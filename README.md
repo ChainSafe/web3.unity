@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/19412160/121092289-4d9dda80-c7b9-11eb-9edf-9f88ced8ed75.png">
+  <img src="https://user-images.githubusercontent.com/19412160/121560966-0d6f6f80-c9e6-11eb-87b6-da2308d9b77d.png">
 </p>
 
 [<img alt="Discord" src="https://img.shields.io/discord/593655374469660673.svg?style=for-the-badge&label=Discord&logo=discord" height="20">](https://discord.gg/Q6A3YA2)
