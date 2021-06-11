@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
-using EthereumDefinition;
+using AvalancheDefinition;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class Polygon 
+public class Avalanche 
 {
     private static string host = _Config.Host;
 
@@ -14,7 +14,7 @@ public class Polygon
     {
         string url =
             host +
-            "/polygon/balanceOf?network=" +
+            "/avalanche/balanceOf?network=" +
             _network +
             "&account=" +
             _account;
@@ -35,7 +35,7 @@ public class Polygon
     {
         string url =
             host +
-            "/polygon/verify?message=" +
+            "/avalanche/verify?message=" +
             _message +
             "&signature=" +
             _signature;
