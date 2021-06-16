@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 using System.Threading.Tasks;
-using BEP20Definition;
+using Token20Definition;
 using UnityEngine;
 using UnityEngine.Networking;
 

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace ERC20Definition
+namespace Token20Definition
 {
     [Serializable]
     public class BalanceOf
