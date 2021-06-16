@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 using System.Threading.Tasks;
-using ERC20Definition;
+using Token20Definition;
 using UnityEngine;
 using UnityEngine.Networking;
 

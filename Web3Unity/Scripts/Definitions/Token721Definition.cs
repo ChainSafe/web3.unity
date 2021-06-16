@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Moonbeam721Definition
+namespace Token721Definition
 {
     [Serializable]
     public class BalanceOf

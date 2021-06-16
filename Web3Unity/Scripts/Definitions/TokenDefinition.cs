@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace PolygonDefinition
+namespace TokenDefinition
 {
     [Serializable]
     public class BalanceOf

@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 using System.Threading.Tasks;
-using BEP721Definition;
+using Token721Definition;
 using UnityEngine;
 using UnityEngine.Networking;
 

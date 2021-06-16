@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
-using AvalancheDefinition;
+using TokenDefinition;
 using UnityEngine;
 using UnityEngine.Networking;
 
