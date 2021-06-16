@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Avalanche1155Definition
+namespace Token1155Definition
 {
     [Serializable]
     public class BalanceOf

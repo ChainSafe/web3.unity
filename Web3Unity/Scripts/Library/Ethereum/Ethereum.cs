@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
-using EthereumDefinition;
+using TokenDefinition;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -51,49 +51,4 @@ public class Ethereum
         return response.verify;
     }
 
-    public static async Task<string>
-    Broadcast(string _network, string _transaction)
-    {
-        string url =
-            host +
-            "/ethereum/broadcast?network=" +
-            _network +
-            "&transaction=" +
-            _transaction;
-        UnityWebRequest webRequest = UnityWebRequest.Get(url);
-        await webRequest.SendWebRequest();
-        Broadcast response =
-            JsonUtility
-                .FromJson<Broadcast>(System
-                    .Text
-                    .Encoding
-                    .UTF8
-                    .GetString(webRequest.downloadHandler.data));
-        return response.broadcast;
-    }
-
-    public static async Task<Transaction>
-    CreateTransaction(string _network, string _from, string _to, string _eth)
-    {
-        string url =
-            host +
-            "/ethereum/createtransaction?network=" +
-            _network +
-            "&from=" +
-            _from +
-            "&to=" +
-            _to +
-            "&eth=" +
-            _eth;
-        UnityWebRequest webRequest = UnityWebRequest.Get(url);
-        await webRequest.SendWebRequest();
-        Transaction response =
-            JsonUtility
-                .FromJson<Transaction>(System
-                    .Text
-                    .Encoding
-                    .UTF8
-                    .GetString(webRequest.downloadHandler.data));
-        return response;
-    }
 }
