@@ -10,7 +10,7 @@ public class _Config : MonoBehaviour
     public static string Account = "0x0000000000000000000000000000000000000001";
 
     // host url for API
-    public readonly static string Host = "http://3.16.155.209";
+    public readonly static string Host = "https://api.gaming.chainsafe.io";
 
     void Awake()
     {
