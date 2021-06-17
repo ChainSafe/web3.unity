@@ -42,17 +42,15 @@ public class Avalanche1155
         string[] _ids
     )
     {
-        string url =
-            host +
-            "/avalanche1155/balanceOfBatch?network=" +
-            _network +
-            "&contract=" +
-            _contract +
-            "&ids=" +
-            string.Join(",", _ids) +
-            "&accounts=" +
-            string.Join(",", _accounts);
-        UnityWebRequest webRequest = UnityWebRequest.Get(url);
+        string url = host + "/avalanche1155/balanceOfBatch";
+
+        WWWForm form = new WWWForm();
+        form.AddField("network", _network);
+        form.AddField("contract", _contract);
+        form.AddField("ids", string.Join(",", _ids));
+        form.AddField("accounts", string.Join(",", _accounts));
+
+        UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
         await webRequest.SendWebRequest();
         BalanceOfBatch response =
             JsonUtility
