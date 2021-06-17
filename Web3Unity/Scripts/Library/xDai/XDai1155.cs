@@ -40,16 +40,14 @@ public class XDai1155
         string[] _ids
     )
     {
-        string url =
-            host +
-            "/xdai1155/balanceOfBatch?" +
-            "contract=" +
-            _contract +
-            "&ids=" +
-            string.Join(",", _ids) +
-            "&accounts=" +
-            string.Join(",", _accounts);
-        UnityWebRequest webRequest = UnityWebRequest.Get(url);
+        string url = host + "/xdai1155/balanceOfBatch";
+
+        WWWForm form = new WWWForm();
+        form.AddField("contract", _contract);
+        form.AddField("ids", string.Join(",", _ids));
+        form.AddField("accounts", string.Join(",", _accounts));        
+        
+        UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
         await webRequest.SendWebRequest();
         BalanceOfBatch response =
             JsonUtility
