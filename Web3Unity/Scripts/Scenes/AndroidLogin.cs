@@ -67,7 +67,7 @@ public class AndroidLogin : MonoBehaviour
 
             // get owner of signature
             string message = account + '-' + expirationTime;
-            string owner = await Ethereum.Verify(message, signature);
+            string owner = await EVM.Verify(message, signature);
 
             // return if not owner
             if (owner != account) return;
