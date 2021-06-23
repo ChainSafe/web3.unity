@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 public class EVM
 {
   public class Response { public string response; }
-  private readonly static string host = "https://api.gaming.chainsafe.io";
+  private readonly static string host = "https://api.gaming.chainsafe.io/evm";
 
   public static async Task<string> BalanceOf(string _chain, string _network, string _account, string _rpc = "")
   {
