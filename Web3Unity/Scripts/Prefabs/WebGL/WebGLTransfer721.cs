@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 
+#if UNITY_WEBGL
 public class WebGLTransfer721: MonoBehaviour
 {
     [SerializeField]
@@ -26,3 +27,4 @@ public class WebGLTransfer721: MonoBehaviour
         Web3GL.Send(method, abi, contract, args, value);
     }
 }
+#endif
