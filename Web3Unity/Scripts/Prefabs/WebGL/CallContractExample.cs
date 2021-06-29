@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
+#if UNITY_WEBGL
 public class CallContractExample : MonoBehaviour
 {
     public Text buttonTxt;
@@ -23,3 +24,4 @@ public class CallContractExample : MonoBehaviour
         buttonTxt.text = response;
     }
 }
+#endif

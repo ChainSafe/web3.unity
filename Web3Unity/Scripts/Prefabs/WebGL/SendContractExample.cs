@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+#if UNITY_WEBGL
 public class SendContractExample : MonoBehaviour
 {
     public void OnSendContract()
@@ -20,3 +21,4 @@ public class SendContractExample : MonoBehaviour
         Web3GL.Send(method, abi, contract, args, value);
     }
 }
+#endif

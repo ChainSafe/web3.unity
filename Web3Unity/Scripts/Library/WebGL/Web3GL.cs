@@ -4,13 +4,9 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using UnityEngine;
 
+#if UNITY_WEBGL
 public class Web3GL
 {
-
-    /*
-    ONLY WORKS FOR WEBGL BUILDS
-    */
-
     [DllImport("__Internal")]
     private static extern void SendContract(string method, string abi, string contract, string args, string value);
 
@@ -36,3 +32,4 @@ public class Web3GL
     }
 
 }
+#endif
