@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,7 +6,7 @@ using UnityEngine;
 #if UNITY_WEBGL
 public class SendContractExample : MonoBehaviour
 {
-    public void OnSendContract()
+    async public void OnSendContract()
     {
         // smart contract method to call
         string method = "increment";
@@ -18,7 +19,13 @@ public class SendContractExample : MonoBehaviour
         // value in wei
         string value = "0";
         // connects to user's browser wallet (metamask) to send a transaction
-        Web3GL.Send(method, abi, contract, args, value);
+        try {
+            string response = await Web3GL.Send(method, abi, contract, args, value);
+            Debug.Log(response);
+        } catch (Exception e) {
+            Debug.LogException(e, this);
+        }
+
     }
 }
 #endif
