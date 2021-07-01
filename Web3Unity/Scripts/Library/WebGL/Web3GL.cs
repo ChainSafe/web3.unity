@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -11,24 +12,28 @@ public class Web3GL
     private static extern void SendContract(string method, string abi, string contract, string args, string value);
 
     [DllImport("__Internal")]
-    private static extern void CallContract(string method, string abi, string contract, string args);
+    private static extern string SendContractResponse();
 
     [DllImport("__Internal")]
-    private static extern string CallResponse();
+    private static extern void SetContractResponse(string value);
 
     // this function will create a metamask tx for user to confirm.
-    public static void Send(string _method, string _abi, string _contract, string _args, string _value)
+    async public static Task<string> Send(string _method, string _abi, string _contract, string _args, string _value)
     {
         SendContract(_method, _abi, _contract, _args, _value);
-    }
-
-    public static async Task<string> Call(string _method, string _abi, string _contract, string _args)
-    {
-        CallContract(_method, _abi, _contract, _args);
-        // pause then fetch response
-        await new WaitForSeconds(1.5f);
-        string response = CallResponse();
-        return response;
+        string response = SendContractResponse();
+        while (response == "") {
+            await new WaitForSeconds(1f);
+            response = SendContractResponse();
+        }
+        // Set response to empty
+        SetContractResponse("");
+        // check if user submmited or user rejected
+        if (response.Length == 66) {
+            return response;
+        } else {
+            throw new Exception(response);
+        }
     }
 
 }
