@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7769410624422148995}
   - component: {fileID: 7769410624422148992}
   m_Layer: 0
-  m_Name: BalanceOf
+  m_Name: BalanceOfEVM
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
