@@ -7,6 +7,7 @@ using UnityEngine.Networking;
 public class EVM
 {
   public class Response { public string response; }
+  public class BoolResponse { public bool response; }
   private readonly static string host = "https://api.gaming.chainsafe.io/evm";
 
   public static async Task<string> BalanceOf(string _chain, string _network, string _account, string _rpc = "")
@@ -51,5 +52,19 @@ public class EVM
     Response data = JsonUtility.FromJson<Response>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
     return data.response; 
   }
+
+  public static async Task<bool> IsTxConfirmed(string _chain, string _network, string _transaction, string _rpc = "")
+  {
+    WWWForm form = new WWWForm();
+    form.AddField("chain", _chain);
+    form.AddField("network", _network);
+    form.AddField("transaction", _transaction);
+    form.AddField("rpc", _rpc);
+    string url = host + "/isTxConfirmed";
+    UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
+    await webRequest.SendWebRequest();
+    BoolResponse data = JsonUtility.FromJson<BoolResponse>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+    return data.response;
+  } 
 }
 
