@@ -11,7 +11,7 @@ public class ERC721URIExample : MonoBehaviour
         string contract = "0xbCCaa7ACb552A2c7eb27C7eb77c2CC99580735b9";
         string tokenId = "965";
 
-        string ownerOf = await ERC721.URI(chain, network, contract, tokenId);
-        print(ownerOf);
+        string uri = await ERC721.URI(chain, network, contract, tokenId);
+        print(uri);
     }
 }
