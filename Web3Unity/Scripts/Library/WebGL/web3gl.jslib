@@ -10,6 +10,10 @@ mergeInto(LibraryManager.library, {
     return buffer;
   },
 
+  ResetLoginMessage: function () {
+    window.web3gl.loginMessage = "";
+  },
+
   SendContract: function (method, abi, contract, args, value) {
     window.web3gl.sendContract(
       Pointer_stringify(method),
