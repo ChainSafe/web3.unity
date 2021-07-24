@@ -12,6 +12,9 @@ public class WebLogin : MonoBehaviour
     [DllImport("__Internal")]
     private static extern string LoginMessage();
 
+    [DllImport("__Internal")]
+    private static extern void ResetLoginMessage();
+
     private float elapsed = 0f;
 
     void Update()
@@ -29,14 +32,14 @@ public class WebLogin : MonoBehaviour
     {
         try
         {
-            // get signedMessage from jslib
-            string signedMessage = LoginMessage();
+            // get loginMessage from jslib
+            string loginMessage = LoginMessage();
 
-            if (signedMessage == "") return;
+            if (loginMessage == "") return;
 
-            string signature = signedMessage.Split('-')[0];
-            string account = signedMessage.Split('-')[1];
-            string expirationTime = signedMessage.Split('-')[2];
+            string signature = loginMessage.Split('-')[0];
+            string account = loginMessage.Split('-')[1];
+            string expirationTime = loginMessage.Split('-')[2];
 
             // get current time
             DateTime epochStart = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -54,6 +57,9 @@ public class WebLogin : MonoBehaviour
 
             // save account for next scene
             _Config.Account = account;
+
+            // reset login message
+            ResetLoginMessage();
 
             // load next scene
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
