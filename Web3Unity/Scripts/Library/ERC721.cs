@@ -35,6 +35,36 @@ public class ERC721
         return response; 
     }
 
+    public static async Task<List<string>> OwnerOfBatch(string _chain, string _network, string _contract, string[] _tokenIds, string _rpc="")
+    {
+        string method = "ownerOf";
+        // build array of args
+        string[][] obj = new string[_tokenIds.Length][];
+        for (int i = 0; i < _tokenIds.Length; i++)
+        {
+            obj[i] = new string[1] { _tokenIds[i] };
+        };
+        string args = JsonConvert.SerializeObject(obj);
+        string response = await EVM.MultiCall(_chain, _network, _contract, abi, method, args, _rpc);
+        try 
+        {
+            string[] responses = JsonConvert.DeserializeObject<string[]>(response);
+            List<string> owners = new List<string>();
+            for (int i = 0; i < responses.Length; i++)
+            {
+                // clean up address
+                string address = "0x" + responses[i].Substring(responses[i].Length - 40);
+                owners.Add(address);
+            }
+            return owners;
+        } 
+        catch 
+        {
+            Debug.LogError(response);
+            throw;
+        }  
+    }
+
     public static async Task<string> URI(string _chain, string _network, string _contract, string _tokenId, string _rpc="")
     {
         string method = "tokenURI";
