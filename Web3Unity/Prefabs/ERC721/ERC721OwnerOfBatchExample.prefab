@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2230512649399900977}
   - component: {fileID: 2230512649399900978}
   m_Layer: 0
-  m_Name: BalanceOfBatch721
+  m_Name: ERC721OwnerOfBatchExample
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

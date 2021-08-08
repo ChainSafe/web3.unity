@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ERC721BalanceOfBatchExample : MonoBehaviour
+public class ERC721OwnerOfBatchExample : MonoBehaviour
 {
     async void Start()
     {
