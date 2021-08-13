@@ -17,21 +17,56 @@ public class Web3GL
     [DllImport("__Internal")]
     private static extern void SetContractResponse(string value);
 
+    [DllImport("__Internal")]
+    private static extern void SignMessage(string value);
+
+    [DllImport("__Internal")]
+    private static extern string SignMessageResponse();
+
+    [DllImport("__Internal")]
+    private static extern void SetSignMessageResponse(string value);
+
     // this function will create a metamask tx for user to confirm.
     async public static Task<string> Send(string _method, string _abi, string _contract, string _args, string _value)
     {
         SendContract(_method, _abi, _contract, _args, _value);
         string response = SendContractResponse();
-        while (response == "") {
+        while (response == "") 
+        {
             await new WaitForSeconds(1f);
             response = SendContractResponse();
         }
         // Set response to empty
         SetContractResponse("");
         // check if user submmited or user rejected
-        if (response.Length == 66) {
+        if (response.Length == 66) 
+        {
             return response;
-        } else {
+        } 
+        else 
+        {
+            throw new Exception(response);
+        }
+    }
+
+    async public static Task<string> Sign(string _message)
+    {
+        SignMessage(_message);
+        string response = SignMessageResponse();
+        while (response == "") 
+        {
+            await new WaitForSeconds(1f);
+            response = SignMessageResponse();
+        }
+        // Set response to empty
+        SetSignMessageResponse("");
+        // check if user submmited or user rejected
+        if (response.Length == 132)
+        {
+            return response;
+        } 
+        else 
+        {
             throw new Exception(response);
         }
     }
