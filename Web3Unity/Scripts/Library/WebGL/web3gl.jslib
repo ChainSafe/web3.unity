@@ -33,5 +33,20 @@ mergeInto(LibraryManager.library, {
 
   SetContractResponse: function (value) {
     window.web3gl.sendContractResponse = value;
+  },
+
+  SignMessage: function (message) {
+    window.web3gl.signMessage(Pointer_stringify(message));
+  },
+
+  SignMessageResponse: function () {
+    var bufferSize = lengthBytesUTF8(window.web3gl.signMessageResponse) + 1;
+    var buffer = _malloc(bufferSize);
+    stringToUTF8(window.web3gl.signMessageResponse, buffer, bufferSize);
+    return buffer; 
+  },
+
+  SetSignMessageResponse: function (value) {
+    window.web3gl.signMessageResponse = value;
   }
 });
