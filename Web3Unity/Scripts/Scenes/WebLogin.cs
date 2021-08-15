@@ -7,49 +7,62 @@ using UnityEngine.SceneManagement;
 public class WebLogin : MonoBehaviour
 {
     [DllImport("__Internal")]
-    private static extern void Web3Login();
+    private static extern void Web3Connect();
 
     [DllImport("__Internal")]
-    private static extern string LoginMessage();
+    private static extern string ConnectAccount();
 
     [DllImport("__Internal")]
-    private static extern void ResetLoginMessage();
+    private static extern void SetConnectAccount(string value);
 
-    private float elapsed = 0f;
+    private int expirationTime;
+    private string account; 
 
-    void Update()
+    public void OnLogin()
     {
-        // check every second
-        elapsed += Time.deltaTime;
-        if (elapsed >= 1f)
-        {
-            elapsed = 0;
-            VerifySignature();
+        Web3Connect();
+        OnConnected();
+    }
+
+    async private void OnConnected()
+    {
+        account = ConnectAccount();
+        while (account == "") {
+            await new WaitForSeconds(1f);
+            account = ConnectAccount();
+        };
+        SignLoginMessage(account); 
+    }
+
+    async private void SignLoginMessage(string account)
+    {
+        try {
+            // create expiration time
+            DateTime epochStart = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            int currentTime = (int)(DateTime.UtcNow - epochStart).TotalSeconds;
+            expirationTime = (currentTime + 30);
+            // create message to sign
+            string message = account + "-" + expirationTime.ToString();
+            string signature = await Web3GL.Sign(message);
+            VerifySignature(signature);
+        } catch (Exception e) {
+            Debug.LogException(e, this);
         }
     }
 
-    private async void VerifySignature()
+    private async void VerifySignature(string signature)
     {
         try
         {
-            // get loginMessage from jslib
-            string loginMessage = LoginMessage();
-
-            if (loginMessage == "") return;
-
-            string signature = loginMessage.Split('-')[0];
-            string account = loginMessage.Split('-')[1];
-            string expirationTime = loginMessage.Split('-')[2];
-
             // get current time
             DateTime epochStart = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             int currentTime = (int)(DateTime.UtcNow - epochStart).TotalSeconds;
 
             // return if date expired
-            if (currentTime > Int32.Parse(expirationTime)) return;
+            if (currentTime > expirationTime) return;
 
             // get owner of signature
-            string message = account + '-' + expirationTime;
+            string message = account + '-' + expirationTime.ToString();
             string owner = await EVM.Verify(message, signature);
 
             // return if not owner
@@ -59,7 +72,7 @@ public class WebLogin : MonoBehaviour
             _Config.Account = account;
 
             // reset login message
-            ResetLoginMessage();
+            SetConnectAccount("");
 
             // load next scene
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
@@ -68,11 +81,6 @@ public class WebLogin : MonoBehaviour
         {
             print("invalid code");
         }
-    }
-
-    public void OnLogin()
-    {
-        Web3Login();
     }
 
     public void OnSkip()
