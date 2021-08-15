@@ -1,17 +1,17 @@
 mergeInto(LibraryManager.library, {
-  Web3Login: function () {
-    window.web3gl.login();
+  Web3Connect: function () {
+    window.web3gl.connect();
   },
 
-  LoginMessage: function () {
-    var bufferSize = lengthBytesUTF8(window.web3gl.loginMessage) + 1;
+  ConnectAccount: function () {
+    var bufferSize = lengthBytesUTF8(window.web3gl.connectAccount) + 1;
     var buffer = _malloc(bufferSize);
-    stringToUTF8(window.web3gl.loginMessage, buffer, bufferSize);
+    stringToUTF8(window.web3gl.connectAccount, buffer, bufferSize);
     return buffer;
   },
 
-  ResetLoginMessage: function () {
-    window.web3gl.loginMessage = "";
+  SetConnectAccount: function (value) {
+    window.web3gl.connectAccount = value;
   },
 
   SendContract: function (method, abi, contract, args, value) {
