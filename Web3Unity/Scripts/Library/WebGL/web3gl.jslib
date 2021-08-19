@@ -48,5 +48,9 @@ mergeInto(LibraryManager.library, {
 
   SetSignMessageResponse: function (value) {
     window.web3gl.signMessageResponse = value;
+  },
+
+  GetNetwork: function () {
+    return window.web3gl.network;
   }
 });
