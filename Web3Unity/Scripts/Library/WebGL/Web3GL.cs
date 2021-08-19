@@ -26,12 +26,15 @@ public class Web3GL
     [DllImport("__Internal")]
     private static extern void SetSignMessageResponse(string value);
 
+    [DllImport("__Internal")]
+    private static extern int GetNetwork();
+
     // this function will create a metamask tx for user to confirm.
     async public static Task<string> Send(string _method, string _abi, string _contract, string _args, string _value)
     {
         SendContract(_method, _abi, _contract, _args, _value);
         string response = SendContractResponse();
-        while (response == "") 
+        while (response == "")
         {
             await new WaitForSeconds(1f);
             response = SendContractResponse();
@@ -53,7 +56,7 @@ public class Web3GL
     {
         SignMessage(_message);
         string response = SignMessageResponse();
-        while (response == "") 
+        while (response == "")
         {
             await new WaitForSeconds(1f);
             response = SignMessageResponse();
@@ -69,6 +72,11 @@ public class Web3GL
         {
             throw new Exception(response);
         }
+    }
+
+    public static int Network()
+    {
+        return GetNetwork();
     }
 
 }
