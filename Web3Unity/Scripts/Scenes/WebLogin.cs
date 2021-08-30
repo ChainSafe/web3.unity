@@ -69,7 +69,7 @@ public class WebLogin : MonoBehaviour
             if (owner != account) return;
 
             // save account for next scene
-            _Config.Account = account;
+            PlayerPrefs.SetString("Account", account);
 
             // reset login message
             SetConnectAccount("");
