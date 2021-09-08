@@ -9,7 +9,7 @@ using UnityEngine;
 public class Web3GL
 {
     [DllImport("__Internal")]
-    private static extern void SendContract(string method, string abi, string contract, string args, string value);
+    private static extern void SendContract(string method, string abi, string contract, string args, string value, string gas);
 
     [DllImport("__Internal")]
     private static extern string SendContractResponse();
@@ -30,9 +30,9 @@ public class Web3GL
     private static extern int GetNetwork();
 
     // this function will create a metamask tx for user to confirm.
-    async public static Task<string> Send(string _method, string _abi, string _contract, string _args, string _value)
+    async public static Task<string> Send(string _method, string _abi, string _contract, string _args, string _value, string _gas = "")
     {
-        SendContract(_method, _abi, _contract, _args, _value);
+        SendContract(_method, _abi, _contract, _args, _value, _gas);
         string response = SendContractResponse();
         while (response == "")
         {

@@ -18,6 +18,8 @@ public class WebGLSendContractExample : MonoBehaviour
         string args = "[]";
         // value in wei
         string value = "0";
+        // gas limit OPTIONAL
+        string gas = "21000";
         // connects to user's browser wallet (metamask) to send a transaction
         try {
             string response = await Web3GL.Send(method, abi, contract, args, value);

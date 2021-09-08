@@ -14,13 +14,14 @@ mergeInto(LibraryManager.library, {
     window.web3gl.connectAccount = value;
   },
 
-  SendContract: function (method, abi, contract, args, value) {
+  SendContract: function (method, abi, contract, args, value, gas) {
     window.web3gl.sendContract(
       Pointer_stringify(method),
       Pointer_stringify(abi),
       Pointer_stringify(contract),
       Pointer_stringify(args),
-      Pointer_stringify(value)
+      Pointer_stringify(value),
+      Pointer_stringify(gas)
     );
   },
 
