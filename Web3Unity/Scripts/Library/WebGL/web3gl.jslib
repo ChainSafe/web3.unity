@@ -14,7 +14,7 @@ mergeInto(LibraryManager.library, {
     window.web3gl.connectAccount = value;
   },
 
-  SendContract: function (method, abi, contract, args, value, gas) {
+  SendContractJs: function (method, abi, contract, args, value, gas) {
     window.web3gl.sendContract(
       Pointer_stringify(method),
       Pointer_stringify(abi),
@@ -34,6 +34,25 @@ mergeInto(LibraryManager.library, {
 
   SetContractResponse: function (value) {
     window.web3gl.sendContractResponse = value;
+  },
+
+  SendTransactionJs: function (to, value, gas) {
+    window.web3gl.sendTransaction(
+      Pointer_stringify(to),
+      Pointer_stringify(value),
+      Pointer_stringify(gas)
+    );
+  },
+
+  SendTransactionResponse: function () {
+    var bufferSize = lengthBytesUTF8(window.web3gl.sendTransactionResponse) + 1;
+    var buffer = _malloc(bufferSize);
+    stringToUTF8(window.web3gl.sendTransactionResponse, buffer, bufferSize);
+    return buffer;
+  },
+
+  SetTransactionResponse: function (value) {
+    window.web3gl.sendTransactionResponse = value;
   },
 
   SignMessage: function (message) {
