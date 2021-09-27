@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 
-#if UNITY_WEBGL
 public class WebGLTransfer1155: MonoBehaviour
 {
     [SerializeField]
@@ -30,11 +29,10 @@ public class WebGLTransfer1155: MonoBehaviour
         string gas = "21000";
         // connects to user's browser wallet (metamask) to send a transaction
         try {
-            string response = await Web3GL.Send(method, abi, contract, args, value, gas);
+            string response = await Web3GL.SendContract(method, abi, contract, args, value, gas);
             Debug.Log(response);
         } catch (Exception e) {
             Debug.LogException(e, this);
         };
     }
 }
-#endif
