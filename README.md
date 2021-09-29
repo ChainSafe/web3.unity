@@ -8,6 +8,10 @@
 ## Documentation
 https://chainsafe.github.io/game-docs/
 
+## Download
+
+https://github.com/ChainSafe/web3.unity/releases
+
 ## Contributing
 - Have questions? Say hi on [Discord](https://discord.gg/Q6A3YA2)!
 
