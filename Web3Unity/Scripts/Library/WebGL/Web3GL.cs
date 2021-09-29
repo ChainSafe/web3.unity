@@ -40,6 +40,8 @@ public class Web3GL
     // this function will create a metamask tx for user to confirm.
     async public static Task<string> SendContract(string _method, string _abi, string _contract, string _args, string _value, string _gas = "")
     {
+        // Set response to empty
+        SetContractResponse("");
         SendContractJs(_method, _abi, _contract, _args, _value, _gas);
         string response = SendContractResponse();
         while (response == "")
@@ -47,7 +49,6 @@ public class Web3GL
             await new WaitForSeconds(1f);
             response = SendContractResponse();
         }
-        // Set response to empty
         SetContractResponse("");
         // check if user submmited or user rejected
         if (response.Length == 66) 
@@ -62,6 +63,8 @@ public class Web3GL
 
     async public static Task<string> SendTransaction(string _to, string _value, string _gas = "")
     {
+        // Set response to empty
+        SetTransactionResponse("");
         SendTransactionJs(_to, _value, _gas);
         string response = SendTransactionResponse();
         while (response == "")
@@ -69,7 +72,6 @@ public class Web3GL
             await new WaitForSeconds(1f);
             response = SendTransactionResponse();
         }
-        // Set response to empty
         SetTransactionResponse("");
         // check if user submmited or user rejected
         if (response.Length == 66) 
