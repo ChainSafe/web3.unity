@@ -8,11 +8,13 @@ public class CustomCallExample : MonoBehaviour
     {
         /*
         // SPDX-License-Identifier: MIT
-        pragma solidity >=0.7.0 <0.9.0;
-        contract Increment {
-            uint public x = 0;
-            function increment() public {
-                x++;
+        pragma solidity ^0.8.0;
+
+        contract AddTotal {
+            uint256 public myTotal = 0;
+
+            function addTotal(uint8 _myArg) public {
+                myTotal = myTotal + _myArg;
             }
         }
         */
@@ -21,11 +23,11 @@ public class CustomCallExample : MonoBehaviour
         // set network mainnet, testnet
         string network = "rinkeby";
         // smart contract method to call
-        string method = "x";
+        string method = "myTotal";
         // abi in json format
-        string abi = "[ { \"inputs\": [], \"name\": \"increment\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\" }, { \"inputs\": [], \"name\": \"x\", \"outputs\": [ { \"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\" } ], \"stateMutability\": \"view\", \"type\": \"function\" } ]";
+        string abi = "[ { \"inputs\": [ { \"internalType\": \"uint8\", \"name\": \"_myArg\", \"type\": \"uint8\" } ], \"name\": \"addTotal\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\" }, { \"inputs\": [], \"name\": \"myTotal\", \"outputs\": [ { \"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\" } ], \"stateMutability\": \"view\", \"type\": \"function\" } ]";
         // address of contract
-        string contract = "0xB6B8bB1e16A6F73f7078108538979336B9B7341C";
+        string contract = "0x7286Cf0F6E80014ea75Dbc25F545A3be90F4904F";
         // array of arguments for contract
         string args = "[]";
         // connects to user's browser wallet to call a transaction
