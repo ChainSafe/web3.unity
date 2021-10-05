@@ -158,7 +158,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 132.09}
-  m_SizeDelta: {x: 870.12, y: 284.99}
+  m_SizeDelta: {x: 870.12, y: 85.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &174141133
 MonoBehaviour:
@@ -196,9 +196,7 @@ MonoBehaviour:
   m_Text: 'Use this scene if you''re building to webgl
 
     FIle > Build Settings
-    > Player Settings... > Web3Template
-
-'
+    > Player Settings... > Web3Template'
 --- !u!222 &174141134
 CanvasRenderer:
   m_ObjectHideFlags: 0
