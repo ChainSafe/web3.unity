@@ -72,3 +72,4 @@ crashlytics-build.properties
 
 # Misc
 .DS_Store
+.idea
