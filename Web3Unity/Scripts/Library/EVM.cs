@@ -8,7 +8,6 @@ using Newtonsoft.Json;
 public class EVM
 {
   public class StringResponse { public string response; }
-  public class BoolResponse { public bool response; }
   public class IntResponse { public int response; }
 
   private readonly static string host = "https://api.gaming.chainsafe.io/evm";
@@ -140,15 +139,18 @@ public class EVM
     return data.response;
   }
 
-  public static async Task<string> CreateTransaction(string _chain, string _network, string _contract, string _abi, string _method, string _args, string _rpc = "")
+  public static async Task<string> CreateTransaction(string _chain, string _network, string _networkId, string _account, string _to, string _value, string _data, string _gasPrice = "", string _gasLimit = "", string _rpc = "")
   {
     WWWForm form = new WWWForm();
     form.AddField("chain", _chain);
     form.AddField("network", _network);
-    form.AddField("contract", _contract);
-    form.AddField("abi", _abi);
-    form.AddField("method", _method);
-    form.AddField("args", _args);
+    form.AddField("networkId", _networkId);
+    form.AddField("account", _account);
+    form.AddField("to", _to);
+    form.AddField("value", _value);
+    form.AddField("data", _data);
+    form.AddField("gasPrice", _gasPrice);
+    form.AddField("gasLimit", _gasLimit);
     form.AddField("rpc", _rpc);
     string url = host + "/createTransaction";
     UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
@@ -157,14 +159,34 @@ public class EVM
     return data.response;
   }
 
-  public static async Task<string> BroadcastTransaction(string _chain, string _network, string _signedTransaction, string _rpc = "")
+  public static async Task<string> BroadcastTransaction(string _chain, string _network, string _networkId, string _account, string _to, string _value, string _data, string _signature, string _gasPrice, string _gasLimit, string _rpc)
   {
     WWWForm form = new WWWForm();
     form.AddField("chain", _chain);
     form.AddField("network", _network);
-    form.AddField("signedTransaction", _signedTransaction);
+    form.AddField("networkId", _networkId);
+    form.AddField("account", _account);
+    form.AddField("to", _to);
+    form.AddField("value", _value);
+    form.AddField("data", _data);
+    form.AddField("signature", _signature);
+    form.AddField("gasPrice", _gasPrice);
+    form.AddField("gasLimit", _gasLimit);
     form.AddField("rpc", _rpc);
     string url = host + "/broadcastTransaction";
+    UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
+    await webRequest.SendWebRequest();
+    StringResponse data = JsonUtility.FromJson<StringResponse>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+    return data.response;
+  }
+
+  public static async Task<string> CreateContractData(string _abi, string _method, string _args)
+  {
+    WWWForm form = new WWWForm();
+    form.AddField("abi", _abi);
+    form.AddField("method", _method);
+    form.AddField("args", _args);
+    string url = host + "/createContractData";
     UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
     await webRequest.SendWebRequest();
     StringResponse data = JsonUtility.FromJson<StringResponse>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
