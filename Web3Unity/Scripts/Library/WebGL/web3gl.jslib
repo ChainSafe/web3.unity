@@ -71,6 +71,6 @@ mergeInto(LibraryManager.library, {
   },
 
   GetNetwork: function () {
-    return window.web3gl.network;
+    return window.web3gl.networkId;
   }
 });
