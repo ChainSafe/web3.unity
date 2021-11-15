@@ -35,7 +35,7 @@ public class ERC721
         return response; 
     }
 
-    public static async Task<List<string>> OwnerOfBatch(string _chain, string _network, string _contract, string[] _tokenIds, string _rpc="")
+    public static async Task<List<string>> OwnerOfBatch(string _chain, string _network, string _contract, string[] _tokenIds, string _multicall = "", string _rpc="")
     {
         string method = "ownerOf";
         // build array of args
@@ -45,7 +45,7 @@ public class ERC721
             obj[i] = new string[1] { _tokenIds[i] };
         };
         string args = JsonConvert.SerializeObject(obj);
-        string response = await EVM.MultiCall(_chain, _network, _contract, abi, method, args, _rpc);
+        string response = await EVM.MultiCall(_chain, _network, _contract, abi, method, args, _multicall, _rpc);
         try 
         {
             string[] responses = JsonConvert.DeserializeObject<string[]>(response);
