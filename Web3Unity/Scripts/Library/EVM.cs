@@ -55,7 +55,7 @@ public class EVM
     return data.response; 
   }
 
-  public static async Task<string> MultiCall(string _chain, string _network, string _contract, string _abi, string _method, string _args, string _rpc = "")
+  public static async Task<string> MultiCall(string _chain, string _network, string _contract, string _abi, string _method, string _args, string _multicall = "", string _rpc = "")
   {
     WWWForm form = new WWWForm();
     form.AddField("chain", _chain);
@@ -64,6 +64,7 @@ public class EVM
     form.AddField("abi", _abi);
     form.AddField("method", _method);
     form.AddField("args", _args);
+    form.AddField("multicall", _multicall);
     form.AddField("rpc", _rpc);
     string url = host + "/multicall";
     UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
