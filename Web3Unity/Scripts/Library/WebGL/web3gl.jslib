@@ -14,14 +14,15 @@ mergeInto(LibraryManager.library, {
     window.web3gl.connectAccount = value;
   },
 
-  SendContractJs: function (method, abi, contract, args, value, gas) {
+  SendContractJs: function (method, abi, contract, args, value, gasLimit, gasPrice) {
     window.web3gl.sendContract(
       Pointer_stringify(method),
       Pointer_stringify(abi),
       Pointer_stringify(contract),
       Pointer_stringify(args),
       Pointer_stringify(value),
-      Pointer_stringify(gas)
+      Pointer_stringify(gasLimit),
+      Pointer_stringify(gasPrice)
     );
   },
 
@@ -36,11 +37,12 @@ mergeInto(LibraryManager.library, {
     window.web3gl.sendContractResponse = value;
   },
 
-  SendTransactionJs: function (to, value, gas) {
+  SendTransactionJs: function (to, value, gasLimit, gasPrice) {
     window.web3gl.sendTransaction(
       Pointer_stringify(to),
       Pointer_stringify(value),
-      Pointer_stringify(gas)
+      Pointer_stringify(gasLimit),
+      Pointer_stringify(gasPrice)
     );
   },
 
