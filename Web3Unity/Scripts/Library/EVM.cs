@@ -7,8 +7,9 @@ using Newtonsoft.Json;
 
 public class EVM
 {
-  public class StringResponse { public string response; }
-  public class IntResponse { public int response; }
+  public class Response<T> { public T response; }
+  // public class StringResponse { public string response; }
+  // public class IntResponse { public int response; }
 
   private readonly static string host = "https://api.gaming.chainsafe.io/evm";
 
@@ -22,7 +23,7 @@ public class EVM
     string url = host + "/balanceOf";
     UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
     await webRequest.SendWebRequest();
-    StringResponse data = JsonUtility.FromJson<StringResponse>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+    Response<string> data = JsonUtility.FromJson<StringResponse>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
     return data.response;
   }
 
@@ -34,7 +35,7 @@ public class EVM
     string url = host + "/verify";
     UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
     await webRequest.SendWebRequest();
-    StringResponse data = JsonUtility.FromJson<StringResponse>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+    Response<string> data = JsonUtility.FromJson<StringResponse>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
     return data.response;
   }
 
@@ -51,7 +52,7 @@ public class EVM
     string url = host + "/call";
     UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
     await webRequest.SendWebRequest();
-    StringResponse data = JsonUtility.FromJson<StringResponse>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+    Response<string> data = JsonUtility.FromJson<StringResponse>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
     return data.response; 
   }
 
@@ -69,7 +70,7 @@ public class EVM
     string url = host + "/multicall";
     UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
     await webRequest.SendWebRequest();
-    StringResponse data = JsonUtility.FromJson<StringResponse>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+    Response<string> data = JsonUtility.FromJson<StringResponse>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
     return data.response; 
   }
 
@@ -83,7 +84,7 @@ public class EVM
     string url = host + "/txStatus";
     UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
     await webRequest.SendWebRequest();
-    StringResponse data = JsonUtility.FromJson<StringResponse>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+    Response<string> data = JsonUtility.FromJson<StringResponse>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
     return data.response;
   }
 
@@ -96,7 +97,7 @@ public class EVM
     string url = host + "/blockNumber";
     UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
     await webRequest.SendWebRequest();
-    IntResponse data = JsonUtility.FromJson<IntResponse>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+    Response<int> data = JsonUtility.FromJson<IntResponse>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
     return data.response;
   } 
 
@@ -110,7 +111,7 @@ public class EVM
     string url = host + "/nonce";
     UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
     await webRequest.SendWebRequest();
-    StringResponse data = JsonUtility.FromJson<StringResponse>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+    Response<string> data = JsonUtility.FromJson<StringResponse>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
     return data.response;
   } 
 
@@ -123,8 +124,38 @@ public class EVM
     string url = host + "/createContractData";
     UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
     await webRequest.SendWebRequest();
-    StringResponse data = JsonUtility.FromJson<StringResponse>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+    Response<string> data = JsonUtility.FromJson<StringResponse>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
     return data.response;
   }
+
+  public static async Task<string> AllErc721(string _chain, string _network, string _account, string _contract = "")
+  {
+    WWWForm form = new WWWForm();
+    form.AddField("chain", _chain);
+    form.AddField("network", _network);
+    form.AddField("account", _account);
+    form.AddField("contract", _contract);
+    string url = host + "/all721";
+    UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
+    await webRequest.SendWebRequest();
+    Response<string> data = JsonUtility.FromJson<StringResponse>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+    return data.response; 
+  }
+
+
+  public static async Task<string> AllErc1155(string _chain, string _network, string _account, string _contract = "")
+  {
+    WWWForm form = new WWWForm();
+    form.AddField("chain", _chain);
+    form.AddField("network", _network);
+    form.AddField("account", _account);
+    form.AddField("contract", _contract);
+    string url = host + "/all1155";
+    UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
+    await webRequest.SendWebRequest();
+    Response<string> data = JsonUtility.FromJson<StringResponse>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+    return data.response; 
+  }
+
 }
 
