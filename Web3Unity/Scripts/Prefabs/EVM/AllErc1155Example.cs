@@ -10,7 +10,7 @@ public class AllErc1155Example : MonoBehaviour
         string network = "rinkeby"; // mainnet ropsten kovan rinkeby goerli
         string account = "0xebc0e6232fb9d494060acf580105108444f7c696";
         string contract = "";
-        string balance = await EVM.AllErc721(chain, network, account, contract);
+        string balance = await EVM.AllErc1155(chain, network, account, contract);
         print(balance);
     }
 }
