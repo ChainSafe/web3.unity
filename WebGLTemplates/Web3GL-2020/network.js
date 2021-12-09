@@ -14,6 +14,9 @@ Used to set the network
 80001 Matic Testnet
 43113 Avalanche Testnet
 43114 Avalanche Mainnet
+42220 Celo Mainnet
+44787 Celo Alfajores Testnet
+62320 Celo Baklava Testnet
 */
 
 window.web3NetworkId = 1;
