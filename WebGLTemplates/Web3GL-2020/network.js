@@ -17,6 +17,10 @@ Used to set the network
 42220 Celo Mainnet
 44787 Celo Alfajores Testnet
 62320 Celo Baklava Testnet
+0xfa2 Fantom TestNet
+250 Fantom Opera
+1666700000 Harmony Testnet Shard0
+1666600000 Harmony Mainnet Shard0
 */
 
 window.web3NetworkId = 1;
