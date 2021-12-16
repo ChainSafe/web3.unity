@@ -22,11 +22,11 @@ public class AllErc1155Example : MonoBehaviour
         string response = await EVM.AllErc1155(chain, network, account, contract);
         try
         {
-            NFTs[] erc721s = JsonConvert.DeserializeObject<NFTs[]>(response);
-            print(erc721s[0].contract);
-            print(erc721s[0].tokenId);
-            print(erc721s[0].uri);
-            print(erc721s[0].balance);
+            NFTs[] erc1155s = JsonConvert.DeserializeObject<NFTs[]>(response);
+            print(erc1155s[0].contract);
+            print(erc1155s[0].tokenId);
+            print(erc1155s[0].uri);
+            print(erc1155s[0].balance);
         }
         catch
         {
