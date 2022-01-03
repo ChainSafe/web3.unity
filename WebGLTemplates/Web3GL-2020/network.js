@@ -21,4 +21,5 @@ Used to set the network: https://chainlist.org/
 */
 
 window.web3NetworkId = 1;
+// used for walletconnect
 window.infuraKey = "2d0062a43e9e4086829df115488b45a8";
