@@ -153,4 +153,85 @@ public class EVM
     Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
     return data.response;
   }
+
+  public static async Task<string> GasPrice(string _chain, string _network, string _rpc = "")
+  {
+    WWWForm form = new WWWForm();
+    form.AddField("chain", _chain);
+    form.AddField("network", _network);
+    form.AddField("rpc", _rpc);
+    string url = host + "/gasPrice";
+    UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
+    await webRequest.SendWebRequest();
+    Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+    return data.response;
+  }
+
+  public static async Task<string> GasLimit(string _chain, string _network, string _to, string _value, string _data, string _rpc = "")
+  {
+    WWWForm form = new WWWForm();
+    form.AddField("chain", _chain);
+    form.AddField("network", _network);
+    form.AddField("to", _to);
+    form.AddField("value", _value);
+    form.AddField("data", _data);
+    form.AddField("rpc", _rpc);
+    string url = host + "/gasLimit";
+    UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
+    await webRequest.SendWebRequest();
+    Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+    return data.response;
+  }
+
+  public static async Task<string> ChainId (string _chain, string _network, string _rpc = "")
+  {
+    WWWForm form = new WWWForm();
+    form.AddField("chain", _chain);
+    form.AddField("network", _network);
+    form.AddField("rpc", _rpc);
+    string url = host + "/chainId";
+    UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
+    await webRequest.SendWebRequest();
+    Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+    return data.response;
+  }
+
+    public static async Task<string> CreateTransaction(string _chain, string _network, string _account, string _to, string _value, string _data, string _gasPrice = "", string _gasLimit = "", string _rpc = "")
+  {
+    WWWForm form = new WWWForm();
+    form.AddField("chain", _chain);
+    form.AddField("network", _network);
+    form.AddField("account", _account);
+    form.AddField("to", _to);
+    form.AddField("value", _value);
+    form.AddField("data", _data);
+    form.AddField("gasPrice", _gasPrice);
+    form.AddField("gasLimit", _gasLimit);
+    form.AddField("rpc", _rpc);
+    string url = host + "/createTransaction";
+    UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
+    await webRequest.SendWebRequest();
+    Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+    return data.response;
+  }
+
+  public static async Task<string> BroadcastTransaction(string _chain, string _network, string _account, string _to, string _value, string _data, string _signature, string _gasPrice, string _gasLimit, string _rpc)
+  {
+    WWWForm form = new WWWForm();
+    form.AddField("chain", _chain);
+    form.AddField("network", _network);
+    form.AddField("account", _account);
+    form.AddField("to", _to);
+    form.AddField("value", _value);
+    form.AddField("data", _data);
+    form.AddField("signature", _signature);
+    form.AddField("gasPrice", _gasPrice);
+    form.AddField("gasLimit", _gasLimit);
+    form.AddField("rpc", _rpc);
+    string url = host + "/broadcastTransaction";
+    UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
+    await webRequest.SendWebRequest();
+    Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+    return data.response;
+  }
 }
