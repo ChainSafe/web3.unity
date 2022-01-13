@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+#if UNITY_WEBGL
 public class WebGLSendContractExample : MonoBehaviour
 {
     async public void OnSendContract()
@@ -30,3 +31,4 @@ public class WebGLSendContractExample : MonoBehaviour
         }
     }
 }
+#endif
