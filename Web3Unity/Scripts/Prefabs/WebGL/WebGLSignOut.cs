@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+#if UNITY_WEBGL
 public class WebGLSignOut : MonoBehaviour
 {
     public void OnSignOut()
@@ -13,3 +14,4 @@ public class WebGLSignOut : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 }
+#endif

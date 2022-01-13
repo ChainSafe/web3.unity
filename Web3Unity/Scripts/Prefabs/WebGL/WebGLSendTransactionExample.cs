@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+#if UNITY_WEBGL
 public class WebGLSendTransactionExample : MonoBehaviour
 {
     async public void OnSendTransaction()
@@ -24,3 +25,4 @@ public class WebGLSendTransactionExample : MonoBehaviour
         }
     }
 }
+#endif

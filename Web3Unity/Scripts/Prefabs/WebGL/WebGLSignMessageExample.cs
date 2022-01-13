@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+#if UNITY_WEBGL
 public class WebGLSignMessageExample : MonoBehaviour
 {
     async public void OnSignMessage()
@@ -16,3 +17,4 @@ public class WebGLSignMessageExample : MonoBehaviour
         }
     }
 }
+#endif
