@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MobileLogin : MonoBehaviour
 {
-    async void Start()
+    async public void OnLogin()
     {
         // get current timestamp
         int timestamp = (int)(System.DateTime.UtcNow.Subtract(new System.DateTime(1970, 1, 1))).TotalSeconds;
@@ -16,14 +17,13 @@ public class MobileLogin : MonoBehaviour
         string signature = await Web3Mobile.Sign(message);
         // verify account
         string account = await EVM.Verify(message, signature);
-        // validate account
-        if (account.Length == 42) {
+        int now = (int)(System.DateTime.UtcNow.Subtract(new System.DateTime(1970, 1, 1))).TotalSeconds;
+        // validate
+        if (account.Length == 42 && expirationTime >= now) {
             // save account
             PlayerPrefs.SetString("Account", account);
-            print("Account: " + account);
             // load next scene
-            // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-            print("NEXT SENE");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
     }
 }
