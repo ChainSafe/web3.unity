@@ -18,6 +18,18 @@ public class Web3GL
     private static extern void SetContractResponse(string value);
 
     [DllImport("__Internal")]
+    private static extern void CallContractJs(string method, string abi, string contract, string args);
+
+    [DllImport("__Internal")]
+    private static extern void ResetCallContractResponse();
+
+    [DllImport("__Internal")]
+    private static extern string CallContractResponse();
+
+    [DllImport("__Internal")]
+    private static extern string CallContractError();
+
+    [DllImport("__Internal")]
     private static extern void SendTransactionJs(string to, string value, string gasLimit, string gasPrice);
 
     [DllImport("__Internal")]
@@ -37,6 +49,28 @@ public class Web3GL
 
     [DllImport("__Internal")]
     private static extern int GetNetwork();
+
+    async public static Task<string> CallContract(string _method, string _abi, string _contract, string _args, float _waitSeconds = 0.1f)
+    {
+        ResetCallContractResponse();
+        CallContractJs(_method, _abi, _contract, _args);
+        string response = CallContractResponse();
+        string error = CallContractError();
+        while (response == "" && error == "")
+        {
+            await new WaitForSeconds(_waitSeconds);
+            response = CallContractResponse();
+            error = CallContractError();
+        }
+        ResetCallContractResponse();
+        if (error.Length > 0)
+        {
+            throw new Exception(error);
+        } else
+        {
+            return response;
+        }
+    }
 
     // this function will create a metamask tx for user to confirm.
     async public static Task<string> SendContract(string _method, string _abi, string _contract, string _args, string _value, string _gasLimit = "", string _gasPrice = "")
