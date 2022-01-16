@@ -55,10 +55,10 @@ async function connect() {
   web3 = new Web3(provider);
 
   // set current chain id
-  web3gl.chainId = parseInt(provider.chainId).toString();
+  web3gl.networkId = parseInt(provider.chainId).toString();
 
   // if current chain id is not equal to network id, then switch
-  if (web3gl.chainId != window.web3ChainId) {
+  if (web3gl.networkId != window.web3ChainId) {
     await window.ethereum
       .request({
         method: "wallet_switchEthereumChain",
@@ -78,8 +78,8 @@ async function connect() {
   });
 
   // update if player changes network
-  provider.on("chainChanged", (network) => {
-    web3gl.ChainId = parseInt(parseInt(network).toString());
+  provider.on("chainChanged", (chainId) => {
+    web3gl.networkId = parseInt(parseInt(chainId).toString());
   });
 }
 
