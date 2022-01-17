@@ -11,7 +11,7 @@ document.body.appendChild(Object.assign(document.createElement("script"), { type
 
 // load web3gl to connect to unity
 window.web3gl = {
-  chainId: "",
+  networkId: 0,
   connect,
   connectAccount: "",
   signMessage,
@@ -54,10 +54,10 @@ async function connect() {
   provider = await web3Modal.connect();
   web3 = new Web3(provider);
 
-  // set current chain id
+  // set current network id
   web3gl.networkId = parseInt(provider.chainId).toString();
 
-  // if current chain id is not equal to network id, then switch
+  // if current network id is not equal to network id, then switch
   if (web3gl.networkId != window.web3ChainId) {
     await window.ethereum
       .request({
@@ -79,7 +79,7 @@ async function connect() {
 
   // update if player changes network
   provider.on("chainChanged", (chainId) => {
-    web3gl.networkId = parseInt(parseInt(chainId).toString());
+    web3gl.networkId = parseInt(chainId);
   });
 }
 
