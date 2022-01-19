@@ -7,7 +7,7 @@
 Dispay login modal:
 
 ```javascript
-window.webgl.connect();
+window.web3gl.connect();
 ```
 
 Get Network:
