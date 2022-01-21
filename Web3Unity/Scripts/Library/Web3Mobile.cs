@@ -2,12 +2,12 @@ using System;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class Web3Mobile
+public class Web3Wallet
 {
     #if UNITY_ANDROID && UNITY_IOS
-        private static string url = "https://metamask.app.link/dapp/chainsafe.github.io/game-web3mobile/";
+        private static string url = "https://metamask.app.link/dapp/chainsafe.github.io/game-web3wallet/";
     #else
-        private static string url = "https://chainsafe.github.io/game-web3mobile/";
+        private static string url = "https://chainsafe.github.io/game-web3wallet/";
     #endif
 
     public static async Task<string> SendTransaction(string _chainId, string _to, string _value, string _data = "", string _gasLimit = "", string _gasPrice = "")
