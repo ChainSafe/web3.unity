@@ -272,10 +272,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Use this scene if you''re building for iOS/Android
+  m_Text: 'Use this scene for Desktop, iOS or Android
 
-    Works with MetaMask
-    Mobile'
+    Works with MetaMask'
 --- !u!222 &382110509
 CanvasRenderer:
   m_ObjectHideFlags: 0
