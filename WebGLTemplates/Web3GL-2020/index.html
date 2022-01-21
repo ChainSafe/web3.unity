@@ -1,4 +1,62 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>{{{ PRODUCT_NAME }}}</title><link rel="shortcut icon" href="TemplateData/favicon.ico"/><link rel="stylesheet" href="TemplateData/style.css"/><meta name="viewport" content="width=device-width,initial-scale=1"/><script src="network.js"></script><link rel="manifest" href="./manifest.json"/><link href="./static/css/main.1359096b.chunk.css" rel="stylesheet"></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"></div><div id="unity-container" class="unity-desktop"><canvas id="unity-canvas" width="{{{ WIDTH }}}" height="{{{ HEIGHT }}}"></canvas><div id="unity-loading-bar"><div id="unity-logo"></div><div id="unity-progress-bar-empty"><div id="unity-progress-bar-full"></div></div></div><div id="unity-mobile-warning">WebGL builds are not supported on mobile devices.</div><div id="unity-footer"><div id="unity-webgl-logo"></div><div id="unity-fullscreen-button"></div><div id="unity-build-title">{{{ PRODUCT_NAME }}}</div></div></div><script>var buildUrl = "Build";
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Unity WebGL Player | {{{ PRODUCT_NAME }}}</title>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+  </head>
+  <body>
+    <div id="unity-container" class="unity-desktop">
+      <canvas id="unity-canvas" width={{{ WIDTH }}} height={{{ HEIGHT }}}></canvas>
+      <div id="unity-loading-bar">
+        <div id="unity-logo"></div>
+        <div id="unity-progress-bar-empty">
+          <div id="unity-progress-bar-full"></div>
+        </div>
+      </div>
+      <div id="unity-warning"> </div>
+      <div id="unity-footer">
+        <div id="unity-webgl-logo"></div>
+        <div id="unity-fullscreen-button"></div>
+        <div id="unity-build-title">{{{ PRODUCT_NAME }}}</div>
+      </div>
+    </div>
+    <script src="web3/index.js"></script>
+    <script>
+      var container = document.querySelector("#unity-container");
+      var canvas = document.querySelector("#unity-canvas");
+      var loadingBar = document.querySelector("#unity-loading-bar");
+      var progressBarFull = document.querySelector("#unity-progress-bar-full");
+      var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+      var warningBanner = document.querySelector("#unity-warning");
+
+      // Shows a temporary message banner/ribbon for a few seconds, or
+      // a permanent error message on top of the canvas if type=='error'.
+      // If type=='warning', a yellow highlight color is used.
+      // Modify or remove this function to customize the visually presented
+      // way that non-critical warnings and error messages are presented to the
+      // user.
+      function unityShowBanner(msg, type) {
+        function updateBannerVisibility() {
+          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+        }
+        var div = document.createElement('div');
+        div.innerHTML = msg;
+        warningBanner.appendChild(div);
+        if (type == 'error') div.style = 'background: red; padding: 10px;';
+        else {
+          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
+          setTimeout(function() {
+            warningBanner.removeChild(div);
+            updateBannerVisibility();
+          }, 5000);
+        }
+        updateBannerVisibility();
+      }
+
+      var buildUrl = "Build";
       var loaderUrl = buildUrl + "/{{{ LOADER_FILENAME }}}";
       var config = {
         dataUrl: buildUrl + "/{{{ DATA_FILENAME }}}",
@@ -14,14 +72,8 @@
         companyName: "{{{ COMPANY_NAME }}}",
         productName: "{{{ PRODUCT_NAME }}}",
         productVersion: "{{{ PRODUCT_VERSION }}}",
+        showBanner: unityShowBanner,
       };
-
-      var container = document.querySelector("#unity-container");
-      var canvas = document.querySelector("#unity-canvas");
-      var loadingBar = document.querySelector("#unity-loading-bar");
-      var progressBarFull = document.querySelector("#unity-progress-bar-full");
-      var fullscreenButton = document.querySelector("#unity-fullscreen-button");
-      var mobileWarning = document.querySelector("#unity-mobile-warning");
 
       // By default Unity keeps WebGL canvas render target size matched with
       // the DOM size of the canvas element (scaled by window.devicePixelRatio)
@@ -35,10 +87,7 @@
         // Avoid draining fillrate performance on mobile devices,
         // and default/override low DPI mode on mobile browsers.
         config.devicePixelRatio = 1;
-        mobileWarning.style.display = "block";
-        setTimeout(() => {
-          mobileWarning.style.display = "none";
-        }, 5000);
+        unityShowBanner('WebGL builds are not supported on mobile devices.');
       } else {
         canvas.style.width = "{{{ WIDTH }}}px";
         canvas.style.height = "{{{ HEIGHT }}}px";
@@ -62,4 +111,7 @@
           alert(message);
         });
       };
-      document.body.appendChild(script);</script><script>!function(e){function r(r){for(var a,f,o=r[0],b=r[1],d=r[2],i=0,l=[];i<o.length;i++)f=o[i],Object.prototype.hasOwnProperty.call(n,f)&&n[f]&&l.push(n[f][0]),n[f]=0;for(a in b)Object.prototype.hasOwnProperty.call(b,a)&&(e[a]=b[a]);for(u&&u(r);l.length;)l.shift()();return c.push.apply(c,d||[]),t()}function t(){for(var e,r=0;r<c.length;r++){for(var t=c[r],a=!0,o=1;o<t.length;o++){var b=t[o];0!==n[b]&&(a=!1)}a&&(c.splice(r--,1),e=f(f.s=t[0]))}return e}var a={},n={19:0},c=[];function f(r){if(a[r])return a[r].exports;var t=a[r]={i:r,l:!1,exports:{}};return e[r].call(t.exports,t,t.exports,f),t.l=!0,t.exports}f.e=function(e){var r=[],t=n[e];if(0!==t)if(t)r.push(t[2]);else{var a=new Promise((function(r,a){t=n[e]=[r,a]}));r.push(t[2]=a);var c,o=document.createElement("script");o.charset="utf-8",o.timeout=120,f.nc&&o.setAttribute("nonce",f.nc),o.src=function(e){return f.p+"static/js/"+({}[e]||e)+"."+{0:"1a1c634a",1:"44f8fff7",2:"4f0612a8",3:"696a2c92",4:"9293556b",5:"6938c9b5",6:"8877c4bd",7:"d9c6dbd3",8:"adaa13f2",9:"62216f13",10:"ab43c8c3",11:"5cbf2fa1",12:"50f93a8d",13:"ebd9c9f8",14:"7d010913",15:"8f2cca70",16:"751c3d1c",17:"f19b983e",21:"f28b502f",22:"c8a596e8",23:"1e5bdad3",24:"ce774d18",25:"2fbfb820",26:"83c508da",27:"8ee98dbf",28:"70ff75f2",29:"bb5345d5",30:"7271df86",31:"9b7a4b56",32:"c43976e0",33:"a5e1b7a0",34:"2d7946d4",35:"256a4455",36:"73cac550",37:"040b7b2f",38:"a4c29fa5",39:"d9ff48f5",40:"36ca77ff",41:"6ed073f8",42:"9d43bfb5",43:"9c57ab54",44:"f92f2584",45:"e6becd2c",46:"994beeb5",47:"5ccc068c",48:"fb4f9e83",49:"3e545763",50:"93d91044",51:"e1e0f57a",52:"50ba18bc",53:"b21a6060",54:"abbbe026",55:"723d8515",56:"d7640a78",57:"c5013cae",58:"62f5e944",59:"b99613a4",60:"fb49c6cb",61:"d6171d07",62:"b5cad7e2",63:"5c7765e4",64:"abb52d78",65:"d1507f4b",66:"024636da",67:"692892ec",68:"a61e1a2b",69:"f9d10b53",70:"81f19f93",71:"740e767c",72:"4a5f4dba",73:"50a6b314",74:"c370ea62",75:"5bca7f15",76:"d897736f",77:"8c5a20da",78:"4911840a",79:"6084295b",80:"21c17a90",81:"e1a8a77c",82:"2feae67e",83:"5bd123be",84:"772fd5a5",85:"226bfc6e",86:"9f108779",87:"060c8558",88:"f7eac3ca",89:"f8e7558c"}[e]+".chunk.js"}(e);var b=new Error;c=function(r){o.onerror=o.onload=null,clearTimeout(d);var t=n[e];if(0!==t){if(t){var a=r&&("load"===r.type?"missing":r.type),c=r&&r.target&&r.target.src;b.message="Loading chunk "+e+" failed.\n("+a+": "+c+")",b.name="ChunkLoadError",b.type=a,b.request=c,t[1](b)}n[e]=void 0}};var d=setTimeout((function(){c({type:"timeout",target:o})}),12e4);o.onerror=o.onload=c,document.head.appendChild(o)}return Promise.all(r)},f.m=e,f.c=a,f.d=function(e,r,t){f.o(e,r)||Object.defineProperty(e,r,{enumerable:!0,get:t})},f.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},f.t=function(e,r){if(1&r&&(e=f(e)),8&r)return e;if(4&r&&"object"==typeof e&&e&&e.__esModule)return e;var t=Object.create(null);if(f.r(t),Object.defineProperty(t,"default",{enumerable:!0,value:e}),2&r&&"string"!=typeof e)for(var a in e)f.d(t,a,function(r){return e[r]}.bind(null,a));return t},f.n=function(e){var r=e&&e.__esModule?function(){return e.default}:function(){return e};return f.d(r,"a",r),r},f.o=function(e,r){return Object.prototype.hasOwnProperty.call(e,r)},f.p="./",f.oe=function(e){throw console.error(e),e};var o=this.webpackJsonpweb3gl=this.webpackJsonpweb3gl||[],b=o.push.bind(o);o.push=r,o=o.slice();for(var d=0;d<o.length;d++)r(o[d]);var u=b;t()}([])</script><script src="./static/js/20.feb1d9c3.chunk.js"></script><script src="./static/js/main.ce161854.chunk.js"></script></body></html>
+      document.body.appendChild(script);
+    </script>
+  </body>
+</html>
