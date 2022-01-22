@@ -33,7 +33,7 @@ public class MobileTransfer1155Example : MonoBehaviour
         // gas price OPTIONAL
         string gasPrice = "";
         // send transaction
-        string response = await Web3Mobile.SendTransaction(chainId, contract, value, data, gasLimit, gasPrice);
+        string response = await Web3Wallet.SendTransaction(chainId, contract, value, data, gasLimit, gasPrice);
         print(response);
     }
 }
