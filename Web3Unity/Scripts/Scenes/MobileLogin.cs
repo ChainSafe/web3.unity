@@ -14,7 +14,7 @@ public class MobileLogin : MonoBehaviour
         // set message
         string message = expirationTime.ToString();
         // sign message
-        string signature = await Web3Mobile.Sign(message);
+        string signature = await Web3Wallet.Sign(message);
         // verify account
         string account = await EVM.Verify(message, signature);
         int now = (int)(System.DateTime.UtcNow.Subtract(new System.DateTime(1970, 1, 1))).TotalSeconds;
