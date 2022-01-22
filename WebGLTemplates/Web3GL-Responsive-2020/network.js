@@ -1,5 +1,5 @@
 /*
-Used to set the network
+Used to set the network: https://chainlist.org/
 1 Mainnet
 3 Ropsten
 4 Rinkeby
@@ -20,5 +20,4 @@ Used to set the network
 1666600000 Harmony Mainnet Shard0
 */
 
-window.web3NetworkId = 1;
-window.infuraKey = "2d0062a43e9e4086829df115488b45a8";
+window.web3ChainId = 1;
