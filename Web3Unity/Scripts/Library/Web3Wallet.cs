@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Web3Wallet
 {
-    #if UNITY_ANDROID && UNITY_IOS
+    #if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
         private static string url = "https://metamask.app.link/dapp/chainsafe.github.io/game-web3wallet/";
     #else
         private static string url = "https://chainsafe.github.io/game-web3wallet/";
