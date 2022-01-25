@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MobileLogin : MonoBehaviour
+public class WalletLogin: MonoBehaviour
 {
     async public void OnLogin()
     {
