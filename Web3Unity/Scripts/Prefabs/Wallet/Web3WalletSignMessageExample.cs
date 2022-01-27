@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MobileSignMessageExample : MonoBehaviour
+public class Web3WalletSignMessageExample : MonoBehaviour
 {
     async public void OnSignMessage()
     {
