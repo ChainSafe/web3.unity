@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 
-public class MobileTransfer20Example : MonoBehaviour
+public class Web3WalletTransfer20Example : MonoBehaviour
 {
  async public void OnTransfer20()
     {
