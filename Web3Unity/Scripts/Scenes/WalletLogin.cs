@@ -2,9 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class WalletLogin: MonoBehaviour
 {
+    public Toggle rememberMe;
+
+    void Start() {
+        // if remember me is checked, set the account to the saved account
+        if (rememberMe.isOn && PlayerPrefs.GetString("Account") != "")
+        {
+            // move to next scene
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
+    }
+
     async public void OnLogin()
     {
         // get current timestamp
