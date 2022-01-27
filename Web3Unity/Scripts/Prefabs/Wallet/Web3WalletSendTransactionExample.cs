@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MobileSendTransactionExample : MonoBehaviour
+public class Web3WalletSendTransactionExample : MonoBehaviour
 {
  async public void OnSendTransaction()
     {
