@@ -24,7 +24,15 @@ public class ImportNFTTextureExample : MonoBehaviour
         // fetch json from uri
         UnityWebRequest webRequest = UnityWebRequest.Get(uri);
         await webRequest.SendWebRequest();
-        Response data = JsonUtility.FromJson<Response>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+        try
+        {
+            Response data = JsonUtility.FromJson<Response>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+        }
+        // dispose webrequest after its used.
+        finally
+        {
+            webRequest.Dispose();
+        }
 
         // parse json to get image uri
         string imageUri = data.image;
@@ -33,6 +41,14 @@ public class ImportNFTTextureExample : MonoBehaviour
         // fetch image and display in game
         UnityWebRequest textureRequest = UnityWebRequestTexture.GetTexture(imageUri);
         await textureRequest.SendWebRequest();
-        this.gameObject.GetComponent<Renderer>().material.mainTexture = ((DownloadHandlerTexture)textureRequest.downloadHandler).texture;
+        try
+        {
+            this.gameObject.GetComponent<Renderer>().material.mainTexture = ((DownloadHandlerTexture)textureRequest.downloadHandler).texture;
+        }
+        // dispose webrequest after its used.
+        finally
+        {
+            textureRequest.Dispose();
+        }
     }
 }

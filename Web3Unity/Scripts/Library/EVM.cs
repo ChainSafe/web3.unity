@@ -21,8 +21,15 @@ public class EVM
     string url = host + "/balanceOf";
     UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
     await webRequest.SendWebRequest();
-    Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
-    return data.response;
+    try
+    {
+      Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+      return data.response;
+    }
+    finally
+    {
+      webRequest.Dispose();
+    }
   }
 
   public static async Task<string> Verify(string _message, string _signature)
@@ -33,8 +40,15 @@ public class EVM
     string url = host + "/verify";
     UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
     await webRequest.SendWebRequest();
-    Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
-    return data.response;
+    try
+    {
+      Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+      return data.response;
+    }
+    finally
+    {
+      webRequest.Dispose();
+    }
   }
 
   public static async Task<string> Call(string _chain, string _network, string _contract, string _abi, string _method, string _args, string _rpc = "")
@@ -50,8 +64,15 @@ public class EVM
     string url = host + "/call";
     UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
     await webRequest.SendWebRequest();
-    Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
-    return data.response;
+    try
+    {
+      Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+      return data.response;
+    }
+    finally
+    {
+      webRequest.Dispose();
+    }
   }
 
   public static async Task<string> MultiCall(string _chain, string _network, string _contract, string _abi, string _method, string _args, string _multicall = "", string _rpc = "")
@@ -68,8 +89,15 @@ public class EVM
     string url = host + "/multicall";
     UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
     await webRequest.SendWebRequest();
-    Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
-    return data.response;
+    try
+    {
+      Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+      return data.response;
+    }
+    finally
+    {
+      webRequest.Dispose();
+    }
   }
 
   public static async Task<string> TxStatus(string _chain, string _network, string _transaction, string _rpc = "")
@@ -82,8 +110,15 @@ public class EVM
     string url = host + "/txStatus";
     UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
     await webRequest.SendWebRequest();
-    Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
-    return data.response;
+    try
+    {
+      Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+      return data.response;
+    }
+    finally
+    {
+      webRequest.Dispose();
+    }
   }
 
   public static async Task<int> BlockNumber(string _chain, string _network, string _rpc = "")
@@ -95,8 +130,15 @@ public class EVM
     string url = host + "/blockNumber";
     UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
     await webRequest.SendWebRequest();
-    Response<int> data = JsonUtility.FromJson<Response<int>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
-    return data.response;
+    try
+    {
+      Response<int> data = JsonUtility.FromJson<Response<int>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+      return data.response;
+    }
+    finally
+    {
+      webRequest.Dispose();
+    }
   }
 
   public static async Task<string> Nonce(string _chain, string _network, string _account, string _rpc = "")
@@ -109,8 +151,15 @@ public class EVM
     string url = host + "/nonce";
     UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
     await webRequest.SendWebRequest();
-    Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
-    return data.response;
+    try
+    {
+      Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+      return data.response;
+    }
+    finally
+    {
+      webRequest.Dispose();
+    }
   }
 
   public static async Task<string> CreateContractData(string _abi, string _method, string _args)
@@ -122,8 +171,15 @@ public class EVM
     string url = host + "/createContractData";
     UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
     await webRequest.SendWebRequest();
-    Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
-    return data.response;
+    try
+    {
+      Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+      return data.response;
+    }
+    finally
+    {
+      webRequest.Dispose();
+    }
   }
 
   public static async Task<string> AllErc721(string _chain, string _network, string _account, string _contract = "")
@@ -136,8 +192,15 @@ public class EVM
     string url = host + "/all721";
     UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
     await webRequest.SendWebRequest();
-    Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
-    return data.response;
+    try
+    {
+      Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+      return data.response;
+    }
+    finally
+    {
+      webRequest.Dispose();
+    }
   }
 
   public static async Task<string> AllErc1155(string _chain, string _network, string _account, string _contract = "")
@@ -150,8 +213,15 @@ public class EVM
     string url = host + "/all1155";
     UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
     await webRequest.SendWebRequest();
-    Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
-    return data.response;
+    try
+    {
+      Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+      return data.response;
+    }
+    finally
+    {
+      webRequest.Dispose();
+    }
   }
 
   public static async Task<string> GasPrice(string _chain, string _network, string _rpc = "")
@@ -163,8 +233,15 @@ public class EVM
     string url = host + "/gasPrice";
     UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
     await webRequest.SendWebRequest();
-    Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
-    return data.response;
+    try
+    {
+      Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+      return data.response;
+    }
+    finally
+    {
+      webRequest.Dispose();
+    }
   }
 
   public static async Task<string> GasLimit(string _chain, string _network, string _to, string _value, string _data, string _rpc = "")
@@ -179,8 +256,15 @@ public class EVM
     string url = host + "/gasLimit";
     UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
     await webRequest.SendWebRequest();
-    Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
-    return data.response;
+    try
+    {
+      Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+      return data.response;
+    }
+    finally
+    {
+      webRequest.Dispose();
+    }
   }
 
   public static async Task<string> ChainId (string _chain, string _network, string _rpc = "")
@@ -192,8 +276,15 @@ public class EVM
     string url = host + "/chainId";
     UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
     await webRequest.SendWebRequest();
-    Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
-    return data.response;
+    try
+    {
+      Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+      return data.response;
+    }
+    finally
+    {
+      webRequest.Dispose();
+    }
   }
 
     public static async Task<string> CreateTransaction(string _chain, string _network, string _account, string _to, string _value, string _data, string _gasPrice = "", string _gasLimit = "", string _rpc = "")
@@ -211,8 +302,15 @@ public class EVM
     string url = host + "/createTransaction";
     UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
     await webRequest.SendWebRequest();
-    Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
-    return data.response;
+    try
+    {
+      Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+      return data.response;
+    }
+    finally
+    {
+      webRequest.Dispose();
+    }
   }
 
   public static async Task<string> BroadcastTransaction(string _chain, string _network, string _account, string _to, string _value, string _data, string _signature, string _gasPrice, string _gasLimit, string _rpc)
@@ -231,7 +329,14 @@ public class EVM
     string url = host + "/broadcastTransaction";
     UnityWebRequest webRequest = UnityWebRequest.Post(url, form);
     await webRequest.SendWebRequest();
-    Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
-    return data.response;
+    try
+    {
+      Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+      return data.response;
+    }
+    finally
+    {
+      webRequest.Dispose();
+    }
   }
 }
