@@ -10,6 +10,6 @@ public class Web3PrivateKeyAddressExample : MonoBehaviour
         string privateKey = "0x78dae1a22c7507a4ed30c06172e7614eb168d3546c13856340771e63ad3c0081";
         // get account from private key
         string account = Web3PrivateKey.Address(privateKey);
-        Debug.Log("Account: " + account);
+        print("Account: " + account);
     }
 }
