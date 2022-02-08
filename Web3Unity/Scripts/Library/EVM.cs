@@ -229,7 +229,6 @@ public class EVM
         form.AddField("account", _account);
         form.AddField("contract", _contract);
         string url = host + "/all721";
-
         using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
         {
             await webRequest.SendWebRequest();
