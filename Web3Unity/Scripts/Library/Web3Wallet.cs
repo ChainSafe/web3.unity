@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using UnityEngine;
+using Nethereum.Util;
 
 public class Web3Wallet
 {
@@ -57,5 +58,13 @@ public class Web3Wallet
         {
             throw new Exception("sign error");
         }   
+    }
+
+    public static string Sha3(string _message)
+    {
+        Sha3Keccack hasher = new Sha3Keccack();
+        string hash = hasher.CalculateHash(_message);
+        // 0x1c8aff950685c2ed4bc3174f3472287b56d9517b9c948127319a09a7a36deac8
+        return "0x" + hash;
     }
 }
