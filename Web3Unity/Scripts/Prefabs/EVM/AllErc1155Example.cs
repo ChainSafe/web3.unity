@@ -21,7 +21,7 @@ public class AllErc1155Example : MonoBehaviour
         string contract = "";
         int first = 500;
         int skip = 0;
-        string response = await EVM.AllErc1155(chain, network, account, contract);
+        string response = await EVM.AllErc1155(chain, network, account, contract,first,skip);
         try
         {
             NFTs[] erc1155s = JsonConvert.DeserializeObject<NFTs[]>(response);
