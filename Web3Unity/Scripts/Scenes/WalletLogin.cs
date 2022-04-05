@@ -10,10 +10,13 @@ public class WalletLogin: MonoBehaviour
 
     void Start() {
         // if remember me is checked, set the account to the saved account
-        if (rememberMe.isOn && PlayerPrefs.GetString("Account") != "")
+        if(PlayerPrefs.HasKey("RememberMe") && PlayerPrefs.HasKey("Account"))
         {
-            // move to next scene
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            if (PlayerPrefs.GetInt("RememberMe") == 1 && PlayerPrefs.GetString("Account") != "")
+            {
+                // move to next scene
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            }
         }
     }
 
@@ -34,6 +37,11 @@ public class WalletLogin: MonoBehaviour
         if (account.Length == 42 && expirationTime >= now) {
             // save account
             PlayerPrefs.SetString("Account", account);
+            if (rememberMe.isOn)
+                PlayerPrefs.SetInt("RememberMe", 1);
+            else
+                PlayerPrefs.SetInt("RememberMe", 0);
+            print("Account: " + account);
             // load next scene
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
