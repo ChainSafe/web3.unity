@@ -209,9 +209,10 @@ namespace UnityAsyncAwaitUtil
 
         async Task<byte[]> DownloadRawDataAsync(string url)
         {
-            var request = UnityWebRequest.Get(url);
-            await request.SendWebRequest();
-            return request.downloadHandler.data;
+            using (var request = UnityWebRequest.Get(url)) {
+                await request.SendWebRequest();
+                return request.downloadHandler.data;
+            }
         }
 
         async Task RunIEnumeratorTryCatchExceptionAsync()
