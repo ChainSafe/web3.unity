@@ -22,7 +22,6 @@ public class EVM
         using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
         {
             await webRequest.SendWebRequest();
-            webRequest.Dispose();
             Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
             return data.response;
         }
@@ -37,7 +36,6 @@ public class EVM
         using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
         {
             await webRequest.SendWebRequest();
-            webRequest.Dispose();
             Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
             return data.response;
         }
@@ -57,7 +55,6 @@ public class EVM
         using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
         {
             await webRequest.SendWebRequest();
-            webRequest.Dispose();
             Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
             return data.response;
         }
@@ -78,7 +75,6 @@ public class EVM
         using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
         {
             await webRequest.SendWebRequest();
-            webRequest.Dispose();
             Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
             return data.response;
         }
@@ -95,7 +91,6 @@ public class EVM
         using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
         {
             await webRequest.SendWebRequest();
-            webRequest.Dispose();
             Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
             return data.response;
         }
@@ -111,7 +106,6 @@ public class EVM
         using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
         {
             await webRequest.SendWebRequest();
-            webRequest.Dispose();
             Response<int> data = JsonUtility.FromJson<Response<int>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
             return data.response;
         }
@@ -128,7 +122,6 @@ public class EVM
         using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
         {
             await webRequest.SendWebRequest();
-            webRequest.Dispose();
             Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
             return data.response;
         }
@@ -144,7 +137,6 @@ public class EVM
         using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
         {
             await webRequest.SendWebRequest();
-            webRequest.Dispose();
             Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
             return data.response;
         }
@@ -164,7 +156,6 @@ public class EVM
         using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
         {
             await webRequest.SendWebRequest();
-            webRequest.Dispose();
             Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
             return data.response;
         }
@@ -183,7 +174,6 @@ public class EVM
         using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
         {
             await webRequest.SendWebRequest();
-            webRequest.Dispose();
             Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
             return data.response;
         }
@@ -199,7 +189,6 @@ public class EVM
         using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
         {
             await webRequest.SendWebRequest();
-            webRequest.Dispose();
             Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
             return data.response;
         }
@@ -218,7 +207,6 @@ public class EVM
         using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
         {
             await webRequest.SendWebRequest();
-            webRequest.Dispose();
             Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
             return data.response;
         }
@@ -234,7 +222,6 @@ public class EVM
         using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
         {
             await webRequest.SendWebRequest();
-            webRequest.Dispose();
             Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
             return data.response;
         }
@@ -256,7 +243,6 @@ public class EVM
         using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
         {
             await webRequest.SendWebRequest();
-            webRequest.Dispose();
             Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
             return data.response;
         }
@@ -279,7 +265,6 @@ public class EVM
         using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
         {
             await webRequest.SendWebRequest();
-            webRequest.Dispose();
             Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
             return data.response;
         }
