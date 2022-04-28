@@ -45,5 +45,3 @@ public class Web3PrivateKey
         return signature;
     }
 }
-
-}
