@@ -26,6 +26,8 @@ mergeInto(LibraryManager.library, {
     );
   },
 
+  
+
   SendContractResponse: function () {
     var bufferSize = lengthBytesUTF8(window.web3gl.sendContractResponse) + 1;
     var buffer = _malloc(bufferSize);
@@ -46,6 +48,16 @@ mergeInto(LibraryManager.library, {
     );
   },
 
+    SendTransactionJsData: function (to, value, gasLimit, gasPrice, data) {
+    window.web3gl.sendTransactionData(
+      Pointer_stringify(to),
+      Pointer_stringify(value),
+      Pointer_stringify(gasLimit),
+      Pointer_stringify(gasPrice),
+      Pointer_stringify(data)
+    );
+  },
+
   SendTransactionResponse: function () {
     var bufferSize = lengthBytesUTF8(window.web3gl.sendTransactionResponse) + 1;
     var buffer = _malloc(bufferSize);
@@ -55,6 +67,10 @@ mergeInto(LibraryManager.library, {
 
   SetTransactionResponse: function (value) {
     window.web3gl.sendTransactionResponse = value;
+  },
+
+  SetTransactionResponseData: function (value) {
+    window.web3gl.sendTransactionResponseData = value;
   },
 
   SignMessage: function (message) {

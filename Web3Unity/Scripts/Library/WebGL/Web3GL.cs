@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using UnityEngine;
 
-#if UNITY_WEBGL
+
 public class Web3GL
 {
     [DllImport("__Internal")]
@@ -19,12 +19,18 @@ public class Web3GL
 
     [DllImport("__Internal")]
     private static extern void SendTransactionJs(string to, string value, string gasLimit, string gasPrice);
+    
+    [DllImport("__Internal")]
+    private static extern void SendTransactionJsData(string to, string value, string gasPrice, string gasLimit, string data);
 
     [DllImport("__Internal")]
     private static extern string SendTransactionResponse();
 
     [DllImport("__Internal")]
     private static extern void SetTransactionResponse(string value);
+    
+    [DllImport("__Internal")]
+    private static extern void SetTransactionResponseData(string value);
 
     [DllImport("__Internal")]
     private static extern void SignMessage(string value);
@@ -84,6 +90,29 @@ public class Web3GL
             throw new Exception(response);
         }
     }
+    
+    async public static Task<string> SendTransactionData(string _to, string _value,  string _gasPrice = "",string _gasLimit = "", string _data = "")
+    {
+        // Set response to empty
+        SetTransactionResponse("");
+        SendTransactionJsData(_to, _value, _gasPrice,_gasLimit,_data);
+        string response = SendTransactionResponse();
+        while (response == "")
+        {
+            await new WaitForSeconds(1f);
+            response = SendTransactionResponse();
+        }
+        SetTransactionResponse("");
+        // check if user submmited or user rejected
+        if (response.Length == 66) 
+        {
+            return response;
+        } 
+        else 
+        {
+            throw new Exception(response);
+        }
+    }
 
     async public static Task<string> Sign(string _message)
     {
@@ -113,4 +142,3 @@ public class Web3GL
     }
 
 }
-#endif

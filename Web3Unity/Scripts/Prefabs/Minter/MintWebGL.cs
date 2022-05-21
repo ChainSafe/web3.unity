@@ -14,17 +14,15 @@ public class MintWebGL : MonoBehaviour
     public string account = "0x148dC439Ffe10DF915f1DA14AA780A47A577709E";
     public string to = "0x148dC439Ffe10DF915f1DA14AA780A47A577709E";
     public string cid = "QmXjWjjMU8r39UCEZ8483aNedwNRFRLvvV9kwq1GpCgthj";
-    string chainId = "4";
     
     
     public async void MintNFT()
     {
         CreateMintModel.Response nftResponse = await EVM.CreateMint(chain, network, account, to, cid);
-        string signature = await Web3GL.Sign(nftResponse.hashedUnsignedTx);
         // connects to user's browser wallet (metamask) to send a transaction
         try
         {
-               string response = await Web3Wallet.SendTransaction(chainId, nftResponse.tx.to, nftResponse.tx.value, nftResponse.tx.data, nftResponse.tx.gasLimit, nftResponse.tx.gasPrice);
+               string response = await Web3GL.SendTransactionData(nftResponse.tx.to, nftResponse.tx.value, nftResponse.tx.gasPrice,nftResponse.tx.gasLimit, nftResponse.tx.data);
             print("Response: " + response);
         } catch (Exception e) {
             Debug.LogException(e, this);
