@@ -31,59 +31,63 @@ paste this in inspector to connect to wallet:
 window.web3gl.connect()
 */
 async function connect() {
-  // uncomment to enable torus and walletconnect
-  const providerOptions = {
-    // torus: {
-    //   package: Torus,
-    // },
-    // walletconnect: {
-    //   package: window.WalletConnectProvider.default,
-    //   options: {
-    //     infuraId: "00000000000000000000000000000000",
-    //   },
-    // },
-  };
+  try{
+    // uncomment to enable torus and walletconnect
+    const providerOptions = {
+      // torus: {
+      //   package: Torus,
+      // },
+      // walletconnect: {
+      //   package: window.WalletConnectProvider.default,
+      //   options: {
+      //     infuraId: "00000000000000000000000000000000",
+      //   },
+      // },
+    };
 
-  const web3Modal = new window.Web3Modal.default({
-    providerOptions,
-  });
+    const web3Modal = new window.Web3Modal.default({
+      providerOptions,
+    });
 
-  web3Modal.clearCachedProvider();
+    web3Modal.clearCachedProvider();
 
-  // set provider
-  provider = await web3Modal.connect();
-  web3 = new Web3(provider);
+    // set provider
+    provider = await web3Modal.connect();
+    web3 = new Web3(provider);
 
-  // set current network id
-  web3gl.networkId = parseInt(provider.chainId);
+    // set current network id
+    web3gl.networkId = parseInt(provider.chainId);
 
-  // if current network id is not equal to network id, then switch
-  if (web3gl.networkId != window.web3ChainId) {
-    try {
-      await window.ethereum.request({
-        method: "wallet_switchEthereumChain",
-        params: [{ chainId: `0x${window.web3ChainId.toString(16)}` }], // chainId must be in hexadecimal numbers
-      });
-    } catch {
-      // if network isn't added, pop-up metamask to add
-      await addEthereumChain();
+    // if current network id is not equal to network id, then switch
+    if (web3gl.networkId != window.web3ChainId) {
+      try {
+        await window.ethereum.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: `0x${window.web3ChainId.toString(16)}` }], // chainId must be in hexadecimal numbers
+        });
+      } catch {
+        // if network isn't added, pop-up metamask to add
+        await addEthereumChain();
+      }
     }
-  }
 
-  // set current account
-  // provider.selectedAddress works for metamask and torus
-  // provider.accounts[0] works for walletconnect
-  web3gl.connectAccount = provider.selectedAddress || provider.accounts[0];
+    // set current account
+    // provider.selectedAddress works for metamask and torus
+    // provider.accounts[0] works for walletconnect
+    web3gl.connectAccount = provider.selectedAddress || provider.accounts[0];
 
-  // refresh page if player changes account
-  provider.on("accountsChanged", (accounts) => {
+    // refresh page if player changes account
+    provider.on("accountsChanged", (accounts) => {
+      window.location.reload();
+    });
+
+    // update if player changes network
+    provider.on("chainChanged", (chainId) => {
+      web3gl.networkId = parseInt(chainId);
+    });
+  } catch {
     window.location.reload();
-  });
-
-  // update if player changes network
-  provider.on("chainChanged", (chainId) => {
-    web3gl.networkId = parseInt(chainId);
-  });
+  }
 }
 
 /*
