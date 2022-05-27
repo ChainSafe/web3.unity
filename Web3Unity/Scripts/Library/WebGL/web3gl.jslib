@@ -26,6 +26,8 @@ mergeInto(LibraryManager.library, {
     );
   },
 
+  
+
   SendContractResponse: function () {
     var bufferSize = lengthBytesUTF8(window.web3gl.sendContractResponse) + 1;
     var buffer = _malloc(bufferSize);
@@ -46,6 +48,16 @@ mergeInto(LibraryManager.library, {
     );
   },
 
+    SendTransactionJsData: function (to, value, gasLimit, gasPrice, data) {
+    window.web3gl.sendTransactionData(
+      Pointer_stringify(to),
+      Pointer_stringify(value),
+      Pointer_stringify(gasLimit),
+      Pointer_stringify(gasPrice),
+      Pointer_stringify(data)
+    );
+  },
+
   SendTransactionResponse: function () {
     var bufferSize = lengthBytesUTF8(window.web3gl.sendTransactionResponse) + 1;
     var buffer = _malloc(bufferSize);
@@ -57,8 +69,16 @@ mergeInto(LibraryManager.library, {
     window.web3gl.sendTransactionResponse = value;
   },
 
+  SetTransactionResponseData: function (value) {
+    window.web3gl.sendTransactionResponseData = value;
+  },
+
   SignMessage: function (message) {
     window.web3gl.signMessage(Pointer_stringify(message));
+  },
+
+  HashMessage: function (message) {
+    window.web3gl.sha3Message(Pointer_stringify(message));
   },
 
   SignMessageResponse: function () {
@@ -68,10 +88,20 @@ mergeInto(LibraryManager.library, {
     return buffer; 
   },
 
+  HashMessageResponse: function () {
+    var bufferSize = lengthBytesUTF8(window.web3gl.hashMessageResponse) + 1;
+    var buffer = _malloc(bufferSize);
+    stringToUTF8(window.web3gl.hashMessageResponse, buffer, bufferSize);
+    return buffer; 
+  },
+
   SetSignMessageResponse: function (value) {
     window.web3gl.signMessageResponse = value;
   },
 
+  SetHashMessageResponse: function (value) {
+      window.web3gl.hashMessageResponse = value;
+  },
   GetNetwork: function () {
     return window.web3gl.networkId;
   }
