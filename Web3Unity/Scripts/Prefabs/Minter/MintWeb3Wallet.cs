@@ -8,8 +8,8 @@ public class MintWeb3Wallet : MonoBehaviour
 
     public string chain = "ethereum";
     public string network = "rinkeby"; // mainnet ropsten kovan rinkeby goerli
-    public string account = "0xAd51aeAFB332719be31cb8F8bDF036Eff1478827";
-    public string to = "0xAd51aeAFB332719be31cb8F8bDF036Eff1478827";
+    public string account = PlayerPrefs.GetString("Account");
+    public string to = "0x7259E32e35cf880aEACfbD412E7F4Baa8606e04c";
     public string cid = "QmXjWjjMU8r39UCEZ8483aNedwNRFRLvvV9kwq1GpCgthj";
     public string chainId = "4";
 
@@ -23,7 +23,6 @@ public class MintWeb3Wallet : MonoBehaviour
         try
         {
             string response = await Web3Wallet.SendTransaction(chainId, nftResponse.tx.to, nftResponse.tx.value, nftResponse.tx.data, nftResponse.tx.gasLimit, nftResponse.tx.gasPrice);
-            print(response);
             Debug.Log(response);
         } catch (Exception e) {
             Debug.LogException(e, this);

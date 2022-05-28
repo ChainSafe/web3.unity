@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using UnityEngine;
 
-
+#if UNITY_WEBGL
 public class Web3GL
 {
     [DllImport("__Internal")]
@@ -169,3 +169,5 @@ public class Web3GL
     }
 
 }
+
+#endif
