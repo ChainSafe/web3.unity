@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
+#if UNITY_WEBGL
+
 public class WebGLSignVerifyExample : MonoBehaviour
 {
-    public string message = "hello";
+    public string message = "hello1";
     public Text textHashedMessage;
     public Text textSignedHash;
     public Text verifyAddress;
@@ -43,3 +45,5 @@ public class WebGLSignVerifyExample : MonoBehaviour
         Debug.Log("V: " + v);
     }
 }
+
+#endif
