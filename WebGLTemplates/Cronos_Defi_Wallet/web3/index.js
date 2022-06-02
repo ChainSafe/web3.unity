@@ -18,8 +18,16 @@ window.web3gl = {
   connectAccount: "",
   signMessage,
   signMessageResponse: "",
+  callContract,
+  callContractResponse:"",
+  callContractError:"",
   sendTransaction,
   sendTransactionResponse: "",
+  sha3Message,
+  hashMessageResponse: "",
+  sendTransactionResponse: "",
+  sendTransactionData,
+  sendTransactionResponseData:"",
   sendContract,
   sendContractResponse: "",
 };
@@ -94,7 +102,6 @@ async function connect() {
 
   // set current account
   web3gl.connectAccount = (await web3.eth.getAccounts())[0]
-  // or web3gl.connectAccount = (await provider.request({ method: 'eth_accounts' }))[0]
 
   // refresh page if player changes account
   provider.on("accountsChanged", (accounts) => {
@@ -108,14 +115,27 @@ async function connect() {
 }
 
 /*
+Will calculate the sha3 of the input.
+window.web3gl.sha3Message("hello")
+*/
+async function sha3Message(message) {
+    try {
+        const hashedMessage = await web3.utils.sha3(message);
+        window.web3gl.hashMessageResponse = hashedMessage;
+    } catch (error) {
+        window.web3gl.hashMessageResponse = error.message;
+    }
+}
+
+/*
 paste this in inspector to connect to sign message:
 window.web3gl.signMessage("hello")
 */
 async function signMessage(message) {
   try {
     const from = (await web3.eth.getAccounts())[0];
-    const signature = await web3.eth.personal.sign(message, from, "");
-    window.web3gl.signMessageResponse = signature;
+    const signature = await web3.eth.personal.sign(message, from, "")
+      window.web3gl.signMessageResponse = signature;
   } catch (error) {
     window.web3gl.signMessageResponse = error.message;
   }
@@ -132,19 +152,64 @@ window.web3gl.sendTransaction(to, value, gasLimit, gasPrice);
 async function sendTransaction(to, value, gasLimit, gasPrice) {
   const from = (await web3.eth.getAccounts())[0];
   web3.eth
-    .sendTransaction({
-      from,
-      to,
-      value,
-      gas: gasLimit ? gasLimit : undefined,
-      gasPrice: gasPrice ? gasPrice : undefined,
-    })
-    .on("transactionHash", (transactionHash) => {
-      window.web3gl.sendTransactionResponse = transactionHash;
-    })
-    .on("error", (error) => {
-      window.web3gl.sendTransactionResponse = error.message;
-    });
+      .sendTransaction({
+        from,
+        to,
+        value,
+        gas: gasLimit ? gasLimit : undefined,
+        gasPrice: gasPrice ? gasPrice : undefined,
+      })
+      .on("transactionHash", (transactionHash) => {
+        window.web3gl.sendTransactionResponse = transactionHash;
+      })
+      .on("error", (error) => {
+        window.web3gl.sendTransactionResponse = error.message;
+      });
+}
+
+/*
+paste this in inspector to send eth:
+const to = "0x20E7D0C4182149ADBeFE446E82358A2b2D5244e9"
+const value = "0"
+const gasPrice = "1100000010"
+const gasLimit = "228620" // gas limit
+const data = "0xd0def521000000000000000000000000d25b827d92b0fd656a1c829933e9b0b836d5c3e20000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000002e516d586a576a6a4d55387233395543455a38343833614e6564774e5246524c767656396b7771314770436774686a000000000000000000000000000000000000"
+window.web3gl.sendTransactionData(to, value, gasPrice, gasLimit, data);
+*/
+async function sendTransactionData(to, value, gasPrice, gasLimit, data) {
+    const from = (await web3.eth.getAccounts())[0];
+    web3.eth
+        .sendTransaction({
+            from,
+            to,
+            value,
+            gasPrice: gasPrice ? gasPrice : undefined,
+            gas: gasLimit ? gasLimit : undefined,
+            data: data ? data : undefined,
+        })
+        .on("transactionHash", (transactionHash) => {
+            window.web3gl.sendTransactionResponseData = transactionHash;
+        })
+        .on("error", (error) => {
+            window.web3gl.sendTransactionResponseData = error.message;
+        });
+}
+
+/*
+calls a non-mutable contract method.
+const method = "x"
+const abi = `[ { "inputs": [], "name": "increment", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "x", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" } ]`;
+const contract = "0xB6B8bB1e16A6F73f7078108538979336B9B7341C"
+const args = "[]"
+window.web3gl.callContract(method, abi, contract, args)
+*/
+async function callContract(method, abi, contract, args) {
+    const from = (await web3.eth.getAccounts())[0];
+    new web3.eth.Contract(JSON.parse(abi), contract).methods[method](
+        ...JSON.parse(args)
+    ).call()
+        .then((result) => window.web3gl.callContractResponse = result)
+        .catch((error) => window.web3gl.callContractError = error.message);
 }
 
 /*
@@ -161,18 +226,18 @@ window.web3gl.sendContract(method, abi, contract, args, value, gasLimit, gasPric
 async function sendContract(method, abi, contract, args, value, gasLimit, gasPrice) {
   const from = (await web3.eth.getAccounts())[0];
   new web3.eth.Contract(JSON.parse(abi), contract).methods[method](...JSON.parse(args))
-    .send({
-      from,
-      value,
-      gas: gasLimit ? gasLimit : undefined,
-      gasPrice: gasPrice ? gasPrice : undefined,
-    })
-    .on("transactionHash", (transactionHash) => {
-      window.web3gl.sendContractResponse = transactionHash;
-    })
-    .on("error", (error) => {
-      window.web3gl.sendContractResponse = error.message;
-    });
+      .send({
+        from,
+        value,
+        gas: gasLimit ? gasLimit : undefined,
+        gasPrice: gasPrice ? gasPrice : undefined,
+      })
+      .on("transactionHash", (transactionHash) => {
+        window.web3gl.sendContractResponse = transactionHash;
+      })
+      .on("error", (error) => {
+        window.web3gl.sendContractResponse = error.message;
+      });
 }
 
 // add new wallet to in metamask
@@ -199,12 +264,12 @@ async function addEthereumChain() {
   };
 
   await window.ethereum
-    .request({
-      method: "wallet_addEthereumChain",
-      params: [params, account],
-    })
-    .catch(() => {
-      // I give up
-      window.location.reload();
-    });
+      .request({
+        method: "wallet_addEthereumChain",
+        params: [params, account],
+      })
+      .catch(() => {
+        // I give up
+        window.location.reload();
+      });
 }

@@ -11,7 +11,7 @@ public class WebGLSignMessageExample : MonoBehaviour
         try {
             string message = "hello";
             string response = await Web3GL.Sign(message);
-            Debug.Log(response);
+            print(response);
         } catch (Exception e) {
             Debug.LogException(e, this);
         }
