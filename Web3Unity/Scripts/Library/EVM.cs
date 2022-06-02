@@ -1,6 +1,7 @@
 using System;
 using System.Numerics;
 using System.Threading.Tasks;
+using Models;
 using UnityEngine;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
@@ -92,6 +93,23 @@ public class EVM
         {
             await webRequest.SendWebRequest();
             Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+            return data.response;
+        }
+    }
+    
+    public static async Task<CreateMintModel.Response> CreateMint(string _chain, string _network, string _account, string _to, string _cid)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("chain", _chain);
+        form.AddField("network", _network);
+        form.AddField("account", _account);
+        form.AddField("to", _to);
+        form.AddField("cid", _cid);
+        string url = host + "/createMintNFTTransaction";
+        using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
+        {
+            await webRequest.SendWebRequest();
+            CreateMintModel.Root data = JsonUtility.FromJson<CreateMintModel.Root>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
             return data.response;
         }
     }

@@ -19,21 +19,37 @@ public class Web3GL
 
     [DllImport("__Internal")]
     private static extern void SendTransactionJs(string to, string value, string gasLimit, string gasPrice);
+    
+    [DllImport("__Internal")]
+    private static extern void SendTransactionJsData(string to, string value, string gasPrice, string gasLimit, string data);
 
     [DllImport("__Internal")]
     private static extern string SendTransactionResponse();
 
     [DllImport("__Internal")]
     private static extern void SetTransactionResponse(string value);
+    
+    [DllImport("__Internal")]
+    private static extern void SetTransactionResponseData(string value);
 
     [DllImport("__Internal")]
     private static extern void SignMessage(string value);
+    
+    
+    [DllImport("__Internal")]
+    private static extern void HashMessage(string value);
 
     [DllImport("__Internal")]
     private static extern string SignMessageResponse();
+    
+    [DllImport("__Internal")]
+    private static extern string HashMessageResponse();
 
     [DllImport("__Internal")]
     private static extern void SetSignMessageResponse(string value);
+    
+    [DllImport("__Internal")]
+    private static extern void SetHashMessageResponse(string value);
 
     [DllImport("__Internal")]
     private static extern int GetNetwork();
@@ -84,6 +100,29 @@ public class Web3GL
             throw new Exception(response);
         }
     }
+    
+    async public static Task<string> SendTransactionData(string _to, string _value,  string _gasPrice = "",string _gasLimit = "", string _data = "")
+    {
+        // Set response to empty
+        SetTransactionResponse("");
+        SendTransactionJsData(_to, _value, _gasPrice,_gasLimit,_data);
+        string response = SendTransactionResponse();
+        while (response == "")
+        {
+            await new WaitForSeconds(1f);
+            response = SendTransactionResponse();
+        }
+        SetTransactionResponse("");
+        // check if user submmited or user rejected
+        if (response.Length == 66) 
+        {
+            return response;
+        } 
+        else 
+        {
+            throw new Exception(response);
+        }
+    }
 
     async public static Task<string> Sign(string _message)
     {
@@ -106,6 +145,23 @@ public class Web3GL
             throw new Exception(response);
         }
     }
+    
+    async public static Task<string> Sha3(string _message)
+    {
+        HashMessage(_message);
+        SetHashMessageResponse("");
+        try
+        {
+            await new WaitForSeconds(1f);
+            string response = HashMessageResponse();
+            return response;
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+            throw;
+        }
+    }
 
     public static int Network()
     {
@@ -113,4 +169,5 @@ public class Web3GL
     }
 
 }
+
 #endif
