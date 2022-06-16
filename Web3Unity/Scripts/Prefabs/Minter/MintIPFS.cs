@@ -4,7 +4,7 @@ using Models;
 using Newtonsoft.Json;
 using UnityEngine;
 
-public class MintPK : MonoBehaviour
+public class MintIPFS : MonoBehaviour
 {
 
     // Start is called before the first frame update
@@ -12,10 +12,16 @@ public class MintPK : MonoBehaviour
     public string network = "rinkeby"; // mainnet ropsten kovan rinkeby goerli
     public string account = "0x7259E32e35cf880aEACfbD412E7F4Baa8606e04c";
     public string to = "0x7259E32e35cf880aEACfbD412E7F4Baa8606e04c";
-    public string cid = "QmXjWjjMU8r39UCEZ8483aNedwNRFRLvvV9kwq1GpCgthj";
 
-    async public void MintButtonPK()
+    async public void MintButtonIPFS()
     {
+        var data = System.Text.Encoding.UTF8.GetBytes("YOUR_DATA");
+        
+        IPFS ipfs = new IPFS("YOUR_CHAINSAFE_STORE_API_KEY");
+        string cid  = await ipfs.Upload("BUCKET_ID", "/PATH", "FILENAME.ext", data, "application/octet-stream");
+
+        Debug.Log("IPFS CID: " + cid);
+        
         CreateMintModel.Response nftResponse = await EVM.CreateMint(chain, network, account, to, cid);
         if (nftResponse != null)
         {

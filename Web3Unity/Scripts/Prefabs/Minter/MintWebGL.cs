@@ -13,17 +13,11 @@ public class MintWebGL : MonoBehaviour
     public string network = "rinkeby"; // mainnet ropsten kovan rinkeby goerli
     public string account = "0x148dC439Ffe10DF915f1DA14AA780A47A577709E";
     public string to = "0x148dC439Ffe10DF915f1DA14AA780A47A577709E";
+    public string cid = "QmXjWjjMU8r39UCEZ8483aNedwNRFRLvvV9kwq1GpCgthj";
     
     
     public async void MintNFT()
     {
-        var data = System.Text.Encoding.UTF8.GetBytes("YOUR_DATA");
-        
-        IPFS ipfs = new IPFS("YOUR_CHAINSAFE_STORAGE_API_KEY");
-        string cid  = await ipfs.Upload("BUCKET_ID", "/PATH", "FILENAME.ext", data, "application/octet-stream");
-
-        Debug.Log("IPFS CID: " + cid);
-
         CreateMintModel.Response nftResponse = await EVM.CreateMint(chain, network, account, to, cid);
         // connects to user's browser wallet (metamask) to send a transaction
         try
