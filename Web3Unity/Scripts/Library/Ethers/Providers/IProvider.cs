@@ -2,6 +2,8 @@ using System.Numerics;
 using System.Threading.Tasks;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
+using Web3Unity.Scripts.Library.Ethers.Blocks;
+using Web3Unity.Scripts.Library.Ethers.Transactions;
 
 namespace Web3Unity.Scripts.Library.Ethers.Providers
 {
@@ -24,19 +26,20 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
         public Task<Block> GetBlock(string blockHash);
         public Task<BlockWithTransactions> GetBlockWithTransactions(BlockParameter blockTag = null);
         public Task<BlockWithTransactions> GetBlockWithTransactions(string blockHash);
-        public Task<Transaction> GetTransaction(string transactionHash);
-        public Task<TransactionReceipt> GetTransactionReceipt(string transactionHash);
+        public Task<TransactionResponse> GetTransaction(string transactionHash);
+        public Task<Transactions.TransactionReceipt> GetTransactionReceipt(string transactionHash);
 
         // Fees
         public Task<HexBigInteger> GetGasPrice();
         public Task<FeeData> GetFeeData();
 
         // Execution
-        public Task<string> Call(CallInput input, BlockParameter blockTag = null);
-        public Task<HexBigInteger> EstimateGas(CallInput input);
-        public Task<Transaction> SendTransaction(string signedTx);
+        public Task<string> Call(TransactionRequest transaction, BlockParameter blockTag = null);
+        public Task<HexBigInteger> EstimateGas(TransactionRequest transaction);
+        public Task<TransactionResponse> SendTransaction(string signedTx);
 
-        public Task<TransactionReceipt> WaitForTransactionReceipt(string transactionHash, uint confirmations = 1,
+        public Task<Transactions.TransactionReceipt> WaitForTransactionReceipt(string transactionHash,
+            uint confirmations = 1,
             uint timeout = 30);
 
         // Bloom-filter Queries

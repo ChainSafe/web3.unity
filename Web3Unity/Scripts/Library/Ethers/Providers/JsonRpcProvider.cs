@@ -12,6 +12,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
     public class JsonRpcProvider : BaseProvider
     {
         private readonly string _connection;
+        private ulong _nextId;
 
         private readonly JsonSerializerSettings _jsonSerializerSettings = new JsonSerializerSettings
         {
@@ -31,16 +32,6 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
             var task = Task.Run(async () => { base._network = await DetectNetwork(); });
             task.Wait(TimeSpan.FromMilliseconds(0));
-        }
-
-        public JsonRpcProvider(string chain, string network) : base(null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public JsonRpcProvider(uint chainId) : base(null)
-        {
-            throw new NotImplementedException();
         }
 
         public static string DefaultUrl()
@@ -122,8 +113,8 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
         public async Task<T> Send<T>(string method, object[] parameters = null)
         {
-            var json = JsonConvert.SerializeObject(new RpcRequestMessage(1, method, parameters),
-                _jsonSerializerSettings); // TODO: nextId
+            var json = JsonConvert.SerializeObject(new RpcRequestMessage(++_nextId, method, parameters),
+                _jsonSerializerSettings);
             var response = await Web.Web.FetchJson<RpcResponseMessage>(_connection, json);
             if (response.Error != null)
             {

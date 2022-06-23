@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
+using Web3Unity.Scripts.Library.Ethers.Blocks;
+using Web3Unity.Scripts.Library.Ethers.Transactions;
 
 namespace Web3Unity.Scripts.Library.Ethers.Providers
 {
@@ -11,6 +13,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
     {
         public readonly bool AnyNetwork = true;
         internal Network.Network _network;
+        internal readonly Formatter _formater;
 
         public BaseProvider(Network.Network network)
         {
@@ -30,9 +33,9 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             blockTag ??= new BlockParameter();
 
             var parameters = new object[] {address, blockTag};
-            var result = await Perform<string>("eth_getBalance", parameters);
             try
             {
+                var result = await Perform<string>("eth_getBalance", parameters);
                 return new HexBigInteger(result);
             }
             catch (Exception e)
@@ -48,9 +51,9 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             blockTag ??= new BlockParameter();
 
             var parameters = new object[] {address, blockTag};
-            var result = await Perform<string>("eth_getCode", parameters);
             try
             {
+                var result = await Perform<string>("eth_getCode", parameters);
                 return result;
             }
             catch (Exception e)
@@ -66,9 +69,9 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             blockTag ??= new BlockParameter();
 
             var parameters = new object[] {address, position.ToHex(false), blockTag};
-            var result = await Perform<string>("eth_getStorageAt", parameters);
             try
             {
+                var result = await Perform<string>("eth_getStorageAt", parameters);
                 return result;
             }
             catch (Exception e)
@@ -84,9 +87,9 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             blockTag ??= new BlockParameter();
 
             var parameters = new object[] {address, blockTag};
-            var result = await Perform<string>("eth_getTransactionCount", parameters);
             try
             {
+                var result = await Perform<string>("eth_getTransactionCount", parameters);
                 return new HexBigInteger(result);
             }
             catch (Exception e)
@@ -102,9 +105,9 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             blockTag ??= new BlockParameter();
 
             var parameters = new object[] {blockTag.GetRPCParam(), false};
-            var result = await Perform<Block>("eth_getBlockByNumber", parameters);
             try
             {
+                var result = await Perform<Block>("eth_getBlockByNumber", parameters);
                 return result;
             }
             catch (Exception e)
@@ -123,9 +126,9 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             }
 
             var parameters = new object[] {blockHash, false};
-            var result = await Perform<Block>("eth_getBlockByHash", parameters);
             try
             {
+                var result = await Perform<Block>("eth_getBlockByHash", parameters);
                 return result;
             }
             catch (Exception e)
@@ -141,9 +144,9 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             blockTag ??= new BlockParameter();
 
             var parameters = new object[] {blockTag.GetRPCParam(), true};
-            var result = await Perform<BlockWithTransactions>("eth_getBlockByNumber", parameters);
             try
             {
+                var result = await Perform<BlockWithTransactions>("eth_getBlockByNumber", parameters);
                 return result;
             }
             catch (Exception e)
@@ -162,9 +165,9 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             }
 
             var parameters = new object[] {blockHash, true};
-            var result = await Perform<BlockWithTransactions>("eth_getBlockByHash", parameters);
             try
             {
+                var result = await Perform<BlockWithTransactions>("eth_getBlockByHash", parameters);
                 return result;
             }
             catch (Exception e)
@@ -177,9 +180,9 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
         {
             await GetNetwork();
 
-            var result = await Perform<string>("eth_blockNumber", null);
             try
             {
+                var result = await Perform<string>("eth_blockNumber", null);
                 return new HexBigInteger(result);
             }
             catch (Exception e)
@@ -205,9 +208,9 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
         {
             await GetNetwork();
 
-            var result = await Perform<string>("eth_gasPrice", null);
             try
             {
+                var result = await Perform<string>("eth_gasPrice", null);
                 return new HexBigInteger(result);
             }
             catch (Exception e)
@@ -238,16 +241,16 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             };
         }
 
-        public async Task<string> Call(CallInput input, BlockParameter blockTag = null)
+        public async Task<string> Call(TransactionRequest transaction, BlockParameter blockTag = null)
         {
             await GetNetwork();
 
             blockTag ??= new BlockParameter();
 
-            var parameters = new object[] {input, blockTag.GetRPCParam()};
-            var result = await Perform<string>("eth_call", parameters);
+            var parameters = new object[] {transaction, blockTag.GetRPCParam()};
             try
             {
+                var result = await Perform<string>("eth_call", parameters);
                 return result;
             }
             catch (Exception e)
@@ -256,14 +259,14 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             }
         }
 
-        public async Task<HexBigInteger> EstimateGas(CallInput input)
+        public async Task<HexBigInteger> EstimateGas(TransactionRequest transaction)
         {
             await GetNetwork();
 
-            var parameters = new object[] {input};
-            var result = await Perform<string>("eth_estimateGas", parameters);
+            var parameters = new object[] {transaction};
             try
             {
+                var result = await Perform<string>("eth_estimateGas", parameters);
                 return new HexBigInteger(result);
             }
             catch (Exception e)
@@ -272,16 +275,16 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             }
         }
 
-        public async Task<Transaction> GetTransaction(string transactionHash)
+        public async Task<TransactionResponse> GetTransaction(string transactionHash)
         {
             await GetNetwork();
 
             // TODO: add polling system to wait for transaction to be mined?
 
             var parameters = new object[] {transactionHash};
-            var result = await Perform<Transaction>("eth_getTransactionByHash", parameters);
             try
             {
+                var result = await Perform<TransactionResponse>("eth_getTransactionByHash", parameters);
                 return result;
             }
             catch (Exception e)
@@ -297,9 +300,9 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             // TODO: add polling system to wait for transaction to be mined?
 
             var parameters = new object[] {transactionHash};
-            var result = await Perform<TransactionReceipt>("eth_getTransactionReceipt", parameters);
             try
             {
+                var result = await Perform<TransactionReceipt>("eth_getTransactionReceipt", parameters);
                 return result;
             }
             catch (Exception e)
@@ -308,10 +311,41 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             }
         }
 
-        public Task<Transaction> SendTransaction(string signedTx)
+        public async Task<TransactionResponse> SendTransaction(string signedTx)
         {
-            // eth_sendRawTransaction
-            throw new NotImplementedException();
+            await GetNetwork();
+
+            var tx = _formater.Transaction.Parse(signedTx);
+
+            var parameters = new object[] {signedTx};
+            try
+            {
+                var result = await Perform<string>("eth_sendRawTransaction", parameters);
+                return _wrapTransaction(tx, result);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("bad result from backend", e);
+            }
+        }
+
+        public TransactionResponse _wrapTransaction(Transaction tx, string hash)
+        {
+            if (hash != null && hash.Length != 66)
+            {
+                throw new Exception("invalid response - SendTransaction");
+            }
+
+            var result = (TransactionResponse) tx;
+            result.Hash = hash;
+
+            result.Wait = async () =>
+            {
+                var receipt = await GetTransactionReceipt(hash); // TODO: _waitForTransaction(hash, confirms);
+                return receipt;
+            };
+
+            return result;
         }
 
         public Task<TransactionReceipt> WaitForTransactionReceipt(string transactionHash, uint confirmations = 1,
@@ -325,9 +359,9 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             await GetNetwork();
 
             var parameters = new object[] {filter};
-            var result = await Perform<FilterLog[]>("eth_getLogs", parameters);
             try
             {
+                var result = await Perform<FilterLog[]>("eth_getLogs", parameters);
                 return result;
             }
             catch (Exception e)

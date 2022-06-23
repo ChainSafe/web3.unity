@@ -1,7 +1,9 @@
 using System;
 using System.Threading.Tasks;
 using Nethereum.Hex.HexConvertors.Extensions;
+using Nethereum.Hex.HexTypes;
 using Web3Unity.Scripts.Library.Ethers.Providers;
+using Web3Unity.Scripts.Library.Ethers.Transactions;
 
 namespace Web3Unity.Scripts.Library.Ethers.Signers
 {
@@ -45,6 +47,49 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
         public override async Task<string> SignMessage(string message)
         {
             return await _signMessage(message.ToHexUTF8());
+        }
+
+        public override async Task<TransactionResponse> SendTransaction(TransactionRequest transaction)
+        {
+            var hash = await SendUncheckedTransaction(transaction);
+
+            try
+            {
+                var tx = await _provider.GetTransaction(hash);
+                return this.provider._wrapTransaction(tx, hash);
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"failed to get transaction {hash}", e);
+            }
+        }
+
+        public async Task<string> SendUncheckedTransaction(TransactionRequest transaction)
+        {
+            var fromAddress = (await GetAddress()).ToLower();
+            
+            if (transaction.GasLimit == null)
+            {
+                var estimate = (TransactionRequest) transaction.Clone();
+                estimate.From = fromAddress;
+                transaction.GasLimit = (await _provider.EstimateGas(transaction));
+                transaction.GasLimit = new HexBigInteger(transaction.GasLimit.Value * 2);
+            }
+
+            if (transaction.From != null)
+            {
+                if (transaction.From.ToLower() != fromAddress)
+                {
+                    throw new Exception("from address mismatch");
+                }
+            }
+            else
+            {
+                transaction.From = fromAddress;
+            }
+
+            var rpcTxParams = transaction.ToRPCParam();
+            return await provider.Send<string>("eth_sendTransaction", new object[] {rpcTxParams});
         }
 
         private async Task<string> _signMessage(string hexMessage)

@@ -4,6 +4,7 @@ using Nethereum.RPC.Eth.DTOs;
 using UnityEngine;
 using Web3Unity.Scripts.Library.Ethers.Network;
 using Web3Unity.Scripts.Library.Ethers.Providers;
+using Web3Unity.Scripts.Library.Ethers.Transactions;
 using Web3Unity.Scripts.Library.Ethers.Utils;
 
 namespace Web3Unity.Scripts.Prefabs.Ethers
@@ -24,7 +25,7 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
             var network = await provider.GetNetwork();
             Debug.Log($"Network name: {network.Name}");
             Debug.Log($"Network chain id: {network.ChainId}");
-
+            
             var balance = await provider.GetBalance(BAYC);
             Debug.Log($"Contract balance: {balance} wei");
             Debug.Log($"Contract balance: {Units.FormatEther(balance)} ETH");
@@ -65,7 +66,7 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
             Debug.Log($"GasPrice: {Units.FormatUnits(feeData.GasPrice, "gwei")} gwei");
             Debug.Log($"MaxFeePerGas: {Units.FormatUnits(feeData.MaxFeePerGas, "gwei")} gwei");
             Debug.Log($"MaxPriorityFeePerGas: {Units.FormatUnits(feeData.MaxPriorityFeePerGas, "gwei")} gwei");
-
+            
             var gasPrice = await provider.GetGasPrice();
             Debug.Log($"GasPrice: {gasPrice} wei");
             
@@ -78,18 +79,28 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
                 await provider.GetTransactionReceipt(
                     "0xad68326264ad8f7b6603dd7350aa9780eb5597228fc04153ddf648eaa624cf60");
             Debug.Log($"Block hash from TX receipt: {receipt.BlockHash}");
-
-
-            var owner = await provider.Call(new CallInput("0x8da5cb5b", BAYC)); // owner()
+            
+            var owner = await provider.Call(new TransactionRequest
+            {
+                To = BAYC,
+                Data = "0x8da5cb5b" // owner()
+            });
             Debug.Log($"BAYC.onwer(): {owner}");
             
-            var ownerOfOne = await provider.Call(new CallInput(
-                "0x6352211e0000000000000000000000000000000000000000000000000000000000000001", BAYC)); // ownerOf(1)
+            var ownerOfOne = await provider.Call(new TransactionRequest
+            {
+                To = BAYC,
+                Data = "0x6352211e0000000000000000000000000000000000000000000000000000000000000001" // ownerOf(1)
+            });
+            
             Debug.Log($"BAYC.onwerOf(1): {ownerOfOne}");
             
-            var estimatedGas = await provider.EstimateGas(new CallInput(
-                "0x6352211e0000000000000000000000000000000000000000000000000000000000000001",
-                BAYC)); // ownerOf(1)
+            var estimatedGas = await provider.EstimateGas(new TransactionRequest
+            {
+                To = BAYC,
+                Data = "0x6352211e0000000000000000000000000000000000000000000000000000000000000001" // ownerOf(1)
+            });
+            
             Debug.Log($"Estimated gas for {BAYC}.ownerOf(1): {Units.FormatEther(estimatedGas)} ETH");
             
             // var logs = await provider.GetLogs(new NewFilterInput());
@@ -117,6 +128,16 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
             
             Debug.Log($"Legacy signature string(hello): {await signer._LegacySignMessage("hello")}");
             Debug.Log($"Legacy signature byte[](hello): {await signer._LegacySignMessage(Encoding.ASCII.GetBytes("hello"))}");
+
+            var tx = await signer.SendTransaction(new TransactionRequest
+            {
+                To = await signer.GetAddress()
+            });
+            
+            Debug.Log($"Transaction hash: {tx.Hash}");
+            
+            var receipt = await tx.Wait();
+            Debug.Log($"Transaction receipt: {receipt.Status}");
         }
     }
 }
