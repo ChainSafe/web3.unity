@@ -13,7 +13,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Transactions
 
         [JsonProperty(PropertyName = "type")]
         public HexBigInteger Type { get; set; }
-        
+
         /// <summary>
         ///    QUANTITY - The transaction chain id.
         /// </summary>

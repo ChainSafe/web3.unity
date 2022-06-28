@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
+using Web3Unity.Scripts.Library.Ethers.InternalEvents;
 using Web3Unity.Scripts.Library.Ethers.Providers;
 using Web3Unity.Scripts.Library.Ethers.Transactions;
 
@@ -95,9 +97,19 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
         {
             if (_provider == null)
             {
-                // TODO: event log
+                _captureError(operation, "missing provider");
                 throw new Exception("missing provider");
             }
+        }
+        
+        private static void _captureError(string operation, string error)
+        {
+            var properties = new Dictionary<string, object>
+            {
+                {"error", error}
+            };
+
+            PostHog.Client.Capture("Chains", properties);
         }
     }
 }

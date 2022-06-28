@@ -15,19 +15,19 @@ namespace Web3Unity.Scripts.Library.Ethers.Transactions
         /// <summary>
         ///     QUANTITY - integer of the transactions index position in the block.
         /// </summary>
-       [JsonProperty(PropertyName = "transactionIndex")]
+        [JsonProperty(PropertyName = "transactionIndex")]
         public HexBigInteger TransactionIndex { get; set; }
 
         /// <summary>
         ///     DATA, 32 Bytes - hash of the block where this transaction was in.
         /// </summary>
-       [JsonProperty(PropertyName = "blockHash")]
+        [JsonProperty(PropertyName = "blockHash")]
         public string BlockHash { get; set; }
 
         /// <summary>
         ///     QUANTITY - block number where this transaction was in.
         /// </summary>
-       [JsonProperty(PropertyName = "blockNumber")]
+        [JsonProperty(PropertyName = "blockNumber")]
         public HexBigInteger BlockNumber { get; set; }
 
         /// <summary>
@@ -41,17 +41,17 @@ namespace Web3Unity.Scripts.Library.Ethers.Transactions
         /// </summary>
         [JsonProperty(PropertyName = "to")]
         public string To { get; set; }
-        
+
         /// <summary>
         ///     QUANTITY - The total amount of gas used when this transaction was executed in the block.
         /// </summary>
-       [JsonProperty(PropertyName = "cumulativeGasUsed")]
+        [JsonProperty(PropertyName = "cumulativeGasUsed")]
         public HexBigInteger CumulativeGasUsed { get; set; }
 
         /// <summary>
         ///     QUANTITY - The amount of gas used by this specific transaction alone.
         /// </summary>
-       [JsonProperty(PropertyName = "gasUsed")]
+        [JsonProperty(PropertyName = "gasUsed")]
         public HexBigInteger GasUsed { get; set; }
 
         /// <summary>
@@ -63,31 +63,31 @@ namespace Web3Unity.Scripts.Library.Ethers.Transactions
         /// <summary>
         ///     DATA, 20 Bytes - The contract address created, if the transaction was a contract creation, otherwise null.
         /// </summary>
-       [JsonProperty(PropertyName = "contractAddress")]
+        [JsonProperty(PropertyName = "contractAddress")]
         public string ContractAddress { get; set; }
 
         /// <summary>
         ///     QUANTITY / BOOLEAN Transaction Success 1, Transaction Failed 0
         /// </summary>
-       [JsonProperty(PropertyName = "status")]
+        [JsonProperty(PropertyName = "status")]
         public HexBigInteger Status { get; set; }
 
         /// <summary>
         ///     logs: Array - Array of log objects, which this transaction generated.
         /// </summary>
-       [JsonProperty(PropertyName = "logs")]
+        [JsonProperty(PropertyName = "logs")]
         public JArray Logs { get; set; }
 
         /// <summary>
         ///    QUANTITY - The transaction type.
         /// </summary>
-       [JsonProperty(PropertyName = "type")]
+        [JsonProperty(PropertyName = "type")]
         public HexBigInteger Type { get; set; }
 
         /// <summary>
         ///     DATA, 256 Bytes - Bloom filter for light clients to quickly retrieve related logs
         /// </summary>
-       [JsonProperty(PropertyName = "logsBloom")]
+        [JsonProperty(PropertyName = "logsBloom")]
         public string LogsBloom { get; set; }
 
         /// <summary>

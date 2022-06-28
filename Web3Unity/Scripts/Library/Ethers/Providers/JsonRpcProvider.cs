@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.Client.RpcMessages;
@@ -68,7 +69,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             {
                 var chains = await Chains.GetChains();
                 var chain = chains[chainId];
-                
+
                 if (chain == null)
                 {
                     return new Network.Network
@@ -77,7 +78,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
                         ChainId = chainId
                     };
                 }
-                
+
                 return new Network.Network
                 {
                     Name = chain.Name,
@@ -128,6 +129,12 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
         public override async Task<T> Perform<T>(string method, object[] parameters = null)
         {
             return await Send<T>(method, parameters);
+        }
+
+        protected override void _populateEventProperties(Dictionary<string, object> properties)
+        {
+            properties["provider"] = "jsonrpc";
+            properties["rpc"] = _connection;
         }
     }
 }

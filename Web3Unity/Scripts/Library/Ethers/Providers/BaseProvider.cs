@@ -1,10 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.Numerics;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
 using Web3Unity.Scripts.Library.Ethers.Blocks;
+using Web3Unity.Scripts.Library.Ethers.InternalEvents;
 using Web3Unity.Scripts.Library.Ethers.Transactions;
 
 namespace Web3Unity.Scripts.Library.Ethers.Providers
@@ -17,6 +20,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
         public BaseProvider(Network.Network network)
         {
+            _network = network;
         }
 
         public Network.Network Network => _network;
@@ -33,13 +37,20 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             blockTag ??= new BlockParameter();
 
             var parameters = new object[] {address, blockTag};
+            var properties = new Dictionary<string, object>
+            {
+                {"address", address},
+                {"block", blockTag.GetRPCParamAsNumber()}
+            };
             try
             {
-                var result = await Perform<string>("eth_getBalance", parameters);
-                return new HexBigInteger(result);
+                var result = new HexBigInteger(await Perform<string>("eth_getBalance", parameters));
+                _captureEvent("eth_getBalance", properties, result.ToString());
+                return result;
             }
             catch (Exception e)
             {
+                _captureError("eth_getBalance", properties, e);
                 throw new Exception("bad result from backend", e);
             }
         }
@@ -51,13 +62,20 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             blockTag ??= new BlockParameter();
 
             var parameters = new object[] {address, blockTag};
+            var properties = new Dictionary<string, object>
+            {
+                {"address", address},
+                {"block", blockTag.GetRPCParamAsNumber()}
+            };
             try
             {
                 var result = await Perform<string>("eth_getCode", parameters);
+                _captureEvent("eth_getCode", properties, result);
                 return result;
             }
             catch (Exception e)
             {
+                _captureError("eth_getCode", properties, e);
                 throw new Exception("bad result from backend", e);
             }
         }
@@ -69,13 +87,21 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             blockTag ??= new BlockParameter();
 
             var parameters = new object[] {address, position.ToHex(false), blockTag};
+            var properties = new Dictionary<string, object>
+            {
+                {"address", address},
+                {"position", position.ToString()},
+                {"block", blockTag.GetRPCParamAsNumber()}
+            };
             try
             {
                 var result = await Perform<string>("eth_getStorageAt", parameters);
+                _captureEvent("eth_getStorageAt", properties, result);
                 return result;
             }
             catch (Exception e)
             {
+                _captureError("eth_getStorageAt", properties, e);
                 throw new Exception("bad result from backend", e);
             }
         }
@@ -87,13 +113,20 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             blockTag ??= new BlockParameter();
 
             var parameters = new object[] {address, blockTag};
+            var properties = new Dictionary<string, object>
+            {
+                {"address", address},
+                {"block", blockTag.GetRPCParamAsNumber()}
+            };
             try
             {
-                var result = await Perform<string>("eth_getTransactionCount", parameters);
-                return new HexBigInteger(result);
+                var result = new HexBigInteger(await Perform<string>("eth_getTransactionCount", parameters));
+                _captureEvent("eth_getTransactionCount", properties, result.ToString());
+                return result;
             }
             catch (Exception e)
             {
+                _captureError("eth_getTransactionCount", properties, e);
                 throw new Exception("bad result from backend", e);
             }
         }
@@ -105,13 +138,19 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             blockTag ??= new BlockParameter();
 
             var parameters = new object[] {blockTag.GetRPCParam(), false};
+            var properties = new Dictionary<string, object>
+            {
+                {"block", blockTag.GetRPCParamAsNumber()}
+            };
             try
             {
                 var result = await Perform<Block>("eth_getBlockByNumber", parameters);
+                _captureEvent("eth_getBlockByNumber", properties, result);
                 return result;
             }
             catch (Exception e)
             {
+                _captureError("eth_getBlockByNumber", properties, e);
                 throw new Exception("bad result from backend", e);
             }
         }
@@ -126,13 +165,19 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             }
 
             var parameters = new object[] {blockHash, false};
+            var properties = new Dictionary<string, object>
+            {
+                {"block", blockHash}
+            };
             try
             {
                 var result = await Perform<Block>("eth_getBlockByHash", parameters);
+                _captureEvent("eth_getBlockByHash", properties, result);
                 return result;
             }
             catch (Exception e)
             {
+                _captureError("eth_getBlockByHash", properties, e);
                 throw new Exception("bad result from backend", e);
             }
         }
@@ -144,13 +189,19 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             blockTag ??= new BlockParameter();
 
             var parameters = new object[] {blockTag.GetRPCParam(), true};
+            var properties = new Dictionary<string, object>
+            {
+                {"block", blockTag.GetRPCParamAsNumber()}
+            };
             try
             {
                 var result = await Perform<BlockWithTransactions>("eth_getBlockByNumber", parameters);
+                _captureEvent("eth_getBlockByNumber", properties, result);
                 return result;
             }
             catch (Exception e)
             {
+                _captureError("eth_getBlockByNumber", properties, e);
                 throw new Exception("bad result from backend", e);
             }
         }
@@ -165,13 +216,19 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             }
 
             var parameters = new object[] {blockHash, true};
+            var properties = new Dictionary<string, object>
+            {
+                {"blockHash", blockHash}
+            };
             try
             {
                 var result = await Perform<BlockWithTransactions>("eth_getBlockByHash", parameters);
+                _captureEvent("eth_getBlockByHash", properties, result);
                 return result;
             }
             catch (Exception e)
             {
+                _captureError("eth_getBlockByHash", properties, e);
                 throw new Exception("bad result from backend", e);
             }
         }
@@ -180,13 +237,16 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
         {
             await GetNetwork();
 
+            var properties = new Dictionary<string, object>();
             try
             {
-                var result = await Perform<string>("eth_blockNumber", null);
-                return new HexBigInteger(result);
+                var result = new HexBigInteger(await Perform<string>("eth_blockNumber", null));
+                _captureEvent("eth_blockNumber", properties, result.ToString());
+                return result;
             }
             catch (Exception e)
             {
+                _captureError("eth_blockNumber", properties, e);
                 throw new Exception("bad result from backend", e);
             }
         }
@@ -208,13 +268,16 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
         {
             await GetNetwork();
 
+            var properties = new Dictionary<string, object>();
             try
             {
-                var result = await Perform<string>("eth_gasPrice", null);
-                return new HexBigInteger(result);
+                var result = new HexBigInteger(await Perform<string>("eth_gasPrice", null));
+                _captureEvent("eth_gasPrice", properties, result.ToString());
+                return result;
             }
             catch (Exception e)
             {
+                _captureError("eth_gasPrice", properties, e);
                 throw new Exception("bad result from backend", e);
             }
         }
@@ -248,13 +311,20 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             blockTag ??= new BlockParameter();
 
             var parameters = new object[] {transaction, blockTag.GetRPCParam()};
+            var properties = new Dictionary<string, object>
+            {
+                {"transaction", transaction},
+                {"block", blockTag.GetRPCParamAsNumber()}
+            };
             try
             {
                 var result = await Perform<string>("eth_call", parameters);
+                _captureEvent("eth_call", properties, result);
                 return result;
             }
             catch (Exception e)
             {
+                _captureError("eth_call", properties, e);
                 throw new Exception("bad result from backend", e);
             }
         }
@@ -264,13 +334,19 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             await GetNetwork();
 
             var parameters = new object[] {transaction};
+            var properties = new Dictionary<string, object>
+            {
+                {"transaction", transaction}
+            };
             try
             {
-                var result = await Perform<string>("eth_estimateGas", parameters);
-                return new HexBigInteger(result);
+                var result = new HexBigInteger(await Perform<string>("eth_estimateGas", parameters));
+                _captureEvent("eth_estimateGas", properties, result.ToString());
+                return result;
             }
             catch (Exception e)
             {
+                _captureError("eth_estimateGas", properties, e);
                 throw new Exception("bad result from backend", e);
             }
         }
@@ -282,13 +358,19 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             // TODO: add polling system to wait for transaction to be mined?
 
             var parameters = new object[] {transactionHash};
+            var properties = new Dictionary<string, object>
+            {
+                {"txHash", transactionHash}
+            };
             try
             {
                 var result = await Perform<TransactionResponse>("eth_getTransactionByHash", parameters);
+                _captureEvent("eth_getTransactionByHash", properties, result);
                 return result;
             }
             catch (Exception e)
             {
+                _captureError("eth_getTransactionByHash", properties, e);
                 throw new Exception("bad result from backend", e);
             }
         }
@@ -300,13 +382,19 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             // TODO: add polling system to wait for transaction to be mined?
 
             var parameters = new object[] {transactionHash};
+            var properties = new Dictionary<string, object>
+            {
+                {"txHash", transactionHash}
+            };
             try
             {
                 var result = await Perform<TransactionReceipt>("eth_getTransactionReceipt", parameters);
+                _captureEvent("eth_getTransactionReceipt", properties, result);
                 return result;
             }
             catch (Exception e)
             {
+                _captureError("eth_getTransactionReceipt", properties, e);
                 throw new Exception("bad result from backend", e);
             }
         }
@@ -318,13 +406,19 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             var tx = _formater.Transaction.Parse(signedTx);
 
             var parameters = new object[] {signedTx};
+            var properties = new Dictionary<string, object>
+            {
+                {"rawTx", signedTx}
+            };
             try
             {
                 var result = await Perform<string>("eth_sendRawTransaction", parameters);
+                _captureEvent("eth_sendRawTransaction", properties, result);
                 return _wrapTransaction(tx, result);
             }
             catch (Exception e)
             {
+                _captureError("eth_sendRawTransaction", properties, e);
                 throw new Exception("bad result from backend", e);
             }
         }
@@ -359,13 +453,19 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             await GetNetwork();
 
             var parameters = new object[] {filter};
+            var properties = new Dictionary<string, object>
+            {
+                {"filter", filter}
+            };
             try
             {
                 var result = await Perform<FilterLog[]>("eth_getLogs", parameters);
+                _captureEvent("eth_getLogs", properties, result);
                 return result;
             }
             catch (Exception e)
             {
+                _captureError("eth_getLogs", properties, e);
                 throw new Exception("bad result from backend", e);
             }
         }
@@ -381,6 +481,40 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
             _network = await DetectNetwork();
             return _network;
+        }
+
+        private void _captureEvent(string method, Dictionary<string, object> properties, object result)
+        {
+            properties["result"] = result;
+            _capture("Call", method, properties);
+        }
+
+        private void _captureError(string method, Dictionary<string, object> properties, Exception error)
+        {
+            properties["error"] = error;
+            _capture("Error", method, properties);
+        }
+
+        private void _capture(string eventName, string method, Dictionary<string, object> properties)
+        {
+            _populateEventProperties(properties);
+
+            var network = _network ?? new Network.Network
+            {
+                ChainId = 0,
+                Name = "unknown",
+            };
+
+            properties["chainId"] = network.ChainId;
+            properties["network"] = network.Name;
+            properties["method"] = method;
+
+            PostHog.Client.Capture("[TEST] " + eventName, properties); // TODO: remove [TEST]
+        }
+
+        protected virtual void _populateEventProperties(Dictionary<string, object> properties)
+        {
+            throw new NotImplementedException();
         }
     }
 }

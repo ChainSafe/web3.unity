@@ -84,7 +84,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Blocks
         ///     QUANTITY - integer of the difficulty for this block.   
         /// </summary>
         [JsonProperty(PropertyName = "difficulty")]
-        public HexBigInteger Difficulty { get; set; } 
+        public HexBigInteger Difficulty { get; set; }
 
         /// <summary>
         ///     QUANTITY - integer of the total difficulty of the chain until this block.
@@ -121,7 +121,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Blocks
         /// </summary>
         [JsonProperty(PropertyName = "gasUsed")]
         public HexBigInteger GasUsed { get; set; }
-        
+
         /// <summary>
         ///     QUANTITY - the base fee per gas amount in this block.
         /// </summary>
