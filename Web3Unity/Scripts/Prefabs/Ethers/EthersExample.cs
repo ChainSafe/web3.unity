@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
 using Nethereum.RPC.Eth.DTOs;
 using UnityEngine;
+using Web3Unity.Scripts.Library.Ethers.InternalEvents;
 using Web3Unity.Scripts.Library.Ethers.Network;
 using Web3Unity.Scripts.Library.Ethers.Providers;
 using Web3Unity.Scripts.Library.Ethers.Transactions;
@@ -15,7 +17,7 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
         {
             var chains = await Chains.GetChains();
             Debug.Log($"{chains.Count} chains found");
-
+            
             // var provider = new JsonRpcProvider("https://eth-mainnet.alchemyapi.io/v2/-xZN4CbntuRCIKrOSZgfdxUpV9zG_KtM");
             var provider = new JsonRpcProvider(); // default url http://localhost:8545
             // var provider = new JsonRpcProvider(chains[1].RPC[3]);
@@ -57,7 +59,14 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
             Debug.Log($"Block hash of first transaction in current block: {blockWithTx.Transactions[0].BlockHash}");
             
             var block15M = await provider.GetBlock(new BlockParameter(15000000));
-            Debug.Log($"Hash of block #15000000: {block15M.BlockHash}");
+            if (block15M != null)
+            {
+                Debug.Log($"Block hash of 15000000: {block15M.BlockHash}");
+            }
+            else
+            {
+                Debug.Log($"Block 15000000 not found");
+            }
             
             var txCount = await provider.GetTransactionCount("0xaba7161a7fb69c88e16ed9f455ce62b791ee4d03");
             Debug.Log($"Transaction count: {txCount}");
@@ -121,14 +130,13 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
             Debug.Log($"Signer balance: {Units.FormatEther(await signer.GetBalance())} ETH");
             Debug.Log($"Signer chain id: {await signer.GetChainId()}");
             Debug.Log($"Signer tx count: {await signer.GetTransactionCount()}");
-            // TODO: nonce?
-
+            
             // Debug.Log($"Signature string(hello): {await signer.SignMessage("hello")}");
             // Debug.Log($"Signature byte[](hello): {await signer.SignMessage(Encoding.ASCII.GetBytes("hello"))}");
             
             Debug.Log($"Legacy signature string(hello): {await signer._LegacySignMessage("hello")}");
             Debug.Log($"Legacy signature byte[](hello): {await signer._LegacySignMessage(Encoding.ASCII.GetBytes("hello"))}");
-
+            
             var tx = await signer.SendTransaction(new TransactionRequest
             {
                 To = await signer.GetAddress()
@@ -136,8 +144,8 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
             
             Debug.Log($"Transaction hash: {tx.Hash}");
             
-            var receipt = await tx.Wait();
-            Debug.Log($"Transaction receipt: {receipt.Status}");
+            var txReceipt = await tx.Wait();
+            Debug.Log($"Transaction receipt: {txReceipt.Status}");
         }
     }
 }
