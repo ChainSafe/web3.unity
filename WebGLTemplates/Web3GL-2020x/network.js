@@ -20,7 +20,6 @@ Used to set the network: https://chainlist.org/
 1666600000 Harmony Mainnet Shard0
 25 Cronos Mainnet Beta
 338 Cronos Testnet
-71401 Nervos EVM Layer Godworken v1.1
 */
 
 window.web3ChainId = 4;
