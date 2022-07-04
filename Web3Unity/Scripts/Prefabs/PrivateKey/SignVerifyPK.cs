@@ -9,16 +9,16 @@ public class SignVerifyPK : MonoBehaviour
     async void Start()
     {
         var privateKey = "ADD_PRIVATE_KEY";
-        string message = "Message";
+        string message = "hello";
         var hashedMessage = Web3Wallet.Sha3(message);
-        Debug.Log("Hashed Message: " + hashedMessage);
+        Debug.Log("Hashed Message PK: " + hashedMessage);
         string signature = Web3PrivateKey.Sign(privateKey, message);
-        print("Signature: " + signature);
+        print("Signature PK: " + signature);
         // get account from private key
         string account = Web3PrivateKey.Address(privateKey);
         print("Account from PK: " + account);
         string address = await EVM.Verify(hashedMessage, signature);
-        print("Address From Verify: " + address);
+        print("Address From Verify PK: " + address);
         
         ParseSignatureFunction(signature);
     }
@@ -28,10 +28,10 @@ public class SignVerifyPK : MonoBehaviour
     {
         string signature = sig;
         string r = signature.Substring(0, 66).EnsureHexPrefix();
-        Debug.Log("R:" + r);
+        Debug.Log("PK R:" + r);
         string s = signature.Substring(66, 64).EnsureHexPrefix();
-        Debug.Log("S: " + s);
+        Debug.Log("PK S: " + s);
         int v = int.Parse(signature.Substring(130, 2), System.Globalization.NumberStyles.HexNumber);
-        Debug.Log("V: " + v);
+        Debug.Log("PK V: " + v);
     }
 }
