@@ -116,7 +116,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 23, y: -48}
+  m_AnchoredPosition: {x: 23, y: -13}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2799717858554657643
@@ -225,7 +225,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c19034a790b61441adfd1dffc88b51c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  message: hello
+  message: hello1
   textHashedMessage: {fileID: 7523017095230044065}
   textSignedHash: {fileID: 7303377407210195607}
   verifyAddress: {fileID: 6576852011596053091}
@@ -295,7 +295,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 39.013, y: -153}
+  m_AnchoredPosition: {x: 39.013, y: -70}
   m_SizeDelta: {x: 514.96, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1190075119736674779

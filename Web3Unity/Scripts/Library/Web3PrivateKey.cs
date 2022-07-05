@@ -41,8 +41,7 @@ public class Web3PrivateKey
     public static string Sign(string _privateKey, string _message)
     {
         var signer = new EthereumMessageSigner();
-        EthECKey key = new EthECKey(_privateKey);
-        string signature = signer.EncodeUTF8AndSign(_message, new EthECKey(_privateKey));
+        string signature = signer.HashAndSign(_message, _privateKey);
         return signature;
     }
 }
