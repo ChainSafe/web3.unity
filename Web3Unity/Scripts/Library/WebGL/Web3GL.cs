@@ -169,5 +169,4 @@ public class Web3GL
     }
 
 }
-
 #endif

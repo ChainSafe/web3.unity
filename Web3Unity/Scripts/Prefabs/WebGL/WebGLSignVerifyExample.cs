@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 public class WebGLSignVerifyExample : MonoBehaviour
 {
-    public string message = "hello1";
+    public string message = "hello";
     public Text textHashedMessage;
     public Text textSignedHash;
     public Text verifyAddress;
