@@ -8,7 +8,6 @@ public class SignVerifyWebWallet : MonoBehaviour
     // Start is called before the first frame update
     async void Start()
     {
-        var signer = new EthereumMessageSigner();
         string message = "hello";
         string signature = await Web3Wallet.Sign(message);
         //verification
