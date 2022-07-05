@@ -22,7 +22,6 @@ public class SignVerifyPK : MonoBehaviour
         
         ParseSignatureFunction(signature);
     }
-
     // Update is called once per frame
     public void ParseSignatureFunction(string sig)
     {

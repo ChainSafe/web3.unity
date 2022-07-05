@@ -1,8 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using Nethereum.Hex.HexConvertors.Extensions;
-using Nethereum.Signer;
 using UnityEngine;
 using Nethereum.Util;
 
@@ -65,9 +63,10 @@ public class Web3Wallet
 
     public static string Sha3(string _message)
     {
-        var signer = new EthereumMessageSigner();
-        var hash = new Sha3Keccack().CalculateHash(_message).EnsureHexPrefix();
-        // 0x06b3dfaec148fb1bb2b066f10ec285e7c9bf402ab32aa78a5d38e34566810cd2
-        return  hash;
+       
+        Sha3Keccack hasher = new Sha3Keccack();
+        string hash = hasher.CalculateHash(_message);
+        // 0x1c8aff950685c2ed4bc3174f3472287b56d9517b9c948127319a09a7a36deac8
+        return "0x" + hash;
     }
 }
