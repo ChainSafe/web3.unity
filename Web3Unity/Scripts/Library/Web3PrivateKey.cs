@@ -23,8 +23,8 @@ public class Web3PrivateKey
         if ((CHAIN_ID == MATIC_MAIN) || (CHAIN_ID == MATIC_MUMBAI) || (CHAIN_ID == HARMONY_MAINNET) ||
             (CHAIN_ID == HARMONY_TESTNET))
         {
-           // signature = EthECDSASignature.CreateStringSignature(key.SignAndCalculateYParityV(hashByteArr));
-           // return signature;
+            signature = EthECDSASignature.CreateStringSignature(key.SignAndCalculateYParityV(hashByteArr));
+            return signature;
 
         }
 
@@ -41,7 +41,8 @@ public class Web3PrivateKey
     public static string Sign(string _privateKey, string _message)
     {
         var signer = new EthereumMessageSigner();
-        string signature = signer.HashAndSign(_message,_privateKey);
+        EthECKey key = new EthECKey(_privateKey);
+        string signature = signer.EncodeUTF8AndSign(_message, new EthECKey(_privateKey));
         return signature;
     }
 }
