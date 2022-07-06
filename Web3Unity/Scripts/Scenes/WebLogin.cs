@@ -10,6 +10,9 @@ public class WebLogin : MonoBehaviour
     private static extern void Web3Connect();
 
     [DllImport("__Internal")]
+    private static extern void Web3ConnectMobile();
+
+    [DllImport("__Internal")]
     private static extern string ConnectAccount();
 
     [DllImport("__Internal")]
@@ -21,6 +24,13 @@ public class WebLogin : MonoBehaviour
     public void OnLogin()
     {
         Web3Connect();
+        OnConnected();
+    }
+
+    // works with safepal mobile dapp browser
+    public void OnLoginMobile()
+    {
+        Web3ConnectMobile();
         OnConnected();
     }
 

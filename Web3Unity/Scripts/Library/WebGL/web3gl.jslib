@@ -3,6 +3,12 @@ mergeInto(LibraryManager.library, {
     window.web3gl.connect();
   },
 
+  Web3ConnectMobile: function () {
+  web3 = new Web3(window.ethereum);
+  // connect popup
+  ethereum.enable();
+  },
+
   ConnectAccount: function () {
     var bufferSize = lengthBytesUTF8(window.web3gl.connectAccount) + 1;
     var buffer = _malloc(bufferSize);
@@ -16,17 +22,15 @@ mergeInto(LibraryManager.library, {
 
   SendContractJs: function (method, abi, contract, args, value, gasLimit, gasPrice) {
     window.web3gl.sendContract(
-      Pointer_stringify(method),
-      Pointer_stringify(abi),
-      Pointer_stringify(contract),
-      Pointer_stringify(args),
-      Pointer_stringify(value),
-      Pointer_stringify(gasLimit),
-      Pointer_stringify(gasPrice)
+      UTF8ToString(method),
+      UTF8ToString(abi),
+      UTF8ToString(contract),
+      UTF8ToString(args),
+      UTF8ToString(value),
+      UTF8ToString(gasLimit),
+      UTF8ToString(gasPrice)
     );
   },
-
-  
 
   SendContractResponse: function () {
     var bufferSize = lengthBytesUTF8(window.web3gl.sendContractResponse) + 1;
@@ -41,20 +45,20 @@ mergeInto(LibraryManager.library, {
 
   SendTransactionJs: function (to, value, gasLimit, gasPrice) {
     window.web3gl.sendTransaction(
-      Pointer_stringify(to),
-      Pointer_stringify(value),
-      Pointer_stringify(gasLimit),
-      Pointer_stringify(gasPrice)
+      UTF8ToString(to),
+      UTF8ToString(value),
+      UTF8ToString(gasLimit),
+      UTF8ToString(gasPrice)
     );
   },
 
     SendTransactionJsData: function (to, value, gasLimit, gasPrice, data) {
     window.web3gl.sendTransactionData(
-      Pointer_stringify(to),
-      Pointer_stringify(value),
-      Pointer_stringify(gasLimit),
-      Pointer_stringify(gasPrice),
-      Pointer_stringify(data)
+      UTF8ToString(to),
+      UTF8ToString(value),
+      UTF8ToString(gasLimit),
+      UTF8ToString(gasPrice),
+      UTF8ToString(data)
     );
   },
 
@@ -74,11 +78,11 @@ mergeInto(LibraryManager.library, {
   },
 
   SignMessage: function (message) {
-    window.web3gl.signMessage(Pointer_stringify(message));
+    window.web3gl.signMessage(UTF8ToString(message));
   },
 
   HashMessage: function (message) {
-    window.web3gl.sha3Message(Pointer_stringify(message));
+    window.web3gl.sha3Message(UTF8ToString(message));
   },
 
   SignMessageResponse: function () {
