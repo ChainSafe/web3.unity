@@ -97,7 +97,7 @@ public class EVM
         }
     }
     
-    public static async Task<CreateMintModel.Response> CreateMint(string _chain, string _network, string _account, string _to, string _cid)
+    public static async Task<CreateMintModel.Response> CreateMint(string _chain, string _network, string _account, string _to, string _cid, string _type)
     {
         WWWForm form = new WWWForm();
         form.AddField("chain", _chain);
@@ -105,6 +105,7 @@ public class EVM
         form.AddField("account", _account);
         form.AddField("to", _to);
         form.AddField("cid", _cid);
+        form.AddField("type", _type);
         string url = host + "/createMintNFTTransaction";
         using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
         {
