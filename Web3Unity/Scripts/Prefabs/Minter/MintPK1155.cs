@@ -4,7 +4,7 @@ using Models;
 using Newtonsoft.Json;
 using UnityEngine;
 
-public class MintPK : MonoBehaviour
+public class MintPK1155 : MonoBehaviour
 {
 
     // Start is called before the first frame update
@@ -12,8 +12,8 @@ public class MintPK : MonoBehaviour
     public string network = "rinkeby"; // mainnet ropsten kovan rinkeby goerli
     public string account = "0x7259E32e35cf880aEACfbD412E7F4Baa8606e04c";
     public string to = "0x7259E32e35cf880aEACfbD412E7F4Baa8606e04c";
-    public string cid = "QmXjWjjMU8r39UCEZ8483aNedwNRFRLvvV9kwq1GpCgthj";
-    public string type = "721";
+    public string cid = "f01559ae4021a47e26bc773587278f62a833f2a6117411afbc5a7855661936d1c";
+    public string type = "1155";
 
     async public void MintButtonPK()
     {
