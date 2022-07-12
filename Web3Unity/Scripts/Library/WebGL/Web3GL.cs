@@ -34,6 +34,7 @@ public class Web3GL
 
     [DllImport("__Internal")]
     private static extern void SignMessage(string value);
+
     
     [DllImport("__Internal")]
     private static extern void HashMessage(string value);
