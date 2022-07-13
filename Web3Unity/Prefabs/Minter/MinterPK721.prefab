@@ -78,7 +78,7 @@ GameObject:
   - component: {fileID: 2089152318148336710}
   - component: {fileID: 2828591265784234870}
   - component: {fileID: 7350898661736696712}
-  - component: {fileID: 1206611345975628240}
+  - component: {fileID: 7316375324198202908}
   m_Layer: 5
   m_Name: MintPK
   m_TagString: Untagged
@@ -188,8 +188,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1206611345975628240}
-        m_TargetAssemblyTypeName: MintPK, Assembly-CSharp
+      - m_Target: {fileID: 7316375324198202908}
+        m_TargetAssemblyTypeName: MintPK721, Assembly-CSharp
         m_MethodName: MintButtonPK
         m_Mode: 1
         m_Arguments:
@@ -200,7 +200,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1206611345975628240
+--- !u!114 &7316375324198202908
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -214,9 +214,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chain: ethereum
   network: rinkeby
-  account: 0xAd51aeAFB332719be31cb8F8bDF036Eff1478827
-  to: 0xAd51aeAFB332719be31cb8F8bDF036Eff1478827
+  account: 0x7259E32e35cf880aEACfbD412E7F4Baa8606e04c
+  to: 0x7259E32e35cf880aEACfbD412E7F4Baa8606e04c
   cid: QmXjWjjMU8r39UCEZ8483aNedwNRFRLvvV9kwq1GpCgthj
+  type: 721
 --- !u!1 &5587050335665095065
 GameObject:
   m_ObjectHideFlags: 0

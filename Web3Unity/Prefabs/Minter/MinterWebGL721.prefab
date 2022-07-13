@@ -289,7 +289,7 @@ GameObject:
   - component: {fileID: 4199834852167704752}
   - component: {fileID: 29298499441941974}
   - component: {fileID: 538445946543294083}
-  - component: {fileID: 1757075670805565513}
+  - component: {fileID: 3794610590014201408}
   m_Layer: 5
   m_Name: MintWebGL
   m_TagString: Untagged
@@ -399,8 +399,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1757075670805565513}
-        m_TargetAssemblyTypeName: MintWebGL, Assembly-CSharp
+      - m_Target: {fileID: 3794610590014201408}
+        m_TargetAssemblyTypeName: MintWebGL721, Assembly-CSharp
         m_MethodName: MintNFT
         m_Mode: 1
         m_Arguments:
@@ -411,7 +411,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1757075670805565513
+--- !u!114 &3794610590014201408
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -420,12 +420,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7976199672808863396}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a61c95736c4f4cc49bdfc1eb4ada334e, type: 3}
+  m_Script: {fileID: 11500000, guid: 87fb94cf6fbd5254380c5b1504ca0727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   chain: ethereum
   network: rinkeby
-  account: 0x148dC439Ffe10DF915f1DA14AA780A47A577709E
+  account: 
   to: 0x148dC439Ffe10DF915f1DA14AA780A47A577709E
   cid: QmXjWjjMU8r39UCEZ8483aNedwNRFRLvvV9kwq1GpCgthj
   type721: 721
