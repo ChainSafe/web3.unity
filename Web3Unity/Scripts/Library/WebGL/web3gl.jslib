@@ -16,13 +16,13 @@ mergeInto(LibraryManager.library, {
 
   SendContractJs: function (method, abi, contract, args, value, gasLimit, gasPrice) {
     window.web3gl.sendContract(
-      stringToUTF8(method),
-      stringToUTF8(abi),
-      stringToUTF8(contract),
-      stringToUTF8(args),
-      stringToUTF8(value),
-      stringToUTF8(gasLimit),
-      stringToUTF8(gasPrice)
+      Pointer_stringify(method),
+      Pointer_stringify(abi),
+      Pointer_stringify(contract),
+      Pointer_stringify(args),
+      Pointer_stringify(value),
+      Pointer_stringify(gasLimit),
+      Pointer_stringify(gasPrice)
     );
   },
 
@@ -41,20 +41,20 @@ mergeInto(LibraryManager.library, {
 
   SendTransactionJs: function (to, value, gasLimit, gasPrice) {
     window.web3gl.sendTransaction(
-      stringToUTF8(to),
-      stringToUTF8(value),
-      stringToUTF8(gasLimit),
-      stringToUTF8(gasPrice)
+      Pointer_stringify(to),
+      Pointer_stringify(value),
+      Pointer_stringify(gasLimit),
+      Pointer_stringify(gasPrice)
     );
   },
 
     SendTransactionJsData: function (to, value, gasLimit, gasPrice, data) {
     window.web3gl.sendTransactionData(
-      stringToUTF8(to),
-      stringToUTF8(value),
-      stringToUTF8(gasLimit),
-      stringToUTF8(gasPrice),
-      stringToUTF8(data)
+      Pointer_stringify(to),
+      Pointer_stringify(value),
+      Pointer_stringify(gasLimit),
+      Pointer_stringify(gasPrice),
+      Pointer_stringify(data)
     );
   },
 
@@ -74,11 +74,11 @@ mergeInto(LibraryManager.library, {
   },
 
   SignMessage: function (message) {
-    window.web3gl.signMessage(stringToUTF8(message));
+    window.web3gl.signMessage(Pointer_stringify(message));
   },
 
   HashMessage: function (message) {
-    window.web3gl.sha3Message(stringToUTF8(message));
+    window.web3gl.sha3Message(Pointer_stringify(message));
   },
 
   SignMessageResponse: function () {

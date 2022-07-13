@@ -14,17 +14,17 @@ public class MintIPFS : MonoBehaviour
     public string to = "0x7259E32e35cf880aEACfbD412E7F4Baa8606e04c";
     public string type = "721"; // for 1155 assets update type.
     public string cid = "QmbnT8LsBCShSaeSSXyrmX1rHdWZdbj45Whyioomqekwr4";
-
-
+    
+    
     async public void MintButtonIPFS()
     {
         var data = System.Text.Encoding.UTF8.GetBytes("YOUR_DATA");
-
+        
         IPFS ipfs = new IPFS("YOUR_CHAINSAFE_STORE_API_KEY");
-        string cid = await ipfs.Upload("BUCKET_ID", "/PATH", "FILENAME.ext", data, "application/octet-stream");
+        string cid  = await ipfs.Upload("BUCKET_ID", "/PATH", "FILENAME.ext", data, "application/octet-stream");
 
         Debug.Log("IPFS CID: " + cid);
-
+        
         CreateMintModel.Response nftResponse = await EVM.CreateMint(chain, network, account, to, cid, type);
         if (nftResponse != null)
         {

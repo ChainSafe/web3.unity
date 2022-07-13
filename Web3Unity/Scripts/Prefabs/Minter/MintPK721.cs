@@ -4,7 +4,7 @@ using Models;
 using Newtonsoft.Json;
 using UnityEngine;
 
-public class MintPK : MonoBehaviour
+public class MintPK721 : MonoBehaviour
 {
 
     // Start is called before the first frame update

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3088116032749859}
   - component: {fileID: 6340334152810470460}
   - component: {fileID: 1194495780224485885}
-  - component: {fileID: 3273593005761991171}
+  - component: {fileID: 8493851505887001244}
   m_Layer: 5
   m_Name: Mint721
   m_TagString: Untagged
@@ -122,7 +122,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3273593005761991171}
+      - m_Target: {fileID: 8493851505887001244}
         m_TargetAssemblyTypeName: MintWeb3Wallet721, Assembly-CSharp
         m_MethodName: MintNFT721
         m_Mode: 1
@@ -134,7 +134,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &3273593005761991171
+--- !u!114 &8493851505887001244
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,7 +143,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1090395696645607554}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ac2589b8ac0df54a8d343a1017fabe6, type: 3}
+  m_Script: {fileID: 11500000, guid: 785a5af054a848e4a93802898e155c97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   chain: ethereum
