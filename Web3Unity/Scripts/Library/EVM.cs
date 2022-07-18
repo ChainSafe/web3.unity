@@ -96,7 +96,7 @@ public class EVM
             return data.response;
         }
     }
-    
+
     public static async Task<CreateMintModel.Response> CreateMint(string _chain, string _network, string _account, string _to, string _cid, string _type)
     {
         WWWForm form = new WWWForm();
@@ -287,5 +287,12 @@ public class EVM
             Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
             return data.response;
         }
+    }
+
+    public static async Task<string> Get721Voucher(string voucherIssuerURI)
+    {
+        string url = voucherIssuerURI + "/voucher721";
+        var data = JsonUtility.FromJson<Response<GetVoucherModel.GetVoucher721Response>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+        return data.response;
     }
 }
