@@ -21,6 +21,7 @@ namespace Models
             public ulong nonce;
             public string signer;
             public string signature;
+            public string amount;
         }
     }
 }
