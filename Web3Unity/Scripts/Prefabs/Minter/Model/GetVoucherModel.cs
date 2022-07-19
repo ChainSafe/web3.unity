@@ -12,12 +12,13 @@ namespace Models
             public string signer;
             public string signature;
         }
+  
         [Serializable]
         public class GetVoucher1155Response
         {
             public int minPrice;
             public string tokenId;
-            public int nonce;
+            public ulong nonce;
             public string signer;
             public string signature;
         }
