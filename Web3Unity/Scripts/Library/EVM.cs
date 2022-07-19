@@ -11,6 +11,8 @@ public class EVM
     public class Response<T> { public T response; }
 
     private readonly static string host = "https://api.gaming.chainsafe.io/evm";
+    private readonly static string hostVoucher = "https://lazy-minting-voucher-signer.herokuapp.com";
+
 
     public static async Task<string> BalanceOf(string _chain, string _network, string _account, string _rpc = "")
     {
@@ -289,10 +291,27 @@ public class EVM
         }
     }
 
-    public static async Task<string> Get721Voucher(string voucherIssuerURI)
+    public static async Task<GetVoucherModel.GetVoucher721Response> Get721Voucher()
     {
-        string url = voucherIssuerURI + "/voucher721";
-        var data = JsonUtility.FromJson<Response<GetVoucherModel.GetVoucher721Response>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
-        return data.response;
+        string url = hostVoucher + "/voucher721";
+
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
+        {
+            await webRequest.SendWebRequest();
+            GetVoucherModel.GetVoucher721Response root721 = JsonConvert.DeserializeObject<GetVoucherModel.GetVoucher721Response>(webRequest.downloadHandler.text);
+            return root721;
+        }
+    }
+
+    public static async Task<GetVoucherModel.GetVoucher1155Response> Get1155Voucher()
+    {
+        string url = hostVoucher + "/voucher1155";
+
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
+        {
+            await webRequest.SendWebRequest();
+            GetVoucherModel.GetVoucher1155Response root1155 = JsonConvert.DeserializeObject<GetVoucherModel.GetVoucher1155Response>(webRequest.downloadHandler.text);
+            return root1155;
+        }
     }
 }
