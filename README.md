@@ -6,7 +6,7 @@
 [<img alt="Twitter" src="https://img.shields.io/twitter/follow/espadrine.svg?style=for-the-badge&label=Twitter&color=1DA1F2" height="20">](https://twitter.com/chainsafeth)
 
 ## Documentation
-https://chainsafe.github.io/game-docs/
+https://docs.gaming.chainsafe.io/
 
 ## Download
 
