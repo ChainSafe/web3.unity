@@ -14,6 +14,7 @@ public class GetListedNFTWebWallet : MonoBehaviour
     private string chain = "ethereum";
     public Renderer textureObject;
     private string network = "goerli";
+    private string chainID = "5";
     public Text price;
     public Text seller;
     public Text description;
@@ -121,7 +122,7 @@ public class GetListedNFTWebWallet : MonoBehaviour
         try
         {
             
-            string responseNft = await Web3Wallet.SendTransaction("5", response.tx.to, response.tx.value,
+            string responseNft = await Web3Wallet.SendTransaction(chainID, response.tx.to, response.tx.value,
                 response.tx.data, response.tx.gasLimit, response.tx.gasPrice);
             if (responseNft == null)
             {
