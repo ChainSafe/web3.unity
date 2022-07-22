@@ -26,6 +26,7 @@ public class MintWebGL721 : MonoBehaviour
     {
         CreateMintModel.Response nftResponse = await EVM.CreateMint(chain, network, account, to, cid, type721);
         // connects to user's browser wallet (metamask) to send a transaction
+        Debug.Log("NFT Response: " + nftResponse);
         try
         {   
             string response = await Web3GL.SendTransactionData(nftResponse.tx.to, nftResponse.tx.value, nftResponse.tx.gasPrice,nftResponse.tx.gasLimit, nftResponse.tx.data);
