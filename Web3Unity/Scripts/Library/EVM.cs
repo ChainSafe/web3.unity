@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
 using Models;
@@ -12,7 +13,6 @@ public class EVM
 
     private readonly static string host = "https://api.gaming.chainsafe.io/evm";
     private readonly static string hostVoucher = "https://lazy-minting-voucher-signer.herokuapp.com";
-
 
     public static async Task<string> BalanceOf(string _chain, string _network, string _account, string _rpc = "")
     {
@@ -98,7 +98,7 @@ public class EVM
             return data.response;
         }
     }
-
+    
     public static async Task<CreateMintModel.Response> CreateMint(string _chain, string _network, string _account, string _to, string _cid, string _type)
     {
         WWWForm form = new WWWForm();
@@ -113,6 +113,123 @@ public class EVM
         {
             await webRequest.SendWebRequest();
             CreateMintModel.Root data = JsonUtility.FromJson<CreateMintModel.Root>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+            return data.response;
+        }
+    }
+    
+public static async Task<List<GetNftListModel.Response>> GetNftMarket(string _chain, string _network)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("chain", _chain);
+        form.AddField("network", _network);
+        string url = host + "/getListedNfts";
+        using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
+        {
+            await webRequest.SendWebRequest();
+            GetNftListModel.Root data = JsonUtility.FromJson<GetNftListModel.Root>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+            return data.response;
+        }
+    }
+    
+    public static async Task<BuyNFT.Response> CreatePurchaseNftTransaction(string _chain, string _network, string _account, string _itemId, string _price, string _tokenType)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("chain", _chain);
+        form.AddField("network", _network);
+        form.AddField("account", _account);
+        form.AddField("itemId", _itemId);
+        form.AddField("price", _price);
+        form.AddField("tokenType", _tokenType);
+        
+        string url = host + "/createPurchaseNftTransaction";
+        using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
+        {
+            await webRequest.SendWebRequest();
+            BuyNFT.Root data = JsonUtility.FromJson<BuyNFT.Root>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+            if (data.response != null)
+            {
+                Debug.Log("Data: " +  JsonConvert.SerializeObject( data.response, Formatting.Indented ));
+            }
+            else
+            {
+                Debug.Log("Response Object Empty ");
+            }
+            return data.response;
+        }
+    }
+    
+    public static async Task<string> CreateListNftTransaction(string _chain, string _network, string _account, string _tokenId, string _priceHex, string _tokenType)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("chain", _chain);
+        form.AddField("network", _network);
+        form.AddField("account", _account);
+        form.AddField("tokenId", _tokenId);
+        form.AddField("priceHex", _priceHex);
+        form.AddField("tokenType", _tokenType);
+        string url = host + "/createListNftTransaction";
+        using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
+        {
+            await webRequest.SendWebRequest();
+            Response<string> data =JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+            Debug.Log("Data: " + data.response);
+            return data.response;
+        }
+    }
+    
+    public static async Task<List<GetNftListModel.Response>> CreateCancelNftTransaction(string _chain, string _network, string _account, string _itemId)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("chain", _chain);
+        form.AddField("network", _network);
+        form.AddField("account", _account);
+        form.AddField("tokenId", _itemId);
+        string url = host + "/createCancelNftTransaction";
+        using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
+        {
+            await webRequest.SendWebRequest();
+            GetNftListModel.Root data = JsonUtility.FromJson<GetNftListModel.Root>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+            return data.response;
+        }
+    }
+    
+        
+    public static async Task<GetVoucherModel.GetVoucher721Response> Get721Voucher()
+    {
+        string url = hostVoucher + "/voucher721";
+       
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
+        {
+            await webRequest.SendWebRequest();
+            GetVoucherModel.GetVoucher721Response root721= JsonConvert.DeserializeObject<GetVoucherModel.GetVoucher721Response>(webRequest.downloadHandler.text);
+            return root721;
+        }
+    }
+    
+    public static async Task<GetVoucherModel.GetVoucher1155Response> Get1155Voucher()
+    {
+        string url = hostVoucher + "/voucher1155";
+       
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
+        {
+            await webRequest.SendWebRequest();
+            GetVoucherModel.GetVoucher1155Response root1155 = JsonConvert.DeserializeObject<GetVoucherModel.GetVoucher1155Response>(webRequest.downloadHandler.text);
+            Debug.Log("Voucher Data" + root1155);
+            return root1155;
+        }
+    }
+    
+    public static async Task<List<GetNftListModel.Response>> CreateApproveTransaction(string _chain, string _network, string _account)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("chain", _chain);
+        form.AddField("network", _network);
+        form.AddField("account", _account);
+        string url = host + "/createApproveTransaction";
+        using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
+        {
+            await webRequest.SendWebRequest();
+            GetNftListModel.Root data = JsonUtility.FromJson<GetNftListModel.Root>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
             return data.response;
         }
     }
@@ -291,27 +408,4 @@ public class EVM
         }
     }
 
-    public static async Task<GetVoucherModel.GetVoucher721Response> Get721Voucher()
-    {
-        string url = hostVoucher + "/voucher721";
-
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
-        {
-            await webRequest.SendWebRequest();
-            GetVoucherModel.GetVoucher721Response root721 = JsonConvert.DeserializeObject<GetVoucherModel.GetVoucher721Response>(webRequest.downloadHandler.text);
-            return root721;
-        }
-    }
-
-    public static async Task<GetVoucherModel.GetVoucher1155Response> Get1155Voucher()
-    {
-        string url = hostVoucher + "/voucher1155";
-
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
-        {
-            await webRequest.SendWebRequest();
-            GetVoucherModel.GetVoucher1155Response root1155 = JsonConvert.DeserializeObject<GetVoucherModel.GetVoucher1155Response>(webRequest.downloadHandler.text);
-            return root1155;
-        }
-    }
 }
