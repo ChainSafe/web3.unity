@@ -13,7 +13,7 @@ public class EVM
 
     private readonly static string host = "https://api.gaming.chainsafe.io/evm";
     private readonly static string hostVoucher = "https://lazy-minting-voucher-signer.herokuapp.com";
-    // https://lazy-minting-voucher-signer.herokuapp.com/voucher1155
+
     public static async Task<string> BalanceOf(string _chain, string _network, string _account, string _rpc = "")
     {
         WWWForm form = new WWWForm();
