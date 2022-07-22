@@ -134,12 +134,6 @@ public static async Task<List<GetNftListModel.Response>> GetNftMarket(string _ch
     public static async Task<BuyNFT.Response> CreatePurchaseNftTransaction(string _chain, string _network, string _account, string _itemId, string _price, string _tokenType)
     {
         WWWForm form = new WWWForm();
-        Debug.Log("Chain KB: " + _chain);
-        Debug.Log("Network KB: " + _network);
-        Debug.Log("Account KB: " + _account);
-        Debug.Log("ItemID KB: " + _itemId);
-        Debug.Log("Price KB: " + _price);
-        Debug.Log("Token Type KB: " + _tokenType);
         form.AddField("chain", _chain);
         form.AddField("network", _network);
         form.AddField("account", _account);
