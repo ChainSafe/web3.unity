@@ -1,11 +1,17 @@
 using System;
-namespace  Models
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+
+namespace Models
 {
-    public class CreateMintModel
+    public class ListNFT
     {
         [Serializable]
         public class Connection
         {
+            public string rpc;
             public string chain;
             public string network;
         }
@@ -14,7 +20,6 @@ namespace  Models
         {
             public string hashedUnsignedTx;
             public Connection connection;
-            public string cid;
             public Tx tx;
         }
         [Serializable]
@@ -27,10 +32,16 @@ namespace  Models
         {
             public string account;
             public string to;
-            public string value;
+            public Value value;
             public string data;
             public string gasPrice;
             public string gasLimit;
+        }
+        [Serializable]
+        public class Value
+        {
+            public string type;
+            public string hex;
         }
     }
 }

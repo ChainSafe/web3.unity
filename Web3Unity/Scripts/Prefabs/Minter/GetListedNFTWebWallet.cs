@@ -77,6 +77,7 @@ public class GetListedNFTWebWallet : MonoBehaviour
             }
         }
         listPercentage.text = response[0].listedPercentage;
+        Debug.Log(response[0].listedPercentage);
         contractAddr.text = response[0].nftContract;
         itemId.text = response[0].itemId;
         _itemID = response[0].itemId;
@@ -90,7 +91,7 @@ public class GetListedNFTWebWallet : MonoBehaviour
     {
         UnityWebRequest request = UnityWebRequestTexture.GetTexture(MediaUrl);
         yield return request.SendWebRequest();
-        if (request.isNetworkError || request.isHttpError)
+        if (request.result == UnityWebRequest.Result.ProtocolError)
             Debug.Log(request.error);
         else
         {
@@ -108,8 +109,6 @@ public class GetListedNFTWebWallet : MonoBehaviour
 
     public async void PurchaseItem()
     {
-        
-        
         BuyNFT.Response response = await EVM.CreatePurchaseNftTransaction(chain, network,
             PlayerPrefs.GetString("Account"), _itemID, _itemPrice, _tokenType);
         Debug.Log("Account: " + response.tx.account);
