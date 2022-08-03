@@ -130,6 +130,21 @@ public static async Task<List<GetNftListModel.Response>> GetNftMarket(string _ch
             return data.response;
         }
     }
+
+public static async Task<List<MintedNFT.Response>> GetMintedNFT(string _chain, string _network, string _account)
+{
+    WWWForm form = new WWWForm();
+    form.AddField("chain", _chain);
+    form.AddField("network", _network);
+    form.AddField("account", _account);
+    string url = host + "/getMintedNfts";
+    using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
+    {
+        await webRequest.SendWebRequest();
+        MintedNFT.Root data = JsonUtility.FromJson<MintedNFT.Root>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+        return data.response;
+    }
+}
     
     public static async Task<BuyNFT.Response> CreatePurchaseNftTransaction(string _chain, string _network, string _account, string _itemId, string _price, string _tokenType)
     {
@@ -158,7 +173,7 @@ public static async Task<List<GetNftListModel.Response>> GetNftMarket(string _ch
         }
     }
     
-    public static async Task<string> CreateListNftTransaction(string _chain, string _network, string _account, string _tokenId, string _priceHex, string _tokenType)
+    public static async Task<ListNFT.Response> CreateListNftTransaction(string _chain, string _network, string _account, string _tokenId, string _priceHex, string _tokenType)
     {
         WWWForm form = new WWWForm();
         form.AddField("chain", _chain);
@@ -171,8 +186,8 @@ public static async Task<List<GetNftListModel.Response>> GetNftMarket(string _ch
         using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
         {
             await webRequest.SendWebRequest();
-            Response<string> data =JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
-            Debug.Log("Data: " + data.response);
+            ListNFT.Root data =JsonUtility.FromJson<ListNFT.Root>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+            Debug.Log("Data: " + JsonConvert.SerializeObject( data.response, Formatting.Indented ));
             return data.response;
         }
     }
