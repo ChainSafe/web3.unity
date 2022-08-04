@@ -56,6 +56,12 @@ public class MintWeb3Wallet721 : MonoBehaviour
     {
         if (PlayerPrefs.GetString("Web3Voucher721Signer") == "0x1372199B632bd6090581A0588b2f4F08985ba2d4")
     {
+        Debug.Log("NFT Response: " + chain);
+        Debug.Log("NFT Response: " + network);
+        Debug.Log("NFT Response: " + account);
+        Debug.Log("NFT Response: " + to);
+        Debug.Log("NFT Response: " + cid721);
+        Debug.Log("NFT Response: " + type721);
         CreateMintModel.Response nftResponse = await EVM.CreateMint(chain, network, account, to, cid721, type721);
         Debug.Log("NFT Response: " + nftResponse);
         // connects to user's browser wallet (metamask) to send a transaction

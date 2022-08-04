@@ -9,7 +9,7 @@ public class MintWeb3Wallet1155 : MonoBehaviour
     public string chain = "ethereum";
     public string network = "goerli"; // mainnet ropsten kovan rinkeby goerli
     public string account;
-    public string to = "0x7259E32e35cf880aEACfbD412E7F4Baa8606e04c";
+    public string to = "0x80B64839B897D9D638468265E6b49f447A169cE7";
     public string cid1155 = "f01559ae4021a47e26bc773587278f62a833f2a6117411afbc5a7855661936d1c";
     public string chainId = "5";
     public string type1155 = "1155";
@@ -56,6 +56,12 @@ public class MintWeb3Wallet1155 : MonoBehaviour
     // validates the account that sent the voucher, you can change this if you like to fit your system
     if (PlayerPrefs.GetString("Web3Voucher1155Signer") == "0x1372199B632bd6090581A0588b2f4F08985ba2d4")
     {
+        Debug.Log("NFT Response: " + chain);
+        Debug.Log("NFT Response: " + network);
+        Debug.Log("NFT Response: " + account);
+        Debug.Log("NFT Response: " + to);
+        Debug.Log("NFT Response: " + cid1155);
+        Debug.Log("NFT Response: " + type1155);
         CreateMintModel.Response nftResponse = await EVM.CreateMint(chain, network, account, to, cid1155, type1155);
         Debug.Log("NFT Response: " + nftResponse);
         // connects to user's browser wallet (metamask) to send a transaction
@@ -67,6 +73,7 @@ public class MintWeb3Wallet1155 : MonoBehaviour
         } catch (Exception e) {
             Debug.LogException(e, this);
         }
+        
     }
     else
     {
