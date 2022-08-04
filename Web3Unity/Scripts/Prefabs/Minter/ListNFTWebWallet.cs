@@ -109,7 +109,7 @@ namespace Web3Unity.Scripts.Prefabs.Minter
                     Debug.Log("Empty Response Object:");
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Debug.Log("Revoked Transaction");
             }
