@@ -14,6 +14,7 @@ public class ListNFTWebGL : MonoBehaviour
     {
         private string chain = "ethereum";
         private string network = "goerli";
+        private string chainID = "5";
         private string _itemPrice = "0.001";
         private string _tokenType = "";
         private string _itemID = "";
@@ -109,7 +110,7 @@ public class ListNFTWebGL : MonoBehaviour
                     Debug.Log("Empty Response Object:");
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 Debug.Log("Revoked Transaction");
             }

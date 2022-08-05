@@ -13,9 +13,6 @@ public class GetVoucherWeb3Wallet721 : MonoBehaviour
         Debug.Log("Voucher Response 721 Signer : " + voucherResponse721.signer);
         Debug.Log("Voucher Response 721 Min Price : " + voucherResponse721.minPrice);
         // saves the voucher to player prefs, you can change this if you like to fit your system
-        PlayerPrefs.SetString("Web3Voucher721Sig", voucherResponse721.signature);
-        PlayerPrefs.SetString("Web3Voucher721URI", voucherResponse721.uri);
-        PlayerPrefs.SetString("Web3Voucher721Signer", voucherResponse721.signer);
-        PlayerPrefs.SetString("Web3Voucher721MinPrice", voucherResponse721.minPrice.ToString());
+        PlayerPrefs.SetString("Web3Voucher721", voucherResponse721.signer);
     }
 }

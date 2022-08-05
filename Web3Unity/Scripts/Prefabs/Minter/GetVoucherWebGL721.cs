@@ -14,10 +14,7 @@ public class GetVoucherWebGL721 : MonoBehaviour
         Debug.Log("Voucher Response 721 Signer : " + voucherResponse721.signer);
         Debug.Log("Voucher Response 721 Min Price : " + voucherResponse721.minPrice);
         // saves the voucher to player prefs, you can change this if you like to fit your system
-        PlayerPrefs.SetString("WebGLVoucher721Sig", voucherResponse721.signature);
-        PlayerPrefs.SetString("WebGLVoucher721URI", voucherResponse721.uri);
-        PlayerPrefs.SetString("WebGLVoucher721Signer", voucherResponse721.signer);
-        PlayerPrefs.SetString("WebGLVoucher721MinPrice", voucherResponse721.minPrice.ToString());
+        PlayerPrefs.SetString("WebGLVoucher721", voucherResponse721.signer);
     }
 }
 #endif
