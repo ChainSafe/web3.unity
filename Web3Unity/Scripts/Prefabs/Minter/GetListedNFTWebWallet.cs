@@ -46,6 +46,7 @@ public class GetListedNFTWebWallet : MonoBehaviour
         List<GetNftListModel.Response> response = await EVM.GetNftMarket(chain, network);
         price.text = response[0].price;
         seller.text = response[0].seller;
+        Debug.Log("Seller: " + response[0].seller);
         if (response[0].uri.StartsWith("ipfs://"))
         {
             response[0].uri = response[0].uri.Replace("ipfs://", "https://ipfs.io/ipfs/");
