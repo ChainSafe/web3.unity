@@ -226,7 +226,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 5940802294771442294}
         m_TargetAssemblyTypeName: MintWeb3Wallet1155, Assembly-CSharp
-        m_MethodName: VoucherMintNFT1155
+        m_MethodName: VoucherMintNft1155
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

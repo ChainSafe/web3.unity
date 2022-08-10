@@ -12,7 +12,7 @@ public class MintPK721 : MonoBehaviour
     public string network = "rinkeby"; // mainnet ropsten kovan rinkeby goerli
     public string account = "0x7259E32e35cf880aEACfbD412E7F4Baa8606e04c";
     public string to = "0x7259E32e35cf880aEACfbD412E7F4Baa8606e04c";
-    public string cid = "bafkzvzacdl6fujsdcv5omhiiy35h4w4upua7k7q5ngvcfawl2pca";
+    public string cid = "QmXjWjjMU8r39UCEZ8483aNedwNRFRLvvV9kwq1GpCgthj";
     public string type = "721";
 
     async public void MintButtonPK()

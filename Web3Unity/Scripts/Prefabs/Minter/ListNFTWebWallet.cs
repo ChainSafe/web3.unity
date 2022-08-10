@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 namespace Web3Unity.Scripts.Prefabs.Minter
 {
-    public class ListNFTWebWallet : MonoBehaviour
+    public class ListNftWebWallet : MonoBehaviour
     {
         private string chain = "ethereum";
         private string network = "goerli";
@@ -25,6 +25,7 @@ namespace Web3Unity.Scripts.Prefabs.Minter
         public Text contractAddr;
         public Text isApproved;
         public InputField itemPrice;
+        public Text noListedItems;
         public Text playerAccount;
    
         public void Awake()
@@ -40,34 +41,50 @@ namespace Web3Unity.Scripts.Prefabs.Minter
         async void Start()
         {
             playerAccount.text = account;
-            List<MintedNFT.Response> response = await EVM.GetMintedNFT(chain, network,account);
-            
-            if (response[0].uri.StartsWith("ipfs://"))
+            try
             {
-                response[0].uri = response[0].uri.Replace("ipfs://", "https://ipfs.io/ipfs/");
-            }
+                List<MintedNFT.Response> response = await EVM.GetMintedNFT(chain, network,account);
             
-            UnityWebRequest webRequest = UnityWebRequest.Get(response[0].uri);
-            await webRequest.SendWebRequest();
-            RootGetNFT data =
-                JsonConvert.DeserializeObject<RootGetNFT>(
-                    System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data)); 
-            description.text = data.description;
-            // parse json to get image uri
-            string imageUri = data.image;
-            if (imageUri.StartsWith("ipfs://"))
-            {
-                imageUri = imageUri.Replace("ipfs://", "https://ipfs.io/ipfs/");
-                StartCoroutine(DownloadImage(imageUri));
-            }
+                if (response[1].uri == null)
+                {
+                    Debug.Log("Not Listed Items");
+                    return;
+                }
+                if (response[1].uri.StartsWith("ipfs://"))
+                {
+                    response[1].uri = response[1].uri.Replace("ipfs://", "https://ipfs.io/ipfs/");
+                }
+            
+                UnityWebRequest webRequest = UnityWebRequest.Get(response[1].uri);
+                await webRequest.SendWebRequest();
+                RootGetNFT data =
+                    JsonConvert.DeserializeObject<RootGetNFT>(
+                        System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data)); 
+                description.text = data.description;
+                // parse json to get image uri
+                string imageUri = data.image;
+                if (imageUri.StartsWith("ipfs://"))
+                {
+                    imageUri = imageUri.Replace("ipfs://", "https://ipfs.io/ipfs/");
+                    StartCoroutine(DownloadImage(imageUri));
+                }
 
-            tokenURI.text = response[0].uri;
-            Debug.Log(response[0].uri);
-            contractAddr.text = response[0].nftContract;
-            isApproved.text = response[0].isApproved.ToString();
-            _itemID = response[0].id;
-            _itemPrice = itemPrice.text;
-            _tokenType = response[0].tokenType;
+                tokenURI.text = response[1].uri;
+                Debug.Log(response[1].uri);
+                contractAddr.text = response[1].nftContract;
+                Debug.Log("NFT Contract: " + response[1].nftContract);
+                isApproved.text = response[1].isApproved.ToString();
+                _itemID = response[1].id;
+                _itemPrice = itemPrice.text;
+                Debug.Log("Token Type: " + response[1].tokenType);
+                _tokenType = response[1].tokenType;
+            }
+            catch (Exception e)
+            {
+                noListedItems.text = "NO LISTED ITEM for " + account;
+                Debug.Log("No Listed Items" + e);
+            }
+           
         }
 
         // ReSharper disable Unity.PerformanceAnalysis
@@ -97,12 +114,14 @@ namespace Web3Unity.Scripts.Prefabs.Minter
             float eth = float.Parse(_itemPrice);
             float decimals = 1000000000000000000; // 18 decimals
             float wei = eth * decimals;
+            Debug.Log("ItemID: " + _itemID);
             ListNFT.Response response =
                 await EVM.CreateListNftTransaction(chain, network, account, _itemID, Convert.ToDecimal(wei).ToString(), _tokenType);
             int value = Convert.ToInt32(response.tx.value.hex, 16);
+            Debug.Log("Response: " + response);
             try
             {
-                string responseNft = await Web3Wallet.SendTransaction(chainID, response.tx.to,  value.ToString(),
+                string responseNft = await Web3Wallet.SendTransaction(chainID, response.tx.to, value.ToString(),
                     response.tx.data, response.tx.gasLimit, response.tx.gasPrice);
                 if (responseNft == null)
                 {
@@ -111,7 +130,7 @@ namespace Web3Unity.Scripts.Prefabs.Minter
             }
             catch (Exception e)
             {
-                Debug.Log("Revoked Transaction");
+                Debug.Log("Error: " + e);
             }
         }
     }

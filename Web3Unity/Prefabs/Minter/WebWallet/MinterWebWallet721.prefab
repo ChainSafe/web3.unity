@@ -124,7 +124,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 8493851505887001244}
         m_TargetAssemblyTypeName: MintWeb3Wallet721, Assembly-CSharp
-        m_MethodName: MintNFT721
+        m_MethodName: MintNft721
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -150,7 +150,7 @@ MonoBehaviour:
   network: goerli
   account: 
   to: 0x7259E32e35cf880aEACfbD412E7F4Baa8606e04c
-  cid721: QmXjWjjMU8r39UCEZ8483aNedwNRFRLvvV9kwq1GpCgthj
+  cid721: f01559ae4021a47e26bc773587278f62a833f2a6117411afbc5a7855661936d1c
   chainId: 5
   type721: 721
 --- !u!1 &3131669594263551518

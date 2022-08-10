@@ -7,9 +7,9 @@ public class ERC20DecimalsExample : MonoBehaviour
 {
     async void Start()
     {
-        string chain = "xdai";
+        string chain = "ethereum";
         string network = "mainnet";
-        string contract = "0xa106739de31fa7a9df4a93c9bea3e1bade0924e2";
+        string contract = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
 
         BigInteger decimals = await ERC20.Decimals(chain, network, contract);
         print(decimals);
