@@ -12,14 +12,16 @@ public class MintWebGL721 : MonoBehaviour
     public string chain = "ethereum";
     public string network = "rinkeby"; // mainnet ropsten kovan rinkeby goerli
     public string account;
-    public string to = "0x7259E32e35cf880aEACfbD412E7F4Baa8606e04c";
-    public string cid = "bafkzvzacdl6fujsdcv5omhiiy35h4w4upua7k7q5ngvcfawl2pca";
+    public string to;
+    // update cid per mint
+    public string cid = "QmXjWjjMU8r39UCEZ8483aNedwNRFRLvvV9kwq1GpCgthj";
     public string type721 = "721";
 
 
     public void Awake()
     {
         account = PlayerPrefs.GetString("Account");
+        to = PlayerPrefs.GetString("Account");
     }
 
     public async void MintNFT()

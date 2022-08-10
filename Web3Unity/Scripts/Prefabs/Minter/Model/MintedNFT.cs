@@ -8,11 +8,13 @@ namespace Models
         [Serializable]
         public class Response
         {
+            public string creator;
+            public string owner;
             public string id;
-            public string uri;
-            public bool isApproved;
             public string nftContract;
+            public bool isApproved;
             public string tokenType;
+            public string uri;
         }
         [Serializable]
         public class Root

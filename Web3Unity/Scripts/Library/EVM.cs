@@ -11,8 +11,8 @@ public class EVM
 {
     public class Response<T> { public T response; }
 
-    private readonly static string host = "https://api.gaming.chainsafe.io/evm";
-    private readonly static string hostVoucher = "https://lazy-minting-voucher-signer.herokuapp.com";
+    private static readonly string host = "https://api.gaming.chainsafe.io/evm";
+    private static readonly string hostVoucher = "https://lazy-minting-voucher-signer.herokuapp.com";
 
     public static async Task<string> BalanceOf(string _chain, string _network, string _account, string _rpc = "")
     {
@@ -180,8 +180,11 @@ public static async Task<List<MintedNFT.Response>> GetMintedNFT(string _chain, s
         form.AddField("network", _network);
         form.AddField("account", _account);
         form.AddField("tokenId", _tokenId);
+        Debug.Log("Token ID: " + _tokenId);
         form.AddField("priceHex", _priceHex);
+        Debug.Log("Price Hex: " + _priceHex);
         form.AddField("tokenType", _tokenType);
+        Debug.Log("Token Type: " + _tokenType);
         string url = host + "/createListNftTransaction";
         using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
         {
@@ -234,17 +237,19 @@ public static async Task<List<MintedNFT.Response>> GetMintedNFT(string _chain, s
         }
     }
     
-    public static async Task<List<GetNftListModel.Response>> CreateApproveTransaction(string _chain, string _network, string _account)
+    public static async Task<CreateApprovalModel.Response> CreateApproveTransaction(string _chain, string _network, string _account, string _tokenType)
     {
         WWWForm form = new WWWForm();
         form.AddField("chain", _chain);
         form.AddField("network", _network);
         form.AddField("account", _account);
+        form.AddField("tokenType", _tokenType);
+        
         string url = host + "/createApproveTransaction";
         using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
         {
             await webRequest.SendWebRequest();
-            GetNftListModel.Root data = JsonUtility.FromJson<GetNftListModel.Root>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+            CreateApprovalModel.Root data = JsonUtility.FromJson<CreateApprovalModel.Root>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
             return data.response;
         }
     }
