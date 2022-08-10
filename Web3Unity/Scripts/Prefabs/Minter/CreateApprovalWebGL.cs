@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+#if UNITY_WEBGL
 public class CreateApprovalWebGL : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -38,3 +40,4 @@ public class CreateApprovalWebGL : MonoBehaviour
         }
     }
 }
+#endif
