@@ -100,7 +100,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
 
         public async Task<string> _LegacySignMessage(byte[] message)
         {
-            return await _legacySignMessage(message.ToHex());
+            return await _legacySignMessage(message.ToHex(true));
         }
 
         public async Task<string> _LegacySignMessage(string message)

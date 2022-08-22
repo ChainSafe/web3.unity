@@ -26,8 +26,6 @@ mergeInto(LibraryManager.library, {
     );
   },
 
-  
-
   SendContractResponse: function () {
     var bufferSize = lengthBytesUTF8(window.web3gl.sendContractResponse) + 1;
     var buffer = _malloc(bufferSize);
@@ -102,6 +100,7 @@ mergeInto(LibraryManager.library, {
   SetHashMessageResponse: function (value) {
       window.web3gl.hashMessageResponse = value;
   },
+  
   GetNetwork: function () {
     return window.web3gl.networkId;
   }

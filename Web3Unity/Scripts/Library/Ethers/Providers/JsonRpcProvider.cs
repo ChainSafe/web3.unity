@@ -112,7 +112,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             }
         }
 
-        public async Task<T> Send<T>(string method, object[] parameters = null)
+        public virtual async Task<T> Send<T>(string method, object[] parameters = null)
         {
             var json = JsonConvert.SerializeObject(new RpcRequestMessage(++_nextId, method, parameters),
                 _jsonSerializerSettings);

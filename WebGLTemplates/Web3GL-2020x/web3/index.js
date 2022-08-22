@@ -11,23 +11,29 @@ document.body.appendChild(Object.assign(document.createElement("script"), { type
 
 // load web3gl to connect to unity
 window.web3gl = {
-    networkId: 0,
-    connect,
-    connectAccount: "",
-    signMessage,
-    signMessageResponse: "",
-    callContract,
-    callContractResponse:"",
-    callContractError:"",
-    sendTransaction,
-    sendTransactionResponse: "",
-    sha3Message,
-    hashMessageResponse: "",
-    sendTransactionResponse: "",
-    sendTransactionData,
-    sendTransactionResponseData:"",
-    sendContract,
-    sendContractResponse: "",
+  networkId: 0,
+  connect,
+  connectAccount: "",
+
+  signMessage,
+  signMessageResponse: "",
+  callContract,
+  callContractResponse: "",
+  callContractError: "",
+  sendTransaction,
+  sendTransactionResponse: "",
+  sha3Message,
+  hashMessageResponse: "",
+  sendTransactionResponse: "",
+  sendTransactionData,
+  sendTransactionResponseData: "",
+  sendContract,
+  sendContractResponse: "",
+
+  // V2
+  sendAsync,
+  sendAsyncResponse: "",
+  sendAsyncError: "",
 };
 
 // will be defined after connect()
@@ -93,18 +99,16 @@ async function connect() {
     web3gl.networkId = parseInt(chainId);
   });
 }
-
 /*
-Will calculate the sha3 of the input.
-window.web3gl.sha3Message("hello")
+    Will calculate the sha3 of the input.
 */
 async function sha3Message(message) {
-    try {
-        const hashedMessage = await web3.utils.sha3(message);
-        window.web3gl.hashMessageResponse = hashedMessage;
-    } catch (error) {
-        window.web3gl.hashMessageResponse = error.message;
-    }
+  try {
+    const hashedMessage = await web3.utils.sha3(message);
+    window.web3gl.hashMessageResponse = hashedMessage;
+  } catch (error) {
+    window.web3gl.hashMessageResponse = error.message;
+  }
 }
 
 /*
@@ -114,8 +118,8 @@ window.web3gl.signMessage("hello")
 async function signMessage(message) {
   try {
     const from = (await web3.eth.getAccounts())[0];
-    const signature = await web3.eth.personal.sign(message, from, "")
-      window.web3gl.signMessageResponse = signature;
+    const signature = await web3.eth.personal.sign(message, from, "");
+    window.web3gl.signMessageResponse = signature;
   } catch (error) {
     window.web3gl.signMessageResponse = error.message;
   }
@@ -132,19 +136,19 @@ window.web3gl.sendTransaction(to, value, gasLimit, gasPrice);
 async function sendTransaction(to, value, gasLimit, gasPrice) {
   const from = (await web3.eth.getAccounts())[0];
   web3.eth
-      .sendTransaction({
-        from,
-        to,
-        value,
-        gas: gasLimit ? gasLimit : undefined,
-        gasPrice: gasPrice ? gasPrice : undefined,
-      })
-      .on("transactionHash", (transactionHash) => {
-        window.web3gl.sendTransactionResponse = transactionHash;
-      })
-      .on("error", (error) => {
-        window.web3gl.sendTransactionResponse = error.message;
-      });
+    .sendTransaction({
+      from,
+      to,
+      value,
+      gas: gasLimit ? gasLimit : undefined,
+      gasPrice: gasPrice ? gasPrice : undefined,
+    })
+    .on("transactionHash", (transactionHash) => {
+      window.web3gl.sendTransactionResponse = transactionHash;
+    })
+    .on("error", (error) => {
+      window.web3gl.sendTransactionResponse = error.message;
+    });
 }
 
 /*
@@ -157,22 +161,22 @@ const data = "0xd0def521000000000000000000000000d25b827d92b0fd656a1c829933e9b0b8
 window.web3gl.sendTransactionData(to, value, gasPrice, gasLimit, data);
 */
 async function sendTransactionData(to, value, gasPrice, gasLimit, data) {
-    const from = (await web3.eth.getAccounts())[0];
-    web3.eth
-        .sendTransaction({
-            from,
-            to,
-            value,
-            gasPrice: gasPrice ? gasPrice : undefined,
-            gas: gasLimit ? gasLimit : undefined,
-            data: data ? data : undefined,
-        })
-        .on("transactionHash", (transactionHash) => {
-            window.web3gl.sendTransactionResponseData = transactionHash;
-        })
-        .on("error", (error) => {
-            window.web3gl.sendTransactionResponseData = error.message;
-        });
+  const from = (await web3.eth.getAccounts())[0];
+  web3.eth
+    .sendTransaction({
+      from,
+      to,
+      value,
+      gasPrice: gasPrice ? gasPrice : undefined,
+      gas: gasLimit ? gasLimit : undefined,
+      data: data ? data : undefined,
+    })
+    .on("transactionHash", (transactionHash) => {
+      window.web3gl.sendTransactionResponseData = transactionHash;
+    })
+    .on("error", (error) => {
+      window.web3gl.sendTransactionResponseData = error.message;
+    });
 }
 
 /*
@@ -184,12 +188,11 @@ const args = "[]"
 window.web3gl.callContract(method, abi, contract, args)
 */
 async function callContract(method, abi, contract, args) {
-    const from = (await web3.eth.getAccounts())[0];
-    new web3.eth.Contract(JSON.parse(abi), contract).methods[method](
-        ...JSON.parse(args)
-    ).call()
-        .then((result) => window.web3gl.callContractResponse = result)
-        .catch((error) => window.web3gl.callContractError = error.message);
+  const from = (await web3.eth.getAccounts())[0];
+  new web3.eth.Contract(JSON.parse(abi), contract).methods[method](...JSON.parse(args))
+    .call()
+    .then((result) => (window.web3gl.callContractResponse = result))
+    .catch((error) => (window.web3gl.callContractError = error.message));
 }
 
 /*
@@ -206,18 +209,18 @@ window.web3gl.sendContract(method, abi, contract, args, value, gasLimit, gasPric
 async function sendContract(method, abi, contract, args, value, gasLimit, gasPrice) {
   const from = (await web3.eth.getAccounts())[0];
   new web3.eth.Contract(JSON.parse(abi), contract).methods[method](...JSON.parse(args))
-      .send({
-        from,
-        value,
-        gas: gasLimit ? gasLimit : undefined,
-        gasPrice: gasPrice ? gasPrice : undefined,
-      })
-      .on("transactionHash", (transactionHash) => {
-        window.web3gl.sendContractResponse = transactionHash;
-      })
-      .on("error", (error) => {
-        window.web3gl.sendContractResponse = error.message;
-      });
+    .send({
+      from,
+      value,
+      gas: gasLimit ? gasLimit : undefined,
+      gasPrice: gasPrice ? gasPrice : undefined,
+    })
+    .on("transactionHash", (transactionHash) => {
+      window.web3gl.sendContractResponse = transactionHash;
+    })
+    .on("error", (error) => {
+      window.web3gl.sendContractResponse = error.message;
+    });
 }
 
 // add new wallet to in metamask
@@ -244,12 +247,12 @@ async function addEthereumChain() {
   };
 
   await window.ethereum
-      .request({
-        method: "wallet_addEthereumChain",
-        params: [params, account],
-      })
-      .catch(() => {
-        // I give up
-        window.location.reload();
-      });
+    .request({
+      method: "wallet_addEthereumChain",
+      params: [params, account],
+    })
+    .catch(() => {
+      // I give up
+      window.location.reload();
+    });
 }

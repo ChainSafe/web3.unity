@@ -1,11 +1,15 @@
 using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
+using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.RPC.Eth.DTOs;
+using Nethereum.Util;
+using Org.BouncyCastle.Crypto.Digests;
 using UnityEngine;
 using Web3Unity.Scripts.Library.Ethers.InternalEvents;
 using Web3Unity.Scripts.Library.Ethers.Network;
 using Web3Unity.Scripts.Library.Ethers.Providers;
+using Web3Unity.Scripts.Library.Ethers.Signers;
 using Web3Unity.Scripts.Library.Ethers.Transactions;
 using Web3Unity.Scripts.Library.Ethers.Utils;
 
@@ -19,8 +23,9 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
             Debug.Log($"{chains.Count} chains found");
             
             // var provider = new JsonRpcProvider("https://eth-mainnet.alchemyapi.io/v2/-xZN4CbntuRCIKrOSZgfdxUpV9zG_KtM");
-            var provider = new JsonRpcProvider(); // default url http://localhost:8545
+            // var provider = new JsonRpcProvider(); // default url http://localhost:8545
             // var provider = new JsonRpcProvider(chains[1].RPC[3]);
+            var provider = new Web3Provider(new WebGLProvider());
             
             var BAYC = "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D";
             
@@ -32,8 +37,8 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
             Debug.Log($"Contract balance: {balance} wei");
             Debug.Log($"Contract balance: {Units.FormatEther(balance)} ETH");
             
-            var code = await provider.GetCode(BAYC);
-            Debug.Log($"Contract code: {code}");
+            // var code = await provider.GetCode(BAYC);
+            // Debug.Log($"Contract code: {code}");
             
             var slot0 =
                 await provider.GetStorageAt(BAYC, new BigInteger(0));
@@ -134,8 +139,10 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
             // Debug.Log($"Signature string(hello): {await signer.SignMessage("hello")}");
             // Debug.Log($"Signature byte[](hello): {await signer.SignMessage(Encoding.ASCII.GetBytes("hello"))}");
             
-            Debug.Log($"Legacy signature string(hello): {await signer._LegacySignMessage("hello")}");
-            Debug.Log($"Legacy signature byte[](hello): {await signer._LegacySignMessage(Encoding.ASCII.GetBytes("hello"))}");
+            var sha3 = new Sha3Keccack();
+
+            // Debug.Log($"Legacy signature string(hello): {await signer._LegacySignMessage(sha3.CalculateHash(Encoding.ASCII.GetBytes("hello")))}");
+            // Debug.Log($"Legacy signature byte[](hello): {await signer._LegacySignMessage(Encoding.ASCII.GetBytes("hello"))}");
             
             var tx = await signer.SendTransaction(new TransactionRequest
             {
@@ -145,7 +152,10 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
             Debug.Log($"Transaction hash: {tx.Hash}");
             
             var txReceipt = await tx.Wait();
-            Debug.Log($"Transaction receipt: {txReceipt.Status}");
+            Debug.Log($"Transaction receipt: {txReceipt.BlockNumber}");
+
+            // var signerPriv = Wallet.CreateRandom();
+            // Debug.Log($"SignMessage('hello'): {await signerPriv.SignMessage("hello")}");
         }
     }
 }
