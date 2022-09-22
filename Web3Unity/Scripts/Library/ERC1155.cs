@@ -51,8 +51,14 @@ public class ERC1155
 
     public static async Task<string> URI(string _chain, string _network, string _contract, string _tokenId, string _rpc="")
     {
+        const string ipfsPath = "https://ipfs.io/ipfs/";
         string method = "uri";
         string[] obj = { _tokenId };
+        if (_tokenId.StartsWith("0x"))
+        {
+            string convertURI = _tokenId.Replace("0x", "f");
+            return ipfsPath + convertURI;
+        }
         string args = JsonConvert.SerializeObject(obj);
         string response = await EVM.Call(_chain, _network, _contract, abi, method, args, _rpc);
         return response;
