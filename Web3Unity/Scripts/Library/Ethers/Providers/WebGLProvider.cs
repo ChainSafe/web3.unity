@@ -16,6 +16,12 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             {
                 NullValueHandling = NullValueHandling.Ignore
             });
+            
+            if (parameters == null)
+            {
+                jsonParams = "[]";
+            }
+            
             var result = await Web3GLLight.SendAsync(method, jsonParams);
             return JsonConvert.DeserializeObject<T>(result);
         }
