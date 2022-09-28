@@ -1,8 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using UnityEngine;
 
 #if UNITY_WEBGL
@@ -39,17 +38,37 @@ public class Web3GLLight
             response = SendAsyncResponse();
             error = SendAsyncError();
         }
-        
-        SetSendAsyncResponse("");
-        SetSendAsyncError("");
-        
+
         if (error != "")
         {
-            throw new Exception(error);
+            var err = JsonConvert.DeserializeObject<WalletError>(error);
+            throw new WalletException(err!.Code, err.Message);
+            
         }
         
         return response;
     }
+    
+    public class WalletError
+    {
+        [JsonProperty(PropertyName = "code")]
+        public int Code { get; set; }
+        
+        [JsonProperty(PropertyName = "message")]
+        public string Message { get; set; }
+    }
+    
+    [Serializable]
+    public class WalletException : Exception
+    {
+        public int code;
+        public string message;
 
+        public WalletException(int code, string message)
+        {
+            this.code = code;
+            this.message = message;
+        }
+    }
 }
 #endif

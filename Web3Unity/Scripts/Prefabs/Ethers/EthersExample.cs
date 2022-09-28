@@ -1,15 +1,9 @@
-using System.Collections.Generic;
 using System.Numerics;
-using System.Text;
-using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.RPC.Eth.DTOs;
 using Nethereum.Util;
-using Org.BouncyCastle.Crypto.Digests;
 using UnityEngine;
-using Web3Unity.Scripts.Library.Ethers.InternalEvents;
 using Web3Unity.Scripts.Library.Ethers.Network;
 using Web3Unity.Scripts.Library.Ethers.Providers;
-using Web3Unity.Scripts.Library.Ethers.Signers;
 using Web3Unity.Scripts.Library.Ethers.Transactions;
 using Web3Unity.Scripts.Library.Ethers.Utils;
 
@@ -32,7 +26,46 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
             var network = await provider.GetNetwork();
             Debug.Log($"Network name: {network.Name}");
             Debug.Log($"Network chain id: {network.ChainId}");
-            
+
+            var chain = chains[5];
+
+            if (network.ChainId != chain.ChainId)
+            {
+                try
+                {
+                    await provider.Send<string>("wallet_switchEthereumChain",
+                        new object[] {new {chainId = "0x"+chain.ChainId.ToString("x")}});
+                }
+                catch (Web3GLLight.WalletException err)
+                {
+                    // This error code indicates that the chain has not been added to MetaMask.
+                    if (err.code == 4902)
+                    {
+                        await provider.Send<string>("wallet_addEthereumChain", new object[]
+                        {
+                            new
+                            {
+                                chainId = "0x"+chain.ChainId.ToString("x"),
+                                chainName = chain.Name,
+                                nativeCurrency = new
+                                {
+                                    name = chain.NativeCurrencyInfo.Name,
+                                    symbol = chain.NativeCurrencyInfo.Symbol,
+                                    decimals = chain.NativeCurrencyInfo.Decimals
+                                },
+                                rpcUrls = chain.RPC,
+                                blockExplorerUrls = new[] {chain.Explorers[0].Url}
+                            }
+                        });
+                    }
+                    else
+                    {
+                        // re-throw error
+                        throw;
+                    }
+                }
+            }
+
             var balance = await provider.GetBalance(BAYC);
             Debug.Log($"Contract balance: {balance} wei");
             Debug.Log($"Contract balance: {Units.FormatEther(balance)} ETH");
@@ -152,7 +185,7 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
             Debug.Log($"Transaction hash: {tx.Hash}");
             
             var txReceipt = await tx.Wait();
-            Debug.Log($"Transaction receipt: {txReceipt.BlockNumber}");
+            Debug.Log($"Transaction receipt: {txReceipt.Confirmations}");
 
             // var signerPriv = Wallet.CreateRandom();
             // Debug.Log($"SignMessage('hello'): {await signerPriv.SignMessage("hello")}");
