@@ -95,5 +95,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Transactions
         /// </summary>
         [JsonProperty(PropertyName = "root")]
         public string Root { get; set; }
+        
+        public ulong? Confirmations { get; set; }
     }
 }

@@ -5,7 +5,9 @@ using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.Client.RpcMessages;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using UnityEngine;
 using Web3Unity.Scripts.Library.Ethers.Network;
+using Web3Unity.Scripts.Library.Ethers.Runtime;
 using Web3Unity.Scripts.Library.Ethers.Signers;
 
 namespace Web3Unity.Scripts.Library.Ethers.Providers
@@ -20,7 +22,8 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             NullValueHandling = NullValueHandling.Ignore
         };
 
-        public JsonRpcProvider(string url = "", Network.Network network = null) : base(network)
+        public JsonRpcProvider(UnityMainThreadDispatcher dispatcher, string url = "", Network.Network network = null) :
+            base(dispatcher, network)
         {
             if (url == "")
             {
@@ -31,8 +34,9 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
             if (network != null) return;
 
-            var task = Task.Run(async () => { base._network = await DetectNetwork(); });
-            task.Wait(TimeSpan.FromMilliseconds(0));
+            // var task = Task.Run(async () => { base._network = await DetectNetwork(); });
+            // task.Wait(TimeSpan.FromMilliseconds(0));
+            dispatcher.Enqueue(async () => { base._network = await DetectNetwork(); });
         }
 
         public static string DefaultUrl()
@@ -59,8 +63,9 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
                 {
                     chainId = new HexBigInteger(await Send<string>("eth_chainId")).ToUlong();
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    Debug.Log(e.ToString());
                     // ignored
                 }
             }

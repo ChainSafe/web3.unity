@@ -42,8 +42,11 @@ namespace Web3Unity.Scripts.Library.Ethers.Transactions
         [JsonProperty(PropertyName = "timestamp")]
         public HexBigInteger Timestamp { get; set; }
 
-        // TODO: confirmation, raw
+        // TODO: raw
+        
+        public ulong? Confirmations { get; set; }
 
         public Func<Task<TransactionReceipt>> Wait { get; set; }
+        public Func<uint, uint, Task<TransactionReceipt>> WaitParams { get; set; }
     }
 }

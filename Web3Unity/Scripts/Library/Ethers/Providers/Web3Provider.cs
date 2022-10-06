@@ -3,14 +3,16 @@ using System.Threading.Tasks;
 using Nethereum.JsonRpc.Client.RpcMessages;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Web3Unity.Scripts.Library.Ethers.Runtime;
 
 namespace Web3Unity.Scripts.Library.Ethers.Providers
 {
     public class Web3Provider : JsonRpcProvider
     {
         private readonly IExternalProvider _provider;
-        
-        public Web3Provider(IExternalProvider provider, Network.Network network = null)
+
+        public Web3Provider(UnityMainThreadDispatcher dispatcher, IExternalProvider provider,
+            Network.Network network = null) : base(dispatcher)
         {
             if (provider == null)
             {
@@ -21,7 +23,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
             _provider = provider;
         }
-        
+
         public override async Task<T> Send<T>(string method, object[] parameters = null)
         {
             return await _provider.Send<T>(method, parameters);
