@@ -27,7 +27,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Runtime
     /// A thread-safe class which holds a queue with actions to execute on the next Update() method. It can be used to make calls to the main thread for
     /// things such as UI Manipulation in Unity. It was developed for use in combination with the Firebase Unity plugin, which uses separate threads for event handling
     /// </summary>
-    public class UnityMainThreadDispatcher : MonoBehaviour
+    public class Dispatcher : MonoBehaviour
     {
         private static readonly Queue<Action> _executionQueue = new Queue<Action>();
 
@@ -97,19 +97,19 @@ namespace Web3Unity.Scripts.Library.Ethers.Runtime
         }
 
 
-        private static UnityMainThreadDispatcher _instance = null;
+        private static Dispatcher _instance = null;
 
         public static bool Exists()
         {
             return _instance != null;
         }
 
-        public static UnityMainThreadDispatcher Instance()
+        public static Dispatcher Instance()
         {
             if (!Exists())
             {
                 throw new Exception(
-                    "UnityMainThreadDispatcher could not find the UnityMainThreadDispatcher object. Please ensure you have added the MainThreadExecutor Prefab to your scene.");
+                    "Runner could not find the Runner object.");
             }
 
             return _instance;
@@ -123,6 +123,16 @@ namespace Web3Unity.Scripts.Library.Ethers.Runtime
                 _instance = this;
                 DontDestroyOnLoad(this.gameObject);
             }
+        }
+        
+        public static Dispatcher Initialize()
+        {
+            if (_instance != null) return _instance;
+            
+            var gameObject = new GameObject("Runner");
+            _instance = gameObject.AddComponent<Dispatcher>();
+
+            return _instance;
         }
 
         void OnDestroy()

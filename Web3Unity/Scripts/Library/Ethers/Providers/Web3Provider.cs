@@ -11,8 +11,8 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
     {
         private readonly IExternalProvider _provider;
 
-        public Web3Provider(UnityMainThreadDispatcher dispatcher, IExternalProvider provider,
-            Network.Network network = null) : base(dispatcher)
+        public Web3Provider(IExternalProvider provider,
+            Network.Network network = null)
         {
             if (provider == null)
             {

@@ -37,13 +37,13 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
         private ulong _fastQueryDate;
 
         private long _emittedBlock;
+        
+        internal Dispatcher _dispatcher;
+        private object _poller;
 
-        private UnityMainThreadDispatcher _dispatcher;
-        private Task _poller;
-
-        public BaseProvider(UnityMainThreadDispatcher dispatcher, Network.Network network)
+        public BaseProvider(Network.Network network)
         {
-            _dispatcher = dispatcher;
+            _dispatcher = Dispatcher.Initialize();
             _network = network;
         }
 
@@ -648,7 +648,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             }
         }
 
-        private TimeSpan PollingInterval { get; set; } = TimeSpan.FromMilliseconds(1000);
+        private TimeSpan PollingInterval { get; set; } = TimeSpan.FromSeconds(1);
 
         private bool _polling { get; set; }
 
@@ -658,49 +658,32 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
             set
             {
-                _polling = value;
                 switch (value)
                 {
-                    case true when _poller == null:
+                    case true when !_polling:
+                        _polling = true;
+                        
                         _dispatcher.Enqueue(async () =>
                         {
                             for (; Polling;)
                             {
-                                // Debug.Log("LOOP DISPATCH");
-                                await new WaitForSeconds(PollingInterval.Milliseconds / 1000.0f);
+                                await new WaitForSeconds(PollingInterval.Seconds);
                                 Poll();
                             }
                         });
-                        _poller = Task.Run(async () =>
-                        {
-                            for (; Polling;)
-                            {
-                                // Debug.Log("LOOP TASK");
-// #if UNITY_WEBGL
-                                await new WaitForSeconds(PollingInterval.Milliseconds / 1000.0f);
-// #else
-                                // await Task.Delay(PollingInterval);
-// #endif
-
-                                // _dispatcher.Enqueue(Poll);
-                                // Poll();
-                            }
-                        });
                         break;
-                    case false when _poller != null:
+                    case false when _polling:
                         if (_dispatcher != null)
                         {
                             _dispatcher.StopAllCoroutines();
                         }
                         
-                        // _poller.Dispose();
-                        _poller = null;
-
+                        _polling = false;
                         break;
                 }
             }
         }
-
+        
         private async Task<ulong> _getInternalBlockNumber(ulong maxAge)
         {
             await _ready();
@@ -740,8 +723,6 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
         private async void Poll()
         {
-            Debug.Log("POLL");
-
             var pollId = _nextPollId++;
 
             // blockNumber through _getInternalBockNumber
@@ -796,11 +777,10 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             _events = _events.FindAll(e =>
             {
                 if (e.Tag != eventName) return true;
-
-                Task.Run(() =>
+                
+                _dispatcher.Enqueue(() =>
                 {
                     e.Apply(data);
-                    return Task.CompletedTask;
                 });
 
                 result = true;

@@ -7,7 +7,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 using Web3Unity.Scripts.Library.Ethers.Network;
-using Web3Unity.Scripts.Library.Ethers.Runtime;
 using Web3Unity.Scripts.Library.Ethers.Signers;
 
 namespace Web3Unity.Scripts.Library.Ethers.Providers
@@ -22,8 +21,8 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             NullValueHandling = NullValueHandling.Ignore
         };
 
-        public JsonRpcProvider(UnityMainThreadDispatcher dispatcher, string url = "", Network.Network network = null) :
-            base(dispatcher, network)
+        public JsonRpcProvider(string url = "", Network.Network network = null) :
+            base(network)
         {
             if (url == "")
             {
@@ -36,7 +35,8 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
             // var task = Task.Run(async () => { base._network = await DetectNetwork(); });
             // task.Wait(TimeSpan.FromMilliseconds(0));
-            dispatcher.Enqueue(async () => { base._network = await DetectNetwork(); });
+            
+            _dispatcher.Enqueue(async () => { base._network = await DetectNetwork(); });
         }
 
         public static string DefaultUrl()
