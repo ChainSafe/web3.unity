@@ -8,7 +8,7 @@ namespace Web3Unity.Scripts.Prefabs.Minter
     {
 
         private string chain = "ethereum";
-        private string network = "goerli"; // mainnet ropsten kovan rinkeby goerli
+        private string network = "goerli"; // mainnet kovan goerli
         private string account;
         private string to;
         public string cid1155 = "bafkzvzacdlxhaqsig3fboo3kjzshfb6rltxivrbnrqwy2euje7sq";

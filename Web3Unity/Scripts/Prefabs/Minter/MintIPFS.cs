@@ -9,7 +9,7 @@ public class MintIPFS : MonoBehaviour
 
     // Start is called before the first frame update
     public string chain = "ethereum";
-    public string network = "rinkeby"; // mainnet ropsten kovan rinkeby goerli
+    public string network = "goerli"; // mainnet kovan goerli
     public string account = "0x7259E32e35cf880aEACfbD412E7F4Baa8606e04c";
     public string to = "0x7259E32e35cf880aEACfbD412E7F4Baa8606e04c";
     public string type = "721"; // for 1155 assets update type.

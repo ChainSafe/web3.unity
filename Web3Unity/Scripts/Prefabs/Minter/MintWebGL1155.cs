@@ -10,7 +10,7 @@ public class MintWebGL1155 : MonoBehaviour
 {
     // Start is called before the first frame update
     public string chain = "ethereum";
-    public string network = "rinkeby"; // mainnet ropsten kovan rinkeby goerli
+    public string network = "goerli"; // mainnet kovan goerli
     public string account;
     public string to;
     public string cid = "f01559ae4021a47e26bc773587278f62a833f2a6117411afbc5a7855661936d1c";
