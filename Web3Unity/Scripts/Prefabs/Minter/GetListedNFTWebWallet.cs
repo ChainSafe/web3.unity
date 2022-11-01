@@ -57,13 +57,25 @@ public class GetListedNFTWebWallet : MonoBehaviour
         await webRequest.SendWebRequest();
         RootGetNFT data =
             JsonConvert.DeserializeObject<RootGetNFT>(
-                System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data)); 
-        description.text = data.description;
+                System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+        if (data.description == null)
+        {
+            description.text = "";
+        }
+        else
+        {
+            description.text = data.description;
+        }
+        
         // parse json to get image uri
         string imageUri = data.image;
         if (imageUri.StartsWith("ipfs://"))
         {
             imageUri = imageUri.Replace("ipfs://", "https://ipfs.io/ipfs/");
+            StartCoroutine(DownloadImage(imageUri));
+        }
+        else
+        {
             StartCoroutine(DownloadImage(imageUri));
         }
 

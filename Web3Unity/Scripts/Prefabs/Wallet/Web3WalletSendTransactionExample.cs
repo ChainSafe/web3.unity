@@ -7,7 +7,7 @@ public class Web3WalletSendTransactionExample : MonoBehaviour
  async public void OnSendTransaction()
     {
         // https://chainlist.org/
-        string chainId = "5"; // goerli
+        string chainId = "4"; // rinkeby
         // account to send to
         string to = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
         // value in wei

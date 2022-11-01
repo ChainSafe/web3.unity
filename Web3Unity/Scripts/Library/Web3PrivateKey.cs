@@ -15,10 +15,6 @@ public class Web3PrivateKey
     const int FTM_TESTNET = 0xfa2;
     const int AVA_MAINNET = 43114;
     const int AVA_TESTNET = 43113;
-    const int ARBITRUM_MAINNET = 42161;
-    const int ARBITRUM_TESTNET = 421613;
-    const int SHIMMER_MAINNET = 1074;
-    const int SHIMMER_TESTNET = 1076;
 
     public static string SignTransaction(string _privateKey, string _transaction, string _chainId)
     {
@@ -31,7 +27,7 @@ public class Web3PrivateKey
         BigInteger chainId = BigInteger.Parse(_chainId);
         // sign transaction
         if ((CHAIN_ID == MATIC_MAIN) || (CHAIN_ID == MATIC_MUMBAI) || (CHAIN_ID == HARMONY_MAINNET) ||
-            (CHAIN_ID == HARMONY_TESTNET) || (CHAIN_ID == CRONOS_MAINNET) || (CHAIN_ID == CRONOS_TESTNET) || (CHAIN_ID == FTM_MAINNET) || (CHAIN_ID == FTM_TESTNET) || (CHAIN_ID == AVA_MAINNET) || (CHAIN_ID == AVA_TESTNET) || (CHAIN_ID == ARBITRUM_MAINNET) || (CHAIN_ID == ARBITRUM_TESTNET) || (CHAIN_ID == SHIMMER_MAINNET) || (CHAIN_ID == SHIMMER_TESTNET))
+            (CHAIN_ID == HARMONY_TESTNET) || (CHAIN_ID == CRONOS_MAINNET) || (CHAIN_ID == CRONOS_TESTNET) || (CHAIN_ID == FTM_MAINNET) || (CHAIN_ID == FTM_TESTNET) || (CHAIN_ID == AVA_MAINNET) || (CHAIN_ID == AVA_TESTNET))
         {
             signature = EthECDSASignature.CreateStringSignature(key.SignAndCalculateYParityV(hashByteArr));
             return signature;
