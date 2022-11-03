@@ -1,14 +1,16 @@
 using UnityEngine;
 using UnityEditor;
-using SDKConfiguration;
 
+#if UNITY_EDITOR
 [InitializeOnLoad]
-public class Startup {
+public class Startup
+{
     static Startup()
     {
         if (PlayerPrefs.GetString("Registered") == "")
         {
-        Debug.LogError("ProjectID Not Valid! Please Go To Dashboard.Gaming.Chainsafe.io To Get A New ProjectID");
+            Debug.LogError("ProjectID Not Valid! Please Go To Dashboard.Gaming.Chainsafe.io To Get A New ProjectID");
         }
     }
 }
+#endif 
