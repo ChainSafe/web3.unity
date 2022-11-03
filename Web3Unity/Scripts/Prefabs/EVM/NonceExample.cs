@@ -7,7 +7,7 @@ public class NonceExample : MonoBehaviour
     async void Start()
     {
         string chain = "ethereum";
-        string network = "goerli";
+        string network = "rinkeby";
         string account = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
 
         string nonce = await EVM.Nonce(chain, network, account);

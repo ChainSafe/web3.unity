@@ -9,14 +9,13 @@ public class ImportNFTTextureExample : MonoBehaviour
     public class Response {
         public string image;
     }
-    
 
     async void Start()
     {
         string chain = "ethereum";
         string network = "goerli";
-        string contract = "0x2c1867BC3026178A47a677513746DCc6822A137A";
-        string tokenId = "0x01559ae4021a8aad9226aef5beee2a0d8ba61eaac07e3bc71d2d9e9a802a216f";
+        string contract = "0x2c1867bc3026178a47a677513746dcc6822a137a";
+        string tokenId = "0x01559ae4021aee70424836ca173b6a4e647287d15cee8ac42d8c2d8d128927e5";
 
         // fetch uri from chain
         string uri = await ERC1155.URI(chain, network, contract, tokenId);
