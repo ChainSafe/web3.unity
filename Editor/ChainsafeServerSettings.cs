@@ -20,28 +20,28 @@ public class ChainSafeServerSettings : EditorWindow
     {
         if ((ProjectID == ("Please Enter Your Project ID")) && (PlayerPrefs.GetString("ProjectID") != ""))
         {
-        ProjectID = PlayerPrefs.GetString("ProjectID");
+            ProjectID = PlayerPrefs.GetString("ProjectID");
         }
 
         if ((ChainID == ("Please Enter Your Chain ID")) && (PlayerPrefs.GetString("ChainID") != ""))
         {
-        ChainID = PlayerPrefs.GetString("ChainID");
-        PlayerPrefs.SetInt("ChainIDInt", int.Parse(PlayerPrefs.GetString("ChainID")));
+            ChainID = PlayerPrefs.GetString("ChainID");
+            PlayerPrefs.SetInt("ChainIDInt", int.Parse(PlayerPrefs.GetString("ChainID")));
         }
 
         if (Chain == ("Please Enter Your Chain i.e Ethereum, Binance, Cronos") && (PlayerPrefs.GetString("Chain") != ""))
         {
-        Chain = PlayerPrefs.GetString("Chain");
+            Chain = PlayerPrefs.GetString("Chain");
         }
 
         if (Network == ("Please Enter Your Network i.e Mainnet, Testnet") && (PlayerPrefs.GetString("Network") != ""))
         {
-        Network = PlayerPrefs.GetString("Network");
+            Network = PlayerPrefs.GetString("Network");
         }
 
         if (RPC == ("Please Enter Your RPC") && (PlayerPrefs.GetString("RPC") != ""))
         {
-        RPC = PlayerPrefs.GetString("RPC");
+            RPC = PlayerPrefs.GetString("RPC");
         }
     }
 
@@ -80,7 +80,7 @@ public class ChainSafeServerSettings : EditorWindow
         // register
         if (GUILayout.Button("Need To Register?"))
         {
-            Application.OpenURL("https://docs.gaming.chainsafe.io/");
+            Application.OpenURL("https://dashboard.gaming.chainsafe.io/");
         }
         // docs
         if (GUILayout.Button("Check Out Our Docs!"))
@@ -103,6 +103,7 @@ public class ChainSafeServerSettings : EditorWindow
             serverCheck = (GameObject)Resources.Load("dll", typeof(GameObject));
             GameObject serverCheckScript = (GameObject)Instantiate(serverCheck, new Vector3(0,0,0), new Quaternion(0,0,0,0));
             serverCheckScript.GetComponent<ServerCheck>().CheckProject();
+            Debug.Log("Server Check Script: " + serverCheck);
         }
         GUILayout.Label ("Reminder: Your ProjectID Must Be Valid To Save & Build With Our SDK. You Can Register For One On Our Website At Dashboard.Gaming.Chainsafe.io", EditorStyles.label);
     }
