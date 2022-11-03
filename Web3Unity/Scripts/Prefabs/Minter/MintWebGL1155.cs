@@ -10,11 +10,11 @@ public class MintWebGL1155 : MonoBehaviour
 {
     // Start is called before the first frame update
     public string chain = "ethereum";
-    public string network = "goerli"; // mainnet kovan goerli
+    public string network = "goerli"; // mainnet ropsten kovan rinkeby goerli
     public string account;
     public string to;
-    public string cid = "f01559ae4021a47e26bc773587278f62a833f2a6117411afbc5a7855661936d1c";
-    public string type721 = "1155";
+    private string cid = "bafkzvzacdlxhaqsig3fboo3kjzshfb6rltxivrbnrqwy2euje7sq";
+    private string type1155 = "1155";
 
 
     public void Awake()
@@ -25,7 +25,7 @@ public class MintWebGL1155 : MonoBehaviour
 
     public async void MintNFT()
     {
-        CreateMintModel.Response nftResponse = await EVM.CreateMint(chain, network, account, to, cid,type721);
+        CreateMintModel.Response nftResponse = await EVM.CreateMint(chain, network, account, to, cid,type1155);
         // connects to user's browser wallet (metamask) to send a transaction
         try
         {   
@@ -40,7 +40,7 @@ public class MintWebGL1155 : MonoBehaviour
     {
         // validates the account that sent the voucher, you can change this if you like to fit your system
         if (PlayerPrefs.GetString("WebGLVoucher1155") == "0x1372199B632bd6090581A0588b2f4F08985ba2d4"){
-            CreateMintModel.Response nftResponse = await EVM.CreateMint(chain, network, account, to, cid,type721);
+            CreateMintModel.Response nftResponse = await EVM.CreateMint(chain, network, account, to, cid,type1155);
             // connects to user's browser wallet (metamask) to send a transaction
             try
             {   

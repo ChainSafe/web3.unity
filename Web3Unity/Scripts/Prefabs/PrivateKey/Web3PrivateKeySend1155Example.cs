@@ -12,7 +12,7 @@ public class Web3PrivateKeySend1155Example : MonoBehaviour
         // set chain: ethereum, moonbeam, polygon etc
         string chain = "ethereum";
         // set network mainnet, testnet
-        string network = "goerli";
+        string network = "rinkeby";
         // smart contract method to call
         string method = "safeTransferFrom";
         // account of player 
@@ -42,6 +42,6 @@ public class Web3PrivateKeySend1155Example : MonoBehaviour
         string signature = Web3PrivateKey.SignTransaction(privateKey, transaction, chainId);
         string response = await EVM.BroadcastTransaction(chain, network, account, contract, value, data, signature, gasPrice, gasLimit, rpc);
         print(response);
-        Application.OpenURL("https://goerli.etherscan.io/tx/" + response);
+        Application.OpenURL("https://rinkeby.etherscan.io/tx/" + response);
     }
 }
