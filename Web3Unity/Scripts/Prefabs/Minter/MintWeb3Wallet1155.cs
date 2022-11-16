@@ -23,21 +23,6 @@ namespace Web3Unity.Scripts.Prefabs.Minter
             Debug.Log("Acoount" + account);
             Debug.Log("To" + to);
         }
-    
-    
-        public async void MintNft1155()
-        {
-            CreateMintModel.Response nftResponse = await EVM.CreateMint(chain, network, account, to, cid1155, type1155);
-            Debug.Log("Data: " + JsonConvert.SerializeObject( nftResponse, Formatting.Indented ));
-            // connects to user's browser wallet (metamask) to send a transaction
-            try
-            {
-                string response = await Web3Wallet.SendTransaction(chainId, nftResponse.tx.to, nftResponse.tx.value, nftResponse.tx.data, nftResponse.tx.gasLimit, nftResponse.tx.gasPrice);
-                print("Response Data: " + response);
-            } catch (Exception e) {
-                Debug.LogException(e, this);
-            }
-        }
 
         public async void VoucherMintNft1155()
         {

@@ -24,20 +24,6 @@ public class MintWebGL721 : MonoBehaviour
         to = PlayerPrefs.GetString("Account");
     }
 
-    public async void MintNFT()
-    {
-        CreateMintModel.Response nftResponse = await EVM.CreateMint(chain, network, account, to, cid, type721);
-        // connects to user's browser wallet (metamask) to send a transaction
-        Debug.Log("NFT Response: " + nftResponse);
-        try
-        {   
-            string response = await Web3GL.SendTransactionData(nftResponse.tx.to, nftResponse.tx.value, nftResponse.tx.gasPrice,nftResponse.tx.gasLimit, nftResponse.tx.data);
-            print("Response: " + response);
-        } catch (Exception e) {
-            Debug.LogException(e, this);
-        }
-    }
-
     public async void VoucherMintNFT()
     {
         // validates the account that sent the voucher, you can change this if you like to fit your system
