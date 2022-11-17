@@ -43,7 +43,11 @@ async function connect() {
   const providerOptions = {
     // torus: {
     //   package: Torus,
-    // },
+    //     options:{
+    //       rpc: "https://goerli.infura.io/v3/",
+    //       chainId: 5,
+    //       networkId: 5
+    //   },
     // walletconnect: {
     //   package: window.WalletConnectProvider.default,
     //   options: {
