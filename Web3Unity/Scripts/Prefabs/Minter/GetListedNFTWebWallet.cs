@@ -67,6 +67,10 @@ public class GetListedNFTWebWallet : MonoBehaviour
             imageUri = imageUri.Replace("ipfs://", "https://ipfs.io/ipfs/");
             StartCoroutine(DownloadImage(imageUri));
         }
+        else
+        {
+            StartCoroutine(DownloadImage(imageUri));
+        }
 
         if (data.properties != null)
         {
