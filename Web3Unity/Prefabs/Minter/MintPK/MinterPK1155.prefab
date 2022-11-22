@@ -213,7 +213,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chain: ethereum
-  network: rinkeby
+  network: goerli
   account: 0x7259E32e35cf880aEACfbD412E7F4Baa8606e04c
   to: 0x7259E32e35cf880aEACfbD412E7F4Baa8606e04c
   cid: f01559ae4021a47e26bc773587278f62a833f2a6117411afbc5a7855661936d1c
