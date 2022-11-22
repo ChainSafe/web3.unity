@@ -84,6 +84,7 @@ namespace Web3Unity.Scripts.Prefabs.Minter
                 noListedItems.text = "NO LISTED ITEM for " + account;
                 Debug.Log("No Listed Items" + e);
             }
+            
         }
 
         // ReSharper disable Unity.PerformanceAnalysis
