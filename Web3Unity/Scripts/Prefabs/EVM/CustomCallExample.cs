@@ -21,7 +21,7 @@ public class CustomCallExample : MonoBehaviour
         // set chain: ethereum, moonbeam, polygon etc
         string chain = "ethereum";
         // set network mainnet, testnet
-        string network = "rinkeby";
+        string network = "goerli";
         // smart contract method to call
         string method = "myTotal";
         // abi in json format

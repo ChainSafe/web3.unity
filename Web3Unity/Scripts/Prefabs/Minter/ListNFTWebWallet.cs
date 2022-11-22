@@ -68,10 +68,6 @@ namespace Web3Unity.Scripts.Prefabs.Minter
                     imageUri = imageUri.Replace("ipfs://", "https://ipfs.io/ipfs/");
                     StartCoroutine(DownloadImage(imageUri));
                 }
-                else
-                {
-                    StartCoroutine(DownloadImage(imageUri));
-                }
 
                 tokenURI.text = response[1].uri;
                 Debug.Log(response[1].uri);
@@ -88,6 +84,7 @@ namespace Web3Unity.Scripts.Prefabs.Minter
                 noListedItems.text = "NO LISTED ITEM for " + account;
                 Debug.Log("No Listed Items" + e);
             }
+            
         }
 
         // ReSharper disable Unity.PerformanceAnalysis
