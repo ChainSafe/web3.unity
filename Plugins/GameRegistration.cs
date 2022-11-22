@@ -9,7 +9,7 @@ public class Startup
     {
         if (PlayerPrefs.GetString("Registered") == "")
         {
-            Debug.LogError("ProjectID Not Valid! Please Go To Dashboard.Gaming.Chainsafe.io To Get A New ProjectID");
+            Debug.LogError("ProjectID Not Valid! Please open Window -> ChainsafeServerSettings to register!");
         }
     }
 }
