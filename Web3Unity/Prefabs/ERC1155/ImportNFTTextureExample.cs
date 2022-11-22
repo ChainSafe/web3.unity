@@ -9,7 +9,6 @@ public class ImportNFTTextureExample : MonoBehaviour
     public class Response {
         public string image;
     }
-
     async void Start()
     {
         string chain = "ethereum";
