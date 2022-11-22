@@ -55,8 +55,8 @@ namespace Web3Unity.Scripts.Prefabs.Minter
             UnityWebRequest webRequest = UnityWebRequest.Get(response[0].uri);
             await webRequest.SendWebRequest();
             RootGetNFT data =
-                JsonConvert.DeserializeObject<RootGetNFT>(
-                    System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data)); 
+            JsonConvert.DeserializeObject<RootGetNFT>(
+            System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data)); 
             description.text = data.description;
             // parse json to get image uri
             string imageUri = data.image;
