@@ -17,7 +17,6 @@ public class Web3PrivateKeySend20Example : MonoBehaviour
         string method = "transfer";
         // account of player 
         string account = Web3PrivateKey.Address(privateKey);
-        // smart contract address: https://rinkeby.etherscan.io/address/0xc7ad46e0b8a400bb3c915120d284aafba8fc4735
         string contract = "0xc7ad46e0b8a400bb3c915120d284aafba8fc4735";
         // account to send to
         string toAccount = "0x428066dd8A212104Bc9240dCe3cdeA3D3A0f7979";
