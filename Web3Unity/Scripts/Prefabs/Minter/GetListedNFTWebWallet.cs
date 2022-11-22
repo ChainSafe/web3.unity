@@ -58,6 +58,7 @@ public class GetListedNFTWebWallet : MonoBehaviour
         RootGetNFT data =
             JsonConvert.DeserializeObject<RootGetNFT>(
                 System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+            description.text = data.description;
         
         // parse json to get image uri
         string imageUri = data.image;

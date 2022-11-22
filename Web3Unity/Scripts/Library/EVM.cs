@@ -427,6 +427,7 @@ public static async Task<List<MintedNFT.Response>> GetMintedNFT(string _chain, s
         form.AddField("gasPrice", _gasPrice);
         form.AddField("gasLimit", _gasLimit);
         form.AddField("rpc", _rpc);
+        form.AddField("nonce", _nonce);
         string url = host + "/createTransaction";
         using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
         {
