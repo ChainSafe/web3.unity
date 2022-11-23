@@ -5,7 +5,7 @@ document.body.appendChild(Object.assign(document.createElement("script"), { type
 // load web3js to create transactions
 document.body.appendChild(Object.assign(document.createElement("script"), { type: "text/javascript", src: "./web3/lib/web3.min.js" }));
 // uncomment to enable torus wallet
-// document.body.appendChild(Object.assign(document.createElement("script"), { type: "text/javascript", src: "https://unpkg.com/@toruslabs/torus-embed" }));
+// document.body.appendChild(Object.assign(document.createElement("script"), { type: "text/javascript", src: "https://cdn.jsdelivr.net/npm/@toruslabs/torus-embed" }));
 // uncomment to enable walletconnect
 // document.body.appendChild(Object.assign(document.createElement("script"), { type: "text/javascript", src: "https://unpkg.com/@walletconnect/web3-provider@1.2.1/dist/umd/index.min.js" }));
 
@@ -43,7 +43,11 @@ async function connect() {
   const providerOptions = {
     // torus: {
     //   package: Torus,
-    // },
+    //     options:{
+    //       rpc: "https://goerli.infura.io/v3/",
+    //       chainId: 5,
+    //       networkId: 5
+    //   },
     // walletconnect: {
     //   package: window.WalletConnectProvider.default,
     //   options: {

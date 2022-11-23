@@ -9,10 +9,10 @@ namespace Web3Unity.Scripts.Prefabs.Minter
     {
 
         private string chain = "ethereum";
-        private string network = "goerli"; // mainnet ropsten kovan rinkeby goerli
+        private string network = "goerli"; // mainnet goerli
         private string account;
         private string to;
-        private string cid1155 = "bafkzvzacdjqx6xc4rsmdiusbwvxmsbboj5vwr7jblef4dtlabjta";
+        private string cid1155 = "bafkzvzacdlxhaqsig3fboo3kjzshfb6rltxivrbnrqwy2euje7sq";
         private string chainId = "5";
         private string type1155 = "1155";
 
@@ -22,21 +22,6 @@ namespace Web3Unity.Scripts.Prefabs.Minter
             to = PlayerPrefs.GetString("Account");
             Debug.Log("Acoount" + account);
             Debug.Log("To" + to);
-        }
-    
-    
-        public async void MintNft1155()
-        {
-            CreateMintModel.Response nftResponse = await EVM.CreateMint(chain, network, account, to, cid1155, type1155);
-            Debug.Log("Data: " + JsonConvert.SerializeObject( nftResponse, Formatting.Indented ));
-            // connects to user's browser wallet (metamask) to send a transaction
-            try
-            {
-                string response = await Web3Wallet.SendTransaction(chainId, nftResponse.tx.to, nftResponse.tx.value, nftResponse.tx.data, nftResponse.tx.gasLimit, nftResponse.tx.gasPrice);
-                print("Response Data: " + response);
-            } catch (Exception e) {
-                Debug.LogException(e, this);
-            }
         }
 
         public async void VoucherMintNft1155()
