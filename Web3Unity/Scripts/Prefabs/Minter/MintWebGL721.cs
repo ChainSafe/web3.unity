@@ -10,7 +10,7 @@ public class MintWebGL721 : MonoBehaviour
 {
     // Start is called before the first frame update
     public string chain = "ethereum";
-    public string network = "rinkeby"; // mainnet ropsten kovan rinkeby goerli
+    public string network = "goerli"; // mainnet goerli
     public string account;
     public string to;
     // update cid per mint
@@ -22,20 +22,6 @@ public class MintWebGL721 : MonoBehaviour
     {
         account = PlayerPrefs.GetString("Account");
         to = PlayerPrefs.GetString("Account");
-    }
-
-    public async void MintNFT()
-    {
-        CreateMintModel.Response nftResponse = await EVM.CreateMint(chain, network, account, to, cid, type721);
-        // connects to user's browser wallet (metamask) to send a transaction
-        Debug.Log("NFT Response: " + nftResponse);
-        try
-        {   
-            string response = await Web3GL.SendTransactionData(nftResponse.tx.to, nftResponse.tx.value, nftResponse.tx.gasPrice,nftResponse.tx.gasLimit, nftResponse.tx.data);
-            print("Response: " + response);
-        } catch (Exception e) {
-            Debug.LogException(e, this);
-        }
     }
 
     public async void VoucherMintNFT()
