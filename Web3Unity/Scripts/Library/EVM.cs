@@ -234,7 +234,7 @@ public static async Task<List<MintedNFT.Response>> GetMintedNFT(string _chain, s
         
     public static async Task<GetVoucherModel.GetVoucher721Response> Get721Voucher()
     {
-        string url = hostVoucher + "/voucher721";
+        string url = hostVoucher + "/voucher721?receiver=" + PlayerPrefs.GetString("Account");
        
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
         {
@@ -246,7 +246,7 @@ public static async Task<List<MintedNFT.Response>> GetMintedNFT(string _chain, s
     
     public static async Task<GetVoucherModel.GetVoucher1155Response> Get1155Voucher()
     {
-        string url = hostVoucher + "/voucher1155";
+        string url = hostVoucher + "/voucher1155?receiver=" + PlayerPrefs.GetString("Account");
        
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
         {
