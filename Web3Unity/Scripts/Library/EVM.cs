@@ -13,7 +13,7 @@ public class EVM
 {
     public class Response<T> { public T response; }
 
-    private static readonly string host = "https://api.gaming.chainsafe.io/evm";
+    private static readonly string host = "https://game-api-stg.chainsafe.io/evm";
     private static readonly string hostVoucher = "https://lazy-minting-voucher-signer.herokuapp.com";
 
     public static async Task<string> BalanceOf(string _chain, string _network, string _account, string _rpc = "")
@@ -433,6 +433,25 @@ public static async Task<List<MintedNFT.Response>> GetMintedNFT(string _chain, s
         {
             await webRequest.SendWebRequest();
             Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+            return data.response;
+        }
+    }
+
+    public static async Task<RedeemVoucherTxModel.Response> CreateRedeemTransaction(string _chain, string _network, string _voucher, string _type, string _nftAddress, string _account)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("projectId", PlayerPrefs.GetString("ProjectID"));
+        form.AddField("chain", _chain);
+        form.AddField("network", _network);
+        form.AddField("voucher", _voucher);
+        form.AddField("type", _type);
+        form.AddField("nftAdrress", _nftAddress);
+        form.AddField("account", _account);
+        string url = host + "/createRedeemTransaction";
+        using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
+        {
+            await webRequest.SendWebRequest();
+            RedeemVoucherTxModel.Root data = JsonConvert.DeserializeObject<RedeemVoucherTxModel.Root>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
             return data.response;
         }
     }
