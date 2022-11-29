@@ -1,45 +1,33 @@
-using System;
 using Models;
 using UnityEngine;
 
-namespace Web3Unity.Scripts.Prefabs.Minter
+public class MintWeb3Wallet721 : MonoBehaviour
 {
-    public class MintWeb3Wallet721 : MonoBehaviour
+    // set chain: ethereum, moonbeam, polygon etc
+    string chain = "ethereum";
+    // chain id
+    string chainId = "5";
+    // set network mainnet, testnet
+    string network = "goerli";
+    // address of nft you want to mint
+    string nftAddress = "f01559ae4021a47e26bc773587278f62a833f2a6117411afbc5a7855661936d1c";
+    // type
+    string type = "721";
+
+    public async void VoucherMintNft721()
     {
+        var voucherResponse721 = await EVM.Get721Voucher();
+        CreateRedeemVoucherModel.CreateVoucher721 voucher721 = new CreateRedeemVoucherModel.CreateVoucher721();
+        voucher721.tokenId = voucherResponse721.tokenId;
+        voucher721.minPrice = voucherResponse721.minPrice;
+        voucher721.signer = voucherResponse721.signer;
+        voucher721.receiver = voucherResponse721.receiver;
+        voucher721.signature = voucherResponse721.signature;
+        string voucherArgs = JsonUtility.ToJson(voucher721);
 
-        public string chain = "ethereum";
-        public string network = "goerli"; // mainnet goerli
-        public string account;
-        public string to = "0x7259E32e35cf880aEACfbD412E7F4Baa8606e04c";
-        public string cid721 = "f01559ae4021a47e26bc773587278f62a833f2a6117411afbc5a7855661936d1c";
-        public string chainId = "5";
-        public string type721 = "721";
-
-        public void Awake()
-        {
-            account = PlayerPrefs.GetString("Account");
-        }
-
-        public async void VoucherMintNft721()
-        {
-            // validates the account that sent the voucher, you can change this if you like to fit your system
-            if (PlayerPrefs.GetString("Web3Voucher721") == "0x1372199B632bd6090581A0588b2f4F08985ba2d4"){
-                CreateMintModel.Response nftResponse = await EVM.CreateMint(chain, network, account, to, cid721, type721);
-                Debug.Log("NFT Response: " + nftResponse);
-                // connects to user's browser wallet (metamask) to send a transaction
-                try
-                {
-                    string response = await Web3Wallet.SendTransaction(chainId, nftResponse.tx.to, nftResponse.tx.value, nftResponse.tx.data, nftResponse.tx.gasLimit, nftResponse.tx.gasPrice);
-                    print(response);
-                    Debug.Log(response);
-                } catch (Exception e) {
-                    Debug.LogException(e, this);
-                }
-            }
-            else
-            {
-                Debug.Log("Voucher Invalid");
-            }
-        }
+        // connects to user's browser wallet to call a transaction
+        RedeemVoucherTxModel.Response voucherResponse = await EVM.CreateRedeemTransaction(chain, network, voucherArgs, type, nftAddress, voucherResponse721.receiver);
+        string response = await Web3Wallet.SendTransaction(chainId, voucherResponse.tx.to, voucherResponse.tx.value.ToString(), voucherResponse.tx.data, voucherResponse.tx.gasLimit, voucherResponse.tx.gasPrice);
+        print("Response: " + response);
     }
 }

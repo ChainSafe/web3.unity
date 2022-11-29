@@ -1,29 +1,28 @@
 using System;
-using System.Numerics;
 
 namespace Models
 {
-    public class GetVoucherModel
+    public class CreateRedeemVoucherModel
     {
         [Serializable]
-        public class GetVoucher721Response
+        public class CreateVoucher721
         {
-            public int minPrice;
             public string tokenId;
+            public int minPrice;
             public string signer;
             public string receiver;
             public string signature;
         }
   
         [Serializable]
-        public class GetVoucher1155Response
+        public class CreateVoucher1155
         {
-            public int minPrice;
             public string tokenId;
-            public int amount;
-            public ulong nonce;
+            public int minPrice;
             public string signer;
             public string receiver;
+            public int amount;
+            public ulong nonce;
             public string signature;
         }
     }
