@@ -6,11 +6,11 @@ using System;
 public class MintWebGL721 : MonoBehaviour
 {
     // set chain: ethereum, moonbeam, polygon etc
-    public string chain = "ethereum";
+    string chain = "ethereum";
     // set network mainnet, testnet
-    public string network = "goerli";
+    string network = "goerli";
     // address of nft you want to mint
-    public string nftAddress = "f01559ae4021a47e26bc773587278f62a833f2a6117411afbc5a7855661936d1c";
+    string nftAddress = "f01559ae4021a47e26bc773587278f62a833f2a6117411afbc5a7855661936d1c";
     // type
     string type = "721";
 
