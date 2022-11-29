@@ -13,7 +13,7 @@ public class EVM
 {
     public class Response<T> { public T response; }
 
-    private static readonly string host = "https://game-api-stg.chainsafe.io/evm";
+    private static readonly string host = "https://api.gaming.chainsafe.io/evm";
     private static readonly string hostVoucher = "https://lazy-minting-voucher-signer.herokuapp.com";
 
     public static async Task<string> BalanceOf(string _chain, string _network, string _account, string _rpc = "")
