@@ -110,6 +110,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3979610389197010250}
+  - component: {fileID: 2818124837886951560}
   m_Layer: 0
   m_Name: GetVoucher1155
   m_TagString: Untagged
@@ -133,6 +134,21 @@ Transform:
   m_Father: {fileID: 6501492190421118278}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2818124837886951560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3979610389197010252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25980a61c707bb34aaae782b8182fea7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chain: ethereum
+  network: goerli
+  nftAddress: 0x2c1867bc3026178a47a677513746dcc6822a137a
 --- !u!1 &6501492188738075420
 GameObject:
   m_ObjectHideFlags: 0
@@ -145,7 +161,6 @@ GameObject:
   - component: {fileID: 6501492188738075431}
   - component: {fileID: 6501492188738075416}
   - component: {fileID: 6501492188738075417}
-  - component: {fileID: 6114925057981882507}
   m_Layer: 5
   m_Name: VoucherButton1155
   m_TagString: Untagged
@@ -256,7 +271,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6114925057981882507}
+      - m_Target: {fileID: 2818124837886951560}
         m_TargetAssemblyTypeName: MintWebGL1155, Assembly-CSharp
         m_MethodName: VoucherMintNft1155
         m_Mode: 1
@@ -268,18 +283,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &6114925057981882507
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6501492188738075420}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25980a61c707bb34aaae782b8182fea7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6501492190388822613
 GameObject:
   m_ObjectHideFlags: 0
