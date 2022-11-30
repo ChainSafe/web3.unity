@@ -12,12 +12,12 @@ public class Web3PrivateKeySend20Example : MonoBehaviour
         // set chain: ethereum, moonbeam, polygon etc
         string chain = "ethereum";
         // set network mainnet, testnet
-        string network = "rinkeby";
+        string network = "goerli";
         // smart contract method to call
         string method = "transfer";
         // account of player 
         string account = Web3PrivateKey.Address(privateKey);
-        // smart contract address: https://rinkeby.etherscan.io/address/0xc7ad46e0b8a400bb3c915120d284aafba8fc4735
+        // smart contract address: https://goerli.etherscan.io/address/0xc7ad46e0b8a400bb3c915120d284aafba8fc4735
         string contract = "0xc7ad46e0b8a400bb3c915120d284aafba8fc4735";
         // account to send to
         string toAccount = "0x428066dd8A212104Bc9240dCe3cdeA3D3A0f7979";
@@ -40,6 +40,6 @@ public class Web3PrivateKeySend20Example : MonoBehaviour
         string signature = Web3PrivateKey.SignTransaction(privateKey, transaction, chainId);
         string response = await EVM.BroadcastTransaction(chain, network, account, contract, value, data, signature, gasPrice, gasLimit, rpc);
         print(response);
-        Application.OpenURL("https://rinkeby.etherscan.io/tx/" + response);
+        Application.OpenURL("https://goerli.etherscan.io/tx/" + response);
     }
 }
