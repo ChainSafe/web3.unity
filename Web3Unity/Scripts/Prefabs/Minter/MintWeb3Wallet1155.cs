@@ -1,49 +1,36 @@
-using System;
 using Models;
-using Newtonsoft.Json;
 using UnityEngine;
+using System;
 
-namespace Web3Unity.Scripts.Prefabs.Minter
+public class MintWeb3Wallet1155 : MonoBehaviour
 {
-    public class MintWeb3Wallet1155 : MonoBehaviour
+    // set chain: ethereum, moonbeam, polygon etc
+    public string chain = "ethereum";
+    // chain id
+    public string chainId = "5";
+    // set network mainnet, testnet
+    public string network = "goerli";
+    // address of nft you want to mint
+    public string nftAddress = "0x2c1867bc3026178a47a677513746dcc6822a137a";
+    // type
+    string type = "1155";
+
+    public async void VoucherMintNft1155()
     {
+        var voucherResponse1155 = await EVM.Get1155Voucher();
+        CreateRedeemVoucherModel.CreateVoucher1155 voucher1155 = new CreateRedeemVoucherModel.CreateVoucher1155();
+        voucher1155.tokenId = voucherResponse1155.tokenId;
+        voucher1155.minPrice = voucherResponse1155.minPrice;
+        voucher1155.signer = voucherResponse1155.signer;
+        voucher1155.receiver = voucherResponse1155.receiver;
+        voucher1155.amount = voucherResponse1155.amount;
+        voucher1155.nonce = voucherResponse1155.nonce;
+        voucher1155.signature = voucherResponse1155.signature;
+        string voucherArgs = JsonUtility.ToJson(voucher1155);
 
-        private string chain = "ethereum";
-        private string network = "goerli"; // mainnet goerli
-        private string account;
-        private string to;
-        private string cid1155 = "bafkzvzacdlxhaqsig3fboo3kjzshfb6rltxivrbnrqwy2euje7sq";
-        private string chainId = "5";
-        private string type1155 = "1155";
-
-        public void Start()
-        {
-            account = PlayerPrefs.GetString("Account");
-            to = PlayerPrefs.GetString("Account");
-            Debug.Log("Acoount" + account);
-            Debug.Log("To" + to);
-        }
-
-        public async void VoucherMintNft1155()
-        {
-            // validates the account that sent the voucher, you can change this if you like to fit your system
-            if (PlayerPrefs.GetString("Web3Voucher1155") == "0x1372199B632bd6090581A0588b2f4F08985ba2d4"){
-                CreateMintModel.Response nftResponse = await EVM.CreateMint(chain, network, account, to, cid1155, type1155);
-                Debug.Log("NFT Response: " + nftResponse);
-                // connects to user's browser wallet (metamask) to send a transaction
-                try
-                {
-                    string response = await Web3Wallet.SendTransaction(chainId, nftResponse.tx.to, nftResponse.tx.value, nftResponse.tx.data, nftResponse.tx.gasLimit, nftResponse.tx.gasPrice);
-                    print(response);
-                    Debug.Log(response);
-                } catch (Exception e) {
-                    Debug.LogException(e, this);
-                }
-            }
-            else
-            {
-                Debug.Log("Voucher Invalid");
-            }
-        }
+        // connects to user's browser wallet to call a transaction
+        RedeemVoucherTxModel.Response voucherResponse = await EVM.CreateRedeemTransaction(chain, network, voucherArgs, type, nftAddress, voucherResponse1155.receiver);
+        string response = await Web3Wallet.SendTransaction(chainId, voucherResponse.tx.to, voucherResponse.tx.value.ToString(), voucherResponse.tx.data, voucherResponse.tx.gasLimit, voucherResponse.tx.gasPrice);
+        print("Response: " + response);
     }
 }

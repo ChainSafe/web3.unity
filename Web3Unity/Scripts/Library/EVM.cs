@@ -437,6 +437,25 @@ public static async Task<List<MintedNFT.Response>> GetMintedNFT(string _chain, s
         }
     }
 
+    public static async Task<RedeemVoucherTxModel.Response> CreateRedeemTransaction(string _chain, string _network, string _voucher, string _type, string _nftAddress, string _account)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("projectId", PlayerPrefs.GetString("ProjectID"));
+        form.AddField("chain", _chain);
+        form.AddField("network", _network);
+        form.AddField("voucher", _voucher);
+        form.AddField("type", _type);
+        form.AddField("nftAdrress", _nftAddress);
+        form.AddField("account", _account);
+        string url = host + "/createRedeemTransaction";
+        using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
+        {
+            await webRequest.SendWebRequest();
+            RedeemVoucherTxModel.Root data = JsonConvert.DeserializeObject<RedeemVoucherTxModel.Root>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+            return data.response;
+        }
+    }
+
     public static async Task<string> BroadcastTransaction(string _chain, string _network, string _account, string _to, string _value, string _data, string _signature, string _gasPrice, string _gasLimit, string _rpc)
     {
         WWWForm form = new WWWForm();

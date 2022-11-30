@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 namespace Web3Unity.Scripts.Prefabs.Minter
 {
-    public class ListNftWebWallet : MonoBehaviour
+    public class ListNFTWebWallet : MonoBehaviour
     {
         private string chain = "ethereum";
         private string network = "goerli";

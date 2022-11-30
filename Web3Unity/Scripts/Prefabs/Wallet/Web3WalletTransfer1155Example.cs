@@ -8,7 +8,7 @@ public class Web3WalletTransfer1155Example : MonoBehaviour
     async public void OnTransfer1155()
     {
         // https://chainlist.org/
-        string chainId = "4"; // rinkeby
+        string chainId = "5"; // goerli
         // contract to interact with 
         string contract = "0x6b0bc2e986b0e70db48296619a96e9ac02c5574b";
         // value in wei
