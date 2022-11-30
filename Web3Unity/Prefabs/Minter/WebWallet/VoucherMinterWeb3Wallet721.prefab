@@ -125,7 +125,6 @@ GameObject:
   - component: {fileID: 2759602052787827406}
   - component: {fileID: 2759602052787827441}
   - component: {fileID: 2759602052787827440}
-  - component: {fileID: 3246147924613060782}
   m_Layer: 5
   m_Name: GetVoucher721
   m_TagString: Untagged
@@ -236,7 +235,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3246147924613060782}
+      - m_Target: {fileID: 1370948658301429458}
         m_TargetAssemblyTypeName: MintWeb3Wallet721, Assembly-CSharp
         m_MethodName: VoucherMintNft721
         m_Mode: 1
@@ -248,18 +247,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &3246147924613060782
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2759602052787827445}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 785a5af054a848e4a93802898e155c97, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2759602052928996944
 GameObject:
   m_ObjectHideFlags: 0
@@ -337,6 +324,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2759602053411208928}
+  - component: {fileID: 1370948658301429458}
   m_Layer: 0
   m_Name: GetVoucher721
   m_TagString: Untagged
@@ -360,6 +348,22 @@ Transform:
   m_Father: {fileID: 2759602052112117141}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1370948658301429458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2759602053411208931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 785a5af054a848e4a93802898e155c97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chain: ethereum
+  chainId: 5
+  network: goerli
+  nftAddress: f01559ae4021a47e26bc773587278f62a833f2a6117411afbc5a7855661936d1c
 --- !u!1 &2759602053423477899
 GameObject:
   m_ObjectHideFlags: 0

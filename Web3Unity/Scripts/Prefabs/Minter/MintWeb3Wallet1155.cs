@@ -5,13 +5,13 @@ using System;
 public class MintWeb3Wallet1155 : MonoBehaviour
 {
     // set chain: ethereum, moonbeam, polygon etc
-    string chain = "ethereum";
+    public string chain = "ethereum";
     // chain id
-    string chainId = "5";
+    public string chainId = "5";
     // set network mainnet, testnet
-    string network = "goerli";
+    public string network = "goerli";
     // address of nft you want to mint
-    string nftAddress = "0x2c1867bc3026178a47a677513746dcc6822a137a";
+    public string nftAddress = "0x2c1867bc3026178a47a677513746dcc6822a137a";
     // type
     string type = "1155";
 
