@@ -19,7 +19,7 @@ public class Web3GL
 
     [DllImport("__Internal")]
     private static extern void SendTransactionJs(string to, string value, string gasLimit, string gasPrice);
-    
+
     [DllImport("__Internal")]
     private static extern void SendTransactionJsData(string to, string value, string gasPrice, string gasLimit, string data);
 
@@ -28,31 +28,44 @@ public class Web3GL
 
     [DllImport("__Internal")]
     private static extern void SetTransactionResponse(string value);
-    
+
     [DllImport("__Internal")]
     private static extern void SetTransactionResponseData(string value);
 
     [DllImport("__Internal")]
     private static extern void SignMessage(string value);
-    
-    
+
+
     [DllImport("__Internal")]
     private static extern void HashMessage(string value);
 
     [DllImport("__Internal")]
     private static extern string SignMessageResponse();
-    
+
     [DllImport("__Internal")]
     private static extern string HashMessageResponse();
 
     [DllImport("__Internal")]
     private static extern void SetSignMessageResponse(string value);
-    
+
     [DllImport("__Internal")]
     private static extern void SetHashMessageResponse(string value);
 
     [DllImport("__Internal")]
     private static extern int GetNetwork();
+
+    [DllImport("__Internal")]
+    private static extern void CallContractJs(string method, string abi, string to, string args);
+
+    [DllImport("__Internal")]
+    private static extern string GetResponse(string property);
+
+    [DllImport("__Internal")]
+    private static extern void SetPropertyValue(string property, string value);
+
+    [DllImport("__Internal")]
+    private static extern void GetTransactionReceiptJs(string hash);
+
 
     // this function will create a metamask tx for user to confirm.
     async public static Task<string> SendContract(string _method, string _abi, string _contract, string _args, string _value, string _gasLimit = "", string _gasPrice = "")
@@ -68,11 +81,11 @@ public class Web3GL
         }
         SetContractResponse("");
         // check if user submmited or user rejected
-        if (response.Length == 66) 
+        if (response.Length == 66)
         {
             return response;
-        } 
-        else 
+        }
+        else
         {
             throw new Exception(response);
         }
@@ -91,21 +104,21 @@ public class Web3GL
         }
         SetTransactionResponse("");
         // check if user submmited or user rejected
-        if (response.Length == 66) 
+        if (response.Length == 66)
         {
             return response;
-        } 
-        else 
+        }
+        else
         {
             throw new Exception(response);
         }
     }
-    
-    async public static Task<string> SendTransactionData(string _to, string _value,  string _gasPrice = "",string _gasLimit = "", string _data = "")
+
+    async public static Task<string> SendTransactionData(string _to, string _value, string _gasPrice = "", string _gasLimit = "", string _data = "")
     {
         // Set response to empty
         SetTransactionResponse("");
-        SendTransactionJsData(_to, _value, _gasPrice,_gasLimit,_data);
+        SendTransactionJsData(_to, _value, _gasPrice, _gasLimit, _data);
         string response = SendTransactionResponse();
         while (response == "")
         {
@@ -114,11 +127,11 @@ public class Web3GL
         }
         SetTransactionResponse("");
         // check if user submmited or user rejected
-        if (response.Length == 66) 
+        if (response.Length == 66)
         {
             return response;
-        } 
-        else 
+        }
+        else
         {
             throw new Exception(response);
         }
@@ -139,13 +152,13 @@ public class Web3GL
         if (response.Length == 132)
         {
             return response;
-        } 
-        else 
+        }
+        else
         {
             throw new Exception(response);
         }
     }
-    
+
     async public static Task<string> Sha3(string _message)
     {
         HashMessage(_message);
@@ -166,6 +179,71 @@ public class Web3GL
     public static int Network()
     {
         return GetNetwork();
+    }
+
+    async public static Task<string> CallContract(string _method, string _abi, string _contract, string _args)
+    {
+        // Set response to empty
+        SetPropertyValue("callContractResponse", "");
+        SetPropertyValue("callContractError", "");
+        CallContractJs(_method, _abi, _contract, _args);
+        string response;
+        string error;
+        do
+        {
+            response = GetResponse("callContractResponse");
+            error = GetResponse("callContractError");
+            await new WaitForSeconds(1f);
+        } while (response == "" && error == "");
+
+        SetPropertyValue("callContractResponse", "");
+        SetPropertyValue("callContractError", "");
+        // check if user submmited or user rejected
+        if (response.Length > 0)
+        {
+            return response;
+        }
+        else
+        {
+            throw new Exception(error);
+        }
+    }
+
+    async public static Task<string> GetTransactionReceipt(string _hash)
+    {
+        string response;
+        string error;
+        do
+        {
+            // Set response to empty
+            SetPropertyValue("transactionReceiptResponse", "");
+            SetPropertyValue("transactionReceiptError", "");
+            GetTransactionReceiptJs(_hash);
+            do
+            {
+                response = GetResponse("transactionReceiptResponse");
+                error = GetResponse("transactionReceiptError");
+                await new WaitForSeconds(1f);
+            } while (response == "" && error == "");
+            if (response == null)
+            {
+                await new WaitForSeconds(1f);
+            }
+            // retry if the transaction was not minted
+        } while (response == null);
+
+
+        SetPropertyValue("transactionReceiptResponse", "");
+        SetPropertyValue("transactionReceiptError", "");
+        // check if user submmited or user rejected
+        if (response.Length > 0)
+        {
+            return response;
+        }
+        else
+        {
+            throw new Exception(error);
+        }
     }
 
 }

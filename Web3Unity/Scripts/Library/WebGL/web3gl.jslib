@@ -15,7 +15,7 @@ mergeInto(LibraryManager.library, {
   },
 
   SendContractJs: function (method, abi, contract, args, value, gasLimit, gasPrice) {
-    window.web3gl.sendContract(
+     window.web3gl.sendContract(
       Pointer_stringify(method),
       Pointer_stringify(abi),
       Pointer_stringify(contract),
@@ -26,7 +26,41 @@ mergeInto(LibraryManager.library, {
     );
   },
 
+  CallContractJs: function (method, abi, contract, args) {
+     window.web3gl.callContract(
+      UTF8ToString(method),
+      UTF8ToString(abi),
+      UTF8ToString(contract),
+      UTF8ToString(args)
+    );
+  },
+
+  GetTransactionReceiptJs: function (hash) {
+   window.web3gl.getTransactionReceipt(
+      UTF8ToString(hash)
+    );
+  },
   
+  GetResponse: function (property) {
+    var value = window.web3gl[UTF8ToString(property)];
+    if(value !== null)
+    {
+        if(typeof value === 'object' || Array.isArray(value))
+        {
+            // stringify object and array
+          var value = JSON.stringify(value);
+        }
+        var bufferSize = lengthBytesUTF8(value) + 1;
+        var buffer = _malloc(bufferSize);
+        stringToUTF8(value, buffer, bufferSize);
+        return buffer;
+    }
+    return null;
+  },
+
+  SetPropertyValue : function (property, value) {
+    window.web3gl[UTF8ToString(property)] = UTF8ToString(value);
+  },
 
   SendContractResponse: function () {
     var bufferSize = lengthBytesUTF8(window.web3gl.sendContractResponse) + 1;
