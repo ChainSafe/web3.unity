@@ -5,15 +5,20 @@
 [<img alt="Discord" src="https://img.shields.io/discord/593655374469660673.svg?style=for-the-badge&label=Discord&logo=discord" height="20">](https://discord.gg/Q6A3YA2)
 [<img alt="Twitter" src="https://img.shields.io/twitter/follow/espadrine.svg?style=for-the-badge&label=Twitter&color=1DA1F2" height="20">](https://twitter.com/chainsafeth)
 
+## Download
+https://github.com/ChainSafe/web3.unity/releases
+
 ## Documentation
 https://docs.gaming.chainsafe.io/
 
-## Download
-
-https://github.com/ChainSafe/web3.unity/releases
+## Support
+- Need help with web3.unity or found a bug? Be sure to read the documentation above, then review existing issues or create a new one [here](https://github.com/ChainSafe/web3.unity/issues). This is the best way to get help from the ChainSafe Gaming team.
+- Need help from the community, including quesitons not related to web3.unity? Ask in #community-code-support on [Discord](https://discord.gg/Q6A3YA2).
 
 ## Contributing
-- Have questions? Say hi on [Discord](https://discord.gg/Q6A3YA2)!
+- Have an idea for a new feature that would improve web3.unity? Create a feature request [here](https://github.com/ChainSafe/web3.unity/issues/new?assignees=&labels=Type%3A+Feature&template=feature_request.md&title=).
+- Have a code contribution you'd like to make directly? Make a pull request to this repo!
+- Join our community! Say hi on [Discord](https://discord.gg/Q6A3YA2) in #web3unity-gaming-general and share your project built with web3.unity in #gaming-showcase.
 
 ## ChainSafe Security Policy
 
