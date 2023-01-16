@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 976027683076692190}
-  - component: {fileID: 976027683076692189}
+  - component: {fileID: -3293625261912357292}
   m_Layer: 0
   m_Name: AllErc721
   m_TagString: Untagged
@@ -27,11 +27,12 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &976027683076692189
+--- !u!114 &-3293625261912357292
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -40,6 +41,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 976027683076692188}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d54d8f0da8bb4e009adf11d334a8c134, type: 3}
+  m_Script: {fileID: 11500000, guid: c9b3d2893e2892a4d962a7c0348f71c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  chain: Enter Your Chain
+  network: Enter Your Network
+  amountOfTokenIdsToSearch: 0
+  nftContracts:
+  - Enter Your NFT Contracts
