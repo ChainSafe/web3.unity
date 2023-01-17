@@ -28,7 +28,7 @@ public class AllErc721 : MonoBehaviour
                     // if token id id matches the account from login, print the tokenID and get the URI
                     if (ownerOf == account)
                     {
-                        string uri = await ERC1155.URI(chain, network, contract, i.ToString());
+                        string uri = await ERC721.URI(chain, network, contract, i.ToString());
                         Debug.Log("TokenID: " + i);
                         Debug.Log("Token URI: " + uri);
                         balance ++;
