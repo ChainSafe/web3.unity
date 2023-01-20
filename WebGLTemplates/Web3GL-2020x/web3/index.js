@@ -7,7 +7,7 @@ document.body.appendChild(Object.assign(document.createElement("script"), { type
 // uncomment to enable torus wallet
 // document.body.appendChild(Object.assign(document.createElement("script"), { type: "text/javascript", src: "https://cdn.jsdelivr.net/npm/@toruslabs/torus-embed" }));
 // uncomment to enable walletconnect
-// document.body.appendChild(Object.assign(document.createElement("script"), { type: "text/javascript", src: "https://unpkg.com/@walletconnect/web3-provider@1.2.1/dist/umd/index.min.js" }));
+// document.body.appendChild(Object.assign(document.createElement("script"), { type: "text/javascript", src: "https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js" }));
 
 // load web3gl to connect to unity
 window.web3gl = {
