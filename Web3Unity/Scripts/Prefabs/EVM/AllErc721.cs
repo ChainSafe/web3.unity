@@ -31,7 +31,7 @@ public class AllErc721 : MonoBehaviour
                         string uri = await ERC721.URI(chain, network, contract, i.ToString());
                         Debug.Log("TokenID: " + i);
                         Debug.Log("Token URI: " + uri);
-                        balance ++;
+                        balanceSearched ++;
                     }
                 }
             }
