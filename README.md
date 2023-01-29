@@ -1,6 +1,4 @@
-<p align="center">
-  <img src="![image](https://user-images.githubusercontent.com/47398578/214978227-cbaf07ba-ec08-498b-86a1-529eb0240f23.png)">
-</p>
+![ChainSafeGaming](https://user-images.githubusercontent.com/681817/215352070-8946841c-741a-4be0-8a2d-94569d5dbd03.png)
 
 [<img alt="Discord" src="https://img.shields.io/discord/593655374469660673.svg?style=for-the-badge&label=Discord&logo=discord" height="20">](https://discord.gg/Q6A3YA2)
 [<img alt="Twitter" src="https://img.shields.io/twitter/follow/espadrine.svg?style=for-the-badge&label=Twitter&color=1DA1F2" height="20">](https://twitter.com/chainsafeth)
