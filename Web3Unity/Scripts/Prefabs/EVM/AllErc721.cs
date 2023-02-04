@@ -7,6 +7,7 @@ public class AllErc721 : MonoBehaviour
     public string chain;
     public string network;
     public int amountOfTokenIdsToSearch;
+    public int tokenIdStart;
     public string[] nftContracts = {};
 
     async void Start()
@@ -24,12 +25,12 @@ public class AllErc721 : MonoBehaviour
                 // if balanceSearched is less than the balance for each contract, keep searching
                 if (balanceSearched < balance)
                 {
-                    string ownerOf = await ERC721.OwnerOf(chain, network, contract, i.ToString());
+                    string ownerOf = await ERC721.OwnerOf(chain, network, contract, (tokenIdStart + i).ToString());
                     // if token id id matches the account from login, print the tokenID and get the URI
                     if (ownerOf == account)
                     {
-                        string uri = await ERC721.URI(chain, network, contract, i.ToString());
-                        Debug.Log("TokenID: " + i);
+                        string uri = await ERC721.URI(chain, network, contract, (tokenIdStart + i).ToString());
+                        Debug.Log("TokenID: " + (tokenIdStart + i));
                         Debug.Log("Token URI: " + uri);
                         balanceSearched ++;
                     }
