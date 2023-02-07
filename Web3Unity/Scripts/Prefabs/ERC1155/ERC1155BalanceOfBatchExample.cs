@@ -1,22 +1,20 @@
-using System.Collections;
 using System.Numerics;
 using System.Collections.Generic;
 using UnityEngine;
+using Web3Unity.Scripts.Library.ETHEREUEM.EIP;
 
 public class ERC1155BalanceOfBatchExample : MonoBehaviour
 {
     async void Start()
     {
-        string chain = "ethereum";
-        string network = "goerli";
-        string contract = "0x2ebecabbbe8a8c629b99ab23ed154d74cd5d4342";
-        string[] accounts = { "0xaCA9B6D9B1636D99156bB12825c75De1E5a58870", "0xaCA9B6D9B1636D99156bB12825c75De1E5a58870" };
-        string[] tokenIds = { "17", "22" };
+        string contract = "0xdc4aff511e1b94677142a43df90f948f9ae181dd";
+        string[] accounts = { "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2", "0xE51995Cdb3b1c109E0e6E67ab5aB31CDdBB83E4a" };
+        string[] tokenIds = { "1", "2" };
 
-        List<BigInteger> batchBalances = await ERC1155.BalanceOfBatch(chain, network, contract, accounts, tokenIds);
+        List<BigInteger> batchBalances = await ERC1155.BalanceOfBatch(contract, accounts, tokenIds);
         foreach (var balance in batchBalances)
         {
-            print ("BalanceOfBatch: " + balance);
-        } 
+            print("BalanceOfBatch: " + balance);
+        }
     }
 }

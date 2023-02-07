@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEngine;
 
 #if UNITY_WEBGL
-public class VoucherMintMenu : MonoBehaviour
+public class ChickenDemo1155VoucherMintExample : MonoBehaviour
 {
     // this example has been taken from the chicken demo to show you the process of minting with a voucher and arrays/tuples
     async public void VoucherMintNFT()

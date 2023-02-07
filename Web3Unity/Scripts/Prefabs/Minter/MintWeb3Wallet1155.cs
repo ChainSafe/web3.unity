@@ -1,5 +1,7 @@
 using Models;
 using UnityEngine;
+using Web3Unity.Scripts.Library.Web3Wallet;
+using Web3Unity.Scripts.Library.ETHEREUEM.Connect;
 using System;
 
 public class MintWeb3Wallet1155 : MonoBehaviour

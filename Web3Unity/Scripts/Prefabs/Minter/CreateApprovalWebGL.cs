@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Web3Unity.Scripts.Library.ETHEREUEM.Connect;
 
 
 #if UNITY_WEBGL

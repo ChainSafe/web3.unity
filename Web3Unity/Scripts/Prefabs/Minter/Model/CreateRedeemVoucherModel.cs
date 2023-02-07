@@ -13,7 +13,6 @@ namespace Models
             public string receiver;
             public string signature;
         }
-  
         [Serializable]
         public class CreateVoucher1155
         {

@@ -1,38 +1,41 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Newtonsoft.Json;
+using Web3Unity.Scripts.Library.ETHEREUEM.EIP;
+using Web3Unity.Scripts.Library.Ethers.Contracts;
+using Web3Unity.Scripts.Library.Web3Wallet;
 
 public class Web3WalletTransfer721Example : MonoBehaviour
 {
-    async public void OnTransfer721()
+    public async void OnTransfer721()
     {
         // https://chainlist.org/
-        string chainId = "5"; // goerli
+        var chainId = "5"; // goerli
         // contract to interact with 
-        string contract = "0xde458cd3deaa28ce67beefe3f45368c875b3ffd6";
+        var contract = "0x31A61D3B956d9E95e0b9434BEf24bfEebB48b2c5";
         // value in wei
-        string value = "0";
+        var value = "0";
         // abi in json format
-        string abi = "[{ \"inputs\": [ { \"internalType\": \"address\", \"name\": \"from\", \"type\": \"address\" }, { \"internalType\": \"address\", \"name\": \"to\", \"type\": \"address\" }, { \"internalType\": \"uint256\", \"name\": \"tokenId\", \"type\": \"uint256\" } ], \"name\": \"safeTransferFrom\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\" }]"; 
+        var abi = ABI.ERC_721;
         // smart contract method to call
-        string method = "safeTransferFrom";
+        var method = ETH_METHOD.SafeTransferFrom;
         // account to send erc721 to
-        string toAccount = PlayerPrefs.GetString("Account");
+        var toAccount = PlayerPrefs.GetString("Account");
         // token id to send
-        string tokenId = "5";
-        // array of arguments for contract
-        string[] obj = { PlayerPrefs.GetString("Account"), toAccount, tokenId };
-        string args = JsonConvert.SerializeObject(obj);
-        // create data to interact with smart contract
-        string data = await EVM.CreateContractData(abi, method, args);
+        var tokenId = "0";
+        var contractData = new Contract(abi, contract);
+
+        var data = contractData.Calldata(method, new object[]
+        {
+            toAccount,
+            toAccount,
+            tokenId
+        });
         print(data);
         // gas limit OPTIONAL
-        string gasLimit = "";
+        var gasLimit = "";
         // gas price OPTIONAL
-        string gasPrice = "";
+        var gasPrice = "";
         // send transaction
-        string response = await Web3Wallet.SendTransaction(chainId, contract, value, data, gasLimit, gasPrice);
+        var response = await Web3Wallet.SendTransaction(chainId, contract, value, data, gasLimit, gasPrice);
         print(response);
     }
 }

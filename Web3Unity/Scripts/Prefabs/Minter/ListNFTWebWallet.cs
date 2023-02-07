@@ -6,10 +6,12 @@ using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using Web3Unity.Scripts.Library.ETHEREUEM.Connect;
+using Web3Unity.Scripts.Library.Web3Wallet;
 
 namespace Web3Unity.Scripts.Prefabs.Minter
 {
-    public class ListNFTWebWallet : MonoBehaviour
+    public class ListNftWebWallet : MonoBehaviour
     {
         private string chain = "ethereum";
         private string network = "goerli";
@@ -18,7 +20,7 @@ namespace Web3Unity.Scripts.Prefabs.Minter
         private string _tokenType = "";
         private string _itemID = "";
         private string account;
-        
+
         public Renderer textureObject;
         public Text description;
         public Text tokenURI;
@@ -27,7 +29,7 @@ namespace Web3Unity.Scripts.Prefabs.Minter
         public InputField itemPrice;
         public Text noListedItems;
         public Text playerAccount;
-   
+
         public void Awake()
         {
             account = PlayerPrefs.GetString("Account");
@@ -43,8 +45,8 @@ namespace Web3Unity.Scripts.Prefabs.Minter
             playerAccount.text = account;
             try
             {
-                List<MintedNFT.Response> response = await EVM.GetMintedNFT(chain, network,account);
-            
+                List<MintedNFT.Response> response = await EVM.GetMintedNFT(chain, network, account);
+
                 if (response[1].uri == null)
                 {
                     Debug.Log("Not Listed Items");
@@ -54,12 +56,12 @@ namespace Web3Unity.Scripts.Prefabs.Minter
                 {
                     response[1].uri = response[1].uri.Replace("ipfs://", "https://ipfs.io/ipfs/");
                 }
-            
+
                 UnityWebRequest webRequest = UnityWebRequest.Get(response[1].uri);
                 await webRequest.SendWebRequest();
                 RootGetNFT data =
                     JsonConvert.DeserializeObject<RootGetNFT>(
-                        System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data)); 
+                        System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
                 description.text = data.description;
                 // parse json to get image uri
                 string imageUri = data.image;
@@ -99,7 +101,7 @@ namespace Web3Unity.Scripts.Prefabs.Minter
                 Debug.Log(request.error);
             else
             {
-                Texture2D webTexture = ((DownloadHandlerTexture) request.downloadHandler).texture as Texture2D;
+                Texture2D webTexture = ((DownloadHandlerTexture)request.downloadHandler).texture as Texture2D;
                 Sprite webSprite = SpriteFromTexture2D(webTexture);
                 textureObject.GetComponent<Image>().sprite = webSprite;
             }

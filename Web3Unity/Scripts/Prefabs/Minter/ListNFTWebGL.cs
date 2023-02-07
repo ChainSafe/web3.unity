@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using Web3Unity.Scripts.Library.ETHEREUEM.Connect;
 
 #if UNITY_WEBGL
 public class ListNFTWebGL : MonoBehaviour

@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,8 +22,8 @@ public class WebGLSignVerifyExample : MonoBehaviour
             Debug.Log("Signed Hashed: " + signHashed);
             textSignedHash.text = signHashed;
             ParseSignatureFunction(signHashed);
-            Task<string> verify = EVM.Verify(hashedMessage, signHashed);
-            verifyAddress.text = await verify;
+            string verify = await Web3GL.EcRecover(hashedMessage, signHashed);
+            verifyAddress.text = verify;
             Debug.Log("Verify Address: " + verifyAddress.text);
         }
         catch (Exception e)
