@@ -43,7 +43,7 @@ namespace Nethereum.Signer
         }
 
         public static ECDSASignature ExtractECDSASignature(byte[] signatureArray)
-        { 
+        {
             var v = signatureArray[64];
 
             if (v == 0 || v == 1)

@@ -9,6 +9,6 @@ public class WaitForBackgroundThread
 {
     public ConfiguredTaskAwaitable.ConfiguredTaskAwaiter GetAwaiter()
     {
-        return Task.Run(() => {}).ConfigureAwait(false).GetAwaiter();
+        return Task.Run(() => { }).ConfigureAwait(false).GetAwaiter();
     }
 }

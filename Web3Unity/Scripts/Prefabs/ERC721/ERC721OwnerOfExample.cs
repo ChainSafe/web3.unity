@@ -1,17 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Web3Unity.Scripts.Library.ETHEREUEM.EIP;
 
 public class ERC721OwnerOfExample : MonoBehaviour
 {
     async void Start()
     {
-        string chain = "moonbeam";
-        string network = "testnet";
-        string contract = "0xcB0cbcE06860f6C30C62560f5eFBF918150e056E";
-        string tokenId = "1";
-
-        string ownerOf = await ERC721.OwnerOf(chain, network, contract, tokenId);
+        string contract = "0x06dc21f89f01409e7ed0e4c80eae1430962ae52c";
+        string tokenId = "0x01559ae4021a565d5cc4740f1cefa95de8c1fb193949ecd32c337b03047da501";
+        string ownerOf = await ERC721.OwnerOf(contract, tokenId);
         print(ownerOf);
     }
 }

@@ -10,7 +10,7 @@ namespace Nethereum.Signer
         public static EthECDSASignature FromComponents(byte[] r, byte[] s, byte v)
         {
             var signature = FromComponents(r, s);
-            signature.V = new[] {v};
+            signature.V = new[] { v };
             return signature;
         }
 
