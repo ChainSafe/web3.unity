@@ -31,4 +31,4 @@ jobs:
       with:
         draft: true
         generate_release_notes: true
-        files: output/v2_beta.unitypackage
+        files: output/web3.unity.unitypackage

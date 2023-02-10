@@ -1,0 +1,9 @@
+{
+    "name": "ChainSafe_RPC_Tests",
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ]
+}

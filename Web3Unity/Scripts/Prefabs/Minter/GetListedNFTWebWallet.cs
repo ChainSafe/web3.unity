@@ -8,6 +8,8 @@ using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using Web3Unity.Scripts.Library.ETHEREUEM.Connect;
+using Web3Unity.Scripts.Library.Web3Wallet;
 
 public class GetListedNFTWebWallet : MonoBehaviour
 {
@@ -30,7 +32,7 @@ public class GetListedNFTWebWallet : MonoBehaviour
 
     public void Awake()
     {
-        
+
         price.text = "";
         seller.text = "";
         description.text = "";
@@ -66,7 +68,7 @@ public class GetListedNFTWebWallet : MonoBehaviour
         {
             description.text = data.description;
         }
-        
+
         // parse json to get image uri
         string imageUri = data.image;
         if (imageUri.StartsWith("ipfs://"))
@@ -108,7 +110,7 @@ public class GetListedNFTWebWallet : MonoBehaviour
             Debug.Log(request.error);
         else
         {
-            Texture2D webTexture = ((DownloadHandlerTexture) request.downloadHandler).texture as Texture2D;
+            Texture2D webTexture = ((DownloadHandlerTexture)request.downloadHandler).texture as Texture2D;
             Sprite webSprite = SpriteFromTexture2D(webTexture);
             textureObject.GetComponent<Image>().sprite = webSprite;
         }
@@ -133,7 +135,7 @@ public class GetListedNFTWebWallet : MonoBehaviour
 
         try
         {
-            
+
             string responseNft = await Web3Wallet.SendTransaction(chainID, response.tx.to, response.tx.value,
                 response.tx.data, response.tx.gasLimit, response.tx.gasPrice);
             if (responseNft == null)

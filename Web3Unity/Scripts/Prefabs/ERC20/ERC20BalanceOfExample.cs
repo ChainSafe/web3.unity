@@ -1,18 +1,15 @@
-using System.Collections;
 using System.Numerics;
-using System.Collections.Generic;
 using UnityEngine;
+using Web3Unity.Scripts.Library.ETHEREUEM.EIP;
 
 public class ERC20BalanceOfExample : MonoBehaviour
 {
     async void Start()
     {
-        string chain = "ethereum";
-        string network = "mainnet";
-        string contract = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
-        string account = "0x000000ea89990a17Ec07a35Ac2BBb02214C50152";
+        string contract = "0x3E0C0447e47d49195fbE329265E330643eB42e6f";
+        string account = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
 
-        BigInteger balanceOf = await ERC20.BalanceOf(chain, network, contract, account);
-        print(balanceOf); 
+        BigInteger balanceOf = await ERC20.BalanceOf(contract, account);
+        Debug.Log("Balance Of: " + balanceOf);
     }
 }
