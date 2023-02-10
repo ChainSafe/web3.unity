@@ -14,7 +14,6 @@ namespace Models
             public string receiver;
             public string signature;
         }
-  
         [Serializable]
         public class GetVoucher1155Response
         {

@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Web3Unity.Scripts.Library.ETHEREUEM.Connect;
+using Web3Unity.Scripts.Library.Web3Wallet;
 
 public class CreateApprovalWebWallet : MonoBehaviour
 {
@@ -21,10 +23,10 @@ public class CreateApprovalWebWallet : MonoBehaviour
     {
         var response = await EVM.CreateApproveTransaction(chain, network, account, tokenType);
         Debug.Log("Response: " + response.connection.chain);
-        
+
         try
         {
-            
+
             string responseNft = await Web3Wallet.SendTransaction(chainID, response.tx.to, "0",
                 response.tx.data, response.tx.gasLimit, response.tx.gasPrice);
             if (responseNft == null)

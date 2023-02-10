@@ -1,10 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Web3Unity.Scripts.Library.Web3Wallet;
 
 public class Web3WalletSendTransactionExample : MonoBehaviour
 {
- async public void OnSendTransaction()
+    async public void OnSendTransaction()
     {
         // https://chainlist.org/
         string chainId = "5"; // goerli

@@ -7,7 +7,7 @@ namespace Nethereum.Util
     public static class ByteUtil
     {
         public static readonly byte[] EMPTY_BYTE_ARRAY = new byte[0];
-        public static readonly byte[] ZERO_BYTE_ARRAY = {0};
+        public static readonly byte[] ZERO_BYTE_ARRAY = { 0 };
 
         /// <summary>
         ///     Creates a copy of bytes and appends b to the end of it
@@ -42,8 +42,8 @@ namespace Nethereum.Util
         public static IEnumerable<byte> MergeToEnum(params byte[][] arrays)
         {
             foreach (var a in arrays)
-            foreach (var b in a)
-                yield return b;
+                foreach (var b in a)
+                    yield return b;
         }
 
         /// <param name="arrays"> - arrays to merge </param>
@@ -58,7 +58,7 @@ namespace Nethereum.Util
             var length = Math.Min(a.Length, b.Length);
             var result = new byte[length];
             for (var i = 0; i < length; i++)
-                result[i] = (byte) (a[i] ^ b[i]);
+                result[i] = (byte)(a[i] ^ b[i]);
             return result;
         }
     }
