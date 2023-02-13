@@ -21,27 +21,32 @@ public class ChainSafeServerSettings : EditorWindow
         if ((ProjectID == ("Please Enter Your Project ID")) && (PlayerPrefs.GetString("ProjectID") != ""))
         {
             ProjectID = PlayerPrefs.GetString("ProjectID");
+            PlayerPrefs.Save();
         }
 
         if ((ChainID == ("Please Enter Your Chain ID")) && (PlayerPrefs.GetString("ChainID") != ""))
         {
             ChainID = PlayerPrefs.GetString("ChainID");
             PlayerPrefs.SetInt("ChainIDInt", int.Parse(PlayerPrefs.GetString("ChainID")));
+            PlayerPrefs.Save();
         }
 
         if (Chain == ("Please Enter Your Chain i.e Ethereum, Binance, Cronos") && (PlayerPrefs.GetString("Chain") != ""))
         {
             Chain = PlayerPrefs.GetString("Chain");
+            PlayerPrefs.Save();
         }
 
         if (Network == ("Please Enter Your Network i.e Mainnet, Testnet") && (PlayerPrefs.GetString("Network") != ""))
         {
             Network = PlayerPrefs.GetString("Network");
+            PlayerPrefs.Save();
         }
 
         if (RPC == ("Please Enter Your RPC") && (PlayerPrefs.GetString("RPC") != ""))
         {
             RPC = PlayerPrefs.GetString("RPC");
+            PlayerPrefs.Save();
         }
     }
 

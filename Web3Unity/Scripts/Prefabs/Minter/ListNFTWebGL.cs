@@ -78,7 +78,7 @@ public class ListNFTWebGL : MonoBehaviour
             Debug.Log(request.error);
         else
         {
-            Texture2D webTexture = ((DownloadHandlerTexture) request.downloadHandler).texture as Texture2D;
+            Texture2D webTexture = ((DownloadHandlerTexture)request.downloadHandler).texture as Texture2D;
             Sprite webSprite = SpriteFromTexture2D(webTexture);
             textureObject.GetComponent<Image>().sprite = webSprite;
         }

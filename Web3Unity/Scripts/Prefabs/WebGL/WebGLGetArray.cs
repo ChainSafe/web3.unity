@@ -22,7 +22,7 @@ public class WebGLGetArray : MonoBehaviour
         var contract = new Contract(abi, contractAddress, provider);
         Debug.Log("Gas Price: " + await provider.GetGasPrice());
         var gasPrice = await provider.GetGasPrice();
-        var gasValue = await contract.EstimateGas("getStore", new object[] {});
+        var gasValue = await contract.EstimateGas("getStore", new object[] { });
         Debug.Log("Gas Value: " + gasValue.Value);
         var calldata = await contract.Call(method);
         string json = JsonConvert.SerializeObject(calldata[0], Formatting.Indented);

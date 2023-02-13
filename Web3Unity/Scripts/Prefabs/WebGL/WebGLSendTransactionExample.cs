@@ -17,10 +17,13 @@ public class WebGLSendTransactionExample : MonoBehaviour
         // gas price OPTIONAL
         string gasPrice = "";
         // connects to user's browser wallet (metamask) to send a transaction
-        try {
+        try
+        {
             string response = await Web3GL.SendTransaction(to, value, gasLimit, gasPrice);
             Debug.Log(response);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             Debug.LogException(e, this);
         }
     }

@@ -6,7 +6,7 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.WebGL
 {
     public class GameLogger
     {
-        private const string loggingUrl = "https://api.gaming.chainsafe.io/logging/logEvent";
+        private const string loggingUrl = "https://game-api-stg.chainsafe.io/logging/logEvent";
 
         public static async Task<string> Log(string _chain, string _network, object _data)
         {

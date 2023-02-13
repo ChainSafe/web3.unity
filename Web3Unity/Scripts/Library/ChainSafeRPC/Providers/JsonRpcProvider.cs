@@ -41,7 +41,8 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
         public static string DefaultUrl()
         {
-            return "http://localhost:8545";
+            var url = RPC.GetInstance.Provider();
+            return url.ToString();
         }
 
         public override async Task<Network.Network> DetectNetwork()
