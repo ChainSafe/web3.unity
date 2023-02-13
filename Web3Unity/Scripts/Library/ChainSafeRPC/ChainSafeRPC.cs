@@ -16,12 +16,13 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
     public class ChainSafeRPC : MonoBehaviour
     {
         private Dictionary<ulong, Chains.Chain> _chains;
-        static BaseProvider _provider;
+        private static BaseProvider _provider;
 
         private static string NFT_ADDRESS = "0xc81fa2eacc1c45688d481b11ce94c24a136e125d";
 
         private string NFT_ABI =
             "[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"approved\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"approved\",\"type\":\"bool\"}],\"name\":\"ApprovalForAll\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"getApproved\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"}],\"name\":\"isApprovedForAll\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"mint\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"ownerOf\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"safeTransferFrom\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"_data\",\"type\":\"bytes\"}],\"name\":\"safeTransferFrom\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"approved\",\"type\":\"bool\"}],\"name\":\"setApprovalForAll\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes4\",\"name\":\"interfaceId\",\"type\":\"bytes4\"}],\"name\":\"supportsInterface\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"tokenURI\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]";
+
         /// <summary>
         /// GetNetwork
         /// </summary>
@@ -35,11 +36,8 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
 
             return network.Name;
         }
-        /// <summary>
-        /// SwitchNetwork
-        /// </summary>
-        /// <returns></returns>
-       /* public async Task<bool> SwitchNetwork()
+
+        /* public async Task<bool> SwitchNetwork()
         {
             // check type of provider to be Web3Provider
             if (_provider is not Web3Provider provider)
@@ -102,6 +100,7 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
 
             return balance.ToString();
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -113,6 +112,7 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
             Debug.Log($"Contract code: {code}");
             return code;
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -125,6 +125,7 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
 
             return slot0;
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -142,6 +143,7 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
             Debug.Log($"Last block gas used: {latestBlock.GasUsed}");
             return latestBlock.BlockHash;
         }
+
         /// <summary>
         /// GetBlockNumber
         /// </summary>
@@ -152,6 +154,7 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
             var currentBlockNumber = await provider.GetBlockNumber();
             return currentBlockNumber.ToString();
         }
+
         /// <summary>
         /// GetBlockByNumber
         /// </summary>
@@ -163,6 +166,7 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
             var blockByNumber = await provider.GetBlock(new BlockParameter(currentBlockNumber));
             return blockByNumber.BlockHash;
         }
+
         /// <summary>
         /// GetBlockWithTransactions
         /// </summary>
@@ -175,6 +179,7 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
                 await _provider.GetBlockWithTransactions(new BlockParameter(currentBlockNumber.ToUlong() - 10));
             return blockWithTx.Transactions[0].Hash;
         }
+
         /// <summary>
         /// GetPreviousBlock
         /// </summary>
@@ -233,6 +238,7 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
             Debug.Log($"Block hash from TX {latestBlockWithTx.Transactions[0].Hash} receipt: {receipt.BlockHash}");
             return receipt.TransactionHash;
         }
+
         /// <summary>
         /// CallContractMethod
         /// </summary>
@@ -265,7 +271,7 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
             var provider = RPC.GetInstance.Provider();
             var contract = new Contract(abi, address, provider);
             string[] obj = { };
-            string args = JsonConvert.SerializeObject(obj);
+            var args = JsonConvert.SerializeObject(obj);
             // var name = await contract.Call(method);
             // Debug.Log($"NFT.name(): {name[0]}");
 
@@ -283,17 +289,20 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
 
             return contractData[0].ToString();
         }
+
         /// <summary>
         /// EstimateGasContractMethod
         /// </summary>
         /// <returns></returns>
-        public async Task<string> EstimateGasContractMethod(string abi, string address, string provider, string method, string args)
+        public async Task<string> EstimateGasContractMethod(string abi, string address, string provider, string method,
+            string args)
         {
             var contract = new Contract(abi, address, _provider);
             var result = await contract.EstimateGas("ownerOf", new object[] { 1 });
             Debug.Log($"NFT.onwerOf(1) gas: {result}");
             return result.ToString();
         }
+
         /// <summary>
         /// GetAccounts
         /// </summary>
@@ -315,6 +324,7 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
 
             return true;
         }
+
         /// <summary>
         /// GetSigner
         /// </summary>
@@ -338,30 +348,26 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
 
             return true;
         }
-        /// <summary>
-        /// SignMessage
-        /// </summary>
-        /// <returns></returns>
-        public async Task<bool> SignMessage()
-        {
-            // if (_provider is not JsonRpcProvider provider)
-            // {
-            //     Debug.Log("Provider is not JsonRpcProvider");
-            //     return;
-            // }
-            //
-            // var signer = provider.GetSigner(); // default signer at index 0
+        //public async Task<bool> SignMessage()
+        //{
+        // if (_provider is not JsonRpcProvider provider)
+        // {
+        //     Debug.Log("Provider is not JsonRpcProvider");
+        //     return;
+        // }
+        //
+        // var signer = provider.GetSigner(); // default signer at index 0
 
-            // Debug.Log($"Signature string(hello): {await signer.SignMessage("hello")}");
-            // Debug.Log($"Signature byte[](hello): {await signer.SignMessage(Encoding.ASCII.GetBytes("hello"))}");
+        // Debug.Log($"Signature string(hello): {await signer.SignMessage("hello")}");
+        // Debug.Log($"Signature byte[](hello): {await signer.SignMessage(Encoding.ASCII.GetBytes("hello"))}");
 
-            // var sha3 = new Sha3Keccack();
+        // var sha3 = new Sha3Keccack();
 
-            // Debug.Log($"Legacy signature string(hello): {await signer._LegacySignMessage(sha3.CalculateHash(Encoding.ASCII.GetBytes("hello")))}");
-            // Debug.Log($"Legacy signature byte[](hello): {await signer._LegacySignMessage(Encoding.ASCII.GetBytes("hello"))}");
+        // Debug.Log($"Legacy signature string(hello): {await signer._LegacySignMessage(sha3.CalculateHash(Encoding.ASCII.GetBytes("hello")))}");
+        // Debug.Log($"Legacy signature byte[](hello): {await signer._LegacySignMessage(Encoding.ASCII.GetBytes("hello"))}");
 
-            return true;
-        }
+        //    return true;
+        // }
         /// <summary>
         /// SendTransaction
         /// </summary>
@@ -389,6 +395,7 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
 
             return true;
         }
+
         /// <summary>
         /// SendContract
         /// </summary>
@@ -409,6 +416,7 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
 
             return true;
         }
+
         /// <summary>
         /// SendContractOverrideGas
         /// </summary>
@@ -427,17 +435,18 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
             var ret = await contract.Attach("0x000...000").Connect(signer).Send("mint", null, new TransactionRequest
             {
                 GasLimit = new HexBigInteger("1000"),
-                GasPrice = new HexBigInteger("1000"),
+                GasPrice = new HexBigInteger("1000")
             });
             Debug.Log($"NFT.mint(): {ret}");
 
             return true;
         }
+
         /// <summary>
         /// SubscribeToNewBlockEvent
         /// </summary>
         /// <returns></returns>
-        public async Task<bool> SubscribeToNewBlockEvent()
+        public Task<bool> SubscribeToNewBlockEvent()
         {
             _provider.On("block", (ulong blockNumber) =>
             {
@@ -445,13 +454,14 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
                 return null;
             });
 
-            return true;
+            return Task.FromResult(true);
         }
+
         /// <summary>
         /// SubscribeToNewChainEvent
         /// </summary>
         /// <returns></returns>
-        public async Task<bool> SubscribeToNewChainEvent()
+        public Task<bool> SubscribeToNewChainEvent()
         {
             _provider.On("chainChanged", (ulong chainId) =>
             {
@@ -459,12 +469,13 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
                 return null;
             });
 
-            return true;
+            return Task.FromResult(true);
         }
+
         /// <summary>
         /// OnApplicationQuit
         /// </summary>
-        void OnApplicationQuit()
+        private void OnApplicationQuit()
         {
             Debug.Log("OnApplicationQuit");
             _provider?.RemoveAllListeners();
