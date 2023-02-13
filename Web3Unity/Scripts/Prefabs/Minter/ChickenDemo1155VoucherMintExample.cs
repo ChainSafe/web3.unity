@@ -31,15 +31,18 @@ public class ChickenDemo1155VoucherMintExample : MonoBehaviour
         // authentication prefab if statement, you can change this to match your auth wallet if your system is set up for it
         if (PlayerPrefs.GetString("WebGLVoucher1155Signer") == "0x1372199B632bd6090581A0588b2f4F08985ba2d4")
         {
-        Debug.Log("Args Sent : " + args);
-        try {
-            string response = await Web3GL.SendContract(method, abi, contract, args, value, gasLimit, gasPrice);
-            Debug.Log(response);
-            PlayerPrefs.SetString("WebGLVoucher1155", "");
-            
-        } catch (Exception e) {
-            Debug.LogException(e, this);
-        }
+            Debug.Log("Args Sent : " + args);
+            try
+            {
+                string response = await Web3GL.SendContract(method, abi, contract, args, value, gasLimit, gasPrice);
+                Debug.Log(response);
+                PlayerPrefs.SetString("WebGLVoucher1155", "");
+
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e, this);
+            }
         }
         else
         {

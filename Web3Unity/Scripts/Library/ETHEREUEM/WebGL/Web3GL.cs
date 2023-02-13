@@ -77,12 +77,12 @@ public class Web3GL
             Version = "v2",
             ProjectID = PlayerPrefs.GetString("ProjectID"),
             Player = Sha3(PlayerPrefs.GetString("Account") + PlayerPrefs.GetString("ProjectID")),
-            Method = _method, 
-            Address = _contract, 
-            ABI = _abi, 
-            ARGS = _args, 
-            Value = _value, 
-            GasLimit = _gasLimit, 
+            Method = _method,
+            Address = _contract,
+            ABI = _abi,
+            ARGS = _args,
+            Value = _value,
+            GasLimit = _gasLimit,
             GasPrice = _gasPrice
         };
         await GameLogger.Log(PlayerPrefs.GetString("ChainId"), PlayerPrefs.GetString("RPC"), data);
@@ -111,13 +111,13 @@ public class Web3GL
         SendTransactionJs(_to, _value, _gasLimit, _gasPrice);
         var data = new
         {
-            Client = "WebGL", 
+            Client = "WebGL",
             Version = "v2",
             ProjectID = PlayerPrefs.GetString("ProjectID"),
             Player = Sha3(PlayerPrefs.GetString("Account") + PlayerPrefs.GetString("ProjectID")).ToString(),
-            To = _to, 
-            Value = _value, 
-            GasLimit = _gasLimit, 
+            To = _to,
+            Value = _value,
+            GasLimit = _gasLimit,
             GasPrice = _gasPrice
         };
         var response = SendTransactionResponse();
@@ -149,9 +149,9 @@ public class Web3GL
             Version = "v2",
             ProjectID = PlayerPrefs.GetString("ProjectID"),
             Player = Sha3(PlayerPrefs.GetString("Account") + PlayerPrefs.GetString("ProjectID")),
-            To = _to, 
-            Value = _value, 
-            GasLimit = _gasLimit, 
+            To = _to,
+            Value = _value,
+            GasLimit = _gasLimit,
             GasPrice = _gasPrice
         };
         var response = SendTransactionResponse();

@@ -16,7 +16,7 @@ public class WebLogin : MonoBehaviour
     private static extern void SetConnectAccount(string value);
 
     private int expirationTime;
-    private string account; 
+    private string account;
 
     public void OnLogin()
     {
@@ -27,7 +27,8 @@ public class WebLogin : MonoBehaviour
     async private void OnConnected()
     {
         account = ConnectAccount();
-        while (account == "") {
+        while (account == "")
+        {
             await new WaitForSeconds(1f);
             account = ConnectAccount();
         };

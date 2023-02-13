@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using Web3Unity.Scripts.Library.ETHEREUEM.EIP;
 
 #if UNITY_WEBGL
-public class WebGLTransfer1155: MonoBehaviour
+public class WebGLTransfer1155 : MonoBehaviour
 {
     [SerializeField]
     private string contract = "0x8207ba6852ee561f0786e2d876b1a20fef916e46";
@@ -17,7 +17,7 @@ public class WebGLTransfer1155: MonoBehaviour
     [SerializeField]
     private string amount = "1";
     private readonly string abi = ABI.ERC_1155;
-    
+
     async public void SafeTransferFrom()
     {
         // smart contract method to call
@@ -32,10 +32,13 @@ public class WebGLTransfer1155: MonoBehaviour
         // gas price OPTIONAL
         string gasPrice = "";
         // connects to user's browser wallet (metamask) to send a transaction
-        try {
+        try
+        {
             string response = await Web3GL.SendContract(method, abi, contract, args, value, gasLimit, gasPrice);
             Debug.Log(response);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             Debug.LogException(e, this);
         };
     }

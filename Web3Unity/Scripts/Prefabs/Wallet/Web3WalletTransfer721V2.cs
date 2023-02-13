@@ -28,16 +28,22 @@ public class Web3WalletTransfer721V2 : MonoBehaviour
         // uri
         string uri = "ipfs://QmNn5EaGR26kU7aAMH7LhkNsAGcmcyJgun3Wia4MftVicW/1.json";
         var contract = new Contract(battle_axe_abi, contractAddress);
-        Debug.Log("Contract: " + contract);
         var calldata = contract.Calldata(method, new object[]
         {
             toAccount,
             uri
         });
         Debug.Log("Contract Data: " + calldata);
+
         // send transaction
+#if UNITY_EDITOR
         string response = await Web3Wallet.SendTransaction(chainId, contractAddress, value, calldata, gasLimit, gasPrice);
         print(response);
+#endif
+#if UNITY_WEBGL
+        string responseWeb = await Web3GL.SendTransactionData(contractAddress, value, gasPrice, gasLimit, calldata);
+        print(responseWeb);
+#endif
 
     }
 }

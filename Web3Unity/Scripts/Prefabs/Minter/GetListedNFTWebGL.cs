@@ -31,7 +31,7 @@ namespace Web3Unity.Scripts.Prefabs.Minter
 
         public void Awake()
         {
-        
+
             price.text = "";
             seller.text = "";
             description.text = "";
@@ -57,7 +57,7 @@ namespace Web3Unity.Scripts.Prefabs.Minter
             await webRequest.SendWebRequest();
             RootGetNFT data =
                 JsonConvert.DeserializeObject<RootGetNFT>(
-                    System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data)); 
+                    System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
             description.text = data.description;
             // parse json to get image uri
             string imageUri = data.image;
@@ -95,7 +95,7 @@ namespace Web3Unity.Scripts.Prefabs.Minter
                 Debug.Log(request.error);
             else
             {
-                Texture2D webTexture = ((DownloadHandlerTexture) request.downloadHandler).texture as Texture2D;
+                Texture2D webTexture = ((DownloadHandlerTexture)request.downloadHandler).texture as Texture2D;
                 Sprite webSprite = SpriteFromTexture2D(webTexture);
                 textureObject.GetComponent<Image>().sprite = webSprite;
             }
@@ -119,8 +119,8 @@ namespace Web3Unity.Scripts.Prefabs.Minter
             Debug.Log("Gas Limit : " + response.tx.gasLimit);
 
             try
-            { 
-                string responseNft = await Web3GL.SendTransaction( response.tx.to, response.tx.value, response.tx.gasLimit, response.tx.gasLimit);
+            {
+                string responseNft = await Web3GL.SendTransaction(response.tx.to, response.tx.value, response.tx.gasLimit, response.tx.gasLimit);
                 if (responseNft == null)
                 {
                     Debug.Log("Empty Response Object:");

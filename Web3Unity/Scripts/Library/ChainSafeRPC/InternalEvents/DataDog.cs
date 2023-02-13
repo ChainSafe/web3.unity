@@ -17,7 +17,7 @@ namespace Web3Unity.Scripts.Library.Ethers.InternalEvents
             NullValueHandling = NullValueHandling.Ignore
         };
 
-        public static DataHog Client = new DataHog("API_KEY");
+        public static DataHog Client = new DataHog("");
 
         public DataHog(string apiKey, string baseUrl = null)
         {
