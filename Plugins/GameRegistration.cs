@@ -3,7 +3,7 @@ using UnityEditor;
 
 #if UNITY_EDITOR
 // add this back in for production to initialize pop up and registration check
-//[InitializeOnLoad]
+[InitializeOnLoad]
 public class Startup : EditorWindow
 {
     static Startup()
