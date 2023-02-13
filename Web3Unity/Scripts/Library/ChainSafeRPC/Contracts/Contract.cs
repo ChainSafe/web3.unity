@@ -137,7 +137,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
                 Data = JsonConvert.SerializeObject(parameters),
                 Player = Web3Wallet.Web3Wallet.Sha3(PlayerPrefs.GetString("Account") + PlayerPrefs.GetString("ProjectID"))
             };
-            await GameLogger.Log("","",dataWebGL);
+            await GameLogger.Log("", "", dataWebGL);
 #endif
             var output = function.DecodeOutput(result);
             var array = new object[output.Count];
@@ -252,7 +252,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
                 Method = method,
                 Params = parameters
             };
-           var dataObject =  GameLogger.Log("","",dataWebGL);
+            var dataObject = GameLogger.Log("", "", dataWebGL);
 #endif
             var function = _contractBuilder.GetFunctionBuilder(method);
             return function.GetData(parameters);

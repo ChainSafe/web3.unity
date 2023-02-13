@@ -23,10 +23,13 @@ public class WebGLSendContractExample : MonoBehaviour
         // gas price OPTIONAL
         string gasPrice = "";
         // connects to user's browser wallet (metamask) to update contract state
-        try {
+        try
+        {
             string response = await Web3GL.SendContract(method, abi, contract, args, value, gasLimit, gasPrice);
             Debug.Log(response);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             Debug.LogException(e, this);
         }
     }
