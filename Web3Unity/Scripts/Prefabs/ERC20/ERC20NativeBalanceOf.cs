@@ -5,7 +5,7 @@ public class ERC20NativeBalanceOf : MonoBehaviour
 {
     async void Start()
     {
-        string account = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
+        string account = "0xEDf117cd77C5323f3f21Fc1698E67688b4B8Af8b";
         var provider = new JsonRpcProvider("YOUR_NODE_HERE");
         var getBalance = await provider.GetBalance(account);
         Debug.Log("Account Balance: " + getBalance);
