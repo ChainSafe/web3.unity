@@ -61,8 +61,11 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.EIP
             var method = ETH_METHOD.OwnerOf;
             // build array of args
             var obj = new string[_tokenIds.Length][];
-            for (var i = 0; i < _tokenIds.Length; i++) obj[i] = new string[1] {_tokenIds[i]};
-
+            for (var i = 0; i < _tokenIds.Length; i++)
+                obj[i] = new string[]
+                {
+                    _tokenIds[i]
+                };
             var args = JsonConvert.SerializeObject(obj);
             var response = await EVM.Multicall(PlayerPrefs.GetString("ChainID"), PlayerPrefs.GetString("Network"),
                 _contract, abi, method, args, _multicall, PlayerPrefs.GetString("RPC"));
