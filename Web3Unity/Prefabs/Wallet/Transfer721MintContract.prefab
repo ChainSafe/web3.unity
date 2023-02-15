@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8453335000295763671}
   - component: {fileID: 310481440363644573}
   m_Layer: 5
-  m_Name: Transfer721ExampleCanvasV2
+  m_Name: Transfer721MintContract
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -181,7 +181,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Transfer 721
+  m_Text: Mint ERC721
 --- !u!1 &6239079654478881422
 GameObject:
   m_ObjectHideFlags: 0
@@ -374,8 +374,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 917364559916229488}
-        m_TargetAssemblyTypeName: Web3WalletTransfer721V2, Assembly-CSharp
-        m_MethodName: OnTransfer721
+        m_TargetAssemblyTypeName: Web3WalletMint721V2, Assembly-CSharp
+        m_MethodName: OnMint721
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
