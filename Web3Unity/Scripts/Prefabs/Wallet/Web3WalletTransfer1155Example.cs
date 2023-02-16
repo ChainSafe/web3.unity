@@ -14,7 +14,7 @@ public class Web3WalletTransfer1155Example : MonoBehaviour
         // value in wei
         var value = "0";
         // abi in json format
-        var abi = ABI.ERC_1155;
+        var abi = "";//ABI.ERC_1155;
         // smart contract method to call
         var method = "safeTransferFrom";
         // account to sent tokens to
