@@ -3,6 +3,7 @@ using UnityEngine;
 using Web3Unity.Scripts.Library.ETHEREUEM.EIP;
 using Web3Unity.Scripts.Library.Ethers.Contracts;
 using Web3Unity.Scripts.Library.Web3Wallet;
+using Web3Unity.Scripts.Prefabs;
 using Contract = Web3Unity.Scripts.Library.Ethers.Contracts.Contract;
 
 public class Web3WalletTransfer721Example : MonoBehaviour
@@ -16,9 +17,9 @@ public class Web3WalletTransfer721Example : MonoBehaviour
         // value in wei
         var value = "0";
         // abi in json format
-        var abi = "";//ABI.ERC_721;
+        var abi = ABI.ERC_721;
         // smart contract method to call
-        var method = "";//ETH_METHOD.SafeTransferFrom;
+        var method = ETH_METHOD.SafeTransferFrom;
         // account to send erc721 to
         var toAccount = PlayerPrefs.GetString("Account");
         // token id to send
