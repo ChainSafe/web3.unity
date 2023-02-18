@@ -103,7 +103,7 @@ namespace Web3Unity.Scripts.Prefabs.Minter
             }
             else
             {
-                var webTexture = ((DownloadHandlerTexture) request.downloadHandler).texture;
+                var webTexture = ((DownloadHandlerTexture)request.downloadHandler).texture;
                 var webSprite = SpriteFromTexture2D(webTexture);
                 textureObject.GetComponent<Image>().sprite = webSprite;
             }
