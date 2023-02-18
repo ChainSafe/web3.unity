@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.Globalization;
+using System.Text;
 using Models;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -12,9 +14,9 @@ namespace Web3Unity.Scripts.Prefabs.Minter
 {
     public class ListNftWebWallet : MonoBehaviour
     {
-        private string chain = "ethereum";
-        private string network = "goerli";
-        private string chainID = "5";
+        private readonly string chain = "ethereum";
+        private readonly string network = "goerli";
+        private readonly string chainID = "5";
         private string _itemPrice = "0.001";
         private string _tokenType = "";
         private string _itemID = "";
@@ -53,13 +55,13 @@ namespace Web3Unity.Scripts.Prefabs.Minter
                 }
 
                 if (response[1].uri.StartsWith("ipfs://"))
+                {
                     response[1].uri = response[1].uri.Replace("ipfs://", "https://ipfs.chainsafe.io/ipfs/");
+                }
 
                 var webRequest = UnityWebRequest.Get(response[1].uri);
                 await webRequest.SendWebRequest();
-                var data =
-                    JsonConvert.DeserializeObject<RootGetNFT>(
-                        System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+                var data = JsonConvert.DeserializeObject<RootGetNFT>(Encoding.UTF8.GetString(webRequest.downloadHandler.data));
                 description.text = data.description;
                 // parse json to get image uri
                 var imageUri = data.image;
@@ -91,9 +93,9 @@ namespace Web3Unity.Scripts.Prefabs.Minter
         }
 
         // ReSharper disable Unity.PerformanceAnalysis
-        private IEnumerator DownloadImage(string MediaUrl)
+        private IEnumerator DownloadImage(string mediaUrl)
         {
-            var request = UnityWebRequestTexture.GetTexture(MediaUrl);
+            var request = UnityWebRequestTexture.GetTexture(mediaUrl);
             yield return request.SendWebRequest();
             if (request.result == UnityWebRequest.Result.ProtocolError)
             {
@@ -109,8 +111,7 @@ namespace Web3Unity.Scripts.Prefabs.Minter
 
         private Sprite SpriteFromTexture2D(Texture2D texture)
         {
-            return Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f),
-                100.0f);
+            return Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f), 100.0f);
         }
 
         public async void ListItem()
@@ -120,7 +121,7 @@ namespace Web3Unity.Scripts.Prefabs.Minter
             var wei = eth * decimals;
             Debug.Log("ItemID: " + _itemID);
             var response =
-                await EVM.CreateListNftTransaction(chain, network, account, _itemID, Convert.ToDecimal(wei).ToString(),
+                await EVM.CreateListNftTransaction(chain, network, account, _itemID, Convert.ToDecimal(wei).ToString(CultureInfo.InvariantCulture),
                     _tokenType);
             var value = Convert.ToInt32(response.tx.value.hex, 16);
             Debug.Log("Response: " + response);
