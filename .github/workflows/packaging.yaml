@@ -1,7 +1,7 @@
 name: Create Unity Package on push
 
 on: push
-  branches: [package-fix]
+  branch: [package-fix]
 
 jobs:
   echo:
