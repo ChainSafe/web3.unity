@@ -24,7 +24,7 @@ jobs:
 
     - uses: pCYSl5EDgo/create-unitypackage@master
       with:
-        package-path: 'output/web3.unity.unitypackage'
+        package-path: 'output/web3.unitypackage'
         include-files: metaList
     - name: Release
       uses: softprops/action-gh-release@v1
