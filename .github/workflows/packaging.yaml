@@ -11,11 +11,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - run: |
-        find Editor/ -name \*.meta > metaList
-        find Plugins/ -name \*.meta >> metaList
-        find Resources/ -name \*.meta >> metaList
-        find Web3Unity/ -name \*.meta >> metaList
-        find WebGLTemplates/ -name \*.meta >> metaList
+        find Assets/Editor/ -name \*.meta > metaList
+        find Assets/Plugins/ -name \*.meta >> metaList
+        find Assets/Resources/ -name \*.meta >> metaList
+        find Assets/Web3Unity/ -name \*.meta >> metaList
+        find Assets/WebGLTemplates/ -name \*.meta >> metaList
         echo metaList
 
     - run: mkdir output
@@ -24,7 +24,6 @@ jobs:
       with:
         package-path: 'output/web3.unitypackage'
         include-files: metaList
-        project-folder: "./Assets/"
     - uses: actions/upload-artifact@master
       with:
         path: output
