@@ -24,6 +24,7 @@ jobs:
       with:
         package-path: 'output/web3.unitypackage'
         include-files: metaList
+        project-folder: "./Assets/"
     - uses: actions/upload-artifact@master
       with:
         path: output
