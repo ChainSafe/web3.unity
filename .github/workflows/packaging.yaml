@@ -11,10 +11,15 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - run: |
+        echo "Assets/Editor.meta" > metaList
         find Assets/Editor/ -name \*.meta > metaList
+        echo "Assets/Plugins.meta" > metaList
         find Assets/Plugins/ -name \*.meta >> metaList
+        echo "Assets/Resources.meta" > metaList
         find Assets/Resources/ -name \*.meta >> metaList
+        echo "Assets/Web3Unity.meta" > metaList
         find Assets/Web3Unity/ -name \*.meta >> metaList
+        echo "Assets/WebGLTemplates.meta" > metaList
         find Assets/WebGLTemplates/ -name \*.meta >> metaList
 
     - run: mkdir output
