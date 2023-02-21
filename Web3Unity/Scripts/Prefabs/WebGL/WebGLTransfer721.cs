@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using Newtonsoft.Json;
 using Web3Unity.Scripts.Library.ETHEREUEM.EIP;
+using Web3Unity.Scripts.Prefabs;
 
 #if UNITY_WEBGL
 public class WebGLTransfer721 : MonoBehaviour
