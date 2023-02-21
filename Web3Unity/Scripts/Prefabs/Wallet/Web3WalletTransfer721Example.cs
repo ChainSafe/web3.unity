@@ -1,7 +1,10 @@
+using System.Diagnostics.Contracts;
 using UnityEngine;
 using Web3Unity.Scripts.Library.ETHEREUEM.EIP;
 using Web3Unity.Scripts.Library.Ethers.Contracts;
 using Web3Unity.Scripts.Library.Web3Wallet;
+using Web3Unity.Scripts.Prefabs;
+using Contract = Web3Unity.Scripts.Library.Ethers.Contracts.Contract;
 
 public class Web3WalletTransfer721Example : MonoBehaviour
 {
