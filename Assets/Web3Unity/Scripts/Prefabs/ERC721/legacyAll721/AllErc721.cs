@@ -24,7 +24,7 @@ public class AllErc721 : MonoBehaviour
                 // if balanceSearched is less than the balance for each contract, keep searching
                 if (balanceSearched < balance)
                 {
-                    Debug.Log("Searching" + (tokenIDStart  + i));
+                    Debug.Log("Searching" + (tokenIDStart + i));
                     string ownerOf = await ERC721.OwnerOf(contract, (tokenIDStart + i).ToString());
                     // if token id id matches the account from login, print the tokenID and get the URI
                     if (ownerOf == account)
