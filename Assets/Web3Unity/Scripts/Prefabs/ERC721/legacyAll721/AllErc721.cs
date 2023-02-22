@@ -3,10 +3,11 @@ using Web3Unity.Scripts.Library.ETHEREUEM.EIP;
 
 public class AllErc721 : MonoBehaviour
 {
+    public string[] nftContracts;
+    public int amountOfTokenIdsToSearch;
+    public int tokenIDStart; // set this as a starting point as needed
     string account;
     int balanceSearched;
-    public int amountOfTokenIdsToSearch;
-    public string[] nftContracts;
 
     async void Start()
     {
@@ -23,12 +24,13 @@ public class AllErc721 : MonoBehaviour
                 // if balanceSearched is less than the balance for each contract, keep searching
                 if (balanceSearched < balance)
                 {
-                    string ownerOf = await ERC721.OwnerOf(contract, i.ToString());
+                    Debug.Log("Searching" + (tokenIDStart + i));
+                    string ownerOf = await ERC721.OwnerOf(contract, (tokenIDStart + i).ToString());
                     // if token id id matches the account from login, print the tokenID and get the URI
                     if (ownerOf == account)
                     {
-                        string uri = await ERC721.URI(contract, i.ToString());
-                        Debug.Log("TokenID: " + i);
+                        string uri = await ERC721.URI(contract, (tokenIDStart + i).ToString());
+                        Debug.Log("TokenID: " + (tokenIDStart + i));
                         Debug.Log("Token URI: " + uri);
                         balanceSearched++;
                     }
