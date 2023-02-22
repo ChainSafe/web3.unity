@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.IO;
+using UnityEngine;
 
 #if UNITY_WEBGL
 public class WebLogin : MonoBehaviour
@@ -17,6 +18,19 @@ public class WebLogin : MonoBehaviour
 
     private int expirationTime;
     private string account;
+    private string path = "Assets/Editor/ServerSettings/webglconfig.txt";
+
+    void Awake()
+    {
+        // Read values from file
+        StreamReader sr = new StreamReader(path);
+        for (int i = 0; !sr.EndOfStream; i++) {
+            string line = sr.ReadLine ();
+            string[] Splitted = line.Split(new char[] {' '}, System.StringSplitOptions.RemoveEmptyEntries);
+            PlayerPrefs.SetString("ProjectID", Splitted [0]);
+            PlayerPrefs.SetString("RPC", Splitted [1]);
+        }
+    }
 
     public void OnLogin()
     {

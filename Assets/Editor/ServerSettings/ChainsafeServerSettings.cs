@@ -2,6 +2,7 @@ using UnityEditor;
 using System.Collections;
 using UnityEngine;
 using SDKConfiguration;
+using System.IO;
 using System;
 
 public class ChainSafeServerSettings : EditorWindow
@@ -12,6 +13,7 @@ public class ChainSafeServerSettings : EditorWindow
     public string Network = "Please Enter Your Network i.e Mainnet, Testnet";
     public string RPC = "Please Enter Your RPC";
     public User saveObject;
+    string path = "Assets/Editor/ServerSettings/webglconfig.txt";
     Texture2D m_Logo = null;
     GameObject serverCheck = null;
 
@@ -104,6 +106,8 @@ public class ChainSafeServerSettings : EditorWindow
             PlayerPrefs.SetString("Network", Network);
             PlayerPrefs.SetString("RPC", RPC);
             PlayerPrefs.SetString("Registered", "true");
+            // save project id and rpc to text file for webgl builds (these are pulled into memory in the webgl login script)
+            File.AppendAllText(path, System.String.Format("{0} {1}\n", ProjectID, RPC));
             // assign script to prefab and instantiate then destroy after
             serverCheck = (GameObject)Resources.Load("dll", typeof(GameObject));
             GameObject serverCheckScript = (GameObject)Instantiate(serverCheck, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0));
