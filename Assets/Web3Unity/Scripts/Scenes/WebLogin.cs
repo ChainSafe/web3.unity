@@ -28,7 +28,10 @@ public class WebLogin : MonoBehaviour
             string line = sr.ReadLine ();
             string[] Splitted = line.Split(new char[] {' '}, System.StringSplitOptions.RemoveEmptyEntries);
             PlayerPrefs.SetString("ProjectID", Splitted [0]);
-            PlayerPrefs.SetString("RPC", Splitted [1]);
+            PlayerPrefs.SetString("ChainID", Splitted [1]);
+            PlayerPrefs.SetString("Chain", Splitted [2]);
+            PlayerPrefs.SetString("Network", Splitted [3]);
+            PlayerPrefs.SetString("RPC", Splitted [4]);
         }
     }
 
