@@ -106,7 +106,8 @@ public class ChainSafeServerSettings : EditorWindow
             PlayerPrefs.SetString("Network", Network);
             PlayerPrefs.SetString("RPC", RPC);
             PlayerPrefs.SetString("Registered", "true");
-            // save project id and rpc to text file for webgl builds (these are pulled into memory in the webgl login script)
+            // removes previous entry and saves values to text file for webgl builds (these are pulled into memory in the webgl login script)
+            File.Delete(path);
             File.AppendAllText(path, System.String.Format("{0} {1} {2} {3} {4}\n", ProjectID, ChainID, Chain, Network, RPC));
             // assign script to prefab and instantiate then destroy after
             serverCheck = (GameObject)Resources.Load("dll", typeof(GameObject));
