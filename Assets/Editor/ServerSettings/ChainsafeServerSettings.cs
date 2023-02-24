@@ -15,7 +15,6 @@ public class ChainSafeServerSettings : EditorWindow
     Texture2D m_Logo = null;
     GameObject serverCheck = null;
     ProjectConfigScriptableObject projectConfigSO = null;
-    
 
     // checks if data is already entered
     void Awake()
