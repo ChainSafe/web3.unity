@@ -14,6 +14,8 @@ public class ChainSafeServerSettings : EditorWindow
     public User saveObject;
     Texture2D m_Logo = null;
     GameObject serverCheck = null;
+    ProjectConfigScriptableObject projectConfigSO = null;
+    
 
     // checks if data is already entered
     void Awake()
@@ -27,7 +29,6 @@ public class ChainSafeServerSettings : EditorWindow
         if ((ChainID == ("Please Enter Your Chain ID")) && (PlayerPrefs.GetString("ChainID") != ""))
         {
             ChainID = PlayerPrefs.GetString("ChainID");
-            PlayerPrefs.SetInt("ChainIDInt", int.Parse(PlayerPrefs.GetString("ChainID")));
             PlayerPrefs.Save();
         }
 
@@ -96,14 +97,20 @@ public class ChainSafeServerSettings : EditorWindow
         if (GUILayout.Button("Save Settings"))
         {
             Debug.Log("Saving Settings!");
-            // set player prefs for unity open close
+            // set player prefs for unity open close within the editor
             PlayerPrefs.SetString("ProjectID", ProjectID);
             PlayerPrefs.SetString("ChainID", ChainID);
             PlayerPrefs.SetString("Chain", Chain);
-            PlayerPrefs.SetInt("ChainIDInt", int.Parse(PlayerPrefs.GetString("ChainID")));
             PlayerPrefs.SetString("Network", Network);
             PlayerPrefs.SetString("RPC", RPC);
             PlayerPrefs.SetString("Registered", "true");
+            // set the scriptable object for when the project is built out
+            projectConfigSO = (ProjectConfigScriptableObject)Resources.Load("ProjectConfigData", typeof(ScriptableObject));
+            projectConfigSO.ProjectID = ProjectID;
+            projectConfigSO.ChainID = ChainID;
+            projectConfigSO.Chain = Chain;
+            projectConfigSO.Network = Network;
+            projectConfigSO.RPC = RPC;
             // assign script to prefab and instantiate then destroy after
             serverCheck = (GameObject)Resources.Load("dll", typeof(GameObject));
             GameObject serverCheckScript = (GameObject)Instantiate(serverCheck, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0));
