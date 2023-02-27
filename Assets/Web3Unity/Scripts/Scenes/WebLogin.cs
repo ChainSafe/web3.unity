@@ -17,6 +17,18 @@ public class WebLogin : MonoBehaviour
 
     private int expirationTime;
     private string account;
+    ProjectConfigScriptableObject projectConfigSO = null;
+    
+    void Start()
+    {
+        // loads the data saved from the editor config
+        projectConfigSO = (ProjectConfigScriptableObject)Resources.Load("ProjectConfigData", typeof(ScriptableObject));
+        PlayerPrefs.SetString("ProjectID", projectConfigSO.ProjectID);
+        PlayerPrefs.SetString("ChainID", projectConfigSO.ChainID);
+        PlayerPrefs.SetString("Chain", projectConfigSO.Chain);
+        PlayerPrefs.SetString("Network", projectConfigSO.Network);
+        PlayerPrefs.SetString("RPC", projectConfigSO.RPC);
+    }
 
     public void OnLogin()
     {
