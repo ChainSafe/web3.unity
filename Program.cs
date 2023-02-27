@@ -22,7 +22,7 @@ namespace EthersCSharpv2
         {
             ServicePointManager.Expect100Continue = true;
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            var provider = new JsonRpcProvider("https://eth-goerli.g.alchemy.com/v2/RDCJeKEWK7gvUso6HRPaWUeG4zk6EhsM");
+            var provider = new JsonRpcProvider("ADD_RPC_NODE");
             var accountBalance = await provider.GetBalance("0xE51995Cdb3b1c109E0e6E67ab5aB31CDdBB83E4a");
             var blockNumber = await provider.GetBlockNumber();
             var getBlock = await provider.GetBlock();
@@ -46,7 +46,7 @@ namespace EthersCSharpv2
         
         public static async Task<string> GetNetwork()
         {
-            var provider = new JsonRpcProvider("https://eth-goerli.g.alchemy.com/v2/RDCJeKEWK7gvUso6HRPaWUeG4zk6EhsM");
+            var provider = new JsonRpcProvider("ADD_RPC_NODE");
             var network = await provider.GetNetwork();
             Console.WriteLine($"Network name: {network.Name}");
             Console.WriteLine($"Network chain id: {network.ChainId}");
