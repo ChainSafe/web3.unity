@@ -110,6 +110,8 @@ public class ChainSafeServerSettings : EditorWindow
             projectConfigSO.Chain = Chain;
             projectConfigSO.Network = Network;
             projectConfigSO.RPC = RPC;
+            EditorUtility.SetDirty(projectConfigSO);
+            AssetDatabase.SaveAssets();
             // assign script to prefab and instantiate then destroy after
             serverCheck = (GameObject)Resources.Load("dll", typeof(GameObject));
             GameObject serverCheckScript = (GameObject)Instantiate(serverCheck, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0));
