@@ -16,17 +16,17 @@ namespace Web3Unity.Scripts.Library.Ethers.HDNode
 
         private static readonly object _constructorGuard = new();
 
-        // private readonly string _privateKey;
-        // private readonly string _publicKey;
-        // private readonly string _fingerprint;
-        // private readonly string _parentFingerprint;
-        // private readonly string _address;
+         private readonly string _privateKey;
+         private readonly string _publicKey;
+         private readonly string _fingerprint;
+         private readonly string _parentFingerprint;
+         private readonly string _address;
         private readonly string _mnemonic;
 
         private readonly string _path;
-        // private readonly string _chainCode;
-        // private readonly int _index;
-        // private readonly int _depth;
+        private readonly string _chainCode;
+        private readonly int _index;
+        private readonly int _depth;
 
         private readonly ExtKey _extKey;
 
@@ -50,13 +50,9 @@ namespace Web3Unity.Scripts.Library.Ethers.HDNode
             return new HDNode(_constructorGuard, _extKey.Derive(keyPath), _mnemonic, path);
         }
 
-        public static HDNode FromMnemonic(string mnemonic, string password = null, string locale = "en")
+        public static HDNode FromMnemonic(string _mnemonic, string password = null, string locale = "en")
         {
-            var wordlist = _getWordlist(locale);
-
-            // mnemonic = entropyToMnemonic(mnemonicToEntropy(mnemonic, wordlist), wordlist);
-
-            return _fromSeed(MnemonicToSeed(mnemonic, password), mnemonic, "m/44'/60'/0'/0", locale);
+            return _fromSeed(MnemonicToSeed(_mnemonic, password), _mnemonic, "m/44'/60'/0'/0", locale);
         }
 
         private static HDNode _fromSeed(byte[] seed, string mnemonic, string path, string locale)

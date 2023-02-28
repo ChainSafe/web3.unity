@@ -1,7 +1,10 @@
 using System;
+using System.Diagnostics;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using NBitcoin;
 using Nethereum.Hex.HexConvertors.Extensions;
+using Nethereum.Signer;
 using Nethereum.Util;
 using Web3Unity.Scripts.Library.Ethers.Providers;
 using Web3Unity.Scripts.Library.Ethers.Transactions;
@@ -17,10 +20,10 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
         public Wallet(string privateKey, BaseProvider baseProvider = null) : base(null)
         {
             if (baseProvider != null) BaseProvider = baseProvider;
+            var key = new Key();
+            
 
-            // new Key()
-
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public Wallet(HDNode.HDNode hdNode, BaseProvider baseProvider = null) : base(null)
@@ -32,12 +35,18 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
 
         public static Wallet CreateRandom(string path = "m/44'/60'/0'/0/0", string locale = "en")
         {
-            var entropy = new byte[16];
-            new Random().NextBytes(entropy);
+            // Generate a random seed using the RNGCryptoServiceProvider
+            byte[] randomBytes = new byte[16];
+            using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
+            {
+                rng.GetBytes(randomBytes);
+            }
+
             // TODO: extra entropy
             // hash keccak-256 of random bytes
             // var hash = Keccak.Keccak256(random);
-            var mnemonic = HDNode.HDNode.EntropyToMnemonic(entropy, locale);
+            var mnemonic = new Mnemonic(Wordlist.English, randomBytes).ToString();
+            Console.WriteLine("Mnemonic: " + mnemonic);
             return FromMnemonic(mnemonic, path, locale);
         }
 
@@ -67,6 +76,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
         public override Task<string> SignMessage(string message)
         {
             var hash = new Sha3Keccack().CalculateHash(message);
+            Console.WriteLine("Hash: " + hash);
             return Task.FromResult(_signingKey.Sign(new uint256(hash)).ToCompact().ToHex());
         }
 

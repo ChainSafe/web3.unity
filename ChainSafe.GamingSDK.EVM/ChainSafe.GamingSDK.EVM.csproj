@@ -8,7 +8,7 @@
         <OutputType>Exe</OutputType>
         <AppDesignerFolder>Properties</AppDesignerFolder>
         <RootNamespace>EthersCSharpv2</RootNamespace>
-        <AssemblyName>EthersCSharpv2</AssemblyName>
+        <AssemblyName>ChainSafe.GamingSDK.EVM</AssemblyName>
         <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -64,61 +64,61 @@
         <Reference Include="System.Xml.Linq" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Ethers\Blocks\Block.cs" />
-        <Compile Include="Ethers\Blocks\BlockWithTransactionHashes.cs" />
-        <Compile Include="Ethers\Blocks\BlockWithTransactions.cs" />
-        <Compile Include="Ethers\Bytes\Bytes.cs" />
-        <Compile Include="Ethers\ChainSafeRPC.cs" />
-        <Compile Include="Ethers\Contracts\Builders\ABITypedRegistry.cs" />
-        <Compile Include="Ethers\Contracts\Builders\ContractBuilder.cs" />
-        <Compile Include="Ethers\Contracts\Builders\DeployContractTransactionBuilder.cs" />
-        <Compile Include="Ethers\Contracts\Builders\EventBuilder.cs" />
-        <Compile Include="Ethers\Contracts\Builders\EventTopicBuilder.cs" />
-        <Compile Include="Ethers\Contracts\Builders\FilterInputBuilder.cs" />
-        <Compile Include="Ethers\Contracts\Builders\FilterInput\BlockRange.cs" />
-        <Compile Include="Ethers\Contracts\Builders\FilterInput\FilterExtensions.cs" />
-        <Compile Include="Ethers\Contracts\Builders\FilterInput\FilterInputBuilder_T.cs" />
-        <Compile Include="Ethers\Contracts\Builders\FilterInput\TopicFilter.cs" />
-        <Compile Include="Ethers\Contracts\Builders\FilterInput\TopicFilterContainer.cs" />
-        <Compile Include="Ethers\Contracts\Builders\FunctionBuilder.cs" />
-        <Compile Include="Ethers\Contracts\Builders\FunctionBuilderBase.cs" />
-        <Compile Include="Ethers\Contracts\Contract.cs" />
-        <Compile Include="Ethers\Contracts\EventLog.cs" />
-        <Compile Include="Ethers\Contracts\Extensions\EventExtensions.cs" />
-        <Compile Include="Ethers\Contracts\IEventLog.cs" />
-        <Compile Include="Ethers\HDNode\HDNode.cs" />
-        <Compile Include="Ethers\HDNode\Wordlists\Wordlist.cs" />
-        <Compile Include="Ethers\HDNode\Wordlists\WordlistEnglish.cs" />
-        <Compile Include="Ethers\Network\Chains.cs" />
-        <Compile Include="Ethers\Network\Network.cs" />
-        <Compile Include="Ethers\Providers\BaseProvider.cs" />
-        <Compile Include="Ethers\Providers\Event.cs" />
-        <Compile Include="Ethers\Providers\ExternalProvider.cs" />
-        <Compile Include="Ethers\Providers\FeeData.cs" />
-        <Compile Include="Ethers\Providers\Formatter.cs" />
-        <Compile Include="Ethers\Providers\IProvider.cs" />
-        <Compile Include="Ethers\Providers\JsonRpcProvider.cs" />
-        <Compile Include="Ethers\Providers\Web3Provider.cs" />
-        <Compile Include="Ethers\Providers\WebGLProvider.cs" />
-        <Compile Include="Ethers\RLP\ConvertorForRLPEncodingExtensions.cs" />
-        <Compile Include="Ethers\RLP\IRLPElement.cs" />
-        <Compile Include="Ethers\RLP\RLP.cs" />
-        <Compile Include="Ethers\RLP\RLPCollection.cs" />
-        <Compile Include="Ethers\RLP\RLPItem.cs" />
-        <Compile Include="Ethers\RLP\RLPStringFormatter.cs" />
-        <Compile Include="Ethers\Runtime\Dispatcher.cs" />
-        <Compile Include="Ethers\Signers\BaseSigner.cs" />
-        <Compile Include="Ethers\Signers\ISigner.cs" />
-        <Compile Include="Ethers\Signers\JsonRpcSigner.cs" />
-        <Compile Include="Ethers\Signers\Wallet.cs" />
-        <Compile Include="Ethers\SigningKey\SigningKey.cs" />
-        <Compile Include="Ethers\Transactions\Formatter.cs" />
-        <Compile Include="Ethers\Transactions\Transaction.cs" />
-        <Compile Include="Ethers\Transactions\TransactionReceipt.cs" />
-        <Compile Include="Ethers\Transactions\TransactionRequest.cs" />
-        <Compile Include="Ethers\Transactions\TransactionResponse.cs" />
-        <Compile Include="Ethers\Utils\Units.cs" />
-        <Compile Include="Ethers\Web\Web.cs" />
+        <Compile Include="RPC\Blocks\Block.cs" />
+        <Compile Include="RPC\Blocks\BlockWithTransactionHashes.cs" />
+        <Compile Include="RPC\Blocks\BlockWithTransactions.cs" />
+        <Compile Include="RPC\Bytes\Bytes.cs" />
+        <Compile Include="RPC\ChainSafeRPC.cs" />
+        <Compile Include="RPC\Contracts\Builders\ABITypedRegistry.cs" />
+        <Compile Include="RPC\Contracts\Builders\ContractBuilder.cs" />
+        <Compile Include="RPC\Contracts\Builders\DeployContractTransactionBuilder.cs" />
+        <Compile Include="RPC\Contracts\Builders\EventBuilder.cs" />
+        <Compile Include="RPC\Contracts\Builders\EventTopicBuilder.cs" />
+        <Compile Include="RPC\Contracts\Builders\FilterInputBuilder.cs" />
+        <Compile Include="RPC\Contracts\Builders\FilterInput\BlockRange.cs" />
+        <Compile Include="RPC\Contracts\Builders\FilterInput\FilterExtensions.cs" />
+        <Compile Include="RPC\Contracts\Builders\FilterInput\FilterInputBuilder_T.cs" />
+        <Compile Include="RPC\Contracts\Builders\FilterInput\TopicFilter.cs" />
+        <Compile Include="RPC\Contracts\Builders\FilterInput\TopicFilterContainer.cs" />
+        <Compile Include="RPC\Contracts\Builders\FunctionBuilder.cs" />
+        <Compile Include="RPC\Contracts\Builders\FunctionBuilderBase.cs" />
+        <Compile Include="RPC\Contracts\Contract.cs" />
+        <Compile Include="RPC\Contracts\EventLog.cs" />
+        <Compile Include="RPC\Contracts\Extensions\EventExtensions.cs" />
+        <Compile Include="RPC\Contracts\IEventLog.cs" />
+        <Compile Include="RPC\HDNode\HDNode.cs" />
+        <Compile Include="RPC\HDNode\Wordlists\Wordlist.cs" />
+        <Compile Include="RPC\HDNode\Wordlists\WordlistEnglish.cs" />
+        <Compile Include="RPC\Network\Chains.cs" />
+        <Compile Include="RPC\Network\Network.cs" />
+        <Compile Include="RPC\Providers\BaseProvider.cs" />
+        <Compile Include="RPC\Providers\Event.cs" />
+        <Compile Include="RPC\Providers\ExternalProvider.cs" />
+        <Compile Include="RPC\Providers\FeeData.cs" />
+        <Compile Include="RPC\Providers\Formatter.cs" />
+        <Compile Include="RPC\Providers\IProvider.cs" />
+        <Compile Include="RPC\Providers\JsonRpcProvider.cs" />
+        <Compile Include="RPC\Providers\Web3Provider.cs" />
+        <Compile Include="RPC\Providers\WebGLProvider.cs" />
+        <Compile Include="RPC\RLP\ConvertorForRLPEncodingExtensions.cs" />
+        <Compile Include="RPC\RLP\IRLPElement.cs" />
+        <Compile Include="RPC\RLP\RLP.cs" />
+        <Compile Include="RPC\RLP\RLPCollection.cs" />
+        <Compile Include="RPC\RLP\RLPItem.cs" />
+        <Compile Include="RPC\RLP\RLPStringFormatter.cs" />
+        <Compile Include="RPC\Runtime\Dispatcher.cs" />
+        <Compile Include="RPC\Signers\BaseSigner.cs" />
+        <Compile Include="RPC\Signers\ISigner.cs" />
+        <Compile Include="RPC\Signers\JsonRpcSigner.cs" />
+        <Compile Include="RPC\Signers\Wallet.cs" />
+        <Compile Include="RPC\SigningKey\SigningKey.cs" />
+        <Compile Include="RPC\Transactions\Formatter.cs" />
+        <Compile Include="RPC\Transactions\Transaction.cs" />
+        <Compile Include="RPC\Transactions\TransactionReceipt.cs" />
+        <Compile Include="RPC\Transactions\TransactionRequest.cs" />
+        <Compile Include="RPC\Transactions\TransactionResponse.cs" />
+        <Compile Include="RPC\Utils\Units.cs" />
+        <Compile Include="RPC\Web\Web.cs" />
         <Compile Include="Nethereum\ABI\ABIDeserialisation\ABIDeserialiserFactory.cs" />
         <Compile Include="Nethereum\ABI\ABIDeserialisation\ABIJsonDeserialiser.cs" />
         <Compile Include="Nethereum\ABI\ABIDeserialisation\ABIStringSignatureDeserialiser.cs" />
@@ -268,6 +268,7 @@
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>
+      <Content Include=".gitignore" />
       <Content Include="Nethereum\LICENSE.md" />
       <Content Include="Nethereum\RLP\ConvertorForRLPEncodingExtensions.cs.meta" />
       <Content Include="Nethereum\Util\ContractUtils.cs.bak" />
