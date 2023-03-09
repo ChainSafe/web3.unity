@@ -1,0 +1,1 @@
+import{aP as o,aW as t,aj as m,ab as u,aD as g,ah as l}from"./index-c4efa424.js";function h(){for(var r=[],a=0;a<arguments.length;a++)r[a]=arguments[a];var n=o(r),s=t(r,1/0),e=r;return e.length?e.length===1?u(e[0]):g(s)(l(e,n)):m}export{h as m};
