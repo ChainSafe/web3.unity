@@ -12,6 +12,8 @@ public class WalletLogin : MonoBehaviour
     ProjectConfigScriptableObject projectConfigSO = null;
     private void Start()
     {
+        // change this if you are implementing your own sign in page
+        Web3Wallet.url = "https://chainsafe.github.io/game-web3wallet/";
         // loads the data saved from the editor config
         projectConfigSO = (ProjectConfigScriptableObject)Resources.Load("ProjectConfigData", typeof(ScriptableObject));
         PlayerPrefs.SetString("ProjectID", projectConfigSO.ProjectID);
