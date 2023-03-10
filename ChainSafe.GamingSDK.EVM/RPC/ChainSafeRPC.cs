@@ -92,92 +92,6 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
         }
 
         /// <summary>
-        /// CallContractMethod
-        /// </summary>
-        /// <returns></returns>
-        public async Task<string> CallContractMethod(string _abi, string _contract, string _method)
-        {
-            var provider = new JsonRpcProvider("");
-            var contract = new Contract(_abi, _contract, provider);
-
-            var name = await contract.Call(_method);
-            Console.WriteLine($"NFT.name(): {name[0]}");
-
-            var symbol = await contract.Call("symbol");
-            Console.WriteLine($"NFT.symbol(): {symbol[0]}");
-
-            var tokenURI = await contract.Call("tokenURI", new object[] { 1 });
-            Console.WriteLine($"NFT.tokenURI(1): {tokenURI[0]}");
-
-            var ownerOf = await contract.Call("ownerOf", new object[] { 1 });
-            Console.WriteLine($"NFT.owner(1): {ownerOf[0]}");
-
-            var balanceOf = await contract.Call("balanceOf", new object[] { ownerOf[0] });
-            Console.WriteLine($"NFT.ownerOf({ownerOf[0]}): {balanceOf[0]}");
-
-            return name[0].ToString();
-        }
-
-        public static async Task<string> Call(string abi, string address, string method)
-        {
-            var provider = new JsonRpcProvider("");
-            var contract = new Contract(abi, address, provider);
-            string[] obj = { };
-            var args = JsonConvert.SerializeObject(obj);
-            // var name = await contract.Call(method);
-            // Debug.Log($"NFT.name(): {name[0]}");
-
-            //  var symbol = await contract.Call("symbol");
-            //  Debug.Log($"NFT.symbol(): {symbol[0]}");
-
-            //  var tokenURI = await contract.Call("tokenURI", new object[] {1});
-            //  Debug.Log($"NFT.tokenURI(1): {tokenURI[0]}");
-
-            var ownerOf = await contract.Call("ownerOf", new object[] { 1 });
-            var balanceOf = await contract.Call("balanceOf", new object[] { ownerOf[0] });
-            var contractData = await contract.Call(method, obj);
-
-            Console.WriteLine($"NFT.ownerOf({contractData[0]}");
-
-            return contractData[0].ToString();
-        }
-
-        /// <summary>
-        /// EstimateGasContractMethod
-        /// </summary>
-        /// <returns></returns>
-        public async Task<string> EstimateGasContractMethod(string abi, string address, string provider, string method,
-            string args)
-        {
-            var contract = new Contract(abi, address, _provider);
-            var result = await contract.EstimateGas("ownerOf", new object[] { 1 });
-            Console.WriteLine($"NFT.onwerOf(1) gas: {result}");
-            return result.ToString();
-        }
-
-        /// <summary>
-        /// GetAccounts
-        /// </summary>
-        /// <returns></returns>
-        public async Task<bool> GetAccounts()
-        {
-            if (_provider is not JsonRpcProvider provider)
-            {
-                Console.WriteLine("Provider is not JsonRpcProvider");
-                return false;
-            }
-
-            var accounts = await provider.ListAccounts();
-            foreach (var account in accounts)
-            {
-                var accountBalance = await provider.GetBalance(account);
-                Console.WriteLine($"{account} balance: {Units.FormatEther(accountBalance)} ETH");
-            }
-
-            return true;
-        }
-
-        /// <summary>
         /// GetSigner
         /// </summary>
         /// <returns></returns>
@@ -292,36 +206,6 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
             Console.WriteLine($"NFT.mint(): {ret}");
 
             return true;
-        }
-
-        /// <summary>
-        /// SubscribeToNewBlockEvent
-        /// </summary>
-        /// <returns></returns>
-        public Task<bool> SubscribeToNewBlockEvent()
-        {
-            _provider.On("block", (ulong blockNumber) =>
-            {
-                Console.WriteLine($"New block {blockNumber}");
-                return null;
-            });
-
-            return Task.FromResult(true);
-        }
-
-        /// <summary>
-        /// SubscribeToNewChainEvent
-        /// </summary>
-        /// <returns></returns>
-        public Task<bool> SubscribeToNewChainEvent()
-        {
-            _provider.On("chainChanged", (ulong chainId) =>
-            {
-                Console.WriteLine($"Chain changed {chainId}");
-                return null;
-            });
-
-            return Task.FromResult(true);
         }
 
         /// <summary>
