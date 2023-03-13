@@ -68,7 +68,6 @@
         <Compile Include="RPC\Blocks\BlockWithTransactionHashes.cs" />
         <Compile Include="RPC\Blocks\BlockWithTransactions.cs" />
         <Compile Include="RPC\Bytes\Bytes.cs" />
-        <Compile Include="RPC\ChainSafeRPC.cs" />
         <Compile Include="RPC\Contracts\Builders\ABITypedRegistry.cs" />
         <Compile Include="RPC\Contracts\Builders\ContractBuilder.cs" />
         <Compile Include="RPC\Contracts\Builders\DeployContractTransactionBuilder.cs" />
