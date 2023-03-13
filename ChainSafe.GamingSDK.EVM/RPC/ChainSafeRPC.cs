@@ -90,30 +90,7 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
 
             return slot0;
         }
-
-        /// <summary>
-        /// GetSigner
-        /// </summary>
-        /// <returns></returns>
-        public async Task<bool> GetSigner()
-        {
-            if (_provider is not JsonRpcProvider provider)
-            {
-                Console.WriteLine("Provider is not JsonRpcProvider");
-                return false;
-            }
-
-            var signer = provider.GetSigner(); // default signer at index 0
-            // var signer = provider.GetSigner(1); // signer at index 1
-            // var signer = provider.GetSigner("0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc"); // signer by address
-
-            Console.WriteLine($"Signer address: {await signer.GetAddress()}");
-            Console.WriteLine($"Signer balance: {Units.FormatEther(await signer.GetBalance())} ETH");
-            Console.WriteLine($"Signer chain id: {await signer.GetChainId()}");
-            Console.WriteLine($"Signer tx count: {await signer.GetTransactionCount()}");
-
-            return true;
-        }
+        
         //public async Task<bool> SignMessage()
         //{
         // if (_provider is not JsonRpcProvider provider)

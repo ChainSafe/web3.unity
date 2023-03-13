@@ -9,6 +9,7 @@ using NUnit.Framework;
 using Web3Unity.Scripts.Library.Ethers.Contracts;
 using Web3Unity.Scripts.Library.Ethers.Providers;
 using Web3Unity.Scripts.Library.Ethers.Signers;
+using Web3Unity.Scripts.Library.Ethers.Transactions;
 using Web3Unity.Scripts.Library.Ethers.Utils;
 
 namespace Tests
@@ -201,37 +202,41 @@ namespace Tests
         [Test]
         public void GetSignerTest()
         {
-            if (_infuraProvider is not JsonRpcProvider)
+            if (_ganacheProvider is not JsonRpcProvider)
             {
                 Console.WriteLine("Provider is not JsonRpcProvider");
             }
             
-            var signer = _infuraProvider.GetSigner(); // default signer at index 0
-            // var signer = provider.GetSigner(1); // signer at index 1
-            // var signer = provider.GetSigner("0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc"); // signer by address
-
-            Console.WriteLine($"Signer address: {signer.GetAddress().Result}");
-            Console.WriteLine($"Signer balance: {Units.FormatEther(signer.GetBalance().Result)} ETH");
-            Console.WriteLine($"Signer chain id: {signer.GetChainId().Result}");
-            Console.WriteLine($"Signer tx count: {signer.GetTransactionCount().Result}");
+            var signer = _ganacheProvider.GetSigner(); // default signer at index 0
+            var accounts = _ganacheProvider.ListAccounts().Result;
+            Assert.AreEqual(accounts[0], signer.GetAddress().Result);
+            
+            var accountBalance = _ganacheProvider.GetBalance(accounts[0]).Result;
+            Assert.AreEqual(accountBalance, signer.GetBalance().Result);
+            Assert.AreEqual(1337, signer.GetChainId().Result);
         }
         
         [Test]
-        public void SubscribeToNewBlockEventTest()
+        public void SendTransactionTest()
         {
-            _ganacheProvider.On("block", (ulong blockNumber) =>
+            if (_ganacheProvider is not JsonRpcProvider)
             {
-                Console.WriteLine($"New block {blockNumber}");
-                return null;
-            });
-
-            _ganacheProvider.On("chainChanged", (ulong chainId) =>
-            {
-                Console.WriteLine($"Chain changed {chainId}");
-                return null;
-            });
+                Console.WriteLine("Provider is not JsonRpcProvider");
+            }
             
-            Console.WriteLine(Task.FromResult(true));
+            var signer = _ganacheProvider.GetSigner(); // default signer at index 0
+
+            var tx = signer.SendTransaction(new TransactionRequest
+            {
+                To = signer.GetAddress().Result,
+                Value = new HexBigInteger(100000)
+            }).Result;
+
+            Console.WriteLine($"Transaction hash: {tx.Hash}");
+
+            var txReceipt = tx.Wait().Result;
+            Console.WriteLine($"Transaction receipt: {txReceipt.Confirmations}");
         }
+        
     }
 }
