@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Numerics;
+using Nethereum.Hex.HexTypes;
 
 namespace Nethereum.Hex.HexConvertors.Extensions
 {
@@ -30,7 +31,7 @@ namespace Nethereum.Hex.HexConvertors.Extensions
             if (compact)
                 return "0x" + bytes.ToHexCompact();
 
-            return "0x" + bytes.ToHex();
+            return bytes.ToHex();
         }
 
 
@@ -51,7 +52,7 @@ namespace Nethereum.Hex.HexConvertors.Extensions
 
         public static object ToHex(this BigInteger value)
         {
-            throw new NotImplementedException();
+            return "0x" + value.ToString("X");
         }
     }
 }
