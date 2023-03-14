@@ -54,15 +54,6 @@ namespace Tests
         }
 
         [Test]
-        [Ignore("It always return 0x or 0x0000000")]
-        public void GetStorageAtTest()
-        {
-            var slot = _infuraProvider.GetStorageAt("0x6B175474E89094C44Da98b954EedeAC495271d0F", new BigInteger(255))
-                .Result;
-            Console.WriteLine($"Contract slot 0: {slot}");
-        }
-
-        [Test]
         public void GetLastBlockTest()
         {
             var latestBlock = _infuraProvider.GetBlock().Result;
