@@ -1,5 +1,4 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
 using NUnit.Framework;
@@ -168,22 +167,12 @@ namespace Tests
             Assert.AreEqual("21204", result.ToString());
         }
 
-        private void VerifyGanacheConnection()
-        {
-            try
-            {
-                var network = _ganacheProvider.DetectNetwork().Result;
-            }
-            catch(Exception e)
-            {
-                Assert.Ignore($"Ignoring this test because Ganache is not set properly on http://127.0.0.1:7545");
-            }
-        }
+        
         
         [Test]
         public void GetAccountsTest()
         {
-            VerifyGanacheConnection();
+            TestHelper.VerifyGanacheConnection(_ganacheProvider);
 
             var accounts = _ganacheProvider.ListAccounts().Result;
             Assert.AreEqual(10, accounts.Length);
@@ -197,7 +186,7 @@ namespace Tests
         [Test]
         public void GetSignerTest()
         {
-            VerifyGanacheConnection();
+            TestHelper.VerifyGanacheConnection(_ganacheProvider);
 
             var signer = _ganacheProvider.GetSigner();
             var accounts = _ganacheProvider.ListAccounts().Result;
@@ -211,7 +200,7 @@ namespace Tests
         [Test]
         public void SendTransactionTest()
         {
-            VerifyGanacheConnection();
+            TestHelper.VerifyGanacheConnection(_ganacheProvider);
 
             var signer = _ganacheProvider.GetSigner();
 
@@ -229,7 +218,7 @@ namespace Tests
         [Test]
         public void SendContractTest()
         {
-            VerifyGanacheConnection();
+            TestHelper.VerifyGanacheConnection(_ganacheProvider);
 
             var signer = _ganacheProvider.GetSigner();
 
@@ -242,7 +231,7 @@ namespace Tests
         [Test]
         public void SendContractOverrideGasTest()
         {
-            VerifyGanacheConnection();
+            TestHelper.VerifyGanacheConnection(_ganacheProvider);
 
             var signer = _ganacheProvider.GetSigner();
 
