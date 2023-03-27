@@ -139,7 +139,7 @@ public class GetListedCollectionsWeb3Wallet : MonoBehaviour
                     // increase nft count so we can keep track of the local objects
                     nftCount++;
                 }
-            }   
+            }
         }
     }
 
