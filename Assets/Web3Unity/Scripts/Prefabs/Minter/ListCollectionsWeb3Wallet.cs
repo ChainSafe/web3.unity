@@ -42,7 +42,6 @@ public class ListCollectionsWeb3Wallet : MonoBehaviour
         account = PlayerPrefs.GetString("Account");
         // create a reference to a list and iterate through it to gain token id
         List<string> tokenIdList = new List<String>();
-        
         // checks if filter should be applied
         if (collectionId == "")
         {
@@ -180,15 +179,13 @@ public class ListCollectionsWeb3Wallet : MonoBehaviour
         return Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f),
             100.0f);
     }
-    
-    // parses the json response, as it has lists within the object it needs extra care
+    // parses the json response, as it has lists within the object
     public static CollectionModel.Collection ParseCollections(string json)
     {
         CollectionModel.Root root = JsonConvert.DeserializeObject<CollectionModel.Root>(json);
         return root.response.collection;
     }
-    
-    // parses the json response, as it has lists within the object it needs extra care
+    // parses the json response, as it has lists within the object same as above
     public static GetNftModel.Response ParseNft(string json)
     {
         GetNftModel.Root root = JsonConvert.DeserializeObject<GetNftModel.Root>(json);

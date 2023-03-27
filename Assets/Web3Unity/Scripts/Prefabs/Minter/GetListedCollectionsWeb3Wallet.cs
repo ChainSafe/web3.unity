@@ -42,7 +42,6 @@ public class GetListedCollectionsWeb3Wallet : MonoBehaviour
         account = PlayerPrefs.GetString("Account");
         // create a reference to a list and iterate through it to gain token id
         List<string> tokenIdList = new List<String>();
-        
         // checks if filter should be applied
         if (collectionId == "")
         {
@@ -59,7 +58,6 @@ public class GetListedCollectionsWeb3Wallet : MonoBehaviour
                 tokenIdList.Add(response.items[i].tokenId);
             }
         }
-
         // display check based on nft count fetched, only activates object with data
         if (nftListAmount == 1)
         {
@@ -92,7 +90,6 @@ public class GetListedCollectionsWeb3Wallet : MonoBehaviour
                     {
                         continue;
                     }
-                    
                     if (nftResponse.uri.StartsWith("ipfs://"))
                     {
                         nftResponse.uri = nftResponse.uri.Replace("ipfs://", "https://ipfs.io/ipfs/");
@@ -162,7 +159,6 @@ public class GetListedCollectionsWeb3Wallet : MonoBehaviour
         Debug.Log("Data : " + response.tx.data);
         Debug.Log("Gas Price : " + response.tx.gasPrice);
         Debug.Log("Gas Limit : " + response.tx.gasLimit);
-
         try
         {
 
@@ -180,7 +176,6 @@ public class GetListedCollectionsWeb3Wallet : MonoBehaviour
             Debug.LogException(e, this);
         }
     }
-    
     // downloads the nft image
     IEnumerator DownloadImage(string MediaUrl, int nftCount)
     {
@@ -195,22 +190,19 @@ public class GetListedCollectionsWeb3Wallet : MonoBehaviour
             textureObjects[nftCount].GetComponent<Image>().sprite = webSprite;
         }
     }
-
     // render the sprite into the image object
     Sprite SpriteFromTexture2D(Texture2D texture)
     {
         return Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f),
             100.0f);
     }
-    
-    // parses the json response, as it has lists within the object it needs extra care
+    // parses the json response, as it has lists within the object
     public static CollectionModel.Collection ParseCollections(string json)
     {
         CollectionModel.Root root = JsonConvert.DeserializeObject<CollectionModel.Root>(json);
         return root.response.collection;
     }
-    
-    // parses the json response, as it has lists within the object it needs extra care
+    // parses the json response, as it has lists within the object same as above
     public static GetNftModel.Response ParseNft(string json)
     {
         GetNftModel.Root root = JsonConvert.DeserializeObject<GetNftModel.Root>(json);
