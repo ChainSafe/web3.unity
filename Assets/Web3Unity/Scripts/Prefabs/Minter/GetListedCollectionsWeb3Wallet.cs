@@ -37,12 +37,10 @@ public class GetListedCollectionsWeb3Wallet : MonoBehaviour
         // load the nft data
         LoadNftDataBuyPage();
     }
-    
     async void LoadNftDataBuyPage()
     {
         account = PlayerPrefs.GetString("Account");
-        
-        // create a reference to a list and iterate through it to gain tokenids
+        // create a reference to a list and iterate through it to gain token id
         List<string> tokenIdList = new List<String>();
         
         // checks if filter should be applied
@@ -88,61 +86,61 @@ public class GetListedCollectionsWeb3Wallet : MonoBehaviour
                 if (listResponse[i].tokenId == tokenId)
                 {
                     string nftResponseStr = await EVM.GetNft(account, chain, network, nftContract, tokenId);
-                GetNftModel.Response nftResponse = ParseNft(nftResponseStr);
-                // breaks out of loop and continues on if an error case is found for some reason
-                if (nftResponseStr == "{}")
-                {
-                    continue;
-                }
-                
-                if (nftResponse.uri.StartsWith("ipfs://"))
-                {
-                    nftResponse.uri = nftResponse.uri.Replace("ipfs://", "https://ipfs.io/ipfs/");
-                }
-                UnityWebRequest webRequest = UnityWebRequest.Get(nftResponse.uri);
-                await webRequest.SendWebRequest();
-                RootGetNFT data =
-                    JsonConvert.DeserializeObject<RootGetNFT>(
-                        System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
-                // populate text objects with data
-                idsBuy[nftCount].text = listResponse[i].itemId;
-                float decimals = 18;
-                double price = float.Parse(listResponse[i].price) / Math.Pow(10, decimals);
-                prices[nftCount].text = listResponse[i].price;
-                sellers[nftCount].text = nftResponse.owner;
-                tokenTypesBuy[nftCount].text = nftResponse.tokenType;
-                if (data.description == null)
-                {
-                    descriptionsBuy[nftCount].text = "";
-                }
-                else
-                {
-                    descriptionsBuy[nftCount].text = data.description;
-                }
-                // parse json to get image uri and download
-                string imageUri = data.image;
-                if (imageUri.StartsWith("ipfs://"))
-                {
-                    imageUri = imageUri.Replace("ipfs://", "https://ipfs.io/ipfs/");
-                    StartCoroutine(DownloadImage(imageUri, nftCount));
-                }
-                else
-                {
-                    StartCoroutine(DownloadImage(imageUri, nftCount));
-                }
-
-                if (data.properties != null)
-                {
-                    foreach (var prop in data.properties.additionalFiles)
+                    GetNftModel.Response nftResponse = ParseNft(nftResponseStr);
+                    // breaks out of loop and continues on if an error case is found for some reason
+                    if (nftResponseStr == "{}")
                     {
-                        if (prop.StartsWith("ipfs://"))
+                        continue;
+                    }
+                    
+                    if (nftResponse.uri.StartsWith("ipfs://"))
+                    {
+                        nftResponse.uri = nftResponse.uri.Replace("ipfs://", "https://ipfs.io/ipfs/");
+                    }
+                    UnityWebRequest webRequest = UnityWebRequest.Get(nftResponse.uri);
+                    await webRequest.SendWebRequest();
+                    RootGetNFT data =
+                        JsonConvert.DeserializeObject<RootGetNFT>(
+                            System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+                    // populate text objects with data
+                    idsBuy[nftCount].text = listResponse[i].itemId;
+                    float decimals = 18;
+                    double price = float.Parse(listResponse[i].price) / Math.Pow(10, decimals);
+                    prices[nftCount].text = listResponse[i].price;
+                    sellers[nftCount].text = nftResponse.owner;
+                    tokenTypesBuy[nftCount].text = nftResponse.tokenType;
+                    if (data.description == null)
+                    {
+                        descriptionsBuy[nftCount].text = "";
+                    }
+                    else
+                    {
+                        descriptionsBuy[nftCount].text = data.description;
+                    }
+                    // parse json to get image uri and download
+                    string imageUri = data.image;
+                    if (imageUri.StartsWith("ipfs://"))
+                    {
+                        imageUri = imageUri.Replace("ipfs://", "https://ipfs.io/ipfs/");
+                        StartCoroutine(DownloadImage(imageUri, nftCount));
+                    }
+                    else
+                    {
+                        StartCoroutine(DownloadImage(imageUri, nftCount));
+                    }
+
+                    if (data.properties != null)
+                    {
+                        foreach (var prop in data.properties.additionalFiles)
                         {
-                            var additionalURi = prop.Replace("ipfs://", "https://ipfs.io/ipfs/");
+                            if (prop.StartsWith("ipfs://"))
+                            {
+                                var additionalURi = prop.Replace("ipfs://", "https://ipfs.io/ipfs/");
+                            }
                         }
                     }
-                }
-                // increase nft count so we can keep track of the local objects
-                nftCount++;
+                    // increase nft count so we can keep track of the local objects
+                    nftCount++;
                 }
             }   
         }

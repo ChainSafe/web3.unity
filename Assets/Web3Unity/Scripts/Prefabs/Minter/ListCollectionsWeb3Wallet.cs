@@ -36,13 +36,11 @@ public class ListCollectionsWeb3Wallet : MonoBehaviour
         // load the nft data
         LoadNftDataSellPage();
     }
-
     // load sell page data function
     async void LoadNftDataSellPage()
     {
         account = PlayerPrefs.GetString("Account");
-        
-        // create a reference to a list and iterate through it to gain tokenids
+        // create a reference to a list and iterate through it to gain token id
         List<string> tokenIdList = new List<String>();
         
         // checks if filter should be applied
@@ -79,7 +77,7 @@ public class ListCollectionsWeb3Wallet : MonoBehaviour
             C3s.SetActive(true);
         }
 
-        // get nft data for each tokenId paired with nftcount for local data population
+        // get nft data for each tokenId paired with nft count for local data population
         foreach (string tokenId in tokenIdList)
         {
             string nftResponseStr = await EVM.GetNft(account, chain, network, nftContract, tokenId);
