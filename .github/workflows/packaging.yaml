@@ -16,7 +16,6 @@ jobs:
         find Assets/Resources/ -name \*.meta >> metaList
         find Assets/Web3Unity/ -name \*.meta >> metaList
         find Assets/WebGLTemplates/ -name \*.meta >> metaList
-        find Assets/WebGLTemplates/Web3GL-2020x/assets/ -name \*.meta >> metaList
         echo metaList
 
     - run: mkdir output
