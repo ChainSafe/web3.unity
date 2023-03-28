@@ -3,7 +3,7 @@ name: Create Unity Package on push
 on: 
   push:
     branches: 
-      - package-fix
+      - autogeneration
 
 jobs:
   echo:
