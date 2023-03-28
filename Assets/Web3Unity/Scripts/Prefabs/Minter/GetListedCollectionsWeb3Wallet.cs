@@ -29,7 +29,7 @@ public class GetListedCollectionsWeb3Wallet : MonoBehaviour
     public string chain = "ethereum";
     public string network = "goerli";
     public string chainID = "5";
-    public string collectionId;
+    public string collectionSlug;
     private string nftContract = "0x2c1867bc3026178a47a677513746dcc6822a137a";
 
     void Start()
@@ -43,14 +43,14 @@ public class GetListedCollectionsWeb3Wallet : MonoBehaviour
         // create a reference to a list and iterate through it to gain token id
         List<string> tokenIdList = new List<String>();
         // checks if filter should be applied
-        if (collectionId == "")
+        if (collectionSlug == "")
         {
             Debug.Log("Please set collection ID");
             return;
         }
         else
         {
-            string collections = await EVM.GetNftCollectionById(collectionId);
+            string collections = await EVM.GetNftCollectionBySlug(collectionSlug);
             CollectionModel.Collection response = ParseCollections(collections);
             nftListAmount = response.items.Count;
             for (int i = 0; i < nftListAmount; i++)
