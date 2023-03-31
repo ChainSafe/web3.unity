@@ -62,7 +62,7 @@ namespace Tests
             {
                 var txHash = await from.SendTransaction(transaction);
             });
-            Assert.AreEqual( "eth_sendTransaction: -32700 Cannot wrap string value \"not_a_valid_address\" as a json-rpc type; strings must be prefixed with \"0x\". ", ex.Message);
+            Assert.AreEqual( $"eth_sendTransaction: -32700 Cannot wrap string value \"{to}\" as a json-rpc type; strings must be prefixed with \"0x\". ", ex.Message);
         }
         
         [Test]
