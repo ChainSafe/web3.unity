@@ -49,6 +49,7 @@
     <ItemGroup>
         <Compile Include="ChainsafeRPCTests.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="ProvidersSendTests.cs" />
         <Compile Include="TestHelper.cs" />
     </ItemGroup>
     <ItemGroup>
