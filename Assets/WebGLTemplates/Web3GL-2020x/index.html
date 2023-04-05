@@ -6,8 +6,6 @@
     <title>Unity WebGL Player | {{{ PRODUCT_NAME }}}</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
-   
-    <script type="module" crossorigin src="./assets/index-f9496d0e.js"></script>
   </head>
   <body>
     <div id="unity-container" class="unity-desktop">
@@ -25,6 +23,9 @@
         <div id="unity-build-title">{{{ PRODUCT_NAME }}}</div>
       </div>
     </div>
+    <script>
+      document.body.appendChild(Object.assign(document.createElement("script"), { type: "module", src: "./assets/index-f9496d0e.js" }));
+    </script>
     <script>
       document.body.appendChild(Object.assign(document.createElement("script"), { type: "text/javascript", src: "./network.js" }));
     </script>
