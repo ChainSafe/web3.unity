@@ -24,13 +24,6 @@
       </div>
     </div>
     <script>
-      document.body.appendChild(Object.assign(document.createElement("script"), { type: "module", src: "./assets/index-f9496d0e.js" }));
-    </script>
-    <script>
-      document.body.appendChild(Object.assign(document.createElement("script"), { type: "text/javascript", src: "./network.js" }));
-    </script>
-    
-    <script>
       var container = document.querySelector("#unity-container");
       var canvas = document.querySelector("#unity-canvas");
       var loadingBar = document.querySelector("#unity-loading-bar");
@@ -118,6 +111,8 @@
         });
       };
       document.body.appendChild(script);
+      document.body.appendChild(Object.assign(document.createElement("script"), { type: "module", src: "./assets/index-f9496d0e.js" }));
+      document.body.appendChild(Object.assign(document.createElement("script"), { type: "text/javascript", src: "./network.js" }));
     </script>
   </body>
 </html>
