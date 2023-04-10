@@ -151,5 +151,16 @@ namespace Tests
 
             Assert.AreEqual(expectedDecoded, decodedIRLP.RLPData);
         }
+        
+        [Test]
+        public void DecodeRLPShortDataTest()
+        {
+            var byteArray = "0x".HexToByteArray();
+            
+            
+            var decodedIRLP = RLP.Decode(byteArray);
+
+            Console.WriteLine(decodedIRLP.RLPData.ToHex());
+        }
     }
 }
