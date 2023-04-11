@@ -169,7 +169,7 @@ namespace Web3Unity.Scripts.Library.Ethers.RLP
                         continue;
                     }
 
-                    if (IsSigleByteItem(msgData, currentPosition))
+                    if (IsSingleByteItem(msgData, currentPosition))
                         currentPosition = ProcessSingleByteItem(msgData, rlpCollection, currentPosition);
                 }
             }
@@ -216,7 +216,7 @@ namespace Web3Unity.Scripts.Library.Ethers.RLP
             return msgData[currentPosition] == OFFSET_SHORT_ITEM;
         }
 
-        private static bool IsSigleByteItem(byte[] msgData, int currentPosition)
+        private static bool IsSingleByteItem(byte[] msgData, int currentPosition)
         {
             return msgData[currentPosition] < OFFSET_SHORT_ITEM;
         }

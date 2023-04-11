@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Nethereum.Hex.HexConvertors.Extensions;
 using NUnit.Framework;
 using Web3Unity.Scripts.Library.Ethers.RLP;
@@ -148,19 +149,42 @@ namespace Tests
             var expectedDecoded = decoded.HexToByteArray();
             
             var decodedIRLP = RLP.Decode(byteArray);
-
             Assert.AreEqual(expectedDecoded, decodedIRLP.RLPData);
         }
         
         [Test]
-        public void DecodeRLPShortDataTest()
+        public void DecodeShortDataTest()
         {
             var byteArray = "0x".HexToByteArray();
             
+            var ex = Assert.Throws<ArgumentOutOfRangeException>(() =>
+            {
+               RLP.Decode(byteArray);
+            });
+            Assert.AreEqual("Index was out of range. Must be non-negative and less than the size of the collection.\nParameter name: index", ex.Message);
+        }
+        
+        [Test]
+        public void DecodeShortSegmentDataTest()
+        {
+            var byteArray = "0xc8c382c3823145".HexToByteArray();
             
-            var decodedIRLP = RLP.Decode(byteArray);
+            var ex = Assert.Throws<Exception>(() =>
+            {
+                RLP.Decode(byteArray);
+            });
+            Assert.AreEqual("Invalid RLP c8c382c3823145", ex.Message);
+        }
+        
+        [Test]
+        public void EncodeMaxLengthTest()
+        {
+            var input = new byte[55];
+            var expectedOutput = new byte[] { 0xB7 }.Concat(input).ToArray();
 
-            Console.WriteLine(decodedIRLP.RLPData.ToHex());
+            var actualOutput = RLP.EncodeElement(input);
+
+            Assert.AreEqual(expectedOutput, actualOutput);
         }
     }
 }
