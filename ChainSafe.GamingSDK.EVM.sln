@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "src\ChainSafe.GamingSDK.EVM", "src\ChainSafe.GamingSDK.EVM\ChainSafe.GamingSDK.EVM.csproj", "{E6CC674F-C552-412E-8272-692CE182AB7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "src\ChainSafe.GamingSDK.EVM.Tests", "src\ChainSafe.GamingSDK.EVM.Tests\ChainSafe.GamingSDK.EVM.Tests.csproj", "{D63ACB2E-71E2-49C1-AE55-92DFA723391E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E6CC674F-C552-412E-8272-692CE182AB7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6CC674F-C552-412E-8272-692CE182AB7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6CC674F-C552-412E-8272-692CE182AB7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6CC674F-C552-412E-8272-692CE182AB7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D63ACB2E-71E2-49C1-AE55-92DFA723391E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D63ACB2E-71E2-49C1-AE55-92DFA723391E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D63ACB2E-71E2-49C1-AE55-92DFA723391E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D63ACB2E-71E2-49C1-AE55-92DFA723391E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
