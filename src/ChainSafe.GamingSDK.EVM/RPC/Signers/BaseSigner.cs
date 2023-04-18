@@ -19,21 +19,14 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
 
         public virtual IProvider Provider => _provider;
 
-        public virtual Task<string> GetAddress()
-        {
-            throw new Exception("GetAddress not implemented");
-        }
+        // TODO: specific reason why these functions weren't abstract?
+        public abstract Task<string> GetAddress();
 
-        public virtual Task<string> SignMessage(byte[] message)
-        {
-            throw new Exception("SignMessage not implemented");
-        }
+        public abstract Task<string> SignMessage(byte[] message);
 
-        public virtual Task<string> SignMessage(string message)
-        {
-            throw new Exception("SignMessage not implemented");
-        }
+        public abstract Task<string> SignMessage(string message);
 
+        // TODO: JsonRpcSigner doesn't implement this; Is it never used?
         public virtual Task<string> SignTransaction(TransactionRequest transaction)
         {
             throw new Exception("SignTransaction not implemented");
@@ -69,12 +62,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
             return await _provider.Call(transaction, blockTag);
         }
 
-        public virtual async Task<TransactionResponse> SendTransaction(TransactionRequest transaction)
-        {
-            _checkProvider("SendTransaction");
-            var signedTx = await SignTransaction(transaction);
-            return await _provider.SendTransaction(signedTx);
-        }
+        public abstract Task<TransactionResponse> SendTransaction(TransactionRequest transaction);
 
         public virtual async Task<ulong> GetChainId()
         {

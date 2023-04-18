@@ -12,6 +12,8 @@ using Block = Web3Unity.Scripts.Library.Ethers.Blocks.Block;
 using BlockWithTransactions = Web3Unity.Scripts.Library.Ethers.Blocks.BlockWithTransactions;
 using Transaction = Web3Unity.Scripts.Library.Ethers.Transactions.Transaction;
 using TransactionReceipt = Web3Unity.Scripts.Library.Ethers.Transactions.TransactionReceipt;
+using Web3Unity.Scripts.Library.Ethers.RPC;
+using System.Threading;
 
 namespace Web3Unity.Scripts.Library.Ethers.Providers
 {
@@ -26,7 +28,9 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
     {
         public readonly bool AnyNetwork = true;
         internal Network.Network _network;
-        internal readonly Formatter _formater;
+
+        // TODO: this isn't actually used, see comment in SendTransaction
+        internal readonly Formatter _formater = new();
 
         private List<Event> _events = new();
         private ulong _nextPollId = 1;
@@ -40,12 +44,8 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
         private long _emittedBlock;
 
-        //internal Dispatcher _dispatcher;
-        private object _poller;
-
         public BaseProvider(Network.Network network)
         {
-           // _dispatcher = Dispatcher.Initialize();
             _network = network;
         }
 
@@ -112,7 +112,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
             blockTag ??= new BlockParameter();
 
-            var parameters = new object[] { address, position.ToHex(), blockTag };
+            var parameters = new object[] { address, position.ToHex(BitConverter.IsLittleEndian), blockTag };
             var properties = new Dictionary<string, object>
             {
                 {"address", address},
@@ -458,6 +458,9 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
         {
             await GetNetwork();
 
+            // TODO: _formater is never assigned, so this code will inevitably fail.
+            // Is this method unused? -> Yes it is, only used in BaseSigner's implementation
+            // of SendTransaction, which is always overridden
             var tx = _formater.Transaction.Parse(signedTx);
 
             var parameters = new object[] { signedTx };
@@ -522,7 +525,8 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
             while (true)
             {
-               // await new WaitForSeconds(1.0f);
+                // TODO: implement exponential backoff?
+                await Task.Delay(1000);
 
                 receipt = await GetTransactionReceipt(transactionHash);
                 if (receipt != null && receipt.Confirmations >= confirmations)
@@ -649,38 +653,57 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
         private TimeSpan PollingInterval { get; set; } = TimeSpan.FromSeconds(1);
 
-        private bool _polling { get; set; }
+        private CancellationTokenSource pollLoopCts;
 
-        private bool Polling
+        // TODO: this can be refactored into a method
+        private void SetPollLoopState(bool enabled)
         {
-            get => _polling;
-
-            set
+            switch (enabled)
             {
-                switch (value)
-                {
-                    case true when !_polling:
-                        _polling = true;
+                case true when pollLoopCts == null:
+                    pollLoopCts = new();
+                    RunPollLoop(pollLoopCts.Token);
+                    break;
 
-                       /* _dispatcher.Enqueue(async () =>
-                        {
-                            for (; Polling;)
-                            {
-                               // await new WaitForSeconds(PollingInterval.Seconds);
-                                Poll();
-                            }
-                        });*/
-                        break;
-                    case false when _polling:
-                       /* if (_dispatcher != null)
-                        {
-                         //   _dispatcher.StopAllCoroutines();
-                        }
-
-                        _polling = false;*/
-                        break;
-                }
+                case false when pollLoopCts != null:
+                    // This will eventually cause the poll loop to stop.
+                    // Note that restarting the poll loop will make a new task
+                    // with a new cancellation token source and will not interfere
+                    // with the one we're stopping here.
+                    pollLoopCts.Cancel();
+                    pollLoopCts = null;
+                    break;
             }
+        }
+
+        private async void RunPollLoop(CancellationToken cancellationToken)
+        {
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                // Since Poll is async, we can't just wait one second.
+                // Also, we can't just ignore the result of Poll, since
+                // we don't want to have multiple poll operations happening
+                // at the same time if the network is unstable and polls
+                // take longer than PollingInterval. So we measure the time
+                // we would like the next poll to happen before starting
+                // the current poll.
+
+                var nextPollTime = DateTime.Now + PollingInterval;
+
+                try
+                {
+                    await Poll();
+                }
+                catch (Exception ex)
+                {
+                    RpcEnvironmentStore.Environment.LogError(ex.ToString());
+                }
+
+                var now = DateTime.Now;
+                if (now < nextPollTime)
+                    await Task.Delay(nextPollTime - now);
+            }
+
         }
 
         private async Task<ulong> _getInternalBlockNumber(ulong maxAge)
@@ -720,7 +743,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             return internalBlock.BlockNumber;
         }
 
-        internal virtual async void Poll()
+        internal virtual async Task Poll()
         {
             var pollId = _nextPollId++;
 
@@ -732,7 +755,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                RpcEnvironmentStore.Environment.LogError(e.ToString());
                 Emit("error", new object[] { e });
                 return;
             }
@@ -777,10 +800,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             {
                 if (e.Tag != eventName) return true;
 
-               /* _dispatcher.Enqueue(() =>
-                {
-                    e.Apply(data);
-                });*/
+                 RpcEnvironmentStore.Environment.RunOnForegroundThread(() => e.Apply(data));
 
                 result = true;
 
@@ -803,12 +823,12 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
         protected virtual void _startEvent()
         {
-            Polling = _events.Any(e => e.IsPollable);
+            SetPollLoopState(_events.Any(e => e.IsPollable));
         }
 
         protected virtual void _stopEvent(Event @event)
         {
-            Polling = _events.Any(e => e.IsPollable);
+            SetPollLoopState(_events.Any(e => e.IsPollable));
         }
 
         protected virtual BaseProvider _addEventListener<T>(string eventName, Func<T, object> listener, bool once)

@@ -53,10 +53,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             }
         }
 
-        public virtual void Apply(object[] args)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void Apply(object[] args);
 
         public bool IsPollable => (Tag.IndexOf(":", StringComparison.Ordinal) >= 0 || PollableEvents.IndexOf(Tag) >= 0);
     }

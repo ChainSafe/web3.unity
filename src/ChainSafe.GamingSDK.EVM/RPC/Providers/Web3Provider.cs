@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Nethereum.JsonRpc.Client.RpcMessages;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-//using Web3Unity.Scripts.Library.Ethers.Runtime;
 
 namespace Web3Unity.Scripts.Library.Ethers.Providers
 {
@@ -19,6 +18,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
                 throw new Exception($"missing provider {nameof(provider)}");
             }
 
+            // TODO: why make an unused variable?
             var path = provider.GetPath();
 
             _provider = provider;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Web3Unity.Scripts.Library.Ethers.RPC;
 using Newtonsoft.Json;
 
 namespace Web3Unity.Scripts.Library.Ethers.Network
@@ -68,21 +69,15 @@ namespace Web3Unity.Scripts.Library.Ethers.Network
                 return cached;
             }
 
-            var httpClient = new HttpClient();
-            var req = await httpClient.GetAsync("https://chainid.network/chains.json");
-            var content = await req.Content.ReadAsStringAsync();
+            var response = await RpcEnvironmentStore.Environment.GetAsync("https://chainid.network/chains.json");
 
-            if (!req.IsSuccessStatusCode)
+            if (!response.IsSuccess)
             {
-                _captureError(req.ReasonPhrase);
-                throw new HttpRequestException(req.ReasonPhrase);
+                _captureError(response.Error);
+                throw new HttpRequestException(response.Error);
             }
 
-            var reader = new JsonTextReader(new StringReader(content));
-            var serializer = JsonSerializer.Create();
-            var chains = serializer.Deserialize<Chain[]>(reader);
-
-            req.Dispose();
+            var chains = JsonConvert.DeserializeObject<Chain[]>(response.Response);
 
             if (chains == null)
             {
@@ -104,7 +99,8 @@ namespace Web3Unity.Scripts.Library.Ethers.Network
             {
                 {"error", error}
             };
-            
+
+            RpcEnvironmentStore.Environment.CaptureEvent("Chains", properties);
         }
     }
 }

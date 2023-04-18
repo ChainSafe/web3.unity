@@ -1,288 +1,37 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E6CC674F-C552-412E-8272-692CE182AB7A}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EthersCSharpv2</RootNamespace>
-    <AssemblyName>ChainSafe.GamingSDK.EVM</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <LangVersion>9</LangVersion>
-    <TargetFrameworkProfile />
+    <TargetFrameworks>netstandard2.1;net472</TargetFrameworks>
+    <LangVersion>9.0</LangVersion>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+
+  <ItemGroup>
+    <PackageReference Include="NBitcoin" Version="7.0.24" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+    <PackageReference Include="System.Net.Http" Version="4.1.2" />
+  </ItemGroup>
+
+  <!-- 
+    Note: When updating the Nethereum dependency, the Unity version of
+    the libraries must manually be downloaded and placed in the libs
+    directory as well.
+  -->
+  <ItemGroup Condition="'$(Unity)' != 'True'">
+    <PackageReference Include="Nethereum.ABI" Version="4.14.0" />
+    <PackageReference Include="Nethereum.RPC" Version="4.14.0" />
+    <PackageReference Include="Nethereum.Signer" Version="4.14.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Unity)' == 'True'">
+    <Reference Include="../../libs/Nethereum-UnityAOT/*.dll" />
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(Unity)' == 'True'">
+    <DefineConstants>Unity</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="BouncyCastle.Crypto, Version=1.8.9.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
-      <HintPath>..\packages\BouncyCastle.1.8.9\lib\BouncyCastle.Crypto.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.1.0.0\lib\netstandard1.1\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="mscorlib" />
-    <Reference Include="NBitcoin, Version=7.0.24.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NBitcoin.7.0.24\lib\netstandard1.1\NBitcoin.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.13.0.3-beta1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Buffers.4.5.0\lib\netstandard1.1\System.Buffers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.IO.Compression" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="RPC\Blocks\Block.cs" />
-    <Compile Include="RPC\Blocks\BlockWithTransactionHashes.cs" />
-    <Compile Include="RPC\Blocks\BlockWithTransactions.cs" />
-    <Compile Include="RPC\Bytes\Bytes.cs" />
-    <Compile Include="RPC\Contracts\Builders\ABITypedRegistry.cs" />
-    <Compile Include="RPC\Contracts\Builders\ContractBuilder.cs" />
-    <Compile Include="RPC\Contracts\Builders\DeployContractTransactionBuilder.cs" />
-    <Compile Include="RPC\Contracts\Builders\EventBuilder.cs" />
-    <Compile Include="RPC\Contracts\Builders\EventTopicBuilder.cs" />
-    <Compile Include="RPC\Contracts\Builders\FilterInputBuilder.cs" />
-    <Compile Include="RPC\Contracts\Builders\FilterInput\BlockRange.cs" />
-    <Compile Include="RPC\Contracts\Builders\FilterInput\FilterExtensions.cs" />
-    <Compile Include="RPC\Contracts\Builders\FilterInput\FilterInputBuilder_T.cs" />
-    <Compile Include="RPC\Contracts\Builders\FilterInput\TopicFilter.cs" />
-    <Compile Include="RPC\Contracts\Builders\FilterInput\TopicFilterContainer.cs" />
-    <Compile Include="RPC\Contracts\Builders\FunctionBuilder.cs" />
-    <Compile Include="RPC\Contracts\Builders\FunctionBuilderBase.cs" />
-    <Compile Include="RPC\Contracts\Contract.cs" />
-    <Compile Include="RPC\Contracts\EventLog.cs" />
-    <Compile Include="RPC\Contracts\Extensions\EventExtensions.cs" />
-    <Compile Include="RPC\Contracts\IEventLog.cs" />
-    <Compile Include="RPC\HDNode\HDNode.cs" />
-    <Compile Include="RPC\HDNode\Wordlists\Wordlist.cs" />
-    <Compile Include="RPC\HDNode\Wordlists\WordlistEnglish.cs" />
-    <Compile Include="RPC\Network\Chains.cs" />
-    <Compile Include="RPC\Network\Network.cs" />
-    <Compile Include="RPC\Providers\BaseProvider.cs" />
-    <Compile Include="RPC\Providers\Event.cs" />
-    <Compile Include="RPC\Providers\ExternalProvider.cs" />
-    <Compile Include="RPC\Providers\FeeData.cs" />
-    <Compile Include="RPC\Providers\Formatter.cs" />
-    <Compile Include="RPC\Providers\IProvider.cs" />
-    <Compile Include="RPC\Providers\JsonRpcProvider.cs" />
-    <Compile Include="RPC\Providers\Web3Provider.cs" />
-    <Compile Include="RPC\Providers\WebGLProvider.cs" />
-    <Compile Include="RPC\RLP\ConvertorForRLPEncodingExtensions.cs" />
-    <Compile Include="RPC\RLP\IRLPElement.cs" />
-    <Compile Include="RPC\RLP\RLP.cs" />
-    <Compile Include="RPC\RLP\RLPCollection.cs" />
-    <Compile Include="RPC\RLP\RLPItem.cs" />
-    <Compile Include="RPC\RLP\RLPStringFormatter.cs" />
-    <Compile Include="RPC\Runtime\Dispatcher.cs" />
-    <Compile Include="RPC\Signers\BaseSigner.cs" />
-    <Compile Include="RPC\Signers\ISigner.cs" />
-    <Compile Include="RPC\Signers\JsonRpcSigner.cs" />
-    <Compile Include="RPC\Signers\Wallet.cs" />
-    <Compile Include="RPC\SigningKey\SigningKey.cs" />
-    <Compile Include="RPC\Transactions\Formatter.cs" />
-    <Compile Include="RPC\Transactions\Transaction.cs" />
-    <Compile Include="RPC\Transactions\TransactionReceipt.cs" />
-    <Compile Include="RPC\Transactions\TransactionRequest.cs" />
-    <Compile Include="RPC\Transactions\TransactionResponse.cs" />
-    <Compile Include="RPC\Utils\Units.cs" />
-    <Compile Include="RPC\Web\Web.cs" />
-    <Compile Include="Nethereum\ABI\ABIDeserialisation\ABIDeserialiserFactory.cs" />
-    <Compile Include="Nethereum\ABI\ABIDeserialisation\ABIJsonDeserialiser.cs" />
-    <Compile Include="Nethereum\ABI\ABIDeserialisation\ABIStringSignatureDeserialiser.cs" />
-    <Compile Include="Nethereum\ABI\ABIDeserialisation\ExpandoConvertor.cs" />
-    <Compile Include="Nethereum\ABI\ABIEncode.cs" />
-    <Compile Include="Nethereum\ABI\ABIType.cs" />
-    <Compile Include="Nethereum\ABI\ABIValue.cs" />
-    <Compile Include="Nethereum\ABI\AddressType.cs" />
-    <Compile Include="Nethereum\ABI\ArrayType.cs" />
-    <Compile Include="Nethereum\ABI\BoolType.cs" />
-    <Compile Include="Nethereum\ABI\ByteCodeConstants.cs" />
-    <Compile Include="Nethereum\ABI\Bytes32Type.cs" />
-    <Compile Include="Nethereum\ABI\BytesElementaryType.cs" />
-    <Compile Include="Nethereum\ABI\BytesType.cs" />
-    <Compile Include="Nethereum\ABI\Decoders\AddressTypeDecoder.cs" />
-    <Compile Include="Nethereum\ABI\Decoders\ArrayTypeDecoder.cs" />
-    <Compile Include="Nethereum\ABI\Decoders\BoolTypeDecoder.cs" />
-    <Compile Include="Nethereum\ABI\Decoders\Bytes32TypeDecoder.cs" />
-    <Compile Include="Nethereum\ABI\Decoders\BytesElementaryTypeDecoder .cs" />
-    <Compile Include="Nethereum\ABI\Decoders\BytesTypeDecoder.cs" />
-    <Compile Include="Nethereum\ABI\Decoders\DynamicArrayTypeDecoder.cs" />
-    <Compile Include="Nethereum\ABI\Decoders\IntTypeDecoder.cs" />
-    <Compile Include="Nethereum\ABI\Decoders\IRawDecoder.cs" />
-    <Compile Include="Nethereum\ABI\Decoders\ITypeDecoder.cs" />
-    <Compile Include="Nethereum\ABI\Decoders\StringBytes32Decoder.cs" />
-    <Compile Include="Nethereum\ABI\Decoders\StringTypeDecoder.cs" />
-    <Compile Include="Nethereum\ABI\Decoders\TupleTypeDecoder.cs" />
-    <Compile Include="Nethereum\ABI\Decoders\TypeDecoder.cs" />
-    <Compile Include="Nethereum\ABI\DynamicArrayType.cs" />
-    <Compile Include="Nethereum\ABI\EIP712\Domain.cs" />
-    <Compile Include="Nethereum\ABI\EIP712\EIP2612\EIP2612TypeFactory.cs" />
-    <Compile Include="Nethereum\ABI\EIP712\EIP2612\Permit.cs" />
-    <Compile Include="Nethereum\ABI\EIP712\Eip712TypedDataEncoder.cs" />
-    <Compile Include="Nethereum\ABI\EIP712\MemberDescription.cs" />
-    <Compile Include="Nethereum\ABI\EIP712\MemberDescriptionFactory.cs" />
-    <Compile Include="Nethereum\ABI\EIP712\MemberValue.cs" />
-    <Compile Include="Nethereum\ABI\EIP712\MemberValueFactory.cs" />
-    <Compile Include="Nethereum\ABI\EIP712\TypedData.cs" />
-    <Compile Include="Nethereum\ABI\EIP712\TypedDataRaw.cs" />
-    <Compile Include="Nethereum\ABI\EIP712\TypedDataRawJsonConversion.cs" />
-    <Compile Include="Nethereum\ABI\EncoderDecoderHelpers.cs" />
-    <Compile Include="Nethereum\ABI\Encoders\AddressTypeEncoder.cs" />
-    <Compile Include="Nethereum\ABI\Encoders\ArrayTypeEncoder.cs" />
-    <Compile Include="Nethereum\ABI\Encoders\BoolTypeEncoder.cs" />
-    <Compile Include="Nethereum\ABI\Encoders\Bytes32TypeEncoder.cs" />
-    <Compile Include="Nethereum\ABI\Encoders\BytesElementaryTypeEncoder.cs" />
-    <Compile Include="Nethereum\ABI\Encoders\BytesTypeEncoder.cs" />
-    <Compile Include="Nethereum\ABI\Encoders\DynamicArrayTypeEncoder.cs" />
-    <Compile Include="Nethereum\ABI\Encoders\IntTypeEncoder.cs" />
-    <Compile Include="Nethereum\ABI\Encoders\ITypeEncoder.cs" />
-    <Compile Include="Nethereum\ABI\Encoders\StaticArrayTypeEncoder.cs" />
-    <Compile Include="Nethereum\ABI\Encoders\StringTypeEncoder.cs" />
-    <Compile Include="Nethereum\ABI\Encoders\TupleTypeEncoder.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\AbiEncodingException.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\AttributeEncoding\ParameterAttributeValue.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\AttributeEncoding\ParameterOutputProperty.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\Attributes\AttributesToABIExtractor.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\Attributes\ErrorAttribute.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\Attributes\EventAttribute.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\Attributes\FunctionAttribute.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\Attributes\FunctionOutputAttribute.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\Attributes\IErrorDTO.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\Attributes\IEventDTO.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\Attributes\IFunctionOutputDTO.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\Attributes\ParameterAttribute.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\Attributes\ParameterAttributeIndexedTopics.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\Attributes\ParameterIndexedTopicExtractor.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\Attributes\PropertiesExtractor.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\Attributes\StructAttribute.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\ByteCodeLibrary.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\ByteCodeLibraryLinker.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\ByteCodeSwarmExtractor.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\ConstructorCallDecoder.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\ConstructorCallEncoder.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\DecodedValue.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\ErrorFunction.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\EventTopicDecoder.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\FunctionCallDecoder.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\FunctionCallEncoder.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\JsonParameterObjectConvertor.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\ParameterDecoder.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\ParameterOutput.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\ParameterOutputExtensions.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\ParametersEncoder.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\PropertyInfoExtensions.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\SerpentSignatureEncoder.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\SignatureEncoder.cs" />
-    <Compile Include="Nethereum\ABI\FunctionEncoding\SmartContractRevertException.cs" />
-    <Compile Include="Nethereum\ABI\IntType.cs" />
-    <Compile Include="Nethereum\ABI\Model\ConstructorABI.cs" />
-    <Compile Include="Nethereum\ABI\Model\ContractABI.cs" />
-    <Compile Include="Nethereum\ABI\Model\ErrorABI.cs" />
-    <Compile Include="Nethereum\ABI\Model\EventABI.cs" />
-    <Compile Include="Nethereum\ABI\Model\FunctionABI.cs" />
-    <Compile Include="Nethereum\ABI\Model\Parameter.cs" />
-    <Compile Include="Nethereum\ABI\StaticArrayType.cs" />
-    <Compile Include="Nethereum\ABI\StringType.cs" />
-    <Compile Include="Nethereum\ABI\TupleType.cs" />
-    <Compile Include="Nethereum\ABI\Util\ByteUtil.cs" />
-    <Compile Include="Nethereum\ABI\Util\NumberUtilExtensions.cs" />
-    <Compile Include="Nethereum\AddressExtensions.cs" />
-    <Compile Include="Nethereum\AddressUtil.cs" />
-    <Compile Include="Nethereum\ByteUtil.cs" />
-    <Compile Include="Nethereum\DeterministicDSAExtensions.cs" />
-    <Compile Include="Nethereum\DeterministicECDSA.cs" />
-    <Compile Include="Nethereum\ECDSASignature.cs" />
-    <Compile Include="Nethereum\ECDSASignatureFactory.cs" />
-    <Compile Include="Nethereum\ECKey.cs" />
-    <Compile Include="Nethereum\EthECDSASignature.cs" />
-    <Compile Include="Nethereum\EthECDSASignatureFactory.cs" />
-    <Compile Include="Nethereum\EthECKeys.cs" />
-    <Compile Include="Nethereum\EthereumMessageSigner.cs" />
-    <Compile Include="Nethereum\Hex\HexConvertors\Extensions\HexBigIntegerConvertorExtensions.cs" />
-    <Compile Include="Nethereum\Hex\HexConvertors\Extensions\HexByteConvertorExtensions.cs" />
-    <Compile Include="Nethereum\Hex\HexConvertors\Extensions\HexStringUTF8ConvertorExtensions.cs" />
-    <Compile Include="Nethereum\Hex\HexConvertors\HexBigIntegerBigEndianConvertor.cs" />
-    <Compile Include="Nethereum\Hex\HexConvertors\HexUTF8StringConvertor.cs" />
-    <Compile Include="Nethereum\Hex\HexConvertors\IHexConvertor.cs" />
-    <Compile Include="Nethereum\Hex\HexTypes\HexBigInteger.cs" />
-    <Compile Include="Nethereum\Hex\HexTypes\HexBigIntegerNumberExtensions.cs" />
-    <Compile Include="Nethereum\Hex\HexTypes\HexType.cs" />
-    <Compile Include="Nethereum\Hex\HexTypes\HexTypeFactory.cs" />
-    <Compile Include="Nethereum\Hex\HexTypes\HexTypeJsonConverter.cs" />
-    <Compile Include="Nethereum\Hex\HexTypes\HexUTF8String.cs" />
-    <Compile Include="Nethereum\JsonRpc.Client\RpcMessages\RpcMessages.cs" />
-    <Compile Include="Nethereum\KeccakDigest.cs" />
-    <Compile Include="Nethereum\MessageSigner.cs" />
-    <Compile Include="Nethereum\RLP\ConvertorForRLPEncodingExtensions.cs" />
-    <Compile Include="Nethereum\RPC\Eth\DTOs\AccessList.cs" />
-    <Compile Include="Nethereum\RPC\Eth\DTOs\BlockParameter.cs" />
-    <Compile Include="Nethereum\RPC\Eth\DTOs\BlockParameterJsonConverter.cs" />
-    <Compile Include="Nethereum\RPC\Eth\DTOs\CallInput.cs" />
-    <Compile Include="Nethereum\RPC\Eth\DTOs\Comparers\FilterLogBlockNumberTransactionIndexLogIndexComparer.cs" />
-    <Compile Include="Nethereum\RPC\Eth\DTOs\EthNewFilterInput.cs" />
-    <Compile Include="Nethereum\RPC\Eth\DTOs\EthNewSubscriptionInput.cs" />
-    <Compile Include="Nethereum\RPC\Eth\DTOs\FeeHistoryResult.cs" />
-    <Compile Include="Nethereum\RPC\Eth\DTOs\FilterLog.cs" />
-    <Compile Include="Nethereum\RPC\Eth\DTOs\SyncingOutput.cs" />
-    <Compile Include="Nethereum\RPC\Eth\DTOs\TransactionInput.cs" />
-    <Compile Include="Nethereum\RPC\TransactionTypes\TransactionType.cs" />
-    <Compile Include="Nethereum\Sha3Keccack.cs" />
-    <Compile Include="Nethereum\Util\BigDecimal.cs" />
-    <Compile Include="Nethereum\Util\BigDecimal.Formatter.cs" />
-    <Compile Include="Nethereum\Util\BigIntegerExtensions.cs" />
-    <Compile Include="Nethereum\Util\NumberFormatting.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include=".gitignore" />
-    <Content Include="Nethereum\LICENSE.md" />
-    <Content Include="Nethereum\RLP\ConvertorForRLPEncodingExtensions.cs.meta" />
-    <Content Include="Nethereum\Util\ContractUtils.cs.bak" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-         Other similar extension points exist, see Microsoft.Common.targets.
-    <Target Name="BeforeBuild">
-    </Target>
-    <Target Name="AfterBuild">
-    </Target>
-    -->
+
 </Project>

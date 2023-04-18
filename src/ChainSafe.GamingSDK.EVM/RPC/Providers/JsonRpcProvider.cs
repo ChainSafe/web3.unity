@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Web3Unity.Scripts.Library.Ethers.Network;
 using Web3Unity.Scripts.Library.Ethers.Signers;
+using Web3Unity.Scripts.Library.Ethers.RPC;
 
 namespace Web3Unity.Scripts.Library.Ethers.Providers
 {
@@ -32,17 +33,14 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
             if (network != null) return;
 
-            // var task = Task.Run(async () => { base._network = await DetectNetwork(); });
-            // task.Wait(TimeSpan.FromMilliseconds(0));
-
-            //_dispatcher.Enqueue(async () => { base._network = await DetectNetwork(); });
+            // Note: Task.Run starts the task regardless of whether we wait on it.
+            Task.Run(async () =>
+            {
+                base._network = await DetectNetwork();
+            });
         }
 
-        public static string DefaultUrl()
-        {
-            var url = "http://127.0.0.1:8545";
-            return url.ToString();
-        }
+        public static string DefaultUrl() => RpcEnvironmentStore.Environment.GetDefaultRpcUrl();
 
         public override async Task<Network.Network> DetectNetwork()
         {
@@ -61,37 +59,36 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             {
                 try
                 {
+                    // TODO: why do this twice?
                     chainId = new HexBigInteger(await Send<string>("eth_chainId")).ToUlong();
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.ToString());
-                    // ignored
+                    RpcEnvironmentStore.Environment.LogError(e.ToString());
+                    // TODO: ignored
                 }
             }
 
-            if (chainId > 0)
+            if (chainId == 0)
+                throw new Exception("could not detect network");
+
+            var chains = await Chains.GetChains();
+            var chain = chains[chainId];
+
+            if (chain == null)
             {
-                var chains = await Chains.GetChains();
-                var chain = chains[chainId];
-
-                if (chain == null)
-                {
-                    return new Network.Network
-                    {
-                        Name = "Unknown",
-                        ChainId = chainId
-                    };
-                }
-
                 return new Network.Network
                 {
-                    Name = chain.Name,
-                    ChainId = chain.ChainId
+                    Name = "Unknown",
+                    ChainId = chainId
                 };
             }
 
-            throw new Exception("could not detect network");
+            return new Network.Network
+            {
+                Name = chain.Name,
+                ChainId = chain.ChainId
+            };
         }
 
         public JsonRpcSigner GetSigner(string address)
@@ -117,11 +114,17 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             }
         }
 
-       public virtual async Task<T> Send<T>(string method, object[] parameters = null)
+        public virtual async Task<T> Send<T>(string method, object[] parameters = null)
         {
             var json = JsonConvert.SerializeObject(new RpcRequestMessage(++_nextId, method, parameters),
                 _jsonSerializerSettings);
-            var response = await Web.Web.FetchJson<RpcResponseMessage>(_connection, json);
+
+            var networkResponse = await RpcEnvironmentStore.Environment.PostAsync(_connection, json, "application/json");
+            networkResponse.EnsureSuccess();
+
+            var response = JsonConvert.DeserializeObject<RpcResponseMessage>(
+                networkResponse.Response,
+                _jsonSerializerSettings);
             if (response.Error != null)
             {
                 throw new Exception($"{method}: {response.Error.Code} {response.Error.Message} {response.Error.Data}");
