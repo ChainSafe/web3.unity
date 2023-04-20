@@ -14,7 +14,7 @@ public class ABIWindow : EditorWindow
     [MenuItem("Window/ChainSafe ABI Converter")]
 
     // Show our window
-    public static void ShowWindow ()
+    public static void ShowWindow()
     {
         GetWindow<ABIWindow>("ChainSafe ABI Converter");
     }
