@@ -12,33 +12,33 @@ namespace Web3Unity.Scripts.Library.Ethers.HDNode
 {
     public class HDNode
     {
-        private const uint HardenedBit = 0x80000000;
+        //private const uint HardenedBit = 0x80000000;
 
         private static readonly object _constructorGuard = new();
 
-         private readonly string _privateKey;
-         private readonly string _publicKey;
-         private readonly string _fingerprint;
-         private readonly string _parentFingerprint;
-         private readonly string _address;
+        //private readonly string _privateKey;
+        //private readonly string _publicKey;
+        //private readonly string _fingerprint;
+        //private readonly string _parentFingerprint;
+        //private readonly string _address;
         private readonly string _mnemonic;
 
-        private readonly string _path;
-        private readonly string _chainCode;
-        private readonly int _index;
-        private readonly int _depth;
+        //private readonly string _path;
+        //private readonly string _chainCode;
+        //private readonly int _index;
+        //private readonly int _depth;
 
         private readonly ExtKey _extKey;
 
         public Key PrivateKey => _extKey.PrivateKey;
 
-        public HDNode(object constructorGuard, ExtKey key, string mnemonic, string path)
+        public HDNode(object constructorGuard, ExtKey key, string mnemonic, string _path)
         {
             if (constructorGuard != _constructorGuard)
                 throw new Exception("HDNode constructor cannot be called directly");
 
             _mnemonic = mnemonic;
-            _path = path;
+            //_path = path;
 
             _extKey = key;
         }
