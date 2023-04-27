@@ -74,3 +74,6 @@ crashlytics-build.properties
 # Ignore settings since we only care about the source files
 /[Pp]rojectSettings
 .vsconfig
+
+# Ignore the build artifacts from our libraries
+/Assets/Plugins/Web3/Libraries
