@@ -1,22 +1,23 @@
-using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
+using ChainSafe.GamingWeb3.Evm;
+using ChainSafe.GamingWeb3.Evm.Providers;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
-using Web3Unity.Scripts.Library.Ethers.Blocks;
-using Web3Unity.Scripts.Library.Ethers.Transactions;
-using Block = Web3Unity.Scripts.Library.Ethers.Blocks.Block;
-using BlockWithTransactions = Web3Unity.Scripts.Library.Ethers.Blocks.BlockWithTransactions;
-using TransactionReceipt = Web3Unity.Scripts.Library.Ethers.Transactions.TransactionReceipt;
+using Block = ChainSafe.GamingWeb3.Evm.Block;
+using BlockWithTransactions = ChainSafe.GamingWeb3.Evm.BlockWithTransactions;
+using TransactionReceipt = ChainSafe.GamingWeb3.Evm.TransactionReceipt;
 
-namespace Web3Unity.Scripts.Library.Ethers.Providers
+namespace ChainSafe.GamingWeb3.Evm
 {
-    public interface IProvider
+    public interface IEvmProvider
     {
+        public ValueTask Initialize();
+        
         // Network
-        public Task<Network.Network> DetectNetwork();
-        public Network.Network Network { get; }
-        public Task<Network.Network> GetNetwork();
+        public Task<Network> DetectNetwork();
+        public Network Network { get; }
+        public Task<Network> GetNetwork();
 
         // Account
         public Task<HexBigInteger> GetBalance(string address, BlockParameter blockTag = null);
@@ -42,7 +43,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
         public Task<HexBigInteger> EstimateGas(TransactionRequest transaction);
         public Task<TransactionResponse> SendTransaction(string signedTx);
 
-        public Task<Transactions.TransactionReceipt> WaitForTransactionReceipt(string transactionHash,
+        public Task<TransactionReceipt> WaitForTransactionReceipt(string transactionHash,
             uint confirmations = 1,
             uint timeout = 30);
 

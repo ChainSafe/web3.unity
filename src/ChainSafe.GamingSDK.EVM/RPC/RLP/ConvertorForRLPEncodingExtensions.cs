@@ -4,7 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 
-namespace Web3Unity.Scripts.Library.Ethers.RLP
+namespace ChainSafe.GamingWeb3.Evm.RLP
 {
     public static class ConvertorForRLPEncodingExtensions
     {

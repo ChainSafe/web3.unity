@@ -5,7 +5,7 @@ using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
 using Nethereum.RPC.TransactionTypes;
 
-namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders
+namespace ChainSafe.GamingWeb3.Evm.Contracts.Builders
 {
     public class DeployContractTransactionBuilder
     {

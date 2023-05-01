@@ -1,12 +1,11 @@
-using System;
 using System.Collections.Generic;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
 using Newtonsoft.Json;
 
-namespace Web3Unity.Scripts.Library.Ethers.Transactions
+namespace ChainSafe.GamingWeb3.Evm
 {
-    public class TransactionRequest : ICloneable
+    public class Transaction
     {
         /// <summary>
         ///    QUANTITY - The transaction type.
@@ -88,83 +87,30 @@ namespace Web3Unity.Scripts.Library.Ethers.Transactions
         /// <summary>
         ///     QUANTITY - r signature.
         /// </summary>
+
+        [JsonProperty(PropertyName = "r")]
+        public string R { get; set; }
+
+
+        /// <summary>
+        ///     QUANTITY - s signature.
+        /// </summary>
+
+        [JsonProperty(PropertyName = "s")]
+        public string S { get; set; }
+
+        /// <summary>
+        ///     QUANTITY - v signature.
+        /// </summary>
+
+        [JsonProperty(PropertyName = "v")]
+        public string V { get; set; }
+
         /// <summary>
         ///   Access list
         /// </summary>
 
         [JsonProperty(PropertyName = "accessList")]
         public List<AccessList> AccessList { get; set; }
-
-        public object Clone()
-        {
-            return this.MemberwiseClone();
-        }
-
-        public Dictionary<string, object> ToRPCParam()
-        {
-            var param = new Dictionary<string, object>();
-
-            if (Type != null)
-            {
-                param.Add("type", Type.HexValue);
-            }
-
-            if (ChainId != null)
-            {
-                param.Add("chainId", ChainId.HexValue);
-            }
-
-            if (From != null)
-            {
-                param.Add("from", From);
-            }
-
-            if (To != null)
-            {
-                param.Add("to", To);
-            }
-
-            if (GasLimit != null)
-            {
-                param.Add("gas", GasLimit.HexValue);
-            }
-
-            if (GasPrice != null)
-            {
-                param.Add("gasPrice", GasPrice.HexValue);
-            }
-
-            if (MaxFeePerGas != null)
-            {
-                param.Add("maxFeePerGas", MaxFeePerGas.HexValue);
-            }
-
-            if (MaxPriorityFeePerGas != null)
-            {
-                param.Add("maxPriorityFeePerGas", MaxPriorityFeePerGas.HexValue);
-            }
-
-            if (Value != null)
-            {
-                param.Add("value", Value.HexValue);
-            }
-
-            if (Data != null)
-            {
-                param.Add("data", Data);
-            }
-
-            if (Nonce != null)
-            {
-                param.Add("nonce", Nonce.HexValue);
-            }
-
-            // if (AccessList != null) // TODO: AccessList
-            // {
-            //     param.Add("accessList", AccessList);
-            // }
-
-            return param;
-        }
     }
 }

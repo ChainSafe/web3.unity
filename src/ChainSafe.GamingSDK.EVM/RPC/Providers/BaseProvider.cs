@@ -7,15 +7,12 @@ using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
 //using Web3Unity.Scripts.Library.Ethers.Runtime;
-using Web3Unity.Scripts.Library.Ethers.Transactions;
-using Block = Web3Unity.Scripts.Library.Ethers.Blocks.Block;
-using BlockWithTransactions = Web3Unity.Scripts.Library.Ethers.Blocks.BlockWithTransactions;
-using Transaction = Web3Unity.Scripts.Library.Ethers.Transactions.Transaction;
-using TransactionReceipt = Web3Unity.Scripts.Library.Ethers.Transactions.TransactionReceipt;
-using Web3Unity.Scripts.Library.Ethers.RPC;
 using System.Threading;
+using ChainSafe.GamingWeb3.Evm;
+using ChainSafe.GamingWeb3.Evm.RPC;
+using Block = ChainSafe.GamingWeb3.Evm.Block;
 
-namespace Web3Unity.Scripts.Library.Ethers.Providers
+namespace ChainSafe.GamingWeb3.Evm.Providers
 {
     public class InternalBlockNumber
     {
@@ -24,10 +21,10 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
         public ulong RespTime { get; set; }
     }
 
-    public abstract class BaseProvider : IProvider
+    public abstract class BaseProvider : IEvmProvider
     {
         public readonly bool AnyNetwork = true;
-        internal Network.Network _network;
+        internal Network _network;
 
         // TODO: this isn't actually used, see comment in SendTransaction
         internal readonly Formatter _formater = new();
@@ -44,14 +41,16 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
         private long _emittedBlock;
 
-        public BaseProvider(Network.Network network)
+        public BaseProvider(Network network)
         {
             _network = network;
         }
 
-        public Network.Network Network => _network;
+        public Network Network => _network;
 
-        public virtual Task<Network.Network> DetectNetwork()
+        public virtual ValueTask Initialize() => new(GetNetwork());
+
+        public virtual Task<Network> DetectNetwork()
         {
             throw new Exception("provider does not support network detection");
         }
@@ -277,7 +276,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             }
         }
 
-        public async Task<Network.Network> GetNetwork()
+        public async Task<Network> GetNetwork()
         {
             var network = await _ready();
             var currentNetwork = await DetectNetwork();
@@ -573,7 +572,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             throw new Exception(method + " not implemented");
         }
 
-        private async Task<Network.Network> _ready()
+        private async Task<Network> _ready()
         {
             if (_network != null) return _network;
 
@@ -597,7 +596,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
         {
             _populateEventProperties(properties);
 
-            var network = _network ?? new Network.Network
+            var network = _network ?? new Network
             {
                 ChainId = 0,
                 Name = "unknown",

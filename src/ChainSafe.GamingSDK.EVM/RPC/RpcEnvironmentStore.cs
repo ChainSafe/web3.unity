@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Web3Unity.Scripts.Library.Ethers.RPC
+namespace ChainSafe.GamingWeb3.Evm.RPC
 {
     // TODO: this is a temporary solution meant for demo purposes
     // only. It *could* also end up being the final solution under

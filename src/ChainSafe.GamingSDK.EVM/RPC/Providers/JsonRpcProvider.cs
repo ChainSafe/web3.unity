@@ -1,15 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ChainSafe.GamingWeb3.Evm.RPC;
+using ChainSafe.GamingWeb3.Evm.Signers;
 using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.Client.RpcMessages;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Web3Unity.Scripts.Library.Ethers.Network;
-using Web3Unity.Scripts.Library.Ethers.Signers;
-using Web3Unity.Scripts.Library.Ethers.RPC;
 
-namespace Web3Unity.Scripts.Library.Ethers.Providers
+namespace ChainSafe.GamingWeb3.Evm.Providers
 {
     public class JsonRpcProvider : BaseProvider
     {
@@ -21,7 +20,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             NullValueHandling = NullValueHandling.Ignore
         };
 
-        public JsonRpcProvider(string url = "", Network.Network network = null) :
+        public JsonRpcProvider(string url = "", Network network = null) :
             base(network)
         {
             if (url == "")
@@ -42,13 +41,13 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
         public static string DefaultUrl() => RpcEnvironmentStore.Environment.GetDefaultRpcUrl();
 
-        public override async Task<Network.Network> DetectNetwork()
+        public override async Task<Network> DetectNetwork()
         {
             // TODO: cache
             return await _uncachedDetectNetwork();
         }
 
-        private async Task<Network.Network> _uncachedDetectNetwork()
+        private async Task<Network> _uncachedDetectNetwork()
         {
             ulong chainId = 0;
             try
@@ -72,23 +71,26 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             if (chainId == 0)
                 throw new Exception("could not detect network");
 
-            var chains = await Chains.GetChains();
-            var chain = chains[chainId];
+            // todo figure out DI/Non-Di approach
+            throw new NotImplementedException();
 
-            if (chain == null)
-            {
-                return new Network.Network
-                {
-                    Name = "Unknown",
-                    ChainId = chainId
-                };
-            }
-
-            return new Network.Network
-            {
-                Name = chain.Name,
-                ChainId = chain.ChainId
-            };
+            // var chains = await Chains.GetChains();
+            // var chain = chains[chainId];
+            //
+            // if (chain == null)
+            // {
+            //     return new Network
+            //     {
+            //         Name = "Unknown",
+            //         ChainId = chainId
+            //     };
+            // }
+            //
+            // return new Network
+            // {
+            //     Name = chain.Name,
+            //     ChainId = chain.ChainId
+            // };
         }
 
         public JsonRpcSigner GetSigner(string address)

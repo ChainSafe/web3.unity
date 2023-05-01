@@ -1,23 +1,24 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ChainSafe.GamingWeb3.Evm;
+using ChainSafe.GamingWeb3.Evm.Providers;
+using ChainSafe.GamingWeb3.Evm.Transactions;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
-using Web3Unity.Scripts.Library.Ethers.Providers;
-using Web3Unity.Scripts.Library.Ethers.Transactions;
 
-namespace Web3Unity.Scripts.Library.Ethers.Signers
+namespace ChainSafe.GamingWeb3.Evm.Signers
 {
-    public abstract class BaseSigner : ISigner
+    public abstract class BaseSigner : IEvmSigner
     {
-        internal IProvider _provider;
+        internal IEvmProvider _provider;
 
-        protected BaseSigner(IProvider provider)
+        protected BaseSigner(IEvmProvider provider)
         {
             _provider = provider;
         }
 
-        public virtual IProvider Provider => _provider;
+        public virtual IEvmProvider Provider => _provider;
 
         // TODO: specific reason why these functions weren't abstract?
         public abstract Task<string> GetAddress();
@@ -30,12 +31,6 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
         public virtual Task<string> SignTransaction(TransactionRequest transaction)
         {
             throw new Exception("SignTransaction not implemented");
-        }
-
-        public virtual ISigner Connect(IProvider provider)
-        {
-            _provider = provider;
-            return this;
         }
 
         public virtual async Task<HexBigInteger> GetBalance(BlockParameter blockTag = null)

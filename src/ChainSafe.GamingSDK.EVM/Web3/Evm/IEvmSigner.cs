@@ -1,17 +1,15 @@
 using System.Threading.Tasks;
-using Web3Unity.Scripts.Library.Ethers.Providers;
-using Web3Unity.Scripts.Library.Ethers.Transactions;
+using ChainSafe.GamingWeb3.Evm;
 
-namespace Web3Unity.Scripts.Library.Ethers.Signers
+namespace ChainSafe.GamingWeb3.Evm.Signers
 {
-    public interface ISigner
+    public interface IEvmSigner
     {
         public Task<string> GetAddress();
         public Task<string> SignMessage(byte[] message);
         public Task<string> SignMessage(string message);
         public Task<string> SignTransaction(TransactionRequest transaction);
         public Task<TransactionResponse> SendTransaction(TransactionRequest transaction);
-        public ISigner Connect(IProvider provider);
-        public IProvider Provider { get; }
+        public IEvmProvider Provider { get; }
     }
 }

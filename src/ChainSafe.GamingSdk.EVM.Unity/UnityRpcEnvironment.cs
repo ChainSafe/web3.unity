@@ -1,13 +1,13 @@
-﻿using Web3Unity.Scripts.Library.Ethers.RPC;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using ChainSafe.GamingWeb3.Evm.RPC;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Networking;
 
-namespace Web3Unity.Scripts.Library.Ethers.Unity
+namespace ChainSafe.GamingWeb3.Evm.Unity
 {
     public class UnityRpcEnvironment : IRpcEnvironment
     {

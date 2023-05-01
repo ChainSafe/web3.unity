@@ -1,10 +1,10 @@
 using System;
 using System.Linq;
+using ChainSafe.GamingWeb3.Evm.RLP;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
-using Web3Unity.Scripts.Library.Ethers.RLP;
 
-namespace Web3Unity.Scripts.Library.Ethers.Transactions
+namespace ChainSafe.GamingWeb3.Evm.Transactions
 {
     public class Formatter
     {

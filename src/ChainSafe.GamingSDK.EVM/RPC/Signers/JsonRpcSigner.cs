@@ -1,11 +1,12 @@
 using System;
 using System.Threading.Tasks;
+using ChainSafe.GamingWeb3.Evm;
+using ChainSafe.GamingWeb3.Evm.Providers;
+using ChainSafe.GamingWeb3.Evm.Transactions;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
-using Web3Unity.Scripts.Library.Ethers.Providers;
-using Web3Unity.Scripts.Library.Ethers.Transactions;
 
-namespace Web3Unity.Scripts.Library.Ethers.Signers
+namespace ChainSafe.GamingWeb3.Evm.Signers
 {
     public class JsonRpcSigner : BaseSigner
     {
@@ -23,11 +24,6 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
         {
             this.provider = provider;
             _index = index;
-        }
-
-        public override ISigner Connect(IProvider provider)
-        {
-            throw new Exception("cannot alter JSON-RPC Signer connection");
         }
 
         public override async Task<string> GetAddress()

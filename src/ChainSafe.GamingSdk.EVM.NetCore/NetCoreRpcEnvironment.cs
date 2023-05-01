@@ -1,11 +1,11 @@
-﻿using Web3Unity.Scripts.Library.Ethers.RPC;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using ChainSafe.GamingWeb3.Evm.RPC;
 
-namespace Web3Unity.Scripts.Library.Ethers.NetCore
+namespace ChainSafe.GamingWeb3.Evm.NetCore
 {
     public class NetCoreRpcEnvironment : IRpcEnvironment
     {

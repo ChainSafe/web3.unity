@@ -1,6 +1,6 @@
 ﻿using Nethereum.RPC.Eth.DTOs;
 
-namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders
+namespace ChainSafe.GamingWeb3.Evm.Contracts.Builders
 {
     public class FilterInputBuilder
     {

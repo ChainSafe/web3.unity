@@ -1,4 +1,4 @@
-namespace Web3Unity.Scripts.Library.Ethers.RLP
+namespace ChainSafe.GamingWeb3.Evm.RLP
 {
     public class RLPItem : IRLPElement
     {

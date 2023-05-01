@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using ChainSafe.GamingWeb3.Evm.HDNode.Wordlists;
 using NBitcoin;
 using Nethereum.Hex.HexConvertors.Extensions;
-using Web3Unity.Scripts.Library.Ethers.HDNode.Wordlists;
-using Wordlist = Web3Unity.Scripts.Library.Ethers.HDNode.Wordlists.Wordlist;
+using Wordlist = ChainSafe.GamingWeb3.Evm.HDNode.Wordlists.Wordlist;
 
-namespace Web3Unity.Scripts.Library.Ethers.HDNode
+namespace ChainSafe.GamingWeb3.Evm.HDNode
 {
     public class HDNode
     {
@@ -113,7 +113,7 @@ namespace Web3Unity.Scripts.Library.Ethers.HDNode
             return string.Join(" ", indices.Select(index => wordlist.GetWord(index)));
         }
 
-        private static Wordlist _getWordlist(string locale)
+        private static Wordlists.Wordlist _getWordlist(string locale)
         {
             return locale switch
             {

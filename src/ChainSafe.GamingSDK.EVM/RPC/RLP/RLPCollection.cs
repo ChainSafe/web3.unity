@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Web3Unity.Scripts.Library.Ethers.RLP
+namespace ChainSafe.GamingWeb3.Evm.RLP
 {
     public class RLPCollection : List<IRLPElement>, IRLPElement
     {
