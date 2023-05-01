@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using Web3Unity.Scripts.Library.Ethers.Providers;
+using Web3Unity.Scripts.Library.Ethers.Unity;
 using Web3Unity.Scripts.Prefabs.Ethers;
 
 
@@ -22,6 +23,7 @@ public sealed class RPC
 
     private RPC()
     {
+        UnityRpcEnvironment.InitializeRpcEnvironment(PlayerPrefs.GetString("RPC"), "");
         provider = new JsonRpcProvider(PlayerPrefs.GetString("RPC"));
     }
 
