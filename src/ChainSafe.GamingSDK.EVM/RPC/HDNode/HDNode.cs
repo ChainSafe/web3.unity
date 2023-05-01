@@ -79,7 +79,7 @@ namespace Web3Unity.Scripts.Library.Ethers.HDNode
                 throw new Exception("entropy must be between 16 and 32 byte bytes and a multiple of 4");
 
             // var indices = new int[] {0};
-            var indices = new List<int> {0};
+            var indices = new List<int> { 0 };
 
             var remainingBits = 11;
             foreach (var e in entropy)

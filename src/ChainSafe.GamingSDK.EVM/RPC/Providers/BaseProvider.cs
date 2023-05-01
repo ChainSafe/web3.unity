@@ -800,7 +800,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             {
                 if (e.Tag != eventName) return true;
 
-                 RpcEnvironmentStore.Environment.RunOnForegroundThread(() => e.Apply(data));
+                RpcEnvironmentStore.Environment.RunOnForegroundThread(() => e.Apply(data));
 
                 result = true;
 

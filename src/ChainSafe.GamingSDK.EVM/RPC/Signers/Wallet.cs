@@ -25,7 +25,7 @@
 //        {
 //            if (baseProvider != null) BaseProvider = baseProvider;
 //            var key = new Key();
-            
+
 
 //            //throw new NotImplementedException();
 //        }
@@ -53,7 +53,7 @@
 //            Console.WriteLine("Mnemonic: " + mnemonic);
 //            return FromMnemonic(mnemonic, path, locale);
 //        }
-        
+
 //        public static void CreateEthWallet()
 //        {
 //            // Generate a random seed using the RNGCryptoServiceProvider
@@ -86,8 +86,8 @@
 
 //                // Generate the Ethereum public address from the private key
 //                string address = privateKey.GetPublicAddress().ToLower();
-                
-            
+
+
 //                // Print the Ethereum public address
 //                Console.WriteLine("Public address: " + address);
 //            }

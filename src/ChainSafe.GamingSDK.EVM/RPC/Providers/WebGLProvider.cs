@@ -18,12 +18,12 @@
 //            {
 //                NullValueHandling = NullValueHandling.Ignore
 //            });
-            
+
 //            if (parameters == null)
 //            {
 //                jsonParams = "[]";
 //            }
-            
+
 //            var result = await Web3GLLight.SendAsync(method, jsonParams);
 //            return JsonConvert.DeserializeObject<T>(result);
 //        }
