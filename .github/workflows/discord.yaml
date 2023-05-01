@@ -1,0 +1,27 @@
+# This workflow is used to automate the release of notifications to discord
+
+name: Notification on push
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  sending:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Discord notification
+      uses: LeGitHubDeTai/github-to-discord@main
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_SECRET }}
+        DISCORD_USERNAME: ChainSafe Gaming
+        DISCORD_AVATAR: https://pbs.twimg.com/profile_images/1571957963564421120/iY35hgvW_400x400.png
+        MESSAGE_TITLE: Web3.Unity
+        MESSAGE_DESCRIPTION: View the latest release notes
+        MESSAGE_URL: https://github.com/ChainSafe/web3.unity/releases
+        MESSAGE_COLOR: 5814783
+        AUTHOR_NAME: "ChainSafe Gaming"
+        FOOTER_TEXT: "Web3.Unity"
+        AUTHOR_URL: "https://gaming.chainsafe.io/"
+        AUTHOR_AVATAR: "https://pbs.twimg.com/profile_images/1571957963564421120/iY35hgvW_400x400.png"
+        FOOTER_AVATAR: "https://pbs.twimg.com/profile_images/1571957963564421120/iY35hgvW_400x400.png"
