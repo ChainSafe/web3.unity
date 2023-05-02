@@ -11,7 +11,8 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders
 {
     public abstract class FunctionBuilderBase
     {
-        protected FunctionBuilderBase(string contractAddress, FunctionABI functionAbi) : this(contractAddress)
+        protected FunctionBuilderBase(string contractAddress, FunctionABI functionAbi)
+            : this(contractAddress)
         {
             FunctionABI = functionAbi;
         }
@@ -31,6 +32,21 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders
 
         public FunctionABI FunctionABI { get; protected set; }
 
+        private static Parameter GetFirstParameterOrNull(Parameter[] parameters)
+        {
+            if (parameters == null)
+            {
+                return null;
+            }
+
+            if (parameters.Length == 0)
+            {
+                return null;
+            }
+
+            return parameters[0];
+        }
+
         public bool IsTransactionInputDataForFunction(string data)
         {
             return FunctionCallDecoder.IsDataForFunction(FunctionABI.Sha3Signature, data);
@@ -38,8 +54,8 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders
 
         public List<ParameterOutput> DecodeInput(string data)
         {
-            return FunctionCallDecoder.DecodeFunctionInput(FunctionABI.Sha3Signature, data,
-                FunctionABI.InputParameters);
+            return FunctionCallDecoder.DecodeFunctionInput(
+                FunctionABI.Sha3Signature, data, FunctionABI.InputParameters);
         }
 
         public object[] ConvertJsonToObjectInputParameters(string json)
@@ -60,8 +76,8 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders
 
         public List<ParameterOutput> DecodeOutput(string data)
         {
-            return FunctionCallDecoder.DecodeDefaultData(data,
-                FunctionABI.OutputParameters);
+            return FunctionCallDecoder.DecodeDefaultData(
+                data, FunctionABI.OutputParameters);
         }
 
         public TReturn DecodeTypeOutput<TReturn>(string output)
@@ -84,19 +100,28 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders
             return FunctionCallDecoder.DecodeFunctionOutput(functionOuput, output);
         }
 
-        public TReturn DecodeDTOTypeOutput<TReturn>(string output) where TReturn : new()
+        public TReturn DecodeDTOTypeOutput<TReturn>(string output)
+            where TReturn : new()
         {
             return FunctionCallDecoder.DecodeFunctionOutput<TReturn>(output);
         }
 
-        public TransactionInput CreateTransactionInput(string from, HexBigInteger gas,
+        public TransactionInput CreateTransactionInput(
+            string from,
+            HexBigInteger gas,
             HexBigInteger value)
         {
             var encodedInput = FunctionCallEncoder.EncodeRequest(FunctionABI.Sha3Signature);
             return new TransactionInput(encodedInput, from, gas, value);
         }
 
-        public TransactionInput CreateTransactionInput(HexBigInteger type, string from, HexBigInteger gas, HexBigInteger value, HexBigInteger maxFeePerGas, HexBigInteger maxPriorityFeePerGas)
+        public TransactionInput CreateTransactionInput(
+            HexBigInteger type,
+            string from,
+            HexBigInteger gas,
+            HexBigInteger value,
+            HexBigInteger maxFeePerGas,
+            HexBigInteger maxPriorityFeePerGas)
         {
             var encodedInput = FunctionCallEncoder.EncodeRequest(FunctionABI.Sha3Signature);
             return new TransactionInput(type, encodedInput, ContractAddress, from, gas, value, maxFeePerGas, maxPriorityFeePerGas);
@@ -107,7 +132,10 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders
             return new CallInput(encodedFunctionCall, ContractAddress);
         }
 
-        protected CallInput CreateCallInput(string encodedFunctionCall, string from, HexBigInteger gas,
+        protected CallInput CreateCallInput(
+            string encodedFunctionCall,
+            string from,
+            HexBigInteger gas,
             HexBigInteger value)
         {
             return new CallInput(encodedFunctionCall, ContractAddress, from, gas, value);
@@ -119,13 +147,19 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders
             return tx;
         }
 
-        protected TransactionInput CreateTransactionInput(string encodedFunctionCall, string from, HexBigInteger gas,
+        protected TransactionInput CreateTransactionInput(
+            string encodedFunctionCall,
+            string from,
+            HexBigInteger gas,
             HexBigInteger value)
         {
             return new TransactionInput(encodedFunctionCall, ContractAddress, from, gas, value);
         }
 
-        protected TransactionInput CreateTransactionInput(string encodedFunctionCall, string from, HexBigInteger gas,
+        protected TransactionInput CreateTransactionInput(
+            string encodedFunctionCall,
+            string from,
+            HexBigInteger gas,
             HexBigInteger gasPrice,
             HexBigInteger value)
         {
@@ -137,20 +171,11 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders
             return new TransactionInput(type, encodedFunctionCall, ContractAddress, from, gas, value, maxFeePerGas, maxPriorityFeePerGas);
         }
 
-
-        protected TransactionInput CreateTransactionInput(string encodedFunctionCall,
-            TransactionInput input)
+        protected TransactionInput CreateTransactionInput(string encodedFunctionCall, TransactionInput input)
         {
             input.Data = encodedFunctionCall;
             input.To = ContractAddress;
             return input;
-        }
-
-        private Parameter GetFirstParameterOrNull(Parameter[] parameters)
-        {
-            if (parameters == null) return null;
-            if (parameters.Length == 0) return null;
-            return parameters[0];
         }
     }
 }

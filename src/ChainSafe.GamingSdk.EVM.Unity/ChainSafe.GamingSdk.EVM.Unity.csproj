@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="UnityEngine.dll" />
+    <Reference Include="../../libs/UnityEngine/UnityEngine.dll" />
     <Reference Include="../../libs/Nethereum-UnityAOT/Newtonsoft.Json.dll" />
   </ItemGroup>
 

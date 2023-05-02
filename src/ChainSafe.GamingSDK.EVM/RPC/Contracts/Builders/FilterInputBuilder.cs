@@ -13,7 +13,6 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders
             }
 
             return GetDefaultFilterInput(addresses, fromBlock, toBlock);
-
         }
 
         public static NewFilterInput GetDefaultFilterInput(string[] addresses, BlockParameter fromBlock = null, BlockParameter toBlock = null)
@@ -22,7 +21,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders
             {
                 FromBlock = fromBlock ?? BlockParameter.CreateEarliest(),
                 ToBlock = toBlock ?? BlockParameter.CreateLatest(),
-                Address = addresses
+                Address = addresses,
             };
             return ethFilterInput;
         }

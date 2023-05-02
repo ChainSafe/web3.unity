@@ -8,9 +8,10 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 {
     public class Web3Provider : JsonRpcProvider
     {
-        private readonly IExternalProvider _provider;
+        private readonly IExternalProvider provider;
 
-        public Web3Provider(IExternalProvider provider,
+        public Web3Provider(
+            IExternalProvider provider,
             Network.Network network = null)
         {
             if (provider == null)
@@ -21,12 +22,12 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             // TODO: why make an unused variable?
             var path = provider.GetPath();
 
-            _provider = provider;
+            this.provider = provider;
         }
 
         public override async Task<T> Send<T>(string method, object[] parameters = null)
         {
-            return await _provider.Send<T>(method, parameters);
+            return await provider.Send<T>(method, parameters);
         }
     }
 }

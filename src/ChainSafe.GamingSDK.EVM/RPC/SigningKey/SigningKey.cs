@@ -12,8 +12,7 @@ namespace Web3Unity.Scripts.Library.Ethers.SigningKey
         // private readonly string _curve;
         // private readonly string _privateKey;
         // private readonly string _publicKey;
-
-        private readonly ECKey _ecKey;
+        private readonly ECKey ecKey;
 
         public SigningKey(string privateKey)
         {
@@ -23,15 +22,16 @@ namespace Web3Unity.Scripts.Library.Ethers.SigningKey
             // var ecCurveByOid = ECNamedCurveTable.GetByOid(X9ObjectIdentifiers.Prime256v1);
             // var parameters = new ECDomainParameters(ecCurveByOid.Curve, ecCurveByOid.G, ecCurveByOid.N, ecCurveByOid.H, ecCurveByOid.GetSeed());
             // var keyPair = new AsymmetricCipherKeyPair((AsymmetricKeyParameter) new ECPublicKeyParameters("EC", q, parameters), (AsymmetricKeyParameter) new ECPrivateKeyParameters("EC", bigInteger, parameters))
-
-            _ecKey = new ECKey(privateKey.HexToByteArray(), true);
+            ecKey = new ECKey(privateKey.HexToByteArray(), true);
         }
 
-        public SigningKey(byte[] privateKey) : this(Bytes.Bytes.Hexlify(privateKey))
+        public SigningKey(byte[] privateKey)
+            : this(Bytes.Bytes.Hexlify(privateKey))
         {
         }
 
-        public string PrivateKey => "0x" + _ecKey.PrivateKey.D.ToByteArray().ToHex();
-        public string CompressedPublicKey => _ecKey.GetPubKey(true).ToHex(true);
+        public string PrivateKey => "0x" + ecKey.PrivateKey.D.ToByteArray().ToHex();
+
+        public string CompressedPublicKey => ecKey.GetPubKey(true).ToHex(true);
     }
 }

@@ -12,11 +12,13 @@ namespace Web3Unity.Scripts.Library.Ethers.RPC
     {
         // TODO: use a strongly typed Url request
         Task<NetworkResponse> GetAsync(string url);
+
         Task<NetworkResponse> PostAsync(string url, string requestBody, string contentType);
 
         string GetDefaultRpcUrl();
 
         void LogError(string message);
+
         void CaptureEvent(string eventName, Dictionary<string, object> properties);
 
         void RunOnForegroundThread(Action action);
@@ -25,7 +27,9 @@ namespace Web3Unity.Scripts.Library.Ethers.RPC
     public class NetworkResponse
     {
         public string Response { get; private set; }
+
         public string Error { get; private set; }
+
         public bool IsSuccess { get; private set; }
 
         public static NetworkResponse Success(string response)

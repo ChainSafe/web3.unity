@@ -13,22 +13,23 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders.FilterInput
     /// The DTO should have properties decorated with ParameterAttribute
     /// Only ParameterAttributes flagged as indexed are included
     /// Use SetTopic to set a value on a indexed property on the query template
-    /// Values set on the query template are put in to the filter when Build is called
+    /// Values set on the query template are put in to the filter when Build is called.
     /// </summary>
-    /// <typeparam name="TEventDTo"></typeparam>
-    public class FilterInputBuilder<TEventDTo> where TEventDTo : class
+    /// <typeparam name="TEventDto">The event DTO type.</typeparam>
+    public class FilterInputBuilder<TEventDto>
+        where TEventDto : class
     {
-        private readonly EventABI _eventAbi;
-        private readonly TopicFilterContainer<TEventDTo> _topics;
+        private readonly EventABI eventAbi;
+        private readonly TopicFilterContainer<TEventDto> topics;
 
         public FilterInputBuilder()
         {
-            _eventAbi = ABITypedRegistry.GetEvent<TEventDTo>();
-            _topics = new TopicFilterContainer<TEventDTo>();
+            eventAbi = ABITypedRegistry.GetEvent<TEventDto>();
+            topics = new TopicFilterContainer<TEventDto>();
         }
 
-        public FilterInputBuilder<TEventDTo> AddTopic<TPropertyType>(
-            Expression<Func<TEventDTo, TPropertyType>> propertySelector, IEnumerable<TPropertyType> desiredValues)
+        public FilterInputBuilder<TEventDto> AddTopic<TPropertyType>(
+            Expression<Func<TEventDto, TPropertyType>> propertySelector, IEnumerable<TPropertyType> desiredValues)
         {
             foreach (var desiredValue in desiredValues)
             {
@@ -38,13 +39,13 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders.FilterInput
             return this;
         }
 
-        public FilterInputBuilder<TEventDTo> AddTopic<TPropertyType>(
-            Expression<Func<TEventDTo, TPropertyType>> propertySelector, TPropertyType desiredValue)
+        public FilterInputBuilder<TEventDto> AddTopic<TPropertyType>(
+            Expression<Func<TEventDto, TPropertyType>> propertySelector, TPropertyType desiredValue)
         {
             var member = propertySelector.Body as MemberExpression;
             var propertyInfo = member?.Member as PropertyInfo;
 
-            _topics
+            topics
                 .GetTopic(propertyInfo)
                 .AddValue(desiredValue);
 
@@ -61,56 +62,53 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders.FilterInput
             return Build(new[] { contractAddress }, from, to);
         }
 
-
         public NewFilterInput Build(string[] contractAddresses = null, BlockRange? blockRange = null)
         {
             BlockParameter from = blockRange == null ? null : new BlockParameter(blockRange.Value.From);
             BlockParameter to = blockRange == null ? null : new BlockParameter(blockRange.Value.To);
 
             return Build(contractAddresses, from, to);
-
         }
 
         public NewFilterInput Build(string[] contractAddresses, BlockParameter from, BlockParameter to)
         {
-            if (_topics.Empty)
+            if (topics.Empty)
             {
-                return _eventAbi.CreateFilterInput(contractAddresses, from, to);
+                return eventAbi.CreateFilterInput(contractAddresses, from, to);
             }
 
-            //if the object array exceeds the length of the topics on the abi
-            //the filter no longer works
+            // if the object array exceeds the length of the topics on the abi
+            // the filter no longer works
 
-            //one indexed topic
-            if (_topics.Topic2 == TopicFilter.Empty)
+            // one indexed topic
+            if (topics.Topic2 == TopicFilter.Empty)
             {
-                return _eventAbi.CreateFilterInput(
+                return eventAbi.CreateFilterInput(
                     contractAddresses,
-                    _topics.Topic1.GetValues(),
+                    topics.Topic1.GetValues(),
                     from,
                     to);
             }
 
-            //two indexed topics
-            if (_topics.Topic3 == TopicFilter.Empty)
+            // two indexed topics
+            if (topics.Topic3 == TopicFilter.Empty)
             {
-                return _eventAbi.CreateFilterInput(
+                return eventAbi.CreateFilterInput(
                     contractAddresses,
-                    _topics.Topic1.GetValues(),
-                    _topics.Topic2.GetValues(),
+                    topics.Topic1.GetValues(),
+                    topics.Topic2.GetValues(),
                     from,
                     to);
             }
 
-            //three indexed topics
-            return _eventAbi.CreateFilterInput(
+            // three indexed topics
+            return eventAbi.CreateFilterInput(
                 contractAddresses,
-                _topics.Topic1.GetValues(),
-                _topics.Topic2.GetValues(),
-                _topics.Topic3.GetValues(),
+                topics.Topic1.GetValues(),
+                topics.Topic2.GetValues(),
+                topics.Topic3.GetValues(),
                 from,
                 to);
         }
-
     }
 }

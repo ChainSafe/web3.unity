@@ -15,7 +15,9 @@ namespace Web3Unity.Scripts.Library.Ethers.RPC
         public static void Initialize(IRpcEnvironment environment)
         {
             if (Environment != null)
+            {
                 throw new Exception("RPC environment is already initialized");
+            }
 
             Environment = environment;
         }

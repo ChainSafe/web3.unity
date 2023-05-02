@@ -10,19 +10,21 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
     public class JsonRpcSigner : BaseSigner
     {
         private readonly JsonRpcProvider provider;
-        private int _index;
-        private string _address;
+        private readonly int index;
+        private readonly string address;
 
-        public JsonRpcSigner(JsonRpcProvider provider, string address) : base(provider)
+        public JsonRpcSigner(JsonRpcProvider provider, string address)
+            : base(provider)
         {
             this.provider = provider;
-            _address = address;
+            this.address = address;
         }
 
-        public JsonRpcSigner(JsonRpcProvider provider, int index) : base(provider)
+        public JsonRpcSigner(JsonRpcProvider provider, int index)
+            : base(provider)
         {
             this.provider = provider;
-            _index = index;
+            this.index = index;
         }
 
         public override ISigner Connect(IProvider provider)
@@ -32,21 +34,28 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
 
         public override async Task<string> GetAddress()
         {
-            if (_address != null) return await Task.Run(() => _address);
+            if (address != null)
+            {
+                return await Task.Run(() => address);
+            }
 
             var accounts = await provider.Send<string[]>("eth_accounts", null);
-            if (accounts.Length <= _index) throw new Exception($"unknown account #{_index}");
-            return accounts[_index];
+            if (accounts.Length <= index)
+            {
+                throw new Exception($"unknown account #{index}");
+            }
+
+            return accounts[index];
         }
 
         public override async Task<string> SignMessage(byte[] message)
         {
-            return await _signMessage(message.ToHex());
+            return await SignHexMessage(message.ToHex());
         }
 
         public override async Task<string> SignMessage(string message)
         {
-            return await _signMessage(message.ToHexUTF8());
+            return await SignHexMessage(message.ToHexUTF8());
         }
 
         public override async Task<TransactionResponse> SendTransaction(TransactionRequest transaction)
@@ -56,8 +65,8 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
 
             try
             {
-                var tx = await _provider.GetTransaction(hash);
-                return this.provider._wrapTransaction(tx, hash);
+                var tx = await Provider.GetTransaction(hash);
+                return provider.WrapTransaction(tx, hash);
             }
             catch (Exception e)
             {
@@ -73,7 +82,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
             {
                 var estimate = (TransactionRequest)transaction.Clone();
                 estimate.From = fromAddress;
-                transaction.GasLimit = (await _provider.EstimateGas(transaction));
+                transaction.GasLimit = await Provider.EstimateGas(transaction);
                 transaction.GasLimit = new HexBigInteger(transaction.GasLimit.Value * 2);
             }
 
@@ -93,23 +102,23 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
             return await provider.Send<string>("eth_sendTransaction", new object[] { rpcTxParams });
         }
 
-        private async Task<string> _signMessage(string hexMessage)
+        private async Task<string> SignHexMessage(string hexMessage)
         {
             var address = await GetAddress();
             return await provider.Send<string>("personal_sign", new object[] { hexMessage, address.ToLower() });
         }
 
-        public async Task<string> _LegacySignMessage(byte[] message)
+        public async Task<string> LegacySignMessage(byte[] message)
         {
-            return await _legacySignMessage(message.ToHex(true));
+            return await LegacySignHexMessage(message.ToHex(true));
         }
 
-        public async Task<string> _LegacySignMessage(string message)
+        public async Task<string> LegacySignMessage(string message)
         {
-            return await _legacySignMessage(message.ToHexUTF8());
+            return await LegacySignHexMessage(message.ToHexUTF8());
         }
 
-        private async Task<string> _legacySignMessage(string hexMessage)
+        private async Task<string> LegacySignHexMessage(string hexMessage)
         {
             var address = await GetAddress();
             return await provider.Send<string>("eth_sign", new object[] { address.ToLower(), hexMessage });
