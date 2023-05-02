@@ -3,6 +3,7 @@ using System;
 using System.Threading.Tasks;
 using ChainSafe.GamingWeb3.Environment;
 using ChainSafe.GamingWeb3.Evm;
+using ChainSafe.GamingWeb3.Evm.Signers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ChainSafe.GamingWeb3
@@ -14,6 +15,7 @@ namespace ChainSafe.GamingWeb3
   {
     private readonly ServiceProvider _serviceProvider;
     private readonly IEvmProvider? _provider;
+    private readonly IEvmSigner? _signer;
     private readonly IEvmWallet? _wallet;
     
     private bool _initialized;
@@ -21,13 +23,15 @@ namespace ChainSafe.GamingWeb3
 
     public IWeb3Environment Environment { get; }
     public IEvmProvider Provider => AssertComponentAccessible(_provider, nameof(Provider))!;
+    public IEvmSigner Signer => AssertComponentAccessible(_signer, nameof(Signer))!;
     public IEvmWallet Wallet => AssertComponentAccessible(_wallet, nameof(Wallet))!;
 
-    internal Web3(ServiceProvider serviceProvider, IWeb3Environment environment, IEvmProvider? provider = null, IEvmWallet? wallet = null)
+    internal Web3(ServiceProvider serviceProvider, IWeb3Environment environment, IEvmProvider? provider = null, IEvmSigner? signer = null, IEvmWallet? wallet = null)
     {
       Environment = environment;
       _serviceProvider = serviceProvider;
       _provider = provider;
+      _signer = signer;
       _wallet = wallet;
     }
 

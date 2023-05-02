@@ -1,38 +1,32 @@
 using System;
 using System.Threading.Tasks;
-using ChainSafe.GamingWeb3.Evm;
 using ChainSafe.GamingWeb3.Evm.Providers;
-using ChainSafe.GamingWeb3.Evm.Transactions;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
 
 namespace ChainSafe.GamingWeb3.Evm.Signers
 {
-    public class JsonRpcSigner : BaseSigner
+    public class JsonRpcWallet : BaseSigner, IEvmWallet
     {
-        private readonly JsonRpcProvider provider;
-        private int _index;
         private string _address;
+        private readonly JsonRpcWalletConfiguration _configuration;
 
-        public JsonRpcSigner(JsonRpcProvider provider, string address) : base(provider)
+        public JsonRpcWallet(JsonRpcWalletConfiguration configuration, IEvmProvider provider) : base(provider)
         {
-            this.provider = provider;
-            _address = address;
-        }
-
-        public JsonRpcSigner(JsonRpcProvider provider, int index) : base(provider)
-        {
-            this.provider = provider;
-            _index = index;
+            _configuration = configuration;
         }
 
         public override async Task<string> GetAddress()
         {
-            if (_address != null) return await Task.Run(() => _address);
+            if (_address != null) return _address;
 
-            var accounts = await provider.Send<string[]>("eth_accounts", null);
-            if (accounts.Length <= _index) throw new Exception($"unknown account #{_index}");
-            return accounts[_index];
+            var accounts = await Provider.Perform<string[]>("eth_accounts");
+            if (accounts.Length <= _configuration.AccountIndex)
+            {
+                throw new Web3Exception($"No account with index #{_configuration.AccountIndex} available");
+            }
+            
+            return accounts[_configuration.AccountIndex];
         }
 
         public override async Task<string> SignMessage(byte[] message)
@@ -52,8 +46,8 @@ namespace ChainSafe.GamingWeb3.Evm.Signers
 
             try
             {
-                var tx = await _provider.GetTransaction(hash);
-                return this.provider._wrapTransaction(tx, hash);
+                var tx = await Provider.GetTransaction(hash);
+                return Provider.WrapTransaction(tx, hash);
             }
             catch (Exception e)
             {
@@ -69,7 +63,7 @@ namespace ChainSafe.GamingWeb3.Evm.Signers
             {
                 var estimate = (TransactionRequest)transaction.Clone();
                 estimate.From = fromAddress;
-                transaction.GasLimit = (await _provider.EstimateGas(transaction));
+                transaction.GasLimit = (await Provider.EstimateGas(transaction));
                 transaction.GasLimit = new HexBigInteger(transaction.GasLimit.Value * 2);
             }
 
@@ -86,13 +80,13 @@ namespace ChainSafe.GamingWeb3.Evm.Signers
             }
 
             var rpcTxParams = transaction.ToRPCParam();
-            return await provider.Send<string>("eth_sendTransaction", new object[] { rpcTxParams });
+            return await Provider.Perform<string>("eth_sendTransaction", rpcTxParams);
         }
 
         private async Task<string> _signMessage(string hexMessage)
         {
             var address = await GetAddress();
-            return await provider.Send<string>("personal_sign", new object[] { hexMessage, address.ToLower() });
+            return await Provider.Perform<string>("personal_sign", hexMessage, address.ToLower());
         }
 
         public async Task<string> _LegacySignMessage(byte[] message)
@@ -108,7 +102,16 @@ namespace ChainSafe.GamingWeb3.Evm.Signers
         private async Task<string> _legacySignMessage(string hexMessage)
         {
             var address = await GetAddress();
-            return await provider.Send<string>("eth_sign", new object[] { address.ToLower(), hexMessage });
+            return await Provider.Perform<string>("eth_sign", address.ToLower(), hexMessage);
+        }
+
+        public bool Connected { get; private set; }
+    
+        public async ValueTask Connect()
+        {
+            // simply cache address in this case
+            _address = await GetAddress();
+            Connected = true;
         }
     }
 }

@@ -11,14 +11,12 @@ namespace ChainSafe.GamingWeb3.Evm.Signers
 {
     public abstract class BaseSigner : IEvmSigner
     {
-        internal IEvmProvider _provider;
+        public IEvmProvider Provider { get; }
 
         protected BaseSigner(IEvmProvider provider)
         {
-            _provider = provider;
+            Provider = provider;
         }
-
-        public virtual IEvmProvider Provider => _provider;
 
         // TODO: specific reason why these functions weren't abstract?
         public abstract Task<string> GetAddress();
@@ -27,7 +25,7 @@ namespace ChainSafe.GamingWeb3.Evm.Signers
 
         public abstract Task<string> SignMessage(string message);
 
-        // TODO: JsonRpcSigner doesn't implement this; Is it never used?
+        // TODO: JsonRpcWallet doesn't implement this; Is it never used?
         public virtual Task<string> SignTransaction(TransactionRequest transaction)
         {
             throw new Exception("SignTransaction not implemented");
@@ -36,25 +34,25 @@ namespace ChainSafe.GamingWeb3.Evm.Signers
         public virtual async Task<HexBigInteger> GetBalance(BlockParameter blockTag = null)
         {
             _checkProvider("GetBalance");
-            return await _provider.GetBalance(await GetAddress(), blockTag);
+            return await Provider.GetBalance(await GetAddress(), blockTag);
         }
 
         public virtual async Task<HexBigInteger> GetTransactionCount(BlockParameter blockTag = null)
         {
             _checkProvider("GetTransactionCount");
-            return await _provider.GetTransactionCount(await GetAddress(), blockTag);
+            return await Provider.GetTransactionCount(await GetAddress(), blockTag);
         }
 
         public virtual async Task<HexBigInteger> EstimateGas(TransactionRequest transaction)
         {
             _checkProvider("EstimateGas");
-            return await _provider.EstimateGas(transaction);
+            return await Provider.EstimateGas(transaction);
         }
 
         public virtual async Task<string> Call(TransactionRequest transaction, BlockParameter blockTag = null)
         {
             _checkProvider("Call");
-            return await _provider.Call(transaction, blockTag);
+            return await Provider.Call(transaction, blockTag);
         }
 
         public abstract Task<TransactionResponse> SendTransaction(TransactionRequest transaction);
@@ -62,24 +60,24 @@ namespace ChainSafe.GamingWeb3.Evm.Signers
         public virtual async Task<ulong> GetChainId()
         {
             _checkProvider("GetChainId");
-            return (await _provider.GetNetwork()).ChainId;
+            return (await Provider.GetNetwork()).ChainId;
         }
 
         public virtual async Task<HexBigInteger> GetGasPrice()
         {
             _checkProvider("GetGasPrice");
-            return await _provider.GetGasPrice();
+            return await Provider.GetGasPrice();
         }
 
         public virtual async Task<FeeData> GetFeeData()
         {
             _checkProvider("GetFeeData");
-            return await _provider.GetFeeData();
+            return await Provider.GetFeeData();
         }
 
         private void _checkProvider(string operation)
         {
-            if (_provider == null)
+            if (Provider == null)
             {
                 _captureError(operation, "missing provider");
                 throw new Exception("missing provider");

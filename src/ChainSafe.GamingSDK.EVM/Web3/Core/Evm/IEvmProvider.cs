@@ -52,6 +52,7 @@ namespace ChainSafe.GamingWeb3.Evm
 
         // ENS
 
-        public Task<T> Perform<T>(string method, object[] parameters = null);
+        public Task<T> Perform<T>(string method, params object[] parameters);
+        TransactionResponse WrapTransaction(Transaction tx, string hash);
     }
 }

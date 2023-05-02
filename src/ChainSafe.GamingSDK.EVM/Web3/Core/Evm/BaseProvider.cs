@@ -41,18 +41,22 @@ namespace ChainSafe.GamingWeb3.Evm.Providers
 
         private long _emittedBlock;
 
+        public Network Network => _network;
+
         public BaseProvider(Network network)
         {
             _network = network;
         }
 
-        public Network Network => _network;
-
-        public virtual ValueTask Initialize() => new(GetNetwork());
+        public virtual async ValueTask Initialize()
+        {
+            if (_network != null) return;
+            _network = await GetNetwork();
+        }
 
         public virtual Task<Network> DetectNetwork()
         {
-            throw new Exception("provider does not support network detection");
+            throw new Web3Exception("provider does not support network detection");
         }
 
         public async Task<HexBigInteger> GetBalance(string address, BlockParameter blockTag = null)
@@ -76,7 +80,7 @@ namespace ChainSafe.GamingWeb3.Evm.Providers
             catch (Exception e)
             {
                 _captureError("eth_getBalance", properties, e);
-                throw new Exception("eth_getBalance: bad result from backend", e);
+                throw new Web3Exception("eth_getBalance: bad result from backend", e);
             }
         }
 
@@ -101,7 +105,7 @@ namespace ChainSafe.GamingWeb3.Evm.Providers
             catch (Exception e)
             {
                 _captureError("eth_getCode", properties, e);
-                throw new Exception("eth_getCode: bad result from backend", e);
+                throw new Web3Exception("eth_getCode: bad result from backend", e);
             }
         }
 
@@ -127,7 +131,7 @@ namespace ChainSafe.GamingWeb3.Evm.Providers
             catch (Exception e)
             {
                 _captureError("eth_getStorageAt", properties, e);
-                throw new Exception("eth_getStorageAt: bad result from backend", e);
+                throw new Web3Exception("eth_getStorageAt: bad result from backend", e);
             }
         }
 
@@ -152,7 +156,7 @@ namespace ChainSafe.GamingWeb3.Evm.Providers
             catch (Exception e)
             {
                 _captureError("eth_getTransactionCount", properties, e);
-                throw new Exception("eth_getTransactionCount: bad result from backend", e);
+                throw new Web3Exception("eth_getTransactionCount: bad result from backend", e);
             }
         }
 
@@ -176,7 +180,7 @@ namespace ChainSafe.GamingWeb3.Evm.Providers
             catch (Exception e)
             {
                 _captureError("eth_getBlockByNumber", properties, e);
-                throw new Exception("eth_getBlockByNumber: bad result from backend", e);
+                throw new Web3Exception("eth_getBlockByNumber: bad result from backend", e);
             }
         }
 
@@ -186,7 +190,7 @@ namespace ChainSafe.GamingWeb3.Evm.Providers
 
             if (!blockHash.HasHexPrefix() || blockHash.Length != 66)
             {
-                throw new Exception("wrong block hash format");
+                throw new Web3Exception("wrong block hash format");
             }
 
             var parameters = new object[] { blockHash, false };
@@ -203,7 +207,7 @@ namespace ChainSafe.GamingWeb3.Evm.Providers
             catch (Exception e)
             {
                 _captureError("eth_getBlockByHash", properties, e);
-                throw new Exception("eth_getBlockByHash: bad result from backend", e);
+                throw new Web3Exception("eth_getBlockByHash: bad result from backend", e);
             }
         }
 
@@ -227,7 +231,7 @@ namespace ChainSafe.GamingWeb3.Evm.Providers
             catch (Exception e)
             {
                 _captureError("eth_getBlockByNumber", properties, e);
-                throw new Exception("eth_getBlockByNumber: bad result from backend", e);
+                throw new Web3Exception("eth_getBlockByNumber: bad result from backend", e);
             }
         }
 
@@ -237,7 +241,7 @@ namespace ChainSafe.GamingWeb3.Evm.Providers
 
             if (!blockHash.HasHexPrefix() || blockHash.Length != 66)
             {
-                throw new Exception("wrong block hash format");
+                throw new Web3Exception("wrong block hash format");
             }
 
             var parameters = new object[] { blockHash, true };
@@ -254,7 +258,7 @@ namespace ChainSafe.GamingWeb3.Evm.Providers
             catch (Exception e)
             {
                 _captureError("eth_getBlockByHash", properties, e);
-                throw new Exception("eth_getBlockByHash: bad result from backend", e);
+                throw new Web3Exception("eth_getBlockByHash: bad result from backend", e);
             }
         }
 
@@ -272,7 +276,7 @@ namespace ChainSafe.GamingWeb3.Evm.Providers
             catch (Exception e)
             {
                 _captureError("eth_blockNumber", properties, e);
-                throw new Exception("eth_blockNumber: bad result from backend", e);
+                throw new Web3Exception("eth_blockNumber: bad result from backend", e);
             }
         }
 
@@ -283,7 +287,7 @@ namespace ChainSafe.GamingWeb3.Evm.Providers
 
             if (network.ChainId == currentNetwork.ChainId) return network;
 
-            if (!AnyNetwork) throw new Exception("underlying network changed");
+            if (!AnyNetwork) throw new Web3Exception("underlying network changed");
 
             Emit("chainChanged", new object[] { currentNetwork.ChainId });
 
@@ -305,7 +309,7 @@ namespace ChainSafe.GamingWeb3.Evm.Providers
             catch (Exception e)
             {
                 _captureError("eth_gasPrice", properties, e);
-                throw new Exception("eth_gasPrice: bad result from backend", e);
+                throw new Web3Exception("eth_gasPrice: bad result from backend", e);
             }
         }
 
@@ -352,7 +356,7 @@ namespace ChainSafe.GamingWeb3.Evm.Providers
             catch (Exception e)
             {
                 _captureError("eth_call", properties, e);
-                throw new Exception("eth_call: bad result from backend", e);
+                throw new Web3Exception("eth_call: bad result from backend", e);
             }
         }
 
@@ -374,7 +378,7 @@ namespace ChainSafe.GamingWeb3.Evm.Providers
             catch (Exception e)
             {
                 _captureError("eth_estimateGas", properties, e);
-                throw new Exception("eth_estimateGas: bad result from backend", e);
+                throw new Web3Exception("eth_estimateGas: bad result from backend", e);
             }
         }
 
@@ -394,7 +398,7 @@ namespace ChainSafe.GamingWeb3.Evm.Providers
 
                 if (result == null)
                 {
-                    throw new Exception("transaction not found");
+                    throw new Web3Exception("transaction not found");
                 }
 
                 if (result.BlockNumber == null) result.Confirmations = 0;
@@ -411,7 +415,7 @@ namespace ChainSafe.GamingWeb3.Evm.Providers
             catch (Exception e)
             {
                 _captureError("eth_getTransactionByHash", properties, e);
-                throw new Exception("eth_getTransactionByHash: bad result from backend", e);
+                throw new Web3Exception("eth_getTransactionByHash: bad result from backend", e);
             }
         }
 
@@ -449,7 +453,7 @@ namespace ChainSafe.GamingWeb3.Evm.Providers
             catch (Exception e)
             {
                 _captureError("eth_getTransactionReceipt", properties, e);
-                throw new Exception("eth_getTransactionReceipt: bad result from backend", e);
+                throw new Web3Exception("eth_getTransactionReceipt: bad result from backend", e);
             }
         }
 
@@ -471,20 +475,20 @@ namespace ChainSafe.GamingWeb3.Evm.Providers
             {
                 var result = await Perform<string>("eth_sendRawTransaction", parameters);
                 _captureEvent("eth_sendRawTransaction", properties, result);
-                return _wrapTransaction(tx, result);
+                return WrapTransaction(tx, result);
             }
             catch (Exception e)
             {
                 _captureError("eth_sendRawTransaction", properties, e);
-                throw new Exception("eth_sendRawTransaction: bad result from backend", e);
+                throw new Web3Exception("eth_sendRawTransaction: bad result from backend", e);
             }
         }
 
-        public TransactionResponse _wrapTransaction(Transaction tx, string hash)
+        public TransactionResponse WrapTransaction(Transaction tx, string hash)
         {
             if (hash != null && hash.Length != 66)
             {
-                throw new Exception("invalid response - SendTransaction");
+                throw new Web3Exception("invalid response - SendTransaction");
             }
 
             var result = (TransactionResponse)tx;
@@ -540,7 +544,7 @@ namespace ChainSafe.GamingWeb3.Evm.Providers
 
                 if (timeout == 0)
                 {
-                    throw new Exception("timeout waiting for transaction");
+                    throw new Web3Exception("timeout waiting for transaction");
                 }
             }
         }
@@ -563,13 +567,13 @@ namespace ChainSafe.GamingWeb3.Evm.Providers
             catch (Exception e)
             {
                 _captureError("eth_getLogs", properties, e);
-                throw new Exception("eth_getLogs: bad result from backend", e);
+                throw new Web3Exception("eth_getLogs: bad result from backend", e);
             }
         }
 
-        public virtual Task<T> Perform<T>(string method, object[] parameters = null)
+        public virtual Task<T> Perform<T>(string method, params object[] parameters)
         {
-            throw new Exception(method + " not implemented");
+            throw new Web3Exception(method + " not implemented");
         }
 
         private async Task<Network> _ready()

@@ -10,6 +10,8 @@ namespace ChainSafe.GamingWeb3.Evm.Signers
         public Task<string> SignMessage(string message);
         public Task<string> SignTransaction(TransactionRequest transaction);
         public Task<TransactionResponse> SendTransaction(TransactionRequest transaction);
+        
+        // todo remove after migration complete
         public IEvmProvider Provider { get; }
     }
 }

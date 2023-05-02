@@ -1,6 +1,7 @@
 ﻿using System;
 using ChainSafe.GamingWeb3.Environment;
 using ChainSafe.GamingWeb3.Evm;
+using ChainSafe.GamingWeb3.Evm.Signers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ChainSafe.GamingWeb3.Build
@@ -33,9 +34,16 @@ namespace ChainSafe.GamingWeb3.Build
       var serviceProvider = _serviceCollection.BuildServiceProvider();
       var environment = AssertWeb3EnvironmentBound(serviceProvider);
       var provider = serviceProvider.GetService<IEvmProvider>();
+      var signer = serviceProvider.GetService<IEvmSigner>();
       var wallet = serviceProvider.GetService<IEvmWallet>();
 
-      var web3 = new Web3(serviceProvider, environment, provider, wallet);
+      var web3 = new Web3(
+        serviceProvider,
+        environment,
+        provider,
+        signer,
+        wallet
+        );
 
       return web3;
     }

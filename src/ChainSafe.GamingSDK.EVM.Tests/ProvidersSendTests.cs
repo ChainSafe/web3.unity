@@ -4,6 +4,7 @@ using Nethereum.Hex.HexTypes;
 using NUnit.Framework;
 using ChainSafe.GamingWeb3.Evm.Providers;
 using ChainSafe.GamingWeb3.Evm.Transactions;
+using ChainSafe.GamingWeb3.Migration;
 
 namespace ChainSafe.GamingSDK.EVM.Tests
 {
@@ -15,7 +16,7 @@ namespace ChainSafe.GamingSDK.EVM.Tests
         [OneTimeSetUp]
         public void SetUp()
         {
-            _ganacheProvider = new JsonRpcProvider("http://127.0.0.1:7545");
+            _ganacheProvider = MigrationHelper.NewJsonRpcProvider("http://127.0.0.1:7545");
         }
 
         [Test]
