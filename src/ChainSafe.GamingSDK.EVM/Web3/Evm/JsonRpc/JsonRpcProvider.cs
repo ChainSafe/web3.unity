@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ChainSafe.GamingWeb3.Environment;
-using ChainSafe.GamingWeb3.Evm.RPC;
-using ChainSafe.GamingWeb3.Evm.Signers;
 using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.Client.RpcMessages;
 using Newtonsoft.Json;
@@ -13,8 +11,10 @@ namespace ChainSafe.GamingWeb3.Evm.Providers
 {
     public class JsonRpcProvider : BaseProvider
     {
+        private const string DefaultRpcUrl = "http://localhost";
+        
         private readonly JsonRpcProviderConfiguration _configuration;
-        private readonly IWeb3Environment _environment;
+        private readonly Web3Environment _environment;
         private readonly ChainProvider _chainProvider;
         
         private uint _nextMessageId;
@@ -28,7 +28,7 @@ namespace ChainSafe.GamingWeb3.Evm.Providers
         };
 
 
-        public JsonRpcProvider(JsonRpcProviderConfiguration configuration, IWeb3Environment environment,
+        public JsonRpcProvider(JsonRpcProviderConfiguration configuration, Web3Environment environment,
             ChainProvider chainProvider) : base(configuration.Network)
         {
             _chainProvider = chainProvider;
@@ -37,11 +37,9 @@ namespace ChainSafe.GamingWeb3.Evm.Providers
             
             if (string.IsNullOrEmpty(_configuration.RpcNodeUrl))
             {
-                _configuration.RpcNodeUrl = DefaultUrl();
+                _configuration.RpcNodeUrl = DefaultRpcUrl;
             }
         }
-
-        public static string DefaultUrl() => RpcEnvironmentStore.Environment.GetDefaultRpcUrl();
 
         public override async Task<Network> DetectNetwork()
         {

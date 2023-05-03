@@ -11,10 +11,10 @@ namespace ChainSafe.GamingWeb3.Evm
   {
     private const string FetchUrl = "https://chainid.network/chains.json";
 
-    private readonly IWeb3Environment _environment;
+    private readonly Web3Environment _environment;
     private Dictionary<ulong, Chain>? _chains;
 
-    public ChainProvider(IWeb3Environment environment)
+    public ChainProvider(Web3Environment environment)
     {
       _environment = environment;
     }

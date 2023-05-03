@@ -32,14 +32,13 @@ namespace ChainSafe.GamingWeb3.Build
     public Web3 Build()
     {
       var serviceProvider = _serviceCollection.BuildServiceProvider();
-      var environment = AssertWeb3EnvironmentBound(serviceProvider);
+      AssertWeb3EnvironmentBound(serviceProvider);
       var provider = serviceProvider.GetService<IEvmProvider>();
       var signer = serviceProvider.GetService<IEvmSigner>();
       var wallet = serviceProvider.GetService<IEvmWallet>();
 
       var web3 = new Web3(
         serviceProvider,
-        environment,
         provider,
         signer,
         wallet
@@ -48,19 +47,20 @@ namespace ChainSafe.GamingWeb3.Build
       return web3;
     }
 
-    private static IWeb3Environment AssertWeb3EnvironmentBound(IServiceProvider serviceProvider)
+    private static void AssertWeb3EnvironmentBound(IServiceProvider serviceProvider)
     {
-      IWeb3Environment env;
+      // todo test what happens when of environment components is not bound
+      
       try
       {
-        env = serviceProvider.GetRequiredService<IWeb3Environment>();
+        serviceProvider.GetRequiredService<Web3Environment>();
       }
       catch (InvalidOperationException e)
       {
-        throw new Web3Exception($"{nameof(IWeb3Environment)} is a required service for Web3 to work.", e);
+        var message = $"{nameof(Web3Environment)} is required for Web3 to work." +
+                      "Don't forget to bind it when building Web3.";
+        throw new Web3Exception(message, e);
       }
-
-      return env;
     }
   }
 }
