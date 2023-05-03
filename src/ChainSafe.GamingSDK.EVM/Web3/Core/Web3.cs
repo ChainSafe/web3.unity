@@ -64,10 +64,11 @@ namespace ChainSafe.GamingWeb3
           $"{propertyName} is not bound. Make sure to add an implementation of {propertyName} before using it.");
       }
       
-      if (!_initialized)
-      {
-        throw new Web3Exception($"Can't access {propertyName}. Initialize Web3 first.");
-      }
+      // todo uncomment after migration complete
+      // if (!_initialized)
+      // {
+      //   throw new Web3Exception($"Can't access {propertyName}. Initialize Web3 first.");
+      // }
 
       return value;
     }
