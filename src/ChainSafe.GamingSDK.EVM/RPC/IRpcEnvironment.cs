@@ -35,7 +35,7 @@ namespace ChainSafe.GamingWeb3.Evm.RPC
 
         public static NetworkResponse Failure(string error)
         {
-           return new NetworkResponse() { Error = error, IsSuccess = false };
+            return new NetworkResponse() { Error = error, IsSuccess = false };
         }
 
         public void EnsureSuccess()

@@ -7,7 +7,7 @@ namespace ChainSafe.GamingWeb3.Evm.RPC
     // TODO: this is a temporary solution meant for demo purposes
     // only. It *could* also end up being the final solution under
     // very specific circumstances though.
-	// TODO @Oleksandr: Remove this class when implementing the DI infrastructure.
+    // TODO @Oleksandr: Remove this class when implementing the DI infrastructure.
     public static class RpcEnvironmentStore
     {
         internal static IRpcEnvironment Environment { get; set; }
