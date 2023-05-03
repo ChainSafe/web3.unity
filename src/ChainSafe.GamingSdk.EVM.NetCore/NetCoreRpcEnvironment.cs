@@ -1,19 +1,19 @@
-﻿using Web3Unity.Scripts.Library.Ethers.RPC;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Web3Unity.Scripts.Library.Ethers.RPC;
 
 namespace Web3Unity.Scripts.Library.Ethers.NetCore
 {
     public class NetCoreRpcEnvironment : IRpcEnvironment
     {
-        private readonly string _defaultRpcUrl;
+        private readonly string defaultRpcUrl;
 
         public NetCoreRpcEnvironment(string defaultRpcUrl)
         {
-            _defaultRpcUrl = defaultRpcUrl;
+            this.defaultRpcUrl = defaultRpcUrl;
         }
 
         public static void InitializeRpcEnvironment(string defaultRpcUrl)
@@ -21,7 +21,7 @@ namespace Web3Unity.Scripts.Library.Ethers.NetCore
             RpcEnvironmentStore.Initialize(new NetCoreRpcEnvironment(defaultRpcUrl));
         }
 
-        public string GetDefaultRpcUrl() => _defaultRpcUrl;
+        public string GetDefaultRpcUrl() => defaultRpcUrl;
 
         public void LogError(string message)
         {
@@ -75,6 +75,8 @@ namespace Web3Unity.Scripts.Library.Ethers.NetCore
         }
 
         // TODO: find suitable event capturing solution.
-        public void CaptureEvent(string eventName, Dictionary<string, object> properties) { }
+        public void CaptureEvent(string eventName, Dictionary<string, object> properties)
+        {
+        }
     }
 }
