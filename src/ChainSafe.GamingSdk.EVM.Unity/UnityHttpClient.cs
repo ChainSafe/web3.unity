@@ -1,12 +1,16 @@
+using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.GamingSdk.Evm.Unity;
 using ChainSafe.GamingWeb3.Environment;
+using Newtonsoft.Json;
+using UnityEngine.Assertions;
+using UnityEngine.Networking;
 
 namespace ChainSafe.GamingWeb3.Unity
 {
     public class UnityHttpClient : IHttpClient
     {
-        private IMainThreadRunner _mainThreadRunner;
+        private readonly IMainThreadRunner _mainThreadRunner;
 
         public UnityHttpClient(IMainThreadRunner mainThreadRunner)
         {
@@ -15,56 +19,59 @@ namespace ChainSafe.GamingWeb3.Unity
 
         public ValueTask<string> GetRaw(string url)
         {
-            throw new System.NotImplementedException();
+            return new ValueTask<string>(_mainThreadRunner.EnqueueTask(async () =>
+            {
+                using var request = UnityWebRequest.Get(url);
+                request.downloadHandler = new DownloadHandlerBuffer();
+                await request.SendWebRequest();
+                
+                Assert.AreNotEqual(request.result, UnityWebRequest.Result.InProgress);
+                
+                if (request.result != UnityWebRequest.Result.Success)
+                {
+                    throw new Web3Exception($"HTTP.Get responded with error: {request.error}");
+                }
+
+                var response = request.downloadHandler.text;
+                return response;
+            }));
         }
 
         public ValueTask<string> PostRaw(string url, string data, string contentType)
         {
-            throw new System.NotImplementedException();
+            return new ValueTask<string>(_mainThreadRunner.EnqueueTask(async () =>
+            {
+                using var request = new UnityWebRequest(url, "POST");
+                request.uploadHandler = new UploadHandlerRaw(new UTF8Encoding().GetBytes(data));
+                request.downloadHandler = new DownloadHandlerBuffer();
+                request.SetRequestHeader("Content-Type", contentType);
+                await request.SendWebRequest();
+                
+                Assert.AreNotEqual(request.result, UnityWebRequest.Result.InProgress);
+
+                if (request.result != UnityWebRequest.Result.Success)
+                {
+                    throw new Web3Exception($"HTTP.Post responded with error: {request.error}");
+                }
+
+                var response = request.downloadHandler.text;
+                return response;
+            }));
         }
 
-        public ValueTask<TResponse> Get<TResponse>(string url)
+        public async ValueTask<TResponse> Get<TResponse>(string url)
         {
-            throw new System.NotImplementedException();
+            var responseJson = await GetRaw(url);
+            var response = JsonConvert.DeserializeObject<TResponse>(responseJson);
+            return response;
         }
 
-        public ValueTask<TResponse> Post<TRequest, TResponse>(string url, TRequest data)
+        public async ValueTask<TResponse> Post<TRequest, TResponse>(string url, TRequest data)
         {
-            throw new System.NotImplementedException();
+            var requestJson = JsonConvert.SerializeObject(data);
+            var responseJson = await PostRaw(url, requestJson, "application/json");
+            var response = JsonConvert.DeserializeObject<TResponse>(responseJson);
+            return response;
         }
-        
-        // public Task<NetworkResponse> GetAsync(string url) =>
-        //     _dispatcher.EnqueueTask(async () =>
-        //     {
-        //         using var request = UnityWebRequest.Get(url);
-        //         request.downloadHandler = new DownloadHandlerBuffer();
-        //         await request.SendWebRequest();
-        //
-        //         Assert.AreNotEqual(request.result, UnityWebRequest.Result.InProgress);
-        //
-        //         if (request.result != UnityWebRequest.Result.Success)
-        //         {
-        //             return NetworkResponse.Failure(request.error);
-        //         }
-        //
-        //         return NetworkResponse.Success(request.downloadHandler.text);
-        //     });
-        //
-        // public Task<NetworkResponse> PostAsync(string url, string requestBody, string contentType) =>
-        //     _dispatcher.EnqueueTask(async () =>
-        //     {
-        //         using var request = new UnityWebRequest(url, "POST");
-        //         request.uploadHandler = new UploadHandlerRaw(new UTF8Encoding().GetBytes(requestBody));
-        //         request.downloadHandler = new DownloadHandlerBuffer();
-        //         request.SetRequestHeader("Content-Type", contentType);
-        //         await request.SendWebRequest();
-        //
-        //         if (request.result != UnityWebRequest.Result.Success)
-        //         {
-        //             return NetworkResponse.Failure(request.error);
-        //         }
-        //
-        //         return NetworkResponse.Success(request.downloadHandler.text);
-        //     });
     }
 }
