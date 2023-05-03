@@ -1,5 +1,7 @@
 #! /usr/bin/env sh
 
+set -e
+
 echo Building project . . .
 
 dotnet publish -c release -f netstandard2.1 /property:Unity=true
