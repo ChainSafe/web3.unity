@@ -29,6 +29,15 @@ namespace Web3Unity.Scripts.Library.Ethers.Unity
             this.defaultRpcUrl = defaultRpcUrl;
         }
 
+        // Make sure the AsyncAwaitUtil submodule was correctly cloned
+#pragma warning disable CS0414
+        private static void EnsureAsyncAwaitAvailable()
+        {
+            // If you're getting an error on this line, make sure you cloned all submodules correctly
+            var unused = Awaiters.NextFrame;
+        }
+#pragma warning restore CS0414
+
         public static void InitializeRpcEnvironment(string defaultRpcUrl, string dataDogApiKey)
         {
             RpcEnvironmentStore.Initialize(new UnityRpcEnvironment(defaultRpcUrl, dataDogApiKey));

@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\submodules\AsyncAwaitUtil\UnityProject\Assets\Plugins\AsyncAwaitUtil\Source\**\*.cs" LinkBase="AsyncAwaitUtil" />
+    <Compile Include="../../submodules/AsyncAwaitUtil/UnityProject/Assets/Plugins/AsyncAwaitUtil/Source/**/*.cs" LinkBase="AsyncAwaitUtil" />
   </ItemGroup>
 
   <ItemGroup>
