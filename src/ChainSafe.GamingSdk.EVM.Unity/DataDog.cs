@@ -9,21 +9,21 @@ namespace Web3Unity.Scripts.Library.Ethers.Unity
 {
     public class DataDog
     {
-        private readonly string _baseUrl = "https://http-intake.logs.datadoghq.com/api/v2/logs";
-        private readonly string _apiKey;
+        private readonly string baseUrl = "https://http-intake.logs.datadoghq.com/api/v2/logs";
+        private readonly string apiKey;
 
-        private readonly JsonSerializerSettings _jsonSerializerSettings = new JsonSerializerSettings
+        private readonly JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings
         {
-            NullValueHandling = NullValueHandling.Ignore
+            NullValueHandling = NullValueHandling.Ignore,
         };
 
         public DataDog(string apiKey, string baseUrl = null)
         {
-            _apiKey = apiKey;
+            this.apiKey = apiKey;
 
             if (baseUrl != null)
             {
-                _baseUrl = baseUrl;
+                this.baseUrl = baseUrl;
             }
         }
 
@@ -42,15 +42,17 @@ namespace Web3Unity.Scripts.Library.Ethers.Unity
 
             try
             {
-                var json = JsonConvert.SerializeObject(new DataDogEvent
-                {
-                    DD_SOURCE = _apiKey,
-                    Event = eventName,
-                    DDTAGS = properties,
-                    PROJECT_ID = userUuid
-                }, _jsonSerializerSettings);
+                var json = JsonConvert.SerializeObject(
+                    new DataDogEvent
+                    {
+                        DD_SOURCE = apiKey,
+                        Event = eventName,
+                        DDTAGS = properties,
+                        PROJECT_ID = userUuid,
+                    },
+                    jsonSerializerSettings);
 
-                var req = new UnityWebRequest(_baseUrl + "/batch/", "POST");
+                var req = new UnityWebRequest(baseUrl + "/batch/", "POST");
                 req.uploadHandler = new UploadHandlerRaw(new UTF8Encoding().GetBytes(json));
                 req.downloadHandler = new DownloadHandlerBuffer();
                 req.SetRequestHeader("Content-Type", "application/json");
@@ -87,9 +89,11 @@ namespace Web3Unity.Scripts.Library.Ethers.Unity
             [JsonProperty(PropertyName = "service")]
             public string SERVICE { get; set; }
 
-            [JsonProperty(PropertyName = "type")] public string Type { get; set; }
+            [JsonProperty(PropertyName = "type")]
+            public string Type { get; set; }
 
-            [JsonProperty(PropertyName = "event")] public string Event { get; set; }
+            [JsonProperty(PropertyName = "event")]
+            public string Event { get; set; }
 
             [JsonProperty(PropertyName = "projectID")]
             public string PROJECT_ID { get; set; }

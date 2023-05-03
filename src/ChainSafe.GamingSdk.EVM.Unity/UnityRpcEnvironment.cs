@@ -1,32 +1,32 @@
-﻿using Web3Unity.Scripts.Library.Ethers.RPC;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Networking;
+using Web3Unity.Scripts.Library.Ethers.RPC;
 
 namespace Web3Unity.Scripts.Library.Ethers.Unity
 {
     public class UnityRpcEnvironment : IRpcEnvironment
     {
-        Dispatcher _dispatcher;
-        DataDog _dataDog;
-        string _defaultRpcUrl;
+        private readonly Dispatcher dispatcher;
+        private readonly DataDog dataDog;
+        private readonly string defaultRpcUrl;
 
-#pragma warning disable CS0414
         // Make sure we're referencing the Unity build of the Core library.
         // To make this work, pass `/r:property:Unity=true` to `dotnet build`
         // when building `ChainSafe.GamingSDK.EVM` and this library.
-        readonly Utils.IsUnityBuild _isUnityBuild = null;
+#pragma warning disable CS0414
+        private readonly Utils.IsUnityBuild isUnityBuild = null;
 #pragma warning restore CS0414
 
         private UnityRpcEnvironment(string defaultRpcUrl, string dataDogApiKey)
         {
-            _dispatcher = Dispatcher.Initialize();
-            _dataDog = new DataDog(dataDogApiKey);
-            _defaultRpcUrl = defaultRpcUrl;
+            dispatcher = Dispatcher.Initialize();
+            dataDog = new DataDog(dataDogApiKey);
+            this.defaultRpcUrl = defaultRpcUrl;
         }
 
         public static void InitializeRpcEnvironment(string defaultRpcUrl, string dataDogApiKey)
@@ -36,11 +36,11 @@ namespace Web3Unity.Scripts.Library.Ethers.Unity
 
         public void CaptureEvent(string eventName, Dictionary<string, object> properties)
         {
-            _dataDog.Capture(eventName, properties);
+            dataDog.Capture(eventName, properties);
         }
 
         public Task<NetworkResponse> GetAsync(string url) =>
-            _dispatcher.EnqueueTask(async () =>
+            dispatcher.EnqueueTask(async () =>
             {
                 using var request = UnityWebRequest.Get(url);
                 request.downloadHandler = new DownloadHandlerBuffer();
@@ -57,7 +57,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Unity
             });
 
         public Task<NetworkResponse> PostAsync(string url, string requestBody, string contentType) =>
-            _dispatcher.EnqueueTask(async () =>
+            dispatcher.EnqueueTask(async () =>
             {
                 using var request = new UnityWebRequest(url, "POST");
                 request.uploadHandler = new UploadHandlerRaw(new UTF8Encoding().GetBytes(requestBody));
@@ -73,7 +73,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Unity
                 return NetworkResponse.Success(request.downloadHandler.text);
             });
 
-        public string GetDefaultRpcUrl() => _defaultRpcUrl;
+        public string GetDefaultRpcUrl() => defaultRpcUrl;
 
         public void LogError(string message)
         {
@@ -82,7 +82,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Unity
 
         public void RunOnForegroundThread(Action action)
         {
-            _dispatcher.Enqueue(action);
+            dispatcher.Enqueue(action);
         }
     }
 }
