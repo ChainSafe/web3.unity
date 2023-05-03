@@ -14,7 +14,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
     public class JsonRpcProvider : BaseProvider
     {
         private readonly string connection;
-        private readonly JsonSerializerSettings jsonSerializerSettings = new ()
+        private readonly JsonSerializerSettings jsonSerializerSettings = new()
         {
             NullValueHandling = NullValueHandling.Ignore,
         };

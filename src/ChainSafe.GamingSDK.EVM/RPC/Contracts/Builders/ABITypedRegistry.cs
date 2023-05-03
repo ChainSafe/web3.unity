@@ -7,11 +7,11 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders
 {
     public static class ABITypedRegistry
     {
-        private static readonly ConcurrentDictionary<Type, FunctionABI> FunctionAbiRegistry = new ();
-        private static readonly ConcurrentDictionary<Type, EventABI> EventAbiRegistry = new ();
-        private static readonly ConcurrentDictionary<Type, ErrorABI> ErrorAbiRegistry = new ();
+        private static readonly ConcurrentDictionary<Type, FunctionABI> FunctionAbiRegistry = new();
+        private static readonly ConcurrentDictionary<Type, EventABI> EventAbiRegistry = new();
+        private static readonly ConcurrentDictionary<Type, ErrorABI> ErrorAbiRegistry = new();
 
-        private static readonly AttributesToABIExtractor AbiExtractor = new ();
+        private static readonly AttributesToABIExtractor AbiExtractor = new();
 
         public static FunctionABI GetFunctionABI<TFunctionMessage>()
         {

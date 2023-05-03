@@ -6,7 +6,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders.FilterInput
 {
     internal class TopicFilter
     {
-        internal static readonly TopicFilter Empty = new (null, null);
+        internal static readonly TopicFilter Empty = new(null, null);
 
         private List<object> values;
 
