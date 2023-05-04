@@ -4,7 +4,7 @@ using System.Numerics;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
 
-namespace ChainSafe.GamingWeb3.Evm.Contracts.Builders.FilterInput
+namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders.FilterInput
 {
     public static class FilterExtensions
     {

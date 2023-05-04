@@ -1,18 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ChainSafe.GamingWeb3;
 using ChainSafe.GamingWeb3.Environment;
 using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.Client.RpcMessages;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace ChainSafe.GamingWeb3.Evm.Providers
+namespace Web3Unity.Scripts.Library.Ethers.Providers
 {
     public class JsonRpcProvider : BaseProvider
     {
-        private const string DefaultRpcUrl = "http://localhost";
-        
         private readonly JsonRpcProviderConfiguration _configuration;
         private readonly Web3Environment _environment;
         private readonly ChainProvider _chainProvider;
@@ -37,11 +36,11 @@ namespace ChainSafe.GamingWeb3.Evm.Providers
             
             if (string.IsNullOrEmpty(_configuration.RpcNodeUrl))
             {
-                _configuration.RpcNodeUrl = DefaultRpcUrl;
+                _configuration.RpcNodeUrl = _environment.SettingsProvider.DefaultRpcUrl;
             }
         }
 
-        public override async Task<Network> DetectNetwork()
+        public override async Task<Network.Network> DetectNetwork()
         {
             // TODO: cache
             var chainIdHexString = await Send<string>("eth_chainId");
@@ -54,8 +53,8 @@ namespace ChainSafe.GamingWeb3.Evm.Providers
 
             var chain = await _chainProvider.GetChain(chainId);
             return chain != null 
-                ? new Network { Name = chain.Name, ChainId = chainId } 
-                : new Network { Name = "Unknown", ChainId = chainId };
+                ? new Network.Network { Name = chain.Name, ChainId = chainId } 
+                : new Network.Network { Name = "Unknown", ChainId = chainId };
         }
 
         public async Task<string[]> ListAccounts()

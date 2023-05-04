@@ -1,6 +1,6 @@
 using System;
 using NUnit.Framework;
-using ChainSafe.GamingWeb3.Evm.Providers;
+using Web3Unity.Scripts.Library.Ethers.Providers;
 
 namespace ChainSafe.GamingSDK.EVM.Tests
 {

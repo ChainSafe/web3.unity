@@ -1,7 +1,7 @@
 ﻿using System;
-using ChainSafe.GamingWeb3.Logger;
+using ChainSafe.GamingWeb3.Environment;
 
-namespace ChainSafe.GamingWeb3.Evm.NetCore
+namespace Web3Unity.Scripts.Library.Ethers.NetCore
 {
   public class NetCoreLogWriter : ILogWriter
   {

@@ -1,19 +1,23 @@
 using System;
 using System.Threading.Tasks;
-using ChainSafe.GamingWeb3.Evm.Providers;
+using ChainSafe.GamingWeb3;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
+using Web3Unity.Scripts.Library.Ethers.Providers;
+using TransactionRequest = Web3Unity.Scripts.Library.Ethers.Transactions.TransactionRequest;
+using TransactionResponse = Web3Unity.Scripts.Library.Ethers.Transactions.TransactionResponse;
 
-namespace ChainSafe.GamingWeb3.Evm.Signers
+namespace Web3Unity.Scripts.Library.Ethers.Signers
 {
-    public class JsonRpcWallet : BaseSigner, IEvmWallet
+    public class JsonRpcSigner : BaseSigner, IEvmWallet
     {
         private string _address;
-        private readonly JsonRpcWalletConfiguration _configuration;
+        private readonly JsonRpcSignerConfiguration _configuration;
 
-        public JsonRpcWallet(JsonRpcWalletConfiguration configuration, IEvmProvider provider) : base(provider)
+        public JsonRpcSigner(JsonRpcSignerConfiguration configuration, IEvmProvider provider) : base(provider)
         {
             _configuration = configuration;
+            _address = _configuration.AddressOverride;
         }
 
         public override async Task<string> GetAddress()

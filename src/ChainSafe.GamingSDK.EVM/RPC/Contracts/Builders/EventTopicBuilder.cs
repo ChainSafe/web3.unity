@@ -3,7 +3,7 @@ using System.Linq;
 using Nethereum.ABI.Model;
 using Nethereum.Hex.HexConvertors.Extensions;
 
-namespace ChainSafe.GamingWeb3.Evm.Contracts.Builders
+namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders
 {
     public class EventTopicBuilder
     {

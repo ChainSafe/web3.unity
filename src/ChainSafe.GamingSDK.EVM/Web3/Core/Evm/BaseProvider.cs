@@ -8,11 +8,16 @@ using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
 //using Web3Unity.Scripts.Library.Ethers.Runtime;
 using System.Threading;
-using ChainSafe.GamingWeb3.Evm;
-using ChainSafe.GamingWeb3.Evm.RPC;
-using Block = ChainSafe.GamingWeb3.Evm.Block;
+using ChainSafe.GamingWeb3;
+using Web3Unity.Scripts.Library.Ethers.RPC;
+using Block = Web3Unity.Scripts.Library.Ethers.Blocks.Block;
+using BlockWithTransactions = Web3Unity.Scripts.Library.Ethers.Blocks.BlockWithTransactions;
+using Transaction = Web3Unity.Scripts.Library.Ethers.Transactions.Transaction;
+using TransactionRequest = Web3Unity.Scripts.Library.Ethers.Transactions.TransactionRequest;
+using TransactionResponse = Web3Unity.Scripts.Library.Ethers.Transactions.TransactionResponse;
+using TransactionReceipt = Web3Unity.Scripts.Library.Ethers.Transactions.TransactionReceipt;
 
-namespace ChainSafe.GamingWeb3.Evm.Providers
+namespace Web3Unity.Scripts.Library.Ethers.Providers
 {
     public class InternalBlockNumber
     {
@@ -24,7 +29,7 @@ namespace ChainSafe.GamingWeb3.Evm.Providers
     public abstract class BaseProvider : IEvmProvider
     {
         public readonly bool AnyNetwork = true;
-        internal Network _network;
+        internal Network.Network _network;
 
         // TODO: this isn't actually used, see comment in SendTransaction
         internal readonly Formatter _formater = new();
@@ -41,9 +46,9 @@ namespace ChainSafe.GamingWeb3.Evm.Providers
 
         private long _emittedBlock;
 
-        public Network Network => _network;
+        public Network.Network Network => _network;
 
-        public BaseProvider(Network network)
+        public BaseProvider(Network.Network network)
         {
             _network = network;
         }
@@ -54,7 +59,7 @@ namespace ChainSafe.GamingWeb3.Evm.Providers
             _network = await GetNetwork();
         }
 
-        public virtual Task<Network> DetectNetwork()
+        public virtual Task<Network.Network> DetectNetwork()
         {
             throw new Web3Exception("provider does not support network detection");
         }
@@ -280,7 +285,7 @@ namespace ChainSafe.GamingWeb3.Evm.Providers
             }
         }
 
-        public async Task<Network> GetNetwork()
+        public async Task<Network.Network> GetNetwork()
         {
             var network = await _ready();
             var currentNetwork = await DetectNetwork();
@@ -576,7 +581,7 @@ namespace ChainSafe.GamingWeb3.Evm.Providers
             throw new Web3Exception(method + " not implemented");
         }
 
-        private async Task<Network> _ready()
+        private async Task<Network.Network> _ready()
         {
             if (_network != null) return _network;
 
@@ -600,7 +605,7 @@ namespace ChainSafe.GamingWeb3.Evm.Providers
         {
             _populateEventProperties(properties);
 
-            var network = _network ?? new Network
+            var network = _network ?? new Network.Network
             {
                 ChainId = 0,
                 Name = "unknown",

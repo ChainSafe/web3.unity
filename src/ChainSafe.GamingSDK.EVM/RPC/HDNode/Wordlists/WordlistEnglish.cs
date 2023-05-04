@@ -1,7 +1,7 @@
 using System;
 using System.Text.RegularExpressions;
 
-namespace ChainSafe.GamingWeb3.Evm.HDNode.Wordlists
+namespace Web3Unity.Scripts.Library.Ethers.HDNode.Wordlists
 {
     public class WordlistEnglish : Wordlist
     {

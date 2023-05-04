@@ -1,7 +1,7 @@
 using System;
 using System.Text.RegularExpressions;
 
-namespace ChainSafe.GamingWeb3.Evm.Bytes
+namespace Web3Unity.Scripts.Library.Ethers.Bytes
 {
     public class Bytes
     {

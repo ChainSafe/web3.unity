@@ -5,7 +5,7 @@ using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
 
-namespace ChainSafe.GamingWeb3.Evm.SigningKey
+namespace Web3Unity.Scripts.Library.Ethers.SigningKey
 {
     public class SigningKey
     {

@@ -1,12 +1,11 @@
 ﻿using System.Numerics;
-using ChainSafe.GamingWeb3.Evm;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
 using NUnit.Framework;
-using ChainSafe.GamingWeb3.Evm.Contracts;
-using ChainSafe.GamingWeb3.Evm.NetCore.Migration;
-using ChainSafe.GamingWeb3.Evm.Providers;
-using ChainSafe.GamingWeb3.Evm.Utils;
+using Web3Unity.Scripts.Library.Ethers.Contracts;
+using Web3Unity.Scripts.Library.Ethers.Providers;
+using Web3Unity.Scripts.Library.Ethers.Utils;
+using TransactionRequest = Web3Unity.Scripts.Library.Ethers.Transactions.TransactionRequest;
 
 namespace ChainSafe.GamingSDK.EVM.Tests
 {
@@ -22,8 +21,8 @@ namespace ChainSafe.GamingSDK.EVM.Tests
         [OneTimeSetUp]
         public void SetUp()
         {
-            _ganacheProvider = MigrationHelper.NewJsonRpcProvider("http://127.0.0.1:7545");
-            _infuraProvider = MigrationHelper.NewJsonRpcProvider("https://goerli.infura.io/v3/904006115c764661965dc0909e5ed473");
+            _ganacheProvider = ProviderMigration.NewJsonRpcProvider("http://127.0.0.1:7545");
+            _infuraProvider = ProviderMigration.NewJsonRpcProvider("https://goerli.infura.io/v3/904006115c764661965dc0909e5ed473");
             _goerliAddress = "0xaBed4239E4855E120fDA34aDBEABDd2911626BA1";
             _nftAddress = "0xc81fa2eacc1c45688d481b11ce94c24a136e125d";
             _nftABi =

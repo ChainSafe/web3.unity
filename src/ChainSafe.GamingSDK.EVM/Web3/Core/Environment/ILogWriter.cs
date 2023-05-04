@@ -1,4 +1,4 @@
-﻿namespace ChainSafe.GamingWeb3.Logger
+﻿namespace ChainSafe.GamingWeb3.Environment
 {
   public interface ILogWriter
   {

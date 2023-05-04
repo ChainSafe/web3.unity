@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using ChainSafe.GamingWeb3.Environment;
-using ChainSafe.GamingWeb3.Logger;
 
-namespace ChainSafe.GamingWeb3.Evm.NetCore
+namespace Web3Unity.Scripts.Library.Ethers.NetCore
 {
   public class NetCoreAnalytics : IAnalyticsClient
   {

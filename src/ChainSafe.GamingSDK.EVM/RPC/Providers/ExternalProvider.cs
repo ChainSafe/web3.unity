@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace ChainSafe.GamingWeb3.Evm.Providers
+namespace Web3Unity.Scripts.Library.Ethers.Providers
 {
     public interface IExternalProvider
     {

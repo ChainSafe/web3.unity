@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ChainSafe.GamingWeb3.Evm;
-using ChainSafe.GamingWeb3.Evm.Providers;
-using ChainSafe.GamingWeb3.Evm.Transactions;
+using Web3Unity.Scripts.Library.Ethers;
+using Web3Unity.Scripts.Library.Ethers.Transactions;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
+using Web3Unity.Scripts.Library.Ethers.Providers;
 
-namespace ChainSafe.GamingWeb3.Evm.Signers
+namespace Web3Unity.Scripts.Library.Ethers.Signers
 {
     public abstract class BaseSigner : IEvmSigner
     {
@@ -25,7 +25,7 @@ namespace ChainSafe.GamingWeb3.Evm.Signers
 
         public abstract Task<string> SignMessage(string message);
 
-        // TODO: JsonRpcWallet doesn't implement this; Is it never used?
+        // TODO: JsonRpcSigner doesn't implement this; Is it never used?
         public virtual Task<string> SignTransaction(TransactionRequest transaction)
         {
             throw new Exception("SignTransaction not implemented");

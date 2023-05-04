@@ -4,7 +4,7 @@ using Nethereum.JsonRpc.Client.RpcMessages;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace ChainSafe.GamingWeb3.Evm.Providers
+namespace Web3Unity.Scripts.Library.Ethers.Providers
 {
     // public class Web3Provider : JsonRpcProvider
     // {

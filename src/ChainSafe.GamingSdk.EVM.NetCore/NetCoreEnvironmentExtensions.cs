@@ -1,9 +1,8 @@
 ﻿using ChainSafe.GamingWeb3.Build;
 using ChainSafe.GamingWeb3.Environment;
-using ChainSafe.GamingWeb3.Logger;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ChainSafe.GamingWeb3.Evm.NetCore
+namespace Web3Unity.Scripts.Library.Ethers.NetCore
 {
   public static class NetCoreEnvironmentExtensions
   {

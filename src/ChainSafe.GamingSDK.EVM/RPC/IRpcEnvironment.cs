@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChainSafe.GamingWeb3.Evm.RPC
+namespace Web3Unity.Scripts.Library.Ethers.RPC
 {
     // TODO @Oleksandr: Put these methods into different interfaces
     // suggestions: INetworkRequestHandler, ILogWriter (don't use ILogger,

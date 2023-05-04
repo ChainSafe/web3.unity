@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace ChainSafe.GamingWeb3.Evm
+namespace Web3Unity.Scripts.Library.Ethers
 {
   public interface IEvmWallet
   {

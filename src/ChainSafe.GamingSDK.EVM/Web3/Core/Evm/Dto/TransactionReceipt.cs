@@ -2,7 +2,7 @@ using Nethereum.Hex.HexTypes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace ChainSafe.GamingWeb3.Evm
+namespace Web3Unity.Scripts.Library.Ethers.Transactions
 {
     public class TransactionReceipt
     {

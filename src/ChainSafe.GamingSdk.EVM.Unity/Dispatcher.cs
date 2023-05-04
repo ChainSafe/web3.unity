@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System;
 using System.Threading.Tasks;
 
-namespace ChainSafe.GamingWeb3.Evm.Unity
+namespace Web3Unity.Scripts.Library.Ethers.Unity
 {
     /// Author: Pim de Witte (pimdewitte.com) and contributors, https://github.com/PimDeWitte/UnityMainThreadDispatcher
     /// <summary>

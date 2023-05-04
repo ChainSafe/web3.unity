@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace ChainSafe.GamingWeb3.Evm.Unity
+namespace Web3Unity.Scripts.Library.Ethers.Unity
 {
     public class DataDog
     {

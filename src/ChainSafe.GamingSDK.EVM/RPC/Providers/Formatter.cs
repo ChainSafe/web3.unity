@@ -1,4 +1,4 @@
-namespace ChainSafe.GamingWeb3.Evm.Providers
+namespace Web3Unity.Scripts.Library.Ethers.Providers
 {
     public class Formatter
     {

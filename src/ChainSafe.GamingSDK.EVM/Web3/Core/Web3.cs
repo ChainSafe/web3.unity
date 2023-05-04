@@ -1,9 +1,10 @@
 ﻿#nullable enable
 using System;
 using System.Threading.Tasks;
-using ChainSafe.GamingWeb3.Evm;
-using ChainSafe.GamingWeb3.Evm.Signers;
+using Web3Unity.Scripts.Library.Ethers;
+using Web3Unity.Scripts.Library.Ethers.Signers;
 using Microsoft.Extensions.DependencyInjection;
+using Web3Unity.Scripts.Library.Ethers.Providers;
 
 namespace ChainSafe.GamingWeb3
 {

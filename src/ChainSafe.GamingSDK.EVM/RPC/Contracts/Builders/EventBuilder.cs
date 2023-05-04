@@ -4,9 +4,9 @@ using Nethereum.ABI.FunctionEncoding;
 using Nethereum.ABI.Model;
 using Nethereum.RPC.Eth.DTOs;
 using Newtonsoft.Json.Linq;
-using ChainSafe.GamingWeb3.Evm.Contracts.Extensions;
+using Web3Unity.Scripts.Library.Ethers.Contracts.Extensions;
 
-namespace ChainSafe.GamingWeb3.Evm.Contracts.Builders
+namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders
 {
     [Obsolete("Use the EventABI extensions instead")]
     public class EventBuilder

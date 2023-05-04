@@ -1,13 +1,13 @@
 using System;
 using System.Threading.Tasks;
-using ChainSafe.GamingWeb3.Evm;
-using ChainSafe.GamingWeb3.Evm.Contracts.Builders;
+using Web3Unity.Scripts.Library.Ethers;
 using Nethereum.Hex.HexTypes;
-using ChainSafe.GamingWeb3.Evm.Providers;
-using ChainSafe.GamingWeb3.Evm.Signers;
-using ChainSafe.GamingWeb3.Evm.Transactions;
+using Web3Unity.Scripts.Library.Ethers.Providers;
+using Web3Unity.Scripts.Library.Ethers.Transactions;
+using Web3Unity.Scripts.Library.Ethers.Contracts.Builders;
+using Web3Unity.Scripts.Library.Ethers.Signers;
 
-namespace ChainSafe.GamingWeb3.Evm.Contracts
+namespace Web3Unity.Scripts.Library.Ethers.Contracts
 {
     public static class MyUtils
     {

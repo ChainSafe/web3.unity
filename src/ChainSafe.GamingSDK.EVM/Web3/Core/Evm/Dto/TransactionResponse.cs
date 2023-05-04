@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Nethereum.Hex.HexTypes;
 using Newtonsoft.Json;
 
-namespace ChainSafe.GamingWeb3.Evm
+namespace Web3Unity.Scripts.Library.Ethers.Transactions
 {
     public class TransactionResponse : Transaction
     {

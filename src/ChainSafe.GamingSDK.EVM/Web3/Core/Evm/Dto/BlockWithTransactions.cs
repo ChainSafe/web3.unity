@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
+using Web3Unity.Scripts.Library.Ethers.Transactions;
 
-namespace ChainSafe.GamingWeb3.Evm
+namespace Web3Unity.Scripts.Library.Ethers.Blocks
 {
     /// <summary>
     /// Block including transaction objects

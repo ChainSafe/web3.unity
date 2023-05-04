@@ -1,6 +1,6 @@
 using Nethereum.RPC.Eth.DTOs;
 
-namespace ChainSafe.GamingWeb3.Evm.Contracts
+namespace Web3Unity.Scripts.Library.Ethers.Contracts
 {
     public class EventLog<T> : IEventLog
     {

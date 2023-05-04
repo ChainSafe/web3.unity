@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ChainSafe.GamingWeb3.Evm.Contracts.Builders;
-using ChainSafe.GamingWeb3.Evm.Contracts.Builders.FilterInput;
 using Nethereum.ABI.FunctionEncoding;
 using Nethereum.ABI.FunctionEncoding.Attributes;
 using Nethereum.ABI.Model;
@@ -11,8 +9,10 @@ using Nethereum.RPC.Eth.DTOs.Comparers;
 using Nethereum.Util;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Web3Unity.Scripts.Library.Ethers.Contracts.Builders;
+using Web3Unity.Scripts.Library.Ethers.Contracts.Builders.FilterInput;
 
-namespace ChainSafe.GamingWeb3.Evm.Contracts.Extensions
+namespace Web3Unity.Scripts.Library.Ethers.Contracts.Extensions
 {
 
     public static class EventExtensions

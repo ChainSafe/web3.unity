@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using ChainSafe.GamingWeb3.Environment;
-using ChainSafe.GamingWeb3.Evm.Unity;
+using Web3Unity.Scripts.Library.Ethers.Unity;
 
 namespace ChainSafe.GamingSdk.Evm.Unity
 {

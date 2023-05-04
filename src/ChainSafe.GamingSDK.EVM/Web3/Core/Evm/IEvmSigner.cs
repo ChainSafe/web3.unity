@@ -1,7 +1,8 @@
 using System.Threading.Tasks;
-using ChainSafe.GamingWeb3.Evm;
+using Web3Unity.Scripts.Library.Ethers.Providers;
+using Web3Unity.Scripts.Library.Ethers.Transactions;
 
-namespace ChainSafe.GamingWeb3.Evm.Signers
+namespace Web3Unity.Scripts.Library.Ethers.Signers
 {
     public interface IEvmSigner
     {

@@ -1,6 +1,5 @@
 using ChainSafe.GamingSdk.Evm.Unity;
 using ChainSafe.GamingWeb3.Environment;
-using ChainSafe.GamingWeb3.Logger;
 using UnityEngine;
 
 namespace ChainSafe.GamingWeb3.Unity

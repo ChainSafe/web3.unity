@@ -8,8 +8,8 @@ public class Web3WalletGetTxStatus : MonoBehaviour
 {
     public async void GetTransactionStatus()
     {
-        var provider = new JsonRpcProvider("YOUR_NODE");
-        var signer = new JsonRpcSigner(provider, 0);
+        var provider = ProviderMigration.NewJsonRpcProvider("YOUR_NODE");
+        var signer = SignerMigration.NewJsonRpcSigner(provider, 0);
         var tx = await signer.SendTransaction(new TransactionRequest
         {
             To = await signer.GetAddress(),

@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using Nethereum.Hex.HexConvertors.Extensions;
 using NUnit.Framework;
-using ChainSafe.GamingWeb3.Evm.RLP;
+using Web3Unity.Scripts.Library.Ethers.RLP;
 
 namespace ChainSafe.GamingSDK.EVM.Tests
 {

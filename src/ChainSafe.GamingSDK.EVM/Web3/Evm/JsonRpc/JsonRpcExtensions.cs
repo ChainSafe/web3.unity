@@ -1,9 +1,9 @@
 ﻿using ChainSafe.GamingWeb3.Build;
-using ChainSafe.GamingWeb3.Evm.Providers;
-using ChainSafe.GamingWeb3.Evm.Signers;
 using Microsoft.Extensions.DependencyInjection;
+using Web3Unity.Scripts.Library.Ethers.Providers;
+using Web3Unity.Scripts.Library.Ethers.Signers;
 
-namespace ChainSafe.GamingWeb3.Evm.JsonRpc
+namespace Web3Unity.Scripts.Library.Ethers.JsonRpc
 {
   public static class JsonRpcExtensions
   {
@@ -35,7 +35,7 @@ namespace ChainSafe.GamingWeb3.Evm.JsonRpc
     /// <summary>
     /// Binds JSON RPC implementation of EVM Wallet to Web3
     /// </summary>
-    public static void UseJsonRpcWallet(this IWeb3ServiceCollection serviceCollection, JsonRpcWalletConfiguration configuration)
+    public static void UseJsonRpcWallet(this IWeb3ServiceCollection serviceCollection, JsonRpcSignerConfiguration configuration)
     {
       serviceCollection.ConfigureJsonRpcWallet(configuration);
       serviceCollection.UseJsonRpcWallet();
@@ -46,14 +46,14 @@ namespace ChainSafe.GamingWeb3.Evm.JsonRpc
     /// </summary>
     public static void UseJsonRpcWallet(this IWeb3ServiceCollection serviceCollection)
     {
-      serviceCollection.AddSingleton<IEvmWallet, JsonRpcWallet>();
+      serviceCollection.AddSingleton<IEvmWallet, JsonRpcSigner>();
       serviceCollection.AddSingleton(provider => (IEvmSigner) provider.GetService<IEvmWallet>());
     }
     
     /// <summary>
     /// Configures JSON RPC implementation of EVM Wallet
     /// </summary>
-    public static void ConfigureJsonRpcWallet(this IWeb3ServiceCollection serviceCollection, JsonRpcWalletConfiguration configuration)
+    public static void ConfigureJsonRpcWallet(this IWeb3ServiceCollection serviceCollection, JsonRpcSignerConfiguration configuration)
     {
       serviceCollection.AddSingleton(configuration);
     }
