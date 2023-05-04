@@ -105,6 +105,11 @@ public class ChainSafeServerSettings : EditorWindow
             PlayerPrefs.SetString("Registered", "true");
             // set the scriptable object for when the project is built out
             projectConfigSO = (ProjectConfigScriptableObject)Resources.Load("ProjectConfigData", typeof(ScriptableObject));
+            if (projectConfigSO == null)
+            {
+                projectConfigSO = CreateInstance<ProjectConfigScriptableObject>();
+                AssetDatabase.CreateAsset(projectConfigSO, "Assets/Resources/ProjectConfigData.asset");
+            }
             projectConfigSO.ProjectID = ProjectID;
             projectConfigSO.ChainID = ChainID;
             projectConfigSO.Chain = Chain;
