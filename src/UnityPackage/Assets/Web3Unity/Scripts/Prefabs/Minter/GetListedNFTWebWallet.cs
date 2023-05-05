@@ -51,7 +51,7 @@ public class GetListedNFTWebWallet : MonoBehaviour
         Debug.Log("Seller: " + response[0].seller);
         if (response[0].uri.StartsWith("ipfs://"))
         {
-            response[0].uri = response[0].uri.Replace("ipfs://", "https://ipfs.io/ipfs/");
+            response[0].uri = response[0].uri.Replace("ipfs://", "https://ipfs.chainsafe.io/ipfs/");
             Debug.Log("Response URI" + response[0].uri);
         }
 
@@ -73,7 +73,7 @@ public class GetListedNFTWebWallet : MonoBehaviour
         string imageUri = data.image;
         if (imageUri.StartsWith("ipfs://"))
         {
-            imageUri = imageUri.Replace("ipfs://", "https://ipfs.io/ipfs/");
+            imageUri = imageUri.Replace("ipfs://", "https://ipfs.chainsafe.io/ipfs/");
             StartCoroutine(DownloadImage(imageUri));
         }
         else
@@ -87,7 +87,7 @@ public class GetListedNFTWebWallet : MonoBehaviour
             {
                 if (prop.StartsWith("ipfs://"))
                 {
-                    var additionalURi = prop.Replace("ipfs://", "https://ipfs.io/ipfs/");
+                    var additionalURi = prop.Replace("ipfs://", "https://ipfs.chainsafe.io/ipfs/");
                 }
             }
         }
