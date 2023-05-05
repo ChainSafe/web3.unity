@@ -8,11 +8,11 @@ namespace ChainSafe.GamingSdk.Evm.Unity
         /// <summary>
         /// Your unique api key for DataDog
         /// </summary>
-        public string ApiKey { get; set; }
-        
+        public string ApiKey;
+
         /// <summary>
         /// (Optional) TODO
         /// </summary>
-        public string BaseUrl { get; set; }
+        public string BaseUrl;
     }
 }
