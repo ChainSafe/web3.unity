@@ -1,5 +1,8 @@
+using System;
+
 namespace ChainSafe.GamingSdk.Evm.Unity
 {
+    [Serializable]
     public class DataDogAnalyticsConfiguration
     {
         /// <summary>
