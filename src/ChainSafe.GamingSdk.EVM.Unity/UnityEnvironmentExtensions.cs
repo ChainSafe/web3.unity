@@ -1,4 +1,5 @@
 ﻿using ChainSafe.GamingSdk.Evm.Unity;
+using ChainSafe.GamingSdk.EVM.Unity;
 using ChainSafe.GamingWeb3.Build;
 using ChainSafe.GamingWeb3.Environment;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +21,7 @@ namespace ChainSafe.GamingWeb3.Unity
       services.AddSingleton<IHttpClient, UnityHttpClient>();
       services.AddSingleton<ILogWriter, UnityLogWriter>();
       services.AddSingleton<IAnalyticsClient, DataDogAnalytics>();
+      services.AddSingleton<ISettingsProvider, UnitySettingsProvider>();
     }
     
     public static void ConfigureUnityEnvironment(this IWeb3ServiceCollection services, UnityEnvironmentConfiguration configuration)
