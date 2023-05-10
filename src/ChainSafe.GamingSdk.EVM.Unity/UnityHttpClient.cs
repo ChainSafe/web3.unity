@@ -24,9 +24,9 @@ namespace ChainSafe.GamingWeb3.Unity
                 using var request = UnityWebRequest.Get(url);
                 request.downloadHandler = new DownloadHandlerBuffer();
                 await request.SendWebRequest();
-                
+
                 Assert.AreNotEqual(request.result, UnityWebRequest.Result.InProgress);
-                
+
                 if (request.result != UnityWebRequest.Result.Success)
                 {
                     throw new Web3Exception($"HTTP.Get responded with error: {request.error}");
@@ -46,7 +46,7 @@ namespace ChainSafe.GamingWeb3.Unity
                 request.downloadHandler = new DownloadHandlerBuffer();
                 request.SetRequestHeader("Content-Type", contentType);
                 await request.SendWebRequest();
-                
+
                 Assert.AreNotEqual(request.result, UnityWebRequest.Result.InProgress);
 
                 if (request.result != UnityWebRequest.Result.Success)

@@ -12,7 +12,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
     public class JsonRpcSigner : BaseSigner
     {
         private readonly JsonRpcSignerConfiguration _configuration;
-        
+
         private string _address;
         private bool _connected;
 
@@ -31,7 +31,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
             {
                 throw new Web3Exception($"No account with index #{_configuration.AccountIndex} available");
             }
-            
+
             return accounts[_configuration.AccountIndex];
         }
 

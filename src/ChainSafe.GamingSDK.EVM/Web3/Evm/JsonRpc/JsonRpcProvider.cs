@@ -15,7 +15,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
         private readonly JsonRpcProviderConfiguration _configuration;
         private readonly Web3Environment _environment;
         private readonly ChainProvider _chainProvider;
-        
+
         private uint _nextMessageId;
 
         // todo can be removed after Evm/Migration removed from project
@@ -33,7 +33,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             _chainProvider = chainProvider;
             _environment = environment;
             _configuration = configuration;
-            
+
             if (string.IsNullOrEmpty(_configuration.RpcNodeUrl))
             {
                 _configuration.RpcNodeUrl = _environment.SettingsProvider.DefaultRpcUrl;
@@ -52,8 +52,8 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             }
 
             var chain = await _chainProvider.GetChain(chainId);
-            return chain != null 
-                ? new Network.Network { Name = chain.Name, ChainId = chainId } 
+            return chain != null
+                ? new Network.Network { Name = chain.Name, ChainId = chainId }
                 : new Network.Network { Name = "Unknown", ChainId = chainId };
         }
 
@@ -75,7 +75,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             var httpClient = _environment.HttpClient;
             var request = new RpcRequestMessage(_nextMessageId++, method, parameters);
             var response = await httpClient.Post<RpcRequestMessage, RpcResponseMessage>(_configuration.RpcNodeUrl, request);
-      
+
             if (response.HasError)
             {
                 var error = response.Error;

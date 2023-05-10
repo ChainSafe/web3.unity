@@ -5,18 +5,18 @@ using Web3Unity.Scripts.Library.Ethers.Providers;
 
 namespace Web3Unity.Scripts.Library.Ethers.Signers
 {
-  public static class SignerMigration
-  {
-    public static JsonRpcSigner NewJsonRpcSigner(JsonRpcProvider provider, string address)
+    public static class SignerMigration
     {
-      return MigrationHelper.NewJsonRpcSigner(provider, address, BindEnvironment);
-    }
+        public static JsonRpcSigner NewJsonRpcSigner(JsonRpcProvider provider, string address)
+        {
+            return MigrationHelper.NewJsonRpcSigner(provider, address, BindEnvironment);
+        }
 
-    public static JsonRpcSigner NewJsonRpcSigner(JsonRpcProvider provider, int index)
-    {
-      return MigrationHelper.NewJsonRpcSigner(provider, index, BindEnvironment);
-    }
+        public static JsonRpcSigner NewJsonRpcSigner(JsonRpcProvider provider, int index)
+        {
+            return MigrationHelper.NewJsonRpcSigner(provider, index, BindEnvironment);
+        }
 
-    private static void BindEnvironment(IWeb3ServiceCollection services) => services.UseUnityEnvironment();
-  }
+        private static void BindEnvironment(IWeb3ServiceCollection services) => services.UseUnityEnvironment();
+    }
 }

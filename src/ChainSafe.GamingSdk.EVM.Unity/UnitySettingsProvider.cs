@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace ChainSafe.GamingSdk.EVM.Unity
 {
-  public class UnitySettingsProvider : ISettingsProvider
-  {
-    public string DefaultRpcUrl => PlayerPrefs.GetString("RPC");
-  }
+    public class UnitySettingsProvider : ISettingsProvider
+    {
+        public string DefaultRpcUrl => PlayerPrefs.GetString("RPC");
+    }
 }

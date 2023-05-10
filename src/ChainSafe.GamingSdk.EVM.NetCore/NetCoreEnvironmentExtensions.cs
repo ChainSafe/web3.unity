@@ -4,15 +4,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Web3Unity.Scripts.Library.Ethers.NetCore
 {
-  public static class NetCoreEnvironmentExtensions
-  {
-    public static void UseNetCoreEnvironment(this IWeb3ServiceCollection services)
+    public static class NetCoreEnvironmentExtensions
     {
-      services.AddSingleton<Web3Environment>();
-      services.AddSingleton<IHttpClient, NetCoreHttpClient>();
-      services.AddSingleton<ILogWriter, NetCoreLogWriter>();
-      services.AddSingleton<IAnalyticsClient, NetCoreAnalytics>();
-      services.AddSingleton<ISettingsProvider, NetCoreSettingsProvider>();
+        public static void UseNetCoreEnvironment(this IWeb3ServiceCollection services)
+        {
+            services.AddSingleton<Web3Environment>();
+            services.AddSingleton<IHttpClient, NetCoreHttpClient>();
+            services.AddSingleton<ILogWriter, NetCoreLogWriter>();
+            services.AddSingleton<IAnalyticsClient, NetCoreAnalytics>();
+            services.AddSingleton<ISettingsProvider, NetCoreSettingsProvider>();
+        }
     }
-  }
 }

@@ -2,8 +2,8 @@
 
 namespace Web3Unity.Scripts.Library.Ethers.NetCore
 {
-  public class NetCoreSettingsProvider : ISettingsProvider
-  {
-    public string DefaultRpcUrl => "http://localhost";
-  }
+    public class NetCoreSettingsProvider : ISettingsProvider
+    {
+        public string DefaultRpcUrl => "http://localhost";
+    }
 }

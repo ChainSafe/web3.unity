@@ -13,7 +13,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
     public interface IEvmProvider
     {
         public ValueTask Initialize();
-        
+
         // Network
         public Task<Network.Network> DetectNetwork();
         public Network.Network Network { get; }
