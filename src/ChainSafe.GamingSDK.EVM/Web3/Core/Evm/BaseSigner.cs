@@ -18,6 +18,9 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
             Provider = provider;
         }
 
+        public abstract bool Connected { get; }
+        public abstract ValueTask Connect();
+
         // TODO: specific reason why these functions weren't abstract?
         public abstract Task<string> GetAddress();
 

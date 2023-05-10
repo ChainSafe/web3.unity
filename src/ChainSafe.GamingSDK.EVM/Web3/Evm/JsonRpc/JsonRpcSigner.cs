@@ -9,10 +9,12 @@ using TransactionResponse = Web3Unity.Scripts.Library.Ethers.Transactions.Transa
 
 namespace Web3Unity.Scripts.Library.Ethers.Signers
 {
-    public class JsonRpcSigner : BaseSigner, IEvmWallet
+    public class JsonRpcSigner : BaseSigner
     {
-        private string _address;
         private readonly JsonRpcSignerConfiguration _configuration;
+        
+        private string _address;
+        private bool _connected;
 
         public JsonRpcSigner(JsonRpcSignerConfiguration configuration, IEvmProvider provider) : base(provider)
         {
@@ -109,13 +111,13 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
             return await Provider.Perform<string>("eth_sign", address.ToLower(), hexMessage);
         }
 
-        public bool Connected { get; private set; }
-    
-        public async ValueTask Connect()
+        public override bool Connected => _connected;
+
+        public override async ValueTask Connect()
         {
-            // simply cache address in this case
+            // simply check connection and cache address in case of JsonRpc
             _address = await GetAddress();
-            Connected = true;
+            _connected = true;
         }
     }
 }

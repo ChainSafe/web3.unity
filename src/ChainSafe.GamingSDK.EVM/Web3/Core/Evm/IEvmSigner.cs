@@ -6,6 +6,9 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
 {
     public interface IEvmSigner
     {
+        bool Connected { get; }
+        ValueTask Connect();
+        
         public Task<string> GetAddress();
         public Task<string> SignMessage(byte[] message);
         public Task<string> SignMessage(string message);

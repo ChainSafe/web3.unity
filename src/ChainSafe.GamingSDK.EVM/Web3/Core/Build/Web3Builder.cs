@@ -36,13 +36,11 @@ namespace ChainSafe.GamingWeb3.Build
       AssertWeb3EnvironmentBound(serviceProvider);
       var provider = serviceProvider.GetService<IEvmProvider>();
       var signer = serviceProvider.GetService<IEvmSigner>();
-      var wallet = serviceProvider.GetService<IEvmWallet>();
 
       var web3 = new Web3(
         serviceProvider,
         provider,
-        signer,
-        wallet
+        signer
         );
 
       return web3;

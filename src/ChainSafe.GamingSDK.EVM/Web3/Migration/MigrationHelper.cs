@@ -31,7 +31,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Migration
             RpcNodeUrl = provider.RpcNodeUrl,
             Network = provider.Network
           });
-          services.UseJsonRpcWallet(new JsonRpcSignerConfiguration { AddressOverride = address });
+          services.UseJsonRpcSigner(new JsonRpcSignerConfiguration { AddressOverride = address });
         }).Build();
 
       return (JsonRpcSigner) web3.Signer;
@@ -48,7 +48,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Migration
             RpcNodeUrl = provider.RpcNodeUrl,
             Network = provider.Network
           });
-          services.UseJsonRpcWallet(new JsonRpcSignerConfiguration { AccountIndex = index });
+          services.UseJsonRpcSigner(new JsonRpcSignerConfiguration { AccountIndex = index });
         }).Build();
 
       return (JsonRpcSigner) web3.Signer;
