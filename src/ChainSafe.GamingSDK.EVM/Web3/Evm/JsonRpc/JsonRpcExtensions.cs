@@ -10,55 +10,61 @@ namespace Web3Unity.Scripts.Library.Ethers.JsonRpc
         /// <summary>
         /// Binds JSON RPC implementation of EVM Provider to Web3
         /// </summary>
-        public static void UseJsonRpcProvider(this IWeb3ServiceCollection serviceCollection, JsonRpcProviderConfiguration configuration)
+        public static IWeb3ServiceCollection UseJsonRpcProvider(this IWeb3ServiceCollection serviceCollection, JsonRpcProviderConfiguration configuration)
         {
             serviceCollection.ConfigureJsonRpcProvider(configuration);
             serviceCollection.UseJsonRpcProvider();
+            return serviceCollection;
         }
 
         /// <summary>
         /// Configures JSON RPC implementation of EVM Provider
         /// </summary>
-        public static void ConfigureJsonRpcProvider(this IWeb3ServiceCollection serviceCollection, JsonRpcProviderConfiguration configuration)
+        public static IWeb3ServiceCollection ConfigureJsonRpcProvider(this IWeb3ServiceCollection serviceCollection, JsonRpcProviderConfiguration configuration)
         {
             serviceCollection.AssertConfigurationNotBound<JsonRpcProviderConfiguration>();
             serviceCollection.AddSingleton(configuration);
+            return serviceCollection;
         }
 
         /// <summary>
         /// Binds JSON RPC implementation of EVM Provider to Web3
         /// </summary>
-        public static void UseJsonRpcProvider(this IWeb3ServiceCollection serviceCollection)
+        public static IWeb3ServiceCollection UseJsonRpcProvider(this IWeb3ServiceCollection serviceCollection)
         {
             serviceCollection.AssertServiceNotBound<IEvmProvider>();
             serviceCollection.AddSingleton<IEvmProvider, JsonRpcProvider>();
+            return serviceCollection;
         }
 
         /// <summary>
         /// Binds JSON RPC implementation of EVM Wallet to Web3
         /// </summary>
-        public static void UseJsonRpcSigner(this IWeb3ServiceCollection serviceCollection, JsonRpcSignerConfiguration configuration)
+        public static IWeb3ServiceCollection UseJsonRpcSigner(this IWeb3ServiceCollection serviceCollection, JsonRpcSignerConfiguration configuration)
         {
             serviceCollection.ConfigureJsonRpcSigner(configuration);
             serviceCollection.UseJsonRpcSigner();
+            return serviceCollection;
         }
 
         /// <summary>
         /// Configures JSON RPC implementation of EVM Wallet
         /// </summary>
-        public static void ConfigureJsonRpcSigner(this IWeb3ServiceCollection serviceCollection, JsonRpcSignerConfiguration configuration)
+        public static IWeb3ServiceCollection ConfigureJsonRpcSigner(this IWeb3ServiceCollection serviceCollection, JsonRpcSignerConfiguration configuration)
         {
             serviceCollection.AssertConfigurationNotBound<JsonRpcSignerConfiguration>();
             serviceCollection.AddSingleton(configuration);
+            return serviceCollection;
         }
 
         /// <summary>
         /// Binds JSON RPC implementation of EVM Wallet to Web3
         /// </summary>
-        public static void UseJsonRpcSigner(this IWeb3ServiceCollection serviceCollection)
+        public static IWeb3ServiceCollection UseJsonRpcSigner(this IWeb3ServiceCollection serviceCollection)
         {
             serviceCollection.AssertServiceNotBound<IEvmSigner>();
             serviceCollection.AddSingleton<IEvmSigner, JsonRpcSigner>();
+            return serviceCollection;
         }
     }
 }
