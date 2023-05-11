@@ -15,7 +15,7 @@ https://docs.gaming.chainsafe.io/
 
 ## Support
 - Need help with web3.unity or found a bug? Be sure to read the documentation above, then review existing issues or create a new one [here](https://github.com/ChainSafe/web3.unity/issues). This is the best way to get help from the ChainSafe Gaming team.
-- Need help from the community, including quesitons not related to web3.unity? Ask in #community-code-support on [Discord](https://discord.gg/Q6A3YA2).
+- Need help from the community, including questions not related to web3.unity? Ask in #community-code-support on [Discord](https://discord.gg/Q6A3YA2).
 
 ## Contributing
 - Have an idea for a new feature that would improve web3.unity? Create a feature request [here](https://github.com/ChainSafe/web3.unity/issues/new?assignees=&labels=Type%3A+Feature&template=feature_request.md&title=).
