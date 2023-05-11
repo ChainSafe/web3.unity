@@ -34,6 +34,7 @@ namespace ChainSafe.GamingWeb3
 
         public async ValueTask Initialize()
         {
+            if (_initialized) throw new Web3Exception("Web3 was already initialized.");
             if (_provider != null) await _provider.Initialize();
 
             // todo initialize other components
