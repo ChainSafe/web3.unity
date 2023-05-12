@@ -4,7 +4,7 @@ public sealed class RPC
 {
     private static RPC instance = null;
     private static JsonRpcProvider provider;
-    
+
     public static RPC GetInstance
     {
         get
