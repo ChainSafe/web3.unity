@@ -151,7 +151,7 @@ public JsonRpcProvider(IHttpClient httpClient)
 ```
 As well as any component or default service:
 ```csharp
-public JsonRpcSigner(JsonRpcProvider provider, ChainProvider chainProvider)
+public JsonRpcSigner(IEvmProvider provider, ChainProvider chainProvider)
 {
     _chainProvider = chainProvider;
     _provider = provider;
