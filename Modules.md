@@ -1,6 +1,6 @@
 ﻿# Modular approach
 
-As we're trying to keep our codebase maintainable and easily scalable Modular Approach** has been introduced.
+As we're trying to keep our codebase maintainable and easily scalable Modular Approach has been introduced.
 The philosophy here is to keep interconnected code as loosely coupled as possible.
 
 # SDK Configuration
