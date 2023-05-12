@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33414.496
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainSafe.GamingSDK.EVM", "src\ChainSafe.GamingSDK.EVM\ChainSafe.GamingSDK.EVM.csproj", "{E6CC674F-C552-412E-8272-692CE182AB7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.GamingSDK.EVM.Tests", "src\ChainSafe.GamingSDK.EVM.Tests\ChainSafe.GamingSDK.EVM.Tests.csproj", "{D63ACB2E-71E2-49C1-AE55-92DFA723391E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainSafe.GamingSdk.EVM.Unity", "src\ChainSafe.GamingSdk.EVM.Unity\ChainSafe.GamingSdk.EVM.Unity.csproj", "{14C3ACCB-285C-493C-AD59-73853386095E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainSafe.GamingSdk.EVM.NetCore", "src\ChainSafe.GamingSdk.EVM.NetCore\ChainSafe.GamingSdk.EVM.NetCore.csproj", "{C1FA80C9-64F5-4213-9938-2CB5323A4823}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E6CC674F-C552-412E-8272-692CE182AB7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6CC674F-C552-412E-8272-692CE182AB7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6CC674F-C552-412E-8272-692CE182AB7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6CC674F-C552-412E-8272-692CE182AB7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D63ACB2E-71E2-49C1-AE55-92DFA723391E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D63ACB2E-71E2-49C1-AE55-92DFA723391E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D63ACB2E-71E2-49C1-AE55-92DFA723391E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D63ACB2E-71E2-49C1-AE55-92DFA723391E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14C3ACCB-285C-493C-AD59-73853386095E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14C3ACCB-285C-493C-AD59-73853386095E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14C3ACCB-285C-493C-AD59-73853386095E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14C3ACCB-285C-493C-AD59-73853386095E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1FA80C9-64F5-4213-9938-2CB5323A4823}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1FA80C9-64F5-4213-9938-2CB5323A4823}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1FA80C9-64F5-4213-9938-2CB5323A4823}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1FA80C9-64F5-4213-9938-2CB5323A4823}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DB0D5856-6403-4C0C-8095-9A328B81C86F}
+	EndGlobalSection
+EndGlobal

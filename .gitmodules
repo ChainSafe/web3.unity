@@ -1,0 +1,3 @@
+[submodule "submodules/AsyncAwaitUtil"]
+	path = submodules/AsyncAwaitUtil
+	url = https://github.com/modesttree/Unity3dAsyncAwaitUtil.git
