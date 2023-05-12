@@ -123,7 +123,7 @@ public static IWeb3ServiceCollection UseUnityEnvironment(this IWeb3ServiceCollec
     return services;
 }
 ```
-You can see I used `IMainThreadRunner` (not just `UnityDispatcherAdapter`) as a contract type, you don't need that
+You can see I used `IMainThreadRunner` (not just `UnityDispatcherAdapter`) as a contract type. You don't need that
 if you think you'll only have one implementation of `IMainThreadRunner`.
 
 # Environment
