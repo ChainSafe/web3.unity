@@ -17,6 +17,15 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
             return MigrationHelper.NewJsonRpcSigner(provider, index, BindEnvironment);
         }
 
-        private static void BindEnvironment(IWeb3ServiceCollection services) => services.UseUnityEnvironment();
+        private static void BindEnvironment(IWeb3ServiceCollection services) =>
+            services
+                .ConfigureUnityEnvironment(new UnityEnvironmentConfiguration
+                {
+                    DataDog = new ChainSafe.GamingSdk.Evm.Unity.DataDogAnalyticsConfiguration
+                    {
+                        ApiKey = "",
+                    }
+                })
+                .UseUnityEnvironment();
     }
 }
