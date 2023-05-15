@@ -37,7 +37,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders.FilterInput
         {
             return Topics
                        .FirstOrDefault(t => t.EventDtoProperty.Name == pInfo.Name) ??
-                   throw new ArgumentException($"Property '{pInfo.Name}' does not represent a topic. The property must have a ParameterAttribute which is flagged as indexed"); ;
+                   throw new ArgumentException($"Property '{pInfo.Name}' does not represent a topic. The property must have a ParameterAttribute which is flagged as indexed");
         }
 
     }

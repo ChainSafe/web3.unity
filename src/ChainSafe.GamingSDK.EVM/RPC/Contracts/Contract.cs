@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Web3Unity.Scripts.Library.Ethers;
 using Nethereum.Hex.HexTypes;
 using Web3Unity.Scripts.Library.Ethers.Contracts.Builders;
 using Web3Unity.Scripts.Library.Ethers.Providers;
@@ -19,11 +20,11 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
     {
         private readonly string _abi;
         private readonly string _address;
-        private readonly IProvider _provider;
-        private readonly ISigner _signer;
+        private readonly IEvmProvider _provider;
+        private readonly IEvmSigner _signer;
         private readonly ContractBuilder _contractBuilder;
 
-        public Contract(string abi, string address = "", IProvider provider = null)
+        public Contract(string abi, string address = "", IEvmProvider provider = null)
         {
             if (string.IsNullOrEmpty(abi))
             {
@@ -36,7 +37,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
             _contractBuilder = new ContractBuilder(abi, address);
         }
 
-        public Contract(string abi, string address, ISigner signer) : this(abi, address, signer.Provider)
+        public Contract(string abi, string address, IEvmSigner signer) : this(abi, address, signer.Provider)
         {
             _signer = signer;
         }
@@ -46,7 +47,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
         /// <param name="provider"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public Contract Connect(IProvider provider)
+        public Contract Connect(IEvmProvider provider)
         {
             if (provider == null)
             {
@@ -61,7 +62,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
         /// <param name="provider"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public Contract Connect(ISigner signer)
+        public Contract Connect(IEvmSigner signer)
         {
             if (signer == null)
             {

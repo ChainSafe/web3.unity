@@ -2,7 +2,7 @@
 using Nethereum.Hex.HexTypes;
 using NUnit.Framework;
 using Web3Unity.Scripts.Library.Ethers.Providers;
-using Web3Unity.Scripts.Library.Ethers.Transactions;
+using TransactionRequest = Web3Unity.Scripts.Library.Ethers.Transactions.TransactionRequest;
 
 namespace ChainSafe.GamingSDK.EVM.Tests
 {
@@ -14,7 +14,7 @@ namespace ChainSafe.GamingSDK.EVM.Tests
         [OneTimeSetUp]
         public void SetUp()
         {
-            _ganacheProvider = new JsonRpcProvider("http://127.0.0.1:7545");
+            _ganacheProvider = ProviderMigration.NewJsonRpcProvider("http://127.0.0.1:7545");
         }
 
         [Test]

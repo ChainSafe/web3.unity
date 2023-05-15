@@ -113,7 +113,7 @@ namespace Web3Unity.Scripts.Library.Ethers.HDNode
             return string.Join(" ", indices.Select(index => wordlist.GetWord(index)));
         }
 
-        private static Wordlist _getWordlist(string locale)
+        private static Wordlists.Wordlist _getWordlist(string locale)
         {
             return locale switch
             {
