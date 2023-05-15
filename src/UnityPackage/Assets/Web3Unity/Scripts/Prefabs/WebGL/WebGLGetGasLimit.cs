@@ -7,7 +7,7 @@ public class WebGLGetGasLimit : MonoBehaviour
 {
     public async void GetGasLimit()
     {
-        var provider = new JsonRpcProvider("YOUR_NODE");
+        var provider = ProviderMigration.NewJsonRpcProvider("YOUR_NODE");
         string contractAbi =
             "[ { \"inputs\": [ { \"internalType\": \"uint8\", \"name\": \"_myArg\", \"type\": \"uint8\" } ], \"name\": \"addTotal\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\" }, { \"inputs\": [], \"name\": \"myTotal\", \"outputs\": [ { \"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\" } ], \"stateMutability\": \"view\", \"type\": \"function\" } ]";
         string contractAddress = "0x741C3F3146304Aaf5200317cbEc0265aB728FE07";

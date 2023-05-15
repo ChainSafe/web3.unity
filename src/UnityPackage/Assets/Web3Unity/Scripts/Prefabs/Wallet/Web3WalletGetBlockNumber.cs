@@ -5,7 +5,7 @@ public class Web3WalletGetBlockNumber : MonoBehaviour
 {
     public async void GetBlockNumber()
     {
-        var provider = new JsonRpcProvider("YOUR_NODE");
+        var provider = ProviderMigration.NewJsonRpcProvider("YOUR_NODE");
         Debug.Log("Block Number: " + await provider.GetBlockNumber());
     }
 }
