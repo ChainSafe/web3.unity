@@ -13,11 +13,11 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
     {
         private readonly string abi;
         private readonly string address;
-        private readonly IProvider provider;
-        private readonly ISigner signer;
+        private readonly IEvmProvider provider;
+        private readonly IEvmSigner signer;
         private readonly ContractBuilder contractBuilder;
 
-        public Contract(string abi, string address = "", IProvider provider = null)
+        public Contract(string abi, string address = "", IEvmProvider provider = null)
         {
             if (string.IsNullOrEmpty(abi))
             {
@@ -30,7 +30,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
             contractBuilder = new ContractBuilder(abi, address);
         }
 
-        public Contract(string abi, string address, ISigner signer)
+        public Contract(string abi, string address, IEvmSigner signer)
             : this(abi, address, signer.Provider)
         {
             this.signer = signer;
@@ -43,7 +43,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
         /// </summary>
         /// <param name="provider">The provider.</param>
         /// <returns>The new contract.</returns>
-        public Contract Connect(IProvider provider)
+        public Contract Connect(IEvmProvider provider)
         {
             if (provider == null)
             {
@@ -59,7 +59,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
         /// </summary>
         /// <param name="signer">The signer.</param>
         /// <returns>The new contract.</returns>
-        public Contract Connect(ISigner signer)
+        public Contract Connect(IEvmSigner signer)
         {
             if (signer == null)
             {

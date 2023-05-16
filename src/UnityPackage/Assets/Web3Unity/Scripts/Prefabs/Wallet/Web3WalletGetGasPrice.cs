@@ -5,7 +5,7 @@ public class Web3WalletGetGasPrice : MonoBehaviour
 {
     public async void GetGasPrice()
     {
-        var provider = new JsonRpcProvider("YOUR_NODE");
+        var provider = ProviderMigration.NewJsonRpcProvider("YOUR_NODE");
         Debug.Log("Gas Price: " + await provider.GetGasPrice());
     }
 }

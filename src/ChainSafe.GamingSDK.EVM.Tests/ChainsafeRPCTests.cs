@@ -21,8 +21,8 @@ namespace ChainSafe.GamingSDK.EVM.Tests
         [OneTimeSetUp]
         public void SetUp()
         {
-            ganacheProvider = new JsonRpcProvider("http://127.0.0.1:7545");
-            infuraProvider = new JsonRpcProvider("https://goerli.infura.io/v3/904006115c764661965dc0909e5ed473");
+            ganacheProvider = ProviderMigration.NewJsonRpcProvider("http://127.0.0.1:7545");
+            infuraProvider = ProviderMigration.NewJsonRpcProvider("https://goerli.infura.io/v3/904006115c764661965dc0909e5ed473");
             goerliAddress = "0xaBed4239E4855E120fDA34aDBEABDd2911626BA1";
             nftAddress = "0xc81fa2eacc1c45688d481b11ce94c24a136e125d";
             nftABi =
