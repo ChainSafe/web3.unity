@@ -18,10 +18,9 @@ public class WebGLGetArray : MonoBehaviour
     public Text playerAddresses;
     public async void GetArrayDataWeb()
     {
-        var provider = ProviderMigration.NewJsonRpcProvider("YOUR_NODE");
-        var contract = new Contract(abi, contractAddress, provider);
-        Debug.Log("Gas Price: " + await provider.GetGasPrice());
-        var gasPrice = await provider.GetGasPrice();
+        var contract = new Contract(abi, contractAddress, RPC.GetInstance.Provider());
+        Debug.Log("Gas Price: " + await RPC.GetInstance.Provider().GetGasPrice());
+        var gasPrice = await RPC.GetInstance.Provider().GetGasPrice();
         var gasValue = await contract.EstimateGas("getStore", new object[] { });
         Debug.Log("Gas Value: " + gasValue.Value);
         var calldata = await contract.Call(method);
