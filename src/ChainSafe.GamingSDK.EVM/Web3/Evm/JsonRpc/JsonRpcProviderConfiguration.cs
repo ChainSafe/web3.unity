@@ -6,13 +6,13 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
     public class JsonRpcProviderConfiguration
     {
         /// <summary>
-        /// (Optional) Url of RPC Node 
+        /// (Optional) Url of RPC Node.
         /// </summary>
-        public string RpcNodeUrl;
+        public string RpcNodeUrl { get; set; }
 
         /// <summary>
-        /// (Optional) Network to operate on 
+        /// (Optional) Network to operate on.
         /// </summary>
-        public Network.Network Network;
+        public Network.Network Network { get; set; }
     }
 }

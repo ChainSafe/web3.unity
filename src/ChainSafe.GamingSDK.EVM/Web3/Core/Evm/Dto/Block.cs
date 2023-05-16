@@ -6,13 +6,13 @@ namespace Web3Unity.Scripts.Library.Ethers.Blocks
     public class Block
     {
         /// <summary>
-        ///     QUANTITY - the block number. null when its pending block. 
+        ///     QUANTITY - the block number. null when its pending block.
         /// </summary>
         [JsonProperty(PropertyName = "number")]
         public HexBigInteger Number { get; set; }
 
         /// <summary>
-        ///     DATA, 32 Bytes - hash of the block.  
+        ///     DATA, 32 Bytes - hash of the block.
         /// </summary>
         [JsonProperty(PropertyName = "hash")]
         public string BlockHash { get; set; }
@@ -23,38 +23,35 @@ namespace Web3Unity.Scripts.Library.Ethers.Blocks
         [JsonProperty(PropertyName = "author")]
         public string Author { get; set; }
 
-
         /// <summary>
-        ///  Seal fiels. 
+        ///  Seal fiels.
         /// </summary>
         [JsonProperty(PropertyName = "sealFields")]
         public string[] SealFields { get; set; }
 
         /// <summary>
-        ///     DATA, 32 Bytes - hash of the parent block. 
+        ///     DATA, 32 Bytes - hash of the parent block.
         /// </summary>
         [JsonProperty(PropertyName = "parentHash")]
         public string ParentHash { get; set; }
 
         /// <summary>
-        ///     DATA, 8 Bytes - hash of the generated proof-of-work. null when its pending block. 
+        ///     DATA, 8 Bytes - hash of the generated proof-of-work. null when its pending block.
         /// </summary>
         [JsonProperty(PropertyName = "nonce")]
         public string Nonce { get; set; }
 
         /// <summary>
-        ///     DATA, 32 Bytes - SHA3 of the uncles data in the block. 
+        ///     DATA, 32 Bytes - SHA3 of the uncles data in the block.
         /// </summary>
         [JsonProperty(PropertyName = "sha3Uncles")]
         public string Sha3Uncles { get; set; }
 
-
         /// <summary>
-        ///     DATA, 256 Bytes - the bloom filter for the logs of the block. null when its pending block. 
+        ///     DATA, 256 Bytes - the bloom filter for the logs of the block. null when its pending block.
         /// </summary>
         [JsonProperty(PropertyName = "logsBloom")]
         public string LogsBloom { get; set; }
-
 
         /// <summary>
         ///     DATA, 32 Bytes - the root of the transaction trie of the block.
@@ -69,7 +66,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Blocks
         public string StateRoot { get; set; }
 
         /// <summary>
-        ///     DATA, 32 Bytes - the root of the receipts trie of the block. 
+        ///     DATA, 32 Bytes - the root of the receipts trie of the block.
         /// </summary>
         [JsonProperty(PropertyName = "receiptsRoot")]
         public string ReceiptsRoot { get; set; }
@@ -81,7 +78,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Blocks
         public string Miner { get; set; }
 
         /// <summary>
-        ///     QUANTITY - integer of the difficulty for this block.   
+        ///     QUANTITY - integer of the difficulty for this block.
         /// </summary>
         [JsonProperty(PropertyName = "difficulty")]
         public HexBigInteger Difficulty { get; set; }
@@ -93,31 +90,31 @@ namespace Web3Unity.Scripts.Library.Ethers.Blocks
         public HexBigInteger TotalDifficulty { get; set; }
 
         /// <summary>
-        ///     DATA - the "mix hash" field of this block.  
+        ///     DATA - the "mix hash" field of this block.
         /// </summary>
         [JsonProperty(PropertyName = "mixHash")]
         public string MixHash { get; set; }
 
         /// <summary>
-        ///     DATA - the "extra data" field of this block.  
+        ///     DATA - the "extra data" field of this block.
         /// </summary>
         [JsonProperty(PropertyName = "extraData")]
         public string ExtraData { get; set; }
 
         /// <summary>
-        ///     QUANTITY - integer the size of this block in bytes. 
+        ///     QUANTITY - integer the size of this block in bytes.
         /// </summary>
         [JsonProperty(PropertyName = "size")]
         public HexBigInteger Size { get; set; }
 
         /// <summary>
-        ///     QUANTITY - the maximum gas allowed in this block. 
+        ///     QUANTITY - the maximum gas allowed in this block.
         /// </summary>
         [JsonProperty(PropertyName = "gasLimit")]
         public HexBigInteger GasLimit { get; set; }
 
         /// <summary>
-        ///     QUANTITY - the total used gas by all transactions in this block. 
+        ///     QUANTITY - the total used gas by all transactions in this block.
         /// </summary>
         [JsonProperty(PropertyName = "gasUsed")]
         public HexBigInteger GasUsed { get; set; }

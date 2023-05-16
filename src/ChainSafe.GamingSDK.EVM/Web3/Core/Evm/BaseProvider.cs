@@ -2,61 +2,77 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Threading;
 using System.Threading.Tasks;
+using ChainSafe.GamingWeb3;
+using ChainSafe.GamingWeb3.Environment;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
-//using Web3Unity.Scripts.Library.Ethers.Runtime;
-using System.Threading;
-using ChainSafe.GamingWeb3;
-using Web3Unity.Scripts.Library.Ethers.RPC;
+using Web3Unity.Scripts.Library.Ethers.Transactions;
 using Block = Web3Unity.Scripts.Library.Ethers.Blocks.Block;
 using BlockWithTransactions = Web3Unity.Scripts.Library.Ethers.Blocks.BlockWithTransactions;
 using Transaction = Web3Unity.Scripts.Library.Ethers.Transactions.Transaction;
-using TransactionRequest = Web3Unity.Scripts.Library.Ethers.Transactions.TransactionRequest;
-using TransactionResponse = Web3Unity.Scripts.Library.Ethers.Transactions.TransactionResponse;
 using TransactionReceipt = Web3Unity.Scripts.Library.Ethers.Transactions.TransactionReceipt;
 
 namespace Web3Unity.Scripts.Library.Ethers.Providers
 {
-    public class InternalBlockNumber
-    {
-        public ulong BlockNumber { get; set; }
-        public ulong ReqTime { get; set; }
-        public ulong RespTime { get; set; }
-    }
-
     public abstract class BaseProvider : IEvmProvider
     {
-        public readonly bool AnyNetwork = true;
-        internal Network.Network _network;
+        private readonly bool anyNetwork = true;
 
         // TODO: this isn't actually used, see comment in SendTransaction
-        internal readonly Formatter _formater = new();
+        private readonly Formatter formater = new();
 
-        private List<Event> _events = new();
-        private ulong _nextPollId = 1;
-        private InternalBlockNumber _internalBlockNumber;
-        private ulong _maxInternalBlockNumber;
-        private ulong _lastBlockNumber;
+        private readonly Web3Environment environment;
 
-        private ulong? _fastBlockNumber;
-        private Task<ulong> _fastBlockNumberTask;
-        private ulong _fastQueryDate;
+        private Network.Network network;
+        private List<Event> events = new();
+        private ulong nextPollId = 1;
+        private InternalBlockNumber internalBlockNumber;
+        private ulong maxInternalBlockNumber;
+        private ulong lastBlockNumber;
 
-        private long _emittedBlock;
+        private ulong? fastBlockNumber;
 
-        public Network.Network Network => _network;
+        /*
+        private Task<ulong> fastBlockNumberTask;
+        */
+        private ulong fastQueryDate;
 
-        public BaseProvider(Network.Network network)
+        private long emittedBlock;
+
+        private CancellationTokenSource pollLoopCts;
+
+        public BaseProvider(Network.Network network, Web3Environment environment)
         {
-            _network = network;
+            this.network = network;
+            this.environment = environment;
+        }
+
+        public Network.Network Network
+        {
+            get => network;
+            protected set => network = value;
+        }
+
+        private TimeSpan PollingInterval { get; set; } = TimeSpan.FromSeconds(1);
+
+        private static ulong GetTime()
+        {
+            // TODO: Millisecond returns only the millisecond component
+            // of the time (between 0 and 999). This is likely wrong.
+            return (ulong)DateTime.Now.Millisecond;
         }
 
         public virtual async ValueTask Initialize()
         {
-            if (_network != null) return;
-            _network = await GetNetwork();
+            if (network != null)
+            {
+                return;
+            }
+
+            network = await GetNetwork();
         }
 
         public virtual Task<Network.Network> DetectNetwork()
@@ -73,18 +89,18 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             var parameters = new object[] { address, blockTag };
             var properties = new Dictionary<string, object>
             {
-                {"address", address},
-                {"block", blockTag.GetRPCParamAsNumber()}
+                { "address", address },
+                { "block", blockTag.GetRPCParamAsNumber() },
             };
             try
             {
                 var result = new HexBigInteger(await Perform<string>("eth_getBalance", parameters));
-                _captureEvent("eth_getBalance", properties, result.ToString());
+                CaptureEvent("eth_getBalance", properties, result.ToString());
                 return result;
             }
             catch (Exception e)
             {
-                _captureError("eth_getBalance", properties, e);
+                CaptureError("eth_getBalance", properties, e);
                 throw new Web3Exception("eth_getBalance: bad result from backend", e);
             }
         }
@@ -98,18 +114,18 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             var parameters = new object[] { address, blockTag };
             var properties = new Dictionary<string, object>
             {
-                {"address", address},
-                {"block", blockTag.GetRPCParamAsNumber()}
+                { "address", address },
+                { "block", blockTag.GetRPCParamAsNumber() },
             };
             try
             {
                 var result = await Perform<string>("eth_getCode", parameters);
-                _captureEvent("eth_getCode", properties, result);
+                CaptureEvent("eth_getCode", properties, result);
                 return result;
             }
             catch (Exception e)
             {
-                _captureError("eth_getCode", properties, e);
+                CaptureError("eth_getCode", properties, e);
                 throw new Web3Exception("eth_getCode: bad result from backend", e);
             }
         }
@@ -123,19 +139,19 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             var parameters = new object[] { address, position.ToHex(BitConverter.IsLittleEndian), blockTag };
             var properties = new Dictionary<string, object>
             {
-                {"address", address},
-                {"position", position.ToString()},
-                {"block", blockTag.GetRPCParamAsNumber()}
+                { "address", address },
+                { "position", position.ToString() },
+                { "block", blockTag.GetRPCParamAsNumber() },
             };
             try
             {
                 var result = await Perform<string>("eth_getStorageAt", parameters);
-                _captureEvent("eth_getStorageAt", properties, result);
+                CaptureEvent("eth_getStorageAt", properties, result);
                 return result;
             }
             catch (Exception e)
             {
-                _captureError("eth_getStorageAt", properties, e);
+                CaptureError("eth_getStorageAt", properties, e);
                 throw new Web3Exception("eth_getStorageAt: bad result from backend", e);
             }
         }
@@ -149,18 +165,18 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             var parameters = new object[] { address, blockTag };
             var properties = new Dictionary<string, object>
             {
-                {"address", address},
-                {"block", blockTag.GetRPCParamAsNumber()}
+                { "address", address },
+                { "block", blockTag.GetRPCParamAsNumber() },
             };
             try
             {
                 var result = new HexBigInteger(await Perform<string>("eth_getTransactionCount", parameters));
-                _captureEvent("eth_getTransactionCount", properties, result.ToString());
+                CaptureEvent("eth_getTransactionCount", properties, result.ToString());
                 return result;
             }
             catch (Exception e)
             {
-                _captureError("eth_getTransactionCount", properties, e);
+                CaptureError("eth_getTransactionCount", properties, e);
                 throw new Web3Exception("eth_getTransactionCount: bad result from backend", e);
             }
         }
@@ -174,17 +190,17 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             var parameters = new object[] { blockTag.GetRPCParam(), false };
             var properties = new Dictionary<string, object>
             {
-                {"block", blockTag.GetRPCParamAsNumber()}
+                { "block", blockTag.GetRPCParamAsNumber() },
             };
             try
             {
                 var result = await Perform<Block>("eth_getBlockByNumber", parameters);
-                _captureEvent("eth_getBlockByNumber", properties, result);
+                CaptureEvent("eth_getBlockByNumber", properties, result);
                 return result;
             }
             catch (Exception e)
             {
-                _captureError("eth_getBlockByNumber", properties, e);
+                CaptureError("eth_getBlockByNumber", properties, e);
                 throw new Web3Exception("eth_getBlockByNumber: bad result from backend", e);
             }
         }
@@ -201,17 +217,17 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             var parameters = new object[] { blockHash, false };
             var properties = new Dictionary<string, object>
             {
-                {"block", blockHash}
+                { "block", blockHash },
             };
             try
             {
                 var result = await Perform<Block>("eth_getBlockByHash", parameters);
-                _captureEvent("eth_getBlockByHash", properties, result);
+                CaptureEvent("eth_getBlockByHash", properties, result);
                 return result;
             }
             catch (Exception e)
             {
-                _captureError("eth_getBlockByHash", properties, e);
+                CaptureError("eth_getBlockByHash", properties, e);
                 throw new Web3Exception("eth_getBlockByHash: bad result from backend", e);
             }
         }
@@ -225,17 +241,17 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             var parameters = new object[] { blockTag.GetRPCParam(), true };
             var properties = new Dictionary<string, object>
             {
-                {"block", blockTag.GetRPCParamAsNumber()}
+                { "block", blockTag.GetRPCParamAsNumber() },
             };
             try
             {
                 var result = await Perform<BlockWithTransactions>("eth_getBlockByNumber", parameters);
-                _captureEvent("eth_getBlockByNumber", properties, result);
+                CaptureEvent("eth_getBlockByNumber", properties, result);
                 return result;
             }
             catch (Exception e)
             {
-                _captureError("eth_getBlockByNumber", properties, e);
+                CaptureError("eth_getBlockByNumber", properties, e);
                 throw new Web3Exception("eth_getBlockByNumber: bad result from backend", e);
             }
         }
@@ -252,17 +268,17 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             var parameters = new object[] { blockHash, true };
             var properties = new Dictionary<string, object>
             {
-                {"blockHash", blockHash}
+                { "blockHash", blockHash },
             };
             try
             {
                 var result = await Perform<BlockWithTransactions>("eth_getBlockByHash", parameters);
-                _captureEvent("eth_getBlockByHash", properties, result);
+                CaptureEvent("eth_getBlockByHash", properties, result);
                 return result;
             }
             catch (Exception e)
             {
-                _captureError("eth_getBlockByHash", properties, e);
+                CaptureError("eth_getBlockByHash", properties, e);
                 throw new Web3Exception("eth_getBlockByHash: bad result from backend", e);
             }
         }
@@ -275,29 +291,35 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             try
             {
                 var result = new HexBigInteger(await Perform<string>("eth_blockNumber", null));
-                _captureEvent("eth_blockNumber", properties, result.ToString());
+                CaptureEvent("eth_blockNumber", properties, result.ToString());
                 return result;
             }
             catch (Exception e)
             {
-                _captureError("eth_blockNumber", properties, e);
+                CaptureError("eth_blockNumber", properties, e);
                 throw new Web3Exception("eth_blockNumber: bad result from backend", e);
             }
         }
 
         public async Task<Network.Network> GetNetwork()
         {
-            var network = await _ready();
+            var network = await Ready();
             var currentNetwork = await DetectNetwork();
 
-            if (network.ChainId == currentNetwork.ChainId) return network;
+            if (network.ChainId == currentNetwork.ChainId)
+            {
+                return network;
+            }
 
-            if (!AnyNetwork) throw new Web3Exception("underlying network changed");
+            if (!anyNetwork)
+            {
+                throw new Web3Exception("underlying network changed");
+            }
 
             Emit("chainChanged", new object[] { currentNetwork.ChainId });
 
-            _network = currentNetwork;
-            return _network;
+            this.network = currentNetwork;
+            return this.network;
         }
 
         public async Task<HexBigInteger> GetGasPrice()
@@ -308,12 +330,12 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             try
             {
                 var result = new HexBigInteger(await Perform<string>("eth_gasPrice", null));
-                _captureEvent("eth_gasPrice", properties, result.ToString());
+                CaptureEvent("eth_gasPrice", properties, result.ToString());
                 return result;
             }
             catch (Exception e)
             {
-                _captureError("eth_gasPrice", properties, e);
+                CaptureError("eth_gasPrice", properties, e);
                 throw new Web3Exception("eth_gasPrice: bad result from backend", e);
             }
         }
@@ -329,14 +351,14 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             if (block.BaseFeePerGas > BigInteger.Zero)
             {
                 maxPriorityFeePerGas = new BigInteger(1500000000);
-                maxFeePerGas = block.BaseFeePerGas * new BigInteger(2) + maxPriorityFeePerGas;
+                maxFeePerGas = (block.BaseFeePerGas * new BigInteger(2)) + maxPriorityFeePerGas;
             }
 
             return new FeeData
             {
                 GasPrice = gasPrice,
                 MaxFeePerGas = maxFeePerGas,
-                MaxPriorityFeePerGas = maxPriorityFeePerGas
+                MaxPriorityFeePerGas = maxPriorityFeePerGas,
             };
         }
 
@@ -349,18 +371,18 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             var parameters = new object[] { transaction, blockTag.GetRPCParam() };
             var properties = new Dictionary<string, object>
             {
-                {"transaction", transaction},
-                {"block", blockTag.GetRPCParamAsNumber()}
+                { "transaction", transaction },
+                { "block", blockTag.GetRPCParamAsNumber() },
             };
             try
             {
                 var result = await Perform<string>("eth_call", parameters);
-                _captureEvent("eth_call", properties, result);
+                CaptureEvent("eth_call", properties, result);
                 return result;
             }
             catch (Exception e)
             {
-                _captureError("eth_call", properties, e);
+                CaptureError("eth_call", properties, e);
                 throw new Web3Exception("eth_call: bad result from backend", e);
             }
         }
@@ -372,17 +394,17 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             var parameters = new object[] { transaction };
             var properties = new Dictionary<string, object>
             {
-                {"transaction", transaction}
+                { "transaction", transaction },
             };
             try
             {
                 var result = new HexBigInteger(await Perform<string>("eth_estimateGas", parameters));
-                _captureEvent("eth_estimateGas", properties, result.ToString());
+                CaptureEvent("eth_estimateGas", properties, result.ToString());
                 return result;
             }
             catch (Exception e)
             {
-                _captureError("eth_estimateGas", properties, e);
+                CaptureError("eth_estimateGas", properties, e);
                 throw new Web3Exception("eth_estimateGas: bad result from backend", e);
             }
         }
@@ -394,24 +416,31 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             var parameters = new object[] { transactionHash };
             var properties = new Dictionary<string, object>
             {
-                {"txHash", transactionHash}
+                { "txHash", transactionHash },
             };
             try
             {
                 var result = await Perform<TransactionResponse>("eth_getTransactionByHash", parameters);
-                _captureEvent("eth_getTransactionByHash", properties, result);
+                CaptureEvent("eth_getTransactionByHash", properties, result);
 
                 if (result == null)
                 {
                     throw new Web3Exception("transaction not found");
                 }
 
-                if (result.BlockNumber == null) result.Confirmations = 0;
+                if (result.BlockNumber == null)
+                {
+                    result.Confirmations = 0;
+                }
                 else if (result.Confirmations == null)
                 {
                     var blockNumber = await GetBlockNumber();
                     var confirmations = (blockNumber.ToUlong() - result.BlockNumber.ToUlong()) + 1;
-                    if (confirmations <= 0) confirmations = 1;
+                    if (confirmations <= 0)
+                    {
+                        confirmations = 1;
+                    }
+
                     result.Confirmations = confirmations;
                 }
 
@@ -419,7 +448,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             }
             catch (Exception e)
             {
-                _captureError("eth_getTransactionByHash", properties, e);
+                CaptureError("eth_getTransactionByHash", properties, e);
                 throw new Web3Exception("eth_getTransactionByHash: bad result from backend", e);
             }
         }
@@ -431,12 +460,12 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             var parameters = new object[] { transactionHash };
             var properties = new Dictionary<string, object>
             {
-                {"txHash", transactionHash}
+                { "txHash", transactionHash },
             };
             try
             {
                 var result = await Perform<TransactionReceipt>("eth_getTransactionReceipt", parameters);
-                _captureEvent("eth_getTransactionReceipt", properties, result);
+                CaptureEvent("eth_getTransactionReceipt", properties, result);
 
                 if (result == null)
                 {
@@ -444,12 +473,19 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
                     return result;
                 }
 
-                if (result.BlockNumber == null) result.Confirmations = 0;
+                if (result.BlockNumber == null)
+                {
+                    result.Confirmations = 0;
+                }
                 else if (result.Confirmations == null)
                 {
                     var blockNumber = await GetBlockNumber();
                     var confirmations = (blockNumber.ToUlong() - result.BlockNumber.ToUlong()) + 1;
-                    if (confirmations <= 0) confirmations = 1;
+                    if (confirmations <= 0)
+                    {
+                        confirmations = 1;
+                    }
+
                     result.Confirmations = confirmations;
                 }
 
@@ -457,7 +493,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             }
             catch (Exception e)
             {
-                _captureError("eth_getTransactionReceipt", properties, e);
+                CaptureError("eth_getTransactionReceipt", properties, e);
                 throw new Web3Exception("eth_getTransactionReceipt: bad result from backend", e);
             }
         }
@@ -469,22 +505,22 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             // TODO: _formater is never assigned, so this code will inevitably fail.
             // Is this method unused? -> Yes it is, only used in BaseSigner's implementation
             // of SendTransaction, which is always overridden
-            var tx = _formater.Transaction.Parse(signedTx);
+            var tx = formater.Transaction.Parse(signedTx);
 
             var parameters = new object[] { signedTx };
             var properties = new Dictionary<string, object>
             {
-                {"rawTx", signedTx}
+                { "rawTx", signedTx },
             };
             try
             {
                 var result = await Perform<string>("eth_sendRawTransaction", parameters);
-                _captureEvent("eth_sendRawTransaction", properties, result);
+                CaptureEvent("eth_sendRawTransaction", properties, result);
                 return WrapTransaction(tx, result);
             }
             catch (Exception e)
             {
-                _captureError("eth_sendRawTransaction", properties, e);
+                CaptureError("eth_sendRawTransaction", properties, e);
                 throw new Web3Exception("eth_sendRawTransaction: bad result from backend", e);
             }
         }
@@ -501,26 +537,30 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
             result.Wait = async () =>
             {
-                var receipt = await _waitForTransaction(hash, 1, 0);
+                var receipt = await WaitForTransactionInternal(hash, 1, 0);
                 return receipt;
             };
 
             result.WaitParams = async (uint confirms, uint timeout) =>
             {
-                var receipt = await _waitForTransaction(hash, confirms, timeout);
+                var receipt = await WaitForTransactionInternal(hash, confirms, timeout);
                 return receipt;
             };
 
             return result;
         }
 
-        public async Task<TransactionReceipt> WaitForTransactionReceipt(string transactionHash, uint confirmations = 1,
+        public async Task<TransactionReceipt> WaitForTransactionReceipt(
+            string transactionHash,
+            uint confirmations = 1,
             uint timeout = 0)
         {
-            return await _waitForTransaction(transactionHash, confirmations, timeout);
+            return await WaitForTransactionInternal(transactionHash, confirmations, timeout);
         }
 
-        private async Task<TransactionReceipt> _waitForTransaction(string transactionHash, uint confirmations = 1,
+        private async Task<TransactionReceipt> WaitForTransactionInternal(
+            string transactionHash,
+            uint confirmations = 1,
             uint timeout = 0)
         {
             var receipt = await GetTransactionReceipt(transactionHash);
@@ -543,7 +583,10 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
                 }
 
                 // if timeout disabled
-                if (noTimeout) continue;
+                if (noTimeout)
+                {
+                    continue;
+                }
 
                 timeout--;
 
@@ -561,51 +604,54 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             var parameters = new object[] { filter };
             var properties = new Dictionary<string, object>
             {
-                {"filter", filter}
+                { "filter", filter },
             };
             try
             {
                 var result = await Perform<FilterLog[]>("eth_getLogs", parameters);
-                _captureEvent("eth_getLogs", properties, result);
+                CaptureEvent("eth_getLogs", properties, result);
                 return result;
             }
             catch (Exception e)
             {
-                _captureError("eth_getLogs", properties, e);
+                CaptureError("eth_getLogs", properties, e);
                 throw new Web3Exception("eth_getLogs: bad result from backend", e);
             }
         }
 
         public virtual Task<T> Perform<T>(string method, params object[] parameters)
         {
-            throw new Web3Exception(method + " not implemented");
+            throw new Exception(method + " not implemented");
         }
 
-        private async Task<Network.Network> _ready()
+        private async Task<Network.Network> Ready()
         {
-            if (_network != null) return _network;
+            if (network != null)
+            {
+                return network;
+            }
 
-            _network = await DetectNetwork();
-            return _network;
+            network = await DetectNetwork();
+            return network;
         }
 
-        private void _captureEvent(string method, Dictionary<string, object> properties, object result)
+        private void CaptureEvent(string method, Dictionary<string, object> properties, object result)
         {
             properties["result"] = result;
-            _capture("Call", method, properties);
+            Capture("Call", method, properties);
         }
 
-        private void _captureError(string method, Dictionary<string, object> properties, Exception error)
+        private void CaptureError(string method, Dictionary<string, object> properties, Exception error)
         {
             properties["error"] = error;
-            _capture("Error", method, properties);
+            Capture("Error", method, properties);
         }
 
-        private void _capture(string eventName, string method, Dictionary<string, object> properties)
+        private void Capture(string eventName, string method, Dictionary<string, object> properties)
         {
-            _populateEventProperties(properties);
+            PopulateEventProperties(properties);
 
-            var network = _network ?? new Network.Network
+            var network = this.network ?? new Network.Network
             {
                 ChainId = 0,
                 Name = "unknown",
@@ -618,50 +664,53 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             // PostHog.Client.Capture("[TEST] " + eventName, properties); // TODO: remove [TEST]
         }
 
-        protected virtual void _populateEventProperties(Dictionary<string, object> properties)
+        protected virtual void PopulateEventProperties(Dictionary<string, object> properties)
         {
-            throw new NotImplementedException();
         }
 
+        // TODO: unused
+        /*
         private Task<ulong> _getFastBlockNumber()
         {
-            var now = _getTime();
+            var now = BaseProvider.GetTime();
 
             // Stale block number, request a newer value
-            if (now - _fastQueryDate > 2 * (ulong)PollingInterval.Milliseconds)
+            if (now - fastQueryDate > 2 * (ulong)PollingInterval.Milliseconds)
             {
-                _fastQueryDate = now;
-                _fastBlockNumberTask = Task.Run(async () =>
+                fastQueryDate = now;
+                fastBlockNumberTask = Task.Run(async () =>
                 {
                     var blockNumber = (await GetBlockNumber()).ToUlong();
-                    if (_fastBlockNumber == null || blockNumber > _fastBlockNumber)
-                        _fastBlockNumber = blockNumber;
+                    if (fastBlockNumber == null || blockNumber > fastBlockNumber)
+                    {
+                        fastBlockNumber = blockNumber;
+                    }
 
                     return blockNumber;
                 });
             }
 
-            return _fastBlockNumberTask;
+            return fastBlockNumberTask;
         }
+        */
 
-        private void _setFastBlockNumber(ulong blockNumber)
+        private void SetFastBlockNumber(ulong blockNumber)
         {
             // Older block, maybe a stale request
-            if (_fastBlockNumber != null && blockNumber < _fastBlockNumber) return;
+            if (fastBlockNumber != null && blockNumber < fastBlockNumber)
+            {
+                return;
+            }
 
             // Update the time we updated the blocknumber
-            _fastQueryDate = _getTime();
+            fastQueryDate = BaseProvider.GetTime();
 
             // Newer block number, use  it
-            if (_fastBlockNumber == null || blockNumber > _fastBlockNumber)
+            if (fastBlockNumber == null || blockNumber > fastBlockNumber)
             {
-                _fastBlockNumber = blockNumber;
+                fastBlockNumber = blockNumber;
             }
         }
-
-        private TimeSpan PollingInterval { get; set; } = TimeSpan.FromSeconds(1);
-
-        private CancellationTokenSource pollLoopCts;
 
         // TODO: this can be refactored into a method
         private void SetPollLoopState(bool enabled)
@@ -695,7 +744,6 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
                 // take longer than PollingInterval. So we measure the time
                 // we would like the next poll to happen before starting
                 // the current poll.
-
                 var nextPollTime = DateTime.Now + PollingInterval;
 
                 try
@@ -704,99 +752,100 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
                 }
                 catch (Exception ex)
                 {
-                    RpcEnvironmentStore.Environment.LogError(ex.ToString());
+                    environment.LogWriter.LogError(ex.ToString());
                 }
 
                 var now = DateTime.Now;
                 if (now < nextPollTime)
+                {
                     await Task.Delay(nextPollTime - now);
+                }
             }
-
         }
 
-        private async Task<ulong> _getInternalBlockNumber(ulong maxAge)
+        private async Task<ulong> GetInternalBlockNumber(ulong maxAge)
         {
-            await _ready();
+            await Ready();
 
             // Allowing stale data up to maxAge old
-            if (maxAge > 0 && _internalBlockNumber != null)
+            if (maxAge > 0 && internalBlockNumber != null)
             {
-                var internalBlockNumber = _internalBlockNumber;
+                var internalBlockNumber = this.internalBlockNumber;
 
-                if (_getTime() - internalBlockNumber.RespTime <= maxAge)
+                if (GetTime() - internalBlockNumber.RespTime <= maxAge)
                 {
                     return internalBlockNumber.BlockNumber;
                 }
             }
 
-            var reqTime = _getTime();
+            var reqTime = GetTime();
 
             var blockNumber = (await GetBlockNumber()).ToUlong();
-            if (blockNumber < _maxInternalBlockNumber)
+            if (blockNumber < maxInternalBlockNumber)
             {
-                blockNumber = _maxInternalBlockNumber;
+                blockNumber = maxInternalBlockNumber;
             }
 
-            _maxInternalBlockNumber = blockNumber;
+            maxInternalBlockNumber = blockNumber;
 
             var internalBlock = new InternalBlockNumber
             {
                 BlockNumber = blockNumber,
                 ReqTime = reqTime,
-                RespTime = _getTime()
+                RespTime = GetTime(),
             };
 
-            _internalBlockNumber = internalBlock;
+            internalBlockNumber = internalBlock;
 
             return internalBlock.BlockNumber;
         }
 
         internal virtual async Task Poll()
         {
-            var pollId = _nextPollId++;
+            var pollId = nextPollId++;
 
             // blockNumber through _getInternalBockNumber
             ulong blockNumber;
             try
             {
-                blockNumber = await _getInternalBlockNumber(100 + (ulong)PollingInterval.Milliseconds / 2);
+                blockNumber = await GetInternalBlockNumber(100 + ((ulong)PollingInterval.TotalMilliseconds / 2));
             }
             catch (Exception e)
             {
-                RpcEnvironmentStore.Environment.LogError(e.ToString());
+                environment.LogWriter.LogError(e.ToString());
                 Emit("error", new object[] { e });
                 return;
             }
 
-            _setFastBlockNumber(blockNumber);
+            SetFastBlockNumber(blockNumber);
 
             Emit("poll", new object[] { pollId, blockNumber });
 
-            if (blockNumber == _lastBlockNumber)
+            if (blockNumber == lastBlockNumber)
             {
                 Emit("didPoll", new object[] { pollId });
                 return;
             }
 
-            if (_emittedBlock == -2)
+            if (emittedBlock == -2)
             {
-                _emittedBlock = (long)blockNumber - 1;
+                emittedBlock = (long)blockNumber - 1;
             }
 
-            if (Math.Abs(_emittedBlock - (long)blockNumber) > 1000)
+            if (Math.Abs(emittedBlock - (long)blockNumber) > 1000)
             {
                 Emit("error", new object[] { new Exception("network block skew detected") });
                 Emit("block", new object[] { blockNumber });
             }
             else
             {
-                for (var i = _emittedBlock + 1; i <= (long)blockNumber; i++)
+                for (var i = emittedBlock + 1; i <= (long)blockNumber; i++)
                 {
                     Emit("block", new object[] { i });
                 }
             }
 
-            _lastBlockNumber = blockNumber;
+            lastBlockNumber = blockNumber;
         }
 
         private bool Emit(string eventName, object[] data)
@@ -804,69 +853,80 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             var result = false;
             var stopped = new List<Event>();
 
-            _events = _events.FindAll(e =>
+            events = events.FindAll(e =>
             {
-                if (e.Tag != eventName) return true;
+                if (e.Tag != eventName)
+                {
+                    return true;
+                }
 
-                RpcEnvironmentStore.Environment.RunOnForegroundThread(() => e.Apply(data));
+                // TODO: this should execute the event on the foreground thread.
+                e.Apply(data);
 
                 result = true;
 
-                if (!e.Once) return true;
+                if (!e.Once)
+                {
+                    return true;
+                }
+
                 stopped.Add(e);
                 return false;
-
             });
 
-            stopped.ForEach(e => _stopEvent(e));
-            _stopEvent();
+            stopped.ForEach(e => StopEvent(e));
+            StopEvent();
 
             return result;
         }
 
-        private void _stopEvent()
+        private void StopEvent()
         {
             throw new NotImplementedException();
         }
 
-        protected virtual void _startEvent()
+        protected virtual void StartEvent()
         {
-            SetPollLoopState(_events.Any(e => e.IsPollable));
+            SetPollLoopState(events.Any(e => e.IsPollable));
         }
 
-        protected virtual void _stopEvent(Event @event)
+        protected virtual void StopEvent(Event @event)
         {
-            SetPollLoopState(_events.Any(e => e.IsPollable));
+            SetPollLoopState(events.Any(e => e.IsPollable));
         }
 
-        protected virtual BaseProvider _addEventListener<T>(string eventName, Func<T, object> listener, bool once)
+        protected virtual BaseProvider AddEventListener<T>(string eventName, Func<T, object> listener, bool once)
         {
             var eEvent = new Event<T>(eventName, listener, once);
-            _events.Add(eEvent);
-            _startEvent();
+            events.Add(eEvent);
+            StartEvent();
             return this;
         }
 
         public virtual BaseProvider On<T>(string eventName, Func<T, object> listener)
         {
-            return _addEventListener(eventName, listener, false);
+            return AddEventListener(eventName, listener, false);
         }
 
         public virtual BaseProvider Once<T>(string eventName, Func<T, object> listener)
         {
-            return _addEventListener(eventName, listener, true);
+            return AddEventListener(eventName, listener, true);
         }
 
         public virtual BaseProvider RemoveAllListeners()
         {
-            _events.RemoveAll(_ => true);
-            _stopEvent();
+            events.RemoveAll(_ => true);
+            StopEvent();
             return this;
         }
+    }
 
-        private ulong _getTime()
-        {
-            return (ulong)DateTime.Now.Millisecond;
-        }
+    public class InternalBlockNumber
+    {
+        public ulong BlockNumber { get; set; }
+
+        public ulong ReqTime { get; set; }
+
+        public ulong RespTime { get; set; }
     }
 }

@@ -7,15 +7,17 @@ namespace ChainSafe.GamingSdk.Evm.Unity
 {
     public class UnityDispatcherAdapter : IMainThreadRunner
     {
-        private readonly Dispatcher _dispatcher;
+        private readonly Dispatcher dispatcher;
 
         public UnityDispatcherAdapter()
         {
-            _dispatcher = Dispatcher.Initialize();
+            dispatcher = Dispatcher.Initialize();
         }
 
-        public void Enqueue(Action action) => _dispatcher.Enqueue(action);
-        public Task EnqueueTask(Func<Task> task) => _dispatcher.EnqueueTask(task);
-        public Task<T> EnqueueTask<T>(Func<Task<T>> task) => _dispatcher.EnqueueTask(task);
+        public void Enqueue(Action action) => dispatcher.Enqueue(action);
+
+        public Task EnqueueTask(Func<Task> task) => dispatcher.EnqueueTask(task);
+
+        public Task<T> EnqueueTask<T>(Func<Task<T>> task) => dispatcher.EnqueueTask(task);
     }
 }

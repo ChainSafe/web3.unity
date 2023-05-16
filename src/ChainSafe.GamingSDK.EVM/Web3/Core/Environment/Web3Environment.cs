@@ -5,11 +5,6 @@ namespace ChainSafe.GamingWeb3.Environment
     /// </summary>
     public class Web3Environment
     {
-        public ISettingsProvider SettingsProvider { get; }
-        public IHttpClient HttpClient { get; }
-        public ILogWriter LogWriter { get; }
-        public IAnalyticsClient AnalyticsClient { get; }
-
         public Web3Environment(ISettingsProvider settingsProvider, IHttpClient httpClient, ILogWriter logWriter, IAnalyticsClient analyticsClient)
         {
             SettingsProvider = settingsProvider;
@@ -17,5 +12,13 @@ namespace ChainSafe.GamingWeb3.Environment
             LogWriter = logWriter;
             AnalyticsClient = analyticsClient;
         }
+
+        public ISettingsProvider SettingsProvider { get; }
+
+        public IHttpClient HttpClient { get; }
+
+        public ILogWriter LogWriter { get; }
+
+        public IAnalyticsClient AnalyticsClient { get; }
     }
 }

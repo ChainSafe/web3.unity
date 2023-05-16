@@ -5,7 +5,8 @@ using Nethereum.ABI.FunctionEncoding.Attributes;
 
 namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders.FilterInput
 {
-    internal class TopicFilterContainer<T> where T : class
+    internal class TopicFilterContainer<T>
+        where T : class
     {
         internal TopicFilterContainer()
         {
@@ -28,17 +29,18 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders.FilterInput
         public bool Empty { get; private set; }
 
         public TopicFilter Topic1 { get; private set; }
+
         public TopicFilter Topic2 { get; private set; }
+
         public TopicFilter Topic3 { get; private set; }
 
         private TopicFilter[] Topics { get; set; }
 
         public TopicFilter GetTopic(PropertyInfo pInfo)
         {
-            return Topics
-                       .FirstOrDefault(t => t.EventDtoProperty.Name == pInfo.Name) ??
-                   throw new ArgumentException($"Property '{pInfo.Name}' does not represent a topic. The property must have a ParameterAttribute which is flagged as indexed");
+            return
+                Topics.FirstOrDefault(t => t.EventDtoProperty.Name == pInfo.Name) ??
+                throw new ArgumentException($"Property '{pInfo.Name}' does not represent a topic. The property must have a ParameterAttribute which is flagged as indexed");
         }
-
     }
 }

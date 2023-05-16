@@ -8,8 +8,9 @@ namespace Web3Unity.Scripts.Library.Ethers.JsonRpc
     public static class JsonRpcExtensions
     {
         /// <summary>
-        /// Binds JSON RPC implementation of EVM Provider to Web3
+        /// Binds JSON RPC implementation of EVM Provider to Web3.
         /// </summary>
+        /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
         public static IWeb3ServiceCollection UseJsonRpcProvider(this IWeb3ServiceCollection serviceCollection, JsonRpcProviderConfiguration configuration)
         {
             serviceCollection.ConfigureJsonRpcProvider(configuration);
@@ -18,8 +19,9 @@ namespace Web3Unity.Scripts.Library.Ethers.JsonRpc
         }
 
         /// <summary>
-        /// Configures JSON RPC implementation of EVM Provider
+        /// Configures JSON RPC implementation of EVM Provider.
         /// </summary>
+        /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
         public static IWeb3ServiceCollection ConfigureJsonRpcProvider(this IWeb3ServiceCollection serviceCollection, JsonRpcProviderConfiguration configuration)
         {
             serviceCollection.AssertConfigurationNotBound<JsonRpcProviderConfiguration>();
@@ -28,8 +30,9 @@ namespace Web3Unity.Scripts.Library.Ethers.JsonRpc
         }
 
         /// <summary>
-        /// Binds JSON RPC implementation of EVM Provider to Web3
+        /// Binds JSON RPC implementation of EVM Provider to Web3.
         /// </summary>
+        /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
         public static IWeb3ServiceCollection UseJsonRpcProvider(this IWeb3ServiceCollection serviceCollection)
         {
             serviceCollection.AssertServiceNotBound<IEvmProvider>();
@@ -38,8 +41,9 @@ namespace Web3Unity.Scripts.Library.Ethers.JsonRpc
         }
 
         /// <summary>
-        /// Binds JSON RPC implementation of EVM Wallet to Web3
+        /// Binds JSON RPC implementation of EVM Wallet to Web3.
         /// </summary>
+        /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
         public static IWeb3ServiceCollection UseJsonRpcSigner(this IWeb3ServiceCollection serviceCollection, JsonRpcSignerConfiguration configuration)
         {
             serviceCollection.ConfigureJsonRpcSigner(configuration);
@@ -48,8 +52,9 @@ namespace Web3Unity.Scripts.Library.Ethers.JsonRpc
         }
 
         /// <summary>
-        /// Configures JSON RPC implementation of EVM Wallet
+        /// Configures JSON RPC implementation of EVM Wallet.
         /// </summary>
+        /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
         public static IWeb3ServiceCollection ConfigureJsonRpcSigner(this IWeb3ServiceCollection serviceCollection, JsonRpcSignerConfiguration configuration)
         {
             serviceCollection.AssertConfigurationNotBound<JsonRpcSignerConfiguration>();
@@ -58,8 +63,9 @@ namespace Web3Unity.Scripts.Library.Ethers.JsonRpc
         }
 
         /// <summary>
-        /// Binds JSON RPC implementation of EVM Wallet to Web3
+        /// Binds JSON RPC implementation of EVM Wallet to Web3.
         /// </summary>
+        /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
         public static IWeb3ServiceCollection UseJsonRpcSigner(this IWeb3ServiceCollection serviceCollection)
         {
             serviceCollection.AssertServiceNotBound<IEvmSigner>();

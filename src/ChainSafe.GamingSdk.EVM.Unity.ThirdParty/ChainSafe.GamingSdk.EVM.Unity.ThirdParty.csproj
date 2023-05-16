@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Note: We need to put third-party code in a separate library
+    because we don't control the sources and can't apply the same
+    set of code standards to them (code analysis, warnings as
+    errors, etc.)
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+
+    <!-- We need to ignore CS0618 because of the extension method on WWW in IEnumeratorAwaitExtensions, the source for which we don't control. -->
+    <NoWarn>1701;1702;CS0618</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="../../submodules/AsyncAwaitUtil/UnityProject/Assets/Plugins/AsyncAwaitUtil/Source/**/*.cs" LinkBase="AsyncAwaitUtil" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="../../libs/UnityEngine/UnityEngine.dll" />
+  </ItemGroup>
+
+</Project>

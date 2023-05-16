@@ -16,8 +16,7 @@ public class Web3WalletGetArray : MonoBehaviour
             "[{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"_addresses\",\"type\":\"address[]\"}],\"name\":\"setStore\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"bought\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getStore\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]";
         // smart contract method to call
         string method = "getStore";
-        var provider = ProviderMigration.NewJsonRpcProvider("YOUR_NODE");
-        var contract = new Contract(abi, contractAddress, provider);
+        var contract = new Contract(abi, contractAddress, RPC.GetInstance.Provider());
         var calldata = await contract.Call(method);
         string json = JsonConvert.SerializeObject(calldata[0], Formatting.Indented);
         string[] addresses = JsonConvert.DeserializeObject<string[]>(json);

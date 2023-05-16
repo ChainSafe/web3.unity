@@ -14,7 +14,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Utils
             "gwei",
             "szabo",
             "finney",
-            "ether"
+            "ether",
         };
 
         public static string FormatEther(BigInteger wei)

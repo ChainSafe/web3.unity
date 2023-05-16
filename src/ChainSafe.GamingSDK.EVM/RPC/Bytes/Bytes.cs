@@ -12,7 +12,11 @@ namespace Web3Unity.Scripts.Library.Ethers.Bytes
 
         public static string Hexlify(string value)
         {
-            if (IsHexString(value)) return value;
+            if (IsHexString(value))
+            {
+                return value;
+            }
+
             return "0x" + value;
         }
 
@@ -23,14 +27,14 @@ namespace Web3Unity.Scripts.Library.Ethers.Bytes
                 throw new Exception($"invalid hex string {value}");
             }
 
-            if (value.Length > 2 * lenght + 2)
+            if (value.Length > (2 * lenght) + 2)
             {
                 throw new Exception($"value out of range {value}");
             }
 
-            while (value.Length < 2 * lenght + 2)
+            while (value.Length < (2 * lenght) + 2)
             {
-                string.Format("0x0{0}", value.Substring(2));
+                value = string.Format("0x0{0}", value.Substring(2));
             }
 
             return value;

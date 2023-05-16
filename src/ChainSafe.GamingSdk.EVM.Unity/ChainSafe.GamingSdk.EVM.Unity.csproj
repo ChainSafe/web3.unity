@@ -5,20 +5,17 @@
     <LangVersion>9.0</LangVersion>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
 
-    <!-- We need to ignore CS0618 because of the extension method on WWW in IEnumeratorAwaitExtensions, the source for which we don't control. -->
-    <NoWarn>1701;1702;CS0618</NoWarn>
+    <EnableNETAnalyzers>True</EnableNETAnalyzers>
+    <CodeAnalysisRuleSet>../../global.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\submodules\AsyncAwaitUtil\UnityProject\Assets\Plugins\AsyncAwaitUtil\Source\**\*.cs" LinkBase="AsyncAwaitUtil" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\ChainSafe.GamingSDK.EVM\ChainSafe.GamingSDK.EVM.csproj" />
+    <ProjectReference Include="..\ChainSafe.GamingSdk.EVM.Unity.ThirdParty\ChainSafe.GamingSdk.EVM.Unity.ThirdParty.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="UnityEngine.dll" />
+    <Reference Include="../../libs/UnityEngine/UnityEngine.dll" />
     <Reference Include="../../libs/Nethereum-UnityAOT/Newtonsoft.Json.dll" />
   </ItemGroup>
 

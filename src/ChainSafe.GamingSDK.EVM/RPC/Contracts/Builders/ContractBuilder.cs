@@ -41,8 +41,8 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders
 
         public FunctionBuilder<TFunction> GetFunctionBuilder<TFunction>()
         {
-            var function = FunctionAttribute.GetAttribute<TFunction>();
-            if (function == null) throw new Exception("Invalid TFunction required a Function Attribute");
+            var function = FunctionAttribute.GetAttribute<TFunction>() ??
+                throw new Exception("Invalid TFunction required a Function Attribute");
             return new FunctionBuilder<TFunction>(Address, GetFunctionAbi(function.Name));
         }
 
@@ -58,42 +58,69 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders
 
         public ErrorABI GetErrorAbi(string name)
         {
-            if (ContractABI == null) throw new Exception("Contract abi not initialised");
-            var errorAbi = ContractABI.Errors.FirstOrDefault(x => x.Name == name);
-            if (errorAbi == null) throw new Exception("Error not found");
+            if (ContractABI == null)
+            {
+                throw new Exception("Contract abi not initialised");
+            }
+
+            var errorAbi = ContractABI.Errors.FirstOrDefault(x => x.Name == name) ??
+                throw new Exception("Error not found");
             return errorAbi;
         }
 
-
         public EventABI GetEventAbi(string name)
         {
-            if (ContractABI == null) throw new Exception("Contract abi not initialised");
-            var eventAbi = ContractABI.Events.FirstOrDefault(x => x.Name == name);
-            if (eventAbi == null) throw new Exception("Event not found");
+            if (ContractABI == null)
+            {
+                throw new Exception("Contract abi not initialised");
+            }
+
+            var eventAbi = ContractABI.Events.FirstOrDefault(x => x.Name == name) ??
+                throw new Exception("Event not found");
             return eventAbi;
         }
 
         public EventABI GetEventAbiBySignature(string signature)
         {
-            if (ContractABI == null) throw new Exception("Contract abi not initialised");
-            var eventAbi = ContractABI.Events.FirstOrDefault(x => x.Sha3Signature.ToLowerInvariant().EnsureHexPrefix() == signature.ToLowerInvariant().EnsureHexPrefix());
-            if (eventAbi == null) throw new Exception("Event not found for signature:" + signature);
+            if (ContractABI == null)
+            {
+                throw new Exception("Contract abi not initialised");
+            }
+
+            var eventAbi =
+                ContractABI.Events.FirstOrDefault(
+                    x =>
+                        x.Sha3Signature.ToLowerInvariant().EnsureHexPrefix() ==
+                        signature.ToLowerInvariant().EnsureHexPrefix()) ??
+                throw new Exception("Event not found for signature:" + signature);
             return eventAbi;
         }
 
         public FunctionABI GetFunctionAbi(string name)
         {
-            if (ContractABI == null) throw new Exception("Contract abi not initialised");
-            var functionAbi = ContractABI.Functions.FirstOrDefault(x => x.Name == name);
-            if (functionAbi == null) throw new Exception("Function not found:" + name);
+            if (ContractABI == null)
+            {
+                throw new Exception("Contract abi not initialised");
+            }
+
+            var functionAbi = ContractABI.Functions.FirstOrDefault(x => x.Name == name) ??
+                throw new Exception("Function not found:" + name);
             return functionAbi;
         }
 
         public FunctionABI GetFunctionAbiBySignature(string signature)
         {
-            if (ContractABI == null) throw new Exception("Contract abi not initialised");
-            var functionAbi = ContractABI.Functions.FirstOrDefault(x => x.Sha3Signature.ToLowerInvariant().EnsureHexPrefix() == signature.ToLowerInvariant().EnsureHexPrefix());
-            if (functionAbi == null) throw new Exception("Function not found for signature:" + signature);
+            if (ContractABI == null)
+            {
+                throw new Exception("Contract abi not initialised");
+            }
+
+            var functionAbi =
+                ContractABI.Functions.FirstOrDefault(
+                    x =>
+                        x.Sha3Signature.ToLowerInvariant().EnsureHexPrefix() ==
+                        signature.ToLowerInvariant().EnsureHexPrefix()) ??
+                throw new Exception("Function not found for signature:" + signature);
             return functionAbi;
         }
     }

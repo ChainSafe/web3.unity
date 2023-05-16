@@ -1,9 +1,7 @@
 ﻿using ChainSafe.GamingWeb3.Build;
-using Web3Unity.Scripts.Library.Ethers.Migration;
-using Web3Unity.Scripts.Library.Ethers.Providers;
-using Web3Unity.Scripts.Library.Ethers.Signers;
 using ChainSafe.GamingWeb3.Unity;
-using Web3Unity.Scripts.Library.Ethers.Network;
+using Web3Unity.Scripts.Library.Ethers.Migration;
+using Web3Unity.Scripts.Library.Ethers.Signers;
 
 namespace Web3Unity.Scripts.Library.Ethers.Providers
 {
@@ -25,8 +23,8 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
                 {
                     DataDog = new ChainSafe.GamingSdk.Evm.Unity.DataDogAnalyticsConfiguration
                     {
-                        ApiKey = "",
-                    }
+                        ApiKey = string.Empty,
+                    },
                 })
                 .UseUnityEnvironment();
     }

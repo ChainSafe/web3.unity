@@ -2,18 +2,18 @@ namespace Web3Unity.Scripts.Library.Ethers.RLP
 {
     public class RLPItem : IRLPElement
     {
-        private readonly byte[] _rlpData;
+        private readonly byte[] rlpData;
 
         public RLPItem(byte[] rlpData)
         {
-            this._rlpData = rlpData;
+            this.rlpData = rlpData;
         }
 
         public byte[] RLPData => GetRLPData();
 
         private byte[] GetRLPData()
         {
-            return _rlpData.Length == 0 ? null : _rlpData;
+            return rlpData.Length == 0 ? null : rlpData;
         }
     }
 }

@@ -75,5 +75,8 @@ crashlytics-build.properties
 /[Pp]rojectSettings
 .vsconfig
 
+# meta files are ignored in the root gitignore, negate that here
+!*.meta
+
 # Ignore the build artifacts from our libraries
 /Assets/Plugins/Web3/Libraries

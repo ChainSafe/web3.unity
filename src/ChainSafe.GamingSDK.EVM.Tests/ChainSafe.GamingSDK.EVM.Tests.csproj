@@ -4,6 +4,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>9.0</LangVersion>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <EnableNETAnalyzers>True</EnableNETAnalyzers>
+    <CodeAnalysisRuleSet>../../global.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <ItemGroup>

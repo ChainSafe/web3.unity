@@ -7,11 +7,11 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders
 {
     public static class ABITypedRegistry
     {
-        private static readonly ConcurrentDictionary<Type, FunctionABI> _functionAbiRegistry = new ConcurrentDictionary<Type, FunctionABI>();
-        private static readonly ConcurrentDictionary<Type, EventABI> _eventAbiRegistry = new ConcurrentDictionary<Type, EventABI>();
-        private static readonly ConcurrentDictionary<Type, ErrorABI> _errorAbiRegistry = new ConcurrentDictionary<Type, ErrorABI>();
+        private static readonly ConcurrentDictionary<Type, FunctionABI> FunctionAbiRegistry = new();
+        private static readonly ConcurrentDictionary<Type, EventABI> EventAbiRegistry = new();
+        private static readonly ConcurrentDictionary<Type, ErrorABI> ErrorAbiRegistry = new();
 
-        private static readonly AttributesToABIExtractor _abiExtractor = new AttributesToABIExtractor();
+        private static readonly AttributesToABIExtractor AbiExtractor = new();
 
         public static FunctionABI GetFunctionABI<TFunctionMessage>()
         {
@@ -20,17 +20,14 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders
 
         public static FunctionABI GetFunctionABI(Type functionABIType)
         {
-            if (!_functionAbiRegistry.ContainsKey(functionABIType))
+            if (!FunctionAbiRegistry.ContainsKey(functionABIType))
             {
-                var functionAbi = _abiExtractor.ExtractFunctionABI(functionABIType);
-                if (functionAbi == null)
-                {
+                var functionAbi = AbiExtractor.ExtractFunctionABI(functionABIType) ??
                     throw new ArgumentException(functionABIType.ToString() + " is not a valid Function Type");
-                }
-
-                _functionAbiRegistry[functionABIType] = functionAbi;
+                FunctionAbiRegistry[functionABIType] = functionAbi;
             }
-            return _functionAbiRegistry[functionABIType];
+
+            return FunctionAbiRegistry[functionABIType];
         }
 
         public static EventABI GetEvent<TEvent>()
@@ -40,17 +37,14 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders
 
         public static EventABI GetEvent(Type type)
         {
-            if (!_eventAbiRegistry.ContainsKey(type))
+            if (!EventAbiRegistry.ContainsKey(type))
             {
-                var eventABI = _abiExtractor.ExtractEventABI(type);
-                if (null == eventABI)
-                {
+                var eventABI = AbiExtractor.ExtractEventABI(type) ??
                     throw new ArgumentException(type.ToString() + " is not a valid Event Type");
-                }
-
-                _eventAbiRegistry[type] = eventABI;
+                EventAbiRegistry[type] = eventABI;
             }
-            return _eventAbiRegistry[type];
+
+            return EventAbiRegistry[type];
         }
 
         public static ErrorABI GetError<TError>()
@@ -60,17 +54,14 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders
 
         public static ErrorABI GetError(Type type)
         {
-            if (!_errorAbiRegistry.ContainsKey(type))
+            if (!ErrorAbiRegistry.ContainsKey(type))
             {
-                var errorABI = _abiExtractor.ExtractErrorABI(type);
-                if (null == errorABI)
-                {
+                var errorABI = AbiExtractor.ExtractErrorABI(type) ??
                     throw new ArgumentException(type.ToString() + " is not a valid Error Type");
-                }
-
-                _errorAbiRegistry[type] = errorABI;
+                ErrorAbiRegistry[type] = errorABI;
             }
-            return _errorAbiRegistry[type];
+
+            return ErrorAbiRegistry[type];
         }
     }
 }

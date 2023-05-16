@@ -7,11 +7,16 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders
 {
     public class EventTopicBuilder
     {
-        private readonly EventABI _eventABI;
+        private readonly EventABI eventABI;
 
         public EventTopicBuilder(EventABI eventABI)
         {
-            this._eventABI = eventABI;
+            this.eventABI = eventABI;
+        }
+
+        private static string EnsureHexPrefix(string input)
+        {
+            return input.EnsureHexPrefix();
         }
 
         public object[] GetSignatureTopicAsTheOnlyTopic()
@@ -21,12 +26,12 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders
 
         public object GetSignatureTopic()
         {
-            return _eventABI.Sha3Signature.EnsureHexPrefix();
+            return eventABI.Sha3Signature.EnsureHexPrefix();
         }
 
         public object[] GetTopics(object[] firstTopic)
         {
-            if (_eventABI.IsAnonymous)
+            if (eventABI.IsAnonymous)
             {
                 return new[] { GetValueTopic(firstTopic, 1) };
             }
@@ -36,7 +41,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders
 
         public object[] GetTopics(object[] firstTopic, object[] secondTopic)
         {
-            if (_eventABI.IsAnonymous)
+            if (eventABI.IsAnonymous)
             {
                 return new[] { GetValueTopic(firstTopic, 1), GetValueTopic(secondTopic, 2) };
             }
@@ -46,18 +51,19 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders
 
         public object[] GetTopics(object[] firstTopic, object[] secondTopic, object[] thirdTopic)
         {
-            if (_eventABI.IsAnonymous)
+            if (eventABI.IsAnonymous)
             {
                 return new[]
                 {
-                    GetValueTopic(firstTopic, 1), GetValueTopic(secondTopic, 2), GetValueTopic(thirdTopic, 3)
+                    GetValueTopic(firstTopic, 1), GetValueTopic(secondTopic, 2),
+                    GetValueTopic(thirdTopic, 3),
                 };
             }
 
             return new[]
             {
                 GetSignatureTopic(), GetValueTopic(firstTopic, 1), GetValueTopic(secondTopic, 2),
-                GetValueTopic(thirdTopic, 3)
+                GetValueTopic(thirdTopic, 3),
             };
         }
 
@@ -83,19 +89,18 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders
 
         public object[] GetTopics<T1, T2>(T1 firstTopic, T2 secondTopic)
         {
-            return GetTopics(firstTopic == null ? null : new[] { (object)firstTopic },
+            return GetTopics(
+                firstTopic == null ? null : new[] { (object)firstTopic },
                 secondTopic == null ? null : new[] { (object)secondTopic });
-
         }
 
         public object[] GetTopics<T1, T2, T3>(T1 firstTopic, T2 secondTopic, T3 thirdTopic)
         {
-
-            return GetTopics(firstTopic == null ? null : new[] { (object)firstTopic },
+            return GetTopics(
+                firstTopic == null ? null : new[] { (object)firstTopic },
                 secondTopic == null ? null : new[] { (object)secondTopic },
-                 thirdTopic == null ? null : new[] { (object)thirdTopic });
+                thirdTopic == null ? null : new[] { (object)thirdTopic });
         }
-
 
         public object[] GetTopics<T1>(T1[] firstOrTopics)
         {
@@ -114,11 +119,14 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders
 
         public object[] GetValueTopic(object[] values, int paramNumber)
         {
-            if (values == null) return null;
-            var encoded = new object[values.Length];
-            var parameter = _eventABI.InputParameters.FirstOrDefault(x => x.Order == paramNumber);
-            if (parameter == null) throw new Exception("Event parameter not found at " + paramNumber);
+            if (values == null)
+            {
+                return null;
+            }
 
+            var encoded = new object[values.Length];
+            var parameter = eventABI.InputParameters.FirstOrDefault(x => x.Order == paramNumber) ??
+                throw new Exception("Event parameter not found at " + paramNumber);
             for (var i = 0; i < values.Length; i++)
             {
                 if (values[i] != null)
@@ -128,11 +136,6 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders
             }
 
             return encoded;
-        }
-
-        private string EnsureHexPrefix(string input)
-        {
-            return input.EnsureHexPrefix();
         }
     }
 }

@@ -23,8 +23,8 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
                 {
                     DataDog = new ChainSafe.GamingSdk.Evm.Unity.DataDogAnalyticsConfiguration
                     {
-                        ApiKey = "",
-                    }
+                        ApiKey = string.Empty,
+                    },
                 })
                 .UseUnityEnvironment();
     }
