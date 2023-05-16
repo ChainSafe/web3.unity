@@ -1,61 +1,36 @@
 ﻿#nullable enable
 using System;
 using System.Threading.Tasks;
-using Web3Unity.Scripts.Library.Ethers;
-using Web3Unity.Scripts.Library.Ethers.Signers;
 using Microsoft.Extensions.DependencyInjection;
 using Web3Unity.Scripts.Library.Ethers.Providers;
+using Web3Unity.Scripts.Library.Ethers.Signers;
 
 namespace ChainSafe.GamingWeb3
 {
     /// <summary>
-    /// Facade for all Web3-related services
+    /// Facade for all Web3-related services.
     /// </summary>
     public class Web3 : IDisposable
     {
-        private readonly ServiceProvider _serviceProvider;
-        private readonly IEvmProvider? _provider;
-        private readonly IEvmSigner? _signer;
+        private readonly ServiceProvider serviceProvider;
+        private readonly IEvmProvider? provider;
+        private readonly IEvmSigner? signer;
 
-        private bool _initialized;
-        private bool _terminated;
-
-        public IEvmProvider Provider => AssertComponentAccessible(_provider, nameof(Provider))!;
-        public IEvmSigner Signer => AssertComponentAccessible(_signer, nameof(Signer))!;
+        private bool initialized;
+        private bool terminated;
 
         internal Web3(ServiceProvider serviceProvider, IEvmProvider? provider = null, IEvmSigner? signer = null)
         {
-            _serviceProvider = serviceProvider;
-            _provider = provider;
-            _signer = signer;
+            this.serviceProvider = serviceProvider;
+            this.provider = provider;
+            this.signer = signer;
         }
 
-        void IDisposable.Dispose() => Terminate();
+        public IEvmProvider Provider => AssertComponentAccessible(provider, nameof(Provider))!;
 
-        public async ValueTask Initialize()
-        {
-            if (_initialized) throw new Web3Exception("Web3 was already initialized.");
-            if (_provider != null) await _provider.Initialize();
+        public IEvmSigner Signer => AssertComponentAccessible(signer, nameof(Signer))!;
 
-            // todo initialize other components
-
-            _initialized = true;
-        }
-
-        public void Terminate()
-        {
-            if (_terminated) throw new Web3Exception("Web3 was already terminated.");
-
-            if (_initialized)
-            {
-                // todo terminate other components
-            }
-
-            _serviceProvider.Dispose();
-            _terminated = true;
-        }
-
-        private T AssertComponentAccessible<T>(T value, string propertyName)
+        private static T AssertComponentAccessible<T>(T value, string propertyName)
         {
             if (value == null)
             {
@@ -68,8 +43,45 @@ namespace ChainSafe.GamingWeb3
             // {
             //   throw new Web3Exception($"Can't access {propertyName}. Initialize Web3 first.");
             // }
-
             return value;
+        }
+
+        void IDisposable.Dispose()
+        {
+            Terminate();
+            GC.SuppressFinalize(this);
+        }
+
+        public async ValueTask Initialize()
+        {
+            if (initialized)
+            {
+                throw new Web3Exception("Web3 was already initialized.");
+            }
+
+            if (provider != null)
+            {
+                await provider.Initialize();
+            }
+
+            // todo initialize other components
+            initialized = true;
+        }
+
+        public void Terminate()
+        {
+            if (terminated)
+            {
+                throw new Web3Exception("Web3 was already terminated.");
+            }
+
+            if (initialized)
+            {
+                // todo terminate other components
+            }
+
+            serviceProvider.Dispose();
+            terminated = true;
         }
     }
 }

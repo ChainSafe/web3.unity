@@ -2,37 +2,37 @@
 using Nethereum.Hex.HexTypes;
 using NUnit.Framework;
 using Web3Unity.Scripts.Library.Ethers.Providers;
-using TransactionRequest = Web3Unity.Scripts.Library.Ethers.Transactions.TransactionRequest;
+using Web3Unity.Scripts.Library.Ethers.Transactions;
 
 namespace ChainSafe.GamingSDK.EVM.Tests
 {
     [TestFixture]
     public class ProvidersSendTests
     {
-        private JsonRpcProvider _ganacheProvider;
+        private JsonRpcProvider ganacheProvider;
 
         [OneTimeSetUp]
         public void SetUp()
         {
-            _ganacheProvider = ProviderMigration.NewJsonRpcProvider("http://127.0.0.1:7545");
+            ganacheProvider = ProviderMigration.NewJsonRpcProvider("http://127.0.0.1:7545");
         }
 
         [Test]
         public void SendTransactionTest()
         {
-            TestHelper.VerifyGanacheConnection(_ganacheProvider);
+            TestHelper.VerifyGanacheConnection(ganacheProvider);
 
-            var from = _ganacheProvider.GetSigner();
+            var from = ganacheProvider.GetSigner();
             var fromInitialBalance = from.GetBalance().Result.Value;
 
-            var to = _ganacheProvider.GetSigner(1);
+            var to = ganacheProvider.GetSigner(1);
             var toInitialBalance = to.GetBalance().Result.Value;
 
             var amount = new HexBigInteger(1000000);
             var tx = from.SendTransaction(new TransactionRequest
             {
                 To = to.GetAddress().Result,
-                Value = amount
+                Value = amount,
             }).Result;
             Assert.True(tx.Hash.StartsWith("0x"));
 
@@ -46,8 +46,8 @@ namespace ChainSafe.GamingSDK.EVM.Tests
         [Test]
         public void SendTransactionWithInvalidAddress()
         {
-            TestHelper.VerifyGanacheConnection(_ganacheProvider);
-            var from = _ganacheProvider.GetSigner();
+            TestHelper.VerifyGanacheConnection(ganacheProvider);
+            var from = ganacheProvider.GetSigner();
             const string to = "not_a_valid_address";
             var amount = new HexBigInteger(1000000);
             var transaction = new TransactionRequest
@@ -55,7 +55,7 @@ namespace ChainSafe.GamingSDK.EVM.Tests
                 To = to,
                 Value = amount,
                 GasLimit = new HexBigInteger("10000"),
-                GasPrice = new HexBigInteger("100000000")
+                GasPrice = new HexBigInteger("100000000"),
             };
 
             var ex = Assert.ThrowsAsync<Exception>(async () =>
@@ -68,8 +68,8 @@ namespace ChainSafe.GamingSDK.EVM.Tests
         [Test]
         public void SendTransactionWithLowGasLimit()
         {
-            TestHelper.VerifyGanacheConnection(_ganacheProvider);
-            var from = _ganacheProvider.GetSigner();
+            TestHelper.VerifyGanacheConnection(ganacheProvider);
+            var from = ganacheProvider.GetSigner();
             const string to = "0x1234567890123456789012345678901234567890";
             var amount = new HexBigInteger(1000000);
             var gasLimit = new HexBigInteger(1);
@@ -77,7 +77,7 @@ namespace ChainSafe.GamingSDK.EVM.Tests
             {
                 To = to,
                 Value = amount,
-                GasLimit = gasLimit
+                GasLimit = gasLimit,
             };
 
             var ex = Assert.ThrowsAsync<Exception>(async () =>
@@ -90,8 +90,8 @@ namespace ChainSafe.GamingSDK.EVM.Tests
         [Test]
         public void SendTransactionWithLowGasPrice()
         {
-            TestHelper.VerifyGanacheConnection(_ganacheProvider);
-            var from = _ganacheProvider.GetSigner();
+            TestHelper.VerifyGanacheConnection(ganacheProvider);
+            var from = ganacheProvider.GetSigner();
             const string to = "0x1234567890123456789012345678901234567890";
             var amount = new HexBigInteger(1000000);
             var gasPrice = new HexBigInteger(1);
@@ -99,7 +99,7 @@ namespace ChainSafe.GamingSDK.EVM.Tests
             {
                 To = to,
                 Value = amount,
-                GasPrice = gasPrice
+                GasPrice = gasPrice,
             };
 
             Assert.ThrowsAsync<Exception>(() => from.SendTransaction(transaction));

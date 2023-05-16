@@ -12,33 +12,30 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 {
     public class JsonRpcProvider : BaseProvider
     {
-        private readonly JsonRpcProviderConfiguration _configuration;
-        private readonly Web3Environment _environment;
-        private readonly ChainProvider _chainProvider;
+        private readonly JsonRpcProviderConfiguration configuration;
+        private readonly Web3Environment environment;
+        private readonly ChainProvider chainProvider;
 
-        private uint _nextMessageId;
+        private uint nextMessageId;
 
-        // todo can be removed after Evm/Migration removed from project
-        public string RpcNodeUrl => _configuration.RpcNodeUrl;
-
-        private readonly JsonSerializerSettings _jsonSerializerSettings = new JsonSerializerSettings
+        public JsonRpcProvider(
+            JsonRpcProviderConfiguration configuration,
+            Web3Environment environment,
+            ChainProvider chainProvider)
+            : base(configuration.Network, environment)
         {
-            NullValueHandling = NullValueHandling.Ignore
-        };
+            this.chainProvider = chainProvider;
+            this.environment = environment;
+            this.configuration = configuration;
 
-
-        public JsonRpcProvider(JsonRpcProviderConfiguration configuration, Web3Environment environment,
-            ChainProvider chainProvider) : base(configuration.Network)
-        {
-            _chainProvider = chainProvider;
-            _environment = environment;
-            _configuration = configuration;
-
-            if (string.IsNullOrEmpty(_configuration.RpcNodeUrl))
+            if (string.IsNullOrEmpty(this.configuration.RpcNodeUrl))
             {
-                _configuration.RpcNodeUrl = _environment.SettingsProvider.DefaultRpcUrl;
+                this.configuration.RpcNodeUrl = this.environment.SettingsProvider.DefaultRpcUrl;
             }
         }
+
+        // todo can be removed after Evm/Migration removed from project
+        public string RpcNodeUrl => configuration.RpcNodeUrl;
 
         public override async Task<Network.Network> DetectNetwork()
         {
@@ -51,7 +48,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
                 throw new Web3Exception("Couldn't detect network");
             }
 
-            var chain = await _chainProvider.GetChain(chainId);
+            var chain = await chainProvider.GetChain(chainId);
             return chain != null
                 ? new Network.Network { Name = chain.Name, ChainId = chainId }
                 : new Network.Network { Name = "Unknown", ChainId = chainId };
@@ -72,9 +69,9 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
         public async Task<TResponse> Send<TResponse>(string method, params object[] parameters)
         {
-            var httpClient = _environment.HttpClient;
-            var request = new RpcRequestMessage(_nextMessageId++, method, parameters);
-            var response = await httpClient.Post<RpcRequestMessage, RpcResponseMessage>(_configuration.RpcNodeUrl, request);
+            var httpClient = environment.HttpClient;
+            var request = new RpcRequestMessage(nextMessageId++, method, parameters);
+            var response = (await httpClient.Post<RpcRequestMessage, RpcResponseMessage>(configuration.RpcNodeUrl, request)).EnsureResponse();
 
             if (response.HasError)
             {
@@ -90,12 +87,6 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
         public override async Task<T> Perform<T>(string method, params object[] parameters)
         {
             return await Send<T>(method, parameters);
-        }
-
-        protected override void _populateEventProperties(Dictionary<string, object> properties)
-        {
-            properties["provider"] = "jsonrpc";
-            properties["rpc"] = _configuration.RpcNodeUrl;
         }
     }
 }

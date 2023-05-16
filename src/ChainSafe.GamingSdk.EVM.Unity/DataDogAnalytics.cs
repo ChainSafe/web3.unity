@@ -6,16 +6,16 @@ namespace ChainSafe.GamingSdk.Evm.Unity
 {
     public class DataDogAnalytics : IAnalyticsClient
     {
-        private readonly DataDog _dataDog;
+        private readonly DataDog dataDog;
 
         public DataDogAnalytics(DataDogAnalyticsConfiguration configuration)
         {
-            _dataDog = new DataDog(configuration.ApiKey, configuration.BaseUrl);
+            dataDog = new DataDog(configuration.ApiKey, configuration.BaseUrl);
         }
 
         public void CaptureEvent(string eventName, Dictionary<string, object> properties)
         {
-            _dataDog.Capture(eventName, properties);
+            dataDog.Capture(eventName, properties);
         }
     }
 }

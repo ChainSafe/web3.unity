@@ -14,21 +14,21 @@ namespace Web3Unity.Scripts.Library.Ethers.Transactions
 
             if (payload[0] > 0x7f)
             {
-                return _parse(payload);
+                return Parse(payload);
             }
 
             switch (payload[0])
             {
                 case 1:
-                    return _parseEip2930(payload);
+                    return ParseEip2930(payload);
                 case 2:
-                    return _parseEip1559(payload);
+                    return ParseEip1559(payload);
             }
 
             throw new Exception($"unsupported transaction type: {payload[0]}");
         }
 
-        private Transaction _parse(byte[] payload)
+        private Transaction Parse(byte[] payload)
         {
             var decodedList = RLP.RLP.Decode(payload);
             var decodedElements = (RLPCollection)decodedList;
@@ -100,11 +100,10 @@ namespace Web3Unity.Scripts.Library.Ethers.Transactions
             // }
             //
             // tx.type = null;
-
             return tx;
         }
 
-        private Transaction _parseEip2930(byte[] payload)
+        private Transaction ParseEip2930(byte[] payload)
         {
             var decodedList = RLP.RLP.Decode(payload.Skip(1).ToArray());
             var decodedElements = (RLPCollection)decodedList;
@@ -124,6 +123,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Transactions
                 To = decodedElements[4].RLPData?.ToHex(true),
                 Value = new HexBigInteger(decodedElements[5].RLPData.ToBigIntegerFromRLPDecoded()),
                 Data = decodedElements[6].RLPData?.ToHex(true),
+
                 // AccessList = new List<AccessList>(), // TODO: parse this
             };
 
@@ -134,13 +134,11 @@ namespace Web3Unity.Scripts.Library.Ethers.Transactions
             }
 
             // tx.Hash = keccak256(payload);
-
             // _parseEipSignature(tx, decodedElement.Skip(8).ToArray(), _serializeEip2930);
-
             return tx;
         }
 
-        private Transaction _parseEip1559(byte[] payload)
+        private Transaction ParseEip1559(byte[] payload)
         {
             var decodedList = RLP.RLP.Decode(payload.Skip(1).ToArray());
             var decodedElements = (RLPCollection)decodedList;
@@ -161,6 +159,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Transactions
                 To = decodedElements[5].RLPData?.ToHex(true),
                 Value = new HexBigInteger(decodedElements[6].RLPData.ToBigIntegerFromRLPDecoded()),
                 Data = decodedElements[7].RLPData?.ToHex(true),
+
                 // AccessList = new List<AccessList>(), // TODO: parse this
             };
 
@@ -171,9 +170,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Transactions
             }
 
             // tx.Hash = keccak256(payload);
-
             // _parseEipSignature(tx, decodedElement.Skip(8).ToArray(), _serializeEip2930);
-
             return tx;
         }
     }

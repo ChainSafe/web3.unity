@@ -11,38 +11,51 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
 {
     public class JsonRpcSigner : BaseSigner
     {
-        private readonly JsonRpcSignerConfiguration _configuration;
+        private readonly JsonRpcSignerConfiguration configuration;
 
-        private string _address;
-        private bool _connected;
+        private string address;
+        private bool connected;
 
-        public JsonRpcSigner(JsonRpcSignerConfiguration configuration, IEvmProvider provider) : base(provider)
+        public JsonRpcSigner(JsonRpcSignerConfiguration configuration, IEvmProvider provider)
+            : base(provider)
         {
-            _configuration = configuration;
-            _address = _configuration.AddressOverride;
+            this.configuration = configuration;
+            address = this.configuration.AddressOverride;
+        }
+
+        public override bool Connected => connected;
+
+        public override async ValueTask Connect()
+        {
+            // simply check connection and cache address in case of JsonRpc
+            address = await GetAddress();
+            connected = true;
         }
 
         public override async Task<string> GetAddress()
         {
-            if (_address != null) return _address;
-
-            var accounts = await Provider.Perform<string[]>("eth_accounts");
-            if (accounts.Length <= _configuration.AccountIndex)
+            if (address != null)
             {
-                throw new Web3Exception($"No account with index #{_configuration.AccountIndex} available");
+                return address;
             }
 
-            return accounts[_configuration.AccountIndex];
+            var accounts = await Provider.Perform<string[]>("eth_accounts");
+            if (accounts.Length <= configuration.AccountIndex)
+            {
+                throw new Web3Exception($"No account with index #{configuration.AccountIndex} available");
+            }
+
+            return accounts[configuration.AccountIndex];
         }
 
         public override async Task<string> SignMessage(byte[] message)
         {
-            return await _signMessage(message.ToHex());
+            return await SignMessageImpl(message.ToHex());
         }
 
         public override async Task<string> SignMessage(string message)
         {
-            return await _signMessage(message.ToHexUTF8());
+            return await SignMessageImpl(message.ToHexUTF8());
         }
 
         public override async Task<TransactionResponse> SendTransaction(TransactionRequest transaction)
@@ -69,7 +82,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
             {
                 var estimate = (TransactionRequest)transaction.Clone();
                 estimate.From = fromAddress;
-                transaction.GasLimit = (await Provider.EstimateGas(transaction));
+                transaction.GasLimit = await Provider.EstimateGas(transaction);
                 transaction.GasLimit = new HexBigInteger(transaction.GasLimit.Value * 2);
             }
 
@@ -89,35 +102,26 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
             return await Provider.Perform<string>("eth_sendTransaction", rpcTxParams);
         }
 
-        private async Task<string> _signMessage(string hexMessage)
+        private async Task<string> SignMessageImpl(string hexMessage)
         {
             var address = await GetAddress();
             return await Provider.Perform<string>("personal_sign", hexMessage, address.ToLower());
         }
 
-        public async Task<string> _LegacySignMessage(byte[] message)
+        public async Task<string> LegacySignMessage(byte[] message)
         {
-            return await _legacySignMessage(message.ToHex(true));
+            return await LegacySignMessageImpl(message.ToHex(true));
         }
 
-        public async Task<string> _LegacySignMessage(string message)
+        public async Task<string> LegacySignMessage(string message)
         {
-            return await _legacySignMessage(message.ToHexUTF8());
+            return await LegacySignMessageImpl(message.ToHexUTF8());
         }
 
-        private async Task<string> _legacySignMessage(string hexMessage)
+        private async Task<string> LegacySignMessageImpl(string hexMessage)
         {
             var address = await GetAddress();
             return await Provider.Perform<string>("eth_sign", address.ToLower(), hexMessage);
-        }
-
-        public override bool Connected => _connected;
-
-        public override async ValueTask Connect()
-        {
-            // simply check connection and cache address in case of JsonRpc
-            _address = await GetAddress();
-            _connected = true;
         }
     }
 }

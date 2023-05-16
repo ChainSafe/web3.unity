@@ -6,21 +6,21 @@ namespace ChainSafe.GamingWeb3.Unity
 {
     public class UnityLogWriter : ILogWriter
     {
-        private readonly IMainThreadRunner _mainThreadRunner;
+        private readonly IMainThreadRunner mainThreadRunner;
 
         public UnityLogWriter(IMainThreadRunner mainThreadRunner)
         {
-            _mainThreadRunner = mainThreadRunner;
+            this.mainThreadRunner = mainThreadRunner;
         }
 
         public void Log(string message)
         {
-            _mainThreadRunner.Enqueue(() => Debug.Log(FormatMessage(message)));
+            mainThreadRunner.Enqueue(() => Debug.Log(FormatMessage(message)));
         }
 
         public void LogError(string message)
         {
-            _mainThreadRunner.Enqueue(() => Debug.LogError(FormatMessage(message)));
+            mainThreadRunner.Enqueue(() => Debug.LogError(FormatMessage(message)));
         }
 
         private static string FormatMessage(string message)

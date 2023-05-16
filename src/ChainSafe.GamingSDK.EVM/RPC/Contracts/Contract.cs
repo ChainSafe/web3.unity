@@ -1,6 +1,6 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
-using Web3Unity.Scripts.Library.Ethers;
 using Nethereum.Hex.HexTypes;
 using Web3Unity.Scripts.Library.Ethers.Contracts.Builders;
 using Web3Unity.Scripts.Library.Ethers.Providers;
@@ -9,20 +9,13 @@ using Web3Unity.Scripts.Library.Ethers.Transactions;
 
 namespace Web3Unity.Scripts.Library.Ethers.Contracts
 {
-    public static class MyUtils
-    {
-        public static T[] Empty<T>()
-        {
-            return new T[0];
-        }
-    }
     public class Contract
     {
-        private readonly string _abi;
-        private readonly string _address;
-        private readonly IEvmProvider _provider;
-        private readonly IEvmSigner _signer;
-        private readonly ContractBuilder _contractBuilder;
+        private readonly string abi;
+        private readonly string address;
+        private readonly IEvmProvider provider;
+        private readonly IEvmSigner signer;
+        private readonly ContractBuilder contractBuilder;
 
         public Contract(string abi, string address = "", IEvmProvider provider = null)
         {
@@ -31,22 +24,25 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
                 throw new ArgumentException("message", nameof(abi));
             }
 
-            _abi = abi;
-            _address = address;
-            _provider = provider;
-            _contractBuilder = new ContractBuilder(abi, address);
+            this.abi = abi;
+            this.address = address;
+            this.provider = provider;
+            contractBuilder = new ContractBuilder(abi, address);
         }
 
-        public Contract(string abi, string address, IEvmSigner signer) : this(abi, address, signer.Provider)
+        public Contract(string abi, string address, IEvmSigner signer)
+            : this(abi, address, signer.Provider)
         {
-            _signer = signer;
+            this.signer = signer;
         }
+
         /// <summary>
-        /// Returns a new instance of the Contract, but connected to providerOrSigner. By passing in a Provider, this will return a downgraded Contract which only has read-only access (i.e. constant calls). By passing in a Signer. this will return a Contract which will act on behalf of that signer.
+        /// Returns a new instance of the Contract, but connected to provider. This
+        /// will return a downgraded Contract which only has read-only access
+        /// (i.e. constant calls).
         /// </summary>
-        /// <param name="provider"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
+        /// <param name="provider">The provider.</param>
+        /// <returns>The new contract.</returns>
         public Contract Connect(IEvmProvider provider)
         {
             if (provider == null)
@@ -54,14 +50,15 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
                 throw new Exception("provider is not set");
             }
 
-            return new Contract(_abi, _address, provider);
+            return new Contract(abi, address, provider);
         }
+
         /// <summary>
-        /// Returns a new instance of the Contract, but connected to providerOrSigner. By passing in a Provider, this will return a downgraded Contract which only has read-only access (i.e. constant calls). By passing in a Signer. this will return a Contract which will act on behalf of that signer.
+        /// Returns a new instance of the Contract, but connected to signer.
+        /// This will return a Contract which will act on behalf of the signer.
         /// </summary>
-        /// <param name="provider"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
+        /// <param name="signer">The signer.</param>
+        /// <returns>The new contract.</returns>
         public Contract Connect(IEvmSigner signer)
         {
             if (signer == null)
@@ -69,14 +66,14 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
                 throw new Exception("signer is not set");
             }
 
-            return new Contract(_abi, _address, signer);
+            return new Contract(abi, address, signer);
         }
+
         /// <summary>
         /// Returns a new instance of the Contract attached to a new address. This is useful if there are multiple similar or identical copies of a Contract on the network and you wish to interact with each of them.
         /// </summary>
-        /// <param name="address"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
+        /// <param name="address">Address of the contract to attach to.</param>
+        /// <returns>The new contract.</returns>
         public Contract Attach(string address)
         {
             if (string.IsNullOrEmpty(address))
@@ -84,36 +81,29 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
                 throw new Exception("contract address is not set");
             }
 
-            return new Contract(_abi, address, _provider);
+            return new Contract(abi, address, provider);
         }
-        /// <summary>
-        ///  Call Contract
-        /// </summary>
-        /// <param name="method"></param>
-        /// <param name="parameters"></param>
-        /// <param name="overwrite"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
+
         public async Task<object[]> Call(string method, object[] parameters = null, TransactionRequest overwrite = null)
         {
-            if (string.IsNullOrEmpty(_address))
+            if (string.IsNullOrEmpty(address))
             {
                 throw new Exception("contract address is not set");
             }
 
-            if (_provider == null)
+            if (provider == null)
             {
                 throw new Exception("provider or signer is not set");
             }
 
-            parameters ??= MyUtils.Empty<object>();
+            parameters ??= Array.Empty<object>();
 
-            var function = _contractBuilder.GetFunctionBuilder(method);
+            var function = contractBuilder.GetFunctionBuilder(method);
             var txReq = overwrite ?? new TransactionRequest();
-            txReq.To = _address;
+            txReq.To = address;
             txReq.Data = function.GetData(parameters);
 
-            var result = await _provider.Call(txReq);
+            var result = await provider.Call(txReq);
 
             var output = function.DecodeOutput(result);
             var array = new object[output.Count];
@@ -124,88 +114,87 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
 
             return array;
         }
+
         /// <summary>
-        /// Sends Transaction
+        /// Sends the transaction.
         /// </summary>
-        /// <param name="method"></param>
-        /// <param name="parameters"></param>
-        /// <param name="overwrite"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
+        /// <param name="method">The method.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <param name="overwrite">An existing TransactionRequest to use instead of making a new one.</param>
+        /// <returns>The outputs of the method.</returns>
         public async Task<object[]> Send(string method, object[] parameters = null, TransactionRequest overwrite = null)
         {
-            if (string.IsNullOrEmpty(_address))
+            if (string.IsNullOrEmpty(address))
             {
                 throw new Exception("contract address is not set");
             }
 
-            if (_signer == null)
+            if (signer == null)
             {
                 throw new Exception("signer is not set");
             }
 
-            parameters ??= MyUtils.Empty<object>();
+            parameters ??= Array.Empty<object>();
 
-            var function = _contractBuilder.GetFunctionBuilder(method);
+            var function = contractBuilder.GetFunctionBuilder(method);
             var txReq = overwrite ?? new TransactionRequest();
-            txReq.From = await _signer.GetAddress();
-            txReq.To = _address;
+            txReq.From = await signer.GetAddress();
+            txReq.To = address;
             txReq.Data = function.GetData(parameters);
 
-            var tx = await _signer.SendTransaction(txReq);
+            var tx = await signer.SendTransaction(txReq);
             var receipt = await tx.Wait();
 
             var output = function.DecodeOutput(tx.Data);
-            var array = new object[output.Count];
-            for (var i = 0; i < output.Count; i++)
-            {
-                array[i] = output[i].Result;
-            }
-
-            return array;
+            return output.Select(x => x.Result).ToArray();
         }
+
         /// <summary>
-        /// Estimate Gas
+        /// Estimate gas.
         /// </summary>
-        /// <param name="method"></param>
-        /// <param name="parameters"></param>
-        /// <param name="overwrite"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
-        public async Task<HexBigInteger> EstimateGas(string method, object[] parameters,
+        /// <param name="method">The method.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <param name="overwrite">An existing TransactionRequest to use instead of making a new one.</param>
+        /// <returns>The estimated amount of gas.</returns>
+        public async Task<HexBigInteger> EstimateGas(
+            string method,
+            object[] parameters,
             TransactionRequest overwrite = null)
         {
-            if (string.IsNullOrEmpty(_address))
+            if (string.IsNullOrEmpty(address))
             {
                 throw new Exception("contract address is not set");
             }
-            if (_provider == null)
+
+            if (provider == null)
             {
                 throw new Exception("provider or signer is not set");
             }
 
-            var function = _contractBuilder.GetFunctionBuilder(method);
+            var function = contractBuilder.GetFunctionBuilder(method);
             var txReq = overwrite ?? new TransactionRequest();
 
-            if (_signer != null)
+            if (signer != null)
             {
-                txReq.From = txReq.From = await _signer.GetAddress();
+                txReq.From = txReq.From = await signer.GetAddress();
             }
 
-            txReq.To = _address;
+            txReq.To = address;
             txReq.Data = function.GetData(parameters);
 
-            return await _provider.EstimateGas(txReq);
+            return await provider.EstimateGas(txReq);
         }
+
         /// <summary>
-        /// Create Contract Data
+        /// Create contract call data.
         /// </summary>
-        /// <param name="method"></param>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
+        /// <param name="method">The method.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>The contract call data.</returns>
         public string Calldata(string method, object[] parameters = null)
         {
-            parameters ??= MyUtils.Empty<object>();
+            parameters ??= Array.Empty<object>();
+
             // TODO: since this code isn't built in Unity, these blocks will always be left out.
 #if UNITY_EDITOR_WIN || UNITY_EDITOR_OSX || UNITY_IOS || UNITY_ANDROID
             var data = new
@@ -231,7 +220,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
             };
             var dataObject = GameLogger.Log("", "", dataWebGL);
 #endif
-            var function = _contractBuilder.GetFunctionBuilder(method);
+            var function = contractBuilder.GetFunctionBuilder(method);
             return function.GetData(parameters);
         }
     }

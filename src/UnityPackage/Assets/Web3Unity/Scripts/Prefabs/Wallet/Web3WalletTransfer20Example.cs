@@ -17,9 +17,9 @@ public class Web3WalletTransfer20Example : MonoBehaviour
         // value in wei
         string value = "0";
         // abi in json format
-        string abi = "";//ABI.ERC_20;
+        string abi = ABI.ERC_20;
         // smart contract method to call
-        string method = "";//ETH_METHOD.Transfer;
+        string method = ETH_METHOD.Transfer;
         // account to send erc20 to
         string toAccount = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
         // amount of erc20 tokens to send

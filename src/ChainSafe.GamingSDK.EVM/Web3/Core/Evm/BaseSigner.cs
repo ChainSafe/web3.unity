@@ -1,25 +1,25 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Web3Unity.Scripts.Library.Ethers;
-using Web3Unity.Scripts.Library.Ethers.Transactions;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
 using Web3Unity.Scripts.Library.Ethers.Providers;
+using Web3Unity.Scripts.Library.Ethers.Transactions;
 
 namespace Web3Unity.Scripts.Library.Ethers.Signers
 {
     public abstract class BaseSigner : IEvmSigner
     {
-        public IEvmProvider Provider { get; }
-
-        public abstract bool Connected { get; }
-        public abstract ValueTask Connect();
-
         protected BaseSigner(IEvmProvider provider)
         {
             Provider = provider;
         }
+
+        public virtual IEvmProvider Provider { get; private set; }
+
+        public abstract bool Connected { get; }
+
+        public abstract ValueTask Connect();
 
         // TODO: specific reason why these functions weren't abstract?
         public abstract Task<string> GetAddress();

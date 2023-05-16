@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06e300208fa3ee04a99d031a99308441, type: 3}
   m_Name: ProjectConfigData
   m_EditorClassIdentifier: 
-  ProjectID: 
-  ChainID: 
-  Chain: 
-  Network: 
-  RPC: 
+  projectID: 
+  chainID: 
+  chain: 
+  network: 
+  rpc: 

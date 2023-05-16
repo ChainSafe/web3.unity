@@ -6,9 +6,9 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders.FilterInput
 {
     internal class TopicFilter
     {
-        internal static readonly TopicFilter Empty = new TopicFilter(null, null);
+        internal static readonly TopicFilter Empty = new(null, null);
 
-        private List<object> _values;
+        private List<object> values;
 
         internal TopicFilter(PropertyInfo eventDtoProperty, ParameterAttribute parameterAttribute)
         {
@@ -17,20 +17,19 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders.FilterInput
         }
 
         public PropertyInfo EventDtoProperty { get; }
+
         public ParameterAttribute ParameterAttribute { get; }
 
         public object[] GetValues()
         {
-            return _values == null || _values.Count == 0 ? null : _values.ToArray();
+            return values == null || values.Count == 0 ? null : values.ToArray();
         }
 
         public void AddValue(object val)
         {
-            if (_values == null)
-            {
-                _values = new List<object>();
-            }
-            _values.Add(val);
+            values ??= new List<object>();
+
+            values.Add(val);
         }
     }
 }

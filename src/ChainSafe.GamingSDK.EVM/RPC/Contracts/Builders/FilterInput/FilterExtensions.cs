@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using Nethereum.Hex.HexTypes;
@@ -8,11 +9,12 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders.FilterInput
 {
     public static class FilterExtensions
     {
-        private readonly static object[] EmptyObjectArray = new object[0];
         public static string Key(this FilterLog log)
         {
             if (log.TransactionHash == null || log.LogIndex == null)
+            {
                 return log.GetHashCode().ToString();
+            }
 
             return $"{log.TransactionHash}{log.LogIndex.HexValue}";
         }
@@ -34,7 +36,11 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders.FilterInput
 
         public static BigInteger? NumberOfBlocksInBlockParameters(this NewFilterInput filter)
         {
-            if (filter.FromBlock?.BlockNumber == null || filter.ToBlock?.BlockNumber == null) return null;
+            if (filter.FromBlock?.BlockNumber == null || filter.ToBlock?.BlockNumber == null)
+            {
+                return null;
+            }
+
             return (filter.ToBlock.BlockNumber.Value - filter.FromBlock.BlockNumber.Value) + 1;
         }
 
@@ -72,17 +78,32 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders.FilterInput
         {
             var allTopics = filter.Topics;
 
-            if (allTopics == null) return EmptyObjectArray;
-            if (allTopics.Length < 2) return EmptyObjectArray;
-            if (topicNumber > allTopics.Length) return EmptyObjectArray;
+            if (allTopics == null)
+            {
+                return Array.Empty<object>();
+            }
+
+            if (allTopics.Length < 2)
+            {
+                return Array.Empty<object>();
+            }
+
+            if (topicNumber > allTopics.Length)
+            {
+                return Array.Empty<object>();
+            }
 
             if (allTopics[topicNumber] is object[] topicValues)
+            {
                 return topicValues;
+            }
 
             if (allTopics[topicNumber] is object val)
+            {
                 return new[] { val };
+            }
 
-            return EmptyObjectArray;
+            return Array.Empty<object>();
         }
     }
 }

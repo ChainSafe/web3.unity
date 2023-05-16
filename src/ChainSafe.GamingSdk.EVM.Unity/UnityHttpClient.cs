@@ -10,68 +10,60 @@ namespace ChainSafe.GamingWeb3.Unity
 {
     public class UnityHttpClient : IHttpClient
     {
-        private readonly IMainThreadRunner _mainThreadRunner;
+        private readonly IMainThreadRunner mainThreadRunner;
 
         public UnityHttpClient(IMainThreadRunner mainThreadRunner)
         {
-            _mainThreadRunner = mainThreadRunner;
+            this.mainThreadRunner = mainThreadRunner;
         }
 
-        public ValueTask<string> GetRaw(string url)
+        private static NetworkResponse<string> UnityWebRequestToNetworkResponse(UnityWebRequest request)
         {
-            return new ValueTask<string>(_mainThreadRunner.EnqueueTask(async () =>
+            Assert.AreNotEqual(request.result, UnityWebRequest.Result.InProgress);
+
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                throw new Web3Exception($"HTTP.Get responded with error: {request.error}");
+            }
+
+            return NetworkResponse<string>.Success(request.downloadHandler.text);
+        }
+
+        public ValueTask<NetworkResponse<string>> GetRaw(string url)
+        {
+            return new ValueTask<NetworkResponse<string>>(mainThreadRunner.EnqueueTask(async () =>
             {
                 using var request = UnityWebRequest.Get(url);
                 request.downloadHandler = new DownloadHandlerBuffer();
                 await request.SendWebRequest();
-
-                Assert.AreNotEqual(request.result, UnityWebRequest.Result.InProgress);
-
-                if (request.result != UnityWebRequest.Result.Success)
-                {
-                    throw new Web3Exception($"HTTP.Get responded with error: {request.error}");
-                }
-
-                var response = request.downloadHandler.text;
-                return response;
+                return UnityWebRequestToNetworkResponse(request);
             }));
         }
 
-        public ValueTask<string> PostRaw(string url, string data, string contentType)
+        public ValueTask<NetworkResponse<string>> PostRaw(string url, string data, string contentType)
         {
-            return new ValueTask<string>(_mainThreadRunner.EnqueueTask(async () =>
+            return new ValueTask<NetworkResponse<string>>(mainThreadRunner.EnqueueTask(async () =>
             {
                 using var request = new UnityWebRequest(url, "POST");
                 request.uploadHandler = new UploadHandlerRaw(new UTF8Encoding().GetBytes(data));
                 request.downloadHandler = new DownloadHandlerBuffer();
                 request.SetRequestHeader("Content-Type", contentType);
                 await request.SendWebRequest();
-
-                Assert.AreNotEqual(request.result, UnityWebRequest.Result.InProgress);
-
-                if (request.result != UnityWebRequest.Result.Success)
-                {
-                    throw new Web3Exception($"HTTP.Post responded with error: {request.error}");
-                }
-
-                var response = request.downloadHandler.text;
-                return response;
+                return UnityWebRequestToNetworkResponse(request);
             }));
         }
 
-        public async ValueTask<TResponse> Get<TResponse>(string url)
+        public async ValueTask<NetworkResponse<TResponse>> Get<TResponse>(string url)
         {
-            var responseJson = await GetRaw(url);
-            var response = JsonConvert.DeserializeObject<TResponse>(responseJson);
-            return response;
+            var response = await GetRaw(url);
+            return response.Map(x => JsonConvert.DeserializeObject<TResponse>(x));
         }
 
-        public async ValueTask<TResponse> Post<TRequest, TResponse>(string url, TRequest data)
+        public async ValueTask<NetworkResponse<TResponse>> Post<TRequest, TResponse>(string url, TRequest data)
         {
             var requestJson = JsonConvert.SerializeObject(data);
-            var responseJson = await PostRaw(url, requestJson, "application/json");
-            var response = JsonConvert.DeserializeObject<TResponse>(responseJson);
-            return response;
+            var response = await PostRaw(url, requestJson, "application/json");
+            return response.Map(x => JsonConvert.DeserializeObject<TResponse>(x));
         }
     }
 }

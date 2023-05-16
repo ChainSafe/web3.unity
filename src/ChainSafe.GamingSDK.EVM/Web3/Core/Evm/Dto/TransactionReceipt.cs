@@ -31,13 +31,13 @@ namespace Web3Unity.Scripts.Library.Ethers.Transactions
         public HexBigInteger BlockNumber { get; set; }
 
         /// <summary>
-        ///     DATA, 20 Bytes - From address
+        ///     DATA, 20 Bytes - From address.
         /// </summary>
         [JsonProperty(PropertyName = "from")]
         public string From { get; set; }
 
         /// <summary>
-        ///     DATA, 20 Bytes - To address
+        ///     DATA, 20 Bytes - To address.
         /// </summary>
         [JsonProperty(PropertyName = "to")]
         public string To { get; set; }
@@ -67,7 +67,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Transactions
         public string ContractAddress { get; set; }
 
         /// <summary>
-        ///     QUANTITY / BOOLEAN Transaction Success 1, Transaction Failed 0
+        ///     QUANTITY / BOOLEAN Transaction Success 1, Transaction Failed 0.
         /// </summary>
         [JsonProperty(PropertyName = "status")]
         public HexBigInteger Status { get; set; }
@@ -85,13 +85,13 @@ namespace Web3Unity.Scripts.Library.Ethers.Transactions
         public HexBigInteger Type { get; set; }
 
         /// <summary>
-        ///     DATA, 256 Bytes - Bloom filter for light clients to quickly retrieve related logs
+        ///     DATA, 256 Bytes - Bloom filter for light clients to quickly retrieve related logs.
         /// </summary>
         [JsonProperty(PropertyName = "logsBloom")]
         public string LogsBloom { get; set; }
 
         /// <summary>
-        ///  DATA, 32 Bytes The post-transaction state root. Only specified for transactions included before the Byzantium upgrade. (DEPRECATED)
+        ///  DATA, 32 Bytes The post-transaction state root. Only specified for transactions included before the Byzantium upgrade. (DEPRECATED).
         /// </summary>
         [JsonProperty(PropertyName = "root")]
         public string Root { get; set; }

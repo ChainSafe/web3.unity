@@ -11,6 +11,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
         }
 
         public T Event { get; }
+
         public FilterLog Log { get; }
     }
 }

@@ -10,7 +10,11 @@ namespace Web3Unity.Scripts.Library.Ethers.RLP
     {
         public static BigInteger ToBigIntegerFromRLPDecoded(this byte[] bytes)
         {
-            if (bytes == null) return 0;
+            if (bytes == null)
+            {
+                return 0;
+            }
+
             if (BitConverter.IsLittleEndian)
             {
                 var listEncoded = bytes.ToList();
@@ -18,6 +22,7 @@ namespace Web3Unity.Scripts.Library.Ethers.RLP
                 bytes = listEncoded.ToArray().Reverse().ToArray();
                 return new BigInteger(bytes);
             }
+
             return new BigInteger(bytes);
         }
 
@@ -45,7 +50,10 @@ namespace Web3Unity.Scripts.Library.Ethers.RLP
         {
             var output = new List<byte[]>();
             foreach (var str in strings)
+            {
                 output.Add(str.ToBytesForRLPEncoding());
+            }
+
             return output.ToArray();
         }
 
@@ -61,14 +69,20 @@ namespace Web3Unity.Scripts.Library.Ethers.RLP
 
         public static string ToStringFromRLPDecoded(this byte[] bytes)
         {
-            if (bytes == null) return "";
+            if (bytes == null)
+            {
+                return string.Empty;
+            }
+
             return Encoding.UTF8.GetString(bytes, 0, bytes.Length);
         }
 
         public static byte[] ToBytesFromNumber(byte[] bytes)
         {
             if (BitConverter.IsLittleEndian)
+            {
                 bytes = bytes.Reverse().ToArray();
+            }
 
             return TrimZeroBytes(bytes);
         }
@@ -81,7 +95,9 @@ namespace Web3Unity.Scripts.Library.Ethers.RLP
             for (var i = 0; i < bytes.Length; i++)
             {
                 if (previousByteWasZero && bytes[i] == 0)
+                {
                     continue;
+                }
 
                 previousByteWasZero = false;
                 trimmed.Add(bytes[i]);

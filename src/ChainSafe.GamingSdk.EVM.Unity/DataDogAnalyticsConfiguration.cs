@@ -6,13 +6,13 @@ namespace ChainSafe.GamingSdk.Evm.Unity
     public class DataDogAnalyticsConfiguration
     {
         /// <summary>
-        /// Your unique api key for DataDog
+        /// Your unique api key for DataDog.
         /// </summary>
-        public string ApiKey;
+        public string ApiKey { get; set; }
 
         /// <summary>
-        /// (Optional) TODO
+        /// (Optional) TODO.
         /// </summary>
-        public string BaseUrl;
+        public string BaseUrl { get; set; }
     }
 }

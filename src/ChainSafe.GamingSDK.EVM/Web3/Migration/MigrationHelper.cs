@@ -29,7 +29,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Migration
                   services.UseJsonRpcProvider(new JsonRpcProviderConfiguration
                   {
                       RpcNodeUrl = provider.RpcNodeUrl,
-                      Network = provider.Network
+                      Network = provider.Network,
                   });
                   services.UseJsonRpcSigner(new JsonRpcSignerConfiguration { AddressOverride = address });
               }).Build();
@@ -46,7 +46,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Migration
                   services.UseJsonRpcProvider(new JsonRpcProviderConfiguration
                   {
                       RpcNodeUrl = provider.RpcNodeUrl,
-                      Network = provider.Network
+                      Network = provider.Network,
                   });
                   services.UseJsonRpcSigner(new JsonRpcSignerConfiguration { AccountIndex = index });
               }).Build();
