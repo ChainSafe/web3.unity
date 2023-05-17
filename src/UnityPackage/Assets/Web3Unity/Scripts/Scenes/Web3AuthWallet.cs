@@ -124,7 +124,7 @@ public class Web3AuthWallet : MonoBehaviour
         if (W3AWalletUtils.incomingAction == "Sign")
         {
             // attempt to sign tx
-            try 
+            try
             {
                 string tx = W3AWalletUtils.SignMsgW3A(W3AWalletUtils.pk, W3AWalletUtils.incomingMessageData);
                 IncomingTxHash.text = "Signing...";
@@ -132,7 +132,9 @@ public class Web3AuthWallet : MonoBehaviour
                 W3AWalletUtils.signedTxResponse = tx;
                 IncomingTxHash.text = "Sign Successful!";
                 UpdateTxHistory(System.DateTime.Now.ToString(), "Sign", "0", "N/A");
-            }catch (Exception e){
+            }
+            catch (Exception e)
+            {
                 Debug.LogException(e, this);
             }
             // sets getter back to null ready for the next transaction
@@ -163,7 +165,9 @@ public class Web3AuthWallet : MonoBehaviour
                 W3AWalletUtils.signedTxResponse = tx;
                 IncomingTxHash.text = "Broadcast Successful!";
                 UpdateTxHistory(System.DateTime.Now.ToString(), "Transaction", W3AWalletUtils.amount, tx.ToString());
-            }catch (Exception e){
+            }
+            catch (Exception e)
+            {
                 Debug.LogException(e, this);
             }
             // sets bool back to false ready for the next transaction
@@ -208,7 +212,8 @@ public class Web3AuthWallet : MonoBehaviour
             string amount = Convert.ToDecimal(wei).ToString();
             W3AWalletUtils.outgoingContract = SendingToWallet.text;
             // connects to user's browser wallet (metamask) to send a transaction
-            try{
+            try
+            {
                 // connects to user's browser wallet to call a transaction
                 var contract = new Contract(customTokenABI, customTokenCA);
                 Debug.Log("Contract: " + contract);
@@ -224,7 +229,8 @@ public class Web3AuthWallet : MonoBehaviour
                 W3AWalletUtils.incomingTxData = calldata;
                 W3AWalletUtils.amount = AmountToSend.text;
                 this.GetComponent<Web3AuthWallet>().OpenButton();
-            }catch (Exception e){
+            } catch (Exception e)
+            {
                 Debug.LogException(e, this);
             }
         }
