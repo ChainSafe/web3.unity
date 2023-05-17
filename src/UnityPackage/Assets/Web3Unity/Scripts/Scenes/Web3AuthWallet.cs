@@ -50,14 +50,12 @@ public class Web3AuthWallet : MonoBehaviour
         W3AWalletUtils.pk = PlayerPrefs.GetString("PK");
         PlayerPrefs.SetString("PK", "");
     }
-    
     public void CloseButton()
     {
         // closes the wallet
         walletOpen = false;
         WalletCanvas.SetActive(false);
     }
-    
     public void OpenButton()
     {
         // opens the wallet and stops wallet being used on log in scene as it isn't ready
@@ -75,7 +73,6 @@ public class Web3AuthWallet : MonoBehaviour
         // gets balances
         GetData();
     }
-    
     async public void GetData()
     {
         // updates the wallets balances and custom tokens if specified by dev
@@ -129,13 +126,13 @@ public class Web3AuthWallet : MonoBehaviour
             // attempt to sign tx
             try 
             {
-               string tx = W3AWalletUtils.SignMsgW3A(W3AWalletUtils.pk, W3AWalletUtils.incomingMessageData);
-               IncomingTxHash.text = "Signing...";
-               await new WaitForSeconds(3);
-               W3AWalletUtils.signedTxResponse = tx;
-               IncomingTxHash.text = "Sign Successful!";
-               UpdateTxHistory(System.DateTime.Now.ToString(), "Sign", "0", "N/A");
-            } catch (Exception e) {
+                string tx = W3AWalletUtils.SignMsgW3A(W3AWalletUtils.pk, W3AWalletUtils.incomingMessageData);
+                IncomingTxHash.text = "Signing...";
+                await new WaitForSeconds(3);
+                W3AWalletUtils.signedTxResponse = tx;
+                IncomingTxHash.text = "Sign Successful!";
+                UpdateTxHistory(System.DateTime.Now.ToString(), "Sign", "0", "N/A");
+            }catch (Exception e){
                 Debug.LogException(e, this);
             }
             // sets getter back to null ready for the next transaction
@@ -143,16 +140,15 @@ public class Web3AuthWallet : MonoBehaviour
             W3AWalletUtils.incomingTxData = "";
             W3AWalletUtils.incomingMessageData = "";
         }
-        
         if (W3AWalletUtils.incomingAction == "Broadcast")
         {
             // attempt to broadcast tx
-            try 
+            try
             {
                 string _chain = PlayerPrefs.GetString("Chain");
                 string _chainId = PlayerPrefs.GetString("ChainID");
                 string _network = PlayerPrefs.GetString("Network");
-                string _rpc = PlayerPrefs.GetString("RPC");;
+                string _rpc = PlayerPrefs.GetString("RPC");
                 string _to = W3AWalletUtils.outgoingContract;
                 string _value = "0";
                 string _data = W3AWalletUtils.incomingTxData;
@@ -161,13 +157,13 @@ public class Web3AuthWallet : MonoBehaviour
                 //tring _gasLimit = await W3AWalletUtils.GasLimit(_chain, _network, _to, _value, _data, _rpc);
                 string transaction = await W3AWalletUtils.CreateTransaction(_chain, _network, W3AWalletUtils.account, _to, _value, _data, _gasPrice.ToString(), _gasLimit, _rpc);
                 string signedTx = W3AWalletUtils.SignTransactionW3A(W3AWalletUtils.pk, transaction, _chainId);
-                string tx = await W3AWalletUtils.BroadcastTransactionW3A(_chain,_network, W3AWalletUtils.account, _to, _value, _data, signedTx, _gasPrice.ToString(), _gasLimit, _rpc);
+                string tx = await W3AWalletUtils.BroadcastTransactionW3A(_chain, _network, W3AWalletUtils.account, _to, _value, _data, signedTx, _gasPrice.ToString(), _gasLimit, _rpc);
                 IncomingTxHash.text = "Broadcasting...";
                 await new WaitForSeconds(3);
                 W3AWalletUtils.signedTxResponse = tx;
                 IncomingTxHash.text = "Broadcast Successful!";
                 UpdateTxHistory(System.DateTime.Now.ToString(), "Transaction", W3AWalletUtils.amount, tx.ToString());
-            } catch (Exception e) {
+            }catch (Exception e){
                 Debug.LogException(e, this);
             }
             // sets bool back to false ready for the next transaction
@@ -212,7 +208,7 @@ public class Web3AuthWallet : MonoBehaviour
             string amount = Convert.ToDecimal(wei).ToString();
             W3AWalletUtils.outgoingContract = SendingToWallet.text;
             // connects to user's browser wallet (metamask) to send a transaction
-            try {
+            try{
                 // connects to user's browser wallet to call a transaction
                 var contract = new Contract(customTokenABI, customTokenCA);
                 Debug.Log("Contract: " + contract);
@@ -228,7 +224,7 @@ public class Web3AuthWallet : MonoBehaviour
                 W3AWalletUtils.incomingTxData = calldata;
                 W3AWalletUtils.amount = AmountToSend.text;
                 this.GetComponent<Web3AuthWallet>().OpenButton();
-            } catch (Exception e) {
+            }catch (Exception e){
                 Debug.LogException(e, this);
             }
         }
