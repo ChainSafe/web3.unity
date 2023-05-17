@@ -229,7 +229,8 @@ public class Web3AuthWallet : MonoBehaviour
                 W3AWalletUtils.incomingTxData = calldata;
                 W3AWalletUtils.amount = AmountToSend.text;
                 this.GetComponent<Web3AuthWallet>().OpenButton();
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 Debug.LogException(e, this);
             }
