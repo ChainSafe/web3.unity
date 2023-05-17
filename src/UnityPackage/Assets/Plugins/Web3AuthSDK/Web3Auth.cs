@@ -65,7 +65,7 @@ public class Web3Auth : MonoBehaviour
 //        } 
 #endif
 
-        authorizeSession();
+        //authorizeSession();
     }
 
     public void setOptions(Web3AuthOptions web3AuthOptions)
