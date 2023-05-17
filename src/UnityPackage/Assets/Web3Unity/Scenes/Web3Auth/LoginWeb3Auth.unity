@@ -419,6 +419,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1252166805705039956, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1390155622}
+    - target: {fileID: 1252166805705039956, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Logout
+      objectReference: {fileID: 0}
+    - target: {fileID: 1252166805705039956, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Web3AuthWallet, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 4345567620435825774, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
       propertyPath: m_Name
       value: CSWallet
@@ -2134,6 +2146,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1335677076}
   m_CullTransparentMesh: 0
+--- !u!114 &1390155622 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4345567620435825772, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
+  m_PrefabInstance: {fileID: 208088974}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e0f8552a464b734ebc4bb7609304d03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1509531154
 GameObject:
   m_ObjectHideFlags: 0
