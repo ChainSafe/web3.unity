@@ -40,7 +40,6 @@ public class Web3AuthLogin : MonoBehaviour
 
     [SerializeField]
     Button logoutButton;
-    
     ProjectConfigScriptableObject projectConfigSO = null;
 
     void Start()
