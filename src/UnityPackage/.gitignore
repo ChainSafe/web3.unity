@@ -80,3 +80,6 @@ crashlytics-build.properties
 
 # Ignore the build artifacts from our libraries
 /Assets/Plugins/Web3/Libraries
+
+# Since the folder is called 'Debug', it's being ignored, so negate that
+!Assets/Plugins/Web3AuthSDK/Debug
