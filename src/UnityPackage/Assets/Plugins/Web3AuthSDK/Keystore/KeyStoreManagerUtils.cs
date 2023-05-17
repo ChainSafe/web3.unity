@@ -36,7 +36,8 @@ public class KeyStoreManagerUtils
             var q = new ECPublicKeyParameters("EC", domain.G.Multiply(key.D), parameters).Q;
 
             return Hex.ToHexString(domain.Curve.CreatePoint(q.XCoord.ToBigInteger(), q.YCoord.ToBigInteger()).GetEncoded(false));
-        } catch (System.Exception ex)
+        }
+        catch (System.Exception ex)
         {
             UnityEngine.Debug.Log(ex);
             return "";
@@ -76,7 +77,8 @@ public class KeyStoreManagerUtils
 #endif
     }
 
-    public static string getECDSASignature(string privateKey, string data){
+    public static string getECDSASignature(string privateKey, string data)
+    {
         var curve = SecNamedCurves.GetByName("secp256k1");
         var domain = new ECDomainParameters(curve.Curve, curve.G, curve.N, curve.H);
         var keyParameters = new ECPrivateKeyParameters(new BigInteger(privateKey, 16), domain);

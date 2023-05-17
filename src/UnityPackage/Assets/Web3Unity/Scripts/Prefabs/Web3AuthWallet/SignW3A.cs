@@ -7,7 +7,7 @@ public class SignW3A : MonoBehaviour
     public Text responseText;
     public string message = "This is a test message to sign";
     private GameObject CSWallet = null;
-    
+
     public void OnEnable()
     {
         // resets response text

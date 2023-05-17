@@ -23,11 +23,11 @@ namespace Web3Unity.Scripts.Library.Ethers.Web3AuthWallet
         public static string incomingMessageData { get; set; }
         public static string signedTxResponse { get; set; }
         public static bool incomingTx { get; set; }
-        
+
         private static readonly string host = "https://api.gaming.chainsafe.io/evm";
 
         // used to obtain a users wallet address from their private key stored in memory
-        public static string GetAddressW3A(string _privateKey)  =>new EthECKey(_privateKey).GetPublicAddress();
+        public static string GetAddressW3A(string _privateKey) => new EthECKey(_privateKey).GetPublicAddress();
 
         // used to sign a message with a users private key stored in memory
         public static string SignMsgW3A(string _privateKey, string _message) => new EthereumMessageSigner().HashAndSign(_message, _privateKey);
@@ -55,7 +55,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Web3AuthWallet
                 return data.response;
             }
         }
-        
+
         // used to sign a transaction with a users private key stored in memory
         public static string SignTransactionW3A(string _privateKey, string _transaction, string _chainId)
         {
@@ -65,7 +65,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Web3AuthWallet
             BigInteger chainId = BigInteger.Parse(_chainId);
             return int32 == 137 || int32 == 80001 || int32 == 1666600000 || int32 == 1666700000 || int32 == 25 || int32 == 338 || int32 == 250 || int32 == 4002 || int32 == 43114 || int32 == 43113 ? EthECDSASignature.CreateStringSignature(ethEcKey.SignAndCalculateYParityV(byteArray)) : EthECDSASignature.CreateStringSignature(ethEcKey.SignAndCalculateV(byteArray, chainId));
         }
-        
+
         // broadcasts a signed transaction
         public static async Task<string> BroadcastTransactionW3A(string _chain, string _network, string _account, string _to, string _value, string _data, string _signature, string _gasPrice, string _gasLimit, string _rpc)
         {

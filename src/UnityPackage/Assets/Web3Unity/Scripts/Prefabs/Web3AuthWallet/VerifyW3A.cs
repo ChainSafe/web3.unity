@@ -16,7 +16,7 @@ public class VerifyW3A : MonoBehaviour
         // resets response text
         responseText.text = "";
     }
-    
+
     public void UserSign()
     {
         // finds the wallet, sets sign and incoming tx conditions to true and opens
@@ -26,7 +26,7 @@ public class VerifyW3A : MonoBehaviour
         W3AWalletUtils.incomingMessageData = message;
         CSWallet.GetComponent<Web3AuthWallet>().OpenButton();
     }
-    
+
     public void SignVerifySignature(string signatureString, string originalMessage)
     {
         string msg = "\x19" + "Ethereum Signed Message:\n" + originalMessage.Length + originalMessage;
@@ -40,7 +40,7 @@ public class VerifyW3A : MonoBehaviour
         // display signed tx response from wallet
         responseText.text = "Verify Address: " + key.GetPublicAddress();
     }
-    
+
     void Update()
     {
         if (W3AWalletUtils.signedTxResponse != "")

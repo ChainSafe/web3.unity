@@ -28,7 +28,7 @@ public class ContractCallSignW3A : MonoBehaviour
             }
         }
     */
-    
+
     public void OnEnable()
     {
         // resets response text
@@ -75,7 +75,7 @@ public class ContractCallSignW3A : MonoBehaviour
         CSWallet.GetComponent<Web3AuthWallet>().OpenButton();
         print("Please check the contract variable again in a few seconds once the chain has processed the request!");
     }
-    
+
     void Update()
     {
         if (W3AWalletUtils.signedTxResponse != "")

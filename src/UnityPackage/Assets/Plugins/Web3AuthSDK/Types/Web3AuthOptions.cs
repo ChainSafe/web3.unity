@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
-public class Web3AuthOptions {
+public class Web3AuthOptions
+{
     //public context: Context,
     public string clientId { get; set; }
     public Web3Auth.Network network { get; set; }
