@@ -1,0 +1,7 @@
+#container {
+    margin: 10px;
+}
+
+#title {
+    margin-bottom: 20px;
+}
