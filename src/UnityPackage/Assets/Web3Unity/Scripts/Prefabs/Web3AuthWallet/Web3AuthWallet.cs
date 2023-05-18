@@ -264,6 +264,14 @@ public class Web3AuthWallet : MonoBehaviour
             HashesTexts[2].text = txHash;
             txNumber++;
         }
+        else if (txNumber == 3)
+        {
+            DatesTexts[3].text = date;
+            ActionsTexts[3].text = action;
+            AmountsTexts[3].text = amount;
+            HashesTexts[3].text = txHash;
+            txNumber++;
+        }
         else
         {
             // push all transactions down and update

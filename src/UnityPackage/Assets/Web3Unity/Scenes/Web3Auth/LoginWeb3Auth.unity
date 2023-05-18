@@ -412,164 +412,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 159681584}
   m_CullTransparentMesh: 0
---- !u!1001 &208088974
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1252166805705039956, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1390155622}
-    - target: {fileID: 1252166805705039956, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Logout
-      objectReference: {fileID: 0}
-    - target: {fileID: 1252166805705039956, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Web3AuthWallet, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 4345567620435825772, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
-      propertyPath: customTokenCA
-      value: 0x6f352D71b68875AA9b92a041F046D1B22291E4e4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4345567620435825772, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
-      propertyPath: customTokenABI
-      value: '[ { "inputs": [], "stateMutability": "nonpayable", "type": "constructor"
-        }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address",
-        "name": "owner", "type": "address" }, { "indexed": true, "internalType":
-        "address", "name": "spender", "type": "address" }, { "indexed": false, "internalType":
-        "uint256", "name": "value", "type": "uint256" } ], "name": "Approval", "type":
-        "event" }, { "inputs": [ { "internalType": "address", "name": "spender",
-        "type": "address" }, { "internalType": "uint256", "name": "amount", "type":
-        "uint256" } ], "name": "approve", "outputs": [ { "internalType": "bool",
-        "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type":
-        "function" }, { "inputs": [ { "internalType": "address", "name": "spender",
-        "type": "address" }, { "internalType": "uint256", "name": "subtractedValue",
-        "type": "uint256" } ], "name": "decreaseAllowance", "outputs": [ { "internalType":
-        "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable",
-        "type": "function" }, { "inputs": [ { "internalType": "address", "name":
-        "spender", "type": "address" }, { "internalType": "uint256", "name": "addedValue",
-        "type": "uint256" } ], "name": "increaseAllowance", "outputs": [ { "internalType":
-        "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable",
-        "type": "function" }, { "inputs": [ { "internalType": "address", "name":
-        "to", "type": "address" }, { "internalType": "uint256", "name": "amount",
-        "type": "uint256" } ], "name": "mint", "outputs": [], "stateMutability":
-        "nonpayable", "type": "function" }, { "anonymous": false, "inputs": [ { "indexed":
-        true, "internalType": "address", "name": "previousOwner", "type": "address"
-        }, { "indexed": true, "internalType": "address", "name": "newOwner", "type":
-        "address" } ], "name": "OwnershipTransferred", "type": "event" }, { "inputs":
-        [], "name": "renounceOwnership", "outputs": [], "stateMutability": "nonpayable",
-        "type": "function" }, { "inputs": [ { "internalType": "address", "name":
-        "to", "type": "address" }, { "internalType": "uint256", "name": "amount",
-        "type": "uint256" } ], "name": "transfer", "outputs": [ { "internalType":
-        "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable",
-        "type": "function" }, { "anonymous": false, "inputs": [ { "indexed": true,
-        "internalType": "address", "name": "from", "type": "address" }, { "indexed":
-        true, "internalType": "address", "name": "to", "type": "address" }, { "indexed":
-        false, "internalType": "uint256", "name": "value", "type": "uint256" } ],
-        "name": "Transfer", "type": "event" }, { "inputs": [ { "internalType": "address",
-        "name": "from", "type": "address" }, { "internalType": "address", "name":
-        "to", "type": "address" }, { "internalType": "uint256", "name": "amount",
-        "type": "uint256" } ], "name": "transferFrom", "outputs": [ { "internalType":
-        "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable",
-        "type": "function" }, { "inputs": [ { "internalType": "address", "name":
-        "newOwner", "type": "address" } ], "name": "transferOwnership", "outputs":
-        [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [
-        { "internalType": "address", "name": "owner", "type": "address" }, { "internalType":
-        "address", "name": "spender", "type": "address" } ], "name": "allowance",
-        "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" }
-        ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType":
-        "address", "name": "account", "type": "address" } ], "name": "balanceOf",
-        "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" }
-        ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name":
-        "decimals", "outputs": [ { "internalType": "uint8", "name": "", "type": "uint8"
-        } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name":
-        "name", "outputs": [ { "internalType": "string", "name": "", "type": "string"
-        } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name":
-        "owner", "outputs": [ { "internalType": "address", "name": "", "type": "address"
-        } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name":
-        "symbol", "outputs": [ { "internalType": "string", "name": "", "type": "string"
-        } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name":
-        "totalSupply", "outputs": [ { "internalType": "uint256", "name": "", "type":
-        "uint256" } ], "stateMutability": "view", "type": "function" } ]'
-      objectReference: {fileID: 0}
-    - target: {fileID: 4345567620435825774, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
-      propertyPath: m_Name
-      value: CSWallet
-      objectReference: {fileID: 0}
-    - target: {fileID: 4345567620435825775, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
-      propertyPath: m_RootOrder
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4345567620435825775, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4345567620435825775, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4345567620435825775, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 4345567620435825775, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4345567620435825775, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4345567620435825775, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4345567620435825775, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4345567620435825775, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4345567620435825775, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4345567620435825775, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4345567621468223718, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
-      propertyPath: m_UiScaleMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4345567621468223739, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4345567621927929311, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.7255046
-      objectReference: {fileID: 0}
-    - target: {fileID: 4345567621927929311, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.7255046
-      objectReference: {fileID: 0}
-    - target: {fileID: 4345567621927929311, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.7255046
-      objectReference: {fileID: 0}
-    - target: {fileID: 4345567621927929311, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -279
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
 --- !u!1 &235747596
 GameObject:
   m_ObjectHideFlags: 0
@@ -2211,17 +2053,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1335677076}
   m_CullTransparentMesh: 0
---- !u!114 &1390155622 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4345567620435825772, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
-  m_PrefabInstance: {fileID: 208088974}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e0f8552a464b734ebc4bb7609304d03, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1509531154
 GameObject:
   m_ObjectHideFlags: 0
@@ -2344,6 +2175,75 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1509531154}
   m_CullTransparentMesh: 0
+--- !u!1001 &1544232336
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4345567620435825774, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
+      propertyPath: m_Name
+      value: CSWallet
+      objectReference: {fileID: 0}
+    - target: {fileID: 4345567620435825775, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4345567620435825775, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4345567620435825775, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4345567620435825775, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 4345567620435825775, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4345567620435825775, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4345567620435825775, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4345567620435825775, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4345567620435825775, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4345567620435825775, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4345567620435825775, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4345567621468223718, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
+      propertyPath: m_MatchWidthOrHeight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4345567621468223719, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
+      propertyPath: m_PixelPerfect
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4345567621468223739, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
 --- !u!1 &1709238520
 GameObject:
   m_ObjectHideFlags: 0
