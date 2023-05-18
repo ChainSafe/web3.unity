@@ -25,10 +25,9 @@ public class TransferW3A : MonoBehaviour
         // smart contract method to call
         string method = "transfer";
         W3AWalletUtils.outgoingContract = contractAddress;
-        // connects to user's browser wallet (metamask) to send a transaction
         try
         {
-            // connects to user's browser wallet to call a transaction
+            // connects to user's wallet to call a transaction
             var contract = new Contract(contractAbi, contractAddress);
             Debug.Log("Contract: " + contract);
             var calldata = contract.Calldata(method, new object[]
@@ -56,7 +55,7 @@ public class TransferW3A : MonoBehaviour
         // smart contract method to call
         string method = "mint";
         W3AWalletUtils.outgoingContract = contractAddress;
-        // connects to user's browser wallet (metamask) to send a transaction
+        // connects to user's wallet to send a transaction
         try
         {
             var contract = new Contract(contractAbi, contractAddress);
