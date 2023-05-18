@@ -210,8 +210,8 @@ public class Web3AuthWallet : MonoBehaviour
             float decimals = 1000000000000000000; // 18 decimals
             float wei = eth * decimals;
             string amount = Convert.ToDecimal(wei).ToString();
-            W3AWalletUtils.outgoingContract = SendingToWallet.text;
-            // connects to user's browser wallet (metamask) to send a transaction
+            W3AWalletUtils.outgoingContract = customTokenCA;
+            // connects to user's wallet to send a transaction
             try
             {
                 // connects to user's browser wallet to call a transaction

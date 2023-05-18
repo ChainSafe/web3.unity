@@ -52,7 +52,6 @@ public class TransferW3A : MonoBehaviour
 
     public void Mint()
     {
-        string account = PlayerPrefs.GetString("Account");
         // smart contract method to call
         string method = "mint";
         W3AWalletUtils.outgoingContract = contractAddress;
@@ -63,6 +62,7 @@ public class TransferW3A : MonoBehaviour
             Debug.Log("Contract: " + contract);
             var calldata = contract.Calldata(method, new object[]
             {
+                W3AWalletUtils.account,
                 BigInteger.Parse(amount)
             });
             Debug.Log("Contract Data: " + calldata);
