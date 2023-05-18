@@ -431,6 +431,48 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: Web3AuthWallet, Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 4345567620435825772, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
+      propertyPath: customTokenCA
+      value: 0xCa8EEB07d45127F6FCacB04B99c42003267Cc11E
+      objectReference: {fileID: 0}
+    - target: {fileID: 4345567620435825772, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
+      propertyPath: customTokenABI
+      value: '[ { "inputs": [ { "internalType": "uint256", "name": "_value", "type":
+        "uint256" } ], "name": "mint", "outputs": [ { "internalType": "bool", "name":
+        "success", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function"
+        }, { "inputs": [ { "internalType": "address", "name": "_to", "type": "address"
+        }, { "internalType": "uint256", "name": "_value", "type": "uint256" } ],
+        "name": "transfer", "outputs": [ { "internalType": "bool", "name": "success",
+        "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" },
+        { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" },
+        { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address",
+        "name": "_owner", "type": "address" }, { "indexed": false, "internalType":
+        "uint256", "name": "_value", "type": "uint256" } ], "name": "Mint", "type":
+        "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType":
+        "address", "name": "_from", "type": "address" }, { "indexed": true, "internalType":
+        "address", "name": "_to", "type": "address" }, { "indexed": false, "internalType":
+        "uint256", "name": "_value", "type": "uint256" } ], "name": "Transfer", "type":
+        "event" }, { "inputs": [], "name": "_decimal", "outputs": [ { "internalType":
+        "uint8", "name": "", "type": "uint8" } ], "stateMutability": "view", "type":
+        "function" }, { "inputs": [], "name": "_name", "outputs": [ { "internalType":
+        "string", "name": "", "type": "string" } ], "stateMutability": "view", "type":
+        "function" }, { "inputs": [], "name": "_symbol", "outputs": [ { "internalType":
+        "string", "name": "", "type": "string" } ], "stateMutability": "view", "type":
+        "function" }, { "inputs": [], "name": "_totalSupply", "outputs": [ { "internalType":
+        "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view",
+        "type": "function" }, { "inputs": [ { "internalType": "address", "name":
+        "_owner", "type": "address" } ], "name": "balanceOf", "outputs": [ { "internalType":
+        "uint256", "name": "balance", "type": "uint256" } ], "stateMutability": "view",
+        "type": "function" }, { "inputs": [], "name": "decimals", "outputs": [ {
+        "internalType": "uint8", "name": "", "type": "uint8" } ], "stateMutability":
+        "view", "type": "function" }, { "inputs": [], "name": "name", "outputs":
+        [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability":
+        "view", "type": "function" }, { "inputs": [], "name": "symbol", "outputs":
+        [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability":
+        "view", "type": "function" }, { "inputs": [], "name": "totalSupply", "outputs":
+        [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability":
+        "view", "type": "function" } ]'
+      objectReference: {fileID: 0}
     - target: {fileID: 4345567620435825774, guid: 3ab2c7d20d1e69843932b8cc57cfa5e7, type: 3}
       propertyPath: m_Name
       value: CSWallet
