@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using ChainSafe.GamingWeb3.Environment;
+using Nethereum.Hex.HexTypes;
 
 namespace ChainSafe.GamingSdk.Gelato
 {
@@ -48,8 +49,12 @@ namespace ChainSafe.GamingSdk.Gelato
         {
         }
 
-        public void GetEstimatedFee()
+        public void GetEstimatedFee(ulong chainId, string paymentToken, HexBigInteger gasLimit, bool isHighPriority, HexBigInteger gasLimitL1 = null)
         {
+            if (gasLimitL1 == null)
+            {
+                gasLimitL1 = new HexBigInteger("0x0");
+            }
         }
 
         public void GetTaskStatus()
