@@ -1,6 +1,9 @@
 using System.Threading.Tasks;
+using ChainSafe.GamingSdk.Gelato.Relay;
 using ChainSafe.GamingWeb3.Environment;
 using Nethereum.Hex.HexTypes;
+using Web3Unity.Scripts.Library.Ethers.Providers;
+using Web3Unity.Scripts.Library.Ethers.Signers;
 
 namespace ChainSafe.GamingSdk.Gelato
 {
@@ -13,19 +16,27 @@ namespace ChainSafe.GamingSdk.Gelato
             this.httpClient = httpClient;
         }
 
-        public void CallWithSyncFee()
+        public void CallWithSyncFee(CallWithSyncFeeRequest request, RelayRequestOptions options = null)
         {
         }
 
-        public void CallWithSyncFeeERC2771()
+        public void CallWithSyncFeeERC2771(CallWithSyncFeeERC2771Request request, IEvmProvider provider, RelayRequestOptions options = null)
         {
         }
 
-        public void SponsoredCall()
+        public void CallWithSyncFeeERC2771(CallWithSyncFeeERC2771Request request, IEvmSigner wallet, RelayRequestOptions options = null)
         {
         }
 
-        public void SponsoredCallERC2771()
+        public void SponsoredCall(SponsoredCallRequest request, string sponsorApiKey, RelayRequestOptions options = null)
+        {
+        }
+
+        public void SponsoredCallERC2771(SponsoredCallERC2771Request request, IEvmProvider provider, string sponsorApiKey, RelayRequestOptions options = null)
+        {
+        }
+
+        public void SponsoredCallERC2771(SponsoredCallERC2771Request request, IEvmSigner provider, string sponsorApiKey, RelayRequestOptions options = null)
         {
         }
 
@@ -37,7 +48,7 @@ namespace ChainSafe.GamingSdk.Gelato
         {
         }
 
-        public void IsOracleActive()
+        public void IsOracleActive(ulong chainId)
         {
         }
 
@@ -45,7 +56,7 @@ namespace ChainSafe.GamingSdk.Gelato
         {
         }
 
-        public void GetPaymentTokens()
+        public void GetPaymentTokens(ulong chainId)
         {
         }
 
@@ -57,7 +68,7 @@ namespace ChainSafe.GamingSdk.Gelato
             }
         }
 
-        public void GetTaskStatus()
+        public void GetTaskStatus(string taskId)
         {
         }
     }
