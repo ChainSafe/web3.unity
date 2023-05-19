@@ -27,5 +27,33 @@ namespace ChainSafe.GamingSdk.Gelato
         public void SponsoredCallERC2771()
         {
         }
+
+        public void IsNetworkSupported(uint networkId)
+        {
+        }
+
+        public void GetSupportedNetworks()
+        {
+        }
+
+        public void IsOracleActive()
+        {
+        }
+
+        public void GetGelatoOracles()
+        {
+        }
+
+        public void GetPaymentTokens()
+        {
+        }
+
+        public void GetEstimatedFee()
+        {
+        }
+
+        public void GetTaskStatus()
+        {
+        }
     }
 }
