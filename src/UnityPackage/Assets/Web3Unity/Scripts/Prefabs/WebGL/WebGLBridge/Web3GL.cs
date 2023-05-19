@@ -9,6 +9,9 @@ using Web3Unity.Scripts.Library.ETHEREUEM.WebGL;
 public class Web3GL
 {
     [DllImport("__Internal")]
+    
+    private static extern void AddTokenFunction(string _tokenAddress,string _tokenSymbol,string _tokenDecimals,string _tokenImage);
+    [DllImport("__Internal")]
     private static extern void SendContractJs(string method, string abi, string contract, string args, string value,
         string gasLimit, string gasPrice);
 
@@ -63,6 +66,13 @@ public class Web3GL
 
     [DllImport("__Internal")]
     private static extern int GetNetwork();
+    
+    // this function will add a custom token to EOA if not present
+    public static void AddTokenFunctionWeb(string tokenAddress,string tokenSymbol,string tokenDecimals,string tokenImage)
+    {
+       AddTokenFunction(tokenAddress,tokenSymbol,tokenDecimals,tokenImage);
+    }
+
 
     // this function will create a metamask tx for user to confirm.
     public static async Task<string> SendContract(string _method, string _abi, string _contract, string _args,
