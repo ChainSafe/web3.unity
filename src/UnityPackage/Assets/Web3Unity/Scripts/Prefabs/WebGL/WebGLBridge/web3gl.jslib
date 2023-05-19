@@ -33,6 +33,15 @@ mergeInto(LibraryManager.library, {
     return buffer;
   },
 
+    AddTokenFunction: function(_tokenAddress, _tokenSymbol, _tokenDecimals, _tokenImage){
+      window.web3gl.addTokenFunction(
+        UTF8ToString(_tokenAddress),
+        UTF8ToString( _tokenSymbol),
+        UTF8ToString(_tokenDecimals),
+        UTF8ToString(_tokenImage),
+      );
+    },
+
    EcRecoverJS: function (message,signature) {
     window.web3gl.ecRecover(
      UTF8ToString(message),
