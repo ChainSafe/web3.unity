@@ -9,6 +9,9 @@ using Web3Unity.Scripts.Library.ETHEREUEM.WebGL;
 public class Web3GL
 {
     [DllImport("__Internal")]
+    
+    private static extern void AddTokenFunction(string _tokenAddress,string _tokenSymbol,string _tokenDecimals,string _tokenImage);
+    [DllImport("__Internal")]
     private static extern void SendContractJs(string method, string abi, string contract, string args, string value,
         string gasLimit, string gasPrice);
 
@@ -63,6 +66,13 @@ public class Web3GL
 
     [DllImport("__Internal")]
     private static extern int GetNetwork();
+    
+    // this function will add a custom token to EOA if not present
+    public static void AddTokenFunctionWeb(string tokenAddress,string tokenSymbol,string tokenDecimals,string tokenImage)
+    {
+       AddTokenFunction(tokenAddress,tokenSymbol,tokenDecimals,tokenImage);
+    }
+
 
     // this function will create a metamask tx for user to confirm.
     public static async Task<string> SendContract(string _method, string _abi, string _contract, string _args,
@@ -77,12 +87,12 @@ public class Web3GL
             Version = "v2",
             ProjectID = PlayerPrefs.GetString("ProjectID"),
             Player = Sha3(PlayerPrefs.GetString("Account") + PlayerPrefs.GetString("ProjectID")),
-            Method = _method,
-            Address = _contract,
-            ABI = _abi,
-            ARGS = _args,
-            Value = _value,
-            GasLimit = _gasLimit,
+            Method = _method, 
+            Address = _contract, 
+            ABI = _abi, 
+            ARGS = _args, 
+            Value = _value, 
+            GasLimit = _gasLimit, 
             GasPrice = _gasPrice
         };
         await GameLogger.Log(PlayerPrefs.GetString("ChainId"), PlayerPrefs.GetString("RPC"), data);
@@ -111,13 +121,13 @@ public class Web3GL
         SendTransactionJs(_to, _value, _gasLimit, _gasPrice);
         var data = new
         {
-            Client = "WebGL",
+            Client = "WebGL", 
             Version = "v2",
             ProjectID = PlayerPrefs.GetString("ProjectID"),
             Player = Sha3(PlayerPrefs.GetString("Account") + PlayerPrefs.GetString("ProjectID")).ToString(),
-            To = _to,
-            Value = _value,
-            GasLimit = _gasLimit,
+            To = _to, 
+            Value = _value, 
+            GasLimit = _gasLimit, 
             GasPrice = _gasPrice
         };
         var response = SendTransactionResponse();
@@ -149,9 +159,9 @@ public class Web3GL
             Version = "v2",
             ProjectID = PlayerPrefs.GetString("ProjectID"),
             Player = Sha3(PlayerPrefs.GetString("Account") + PlayerPrefs.GetString("ProjectID")),
-            To = _to,
-            Value = _value,
-            GasLimit = _gasLimit,
+            To = _to, 
+            Value = _value, 
+            GasLimit = _gasLimit, 
             GasPrice = _gasPrice
         };
         var response = SendTransactionResponse();
