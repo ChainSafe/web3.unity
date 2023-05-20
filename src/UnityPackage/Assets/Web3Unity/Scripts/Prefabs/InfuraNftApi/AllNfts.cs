@@ -7,6 +7,21 @@ using UnityEngine.Networking;
 
 public class AllNfts : MonoBehaviour
 {
+    /*
+    Infura has come out swinging with a potential replacement for blockchain indexing.
+
+    Link: https://docs.infura.io/infura/infura-expansion-apis/nft-api
+
+    The included script will include everything you need to start shaping your own custom API calls to their endpoints and query data like:
+
+    Transfers
+    Ownership
+    Metadata
+    Collections
+    Market Data
+    In the included example, we query all the owners for a specific token on the Cronos testnet.
+     */
+    
     // Feel free to change all of this. It's purely educational and nothing more than a proof of concept
     private string APICall;
     
