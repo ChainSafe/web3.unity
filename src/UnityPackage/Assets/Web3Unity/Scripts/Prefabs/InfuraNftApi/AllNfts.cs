@@ -18,19 +18,14 @@ public class AllNfts : MonoBehaviour
     Market Data
     In the included example, we query all the owners for a specific token on the Cronos testnet.
     */
-    
     // Feel free to change all of this. It's purely educational and nothing more than a proof of concept
     private string APICall;
-    
-    // Add your Infura API Key and Secret <API KEY>:<API SECRET>
+    // Add your Infura API Key and Secret API KEY:API SECRET
     private string APIKey;
-
     // Which Chain is your contract deployed on?
     public string ChainID;
-
     // What is your NFT Contract Address?
     public string TokenContract;
-
     // What tokenID do you want to check against?
     public string TokenID;
 
