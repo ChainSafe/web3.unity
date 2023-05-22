@@ -3,7 +3,8 @@ using Newtonsoft.Json;
 
 namespace ChainSafe.GamingSdk.Gelato.Types
 {
-    public enum RelayCall {
+    public enum RelayCall
+    {
         CallWithSyncFee,
         CallWithSyncFeeERC2771,
         SponsoredCall,
@@ -23,14 +24,5 @@ namespace ChainSafe.GamingSdk.Gelato.Types
         /// </summary>
         [JsonProperty(PropertyName = "retries")]
         public uint Retries { get; set; }
-    }
-
-    public class ApiKey 
-    {
-        /// <summary>
-        ///     DATA - api key of the 1Balance account that is sponsoring the transaction
-        /// </summary>
-        [JsonProperty(PropertyName = "sponsorApiKey")]
-        public string SponsorApiKey;
     }
 }

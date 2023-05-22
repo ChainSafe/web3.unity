@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace ChainSafe.GamingSdk.Gelato.Relay
 {
     ///  CallWithERC2771Request & BaseCallWithSyncFeeParams;
-    public class CallWithSyncFeeERC2771Request : ERC2771UserParams
+    public class CallWithSyncFeeErc2771Request : Erc2771UserParams
     {
         /// <summary>
         ///    QUANTITY - The transaction chain id.

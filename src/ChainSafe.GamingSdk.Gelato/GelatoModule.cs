@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using ChainSafe.GamingSdk.Gelato.Relay;
+using ChainSafe.GamingSdk.Gelato.Types;
 using ChainSafe.GamingWeb3.Environment;
 using Nethereum.Hex.HexTypes;
 using Web3Unity.Scripts.Library.Ethers.Providers;
@@ -11,64 +12,36 @@ namespace ChainSafe.GamingSdk.Gelato
     {
         private GelatoClient gelatoClient;
 
-        public GelatoModule(IHttpClient httpClient)
+        public GelatoModule(IHttpClient httpClient, Config config)
         {
-            this.gelatoClient = new GelatoClient(httpClient);
+            // Check if Config's chainId is valid
+            this.gelatoClient = new GelatoClient(httpClient, config);
         }
 
-        public void CallWithSyncFee(CallWithSyncFeeRequest request, RelayRequestOptions options = null)
+        public async Task<RelayResponse> CallWithSyncFee(CallWithSyncFeeRequest request, RelayRequestOptions options = null)
         {
+            return await this.gelatoClient.Post<CallWithSyncFeeRequest, RelayResponse>(RelayCall.CallWithSyncFee, request);
         }
 
-        public void CallWithSyncFeeERC2771(CallWithSyncFeeERC2771Request request, IEvmProvider provider, RelayRequestOptions options = null)
-        {
-        }
+        // public void CallWithSyncFeeERC2771(CallWithSyncFeeERC2771Request request, IEvmProvider provider, RelayRequestOptions options = null)
+        // {
+        // }
 
-        public void CallWithSyncFeeERC2771(CallWithSyncFeeERC2771Request request, IEvmSigner wallet, RelayRequestOptions options = null)
-        {
-        }
+        // public void CallWithSyncFeeERC2771(CallWithSyncFeeERC2771Request request, IEvmSigner wallet, RelayRequestOptions options = null)
+        // {
+        // }
 
-        public void SponsoredCall(SponsoredCallRequest request, string sponsorApiKey, RelayRequestOptions options = null)
-        {
-        }
+        // public void SponsoredCall(SponsoredCallRequest request, string sponsorApiKey, RelayRequestOptions options = null)
+        // {
+        // }
 
-        public void SponsoredCallERC2771(SponsoredCallERC2771Request request, IEvmProvider provider, string sponsorApiKey, RelayRequestOptions options = null)
-        {
-        }
+        // public void SponsoredCallERC2771(SponsoredCallERC2771Request request, IEvmProvider provider, string sponsorApiKey, RelayRequestOptions options = null)
+        // {
+        // }
 
-        public void SponsoredCallERC2771(SponsoredCallERC2771Request request, IEvmSigner provider, string sponsorApiKey, RelayRequestOptions options = null)
-        {
-        }
-
-        public void IsNetworkSupported(uint networkId)
-        {
-            // const supportedNetworks = await getSupportedNetworks(config);
-            // return supportedNetworks.includes(payload.chainId.toString());
-        }
-
-        public void GetSupportedNetworks()
-        {
-            // try {
-            //     return (await axios.get<{ relays: string[] }>(`${config.url}/relays/v2`))
-            //     .data.relays;
-            // } catch (error) {
-            //     throw new Error(
-            //     `GelatoRelaySDK/getSupportedNetworks: Failed with error: ${getHttpErrorMessage(
-            //         error
-            //     )}`
-            //     );
-            // }
-        }
-
-        public void IsOracleActive(ulong chainId)
-        {
-            // const oracles = await getGelatoOracles(config);
-            // return oracles.includes(payload.chainId.toString());
-        }
-
-        public void GetPaymentTokens(ulong chainId)
-        {
-        }
+        // public void SponsoredCallERC2771(SponsoredCallERC2771Request request, IEvmSigner provider, string sponsorApiKey, RelayRequestOptions options = null)
+        // {
+        // }
 
         public void GetEstimatedFee(ulong chainId, string paymentToken, HexBigInteger gasLimit, bool isHighPriority, HexBigInteger gasLimitL1 = null)
         {
@@ -76,10 +49,20 @@ namespace ChainSafe.GamingSdk.Gelato
             {
                 gasLimitL1 = new HexBigInteger("0x0");
             }
+
+            // this.gelatoClient.GetEstimatedFeeRequest()
         }
 
-        public void GetTaskStatus(string taskId)
+        // private async Task<bool> IsNetworkSupported(uint networkId)
+        // {
+        //     string[] supportedNetworks = await this.gelatoClient.GetSupportedNetworks();
+        //     return supportedNetworks.Contains(networkId.ToString());
+        // }
+
+        private void IsOracleActive(ulong chainId)
         {
+            // const oracles = await getGelatoOracles(config);
+            // return oracles.includes(payload.chainId.toString());
         }
     }
 }

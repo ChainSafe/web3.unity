@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace ChainSafe.GamingSdk.Gelato.Relay
 {
-    public class ERC2771UserParams
+    public class Erc2771UserParams
     {
         /// <summary>
         ///     DATA, 20 Bytes - the address of the user's EOA.

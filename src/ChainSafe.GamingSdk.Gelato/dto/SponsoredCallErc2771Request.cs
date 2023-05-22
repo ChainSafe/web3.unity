@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace ChainSafe.GamingSdk.Gelato.Relay
 {
-    public class SponsoredCallERC2771Request : ERC2771UserParams
+    public class SponsoredCallErc2771Request : Erc2771UserParams
     {
         /// <summary>
         ///    QUANTITY - The transaction chain id.
