@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace ChainSafe.GamingSdk.Gelato.Relay
+namespace ChainSafe.GamingSdk.Gelato.Types
 {
     public class RelayResponse
     {

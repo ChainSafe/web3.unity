@@ -1,8 +1,15 @@
 using Nethereum.Hex.HexTypes;
 using Newtonsoft.Json;
 
-namespace ChainSafe.GamingSdk.Gelato.Relay
+namespace ChainSafe.GamingSdk.Gelato.Types
 {
+    public enum RelayCall {
+        CallWithSyncFee,
+        CallWithSyncFeeERC2771,
+        SponsoredCall,
+        SponsoredCallERC2771,
+    }
+
     public class RelayRequestOptions
     {
         /// <summary>
@@ -16,5 +23,14 @@ namespace ChainSafe.GamingSdk.Gelato.Relay
         /// </summary>
         [JsonProperty(PropertyName = "retries")]
         public uint Retries { get; set; }
+    }
+
+    public class ApiKey 
+    {
+        /// <summary>
+        ///     DATA - api key of the 1Balance account that is sponsoring the transaction
+        /// </summary>
+        [JsonProperty(PropertyName = "sponsorApiKey")]
+        public string SponsorApiKey;
     }
 }

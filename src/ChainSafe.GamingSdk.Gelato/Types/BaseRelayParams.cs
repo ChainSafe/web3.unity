@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Nethereum.Hex.HexTypes;
 using Newtonsoft.Json;
 
-namespace ChainSafe.GamingSdk.Gelato.Relay
+namespace ChainSafe.GamingSdk.Gelato.Types
 {
     public class BaseRelayParams
     {
