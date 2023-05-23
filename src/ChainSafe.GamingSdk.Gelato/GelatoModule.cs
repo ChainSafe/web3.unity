@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using ChainSafe.GamingSdk.Gelato.Relay;
 using ChainSafe.GamingSdk.Gelato.Types;
@@ -18,9 +19,16 @@ namespace ChainSafe.GamingSdk.Gelato
             this.gelatoClient = new GelatoClient(httpClient, config);
         }
 
-        public async Task<RelayResponse> CallWithSyncFee(CallWithSyncFeeRequest request, RelayRequestOptions options = null)
+        public async Task<RelayResponse> CallWithSyncFee(CallWithSyncFeeRequest request)
         {
-            return await this.gelatoClient.Post<CallWithSyncFeeRequest, RelayResponse>(RelayCall.CallWithSyncFee, request);
+            try
+            {
+                return await this.gelatoClient.Post<CallWithSyncFeeRequest, RelayResponse>(RelayCall.CallWithSyncFee, request);
+            }
+            catch (System.Exception e)
+            {
+                throw new Exception($"GelatoRelaySDK/relayWithSyncFee: Failed with error: ${e.Message}");
+            }
         }
 
         // public void CallWithSyncFeeERC2771(CallWithSyncFeeERC2771Request request, IEvmProvider provider, RelayRequestOptions options = null)
@@ -31,9 +39,17 @@ namespace ChainSafe.GamingSdk.Gelato
         // {
         // }
 
-        // public void SponsoredCall(SponsoredCallRequest request, string sponsorApiKey, RelayRequestOptions options = null)
-        // {
-        // }
+        public async Task<RelayResponse> SponsoredCall(SponsoredCallRequest request, string sponsorApiKey)
+        {
+            try
+            {
+                return await this.gelatoClient.Post<SponsoredCallRequest, RelayResponse>(RelayCall.CallWithSyncFee, request);
+            }
+            catch (System.Exception e)
+            {
+                throw new Exception($"GelatoRelaySDK/sponsoredCall: Failed with error: ${e.Message}");
+            }
+        }
 
         // public void SponsoredCallERC2771(SponsoredCallERC2771Request request, IEvmProvider provider, string sponsorApiKey, RelayRequestOptions options = null)
         // {

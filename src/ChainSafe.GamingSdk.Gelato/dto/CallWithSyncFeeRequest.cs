@@ -1,10 +1,11 @@
+using ChainSafe.GamingSdk.Gelato.Types;
 using Nethereum.Hex.HexTypes;
 using Newtonsoft.Json;
 
 namespace ChainSafe.GamingSdk.Gelato.Relay
 {
     /// BaseCallWithSyncFeeParams && BaseRelayParams
-    public class CallWithSyncFeeRequest
+    public class CallWithSyncFeeRequest : RelayRequestOptions
     {
         /// <summary>
         ///    QUANTITY - The transaction chain id.
