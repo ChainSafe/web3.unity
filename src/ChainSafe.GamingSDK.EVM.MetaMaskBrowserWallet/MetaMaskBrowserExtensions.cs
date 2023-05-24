@@ -2,15 +2,15 @@
 using Microsoft.Extensions.DependencyInjection;
 using Web3Unity.Scripts.Library.Ethers.Signers;
 
-namespace ChainSafe.GamingSDK.EVM.WebWallet
+namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
 {
-    public static class WebSignerExtensions
+    public static class MetaMaskBrowserExtensions
     {
         /// <summary>
         /// Binds Web implementation of EVM Provider to Web3
         /// </summary>
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
-        public static IWeb3ServiceCollection UseWebSigner(this IWeb3ServiceCollection collection, WebSignerConfiguration configuration)
+        public static IWeb3ServiceCollection UseWebSigner(this IWeb3ServiceCollection collection, MetaMaskBrowserSignerConfiguration configuration)
         {
             collection.ConfigureWebSigner(configuration);
             collection.UseWebSigner();
@@ -24,7 +24,7 @@ namespace ChainSafe.GamingSDK.EVM.WebWallet
         public static IWeb3ServiceCollection UseWebSigner(this IWeb3ServiceCollection collection)
         {
             collection.AssertServiceNotBound<IEvmSigner>();
-            collection.AddSingleton<IEvmSigner, WebSigner>();
+            collection.AddSingleton<IEvmSigner, MetaMaskBrowserSigner>();
             return collection;
         }
 
@@ -32,9 +32,9 @@ namespace ChainSafe.GamingSDK.EVM.WebWallet
         /// Configures Web implementation of EVM Provider
         /// </summary>
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
-        public static IWeb3ServiceCollection ConfigureWebSigner(this IWeb3ServiceCollection collection, WebSignerConfiguration configuration)
+        public static IWeb3ServiceCollection ConfigureWebSigner(this IWeb3ServiceCollection collection, MetaMaskBrowserSignerConfiguration configuration)
         {
-            collection.AssertConfigurationNotBound<WebSignerConfiguration>();
+            collection.AssertConfigurationNotBound<MetaMaskBrowserSignerConfiguration>();
             collection.AddSingleton(configuration);
             return collection;
         }

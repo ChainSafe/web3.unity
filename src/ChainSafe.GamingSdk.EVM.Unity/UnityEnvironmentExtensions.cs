@@ -23,6 +23,7 @@ namespace ChainSafe.GamingWeb3.Unity
             services.AddSingleton<ILogWriter, UnityLogWriter>();
             services.AddSingleton<IAnalyticsClient, DataDogAnalytics>();
             services.AddSingleton<ISettingsProvider, UnitySettingsProvider>();
+            services.AddSingleton<IOperatingSystemMediator, UnityOperatingSystemMediator>();
             return services;
         }
 
