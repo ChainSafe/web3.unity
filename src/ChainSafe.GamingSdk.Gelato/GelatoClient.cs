@@ -9,15 +9,15 @@ namespace ChainSafe.GamingSdk.Gelato
 {
     public class GelatoClient
     {
-        private const string GELATO_RELAY_URL = "https://api.gelato.digital"; //Relay GW
-        private const string SIGN_TYPED_DATA_V4 = "eth_signTypedData_v4";
-        private const string DEFAULT_INTERNAL_ERROR_MESSAGE = "Internal Error";
-        private const Int32 DEFAULT_DEADLINE_GAP = 86_400; //24H
-        private static readonly string[] USER_NONCE_ABI = {"function userNonce(address account) external view returns (uint256)"};
-        private const string GELATO_RELAY_ERC2771_ADDRESS = "0xb539068872230f20456CF38EC52EF2f91AF4AE49";
-        private const string GELATO_RELAY_1BALANCE_ERC2771_ADDRESS = "0xd8253782c45a12053594b9deB72d8e8aB2Fca54c";
-        private const string GELATO_RELAY_ERC2771_ZKSYNC_ADDRESS = "0x22DCC39b2AC376862183dd35A1664798dafC7Da6";
-        private const string GELATO_RELAY_1BALANCE_ERC2771_ZKSYNC_ADDRESS = "0x97015cD4C3d456997DD1C40e2a18c79108FCc412";
+        private const string GelatoRelayUrl = "https://api.gelato.digital"; // Relay GW
+        public const string SignedTypedDataV4 = "eth_signTypedData_v4";
+        private const string DefaultInternalErrorMessage = "Internal Error";
+        public const int DefaultDeadlineGap = 86_400; // 24H
+        public const string GelatoRelayErc2771Address = "0xb539068872230f20456CF38EC52EF2f91AF4AE49";
+        public const string GelatoRelay1BalanceErc2771Address = "0xd8253782c45a12053594b9deB72d8e8aB2Fca54c";
+        public const string GelatoRelayErc2771ZksyncAddress = "0x22DCC39b2AC376862183dd35A1664798dafC7Da6";
+        public const string GelatoRelay1BalanceErc2771ZksyncAddress = "0x97015cD4C3d456997DD1C40e2a18c79108FCc412";
+        public static readonly string UserNonceAbi = "[{\"inputs\": [{\"internalType\": \"address\",\"name\": \"account\",\"type\": \"address\"}],\"name\": \"userNonce\",\"outputs\": [{\"internalType\": \"uint256\",\"name\": \"\",\"type\": \"uint256\"}],\"stateMutability\": \"view\",\"type\": \"function\"}]\"}";
         private IHttpClient httpClient;
         private Config config;
 
@@ -29,7 +29,7 @@ namespace ChainSafe.GamingSdk.Gelato
 
         public async Task<TResponse> Post<TRequest, TResponse>(RelayCall relayCall, TRequest request)
         {
-            switch (relayCall) 
+            switch (relayCall)
             {
                 case RelayCall.CallWithSyncFee:
                     return (await this.httpClient.Post<TRequest, TResponse>($"{config.Url}/relays/v2/call-with-sync-fee", request)).Response;
@@ -42,7 +42,7 @@ namespace ChainSafe.GamingSdk.Gelato
 
                 case RelayCall.SponsoredCallERC2771:
                     return (await this.httpClient.Post<TRequest, TResponse>($"{config.Url}/relays/v2/sponsored-call-erc2771", request)).Response;
-                default: 
+                default:
                     throw new Exception("relayCall option not found");
             }
         }

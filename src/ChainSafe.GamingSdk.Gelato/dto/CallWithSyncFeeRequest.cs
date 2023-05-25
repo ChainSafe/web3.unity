@@ -4,7 +4,6 @@ using Newtonsoft.Json;
 
 namespace ChainSafe.GamingSdk.Gelato.Relay
 {
-    /// BaseCallWithSyncFeeParams && BaseRelayParams
     public class CallWithSyncFeeRequest : RelayRequestOptions
     {
         /// <summary>

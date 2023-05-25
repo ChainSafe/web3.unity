@@ -12,11 +12,13 @@ namespace ChainSafe.GamingSdk.Gelato
     public class GelatoModule
     {
         private GelatoClient gelatoClient;
+        private Config config;
 
         public GelatoModule(IHttpClient httpClient, Config config)
         {
             // Check if Config's chainId is valid
             this.gelatoClient = new GelatoClient(httpClient, config);
+            this.config = config;
         }
 
         public async Task<RelayResponse> CallWithSyncFee(CallWithSyncFeeRequest request)
@@ -31,9 +33,10 @@ namespace ChainSafe.GamingSdk.Gelato
             }
         }
 
-        // public void CallWithSyncFeeERC2771(CallWithSyncFeeERC2771Request request, IEvmProvider provider, RelayRequestOptions options = null)
-        // {
-        // }
+        public void CallWithSyncFeeERC2771(CallWithSyncFeeErc2771Request request, IEvmProvider provider, RelayRequestOptions options = null)
+        {
+            // Confirm Wallet & Provider chain ID match
+        }
 
         // public void CallWithSyncFeeERC2771(CallWithSyncFeeERC2771Request request, IEvmSigner wallet, RelayRequestOptions options = null)
         // {
