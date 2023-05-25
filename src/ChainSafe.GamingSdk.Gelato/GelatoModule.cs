@@ -14,6 +14,8 @@ using Web3Unity.Scripts.Library.Ethers.Signers;
 // Last part of the ERC2771 calls
 // Oracle checks
 // Check in array Contains is missing
+// Clean up EIP712Domain
+// Remove redundant/unused interfaces
 namespace ChainSafe.GamingSdk.Gelato
 {
     public class GelatoModule

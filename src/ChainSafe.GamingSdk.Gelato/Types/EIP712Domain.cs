@@ -1,4 +1,3 @@
-using Nethereum.Hex.HexTypes;
 using Newtonsoft.Json;
 
 namespace ChainSafe.GamingSdk.Gelato.Types
