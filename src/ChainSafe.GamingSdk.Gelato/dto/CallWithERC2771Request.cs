@@ -82,8 +82,6 @@ namespace ChainSafe.GamingSdk.Gelato.Relay
             newStruct.UserNonce = overrides.UserNonce ?? UserNonce;
             newStruct.UserDeadline = overrides.UserDeadline ?? UserDeadline;
             return newStruct;
-            // target: getAddress(request.target as string),
-            // user: getAddress(request.user as string),
         }
     }
 
@@ -101,6 +99,10 @@ namespace ChainSafe.GamingSdk.Gelato.Relay
         [JsonProperty(PropertyName = "userDeadline")]
         public HexBigInteger UserDeadline { get; set; }
 
+        public async Task<CallWithERC2771RequestOptionalParameters> PopulateOptionalUserParameters(CallWithErc2771Request request, ERC2771Type type, IEvmSigner wallet, Config config)
+        {
+            return await PopulateOptionalUserParameters(request, type, wallet.Provider, config);
+        }
         public async Task<CallWithERC2771RequestOptionalParameters> PopulateOptionalUserParameters(CallWithErc2771Request request, ERC2771Type type, IEvmProvider provider, Config config)
         {
             var optionalParams = new CallWithERC2771RequestOptionalParameters();
@@ -113,23 +115,6 @@ namespace ChainSafe.GamingSdk.Gelato.Relay
             {
                 // Must be custom nonce from the relay contract
                 optionalParams.UserNonce = await GetUserNonce(request.User, type, provider, config);
-            }
-
-            return optionalParams;
-        }
-
-        public async Task<CallWithERC2771RequestOptionalParameters> PopulateOptionalUserParameters(CallWithErc2771Request request, ERC2771Type type, IEvmSigner wallet, Config config)
-        {
-            var optionalParams = new CallWithERC2771RequestOptionalParameters();
-            if(request.UserDeadline == null)
-            {
-                optionalParams.UserDeadline = CalculateDeadline();
-            }
-
-            if (request.UserNonce == null)
-            {
-                // Must be custom nonce from the relay contract
-                optionalParams.UserNonce = await GetUserNonce(request.User, type, wallet.Provider, config);
             }
 
             return optionalParams;

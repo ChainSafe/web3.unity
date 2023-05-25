@@ -7,6 +7,13 @@ using Nethereum.Hex.HexTypes;
 using Web3Unity.Scripts.Library.Ethers.Providers;
 using Web3Unity.Scripts.Library.Ethers.Signers;
 
+// TODO:
+// Checksum address confirms
+// Check network ID matches provider & is a supported network
+// Get config from network.js or whichever
+// Last part of the ERC2771 calls
+// Oracle checks
+// Check in array Contains is missing
 namespace ChainSafe.GamingSdk.Gelato
 {
     public class GelatoModule
@@ -33,14 +40,15 @@ namespace ChainSafe.GamingSdk.Gelato
             }
         }
 
+        public void CallWithSyncFeeERC2771(CallWithSyncFeeErc2771Request request, IEvmSigner wallet, RelayRequestOptions options = null)
+        {
+            CallWithSyncFeeERC2771(request, wallet.Provider, options);
+        }
+
         public void CallWithSyncFeeERC2771(CallWithSyncFeeErc2771Request request, IEvmProvider provider, RelayRequestOptions options = null)
         {
             // Confirm Wallet & Provider chain ID match
         }
-
-        // public void CallWithSyncFeeERC2771(CallWithSyncFeeERC2771Request request, IEvmSigner wallet, RelayRequestOptions options = null)
-        // {
-        // }
 
         public async Task<RelayResponse> SponsoredCall(SponsoredCallRequest request, string sponsorApiKey)
         {
@@ -54,13 +62,14 @@ namespace ChainSafe.GamingSdk.Gelato
             }
         }
 
-        // public void SponsoredCallERC2771(SponsoredCallERC2771Request request, IEvmProvider provider, string sponsorApiKey, RelayRequestOptions options = null)
-        // {
-        // }
+        public void SponsoredCallERC2771(SponsoredCallErc2771Request request, IEvmSigner wallet, string sponsorApiKey, RelayRequestOptions options = null)
+        {
+            SponsoredCallERC2771(request, wallet.Provider, sponsorApiKey, options);
+        }
 
-        // public void SponsoredCallERC2771(SponsoredCallERC2771Request request, IEvmSigner provider, string sponsorApiKey, RelayRequestOptions options = null)
-        // {
-        // }
+        public void SponsoredCallERC2771(SponsoredCallErc2771Request request, IEvmProvider provider, string sponsorApiKey, RelayRequestOptions options = null)
+        {
+        }
 
         public void GetEstimatedFee(ulong chainId, string paymentToken, HexBigInteger gasLimit, bool isHighPriority, HexBigInteger gasLimitL1 = null)
         {
