@@ -39,6 +39,11 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
 
         public async ValueTask Connect()
         {
+            if (Connected)
+            {
+                throw new Web3Exception("Signer already connected.");
+            }
+
             publicAddress = await this.VerifyUserOwnsAccount();
             Connected = true;
         }
