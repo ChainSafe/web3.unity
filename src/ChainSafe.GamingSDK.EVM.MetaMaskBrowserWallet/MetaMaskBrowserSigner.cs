@@ -69,8 +69,7 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
             var pageUrl = BuildUrl();
             var hash = await OpenPageWaitResponse(pageUrl, ValidateResponse);
 
-            // todo logs!!!
-            // analytics.Capture()
+            // todo log event on success
             return hash;
 
             string BuildUrl()
@@ -94,8 +93,7 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
             var pageUrl = BuildUrl();
             var hash = await OpenPageWaitResponse(pageUrl, ValidateResponse);
 
-            // todo logs!!!
-            // analytics.Capture()
+            // todo log event on success (see example near end of file)
             return await Provider.GetTransaction(hash);
 
             string BuildUrl()
@@ -142,5 +140,32 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
                     configuration.ClipboardCheckPeriod.TotalMilliseconds);
             }
         }
+
+        /*
+         Logging event on SendTransaction success
+        var data = new
+        {
+            Client = "Desktop/Mobile",
+            Version = "v2",
+            ProjectID = PlayerPrefs.GetString("ProjectID"),
+            Player = Sha3(PlayerPrefs.GetString("Account") + PlayerPrefs.GetString("ProjectID")),
+            ChainId = _chainId,
+            Address = _to,
+            Value = _value,
+            GasLimit = _gasLimit,
+            GasPrice = _gasPrice,
+            Data = _data
+        };
+
+        Logging.SendGameData(data);
+
+        public static string Sha3(string _message)
+        {
+            var signer = new EthereumMessageSigner();
+            var hash = new Sha3Keccack().CalculateHash(_message).EnsureHexPrefix();
+            // 0x06b3dfaec148fb1bb2b066f10ec285e7c9bf402ab32aa78a5d38e34566810cd2
+            return hash;
+        }
+         */
     }
 }
