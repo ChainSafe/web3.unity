@@ -1,4 +1,6 @@
-﻿using ChainSafe.GamingWeb3;
+﻿using System;
+using System.Threading.Tasks;
+using ChainSafe.GamingWeb3;
 using ChainSafe.GamingWeb3.Environment;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Web3Unity.Scripts.Library.Ethers.Providers;
@@ -73,6 +75,7 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
                        $"&message={Uri.EscapeDataString(message)}";
             }
 
+            // todo validate with regex
             bool ValidateResponse(string response) => response.StartsWith("0x") && response.Length == 132;
         }
 
@@ -102,6 +105,7 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
                        $"&gasPrice={transaction.GasPrice}";
             }
 
+            // todo validate with regex
             bool ValidateResponse(string response) => response.StartsWith("0x") && response.Length == 66;
         }
 
@@ -111,7 +115,7 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
             operatingSystem.OpenUrl(pageUrl);
             operatingSystem.ClipboardContent = string.Empty;
 
-            var updateDelay = GetUpdateDelaySafe();
+            var updateDelay = GetUpdatePeriodSafe();
             while (string.IsNullOrEmpty(operatingSystem.ClipboardContent))
             {
                 await Task.Delay(updateDelay);
@@ -126,7 +130,7 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
 
             return response;
 
-            int GetUpdateDelaySafe()
+            int GetUpdatePeriodSafe()
             {
                 return (int)Math.Max(
                     MinClipboardCheckPeriod.TotalMilliseconds,

@@ -7,21 +7,21 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
     public static class MetaMaskBrowserExtensions
     {
         /// <summary>
-        /// Binds Web implementation of EVM Provider to Web3
+        /// Binds Web implementation of EVM Provider to Web3.
         /// </summary>
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
-        public static IWeb3ServiceCollection UseWebSigner(this IWeb3ServiceCollection collection, MetaMaskBrowserSignerConfiguration configuration)
+        public static IWeb3ServiceCollection UseMetaMaskBrowserSigner(this IWeb3ServiceCollection collection, MetaMaskBrowserSignerConfiguration configuration)
         {
-            collection.ConfigureWebSigner(configuration);
-            collection.UseWebSigner();
+            collection.ConfigureMetaMaskBrowserSigner(configuration);
+            collection.UseMetaMaskBrowserSigner();
             return collection;
         }
 
         /// <summary>
-        /// Binds Web implementation of EVM Provider to Web3
+        /// Binds Web implementation of EVM Provider to Web3.
         /// </summary>
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
-        public static IWeb3ServiceCollection UseWebSigner(this IWeb3ServiceCollection collection)
+        public static IWeb3ServiceCollection UseMetaMaskBrowserSigner(this IWeb3ServiceCollection collection)
         {
             collection.AssertServiceNotBound<IEvmSigner>();
             collection.AddSingleton<IEvmSigner, MetaMaskBrowserSigner>();
@@ -29,10 +29,10 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
         }
 
         /// <summary>
-        /// Configures Web implementation of EVM Provider
+        /// Configures Web implementation of EVM Provider.
         /// </summary>
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
-        public static IWeb3ServiceCollection ConfigureWebSigner(this IWeb3ServiceCollection collection, MetaMaskBrowserSignerConfiguration configuration)
+        public static IWeb3ServiceCollection ConfigureMetaMaskBrowserSigner(this IWeb3ServiceCollection collection, MetaMaskBrowserSignerConfiguration configuration)
         {
             collection.AssertConfigurationNotBound<MetaMaskBrowserSignerConfiguration>();
             collection.AddSingleton(configuration);
