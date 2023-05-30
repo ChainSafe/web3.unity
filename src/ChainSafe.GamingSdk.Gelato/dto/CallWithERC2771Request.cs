@@ -99,11 +99,12 @@ namespace ChainSafe.GamingSdk.Gelato.Relay
         [JsonProperty(PropertyName = "userDeadline")]
         public HexBigInteger UserDeadline { get; set; }
 
-        public async Task<CallWithERC2771RequestOptionalParameters> PopulateOptionalUserParameters(CallWithErc2771Request request, ERC2771Type type, IEvmSigner wallet, Config config)
+        public static async Task<CallWithERC2771RequestOptionalParameters> PopulateOptionalUserParameters(CallWithErc2771Request request, ERC2771Type type, IEvmSigner wallet, Config config)
         {
             return await PopulateOptionalUserParameters(request, type, wallet.Provider, config);
         }
-        public async Task<CallWithERC2771RequestOptionalParameters> PopulateOptionalUserParameters(CallWithErc2771Request request, ERC2771Type type, IEvmProvider provider, Config config)
+
+        public static async Task<CallWithERC2771RequestOptionalParameters> PopulateOptionalUserParameters(CallWithErc2771Request request, ERC2771Type type, IEvmProvider provider, Config config)
         {
             var optionalParams = new CallWithERC2771RequestOptionalParameters();
             if(request.UserDeadline == null)
@@ -120,7 +121,7 @@ namespace ChainSafe.GamingSdk.Gelato.Relay
             return optionalParams;
         }
 
-        private HexBigInteger GetGelatoRelayErc2771Address(ERC2771Type type, Config config)
+        private static HexBigInteger GetGelatoRelayErc2771Address(ERC2771Type type, Config config)
         {
             switch (type)
             {
@@ -137,22 +138,22 @@ namespace ChainSafe.GamingSdk.Gelato.Relay
             }
         }
 
-        private bool IsZkSync(long chainId)
+        private static bool IsZkSync(long chainId)
         {
             return chainId == 324 || chainId == 280;
         }
 
-        private async Task<HexBigInteger> GetUserNonce(string account, ERC2771Type type, IEvmProvider provider, Config config)
+        private static async Task<HexBigInteger> GetUserNonce(string account, ERC2771Type type, IEvmProvider provider, Config config)
         {
             var contract = new Contract(GelatoClient.UserNonceAbi,  GetGelatoRelayErc2771Address(type, config).ToString(), provider);
             var result = await contract.Call("userNonce", new object[] { account });
             return (HexBigInteger)result[0];
         }
 
-        private HexBigInteger CalculateDeadline()
+        private static HexBigInteger CalculateDeadline()
         {
             // BigNumber.from(Math.floor(Date.now() / 1000) + GelatoClient.DEFAULT_DEADLINE_GAP).toString()
-            var parsed = (((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds() / 1000 + GelatoClient.DefaultDeadlineGap).ToString("X");
+            var parsed = ((((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds() / 1000) + GelatoClient.DefaultDeadlineGap).ToString("X");
             return new HexBigInteger($"0x{parsed}");
         }
     }

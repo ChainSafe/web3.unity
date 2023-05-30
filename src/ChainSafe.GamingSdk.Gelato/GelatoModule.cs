@@ -13,8 +13,6 @@ using Web3Unity.Scripts.Library.Ethers.Signers;
 // Check network ID matches provider & is a supported network
 // Get config from network.js or whichever
 // Last part of the ERC2771 calls
-// Oracle checks
-// Check in array Contains is missing
 // Clean up EIP712Domain
 // Remove redundant/unused interfaces
 namespace ChainSafe.GamingSdk.Gelato
@@ -50,7 +48,18 @@ namespace ChainSafe.GamingSdk.Gelato
 
         public void CallWithSyncFeeERC2771(CallWithSyncFeeErc2771Request request, IEvmProvider provider, RelayRequestOptions options = null)
         {
+            // var callRequest = new CallWithErc2771Request{
+            //     ChainId = request.ChainId,
+            //     Target = request.Target,
+            //     Data = request.Data,
+            //     User = request.User,
+            //     UserDeadline = request.UserDeadline,
+            //     UserNonce = request.UserNonce,
+            // };
             // Confirm Wallet & Provider chain ID match
+
+            // var optional = await CallWithERC2771RequestOptionalParameters.PopulateOptionalUserParameters(callRequest, ERC2771Type.SponsoredCall, provider, this.config);
+            // var newStruct = callRequest.MapRequestToStruct(optional);
         }
 
         public async Task<RelayResponse> SponsoredCall(SponsoredCallRequest request, string sponsorApiKey)
@@ -72,16 +81,41 @@ namespace ChainSafe.GamingSdk.Gelato
 
         public void SponsoredCallERC2771(SponsoredCallErc2771Request request, IEvmProvider provider, string sponsorApiKey, RelayRequestOptions options = null)
         {
+            // var callRequest = new CallWithErc2771Request{
+            //     ChainId = request.ChainId,
+            //     Target = request.Target,
+            //     Data = request.Data,
+            //     User = request.User,
+            //     UserDeadline = request.UserDeadline,
+            //     UserNonce = request.UserNonce,
+            // };
+
+            // Confirm Wallet & Provider chain ID match
+            // var optional = await CallWithERC2771RequestOptionalParameters.PopulateOptionalUserParameters(callRequest, ERC2771Type.SponsoredCall, provider, this.config);
+            // var newStruct = callRequest.MapRequestToStruct(optional);
+
+            // TODO: Sign typed data request
+
+            // return await this.gelatoClient.Post<CallWithErc2771Request, RelayResponse>(RelayCall.SponsoredCallERC2771, callRequest);
         }
 
-        public void GetEstimatedFee(ulong chainId, string paymentToken, HexBigInteger gasLimit, bool isHighPriority, HexBigInteger gasLimitL1 = null)
+        public async Task<HexBigInteger> GetEstimatedFee(ulong chainId, string paymentToken, HexBigInteger gasLimit, bool isHighPriority, HexBigInteger gasLimitL1 = null)
         {
             if (gasLimitL1 == null)
             {
                 gasLimitL1 = new HexBigInteger("0x0");
             }
 
-            // this.gelatoClient.GetEstimatedFeeRequest()
+            var request = new EstimatedFeeRequest
+            {
+                ChainId = chainId,
+                GasLimit = gasLimit,
+                GasLimitL1 = gasLimitL1,
+                IsHighPriority = isHighPriority,
+                PaymentToken = paymentToken,
+            };
+
+            return await this.gelatoClient.GetEstimatedFeeRequest(request);
         }
 
         private async Task<bool> IsNetworkSupported(uint networkId)
