@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using ChainSafe.GamingSdk.Gelato.Relay;
 using ChainSafe.GamingSdk.Gelato.Types;
@@ -83,16 +84,16 @@ namespace ChainSafe.GamingSdk.Gelato
             // this.gelatoClient.GetEstimatedFeeRequest()
         }
 
-        // private async Task<bool> IsNetworkSupported(uint networkId)
-        // {
-        //     string[] supportedNetworks = await this.gelatoClient.GetSupportedNetworks();
-        //     return supportedNetworks.Contains(networkId.ToString());
-        // }
-
-        private void IsOracleActive(ulong chainId)
+        private async Task<bool> IsNetworkSupported(uint networkId)
         {
-            // const oracles = await getGelatoOracles(config);
-            // return oracles.includes(payload.chainId.toString());
+            string[] supportedNetworks = await this.gelatoClient.GetSupportedNetworks();
+            return supportedNetworks.Contains(networkId.ToString());
+        }
+
+        private async Task<bool> IsOracleActive(ulong chainId)
+        {
+            string[] oracles = await this.gelatoClient.GetGelatoOracles();
+            return oracles.Contains(chainId.ToString());
         }
     }
 }
