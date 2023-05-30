@@ -1,18 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
-        <Nullable>enable</Nullable>
-        <LangVersion>9.0</LangVersion>
-        <PackageId>ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet</PackageId>
-        <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-        <EnableNETAnalyzers>True</EnableNETAnalyzers>
-        <CodeAnalysisRuleSet>../../global.ruleset</CodeAnalysisRuleSet>
-    </PropertyGroup>
-    
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Nullable>enable</Nullable>
+    <LangVersion>9.0</LangVersion>
+    <PackageId>ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet</PackageId>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <EnableNETAnalyzers>True</EnableNETAnalyzers>
+    <CodeAnalysisRuleSet>../../global.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\ChainSafe.GamingSDK.EVM\ChainSafe.GamingSDK.EVM.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ChainSafe.GamingSDK.EVM\ChainSafe.GamingSDK.EVM.csproj" />
+  </ItemGroup>
 
 </Project>

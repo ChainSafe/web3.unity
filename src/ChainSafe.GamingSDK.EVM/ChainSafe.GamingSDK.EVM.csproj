@@ -30,9 +30,9 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(Unity)' == 'True'">
-    <Reference Include="../../libs/Nethereum-UnityAOT/*.dll" />
-  </ItemGroup>
+  <!--
+    The Unity version of Nethereum is referenced inside src/Directory.Build.props
+  -->
 
   <PropertyGroup Condition="'$(Unity)' == 'True'">
     <DefineConstants>Unity</DefineConstants>
