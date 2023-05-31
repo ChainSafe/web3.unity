@@ -8,7 +8,7 @@ using Web3Unity.Scripts.Library.Ethers.Signers;
 
 namespace Web3Unity.Scripts.Library.Ethers.Signers
 {
-    public static class SignerLoginExtensions
+    public static class EvmSignerExtensions
     {
         public const int TimestampExpirationSeconds = 60;
 
@@ -42,6 +42,18 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
             int GetCurrentTimestamp()
             {
                 return (int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+            }
+        }
+
+        /// <summary>
+        /// Asserts that signer was not yet connected.
+        /// </summary>
+        /// <exception cref="Web3Exception">Thrown when signer is already connected.</exception>
+        public static void AssertNotConnected(this IEvmSigner signer)
+        {
+            if (signer.Connected)
+            {
+                throw new Web3Exception("Signer already connected.");
             }
         }
 
