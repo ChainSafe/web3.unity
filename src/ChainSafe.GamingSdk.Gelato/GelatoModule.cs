@@ -20,6 +20,12 @@ namespace ChainSafe.GamingSdk.Gelato
             // Check if Config's chainId is valid
             this.gelatoClient = new GelatoClient(httpClient, config);
             this.config = config;
+            
+            // TODO: Remove blocking call once config init is resolved 
+            if(IsNetworkSupported(config.ChainId).Result == false)
+            {
+                throw new Exception("network not supported by Gelato");
+            }
         }
 
         public async Task<RelayResponse> CallWithSyncFee(CallWithSyncFeeRequest request)
@@ -113,16 +119,16 @@ namespace ChainSafe.GamingSdk.Gelato
             return await this.gelatoClient.GetEstimatedFeeRequest(request);
         }
 
-        private async Task<bool> IsNetworkSupported(uint networkId)
+        private async Task<bool> IsNetworkSupported(string networkId)
         {
             string[] supportedNetworks = await this.gelatoClient.GetSupportedNetworks();
-            return supportedNetworks.Contains(networkId.ToString());
+            return supportedNetworks.Contains(networkId);
         }
 
-        private async Task<bool> IsOracleActive(ulong chainId)
+        private async Task<bool> IsOracleActive(string chainId)
         {
             string[] oracles = await this.gelatoClient.GetGelatoOracles();
-            return oracles.Contains(chainId.ToString());
+            return oracles.Contains(chainId);
         }
     }
 }

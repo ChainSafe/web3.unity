@@ -9,7 +9,7 @@ namespace ChainSafe.GamingSdk.Gelato.Types
         ///    DATA - Relayer endpoint.
         /// </summary>
         [JsonProperty(PropertyName = "chainId")]
-        public long ChainId { get; set; }
+        public string ChainId { get; set; }
 
         /// <summary>
         ///    DATA - Relayer endpoint.
