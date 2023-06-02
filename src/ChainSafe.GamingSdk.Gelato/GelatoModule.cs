@@ -22,7 +22,7 @@ namespace ChainSafe.GamingSdk.Gelato
             this.config = config;
 
             // TODO: Remove blocking call once config init is resolved 
-            if(IsNetworkSupported(config.ChainId).Result == false)
+            if (IsNetworkSupported(config.ChainId).Result == false)
             {
                 throw new Exception("network not supported by Gelato");
             }
