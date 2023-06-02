@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace ChainSafe.GamingSdk.Gelato.Relay
 {
-    ///  CallWithERC2771Request & BaseCallWithSyncFeeParams;
+    // CallWithERC2771Request & BaseCallWithSyncFeeParams;
     public class CallWithSyncFeeErc2771Request : RelayRequestOptions
     {
         /// <summary>
@@ -32,18 +32,18 @@ namespace ChainSafe.GamingSdk.Gelato.Relay
         public string FeeToken { get; set; }
 
         /// <summary>
-        ///     DATA - an optional boolean (default: true ) denoting what data you would prefer appended to the end of the calldata
+        ///     DATA - an optional boolean (default: true ) denoting what data you would prefer appended to the end of the calldata.
         /// </summary>
         [JsonProperty(PropertyName = "isRelayContext")]
         public bool IsRelayContext { get; set; }
 
-         /// <summary>
+        /// <summary>
         ///     DATA, 20 Bytes - the address of the user's EOA.
         /// </summary>
         [JsonProperty(PropertyName = "user")]
         public string User { get; set; }
 
-       /// <summary>
+        /// <summary>
         ///    QUANTITY - optional, this is a nonce similar to Ethereum nonces, stored in a local mapping on the relay contracts. It is used to enforce nonce ordering of relay calls, if the user requires it. Otherwise, this is an optional parameter and if not passed, the relay-SDK will automatically query on-chain for the current value.
         /// </summary>
         [JsonProperty(PropertyName = "userNonce")]

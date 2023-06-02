@@ -18,7 +18,7 @@ namespace ChainSafe.GamingSdk.Gelato.Relay
     public class TransactionStatusResponse
     {
         /// <summary>
-        ///    QUANTITY - The task object
+        ///    QUANTITY - The task object.
         /// </summary>
         [JsonProperty(PropertyName = "task")]
         public RelayedTask Task { get; set; }
@@ -39,7 +39,7 @@ namespace ChainSafe.GamingSdk.Gelato.Relay
         public string TaskId { get; set; }
 
         /// <summary>
-        ///     DATA - status for the state of a relayer's task
+        ///     DATA - status for the state of a relayer's task.
         /// </summary>
         [JsonProperty(PropertyName = "taskState")]
         public TaskState TaskState { get; set; }

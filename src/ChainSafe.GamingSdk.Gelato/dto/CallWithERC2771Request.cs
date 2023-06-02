@@ -42,7 +42,7 @@ namespace ChainSafe.GamingSdk.Gelato.Relay
         public string FeeToken { get; set; }
 
         /// <summary>
-        ///     DATA - an optional boolean (default: true ) denoting what data you would prefer appended to the end of the calldata
+        ///     DATA - an optional boolean (default: true ) denoting what data you would prefer appended to the end of the calldata.
         /// </summary>
         [JsonProperty(PropertyName = "isRelayContext")]
         public bool IsRelayContext { get; set; }
@@ -107,7 +107,7 @@ namespace ChainSafe.GamingSdk.Gelato.Relay
         public static async Task<CallWithERC2771RequestOptionalParameters> PopulateOptionalUserParameters(CallWithErc2771Request request, ERC2771Type type, IEvmProvider provider, Config config)
         {
             var optionalParams = new CallWithERC2771RequestOptionalParameters();
-            if(request.UserDeadline == null)
+            if (request.UserDeadline == null)
             {
                 optionalParams.UserDeadline = CalculateDeadline();
             }
@@ -145,7 +145,7 @@ namespace ChainSafe.GamingSdk.Gelato.Relay
 
         private static async Task<HexBigInteger> GetUserNonce(string account, ERC2771Type type, IEvmProvider provider, Config config)
         {
-            var contract = new Contract(GelatoClient.UserNonceAbi,  GetGelatoRelayErc2771Address(type, config).ToString(), provider);
+            var contract = new Contract(GelatoClient.UserNonceAbi, GetGelatoRelayErc2771Address(type, config).ToString(), provider);
             var result = await contract.Call("userNonce", new object[] { account });
             return (HexBigInteger)result[0];
         }

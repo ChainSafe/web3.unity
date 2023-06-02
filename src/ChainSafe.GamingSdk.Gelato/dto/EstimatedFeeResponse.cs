@@ -6,7 +6,7 @@ namespace ChainSafe.GamingSdk.Gelato.Relay
     public class EstimatedFeeResponse
     {
         /// <summary>
-        ///     Quantity, estimated cost of transact
+        ///     Quantity, estimated cost of transact.
         /// </summary>
         [JsonProperty(PropertyName = "estimatedFee")]
         public HexBigInteger EstimatedFee { get; set; }

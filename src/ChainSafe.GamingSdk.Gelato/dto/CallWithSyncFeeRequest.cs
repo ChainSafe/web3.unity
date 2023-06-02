@@ -31,7 +31,7 @@ namespace ChainSafe.GamingSdk.Gelato.Relay
         public string FeeToken { get; set; }
 
         /// <summary>
-        ///     DATA - an optional boolean (default: true ) denoting what data you would prefer appended to the end of the calldata
+        ///     DATA - an optional boolean (default: true ) denoting what data you would prefer appended to the end of the calldata.
         /// </summary>
         [JsonProperty(PropertyName = "isRelayContext")]
         public bool IsRelayContext { get; set; }

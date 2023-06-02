@@ -6,7 +6,7 @@ namespace ChainSafe.GamingSdk.Gelato.Relay
 {
     public class SponsoredCallRequest : RelayRequestOptions
     {
-         /// <summary>
+        /// <summary>
         ///    QUANTITY - The transaction chain id.
         /// </summary>
         [JsonProperty(PropertyName = "chainId")]
