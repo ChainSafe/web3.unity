@@ -8,13 +8,6 @@ using Nethereum.Hex.HexTypes;
 using Web3Unity.Scripts.Library.Ethers.Providers;
 using Web3Unity.Scripts.Library.Ethers.Signers;
 
-// TODO:
-// Checksum address confirms
-// Check network ID matches provider & is a supported network
-// Get config from network.js or whichever
-// Last part of the ERC2771 calls
-// Clean up EIP712Domain
-// Remove redundant/unused interfaces
 namespace ChainSafe.GamingSdk.Gelato
 {
     public class GelatoModule
@@ -48,18 +41,19 @@ namespace ChainSafe.GamingSdk.Gelato
 
         public void CallWithSyncFeeERC2771(CallWithSyncFeeErc2771Request request, IEvmProvider provider, RelayRequestOptions options = null)
         {
-            // var callRequest = new CallWithErc2771Request{
-            //     ChainId = request.ChainId,
-            //     Target = request.Target,
-            //     Data = request.Data,
-            //     User = request.User,
-            //     UserDeadline = request.UserDeadline,
-            //     UserNonce = request.UserNonce,
-            // };
-            // Confirm Wallet & Provider chain ID match
+            throw new Exception("CallWithSyncFeeERC2771 not implemented");
+            /*var callRequest = new CallWithErc2771Request{
+                ChainId = request.ChainId,
+                Target = request.Target,
+                Data = request.Data,
+                User = request.User,
+                UserDeadline = request.UserDeadline,
+                UserNonce = request.UserNonce,
+            };
+            Confirm Wallet & Provider chain ID match
 
-            // var optional = await CallWithERC2771RequestOptionalParameters.PopulateOptionalUserParameters(callRequest, ERC2771Type.SponsoredCall, provider, this.config);
-            // var newStruct = callRequest.MapRequestToStruct(optional);
+            var optional = await CallWithERC2771RequestOptionalParameters.PopulateOptionalUserParameters(callRequest, ERC2771Type.SponsoredCall, provider, this.config);
+            var newStruct = callRequest.MapRequestToStruct(optional);*/
         }
 
         public async Task<RelayResponse> SponsoredCall(SponsoredCallRequest request, string sponsorApiKey)
@@ -81,22 +75,23 @@ namespace ChainSafe.GamingSdk.Gelato
 
         public void SponsoredCallERC2771(SponsoredCallErc2771Request request, IEvmProvider provider, string sponsorApiKey, RelayRequestOptions options = null)
         {
-            // var callRequest = new CallWithErc2771Request{
-            //     ChainId = request.ChainId,
-            //     Target = request.Target,
-            //     Data = request.Data,
-            //     User = request.User,
-            //     UserDeadline = request.UserDeadline,
-            //     UserNonce = request.UserNonce,
-            // };
+            throw new Exception("SponsoredCallERC2771 not implemented");
+            /* var callRequest = new CallWithErc2771Request{
+                ChainId = request.ChainId,
+                Target = request.Target,
+                Data = request.Data,
+                User = request.User,
+                UserDeadline = request.UserDeadline,
+                UserNonce = request.UserNonce,
+            };
 
-            // Confirm Wallet & Provider chain ID match
-            // var optional = await CallWithERC2771RequestOptionalParameters.PopulateOptionalUserParameters(callRequest, ERC2771Type.SponsoredCall, provider, this.config);
-            // var newStruct = callRequest.MapRequestToStruct(optional);
+            Confirm Wallet & Provider chain ID match
+            var optional = await CallWithERC2771RequestOptionalParameters.PopulateOptionalUserParameters(callRequest, ERC2771Type.SponsoredCall, provider, this.config);
+            var newStruct = callRequest.MapRequestToStruct(optional);
 
             // TODO: Sign typed data request
 
-            // return await this.gelatoClient.Post<CallWithErc2771Request, RelayResponse>(RelayCall.SponsoredCallERC2771, callRequest);
+            return await this.gelatoClient.Post<CallWithErc2771Request, RelayResponse>(RelayCall.SponsoredCallERC2771, callRequest);*/
         }
 
         public async Task<HexBigInteger> GetEstimatedFee(ulong chainId, string paymentToken, HexBigInteger gasLimit, bool isHighPriority, HexBigInteger gasLimitL1 = null)
