@@ -15,12 +15,12 @@ public class WalletLogin : MonoBehaviour
         // change this if you are implementing your own sign in page
         Web3Wallet.url = "https://chainsafe.github.io/game-web3wallet/";
         // loads the data saved from the editor config
-        projectConfigSO = (ProjectConfigScriptableObject)Resources.Load("ProjectConfigData", typeof(ScriptableObject));
-        PlayerPrefs.SetString("ProjectID", projectConfigSO.ProjectID);
-        PlayerPrefs.SetString("ChainID", projectConfigSO.ChainID);
+        projectConfigSO = ProjectConfigScriptableObject.LoadDefault();
+        PlayerPrefs.SetString("ProjectID", projectConfigSO.ProjectId);
+        PlayerPrefs.SetString("ChainID", projectConfigSO.ChainId);
         PlayerPrefs.SetString("Chain", projectConfigSO.Chain);
         PlayerPrefs.SetString("Network", projectConfigSO.Network);
-        PlayerPrefs.SetString("RPC", projectConfigSO.RPC);
+        PlayerPrefs.SetString("RPC", projectConfigSO.Rpc);
         // if remember me is checked, set the account to the saved account
         if (PlayerPrefs.HasKey("RememberMe") && PlayerPrefs.HasKey("Account"))
             if (PlayerPrefs.GetInt("RememberMe") == 1 && PlayerPrefs.GetString("Account") != "")

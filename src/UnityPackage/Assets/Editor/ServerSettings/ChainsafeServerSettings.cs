@@ -104,17 +104,17 @@ public class ChainSafeServerSettings : EditorWindow
             PlayerPrefs.SetString("RPC", RPC);
             PlayerPrefs.SetString("Registered", "true");
             // set the scriptable object for when the project is built out
-            projectConfigSO = (ProjectConfigScriptableObject)Resources.Load("ProjectConfigData", typeof(ScriptableObject));
+            projectConfigSO = ProjectConfigScriptableObject.LoadDefault();
             if (projectConfigSO == null)
             {
                 projectConfigSO = CreateInstance<ProjectConfigScriptableObject>();
-                AssetDatabase.CreateAsset(projectConfigSO, "Assets/Resources/ProjectConfigData.asset");
+                AssetDatabase.CreateAsset(projectConfigSO, ProjectConfigScriptableObject.DefaultAssetPath);
             }
-            projectConfigSO.ProjectID = ProjectID;
-            projectConfigSO.ChainID = ChainID;
+            projectConfigSO.ProjectId = ProjectID;
+            projectConfigSO.ChainId = ChainID;
             projectConfigSO.Chain = Chain;
             projectConfigSO.Network = Network;
-            projectConfigSO.RPC = RPC;
+            projectConfigSO.Rpc = RPC;
             EditorUtility.SetDirty(projectConfigSO);
             AssetDatabase.SaveAssets();
             // assign script to prefab and instantiate then destroy after

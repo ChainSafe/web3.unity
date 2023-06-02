@@ -22,12 +22,12 @@ public class WebLogin : MonoBehaviour
     void Start()
     {
         // loads the data saved from the editor config
-        projectConfigSO = (ProjectConfigScriptableObject)Resources.Load("ProjectConfigData", typeof(ScriptableObject));
-        PlayerPrefs.SetString("ProjectID", projectConfigSO.ProjectID);
-        PlayerPrefs.SetString("ChainID", projectConfigSO.ChainID);
+        projectConfigSO = ProjectConfigScriptableObject.LoadDefault();
+        PlayerPrefs.SetString("ProjectID", projectConfigSO.ProjectId);
+        PlayerPrefs.SetString("ChainID", projectConfigSO.ChainId);
         PlayerPrefs.SetString("Chain", projectConfigSO.Chain);
         PlayerPrefs.SetString("Network", projectConfigSO.Network);
-        PlayerPrefs.SetString("RPC", projectConfigSO.RPC);
+        PlayerPrefs.SetString("RPC", projectConfigSO.Rpc);
     }
 
     public void OnLogin()

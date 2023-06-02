@@ -1,23 +1,25 @@
+using ChainSafe.GamingWeb3;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "ProjectConfigData", menuName = "ScriptableObjects/ProjectConfigScriptableObject",
     order = 1)]
-public class ProjectConfigScriptableObject : ScriptableObject
+public class ProjectConfigScriptableObject : ScriptableObject, ICompleteProjectConfig
 {
+    public const string DefaultAssetPath = "Assets/Resources/ProjectConfigData.asset";
+    
     [SerializeField] public string projectID;
     [SerializeField] public string chainID;
     [SerializeField] public string chain;
     [SerializeField] public string network;
     [SerializeField] public string rpc;
 
-    public string ProjectID
+    public string ProjectId
     {
         get => projectID;
         set => projectID = value;
     }
 
-    public string ChainID
+    public string ChainId
     {
         get => chainID;
         set => chainID = value;
@@ -35,9 +37,11 @@ public class ProjectConfigScriptableObject : ScriptableObject
         set => network = value;
     }
 
-    public string RPC
+    public string Rpc
     {
         get => rpc;
         set => rpc = value;
     }
+
+    public static ProjectConfigScriptableObject LoadDefault() => Resources.Load<ProjectConfigScriptableObject>(DefaultAssetPath);
 }
