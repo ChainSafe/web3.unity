@@ -20,7 +20,7 @@ namespace ChainSafe.GamingSdk.Gelato
             // Check if Config's chainId is valid
             this.gelatoClient = new GelatoClient(httpClient, config);
             this.config = config;
-            
+
             // TODO: Remove blocking call once config init is resolved 
             if(IsNetworkSupported(config.ChainId).Result == false)
             {
