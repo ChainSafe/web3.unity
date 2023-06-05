@@ -24,6 +24,11 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
         // TODO: specific reason why these functions weren't abstract?
         public abstract Task<string> GetAddress();
 
+        public string GetAddress(string pk)
+        {
+            throw new NotImplementedException();
+        }
+
         public abstract Task<string> SignMessage(byte[] message);
 
         public abstract Task<string> SignMessage(string message);
