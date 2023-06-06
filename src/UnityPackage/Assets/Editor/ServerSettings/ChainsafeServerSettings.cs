@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using SDKConfiguration;
 using System;
+using System.IO;
 
 public class ChainSafeServerSettings : EditorWindow
 {
@@ -10,6 +11,7 @@ public class ChainSafeServerSettings : EditorWindow
     public string ChainID = "Please Enter Your Chain ID";
     public string Chain = "Please Enter Your Chain i.e Ethereum, Binance, Cronos";
     public string Network = "Please Enter Your Network i.e Mainnet, Testnet";
+    public string Token = "Please Enter Your Chain's Native Token i.e Eth, Cro";
     public string RPC = "Please Enter Your RPC";
     public User saveObject;
     Texture2D m_Logo = null;
@@ -42,6 +44,12 @@ public class ChainSafeServerSettings : EditorWindow
             Network = PlayerPrefs.GetString("Network");
             PlayerPrefs.Save();
         }
+        
+        if (Token == ("Please Enter Your Chain's Native Token i.e Eth, Cro") && (PlayerPrefs.GetString("Token") != ""))
+        {
+            Token = PlayerPrefs.GetString("Token");
+            PlayerPrefs.Save();
+        }
 
         if (RPC == ("Please Enter Your RPC") && (PlayerPrefs.GetString("RPC") != ""))
         {
@@ -58,7 +66,7 @@ public class ChainSafeServerSettings : EditorWindow
         EditorWindow.GetWindow(typeof(ChainSafeServerSettings));
     }
 
-    // called when menu is opened, loads Chainsafe Logo
+    // called when menu is opened, loads Chainsafe's Logo
     void OnEnable()
     {
         m_Logo = (Texture2D)Resources.Load("chainsafemenulogo", typeof(Texture2D));
@@ -79,6 +87,7 @@ public class ChainSafeServerSettings : EditorWindow
         ChainID = EditorGUILayout.TextField("Chain ID", ChainID);
         Chain = EditorGUILayout.TextField("Chain", Chain);
         Network = EditorGUILayout.TextField("Network", Network);
+        Token = EditorGUILayout.TextField("Token", Token);
         RPC = EditorGUILayout.TextField("RPC", RPC);
         // buttons
 
@@ -101,6 +110,7 @@ public class ChainSafeServerSettings : EditorWindow
             PlayerPrefs.SetString("ChainID", ChainID);
             PlayerPrefs.SetString("Chain", Chain);
             PlayerPrefs.SetString("Network", Network);
+            PlayerPrefs.SetString("Token", Token);
             PlayerPrefs.SetString("RPC", RPC);
             PlayerPrefs.SetString("Registered", "true");
             // set the scriptable object for when the project is built out
@@ -114,8 +124,10 @@ public class ChainSafeServerSettings : EditorWindow
             projectConfigSO.ChainID = ChainID;
             projectConfigSO.Chain = Chain;
             projectConfigSO.Network = Network;
+            projectConfigSO.Token = Token;
             projectConfigSO.RPC = RPC;
             EditorUtility.SetDirty(projectConfigSO);
+            WriteNetworkFile();
             AssetDatabase.SaveAssets();
             // assign script to prefab and instantiate then destroy after
             serverCheck = (GameObject)Resources.Load("dll", typeof(GameObject));
@@ -124,5 +136,31 @@ public class ChainSafeServerSettings : EditorWindow
             Debug.Log("Server Check Script: " + serverCheck);
         }
         GUILayout.Label("Reminder: Your ProjectID Must Be Valid To Save & Build With Our SDK. You Can Register For One On Our Website At Dashboard.Gaming.Chainsafe.io", EditorStyles.label);
+    }
+    
+    public void WriteNetworkFile()
+    {
+        // declares paths to write our javascript files to
+        string path1 = "Assets/WebGLTemplates/Web3GL-2020x/network.js";
+        string path2 = "Assets/WebGLTemplates/Web3GL-MetaMask/network.js";
+        
+        // writes data to the webgl default network file
+        StreamWriter writer1 = new StreamWriter(path1, false);
+        writer1.WriteLine("//You can see a list of compatible EVM chains at https://chainlist.org/");
+        writer1.WriteLine("window.networks = [");
+        writer1.WriteLine("  {");
+        writer1.WriteLine("id: " + PlayerPrefs.GetString("ChainID") + ",");
+        writer1.WriteLine("label: " + '"' + PlayerPrefs.GetString("Chain") + " " + PlayerPrefs.GetString("Network") + '"' + ",");
+        writer1.WriteLine("token: " + '"' + PlayerPrefs.GetString("Token") + '"' + ",");
+        writer1.WriteLine("rpcUrl: " + "'" + PlayerPrefs.GetString("RPC") + "'" + ",");
+        writer1.WriteLine("  }");
+        writer1.WriteLine("]");
+        writer1.Close();
+        
+        // writes data to the webgl metamask network file
+        StreamWriter writer2 = new StreamWriter(path2, false);
+        writer2.WriteLine("//You can see a list of compatible EVM chains at https://chainlist.org/");
+        writer2.WriteLine("window.web3ChainId = " + PlayerPrefs.GetString("ChainID") + ";");
+        writer2.Close();
     }
 }
