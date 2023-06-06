@@ -35,7 +35,7 @@ public class ProjectConfigScriptableObject : ScriptableObject
         get => network;
         set => network = value;
     }
-    
+
     public string Token
     {
         get => token;

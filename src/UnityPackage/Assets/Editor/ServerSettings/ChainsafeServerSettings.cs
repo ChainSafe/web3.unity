@@ -44,7 +44,7 @@ public class ChainSafeServerSettings : EditorWindow
             Network = PlayerPrefs.GetString("Network");
             PlayerPrefs.Save();
         }
-        
+
         if (Token == ("Please Enter Your Chain's Native Token i.e Eth, Cro") && (PlayerPrefs.GetString("Token") != ""))
         {
             Token = PlayerPrefs.GetString("Token");
@@ -137,13 +137,13 @@ public class ChainSafeServerSettings : EditorWindow
         }
         GUILayout.Label("Reminder: Your ProjectID Must Be Valid To Save & Build With Our SDK. You Can Register For One On Our Website At Dashboard.Gaming.Chainsafe.io", EditorStyles.label);
     }
-    
+
     public void WriteNetworkFile()
     {
         // declares paths to write our javascript files to
         string path1 = "Assets/WebGLTemplates/Web3GL-2020x/network.js";
         string path2 = "Assets/WebGLTemplates/Web3GL-MetaMask/network.js";
-        
+
         // writes data to the webgl default network file
         StreamWriter writer1 = new StreamWriter(path1, false);
         writer1.WriteLine("//You can see a list of compatible EVM chains at https://chainlist.org/");
@@ -156,7 +156,7 @@ public class ChainSafeServerSettings : EditorWindow
         writer1.WriteLine("  }");
         writer1.WriteLine("]");
         writer1.Close();
-        
+
         // writes data to the webgl metamask network file
         StreamWriter writer2 = new StreamWriter(path2, false);
         writer2.WriteLine("//You can see a list of compatible EVM chains at https://chainlist.org/");
