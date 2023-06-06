@@ -11,7 +11,7 @@ public class ChainSafeServerSettings : EditorWindow
     public string ChainID = "Please Enter Your Chain ID";
     public string Chain = "Please Enter Your Chain i.e Ethereum, Binance, Cronos";
     public string Network = "Please Enter Your Network i.e Mainnet, Testnet";
-    public string Token = "Please Enter Your Chain's Native Token i.e Eth, Cro";
+    public string Symbol = "Please Enter Your Chain's Native Symbol i.e Eth, Cro";
     public string RPC = "Please Enter Your RPC";
     public User saveObject;
     Texture2D m_Logo = null;
@@ -45,9 +45,9 @@ public class ChainSafeServerSettings : EditorWindow
             PlayerPrefs.Save();
         }
 
-        if (Token == ("Please Enter Your Chain's Native Token i.e Eth, Cro") && (PlayerPrefs.GetString("Token") != ""))
+        if (Symbol == ("Please Enter Your Chain's Native Symbol i.e Eth, Cro") && (PlayerPrefs.GetString("Symbol") != ""))
         {
-            Token = PlayerPrefs.GetString("Token");
+            Symbol = PlayerPrefs.GetString("Symbol");
             PlayerPrefs.Save();
         }
 
@@ -87,7 +87,7 @@ public class ChainSafeServerSettings : EditorWindow
         ChainID = EditorGUILayout.TextField("Chain ID", ChainID);
         Chain = EditorGUILayout.TextField("Chain", Chain);
         Network = EditorGUILayout.TextField("Network", Network);
-        Token = EditorGUILayout.TextField("Token", Token);
+        Symbol = EditorGUILayout.TextField("Symbol", Symbol);
         RPC = EditorGUILayout.TextField("RPC", RPC);
         // buttons
 
@@ -110,7 +110,7 @@ public class ChainSafeServerSettings : EditorWindow
             PlayerPrefs.SetString("ChainID", ChainID);
             PlayerPrefs.SetString("Chain", Chain);
             PlayerPrefs.SetString("Network", Network);
-            PlayerPrefs.SetString("Token", Token);
+            PlayerPrefs.SetString("Symbol", Symbol);
             PlayerPrefs.SetString("RPC", RPC);
             PlayerPrefs.SetString("Registered", "true");
             // set the scriptable object for when the project is built out
@@ -124,7 +124,7 @@ public class ChainSafeServerSettings : EditorWindow
             projectConfigSO.ChainID = ChainID;
             projectConfigSO.Chain = Chain;
             projectConfigSO.Network = Network;
-            projectConfigSO.Token = Token;
+            projectConfigSO.Symbol = Symbol;
             projectConfigSO.RPC = RPC;
             EditorUtility.SetDirty(projectConfigSO);
             WriteNetworkFile();
@@ -149,10 +149,10 @@ public class ChainSafeServerSettings : EditorWindow
         writer1.WriteLine("//You can see a list of compatible EVM chains at https://chainlist.org/");
         writer1.WriteLine("window.networks = [");
         writer1.WriteLine("     {");
-        writer1.WriteLine("id: " + PlayerPrefs.GetString("ChainID") + ",");
-        writer1.WriteLine("label: " + '"' + PlayerPrefs.GetString("Chain") + " " + PlayerPrefs.GetString("Network") + '"' + ",");
-        writer1.WriteLine("token: " + '"' + PlayerPrefs.GetString("Token") + '"' + ",");
-        writer1.WriteLine("rpcUrl: " + "'" + PlayerPrefs.GetString("RPC") + "'" + ",");
+        writer1.WriteLine("             id: " + PlayerPrefs.GetString("ChainID") + ",");
+        writer1.WriteLine("             label: " + '"' + PlayerPrefs.GetString("Chain") + " " + PlayerPrefs.GetString("Network") + '"' + ",");
+        writer1.WriteLine("             symbol: " + '"' + PlayerPrefs.GetString("Symbol") + '"' + ",");
+        writer1.WriteLine("             rpcUrl: " + "'" + PlayerPrefs.GetString("RPC") + "'" + ",");
         writer1.WriteLine("     }");
         writer1.WriteLine("]");
         writer1.Close();

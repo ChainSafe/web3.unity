@@ -9,7 +9,7 @@ public class ProjectConfigScriptableObject : ScriptableObject
     [SerializeField] public string chainID;
     [SerializeField] public string chain;
     [SerializeField] public string network;
-    [SerializeField] public string token;
+    [SerializeField] public string symbol;
     [SerializeField] public string rpc;
 
     public string ProjectID
@@ -36,10 +36,10 @@ public class ProjectConfigScriptableObject : ScriptableObject
         set => network = value;
     }
 
-    public string Token
+    public string Symbol
     {
-        get => token;
-        set => token = value;
+        get => symbol;
+        set => symbol = value;
     }
 
     public string RPC
