@@ -19,7 +19,6 @@ public class ChainSafeServerSettings : EditorWindow
     private string _network = Network;
     private string _symbol = Symbol;
     private string _rpc = RPC;
-    
     public User saveObject;
     Texture2D m_Logo = null;
     GameObject serverCheck = null;
