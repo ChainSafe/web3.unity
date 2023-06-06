@@ -148,12 +148,12 @@ public class ChainSafeServerSettings : EditorWindow
         StreamWriter writer1 = new StreamWriter(path1, false);
         writer1.WriteLine("//You can see a list of compatible EVM chains at https://chainlist.org/");
         writer1.WriteLine("window.networks = [");
-        writer1.WriteLine("  {");
+        writer1.WriteLine("     {");
         writer1.WriteLine("id: " + PlayerPrefs.GetString("ChainID") + ",");
         writer1.WriteLine("label: " + '"' + PlayerPrefs.GetString("Chain") + " " + PlayerPrefs.GetString("Network") + '"' + ",");
         writer1.WriteLine("token: " + '"' + PlayerPrefs.GetString("Token") + '"' + ",");
         writer1.WriteLine("rpcUrl: " + "'" + PlayerPrefs.GetString("RPC") + "'" + ",");
-        writer1.WriteLine("  }");
+        writer1.WriteLine("     }");
         writer1.WriteLine("]");
         writer1.Close();
 
