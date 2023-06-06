@@ -151,7 +151,7 @@ public class ChainSafeServerSettings : EditorWindow
         writer1.WriteLine("     {");
         writer1.WriteLine("            id: " + PlayerPrefs.GetString("ChainID") + ",");
         writer1.WriteLine("            label: " + '"' + PlayerPrefs.GetString("Chain") + " " + PlayerPrefs.GetString("Network") + '"' + ",");
-        writer1.WriteLine("            symbol: " + '"' + PlayerPrefs.GetString("Symbol") + '"' + ",");
+        writer1.WriteLine("            token: " + '"' + PlayerPrefs.GetString("Symbol") + '"' + ",");
         writer1.WriteLine("            rpcUrl: " + "'" + PlayerPrefs.GetString("RPC") + "'" + ",");
         writer1.WriteLine("     }");
         writer1.WriteLine("]");
