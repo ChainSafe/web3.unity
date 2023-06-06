@@ -7,12 +7,19 @@ using System.IO;
 
 public class ChainSafeServerSettings : EditorWindow
 {
-    public string ProjectID = "Please Enter Your Project ID";
-    public string ChainID = "Please Enter Your Chain ID";
-    public string Chain = "Please Enter Your Chain i.e Ethereum, Binance, Cronos";
-    public string Network = "Please Enter Your Network i.e Mainnet, Testnet";
-    public string Symbol = "Please Enter Your Chain's Native Symbol i.e Eth, Cro";
-    public string RPC = "Please Enter Your RPC";
+    private const string ProjectID = "Please Enter Your Project ID";
+    private const string ChainID = "Please Enter Your Chain ID";
+    private const string Chain = "Please Enter Your Chain i.e Ethereum, Binance, Cronos";
+    private const string Network = "Please Enter Your Network i.e Mainnet, Testnet";
+    private const string Symbol = "Please Enter Your Chain's Native Symbol i.e Eth, Cro";
+    private const string RPC = "Please Enter Your RPC";
+    private string _projectID = ProjectID;
+    private string _chainID = ChainID;
+    private string _chain = Chain;
+    private string _network = Network;
+    private string _symbol = Symbol;
+    private string _rpc = RPC;
+    
     public User saveObject;
     Texture2D m_Logo = null;
     GameObject serverCheck = null;
@@ -21,39 +28,39 @@ public class ChainSafeServerSettings : EditorWindow
     // checks if data is already entered
     void Awake()
     {
-        if ((ProjectID == ("Please Enter Your Project ID")) && (PlayerPrefs.GetString("ProjectID") != ""))
+        if ((_projectID == (ProjectID)) && (PlayerPrefs.GetString("ProjectID") != ""))
         {
-            ProjectID = PlayerPrefs.GetString("ProjectID");
+            _projectID = PlayerPrefs.GetString("ProjectID");
             PlayerPrefs.Save();
         }
 
-        if ((ChainID == ("Please Enter Your Chain ID")) && (PlayerPrefs.GetString("ChainID") != ""))
+        if ((_chainID == (ChainID)) && (PlayerPrefs.GetString("ChainID") != ""))
         {
-            ChainID = PlayerPrefs.GetString("ChainID");
+            _chainID = PlayerPrefs.GetString("ChainID");
             PlayerPrefs.Save();
         }
 
-        if (Chain == ("Please Enter Your Chain i.e Ethereum, Binance, Cronos") && (PlayerPrefs.GetString("Chain") != ""))
+        if ((_chain == (Chain)) && (PlayerPrefs.GetString("Chain") != ""))
         {
-            Chain = PlayerPrefs.GetString("Chain");
+            _chain = PlayerPrefs.GetString("Chain");
             PlayerPrefs.Save();
         }
 
-        if (Network == ("Please Enter Your Network i.e Mainnet, Testnet") && (PlayerPrefs.GetString("Network") != ""))
+        if ((_network == (Network)) && (PlayerPrefs.GetString("Network") != ""))
         {
-            Network = PlayerPrefs.GetString("Network");
+            _network = PlayerPrefs.GetString("Network");
             PlayerPrefs.Save();
         }
 
-        if (Symbol == ("Please Enter Your Chain's Native Symbol i.e Eth, Cro") && (PlayerPrefs.GetString("Symbol") != ""))
+        if ((_symbol == (Symbol)) && (PlayerPrefs.GetString("Symbol") != ""))
         {
-            Symbol = PlayerPrefs.GetString("Symbol");
+            _symbol = PlayerPrefs.GetString("Symbol");
             PlayerPrefs.Save();
         }
 
-        if (RPC == ("Please Enter Your RPC") && (PlayerPrefs.GetString("RPC") != ""))
+        if ((_rpc == (RPC)) && (PlayerPrefs.GetString("RPC") != ""))
         {
-            RPC = PlayerPrefs.GetString("RPC");
+            _rpc = PlayerPrefs.GetString("RPC");
             PlayerPrefs.Save();
         }
     }
@@ -83,12 +90,12 @@ public class ChainSafeServerSettings : EditorWindow
         GUILayout.Label("Welcome To The ChainSafe SDK!", EditorStyles.boldLabel);
         GUILayout.Label("Here you can enter all the information needed to get your game started on the blockchain!", EditorStyles.label);
         // inputs
-        ProjectID = EditorGUILayout.TextField("Project ID", ProjectID);
-        ChainID = EditorGUILayout.TextField("Chain ID", ChainID);
-        Chain = EditorGUILayout.TextField("Chain", Chain);
-        Network = EditorGUILayout.TextField("Network", Network);
-        Symbol = EditorGUILayout.TextField("Symbol", Symbol);
-        RPC = EditorGUILayout.TextField("RPC", RPC);
+        _projectID = EditorGUILayout.TextField("Project ID", _projectID);
+        _chainID = EditorGUILayout.TextField("Chain ID", _chainID);
+        _chain = EditorGUILayout.TextField("Chain", _chain);
+        _network = EditorGUILayout.TextField("Network", _network);
+        _symbol = EditorGUILayout.TextField("Symbol", _symbol);
+        _rpc = EditorGUILayout.TextField("RPC", _rpc);
         // buttons
 
         // register
@@ -106,12 +113,12 @@ public class ChainSafeServerSettings : EditorWindow
         {
             Debug.Log("Saving Settings!");
             // set player prefs for unity open close within the editor
-            PlayerPrefs.SetString("ProjectID", ProjectID);
-            PlayerPrefs.SetString("ChainID", ChainID);
-            PlayerPrefs.SetString("Chain", Chain);
-            PlayerPrefs.SetString("Network", Network);
-            PlayerPrefs.SetString("Symbol", Symbol);
-            PlayerPrefs.SetString("RPC", RPC);
+            PlayerPrefs.SetString("ProjectID", _projectID);
+            PlayerPrefs.SetString("ChainID", _chainID);
+            PlayerPrefs.SetString("Chain", _chain);
+            PlayerPrefs.SetString("Network", _network);
+            PlayerPrefs.SetString("Symbol", _symbol);
+            PlayerPrefs.SetString("RPC", _rpc);
             PlayerPrefs.SetString("Registered", "true");
             // set the scriptable object for when the project is built out
             projectConfigSO = (ProjectConfigScriptableObject)Resources.Load("ProjectConfigData", typeof(ScriptableObject));
@@ -120,12 +127,12 @@ public class ChainSafeServerSettings : EditorWindow
                 projectConfigSO = CreateInstance<ProjectConfigScriptableObject>();
                 AssetDatabase.CreateAsset(projectConfigSO, "Assets/Resources/ProjectConfigData.asset");
             }
-            projectConfigSO.ProjectID = ProjectID;
-            projectConfigSO.ChainID = ChainID;
-            projectConfigSO.Chain = Chain;
-            projectConfigSO.Network = Network;
-            projectConfigSO.Symbol = Symbol;
-            projectConfigSO.RPC = RPC;
+            projectConfigSO.ProjectID = _projectID;
+            projectConfigSO.ChainID = _chainID;
+            projectConfigSO.Chain = _chain;
+            projectConfigSO.Network = _network;
+            projectConfigSO.Symbol = _symbol;
+            projectConfigSO.RPC = _rpc;
             EditorUtility.SetDirty(projectConfigSO);
             WriteNetworkFile();
             AssetDatabase.SaveAssets();
