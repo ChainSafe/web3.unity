@@ -5,43 +5,58 @@ using System.Threading.Tasks;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
 using ChainSafe.GamingSdk.Editor;
+using System.IO;
+using System.Text;
 
 public class ChainSafeServerSettings : EditorWindow
 {
-    private string ProjectID = "Please Enter Your Project ID";
-    private string ChainID = "Please Enter Your Chain ID";
-    private string Chain = "Please Enter Your Chain i.e Ethereum, Binance, Cronos";
-    private string Network = "Please Enter Your Network i.e Mainnet, Testnet";
-    private string RPC = "Please Enter Your RPC";
+    private const string ProjectID = "Please enter your project ID";
+    private const string ChainID = "Please enter your chain ID";
+    private const string Chain = "Please enter your chain i.e Ethereum, Binance, Cronos";
+    private const string Network = "Please enter your network i.e Mainnet, Testnet";
+    private const string Symbol = "Please enter your chain's native symbol i.e Eth, Cro";
+    private const string Rpc = "Please enter your RPC endpoint";
+
+    private string projectID = ProjectID;
+    private string chainID = ChainID;
+    private string chain = Chain;
+    private string network = Network;
+    private string symbol = Symbol;
+    private string rpc = Rpc;
 
     Texture2D logo = null;
 
     // checks if data is already entered
     void Awake()
     {
-        if ((ProjectID == "Please Enter Your Project ID") && (PlayerPrefs.GetString("ProjectID") != ""))
+        if ((projectID == ProjectID) && (PlayerPrefs.GetString("ProjectID") != ""))
         {
-            ProjectID = PlayerPrefs.GetString("ProjectID");
+            projectID = PlayerPrefs.GetString("ProjectID");
         }
 
-        if ((ChainID == "Please Enter Your Chain ID") && (PlayerPrefs.GetString("ChainID") != ""))
+        if ((chainID == ChainID) && (PlayerPrefs.GetString("ChainID") != ""))
         {
-            ChainID = PlayerPrefs.GetString("ChainID");
+            chainID = PlayerPrefs.GetString("ChainID");
         }
 
-        if (Chain == "Please Enter Your Chain i.e Ethereum, Binance, Cronos" && (PlayerPrefs.GetString("Chain") != ""))
+        if (chain == Chain && (PlayerPrefs.GetString("Chain") != ""))
         {
-            Chain = PlayerPrefs.GetString("Chain");
+            chain = PlayerPrefs.GetString("Chain");
         }
 
-        if (Network == "Please Enter Your Network i.e Mainnet, Testnet" && (PlayerPrefs.GetString("Network") != ""))
+        if (network == Network && (PlayerPrefs.GetString("Network") != ""))
         {
-            Network = PlayerPrefs.GetString("Network");
+            network = PlayerPrefs.GetString("Network");
         }
 
-        if (RPC == "Please Enter Your RPC" && (PlayerPrefs.GetString("RPC") != ""))
+        if (symbol == Symbol && (PlayerPrefs.GetString("Symbol") != ""))
         {
-            RPC = PlayerPrefs.GetString("RPC");
+            symbol = PlayerPrefs.GetString("Symbol");
+        }
+
+        if (rpc == Rpc && (PlayerPrefs.GetString("RPC") != ""))
+        {
+            rpc = PlayerPrefs.GetString("RPC");
         }
     }
 
@@ -73,11 +88,12 @@ public class ChainSafeServerSettings : EditorWindow
         GUILayout.Label("Welcome To The ChainSafe SDK!", EditorStyles.boldLabel);
         GUILayout.Label("Here you can enter all the information needed to get your game started on the blockchain!", EditorStyles.label);
         // inputs
-        ProjectID = EditorGUILayout.TextField("Project ID", ProjectID);
-        ChainID = EditorGUILayout.TextField("Chain ID", ChainID);
-        Chain = EditorGUILayout.TextField("Chain", Chain);
-        Network = EditorGUILayout.TextField("Network", Network);
-        RPC = EditorGUILayout.TextField("RPC", RPC);
+        projectID = EditorGUILayout.TextField("Project ID", projectID);
+        chainID = EditorGUILayout.TextField("Chain ID", chainID);
+        chain = EditorGUILayout.TextField("Chain", chain);
+        network = EditorGUILayout.TextField("Network", network);
+        symbol = EditorGUILayout.TextField("Symbol", symbol);
+        rpc = EditorGUILayout.TextField("RPC", rpc);
         // buttons
 
         // register
@@ -95,15 +111,16 @@ public class ChainSafeServerSettings : EditorWindow
         {
             Debug.Log("Saving Settings!");
             var projectConfig = ProjectConfigUtilities.CreateOrLoad();
-            projectConfig.ProjectID = ProjectID;
-            projectConfig.ChainID = ChainID;
-            projectConfig.Chain = Chain;
-            projectConfig.Network = Network;
-            projectConfig.RPC = RPC;
+            projectConfig.ProjectID = projectID;
+            projectConfig.ChainID = chainID;
+            projectConfig.Chain = chain;
+            projectConfig.Network = network;
+            projectConfig.Symbol = symbol;
+            projectConfig.RPC = rpc;
             ProjectConfigUtilities.Save(projectConfig);
 
             // TODO: this should happen *before* the asset is saved.
-            ValidateProjectID(ProjectID);
+            ValidateProjectID(projectID);
         }
         GUILayout.Label("Reminder: Your ProjectID Must Be Valid To Save & Build With Our SDK. You Can Register For One On Our Website At Dashboard.Gaming.Chainsafe.io", EditorStyles.label);
 
@@ -117,7 +134,10 @@ public class ChainSafeServerSettings : EditorWindow
     {
         try
         {
-            await ValidateProjectIDAsync(projectID);
+            if (await ValidateProjectIDAsync(projectID))
+            {
+                WriteNetworkFile();
+            }
         }
         catch (Exception e)
         {
@@ -152,6 +172,42 @@ public class ChainSafeServerSettings : EditorWindow
         {
             Debug.LogError("ProjectID Not Valid! Please Go To Dashboard.Gaming.Chainsafe.IO To Get A New Project ID");
             return false;
+        }
+    }
+
+    public static void WriteNetworkFile()
+    {
+        Debug.Log("Updating network.js . . .");
+
+        // declares paths to write our javascript files to
+        string path1 = "Assets/WebGLTemplates/Web3GL-2020x/network.js";
+        string path2 = "Assets/WebGLTemplates/Web3GL-MetaMask/network.js";
+
+        if (AssetDatabase.IsValidFolder(Path.GetDirectoryName(path1)))
+        {
+            // write data to the webgl default network file
+            var sb = new StringBuilder();
+            sb.AppendLine("//You can see a list of compatible EVM chains at https://chainlist.org/");
+            sb.AppendLine("window.networks = [");
+            sb.AppendLine("  {");
+            sb.AppendLine("    id: " + PlayerPrefs.GetString("ChainID") + ",");
+            sb.AppendLine("    label: " + '"' + PlayerPrefs.GetString("Chain") + " " + PlayerPrefs.GetString("Network") + '"' + ",");
+            sb.AppendLine("    token: " + '"' + PlayerPrefs.GetString("Symbol") + '"' + ",");
+            sb.AppendLine("    rpcUrl: " + "'" + PlayerPrefs.GetString("RPC") + "'" + ",");
+            sb.AppendLine("  }");
+            sb.AppendLine("]");
+            var textAsset = new TextAsset(sb.ToString());
+            AssetDatabase.CreateAsset(textAsset, path1);
+        }
+
+        if (AssetDatabase.IsValidFolder(Path.GetDirectoryName(path2)))
+        {
+            // writes data to the webgl metamask network file
+            var sb = new StringBuilder();
+            sb.AppendLine("//You can see a list of compatible EVM chains at https://chainlist.org/");
+            sb.AppendLine("window.web3ChainId = " + PlayerPrefs.GetString("ChainID") + ";");
+            var textAsset = new TextAsset(sb.ToString());
+            AssetDatabase.CreateAsset(textAsset, path2);
         }
     }
 
