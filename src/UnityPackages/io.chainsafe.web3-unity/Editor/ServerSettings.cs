@@ -199,6 +199,10 @@ public class ChainSafeServerSettings : EditorWindow
             var textAsset = new TextAsset(sb.ToString());
             AssetDatabase.CreateAsset(textAsset, path1);
         }
+        else
+        {
+            Debug.LogWarning($"{Path.GetDirectoryName(path1)} is missing, network.js file will not be updated for this template");
+        }
 
         if (AssetDatabase.IsValidFolder(Path.GetDirectoryName(path2)))
         {
@@ -208,6 +212,10 @@ public class ChainSafeServerSettings : EditorWindow
             sb.AppendLine("window.web3ChainId = " + PlayerPrefs.GetString("ChainID") + ";");
             var textAsset = new TextAsset(sb.ToString());
             AssetDatabase.CreateAsset(textAsset, path2);
+        }
+        else
+        {
+            Debug.LogWarning($"{Path.GetDirectoryName(path2)} is missing, network.js file will not be updated for this template");
         }
     }
 
