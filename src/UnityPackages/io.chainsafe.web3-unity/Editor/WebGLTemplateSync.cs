@@ -54,19 +54,24 @@ namespace ChainSafe.GamingSdk.Editor
         {
             AssetDatabase.DisallowAutoRefresh();
 
-            var assetsTemplatesDirectory = new DirectoryInfo(Path.Combine(Application.dataPath, "WebGLTemplates"));
-            if (!assetsTemplatesDirectory.Exists)
+            try
             {
-                AssetDatabase.CreateFolder("Assets", "WebGLTemplates");
+                var assetsTemplatesDirectory = new DirectoryInfo(Path.Combine(Application.dataPath, "WebGLTemplates"));
+                if (!assetsTemplatesDirectory.Exists)
+                {
+                    AssetDatabase.CreateFolder("Assets", "WebGLTemplates");
+                }
+
+                var pluginPath = PluginPathDetector.GetPluginPath();
+                var templatesFolder = new DirectoryInfo(Path.Combine(pluginPath, "Editor/WebGLTemplates"));
+
+                CopyFolder(templatesFolder, assetsTemplatesDirectory);
             }
-
-            var pluginPath = PluginPathDetector.GetPluginPath();
-            var templatesFolder = new DirectoryInfo(Path.Combine(pluginPath, "Editor/WebGLTemplates"));
-
-            CopyFolder(templatesFolder, assetsTemplatesDirectory);
-
-            AssetDatabase.AllowAutoRefresh();
-            AssetDatabase.Refresh();
+            finally
+            {
+                AssetDatabase.AllowAutoRefresh();
+                AssetDatabase.Refresh();
+            }
         }
 
         private static void CopyFolder(DirectoryInfo source, DirectoryInfo destination)
@@ -78,15 +83,17 @@ namespace ChainSafe.GamingSdk.Editor
 
             foreach (var file in source.GetFiles())
             {
-                if (file.Extension != ".meta")
+                if (file.Extension == ".meta")
                 {
-                    var destinationFile = new FileInfo(Path.Combine(destination.FullName, file.Name));
-                    if (destinationFile.Exists)
-                    {
-                        destinationFile.Delete();
-                    }
-                    File.Copy(file.FullName, destinationFile.FullName);
+                    continue;
                 }
+
+                var destinationFile = new FileInfo(Path.Combine(destination.FullName, file.Name));
+                if (destinationFile.Exists)
+                {
+                    destinationFile.Delete();
+                }
+                File.Copy(file.FullName, destinationFile.FullName);
             }
 
             foreach (var directory in source.GetDirectories())
