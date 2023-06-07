@@ -32,16 +32,16 @@ namespace ChainSafe.GamingSdk.Gelato
             switch (relayCall)
             {
                 case RelayCall.CallWithSyncFee:
-                    return (await this.httpClient.Post<TRequest, TResponse>($"{config.Url}/relays/v2/call-with-sync-fee", request)).Response;
+                    return (await this.httpClient.Post<TRequest, TResponse>($"{config.Url}/relays/v2/call-with-sync-fee", request)).EnsureResponse();
 
                 case RelayCall.CallWithSyncFeeERC2771:
-                    return (await this.httpClient.Post<TRequest, TResponse>($"{config.Url}/relays/v2/call-with-sync-fee-erc2771", request)).Response;
+                    return (await this.httpClient.Post<TRequest, TResponse>($"{config.Url}/relays/v2/call-with-sync-fee-erc2771", request)).EnsureResponse();
 
                 case RelayCall.SponsoredCall:
-                    return (await this.httpClient.Post<TRequest, TResponse>($"{config.Url}/relays/v2/sponsored-call", request)).Response;
+                    return (await this.httpClient.Post<TRequest, TResponse>($"{config.Url}/relays/v2/sponsored-call", request)).EnsureResponse();
 
                 case RelayCall.SponsoredCallERC2771:
-                    return (await this.httpClient.Post<TRequest, TResponse>($"{config.Url}/relays/v2/sponsored-call-erc2771", request)).Response;
+                    return (await this.httpClient.Post<TRequest, TResponse>($"{config.Url}/relays/v2/sponsored-call-erc2771", request)).EnsureResponse();
                 default:
                     throw new Exception("relayCall option not found");
             }
@@ -51,7 +51,7 @@ namespace ChainSafe.GamingSdk.Gelato
         {
             try
             {
-                return (await this.httpClient.Get<SupportedNetworksResponse>($"{config.Url}/relays/v2")).Response.Relays;
+                return (await this.httpClient.Get<SupportedNetworksResponse>($"{config.Url}/relays/v2")).EnsureResponse().Relays;
             }
             catch (System.Exception e)
             {
@@ -63,7 +63,7 @@ namespace ChainSafe.GamingSdk.Gelato
         {
             try
             {
-                return (await this.httpClient.Get<OraclesResponse>($"{config.Url}/oracles/")).Response.Oracles;
+                return (await this.httpClient.Get<OraclesResponse>($"{config.Url}/oracles/")).EnsureResponse().Oracles;
             }
             catch (System.Exception e)
             {
@@ -75,7 +75,7 @@ namespace ChainSafe.GamingSdk.Gelato
         {
             try
             {
-                return (await this.httpClient.Get<PaymentTokensResponse>($"{config.Url}/oracles/${chainId}/paymentTokens/")).Response.PaymentTokens;
+                return (await this.httpClient.Get<PaymentTokensResponse>($"{config.Url}/oracles/${chainId}/paymentTokens/")).EnsureResponse().PaymentTokens;
             }
             catch (System.Exception e)
             {
@@ -87,7 +87,7 @@ namespace ChainSafe.GamingSdk.Gelato
         {
             try
             {
-                return (await this.httpClient.Post<EstimatedFeeRequest, EstimatedFeeResponse>($"{config.Url}/oracles/${request.ChainId}/estimate/", request)).Response.EstimatedFee;
+                return (await this.httpClient.Post<EstimatedFeeRequest, EstimatedFeeResponse>($"{config.Url}/oracles/${request.ChainId}/estimate/", request)).EnsureResponse().EstimatedFee;
             }
             catch (System.Exception e)
             {
@@ -99,7 +99,7 @@ namespace ChainSafe.GamingSdk.Gelato
         {
             try
             {
-                return (await this.httpClient.Get<TransactionStatusResponse>($"{config.Url}/tasks/status/{taskId}")).Response.Task;
+                return (await this.httpClient.Get<TransactionStatusResponse>($"{config.Url}/tasks/status/{taskId}")).EnsureResponse().Task;
             }
             catch (System.Exception e)
             {
