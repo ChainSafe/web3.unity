@@ -14,8 +14,6 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
     {
         public Network.Network Network { get; }
 
-        public ValueTask Initialize();
-
         // Network
         public Task<Network.Network> DetectNetwork();
 

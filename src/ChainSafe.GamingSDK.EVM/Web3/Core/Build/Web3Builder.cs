@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
 using ChainSafe.GamingWeb3.Environment;
 using Microsoft.Extensions.DependencyInjection;
@@ -44,14 +45,14 @@ namespace ChainSafe.GamingWeb3.Build
             return this;
         }
 
-        public Web3 Build()
+        public async ValueTask<Web3> BuildAsync()
         {
             var serviceProvider = serviceCollection.BuildServiceProvider();
             AssertWeb3EnvironmentBound(serviceProvider);
 
-            var provider = serviceProvider.GetService<IRpcProvider>();
-            var signer = serviceProvider.GetService<ISigner>();
-            var transactionExecutor = serviceProvider.GetService<ITransactionExecutor>();
+            var web3 = new Web3(serviceProvider);
+
+            await web3.InitializeAsync();
 
             return new Web3(serviceProvider, provider, signer, transactionExecutor);
         }

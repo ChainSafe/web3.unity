@@ -9,15 +9,14 @@ public sealed class RPC
     {
         get
         {
-            if (instance == null)
-                instance = new RPC();
+            instance ??= new RPC();
             return instance;
         }
     }
 
     private RPC()
     {
-        provider = ProviderMigration.NewJsonRpcProvider();
+        provider = ProviderMigration.NewJsonRpcProviderAsync().Result;
     }
 
     public JsonRpcProvider Provider()
