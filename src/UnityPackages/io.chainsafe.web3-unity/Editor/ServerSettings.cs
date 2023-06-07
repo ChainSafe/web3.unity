@@ -196,8 +196,7 @@ public class ChainSafeServerSettings : EditorWindow
             sb.AppendLine("    rpcUrl: " + "'" + PlayerPrefs.GetString("RPC") + "'" + ",");
             sb.AppendLine("  }");
             sb.AppendLine("]");
-            var textAsset = new TextAsset(sb.ToString());
-            AssetDatabase.CreateAsset(textAsset, path1);
+            File.WriteAllText(path1, sb.ToString());
         }
         else
         {
@@ -210,13 +209,14 @@ public class ChainSafeServerSettings : EditorWindow
             var sb = new StringBuilder();
             sb.AppendLine("//You can see a list of compatible EVM chains at https://chainlist.org/");
             sb.AppendLine("window.web3ChainId = " + PlayerPrefs.GetString("ChainID") + ";");
-            var textAsset = new TextAsset(sb.ToString());
-            AssetDatabase.CreateAsset(textAsset, path2);
+            File.WriteAllText(path2, sb.ToString());
         }
         else
         {
             Debug.LogWarning($"{Path.GetDirectoryName(path2)} is missing, network.js file will not be updated for this template");
         }
+
+        AssetDatabase.Refresh();
     }
 
     private class ValidateProjectIDResponse
