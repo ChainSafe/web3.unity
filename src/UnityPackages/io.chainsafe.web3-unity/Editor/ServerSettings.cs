@@ -177,7 +177,9 @@ public class ChainSafeServerSettings : EditorWindow
 
     public static void WriteNetworkFile()
     {
-        Debug.Log("Updating network.js . . .");
+        Debug.Log("Updating network.js...");
+
+        var projectConfig = ProjectConfigUtilities.CreateOrLoad();
 
         // declares paths to write our javascript files to
         string path1 = "Assets/WebGLTemplates/Web3GL-2020x/network.js";
@@ -190,10 +192,10 @@ public class ChainSafeServerSettings : EditorWindow
             sb.AppendLine("//You can see a list of compatible EVM chains at https://chainlist.org/");
             sb.AppendLine("window.networks = [");
             sb.AppendLine("  {");
-            sb.AppendLine("    id: " + PlayerPrefs.GetString("ChainID") + ",");
-            sb.AppendLine("    label: " + '"' + PlayerPrefs.GetString("Chain") + " " + PlayerPrefs.GetString("Network") + '"' + ",");
-            sb.AppendLine("    token: " + '"' + PlayerPrefs.GetString("Symbol") + '"' + ",");
-            sb.AppendLine("    rpcUrl: " + "'" + PlayerPrefs.GetString("RPC") + "'" + ",");
+            sb.AppendLine("    id: " + projectConfig.ChainID + ",");
+            sb.AppendLine("    label: " + '"' + projectConfig.Chain + " " + projectConfig.Network + '"' + ",");
+            sb.AppendLine("    token: " + '"' + projectConfig.Symbol + '"' + ",");
+            sb.AppendLine("    rpcUrl: " + "'" + projectConfig.RPC + "'" + ",");
             sb.AppendLine("  }");
             sb.AppendLine("]");
             File.WriteAllText(path1, sb.ToString());
@@ -208,7 +210,7 @@ public class ChainSafeServerSettings : EditorWindow
             // writes data to the webgl metamask network file
             var sb = new StringBuilder();
             sb.AppendLine("//You can see a list of compatible EVM chains at https://chainlist.org/");
-            sb.AppendLine("window.web3ChainId = " + PlayerPrefs.GetString("ChainID") + ";");
+            sb.AppendLine("window.web3ChainId = " + projectConfig.ChainID + ";");
             File.WriteAllText(path2, sb.ToString());
         }
         else
@@ -217,6 +219,8 @@ public class ChainSafeServerSettings : EditorWindow
         }
 
         AssetDatabase.Refresh();
+
+        Debug.Log("Done");
     }
 
     private class ValidateProjectIDResponse
