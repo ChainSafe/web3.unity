@@ -85,7 +85,7 @@ namespace Web3Unity.Scripts.Library.Web3Wallet
         {
             // open application
             var message = Uri.EscapeDataString(_message);
-            Application.OpenURL(url + "?action=sign-typed-data" + "&domain=" + JsonConvert.SerializeObject(domain)  + "&types=" + JsonConvert.SerializeObject(types) + "&message=" + JsonConvert.SerializeObject(message));
+            Application.OpenURL(url + "?action=sign-typed-data" + "&domain=" + JsonConvert.SerializeObject(domain) + "&types=" + JsonConvert.SerializeObject(types) + "&message=" + JsonConvert.SerializeObject(message));
             // set clipboard to empty
             GUIUtility.systemCopyBuffer = "";
             // wait for clipboard response
