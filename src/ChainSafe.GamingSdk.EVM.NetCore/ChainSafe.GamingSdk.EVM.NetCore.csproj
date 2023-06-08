@@ -12,4 +12,6 @@
     <ProjectReference Include="..\ChainSafe.GamingSDK.EVM\ChainSafe.GamingSDK.EVM.csproj" />
   </ItemGroup>
 
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
+
 </Project>

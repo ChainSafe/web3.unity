@@ -1,0 +1,14 @@
+﻿group NetCore
+    Microsoft.Extensions.DependencyInjection
+    Microsoft.Extensions.Logging.Abstractions
+    NBitcoin
+    Nethereum.ABI
+    Nethereum.RPC
+    Nethereum.Signer
+    Newtonsoft.Json
+    StyleCop.Analyzers
+
+group Unity
+    Microsoft.Extensions.DependencyInjection
+    Microsoft.Extensions.Logging.Abstractions
+    StyleCop.Analyzers

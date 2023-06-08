@@ -22,4 +22,6 @@
     <Reference Include="../../libs/UnityEngine/UnityEngine.dll" />
   </ItemGroup>
 
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
+
 </Project>

@@ -1,0 +1,33 @@
+group NetCore
+    condition: NotUnity
+    source https://api.nuget.org/v3/index.json
+    framework netstandard2.1,net472
+
+    nuget Microsoft.Extensions.DependencyInjection 7.0.0
+    nuget Microsoft.Extensions.Logging.Abstractions 6.0.1
+    nuget Newtonsoft.Json 13.0.1
+    nuget StyleCop.Analyzers 1.1.118
+
+    # Note: When updating the Nethereum dependency, the Unity version of
+    # the libraries must manually be downloaded and placed in the libs
+    # directory as well.
+    nuget NBitcoin 7.0.24
+    nuget Nethereum.ABI 4.14.0
+    nuget Nethereum.RPC 4.14.0
+    nuget Nethereum.Signer 4.14.0
+
+group Unity
+    condition: Unity
+    source https://api.nuget.org/v3/index.json
+    framework netstandard2.1,net472
+
+    nuget Microsoft.Extensions.DependencyInjection 7.0.0
+    nuget Microsoft.Extensions.Logging.Abstractions 6.0.1
+    nuget StyleCop.Analyzers 1.1.118
+
+group Test
+    source https://api.nuget.org/v3/index.json
+
+    nuget Microsoft.NET.Test.Sdk 17.5.0
+    nuget NUnit 3.13.3
+    nuget NUnit3TestAdapter 4.4.2

@@ -19,9 +19,6 @@
     <Reference Include="../../libs/Nethereum-UnityAOT/Newtonsoft.Json.dll" />
   </ItemGroup>
 
-  <ItemGroup>
-    <!-- Resolve dependency conflict by referencing this version directly -->
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
-  </ItemGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
 
 </Project>
