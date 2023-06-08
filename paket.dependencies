@@ -27,6 +27,7 @@ group Unity
 
 group Test
     source https://api.nuget.org/v3/index.json
+    framework net6.0
 
     nuget Microsoft.NET.Test.Sdk 17.5.0
     nuget NUnit 3.13.3

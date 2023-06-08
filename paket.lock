@@ -96,37 +96,32 @@ NUGET
       System.Runtime.CompilerServices.Unsafe (>= 4.5.3)
 
 GROUP Test
+RESTRICTION: == net6.0
 NUGET
   remote: https://api.nuget.org/v3/index.json
-    Microsoft.CodeCoverage (17.6.2) - restriction: || (>= net462) (>= netcoreapp3.1)
+    Microsoft.CodeCoverage (17.6.2)
     Microsoft.NET.Test.Sdk (17.5)
-      Microsoft.CodeCoverage (>= 17.5) - restriction: || (>= net462) (>= netcoreapp3.1)
-      Microsoft.TestPlatform.TestHost (>= 17.5) - restriction: >= netcoreapp3.1
-    Microsoft.NETCore.Platforms (7.0.2) - restriction: || (&& (< net35) (>= netstandard2.0)) (>= netcoreapp2.0) (&& (< netstandard1.0) (>= netstandard2.0) (>= win8)) (&& (< netstandard1.3) (>= netstandard2.0) (< win8) (>= wpa81)) (&& (< netstandard1.5) (>= netstandard2.0) (>= uap10.0)) (&& (>= netstandard2.0) (>= uap10.1)) (&& (>= netstandard2.0) (>= wp8))
-    Microsoft.TestPlatform.ObjectModel (17.6.2) - restriction: >= netcoreapp3.1
-      NuGet.Frameworks (>= 6.5) - restriction: || (>= net462) (>= netstandard2.0)
-      System.Reflection.Metadata (>= 1.6) - restriction: || (>= net462) (>= netstandard2.0)
-    Microsoft.TestPlatform.TestHost (17.6.2) - restriction: >= netcoreapp3.1
-      Microsoft.TestPlatform.ObjectModel (>= 17.6.2) - restriction: >= netcoreapp3.1
-      Newtonsoft.Json (>= 13.0.1) - restriction: >= netcoreapp3.1
-    NETStandard.Library (2.0.3) - restriction: && (< net35) (>= netstandard2.0)
-      Microsoft.NETCore.Platforms (>= 1.1) - restriction: || (&& (>= net45) (< netstandard1.3)) (&& (< net45) (>= netstandard1.1) (< netstandard1.2) (< win8)) (&& (< net45) (>= netstandard1.2) (< netstandard1.3) (< win8) (< wpa81)) (&& (< net45) (>= netstandard1.3) (< netstandard1.4) (< win8) (< wpa81)) (&& (< net45) (>= netstandard1.4) (< netstandard1.5) (< win8) (< wpa81)) (&& (< net45) (>= netstandard1.5) (< netstandard1.6) (< win8) (< wpa81)) (&& (< net45) (>= netstandard1.6) (< netstandard2.0) (< win8) (< wpa81)) (&& (< net45) (>= netstandard2.0)) (&& (>= net46) (< netstandard1.4)) (>= net461) (>= netcoreapp2.0) (&& (>= netstandard1.0) (< portable-net45+win8+wpa81)) (&& (< netstandard1.0) (>= portable-net45+win8) (< win8)) (&& (< netstandard1.0) (< portable-net45+win8) (>= portable-net45+win8+wpa81)) (&& (< netstandard1.0) (>= portable-net45+win8+wp8+wpa81) (< portable-net45+win8+wpa81)) (&& (< netstandard1.0) (>= win8)) (&& (< netstandard1.3) (< win8) (>= wpa81)) (&& (< netstandard1.5) (>= uap10.0)) (>= uap10.1) (>= wp8)
-    Newtonsoft.Json (13.0.3) - restriction: >= netcoreapp3.1
-    NuGet.Frameworks (6.6) - restriction: >= netcoreapp3.1
+      Microsoft.CodeCoverage (>= 17.5)
+      Microsoft.TestPlatform.TestHost (>= 17.5)
+    Microsoft.NETCore.Platforms (7.0.2)
+    Microsoft.TestPlatform.ObjectModel (17.6.2)
+      NuGet.Frameworks (>= 6.5)
+      System.Reflection.Metadata (>= 1.6)
+    Microsoft.TestPlatform.TestHost (17.6.2)
+      Microsoft.TestPlatform.ObjectModel (>= 17.6.2)
+      Newtonsoft.Json (>= 13.0.1)
+    NETStandard.Library (2.0.3)
+      Microsoft.NETCore.Platforms (>= 1.1)
+    Newtonsoft.Json (13.0.3)
+    NuGet.Frameworks (6.6)
     NUnit (3.13.3)
-      NETStandard.Library (>= 2.0) - restriction: && (< net35) (>= netstandard2.0)
+      NETStandard.Library (>= 2.0)
     NUnit3TestAdapter (4.4.2)
-    System.Buffers (4.5.1) - restriction: || (&& (>= monoandroid) (>= netcoreapp3.1) (< netstandard1.1)) (&& (< monoandroid) (>= netcoreapp3.1) (< netstandard1.1)) (&& (< monoandroid) (>= netcoreapp3.1) (< netstandard2.0)) (&& (>= monotouch) (>= netcoreapp3.1)) (&& (>= net45) (>= netcoreapp3.1) (< netstandard2.0)) (&& (>= net461) (>= netcoreapp3.1)) (&& (>= net462) (>= netcoreapp3.1)) (&& (< net6.0) (>= netcoreapp3.1) (>= xamarinios)) (&& (< net6.0) (>= netcoreapp3.1) (>= xamarinmac)) (&& (< net6.0) (>= netcoreapp3.1) (>= xamarintvos)) (&& (< net6.0) (>= netcoreapp3.1) (>= xamarinwatchos)) (&& (< netcoreapp2.0) (>= netcoreapp3.1)) (&& (>= netcoreapp3.1) (< netstandard1.1) (>= win8)) (&& (>= netcoreapp3.1) (< netstandard2.0) (>= wpa81))
-    System.Collections.Immutable (7.0) - restriction: >= netcoreapp3.1
-      System.Memory (>= 4.5.5) - restriction: || (>= net462) (&& (< net6.0) (>= netstandard2.0))
-      System.Runtime.CompilerServices.Unsafe (>= 6.0) - restriction: || (>= net462) (&& (>= net6.0) (< net7.0)) (&& (< net6.0) (>= netstandard2.0))
-    System.Memory (4.5.5) - restriction: || (&& (>= net462) (>= netcoreapp3.1)) (&& (< net6.0) (>= netcoreapp3.1))
-      System.Buffers (>= 4.5.1) - restriction: || (&& (>= monoandroid) (< netstandard1.1)) (&& (< monoandroid) (< net45) (>= netstandard1.1) (< netstandard2.0) (< win8) (< wpa81)) (&& (< monoandroid) (< netstandard1.1) (>= portable-net45+win8+wpa81) (< win8)) (>= monotouch) (&& (>= net45) (< netstandard2.0)) (&& (< net45) (< netcoreapp2.0) (>= netstandard2.0)) (>= net461) (&& (< netstandard1.1) (>= win8)) (&& (< netstandard2.0) (< uap10.1) (>= wpa81)) (>= xamarinios) (>= xamarinmac) (>= xamarintvos) (>= xamarinwatchos)
-      System.Runtime.CompilerServices.Unsafe (>= 4.5.3) - restriction: || (&& (>= monoandroid) (< netstandard1.1)) (&& (< monoandroid) (< net45) (>= netstandard1.1) (< netstandard2.0) (< win8) (< wpa81)) (&& (< monoandroid) (>= netcoreapp2.0) (< netcoreapp2.1)) (&& (< monoandroid) (< netstandard1.1) (>= portable-net45+win8+wpa81) (< win8)) (>= monotouch) (&& (>= net45) (< netstandard2.0)) (&& (< net45) (< netcoreapp2.0) (>= netstandard2.0)) (>= net461) (&& (< netstandard1.1) (>= win8)) (&& (< netstandard2.0) (>= wpa81)) (>= uap10.1) (>= xamarinios) (>= xamarinmac) (>= xamarintvos) (>= xamarinwatchos)
-    System.Reflection.Metadata (7.0.1) - restriction: >= netcoreapp3.1
-      System.Collections.Immutable (>= 7.0) - restriction: || (>= net462) (>= netstandard2.0)
-      System.Memory (>= 4.5.5) - restriction: || (>= net462) (&& (< net6.0) (>= netstandard2.0))
-    System.Runtime.CompilerServices.Unsafe (6.0) - restriction: || (&& (>= monoandroid) (>= netcoreapp3.1) (< netstandard1.1)) (&& (< monoandroid) (< netcoreapp2.1) (>= netcoreapp3.1)) (&& (< monoandroid) (>= netcoreapp3.1) (< netstandard1.1)) (&& (< monoandroid) (>= netcoreapp3.1) (< netstandard2.0)) (&& (>= monotouch) (>= netcoreapp3.1)) (&& (>= net45) (>= netcoreapp3.1) (< netstandard2.0)) (&& (>= net461) (>= netcoreapp3.1)) (&& (>= net462) (>= netcoreapp3.1)) (&& (>= net6.0) (< net7.0)) (&& (< net6.0) (>= netcoreapp3.1)) (&& (< netcoreapp2.0) (>= netcoreapp3.1)) (&& (>= netcoreapp3.1) (< netstandard1.1) (>= win8)) (&& (>= netcoreapp3.1) (< netstandard2.0) (>= wpa81)) (&& (>= netcoreapp3.1) (>= uap10.1))
+    System.Collections.Immutable (7.0)
+      System.Runtime.CompilerServices.Unsafe (>= 6.0)
+    System.Reflection.Metadata (7.0.1)
+      System.Collections.Immutable (>= 7.0)
+    System.Runtime.CompilerServices.Unsafe (6.0)
 
 GROUP Unity
 CONDITION: UNITY
