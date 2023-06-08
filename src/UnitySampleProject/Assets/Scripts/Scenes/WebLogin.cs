@@ -27,7 +27,7 @@ public class WebLogin : MonoBehaviour
         PlayerPrefs.SetString("ChainID", projectConfigSO.ChainID);
         PlayerPrefs.SetString("Chain", projectConfigSO.Chain);
         PlayerPrefs.SetString("Network", projectConfigSO.Network);
-        PlayerPrefs.SetString("RPC", projectConfigSO.RPC);
+        PlayerPrefs.SetString("RPC", projectConfigSO.Rpc);
     }
 
     public void OnLogin()
