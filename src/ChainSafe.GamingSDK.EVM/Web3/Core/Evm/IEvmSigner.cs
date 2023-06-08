@@ -15,8 +15,6 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
 
         public Task<string> GetAddress();
 
-        public string GetAddress(string pk);
-
         public Task<string> SignMessage(byte[] message);
 
         public Task<string> SignMessage(string message);
