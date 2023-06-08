@@ -6,7 +6,7 @@ public class WebGLGetBlockNumber : MonoBehaviour
 {
     public async void GetBlockNumber()
     {
-        var provider = ProviderMigration.NewJsonRpcProvider("YOUR_NODE");
+        var provider = ProviderMigration.NewJsonRpcProviderAsync("YOUR_NODE").Result;
         Debug.Log("Block Number: " + await provider.GetBlockNumber());
     }
 }

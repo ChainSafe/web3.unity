@@ -6,7 +6,7 @@ public class WebGLGetGasPrice : MonoBehaviour
 {
     public async void GetGasPrice()
     {
-        var provider = ProviderMigration.NewJsonRpcProvider("YOUR_NODE");
+        var provider = ProviderMigration.NewJsonRpcProviderAsync("YOUR_NODE").Result;
         Debug.Log("Gas Price: " + await provider.GetGasPrice());
     }
 }
