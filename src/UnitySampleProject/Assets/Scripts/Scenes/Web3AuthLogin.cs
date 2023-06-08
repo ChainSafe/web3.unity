@@ -51,7 +51,7 @@ public class Web3AuthLogin : MonoBehaviour
         PlayerPrefs.SetString("ChainID", projectConfigSO.ChainID);
         PlayerPrefs.SetString("Chain", projectConfigSO.Chain);
         PlayerPrefs.SetString("Network", projectConfigSO.Network);
-        PlayerPrefs.SetString("RPC", projectConfigSO.RPC);
+        PlayerPrefs.SetString("RPC", projectConfigSO.Rpc);
         var loginConfigItem = new LoginConfigItem()
         {
             verifier = "your_verifierid_from_web3auth_dashboard",

@@ -10,54 +10,33 @@ using System.Text;
 
 public class ChainSafeServerSettings : EditorWindow
 {
-    private const string ProjectID = "Please enter your project ID";
-    private const string ChainID = "Please enter your chain ID";
-    private const string Chain = "Please enter your chain i.e Ethereum, Binance, Cronos";
-    private const string Network = "Please enter your network i.e Mainnet, Testnet";
-    private const string Symbol = "Please enter your chain's native symbol i.e Eth, Cro";
-    private const string Rpc = "Please enter your RPC endpoint";
+    private const string ProjectIDPrompt = "Please enter your project ID";
+    private const string ChainIDPrompt = "Please enter your chain ID";
+    private const string ChainPrompt = "Please enter your chain i.e Ethereum, Binance, Cronos";
+    private const string NetworkPrompt = "Please enter your network i.e Mainnet, Testnet";
+    private const string SymbolPrompt = "Please enter your chain's native symbol i.e Eth, Cro";
+    private const string RpcPrompt = "Please enter your RPC endpoint";
 
-    private string projectID = ProjectID;
-    private string chainID = ChainID;
-    private string chain = Chain;
-    private string network = Network;
-    private string symbol = Symbol;
-    private string rpc = Rpc;
+    private string projectID;
+    private string chainID;
+    private string chain;
+    private string network;
+    private string symbol;
+    private string rpc;
 
     Texture2D logo = null;
 
     // checks if data is already entered
     void Awake()
     {
-        if ((projectID == ProjectID) && (PlayerPrefs.GetString("ProjectID") != ""))
-        {
-            projectID = PlayerPrefs.GetString("ProjectID");
-        }
+        var projectConfig = ProjectConfigUtilities.Load();
 
-        if ((chainID == ChainID) && (PlayerPrefs.GetString("ChainID") != ""))
-        {
-            chainID = PlayerPrefs.GetString("ChainID");
-        }
-
-        if (chain == Chain && (PlayerPrefs.GetString("Chain") != ""))
-        {
-            chain = PlayerPrefs.GetString("Chain");
-        }
-
-        if (network == Network && (PlayerPrefs.GetString("Network") != ""))
-        {
-            network = PlayerPrefs.GetString("Network");
-        }
-
-        if (symbol == Symbol && (PlayerPrefs.GetString("Symbol") != ""))
-        {
-            symbol = PlayerPrefs.GetString("Symbol");
-        }
-
-        if (rpc == Rpc && (PlayerPrefs.GetString("RPC") != ""))
-        {
-            rpc = PlayerPrefs.GetString("RPC");
-        }
+        projectID = string.IsNullOrEmpty(projectConfig?.ProjectID) ? ProjectIDPrompt : projectConfig.ProjectID;
+        chainID = string.IsNullOrEmpty(projectConfig?.ChainID) ? ChainIDPrompt : projectConfig.ChainID;
+        chain = string.IsNullOrEmpty(projectConfig?.Chain) ? ChainPrompt : projectConfig.Chain;
+        network = string.IsNullOrEmpty(projectConfig?.Network) ? NetworkPrompt : projectConfig.Network;
+        symbol = string.IsNullOrEmpty(projectConfig?.Symbol) ? SymbolPrompt : projectConfig.Symbol;
+        rpc = string.IsNullOrEmpty(projectConfig?.Rpc) ? RpcPrompt : projectConfig.Rpc;
     }
 
     // Initializes window
@@ -116,7 +95,7 @@ public class ChainSafeServerSettings : EditorWindow
             projectConfig.Chain = chain;
             projectConfig.Network = network;
             projectConfig.Symbol = symbol;
-            projectConfig.RPC = rpc;
+            projectConfig.Rpc = rpc;
             ProjectConfigUtilities.Save(projectConfig);
 
             // TODO: this should happen *before* the asset is saved.
@@ -195,7 +174,7 @@ public class ChainSafeServerSettings : EditorWindow
             sb.AppendLine("    id: " + projectConfig.ChainID + ",");
             sb.AppendLine("    label: " + '"' + projectConfig.Chain + " " + projectConfig.Network + '"' + ",");
             sb.AppendLine("    token: " + '"' + projectConfig.Symbol + '"' + ",");
-            sb.AppendLine("    rpcUrl: " + "'" + projectConfig.RPC + "'" + ",");
+            sb.AppendLine("    rpcUrl: " + "'" + projectConfig.Rpc + "'" + ",");
             sb.AppendLine("  }");
             sb.AppendLine("]");
             File.WriteAllText(path1, sb.ToString());

@@ -42,7 +42,7 @@ public class ProjectConfigScriptableObject : ScriptableObject
         set => symbol = value;
     }
 
-    public string RPC
+    public string Rpc
     {
         get => rpc;
         set => rpc = value;
