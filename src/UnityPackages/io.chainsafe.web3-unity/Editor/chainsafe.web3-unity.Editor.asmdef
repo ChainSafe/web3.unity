@@ -1,0 +1,18 @@
+{
+    "name": "chainsafe.web3-unity.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:5426c6b788696eb4c88f4198b59839eb"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
