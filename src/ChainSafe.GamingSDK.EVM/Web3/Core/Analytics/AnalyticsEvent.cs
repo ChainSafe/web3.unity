@@ -33,6 +33,7 @@ namespace ChainSafe.GamingWeb3.Analytics
             var sb = new StringBuilder();
             sb.Append("{ ");
             AppendMember(nameof(Client), Client, isFirst: true);
+            IfNotNullNorWhitespace(ProjectId, () => AppendMember(nameof(ProjectId), ProjectId));
             IfNotNullNorWhitespace(Version, () => AppendMember(nameof(Version), Version));
             IfNotNullNorWhitespace(Player, () => AppendMember(nameof(Player), Player));
             IfNotNullNorWhitespace(To, () => AppendMember(nameof(To), To));

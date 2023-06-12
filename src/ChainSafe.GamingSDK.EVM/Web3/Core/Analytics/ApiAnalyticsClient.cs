@@ -1,20 +1,17 @@
-using System.Collections.Generic;
 using ChainSafe.GamingWeb3.Environment;
 
 namespace ChainSafe.GamingWeb3.Analytics
 {
     public class ApiAnalyticsClient : IAnalyticsClient
     {
-        private const string LoggingUrl = "https://game-api-stg.chainsafe.io/logging/logEvent";
+        private const string LoggingUrl = "https://api.gaming.chainsafe.io/logging/logEvent";
 
         private readonly IProjectConfig projectConfig;
         private readonly IChainConfig chainConfig;
         private readonly IHttpClient httpClient;
-        private readonly ILogWriter logWriter;
 
-        public ApiAnalyticsClient(IProjectConfig projectConfig, IChainConfig chainConfig, IHttpClient httpClient, ILogWriter logWriter)
+        public ApiAnalyticsClient(IProjectConfig projectConfig, IChainConfig chainConfig, IHttpClient httpClient)
         {
-            this.logWriter = logWriter;
             this.httpClient = httpClient;
             this.chainConfig = chainConfig;
             this.projectConfig = projectConfig;

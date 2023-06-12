@@ -93,7 +93,7 @@ public class Web3GL
             GasLimit = _gasLimit,
             GasPrice = _gasPrice
         };
-        // Temporarily disabled, waiting for migration to DI
+        // TODO: Temporarily disabled, waiting for migration to DI
         // await GameLogger.Log(PlayerPrefs.GetString("ChainId"), PlayerPrefs.GetString("RPC"), data);
         var response = SendContractResponse();
         while (response == "")
@@ -106,7 +106,7 @@ public class Web3GL
         // check if user submmited or user rejected
         if (response.Length == 66)
         {
-            // Temporarily disabled, waiting for migration to DI
+            // TODO: Temporarily disabled, waiting for migration to DI
             // await GameLogger.Log(PlayerPrefs.GetString("ChainId"), PlayerPrefs.GetString("RPC"), data);
             return response;
         }
@@ -141,7 +141,7 @@ public class Web3GL
         // check if user submmited or user rejected
         if (response.Length == 66)
         {
-            // Temporarily disabled, waiting for migration to DI
+            // TODO: Temporarily disabled, waiting for migration to DI
             // await GameLogger.Log(PlayerPrefs.GetString("ChainId"), PlayerPrefs.GetString("RPC"), data);
             return response;
         }
