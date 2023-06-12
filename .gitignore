@@ -398,3 +398,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# VS Code files
+.vscode/
