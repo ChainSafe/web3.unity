@@ -10,8 +10,8 @@ using System.Text;
 
 public class ChainSafeServerSettings : EditorWindow
 {
-    private const string ProjectIDPrompt = "Please enter your project ID";
-    private const string ChainIDPrompt = "Please enter your chain ID";
+    private const string ProjectIdPrompt = "Please enter your project ID";
+    private const string ChainIdPrompt = "Please enter your chain ID";
     private const string ChainPrompt = "Please enter your chain i.e Ethereum, Binance, Cronos";
     private const string NetworkPrompt = "Please enter your network i.e Mainnet, Testnet";
     private const string SymbolPrompt = "Please enter your chain's native symbol i.e Eth, Cro";
@@ -31,8 +31,8 @@ public class ChainSafeServerSettings : EditorWindow
     {
         var projectConfig = ProjectConfigUtilities.Load();
 
-        projectID = string.IsNullOrEmpty(projectConfig?.ProjectID) ? ProjectIDPrompt : projectConfig.ProjectID;
-        chainID = string.IsNullOrEmpty(projectConfig?.ChainID) ? ChainIDPrompt : projectConfig.ChainID;
+        projectID = string.IsNullOrEmpty(projectConfig?.ProjectId) ? ProjectIdPrompt : projectConfig.ProjectId;
+        chainID = string.IsNullOrEmpty(projectConfig?.ChainId) ? ChainIdPrompt : projectConfig.ChainId;
         chain = string.IsNullOrEmpty(projectConfig?.Chain) ? ChainPrompt : projectConfig.Chain;
         network = string.IsNullOrEmpty(projectConfig?.Network) ? NetworkPrompt : projectConfig.Network;
         symbol = string.IsNullOrEmpty(projectConfig?.Symbol) ? SymbolPrompt : projectConfig.Symbol;
@@ -90,8 +90,8 @@ public class ChainSafeServerSettings : EditorWindow
         {
             Debug.Log("Saving Settings!");
             var projectConfig = ProjectConfigUtilities.CreateOrLoad();
-            projectConfig.ProjectID = projectID;
-            projectConfig.ChainID = chainID;
+            projectConfig.ProjectId = projectID;
+            projectConfig.ChainId = chainID;
             projectConfig.Chain = chain;
             projectConfig.Network = network;
             projectConfig.Symbol = symbol;
@@ -171,7 +171,7 @@ public class ChainSafeServerSettings : EditorWindow
             sb.AppendLine("//You can see a list of compatible EVM chains at https://chainlist.org/");
             sb.AppendLine("window.networks = [");
             sb.AppendLine("  {");
-            sb.AppendLine("    id: " + projectConfig.ChainID + ",");
+            sb.AppendLine("    id: " + projectConfig.ChainId + ",");
             sb.AppendLine("    label: " + '"' + projectConfig.Chain + " " + projectConfig.Network + '"' + ",");
             sb.AppendLine("    token: " + '"' + projectConfig.Symbol + '"' + ",");
             sb.AppendLine("    rpcUrl: " + "'" + projectConfig.Rpc + "'" + ",");
@@ -189,7 +189,7 @@ public class ChainSafeServerSettings : EditorWindow
             // writes data to the webgl metamask network file
             var sb = new StringBuilder();
             sb.AppendLine("//You can see a list of compatible EVM chains at https://chainlist.org/");
-            sb.AppendLine("window.web3ChainId = " + projectConfig.ChainID + ";");
+            sb.AppendLine("window.web3ChainId = " + projectConfig.ChainId + ";");
             File.WriteAllText(path2, sb.ToString());
         }
         else
