@@ -1,9 +1,10 @@
+using ChainSafe.GamingWeb3;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "ProjectConfigData", menuName = "ScriptableObjects/ProjectConfigScriptableObject",
     order = 1)]
-public class ProjectConfigScriptableObject : ScriptableObject
+public class ProjectConfigScriptableObject : ScriptableObject, ICompleteProjectConfig
 {
     [SerializeField] private string projectID;
     [SerializeField] private string chainID;
@@ -12,13 +13,13 @@ public class ProjectConfigScriptableObject : ScriptableObject
     [SerializeField] private string symbol;
     [SerializeField] private string rpc;
 
-    public string ProjectID
+    public string ProjectId
     {
         get => projectID;
         set => projectID = value;
     }
 
-    public string ChainID
+    public string ChainId
     {
         get => chainID;
         set => chainID = value;

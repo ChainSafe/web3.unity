@@ -46,7 +46,7 @@ public class Web3AuthLogin : MonoBehaviour
     {
         PlayerPrefs.SetString("PK", "");
         // loads the data saved from the editor config
-        projectConfigSO = ProjectConfigScriptableObject.LoadDefault();
+        projectConfigSO = ProjectConfigUtilities.Load();
         PlayerPrefs.SetString("ProjectID", projectConfigSO.ProjectId);
         PlayerPrefs.SetString("ChainID", projectConfigSO.ChainId);
         PlayerPrefs.SetString("Chain", projectConfigSO.Chain);
