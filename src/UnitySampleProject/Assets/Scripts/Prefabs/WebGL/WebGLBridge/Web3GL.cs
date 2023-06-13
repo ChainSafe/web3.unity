@@ -1,9 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using GameData;
 using UnityEngine;
-using Web3Unity.Scripts.Library.ETHEREUEM.WebGL;
 
 #if UNITY_WEBGL
 public class Web3GL
@@ -95,7 +93,8 @@ public class Web3GL
             GasLimit = _gasLimit,
             GasPrice = _gasPrice
         };
-        await GameLogger.Log(PlayerPrefs.GetString("ChainId"), PlayerPrefs.GetString("RPC"), data);
+        // TODO: Temporarily disabled, waiting for migration to DI
+        // await GameLogger.Log(PlayerPrefs.GetString("ChainId"), PlayerPrefs.GetString("RPC"), data);
         var response = SendContractResponse();
         while (response == "")
         {
@@ -107,7 +106,8 @@ public class Web3GL
         // check if user submmited or user rejected
         if (response.Length == 66)
         {
-            await GameLogger.Log(PlayerPrefs.GetString("ChainId"), PlayerPrefs.GetString("RPC"), data);
+            // TODO: Temporarily disabled, waiting for migration to DI
+            // await GameLogger.Log(PlayerPrefs.GetString("ChainId"), PlayerPrefs.GetString("RPC"), data);
             return response;
         }
         throw new Exception(response);
@@ -141,7 +141,8 @@ public class Web3GL
         // check if user submmited or user rejected
         if (response.Length == 66)
         {
-            await GameLogger.Log(PlayerPrefs.GetString("ChainId"), PlayerPrefs.GetString("RPC"), data);
+            // TODO: Temporarily disabled, waiting for migration to DI
+            // await GameLogger.Log(PlayerPrefs.GetString("ChainId"), PlayerPrefs.GetString("RPC"), data);
             return response;
         }
         throw new Exception(response);

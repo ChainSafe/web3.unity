@@ -1,3 +1,5 @@
+using ChainSafe.GamingWeb3.Analytics;
+
 namespace ChainSafe.GamingWeb3.Environment
 {
     /// <summary>
