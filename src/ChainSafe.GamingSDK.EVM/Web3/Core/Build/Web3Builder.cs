@@ -22,6 +22,19 @@ namespace ChainSafe.GamingWeb3.Build
             serviceCollection.AddSingleton<ChainProvider>();
         }
 
+        // todo inline parameterless constructor into this one (therefore remove that overload)
+        public Web3Builder(IProjectConfig projectConfig, IChainConfig chainConfig)
+            : this()
+        {
+            serviceCollection.AddSingleton(projectConfig);
+            serviceCollection.AddSingleton(chainConfig);
+        }
+
+        public Web3Builder(ICompleteProjectConfig projectConfig)
+            : this(projectConfig, projectConfig)
+        {
+        }
+
         public delegate void ConfigureServicesDelegate(IWeb3ServiceCollection services);
 
         public Web3Builder Configure(ConfigureServicesDelegate configureMethod)
