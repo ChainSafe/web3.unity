@@ -6,6 +6,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
 {
     public interface IEvmSigner
     {
+        // todo remove Connect functionality from Signers
         bool Connected { get; }
 
         // todo remove after migration complete
