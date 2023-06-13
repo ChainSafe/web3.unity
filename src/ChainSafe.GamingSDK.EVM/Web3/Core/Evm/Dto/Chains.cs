@@ -49,7 +49,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Network
                 { "error", error },
             };
 
-            environment.AnalyticsClient.CaptureEvent("Chains", properties);
+            // todo log error using new event format
         }
 
         public class Chain
