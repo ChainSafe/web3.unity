@@ -1,6 +1,7 @@
 ﻿#nullable enable
 using System;
 using System.Threading.Tasks;
+using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
 using Microsoft.Extensions.DependencyInjection;
 using Web3Unity.Scripts.Library.Ethers.Providers;
 using Web3Unity.Scripts.Library.Ethers.Signers;
@@ -13,22 +14,26 @@ namespace ChainSafe.GamingWeb3
     public class Web3 : IDisposable
     {
         private readonly ServiceProvider serviceProvider;
-        private readonly IEvmProvider? provider;
-        private readonly IEvmSigner? signer;
+        private readonly IRpcProvider? provider;
+        private readonly ISigner? signer;
+        private readonly ITransactionExecutor? transactionExecutor;
 
         private bool initialized;
         private bool terminated;
 
-        internal Web3(ServiceProvider serviceProvider, IEvmProvider? provider = null, IEvmSigner? signer = null)
+        internal Web3(ServiceProvider serviceProvider, IRpcProvider? provider, ISigner? signer, ITransactionExecutor? transactionExecutor)
         {
             this.serviceProvider = serviceProvider;
             this.provider = provider;
             this.signer = signer;
+            this.transactionExecutor = transactionExecutor;
         }
 
-        public IEvmProvider Provider => AssertComponentAccessible(provider, nameof(Provider))!;
+        public IRpcProvider Provider => AssertComponentAccessible(provider, nameof(Provider))!;
 
-        public IEvmSigner Signer => AssertComponentAccessible(signer, nameof(Signer))!;
+        public ISigner Signer => AssertComponentAccessible(signer, nameof(Signer))!;
+
+        public ITransactionExecutor TransactionExecutor => AssertComponentAccessible(transactionExecutor, nameof(TransactionExecutor))!;
 
         private static T AssertComponentAccessible<T>(T value, string propertyName)
         {

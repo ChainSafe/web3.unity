@@ -4,6 +4,7 @@ using Web3Unity.Scripts.Library.Ethers.Contracts;
 // using Web3Unity.Scripts.Library.Web3Wallet;
 public class Web3WalletMint721V2 : MonoBehaviour
 {
+    // todo rework with new architecture in mind
     public async void OnMint721()
     {
         throw new NotImplementedException(

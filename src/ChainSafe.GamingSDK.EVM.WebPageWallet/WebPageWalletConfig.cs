@@ -3,7 +3,7 @@
 namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
 {
     [Serializable]
-    public class MetaMaskBrowserSignerConfiguration
+    public class WebPageWalletConfig
     {
         public string ServiceUrl { get; set; } = "https://chainsafe.github.io/game-web3wallet/";
 

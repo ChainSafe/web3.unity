@@ -17,7 +17,8 @@ using TransactionReceipt = Web3Unity.Scripts.Library.Ethers.Transactions.Transac
 
 namespace Web3Unity.Scripts.Library.Ethers.Providers
 {
-    public abstract class BaseProvider : IEvmProvider
+    // todo move all functionality out of this class and delete this file
+    public abstract class BaseProvider : IRpcProvider
     {
         private readonly bool anyNetwork = true;
 

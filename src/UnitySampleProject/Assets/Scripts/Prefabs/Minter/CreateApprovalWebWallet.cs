@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet;
 using ChainSafe.GamingWeb3;
 using ChainSafe.GamingWeb3.Build;
 using ChainSafe.GamingWeb3.Unity;

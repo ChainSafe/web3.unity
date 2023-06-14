@@ -1,63 +1,35 @@
 ﻿using System;
 using System.Threading.Tasks;
+using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
 using ChainSafe.GamingWeb3;
 using ChainSafe.GamingWeb3.Environment;
-using Nethereum.Hex.HexConvertors.Extensions;
 using Web3Unity.Scripts.Library.Ethers.Providers;
 using Web3Unity.Scripts.Library.Ethers.Signers;
 using Web3Unity.Scripts.Library.Ethers.Transactions;
 
 namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
 {
-    public class MetaMaskBrowserSigner : IEvmSigner
+    public class WebPageWallet : ISigner, ITransactionExecutor
     {
         private static readonly TimeSpan MinClipboardCheckPeriod = TimeSpan.FromMilliseconds(10);
 
-        private readonly MetaMaskBrowserSignerConfiguration configuration;
+        private readonly WebPageWalletConfig configuration;
         private readonly IOperatingSystemMediator operatingSystem;
-        private readonly IAnalyticsClient analytics;
+        private readonly IRpcProvider provider;
 
-        private string publicAddress = "undefined";
-
-        public MetaMaskBrowserSigner(
-            IEvmProvider provider,
-            MetaMaskBrowserSignerConfiguration configuration,
-            IOperatingSystemMediator operatingSystem,
-            IAnalyticsClient analytics)
+        public WebPageWallet(
+            IRpcProvider provider,
+            WebPageWalletConfig configuration,
+            IOperatingSystemMediator operatingSystem)
         {
-            this.analytics = analytics;
+            this.provider = provider;
             this.operatingSystem = operatingSystem;
             this.configuration = configuration;
-
-            Provider = provider;
-            Connected = false;
-        }
-
-        public bool Connected { get; private set; }
-
-        public IEvmProvider Provider { get; }
-
-        public async ValueTask Connect()
-        {
-            this.AssertNotConnected();
-            publicAddress = await this.VerifyUserOwnsAccount();
-            Connected = true;
         }
 
         public Task<string> GetAddress()
         {
-            if (!Connected)
-            {
-                throw new Web3Exception(
-                    $"Can't retrieve public address. {nameof(MetaMaskBrowserSigner)} is not connected yet.");
-            }
-
-            return Task.FromResult(publicAddress);
-        }
-
-        public Task<string> SignMessage(byte[] message)
-        {
-            return SignMessage(message.ToHex());
+            throw new NotImplementedException();
         }
 
         public async Task<string> SignMessage(string message)
@@ -65,7 +37,7 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
             var pageUrl = BuildUrl();
             var hash = await OpenPageWaitResponse(pageUrl, ValidateResponse);
 
-            // todo log event on success
+            // todo: log event on success
             return hash;
 
             string BuildUrl()
@@ -79,6 +51,7 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
             bool ValidateResponse(string response) => response.StartsWith("0x") && response.Length == 132;
         }
 
+        // todo: found no implementations for this method anywhere, implement
         public Task<string> SignTransaction(TransactionRequest transaction)
         {
             throw new NotImplementedException();
@@ -89,8 +62,8 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
             var pageUrl = BuildUrl();
             var hash = await OpenPageWaitResponse(pageUrl, ValidateResponse);
 
-            // todo log event on success (see example near end of file)
-            return await Provider.GetTransaction(hash);
+            // todo: log event on success (see example near end of file)
+            return await provider.GetTransaction(hash);
 
             string BuildUrl()
             {
@@ -108,7 +81,7 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
             bool ValidateResponse(string response) => response.StartsWith("0x") && response.Length == 66;
         }
 
-        // todo extract hash from deeplink instead of clipboard?
+        // todo: extract hash from deeplink instead of clipboard
         private async Task<string> OpenPageWaitResponse(string pageUrl, Func<string, bool> validator)
         {
             operatingSystem.OpenUrl(pageUrl);
@@ -138,6 +111,8 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
         }
 
         /*
+         Storing this here just to know, how events for analytics were constructed
+
          Logging event on SendTransaction success
         var data = new
         {
@@ -161,6 +136,32 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
             var hash = new Sha3Keccack().CalculateHash(_message).EnsureHexPrefix();
             // 0x06b3dfaec148fb1bb2b066f10ec285e7c9bf402ab32aa78a5d38e34566810cd2
             return hash;
+        }
+         */
+
+        /*
+         SignTypedData implementation. Could possibly want to add this to ISigner in the future.
+
+        public static async Task<string> SignTypedData(Domain domain, Dictionary<string, MemberDescription[]> types, MemberValue[] message)
+        {
+            // open application
+            var message = Uri.EscapeDataString(_message);
+            Application.OpenURL(url + "?action=sign-typed-data" + "&domain=" + JsonConvert.SerializeObject(domain) + "&types=" + JsonConvert.SerializeObject(types) + "&message=" + JsonConvert.SerializeObject(message));
+            // set clipboard to empty
+            GUIUtility.systemCopyBuffer = "";
+            // wait for clipboard response
+            var clipBoard = "";
+            while (clipBoard == "")
+            {
+                clipBoard = GUIUtility.systemCopyBuffer;
+                await Task.Delay(100);
+            }
+
+            // check if clipboard response is valid
+            if (clipBoard.StartsWith("0x") && clipBoard.Length == 132)
+                return clipBoard;
+            else
+                throw new Exception("sign error");
         }
          */
     }

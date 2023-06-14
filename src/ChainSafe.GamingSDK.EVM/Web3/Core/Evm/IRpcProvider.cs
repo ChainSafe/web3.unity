@@ -10,7 +10,7 @@ using TransactionReceipt = Web3Unity.Scripts.Library.Ethers.Transactions.Transac
 
 namespace Web3Unity.Scripts.Library.Ethers.Providers
 {
-    public interface IEvmProvider
+    public interface IRpcProvider
     {
         public Network.Network Network { get; }
 

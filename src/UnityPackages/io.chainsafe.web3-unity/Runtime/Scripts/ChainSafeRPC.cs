@@ -325,122 +325,123 @@ namespace Web3Unity.Scripts.Prefabs.Ethers
             return true;
         }
 
-        /// <summary>
-        /// GetSigner
-        /// </summary>
-        /// <returns></returns>
-        public async Task<bool> GetSigner()
-        {
-            if (_provider is not JsonRpcProvider provider)
-            {
-                Debug.Log("Provider is not JsonRpcProvider");
-                return false;
-            }
-
-            var signer = provider.GetSigner(); // default signer at index 0
-            // var signer = provider.GetSigner(1); // signer at index 1
-            // var signer = provider.GetSigner("0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc"); // signer by address
-
-            Debug.Log($"Signer address: {await signer.GetAddress()}");
-            Debug.Log($"Signer balance: {Units.FormatEther(await signer.GetBalance())} ETH");
-            Debug.Log($"Signer chain id: {await signer.GetChainId()}");
-            Debug.Log($"Signer tx count: {await signer.GetTransactionCount()}");
-
-            return true;
-        }
-        //public async Task<bool> SignMessage()
-        //{
-        // if (_provider is not JsonRpcProvider provider)
+        // todo: rework with new architecture in mind
+        // /// <summary>
+        // /// GetSigner
+        // /// </summary>
+        // /// <returns></returns>
+        // public async Task<bool> GetSigner()
         // {
-        //     Debug.Log("Provider is not JsonRpcProvider");
-        //     return;
+        //     if (_provider is not JsonRpcProvider provider)
+        //     {
+        //         Debug.Log("Provider is not JsonRpcProvider");
+        //         return false;
+        //     }
+        //
+        //     var signer = provider.GetSigner(); // default signer at index 0
+        //     // var signer = provider.GetSigner(1); // signer at index 1
+        //     // var signer = provider.GetSigner("0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc"); // signer by address
+        //
+        //     Debug.Log($"Signer address: {await signer.GetAddress()}");
+        //     Debug.Log($"Signer balance: {Units.FormatEther(await signer.GetBalance())} ETH");
+        //     Debug.Log($"Signer chain id: {await signer.GetChainId()}");
+        //     Debug.Log($"Signer tx count: {await signer.GetTransactionCount()}");
+        //
+        //     return true;
+        // }
+        // //public async Task<bool> SignMessage()
+        // //{
+        // // if (_provider is not JsonRpcProvider provider)
+        // // {
+        // //     Debug.Log("Provider is not JsonRpcProvider");
+        // //     return;
+        // // }
+        // //
+        // // var signer = provider.GetSigner(); // default signer at index 0
+        //
+        // // Debug.Log($"Signature string(hello): {await signer.SignMessage("hello")}");
+        // // Debug.Log($"Signature byte[](hello): {await signer.SignMessage(Encoding.ASCII.GetBytes("hello"))}");
+        //
+        // // var sha3 = new Sha3Keccack();
+        //
+        // // Debug.Log($"Legacy signature string(hello): {await signer._LegacySignMessage(sha3.CalculateHash(Encoding.ASCII.GetBytes("hello")))}");
+        // // Debug.Log($"Legacy signature byte[](hello): {await signer._LegacySignMessage(Encoding.ASCII.GetBytes("hello"))}");
+        //
+        // //    return true;
+        // // }
+        // /// <summary>
+        // /// SendTransaction
+        // /// </summary>
+        // /// <returns></returns>
+        // public async Task<bool> SendTransaction()
+        // {
+        //     if (_provider is not JsonRpcProvider provider)
+        //     {
+        //         Debug.Log("Provider is not JsonRpcProvider");
+        //         return false;
+        //     }
+        //
+        //     var signer = provider.GetSigner(); // default signer at index 0
+        //
+        //     var tx = await signer.SendTransaction(new TransactionRequest
+        //     {
+        //         To = await signer.GetAddress(),
+        //         Value = new HexBigInteger(100000)
+        //     });
+        //
+        //     Debug.Log($"Transaction hash: {tx.Hash}");
+        //
+        //     var txReceipt = await tx.Wait();
+        //     Debug.Log($"Transaction receipt: {txReceipt.Confirmations}");
+        //
+        //     return true;
         // }
         //
-        // var signer = provider.GetSigner(); // default signer at index 0
-
-        // Debug.Log($"Signature string(hello): {await signer.SignMessage("hello")}");
-        // Debug.Log($"Signature byte[](hello): {await signer.SignMessage(Encoding.ASCII.GetBytes("hello"))}");
-
-        // var sha3 = new Sha3Keccack();
-
-        // Debug.Log($"Legacy signature string(hello): {await signer._LegacySignMessage(sha3.CalculateHash(Encoding.ASCII.GetBytes("hello")))}");
-        // Debug.Log($"Legacy signature byte[](hello): {await signer._LegacySignMessage(Encoding.ASCII.GetBytes("hello"))}");
-
-        //    return true;
+        // /// <summary>
+        // /// SendContract
+        // /// </summary>
+        // /// <returns></returns>
+        // public async Task<bool> SendContract()
+        // {
+        //     if (_provider is not JsonRpcProvider provider)
+        //     {
+        //         Debug.Log("Provider is not JsonRpcProvider");
+        //         return false;
+        //     }
+        //
+        //     var signer = provider.GetSigner(); // default signer at index 0
+        //
+        //     var contract = new Contract(NFT_ABI, NFT_ADDRESS, _provider);
+        //     var ret = await contract.Connect(signer).Send("mint");
+        //     Debug.Log($"NFT.mint(): {ret}");
+        //
+        //     return true;
         // }
-        /// <summary>
-        /// SendTransaction
-        /// </summary>
-        /// <returns></returns>
-        public async Task<bool> SendTransaction()
-        {
-            if (_provider is not JsonRpcProvider provider)
-            {
-                Debug.Log("Provider is not JsonRpcProvider");
-                return false;
-            }
-
-            var signer = provider.GetSigner(); // default signer at index 0
-
-            var tx = await signer.SendTransaction(new TransactionRequest
-            {
-                To = await signer.GetAddress(),
-                Value = new HexBigInteger(100000)
-            });
-
-            Debug.Log($"Transaction hash: {tx.Hash}");
-
-            var txReceipt = await tx.Wait();
-            Debug.Log($"Transaction receipt: {txReceipt.Confirmations}");
-
-            return true;
-        }
-
-        /// <summary>
-        /// SendContract
-        /// </summary>
-        /// <returns></returns>
-        public async Task<bool> SendContract()
-        {
-            if (_provider is not JsonRpcProvider provider)
-            {
-                Debug.Log("Provider is not JsonRpcProvider");
-                return false;
-            }
-
-            var signer = provider.GetSigner(); // default signer at index 0
-
-            var contract = new Contract(NFT_ABI, NFT_ADDRESS, _provider);
-            var ret = await contract.Connect(signer).Send("mint");
-            Debug.Log($"NFT.mint(): {ret}");
-
-            return true;
-        }
-
-        /// <summary>
-        /// SendContractOverrideGas
-        /// </summary>
-        /// <returns></returns>
-        public async Task<bool> SendContractOverrideGas()
-        {
-            if (_provider is not JsonRpcProvider provider)
-            {
-                Debug.Log("Provider is not JsonRpcProvider");
-                return false;
-            }
-
-            var signer = provider.GetSigner(); // default signer at index 0
-
-            var contract = new Contract(NFT_ABI, NFT_ADDRESS, _provider);
-            var ret = await contract.Attach("0x000...000").Connect(signer).Send("mint", null, new TransactionRequest
-            {
-                GasLimit = new HexBigInteger("1000"),
-                GasPrice = new HexBigInteger("1000")
-            });
-            Debug.Log($"NFT.mint(): {ret}");
-
-            return true;
-        }
+        //
+        // /// <summary>
+        // /// SendContractOverrideGas
+        // /// </summary>
+        // /// <returns></returns>
+        // public async Task<bool> SendContractOverrideGas()
+        // {
+        //     if (_provider is not JsonRpcProvider provider)
+        //     {
+        //         Debug.Log("Provider is not JsonRpcProvider");
+        //         return false;
+        //     }
+        //
+        //     var signer = provider.GetSigner(); // default signer at index 0
+        //
+        //     var contract = new Contract(NFT_ABI, NFT_ADDRESS, _provider);
+        //     var ret = await contract.Attach("0x000...000").Connect(signer).Send("mint", null, new TransactionRequest
+        //     {
+        //         GasLimit = new HexBigInteger("1000"),
+        //         GasPrice = new HexBigInteger("1000")
+        //     });
+        //     Debug.Log($"NFT.mint(): {ret}");
+        //
+        //     return true;
+        // }
 
         /// <summary>
         /// SubscribeToNewBlockEvent

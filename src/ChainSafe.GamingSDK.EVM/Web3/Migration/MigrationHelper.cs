@@ -14,44 +14,10 @@ namespace Web3Unity.Scripts.Library.Ethers.Migration
               .Configure(services =>
               {
                   bindEnvironment(services);
-                  services.UseJsonRpcProvider(new JsonRpcProviderConfiguration { RpcNodeUrl = url, Network = network });
+                  services.UseJsonRpcProvider(new JsonRpcProviderConfig { RpcNodeUrl = url, Network = network });
               }).Build();
 
             return (JsonRpcProvider)web3.Provider;
-        }
-
-        public static JsonRpcSigner NewJsonRpcSigner(JsonRpcProvider provider, string address, Action<IWeb3ServiceCollection> bindEnvironment)
-        {
-            var web3 = new Web3Builder()
-              .Configure(services =>
-              {
-                  bindEnvironment(services);
-                  services.UseJsonRpcProvider(new JsonRpcProviderConfiguration
-                  {
-                      RpcNodeUrl = provider.RpcNodeUrl,
-                      Network = provider.Network,
-                  });
-                  services.UseJsonRpcSigner(new JsonRpcSignerConfiguration { AddressOverride = address });
-              }).Build();
-
-            return (JsonRpcSigner)web3.Signer;
-        }
-
-        public static JsonRpcSigner NewJsonRpcSigner(JsonRpcProvider provider, int index, Action<IWeb3ServiceCollection> bindEnvironment)
-        {
-            var web3 = new Web3Builder()
-              .Configure(services =>
-              {
-                  bindEnvironment(services);
-                  services.UseJsonRpcProvider(new JsonRpcProviderConfiguration
-                  {
-                      RpcNodeUrl = provider.RpcNodeUrl,
-                      Network = provider.Network,
-                  });
-                  services.UseJsonRpcSigner(new JsonRpcSignerConfiguration { AccountIndex = index });
-              }).Build();
-
-            return (JsonRpcSigner)web3.Signer;
         }
     }
 }

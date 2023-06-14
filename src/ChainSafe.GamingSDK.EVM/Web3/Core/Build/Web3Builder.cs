@@ -1,4 +1,5 @@
 ﻿using System;
+using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
 using ChainSafe.GamingWeb3.Environment;
 using Microsoft.Extensions.DependencyInjection;
 using Web3Unity.Scripts.Library.Ethers;
@@ -47,12 +48,12 @@ namespace ChainSafe.GamingWeb3.Build
         {
             var serviceProvider = serviceCollection.BuildServiceProvider();
             AssertWeb3EnvironmentBound(serviceProvider);
-            var provider = serviceProvider.GetService<IEvmProvider>();
-            var signer = serviceProvider.GetService<IEvmSigner>();
 
-            var web3 = new Web3(serviceProvider, provider, signer);
+            var provider = serviceProvider.GetService<IRpcProvider>();
+            var signer = serviceProvider.GetService<ISigner>();
+            var transactionExecutor = serviceProvider.GetService<ITransactionExecutor>();
 
-            return web3;
+            return new Web3(serviceProvider, provider, signer, transactionExecutor);
         }
 
         private static void AssertWeb3EnvironmentBound(IServiceProvider serviceProvider)
