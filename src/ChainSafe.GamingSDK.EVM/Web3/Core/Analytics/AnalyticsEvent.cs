@@ -41,9 +41,20 @@ namespace ChainSafe.GamingWeb3.Analytics
             IfNotNullNorWhitespace(GasLimit, () => AppendMember(nameof(GasLimit), GasLimit));
             IfNotNullNorWhitespace(GasPrice, () => AppendMember(nameof(GasPrice), GasPrice));
 
-            foreach (var (name, value) in CustomProperties)
+            if (CustomProperties != null)
             {
-                AppendMember(name, value);
+                foreach (var pair in CustomProperties)
+                {
+                    var key = pair.Key ?? "Unnamed";
+                    var value = pair.Value ?? "Unknown";
+
+                    if (pair.Key == null || pair.Value == null)
+                    {
+                        Console.WriteLine($"Warning: Null detected in CustomProperties. Key: {pair.Key}, Value: {pair.Value}. Default values have been assigned.");
+                    }
+
+                    AppendMember(key, value);
+                }
             }
 
             sb.Append(" }");
