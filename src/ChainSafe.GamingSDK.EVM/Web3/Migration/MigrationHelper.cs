@@ -18,7 +18,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Migration
                   services.UseJsonRpcProvider(new JsonRpcProviderConfig { RpcNodeUrl = url, Network = network });
               }).BuildAsync();
 
-            return (JsonRpcProvider)web3.Provider;
+            return (JsonRpcProvider)web3.RpcProvider;
         }
     }
 }

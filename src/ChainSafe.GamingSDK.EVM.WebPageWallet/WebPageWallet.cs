@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
 using ChainSafe.GamingWeb3;
 using ChainSafe.GamingWeb3.Environment;
+using Nethereum.ABI.EIP712;
+using Newtonsoft.Json;
 using Web3Unity.Scripts.Library.Ethers.Providers;
 using Web3Unity.Scripts.Library.Ethers.Signers;
 using Web3Unity.Scripts.Library.Ethers.Transactions;
@@ -81,6 +84,24 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
             bool ValidateResponse(string response) => response.StartsWith("0x") && response.Length == 66;
         }
 
+        public async Task<string> SignTypedData(Domain domain, Dictionary<string, MemberDescription[]> types, MemberValue[] message)
+        {
+            var pageUrl = BuildUrl();
+            return await OpenPageWaitResponse(pageUrl, ValidateResponse);
+
+            string BuildUrl()
+            {
+                return $"{configuration.ServiceUrl}" +
+                       "?action=sign-typed-data" +
+                       "&domain=" + JsonConvert.SerializeObject(domain) +
+                       "&types=" + JsonConvert.SerializeObject(types) +
+                       "&message=" + Uri.EscapeDataString(JsonConvert.SerializeObject(message));
+            }
+
+            // todo validate with regex
+            bool ValidateResponse(string response) => response.StartsWith("0x") && response.Length == 132;
+        }
+
         // todo: extract hash from deeplink instead of clipboard
         private async Task<string> OpenPageWaitResponse(string pageUrl, Func<string, bool> validator)
         {
@@ -136,32 +157,6 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
             var hash = new Sha3Keccack().CalculateHash(_message).EnsureHexPrefix();
             // 0x06b3dfaec148fb1bb2b066f10ec285e7c9bf402ab32aa78a5d38e34566810cd2
             return hash;
-        }
-         */
-
-        /*
-         SignTypedData implementation. Could possibly want to add this to ISigner in the future.
-
-        public static async Task<string> SignTypedData(Domain domain, Dictionary<string, MemberDescription[]> types, MemberValue[] message)
-        {
-            // open application
-            var message = Uri.EscapeDataString(_message);
-            Application.OpenURL(url + "?action=sign-typed-data" + "&domain=" + JsonConvert.SerializeObject(domain) + "&types=" + JsonConvert.SerializeObject(types) + "&message=" + JsonConvert.SerializeObject(message));
-            // set clipboard to empty
-            GUIUtility.systemCopyBuffer = "";
-            // wait for clipboard response
-            var clipBoard = "";
-            while (clipBoard == "")
-            {
-                clipBoard = GUIUtility.systemCopyBuffer;
-                await Task.Delay(100);
-            }
-
-            // check if clipboard response is valid
-            if (clipBoard.StartsWith("0x") && clipBoard.Length == 132)
-                return clipBoard;
-            else
-                throw new Exception("sign error");
         }
          */
     }

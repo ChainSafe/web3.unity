@@ -14,5 +14,6 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
         private static void BindEnvironment(IWeb3ServiceCollection services)
         {
             services.UseNetCoreEnvironment();
+        }
     }
 }

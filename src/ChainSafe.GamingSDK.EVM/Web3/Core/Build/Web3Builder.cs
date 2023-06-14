@@ -54,7 +54,7 @@ namespace ChainSafe.GamingWeb3.Build
 
             await web3.InitializeAsync();
 
-            return new Web3(serviceProvider, provider, signer, transactionExecutor);
+            return web3;
         }
 
         private static void AssertWeb3EnvironmentBound(IServiceProvider serviceProvider)

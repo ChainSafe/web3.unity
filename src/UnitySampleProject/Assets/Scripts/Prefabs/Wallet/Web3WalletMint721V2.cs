@@ -5,7 +5,7 @@ using Web3Unity.Scripts.Library.Ethers.Contracts;
 public class Web3WalletMint721V2 : MonoBehaviour
 {
     // todo rework with new architecture in mind
-    public async void OnMint721()
+    public void OnMint721()
     {
         throw new NotImplementedException(
             "Example scripts are in the process of migration to the new API. This function has not yet been migrated.");

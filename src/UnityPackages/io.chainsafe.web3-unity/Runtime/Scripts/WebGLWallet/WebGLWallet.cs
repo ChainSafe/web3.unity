@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
+using Nethereum.ABI.EIP712;
 using Web3Unity.Scripts.Library.Ethers.Signers;
 using Web3Unity.Scripts.Library.Ethers.Transactions;
 
@@ -32,11 +34,11 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
         public Task<TransactionResponse> SendTransaction(TransactionRequest transaction)
         {
             throw new NotImplementedException();
-            
+
             return string.IsNullOrEmpty(transaction.Data)
                 ? SendRegularTransaction()
                 : SendTransactionWithData();
-            
+
             // return await PollJsSide(JS_getSignMessageResponse);
 
             async Task<TransactionResponse> SendRegularTransaction()
@@ -49,6 +51,11 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
             {
                 throw new NotImplementedException();
             }
+        }
+
+        public Task<string> SignTypedData(Domain domain, Dictionary<string, MemberDescription[]> types, MemberValue[] message)
+        {
+            throw new NotImplementedException();
         }
             
         private static async Task<string> PollJsSide(Func<string> pollMethod)
