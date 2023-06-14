@@ -54,7 +54,7 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
             bool ValidateResponse(string response) => response.StartsWith("0x") && response.Length == 132;
         }
 
-        // todo: found no implementations for this method anywhere, implement
+        // todo: implement
         public Task<string> SignTransaction(TransactionRequest transaction)
         {
             throw new NotImplementedException();
