@@ -4,6 +4,7 @@ using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
 using ChainSafe.GamingWeb3.Environment;
 using Microsoft.Extensions.DependencyInjection;
 using Web3Unity.Scripts.Library.Ethers;
+using Web3Unity.Scripts.Library.Ethers.Contracts;
 using Web3Unity.Scripts.Library.Ethers.Providers;
 using Web3Unity.Scripts.Library.Ethers.Signers;
 
@@ -22,6 +23,23 @@ namespace ChainSafe.GamingWeb3.Build
 
             // Bind default services
             serviceCollection.AddSingleton<ChainProvider>();
+
+            serviceCollection.AddSingleton<IContractFactory, ContractFactory>(sp =>
+            {
+                var config = sp.GetService<ContractFactoryConfig>();
+                var rpcProvider = sp.GetRequiredService<IRpcProvider>();
+                var signer = sp.GetRequiredService<ISigner>();
+                var transactionExecutor = sp.GetRequiredService<ITransactionExecutor>();
+
+                if (config != null)
+                {
+                    return new ContractFactory(config, rpcProvider, signer, transactionExecutor);
+                }
+                else
+                {
+                    return new ContractFactory(rpcProvider, signer, transactionExecutor);
+                }
+            });
         }
 
         // todo inline parameterless constructor into this one (therefore remove that overload)
