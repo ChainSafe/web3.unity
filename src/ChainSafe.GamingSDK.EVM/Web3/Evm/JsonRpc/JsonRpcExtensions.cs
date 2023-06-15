@@ -1,4 +1,5 @@
-﻿using ChainSafe.GamingWeb3.Build;
+﻿using ChainSafe.GamingSDK.EVM.Web3.Core;
+using ChainSafe.GamingWeb3.Build;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Web3Unity.Scripts.Library.Ethers.Providers;
@@ -39,7 +40,7 @@ namespace Web3Unity.Scripts.Library.Ethers.JsonRpc
         {
             collection.AssertServiceNotBound<IRpcProvider>();
             collection.TryAddSingleton(DefaultProviderConfig);
-            collection.AddSingleton<IRpcProvider, JsonRpcProvider>();
+            collection.AddSingleton<IRpcProvider, ILifecycleParticipant, JsonRpcProvider>();
             return collection;
         }
     }

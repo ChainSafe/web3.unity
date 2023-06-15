@@ -1,6 +1,7 @@
 ﻿#nullable enable
 using System;
 using System.Threading.Tasks;
+using ChainSafe.GamingSDK.EVM.Web3.Core;
 using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
 using Microsoft.Extensions.DependencyInjection;
 using Web3Unity.Scripts.Library.Ethers.Providers;
@@ -11,25 +12,25 @@ namespace ChainSafe.GamingWeb3
     /// <summary>
     /// Facade for all Web3-related services.
     /// </summary>
-    public class Web3 : IDisposable
+    public class Web3 : IAsyncDisposable
     {
         private readonly ServiceProvider serviceProvider;
-        private readonly IRpcProvider? provider;
+        private readonly IRpcProvider? rpcProvider;
         private readonly ISigner? signer;
         private readonly ITransactionExecutor? transactionExecutor;
 
         private bool initialized;
         private bool terminated;
 
-        internal Web3(ServiceProvider serviceProvider, IRpcProvider? provider, ISigner? signer, ITransactionExecutor? transactionExecutor)
+        internal Web3(ServiceProvider serviceProvider)
         {
             this.serviceProvider = serviceProvider;
-            this.provider = provider;
-            this.signer = signer;
-            this.transactionExecutor = transactionExecutor;
+            rpcProvider = serviceProvider.GetService<IRpcProvider>();
+            signer = serviceProvider.GetService<ISigner>();
+            transactionExecutor = serviceProvider.GetService<ITransactionExecutor>();
         }
 
-        public IRpcProvider Provider => AssertComponentAccessible(provider, nameof(Provider))!;
+        public IRpcProvider RpcProvider => AssertComponentAccessible(rpcProvider, nameof(RpcProvider))!;
 
         public ISigner Signer => AssertComponentAccessible(signer, nameof(Signer))!;
 
@@ -51,29 +52,29 @@ namespace ChainSafe.GamingWeb3
             return value;
         }
 
-        void IDisposable.Dispose()
+        async ValueTask IAsyncDisposable.DisposeAsync()
         {
-            Terminate();
+            await TerminateAsync();
             GC.SuppressFinalize(this);
         }
 
-        public async ValueTask Initialize()
+        public async ValueTask InitializeAsync()
         {
             if (initialized)
             {
                 throw new Web3Exception("Web3 was already initialized.");
             }
 
-            if (provider != null)
+            foreach (var lifecycleParticipant in serviceProvider.GetServices<ILifecycleParticipant>())
             {
-                await provider.Initialize();
+                await lifecycleParticipant.WillStartAsync();
             }
 
             // todo initialize other components
             initialized = true;
         }
 
-        public void Terminate()
+        public async ValueTask TerminateAsync()
         {
             if (terminated)
             {
@@ -82,7 +83,10 @@ namespace ChainSafe.GamingWeb3
 
             if (initialized)
             {
-                // todo terminate other components
+                foreach (var lifecycleParticipant in serviceProvider.GetServices<ILifecycleParticipant>())
+                {
+                    await lifecycleParticipant.WillStopAsync();
+                }
             }
 
             serviceProvider.Dispose();

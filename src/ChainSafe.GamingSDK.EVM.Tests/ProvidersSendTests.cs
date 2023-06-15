@@ -14,7 +14,7 @@ namespace ChainSafe.GamingSDK.EVM.Tests
         [OneTimeSetUp]
         public void SetUp()
         {
-            ganacheProvider = ProviderMigration.NewJsonRpcProvider("http://127.0.0.1:7545");
+            ganacheProvider = ProviderMigration.NewJsonRpcProviderAsync("http://127.0.0.1:7545").Result;
         }
 
         // todo: disabled due to core interfaces being reworked
