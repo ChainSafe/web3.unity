@@ -1,6 +1,6 @@
-﻿using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
+﻿using ChainSafe.GamingSDK.EVM.Web3.Core;
+using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
 using ChainSafe.GamingWeb3.Build;
-using Microsoft.Extensions.DependencyInjection;
 using Web3Unity.Scripts.Library.Ethers.Signers;
 
 namespace ChainSafe.GamingSDK.EVM.WebGLWallet
@@ -12,7 +12,7 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
             collection.AssertServiceNotBound<ISigner>();
             collection.AssertServiceNotBound<ITransactionExecutor>();
             
-            collection.AddSingleton<ISigner, ITransactionExecutor, WebGLWallet>();
+            collection.AddSingleton<ISigner, ITransactionExecutor, ILifecycleParticipant, WebGLWallet>();
             
             return collection;
         }

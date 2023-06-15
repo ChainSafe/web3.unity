@@ -56,19 +56,19 @@ mergeInto(LibraryManager.library, {
     window.web3gl.sendTransactionResponseData = "";
   },
 
-  Web3Connect: function () {
+  JS_web3Connect: function () {
     window.web3gl.connect();
   },
 
-  ConnectAccount: function () {
+  JS_getConnectAccount: function () {
     var bufferSize = lengthBytesUTF8(window.web3gl.connectAccount) + 1;
     var buffer = _malloc(bufferSize);
     stringToUTF8(window.web3gl.connectAccount, buffer, bufferSize);
     return buffer;
   },
 
-  SetConnectAccount: function (value) {
-    window.web3gl.connectAccount = value;
+  JS_resetConnectAccount: function () {
+    window.web3gl.connectAccount = "";
   },
 
   SendContractJs: function (method, abi, contract, args, value, gasLimit, gasPrice) {
