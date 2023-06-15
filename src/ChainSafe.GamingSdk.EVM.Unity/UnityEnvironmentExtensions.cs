@@ -23,7 +23,6 @@ namespace ChainSafe.GamingWeb3.Unity
             services.AddSingleton<IMainThreadRunner, UnityDispatcherAdapter>();
             services.AddSingleton<IHttpClient, UnityHttpClient>();
             services.AddSingleton<ILogWriter, UnityLogWriter>();
-            services.AddSingleton<ISettingsProvider, UnitySettingsProvider>();
             services.AddSingleton<IOperatingSystemMediator, UnityOperatingSystemMediator>();
             return services;
         }

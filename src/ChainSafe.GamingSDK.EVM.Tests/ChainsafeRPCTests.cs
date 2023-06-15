@@ -170,8 +170,6 @@ namespace ChainSafe.GamingSDK.EVM.Tests
         [Test]
         public void GetAccountsTest()
         {
-            TestHelper.VerifyGanacheConnection(ganacheProvider);
-
             var accounts = ganacheProvider.ListAccounts().Result;
             Assert.AreEqual(10, accounts.Length);
             foreach (var account in accounts)

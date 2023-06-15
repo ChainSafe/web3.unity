@@ -14,8 +14,8 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
 
         Task<string> SignTransaction(TransactionRequest transaction);
 
-        Task<string> SignMessage(byte[] message) => SignMessage(message.ToHex());
-
         Task<string> SignTypedData(Domain domain, Dictionary<string, MemberDescription[]> types, MemberValue[] message);
+
+        Task<string> SignMessage(byte[] message) => SignMessage(message.ToHex());
     }
 }

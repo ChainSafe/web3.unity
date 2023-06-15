@@ -21,7 +21,8 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
         public JsonRpcProvider(
             JsonRpcProviderConfig config,
             Web3Environment environment,
-            ChainProvider chainProvider)
+            ChainProvider chainProvider,
+            IChainConfig chainConfig)
             : base(config.Network, environment)
         {
             this.chainProvider = chainProvider;
@@ -30,7 +31,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
             if (string.IsNullOrEmpty(this.config.RpcNodeUrl))
             {
-                this.config.RpcNodeUrl = this.environment.SettingsProvider.DefaultRpcUrl;
+                this.config.RpcNodeUrl = chainConfig.Rpc;
             }
         }
 
