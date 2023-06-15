@@ -148,37 +148,38 @@ public class GetListedCollectionsWebGL : MonoBehaviour
         }
     }
 
+    // todo rework with new architecture in mind
     // buy nft function
     public async void BuyNFT(int nftNumber)
     {
-        Debug.Log("Buying Nft");
-        BuyNFT.Response response = await EVM.CreatePurchaseNftTransaction(chain, network,
-            account, idsBuy[nftNumber].text, prices[nftNumber].text, tokenTypesBuy[nftNumber].text);
-        Debug.Log(account);
-        Debug.Log(idsBuy[nftNumber].text);
-        Debug.Log(prices[nftNumber].text);
-        Debug.Log(tokenTypesBuy[nftNumber].text);
-        Debug.Log("Account: " + response.tx.account);
-        Debug.Log("To : " + response.tx.to);
-        Debug.Log("Value : " + response.tx.value);
-        Debug.Log("Data : " + response.tx.data);
-        Debug.Log("Gas Price : " + response.tx.gasPrice);
-        Debug.Log("Gas Limit : " + response.tx.gasLimit);
-
-        try
-        {
-            string responseNft = await Web3GL.SendTransaction(response.tx.to, response.tx.value, response.tx.gasLimit, response.tx.gasLimit);
-            if (responseNft == null)
-            {
-                Debug.Log("Empty Response Object:");
-            }
-            print(responseNft);
-            Debug.Log(responseNft);
-        }
-        catch (Exception e)
-        {
-            Debug.LogError(e, this);
-        }
+        // Debug.Log("Buying Nft");
+        // BuyNFT.Response response = await EVM.CreatePurchaseNftTransaction(chain, network,
+        //     account, idsBuy[nftNumber].text, prices[nftNumber].text, tokenTypesBuy[nftNumber].text);
+        // Debug.Log(account);
+        // Debug.Log(idsBuy[nftNumber].text);
+        // Debug.Log(prices[nftNumber].text);
+        // Debug.Log(tokenTypesBuy[nftNumber].text);
+        // Debug.Log("Account: " + response.tx.account);
+        // Debug.Log("To : " + response.tx.to);
+        // Debug.Log("Value : " + response.tx.value);
+        // Debug.Log("Data : " + response.tx.data);
+        // Debug.Log("Gas Price : " + response.tx.gasPrice);
+        // Debug.Log("Gas Limit : " + response.tx.gasLimit);
+        //
+        // try
+        // {
+        //     string responseNft = await Web3GL.SendTransaction(response.tx.to, response.tx.value, response.tx.gasLimit, response.tx.gasLimit);
+        //     if (responseNft == null)
+        //     {
+        //         Debug.Log("Empty Response Object:");
+        //     }
+        //     print(responseNft);
+        //     Debug.Log(responseNft);
+        // }
+        // catch (Exception e)
+        // {
+        //     Debug.LogError(e, this);
+        // }
     }
     
     // downloads the nft image

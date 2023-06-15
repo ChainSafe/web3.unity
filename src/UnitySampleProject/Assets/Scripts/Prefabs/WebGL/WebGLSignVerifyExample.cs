@@ -11,25 +11,26 @@ public class WebGLSignVerifyExample : MonoBehaviour
     public Text textSignedHash;
     public Text verifyAddress;
 
+    // todo rework with new architecture in mind
     async public void OnHashMessage()
     {
-        try
-        {
-            string hashedMessage = await Web3GL.Sha3(message);
-            textHashedMessage.text = hashedMessage;
-            Debug.Log("Hashed Message: " + hashedMessage);
-            string signHashed = await Web3GL.Sign(hashedMessage);
-            Debug.Log("Signed Hashed: " + signHashed);
-            textSignedHash.text = signHashed;
-            ParseSignatureFunction(signHashed);
-            string verify = await Web3GL.EcRecover(hashedMessage, signHashed);
-            verifyAddress.text = verify;
-            Debug.Log("Verify Address: " + verifyAddress.text);
-        }
-        catch (Exception e)
-        {
-            Debug.LogException(e, this);
-        }
+        // try
+        // {
+        //     string hashedMessage = await Web3GL.Sha3(message);
+        //     textHashedMessage.text = hashedMessage;
+        //     Debug.Log("Hashed Message: " + hashedMessage);
+        //     string signHashed = await Web3GL.Sign(hashedMessage);
+        //     Debug.Log("Signed Hashed: " + signHashed);
+        //     textSignedHash.text = signHashed;
+        //     ParseSignatureFunction(signHashed);
+        //     string verify = await Web3GL.EcRecover(hashedMessage, signHashed);
+        //     verifyAddress.text = verify;
+        //     Debug.Log("Verify Address: " + verifyAddress.text);
+        // }
+        // catch (Exception e)
+        // {
+        //     Debug.LogException(e, this);
+        // }
     }
     public void ParseSignatureFunction(string sig)
     {

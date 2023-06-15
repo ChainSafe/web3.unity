@@ -11,6 +11,8 @@ using Web3Unity.Scripts.Library.Ethers.Transactions;
 
 namespace ChainSafe.GamingSDK.EVM.WebGLWallet
 {
+    // todo: on initialize connect to wallet, therefore acquire public key
+    // todo: check if running in browser
     // todo: check if window.web3gl is bound during initialization
     public class WebGLWallet : ISigner, ITransactionExecutor
     {
