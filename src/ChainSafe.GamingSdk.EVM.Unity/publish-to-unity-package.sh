@@ -4,6 +4,8 @@ set -e
 
 echo Building project . . .
 
+rm -rf obj
+rm -rf bin
 dotnet publish -c release -f netstandard2.1 /property:Unity=true
 
 echo Moving files to Unity package . . .
