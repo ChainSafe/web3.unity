@@ -30,7 +30,7 @@ public class CreateApprovalWebWallet : MonoBehaviour
     {
         throw new NotImplementedException(
             "Example scripts are in the process of migration to the new API. This function has not yet been migrated.");
-        
+
         // var response = await EVM.CreateApproveTransaction(chain, network, account, tokenType);
         // Debug.Log("Response: " + response.connection.chain);
         // var web3 = new Web3Builder().Configure(services =>

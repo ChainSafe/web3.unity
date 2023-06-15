@@ -3,9 +3,10 @@ using Web3Unity.Scripts.Library.Ethers.Providers;
 
 public class Web3WalletGetGasPrice : MonoBehaviour
 {
-    public async void GetGasPrice()
+    public void GetGasPrice()
     {
-        var provider = ProviderMigration.NewJsonRpcProvider("YOUR_NODE");
-        Debug.Log("Gas Price: " + await provider.GetGasPrice());
+        // todo: can't use Task.Result here, and this code has to conform to the new interfaces anyway
+        //var provider = ProviderMigration.NewJsonRpcProviderAsync("YOUR_NODE").Result;
+        //Debug.Log("Gas Price: " + await provider.GetGasPrice());
     }
 }

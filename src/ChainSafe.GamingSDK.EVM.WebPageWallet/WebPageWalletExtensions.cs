@@ -34,13 +34,8 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
             collection.TryAddSingleton(DefaultConfig);
 
             // wallet
-            collection.AddSingleton<WebPageWallet>();
+            collection.AddSingleton<ISigner, ITransactionExecutor, WebPageWallet>();
 
-            // todo replace with extension methods from Web3ServiceCollectionExtensions in PR#458
-            collection.AddSingleton<ISigner, WebPageWallet>(
-                sp => sp.GetRequiredService<WebPageWallet>());
-            collection.AddSingleton<ITransactionExecutor, WebPageWallet>(
-                sp => sp.GetRequiredService<WebPageWallet>());
             return collection;
         }
 

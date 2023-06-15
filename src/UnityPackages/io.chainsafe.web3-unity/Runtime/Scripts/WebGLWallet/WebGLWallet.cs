@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
 using ChainSafe.GamingWeb3;
+using Nethereum.ABI.EIP712;
 using Web3Unity.Scripts.Library.Ethers.Providers;
 using Web3Unity.Scripts.Library.Ethers.Signers;
 using Web3Unity.Scripts.Library.Ethers.Transactions;
@@ -18,7 +20,7 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
         {
             this.provider = provider;
         }
-        
+
         public Task<string> GetAddress()
         {
             throw new NotImplementedException();
@@ -82,7 +84,12 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
                 }
             }
         }
-        
+
+        public Task<string> SignTypedData(Domain domain, Dictionary<string, MemberDescription[]> types, MemberValue[] message)
+        {
+            throw new NotImplementedException();
+        }
+
         private static async Task<string> PollJsSide(Func<string> getMethod)
         {
             string jsResponse;
@@ -93,7 +100,7 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
             } while (string.IsNullOrEmpty(jsResponse));
             return jsResponse;
         }
-        
+
         // SignMessage
         [DllImport("__Internal")]
         private static extern void JS_signMessage(string value);
@@ -101,7 +108,7 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
         private static extern string JS_getSignMessageResponse();
         [DllImport("__Internal")]
         private static extern void JS_resetSignMessageResponse();
-        
+
         // SendTransaction (no data)
         [DllImport("__Internal")]
         private static extern void JS_sendTransaction(string to, string value, string gasLimit, string gasPrice);
@@ -109,7 +116,7 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
         private static extern string JS_getSendTransactionResponse();
         [DllImport("__Internal")]
         private static extern void JS_resetSendTransactionResponse();
-        
+
         // SendTransaction (with data)
         [DllImport("__Internal")]
         private static extern void JS_sendTransactionData(string to, string value, string gasPrice, string gasLimit,
