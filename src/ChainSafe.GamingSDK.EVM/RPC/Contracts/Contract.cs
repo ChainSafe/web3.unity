@@ -19,7 +19,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
         private readonly ContractBuilder contractBuilder;
         private readonly ITransactionExecutor transactionExecutor;
 
-        public Contract(string abi, string address, IRpcProvider provider = null, ISigner signer = null, ITransactionExecutor transactionExecutor = null)
+        internal Contract(string abi, string address, IRpcProvider provider = null, ISigner signer = null, ITransactionExecutor transactionExecutor = null)
         {
             if (string.IsNullOrEmpty(abi))
             {
