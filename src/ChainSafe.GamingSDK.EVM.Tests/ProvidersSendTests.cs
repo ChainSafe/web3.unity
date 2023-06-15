@@ -20,8 +20,6 @@ namespace ChainSafe.GamingSDK.EVM.Tests
         [Test]
         public void SendTransactionTest()
         {
-            TestHelper.VerifyGanacheConnection(ganacheProvider);
-
             var from = ganacheProvider.GetSigner();
             var fromInitialBalance = from.GetBalance().Result.Value;
 
@@ -46,7 +44,6 @@ namespace ChainSafe.GamingSDK.EVM.Tests
         [Test]
         public void SendTransactionWithInvalidAddress()
         {
-            TestHelper.VerifyGanacheConnection(ganacheProvider);
             var from = ganacheProvider.GetSigner();
             const string to = "not_a_valid_address";
             var amount = new HexBigInteger(1000000);
@@ -68,7 +65,6 @@ namespace ChainSafe.GamingSDK.EVM.Tests
         [Test]
         public void SendTransactionWithLowGasLimit()
         {
-            TestHelper.VerifyGanacheConnection(ganacheProvider);
             var from = ganacheProvider.GetSigner();
             const string to = "0x1234567890123456789012345678901234567890";
             var amount = new HexBigInteger(1000000);
@@ -90,7 +86,6 @@ namespace ChainSafe.GamingSDK.EVM.Tests
         [Test]
         public void SendTransactionWithLowGasPrice()
         {
-            TestHelper.VerifyGanacheConnection(ganacheProvider);
             var from = ganacheProvider.GetSigner();
             const string to = "0x1234567890123456789012345678901234567890";
             var amount = new HexBigInteger(1000000);

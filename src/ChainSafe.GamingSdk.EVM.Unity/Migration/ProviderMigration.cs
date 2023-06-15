@@ -19,13 +19,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
         private static void BindEnvironment(IWeb3ServiceCollection services) =>
             services
-                .ConfigureUnityEnvironment(new UnityEnvironmentConfiguration
-                {
-                    DataDog = new ChainSafe.GamingSdk.Evm.Unity.DataDogAnalyticsConfiguration
-                    {
-                        ApiKey = string.Empty,
-                    },
-                })
+                .ConfigureUnityEnvironment(new UnityEnvironmentConfiguration())
                 .UseUnityEnvironment();
     }
 }

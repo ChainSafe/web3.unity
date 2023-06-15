@@ -4,6 +4,9 @@ using GameData;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Signer;
 using Nethereum.Util;
+using Nethereum.ABI.EIP712;
+using Nethereum.Signer.EIP712;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Web3Unity.Scripts.Library.Web3Wallet
@@ -61,6 +64,28 @@ namespace Web3Unity.Scripts.Library.Web3Wallet
             // open application
             var message = Uri.EscapeDataString(_message);
             Application.OpenURL(url + "?action=sign" + "&message=" + message);
+            // set clipboard to empty
+            GUIUtility.systemCopyBuffer = "";
+            // wait for clipboard response
+            var clipBoard = "";
+            while (clipBoard == "")
+            {
+                clipBoard = GUIUtility.systemCopyBuffer;
+                await Task.Delay(100);
+            }
+
+            // check if clipboard response is valid
+            if (clipBoard.StartsWith("0x") && clipBoard.Length == 132)
+                return clipBoard;
+            else
+                throw new Exception("sign error");
+        }
+
+        public static async Task<string> SignTypedData(Domain domain, Dictionary<string, MemberDescription[]> types, MemberValue[] message)
+        {
+            // open application
+            var message = Uri.EscapeDataString(_message);
+            Application.OpenURL(url + "?action=sign-typed-data" + "&domain=" + JsonConvert.SerializeObject(domain) + "&types=" + JsonConvert.SerializeObject(types) + "&message=" + JsonConvert.SerializeObject(message));
             // set clipboard to empty
             GUIUtility.systemCopyBuffer = "";
             // wait for clipboard response
