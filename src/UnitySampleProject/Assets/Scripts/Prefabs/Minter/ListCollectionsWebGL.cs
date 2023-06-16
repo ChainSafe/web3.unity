@@ -136,29 +136,30 @@ public class ListCollectionsWebGL : MonoBehaviour
         }
     }
 
+    // todo rework with new architecture in mind
     // sell nft function
     public async void SellNFT(int nftNumber)
     {
-        Debug.Log("Selling Nft");
-        var eth = float.Parse(PriceInputs[nftNumber].text);
-        float decimals = 1000000000000000000; // 18 decimals
-        var wei = eth * decimals;
-        Debug.Log("ItemID: " + idsSell[nftNumber].text);
-        var response =
-            await EVM.CreateListNftTransaction(chain, network, account, idsSell[nftNumber].text, Convert.ToDecimal(wei).ToString(CultureInfo.InvariantCulture),
-                tokenTypesSell[nftNumber].text);
-        var value = Convert.ToInt32(response.tx.value.hex, 16);
-        Debug.Log("Response: " + response);
-        try
-        {
-            var responseNft = await Web3GL.SendTransactionData(response.tx.to, value.ToString(),
-                response.tx.gasPrice, response.tx.gasLimit, response.tx.data);
-            if (responseNft == null) Debug.Log("Empty Response Object:");
-        }
-        catch (Exception e)
-        {
-            Debug.Log("Revoked Transaction" + e);
-        }
+        // Debug.Log("Selling Nft");
+        // var eth = float.Parse(PriceInputs[nftNumber].text);
+        // float decimals = 1000000000000000000; // 18 decimals
+        // var wei = eth * decimals;
+        // Debug.Log("ItemID: " + idsSell[nftNumber].text);
+        // var response =
+        //     await EVM.CreateListNftTransaction(chain, network, account, idsSell[nftNumber].text, Convert.ToDecimal(wei).ToString(CultureInfo.InvariantCulture),
+        //         tokenTypesSell[nftNumber].text);
+        // var value = Convert.ToInt32(response.tx.value.hex, 16);
+        // Debug.Log("Response: " + response);
+        // try
+        // {
+        //     var responseNft = await Web3GL.SendTransactionData(response.tx.to, value.ToString(),
+        //         response.tx.gasPrice, response.tx.gasLimit, response.tx.data);
+        //     if (responseNft == null) Debug.Log("Empty Response Object:");
+        // }
+        // catch (Exception e)
+        // {
+        //     Debug.Log("Revoked Transaction" + e);
+        // }
     }
 
     // downloads the nft image

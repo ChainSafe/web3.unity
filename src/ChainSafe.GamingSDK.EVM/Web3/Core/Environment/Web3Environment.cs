@@ -7,20 +7,20 @@ namespace ChainSafe.GamingWeb3.Environment
     /// </summary>
     public class Web3Environment
     {
-        public Web3Environment(ISettingsProvider settingsProvider, IHttpClient httpClient, ILogWriter logWriter, IAnalyticsClient analyticsClient)
+        public Web3Environment(IHttpClient httpClient, ILogWriter logWriter, IAnalyticsClient analyticsClient, IOperatingSystemMediator operatingSystem)
         {
-            SettingsProvider = settingsProvider;
+            OperatingSystem = operatingSystem;
             HttpClient = httpClient;
             LogWriter = logWriter;
             AnalyticsClient = analyticsClient;
         }
-
-        public ISettingsProvider SettingsProvider { get; }
 
         public IHttpClient HttpClient { get; }
 
         public ILogWriter LogWriter { get; }
 
         public IAnalyticsClient AnalyticsClient { get; }
+
+        public IOperatingSystemMediator OperatingSystem { get; }
     }
 }

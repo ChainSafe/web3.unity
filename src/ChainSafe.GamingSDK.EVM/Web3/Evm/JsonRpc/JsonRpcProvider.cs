@@ -12,30 +12,31 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 {
     public class JsonRpcProvider : BaseProvider
     {
-        private readonly JsonRpcProviderConfiguration configuration;
+        private readonly JsonRpcProviderConfig config;
         private readonly Web3Environment environment;
         private readonly ChainProvider chainProvider;
 
         private uint nextMessageId;
 
         public JsonRpcProvider(
-            JsonRpcProviderConfiguration configuration,
+            JsonRpcProviderConfig config,
             Web3Environment environment,
-            ChainProvider chainProvider)
-            : base(configuration.Network, environment)
+            ChainProvider chainProvider,
+            IChainConfig chainConfig)
+            : base(config.Network, environment)
         {
             this.chainProvider = chainProvider;
             this.environment = environment;
-            this.configuration = configuration;
+            this.config = config;
 
-            if (string.IsNullOrEmpty(this.configuration.RpcNodeUrl))
+            if (string.IsNullOrEmpty(this.config.RpcNodeUrl))
             {
-                this.configuration.RpcNodeUrl = this.environment.SettingsProvider.DefaultRpcUrl;
+                this.config.RpcNodeUrl = chainConfig.Rpc;
             }
         }
 
         // todo can be removed after Evm/Migration removed from project
-        public string RpcNodeUrl => configuration.RpcNodeUrl;
+        public string RpcNodeUrl => config.RpcNodeUrl;
 
         public override async Task<Network.Network> DetectNetwork()
         {
@@ -71,7 +72,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
         {
             var httpClient = environment.HttpClient;
             var request = new RpcRequestMessage(nextMessageId++, method, parameters);
-            var response = (await httpClient.Post<RpcRequestMessage, RpcResponseMessage>(configuration.RpcNodeUrl, request)).EnsureResponse();
+            var response = (await httpClient.Post<RpcRequestMessage, RpcResponseMessage>(config.RpcNodeUrl, request)).EnsureResponse();
 
             if (response.HasError)
             {

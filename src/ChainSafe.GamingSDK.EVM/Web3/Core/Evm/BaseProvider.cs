@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
+using ChainSafe.GamingSDK.EVM.Web3.Core;
 using ChainSafe.GamingWeb3;
 using ChainSafe.GamingWeb3.Environment;
 using Nethereum.Hex.HexConvertors.Extensions;
@@ -17,7 +18,8 @@ using TransactionReceipt = Web3Unity.Scripts.Library.Ethers.Transactions.Transac
 
 namespace Web3Unity.Scripts.Library.Ethers.Providers
 {
-    public abstract class BaseProvider : IEvmProvider
+    // todo move all functionality out of this class and delete this file
+    public abstract class BaseProvider : IRpcProvider, ILifecycleParticipant
     {
         private readonly bool anyNetwork = true;
 
@@ -65,15 +67,12 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             return (ulong)DateTime.Now.Millisecond;
         }
 
-        public virtual async ValueTask Initialize()
+        public virtual async ValueTask WillStartAsync()
         {
-            if (network != null)
-            {
-                return;
-            }
-
-            network = await GetNetwork();
+            network ??= await GetNetwork();
         }
+
+        public virtual ValueTask WillStopAsync() => new(Task.CompletedTask);
 
         public virtual Task<Network.Network> DetectNetwork()
         {
