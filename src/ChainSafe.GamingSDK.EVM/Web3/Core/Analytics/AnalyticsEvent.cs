@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Nethereum.Model;
 
 namespace ChainSafe.GamingWeb3.Analytics
 {
@@ -41,9 +42,18 @@ namespace ChainSafe.GamingWeb3.Analytics
             IfNotNullNorWhitespace(GasLimit, () => AppendMember(nameof(GasLimit), GasLimit));
             IfNotNullNorWhitespace(GasPrice, () => AppendMember(nameof(GasPrice), GasPrice));
 
-            foreach (var (name, value) in CustomProperties)
+            if (CustomProperties != null)
             {
-                AppendMember(name, value);
+                foreach (var pair in CustomProperties)
+                {
+                    if (pair.Key == null || pair.Value == null)
+                    {
+                        // TODO: Should integrate logging mechanism. Currently skips if key/value pair not found
+                        continue;
+                    }
+
+                    AppendMember(pair.Key, pair.Value);
+                }
             }
 
             sb.Append(" }");
