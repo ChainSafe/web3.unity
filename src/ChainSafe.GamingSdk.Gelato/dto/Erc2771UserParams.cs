@@ -1,7 +1,7 @@
 using Nethereum.Hex.HexTypes;
 using Newtonsoft.Json;
 
-namespace ChainSafe.GamingSdk.Gelato.Relay
+namespace ChainSafe.GamingSdk.Gelato.Dto
 {
     public class Erc2771UserParams
     {

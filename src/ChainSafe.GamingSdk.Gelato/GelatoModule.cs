@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using ChainSafe.GamingSdk.Gelato.Relay;
+using ChainSafe.GamingSdk.Gelato.Dto;
 using ChainSafe.GamingSdk.Gelato.Types;
 using ChainSafe.GamingWeb3.Environment;
 using Nethereum.Hex.HexTypes;
@@ -12,7 +12,7 @@ namespace ChainSafe.GamingSdk.Gelato
 {
     public class GelatoModule
     {
-        private GelatoClient gelatoClient;
+        private readonly GelatoClient gelatoClient;
         private Config config;
 
         public GelatoModule(IHttpClient httpClient, Config config)
@@ -21,7 +21,7 @@ namespace ChainSafe.GamingSdk.Gelato
             this.gelatoClient = new GelatoClient(httpClient, config);
             this.config = config;
 
-            // TODO: Remove blocking call once config init is resolved 
+            // TODO: Remove blocking call once config init is resolved
             if (IsNetworkSupported(config.ChainId).Result == false)
             {
                 throw new Exception("network not supported by Gelato");
@@ -121,13 +121,13 @@ namespace ChainSafe.GamingSdk.Gelato
 
         private async Task<bool> IsNetworkSupported(string networkId)
         {
-            string[] supportedNetworks = await this.gelatoClient.GetSupportedNetworks();
+            var supportedNetworks = await this.gelatoClient.GetSupportedNetworks();
             return supportedNetworks.Contains(networkId);
         }
 
         private async Task<bool> IsOracleActive(string chainId)
         {
-            string[] oracles = await this.gelatoClient.GetGelatoOracles();
+            var oracles = await this.gelatoClient.GetGelatoOracles();
             return oracles.Contains(chainId);
         }
     }

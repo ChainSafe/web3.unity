@@ -7,11 +7,18 @@ using Web3Unity.Scripts.Library.Ethers.Providers;
 using Web3Unity.Scripts.Library.Ethers.Signers;
 using Contract = Web3Unity.Scripts.Library.Ethers.Contracts.Contract;
 
-namespace ChainSafe.GamingSdk.Gelato.Relay
+namespace ChainSafe.GamingSdk.Gelato.Dto
 {
-    public enum ERC2771Type
+    public enum Erc2771Type
     {
+        /// <summary>
+        /// For requesting a relayed transaction where the contract funds the transaction
+        /// </summary>
         CallWithSyncFee,
+
+        /// <summary>
+        /// For sponsoring the transaction from the developers account
+        /// </summary>
         SponsoredCall,
     }
 
@@ -65,7 +72,7 @@ namespace ChainSafe.GamingSdk.Gelato.Relay
         [JsonProperty(PropertyName = "userDeadline")]
         public HexBigInteger UserDeadline { get; set; }
 
-        public CallWithErc2771Request MapRequestToStruct(CallWithERC2771RequestOptionalParameters overrides)
+        public CallWithErc2771Request MapRequestToStruct(CallWithErc2771RequestOptionalParameters overrides)
         {
             if (overrides.UserNonce == null && UserNonce == null)
             {
@@ -85,7 +92,7 @@ namespace ChainSafe.GamingSdk.Gelato.Relay
         }
     }
 
-    public class CallWithERC2771RequestOptionalParameters
+    public class CallWithErc2771RequestOptionalParameters
     {
         /// <summary>
         ///    QUANTITY - optional, this is a nonce similar to Ethereum nonces, stored in a local mapping on the relay contracts. It is used to enforce nonce ordering of relay calls, if the user requires it. Otherwise, this is an optional parameter and if not passed, the relay-SDK will automatically query on-chain for the current value.
@@ -99,14 +106,14 @@ namespace ChainSafe.GamingSdk.Gelato.Relay
         [JsonProperty(PropertyName = "userDeadline")]
         public HexBigInteger UserDeadline { get; set; }
 
-        public static async Task<CallWithERC2771RequestOptionalParameters> PopulateOptionalUserParameters(CallWithErc2771Request request, ERC2771Type type, IEvmSigner wallet, Config config)
+        public static async Task<CallWithErc2771RequestOptionalParameters> PopulateOptionalUserParameters(CallWithErc2771Request request, Erc2771Type type, IEvmSigner wallet, Config config)
         {
             return await PopulateOptionalUserParameters(request, type, wallet.Provider, config);
         }
 
-        public static async Task<CallWithERC2771RequestOptionalParameters> PopulateOptionalUserParameters(CallWithErc2771Request request, ERC2771Type type, IEvmProvider provider, Config config)
+        public static async Task<CallWithErc2771RequestOptionalParameters> PopulateOptionalUserParameters(CallWithErc2771Request request, Erc2771Type type, IEvmProvider provider, Config config)
         {
-            var optionalParams = new CallWithERC2771RequestOptionalParameters();
+            var optionalParams = new CallWithErc2771RequestOptionalParameters();
             if (request.UserDeadline == null)
             {
                 optionalParams.UserDeadline = CalculateDeadline();
@@ -121,15 +128,15 @@ namespace ChainSafe.GamingSdk.Gelato.Relay
             return optionalParams;
         }
 
-        private static HexBigInteger GetGelatoRelayErc2771Address(ERC2771Type type, Config config)
+        private static HexBigInteger GetGelatoRelayErc2771Address(Erc2771Type type, Config config)
         {
             switch (type)
             {
-                case ERC2771Type.CallWithSyncFee:
+                case Erc2771Type.CallWithSyncFee:
                     return IsZkSync(config.ChainId)
                         ? config.Contract.RelayERC2771zkSync
                         : config.Contract.RelayERC2771;
-                case ERC2771Type.SponsoredCall:
+                case Erc2771Type.SponsoredCall:
                     return IsZkSync(config.ChainId)
                         ? config.Contract.Relay1BalanceERC2771zkSync
                         : config.Contract.Relay1BalanceERC2771;
@@ -138,12 +145,12 @@ namespace ChainSafe.GamingSdk.Gelato.Relay
             }
         }
 
-        private static bool IsZkSync(long chainId)
+        private static bool IsZkSync(string chainId)
         {
-            return chainId == 324 || chainId == 280;
+            return chainId is "324" or "280";
         }
 
-        private static async Task<HexBigInteger> GetUserNonce(string account, ERC2771Type type, IEvmProvider provider, Config config)
+        private static async Task<HexBigInteger> GetUserNonce(string account, Erc2771Type type, IEvmProvider provider, Config config)
         {
             var contract = new Contract(GelatoClient.UserNonceAbi, GetGelatoRelayErc2771Address(type, config).ToString(), provider);
             var result = await contract.Call("userNonce", new object[] { account });

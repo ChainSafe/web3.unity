@@ -5,10 +5,17 @@ namespace ChainSafe.GamingSdk.Gelato.Types
 {
     public enum RelayCall
     {
+        /// <summary>A non ERC712 based call with sync fee request</summary>
         CallWithSyncFee,
-        CallWithSyncFeeERC2771,
+
+        /// <summary>A ERC712 based call with sync fee request</summary>
+        CallWithSyncFeeErc2771,
+
+        /// <summary>A non ERC712 based call sponsored request</summary>
         SponsoredCall,
-        SponsoredCallERC2771,
+
+        /// <summary>A ERC712 based call sponsored request</summary>
+        SponsoredCallErc2771,
     }
 
     public class RelayRequestOptions

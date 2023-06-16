@@ -2,7 +2,7 @@ using ChainSafe.GamingSdk.Gelato.Types;
 using Nethereum.Hex.HexTypes;
 using Newtonsoft.Json;
 
-namespace ChainSafe.GamingSdk.Gelato.Relay
+namespace ChainSafe.GamingSdk.Gelato.Dto
 {
     // CallWithERC2771Request & BaseCallWithSyncFeeParams;
     public class CallWithSyncFeeErc2771Request : RelayRequestOptions

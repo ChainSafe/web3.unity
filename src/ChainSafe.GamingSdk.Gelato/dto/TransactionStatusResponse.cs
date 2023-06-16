@@ -1,17 +1,48 @@
 using Nethereum.Hex.HexTypes;
 using Newtonsoft.Json;
 
-namespace ChainSafe.GamingSdk.Gelato.Relay
+namespace ChainSafe.GamingSdk.Gelato.Dto
 {
     public enum TaskState
     {
+        /// <summary>
+        /// Transaction status is being retrieved
+        /// </summary>
         CheckPending,
+
+        /// <summary>
+        /// Transaction is submitted
+        /// </summary>
         ExecPending,
+
+        /// <summary>
+        /// Transaction succeeded
+        /// </summary>
         ExecSuccess,
+
+        /// <summary>
+        /// Transaction failed
+        /// </summary>
         ExecReverted,
+
+        /// <summary>
+        /// Transaction is awaiting node confirmations
+        /// </summary>
         WaitingForConfirmation,
+
+        /// <summary>
+        /// Account is banned from submission of transactions
+        /// </summary>
         Blacklisted,
+
+        /// <summary>
+        /// Transaction was cancelled
+        /// </summary>
         Cancelled,
+
+        /// <summary>
+        /// TaskId was not found
+        /// </summary>
         NotFound,
     }
 

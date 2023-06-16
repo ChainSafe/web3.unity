@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using ChainSafe.GamingSdk.Gelato.Relay;
+using ChainSafe.GamingSdk.Gelato.Dto;
 using ChainSafe.GamingSdk.Gelato.Types;
 using ChainSafe.GamingWeb3.Environment;
 using Nethereum.Hex.HexTypes;
@@ -17,9 +17,9 @@ namespace ChainSafe.GamingSdk.Gelato
         public const string GelatoRelay1BalanceErc2771Address = "0xd8253782c45a12053594b9deB72d8e8aB2Fca54c";
         public const string GelatoRelayErc2771ZksyncAddress = "0x22DCC39b2AC376862183dd35A1664798dafC7Da6";
         public const string GelatoRelay1BalanceErc2771ZksyncAddress = "0x97015cD4C3d456997DD1C40e2a18c79108FCc412";
-        public static readonly string UserNonceAbi = "[{\"inputs\": [{\"internalType\": \"address\",\"name\": \"account\",\"type\": \"address\"}],\"name\": \"userNonce\",\"outputs\": [{\"internalType\": \"uint256\",\"name\": \"\",\"type\": \"uint256\"}],\"stateMutability\": \"view\",\"type\": \"function\"}]\"}";
-        private IHttpClient httpClient;
-        private Config config;
+        public const string UserNonceAbi = "[{\"inputs\": [{\"internalType\": \"address\",\"name\": \"account\",\"type\": \"address\"}],\"name\": \"userNonce\",\"outputs\": [{\"internalType\": \"uint256\",\"name\": \"\",\"type\": \"uint256\"}],\"stateMutability\": \"view\",\"type\": \"function\"}]\"}";
+        private readonly IHttpClient httpClient;
+        private readonly Config config;
 
         public GelatoClient(IHttpClient httpClient, Config config)
         {
@@ -29,22 +29,18 @@ namespace ChainSafe.GamingSdk.Gelato
 
         public async Task<TResponse> Post<TRequest, TResponse>(RelayCall relayCall, TRequest request)
         {
-            switch (relayCall)
+            return relayCall switch
             {
-                case RelayCall.CallWithSyncFee:
-                    return (await this.httpClient.Post<TRequest, TResponse>($"{config.Url}/relays/v2/call-with-sync-fee", request)).EnsureResponse();
-
-                case RelayCall.CallWithSyncFeeERC2771:
-                    return (await this.httpClient.Post<TRequest, TResponse>($"{config.Url}/relays/v2/call-with-sync-fee-erc2771", request)).EnsureResponse();
-
-                case RelayCall.SponsoredCall:
-                    return (await this.httpClient.Post<TRequest, TResponse>($"{config.Url}/relays/v2/sponsored-call", request)).EnsureResponse();
-
-                case RelayCall.SponsoredCallERC2771:
-                    return (await this.httpClient.Post<TRequest, TResponse>($"{config.Url}/relays/v2/sponsored-call-erc2771", request)).EnsureResponse();
-                default:
-                    throw new Exception("relayCall option not found");
-            }
+                RelayCall.CallWithSyncFee => (await this.httpClient.Post<TRequest, TResponse>(
+                    $"{config.Url}/relays/v2/call-with-sync-fee", request)).EnsureResponse(),
+                RelayCall.CallWithSyncFeeErc2771 => (await this.httpClient.Post<TRequest, TResponse>(
+                    $"{config.Url}/relays/v2/call-with-sync-fee-erc2771", request)).EnsureResponse(),
+                RelayCall.SponsoredCall => (await this.httpClient.Post<TRequest, TResponse>(
+                    $"{config.Url}/relays/v2/sponsored-call", request)).EnsureResponse(),
+                RelayCall.SponsoredCallErc2771 => (await this.httpClient.Post<TRequest, TResponse>(
+                    $"{config.Url}/relays/v2/sponsored-call-erc2771", request)).EnsureResponse(),
+                _ => throw new Exception("relayCall option not found")
+            };
         }
 
         public async Task<string[]> GetSupportedNetworks()
