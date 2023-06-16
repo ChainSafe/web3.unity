@@ -9,13 +9,6 @@ namespace ChainSafe.GamingWeb3.Unity
 {
     public static class UnityEnvironmentExtensions
     {
-        public static IWeb3ServiceCollection UseUnityEnvironment(this IWeb3ServiceCollection services, UnityEnvironmentConfiguration configuration)
-        {
-            services.UseUnityEnvironment();
-            services.ConfigureUnityEnvironment(configuration);
-            return services;
-        }
-
         public static IWeb3ServiceCollection UseUnityEnvironment(this IWeb3ServiceCollection services)
         {
             services.UseApiAnalytics();
@@ -23,13 +16,7 @@ namespace ChainSafe.GamingWeb3.Unity
             services.AddSingleton<IMainThreadRunner, UnityDispatcherAdapter>();
             services.AddSingleton<IHttpClient, UnityHttpClient>();
             services.AddSingleton<ILogWriter, UnityLogWriter>();
-            services.AddSingleton<ISettingsProvider, UnitySettingsProvider>();
-            return services;
-        }
-
-        public static IWeb3ServiceCollection ConfigureUnityEnvironment(this IWeb3ServiceCollection services, UnityEnvironmentConfiguration configuration)
-        {
-            // empty for now
+            services.AddSingleton<IOperatingSystemMediator, UnityOperatingSystemMediator>();
             return services;
         }
     }

@@ -2,6 +2,8 @@
 
 echo Building project . . .
 
+del obj /F /Q
+del bin /F /Q
 dotnet publish -c release -f netstandard2.1 /property:Unity=true
 if %errorlevel% neq 0 exit /b %errorlevel%
 

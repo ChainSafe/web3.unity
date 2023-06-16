@@ -13,7 +13,7 @@ namespace Web3Unity.Scripts.Library.Ethers.NetCore
             services.AddSingleton<Web3Environment>();
             services.AddSingleton<IHttpClient, NetCoreHttpClient>();
             services.AddSingleton<ILogWriter, NetCoreLogWriter>();
-            services.AddSingleton<ISettingsProvider, NetCoreSettingsProvider>();
+            services.AddSingleton<IOperatingSystemMediator, NetCoreOperatingSystemMediator>();
             return services;
         }
     }

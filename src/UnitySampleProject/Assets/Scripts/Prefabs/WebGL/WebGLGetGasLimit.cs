@@ -7,13 +7,14 @@ public class WebGLGetGasLimit : MonoBehaviour
 {
     public async void GetGasLimit()
     {
-        var provider = ProviderMigration.NewJsonRpcProvider("YOUR_NODE");
-        string contractAbi =
-            "[ { \"inputs\": [ { \"internalType\": \"uint8\", \"name\": \"_myArg\", \"type\": \"uint8\" } ], \"name\": \"addTotal\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\" }, { \"inputs\": [], \"name\": \"myTotal\", \"outputs\": [ { \"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\" } ], \"stateMutability\": \"view\", \"type\": \"function\" } ]";
-        string contractAddress = "0x741C3F3146304Aaf5200317cbEc0265aB728FE07";
-        var contract = new Contract(contractAbi, contractAddress, provider);
-        var gasLimit = await contract.EstimateGas("addTotal", new object[] { });
-        Debug.Log("Gas Limit: " + gasLimit);
+        // todo: can't use Task.Result here, and this code has to conform to the new interfaces anyway
+        //var provider = ProviderMigration.NewJsonRpcProviderAsync("YOUR_NODE").Result;
+        //string contractAbi =
+        //    "[ { \"inputs\": [ { \"internalType\": \"uint8\", \"name\": \"_myArg\", \"type\": \"uint8\" } ], \"name\": \"addTotal\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\" }, { \"inputs\": [], \"name\": \"myTotal\", \"outputs\": [ { \"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\" } ], \"stateMutability\": \"view\", \"type\": \"function\" } ]";
+        //string contractAddress = "0x741C3F3146304Aaf5200317cbEc0265aB728FE07";
+        //var contract = new Contract(contractAbi, contractAddress, provider);
+        //var gasLimit = await contract.EstimateGas("addTotal", new object[] { });
+        //Debug.Log("Gas Limit: " + gasLimit);
     }
 }
 #endif

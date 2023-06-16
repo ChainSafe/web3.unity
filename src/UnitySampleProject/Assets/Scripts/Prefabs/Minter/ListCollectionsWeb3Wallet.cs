@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using Web3Unity.Scripts.Library.ETHEREUEM.Connect;
-using Web3Unity.Scripts.Library.Web3Wallet;
+// using Web3Unity.Scripts.Library.Web3Wallet;
 
 public class ListCollectionsWeb3Wallet : MonoBehaviour
 {
@@ -136,26 +136,29 @@ public class ListCollectionsWeb3Wallet : MonoBehaviour
     // sell nft function
     public async void SellNFT(int nftNumber)
     {
-        Debug.Log("Selling Nft");
-        var eth = float.Parse(PriceInputs[nftNumber].text);
-        float decimals = 1000000000000000000; // 18 decimals
-        var wei = eth * decimals;
-        Debug.Log("ItemID: " + idsSell[nftNumber].text);
-        var response =
-            await EVM.CreateListNftTransaction(chain, network, account, idsSell[nftNumber].text, Convert.ToDecimal(wei).ToString(CultureInfo.InvariantCulture),
-                tokenTypesSell[nftNumber].text);
-        var value = Convert.ToInt32(response.tx.value.hex, 16);
-        Debug.Log("Response: " + response);
-        try
-        {
-            var responseNft = await Web3Wallet.SendTransaction(chainID, response.tx.to, value.ToString(),
-                response.tx.data, response.tx.gasLimit, response.tx.gasPrice);
-            if (responseNft == null) Debug.Log("Empty Response Object:");
-        }
-        catch (Exception e)
-        {
-            Debug.Log("Error: " + e);
-        }
+        throw new NotImplementedException(
+            "Example scripts are in the process of migration to the new API. This function has not yet been migrated.");
+
+        // Debug.Log("Selling Nft");
+        // var eth = float.Parse(PriceInputs[nftNumber].text);
+        // float decimals = 1000000000000000000; // 18 decimals
+        // var wei = eth * decimals;
+        // Debug.Log("ItemID: " + idsSell[nftNumber].text);
+        // var response =
+        //     await EVM.CreateListNftTransaction(chain, network, account, idsSell[nftNumber].text, Convert.ToDecimal(wei).ToString(CultureInfo.InvariantCulture),
+        //         tokenTypesSell[nftNumber].text);
+        // var value = Convert.ToInt32(response.tx.value.hex, 16);
+        // Debug.Log("Response: " + response);
+        // try
+        // {
+        //     var responseNft = await Web3Wallet.SendTransaction(chainID, response.tx.to, value.ToString(),
+        //         response.tx.data, response.tx.gasLimit, response.tx.gasPrice);
+        //     if (responseNft == null) Debug.Log("Empty Response Object:");
+        // }
+        // catch (Exception e)
+        // {
+        //     Debug.Log("Error: " + e);
+        // }
     }
 
     // downloads the nft image
