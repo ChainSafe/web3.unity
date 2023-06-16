@@ -64,12 +64,6 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
             }
         }
 
-        // todo: implement
-        public Task<string> SignTransaction(TransactionRequest transaction)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<TransactionResponse> SendTransaction(TransactionRequest transaction)
         {
             var hash = string.IsNullOrEmpty(transaction.Data)
@@ -104,6 +98,7 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
             }
         }
 
+        // todo: implement before release
         public Task<string> SignTypedData(Domain domain, Dictionary<string, MemberDescription[]> types, MemberValue[] message)
         {
             throw new NotImplementedException();

@@ -12,8 +12,6 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             => MigrationHelper.NewJsonRpcProviderAsync(url, network, BindEnvironment);
 
         private static void BindEnvironment(IWeb3ServiceCollection services) =>
-            services
-                .ConfigureUnityEnvironment(new UnityEnvironmentConfiguration())
-                .UseUnityEnvironment();
+            services.UseUnityEnvironment();
     }
 }
