@@ -69,7 +69,7 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
             var hash = string.IsNullOrEmpty(transaction.Data)
                 ? await SendRegularTransaction()
                 : await SendTransactionWithData();
-            
+
             AssertResponseSuccessful(hash);
             var transactionResponse = await provider.GetTransaction(hash);
             return transactionResponse;
@@ -115,7 +115,7 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
             } while (string.IsNullOrEmpty(jsResponse));
             return jsResponse;
         }
-        
+
         // Connect
         [DllImport("__Internal")]
         private static extern void JS_web3Connect();

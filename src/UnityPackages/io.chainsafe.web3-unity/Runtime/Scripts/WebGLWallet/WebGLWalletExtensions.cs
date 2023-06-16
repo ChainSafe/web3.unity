@@ -11,9 +11,9 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
         {
             collection.AssertServiceNotBound<ISigner>();
             collection.AssertServiceNotBound<ITransactionExecutor>();
-            
+
             collection.AddSingleton<ISigner, ITransactionExecutor, ILifecycleParticipant, WebGLWallet>();
-            
+
             return collection;
         }
     }
