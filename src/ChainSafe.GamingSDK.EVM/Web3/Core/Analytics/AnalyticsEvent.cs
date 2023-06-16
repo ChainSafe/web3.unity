@@ -49,6 +49,7 @@ namespace ChainSafe.GamingWeb3.Analytics
                     if (pair.Key == null || pair.Value == null)
                     {
                         // TODO: Should integrate logging mechanism. Currently skips if key/value pair not found
+                        continue;
                     }
 
                     AppendMember(pair.Key, pair.Value);
