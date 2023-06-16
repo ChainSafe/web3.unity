@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Nethereum.Model;
 
 namespace ChainSafe.GamingWeb3.Analytics
 {
@@ -45,15 +46,12 @@ namespace ChainSafe.GamingWeb3.Analytics
             {
                 foreach (var pair in CustomProperties)
                 {
-                    var key = pair.Key ?? "Unnamed";
-                    var value = pair.Value ?? "Unknown";
-
                     if (pair.Key == null || pair.Value == null)
                     {
-                        Console.WriteLine($"Warning: Null detected in CustomProperties. Key: {pair.Key}, Value: {pair.Value}. Default values have been assigned.");
+                        // TODO: Should integrate logging mechanism. Currently skips if key/value pair not found
                     }
 
-                    AppendMember(key, value);
+                    AppendMember(pair.Key, pair.Value);
                 }
             }
 
