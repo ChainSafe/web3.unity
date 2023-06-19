@@ -41,9 +41,9 @@ namespace ChainSafe.GamingWeb3.Analytics
             IfNotNullNorWhitespace(GasLimit, () => AppendMember(nameof(GasLimit), GasLimit));
             IfNotNullNorWhitespace(GasPrice, () => AppendMember(nameof(GasPrice), GasPrice));
 
-            foreach (var (name, value) in CustomProperties)
+            foreach (var pair in CustomProperties)
             {
-                AppendMember(name, value);
+                AppendMember(pair.Key, pair.Value);
             }
 
             sb.Append(" }");
