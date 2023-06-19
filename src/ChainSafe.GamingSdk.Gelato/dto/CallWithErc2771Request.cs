@@ -106,12 +106,7 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
         [JsonProperty(PropertyName = "userDeadline")]
         public HexBigInteger UserDeadline { get; set; }
 
-        public static async Task<CallWithErc2771RequestOptionalParameters> PopulateOptionalUserParameters(CallWithErc2771Request request, Erc2771Type type, ISigner wallet, Config config)
-        {
-            return await PopulateOptionalUserParameters(request, type, wallet.Provider, config);
-        }
-
-        public static async Task<CallWithErc2771RequestOptionalParameters> PopulateOptionalUserParameters(CallWithErc2771Request request, Erc2771Type type, IEvmProvider provider, Config config)
+        public static async Task<CallWithErc2771RequestOptionalParameters> PopulateOptionalUserParameters(CallWithErc2771Request request, Erc2771Type type, IRpcProvider provider, Config config)
         {
             var optionalParams = new CallWithErc2771RequestOptionalParameters();
             if (request.UserDeadline == null)
@@ -150,7 +145,7 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
             return chainId is "324" or "280";
         }
 
-        private static async Task<HexBigInteger> GetUserNonce(string account, Erc2771Type type, IEvmProvider provider, Config config)
+        private static async Task<HexBigInteger> GetUserNonce(string account, Erc2771Type type, IRpcProvider provider, Config config)
         {
             var contract = new Contract(GelatoClient.UserNonceAbi, GetGelatoRelayErc2771Address(type, config).ToString(), provider);
             var result = await contract.Call("userNonce", new object[] { account });

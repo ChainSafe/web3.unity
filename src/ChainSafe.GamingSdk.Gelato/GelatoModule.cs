@@ -5,18 +5,22 @@ using ChainSafe.GamingSdk.Gelato.Dto;
 using ChainSafe.GamingSdk.Gelato.Types;
 using ChainSafe.GamingWeb3.Environment;
 using Nethereum.Hex.HexTypes;
+using Web3Unity.Scripts.Library.Ethers.Providers;
+using Web3Unity.Scripts.Library.Ethers.Signers;
 
 namespace ChainSafe.GamingSdk.Gelato
 {
     public class GelatoModule
     {
         private readonly GelatoClient gelatoClient;
+        private readonly IRpcProvider provider;
         private Config config;
 
-        public GelatoModule(IHttpClient httpClient, Config config)
+        public GelatoModule(IHttpClient httpClient, Config config, IRpcProvider provider)
         {
             // Check if Config's chainId is valid
             this.gelatoClient = new GelatoClient(httpClient, config);
+            this.provider = provider;
             this.config = config;
 
             // TODO: Remove blocking call once config init is resolved
@@ -38,12 +42,7 @@ namespace ChainSafe.GamingSdk.Gelato
             }
         }
 
-        public void CallWithSyncFeeERC2771(CallWithSyncFeeErc2771Request request, IEvmSigner wallet, RelayRequestOptions options = null)
-        {
-            CallWithSyncFeeERC2771(request, wallet.Provider, options);
-        }
-
-        public void CallWithSyncFeeERC2771(CallWithSyncFeeErc2771Request request, IEvmProvider provider, RelayRequestOptions options = null)
+        public void CallWithSyncFeeERC2771(CallWithSyncFeeErc2771Request request, ISigner wallet, RelayRequestOptions options = null)
         {
             throw new Exception("CallWithSyncFeeERC2771 not implemented");
             /*var callRequest = new CallWithErc2771Request{
@@ -72,12 +71,7 @@ namespace ChainSafe.GamingSdk.Gelato
             }
         }
 
-        public void SponsoredCallERC2771(SponsoredCallErc2771Request request, IEvmSigner wallet, string sponsorApiKey, RelayRequestOptions options = null)
-        {
-            SponsoredCallERC2771(request, wallet.Provider, sponsorApiKey, options);
-        }
-
-        public void SponsoredCallERC2771(SponsoredCallErc2771Request request, IEvmProvider provider, string sponsorApiKey, RelayRequestOptions options = null)
+        public void SponsoredCallERC2771(SponsoredCallErc2771Request request, ISigner wallet, string sponsorApiKey, RelayRequestOptions options = null)
         {
             throw new Exception("SponsoredCallERC2771 not implemented");
             /* var callRequest = new CallWithErc2771Request{
