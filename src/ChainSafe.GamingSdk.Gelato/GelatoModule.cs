@@ -5,8 +5,6 @@ using ChainSafe.GamingSdk.Gelato.Dto;
 using ChainSafe.GamingSdk.Gelato.Types;
 using ChainSafe.GamingWeb3.Environment;
 using Nethereum.Hex.HexTypes;
-using Web3Unity.Scripts.Library.Ethers.Providers;
-using Web3Unity.Scripts.Library.Ethers.Signers;
 
 namespace ChainSafe.GamingSdk.Gelato
 {

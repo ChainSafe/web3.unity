@@ -106,7 +106,7 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
         [JsonProperty(PropertyName = "userDeadline")]
         public HexBigInteger UserDeadline { get; set; }
 
-        public static async Task<CallWithErc2771RequestOptionalParameters> PopulateOptionalUserParameters(CallWithErc2771Request request, Erc2771Type type, IEvmSigner wallet, Config config)
+        public static async Task<CallWithErc2771RequestOptionalParameters> PopulateOptionalUserParameters(CallWithErc2771Request request, Erc2771Type type, ISigner wallet, Config config)
         {
             return await PopulateOptionalUserParameters(request, type, wallet.Provider, config);
         }
