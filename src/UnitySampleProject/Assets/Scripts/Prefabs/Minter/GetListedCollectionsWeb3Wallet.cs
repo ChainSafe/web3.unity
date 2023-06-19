@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using Web3Unity.Scripts.Library.ETHEREUEM.Connect;
-using Web3Unity.Scripts.Library.Web3Wallet;
+// using Web3Unity.Scripts.Library.Web3Wallet;
 
 public class GetListedCollectionsWeb3Wallet : MonoBehaviour
 {
@@ -146,35 +146,38 @@ public class GetListedCollectionsWeb3Wallet : MonoBehaviour
     // buy nft function
     public async void BuyNFT(int nftNumber)
     {
-        Debug.Log("Buying Nft");
-        BuyNFT.Response response = await EVM.CreatePurchaseNftTransaction(chain, network,
-            account, idsBuy[nftNumber].text, prices[nftNumber].text, tokenTypesBuy[nftNumber].text);
-        Debug.Log(account);
-        Debug.Log(idsBuy[nftNumber].text);
-        Debug.Log(prices[nftNumber].text);
-        Debug.Log(tokenTypesBuy[nftNumber].text);
-        Debug.Log("Account: " + response.tx.account);
-        Debug.Log("To : " + response.tx.to);
-        Debug.Log("Value : " + response.tx.value);
-        Debug.Log("Data : " + response.tx.data);
-        Debug.Log("Gas Price : " + response.tx.gasPrice);
-        Debug.Log("Gas Limit : " + response.tx.gasLimit);
-        try
-        {
+        throw new NotImplementedException(
+            "Example scripts are in the process of migration to the new API. This function has not yet been migrated.");
 
-            string responseNft = await Web3Wallet.SendTransaction(chainID, response.tx.to, response.tx.value,
-                response.tx.data, response.tx.gasLimit, response.tx.gasPrice);
-            if (responseNft == null)
-            {
-                Debug.Log("Empty Response Object:");
-            }
-            print(responseNft);
-            Debug.Log(responseNft);
-        }
-        catch (Exception e)
-        {
-            Debug.LogException(e, this);
-        }
+        // Debug.Log("Buying Nft");
+        // BuyNFT.Response response = await EVM.CreatePurchaseNftTransaction(chain, network,
+        //     account, idsBuy[nftNumber].text, prices[nftNumber].text, tokenTypesBuy[nftNumber].text);
+        // Debug.Log(account);
+        // Debug.Log(idsBuy[nftNumber].text);
+        // Debug.Log(prices[nftNumber].text);
+        // Debug.Log(tokenTypesBuy[nftNumber].text);
+        // Debug.Log("Account: " + response.tx.account);
+        // Debug.Log("To : " + response.tx.to);
+        // Debug.Log("Value : " + response.tx.value);
+        // Debug.Log("Data : " + response.tx.data);
+        // Debug.Log("Gas Price : " + response.tx.gasPrice);
+        // Debug.Log("Gas Limit : " + response.tx.gasLimit);
+        // try
+        // {
+        //
+        //     string responseNft = await Web3Wallet.SendTransaction(chainID, response.tx.to, response.tx.value,
+        //         response.tx.data, response.tx.gasLimit, response.tx.gasPrice);
+        //     if (responseNft == null)
+        //     {
+        //         Debug.Log("Empty Response Object:");
+        //     }
+        //     print(responseNft);
+        //     Debug.Log(responseNft);
+        // }
+        // catch (Exception e)
+        // {
+        //     Debug.LogException(e, this);
+        // }
     }
     // downloads the nft image
     IEnumerator DownloadImage(string MediaUrl, int nftCount)

@@ -89,25 +89,26 @@ public class ListNFTWebGL : MonoBehaviour
             100.0f);
     }
 
+    // todo rework with new architecture in mind
     public async void ListItem()
     {
-        var eth = float.Parse(_itemPrice);
-        float decimals = 1000000000000000000; // 18 decimals
-        var wei = eth * decimals;
-        var response =
-            await EVM.CreateListNftTransaction(chain, network, account, _itemID, Convert.ToDecimal(wei).ToString(),
-                _tokenType);
-        var value = Convert.ToInt32(response.tx.value.hex, 16);
-        try
-        {
-            var responseNft = await Web3GL.SendTransactionData(response.tx.to, value.ToString(),
-                response.tx.gasPrice, response.tx.gasLimit, response.tx.data);
-            if (responseNft == null) Debug.Log("Empty Response Object:");
-        }
-        catch (Exception e)
-        {
-            Debug.Log("Revoked Transaction" + e);
-        }
+        // var eth = float.Parse(_itemPrice);
+        // float decimals = 1000000000000000000; // 18 decimals
+        // var wei = eth * decimals;
+        // var response =
+        //     await EVM.CreateListNftTransaction(chain, network, account, _itemID, Convert.ToDecimal(wei).ToString(),
+        //         _tokenType);
+        // var value = Convert.ToInt32(response.tx.value.hex, 16);
+        // try
+        // {
+        //     var responseNft = await Web3GL.SendTransactionData(response.tx.to, value.ToString(),
+        //         response.tx.gasPrice, response.tx.gasLimit, response.tx.data);
+        //     if (responseNft == null) Debug.Log("Empty Response Object:");
+        // }
+        // catch (Exception e)
+        // {
+        //     Debug.Log("Revoked Transaction" + e);
+        // }
     }
 }
 #endif

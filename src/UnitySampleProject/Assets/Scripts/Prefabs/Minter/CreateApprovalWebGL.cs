@@ -19,26 +19,27 @@ public class CreateApprovalWebGL : MonoBehaviour
         account = PlayerPrefs.GetString("Account");
     }
 
+    // todo rework with new architecture in mind
     public async void ApproveTransaction()
     {
-        var response = await EVM.CreateApproveTransaction(chain, network, account, tokenType);
-        Debug.Log("Response: " + response.connection.chain);
-
-        try
-        {
-
-            string responseNft = await Web3GL.SendTransactionData(response.tx.to, "0", response.tx.gasPrice, response.tx.gasLimit, response.tx.data);
-            if (responseNft == null)
-            {
-                Debug.Log("Empty Response Object:");
-            }
-            print(responseNft);
-            Debug.Log(responseNft);
-        }
-        catch (Exception e)
-        {
-            Debug.LogException(e, this);
-        }
+        // var response = await EVM.CreateApproveTransaction(chain, network, account, tokenType);
+        // Debug.Log("Response: " + response.connection.chain);
+        //
+        // try
+        // {
+        //
+        //     string responseNft = await Web3GL.SendTransactionData(response.tx.to, "0", response.tx.gasPrice, response.tx.gasLimit, response.tx.data);
+        //     if (responseNft == null)
+        //     {
+        //         Debug.Log("Empty Response Object:");
+        //     }
+        //     print(responseNft);
+        //     Debug.Log(responseNft);
+        // }
+        // catch (Exception e)
+        // {
+        //     Debug.LogException(e, this);
+        // }
     }
 }
 #endif

@@ -1,27 +1,20 @@
+using System;
+using System.Threading.Tasks;
+using UnityEngine;
 using Web3Unity.Scripts.Library.Ethers.Providers;
 
 public sealed class RPC
 {
     private static RPC instance = null;
-    private static JsonRpcProvider provider;
+    private JsonRpcProvider provider;
 
-    public static RPC GetInstance
+    public static RPC GetInstance => instance ?? throw new Exception("RPC instance is not initialized");
+
+    public static async Task InitializeInstance()
     {
-        get
-        {
-            if (instance == null)
-                instance = new RPC();
-            return instance;
-        }
+        instance = new();
+        instance.provider = await ProviderMigration.NewJsonRpcProviderAsync();
     }
 
-    private RPC()
-    {
-        provider = ProviderMigration.NewJsonRpcProvider();
-    }
-
-    public JsonRpcProvider Provider()
-    {
-        return provider;
-    }
+    public JsonRpcProvider Provider() => provider;
 }

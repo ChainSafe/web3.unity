@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
 using Nethereum.Hex.HexTypes;
 using Web3Unity.Scripts.Library.Ethers.Contracts.Builders;
 using Web3Unity.Scripts.Library.Ethers.Providers;
@@ -13,11 +14,12 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
     {
         private readonly string abi;
         private readonly string address;
-        private readonly IEvmProvider provider;
-        private readonly IEvmSigner signer;
+        private readonly IRpcProvider provider;
+        private readonly ISigner signer;
         private readonly ContractBuilder contractBuilder;
+        private ITransactionExecutor transactionExecutor;
 
-        public Contract(string abi, string address = "", IEvmProvider provider = null)
+        public Contract(string abi, string address = "", IRpcProvider provider = null, ISigner signer = null, ITransactionExecutor transactionExecutor = null)
         {
             if (string.IsNullOrEmpty(abi))
             {
@@ -27,13 +29,9 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
             this.abi = abi;
             this.address = address;
             this.provider = provider;
-            contractBuilder = new ContractBuilder(abi, address);
-        }
-
-        public Contract(string abi, string address, IEvmSigner signer)
-            : this(abi, address, signer.Provider)
-        {
             this.signer = signer;
+            this.transactionExecutor = transactionExecutor;
+            contractBuilder = new ContractBuilder(abi, address);
         }
 
         /// <summary>
@@ -43,7 +41,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
         /// </summary>
         /// <param name="provider">The provider.</param>
         /// <returns>The new contract.</returns>
-        public Contract Connect(IEvmProvider provider)
+        public Contract Connect(IRpcProvider provider)
         {
             if (provider == null)
             {
@@ -59,14 +57,14 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
         /// </summary>
         /// <param name="signer">The signer.</param>
         /// <returns>The new contract.</returns>
-        public Contract Connect(IEvmSigner signer)
+        public Contract Connect(ISigner signer)
         {
             if (signer == null)
             {
                 throw new Exception("signer is not set");
             }
 
-            return new Contract(abi, address, signer);
+            return new Contract(abi, address, provider, signer);
         }
 
         /// <summary>
@@ -142,7 +140,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
             txReq.To = address;
             txReq.Data = function.GetData(parameters);
 
-            var tx = await signer.SendTransaction(txReq);
+            var tx = await transactionExecutor.SendTransaction(txReq);
             var receipt = await tx.Wait();
 
             var output = function.DecodeOutput(tx.Data);

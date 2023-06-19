@@ -107,31 +107,32 @@ namespace Web3Unity.Scripts.Prefabs.Minter
                 100.0f);
         }
 
+        // todo rework with new architecture in mind
         public async void PurchaseItem()
         {
-            BuyNFT.Response response = await EVM.CreatePurchaseNftTransaction(chain, network,
-                PlayerPrefs.GetString("Account"), _itemID, _itemPrice, _tokenType);
-            Debug.Log("Account: " + response.tx.account);
-            Debug.Log("To : " + response.tx.to);
-            Debug.Log("Value : " + response.tx.value);
-            Debug.Log("Data : " + response.tx.data);
-            Debug.Log("Gas Price : " + response.tx.gasPrice);
-            Debug.Log("Gas Limit : " + response.tx.gasLimit);
-
-            try
-            {
-                string responseNft = await Web3GL.SendTransaction(response.tx.to, response.tx.value, response.tx.gasLimit, response.tx.gasLimit);
-                if (responseNft == null)
-                {
-                    Debug.Log("Empty Response Object:");
-                }
-                print(responseNft);
-                Debug.Log(responseNft);
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e, this);
-            }
+            // BuyNFT.Response response = await EVM.CreatePurchaseNftTransaction(chain, network,
+            //     PlayerPrefs.GetString("Account"), _itemID, _itemPrice, _tokenType);
+            // Debug.Log("Account: " + response.tx.account);
+            // Debug.Log("To : " + response.tx.to);
+            // Debug.Log("Value : " + response.tx.value);
+            // Debug.Log("Data : " + response.tx.data);
+            // Debug.Log("Gas Price : " + response.tx.gasPrice);
+            // Debug.Log("Gas Limit : " + response.tx.gasLimit);
+            //
+            // try
+            // {
+            //     string responseNft = await Web3GL.SendTransaction(response.tx.to, response.tx.value, response.tx.gasLimit, response.tx.gasLimit);
+            //     if (responseNft == null)
+            //     {
+            //         Debug.Log("Empty Response Object:");
+            //     }
+            //     print(responseNft);
+            //     Debug.Log(responseNft);
+            // }
+            // catch (Exception e)
+            // {
+            //     Debug.LogError(e, this);
+            // }
         }
     }
 }

@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using Web3Unity.Scripts.Library.ETHEREUEM.Connect;
-using Web3Unity.Scripts.Library.Web3Wallet;
+// using Web3Unity.Scripts.Library.Web3Wallet;
 
 public class GetListedNFTWebWallet : MonoBehaviour
 {
@@ -124,31 +124,34 @@ public class GetListedNFTWebWallet : MonoBehaviour
 
     public async void PurchaseItem()
     {
-        BuyNFT.Response response = await EVM.CreatePurchaseNftTransaction(chain, network,
-            PlayerPrefs.GetString("Account"), _itemID, _itemPrice, _tokenType);
-        Debug.Log("Account: " + response.tx.account);
-        Debug.Log("To : " + response.tx.to);
-        Debug.Log("Value : " + response.tx.value);
-        Debug.Log("Data : " + response.tx.data);
-        Debug.Log("Gas Price : " + response.tx.gasPrice);
-        Debug.Log("Gas Limit : " + response.tx.gasLimit);
+        throw new NotImplementedException(
+            "Example scripts are in the process of migration to the new API. This function has not yet been migrated.");
 
-        try
-        {
-
-            string responseNft = await Web3Wallet.SendTransaction(chainID, response.tx.to, response.tx.value,
-                response.tx.data, response.tx.gasLimit, response.tx.gasPrice);
-            if (responseNft == null)
-            {
-                Debug.Log("Empty Response Object:");
-            }
-            print(responseNft);
-            Debug.Log(responseNft);
-        }
-        catch (Exception e)
-        {
-            Debug.LogException(e, this);
-        }
+        // BuyNFT.Response response = await EVM.CreatePurchaseNftTransaction(chain, network,
+        //     PlayerPrefs.GetString("Account"), _itemID, _itemPrice, _tokenType);
+        // Debug.Log("Account: " + response.tx.account);
+        // Debug.Log("To : " + response.tx.to);
+        // Debug.Log("Value : " + response.tx.value);
+        // Debug.Log("Data : " + response.tx.data);
+        // Debug.Log("Gas Price : " + response.tx.gasPrice);
+        // Debug.Log("Gas Limit : " + response.tx.gasLimit);
+        //
+        // try
+        // {
+        //
+        //     string responseNft = await Web3Wallet.SendTransaction(chainID, response.tx.to, response.tx.value,
+        //         response.tx.data, response.tx.gasLimit, response.tx.gasPrice);
+        //     if (responseNft == null)
+        //     {
+        //         Debug.Log("Empty Response Object:");
+        //     }
+        //     print(responseNft);
+        //     Debug.Log(responseNft);
+        // }
+        // catch (Exception e)
+        // {
+        //     Debug.LogException(e, this);
+        // }
     }
 }
 

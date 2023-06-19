@@ -15,29 +15,30 @@ public class WebGLTransfer721 : MonoBehaviour
     private string tokenId = "1";
     private readonly string abi = ABI.ERC_721;
 
+    // todo rework with new architecture in mind
     async public void SafeTransferFrom()
     {
-        // smart contract method to call
-        string method = "safeTransferFrom";
-        // array of arguments for contract
-        string[] obj = { PlayerPrefs.GetString("Account"), toAccount, tokenId };
-        string args = JsonConvert.SerializeObject(obj);
-        // value in wei
-        string value = "0";
-        // gas limit OPTIONAL
-        string gasLimit = "";
-        // gas price OPTIONAL
-        string gasPrice = "";
-        // connects to user's browser wallet (metamask) to send a transaction
-        try
-        {
-            string response = await Web3GL.SendContract(method, abi, contract, args, value, gasLimit, gasPrice);
-            Debug.Log(response);
-        }
-        catch (Exception e)
-        {
-            Debug.LogException(e, this);
-        }
+        // // smart contract method to call
+        // string method = "safeTransferFrom";
+        // // array of arguments for contract
+        // string[] obj = { PlayerPrefs.GetString("Account"), toAccount, tokenId };
+        // string args = JsonConvert.SerializeObject(obj);
+        // // value in wei
+        // string value = "0";
+        // // gas limit OPTIONAL
+        // string gasLimit = "";
+        // // gas price OPTIONAL
+        // string gasPrice = "";
+        // // connects to user's browser wallet (metamask) to send a transaction
+        // try
+        // {
+        //     string response = await Web3GL.SendContract(method, abi, contract, args, value, gasLimit, gasPrice);
+        //     Debug.Log(response);
+        // }
+        // catch (Exception e)
+        // {
+        //     Debug.LogException(e, this);
+        // }
     }
 }
 #endif
