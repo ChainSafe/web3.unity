@@ -15,9 +15,9 @@ public class AllErc1155 : MonoBehaviour
         // Searches through your listed contracts for balance and uri of the chosen tokenId
         foreach (string contract in nftContracts)
         {
-            BigInteger balance = await ERC1155.BalanceOf(contract, account, tokenIdHex);
+            BigInteger balance = await ERC1155.BalanceOf(Web3Accessor.Instance.Web3, contract, account, tokenIdHex);
             Debug.Log("Balance of contract " + contract + ": " + balance);
-            string uri = await ERC1155.URI(contract, tokenIdHex);
+            string uri = await ERC1155.URI(Web3Accessor.Instance.Web3, contract, tokenIdHex);
             Debug.Log("Token URI: " + uri);
         }
     }

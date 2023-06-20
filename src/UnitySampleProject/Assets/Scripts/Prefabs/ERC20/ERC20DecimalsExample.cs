@@ -10,7 +10,7 @@ public class ERC20DecimalsExample : MonoBehaviour
     {
         string contract = "0x3E0C0447e47d49195fbE329265E330643eB42e6f";
 
-        BigInteger decimals = await ERC20.Decimals(contract);
+        BigInteger decimals = await ERC20.Decimals(Web3Accessor.Instance.Web3, contract);
         print(decimals);
     }
 }

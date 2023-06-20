@@ -11,7 +11,7 @@ public class ERC1155BalanceOfBatchExample : MonoBehaviour
         string[] accounts = { "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2", "0xE51995Cdb3b1c109E0e6E67ab5aB31CDdBB83E4a" };
         string[] tokenIds = { "1", "2" };
 
-        List<BigInteger> batchBalances = await ERC1155.BalanceOfBatch(contract, accounts, tokenIds);
+        List<BigInteger> batchBalances = await ERC1155.BalanceOfBatch(Web3Accessor.Instance.Web3, contract, accounts, tokenIds);
         foreach (var balance in batchBalances)
         {
             print("BalanceOfBatch: " + balance);

@@ -16,7 +16,7 @@ public class AllErc721 : MonoBehaviour
         // Searches through your listed contracts
         foreach (string contract in nftContracts)
         {
-            int balance = await ERC721.BalanceOf(contract, account);
+            int balance = await ERC721.BalanceOf(Web3Accessor.Instance.Web3, contract, account);
             Debug.Log("Balance of contract " + contract + ": " + balance);
             // if i is less than the selected amount of tokenIDs to search, keep searching
             for (int i = 1; i < amountOfTokenIdsToSearch; i++)
@@ -25,11 +25,11 @@ public class AllErc721 : MonoBehaviour
                 if (balanceSearched < balance)
                 {
                     Debug.Log("Searching" + (tokenIDStart + i));
-                    string ownerOf = await ERC721.OwnerOf(contract, (tokenIDStart + i).ToString());
+                    string ownerOf = await ERC721.OwnerOf(Web3Accessor.Instance.Web3, contract, (tokenIDStart + i).ToString());
                     // if token id id matches the account from login, print the tokenID and get the URI
                     if (ownerOf == account)
                     {
-                        string uri = await ERC721.URI(contract, (tokenIDStart + i).ToString());
+                        string uri = await ERC721.URI(Web3Accessor.Instance.Web3, contract, (tokenIDStart + i).ToString());
                         Debug.Log("TokenID: " + (tokenIDStart + i));
                         Debug.Log("Token URI: " + uri);
                         balanceSearched++;

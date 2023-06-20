@@ -10,7 +10,7 @@ public class ERC1155BalanceOfExample : MonoBehaviour
         string account = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
         string tokenId = "0x01559ae4021aee70424836ca173b6a4e647287d15cee8ac42d8c2d8d128927e5";
 
-        BigInteger balanceOf = await ERC1155.BalanceOf(contract, account, tokenId);
+        BigInteger balanceOf = await ERC1155.BalanceOf(Web3Accessor.Instance.Web3, contract, account, tokenId);
         print(balanceOf);
     }
 }
