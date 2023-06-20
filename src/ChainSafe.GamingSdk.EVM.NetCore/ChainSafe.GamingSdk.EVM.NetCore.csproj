@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ChainSafe.GamingSDK.EVM\ChainSafe.GamingSDK.EVM.csproj" />
+    <ProjectReference Include="..\ChainSafe.Gaming.Core\ChainSafe.Gaming.Core.csproj" />
   </ItemGroup>
 
 </Project>

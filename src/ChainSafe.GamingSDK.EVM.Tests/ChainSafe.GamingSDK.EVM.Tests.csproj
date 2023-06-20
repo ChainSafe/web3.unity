@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ChainSafe.GamingSdk.EVM.NetCore\ChainSafe.GamingSdk.EVM.NetCore.csproj" />
-    <ProjectReference Include="..\ChainSafe.GamingSDK.EVM\ChainSafe.GamingSDK.EVM.csproj" />
+    <ProjectReference Include="..\ChainSafe.Gaming.Core\ChainSafe.Gaming.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
