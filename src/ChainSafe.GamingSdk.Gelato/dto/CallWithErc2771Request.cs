@@ -1,10 +1,11 @@
 using System;
 using System.Threading.Tasks;
 using ChainSafe.GamingSdk.Gelato.Types;
+using ChainSafe.GamingWeb3;
+using Nethereum.ABI.EIP712;
 using Nethereum.Hex.HexTypes;
 using Newtonsoft.Json;
 using Web3Unity.Scripts.Library.Ethers.Providers;
-using Web3Unity.Scripts.Library.Ethers.Signers;
 using Contract = Web3Unity.Scripts.Library.Ethers.Contracts.Contract;
 
 namespace ChainSafe.GamingSdk.Gelato.Dto
@@ -72,7 +73,19 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
         [JsonProperty(PropertyName = "userDeadline")]
         public HexBigInteger UserDeadline { get; set; }
 
-        public CallWithErc2771Request MapRequestToStruct(CallWithErc2771RequestOptionalParameters overrides)
+        /// <summary>
+        ///    DATA - the signature from the sign typed data request.
+        /// </summary>
+        [JsonProperty(PropertyName = "userSignature")]
+        public string Signature { get; set; }
+
+        /// <summary>
+        ///    DATA - the signature from the sign typed data request.
+        /// </summary>
+        [JsonProperty(PropertyName = "sponsorApiKey")]
+        public string SponsorApiKey { get; set; }
+
+        public MemberValue[] MapRequestToStruct(CallWithErc2771RequestOptionalParameters overrides)
         {
             if (overrides.UserNonce == null && UserNonce == null)
             {
@@ -84,11 +97,25 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
                 throw new Exception("UserDeadline is not found in the request, nor fetched");
             }
 
-            CallWithErc2771Request newStruct = (CallWithErc2771Request)this.MemberwiseClone();
+            var newStruct = (CallWithErc2771Request)this.MemberwiseClone();
 
             newStruct.UserNonce = overrides.UserNonce ?? UserNonce;
             newStruct.UserDeadline = overrides.UserDeadline ?? UserDeadline;
-            return newStruct;
+
+            return new[]
+            {
+                new MemberValue()
+                {
+                    TypeName = "SponsoredCallERC2771", Value = new[]
+                    {
+                        new MemberValue { TypeName = "address", Value = newStruct.Target },
+                        new MemberValue { TypeName = "bytes", Value = newStruct.Data },
+                        new MemberValue { TypeName = "address", Value = newStruct.User },
+                        new MemberValue { TypeName = "uint256", Value = newStruct.UserNonce },
+                        new MemberValue { TypeName = "uint256", Value = newStruct.UserDeadline },
+                    },
+                },
+            };
         }
     }
 
@@ -106,7 +133,7 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
         [JsonProperty(PropertyName = "userDeadline")]
         public HexBigInteger UserDeadline { get; set; }
 
-        public static async Task<CallWithErc2771RequestOptionalParameters> PopulateOptionalUserParameters(CallWithErc2771Request request, Erc2771Type type, IRpcProvider provider, GelatoConfig config)
+        public static async Task<CallWithErc2771RequestOptionalParameters> PopulateOptionalUserParameters(CallWithErc2771Request request, Erc2771Type type, IRpcProvider provider, GelatoConfig config, IChainConfig chainConfig)
         {
             var optionalParams = new CallWithErc2771RequestOptionalParameters();
             if (request.UserDeadline == null)
@@ -117,27 +144,24 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
             if (request.UserNonce == null)
             {
                 // Must be custom nonce from the relay contract
-                optionalParams.UserNonce = await GetUserNonce(request.User, type, provider, config);
+                optionalParams.UserNonce = await GetUserNonce(request.User, type, provider, config, chainConfig);
             }
 
             return optionalParams;
         }
 
-        private static HexBigInteger GetGelatoRelayErc2771Address(Erc2771Type type, GelatoConfig config)
+        public static HexBigInteger GetGelatoRelayErc2771Address(Erc2771Type type, GelatoConfig config, IChainConfig chainConfig)
         {
-            switch (type)
+            return type switch
             {
-                case Erc2771Type.CallWithSyncFee:
-                    return IsZkSync(config.ChainId)
-                        ? config.Contract.RelayErc2771ZkSync
-                        : config.Contract.RelayErc2771;
-                case Erc2771Type.SponsoredCall:
-                    return IsZkSync(config.ChainId)
-                        ? config.Contract.Relay1BalanceErc2771ZkSync
-                        : config.Contract.Relay1BalanceErc2771;
-                default:
-                    throw new Exception("incorrect relay option");
-            }
+                Erc2771Type.CallWithSyncFee => IsZkSync(chainConfig.ChainId)
+                    ? config.Contract.RelayErc2771ZkSync
+                    : config.Contract.RelayErc2771,
+                Erc2771Type.SponsoredCall => IsZkSync(chainConfig.ChainId)
+                    ? config.Contract.Relay1BalanceErc2771ZkSync
+                    : config.Contract.Relay1BalanceErc2771,
+                _ => throw new Exception("incorrect relay option")
+            };
         }
 
         private static bool IsZkSync(string chainId)
@@ -145,9 +169,9 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
             return chainId is "324" or "280";
         }
 
-        private static async Task<HexBigInteger> GetUserNonce(string account, Erc2771Type type, IRpcProvider provider, GelatoConfig config)
+        private static async Task<HexBigInteger> GetUserNonce(string account, Erc2771Type type, IRpcProvider provider, GelatoConfig config, IChainConfig chainConfig)
         {
-            var contract = new Contract(GelatoClient.UserNonceAbi, GetGelatoRelayErc2771Address(type, config).ToString(), provider);
+            var contract = new Contract(GelatoClient.UserNonceAbi, GetGelatoRelayErc2771Address(type, config, chainConfig).ToString(), provider);
             var result = await contract.Call("userNonce", new object[] { account });
             return (HexBigInteger)result[0];
         }

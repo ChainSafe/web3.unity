@@ -23,5 +23,11 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
         /// </summary>
         [JsonProperty(PropertyName = "data")]
         public string Data { get; set; }
+
+        /// <summary>
+        ///    DATA - the signature from the sign typed data request.
+        /// </summary>
+        [JsonProperty(PropertyName = "sponsorApiKey")]
+        public string SponsorApiKey { get; set; }
     }
 }

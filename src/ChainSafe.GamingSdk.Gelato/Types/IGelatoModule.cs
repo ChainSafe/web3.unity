@@ -11,16 +11,14 @@ namespace ChainSafe.GamingSdk.Gelato.Types
 
         void CallWithSyncFeeErc2771(CallWithSyncFeeErc2771Request request, ISigner wallet, RelayRequestOptions options);
 
-        Task<RelayResponse> SponsoredCall(SponsoredCallRequest request, string sponsorApiKey);
+        Task<RelayResponse> SponsoredCall(SponsoredCallRequest request);
 
-        void SponsoredCallErc2771(
+        Task<RelayResponse> SponsoredCallErc2771(
             SponsoredCallErc2771Request request,
             ISigner wallet,
-            string sponsorApiKey,
             RelayRequestOptions options);
 
         Task<HexBigInteger> GetEstimatedFee(
-            ulong chainId,
             string paymentToken,
             HexBigInteger gasLimit,
             bool isHighPriority,

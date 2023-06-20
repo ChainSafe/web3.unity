@@ -9,7 +9,7 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
         ///     DATA,  Id of the chain the transaction is being relayed to.
         /// </summary>
         [JsonProperty(PropertyName = "chainId")]
-        public ulong ChainId { get; set; }
+        public string ChainId { get; set; }
 
         /// <summary>
         ///     DATA,  Address of the ERC20 token being used to fund the transaction.

@@ -8,12 +8,6 @@ namespace ChainSafe.GamingSdk.Gelato.Types
         /// <summary>
         ///    DATA - Relayer endpoint.
         /// </summary>
-        [JsonProperty(PropertyName = "chainId")]
-        public string ChainId { get; set; }
-
-        /// <summary>
-        ///    DATA - Relayer endpoint.
-        /// </summary>
         [JsonProperty(PropertyName = "url")]
         public string Url { get; set; }
 
@@ -22,6 +16,12 @@ namespace ChainSafe.GamingSdk.Gelato.Types
         /// </summary>
         [JsonProperty(PropertyName = "contract")]
         public Contract Contract { get; set; }
+
+        /// <summary>
+        ///     DATA - 1Balance api key.
+        /// </summary>
+        [JsonProperty(PropertyName = "sponsorApiKey")]
+        public string SponsorApiKey { get; set; }
 
         /// <summary>
         ///     DATA - Address for Erc2771 relay contract.
