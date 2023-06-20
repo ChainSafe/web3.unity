@@ -3,6 +3,7 @@ using System;
 using System.Threading.Tasks;
 using ChainSafe.GamingSDK.EVM.Web3.Core;
 using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
+using ChainSafe.GamingWeb3.Build;
 using Microsoft.Extensions.DependencyInjection;
 using Web3Unity.Scripts.Library.Ethers.Contracts;
 using Web3Unity.Scripts.Library.Ethers.Providers;
@@ -30,6 +31,8 @@ namespace ChainSafe.GamingWeb3
             signer = serviceProvider.GetService<ISigner>();
             transactionExecutor = serviceProvider.GetService<ITransactionExecutor>();
             ContractFactory = serviceProvider.GetRequiredService<IContractFactory>();
+            ProjectConfig = serviceProvider.GetRequiredService<IProjectConfig>();
+            ChainConfig = serviceProvider.GetRequiredService<IChainConfig>();
         }
 
         public IRpcProvider RpcProvider => AssertComponentAccessible(rpcProvider, nameof(RpcProvider))!;
@@ -39,6 +42,12 @@ namespace ChainSafe.GamingWeb3
         public ITransactionExecutor TransactionExecutor => AssertComponentAccessible(transactionExecutor, nameof(TransactionExecutor))!;
 
         public IContractFactory ContractFactory { get; }
+
+        public IProjectConfig ProjectConfig { get; }
+
+        public IChainConfig ChainConfig { get; }
+
+        public IServiceProvider ServiceProvider => serviceProvider;
 
         private static T AssertComponentAccessible<T>(T value, string propertyName)
         {
