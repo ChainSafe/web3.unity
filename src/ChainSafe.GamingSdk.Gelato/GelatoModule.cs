@@ -42,21 +42,37 @@ namespace ChainSafe.GamingSdk.Gelato
             }
         }
 
-        public void CallWithSyncFeeErc2771(CallWithSyncFeeErc2771Request request, ISigner wallet, RelayRequestOptions options = null)
+        public async Task<RelayResponse> CallWithSyncFeeErc2771(CallWithSyncFeeErc2771Request request, ISigner wallet, RelayRequestOptions options = null)
         {
-            throw new Exception("CallWithSyncFeeERC2771 not implemented");
-            /*var callRequest = new CallWithErc2771Request{
-                ChainId = request.ChainId,
+            var callRequest = new CallWithErc2771Request
+            {
+                ChainId = new BigInteger(int.Parse(chainConfig.ChainId)),
                 Target = request.Target,
                 Data = request.Data,
                 User = request.User,
                 UserDeadline = request.UserDeadline,
                 UserNonce = request.UserNonce,
             };
-            Confirm Wallet & Provider chain ID match
 
-            var optional = await CallWithERC2771RequestOptionalParameters.PopulateOptionalUserParameters(callRequest, ERC2771Type.SponsoredCall, provider, this.config);
-            var newStruct = callRequest.MapRequestToStruct(optional);*/
+            var optional = await CallWithErc2771RequestOptionalParameters.PopulateOptionalUserParameters(callRequest, Erc2771Type.CallWithSyncFee, provider, config, chainConfig);
+            var newStruct = callRequest.MapRequestToStruct(optional);
+
+            var types = new Dictionary<string, MemberDescription[]>
+            {
+                ["CallWithSyncFeeERC2771"] = new[]
+                {
+                    new MemberDescription { Name = "target", Type = "address" },
+                    new MemberDescription { Name = "data", Type = "bytes" },
+                    new MemberDescription { Name = "user", Type = "address" },
+                    new MemberDescription { Name = "userNonce", Type = "uint256" },
+                    new MemberDescription { Name = "userDeadline", Type = "uint256" },
+                },
+            };
+
+            callRequest.Signature = await wallet.SignTypedData(GetEip712Domain(Erc2771Type.CallWithSyncFee), types, newStruct);
+
+            // TODO Get Fee token& isRelayContext
+            return await this.gelatoClient.Post<CallWithErc2771Request, RelayResponse>(RelayCall.SponsoredCallErc2771, callRequest);
         }
 
         public async Task<RelayResponse> SponsoredCall(SponsoredCallRequest request)
@@ -82,7 +98,7 @@ namespace ChainSafe.GamingSdk.Gelato
             // throw new Exception("SponsoredCallERC2771 not implemented");
             var callRequest = new CallWithErc2771Request
             {
-                ChainId = request.ChainId,
+                ChainId = new BigInteger(int.Parse(chainConfig.ChainId)),
                 Target = request.Target,
                 Data = request.Data,
                 User = request.User,
@@ -148,7 +164,7 @@ namespace ChainSafe.GamingSdk.Gelato
         {
             return type switch
             {
-                Erc2771Type.SponsoredCall => new Domain()
+                Erc2771Type.CallWithSyncFee => new Domain()
                 {
                     Name = "GelatoRelayERC2771",
                     Version = "1",
@@ -157,7 +173,7 @@ namespace ChainSafe.GamingSdk.Gelato
                         .GetGelatoRelayErc2771Address(type, config, chainConfig)
                         .ToString(),
                 },
-                Erc2771Type.CallWithSyncFee => new Domain()
+                Erc2771Type.SponsoredCall => new Domain()
                 {
                     Name = "GelatoRelay1BalanceERC2771",
                     Version = "1",

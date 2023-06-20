@@ -9,7 +9,7 @@ namespace ChainSafe.GamingSdk.Gelato.Types
     {
         Task<RelayResponse> CallWithSyncFee(CallWithSyncFeeRequest request);
 
-        void CallWithSyncFeeErc2771(CallWithSyncFeeErc2771Request request, ISigner wallet, RelayRequestOptions options);
+        Task<RelayResponse> CallWithSyncFeeErc2771(CallWithSyncFeeErc2771Request request, ISigner wallet, RelayRequestOptions options);
 
         Task<RelayResponse> SponsoredCall(SponsoredCallRequest request);
 

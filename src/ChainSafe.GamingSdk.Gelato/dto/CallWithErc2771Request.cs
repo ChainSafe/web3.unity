@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.GamingSdk.Gelato.Types;
 using ChainSafe.GamingWeb3;
@@ -29,7 +30,7 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
         ///    QUANTITY - The transaction chain id.
         /// </summary>
         [JsonProperty(PropertyName = "chainId")]
-        public HexBigInteger ChainId { get; set; }
+        public BigInteger ChainId { get; set; }
 
         /// <summary>
         ///     DATA, 20 Bytes - The address the transaction is being sent to.
