@@ -2,8 +2,9 @@ namespace ChainSafe.GamingSDK.EVM.Web3.Core.Debug
 {
     public static class ObjectExtensions
     {
-        public static T AssertNotNull<T>(this T obj, string variableName)
-            where T : class
+        #nullable enable
+        public static T AssertNotNull<T>(this T? obj, string variableName)
+            where T : notnull
         {
             if (obj is null)
             {
@@ -12,5 +13,6 @@ namespace ChainSafe.GamingSDK.EVM.Web3.Core.Debug
 
             return obj;
         }
+        #nullable disable
     }
 }
