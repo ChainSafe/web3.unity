@@ -1,4 +1,5 @@
-﻿using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
+﻿using ChainSafe.GamingSDK.EVM.Web3.Core;
+using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
 using ChainSafe.GamingWeb3.Build;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -34,7 +35,7 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
             collection.TryAddSingleton(DefaultConfig);
 
             // wallet
-            collection.AddSingleton<ISigner, ITransactionExecutor, WebPageWallet>();
+            collection.AddSingleton<ISigner, ITransactionExecutor, ILifecycleParticipant, WebPageWallet>();
 
             return collection;
         }
