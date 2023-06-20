@@ -1,4 +1,5 @@
-﻿using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
+﻿using ChainSafe.GamingSDK.EVM.Web3.Core;
+using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
 using ChainSafe.GamingSdk.Gelato.Types;
 using ChainSafe.GamingWeb3.Build;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,13 +35,11 @@ namespace ChainSafe.GamingSdk.Gelato
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
         public static IWeb3ServiceCollection UseGelatoModule(this IWeb3ServiceCollection collection)
         {
-            collection.AssertServiceNotBound<ITransactionExecutor>();
-
             // config
             collection.TryAddSingleton(DefaultConfig);
 
             // Gelato module
-            collection.AddSingleton<GelatoModule>();
+            collection.AddSingleton<IGelatoModule, ILifecycleParticipant, GelatoModule>();
 
             return collection;
         }

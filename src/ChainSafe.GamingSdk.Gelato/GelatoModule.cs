@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using ChainSafe.GamingSDK.EVM.Web3.Core;
 using ChainSafe.GamingSdk.Gelato.Dto;
 using ChainSafe.GamingSdk.Gelato.Types;
 using ChainSafe.GamingWeb3.Environment;
@@ -10,24 +11,17 @@ using Web3Unity.Scripts.Library.Ethers.Signers;
 
 namespace ChainSafe.GamingSdk.Gelato
 {
-    public class GelatoModule
+    public class GelatoModule : IGelatoModule, ILifecycleParticipant
     {
         private readonly GelatoClient gelatoClient;
         private readonly IRpcProvider provider;
-        private GelatoConfig config;
+        private readonly GelatoConfig config;
 
         public GelatoModule(IHttpClient httpClient, GelatoConfig config, IRpcProvider provider)
         {
-            // Check if Config's chainId is valid
             this.gelatoClient = new GelatoClient(httpClient, config);
             this.provider = provider;
             this.config = config;
-
-            // TODO: Remove blocking call once config init is resolved
-            if (IsNetworkSupported(config.ChainId).Result == false)
-            {
-                throw new Exception("network not supported by Gelato");
-            }
         }
 
         public async Task<RelayResponse> CallWithSyncFee(CallWithSyncFeeRequest request)
@@ -42,7 +36,7 @@ namespace ChainSafe.GamingSdk.Gelato
             }
         }
 
-        public void CallWithSyncFeeERC2771(CallWithSyncFeeErc2771Request request, ISigner wallet, RelayRequestOptions options = null)
+        public void CallWithSyncFeeErc2771(CallWithSyncFeeErc2771Request request, ISigner wallet, RelayRequestOptions options = null)
         {
             throw new Exception("CallWithSyncFeeERC2771 not implemented");
             /*var callRequest = new CallWithErc2771Request{
@@ -71,7 +65,7 @@ namespace ChainSafe.GamingSdk.Gelato
             }
         }
 
-        public void SponsoredCallERC2771(SponsoredCallErc2771Request request, ISigner wallet, string sponsorApiKey, RelayRequestOptions options = null)
+        public void SponsoredCallErc2771(SponsoredCallErc2771Request request, ISigner wallet, string sponsorApiKey, RelayRequestOptions options = null)
         {
             throw new Exception("SponsoredCallERC2771 not implemented");
             /* var callRequest = new CallWithErc2771Request{
@@ -122,5 +116,15 @@ namespace ChainSafe.GamingSdk.Gelato
             var oracles = await this.gelatoClient.GetGelatoOracles();
             return oracles.Contains(chainId);
         }
+
+        public async ValueTask WillStartAsync()
+        {
+            if (await IsNetworkSupported(config.ChainId) == false)
+            {
+                throw new Exception("network not supported by Gelato");
+            }
+        }
+
+        public ValueTask WillStopAsync() => new(Task.CompletedTask);
     }
 }
