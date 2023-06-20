@@ -26,7 +26,7 @@ namespace Web3Unity.Scripts.Library.Ethers.SigningKey
         }
 
         public SigningKey(byte[] privateKey)
-            : this(Bytes.Bytes.Hexlify(privateKey))
+            : this(Bytes.HexUtil.Hexlify(privateKey))
         {
         }
 

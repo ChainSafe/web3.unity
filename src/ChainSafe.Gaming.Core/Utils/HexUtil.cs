@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace Web3Unity.Scripts.Library.Ethers.Bytes
 {
-    public class Bytes
+    public class HexUtil
     {
         public static string Hexlify(byte[] value)
         {

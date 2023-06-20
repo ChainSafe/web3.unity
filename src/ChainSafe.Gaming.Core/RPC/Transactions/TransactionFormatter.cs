@@ -6,7 +6,7 @@ using Web3Unity.Scripts.Library.Ethers.RLP;
 
 namespace Web3Unity.Scripts.Library.Ethers.Transactions
 {
-    public class Formatter
+    public class TransactionFormatter
     {
         public Transaction Parse(string signedTx)
         {
