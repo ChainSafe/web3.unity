@@ -9,19 +9,12 @@ namespace ChainSafe.GamingSdk.Gelato
 {
     public class GelatoClient
     {
-        private const string GelatoRelayUrl = "https://api.gelato.digital"; // Relay GW
-        public const string SignedTypedDataV4 = "eth_signTypedData_v4";
-        private const string DefaultInternalErrorMessage = "Internal Error";
         public const int DefaultDeadlineGap = 86_400; // 24H
-        public const string GelatoRelayErc2771Address = "0xb539068872230f20456CF38EC52EF2f91AF4AE49";
-        public const string GelatoRelay1BalanceErc2771Address = "0xd8253782c45a12053594b9deB72d8e8aB2Fca54c";
-        public const string GelatoRelayErc2771ZksyncAddress = "0x22DCC39b2AC376862183dd35A1664798dafC7Da6";
-        public const string GelatoRelay1BalanceErc2771ZksyncAddress = "0x97015cD4C3d456997DD1C40e2a18c79108FCc412";
         public const string UserNonceAbi = "[{\"inputs\": [{\"internalType\": \"address\",\"name\": \"account\",\"type\": \"address\"}],\"name\": \"userNonce\",\"outputs\": [{\"internalType\": \"uint256\",\"name\": \"\",\"type\": \"uint256\"}],\"stateMutability\": \"view\",\"type\": \"function\"}]\"}";
         private readonly IHttpClient httpClient;
-        private readonly Config config;
+        private readonly GelatoConfig config;
 
-        public GelatoClient(IHttpClient httpClient, Config config)
+        public GelatoClient(IHttpClient httpClient, GelatoConfig config)
         {
             this.httpClient = httpClient;
             this.config = config;

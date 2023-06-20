@@ -14,9 +14,9 @@ namespace ChainSafe.GamingSdk.Gelato
     {
         private readonly GelatoClient gelatoClient;
         private readonly IRpcProvider provider;
-        private Config config;
+        private GelatoConfig config;
 
-        public GelatoModule(IHttpClient httpClient, Config config, IRpcProvider provider)
+        public GelatoModule(IHttpClient httpClient, GelatoConfig config, IRpcProvider provider)
         {
             // Check if Config's chainId is valid
             this.gelatoClient = new GelatoClient(httpClient, config);

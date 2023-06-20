@@ -106,7 +106,7 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
         [JsonProperty(PropertyName = "userDeadline")]
         public HexBigInteger UserDeadline { get; set; }
 
-        public static async Task<CallWithErc2771RequestOptionalParameters> PopulateOptionalUserParameters(CallWithErc2771Request request, Erc2771Type type, IRpcProvider provider, Config config)
+        public static async Task<CallWithErc2771RequestOptionalParameters> PopulateOptionalUserParameters(CallWithErc2771Request request, Erc2771Type type, IRpcProvider provider, GelatoConfig config)
         {
             var optionalParams = new CallWithErc2771RequestOptionalParameters();
             if (request.UserDeadline == null)
@@ -123,18 +123,18 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
             return optionalParams;
         }
 
-        private static HexBigInteger GetGelatoRelayErc2771Address(Erc2771Type type, Config config)
+        private static HexBigInteger GetGelatoRelayErc2771Address(Erc2771Type type, GelatoConfig config)
         {
             switch (type)
             {
                 case Erc2771Type.CallWithSyncFee:
                     return IsZkSync(config.ChainId)
-                        ? config.Contract.RelayERC2771zkSync
-                        : config.Contract.RelayERC2771;
+                        ? config.Contract.RelayErc2771ZkSync
+                        : config.Contract.RelayErc2771;
                 case Erc2771Type.SponsoredCall:
                     return IsZkSync(config.ChainId)
-                        ? config.Contract.Relay1BalanceERC2771zkSync
-                        : config.Contract.Relay1BalanceERC2771;
+                        ? config.Contract.Relay1BalanceErc2771ZkSync
+                        : config.Contract.Relay1BalanceErc2771;
                 default:
                     throw new Exception("incorrect relay option");
             }
@@ -145,7 +145,7 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
             return chainId is "324" or "280";
         }
 
-        private static async Task<HexBigInteger> GetUserNonce(string account, Erc2771Type type, IRpcProvider provider, Config config)
+        private static async Task<HexBigInteger> GetUserNonce(string account, Erc2771Type type, IRpcProvider provider, GelatoConfig config)
         {
             var contract = new Contract(GelatoClient.UserNonceAbi, GetGelatoRelayErc2771Address(type, config).ToString(), provider);
             var result = await contract.Call("userNonce", new object[] { account });

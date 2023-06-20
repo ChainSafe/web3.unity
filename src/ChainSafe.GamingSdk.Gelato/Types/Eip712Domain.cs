@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace ChainSafe.GamingSdk.Gelato.Types
 {
-    public class EIP712Domain
+    public class Eip712Domain
     {
         /// <summary>
         ///    DATA - name of the contract dapp eg. Cryptokitties v2.

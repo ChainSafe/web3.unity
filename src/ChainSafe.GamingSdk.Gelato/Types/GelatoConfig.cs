@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace ChainSafe.GamingSdk.Gelato.Types
 {
-    public class Config
+    public class GelatoConfig
     {
         /// <summary>
         ///    DATA - Relayer endpoint.
@@ -22,32 +22,25 @@ namespace ChainSafe.GamingSdk.Gelato.Types
         /// </summary>
         [JsonProperty(PropertyName = "contract")]
         public Contract Contract { get; set; }
-    }
-
-    public class Contract
-    {
-        /// <summary>
-        ///    DATA, 20 Bytes - The ERC2771 relayer endpoint.
-        /// </summary>
-        [JsonProperty(PropertyName = "relayERC2771")]
-        public HexBigInteger RelayERC2771 { get; set; }
 
         /// <summary>
-        ///    DATA, 20 Bytes - The 1balance address for the targer relayer.
+        ///     DATA - Address for Erc2771 relay contract.
         /// </summary>
-        [JsonProperty(PropertyName = "relay1BalanceERC2771")]
-        public HexBigInteger Relay1BalanceERC2771 { get; set; }
+        public string GelatoRelayErc2771Address { get; set; }
 
         /// <summary>
-        ///    DATA, 20 Bytes - The zkSync relayer endpoint.
+        ///     DATA - Address for Gelato 1Balance contract.
         /// </summary>
-        [JsonProperty(PropertyName = "relayERC2771zkSync")]
-        public HexBigInteger RelayERC2771zkSync { get; set; }
+        public string GelatoRelay1BalanceErc2771Address { get; set; }
 
         /// <summary>
-        ///    DATA, 20 Bytes - The zkSync 1Balance Relayer endpoint.
+        ///     DATA - Address for Gelato ZKSync contract.
         /// </summary>
-        [JsonProperty(PropertyName = "relay1BalanceERC2771zkSync")]
-        public HexBigInteger Relay1BalanceERC2771zkSync { get; set; }
+        public string GelatoRelayErc2771ZkSyncAddress { get; set; }
+
+        /// <summary>
+        ///     DATA - Address for Gelato 1Balance ZKSync contract.
+        /// </summary>
+        public string GelatoRelay1BalanceErc2771ZkSyncAddress { get; set; }
     }
 }
