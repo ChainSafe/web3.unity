@@ -61,6 +61,11 @@ namespace ChainSafe.GamingSdk.Gelato
 
         public async Task<RelayResponse> SponsoredCall(SponsoredCallRequest request)
         {
+            if (config.SponsorApiKey == null)
+            {
+                throw new Exception("GelatoRelaySDK/sponsoredCall: Sponsor api key not provided");
+            }
+
             try
             {
                 request.SponsorApiKey = config.SponsorApiKey;

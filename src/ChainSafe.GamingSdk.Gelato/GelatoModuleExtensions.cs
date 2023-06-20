@@ -8,7 +8,7 @@ namespace ChainSafe.GamingSdk.Gelato
 {
     public static class GelatoModuleExtensions
     {
-        private static readonly GelatoConfig DefaultConfig = new()
+        public static GelatoConfig DefaultConfig() => new()
         {
             Url = "https://api.gelato.digital",
             GelatoRelayErc2771Address = "0xb539068872230f20456CF38EC52EF2f91AF4AE49",
@@ -32,10 +32,28 @@ namespace ChainSafe.GamingSdk.Gelato
         /// Binds Gelato module to Web3.
         /// </summary>
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
+        public static IWeb3ServiceCollection UseGelatoModule(this IWeb3ServiceCollection collection, string sponsorApiKey)
+        {
+            // config
+            var config = DefaultConfig();
+            config.SponsorApiKey = sponsorApiKey;
+            collection.TryAddSingleton(config);
+
+            // Gelato module
+            collection.AddSingleton<IGelatoModule, ILifecycleParticipant, GelatoModule>();
+
+            return collection;
+        }
+
+        /// <summary>
+        /// Binds Gelato module to Web3.
+        /// </summary>
+        /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
         public static IWeb3ServiceCollection UseGelatoModule(this IWeb3ServiceCollection collection)
         {
             // config
-            collection.TryAddSingleton(DefaultConfig);
+            var config = DefaultConfig();
+            collection.TryAddSingleton(config);
 
             // Gelato module
             collection.AddSingleton<IGelatoModule, ILifecycleParticipant, GelatoModule>();
