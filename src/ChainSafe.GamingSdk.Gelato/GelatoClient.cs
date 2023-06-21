@@ -60,7 +60,7 @@ namespace ChainSafe.GamingSdk.Gelato
             }
         }
 
-        public async Task<string[]> GetPaymentTokens(ulong chainId)
+        public async Task<string[]> GetPaymentTokens(string chainId)
         {
             try
             {

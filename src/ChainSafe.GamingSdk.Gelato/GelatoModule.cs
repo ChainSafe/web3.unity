@@ -42,7 +42,13 @@ namespace ChainSafe.GamingSdk.Gelato
             }
         }
 
-        public async Task<RelayResponse> CallWithSyncFeeErc2771(CallWithSyncFeeErc2771Request request, ISigner wallet, RelayRequestOptions options = null)
+        public async Task<RelayResponse> CallWithSyncFeeErc2771(CallWithSyncFeeErc2771Request request, ISigner wallet)
+        {
+            return await CallWithSyncFeeErc2771(request, wallet, null);
+        }
+
+        // TODO: consume options
+        public async Task<RelayResponse> CallWithSyncFeeErc2771(CallWithSyncFeeErc2771Request request, ISigner wallet, RelayRequestOptions options)
         {
             var callRequest = new CallWithErc2771Request
             {
@@ -52,15 +58,18 @@ namespace ChainSafe.GamingSdk.Gelato
                 User = request.User,
                 UserDeadline = request.UserDeadline,
                 UserNonce = request.UserNonce,
+                FeeToken = request.FeeToken,
+                IsRelayContext = request.IsRelayContext,
             };
 
             var optional = await CallWithErc2771RequestOptionalParameters.PopulateOptionalUserParameters(callRequest, Erc2771Type.CallWithSyncFee, provider, config, chainConfig);
-            var newStruct = callRequest.MapRequestToStruct(optional);
+            var newStruct = callRequest.MapRequestToStruct(optional, Erc2771Type.CallWithSyncFee);
 
             var types = new Dictionary<string, MemberDescription[]>
             {
                 ["CallWithSyncFeeERC2771"] = new[]
                 {
+                    new MemberDescription { Name = "chainId", Type = "uint256" },
                     new MemberDescription { Name = "target", Type = "address" },
                     new MemberDescription { Name = "data", Type = "bytes" },
                     new MemberDescription { Name = "user", Type = "address" },
@@ -71,7 +80,6 @@ namespace ChainSafe.GamingSdk.Gelato
 
             callRequest.Signature = await wallet.SignTypedData(GetEip712Domain(Erc2771Type.CallWithSyncFee), types, newStruct);
 
-            // TODO Get Fee token& isRelayContext
             return await this.gelatoClient.Post<CallWithErc2771Request, RelayResponse>(RelayCall.SponsoredCallErc2771, callRequest);
         }
 
@@ -93,9 +101,19 @@ namespace ChainSafe.GamingSdk.Gelato
             }
         }
 
-        public async Task<RelayResponse> SponsoredCallErc2771(SponsoredCallErc2771Request request, ISigner wallet, RelayRequestOptions options = null)
+        public async Task<RelayResponse> SponsoredCallErc2771(SponsoredCallErc2771Request request, ISigner wallet)
         {
-            // throw new Exception("SponsoredCallERC2771 not implemented");
+            return await SponsoredCallErc2771(request, wallet, null);
+        }
+
+        // TODO: consume options
+        public async Task<RelayResponse> SponsoredCallErc2771(SponsoredCallErc2771Request request, ISigner wallet, RelayRequestOptions options)
+        {
+            if (config.SponsorApiKey == null)
+            {
+                throw new Exception("GelatoRelaySDK/sponsoredCall: Sponsor api key not provided");
+            }
+
             var callRequest = new CallWithErc2771Request
             {
                 ChainId = new BigInteger(int.Parse(chainConfig.ChainId)),
@@ -109,13 +127,13 @@ namespace ChainSafe.GamingSdk.Gelato
 
             // Confirm Wallet & Provider chain ID match
             var optional = await CallWithErc2771RequestOptionalParameters.PopulateOptionalUserParameters(callRequest, Erc2771Type.SponsoredCall, provider, config, chainConfig);
-            var newStruct = callRequest.MapRequestToStruct(optional);
+            var newStruct = callRequest.MapRequestToStruct(optional, Erc2771Type.SponsoredCall);
 
-            // TODO: Sign typed data request
             var types = new Dictionary<string, MemberDescription[]>
             {
                 ["SponsoredCallERC2771"] = new[]
                 {
+                    new MemberDescription { Name = "chainId", Type = "uint256" },
                     new MemberDescription { Name = "target", Type = "address" },
                     new MemberDescription { Name = "data", Type = "bytes" },
                     new MemberDescription { Name = "user", Type = "address" },
@@ -184,6 +202,16 @@ namespace ChainSafe.GamingSdk.Gelato
                 },
                 _ => throw new Exception("incorrect relay option")
             };
+        }
+
+        public async Task<RelayedTask> GetTaskStatus(string taskId)
+        {
+            return await gelatoClient.GetTaskStatus(taskId);
+        }
+
+        public async Task<string[]> GetPaymentTokens()
+        {
+            return await gelatoClient.GetPaymentTokens(chainConfig.ChainId);
         }
 
         public async ValueTask WillStartAsync()

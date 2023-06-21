@@ -1,9 +1,12 @@
 using System;
 using System.Numerics;
 using System.Threading.Tasks;
+using ChainSafe.GamingSdk.Gelato;
+using ChainSafe.GamingSdk.Gelato.Dto;
 using ChainSafe.GamingSdk.Gelato.Types;
 using ChainSafe.GamingWeb3;
 using Nethereum.ABI.EIP712;
+using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
 using Newtonsoft.Json;
 using Web3Unity.Scripts.Library.Ethers.Providers;
@@ -86,7 +89,7 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
         [JsonProperty(PropertyName = "sponsorApiKey")]
         public string SponsorApiKey { get; set; }
 
-        public MemberValue[] MapRequestToStruct(CallWithErc2771RequestOptionalParameters overrides)
+        public MemberValue[] MapRequestToStruct(CallWithErc2771RequestOptionalParameters overrides, Erc2771Type type)
         {
             if (overrides.UserNonce == null && UserNonce == null)
             {
@@ -103,19 +106,41 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
             newStruct.UserNonce = overrides.UserNonce ?? UserNonce;
             newStruct.UserDeadline = overrides.UserDeadline ?? UserDeadline;
 
-            return new[]
+            return type switch
             {
-                new MemberValue()
+                Erc2771Type.SponsoredCall => new[]
                 {
-                    TypeName = "SponsoredCallERC2771", Value = new[]
+                    new MemberValue()
                     {
-                        new MemberValue { TypeName = "address", Value = newStruct.Target },
-                        new MemberValue { TypeName = "bytes", Value = newStruct.Data },
-                        new MemberValue { TypeName = "address", Value = newStruct.User },
-                        new MemberValue { TypeName = "uint256", Value = newStruct.UserNonce },
-                        new MemberValue { TypeName = "uint256", Value = newStruct.UserDeadline },
+                        TypeName = "SponsoredCallERC2771",
+                        Value = new[]
+                        {
+                            new MemberValue { TypeName = "uint256", Value = newStruct.ChainId },
+                            new MemberValue { TypeName = "address", Value = newStruct.Target },
+                            new MemberValue { TypeName = "bytes", Value = newStruct.Data },
+                            new MemberValue { TypeName = "address", Value = newStruct.User },
+                            new MemberValue { TypeName = "uint256", Value = newStruct.UserNonce },
+                            new MemberValue { TypeName = "uint256", Value = newStruct.UserDeadline },
+                        },
                     },
                 },
+                Erc2771Type.CallWithSyncFee => new[]
+                {
+                    new MemberValue()
+                    {
+                        TypeName = "CallWithSyncFeeERC2771",
+                        Value = new[]
+                        {
+                            new MemberValue { TypeName = "uint256", Value = newStruct.ChainId },
+                            new MemberValue { TypeName = "address", Value = newStruct.Target },
+                            new MemberValue { TypeName = "bytes", Value = newStruct.Data },
+                            new MemberValue { TypeName = "address", Value = newStruct.User },
+                            new MemberValue { TypeName = "uint256", Value = newStruct.UserNonce },
+                            new MemberValue { TypeName = "uint256", Value = newStruct.UserDeadline },
+                        },
+                    },
+                },
+                _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
             };
         }
     }
