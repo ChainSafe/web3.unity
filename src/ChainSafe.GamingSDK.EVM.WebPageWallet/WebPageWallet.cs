@@ -165,11 +165,18 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
 
             string ExtractPublicAddress(string signature, string originalMessage)
             {
-                var msg = "\x19" + "Ethereum Signed Message:\n" + originalMessage.Length + originalMessage;
-                var msgHash = new Sha3Keccack().CalculateHash(Encoding.UTF8.GetBytes(msg));
-                var ecdsaSignature = MessageSigner.ExtractEcdsaSignature(signature);
-                var key = EthECKey.RecoverFromSignature(ecdsaSignature, msgHash);
-                return key.GetPublicAddress();
+                try
+                {
+                    var msg = "\x19" + "Ethereum Signed Message:\n" + originalMessage.Length + originalMessage;
+                    var msgHash = new Sha3Keccack().CalculateHash(Encoding.UTF8.GetBytes(msg));
+                    var ecdsaSignature = MessageSigner.ExtractEcdsaSignature(signature);
+                    var key = EthECKey.RecoverFromSignature(ecdsaSignature, msgHash);
+                    return key.GetPublicAddress();
+                }
+                catch
+                {
+                    throw new Web3Exception("Invalid signature");
+                }
             }
         }
 

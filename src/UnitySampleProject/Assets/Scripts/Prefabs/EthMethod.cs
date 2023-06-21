@@ -1,6 +1,6 @@
 namespace Web3Unity.Scripts.Prefabs
 {
-    public static class ETH_METHOD
+    public static class EthMethod
     {
         public const string BalanceOf = "balanceOf";
         public const string Name = "name";

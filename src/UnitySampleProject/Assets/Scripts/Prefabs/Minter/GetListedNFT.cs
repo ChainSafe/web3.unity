@@ -4,19 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Models;
+using Nethereum.Hex.HexTypes;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using Web3Unity.Scripts.Library.ETHEREUEM.Connect;
+using Web3Unity.Scripts.Library.Ethers.Transactions;
 // using Web3Unity.Scripts.Library.Web3Wallet;
 
 public class GetListedNFTWebWallet : MonoBehaviour
 {
-    private string chain = "ethereum";
     public Renderer textureObject;
-    private string network = "goerli";
-    private string chainID = "5";
     public Text price;
     public Text seller;
     public Text description;
@@ -45,7 +44,8 @@ public class GetListedNFTWebWallet : MonoBehaviour
     // Start is called before the first frame update
     async void Start()
     {
-        List<GetNftListModel.Response> response = await EVM.GetNftMarket(chain, network);
+        var chainConfig = Web3Accessor.Instance.Web3.ChainConfig;
+        List<GetNftListModel.Response> response = await EVM.GetNftMarket(chainConfig.Chain, chainConfig.Network);
         price.text = response[0].price;
         seller.text = response[0].seller;
         Debug.Log("Seller: " + response[0].seller);
@@ -124,34 +124,34 @@ public class GetListedNFTWebWallet : MonoBehaviour
 
     public async void PurchaseItem()
     {
-        throw new NotImplementedException(
-            "Example scripts are in the process of migration to the new API. This function has not yet been migrated.");
+        var chainConfig = Web3Accessor.Instance.Web3.ChainConfig;
+        BuyNFT.Response response = await EVM.CreatePurchaseNftTransaction(chainConfig.Chain, chainConfig.Network,
+            PlayerPrefs.GetString("Account"), _itemID, _itemPrice, _tokenType);
+        Debug.Log("Account: " + response.tx.account);
+        Debug.Log("To : " + response.tx.to);
+        Debug.Log("Value : " + response.tx.value);
+        Debug.Log("Data : " + response.tx.data);
+        Debug.Log("Gas Price : " + response.tx.gasPrice);
+        Debug.Log("Gas Limit : " + response.tx.gasLimit);
 
-        // BuyNFT.Response response = await EVM.CreatePurchaseNftTransaction(chain, network,
-        //     PlayerPrefs.GetString("Account"), _itemID, _itemPrice, _tokenType);
-        // Debug.Log("Account: " + response.tx.account);
-        // Debug.Log("To : " + response.tx.to);
-        // Debug.Log("Value : " + response.tx.value);
-        // Debug.Log("Data : " + response.tx.data);
-        // Debug.Log("Gas Price : " + response.tx.gasPrice);
-        // Debug.Log("Gas Limit : " + response.tx.gasLimit);
-        //
-        // try
-        // {
-        //
-        //     string responseNft = await Web3Wallet.SendTransaction(chainID, response.tx.to, response.tx.value,
-        //         response.tx.data, response.tx.gasLimit, response.tx.gasPrice);
-        //     if (responseNft == null)
-        //     {
-        //         Debug.Log("Empty Response Object:");
-        //     }
-        //     print(responseNft);
-        //     Debug.Log(responseNft);
-        // }
-        // catch (Exception e)
-        // {
-        //     Debug.LogException(e, this);
-        // }
+        try
+        {
+            var txRequest = new TransactionRequest
+            {
+                ChainId = new HexBigInteger(int.Parse(chainConfig.ChainId)),
+                To = response.tx.to,
+                Value = new HexBigInteger(int.Parse(response.tx.value)),
+                Data = response.tx.data,
+                GasLimit = new HexBigInteger(int.Parse(response.tx.gasLimit)),
+                GasPrice = new HexBigInteger(int.Parse(response.tx.gasPrice)),
+            };
+            var responseNft = await Web3Accessor.Instance.Web3.TransactionExecutor.SendTransaction(txRequest);
+            Debug.Log(JsonConvert.SerializeObject(responseNft));
+        }
+        catch (Exception e)
+        {
+            Debug.LogException(e, this);
+        }
     }
 }
 

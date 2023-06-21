@@ -11,9 +11,10 @@ public class Web3Accessor : MonoBehaviour
     {
         get
         {
-            if (instance == null)
+            if (!instance)
             {
                 var go = new GameObject("Web3Accessor");
+                DontDestroyOnLoad(go);
                 instance = go.AddComponent<Web3Accessor>();
             }
 

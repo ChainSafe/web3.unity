@@ -16,7 +16,6 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
         private static readonly string hostVoucher = "https://lazy-minting-voucher-signer.herokuapp.com";
         public static async Task<string> Multicall(string _chain, string _network, string _contract, string _abi, string _method, string _args, string _multicall = "", string _rpc = "")
         {
-            xxxx
             WWWForm form = new WWWForm();
             form.AddField("projectId", PlayerPrefs.GetString("ProjectID"));
             form.AddField("chain", _chain);

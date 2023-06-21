@@ -3,39 +3,41 @@ using UnityEngine;
 // using Web3Unity.Scripts.Library.Web3Wallet;
 using Web3Unity.Scripts.Library.ETHEREUEM.Connect;
 using System;
+using Web3Unity.Scripts.Library.Ethers.Transactions;
+using Nethereum.Hex.HexTypes;
+using Newtonsoft.Json;
 
 public class MintWeb3Wallet1155 : MonoBehaviour
 {
-    // set chain: ethereum, moonbeam, polygon etc
-    public string chain = "ethereum";
-    // chain id
-    public string chainId = "5";
-    // set network mainnet, testnet
-    public string network = "goerli";
     // address of nft you want to mint
     public string nftAddress = "0x2c1867bc3026178a47a677513746dcc6822a137a";
-    // type
-    string type = "1155";
 
     public async void VoucherMintNft1155()
     {
-        throw new NotImplementedException(
-            "Example scripts are in the process of migration to the new API. This function has not yet been migrated.");
+        var voucherResponse1155 = await EVM.Get1155Voucher();
+        CreateRedeemVoucherModel.CreateVoucher1155 voucher1155 = new CreateRedeemVoucherModel.CreateVoucher1155();
+        voucher1155.tokenId = voucherResponse1155.tokenId;
+        voucher1155.minPrice = voucherResponse1155.minPrice;
+        voucher1155.signer = voucherResponse1155.signer;
+        voucher1155.receiver = voucherResponse1155.receiver;
+        voucher1155.amount = voucherResponse1155.amount;
+        voucher1155.nonce = voucherResponse1155.nonce;
+        voucher1155.signature = voucherResponse1155.signature;
+        string voucherArgs = JsonUtility.ToJson(voucher1155);
 
-        // var voucherResponse1155 = await EVM.Get1155Voucher();
-        // CreateRedeemVoucherModel.CreateVoucher1155 voucher1155 = new CreateRedeemVoucherModel.CreateVoucher1155();
-        // voucher1155.tokenId = voucherResponse1155.tokenId;
-        // voucher1155.minPrice = voucherResponse1155.minPrice;
-        // voucher1155.signer = voucherResponse1155.signer;
-        // voucher1155.receiver = voucherResponse1155.receiver;
-        // voucher1155.amount = voucherResponse1155.amount;
-        // voucher1155.nonce = voucherResponse1155.nonce;
-        // voucher1155.signature = voucherResponse1155.signature;
-        // string voucherArgs = JsonUtility.ToJson(voucher1155);
-        //
-        // // connects to user's browser wallet to call a transaction
-        // RedeemVoucherTxModel.Response voucherResponse = await EVM.CreateRedeemTransaction(chain, network, voucherArgs, type, nftAddress, voucherResponse1155.receiver);
-        // string response = await Web3Wallet.SendTransaction(chainId, voucherResponse.tx.to, voucherResponse.tx.value.ToString(), voucherResponse.tx.data, voucherResponse.tx.gasLimit, voucherResponse.tx.gasPrice);
-        // print("Response: " + response);
+        // connects to user's browser wallet to call a transaction
+        var chainConfig = Web3Accessor.Instance.Web3.ChainConfig;
+        RedeemVoucherTxModel.Response voucherResponse = await EVM.CreateRedeemTransaction(chainConfig.Chain, chainConfig.Network, voucherArgs, "1155", nftAddress, voucherResponse1155.receiver);
+        var txRequest = new TransactionRequest
+        {
+            ChainId = new HexBigInteger(int.Parse(chainConfig.ChainId)),
+            To = voucherResponse.tx.to,
+            Value = new HexBigInteger(voucherResponse.tx.value),
+            Data = voucherResponse.tx.data,
+            GasLimit = new HexBigInteger(int.Parse(voucherResponse.tx.gasLimit)),
+            GasPrice = new HexBigInteger(int.Parse(voucherResponse.tx.gasPrice)),
+        };
+        var response = await Web3Accessor.Instance.Web3.TransactionExecutor.SendTransaction(txRequest);
+        Debug.Log(JsonConvert.SerializeObject(response));
     }
 }
