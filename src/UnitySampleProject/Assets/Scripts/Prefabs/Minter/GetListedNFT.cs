@@ -13,7 +13,7 @@ using Web3Unity.Scripts.Library.ETHEREUEM.Connect;
 using Web3Unity.Scripts.Library.Ethers.Transactions;
 // using Web3Unity.Scripts.Library.Web3Wallet;
 
-public class GetListedNFTWebWallet : MonoBehaviour
+public class GetListedNFT : MonoBehaviour
 {
     public Renderer textureObject;
     public Text price;

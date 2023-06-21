@@ -7,7 +7,7 @@ using Web3Unity.Scripts.Library.Ethers.Transactions;
 using Nethereum.Hex.HexTypes;
 using Newtonsoft.Json;
 
-public class MintWeb3Wallet1155 : MonoBehaviour
+public class Mint1155 : MonoBehaviour
 {
     // address of nft you want to mint
     public string nftAddress = "0x2c1867bc3026178a47a677513746dcc6822a137a";

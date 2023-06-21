@@ -14,7 +14,7 @@ using Web3Unity.Scripts.Library.Ethers.Transactions;
 
 namespace Web3Unity.Scripts.Prefabs.Minter
 {
-    public class ListNftWebWallet : MonoBehaviour
+    public class ListNft : MonoBehaviour
     {
         private string _itemPrice = "0.001";
         private string _tokenType = "";

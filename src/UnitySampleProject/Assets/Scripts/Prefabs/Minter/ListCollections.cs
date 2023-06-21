@@ -13,7 +13,7 @@ using Web3Unity.Scripts.Library.ETHEREUEM.Connect;
 using Web3Unity.Scripts.Library.Ethers.Transactions;
 // using Web3Unity.Scripts.Library.Web3Wallet;
 
-public class ListCollectionsWeb3Wallet : MonoBehaviour
+public class ListCollections : MonoBehaviour
 {
     // vars and objects
     public Text[] idsSell;

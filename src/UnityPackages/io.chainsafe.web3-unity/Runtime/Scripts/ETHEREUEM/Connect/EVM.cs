@@ -10,6 +10,7 @@ using Web3Unity.Scripts.Library.Ethers.Contracts;
 
 namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
 {
+    // todo: should we take chain and network from the Web3 object as well?
     public class EVM
     {
         public class Response<T> { public T response; }
@@ -37,12 +38,6 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
         }
         public static async Task<CreateMintModel.Response> CreateMint(Web3 web3, string _chain, string _network, string _account, string _to, string _cid, string _type)
         {
-            Debug.Log("Chain: " + _chain);
-            Debug.Log("Network: " + _network);
-            Debug.Log("Account: " + _account);
-            Debug.Log("to: " + _to);
-            Debug.Log("CID: " + _cid);
-            Debug.Log("Type: " + _type);
             WWWForm form = new WWWForm();
             form.AddField("projectId", web3.ProjectConfig.ProjectId);
             form.AddField("chain", _chain);
@@ -56,7 +51,6 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
             {
                 await webRequest.SendWebRequest();
                 CreateMintModel.Root data = JsonUtility.FromJson<CreateMintModel.Root>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
-                Debug.Log("Data: " + JsonConvert.SerializeObject(data.response, Formatting.Indented));
                 return data.response;
             }
         }
@@ -154,14 +148,6 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
             {
                 await webRequest.SendWebRequest();
                 BuyNFT.Root data = JsonUtility.FromJson<BuyNFT.Root>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
-                if (data.response != null)
-                {
-                    Debug.Log("Data: " + JsonConvert.SerializeObject(data.response, Formatting.Indented));
-                }
-                else
-                {
-                    Debug.Log("Response Object Empty ");
-                }
                 return data.response;
             }
         }
@@ -174,17 +160,13 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
             form.AddField("network", _network);
             form.AddField("account", _account);
             form.AddField("tokenId", _tokenId);
-            Debug.Log("Token ID: " + _tokenId);
             form.AddField("priceHex", _priceHex);
-            Debug.Log("Price Hex: " + _priceHex);
             form.AddField("tokenType", _tokenType);
-            Debug.Log("Token Type: " + _tokenType);
             string url = host + "/createListNftTransaction";
             using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
             {
                 await webRequest.SendWebRequest();
                 ListNFT.Root data = JsonUtility.FromJson<ListNFT.Root>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
-                Debug.Log("Data: " + JsonConvert.SerializeObject(data.response, Formatting.Indented));
                 return data.response;
             }
         }
@@ -227,7 +209,6 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
             {
                 await webRequest.SendWebRequest();
                 GetVoucherModel.GetVoucher1155Response root1155 = JsonConvert.DeserializeObject<GetVoucherModel.GetVoucher1155Response>(webRequest.downloadHandler.text);
-                Debug.Log("Voucher Data" + root1155);
                 return root1155;
             }
         }
