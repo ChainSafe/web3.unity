@@ -14,7 +14,7 @@ public class MintWeb3Wallet1155 : MonoBehaviour
 
     public async void VoucherMintNft1155()
     {
-        var voucherResponse1155 = await EVM.Get1155Voucher();
+        var voucherResponse1155 = await EVM.Get1155Voucher(Web3Accessor.Instance.Web3);
         CreateRedeemVoucherModel.CreateVoucher1155 voucher1155 = new CreateRedeemVoucherModel.CreateVoucher1155();
         voucher1155.tokenId = voucherResponse1155.tokenId;
         voucher1155.minPrice = voucherResponse1155.minPrice;
@@ -27,7 +27,7 @@ public class MintWeb3Wallet1155 : MonoBehaviour
 
         // connects to user's browser wallet to call a transaction
         var chainConfig = Web3Accessor.Instance.Web3.ChainConfig;
-        RedeemVoucherTxModel.Response voucherResponse = await EVM.CreateRedeemTransaction(chainConfig.Chain, chainConfig.Network, voucherArgs, "1155", nftAddress, voucherResponse1155.receiver);
+        RedeemVoucherTxModel.Response voucherResponse = await EVM.CreateRedeemTransaction(Web3Accessor.Instance.Web3, chainConfig.Chain, chainConfig.Network, voucherArgs, "1155", nftAddress, voucherResponse1155.receiver);
         var txRequest = new TransactionRequest
         {
             ChainId = new HexBigInteger(int.Parse(chainConfig.ChainId)),

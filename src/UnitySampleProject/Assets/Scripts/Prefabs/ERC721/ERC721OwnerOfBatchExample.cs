@@ -10,7 +10,7 @@ public class ERC721OwnerOfBatchExample : MonoBehaviour
         string[] tokenIds = { "33", "29" };
         string multicall = "0x77dca2c955b15e9de4dbbcf1246b4b85b651e50e"; // optional: multicall contract https://github.com/makerdao/multicall
 
-        List<string> batchOwners = await ERC721.OwnerOfBatch(contract, tokenIds, multicall);
+        List<string> batchOwners = await ERC721.OwnerOfBatch(Web3Accessor.Instance.Web3, contract, tokenIds, multicall);
         foreach (string owner in batchOwners)
         {
             print("OwnerOfBatch: " + owner);

@@ -53,6 +53,7 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.EIP
         /// <param name="_multicall"></param>
         /// <returns></returns>
         public static async Task<List<string>> OwnerOfBatch(
+            Web3 web3, 
             string contractAddress,
             string[] tokenIds,
             string _multicall = "")
@@ -66,8 +67,8 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.EIP
                     tokenIds[i]
                 };
             var args = JsonConvert.SerializeObject(obj);
-            var response = await EVM.Multicall(PlayerPrefs.GetString("ChainID"), PlayerPrefs.GetString("Network"),
-                contractAddress, abi, method, args, _multicall, PlayerPrefs.GetString("RPC"));
+            var response = await EVM.Multicall(web3, web3.ChainConfig.ChainId, web3.ChainConfig.Network,
+                contractAddress, abi, method, args, _multicall, web3.ChainConfig.Rpc);
             try
             {
                 var responses = JsonConvert.DeserializeObject<string[]>(response);

@@ -50,7 +50,7 @@ public class ListCollectionsWeb3Wallet : MonoBehaviour
         }
         else
         {
-            string collections = await EVM.GetNftCollectionBySlug(collectionSlug);
+            string collections = await EVM.GetNftCollectionBySlug(Web3Accessor.Instance.Web3, collectionSlug);
             CollectionModel.Collection response = ParseCollections(collections);
             nftListAmount = response.items.Count;
             for (int i = 0; i < nftListAmount; i++)
@@ -79,7 +79,7 @@ public class ListCollectionsWeb3Wallet : MonoBehaviour
         // get nft data for each tokenId paired with nft count for local data population
         foreach (string tokenId in tokenIdList)
         {
-            string nftResponseStr = await EVM.GetNft(account, chainConfig.Chain, chainConfig.Network, nftContract, tokenId);
+            string nftResponseStr = await EVM.GetNft(Web3Accessor.Instance.Web3, account, chainConfig.Chain, chainConfig.Network, nftContract, tokenId);
             GetNftModel.Response nftResponse = ParseNft(nftResponseStr);
             // breaks out of loop and continues on if an error case is found for some reason
             if (nftResponseStr == "{}")
@@ -143,7 +143,7 @@ public class ListCollectionsWeb3Wallet : MonoBehaviour
         var wei = eth * decimals;
         Debug.Log("ItemID: " + idsSell[nftNumber].text);
         var response =
-            await EVM.CreateListNftTransaction(chainConfig.Chain, chainConfig.Network, account, idsSell[nftNumber].text, Convert.ToDecimal(wei).ToString(CultureInfo.InvariantCulture),
+            await EVM.CreateListNftTransaction(Web3Accessor.Instance.Web3, chainConfig.Chain, chainConfig.Network, account, idsSell[nftNumber].text, Convert.ToDecimal(wei).ToString(CultureInfo.InvariantCulture),
                 tokenTypesSell[nftNumber].text);
         var value = Convert.ToInt32(response.tx.value.hex, 16);
         Debug.Log("Response: " + response);

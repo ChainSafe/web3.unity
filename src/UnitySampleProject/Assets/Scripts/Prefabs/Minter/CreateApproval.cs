@@ -14,7 +14,7 @@ public class CreateApproval : MonoBehaviour
     public async void ApproveTransaction()
     {
         var chainConfig = Web3Accessor.Instance.Web3.ChainConfig;
-        var response = await EVM.CreateApproveTransaction(chainConfig.Chain, chainConfig.Network, await Web3Accessor.Instance.Web3.Signer.GetAddress(), tokenType);
+        var response = await EVM.CreateApproveTransaction(Web3Accessor.Instance.Web3, chainConfig.Chain, chainConfig.Network, await Web3Accessor.Instance.Web3.Signer.GetAddress(), tokenType);
         Debug.Log("Response: " + response.connection.chain);
 
         try

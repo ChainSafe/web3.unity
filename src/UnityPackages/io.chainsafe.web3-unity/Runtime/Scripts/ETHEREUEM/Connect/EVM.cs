@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using ChainSafe.GamingWeb3;
 using Models;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -14,10 +15,10 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
         public class Response<T> { public T response; }
         private static readonly string host = "https://api.gaming.chainsafe.io/evm";
         private static readonly string hostVoucher = "https://lazy-minting-voucher-signer.herokuapp.com";
-        public static async Task<string> Multicall(string _chain, string _network, string _contract, string _abi, string _method, string _args, string _multicall = "", string _rpc = "")
+        public static async Task<string> Multicall(Web3 web3, string _chain, string _network, string _contract, string _abi, string _method, string _args, string _multicall = "", string _rpc = "")
         {
             WWWForm form = new WWWForm();
-            form.AddField("projectId", PlayerPrefs.GetString("ProjectID"));
+            form.AddField("projectId", web3.ProjectConfig.ProjectId);
             form.AddField("chain", _chain);
             form.AddField("network", _network);
             form.AddField("contract", _contract);
@@ -34,7 +35,7 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
                 return data.response;
             }
         }
-        public static async Task<CreateMintModel.Response> CreateMint(string _chain, string _network, string _account, string _to, string _cid, string _type)
+        public static async Task<CreateMintModel.Response> CreateMint(Web3 web3, string _chain, string _network, string _account, string _to, string _cid, string _type)
         {
             Debug.Log("Chain: " + _chain);
             Debug.Log("Network: " + _network);
@@ -43,7 +44,7 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
             Debug.Log("CID: " + _cid);
             Debug.Log("Type: " + _type);
             WWWForm form = new WWWForm();
-            form.AddField("projectId", PlayerPrefs.GetString("ProjectID"));
+            form.AddField("projectId", web3.ProjectConfig.ProjectId);
             form.AddField("chain", _chain);
             form.AddField("network", _network);
             form.AddField("account", _account);
@@ -60,10 +61,10 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
             }
         }
 
-        public static async Task<string> GetNftCollectionByAcc(string _account)
+        public static async Task<string> GetNftCollectionByAcc(Web3 web3, string _account)
         {
             WWWForm form = new WWWForm();
-            form.AddField("projectId", PlayerPrefs.GetString("ProjectID"));
+            form.AddField("projectId", web3.ProjectConfig.ProjectId);
             form.AddField("account", _account);
             string url = host + "/collection/getByAccount";
             using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
@@ -74,10 +75,10 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
             }
         }
 
-        public static async Task<string> GetNftCollectionBySlug(string _slug)
+        public static async Task<string> GetNftCollectionBySlug(Web3 web3, string _slug)
         {
             WWWForm form = new WWWForm();
-            form.AddField("projectId", PlayerPrefs.GetString("ProjectID"));
+            form.AddField("projectId", web3.ProjectConfig.ProjectId);
             form.AddField("slug", _slug);
             string url = host + "/collection/get";
             using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
@@ -88,10 +89,10 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
             }
         }
 
-        public static async Task<string> GetNft(string _account, string _chain, string _network, string _nftContract, string _tokenId)
+        public static async Task<string> GetNft(Web3 web3, string _account, string _chain, string _network, string _nftContract, string _tokenId)
         {
             WWWForm form = new WWWForm();
-            form.AddField("projectId", PlayerPrefs.GetString("ProjectID"));
+            form.AddField("projectId", web3.ProjectConfig.ProjectId);
             form.AddField("account", _account);
             form.AddField("chain", _chain);
             form.AddField("network", _network);
@@ -106,10 +107,10 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
             }
         }
 
-        public static async Task<List<GetNftListModel.Response>> GetNftMarket(string _chain, string _network)
+        public static async Task<List<GetNftListModel.Response>> GetNftMarket(Web3 web3, string _chain, string _network)
         {
             WWWForm form = new WWWForm();
-            form.AddField("projectId", PlayerPrefs.GetString("ProjectID"));
+            form.AddField("projectId", web3.ProjectConfig.ProjectId);
             form.AddField("chain", _chain);
             form.AddField("network", _network);
             string url = host + "/getListedNfts";
@@ -121,10 +122,10 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
             }
         }
 
-        public static async Task<List<MintedNFT.Response>> GetMintedNFT(string _chain, string _network, string _account)
+        public static async Task<List<MintedNFT.Response>> GetMintedNFT(Web3 web3, string _chain, string _network, string _account)
         {
             WWWForm form = new WWWForm();
-            form.AddField("projectId", PlayerPrefs.GetString("ProjectID"));
+            form.AddField("projectId", web3.ProjectConfig.ProjectId);
             form.AddField("chain", _chain);
             form.AddField("network", _network);
             form.AddField("account", _account);
@@ -137,10 +138,10 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
             }
         }
 
-        public static async Task<BuyNFT.Response> CreatePurchaseNftTransaction(string _chain, string _network, string _account, string _itemId, string _price, string _tokenType)
+        public static async Task<BuyNFT.Response> CreatePurchaseNftTransaction(Web3 web3, string _chain, string _network, string _account, string _itemId, string _price, string _tokenType)
         {
             WWWForm form = new WWWForm();
-            form.AddField("projectId", PlayerPrefs.GetString("ProjectID"));
+            form.AddField("projectId", web3.ProjectConfig.ProjectId);
             form.AddField("chain", _chain);
             form.AddField("network", _network);
             form.AddField("account", _account);
@@ -165,10 +166,10 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
             }
         }
 
-        public static async Task<ListNFT.Response> CreateListNftTransaction(string _chain, string _network, string _account, string _tokenId, string _priceHex, string _tokenType)
+        public static async Task<ListNFT.Response> CreateListNftTransaction(Web3 web3, string _chain, string _network, string _account, string _tokenId, string _priceHex, string _tokenType)
         {
             WWWForm form = new WWWForm();
-            form.AddField("projectId", PlayerPrefs.GetString("ProjectID"));
+            form.AddField("projectId", web3.ProjectConfig.ProjectId);
             form.AddField("chain", _chain);
             form.AddField("network", _network);
             form.AddField("account", _account);
@@ -188,10 +189,10 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
             }
         }
 
-        public static async Task<List<GetNftListModel.Response>> CreateCancelNftTransaction(string _chain, string _network, string _account, string _itemId)
+        public static async Task<List<GetNftListModel.Response>> CreateCancelNftTransaction(Web3 web3, string _chain, string _network, string _account, string _itemId)
         {
             WWWForm form = new WWWForm();
-            form.AddField("projectId", PlayerPrefs.GetString("ProjectID"));
+            form.AddField("projectId", web3.ProjectConfig.ProjectId);
             form.AddField("chain", _chain);
             form.AddField("network", _network);
             form.AddField("account", _account);
@@ -206,9 +207,9 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
         }
 
 
-        public static async Task<GetVoucherModel.GetVoucher721Response> Get721Voucher()
+        public static async Task<GetVoucherModel.GetVoucher721Response> Get721Voucher(Web3 web3)
         {
-            string url = hostVoucher + "/voucher721?receiver=" + PlayerPrefs.GetString("Account");
+            string url = hostVoucher + "/voucher721?receiver=" + await web3.Signer.GetAddress();
 
             using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
             {
@@ -218,9 +219,9 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
             }
         }
 
-        public static async Task<GetVoucherModel.GetVoucher1155Response> Get1155Voucher()
+        public static async Task<GetVoucherModel.GetVoucher1155Response> Get1155Voucher(Web3 web3)
         {
-            string url = hostVoucher + "/voucher1155?receiver=" + PlayerPrefs.GetString("Account");
+            string url = hostVoucher + "/voucher1155?receiver=" + await web3.Signer.GetAddress();
 
             using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
             {
@@ -231,10 +232,10 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
             }
         }
 
-        public static async Task<CreateApprovalModel.Response> CreateApproveTransaction(string _chain, string _network, string _account, string _tokenType)
+        public static async Task<CreateApprovalModel.Response> CreateApproveTransaction(Web3 web3, string _chain, string _network, string _account, string _tokenType)
         {
             WWWForm form = new WWWForm();
-            form.AddField("projectId", PlayerPrefs.GetString("ProjectID"));
+            form.AddField("projectId", web3.ProjectConfig.ProjectId);
             form.AddField("chain", _chain);
             form.AddField("network", _network);
             form.AddField("account", _account);
@@ -250,10 +251,10 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
         }
 
 
-        public static async Task<string> AllErc721(string _chain, string _network, string _account, string _contract = "", int _first = 500, int _skip = 0)
+        public static async Task<string> AllErc721(Web3 web3, string _chain, string _network, string _account, string _contract = "", int _first = 500, int _skip = 0)
         {
             WWWForm form = new WWWForm();
-            form.AddField("projectId", PlayerPrefs.GetString("ProjectID"));
+            form.AddField("projectId", web3.ProjectConfig.ProjectId);
             form.AddField("chain", _chain);
             form.AddField("network", _network);
             form.AddField("account", _account);
@@ -270,10 +271,10 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
             }
         }
 
-        public static async Task<string> AllErc1155(string _chain, string _network, string _account, string _contract = "", int _first = 500, int _skip = 0)
+        public static async Task<string> AllErc1155(Web3 web3, string _chain, string _network, string _account, string _contract = "", int _first = 500, int _skip = 0)
         {
             WWWForm form = new WWWForm();
-            form.AddField("projectId", PlayerPrefs.GetString("ProjectID"));
+            form.AddField("projectId", web3.ProjectConfig.ProjectId);
             form.AddField("chain", _chain);
             form.AddField("network", _network);
             form.AddField("account", _account);
@@ -288,10 +289,10 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
                 return data.response;
             }
         }
-        public static async Task<RedeemVoucherTxModel.Response> CreateRedeemTransaction(string _chain, string _network, string _voucher, string _type, string _nftAddress, string _account)
+        public static async Task<RedeemVoucherTxModel.Response> CreateRedeemTransaction(Web3 web3, string _chain, string _network, string _voucher, string _type, string _nftAddress, string _account)
         {
             WWWForm form = new WWWForm();
-            form.AddField("projectId", PlayerPrefs.GetString("ProjectID"));
+            form.AddField("projectId", web3.ProjectConfig.ProjectId);
             form.AddField("chain", _chain);
             form.AddField("network", _network);
             form.AddField("voucher", _voucher);

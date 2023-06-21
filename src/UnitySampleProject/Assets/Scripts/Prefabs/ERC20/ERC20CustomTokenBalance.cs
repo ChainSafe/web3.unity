@@ -13,7 +13,7 @@ public class ERC20CustomTokenBalance : MonoBehaviour
         var contract = Web3Accessor.Instance.Web3.ContractFactory.Build(contractAbi, contractAddress);
         var calldata = await contract.Call("balanceOf", new object[]
         {
-            PlayerPrefs.GetString("Account")
+            await Web3Accessor.Instance.Web3.Signer.GetAddress()
         });
         Debug.Log(calldata[0].ToString());
     }

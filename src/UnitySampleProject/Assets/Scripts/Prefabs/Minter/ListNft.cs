@@ -46,7 +46,7 @@ namespace Web3Unity.Scripts.Prefabs.Minter
             playerAccount.text = account;
             try
             {
-                var response = await EVM.GetMintedNFT(chainConfig.Chain, chainConfig.Network, account);
+                var response = await EVM.GetMintedNFT(Web3Accessor.Instance.Web3, chainConfig.Chain, chainConfig.Network, account);
 
                 if (response[1].uri == null)
                 {
@@ -122,7 +122,7 @@ namespace Web3Unity.Scripts.Prefabs.Minter
             var wei = eth * decimals;
             Debug.Log("ItemID: " + _itemID);
             var response =
-                await EVM.CreateListNftTransaction(chainConfig.Chain, chainConfig.Network, account, _itemID, Convert.ToDecimal(wei).ToString(CultureInfo.InvariantCulture),
+                await EVM.CreateListNftTransaction(Web3Accessor.Instance.Web3, chainConfig.Chain, chainConfig.Network, account, _itemID, Convert.ToDecimal(wei).ToString(CultureInfo.InvariantCulture),
                     _tokenType);
             var value = Convert.ToInt32(response.tx.value.hex, 16);
             Debug.Log("Response: " + response);

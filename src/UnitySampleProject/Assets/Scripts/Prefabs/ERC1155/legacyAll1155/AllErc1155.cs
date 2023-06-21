@@ -11,7 +11,7 @@ public class AllErc1155 : MonoBehaviour
     async void Start()
     {
         // This is the account taken from the user login scene
-        account = PlayerPrefs.GetString("Account");
+        account = await Web3Accessor.Instance.Web3.Signer.GetAddress();
         // Searches through your listed contracts for balance and uri of the chosen tokenId
         foreach (string contract in nftContracts)
         {

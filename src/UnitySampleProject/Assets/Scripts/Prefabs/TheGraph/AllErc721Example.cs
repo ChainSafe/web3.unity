@@ -20,7 +20,7 @@ public class AllErc721Example : MonoBehaviour
         var contract = "";
         var first = 500;
         var skip = 0;
-        var response = await EVM.AllErc721(chain, network, account, contract, first, skip);
+        var response = await EVM.AllErc721(Web3Accessor.Instance.Web3, chain, network, account, contract, first, skip);
         try
         {
             var erc721s = JsonConvert.DeserializeObject<NFTs[]>(response);

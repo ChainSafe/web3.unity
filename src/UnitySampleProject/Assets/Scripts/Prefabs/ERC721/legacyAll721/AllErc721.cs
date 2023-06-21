@@ -12,7 +12,7 @@ public class AllErc721 : MonoBehaviour
     async void Start()
     {
         // This is the account taken from the user login scene
-        account = PlayerPrefs.GetString("Account");
+        account = await Web3Accessor.Instance.Web3.Signer.GetAddress();
         // Searches through your listed contracts
         foreach (string contract in nftContracts)
         {
