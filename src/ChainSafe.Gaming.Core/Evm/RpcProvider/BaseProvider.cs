@@ -23,9 +23,6 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
     {
         private readonly bool anyNetwork = true;
 
-        // TODO: this isn't actually used, see comment in SendTransaction
-        private readonly Formatter formater = new();
-
         private readonly Web3Environment environment;
 
         private Network.Network network;
@@ -501,10 +498,10 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
         {
             await GetNetwork();
 
-            // TODO: _formater is never assigned, so this code will inevitably fail.
+            // TODO:
             // Is this method unused? -> Yes it is, only used in BaseSigner's implementation
             // of SendTransaction, which is always overridden
-            var tx = formater.Transaction.Parse(signedTx);
+            var tx = TransactionFormatter.Parse(signedTx);
 
             var parameters = new object[] { signedTx };
             var properties = new Dictionary<string, object>

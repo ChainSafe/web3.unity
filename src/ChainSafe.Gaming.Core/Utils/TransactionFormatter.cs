@@ -6,9 +6,9 @@ using Web3Unity.Scripts.Library.Ethers.RLP;
 
 namespace Web3Unity.Scripts.Library.Ethers.Transactions
 {
-    public class TransactionFormatter
+    public static class TransactionFormatter
     {
-        public Transaction Parse(string signedTx)
+        public static Transaction Parse(string signedTx)
         {
             var payload = signedTx.HexToByteArray();
 
@@ -28,7 +28,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Transactions
             throw new Exception($"unsupported transaction type: {payload[0]}");
         }
 
-        private Transaction Parse(byte[] payload)
+        private static Transaction Parse(byte[] payload)
         {
             var decodedList = RLP.RLP.Decode(payload);
             var decodedElements = (RLPCollection)decodedList;
@@ -103,7 +103,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Transactions
             return tx;
         }
 
-        private Transaction ParseEip2930(byte[] payload)
+        private static Transaction ParseEip2930(byte[] payload)
         {
             var decodedList = RLP.RLP.Decode(payload.Skip(1).ToArray());
             var decodedElements = (RLPCollection)decodedList;
@@ -138,7 +138,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Transactions
             return tx;
         }
 
-        private Transaction ParseEip1559(byte[] payload)
+        private static Transaction ParseEip1559(byte[] payload)
         {
             var decodedList = RLP.RLP.Decode(payload.Skip(1).ToArray());
             var decodedElements = (RLPCollection)decodedList;
