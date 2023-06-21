@@ -1,7 +1,8 @@
 using System.Text;
 using System.Threading.Tasks;
+using ChainSafe.Gaming;
+using ChainSafe.Gaming.Environment;
 using ChainSafe.GamingSdk.Evm.Unity;
-using ChainSafe.GamingWeb3.Environment;
 using Newtonsoft.Json;
 using UnityEngine.Assertions;
 using UnityEngine.Networking;

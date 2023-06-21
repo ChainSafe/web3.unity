@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Web3Unity.Scripts.Library.Ethers.Providers
+namespace ChainSafe.Gaming.Evm.RpcProvider
 {
     public abstract class Event
     {

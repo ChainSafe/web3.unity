@@ -1,4 +1,4 @@
-namespace Web3Unity.Scripts.Library.Ethers.Network
+namespace ChainSafe.Gaming.Evm
 {
     public class Network
     {

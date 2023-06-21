@@ -1,14 +1,10 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
+using ChainSafe.Gaming.Evm.Contracts.Builders;
 using Nethereum.Hex.HexTypes;
-using Web3Unity.Scripts.Library.Ethers.Contracts.Builders;
-using Web3Unity.Scripts.Library.Ethers.Providers;
-using Web3Unity.Scripts.Library.Ethers.Signers;
-using Web3Unity.Scripts.Library.Ethers.Transactions;
 
-namespace Web3Unity.Scripts.Library.Ethers.Contracts
+namespace ChainSafe.Gaming.Evm.Contracts
 {
     public class Contract
     {

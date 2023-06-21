@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
+using ChainSafe.Gaming.Evm.Rlp;
 using Nethereum.Hex.HexConvertors.Extensions;
 using NUnit.Framework;
-using Web3Unity.Scripts.Library.Ethers.RLP;
 
 namespace ChainSafe.GamingSDK.EVM.Tests
 {

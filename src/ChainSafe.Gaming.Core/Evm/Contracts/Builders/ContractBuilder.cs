@@ -6,7 +6,7 @@ using Nethereum.ABI.Model;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.RPC.Eth.DTOs;
 
-namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders
+namespace ChainSafe.Gaming.Evm.Contracts.Builders
 {
     public class ContractBuilder
     {

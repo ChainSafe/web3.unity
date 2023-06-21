@@ -1,8 +1,7 @@
-﻿using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
-using ChainSafe.GamingWeb3.Build;
+﻿using ChainSafe.Gaming.Build;
+using ChainSafe.Gaming.Evm;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Web3Unity.Scripts.Library.Ethers.Signers;
 
 namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
 {

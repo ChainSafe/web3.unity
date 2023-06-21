@@ -2,7 +2,7 @@
 using System.Numerics;
 using Nethereum.Hex.HexTypes;
 
-namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders.FilterInput
+namespace ChainSafe.Gaming.Evm.Contracts.Builders.FilterInput
 {
     public readonly struct BlockRange :
         IEquatable<BlockRange>

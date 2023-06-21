@@ -1,6 +1,6 @@
-using ChainSafe.GamingWeb3.Analytics;
+using ChainSafe.Gaming.Analytics;
 
-namespace ChainSafe.GamingWeb3.Environment
+namespace ChainSafe.Gaming.Environment
 {
     /// <summary>
     /// The environment Web3 is being executed in.

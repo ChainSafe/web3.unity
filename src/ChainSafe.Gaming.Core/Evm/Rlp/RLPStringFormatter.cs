@@ -2,7 +2,7 @@ using System;
 using System.Text;
 using Nethereum.Hex.HexConvertors.Extensions;
 
-namespace Web3Unity.Scripts.Library.Ethers.RLP
+namespace ChainSafe.Gaming.Evm.Rlp
 {
     public class RLPStringFormatter
     {

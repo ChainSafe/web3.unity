@@ -7,7 +7,7 @@ using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
 using Newtonsoft.Json.Linq;
 
-namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders
+namespace ChainSafe.Gaming.Evm.Contracts.Builders
 {
     public abstract class FunctionBuilderBase
     {

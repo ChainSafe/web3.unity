@@ -1,4 +1,4 @@
-namespace ChainSafe.GamingWeb3
+namespace ChainSafe.Gaming.Configuration
 {
     public interface ICompleteProjectConfig : IProjectConfig, IChainConfig
     {

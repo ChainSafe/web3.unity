@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace Web3Unity.Scripts.Library.Ethers.Providers
+namespace ChainSafe.Gaming.Evm
 {
     public class FeeData
     {

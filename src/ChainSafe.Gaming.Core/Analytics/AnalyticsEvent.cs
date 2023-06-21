@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Nethereum.Model;
 
-namespace ChainSafe.GamingWeb3.Analytics
+namespace ChainSafe.Gaming.Analytics
 {
     public class AnalyticsEvent
     {

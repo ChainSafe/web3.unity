@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Web3Unity.Scripts.Library.Ethers.Providers
+namespace ChainSafe.Gaming.Evm.JsonRpcProvider
 {
     [Serializable]
     public class JsonRpcProviderConfig
@@ -13,6 +13,6 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
         /// <summary>
         /// (Optional) Network to operate on.
         /// </summary>
-        public Network.Network Network { get; set; }
+        public Network Network { get; set; }
     }
 }

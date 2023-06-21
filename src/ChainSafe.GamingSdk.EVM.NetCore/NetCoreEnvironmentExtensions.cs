@@ -1,6 +1,6 @@
-﻿using ChainSafe.GamingWeb3.Analytics;
-using ChainSafe.GamingWeb3.Build;
-using ChainSafe.GamingWeb3.Environment;
+﻿using ChainSafe.Gaming.Analytics;
+using ChainSafe.Gaming.Build;
+using ChainSafe.Gaming.Environment;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Web3Unity.Scripts.Library.Ethers.NetCore

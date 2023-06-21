@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace ChainSafe.GamingWeb3.Environment
+namespace ChainSafe.Gaming.Environment
 {
     public interface IHttpClient
     {

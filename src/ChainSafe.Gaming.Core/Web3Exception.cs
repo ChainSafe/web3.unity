@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ChainSafe.GamingWeb3
+namespace ChainSafe.Gaming
 {
     public class Web3Exception : Exception
     {

@@ -2,22 +2,17 @@ using System.Numerics;
 using System.Threading.Tasks;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
-using Web3Unity.Scripts.Library.Ethers.Transactions;
-using Block = Web3Unity.Scripts.Library.Ethers.Blocks.Block;
-using BlockWithTransactions = Web3Unity.Scripts.Library.Ethers.Blocks.BlockWithTransactions;
-using Transaction = Web3Unity.Scripts.Library.Ethers.Transactions.Transaction;
-using TransactionReceipt = Web3Unity.Scripts.Library.Ethers.Transactions.TransactionReceipt;
 
-namespace Web3Unity.Scripts.Library.Ethers.Providers
+namespace ChainSafe.Gaming.Evm
 {
     public interface IRpcProvider
     {
-        public Network.Network Network { get; }
+        public Network Network { get; }
 
         // Network
-        public Task<Network.Network> DetectNetwork();
+        public Task<Network> DetectNetwork();
 
-        public Task<Network.Network> GetNetwork();
+        public Task<Network> GetNetwork();
 
         // Account
         public Task<HexBigInteger> GetBalance(string address, BlockParameter blockTag = null);

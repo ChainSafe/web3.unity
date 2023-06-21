@@ -2,7 +2,7 @@ using System;
 using System.Numerics;
 using Nethereum.Util;
 
-namespace Web3Unity.Scripts.Library.Ethers.Utils
+namespace ChainSafe.Gaming.Utils
 {
     public class Units
     {

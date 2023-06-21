@@ -1,11 +1,9 @@
-﻿using ChainSafe.GamingSDK.EVM.Web3.Core;
-using ChainSafe.GamingWeb3.Build;
+﻿using ChainSafe.Gaming.Build;
+using ChainSafe.Gaming.Lifecycle;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Web3Unity.Scripts.Library.Ethers.Providers;
-using Web3Unity.Scripts.Library.Ethers.Signers;
 
-namespace Web3Unity.Scripts.Library.Ethers.JsonRpc
+namespace ChainSafe.Gaming.Evm.JsonRpcProvider
 {
     public static class JsonRpcExtensions
     {

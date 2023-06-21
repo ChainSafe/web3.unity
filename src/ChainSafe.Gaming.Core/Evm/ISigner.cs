@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Nethereum.ABI.EIP712;
 using Nethereum.Hex.HexConvertors.Extensions;
 
-namespace Web3Unity.Scripts.Library.Ethers.Signers
+namespace ChainSafe.Gaming.Evm
 {
     public interface ISigner
     {

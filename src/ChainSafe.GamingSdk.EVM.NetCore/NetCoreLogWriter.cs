@@ -1,5 +1,5 @@
 ﻿using System;
-using ChainSafe.GamingWeb3.Environment;
+using ChainSafe.Gaming.Environment;
 
 namespace Web3Unity.Scripts.Library.Ethers.NetCore
 {

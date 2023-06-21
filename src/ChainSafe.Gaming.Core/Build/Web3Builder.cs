@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
-using ChainSafe.GamingWeb3.Environment;
+using ChainSafe.Gaming.Configuration;
+using ChainSafe.Gaming.Environment;
+using ChainSafe.Gaming.Evm;
 using Microsoft.Extensions.DependencyInjection;
-using Web3Unity.Scripts.Library.Ethers;
-using Web3Unity.Scripts.Library.Ethers.Providers;
-using Web3Unity.Scripts.Library.Ethers.Signers;
 
-namespace ChainSafe.GamingWeb3.Build
+namespace ChainSafe.Gaming.Build
 {
     /// <summary>
     /// Builder object for Web3. Used to configure set of services.

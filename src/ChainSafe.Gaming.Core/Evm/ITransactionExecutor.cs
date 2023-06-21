@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
-using Web3Unity.Scripts.Library.Ethers.Transactions;
 
-namespace ChainSafe.GamingSDK.EVM.Web3.Core.Evm
+namespace ChainSafe.Gaming.Evm
 {
     public interface ITransactionExecutor
     {

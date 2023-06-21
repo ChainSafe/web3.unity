@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Nethereum.Hex.HexConvertors.Extensions;
 
-namespace Web3Unity.Scripts.Library.Ethers.RLP
+namespace ChainSafe.Gaming.Evm.Rlp
 {
     /// <summary>
     ///     Recursive Length Prefix (RLP) encoding.

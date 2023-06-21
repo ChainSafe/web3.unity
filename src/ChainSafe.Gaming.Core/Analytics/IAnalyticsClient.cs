@@ -1,4 +1,4 @@
-﻿namespace ChainSafe.GamingWeb3.Analytics
+﻿namespace ChainSafe.Gaming.Analytics
 {
     public interface IAnalyticsClient
     {

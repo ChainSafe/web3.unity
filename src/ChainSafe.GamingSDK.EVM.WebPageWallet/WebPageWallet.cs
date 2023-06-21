@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
-using ChainSafe.GamingWeb3;
-using ChainSafe.GamingWeb3.Environment;
+using ChainSafe.Gaming;
+using ChainSafe.Gaming.Environment;
+using ChainSafe.Gaming.Evm;
 using Nethereum.ABI.EIP712;
 using Newtonsoft.Json;
-using Web3Unity.Scripts.Library.Ethers.Providers;
-using Web3Unity.Scripts.Library.Ethers.Signers;
-using Web3Unity.Scripts.Library.Ethers.Transactions;
 
 namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
 {

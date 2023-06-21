@@ -1,4 +1,4 @@
-﻿namespace ChainSafe.GamingWeb3.Environment
+﻿namespace ChainSafe.Gaming.Environment
 {
     public interface IOperatingSystemMediator
     {

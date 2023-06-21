@@ -1,6 +1,7 @@
-using ChainSafe.GamingWeb3.Environment;
+using ChainSafe.Gaming.Configuration;
+using ChainSafe.Gaming.Environment;
 
-namespace ChainSafe.GamingWeb3.Analytics
+namespace ChainSafe.Gaming.Analytics
 {
     public class ApiAnalyticsClient : IAnalyticsClient
     {

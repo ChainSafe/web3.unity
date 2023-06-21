@@ -1,8 +1,8 @@
-﻿using ChainSafe.GamingSdk.Evm.Unity;
+﻿using ChainSafe.Gaming.Analytics;
+using ChainSafe.Gaming.Build;
+using ChainSafe.Gaming.Environment;
+using ChainSafe.GamingSdk.Evm.Unity;
 using ChainSafe.GamingSdk.EVM.Unity;
-using ChainSafe.GamingWeb3.Analytics;
-using ChainSafe.GamingWeb3.Build;
-using ChainSafe.GamingWeb3.Environment;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ChainSafe.GamingWeb3.Unity

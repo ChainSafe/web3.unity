@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using ChainSafe.GamingWeb3.Environment;
+using ChainSafe.Gaming.Environment;
 using Newtonsoft.Json;
 
 namespace Web3Unity.Scripts.Library.Ethers.NetCore

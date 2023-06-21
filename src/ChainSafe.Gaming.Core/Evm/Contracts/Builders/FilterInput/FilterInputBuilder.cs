@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
+using ChainSafe.Gaming.Evm.Contracts.Extensions;
 using Nethereum.ABI.Model;
 using Nethereum.RPC.Eth.DTOs;
-using Web3Unity.Scripts.Library.Ethers.Contracts.Extensions;
 
-namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders.FilterInput
+namespace ChainSafe.Gaming.Evm.Contracts.Builders.FilterInput
 {
     /// <summary>
     /// Builds a filter based on indexed parameters on an event DTO query template.

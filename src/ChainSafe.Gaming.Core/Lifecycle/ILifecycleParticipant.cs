@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-namespace ChainSafe.GamingSDK.EVM.Web3.Core
+namespace ChainSafe.Gaming.Lifecycle
 {
     public interface ILifecycleParticipant
     {

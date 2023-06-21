@@ -1,4 +1,4 @@
-namespace Web3Unity.Scripts.Library.Ethers.HDNode.Wordlists
+namespace ChainSafe.Gaming.HDNode
 {
     public abstract class Wordlist
     {

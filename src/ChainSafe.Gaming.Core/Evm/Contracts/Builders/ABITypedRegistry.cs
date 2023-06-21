@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using Nethereum.ABI.FunctionEncoding.Attributes;
 using Nethereum.ABI.Model;
 
-namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders
+namespace ChainSafe.Gaming.Evm.Contracts.Builders
 {
     public static class ABITypedRegistry
     {

@@ -4,19 +4,14 @@ using System.Linq;
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
-using ChainSafe.GamingSDK.EVM.Web3.Core;
-using ChainSafe.GamingWeb3;
-using ChainSafe.GamingWeb3.Environment;
+using ChainSafe.Gaming.Environment;
+using ChainSafe.Gaming.Lifecycle;
+using ChainSafe.Gaming.Utils;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
-using Web3Unity.Scripts.Library.Ethers.Transactions;
-using Block = Web3Unity.Scripts.Library.Ethers.Blocks.Block;
-using BlockWithTransactions = Web3Unity.Scripts.Library.Ethers.Blocks.BlockWithTransactions;
-using Transaction = Web3Unity.Scripts.Library.Ethers.Transactions.Transaction;
-using TransactionReceipt = Web3Unity.Scripts.Library.Ethers.Transactions.TransactionReceipt;
 
-namespace Web3Unity.Scripts.Library.Ethers.Providers
+namespace ChainSafe.Gaming.Evm.RpcProvider
 {
     // todo move all functionality out of this class and delete this file
     public abstract class BaseProvider : IRpcProvider, ILifecycleParticipant
@@ -25,7 +20,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
         private readonly Web3Environment environment;
 
-        private Network.Network network;
+        private Network network;
         private List<Event> events = new();
         private ulong nextPollId = 1;
         private InternalBlockNumber internalBlockNumber;
@@ -43,13 +38,13 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
         private CancellationTokenSource pollLoopCts;
 
-        public BaseProvider(Network.Network network, Web3Environment environment)
+        public BaseProvider(Network network, Web3Environment environment)
         {
             this.network = network;
             this.environment = environment;
         }
 
-        public Network.Network Network
+        public Network Network
         {
             get => network;
             protected set => network = value;
@@ -71,7 +66,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
         public virtual ValueTask WillStopAsync() => new(Task.CompletedTask);
 
-        public virtual Task<Network.Network> DetectNetwork()
+        public virtual Task<Network> DetectNetwork()
         {
             throw new Web3Exception("provider does not support network detection");
         }
@@ -297,7 +292,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             }
         }
 
-        public async Task<Network.Network> GetNetwork()
+        public async Task<Network> GetNetwork()
         {
             var network = await Ready();
             var currentNetwork = await DetectNetwork();
@@ -620,7 +615,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             throw new Exception(method + " not implemented");
         }
 
-        private async Task<Network.Network> Ready()
+        private async Task<Network> Ready()
         {
             if (network != null)
             {
@@ -647,7 +642,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
         {
             PopulateEventProperties(properties);
 
-            var network = this.network ?? new Network.Network
+            var network = this.network ?? new Network
             {
                 ChainId = 0,
                 Name = "unknown",

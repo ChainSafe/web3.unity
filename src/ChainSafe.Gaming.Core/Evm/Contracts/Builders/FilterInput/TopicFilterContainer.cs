@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Nethereum.ABI.FunctionEncoding.Attributes;
 
-namespace Web3Unity.Scripts.Library.Ethers.Contracts.Builders.FilterInput
+namespace ChainSafe.Gaming.Evm.Contracts.Builders.FilterInput
 {
     internal class TopicFilterContainer<T>
         where T : class

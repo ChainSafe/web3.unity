@@ -1,14 +1,14 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using ChainSafe.GamingWeb3;
-using ChainSafe.GamingWeb3.Environment;
+using ChainSafe.Gaming.Configuration;
+using ChainSafe.Gaming.Environment;
+using ChainSafe.Gaming.Evm.RpcProvider;
 using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.Client.RpcMessages;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Web3Unity.Scripts.Library.Ethers.Providers
+namespace ChainSafe.Gaming.Evm.JsonRpcProvider
 {
     public class JsonRpcProvider : BaseProvider
     {
@@ -38,7 +38,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
         // todo can be removed after Evm/Migration removed from project
         public string RpcNodeUrl => config.RpcNodeUrl;
 
-        public override async Task<Network.Network> DetectNetwork()
+        public override async Task<Network> DetectNetwork()
         {
             // TODO: cache
             var chainIdHexString = await Send<string>("eth_chainId");
@@ -51,8 +51,8 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
             var chain = await chainProvider.GetChain(chainId);
             return chain != null
-                ? new Network.Network { Name = chain.Name, ChainId = chainId }
-                : new Network.Network { Name = "Unknown", ChainId = chainId };
+                ? new Network { Name = chain.Name, ChainId = chainId }
+                : new Network { Name = "Unknown", ChainId = chainId };
         }
 
         public async Task<string[]> ListAccounts()

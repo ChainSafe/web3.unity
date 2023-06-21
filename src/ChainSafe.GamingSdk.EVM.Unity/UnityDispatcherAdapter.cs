@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ChainSafe.GamingWeb3.Environment;
 using Web3Unity.Scripts.Library.Ethers.Unity;
 
 namespace ChainSafe.GamingSdk.Evm.Unity

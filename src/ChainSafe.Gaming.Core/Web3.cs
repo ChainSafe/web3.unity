@@ -1,13 +1,11 @@
 ﻿#nullable enable
 using System;
 using System.Threading.Tasks;
-using ChainSafe.GamingSDK.EVM.Web3.Core;
-using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
+using ChainSafe.Gaming.Evm;
+using ChainSafe.Gaming.Lifecycle;
 using Microsoft.Extensions.DependencyInjection;
-using Web3Unity.Scripts.Library.Ethers.Providers;
-using Web3Unity.Scripts.Library.Ethers.Signers;
 
-namespace ChainSafe.GamingWeb3
+namespace ChainSafe.Gaming
 {
     /// <summary>
     /// Facade for all Web3-related services.

@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using ChainSafe.GamingWeb3.Environment;
+using ChainSafe.Gaming.Environment;
 using Newtonsoft.Json;
 
-namespace Web3Unity.Scripts.Library.Ethers.Network
+namespace ChainSafe.Gaming.Evm
 {
     public class Chains
     {

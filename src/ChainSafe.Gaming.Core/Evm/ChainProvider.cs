@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ChainSafe.GamingWeb3.Environment;
-using Web3Unity.Scripts.Library.Ethers.Network;
+using ChainSafe.Gaming.Environment;
 
-namespace Web3Unity.Scripts.Library.Ethers
+namespace ChainSafe.Gaming.Evm
 {
     public class ChainProvider
     {

@@ -1,4 +1,4 @@
-﻿using ChainSafe.GamingWeb3.Environment;
+﻿using ChainSafe.Gaming.Environment;
 using UnityEngine;
 
 namespace ChainSafe.GamingSdk.EVM.Unity

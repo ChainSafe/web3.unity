@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace ChainSafe.GamingWeb3.Build
+namespace ChainSafe.Gaming.Build
 {
     public interface IWeb3ServiceCollection : IServiceCollection
     {

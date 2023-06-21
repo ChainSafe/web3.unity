@@ -1,9 +1,9 @@
 using System.Linq;
-using ChainSafe.GamingWeb3.Build;
+using ChainSafe.Gaming.Build;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace ChainSafe.GamingWeb3.Analytics
+namespace ChainSafe.Gaming.Analytics
 {
     public static class ApiAnalyticsClientExtensions
     {

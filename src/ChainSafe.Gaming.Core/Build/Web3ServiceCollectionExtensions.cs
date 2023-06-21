@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ChainSafe.GamingWeb3.Build
+namespace ChainSafe.Gaming.Build
 {
     public static class Web3ServiceCollectionExtensions
     {

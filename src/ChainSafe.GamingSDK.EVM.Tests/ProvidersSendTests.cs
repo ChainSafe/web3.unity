@@ -1,8 +1,8 @@
 ﻿using System;
+using ChainSafe.Gaming.Evm.JsonRpcProvider;
 using Nethereum.Hex.HexTypes;
 using NUnit.Framework;
 using Web3Unity.Scripts.Library.Ethers.Providers;
-using Web3Unity.Scripts.Library.Ethers.Transactions;
 
 namespace ChainSafe.GamingSDK.EVM.Tests
 {

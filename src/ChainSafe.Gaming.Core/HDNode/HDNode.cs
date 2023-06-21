@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using ChainSafe.Gaming.HDNode.Wordlists;
 using NBitcoin;
 using Nethereum.Hex.HexConvertors.Extensions;
-using Web3Unity.Scripts.Library.Ethers.HDNode.Wordlists;
-using Wordlist = Web3Unity.Scripts.Library.Ethers.HDNode.Wordlists.Wordlist;
 
-namespace Web3Unity.Scripts.Library.Ethers.HDNode
+namespace ChainSafe.Gaming.HDNode
 {
     public class HDNode
     {
