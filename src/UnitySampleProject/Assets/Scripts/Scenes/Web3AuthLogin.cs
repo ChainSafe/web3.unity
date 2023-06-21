@@ -153,7 +153,7 @@
 //    }
 //    /*
 //    // subscription check to enable/disable Web3Auth login
-    
+
 //    [System.Serializable]
 //    public class ValidateOBJ
 //    {
@@ -164,7 +164,7 @@
 //    {
 //        StartCoroutine(Check());
 //    }
-    
+
 //    // web request to check subscription
 //    IEnumerator Check()
 //    {

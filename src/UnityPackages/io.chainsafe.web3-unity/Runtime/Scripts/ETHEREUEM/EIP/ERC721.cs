@@ -53,7 +53,7 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.EIP
         /// <param name="_multicall"></param>
         /// <returns></returns>
         public static async Task<List<string>> OwnerOfBatch(
-            Web3 web3, 
+            Web3 web3,
             string contractAddress,
             string[] tokenIds,
             string _multicall = "")
