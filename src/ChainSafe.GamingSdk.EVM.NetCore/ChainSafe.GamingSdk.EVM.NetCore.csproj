@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ChainSafe.Gaming.Core\ChainSafe.Gaming.Core.csproj" />
+    <ProjectReference Include="..\ChainSafe.Gaming.Core\ChainSafe.Gaming.csproj" />
   </ItemGroup>
 
 </Project>

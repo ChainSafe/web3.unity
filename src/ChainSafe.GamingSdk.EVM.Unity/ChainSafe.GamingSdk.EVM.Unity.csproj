@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ChainSafe.GamingSDK.EVM.WebPageWallet\ChainSafe.GamingSDK.EVM.WebPageWallet.csproj" />
-    <ProjectReference Include="..\ChainSafe.Gaming.Core\ChainSafe.Gaming.Core.csproj" />
+    <ProjectReference Include="..\ChainSafe.Gaming.Core\ChainSafe.Gaming.csproj" />
     <ProjectReference Include="..\ChainSafe.GamingSdk.EVM.Unity.ThirdParty\ChainSafe.GamingSdk.EVM.Unity.ThirdParty.csproj" />
   </ItemGroup>
 

@@ -6,7 +6,7 @@
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <EnableNETAnalyzers>True</EnableNETAnalyzers>
     <CodeAnalysisRuleSet>../../global.ruleset</CodeAnalysisRuleSet>
-    <AssemblyName>ChainSafe.Gaming.Core</AssemblyName>
+    <AssemblyName>ChainSafe.Gaming</AssemblyName>
     <RootNamespace>ChainSafe.Gaming</RootNamespace>
   </PropertyGroup>
 
