@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ChainSafe.GamingSDK.EVM.WebPageWallet\ChainSafe.GamingSDK.EVM.WebPageWallet.csproj" />
+    <ProjectReference Include="..\ChainSafe.Gaming.Wallets.WebPage\ChainSafe.Gaming.Wallets.WebPage.csproj" />
     <ProjectReference Include="..\ChainSafe.Gaming.Unity.ThirdParty\ChainSafe.Gaming.Unity.ThirdParty.csproj" />
   </ItemGroup>
 

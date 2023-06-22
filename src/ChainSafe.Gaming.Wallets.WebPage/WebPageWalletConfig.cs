@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
+namespace ChainSafe.Gaming.Wallets.WebPage
 {
     [Serializable]
     public class WebPageWalletConfig

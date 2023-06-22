@@ -1,16 +1,17 @@
 using ChainSafe.Gaming.Build;
+using ChainSafe.Gaming.Evm;
 using ChainSafe.Gaming.Lifecycle;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
+namespace ChainSafe.Gaming.Wallets.WebPage
 {
     public static class WebPageWalletExtensions
     {
         private static readonly WebPageWalletConfig DefaultConfig = new();
 
         /// <summary>
-        /// Binds Web implementation of EVM Provider to Web3.
+        /// Binds & configures WebPage implementation of ISigner & ITransactionExecutor to Web3.
         /// </summary>
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
         public static IWeb3ServiceCollection UseWebPageWallet(this IWeb3ServiceCollection collection, WebPageWalletConfig configuration)
@@ -21,7 +22,7 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
         }
 
         /// <summary>
-        /// Binds Web implementation of EVM Provider to Web3.
+        /// Binds WebPage implementation of ISigner & ITransactionExecutor to Web3 with default configuration.
         /// </summary>
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
         public static IWeb3ServiceCollection UseWebPageWallet(this IWeb3ServiceCollection collection)
@@ -39,7 +40,7 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
         }
 
         /// <summary>
-        /// Configures Web implementation of EVM Provider.
+        /// Configures WebPage implementation of ISigner & ITransactionExecutor to Web3.
         /// </summary>
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
         public static IWeb3ServiceCollection ConfigureWebPageWallet(this IWeb3ServiceCollection collection, WebPageWalletConfig configuration)
