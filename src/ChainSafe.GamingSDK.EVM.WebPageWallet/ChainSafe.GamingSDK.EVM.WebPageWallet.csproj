@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ChainSafe.Gaming.Core\ChainSafe.Gaming.csproj" />
+    <ProjectReference Include="..\ChainSafe.Gaming\ChainSafe.Gaming.csproj" />
   </ItemGroup>
 
 </Project>
