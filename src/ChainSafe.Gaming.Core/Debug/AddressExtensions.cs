@@ -1,6 +1,4 @@
-using ChainSafe.GamingWeb3;
-
-namespace ChainSafe.GamingSDK.EVM.Web3.Core.Debug
+namespace ChainSafe.Gaming.Debug
 {
     public static class AddressExtensions
     {

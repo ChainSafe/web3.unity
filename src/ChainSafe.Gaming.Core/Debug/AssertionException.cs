@@ -1,6 +1,6 @@
 using System;
 
-namespace ChainSafe.GamingSDK.EVM.Web3.Core.Debug
+namespace ChainSafe.Gaming.Debug
 {
     public class AssertionException : Exception
     {
