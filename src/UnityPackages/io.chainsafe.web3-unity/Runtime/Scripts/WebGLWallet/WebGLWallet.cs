@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using ChainSafe.GamingSDK.EVM.Web3.Core;
+using ChainSafe.GamingSDK.EVM.Web3.Core.Debug;
 using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
 using ChainSafe.GamingWeb3;
 using JetBrains.Annotations;
@@ -45,6 +46,7 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
 
         public Task<string> GetAddress()
         {
+            address.AssertNotNull(nameof(address));
             return Task.FromResult(address);
         }
 

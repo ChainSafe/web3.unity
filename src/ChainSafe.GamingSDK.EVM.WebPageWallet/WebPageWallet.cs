@@ -1,21 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.Gaming;
 using ChainSafe.Gaming.Environment;
 using ChainSafe.Gaming.Evm;
+using ChainSafe.Gaming.Lifecycle;
 using Nethereum.ABI.EIP712;
+using Nethereum.Signer;
+using Nethereum.Util;
 using Newtonsoft.Json;
 
 namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
 {
-    public class WebPageWallet : ISigner, ITransactionExecutor
+    public class WebPageWallet : ISigner, ITransactionExecutor, ILifecycleParticipant
     {
         private static readonly TimeSpan MinClipboardCheckPeriod = TimeSpan.FromMilliseconds(10);
 
         private readonly WebPageWalletConfig configuration;
         private readonly IOperatingSystemMediator operatingSystem;
         private readonly IRpcProvider provider;
+
+        private string? address;
 
         public WebPageWallet(
             IRpcProvider provider,
@@ -27,9 +33,20 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
             this.configuration = configuration;
         }
 
+        public delegate string ConnectMessageBuildDelegate(DateTime expirationTime);
+
+        public async ValueTask WillStartAsync()
+        {
+            configuration.SavedUserAddress?.AssertIsPublicAddress(nameof(configuration.SavedUserAddress));
+            address = configuration.SavedUserAddress ?? await GetAccountVerifyUserOwns();
+        }
+
+        public ValueTask WillStopAsync() => new(Task.CompletedTask);
+
         public Task<string> GetAddress()
         {
-            throw new NotImplementedException();
+            address.AssertNotNull(nameof(address));
+            return Task.FromResult(address!);
         }
 
         public async Task<string> SignMessage(string message)
@@ -119,6 +136,37 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
                 return (int)Math.Max(
                     MinClipboardCheckPeriod.TotalMilliseconds,
                     configuration.ClipboardCheckPeriod.TotalMilliseconds);
+            }
+        }
+
+        private async Task<string> GetAccountVerifyUserOwns()
+        {
+            // sign current time
+            var expirationTime = DateTime.Now + configuration.ConnectRequestExpiresAfter;
+            var message = configuration.ConnectMessageBuilder(expirationTime);
+            var signature = await SignMessage(message);
+            var publicAddress = ExtractPublicAddress(signature, message);
+
+            if (!AddressExtensions.IsPublicAddress(publicAddress))
+            {
+                throw new Web3Exception(
+                    $"Public address recovered from signature is not valid. Public address: {publicAddress}");
+            }
+
+            if (DateTime.Now > expirationTime)
+            {
+                throw new Web3Exception("Signature has already expired. Try again.");
+            }
+
+            return publicAddress;
+
+            string ExtractPublicAddress(string signature, string originalMessage)
+            {
+                var msg = "\x19" + "Ethereum Signed Message:\n" + originalMessage.Length + originalMessage;
+                var msgHash = new Sha3Keccack().CalculateHash(Encoding.UTF8.GetBytes(msg));
+                var ecdsaSignature = MessageSigner.ExtractEcdsaSignature(signature);
+                var key = EthECKey.RecoverFromSignature(ecdsaSignature, msgHash);
+                return key.GetPublicAddress();
             }
         }
 
