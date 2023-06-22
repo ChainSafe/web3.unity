@@ -3,7 +3,7 @@ using ChainSafe.Gaming.Build;
 using ChainSafe.Gaming.Environment;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Web3Unity.Scripts.Library.Ethers.NetCore
+namespace ChainSafe.Gaming.NetCore.Environment
 {
     public static class NetCoreEnvironmentExtensions
     {

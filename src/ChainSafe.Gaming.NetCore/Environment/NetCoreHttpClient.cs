@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Environment;
 using Newtonsoft.Json;
 
-namespace Web3Unity.Scripts.Library.Ethers.NetCore
+namespace ChainSafe.Gaming.NetCore.Environment
 {
     public class NetCoreHttpClient : IHttpClient
     {

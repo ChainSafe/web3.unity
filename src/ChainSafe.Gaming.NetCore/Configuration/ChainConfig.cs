@@ -1,6 +1,6 @@
 using ChainSafe.Gaming.Configuration;
 
-namespace Web3Unity.Scripts.Library.Ethers.NetCore
+namespace ChainSafe.Gaming.NetCore.Configuration
 {
     public class ChainConfig : IChainConfig
     {
