@@ -7,7 +7,7 @@ using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
 using NUnit.Framework;
 
-namespace ChainSafe.GamingSDK.EVM.Tests
+namespace ChainSafe.Gaming.Tests
 {
     [TestFixture]
     public class ChainSafeRpcTests

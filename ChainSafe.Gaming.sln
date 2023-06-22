@@ -5,7 +5,7 @@ VisualStudioVersion = 17.5.33414.496
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainSafe.Gaming", "src\ChainSafe.Gaming\ChainSafe.Gaming.csproj", "{E6CC674F-C552-412E-8272-692CE182AB7A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainSafe.GamingSDK.EVM.Tests", "src\ChainSafe.GamingSDK.EVM.Tests\ChainSafe.GamingSDK.EVM.Tests.csproj", "{D63ACB2E-71E2-49C1-AE55-92DFA723391E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainSafe.Gaming.Tests", "src\ChainSafe.Gaming.Tests\ChainSafe.Gaming.Tests.csproj", "{D63ACB2E-71E2-49C1-AE55-92DFA723391E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainSafe.GamingSdk.EVM.Unity", "src\ChainSafe.GamingSdk.EVM.Unity\ChainSafe.GamingSdk.EVM.Unity.csproj", "{14C3ACCB-285C-493C-AD59-73853386095E}"
 EndProject

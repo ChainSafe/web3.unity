@@ -1,10 +1,8 @@
-﻿using System;
-using ChainSafe.Gaming.Evm.JsonRpcProvider;
+﻿using ChainSafe.Gaming.Evm.JsonRpcProvider;
 using ChainSafe.Gaming.NetCore.Migration;
-using Nethereum.Hex.HexTypes;
 using NUnit.Framework;
 
-namespace ChainSafe.GamingSDK.EVM.Tests
+namespace ChainSafe.Gaming.Tests
 {
     [TestFixture]
     public class ProvidersSendTests
