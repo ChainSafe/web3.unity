@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.Gaming;
+using ChainSafe.Gaming.Debug;
 using ChainSafe.Gaming.Environment;
 using ChainSafe.Gaming.Evm;
 using ChainSafe.Gaming.Lifecycle;
@@ -10,6 +11,7 @@ using Nethereum.ABI.EIP712;
 using Nethereum.Signer;
 using Nethereum.Util;
 using Newtonsoft.Json;
+using AddressExtensions = ChainSafe.Gaming.Debug.AddressExtensions;
 
 namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
 {
