@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ChainSafe.GamingSdk.EVM.Unity
+﻿namespace ChainSafe.Gaming.Unity
 {
     internal class EnsureUnityBuild
     {
@@ -13,7 +9,7 @@ namespace ChainSafe.GamingSdk.EVM.Unity
             "CodeQuality",
             "IDE0051:Remove unused private members",
             Justification = "Included as a check, not meant to be used")]
-        private Web3Unity.Scripts.Library.Ethers.Utils.IsUnityBuild isUnityBuild;
+        private Utils.IsUnityBuild isUnityBuild;
 #pragma warning restore CS0169
     }
 }

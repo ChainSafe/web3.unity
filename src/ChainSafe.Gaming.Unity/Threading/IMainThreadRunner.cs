@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace ChainSafe.GamingSdk.Evm.Unity
+namespace ChainSafe.Gaming.Unity.Threading
 {
     public interface IMainThreadRunner
     {

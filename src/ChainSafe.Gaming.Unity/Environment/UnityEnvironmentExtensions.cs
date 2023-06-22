@@ -1,11 +1,10 @@
 ﻿using ChainSafe.Gaming.Analytics;
 using ChainSafe.Gaming.Build;
 using ChainSafe.Gaming.Environment;
-using ChainSafe.GamingSdk.Evm.Unity;
-using ChainSafe.GamingSdk.EVM.Unity;
+using ChainSafe.Gaming.Unity.Threading;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ChainSafe.GamingWeb3.Unity
+namespace ChainSafe.Gaming.Unity.Environment
 {
     public static class UnityEnvironmentExtensions
     {

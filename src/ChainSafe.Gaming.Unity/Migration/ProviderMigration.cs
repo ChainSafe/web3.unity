@@ -3,9 +3,9 @@ using ChainSafe.Gaming.Build;
 using ChainSafe.Gaming.Evm;
 using ChainSafe.Gaming.Evm.JsonRpcProvider;
 using ChainSafe.Gaming.Migration;
-using ChainSafe.GamingWeb3.Unity;
+using ChainSafe.Gaming.Unity.Environment;
 
-namespace Web3Unity.Scripts.Library.Ethers.Providers
+namespace ChainSafe.Gaming.Unity.Migration
 {
     public static class ProviderMigration
     {

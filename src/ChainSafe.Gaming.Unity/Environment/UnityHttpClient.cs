@@ -1,13 +1,12 @@
 using System.Text;
 using System.Threading.Tasks;
-using ChainSafe.Gaming;
 using ChainSafe.Gaming.Environment;
-using ChainSafe.GamingSdk.Evm.Unity;
+using ChainSafe.Gaming.Unity.Threading;
 using Newtonsoft.Json;
 using UnityEngine.Assertions;
 using UnityEngine.Networking;
 
-namespace ChainSafe.GamingWeb3.Unity
+namespace ChainSafe.Gaming.Unity.Environment
 {
     public class UnityHttpClient : IHttpClient
     {

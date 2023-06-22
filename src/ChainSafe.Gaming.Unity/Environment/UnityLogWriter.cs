@@ -1,8 +1,7 @@
 using ChainSafe.Gaming.Environment;
-using ChainSafe.GamingSdk.Evm.Unity;
-using UnityEngine;
+using ChainSafe.Gaming.Unity.Threading;
 
-namespace ChainSafe.GamingWeb3.Unity
+namespace ChainSafe.Gaming.Unity.Environment
 {
     public class UnityLogWriter : ILogWriter
     {
@@ -15,12 +14,12 @@ namespace ChainSafe.GamingWeb3.Unity
 
         public void Log(string message)
         {
-            mainThreadRunner.Enqueue(() => Debug.Log(FormatMessage(message)));
+            mainThreadRunner.Enqueue(() => UnityEngine.Debug.Log(FormatMessage(message)));
         }
 
         public void LogError(string message)
         {
-            mainThreadRunner.Enqueue(() => Debug.LogError(FormatMessage(message)));
+            mainThreadRunner.Enqueue(() => UnityEngine.Debug.LogError(FormatMessage(message)));
         }
 
         private static string FormatMessage(string message)

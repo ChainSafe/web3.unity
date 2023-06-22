@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Web3Unity.Scripts.Library.Ethers.Unity;
 
-namespace ChainSafe.GamingSdk.Evm.Unity
+namespace ChainSafe.Gaming.Unity.Threading
 {
     public class UnityDispatcherAdapter : IMainThreadRunner
     {

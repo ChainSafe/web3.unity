@@ -1,7 +1,7 @@
 ﻿using ChainSafe.Gaming.Environment;
 using UnityEngine;
 
-namespace ChainSafe.GamingSdk.EVM.Unity
+namespace ChainSafe.Gaming.Unity.Environment
 {
     public class UnityOperatingSystemMediator : IOperatingSystemMediator
     {
