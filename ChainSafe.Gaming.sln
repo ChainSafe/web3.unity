@@ -16,7 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		global.ruleset = global.ruleset
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainSafe.GamingSdk.EVM.Unity.ThirdParty", "src\ChainSafe.GamingSdk.EVM.Unity.ThirdParty\ChainSafe.GamingSdk.EVM.Unity.ThirdParty.csproj", "{9EC71CB4-9401-4E02-AC63-FC13B3D1AA53}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainSafe.Gaming.Unity.ThirdParty", "src\ChainSafe.Gaming.Unity.ThirdParty\ChainSafe.Gaming.Unity.ThirdParty.csproj", "{9EC71CB4-9401-4E02-AC63-FC13B3D1AA53}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainSafe.GamingSDK.EVM.WebPageWallet", "src\ChainSafe.GamingSDK.EVM.WebPageWallet\ChainSafe.GamingSDK.EVM.WebPageWallet.csproj", "{99E7A645-CAC5-441B-848D-1253405D6400}"
 EndProject

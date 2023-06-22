@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Web3Unity.Scripts.Library.Ethers.Unity;
+using ChainSafe.Gaming.Unity.ThirdParty;
 
 namespace ChainSafe.Gaming.Unity.Threading
 {
