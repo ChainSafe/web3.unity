@@ -1,5 +1,4 @@
 using ChainSafe.Gaming.Build;
-using ChainSafe.Gaming.Evm;
 using ChainSafe.Gaming.Lifecycle;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;

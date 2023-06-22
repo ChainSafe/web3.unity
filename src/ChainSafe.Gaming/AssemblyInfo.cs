@@ -1,4 +1,4 @@
 ﻿using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("ChainSafe.Gaming.NetCore")]
-[assembly: InternalsVisibleTo("ChainSafe.GamingSdk.EVM.Unity")]
+[assembly: InternalsVisibleTo("ChainSafe.Gaming.Unity")]
