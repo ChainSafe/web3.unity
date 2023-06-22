@@ -79,19 +79,19 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
         ///     DATA - Creation date of the task.
         /// </summary>
         [JsonProperty(PropertyName = "creationDate")]
-        public long CreationDate { get; set; }
+        public string CreationDate { get; set; }
 
         /// <summary>
         ///     DATA - Optional last time the status was queried by the relayer if available.
         /// </summary>
         [JsonProperty(PropertyName = "lastCheckDate")]
-        public long LastCheckDate { get; set; }
+        public string LastCheckDate { get; set; }
 
         /// <summary>
         ///     DATA - Optional last message retrieved in a check if available.
         /// </summary>
         [JsonProperty(PropertyName = "lastCheckMessage")]
-        public long LastCheckMessage { get; set; }
+        public string LastCheckMessage { get; set; }
 
         /// <summary>
         ///     DATA - Optional transaction hash identifier if available.
@@ -109,6 +109,6 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
         ///     DATA - Optional execution date if the transaction if available.
         /// </summary>
         [JsonProperty(PropertyName = "executionDate")]
-        public long ExecutionDate { get; set; }
+        public string ExecutionDate { get; set; }
     }
 }

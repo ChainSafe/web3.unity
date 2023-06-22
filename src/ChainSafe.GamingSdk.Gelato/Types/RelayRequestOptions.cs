@@ -18,6 +18,7 @@ namespace ChainSafe.GamingSdk.Gelato.Types
         SponsoredCallErc2771,
     }
 
+    [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
     public class RelayRequestOptions
     {
         /// <summary>

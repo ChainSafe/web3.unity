@@ -52,7 +52,7 @@ namespace ChainSafe.GamingSdk.Gelato
         {
             var callRequest = new CallWithErc2771Request
             {
-                ChainId = new BigInteger(int.Parse(chainConfig.ChainId)),
+                ChainId = int.Parse(chainConfig.ChainId),
                 Target = request.Target,
                 Data = request.Data,
                 User = request.User,
@@ -116,7 +116,7 @@ namespace ChainSafe.GamingSdk.Gelato
 
             var callRequest = new CallWithErc2771Request
             {
-                ChainId = new BigInteger(int.Parse(chainConfig.ChainId)),
+                ChainId = int.Parse(chainConfig.ChainId),
                 Target = request.Target,
                 Data = request.Data,
                 User = request.User,

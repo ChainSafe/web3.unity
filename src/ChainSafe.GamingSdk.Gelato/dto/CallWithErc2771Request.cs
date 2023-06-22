@@ -27,13 +27,15 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
         SponsoredCall,
     }
 
+    [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
+
     public class CallWithErc2771Request
     {
         /// <summary>
         ///    QUANTITY - The transaction chain id.
         /// </summary>
         [JsonProperty(PropertyName = "chainId")]
-        public BigInteger ChainId { get; set; }
+        public int ChainId { get; set; }
 
         /// <summary>
         ///     DATA, 20 Bytes - The address the transaction is being sent to.

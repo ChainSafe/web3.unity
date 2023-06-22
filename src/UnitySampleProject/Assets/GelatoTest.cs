@@ -1,4 +1,4 @@
-using System;
+using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 using ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet;
@@ -30,7 +30,12 @@ public class GelatoTest : MonoBehaviour
         
     }
 
-    async Task InitWeb3()
+    public async void TestingGelatoFunction()
+    {
+        Debug.Log("Testing works");
+    }
+
+    private async Task InitWeb3()
     {
         var sponsorApiKey = System.Environment.GetEnvironmentVariable("1BalanceApiKey");
         
@@ -43,7 +48,7 @@ public class GelatoTest : MonoBehaviour
         }).BuildAsync();
     }
 
-    async Task CallWithSyncFeeExample()
+    public async void CallWithSyncFeeExample()
     {
         var vitalik = "0xd8da6bf26964af9d7eed9e03e53415d37aa96045";
         var target = "0xA045eb75e78f4988d42c3cd201365bDD5D76D406";
@@ -63,16 +68,16 @@ public class GelatoTest : MonoBehaviour
         {
             feeToken,
             vitalik,
-            0.0005m
+            new BigInteger(5 * 10E12)
         });
         var gelatoInstance = _web3.ServiceProvider.GetRequiredService<IGelatoModule>();
         var relayResponse = await gelatoInstance.CallWithSyncFee(new CallWithSyncFeeRequest()
         {
-            ChainId = new HexBigInteger(5),
-            Target = target,
+            ChainId = 5,
             Data = data,
             FeeToken = feeToken,
             IsRelayContext = true,
+            Target = target,
         });
 
         var complete = false;
@@ -98,7 +103,7 @@ public class GelatoTest : MonoBehaviour
         }
     }
     
-    async Task SponsorCallExample()
+    public async void SponsorCallExample()
     {
         var counterContract = "0x30d97B13e29B0cd42e6ebd48dbD9063465bF1997";
         
@@ -142,7 +147,7 @@ public class GelatoTest : MonoBehaviour
         }
     }
     
-    async Task CallWithSyncFeeErc2771Example()
+    public async void CallWithSyncFeeErc2771Example()
     {
         var vitalik = "0xd8da6bf26964af9d7eed9e03e53415d37aa96045";
         var target = "0xA045eb75e78f4988d42c3cd201365bDD5D76D406";
@@ -168,7 +173,7 @@ public class GelatoTest : MonoBehaviour
         var gelatoInstance = _web3.ServiceProvider.GetRequiredService<IGelatoModule>();
         var relayResponse = await gelatoInstance.CallWithSyncFeeErc2771(new CallWithSyncFeeErc2771Request()
         {
-            ChainId = new HexBigInteger(5),
+            ChainId = 5,
             Target = target,
             Data = data,
             FeeToken = feeToken,
@@ -198,7 +203,7 @@ public class GelatoTest : MonoBehaviour
         }
     }
     
-    async Task sponsorCallErc2771Example()
+    public async void sponsorCallErc2771Example()
     {
         var counterContract = "0x30d97B13e29B0cd42e6ebd48dbD9063465bF1997";
         

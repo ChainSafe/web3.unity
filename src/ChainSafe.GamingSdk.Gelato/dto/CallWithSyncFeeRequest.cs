@@ -4,13 +4,14 @@ using Newtonsoft.Json;
 
 namespace ChainSafe.GamingSdk.Gelato.Dto
 {
+    [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
     public class CallWithSyncFeeRequest : RelayRequestOptions
     {
         /// <summary>
         ///    QUANTITY - The transaction chain id.
         /// </summary>
         [JsonProperty(PropertyName = "chainId")]
-        public HexBigInteger ChainId { get; set; }
+        public int ChainId { get; set; }
 
         /// <summary>
         ///     DATA, 20 Bytes - The address the transaction is being sent to.
