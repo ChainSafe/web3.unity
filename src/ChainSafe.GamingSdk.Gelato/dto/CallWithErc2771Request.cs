@@ -178,16 +178,16 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
             return optionalParams;
         }
 
-        public static HexBigInteger GetGelatoRelayErc2771Address(Erc2771Type type, GelatoConfig config, IChainConfig chainConfig)
+        public static string GetGelatoRelayErc2771Address(Erc2771Type type, GelatoConfig config, IChainConfig chainConfig)
         {
             return type switch
             {
                 Erc2771Type.CallWithSyncFee => IsZkSync(chainConfig.ChainId)
-                    ? config.Contract.RelayErc2771ZkSync
-                    : config.Contract.RelayErc2771,
+                    ? config.GelatoRelayErc2771ZkSyncAddress
+                    : config.GelatoRelayErc2771Address,
                 Erc2771Type.SponsoredCall => IsZkSync(chainConfig.ChainId)
-                    ? config.Contract.Relay1BalanceErc2771ZkSync
-                    : config.Contract.Relay1BalanceErc2771,
+                    ? config.GelatoRelay1BalanceErc2771ZkSyncAddress
+                    : config.GelatoRelay1BalanceErc2771Address,
                 _ => throw new Exception("incorrect relay option")
             };
         }

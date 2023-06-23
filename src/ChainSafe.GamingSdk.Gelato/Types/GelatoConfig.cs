@@ -12,12 +12,6 @@ namespace ChainSafe.GamingSdk.Gelato.Types
         public string Url { get; set; }
 
         /// <summary>
-        ///     DATA - Contract settings for Gelato.
-        /// </summary>
-        [JsonProperty(PropertyName = "contract")]
-        public Contract Contract { get; set; }
-
-        /// <summary>
         ///     DATA - 1Balance api key.
         /// </summary>
         [JsonProperty(PropertyName = "sponsorApiKey")]

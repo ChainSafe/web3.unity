@@ -10,7 +10,17 @@ namespace ChainSafe.GamingSdk.Gelato
     public class GelatoClient
     {
         public const int DefaultDeadlineGap = 86_400; // 24H
-        public const string UserNonceAbi = "[{\"inputs\": [{\"internalType\": \"address\",\"name\": \"account\",\"type\": \"address\"}],\"name\": \"userNonce\",\"outputs\": [{\"internalType\": \"uint256\",\"name\": \"\",\"type\": \"uint256\"}],\"stateMutability\": \"view\",\"type\": \"function\"}]\"}";
+        public const string UserNonceAbi = "[{\"inputs\": [" +
+                "{\"internalType\": \"address\",\"name\": \"account\",\"type\": \"address\"}" +
+            "]," +
+            "\"name\": \"userNonce\"," +
+            "\"outputs\": [" +
+                "{\"internalType\": \"uint256\",\"name\": \"\",\"type\": \"uint256\"}" +
+            "]," +
+            "\"stateMutability\": \"view\"," +
+            "\"type\": \"function\"" +
+            "}]";
+
         private readonly IHttpClient httpClient;
         private readonly GelatoConfig config;
 

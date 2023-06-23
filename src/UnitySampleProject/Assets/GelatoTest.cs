@@ -73,7 +73,6 @@ public class GelatoTest : MonoBehaviour
         var gelatoInstance = _web3.ServiceProvider.GetRequiredService<IGelatoModule>();
         var relayResponse = await gelatoInstance.CallWithSyncFee(new CallWithSyncFeeRequest()
         {
-            ChainId = 5,
             Data = data,
             FeeToken = feeToken,
             IsRelayContext = true,
@@ -149,6 +148,7 @@ public class GelatoTest : MonoBehaviour
     
     public async void CallWithSyncFeeErc2771Example()
     {
+        var userAddress = await _web3.Signer.GetAddress();
         var vitalik = "0xd8da6bf26964af9d7eed9e03e53415d37aa96045";
         var target = "0xA045eb75e78f4988d42c3cd201365bDD5D76D406";
         var feeToken = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
@@ -167,13 +167,12 @@ public class GelatoTest : MonoBehaviour
         {
             feeToken,
             vitalik,
-            0.0005m
+            new BigInteger(5 * 10E12)
         });
 
         var gelatoInstance = _web3.ServiceProvider.GetRequiredService<IGelatoModule>();
         var relayResponse = await gelatoInstance.CallWithSyncFeeErc2771(new CallWithSyncFeeErc2771Request()
         {
-            ChainId = 5,
             Target = target,
             Data = data,
             FeeToken = feeToken,
