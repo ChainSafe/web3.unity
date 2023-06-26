@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainSafe.Gaming", "src\Cha
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainSafe.Gaming.Tests", "src\ChainSafe.Gaming.Tests\ChainSafe.Gaming.Tests.csproj", "{D63ACB2E-71E2-49C1-AE55-92DFA723391E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainSafe.GamingSdk.EVM.Unity", "src\ChainSafe.Gaming.Unity\ChainSafe.Gaming.Unity.csproj", "{14C3ACCB-285C-493C-AD59-73853386095E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainSafe.Gaming.Unity", "src\ChainSafe.Gaming.Unity\ChainSafe.Gaming.Unity.csproj", "{14C3ACCB-285C-493C-AD59-73853386095E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainSafe.Gaming.NetCore", "src\ChainSafe.Gaming.NetCore\ChainSafe.Gaming.NetCore.csproj", "{C1FA80C9-64F5-4213-9938-2CB5323A4823}"
 EndProject
