@@ -1,11 +1,11 @@
 using System;
 using System.Numerics;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.UnityPackage.Ethereum.Connect;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Signer;
 using UnityEngine;
 using UnityEngine.Networking;
-using Web3Unity.Scripts.Library.ETHEREUEM.Connect;
 
 namespace Web3Unity.Scripts.Library.Ethers.Web3AuthWallet
 {

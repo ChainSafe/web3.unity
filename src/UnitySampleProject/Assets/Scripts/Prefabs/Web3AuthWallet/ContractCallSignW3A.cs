@@ -2,6 +2,7 @@ using ChainSafe.Gaming.Evm.Contracts;
 using UnityEngine.UI;
 using UnityEngine;
 using Web3Unity.Scripts.Library.Ethers.Web3AuthWallet;
+using RPC = ChainSafe.Gaming.UnityPackage.RPC;
 
 public class ContractCallSignW3A : MonoBehaviour
 {

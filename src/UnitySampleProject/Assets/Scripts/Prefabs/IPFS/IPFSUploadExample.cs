@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using ChainSafe.Gaming.UnityPackage.Ethereum.Ipfs;
 using UnityEngine;
-using Web3Unity.Scripts.Library.IPFS;
 
 public class IPFSUploadExample : MonoBehaviour
 {

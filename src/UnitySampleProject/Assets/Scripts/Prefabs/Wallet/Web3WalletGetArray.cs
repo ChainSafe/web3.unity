@@ -2,6 +2,7 @@ using ChainSafe.Gaming.Evm.Contracts;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
+using RPC = ChainSafe.Gaming.UnityPackage.RPC;
 
 public class Web3WalletGetArray : MonoBehaviour
 {

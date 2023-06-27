@@ -1,6 +1,6 @@
 using System.Numerics;
+using ChainSafe.Gaming.UnityPackage.Ethereum.Eip;
 using UnityEngine;
-using Web3Unity.Scripts.Library.ETHEREUEM.EIP;
 
 public class ERC1155BalanceOfExample : MonoBehaviour
 {

@@ -3,18 +3,21 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.JsonRpcProvider;
 using ChainSafe.Gaming.Unity.Migration;
 
-public sealed class RPC
+namespace ChainSafe.Gaming.UnityPackage
 {
-    private static RPC instance = null;
-    private JsonRpcProvider provider;
-
-    public static RPC GetInstance => instance ?? throw new Exception("RPC instance is not initialized");
-
-    public static async Task InitializeInstance()
+    public sealed class RPC
     {
-        instance = new();
-        instance.provider = await ProviderMigration.NewJsonRpcProviderAsync();
-    }
+        private static RPC instance = null;
+        private JsonRpcProvider provider;
 
-    public JsonRpcProvider Provider() => provider;
+        public static RPC GetInstance => instance ?? throw new Exception("RPC instance is not initialized");
+
+        public static async Task InitializeInstance()
+        {
+            instance = new();
+            instance.provider = await ProviderMigration.NewJsonRpcProviderAsync();
+        }
+
+        public JsonRpcProvider Provider() => provider;
+    }
 }

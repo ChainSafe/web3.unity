@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using Models;
+using ChainSafe.Gaming.UnityPackage.Model;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
+namespace ChainSafe.Gaming.UnityPackage.Ethereum.Connect
 {
     public class EVM
     {

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace Web3Unity.Scripts.Library.IPFS
+namespace ChainSafe.Gaming.UnityPackage.Ethereum.Ipfs
 {
     public class IPFS
     {

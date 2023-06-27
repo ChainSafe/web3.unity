@@ -1,6 +1,6 @@
+using ChainSafe.Gaming.UnityPackage.Ethereum.Connect;
 using UnityEngine;
 using Newtonsoft.Json;
-using Web3Unity.Scripts.Library.ETHEREUEM.Connect;
 
 public class AllErc721Example : MonoBehaviour
 {

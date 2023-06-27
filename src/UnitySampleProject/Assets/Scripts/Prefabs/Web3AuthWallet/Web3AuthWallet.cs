@@ -1,11 +1,12 @@
 using System;
 using System.Numerics;
 using ChainSafe.Gaming.Evm.Contracts;
+using ChainSafe.Gaming.UnityPackage.Ethereum.Eip;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Web3Unity.Scripts.Library.ETHEREUEM.EIP;
 using Web3Unity.Scripts.Library.Ethers.Web3AuthWallet;
+using RPC = ChainSafe.Gaming.UnityPackage.RPC;
 
 public class Web3AuthWallet : MonoBehaviour
 {

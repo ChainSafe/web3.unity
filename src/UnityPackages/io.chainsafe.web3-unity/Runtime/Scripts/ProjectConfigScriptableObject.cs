@@ -1,50 +1,54 @@
 using ChainSafe.Gaming.Configuration;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ProjectConfigData", menuName = "ScriptableObjects/ProjectConfigScriptableObject",
-    order = 1)]
-public class ProjectConfigScriptableObject : ScriptableObject, ICompleteProjectConfig
+namespace ChainSafe.Gaming.UnityPackage
 {
-    [SerializeField] private string projectID;
-    [SerializeField] private string chainID;
-    [SerializeField] private string chain;
-    [SerializeField] private string network;
-    [SerializeField] private string symbol;
-    [SerializeField] private string rpc;
-
-    public string ProjectId
+    // todo: can be moved to Core solution
+    [CreateAssetMenu(fileName = "ProjectConfigData", menuName = "ScriptableObjects/ProjectConfigScriptableObject",
+        order = 1)]
+    public class ProjectConfigScriptableObject : ScriptableObject, ICompleteProjectConfig
     {
-        get => projectID;
-        set => projectID = value;
-    }
+        [SerializeField] private string projectID;
+        [SerializeField] private string chainID;
+        [SerializeField] private string chain;
+        [SerializeField] private string network;
+        [SerializeField] private string symbol;
+        [SerializeField] private string rpc;
 
-    public string ChainId
-    {
-        get => chainID;
-        set => chainID = value;
-    }
+        public string ProjectId
+        {
+            get => projectID;
+            set => projectID = value;
+        }
 
-    public string Chain
-    {
-        get => chain;
-        set => chain = value;
-    }
+        public string ChainId
+        {
+            get => chainID;
+            set => chainID = value;
+        }
 
-    public string Network
-    {
-        get => network;
-        set => network = value;
-    }
+        public string Chain
+        {
+            get => chain;
+            set => chain = value;
+        }
 
-    public string Symbol
-    {
-        get => symbol;
-        set => symbol = value;
-    }
+        public string Network
+        {
+            get => network;
+            set => network = value;
+        }
 
-    public string Rpc
-    {
-        get => rpc;
-        set => rpc = value;
+        public string Symbol
+        {
+            get => symbol;
+            set => symbol = value;
+        }
+
+        public string Rpc
+        {
+            get => rpc;
+            set => rpc = value;
+        }
     }
 }

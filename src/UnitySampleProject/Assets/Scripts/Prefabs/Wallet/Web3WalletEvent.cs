@@ -1,5 +1,6 @@
 using ChainSafe.Gaming.Evm.Contracts;
 using UnityEngine;
+using RPC = ChainSafe.Gaming.UnityPackage.RPC;
 
 public class Web3WalletEvent : MonoBehaviour
 {

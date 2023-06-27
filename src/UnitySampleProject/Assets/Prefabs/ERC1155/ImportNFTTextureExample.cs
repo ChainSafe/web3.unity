@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.UnityPackage.Ethereum.Eip;
 using UnityEngine;
 using UnityEngine.Networking;
-using Web3Unity.Scripts.Library.ETHEREUEM.EIP;
 
 public class ImportNFTTextureExample : MonoBehaviour
 {

@@ -3,12 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Models;
+using ChainSafe.Gaming.UnityPackage.Ethereum.Connect;
+using ChainSafe.Gaming.UnityPackage.Model;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
-using Web3Unity.Scripts.Library.ETHEREUEM.Connect;
+
 // using Web3Unity.Scripts.Library.Web3Wallet;
 
 public class GetListedNFTWebWallet : MonoBehaviour

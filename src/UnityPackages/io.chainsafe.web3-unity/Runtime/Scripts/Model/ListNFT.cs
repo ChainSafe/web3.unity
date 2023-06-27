@@ -1,10 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-
-namespace Models
+namespace ChainSafe.Gaming.UnityPackage.Model
 {
     public class ListNFT
     {

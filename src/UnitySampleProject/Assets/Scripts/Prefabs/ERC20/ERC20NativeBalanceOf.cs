@@ -1,4 +1,5 @@
 using UnityEngine;
+using RPC = ChainSafe.Gaming.UnityPackage.RPC;
 
 public class ERC20NativeBalanceOf : MonoBehaviour
 {

@@ -2,8 +2,7 @@ using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
 
-
-namespace Web3Unity.Scripts.Library.ETHEREUEM.EIP
+namespace ChainSafe.Gaming.UnityPackage.Ethereum.Eip
 {
     public class ERC20
     {

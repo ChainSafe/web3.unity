@@ -1,4 +1,4 @@
-namespace Web3Unity.Scripts.Library.ETHEREUEM.EIP
+namespace ChainSafe.Gaming.UnityPackage.Ethereum.Eip
 {
     static class ETH_METHOD
     {

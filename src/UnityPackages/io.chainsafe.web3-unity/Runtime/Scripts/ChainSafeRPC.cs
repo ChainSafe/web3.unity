@@ -11,7 +11,7 @@ using Nethereum.RPC.Eth.DTOs;
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace Web3Unity.Scripts.Prefabs.Ethers
+namespace ChainSafe.Gaming.UnityPackage
 {
     public class ChainSafeRPC : MonoBehaviour
     {

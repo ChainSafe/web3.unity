@@ -3,7 +3,7 @@ using System.Numerics;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Signer;
 
-namespace Web3Unity.Scripts.Library.Web3PrivateKey
+namespace ChainSafe.Gaming.UnityPackage.Ethereum.Web3PrivateKey
 {
     public class Web3PrivateKey
     {

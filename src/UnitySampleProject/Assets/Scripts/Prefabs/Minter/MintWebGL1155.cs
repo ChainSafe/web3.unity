@@ -1,5 +1,3 @@
-using Models;
-using Web3Unity.Scripts.Library.ETHEREUEM.Connect;
 using UnityEngine;
 using System;
 

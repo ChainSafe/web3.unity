@@ -2,6 +2,7 @@ using ChainSafe.Gaming.Evm.Contracts;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
+using RPC = ChainSafe.Gaming.UnityPackage.RPC;
 
 #if UNITY_WEBGL
 public class WebGLGetArray : MonoBehaviour

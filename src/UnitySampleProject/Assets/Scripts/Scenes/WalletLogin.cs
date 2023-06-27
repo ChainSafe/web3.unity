@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using ChainSafe.Gaming.UnityPackage;
 using Nethereum.Signer;
 using Nethereum.Util;
 using UnityEngine;
