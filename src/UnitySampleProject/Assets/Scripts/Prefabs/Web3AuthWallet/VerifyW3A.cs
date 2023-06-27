@@ -14,7 +14,7 @@ public class VerifyW3A : MonoBehaviour
     public void OnEnable()
     {
         // resets response text
-        responseText.text = "";
+        responseText.text = string.Empty;
     }
 
     public void UserSign()
@@ -37,17 +37,18 @@ public class VerifyW3A : MonoBehaviour
         bool isValid = key.Verify(msgHash, signature);
         Debug.Log("Address Returned: " + key.GetPublicAddress());
         Debug.Log("Is Valid: " + isValid);
+
         // display signed tx response from wallet
         responseText.text = "Verify Address: " + key.GetPublicAddress();
     }
 
     void Update()
     {
-        if (W3AWalletUtils.signedTxResponse != "")
+        if (W3AWalletUtils.signedTxResponse != string.Empty)
         {
             //verification
             SignVerifySignature(W3AWalletUtils.signedTxResponse, message);
-            W3AWalletUtils.signedTxResponse = "";
+            W3AWalletUtils.signedTxResponse = string.Empty;
         }
     }
 }

@@ -17,7 +17,7 @@ public class SignW3A : MonoBehaviour
     private Web3AuthWalletConfig _web3AuthWalletConfig;
     private Web3AuthWallet _web3AuthWallet;
     private Web3 _web3;
-    
+
 
     async private void Awake()
     {
@@ -37,7 +37,7 @@ public class SignW3A : MonoBehaviour
     public void OnEnable()
     {
         // resets response text
-        responseText.text = "";
+        responseText.text = string.Empty;
     }
 
     public void OnSignMessage()
@@ -52,11 +52,11 @@ public class SignW3A : MonoBehaviour
 
     void Update()
     {
-        if (W3AWalletUtils.signedTxResponse != "")
+        if (W3AWalletUtils.signedTxResponse != string.Empty)
         {
             // display signed tx response from wallet
             responseText.text = W3AWalletUtils.signedTxResponse;
-            W3AWalletUtils.signedTxResponse = "";
+            W3AWalletUtils.signedTxResponse = string.Empty;
         }
     }
 }

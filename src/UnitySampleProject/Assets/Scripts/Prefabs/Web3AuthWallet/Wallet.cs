@@ -15,13 +15,21 @@ namespace Web3Unity.Scripts.Library.Ethers.Web3AuthWallet
     public class W3AWalletUtils
     {
         public static string account { get; set; }
+
         public static string pk { get; set; }
+
         public static string amount { get; set; }
+
         public static string outgoingContract { get; set; }
+
         public static string incomingAction { get; set; }
+
         public static string incomingTxData { get; set; }
+
         public static string incomingMessageData { get; set; }
+
         public static string signedTxResponse { get; set; }
+
         public static bool incomingTx { get; set; }
 
         private static readonly string host = "https://api.gaming.chainsafe.io/evm";
@@ -33,10 +41,10 @@ namespace Web3Unity.Scripts.Library.Ethers.Web3AuthWallet
         public static string SignMsgW3A(string _privateKey, string _message) => new EthereumMessageSigner().HashAndSign(_message, _privateKey);
 
         // creates a transaction for the wallet
-        
         public interface ITransactionService
         {
             Task<string> CreateTransaction(string chain, string network, string account, string to, string value, string data, string gasPrice = "", string gasLimit = "", string rpc = "", string nonce = "");
+
             Task<string> BroadcastTransaction(string chain, string network, string account, string to, string value, string data, string signature, string gasPrice, string gasLimit, string rpc);
         }
 

@@ -40,9 +40,8 @@ public class TransferW3A : MonoBehaviour
 
     public void OnEnable()
     {
-        
         // resets response text
-        responseText.text = "";
+        responseText.text = string.Empty;
     }
 
     public void Transfer()
@@ -50,6 +49,7 @@ public class TransferW3A : MonoBehaviour
         // smart contract method to call
         string method = "transfer";
         W3AWalletUtils.outgoingContract = contractAddress;
+
         // connects to user's wallet to send a transaction
         try
         {
@@ -80,6 +80,7 @@ public class TransferW3A : MonoBehaviour
         // smart contract method to call
         string method = "mint";
         W3AWalletUtils.outgoingContract = contractAddress;
+
         // connects to user's wallet to send a transaction
         try
         {
@@ -92,6 +93,7 @@ public class TransferW3A : MonoBehaviour
                 1
             });
             Debug.Log("Contract Data: " + calldata);
+
             // finds the wallet, sets sign and incoming tx conditions to true and opens
             CSWallet = GameObject.FindGameObjectWithTag("CSWallet");
             W3AWalletUtils.incomingTx = true;
@@ -107,11 +109,11 @@ public class TransferW3A : MonoBehaviour
 
     void Update()
     {
-        if (W3AWalletUtils.signedTxResponse != "")
+        if (W3AWalletUtils.signedTxResponse != string.Empty)
         {
             // display signed tx response from wallet
             responseText.text = W3AWalletUtils.signedTxResponse;
-            W3AWalletUtils.signedTxResponse = "";
+            W3AWalletUtils.signedTxResponse = string.Empty;
         }
     }
 }

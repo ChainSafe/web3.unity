@@ -12,10 +12,13 @@ using Web3Unity.Scripts.Library.Ethers.Web3AuthWallet;
 public class ContractCallSignW3A : MonoBehaviour
 {
     public string chain = "ethereum";
+
     // set network mainnet, testnet
     public string network = "goerli";
+
     // abi in json format
     public string contractAbi = "[ { \"inputs\": [ { \"internalType\": \"uint8\", \"name\": \"_myArg\", \"type\": \"uint8\" } ], \"name\": \"addTotal\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\" }, { \"inputs\": [], \"name\": \"myTotal\", \"outputs\": [ { \"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\" } ], \"stateMutability\": \"view\", \"type\": \"function\" } ]";
+
     // address of contract
     public string contractAddress = "0x741C3F3146304Aaf5200317cbEc0265aB728FE07";
     public Text responseText;
@@ -37,7 +40,7 @@ public class ContractCallSignW3A : MonoBehaviour
             }
         }
     */
-    async private void Awake()
+    private async void Awake()
     {
         var projectConfig = ProjectConfigUtilities.Load();
         _web3 = await new Web3Builder(projectConfig)
@@ -55,14 +58,15 @@ public class ContractCallSignW3A : MonoBehaviour
     public void OnEnable()
     {
         // resets response text
-        responseText.text = "";
+        responseText.text = string.Empty;
     }
 
-    async public void CheckVariable()
+    public async void CheckVariable()
     {
         string method = "myTotal";
+
         // you can use this to create a provider for hardcoding and parse this instead of rpc get instance
-        //var provider = new JsonRpcProvider(PlayerPrefs.GetString("RPC"));
+        // var provider = new JsonRpcProvider(PlayerPrefs.GetString("RPC"));
         var contract = new Contract(contractAbi, contractAddress, _web3.RpcProvider);
         Debug.Log("Contract: " + contract);
         var calldata = await contract.Call(method, new object[]
@@ -72,6 +76,7 @@ public class ContractCallSignW3A : MonoBehaviour
             // arg2
         });
         Debug.Log("Contract Data: " + calldata[0]);
+
         // display response in game
         print("Contract Variable Total: " + calldata[0]);
         responseText.text = "Contract Variable Total: " + calldata[0];
@@ -90,6 +95,7 @@ public class ContractCallSignW3A : MonoBehaviour
             int.Parse(amount)
         });
         Debug.Log("Contract Data: " + calldata);
+
         // finds the wallet, sets sign and incoming tx conditions to true and opens
         CSWallet = GameObject.FindGameObjectWithTag("CSWallet");
         W3AWalletUtils.incomingTx = true;
@@ -101,11 +107,11 @@ public class ContractCallSignW3A : MonoBehaviour
 
     void Update()
     {
-        if (W3AWalletUtils.signedTxResponse != "")
+        if (W3AWalletUtils.signedTxResponse != string.Empty)
         {
             // display signed tx response from wallet
             responseText.text = W3AWalletUtils.signedTxResponse;
-            W3AWalletUtils.signedTxResponse = "";
+            W3AWalletUtils.signedTxResponse = string.Empty;
         }
     }
 }
