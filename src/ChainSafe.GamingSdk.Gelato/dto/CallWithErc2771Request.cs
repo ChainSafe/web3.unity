@@ -6,6 +6,7 @@ using ChainSafe.GamingSdk.Gelato.Dto;
 using ChainSafe.GamingSdk.Gelato.Types;
 using ChainSafe.GamingWeb3;
 using Nethereum.ABI.EIP712;
+using Nethereum.ABI.FunctionEncoding.Attributes;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
 using Newtonsoft.Json;
@@ -71,13 +72,13 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
         ///    QUANTITY - optional, this is a nonce similar to Ethereum nonces, stored in a local mapping on the relay contracts. It is used to enforce nonce ordering of relay calls, if the user requires it. Otherwise, this is an optional parameter and if not passed, the relay-SDK will automatically query on-chain for the current value.
         /// </summary>
         [JsonProperty(PropertyName = "userNonce")]
-        public HexBigInteger UserNonce { get; set; }
+        public int? UserNonce { get; set; }
 
         /// <summary>
         ///    QUANTITY - optional, the amount of time in seconds that a user is willing for the relay call to be active in the relay backend before it is dismissed.
         /// </summary>
         [JsonProperty(PropertyName = "userDeadline")]
-        public HexBigInteger UserDeadline { get; set; }
+        public int? UserDeadline { get; set; }
 
         /// <summary>
         ///    DATA - the signature from the sign typed data request.
@@ -91,7 +92,10 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
         [JsonProperty(PropertyName = "sponsorApiKey")]
         public string SponsorApiKey { get; set; }
 
-        public MemberValue[] MapRequestToStruct(CallWithErc2771RequestOptionalParameters overrides, Erc2771Type type)
+        public TStructType MapRequestToStruct<TStructType>(
+            CallWithErc2771RequestOptionalParameters overrides,
+            Erc2771Type type)
+            where TStructType : IErc2771StructTypes, new()
         {
             if (overrides.UserNonce == null && UserNonce == null)
             {
@@ -108,42 +112,15 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
             newStruct.UserNonce = overrides.UserNonce ?? UserNonce;
             newStruct.UserDeadline = overrides.UserDeadline ?? UserDeadline;
 
-            return type switch
-            {
-                Erc2771Type.SponsoredCall => new[]
-                {
-                    new MemberValue()
-                    {
-                        TypeName = "SponsoredCallERC2771",
-                        Value = new[]
-                        {
-                            new MemberValue { TypeName = "uint256", Value = newStruct.ChainId },
-                            new MemberValue { TypeName = "address", Value = newStruct.Target },
-                            new MemberValue { TypeName = "bytes", Value = newStruct.Data },
-                            new MemberValue { TypeName = "address", Value = newStruct.User },
-                            new MemberValue { TypeName = "uint256", Value = newStruct.UserNonce },
-                            new MemberValue { TypeName = "uint256", Value = newStruct.UserDeadline },
-                        },
-                    },
-                },
-                Erc2771Type.CallWithSyncFee => new[]
-                {
-                    new MemberValue()
-                    {
-                        TypeName = "CallWithSyncFeeERC2771",
-                        Value = new[]
-                        {
-                            new MemberValue { TypeName = "uint256", Value = newStruct.ChainId },
-                            new MemberValue { TypeName = "address", Value = newStruct.Target },
-                            new MemberValue { TypeName = "bytes", Value = newStruct.Data },
-                            new MemberValue { TypeName = "address", Value = newStruct.User },
-                            new MemberValue { TypeName = "uint256", Value = newStruct.UserNonce },
-                            new MemberValue { TypeName = "uint256", Value = newStruct.UserDeadline },
-                        },
-                    },
-                },
-                _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
-            };
+            var formattedStruct = (TStructType)Activator.CreateInstance(typeof(TStructType));
+            formattedStruct.ChainId = newStruct.ChainId.ToString();
+            formattedStruct.Target = newStruct.Target;
+            formattedStruct.Data = newStruct.Data;
+            formattedStruct.User = newStruct.User;
+            formattedStruct.UserNonce = newStruct.UserNonce.ToString();
+            formattedStruct.UserDeadline = newStruct.UserDeadline.ToString();
+
+            return formattedStruct;
         }
     }
 
@@ -153,15 +130,20 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
         ///    QUANTITY - optional, this is a nonce similar to Ethereum nonces, stored in a local mapping on the relay contracts. It is used to enforce nonce ordering of relay calls, if the user requires it. Otherwise, this is an optional parameter and if not passed, the relay-SDK will automatically query on-chain for the current value.
         /// </summary>
         [JsonProperty(PropertyName = "userNonce")]
-        public HexBigInteger UserNonce { get; set; }
+        public int? UserNonce { get; set; }
 
         /// <summary>
         ///    QUANTITY - optional, the amount of time in seconds that a user is willing for the relay call to be active in the relay backend before it is dismissed.
         /// </summary>
         [JsonProperty(PropertyName = "userDeadline")]
-        public HexBigInteger UserDeadline { get; set; }
+        public int? UserDeadline { get; set; }
 
-        public static async Task<CallWithErc2771RequestOptionalParameters> PopulateOptionalUserParameters(CallWithErc2771Request request, Erc2771Type type, IRpcProvider provider, GelatoConfig config, IChainConfig chainConfig)
+        public static async Task<CallWithErc2771RequestOptionalParameters> PopulateOptionalUserParameters(
+            CallWithErc2771Request request,
+            Erc2771Type type,
+            IRpcProvider provider,
+            GelatoConfig config,
+            IChainConfig chainConfig)
         {
             var optionalParams = new CallWithErc2771RequestOptionalParameters();
             if (request.UserDeadline == null)
@@ -178,7 +160,10 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
             return optionalParams;
         }
 
-        public static string GetGelatoRelayErc2771Address(Erc2771Type type, GelatoConfig config, IChainConfig chainConfig)
+        public static string GetGelatoRelayErc2771Address(
+            Erc2771Type type,
+            GelatoConfig config,
+            IChainConfig chainConfig)
         {
             return type switch
             {
@@ -197,18 +182,27 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
             return chainId is "324" or "280";
         }
 
-        private static async Task<HexBigInteger> GetUserNonce(string account, Erc2771Type type, IRpcProvider provider, GelatoConfig config, IChainConfig chainConfig)
+        private static async Task<int> GetUserNonce(
+            string account,
+            Erc2771Type type,
+            IRpcProvider provider,
+            GelatoConfig config,
+            IChainConfig chainConfig)
         {
-            var contract = new Contract(GelatoClient.UserNonceAbi, GetGelatoRelayErc2771Address(type, config, chainConfig).ToString(), provider);
+            var contract = new Contract(
+                GelatoClient.UserNonceAbi,
+                GetGelatoRelayErc2771Address(type, config, chainConfig).ToString(),
+                provider);
             var result = await contract.Call("userNonce", new object[] { account });
-            return (HexBigInteger)result[0];
+
+            return int.Parse(((BigInteger)result[0]).ToString());
         }
 
-        private static HexBigInteger CalculateDeadline()
+        private static int CalculateDeadline()
         {
-            // BigNumber.from(Math.floor(Date.now() / 1000) + GelatoClient.DEFAULT_DEADLINE_GAP).toString()
-            var parsed = ((((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds() / 1000) + GelatoClient.DefaultDeadlineGap).ToString("X");
-            return new HexBigInteger($"0x{parsed}");
+            var parsed =
+                ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds() + GelatoClient.DefaultDeadlineGap;
+            return (int)parsed;
         }
     }
 }

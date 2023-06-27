@@ -101,7 +101,7 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
         }
 
         // todo: implement before release
-        public Task<string> SignTypedData(Domain domain, Dictionary<string, MemberDescription[]> types, MemberValue[] message)
+        public Task<string> SignTypedData<TStructType>(SerializableDomain domain, Dictionary<string, MemberDescription[]> types, TStructType message)
         {
             throw new NotImplementedException();
         }

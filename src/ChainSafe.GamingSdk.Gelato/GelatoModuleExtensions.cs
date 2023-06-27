@@ -3,6 +3,7 @@ using ChainSafe.GamingSdk.Gelato.Types;
 using ChainSafe.GamingWeb3.Build;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Web3Unity.Scripts.Library.Ethers.Transactions;
 
 namespace ChainSafe.GamingSdk.Gelato
 {

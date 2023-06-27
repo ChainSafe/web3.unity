@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Nethereum.Hex.HexTypes;
 using UnityEngine;
 using Web3Unity.Scripts.Library.Ethers.JsonRpc;
+using Web3Unity.Scripts.Library.Ethers.Transactions;
 using Contract = Web3Unity.Scripts.Library.Ethers.Contracts.Contract;
 
 public class GelatoTest : MonoBehaviour
@@ -64,6 +65,7 @@ public class GelatoTest : MonoBehaviour
                   "\"type\":\"function\"" +
                   "}]";
         var contract = new Contract(abi, target);
+        
         var data = contract.Calldata("sendToFriend", new object[]
         {
             feeToken,
@@ -104,21 +106,20 @@ public class GelatoTest : MonoBehaviour
     
     public async void SponsorCallExample()
     {
-        var counterContract = "0x30d97B13e29B0cd42e6ebd48dbD9063465bF1997";
+        var counterContract = "0x763D37aB388C5cdd2Fb0849d6275802F959fbF30";
         
         var abi = "[{\"inputs\": []," +
-                  "\"name\":\"incrementContext\"," +
+                  "\"name\":\"increment\"," +
                   "\"outputs\":[]," +
                   "\"stateMutability\":\"nonpayable\"," +
                   "\"type\":\"function\"" +
                   "}]";
         var contract = new Contract(abi, counterContract);
-        var data = contract.Calldata("incrementContext");
+        var data = contract.Calldata("increment");
         
         var gelatoInstance = _web3.ServiceProvider.GetRequiredService<IGelatoModule>();
         var relayResponse = await gelatoInstance.SponsoredCall(new SponsoredCallRequest()
         {
-            ChainId = new HexBigInteger(5),
             Target = counterContract,
             Data = data,
         });
@@ -126,6 +127,7 @@ public class GelatoTest : MonoBehaviour
         var complete = false;
         while (!complete)
         {
+            Thread.Sleep(2000);
             var status = await gelatoInstance.GetTaskStatus(relayResponse.TaskId);
             Debug.Log($"SponsorCall status: {relayResponse.TaskId}: {status.TaskState}");
 
@@ -140,7 +142,6 @@ public class GelatoTest : MonoBehaviour
                     Debug.Log($"Transaction hash: {status.TransactionHash}: ");
                     break;
                 default:
-                    Thread.Sleep(2000);
                     continue;
             }
         }
@@ -148,26 +149,17 @@ public class GelatoTest : MonoBehaviour
     
     public async void CallWithSyncFeeErc2771Example()
     {
-        var userAddress = await _web3.Signer.GetAddress();
-        var vitalik = "0xd8da6bf26964af9d7eed9e03e53415d37aa96045";
-        var target = "0xA045eb75e78f4988d42c3cd201365bDD5D76D406";
+        var target = "0x5dD1100f23278e0e27972eacb4F1B81D97D071B7";
         var feeToken = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
-        var abi = "[{\"inputs\": [" +
-                  "{\"internalType\":\"address\",\"name\":\"_token\",\"type\":\"address\"}," +
-                  "{\"internalType\":\"address\",\"name\":\"_to\",\"type\":\"address\"}," +
-                  "{\"internalType\":\"uint256\",\"name\":\"_amount\",\"type\":\"uint256\"}" +
-                  "]," +
-                  "\"name\":\"sendToFriend\"," +
+        var abi = "[{\"inputs\": []," +
+                  "\"name\":\"increment\"," +
                   "\"outputs\":[]," +
                   "\"stateMutability\":\"nonpayable\"," +
                   "\"type\":\"function\"" +
                   "}]";
         var contract = new Contract(abi, target);
-        var data = contract.Calldata("sendToFriend", new object[]
+        var data = contract.Calldata("increment", new object[]
         {
-            feeToken,
-            vitalik,
-            new BigInteger(5 * 10E12)
         });
 
         var gelatoInstance = _web3.ServiceProvider.GetRequiredService<IGelatoModule>();
@@ -182,6 +174,7 @@ public class GelatoTest : MonoBehaviour
         var complete = false;
         while (!complete)
         {
+            Thread.Sleep(2000);
             var status = await gelatoInstance.GetTaskStatus(relayResponse.TaskId);
             Debug.Log($"CallWithSyncFeeErc2771 status: {relayResponse.TaskId}: {status.TaskState}");
 
@@ -196,7 +189,6 @@ public class GelatoTest : MonoBehaviour
                     Debug.Log($"Transaction hash: {status.TransactionHash}: ");
                     break;
                 default:
-                    Thread.Sleep(2000);
                     continue;
             }
         }
@@ -204,7 +196,7 @@ public class GelatoTest : MonoBehaviour
     
     public async void sponsorCallErc2771Example()
     {
-        var counterContract = "0x30d97B13e29B0cd42e6ebd48dbD9063465bF1997";
+        var target = "0x00172f67db60E5fA346e599cdE675f0ca213b47b ";
         
         var abi = "[{\"inputs\": []," +
                   "\"name\":\"incrementContext\"," +
@@ -212,13 +204,13 @@ public class GelatoTest : MonoBehaviour
                   "\"stateMutability\":\"nonpayable\"," +
                   "\"type\":\"function\"" +
                   "}]";
-        var contract = new Contract(abi, counterContract);
+        var contract = new Contract(abi, target);
         var data = contract.Calldata("incrementContext");
         
         var gelatoInstance = _web3.ServiceProvider.GetRequiredService<IGelatoModule>();
         var relayResponse = await gelatoInstance.SponsoredCallErc2771(new SponsoredCallErc2771Request()
         {
-            Target = counterContract,
+            Target = target,
             Data = data,
             User = await _web3.Signer.GetAddress(),
         }, _web3.Signer);
@@ -226,6 +218,7 @@ public class GelatoTest : MonoBehaviour
         var complete = false;
         while (!complete)
         {
+            Thread.Sleep(2000);
             var status = await gelatoInstance.GetTaskStatus(relayResponse.TaskId);
             Debug.Log($"SponsorCallErc2771 status: {relayResponse.TaskId}: {status.TaskState}");
 
@@ -240,7 +233,6 @@ public class GelatoTest : MonoBehaviour
                     Debug.Log($"Transaction hash: {status.TransactionHash}: ");
                     break;
                 default:
-                    Thread.Sleep(2000);
                     continue;
             }
         }
