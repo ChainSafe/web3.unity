@@ -5,7 +5,6 @@ using Models;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
-using Web3Unity.Scripts.Library.Ethers.Contracts;
 
 namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
 {
@@ -30,7 +29,7 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
             using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
             {
                 await webRequest.SendWebRequest();
-                Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+                Response<string> data = JsonUtility.FromJson<Response<string>>(Encoding.UTF8.GetString(webRequest.downloadHandler.data));
                 return data.response;
             }
         }
@@ -54,7 +53,7 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
             using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
             {
                 await webRequest.SendWebRequest();
-                CreateMintModel.Root data = JsonUtility.FromJson<CreateMintModel.Root>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+                CreateMintModel.Root data = JsonUtility.FromJson<CreateMintModel.Root>(Encoding.UTF8.GetString(webRequest.downloadHandler.data));
                 Debug.Log("Data: " + JsonConvert.SerializeObject(data.response, Formatting.Indented));
                 return data.response;
             }
@@ -116,7 +115,7 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
             using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
             {
                 await webRequest.SendWebRequest();
-                GetNftListModel.Root data = JsonUtility.FromJson<GetNftListModel.Root>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+                GetNftListModel.Root data = JsonUtility.FromJson<GetNftListModel.Root>(Encoding.UTF8.GetString(webRequest.downloadHandler.data));
                 return data.response;
             }
         }
@@ -132,7 +131,7 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
             using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
             {
                 await webRequest.SendWebRequest();
-                MintedNFT.Root data = JsonUtility.FromJson<MintedNFT.Root>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+                MintedNFT.Root data = JsonUtility.FromJson<MintedNFT.Root>(Encoding.UTF8.GetString(webRequest.downloadHandler.data));
                 return data.response;
             }
         }
@@ -152,7 +151,7 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
             using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
             {
                 await webRequest.SendWebRequest();
-                BuyNFT.Root data = JsonUtility.FromJson<BuyNFT.Root>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+                BuyNFT.Root data = JsonUtility.FromJson<BuyNFT.Root>(Encoding.UTF8.GetString(webRequest.downloadHandler.data));
                 if (data.response != null)
                 {
                     Debug.Log("Data: " + JsonConvert.SerializeObject(data.response, Formatting.Indented));
@@ -182,7 +181,7 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
             using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
             {
                 await webRequest.SendWebRequest();
-                ListNFT.Root data = JsonUtility.FromJson<ListNFT.Root>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+                ListNFT.Root data = JsonUtility.FromJson<ListNFT.Root>(Encoding.UTF8.GetString(webRequest.downloadHandler.data));
                 Debug.Log("Data: " + JsonConvert.SerializeObject(data.response, Formatting.Indented));
                 return data.response;
             }
@@ -200,7 +199,7 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
             using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
             {
                 await webRequest.SendWebRequest();
-                GetNftListModel.Root data = JsonUtility.FromJson<GetNftListModel.Root>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+                GetNftListModel.Root data = JsonUtility.FromJson<GetNftListModel.Root>(Encoding.UTF8.GetString(webRequest.downloadHandler.data));
                 return data.response;
             }
         }
@@ -244,7 +243,7 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
             using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
             {
                 await webRequest.SendWebRequest();
-                CreateApprovalModel.Root data = JsonUtility.FromJson<CreateApprovalModel.Root>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+                CreateApprovalModel.Root data = JsonUtility.FromJson<CreateApprovalModel.Root>(Encoding.UTF8.GetString(webRequest.downloadHandler.data));
                 return data.response;
             }
         }
@@ -265,7 +264,7 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
             using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
             {
                 await webRequest.SendWebRequest();
-                Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+                Response<string> data = JsonUtility.FromJson<Response<string>>(Encoding.UTF8.GetString(webRequest.downloadHandler.data));
                 return data.response;
             }
         }
@@ -284,7 +283,7 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
             using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
             {
                 await webRequest.SendWebRequest();
-                Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+                Response<string> data = JsonUtility.FromJson<Response<string>>(Encoding.UTF8.GetString(webRequest.downloadHandler.data));
                 return data.response;
             }
         }
@@ -302,7 +301,7 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
             using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
             {
                 await webRequest.SendWebRequest();
-                RedeemVoucherTxModel.Root data = JsonConvert.DeserializeObject<RedeemVoucherTxModel.Root>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+                RedeemVoucherTxModel.Root data = JsonConvert.DeserializeObject<RedeemVoucherTxModel.Root>(Encoding.UTF8.GetString(webRequest.downloadHandler.data));
                 return data.response;
             }
         }

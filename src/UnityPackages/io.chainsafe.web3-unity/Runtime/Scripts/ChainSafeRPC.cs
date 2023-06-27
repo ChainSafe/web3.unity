@@ -1,15 +1,15 @@
 using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm;
+using ChainSafe.Gaming.Evm.Contracts;
+using ChainSafe.Gaming.Evm.JsonRpcProvider;
+using ChainSafe.Gaming.Evm.RpcProvider;
+using ChainSafe.Gaming.Utils;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
 using Newtonsoft.Json;
 using UnityEngine;
-using Web3Unity.Scripts.Library.Ethers.Contracts;
-using Web3Unity.Scripts.Library.Ethers.Network;
-using Web3Unity.Scripts.Library.Ethers.Providers;
-using Web3Unity.Scripts.Library.Ethers.Transactions;
-using Web3Unity.Scripts.Library.Ethers.Utils;
 
 namespace Web3Unity.Scripts.Prefabs.Ethers
 {

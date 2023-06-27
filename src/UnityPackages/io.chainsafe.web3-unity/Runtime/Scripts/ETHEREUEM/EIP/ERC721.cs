@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Contracts;
+using ChainSafe.Gaming.Unity;
 using Newtonsoft.Json;
 using UnityEngine;
-using Web3Unity.Scripts.Library.ETHEREUEM.Connect;
-using Web3Unity.Scripts.Library.Ethers.Contracts;
 
 namespace Web3Unity.Scripts.Library.ETHEREUEM.EIP
 {

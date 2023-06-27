@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
-using UnityEngine;
-using Web3Unity.Scripts.Library.Ethers.Providers;
+using ChainSafe.Gaming.Evm.JsonRpcProvider;
+using ChainSafe.Gaming.Unity.Migration;
 
 public sealed class RPC
 {

@@ -2,18 +2,14 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using ChainSafe.GamingSDK.EVM.Web3.Core;
-using ChainSafe.GamingSDK.EVM.Web3.Core.Debug;
-using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
-using ChainSafe.GamingWeb3;
+using ChainSafe.Gaming.Diagnostics;
+using ChainSafe.Gaming.Evm;
+using ChainSafe.Gaming.Lifecycle;
 using JetBrains.Annotations;
 using Nethereum.ABI.EIP712;
 using UnityEngine;
-using Web3Unity.Scripts.Library.Ethers.Providers;
-using Web3Unity.Scripts.Library.Ethers.Signers;
-using Web3Unity.Scripts.Library.Ethers.Transactions;
 
-namespace ChainSafe.GamingSDK.EVM.WebGLWallet
+namespace ChainSafe.Gaming.Unity.Wallets.WebGLWallet
 {
     // todo: check if window.web3gl is bound during initialization
     public class WebGLWallet : ISigner, ITransactionExecutor, ILifecycleParticipant

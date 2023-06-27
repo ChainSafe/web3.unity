@@ -1,6 +1,5 @@
-using ChainSafe.GamingWeb3;
+using ChainSafe.Gaming.Configuration;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "ProjectConfigData", menuName = "ScriptableObjects/ProjectConfigScriptableObject",
     order = 1)]
