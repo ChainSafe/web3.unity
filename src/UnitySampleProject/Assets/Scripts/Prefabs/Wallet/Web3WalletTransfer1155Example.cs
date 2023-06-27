@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
-using Web3Unity.Scripts.Library.ETHEREUEM.EIP;
-using Web3Unity.Scripts.Library.Ethers.Contracts;
+
 // using Web3Unity.Scripts.Library.Web3Wallet;
 
 public class Web3WalletTransfer1155Example : MonoBehaviour

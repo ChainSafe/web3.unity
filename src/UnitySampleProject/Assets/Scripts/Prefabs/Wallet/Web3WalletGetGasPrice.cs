@@ -1,5 +1,4 @@
 using UnityEngine;
-using Web3Unity.Scripts.Library.Ethers.Providers;
 
 public class Web3WalletGetGasPrice : MonoBehaviour
 {

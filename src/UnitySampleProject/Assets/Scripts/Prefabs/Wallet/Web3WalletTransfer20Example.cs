@@ -1,10 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Newtonsoft.Json;
-using Web3Unity.Scripts.Library.ETHEREUEM.EIP;
-using Web3Unity.Scripts.Library.Ethers.Contracts;
+
 // using Web3Unity.Scripts.Library.Web3Wallet;
 
 public class Web3WalletTransfer20Example : MonoBehaviour

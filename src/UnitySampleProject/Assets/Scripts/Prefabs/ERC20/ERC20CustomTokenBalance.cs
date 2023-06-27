@@ -1,6 +1,4 @@
 using UnityEngine;
-using Web3Unity.Scripts.Library.Ethers.Providers;
-using Web3Unity.Scripts.Library.Ethers.Contracts;
 
 public class ERC20CustomTokenBalance : MonoBehaviour
 {

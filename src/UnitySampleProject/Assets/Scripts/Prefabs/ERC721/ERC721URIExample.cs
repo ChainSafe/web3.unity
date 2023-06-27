@@ -1,6 +1,5 @@
 using UnityEngine;
 using Web3Unity.Scripts.Library.ETHEREUEM.EIP;
-using Web3Unity.Scripts.Library.Ethers.Providers;
 
 public class ERC721URIExample : MonoBehaviour
 {

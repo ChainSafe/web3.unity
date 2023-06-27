@@ -1,7 +1,3 @@
-using Nethereum.Hex.HexTypes;
-using Web3Unity.Scripts.Library.Ethers.Providers;
-using Web3Unity.Scripts.Library.Ethers.Signers;
-using Web3Unity.Scripts.Library.Ethers.Transactions;
 using UnityEngine;
 
 public class Web3WalletGetNonce : MonoBehaviour

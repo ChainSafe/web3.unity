@@ -6,8 +6,6 @@ using Nethereum.Signer;
 using UnityEngine;
 using UnityEngine.Networking;
 using Web3Unity.Scripts.Library.ETHEREUEM.Connect;
-using Web3Unity.Scripts.Library.Ethers.Providers;
-using Web3Unity.Scripts.Library.Ethers.Transactions;
 
 namespace Web3Unity.Scripts.Library.Ethers.Web3AuthWallet
 {

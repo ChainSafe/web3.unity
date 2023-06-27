@@ -1,5 +1,4 @@
 using UnityEngine;
-using Web3Unity.Scripts.Library.Ethers.Contracts;
 
 #if UNITY_WEBGL
 public class WebGLSetArray : MonoBehaviour

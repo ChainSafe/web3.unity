@@ -1,6 +1,6 @@
 using System;
 using System.Numerics;
-using Web3Unity.Scripts.Library.Ethers.Contracts;
+using ChainSafe.Gaming.Evm.Contracts;
 using UnityEngine;
 using UnityEngine.UI;
 using Web3Unity.Scripts.Library.Ethers.Web3AuthWallet;

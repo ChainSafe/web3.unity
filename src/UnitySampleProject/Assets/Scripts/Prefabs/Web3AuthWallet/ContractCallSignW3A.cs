@@ -1,4 +1,4 @@
-using Web3Unity.Scripts.Library.Ethers.Contracts;
+using ChainSafe.Gaming.Evm.Contracts;
 using UnityEngine.UI;
 using UnityEngine;
 using Web3Unity.Scripts.Library.Ethers.Web3AuthWallet;

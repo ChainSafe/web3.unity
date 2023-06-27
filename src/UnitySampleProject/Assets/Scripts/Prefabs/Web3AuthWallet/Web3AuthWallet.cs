@@ -1,12 +1,10 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Numerics;
+using ChainSafe.Gaming.Evm.Contracts;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Web3Unity.Scripts.Library.ETHEREUEM.EIP;
-using Web3Unity.Scripts.Library.Ethers.Contracts;
 using Web3Unity.Scripts.Library.Ethers.Web3AuthWallet;
 
 public class Web3AuthWallet : MonoBehaviour

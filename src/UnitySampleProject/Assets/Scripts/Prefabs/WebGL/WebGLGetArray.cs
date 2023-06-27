@@ -1,8 +1,7 @@
+using ChainSafe.Gaming.Evm.Contracts;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
-using Web3Unity.Scripts.Library.Ethers.Contracts;
-using Web3Unity.Scripts.Library.Ethers.Providers;
 
 #if UNITY_WEBGL
 public class WebGLGetArray : MonoBehaviour

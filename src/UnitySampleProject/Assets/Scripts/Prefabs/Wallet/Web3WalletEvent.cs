@@ -1,5 +1,5 @@
+using ChainSafe.Gaming.Evm.Contracts;
 using UnityEngine;
-using Web3Unity.Scripts.Library.Ethers.Contracts;
 
 public class Web3WalletEvent : MonoBehaviour
 {

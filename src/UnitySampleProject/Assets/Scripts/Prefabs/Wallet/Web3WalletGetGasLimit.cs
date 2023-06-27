@@ -1,5 +1,3 @@
-using Web3Unity.Scripts.Library.Ethers.Contracts;
-using Web3Unity.Scripts.Library.Ethers.Providers;
 using UnityEngine;
 
 public class Web3WalletGetGasLimit : MonoBehaviour

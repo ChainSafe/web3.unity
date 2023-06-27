@@ -1,16 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using ChainSafe.GamingWeb3;
-using ChainSafe.GamingWeb3.Build;
-using ChainSafe.GamingWeb3.Unity;
 using UnityEngine;
-using Web3Unity.Scripts.Library.ETHEREUEM.Connect;
-using Web3Unity.Scripts.Library.Ethers.JsonRpc;
-using Web3Unity.Scripts.Library.Ethers.Network;
-using Web3Unity.Scripts.Library.Ethers.Providers;
 // using Web3Unity.Scripts.Library.Web3Wallet;
-using Network = Web3Unity.Scripts.Library.Ethers.Network.Network;
 
 public class CreateApprovalWebWallet : MonoBehaviour
 {
