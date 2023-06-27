@@ -12,8 +12,6 @@ using Web3Unity.Scripts.Library.Ethers.Transactions;
 
 namespace ChainSafe.GamingSDK.EVM.Web3AuthWallet
 {
-    public delegate string ConnectMessageBuildDelegate(DateTime expirationTime);
-
     public class Web3AuthWallet : ISigner, ITransactionExecutor, ILifecycleParticipant
     {
         private readonly Web3AuthWalletConfig configuration;
