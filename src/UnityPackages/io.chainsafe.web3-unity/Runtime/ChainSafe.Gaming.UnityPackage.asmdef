@@ -1,6 +1,6 @@
 {
-    "name": "chainsafe.web3-unity",
-    "rootNamespace": "",
+    "name": "ChainSafe.Gaming.UnityPackage",
+    "rootNamespace": "ChainSafe.Gaming.UnityPackage",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
