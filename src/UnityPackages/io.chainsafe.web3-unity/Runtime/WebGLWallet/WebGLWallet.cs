@@ -9,7 +9,7 @@ using JetBrains.Annotations;
 using Nethereum.ABI.EIP712;
 using UnityEngine;
 
-namespace ChainSafe.Gaming.Unity.Wallets.WebGLWallet
+namespace ChainSafe.Gaming.Wallets.WebGLWallet
 {
     // todo: check if window.web3gl is bound during initialization
     public class WebGLWallet : ISigner, ITransactionExecutor, ILifecycleParticipant

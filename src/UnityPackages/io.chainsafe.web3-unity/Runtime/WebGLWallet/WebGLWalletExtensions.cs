@@ -2,7 +2,7 @@
 using ChainSafe.Gaming.Evm;
 using ChainSafe.Gaming.Lifecycle;
 
-namespace ChainSafe.Gaming.Unity.Wallets.WebGLWallet
+namespace ChainSafe.Gaming.Wallets.WebGLWallet
 {
     public static class WebGLWalletExtensions
     {
