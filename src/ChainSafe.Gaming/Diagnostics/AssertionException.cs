@@ -1,6 +1,6 @@
 using System;
 
-namespace ChainSafe.Gaming.Debug
+namespace ChainSafe.Gaming.Diagnostics
 {
     public class AssertionException : Exception
     {

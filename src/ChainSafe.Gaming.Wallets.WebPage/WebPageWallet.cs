@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using ChainSafe.Gaming.Debug;
+using ChainSafe.Gaming.Diagnostics;
 using ChainSafe.Gaming.Environment;
 using ChainSafe.Gaming.Evm;
 using ChainSafe.Gaming.Lifecycle;
+using ChainSafe.Gaming.Utils;
 using Nethereum.ABI.EIP712;
 using Nethereum.Signer;
-using Nethereum.Util;
 using Newtonsoft.Json;
-using AddressExtensions = ChainSafe.Gaming.Debug.AddressExtensions;
 
 namespace ChainSafe.Gaming.Wallets.WebPage
 {
@@ -148,7 +147,7 @@ namespace ChainSafe.Gaming.Wallets.WebPage
             var signature = await SignMessage(message);
             var publicAddress = ExtractPublicAddress(signature, message);
 
-            if (!AddressExtensions.IsPublicAddress(publicAddress))
+            if (!AddressUtil.IsPublicAddress(publicAddress))
             {
                 throw new Web3Exception(
                     $"Public address recovered from signature is not valid. Public address: {publicAddress}");
@@ -164,7 +163,7 @@ namespace ChainSafe.Gaming.Wallets.WebPage
             string ExtractPublicAddress(string signature, string originalMessage)
             {
                 var msg = "\x19" + "Ethereum Signed Message:\n" + originalMessage.Length + originalMessage;
-                var msgHash = new Sha3Keccack().CalculateHash(Encoding.UTF8.GetBytes(msg));
+                var msgHash = new Nethereum.Util.Sha3Keccack().CalculateHash(Encoding.UTF8.GetBytes(msg));
                 var ecdsaSignature = MessageSigner.ExtractEcdsaSignature(signature);
                 var key = EthECKey.RecoverFromSignature(ecdsaSignature, msgHash);
                 return key.GetPublicAddress();

@@ -1,4 +1,4 @@
-namespace ChainSafe.Gaming.Debug
+namespace ChainSafe.Gaming.Diagnostics
 {
     public static class ObjectExtensions
     {
