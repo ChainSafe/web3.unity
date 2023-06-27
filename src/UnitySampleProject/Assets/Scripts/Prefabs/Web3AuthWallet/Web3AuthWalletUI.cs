@@ -2,14 +2,20 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Threading.Tasks;
+using ChainSafe.GamingSDK.EVM.Web3AuthWallet;
+using ChainSafe.GamingWeb3;
+using ChainSafe.GamingWeb3.Build;
+using ChainSafe.GamingWeb3.Unity;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Web3Unity.Scripts.Library.ETHEREUEM.EIP;
 using Web3Unity.Scripts.Library.Ethers.Contracts;
+using Web3Unity.Scripts.Library.Ethers.JsonRpc;
 using Web3Unity.Scripts.Library.Ethers.Web3AuthWallet;
 
-public class Web3AuthWallet : MonoBehaviour
+public class Web3AuthWalletUI : MonoBehaviour
 {
     public string nativeTokenSymbol;
     public string blockExplorerUrl;
@@ -37,9 +43,27 @@ public class Web3AuthWallet : MonoBehaviour
     public Text[] ActionsTexts;
     public Text[] AmountsTexts;
     public Text[] HashesTexts;
+    private Web3AuthWalletConfig _web3AuthWalletConfig;
+    private Web3AuthWallet _web3AuthWallet;
+    private Web3 _web3;
+    private W3AWalletUtils.TransactionService _transactionService;
+    private W3AWalletUtils.SignatureService _signatureService;
 
-    void Awake()
+    async void Awake()
     {
+        var projectConfig = ProjectConfigUtilities.Load();
+        _web3 = await new Web3Builder(projectConfig)
+            .Configure(services =>
+            {
+                services.UseUnityEnvironment();
+                services.UseJsonRpcProvider();
+                services.UseWeb3AuthWallet();
+            })
+            .BuildAsync();
+        _web3AuthWallet = new Web3AuthWallet(_web3.RpcProvider, _web3AuthWalletConfig);
+        _web3AuthWalletConfig = new Web3AuthWalletConfig();
+        _transactionService = new W3AWalletUtils.TransactionService();
+        _signatureService = new W3AWalletUtils.SignatureService();
         // keeps the wallet alive between scene changes
         DontDestroyOnLoad(this.gameObject);
     }
@@ -81,7 +105,7 @@ public class Web3AuthWallet : MonoBehaviour
         W3AWalletUtils.account = W3AWalletUtils.GetAddressW3A(W3AWalletUtils.pk);
         WalletAddress.text = W3AWalletUtils.account;
         // populate native token balance
-        var provider = RPC.GetInstance.Provider();
+        var provider = _web3.RpcProvider;
         var getBalance = await provider.GetBalance(W3AWalletUtils.account);
         NativeTokenBalanceName.text = nativeTokenSymbol;
         NativeTokenBalance.text = (float.Parse(getBalance.ToString()) / Math.Pow(10, 18)).ToString();
@@ -90,14 +114,14 @@ public class Web3AuthWallet : MonoBehaviour
         {
             CustomTokenObjPlaceholder.SetActive(false);
             CustomTokenObj.SetActive(true);
-            var contract = new Contract(customTokenABI, customTokenCA, RPC.GetInstance.Provider());
+            var contract = new Contract(customTokenABI, customTokenCA, provider);
             var calldata = await contract.Call("balanceOf", new object[]
             {
                 W3AWalletUtils.account
             });
-            string customTokenName = await ERC20.Symbol(customTokenCA);
+            var customTokenName = await contract.Call("symbol");
             CustomTokenBalance.text = MathF.Ceiling((float)(float.Parse(calldata[0].ToString()) / Math.Pow(10, 18))).ToString();
-            CustomTokenBalanceName.text = customTokenName;
+            CustomTokenBalanceName.text = customTokenName[0].ToString();
         }
         // if incomingTx bool is true, populate data and show details
         if (W3AWalletUtils.incomingTx)
@@ -115,6 +139,15 @@ public class Web3AuthWallet : MonoBehaviour
                 IncomingTxHash.text = W3AWalletUtils.incomingTxData;
             }
         }
+    }
+    
+    public static async Task<string> Symbol(string _contract, string abi, string prodiver)
+    {
+        string method = "symbol";
+        var provider = RPC.GetInstance.Provider();
+        var contract = new Contract(abi, _contract, provider);
+        var symbol = await contract.Call(method);
+        return symbol[0].ToString();
     }
 
     public async void AcceptTX()
@@ -154,12 +187,12 @@ public class Web3AuthWallet : MonoBehaviour
                 string _to = W3AWalletUtils.outgoingContract;
                 string _value = "0";
                 string _data = W3AWalletUtils.incomingTxData;
-                var _gasPrice = await RPC.GetInstance.Provider().GetGasPrice();
+                var _gasPrice = await _web3.RpcProvider.GetGasPrice();
                 string _gasLimit = "80000";
                 //tring _gasLimit = await W3AWalletUtils.GasLimit(_chain, _network, _to, _value, _data, _rpc);
-                string transaction = await W3AWalletUtils.CreateTransaction(_chain, _network, W3AWalletUtils.account, _to, _value, _data, _gasPrice.ToString(), _gasLimit, _rpc);
-                string signedTx = W3AWalletUtils.SignTransactionW3A(W3AWalletUtils.pk, transaction, _chainId);
-                string tx = await W3AWalletUtils.BroadcastTransactionW3A(_chain, _network, W3AWalletUtils.account, _to, _value, _data, signedTx, _gasPrice.ToString(), _gasLimit, _rpc);
+                string transaction = await _transactionService.CreateTransaction(_chain, _network, W3AWalletUtils.account, _to, _value, _data, _gasPrice.ToString(), _gasLimit, _rpc);
+                string signedTx = _signatureService.SignTransaction(W3AWalletUtils.pk, transaction, _chainId);
+                string tx = await _transactionService.BroadcastTransaction(_chain, _network, W3AWalletUtils.account, _to, _value, _data, signedTx, _gasPrice.ToString(), _gasLimit, _rpc);
                 IncomingTxHash.text = "Broadcasting...";
                 await new WaitForSeconds(3);
                 W3AWalletUtils.signedTxResponse = tx;
@@ -228,7 +261,7 @@ public class Web3AuthWallet : MonoBehaviour
                 W3AWalletUtils.incomingAction = "Broadcast";
                 W3AWalletUtils.incomingTxData = calldata;
                 W3AWalletUtils.amount = AmountToSend.text;
-                this.GetComponent<Web3AuthWallet>().OpenButton();
+                this.GetComponent<Web3AuthWalletUI>().OpenButton();
             }
             catch (Exception e)
             {

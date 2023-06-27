@@ -24,7 +24,7 @@ public class VerifyW3A : MonoBehaviour
         W3AWalletUtils.incomingTx = true;
         W3AWalletUtils.incomingAction = "Sign";
         W3AWalletUtils.incomingMessageData = message;
-        CSWallet.GetComponent<Web3AuthWallet>().OpenButton();
+        CSWallet.GetComponent<Web3AuthWalletUI>().OpenButton();
     }
 
     public void SignVerifySignature(string signatureString, string originalMessage)

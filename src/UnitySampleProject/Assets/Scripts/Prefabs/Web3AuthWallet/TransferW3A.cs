@@ -1,8 +1,14 @@
 using System;
 using System.Numerics;
+using ChainSafe.GamingSDK.EVM.Web3AuthWallet;
+using ChainSafe.GamingWeb3;
+using ChainSafe.GamingWeb3.Build;
+using ChainSafe.GamingWeb3.Unity;
+using Nethereum.Hex.HexTypes;
 using Web3Unity.Scripts.Library.Ethers.Contracts;
 using UnityEngine;
 using UnityEngine.UI;
+using Web3Unity.Scripts.Library.Ethers.JsonRpc;
 using Web3Unity.Scripts.Library.Ethers.Web3AuthWallet;
 
 public class TransferW3A : MonoBehaviour
@@ -13,9 +19,28 @@ public class TransferW3A : MonoBehaviour
     public string amount = "1000000000000000000";
     public string contractAbi;
     private GameObject CSWallet = null;
+    private Web3AuthWalletConfig _web3AuthWalletConfig;
+    private Web3AuthWallet _web3AuthWallet;
+    private Web3 _web3;
+
+    async private void Awake()
+    {
+        var projectConfig = ProjectConfigUtilities.Load();
+        _web3 = await new Web3Builder(projectConfig)
+            .Configure(services =>
+            {
+                services.UseUnityEnvironment();
+                services.UseJsonRpcProvider();
+                services.UseWeb3AuthWallet();
+            })
+            .BuildAsync();
+        _web3AuthWallet = new Web3AuthWallet(_web3.RpcProvider, _web3AuthWalletConfig);
+        _web3AuthWalletConfig = new Web3AuthWalletConfig();
+    }
 
     public void OnEnable()
     {
+        
         // resets response text
         responseText.text = "";
     }
@@ -42,7 +67,7 @@ public class TransferW3A : MonoBehaviour
             W3AWalletUtils.incomingTx = true;
             W3AWalletUtils.incomingAction = "Broadcast";
             W3AWalletUtils.incomingTxData = calldata;
-            CSWallet.GetComponent<Web3AuthWallet>().OpenButton();
+            CSWallet.GetComponent<Web3AuthWalletUI>().OpenButton();
         }
         catch (Exception e)
         {
@@ -58,12 +83,13 @@ public class TransferW3A : MonoBehaviour
         // connects to user's wallet to send a transaction
         try
         {
-            var contract = new Contract(contractAbi, contractAddress);
+            var contract = new Contract(contractAbi, contractAddress, _web3.RpcProvider);
             Debug.Log("Contract: " + contract);
+            Debug.Log("Account: " + W3AWalletUtils.account);
             var calldata = contract.Calldata(method, new object[]
             {
-                W3AWalletUtils.account,
-                BigInteger.Parse(amount)
+                "0xdA064B1Cef52e19caFF22ae2Cc1A4e8873B8bAB0",
+                1
             });
             Debug.Log("Contract Data: " + calldata);
             // finds the wallet, sets sign and incoming tx conditions to true and opens
@@ -71,7 +97,7 @@ public class TransferW3A : MonoBehaviour
             W3AWalletUtils.incomingTx = true;
             W3AWalletUtils.incomingAction = "Broadcast";
             W3AWalletUtils.incomingTxData = calldata;
-            CSWallet.GetComponent<Web3AuthWallet>().OpenButton();
+            CSWallet.GetComponent<Web3AuthWalletUI>().OpenButton();
         }
         catch (Exception e)
         {
