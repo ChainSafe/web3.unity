@@ -28,7 +28,6 @@ public class GelatoTest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
     }
 
     public async void TestingGelatoFunction()
@@ -39,7 +38,7 @@ public class GelatoTest : MonoBehaviour
     private async Task InitWeb3()
     {
         var sponsorApiKey = System.Environment.GetEnvironmentVariable("1BalanceApiKey");
-        
+
         _web3 = await new Web3Builder(ProjectConfigUtilities.Load()).Configure(services =>
         {
             services.UseUnityEnvironment();
@@ -65,7 +64,7 @@ public class GelatoTest : MonoBehaviour
                   "\"type\":\"function\"" +
                   "}]";
         var contract = new Contract(abi, target);
-        
+
         var data = contract.Calldata("sendToFriend", new object[]
         {
             feeToken,
@@ -103,7 +102,7 @@ public class GelatoTest : MonoBehaviour
             }
         }
     }
-    
+
     public async void SponsorCallExample()
     {
         var counterContract = "0x763D37aB388C5cdd2Fb0849d6275802F959fbF30";
@@ -116,7 +115,7 @@ public class GelatoTest : MonoBehaviour
                   "}]";
         var contract = new Contract(abi, counterContract);
         var data = contract.Calldata("increment");
-        
+
         var gelatoInstance = _web3.ServiceProvider.GetRequiredService<IGelatoModule>();
         var relayResponse = await gelatoInstance.SponsoredCall(new SponsoredCallRequest()
         {
@@ -146,7 +145,7 @@ public class GelatoTest : MonoBehaviour
             }
         }
     }
-    
+
     public async void CallWithSyncFeeErc2771Example()
     {
         var target = "0x5dD1100f23278e0e27972eacb4F1B81D97D071B7";
@@ -193,11 +192,11 @@ public class GelatoTest : MonoBehaviour
             }
         }
     }
-    
+
     public async void sponsorCallErc2771Example()
     {
         var target = "0x00172f67db60E5fA346e599cdE675f0ca213b47b";
-        
+
         var abi = "[{\"inputs\": []," +
                   "\"name\":\"increment\"," +
                   "\"outputs\":[]," +
@@ -206,7 +205,7 @@ public class GelatoTest : MonoBehaviour
                   "}]";
         var contract = new Contract(abi, target);
         var data = contract.Calldata("increment");
-        
+
         var gelatoInstance = _web3.ServiceProvider.GetRequiredService<IGelatoModule>();
         var relayResponse = await gelatoInstance.SponsoredCallErc2771(new SponsoredCallErc2771Request()
         {
