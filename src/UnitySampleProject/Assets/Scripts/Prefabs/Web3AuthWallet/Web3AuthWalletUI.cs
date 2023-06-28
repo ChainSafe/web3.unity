@@ -274,6 +274,7 @@ public class Web3AuthWalletUI : MonoBehaviour
                     BigInteger.Parse(amount)
                 });
                 Debug.Log("Contract Data: " + calldata);
+
                 // finds the wallet, sets sign and incoming tx conditions to true and opens
                 W3AWalletUtils.IncomingTx = true;
                 W3AWalletUtils.IncomingAction = "Broadcast";
