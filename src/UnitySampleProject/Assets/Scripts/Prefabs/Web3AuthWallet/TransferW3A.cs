@@ -48,7 +48,7 @@ public class TransferW3A : MonoBehaviour
     {
         // smart contract method to call
         string method = "transfer";
-        W3AWalletUtils.outgoingContract = contractAddress;
+        W3AWalletUtils.OutgoingContract = contractAddress;
 
         // connects to user's wallet to send a transaction
         try
@@ -62,11 +62,12 @@ public class TransferW3A : MonoBehaviour
                 BigInteger.Parse(amount)
             });
             Debug.Log("Contract Data: " + calldata);
+
             // finds the wallet, sets sign and incoming tx conditions to true and opens
             CSWallet = GameObject.FindGameObjectWithTag("CSWallet");
-            W3AWalletUtils.incomingTx = true;
-            W3AWalletUtils.incomingAction = "Broadcast";
-            W3AWalletUtils.incomingTxData = calldata;
+            W3AWalletUtils.IncomingTx = true;
+            W3AWalletUtils.IncomingAction = "Broadcast";
+            W3AWalletUtils.IncomingTxData = calldata;
             CSWallet.GetComponent<Web3AuthWalletUI>().OpenButton();
         }
         catch (Exception e)
@@ -79,14 +80,14 @@ public class TransferW3A : MonoBehaviour
     {
         // smart contract method to call
         string method = "mint";
-        W3AWalletUtils.outgoingContract = contractAddress;
+        W3AWalletUtils.OutgoingContract = contractAddress;
 
         // connects to user's wallet to send a transaction
         try
         {
             var contract = new Contract(contractAbi, contractAddress, _web3.RpcProvider);
             Debug.Log("Contract: " + contract);
-            Debug.Log("Account: " + W3AWalletUtils.account);
+            Debug.Log("Account: " + W3AWalletUtils.Account);
             var calldata = contract.Calldata(method, new object[]
             {
                 "0xdA064B1Cef52e19caFF22ae2Cc1A4e8873B8bAB0",
@@ -96,9 +97,9 @@ public class TransferW3A : MonoBehaviour
 
             // finds the wallet, sets sign and incoming tx conditions to true and opens
             CSWallet = GameObject.FindGameObjectWithTag("CSWallet");
-            W3AWalletUtils.incomingTx = true;
-            W3AWalletUtils.incomingAction = "Broadcast";
-            W3AWalletUtils.incomingTxData = calldata;
+            W3AWalletUtils.IncomingTx = true;
+            W3AWalletUtils.IncomingAction = "Broadcast";
+            W3AWalletUtils.IncomingTxData = calldata;
             CSWallet.GetComponent<Web3AuthWalletUI>().OpenButton();
         }
         catch (Exception e)
@@ -109,11 +110,11 @@ public class TransferW3A : MonoBehaviour
 
     void Update()
     {
-        if (W3AWalletUtils.signedTxResponse != string.Empty)
+        if (W3AWalletUtils.SignedTxResponse != string.Empty)
         {
             // display signed tx response from wallet
-            responseText.text = W3AWalletUtils.signedTxResponse;
-            W3AWalletUtils.signedTxResponse = string.Empty;
+            responseText.text = W3AWalletUtils.SignedTxResponse;
+            W3AWalletUtils.SignedTxResponse = string.Empty;
         }
     }
 }
