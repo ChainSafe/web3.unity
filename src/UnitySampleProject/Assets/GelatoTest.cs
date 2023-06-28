@@ -106,7 +106,7 @@ public class GelatoTest : MonoBehaviour
     public async void SponsorCallExample()
     {
         var counterContract = "0x763D37aB388C5cdd2Fb0849d6275802F959fbF30";
-        
+
         var abi = "[{\"inputs\": []," +
                   "\"name\":\"increment\"," +
                   "\"outputs\":[]," +
