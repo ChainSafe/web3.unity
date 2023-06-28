@@ -196,16 +196,16 @@ public class GelatoTest : MonoBehaviour
     
     public async void sponsorCallErc2771Example()
     {
-        var target = "0x00172f67db60E5fA346e599cdE675f0ca213b47b ";
+        var target = "0x00172f67db60E5fA346e599cdE675f0ca213b47b";
         
         var abi = "[{\"inputs\": []," +
-                  "\"name\":\"incrementContext\"," +
+                  "\"name\":\"increment\"," +
                   "\"outputs\":[]," +
                   "\"stateMutability\":\"nonpayable\"," +
                   "\"type\":\"function\"" +
                   "}]";
         var contract = new Contract(abi, target);
-        var data = contract.Calldata("incrementContext");
+        var data = contract.Calldata("increment");
         
         var gelatoInstance = _web3.ServiceProvider.GetRequiredService<IGelatoModule>();
         var relayResponse = await gelatoInstance.SponsoredCallErc2771(new SponsoredCallErc2771Request()

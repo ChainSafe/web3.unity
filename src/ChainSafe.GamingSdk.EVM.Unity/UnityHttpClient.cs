@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using ChainSafe.GamingSdk.Evm.Unity;
 using ChainSafe.GamingWeb3.Environment;
 using Newtonsoft.Json;
+using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Networking;
 

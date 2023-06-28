@@ -34,6 +34,7 @@ namespace ChainSafe.GamingSdk.Gelato
         {
             try
             {
+                request.ChainId = int.Parse(chainConfig.ChainId);
                 return await this.gelatoClient.Post<CallWithSyncFeeRequest, RelayResponse>(RelayCall.CallWithSyncFee, request);
             }
             catch (System.Exception e)
@@ -67,8 +68,8 @@ namespace ChainSafe.GamingSdk.Gelato
                 var optional = await CallWithErc2771RequestOptionalParameters.PopulateOptionalUserParameters(callRequest, Erc2771Type.CallWithSyncFee, provider, config, chainConfig);
                 var newStruct = callRequest.MapRequestToStruct<CallWithSyncFeeErc2771Struct>(optional, Erc2771Type.CallWithSyncFee);
 
-                callRequest.UserDeadline = callRequest.UserDeadline ?? optional.UserDeadline;
-                callRequest.UserNonce = callRequest.UserNonce ?? optional.UserNonce;
+                callRequest.UserDeadline ??= optional.UserDeadline;
+                callRequest.UserNonce ??= optional.UserNonce;
 
                 var types = new Dictionary<string, MemberDescription[]>
                 {
@@ -157,6 +158,9 @@ namespace ChainSafe.GamingSdk.Gelato
 
                 callRequest.Signature = await wallet.SignTypedData(GetEip712Domain(Erc2771Type.SponsoredCall), types, newStruct);
                 callRequest.SponsorApiKey = config.SponsorApiKey;
+
+                callRequest.UserDeadline ??= optional.UserDeadline;
+                callRequest.UserNonce ??= optional.UserNonce;
                 return await this.gelatoClient.Post<CallWithErc2771Request, RelayResponse>(RelayCall.SponsoredCallErc2771, callRequest);
             }
             catch (Exception e)
