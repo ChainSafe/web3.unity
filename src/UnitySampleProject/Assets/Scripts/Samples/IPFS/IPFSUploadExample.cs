@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Web3Unity.Scripts.Library.IPFS;
 
-public class IpfsUploadExample : MonoBehaviour
+public class IPFSUploadExample : MonoBehaviour
 {
     private const string apiKey = "YOUR_CHAINSAFE_STORE_API_KEY";
 
