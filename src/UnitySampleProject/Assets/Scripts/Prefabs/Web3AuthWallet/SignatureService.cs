@@ -4,6 +4,19 @@ using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Signer;
 using UnityEngine;
 
+// Interface for signing transactions
+public interface ITransactionSigner
+{
+    string SignTransaction(string privateKey, string transaction, string chainId);
+}
+
+// Interface for signing messages
+public interface IMessageSigner
+{
+    string SignMessage(string privateKey, string message);
+}
+
+
 // creates a transaction for the wallet
 public class SignatureService : ISignatureService
 {
