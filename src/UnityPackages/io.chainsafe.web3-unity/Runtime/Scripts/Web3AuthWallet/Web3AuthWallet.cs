@@ -22,7 +22,6 @@ namespace ChainSafe.GamingSDK.EVM.Web3AuthWallet
         private readonly IRpcProvider provider;
         ProjectConfigScriptableObject projectConfigSo = (ProjectConfigScriptableObject)Resources.Load("ProjectConfigData", typeof(ScriptableObject));
 
-        
         public class ResponseObject<T>
         {
             public TransactionResponse? Response;
@@ -74,7 +73,7 @@ namespace ChainSafe.GamingSDK.EVM.Web3AuthWallet
         {
             throw new NotImplementedException();
         }
-        
+
         public async Task<string> SignTransaction(TransactionRequest transaction)
         {
             int int32 = Convert.ToInt32(transaction.ChainId);
@@ -109,6 +108,7 @@ namespace ChainSafe.GamingSDK.EVM.Web3AuthWallet
                     return data.Response;
                 }
             }
+
             return null;
         }
 

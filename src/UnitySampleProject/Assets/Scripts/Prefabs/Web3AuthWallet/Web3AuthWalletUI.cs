@@ -75,7 +75,7 @@ public class Web3AuthWalletUI : MonoBehaviour
     {
         // sets the pk to memory and clears it from player prefs
         W3AWalletUtils.PrivateKey = PlayerPrefs.GetString("PK");
-        PlayerPrefs.SetString("PK", "");
+        PlayerPrefs.SetString("PK", string.Empty);
     }
 
     public void CloseButton()
@@ -109,16 +109,19 @@ public class Web3AuthWalletUI : MonoBehaviour
     {
         // updates the wallets balances and custom tokens if specified by dev
         Debug.Log("Updating wallet data");
+
         // populate wallet address
         W3AWalletUtils.Account = _transactionService.GetAddressW3A(W3AWalletUtils.PrivateKey);
         WalletAddress.text = W3AWalletUtils.Account;
+
         // populate native token balance
         var provider = _web3.RpcProvider;
         var getBalance = await provider.GetBalance(W3AWalletUtils.Account);
         NativeTokenBalanceName.text = nativeTokenSymbol;
         NativeTokenBalance.text = (float.Parse(getBalance.ToString()) / Math.Pow(10, 18)).ToString();
+
         // populate custom token balance if contract and abi is entered by dev
-        if ((customTokenCA != "") && (customTokenABI != ""))
+        if ((customTokenCA != string.Empty) && (customTokenABI != string.Empty))
         {
             CustomTokenObjPlaceholder.SetActive(false);
             CustomTokenObj.SetActive(true);

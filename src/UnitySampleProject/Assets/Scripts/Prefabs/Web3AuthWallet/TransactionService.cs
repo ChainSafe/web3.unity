@@ -13,7 +13,7 @@ public class TransactionService : ITransactionService
     // used to obtain a users wallet address from their private key stored in memory
     public string GetAddressW3A(string _privateKey) => new EthECKey(_privateKey).GetPublicAddress();
 
-    public async Task<string> CreateTransaction( string _account, TransactionRequest txRequest,  string _gasPrice = "", string _gasLimit = "", string _rpc = "", string _nonce = "")
+    public async Task<string> CreateTransaction(string _account, TransactionRequest txRequest,  string _gasPrice = "", string _gasLimit = "", string _rpc = "", string _nonce = "")
     {
         WWWForm form = new WWWForm();
         Debug.Log("ProjectID: " + projectConfigSo.ProjectId);
@@ -37,10 +37,8 @@ public class TransactionService : ITransactionService
         }
     }
 
-   public async Task<string> BroadcastTransaction(TransactionRequest txRequest, string _account, 
-       string _signature, string _gasPrice = "", string _gasLimit = "", string _rpc = "")
+    public async Task<string> BroadcastTransaction(TransactionRequest txRequest, string _account, string _signature, string _gasPrice = "", string _gasLimit = "", string _rpc = "")
     {
-
         WWWForm form = new WWWForm();
         form.AddField("projectId", projectConfigSo.ProjectId);
         form.AddField("chain", projectConfigSo.Chain);
@@ -64,7 +62,7 @@ public class TransactionService : ITransactionService
         }
     }
 
-   public async Task<TransactionResponse?> SendTransaction(TransactionRequest txRequest)
+    public async Task<TransactionResponse?> SendTransaction(TransactionRequest txRequest)
     {
         WWWForm form = new WWWForm();
         form.AddField("projectId", PlayerPrefs.GetString("ProjectID"));
@@ -88,6 +86,7 @@ public class TransactionService : ITransactionService
                 return data.Response;
             }
         }
+
         return null;
     }
 }

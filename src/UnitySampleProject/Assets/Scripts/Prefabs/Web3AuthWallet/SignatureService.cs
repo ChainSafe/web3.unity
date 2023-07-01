@@ -5,7 +5,7 @@ using Nethereum.Signer;
 using UnityEngine;
 
 // creates a transaction for the wallet
-public class SignatureService : ITransactionSigner , IMessageSigner
+public class SignatureService : ITransactionSigner, IMessageSigner
 {
     public string SignTransaction(string privateKey, string transaction)
     {
