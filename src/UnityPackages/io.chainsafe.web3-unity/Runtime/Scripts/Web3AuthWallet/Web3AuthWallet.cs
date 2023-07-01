@@ -20,6 +20,8 @@ namespace ChainSafe.GamingSDK.EVM.Web3AuthWallet
     {
         private readonly Web3AuthWalletConfig configuration;
         private readonly IRpcProvider provider;
+        ProjectConfigScriptableObject projectConfigSo = (ProjectConfigScriptableObject)Resources.Load("ProjectConfigData", typeof(ScriptableObject));
+
         
         public class ResponseObject<T>
         {
@@ -85,9 +87,8 @@ namespace ChainSafe.GamingSDK.EVM.Web3AuthWallet
         // Returns an object that i can't parse into a string, transaction works on the explorer
         public async Task<TransactionResponse?> SendTransaction(TransactionRequest transaction)
         {
-            var projectConfigSo = (ProjectConfigScriptableObject)Resources.Load("ProjectConfigData", typeof(ScriptableObject));
             WWWForm form = new WWWForm();
-            form.AddField("projectId", PlayerPrefs.GetString("ProjectID"));
+            form.AddField("projectId", projectConfigSo.ProjectId);
             form.AddField("chain", projectConfigSo.Chain);
             form.AddField("network", projectConfigSo.Network);
             form.AddField("account", transaction.From);
@@ -108,34 +109,6 @@ namespace ChainSafe.GamingSDK.EVM.Web3AuthWallet
                     return data.Response;
                 }
             }
-            return null;
-        }
-        
-        public static async Task<string?> CreateTransaction(TransactionRequest transaction)
-        {
-            var projectConfigSo = (ProjectConfigScriptableObject)Resources.Load("ProjectConfigData", typeof(ScriptableObject));
-            WWWForm form = new WWWForm();
-            form.AddField("projectId", PlayerPrefs.GetString("ProjectID"));
-            form.AddField("chain", projectConfigSo.Chain);
-            form.AddField("network", projectConfigSo.Network);
-            form.AddField("account", transaction.From);
-            form.AddField("to", transaction.To);
-            form.AddField("value", transaction.Value.ToString());
-            form.AddField("data", transaction.Data);
-            form.AddField("gasPrice", transaction.GasPrice.ToString());
-            form.AddField("gasLimit", transaction.GasLimit.ToString());
-            form.AddField("rpc", projectConfigSo.Rpc);
-            string url =  "https://api.gaming.chainsafe.io/evm/createTransaction";
-            using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
-            {
-                await webRequest.SendWebRequest();
-                ResponseObject<string> data = JsonUtility.FromJson<ResponseObject<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
-                if (data.Response != null)
-                {
-                    return data.Response.Hash;
-                }
-            }
-
             return null;
         }
 

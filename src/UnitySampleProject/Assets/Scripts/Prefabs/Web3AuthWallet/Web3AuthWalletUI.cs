@@ -7,12 +7,14 @@ using ChainSafe.GamingSDK.EVM.Web3AuthWallet;
 using ChainSafe.GamingWeb3;
 using ChainSafe.GamingWeb3.Build;
 using ChainSafe.GamingWeb3.Unity;
+using Nethereum.Hex.HexTypes;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Web3Unity.Scripts.Library.ETHEREUEM.EIP;
 using Web3Unity.Scripts.Library.Ethers.Contracts;
 using Web3Unity.Scripts.Library.Ethers.JsonRpc;
+using Web3Unity.Scripts.Library.Ethers.Transactions;
 using Web3Unity.Scripts.Library.Ethers.Web3AuthWallet;
 
 public class Web3AuthWalletUI : MonoBehaviour
@@ -167,7 +169,7 @@ public class Web3AuthWalletUI : MonoBehaviour
             // attempt to sign tx
             try
             {
-                string tx = _signatureService.SignMsgW3A(W3AWalletUtils.PrivateKey, W3AWalletUtils.IncomingMessageData);
+                string tx = _signatureService.SignMessage(W3AWalletUtils.PrivateKey, W3AWalletUtils.IncomingMessageData);
                 IncomingTxHash.text = "Signing...";
                 await new WaitForSeconds(3);
                 W3AWalletUtils.SignedTxResponse = tx;
@@ -190,29 +192,28 @@ public class Web3AuthWalletUI : MonoBehaviour
             // attempt to broadcast tx
             try
             {
-                string _chain = PlayerPrefs.GetString("Chain");
-                string _chainId = PlayerPrefs.GetString("ChainID");
-                string _network = PlayerPrefs.GetString("Network");
-                string _rpc = PlayerPrefs.GetString("RPC");
                 string _to = W3AWalletUtils.OutgoingContract;
-                string _value = "0";
+                string _value = "0x00";
                 string _data = W3AWalletUtils.IncomingTxData;
                 var _gasPrice = await _web3.RpcProvider.GetGasPrice();
                 string _gasLimit = "80000";
-                string transaction = await _transactionService.CreateTransaction(_chain, _network, W3AWalletUtils.Account, _to, _value, _data, _gasPrice.ToString(), _gasLimit, _rpc);
-                Debug.Log("Private Key: " + W3AWalletUtils.PrivateKey);
-                Debug.Log("Transaction: " + transaction);
-                Debug.Log("ChainId: " + _chainId);
-                Debug.Log("Contract: " + _to);
-                Debug.Log("Data: " + _data);
-
-                string signedTx = _signatureService.SignTransaction(W3AWalletUtils.PrivateKey, transaction, _chainId);
-                string tx = await _transactionService.BroadcastTransaction(_chain, _network, W3AWalletUtils.Account, _to, _value, _data, signedTx, _gasPrice.ToString(), _gasLimit, _rpc);
+                var txRequest = new TransactionRequest
+                {
+                    To = W3AWalletUtils.OutgoingContract,
+                    Value = new HexBigInteger(0),
+                    Data = _data,
+                    GasPrice = _gasPrice,
+                    GasLimit = new HexBigInteger(_gasLimit)
+                };
+                string transaction = await _transactionService.CreateTransaction(W3AWalletUtils.Account,txRequest, _gasPrice.ToString(), _gasLimit);
+                string signedTx = _signatureService.SignTransaction(W3AWalletUtils.PrivateKey, transaction);
+                string tx = await _transactionService.BroadcastTransaction(txRequest, W3AWalletUtils.Account,signedTx, _gasPrice.ToString(), _gasLimit);
                 IncomingTxHash.text = "Broadcasting...";
                 await new WaitForSeconds(3);
                 W3AWalletUtils.SignedTxResponse = tx;
+                Debug.Log("Tranascation: " + tx);
                 IncomingTxHash.text = "Broadcast Successful!";
-                UpdateTxHistory(System.DateTime.Now.ToString(), "Transaction", W3AWalletUtils.Amount, tx.ToString());
+                UpdateTxHistory(DateTime.Now.ToString(), "Transaction", W3AWalletUtils.Amount, tx.ToString());
             }
             catch (Exception e)
             {

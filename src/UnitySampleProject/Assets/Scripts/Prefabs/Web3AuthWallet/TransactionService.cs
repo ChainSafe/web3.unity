@@ -8,21 +8,22 @@ using Web3Unity.Scripts.Library.Ethers.Transactions;
 
 public class TransactionService : ITransactionService
 {
+    ProjectConfigScriptableObject projectConfigSo = (ProjectConfigScriptableObject)Resources.Load("ProjectConfigData", typeof(ScriptableObject));
+
     // used to obtain a users wallet address from their private key stored in memory
     public string GetAddressW3A(string _privateKey) => new EthECKey(_privateKey).GetPublicAddress();
 
-    public async Task<string> CreateTransaction(string _chain, string _network, string _account, string _to,
-        string _value, string _data, string _gasPrice = "", string _gasLimit = "", string _rpc = "", string _nonce = "")
+    public async Task<string> CreateTransaction( string _account, TransactionRequest txRequest,  string _gasPrice = "", string _gasLimit = "", string _rpc = "", string _nonce = "")
     {
         WWWForm form = new WWWForm();
-        Debug.Log("ProjectID: " + PlayerPrefs.GetString("ProjectID"));
-        form.AddField("projectId", PlayerPrefs.GetString("ProjectID"));
-        form.AddField("chain", _chain);
-        form.AddField("network", _network);
+        Debug.Log("ProjectID: " + projectConfigSo.ProjectId);
+        form.AddField("projectId",  projectConfigSo.ProjectId);
+        form.AddField("chain",  projectConfigSo.Chain);
+        form.AddField("network",  projectConfigSo.Network);
         form.AddField("account", _account);
-        form.AddField("to", _to);
-        form.AddField("value", _value);
-        form.AddField("data", _data);
+        form.AddField("to", txRequest.To);
+        form.AddField("value", txRequest.Value.ToString());
+        form.AddField("data", txRequest.Data);
         form.AddField("gasPrice", _gasPrice);
         form.AddField("gasLimit", _gasLimit);
         form.AddField("rpc", _rpc);
@@ -36,21 +37,22 @@ public class TransactionService : ITransactionService
         }
     }
 
-    public async Task<string> BroadcastTransaction(string _chain, string _network, string _account, string _to,
-        string _value, string _data, string _signature, string _gasPrice, string _gasLimit, string _rpc)
+   public async Task<string> BroadcastTransaction(TransactionRequest txRequest, string _account, 
+       string _signature, string _gasPrice = "", string _gasLimit = "", string _rpc = "")
     {
+
         WWWForm form = new WWWForm();
-        form.AddField("projectId", PlayerPrefs.GetString("ProjectID"));
-        form.AddField("chain", _chain);
-        form.AddField("network", _network);
+        form.AddField("projectId", projectConfigSo.ProjectId);
+        form.AddField("chain", projectConfigSo.Chain);
+        form.AddField("network", projectConfigSo.Network);
         form.AddField("account", _account);
-        form.AddField("to", _to);
-        form.AddField("value", _value);
-        form.AddField("data", _data);
+        form.AddField("to", txRequest.To);
+        form.AddField("value", txRequest.Value.HexValue);
+        form.AddField("data", txRequest.Data);
         form.AddField("signature", _signature);
         form.AddField("gasPrice", _gasPrice);
         form.AddField("gasLimit", _gasLimit);
-        form.AddField("rpc", _rpc);
+        form.AddField("rpc", projectConfigSo.Rpc);
         string url = "https://api.gaming.chainsafe.io/evm/broadcastTransaction";
         using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
         {
@@ -62,20 +64,19 @@ public class TransactionService : ITransactionService
         }
     }
 
-    public async Task<TransactionResponse?> SendTransaction(TransactionRequest transaction)
+   public async Task<TransactionResponse?> SendTransaction(TransactionRequest txRequest)
     {
-        var projectConfigSo = (ProjectConfigScriptableObject)Resources.Load("ProjectConfigData", typeof(ScriptableObject));
         WWWForm form = new WWWForm();
         form.AddField("projectId", PlayerPrefs.GetString("ProjectID"));
         form.AddField("chain", projectConfigSo.Chain);
         form.AddField("network", projectConfigSo.Network);
-        form.AddField("account", transaction.From);
-        form.AddField("to", transaction.To);
-        form.AddField("value", transaction.Value.ToString());
-        form.AddField("data", transaction.Data);
+        form.AddField("account", txRequest.From);
+        form.AddField("to", txRequest.To);
+        form.AddField("value", txRequest.Value.ToString());
+        form.AddField("data", txRequest.Data);
         form.AddField("signature", W3AUtils.SignedTxResponse);
-        form.AddField("gasPrice", transaction.GasPrice.ToString());
-        form.AddField("gasLimit", transaction.GasLimit.ToString());
+        form.AddField("gasPrice", txRequest.GasPrice.ToString());
+        form.AddField("gasLimit", txRequest.GasLimit.ToString());
         form.AddField("rpc", projectConfigSo.Rpc);
         string url = "https://api.gaming.chainsafe.io/evm/broadcastTransaction";
         using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
@@ -87,7 +88,6 @@ public class TransactionService : ITransactionService
                 return data.Response;
             }
         }
-
         return null;
     }
 }
