@@ -6,16 +6,10 @@ using System.Threading.Tasks;
 using ChainSafe.GamingSDK.EVM.Web3AuthWallet;
 using ChainSafe.GamingWeb3;
 using ChainSafe.GamingWeb3.Build;
-using ChainSafe.GamingWeb3.Unity;
 using Nethereum.Hex.HexTypes;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using Web3Unity.Scripts.Library.ETHEREUEM.EIP;
 using Web3Unity.Scripts.Library.Ethers.Contracts;
 using Web3Unity.Scripts.Library.Ethers.JsonRpc;
 using Web3Unity.Scripts.Library.Ethers.Transactions;
-using Web3Unity.Scripts.Library.Ethers.Web3AuthWallet;
 
 public class Web3AuthWalletUI : MonoBehaviour
 {
@@ -48,14 +42,14 @@ public class Web3AuthWalletUI : MonoBehaviour
     public Text[] HashesTexts;
     private Web3AuthWalletConfig _web3AuthWalletConfig;
     private Web3AuthWallet _web3AuthWallet;
-    private Web3 _web3;
+    private Web3 web3;
     private TransactionService _transactionService;
     private SignatureService _signatureService;
 
     async void Awake()
     {
         var projectConfig = ProjectConfigUtilities.Load();
-        _web3 = await new Web3Builder(projectConfig)
+        web3 = await new Web3Builder(projectConfig)
             .Configure(services =>
             {
                 services.UseUnityEnvironment();
@@ -115,7 +109,7 @@ public class Web3AuthWalletUI : MonoBehaviour
         WalletAddress.text = W3AWalletUtils.Account;
 
         // populate native token balance
-        var provider = _web3.RpcProvider;
+        var provider = web3.RpcProvider;
         var getBalance = await provider.GetBalance(W3AWalletUtils.Account);
         NativeTokenBalanceName.text = nativeTokenSymbol;
         NativeTokenBalance.text = (float.Parse(getBalance.ToString()) / Math.Pow(10, 18)).ToString();
@@ -154,11 +148,11 @@ public class Web3AuthWalletUI : MonoBehaviour
         }
     }
 
-    public static async Task<string> Symbol(string _contract, string abi, string prodiver)
+    public static async Task<string> Symbol(string contract1, string abi)
     {
         string method = "symbol";
         var provider = RPC.GetInstance.Provider();
-        var contract = new Contract(abi, _contract, provider);
+        var contract = new Contract(abi, contract1, provider);
         var symbol = await contract.Call(method);
         return symbol[0].ToString();
     }
@@ -195,22 +189,21 @@ public class Web3AuthWalletUI : MonoBehaviour
             // attempt to broadcast tx
             try
             {
-                string _to = W3AWalletUtils.OutgoingContract;
-                string _value = "0x00";
-                string _data = W3AWalletUtils.IncomingTxData;
-                var _gasPrice = await _web3.RpcProvider.GetGasPrice();
-                string _gasLimit = "80000";
+                string to = W3AWalletUtils.OutgoingContract;
+                string data = W3AWalletUtils.IncomingTxData;
+                var gasPrice = await web3.RpcProvider.GetGasPrice();
+                string gasLimit = "80000";
                 var txRequest = new TransactionRequest
                 {
                     To = W3AWalletUtils.OutgoingContract,
                     Value = new HexBigInteger(0),
-                    Data = _data,
-                    GasPrice = _gasPrice,
-                    GasLimit = new HexBigInteger(_gasLimit)
+                    Data = data,
+                    GasPrice = gasPrice,
+                    GasLimit = new HexBigInteger(gasLimit),
                 };
-                string transaction = await _transactionService.CreateTransaction(W3AWalletUtils.Account,txRequest, _gasPrice.ToString(), _gasLimit);
+                string transaction = await _transactionService.CreateTransaction(W3AWalletUtils.Account, txRequest, gasPrice.ToString(), gasLimit);
                 string signedTx = _signatureService.SignTransaction(W3AWalletUtils.PrivateKey, transaction);
-                string tx = await _transactionService.BroadcastTransaction(txRequest, W3AWalletUtils.Account,signedTx, _gasPrice.ToString(), _gasLimit);
+                string tx = await _transactionService.BroadcastTransaction(txRequest, W3AWalletUtils.Account, signedTx, gasPrice.ToString(), gasLimit);
                 IncomingTxHash.text = "Broadcasting...";
                 await new WaitForSeconds(3);
                 W3AWalletUtils.SignedTxResponse = tx;
