@@ -8,12 +8,12 @@ using Web3Unity.Scripts.Library.Ethers.Transactions;
 
 public class TransactionService : ITransactionService
 {
-    ProjectConfigScriptableObject projectConfigSo = (ProjectConfigScriptableObject)Resources.Load("ProjectConfigData", typeof(ScriptableObject));
+    private ProjectConfigScriptableObject projectConfigSo = (ProjectConfigScriptableObject)Resources.Load("ProjectConfigData", typeof(ScriptableObject));
 
     // used to obtain a users wallet address from their private key stored in memory
     public string GetAddressW3A(string privateKey) => new EthECKey(privateKey).GetPublicAddress();
 
-    public async Task<string> CreateTransaction(string account, TransactionRequest txRequest,  string gasPrice = "", string gasLimit = "", string rpc = "", string nonce = "")
+    public async Task<string> CreateTransaction(string account, TransactionRequest txRequest,  string gasPrice, string gasLimit, string nonce)
     {
         WWWForm form = new WWWForm();
         Debug.Log("ProjectID: " + projectConfigSo.ProjectId);
@@ -26,7 +26,7 @@ public class TransactionService : ITransactionService
         form.AddField("data", txRequest.Data);
         form.AddField("gasPrice", gasPrice);
         form.AddField("gasLimit", gasLimit);
-        form.AddField("rpc", rpc);
+        form.AddField("rpc", projectConfigSo.Rpc);
         form.AddField("nonce", nonce);
         string url = "https://api.gaming.chainsafe.io/evm/createTransaction";
         using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
@@ -37,7 +37,7 @@ public class TransactionService : ITransactionService
         }
     }
 
-    public async Task<string> BroadcastTransaction(TransactionRequest txRequest, string account, string signature, string gasPrice = "", string gasLimit = "", string rpc = "")
+    public async Task<string> BroadcastTransaction(TransactionRequest txRequest, string account, string signature, string gasPrice, string gasLimit)
     {
         WWWForm form = new WWWForm();
         form.AddField("projectId", projectConfigSo.ProjectId);

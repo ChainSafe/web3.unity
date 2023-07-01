@@ -6,10 +6,15 @@ using System.Threading.Tasks;
 using ChainSafe.GamingSDK.EVM.Web3AuthWallet;
 using ChainSafe.GamingWeb3;
 using ChainSafe.GamingWeb3.Build;
+using ChainSafe.GamingWeb3.Unity;
 using Nethereum.Hex.HexTypes;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using Web3Unity.Scripts.Library.Ethers.Contracts;
 using Web3Unity.Scripts.Library.Ethers.JsonRpc;
 using Web3Unity.Scripts.Library.Ethers.Transactions;
+using Web3Unity.Scripts.Library.Ethers.Web3AuthWallet;
 
 public class Web3AuthWalletUI : MonoBehaviour
 {
@@ -201,7 +206,7 @@ public class Web3AuthWalletUI : MonoBehaviour
                     GasPrice = gasPrice,
                     GasLimit = new HexBigInteger(gasLimit),
                 };
-                string transaction = await _transactionService.CreateTransaction(W3AWalletUtils.Account, txRequest, gasPrice.ToString(), gasLimit);
+                string transaction = await _transactionService.CreateTransaction(W3AWalletUtils.Account, txRequest, gasPrice.ToString(), gasLimit,string.Empty);
                 string signedTx = _signatureService.SignTransaction(W3AWalletUtils.PrivateKey, transaction);
                 string tx = await _transactionService.BroadcastTransaction(txRequest, W3AWalletUtils.Account, signedTx, gasPrice.ToString(), gasLimit);
                 IncomingTxHash.text = "Broadcasting...";

@@ -3,7 +3,7 @@ using Web3Unity.Scripts.Library.Ethers.Transactions;
 
 public interface ITransactionService
 {
-    Task<string> CreateTransaction(string account, TransactionRequest txRequest, string gasPrice = "", string gasLimit = "", string rpc = "", string nonce = "");
+    Task<string> CreateTransaction(string account, TransactionRequest txRequest, string gasPrice, string gasLimit, string nonce);
 
-    Task<string> BroadcastTransaction(TransactionRequest txRequest, string _account, string _signature, string _gasPrice, string _gasLimit, string _rpc);
+    Task<string> BroadcastTransaction(TransactionRequest txRequest, string account, string signature, string gasPrice, string gasLimit);
 }
