@@ -1,4 +1,6 @@
+using System;
 using System.Threading.Tasks;
+using ChainSafe.GamingSDK.EVM.Web3AuthWallet;
 using Prefabs.Web3AuthWallet.Interfaces;
 using UnityEngine;
 using Web3Unity.Scripts.Library.ETHEREUEM.Connect;
@@ -39,7 +41,7 @@ namespace Prefabs.Web3AuthWallet.Services
 
         public Task<TransactionResponse> SendTransaction(TransactionRequest txRequest, string signature)
         {
-            WWWForm form = new WWWForm();
+            /*WWWForm form = new WWWForm();
             form.AddField("projectId", PlayerPrefs.GetString("ProjectID"));
             form.AddField("chain", transactionConfig.GetChain());
             form.AddField("network", transactionConfig.GetNetwork());
@@ -53,7 +55,8 @@ namespace Prefabs.Web3AuthWallet.Services
             form.AddField("rpc", transactionConfig.GetRpc());
             string url = "https://api.gaming.chainsafe.io/evm/broadcastTransaction";
             var result = httpRequestHandler.PostRequest<Web3AuthWallet.ResponseObject<TransactionResponse>>(url, form)?.Result;
-            return result;
+            return result;*/
+            throw new NotImplementedException();
         }
 
         public async Task<EVM.Response<string>> BroadcastTransaction(TransactionRequest txRequest, string account, string signature, string gasPrice, string gasLimit)
