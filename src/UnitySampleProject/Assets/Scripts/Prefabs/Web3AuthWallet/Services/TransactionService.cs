@@ -4,6 +4,7 @@ using Prefabs.Web3AuthWallet.Interfaces;
 using UnityEngine;
 using Web3Unity.Scripts.Library.ETHEREUEM.Connect;
 using Web3Unity.Scripts.Library.Ethers.Transactions;
+using Web3Unity.Scripts.Library.Ethers.Web3AuthWallet;
 
 namespace Prefabs.Web3AuthWallet.Services
 {
@@ -49,7 +50,7 @@ namespace Prefabs.Web3AuthWallet.Services
             form.AddField("gasLimit", gasLimit);
             form.AddField("rpc", transactionConfig.GetRpc());
             form.AddField("nonce", nonce);
-            string url = "https://api.gaming.chainsafe.io/evm/createTransaction";
+            string url = W3AWalletUtils.Host + "/createTransaction";
             return await httpRequestHandler.PostRequest<EVM.Response<string>>(url, form);
         }
 
@@ -102,7 +103,7 @@ namespace Prefabs.Web3AuthWallet.Services
             form.AddField("gasPrice", gasPrice);
             form.AddField("gasLimit", gasLimit);
             form.AddField("rpc", transactionConfig.GetRpc());
-            string url = "https://api.gaming.chainsafe.io/evm/broadcastTransaction";
+            string url = W3AWalletUtils.Host + "/broadcastTransaction";
             return await httpRequestHandler.PostRequest<EVM.Response<string>>(url, form);
         }
     }

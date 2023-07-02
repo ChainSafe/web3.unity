@@ -21,6 +21,6 @@ namespace Web3Unity.Scripts.Library.Ethers.Web3AuthWallet
 
         public static bool IncomingTx { get; set; }
 
-        private static readonly string Host = "https://api.gaming.chainsafe.io/evm";
+        public static readonly string Host = "https://api.gaming.chainsafe.io/evm";
     }
 }

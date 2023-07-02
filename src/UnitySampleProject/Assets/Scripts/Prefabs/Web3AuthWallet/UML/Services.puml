@@ -1,0 +1,52 @@
+@startuml
+
+class TransactionService {
+  - transactionConfig: ITransactionConfig
+  - httpRequestHandler: IHttpRequestHandler
+  - ethereumService: IEthereumService
+  + CreateTransaction(txRequest: TransactionRequest, account: string, gasPrice: string, gasLimit: string, nonce: string): Task<EVM.Response<string>>
+  + SendTransaction(txRequest: TransactionRequest, signature: string): Task<TransactionResponse>
+  + BroadcastTransaction(txRequest: TransactionRequest, account: string, signature: string, gasPrice: string, gasLimit: string): Task<EVM.Response<string>>
+}
+
+interface ITransactionService {
+  + CreateTransaction(txRequest: TransactionRequest, account: string, gasPrice: string, gasLimit: string, nonce: string): Task<EVM.Response<string>>
+  + SendTransaction(txRequest: TransactionRequest, signature: string): Task<TransactionResponse>
+  + BroadcastTransaction(txRequest: TransactionRequest, account: string, signature: string, gasPrice: string, gasLimit: string): Task<EVM.Response<string>>
+}
+
+class TransactionRequest {
+  + To: string
+  + Value: decimal
+  + Data: string
+}
+
+class TransactionResponse {
+  // properties and methods here
+}
+
+interface ITransactionConfig {
+  // properties and methods here
+}
+
+interface IHttpRequestHandler {
+  // properties and methods here
+}
+
+interface IEthereumService {
+  // properties and methods here
+}
+
+class EVM.Response<T> {
+  // properties and methods here
+}
+
+TransactionService --> ITransactionService
+TransactionService *--> ITransactionConfig
+TransactionService *--> IHttpRequestHandler
+TransactionService *--> IEthereumService
+TransactionService --> TransactionRequest
+TransactionService --> TransactionResponse
+TransactionService --> EVM.Response
+
+@enduml
