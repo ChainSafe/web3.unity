@@ -4,7 +4,6 @@ using ChainSafe.GamingSDK.EVM.Web3AuthWallet;
 using ChainSafe.GamingWeb3;
 using ChainSafe.GamingWeb3.Build;
 using ChainSafe.GamingWeb3.Unity;
-using Nethereum.Hex.HexTypes;
 using Web3Unity.Scripts.Library.Ethers.Contracts;
 using UnityEngine;
 using UnityEngine.UI;

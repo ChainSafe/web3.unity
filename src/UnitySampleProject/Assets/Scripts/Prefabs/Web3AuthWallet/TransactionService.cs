@@ -13,7 +13,7 @@ public class TransactionService : ITransactionService
     // used to obtain a users wallet address from their private key stored in memory
     public string GetAddressW3A(string privateKey) => new EthECKey(privateKey).GetPublicAddress();
 
-    public async Task<string> CreateTransaction(string account, TransactionRequest txRequest,  string gasPrice, string gasLimit, string nonce)
+    public async Task<string> CreateTransaction(TransactionRequest txRequest, string account,  string gasPrice, string gasLimit, string nonce)
     {
         WWWForm form = new WWWForm();
         Debug.Log("ProjectID: " + projectConfigSo.ProjectId);

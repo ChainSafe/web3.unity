@@ -200,13 +200,13 @@ public class Web3AuthWalletUI : MonoBehaviour
                 string gasLimit = "80000";
                 var txRequest = new TransactionRequest
                 {
-                    To = W3AWalletUtils.OutgoingContract,
+                    To = to,
                     Value = new HexBigInteger(0),
                     Data = data,
                     GasPrice = gasPrice,
                     GasLimit = new HexBigInteger(gasLimit),
                 };
-                string transaction = await _transactionService.CreateTransaction(W3AWalletUtils.Account, txRequest, gasPrice.ToString(), gasLimit, string.Empty);
+                string transaction = await _transactionService.CreateTransaction(txRequest, W3AWalletUtils.Account, gasPrice.ToString(), gasLimit, string.Empty);
                 string signedTx = _signatureService.SignTransaction(W3AWalletUtils.PrivateKey, transaction);
                 string tx = await _transactionService.BroadcastTransaction(txRequest, W3AWalletUtils.Account, signedTx, gasPrice.ToString(), gasLimit);
                 IncomingTxHash.text = "Broadcasting...";
