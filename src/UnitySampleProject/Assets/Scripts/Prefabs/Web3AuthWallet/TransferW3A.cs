@@ -58,7 +58,7 @@ public class TransferW3A : MonoBehaviour
             var calldata = contract.Calldata(method, new object[]
             {
                 toAccount,
-                BigInteger.Parse(amount)
+                BigInteger.Parse(amount),
             });
             Debug.Log("Contract Data: " + calldata);
 
@@ -90,7 +90,7 @@ public class TransferW3A : MonoBehaviour
             var calldata = contract.Calldata(method, new object[]
             {
                 "0xdA064B1Cef52e19caFF22ae2Cc1A4e8873B8bAB0",
-                1
+                1,
             });
             Debug.Log("Contract Data: " + calldata);
 
