@@ -9,6 +9,7 @@ using Nethereum.Hex.HexTypes;
 using Prefabs.Web3AuthWallet.Interfaces;
 using Prefabs.Web3AuthWallet.Services;
 using Prefabs.Web3AuthWallet.Utils;
+using Scripts.Web3AuthWallet;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -50,7 +51,7 @@ namespace Prefabs.Web3AuthWallet.UI
         public Text[] AmountsTexts;
         public Text[] HashesTexts;
         private Web3AuthWalletConfig _web3AuthWalletConfig;
-        private ChainSafe.GamingSDK.EVM.Web3AuthWallet.Web3AuthWallet _web3AuthWallet;
+        private Scripts.Web3AuthWallet.Web3AuthWallet _web3AuthWallet;
         private Web3 web3;
         private TransactionService _transactionService;
         private SignatureService _signatureService;

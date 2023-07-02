@@ -1,11 +1,9 @@
-using ChainSafe.GamingSDK.EVM.Web3.Core;
-using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
+using ChainSafe.GamingSDK.EVM.Web3AuthWallet;
 using ChainSafe.GamingWeb3.Build;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Web3Unity.Scripts.Library.Ethers.Signers;
 
-namespace ChainSafe.GamingSDK.EVM.Web3AuthWallet
+namespace Scripts.Web3AuthWallet
 {
     public static class Web3AuthWalletExtensions
     {
@@ -30,14 +28,14 @@ namespace ChainSafe.GamingSDK.EVM.Web3AuthWallet
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
         public static IWeb3ServiceCollection UseWeb3AuthWallet(this IWeb3ServiceCollection collection)
         {
-            collection.AssertServiceNotBound<ISigner>();
-            collection.AssertServiceNotBound<ITransactionExecutor>();
+            //collection.AssertServiceNotBound<ISigner>();
+            //collection.AssertServiceNotBound<ITransactionExecutor>();
 
             // config
             collection.TryAddSingleton(DefaultConfig);
 
             // wallet
-            collection.AddSingleton<ISigner, ITransactionExecutor, Web3AuthWallet>();
+            //collection.AddSingleton<ISigner>();
 
             return collection;
         }

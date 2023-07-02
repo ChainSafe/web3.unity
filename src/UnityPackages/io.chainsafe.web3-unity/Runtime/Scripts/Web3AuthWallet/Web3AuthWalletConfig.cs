@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ChainSafe.GamingSDK.EVM.Web3AuthWallet
+namespace Scripts.Web3AuthWallet
 {
     [Serializable]
     public class Web3AuthWalletConfig

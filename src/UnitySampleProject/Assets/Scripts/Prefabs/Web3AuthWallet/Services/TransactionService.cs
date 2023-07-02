@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using ChainSafe.GamingSDK.EVM.Web3AuthWallet;
 using Prefabs.Web3AuthWallet.Interfaces;
 using UnityEngine;
 using Web3Unity.Scripts.Library.ETHEREUEM.Connect;
@@ -14,6 +13,12 @@ namespace Prefabs.Web3AuthWallet.Services
         private readonly IHttpRequestHandler httpRequestHandler;
         private readonly IEthereumService ethereumService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TransactionService"/> class.
+        /// </summary>
+        /// <param name="transactionConfig">The transaction configuration.</param>
+        /// <param name="httpRequestHandler">The HTTP request handler.</param>
+        /// <param name="ethereumService">The Ethereum service.</param>
         public TransactionService(ITransactionConfig transactionConfig, IHttpRequestHandler httpRequestHandler, IEthereumService ethereumService)
         {
             this.transactionConfig = transactionConfig;
@@ -21,6 +26,15 @@ namespace Prefabs.Web3AuthWallet.Services
             this.ethereumService = ethereumService;
         }
 
+        /// <summary>
+        /// Creates a transaction.
+        /// </summary>
+        /// <param name="txRequest">The transaction request.</param>
+        /// <param name="account">The account.</param>
+        /// <param name="gasPrice">The gas price.</param>
+        /// <param name="gasLimit">The gas limit.</param>
+        /// <param name="nonce">The nonce.</param>
+        /// <returns>The created transaction.</returns>
         public async Task<EVM.Response<string>> CreateTransaction(TransactionRequest txRequest, string account, string gasPrice, string gasLimit, string nonce)
         {
             WWWForm form = new WWWForm();
@@ -39,6 +53,12 @@ namespace Prefabs.Web3AuthWallet.Services
             return await httpRequestHandler.PostRequest<EVM.Response<string>>(url, form);
         }
 
+        /// <summary>
+        /// Sends a transaction.
+        /// </summary>
+        /// <param name="txRequest">The transaction request.</param>
+        /// <param name="signature">The transaction signature.</param>
+        /// <returns>The transaction response.</returns>
         public Task<TransactionResponse> SendTransaction(TransactionRequest txRequest, string signature)
         {
             /*WWWForm form = new WWWForm();
@@ -59,6 +79,15 @@ namespace Prefabs.Web3AuthWallet.Services
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Broadcasts a transaction.
+        /// </summary>
+        /// <param name="txRequest">The transaction request.</param>
+        /// <param name="account">The account.</param>
+        /// <param name="signature">The transaction signature.</param>
+        /// <param name="gasPrice">The gas price.</param>
+        /// <param name="gasLimit">The gas limit.</param>
+        /// <returns>The broadcasted transaction.</returns>
         public async Task<EVM.Response<string>> BroadcastTransaction(TransactionRequest txRequest, string account, string signature, string gasPrice, string gasLimit)
         {
             WWWForm form = new WWWForm();
