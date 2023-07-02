@@ -153,10 +153,10 @@ public class Web3AuthWalletUI : MonoBehaviour
         }
     }
 
-    public static async Task<string> Symbol(string contract1, string abi)
+    public async Task<string> Symbol(string contract1, string abi)
     {
         string method = "symbol";
-        var provider = RPC.GetInstance.Provider();
+        var provider = web3.RpcProvider;
         var contract = new Contract(abi, contract1, provider);
         var symbol = await contract.Call(method);
         return symbol[0].ToString();
