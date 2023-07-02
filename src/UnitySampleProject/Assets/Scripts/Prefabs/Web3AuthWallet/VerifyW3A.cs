@@ -2,6 +2,7 @@ using UnityEngine.UI;
 using System.Text;
 using Nethereum.Signer;
 using Nethereum.Util;
+using Prefabs.Web3AuthWallet.UI;
 using UnityEngine;
 using Web3Unity.Scripts.Library.Ethers.Web3AuthWallet;
 

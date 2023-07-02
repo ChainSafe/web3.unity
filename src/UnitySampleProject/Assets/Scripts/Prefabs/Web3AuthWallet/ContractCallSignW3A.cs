@@ -2,6 +2,7 @@ using ChainSafe.GamingSDK.EVM.Web3AuthWallet;
 using ChainSafe.GamingWeb3;
 using ChainSafe.GamingWeb3.Build;
 using ChainSafe.GamingWeb3.Unity;
+using Prefabs.Web3AuthWallet.UI;
 using Web3Unity.Scripts.Library.Ethers.Contracts;
 using UnityEngine.UI;
 using UnityEngine;
@@ -68,12 +69,7 @@ public class ContractCallSignW3A : MonoBehaviour
         // var provider = new JsonRpcProvider(PlayerPrefs.GetString("RPC"));
         var contract = new Contract(contractAbi, contractAddress, _web3.RpcProvider);
         Debug.Log("Contract: " + contract);
-        var calldata = await contract.Call(method, new object[]
-        {
-            // if you need to add parameters you can do so, a call with no args is blank
-            // arg1,
-            // arg2
-        });
+        var calldata = await contract.Call(method);
         Debug.Log("Contract Data: " + calldata[0]);
 
         // display response in game
@@ -91,7 +87,7 @@ public class ContractCallSignW3A : MonoBehaviour
         var calldata = contract.Calldata(method, new object[]
         {
             // values need to be converted to their data types in solidity
-            int.Parse(amount)
+            int.Parse(amount),
         });
         Debug.Log("Contract Data: " + calldata);
 

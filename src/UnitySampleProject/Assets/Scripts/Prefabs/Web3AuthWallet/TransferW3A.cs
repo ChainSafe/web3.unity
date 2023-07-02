@@ -4,6 +4,7 @@ using ChainSafe.GamingSDK.EVM.Web3AuthWallet;
 using ChainSafe.GamingWeb3;
 using ChainSafe.GamingWeb3.Build;
 using ChainSafe.GamingWeb3.Unity;
+using Prefabs.Web3AuthWallet.UI;
 using Web3Unity.Scripts.Library.Ethers.Contracts;
 using UnityEngine;
 using UnityEngine.UI;
