@@ -208,7 +208,7 @@ namespace Prefabs.Web3AuthWallet.UI
                     string to = W3AWalletUtils.OutgoingContract;
                     string data = W3AWalletUtils.IncomingTxData;
                     var gasPrice = await web3.RpcProvider.GetGasPrice();
-                    string gasLimit = "80000";
+                    string gasLimit = "100000";
                     var txRequest = new TransactionRequest
                     {
                         To = to,
