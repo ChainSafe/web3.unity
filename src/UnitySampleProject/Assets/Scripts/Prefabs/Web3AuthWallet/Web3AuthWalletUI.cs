@@ -206,7 +206,7 @@ public class Web3AuthWalletUI : MonoBehaviour
                     GasPrice = gasPrice,
                     GasLimit = new HexBigInteger(gasLimit),
                 };
-                string transaction = await _transactionService.CreateTransaction(W3AWalletUtils.Account, txRequest, gasPrice.ToString(), gasLimit,string.Empty);
+                string transaction = await _transactionService.CreateTransaction(W3AWalletUtils.Account, txRequest, gasPrice.ToString(), gasLimit, string.Empty);
                 string signedTx = _signatureService.SignTransaction(W3AWalletUtils.PrivateKey, transaction);
                 string tx = await _transactionService.BroadcastTransaction(txRequest, W3AWalletUtils.Account, signedTx, gasPrice.ToString(), gasLimit);
                 IncomingTxHash.text = "Broadcasting...";
@@ -273,7 +273,7 @@ public class Web3AuthWalletUI : MonoBehaviour
                 var calldata = contract.Calldata(method, new object[]
                 {
                     SendingToWallet.text,
-                    BigInteger.Parse(amount)
+                    BigInteger.Parse(amount),
                 });
                 Debug.Log("Contract Data: " + calldata);
 
