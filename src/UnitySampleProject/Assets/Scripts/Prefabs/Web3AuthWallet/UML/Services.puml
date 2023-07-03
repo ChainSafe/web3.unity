@@ -1,52 +1,151 @@
 @startuml
 
+interface ITransactionService
+interface IHttpRequestHandler
+interface IEthereumService
+interface ITransactionConfig
+interface IServiceCollection
+interface IRpcProvider
+interface ITransactionConfig
+interface ITransactionSigner
+interface IMessageSigner
+
+class TransactionRequest {
+  + To: string
+  + Value: HexBigInteger
+  + Data: string
+  + GasPrice: BigInteger
+  + GasLimit: HexBigInteger
+}
+
+class TransactionResponse
+
+class EVM.Response<T>
+
+class EthECDSASignature {
+  + CreateStringSignature(signature: byte[]): string
+}
+
+class Contract {
+  - abi: string
+  - address: string
+  - provider: IRpcProvider
+  + Contract(abi: string, address: string, provider: IRpcProvider)
+  + Call(method: string): Task<object[]>
+  + Calldata(method: string, args: object[]): string
+}
+
+class Web3 {
+  - _rpcProvider: IRpcProvider
+  + Web3Builder(projectConfig: ProjectConfigScriptableObject): Web3Builder
+  + Configure(services: Action<IServiceCollection>): Web3Builder
+  + BuildAsync(): Task<Web3>
+}
+
+class Web3Builder {
+  - _projectConfig: ProjectConfigScriptableObject
+  + Web3Builder(projectConfig: ProjectConfigScriptableObject)
+  + Configure(services: Action<IServiceCollection>): Web3Builder
+  + BuildAsync(): Task<Web3>
+}
+
+class HttpRequestHandler {
+  + PostRequest<T>(url: string, formData: WWWForm): Task<T>
+}
+
+class EthereumService {
+  + GetAddressW3A(privateKey: string): string
+}
+
+class Web3AuthWalletConfig {
+  + PrivateKey: string?
+  + Host: string
+}
+
+class Web3AuthWalletUI {
+  - nativeTokenSymbol: string
+  - blockExplorerUrl: string
+  - customTokenABI: string
+  - customTokenCA: string
+  - SendingToWallet: InputField
+  - AmountToSend: InputField
+  - WalletCanvas: GameObject
+  - CustomTokenObjPlaceholder: GameObject
+  - IncomingTxObjPlaceholder: GameObject
+  - CustomTokenObj: GameObject
+  - IncomingTxObj: GameObject
+  - WalletAddress: Text
+  - NativeTokenBalance: Text
+  - NativeTokenBalanceName: Text
+  - CustomTokenBalance: Text
+  - CustomTokenBalanceName: Text
+  - IncomingTxAction: Text
+  - IncomingTxHash: Text
+  - walletOpen: bool
+  - pkSet: bool
+  - txNumber: int
+  - DatesTexts: Text[]
+  - ActionsTexts: Text[]
+  - AmountsTexts: Text[]
+  - HashesTexts: Text[]
+  - _web3AuthWalletConfig: Web3AuthWalletConfig
+  - _web3AuthWallet: Web3AuthWallet
+  - web3: Web3
+  - _transactionService: TransactionService
+  - _signatureService: SignatureService
+  + Awake()
+  + SetPK()
+  + CloseButton()
+  + OpenButton()
+  + GetData()
+  + Symbol(contract1: string, abi: string): Task<string>
+  + AcceptTX()
+  + DeclineTx()
+  + SendCustomTokens()
+  + UpdateTxHistory(date: string, action: string, amount: string, txHash: string)
+  + OpenBlockExplorer(number: int)
+  + CopyAddress()
+  + Update()
+  + OnDestroy()
+}
+
 class TransactionService {
   - transactionConfig: ITransactionConfig
   - httpRequestHandler: IHttpRequestHandler
   - ethereumService: IEthereumService
+  + TransactionService(transactionConfig: ITransactionConfig, httpRequestHandler: IHttpRequestHandler, ethereumService: IEthereumService)
   + CreateTransaction(txRequest: TransactionRequest, account: string, gasPrice: string, gasLimit: string, nonce: string): Task<EVM.Response<string>>
   + SendTransaction(txRequest: TransactionRequest, signature: string): Task<TransactionResponse>
   + BroadcastTransaction(txRequest: TransactionRequest, account: string, signature: string, gasPrice: string, gasLimit: string): Task<EVM.Response<string>>
 }
 
-interface ITransactionService {
-  + CreateTransaction(txRequest: TransactionRequest, account: string, gasPrice: string, gasLimit: string, nonce: string): Task<EVM.Response<string>>
-  + SendTransaction(txRequest: TransactionRequest, signature: string): Task<TransactionResponse>
-  + BroadcastTransaction(txRequest: TransactionRequest, account: string, signature: string, gasPrice: string, gasLimit: string): Task<EVM.Response<string>>
+class SignatureService {
+  + SignTransaction(privateKey: string, transaction: string): string
+  + SignMessage(privateKey: string, message: string): string
 }
 
-class TransactionRequest {
-  + To: string
-  + Value: decimal
-  + Data: string
-}
+class ProjectConfigScriptableObject
 
-class TransactionResponse {
-  // properties and methods here
-}
-
-interface ITransactionConfig {
-  // properties and methods here
-}
-
-interface IHttpRequestHandler {
-  // properties and methods here
-}
-
-interface IEthereumService {
-  // properties and methods here
-}
-
-class EVM.Response<T> {
-  // properties and methods here
-}
-
-TransactionService --> ITransactionService
-TransactionService *--> ITransactionConfig
-TransactionService *--> IHttpRequestHandler
-TransactionService *--> IEthereumService
-TransactionService --> TransactionRequest
-TransactionService --> TransactionResponse
-TransactionService --> EVM.Response
+ITransactionService --> TransactionService
+ITransactionService --> ITransactionConfig
+ITransactionService --> IHttpRequestHandler
+TransactionService --> ITransactionConfig
+TransactionService --> IHttpRequestHandler
+TransactionService --> IEthereumService
+TransactionService --> ITransactionSigner
+TransactionService --> IMessageSigner
+Web3AuthWalletUI --> Web3AuthWalletConfig
+Web3AuthWalletUI --> TransactionService
+Web3AuthWalletUI --> SignatureService
+TransactionRequest --> HexBigInteger
+TransactionResponse --> HexBigInteger
+Contract --> IRpcProvider
+Web3 --> IRpcProvider
+Web3Builder --> ProjectConfigScriptableObject
+Web3Builder --> Web3
+HttpRequestHandler --> IHttpRequestHandler
+EthereumService --> IEthereumService
+SignatureService --> ITransactionSigner
+SignatureService --> IMessageSigner
 
 @enduml
