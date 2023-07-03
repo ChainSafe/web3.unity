@@ -67,7 +67,6 @@ public class ContractCallSignW3A : MonoBehaviour
         string method = "myTotal";
 
         // you can use this to create a provider for hardcoding and parse this instead of rpc get instance
-        // var provider = new JsonRpcProvider(PlayerPrefs.GetString("RPC"));
         var contract = new Contract(contractAbi, contractAddress, _web3.RpcProvider);
         Debug.Log("Contract: " + contract);
         var calldata = await contract.Call(method);
