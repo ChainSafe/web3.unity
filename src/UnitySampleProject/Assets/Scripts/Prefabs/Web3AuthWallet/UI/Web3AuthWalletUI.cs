@@ -305,68 +305,36 @@ namespace Prefabs.Web3AuthWallet.UI
 
         private void UpdateTxHistory(string date, string action, string amount, string txHash)
         {
-            // updates transaction history texts
-            if (txNumber == 0)
+            // Check if we need to push transactions down
+            if (txNumber >= DatesTexts.Length)
             {
-                DatesTexts[0].text = date;
-                ActionsTexts[0].text = action;
-                AmountsTexts[0].text = amount;
-                HashesTexts[0].text = txHash;
-                txNumber++;
-            }
-            else if (txNumber == 1)
-            {
-                DatesTexts[1].text = date;
-                ActionsTexts[1].text = action;
-                AmountsTexts[1].text = amount;
-                HashesTexts[1].text = txHash;
-                txNumber++;
-            }
-            else if (txNumber == 2)
-            {
-                DatesTexts[2].text = date;
-                ActionsTexts[2].text = action;
-                AmountsTexts[2].text = amount;
-                HashesTexts[2].text = txHash;
-                txNumber++;
-            }
-            else if (txNumber == 3)
-            {
-                DatesTexts[3].text = date;
-                ActionsTexts[3].text = action;
-                AmountsTexts[3].text = amount;
-                HashesTexts[3].text = txHash;
-                txNumber++;
+                // Shift transactions up by one
+                for (int i = 0; i < DatesTexts.Length - 1; i++)
+                {
+                    DatesTexts[i].text = DatesTexts[i + 1].text;
+                    ActionsTexts[i].text = ActionsTexts[i + 1].text;
+                    AmountsTexts[i].text = AmountsTexts[i + 1].text;
+                    HashesTexts[i].text = HashesTexts[i + 1].text;
+                }
+
+                // Update the last slot with the new transaction
+                DatesTexts[DatesTexts.Length - 1].text = date;
+                ActionsTexts[DatesTexts.Length - 1].text = action;
+                AmountsTexts[DatesTexts.Length - 1].text = amount;
+                HashesTexts[DatesTexts.Length - 1].text = txHash;
             }
             else
             {
-                // push all transactions down and update
-                // 1
-                DatesTexts[0].text = DatesTexts[1].text;
-                ActionsTexts[0].text = ActionsTexts[1].text;
-                AmountsTexts[0].text = AmountsTexts[1].text;
-                HashesTexts[0].text = HashesTexts[1].text;
-
-                // 2
-                DatesTexts[1].text = DatesTexts[2].text;
-                ActionsTexts[1].text = ActionsTexts[2].text;
-                AmountsTexts[1].text = AmountsTexts[2].text;
-                HashesTexts[1].text = HashesTexts[2].text;
-
-                // 3
-                DatesTexts[2].text = DatesTexts[3].text;
-                ActionsTexts[2].text = ActionsTexts[3].text;
-                AmountsTexts[2].text = AmountsTexts[3].text;
-                HashesTexts[2].text = HashesTexts[3].text;
-
-                // 4
-                DatesTexts[3].text = date;
-                ActionsTexts[3].text = action;
-                AmountsTexts[3].text = amount;
-                HashesTexts[3].text = txHash;
-                txNumber++;
+                // Update the next available slot with the new transaction
+                DatesTexts[txNumber].text = date;
+                ActionsTexts[txNumber].text = action;
+                AmountsTexts[txNumber].text = amount;
+                HashesTexts[txNumber].text = txHash;
             }
+
+            txNumber++;
         }
+
 
         public void OpenBlockExplorer(int number)
         {
