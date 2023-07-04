@@ -39,7 +39,7 @@ namespace ChainSafe.GamingSdk.Gelato
             }
             catch (Exception e)
             {
-                throw new Exception($"GelatoRelaySDK/relayWithSyncFee: Failed with error: ${e.Message}");
+                throw new Web3Exception($"GelatoRelaySDK/relayWithSyncFee: Failed with error: ${e.Message}");
             }
         }
 
@@ -90,7 +90,7 @@ namespace ChainSafe.GamingSdk.Gelato
             }
             catch (Exception e)
             {
-                throw new Exception($"GelatoRelaySDK/relayWithSyncFee: Failed with error: ${e.Message}");
+                throw new Web3Exception($"GelatoRelaySDK/relayWithSyncFee: Failed with error: ${e.Message}");
             }
         }
 
@@ -98,7 +98,7 @@ namespace ChainSafe.GamingSdk.Gelato
         {
             if (config.SponsorApiKey == null)
             {
-                throw new Exception("GelatoRelaySDK/sponsoredCall: Sponsor api key not provided");
+                throw new Web3Exception("GelatoRelaySDK/sponsoredCall: Sponsor api key not provided");
             }
 
             try
@@ -109,7 +109,7 @@ namespace ChainSafe.GamingSdk.Gelato
             }
             catch (Exception e)
             {
-                throw new Exception($"GelatoRelaySDK/sponsoredCall: Failed with error: ${e.Message}");
+                throw new Web3Exception($"GelatoRelaySDK/sponsoredCall: Failed with error: ${e.Message}");
             }
         }
 
@@ -125,7 +125,7 @@ namespace ChainSafe.GamingSdk.Gelato
             {
                 if (config.SponsorApiKey == null)
                 {
-                    throw new Exception("GelatoRelaySDK/sponsoredCall: Sponsor api key not provided");
+                    throw new Web3Exception("GelatoRelaySDK/sponsoredCall: Sponsor api key not provided");
                 }
 
                 var callRequest = new CallWithErc2771Request
@@ -165,7 +165,7 @@ namespace ChainSafe.GamingSdk.Gelato
             }
             catch (Exception e)
             {
-                throw new Exception($"GelatoRelaySDK/sponsoredCallErc2771: Failed with error: ${e.Message}");
+                throw new Web3Exception($"GelatoRelaySDK/sponsoredCallErc2771: Failed with error: ${e.Message}");
             }
         }
 
@@ -220,7 +220,7 @@ namespace ChainSafe.GamingSdk.Gelato
                     VerifyingContract = CallWithErc2771RequestOptionalParameters
                         .GetGelatoRelayErc2771Address(type, config, chainConfig),
                 },
-                _ => throw new Exception("incorrect relay option")
+                _ => throw new Web3Exception("incorrect relay option")
             };
         }
 
@@ -238,7 +238,7 @@ namespace ChainSafe.GamingSdk.Gelato
         {
             if (await IsNetworkSupported(chainConfig.ChainId) == false)
             {
-                throw new Exception("network not supported by Gelato");
+                throw new Web3Exception("network not supported by Gelato");
             }
         }
 

@@ -93,12 +93,12 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
         {
             if (overrides.UserNonce == null && UserNonce == null)
             {
-                throw new Exception("UserNonce is not found in the request, nor fetched");
+                throw new Web3Exception("UserNonce is not found in the request, nor fetched");
             }
 
             if (overrides.UserDeadline == null && UserDeadline == null)
             {
-                throw new Exception("UserDeadline is not found in the request, nor fetched");
+                throw new Web3Exception("UserDeadline is not found in the request, nor fetched");
             }
 
             var newStruct = (CallWithErc2771Request)MemberwiseClone();
@@ -167,7 +167,7 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
                 Erc2771Type.SponsoredCall => IsZkSync(chainConfig.ChainId)
                     ? config.GelatoRelay1BalanceErc2771ZkSyncAddress
                     : config.GelatoRelay1BalanceErc2771Address,
-                _ => throw new Exception("incorrect relay option")
+                _ => throw new Web3Exception("incorrect relay option")
             };
         }
 

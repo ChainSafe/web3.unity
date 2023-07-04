@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using ChainSafe.GamingSdk.Gelato.Dto;
 using ChainSafe.GamingSdk.Gelato.Types;
+using ChainSafe.GamingWeb3;
 using ChainSafe.GamingWeb3.Environment;
 using Nethereum.Hex.HexTypes;
 
@@ -27,7 +28,7 @@ namespace ChainSafe.GamingSdk.Gelato
                 RelayCall.CallWithSyncFeeErc2771 => $"{config.Url}/relays/v2/call-with-sync-fee-erc2771",
                 RelayCall.SponsoredCall => $"{config.Url}/relays/v2/sponsored-call",
                 RelayCall.SponsoredCallErc2771 => $"{config.Url}/relays/v2/sponsored-call-erc2771",
-                _ => throw new Exception("relayCall option not found")
+                _ => throw new Web3Exception("relayCall option not found")
             };
 
             return (await httpClient.Post<TRequest, TResponse>(url, request)).EnsureResponse();
@@ -39,9 +40,9 @@ namespace ChainSafe.GamingSdk.Gelato
             {
                 return (await httpClient.Get<SupportedNetworksResponse>($"{config.Url}/relays/v2")).EnsureResponse().Relays;
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
-                throw new Exception($"GelatoRelaySDK/getSupportedNetworks: Failed with error: ${e.Message}");
+                throw new Web3Exception($"GelatoRelaySDK/getSupportedNetworks: Failed with error: ${e.Message}");
             }
         }
 
@@ -51,9 +52,9 @@ namespace ChainSafe.GamingSdk.Gelato
             {
                 return (await httpClient.Get<OraclesResponse>($"{config.Url}/oracles/")).EnsureResponse().Oracles;
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
-                throw new Exception($"GelatoRelaySDK/getGelatoOracles: Failed with error: ${e.Message}");
+                throw new Web3Exception($"GelatoRelaySDK/getGelatoOracles: Failed with error: ${e.Message}");
             }
         }
 
@@ -63,9 +64,9 @@ namespace ChainSafe.GamingSdk.Gelato
             {
                 return (await httpClient.Get<PaymentTokensResponse>($"{config.Url}/oracles/${chainId}/paymentTokens/")).EnsureResponse().PaymentTokens;
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
-                throw new Exception($"GelatoRelaySDK/getPaymentTokens: Failed with error: ${e.Message}");
+                throw new Web3Exception($"GelatoRelaySDK/getPaymentTokens: Failed with error: ${e.Message}");
             }
         }
 
@@ -75,9 +76,9 @@ namespace ChainSafe.GamingSdk.Gelato
             {
                 return (await httpClient.Post<EstimatedFeeRequest, EstimatedFeeResponse>($"{config.Url}/oracles/${request.ChainId}/estimate/", request)).EnsureResponse().EstimatedFee;
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
-                throw new Exception($"GelatoRelaySDK/getEstimatedFee: Failed with error: ${e.Message}");
+                throw new Web3Exception($"GelatoRelaySDK/getEstimatedFee: Failed with error: ${e.Message}");
             }
         }
 
@@ -87,9 +88,9 @@ namespace ChainSafe.GamingSdk.Gelato
             {
                 return (await httpClient.Get<TransactionStatusResponse>($"{config.Url}/tasks/status/{taskId}")).EnsureResponse().Task;
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
-                throw new Exception($"GelatoRelaySDK/getTaskStatus: Failed with error: ${e.Message}");
+                throw new Web3Exception($"GelatoRelaySDK/getTaskStatus: Failed with error: ${e.Message}");
             }
         }
     }
