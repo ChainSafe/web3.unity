@@ -236,7 +236,7 @@ namespace ChainSafe.GamingSdk.Gelato
 
         public async ValueTask WillStartAsync()
         {
-            if (await IsNetworkSupported(chainConfig.ChainId) == false)
+            if (!await IsNetworkSupported(chainConfig.ChainId))
             {
                 throw new Web3Exception("network not supported by Gelato");
             }
