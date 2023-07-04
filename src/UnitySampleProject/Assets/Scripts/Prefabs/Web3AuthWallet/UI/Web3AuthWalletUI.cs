@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.GamingSDK.EVM.Web3AuthWallet;
@@ -129,7 +130,7 @@ namespace Prefabs.Web3AuthWallet.UI
             var provider = web3.RpcProvider;
             var getBalance = await provider.GetBalance(W3AWalletUtils.Account);
             NativeTokenBalanceName.text = nativeTokenSymbol;
-            NativeTokenBalance.text = (float.Parse(getBalance.ToString()) / Math.Pow(10, 18)).ToString();
+            NativeTokenBalance.text = (float.Parse(getBalance.ToString()) / Math.Pow(10, 18)).ToString(CultureInfo.InvariantCulture);
 
             // populate custom token balance if contract and abi is entered by dev
             if ((customTokenCA != string.Empty) && (customTokenABI != string.Empty))
@@ -142,7 +143,7 @@ namespace Prefabs.Web3AuthWallet.UI
                     W3AWalletUtils.Account,
                 });
                 var customTokenName = await contract.Call("symbol");
-                CustomTokenBalance.text = MathF.Ceiling((float)(float.Parse(calldata[0].ToString()) / Math.Pow(10, 18))).ToString();
+                CustomTokenBalance.text = MathF.Ceiling((float)(float.Parse(calldata[0].ToString()) / Math.Pow(10, 18))).ToString(CultureInfo.InvariantCulture);
                 CustomTokenBalanceName.text = customTokenName[0].ToString();
             }
 

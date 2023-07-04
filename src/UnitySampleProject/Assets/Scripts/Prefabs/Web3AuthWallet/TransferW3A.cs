@@ -91,8 +91,8 @@ public class TransferW3A : MonoBehaviour
             Debug.Log("Account: " + W3AWalletUtils.Account);
             var calldata = contract.Calldata(method, new object[]
             {
-                "0xdA064B1Cef52e19caFF22ae2Cc1A4e8873B8bAB0",
-                1,
+                W3AWalletUtils.Account,
+                BigInteger.Parse(amount),
             });
             Debug.Log("Contract Data: " + calldata);
 
