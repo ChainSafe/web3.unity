@@ -24,7 +24,7 @@ namespace ChainSafe.GamingSdk.Gelato
 
         public GelatoModule(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, IRpcProvider provider)
         {
-            this.gelatoClient = new GelatoClient(httpClient, config);
+            gelatoClient = new GelatoClient(httpClient, config);
             this.provider = provider;
             this.config = config;
             this.chainConfig = chainConfig;
@@ -35,9 +35,9 @@ namespace ChainSafe.GamingSdk.Gelato
             try
             {
                 request.ChainId = int.Parse(chainConfig.ChainId);
-                return await this.gelatoClient.Post<CallWithSyncFeeRequest, RelayResponse>(RelayCall.CallWithSyncFee, request);
+                return await gelatoClient.Post<CallWithSyncFeeRequest, RelayResponse>(RelayCall.CallWithSyncFee, request);
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 throw new Exception($"GelatoRelaySDK/relayWithSyncFee: Failed with error: ${e.Message}");
             }
@@ -86,7 +86,7 @@ namespace ChainSafe.GamingSdk.Gelato
 
                 callRequest.Signature = await wallet.SignTypedData(GetEip712Domain(Erc2771Type.CallWithSyncFee), types, newStruct);
 
-                return await this.gelatoClient.Post<CallWithErc2771Request, RelayResponse>(RelayCall.CallWithSyncFeeErc2771, callRequest);
+                return await gelatoClient.Post<CallWithErc2771Request, RelayResponse>(RelayCall.CallWithSyncFeeErc2771, callRequest);
             }
             catch (Exception e)
             {
@@ -105,9 +105,9 @@ namespace ChainSafe.GamingSdk.Gelato
             {
                 request.SponsorApiKey = config.SponsorApiKey;
                 request.ChainId = int.Parse(chainConfig.ChainId);
-                return await this.gelatoClient.Post<SponsoredCallRequest, RelayResponse>(RelayCall.SponsoredCall, request);
+                return await gelatoClient.Post<SponsoredCallRequest, RelayResponse>(RelayCall.SponsoredCall, request);
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 throw new Exception($"GelatoRelaySDK/sponsoredCall: Failed with error: ${e.Message}");
             }
@@ -161,7 +161,7 @@ namespace ChainSafe.GamingSdk.Gelato
 
                 callRequest.UserDeadline ??= optional.UserDeadline;
                 callRequest.UserNonce ??= optional.UserNonce;
-                return await this.gelatoClient.Post<CallWithErc2771Request, RelayResponse>(RelayCall.SponsoredCallErc2771, callRequest);
+                return await gelatoClient.Post<CallWithErc2771Request, RelayResponse>(RelayCall.SponsoredCallErc2771, callRequest);
             }
             catch (Exception e)
             {
@@ -185,18 +185,18 @@ namespace ChainSafe.GamingSdk.Gelato
                 PaymentToken = paymentToken,
             };
 
-            return await this.gelatoClient.GetEstimatedFeeRequest(request);
+            return await gelatoClient.GetEstimatedFeeRequest(request);
         }
 
         private async Task<bool> IsNetworkSupported(string networkId)
         {
-            var supportedNetworks = await this.gelatoClient.GetSupportedNetworks();
+            var supportedNetworks = await gelatoClient.GetSupportedNetworks();
             return supportedNetworks.Contains(networkId);
         }
 
         private async Task<bool> IsOracleActive(string chainId)
         {
-            var oracles = await this.gelatoClient.GetGelatoOracles();
+            var oracles = await gelatoClient.GetGelatoOracles();
             return oracles.Contains(chainId);
         }
 

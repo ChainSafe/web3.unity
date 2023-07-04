@@ -1,14 +1,8 @@
 using System;
 using System.Numerics;
 using System.Threading.Tasks;
-using ChainSafe.GamingSdk.Gelato;
-using ChainSafe.GamingSdk.Gelato.Dto;
 using ChainSafe.GamingSdk.Gelato.Types;
 using ChainSafe.GamingWeb3;
-using Nethereum.ABI.EIP712;
-using Nethereum.ABI.FunctionEncoding.Attributes;
-using Nethereum.Hex.HexConvertors.Extensions;
-using Nethereum.Hex.HexTypes;
 using Newtonsoft.Json;
 using Web3Unity.Scripts.Library.Ethers.Providers;
 using Contract = Web3Unity.Scripts.Library.Ethers.Contracts.Contract;
@@ -107,7 +101,7 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
                 throw new Exception("UserDeadline is not found in the request, nor fetched");
             }
 
-            var newStruct = (CallWithErc2771Request)this.MemberwiseClone();
+            var newStruct = (CallWithErc2771Request)MemberwiseClone();
 
             newStruct.UserNonce = overrides.UserNonce ?? UserNonce;
             newStruct.UserDeadline = overrides.UserDeadline ?? UserDeadline;
@@ -190,7 +184,7 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
             IChainConfig chainConfig)
         {
             var contract = new Contract(
-                GelatoClient.UserNonceAbi,
+                GelatoAbi.UserNonce,
                 GetGelatoRelayErc2771Address(type, config, chainConfig).ToString(),
                 provider);
             var result = await contract.Call("userNonce", new object[] { account });

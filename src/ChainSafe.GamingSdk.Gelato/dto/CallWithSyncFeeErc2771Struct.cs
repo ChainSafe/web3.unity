@@ -1,6 +1,4 @@
-﻿using Nethereum.ABI.EIP712;
-using Nethereum.ABI.FunctionEncoding.Attributes;
-using Nethereum.Hex.HexTypes;
+﻿using Nethereum.ABI.FunctionEncoding.Attributes;
 using Newtonsoft.Json;
 
 namespace ChainSafe.GamingSdk.Gelato.Dto

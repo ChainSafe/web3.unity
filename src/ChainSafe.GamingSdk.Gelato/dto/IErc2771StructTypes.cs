@@ -1,5 +1,4 @@
 ﻿using Nethereum.ABI.FunctionEncoding.Attributes;
-using Nethereum.Hex.HexTypes;
 using Newtonsoft.Json;
 
 namespace ChainSafe.GamingSdk.Gelato.Dto
