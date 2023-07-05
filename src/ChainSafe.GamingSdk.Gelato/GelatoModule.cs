@@ -19,13 +19,15 @@ namespace ChainSafe.GamingSdk.Gelato
     {
         private readonly GelatoClient gelatoClient;
         private readonly IRpcProvider provider;
+        private readonly ISigner signer;
         private readonly GelatoConfig config;
         private readonly IChainConfig chainConfig;
 
-        public GelatoModule(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, IRpcProvider provider)
+        public GelatoModule(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, IRpcProvider provider, ISigner signer)
         {
             gelatoClient = new GelatoClient(httpClient, config);
             this.provider = provider;
+            this.signer = signer;
             this.config = config;
             this.chainConfig = chainConfig;
         }
@@ -43,13 +45,13 @@ namespace ChainSafe.GamingSdk.Gelato
             }
         }
 
-        public async Task<RelayResponse> CallWithSyncFeeErc2771(CallWithSyncFeeErc2771Request request, ISigner wallet)
+        public async Task<RelayResponse> CallWithSyncFeeErc2771(CallWithSyncFeeErc2771Request request)
         {
-            return await CallWithSyncFeeErc2771(request, wallet, null);
+            return await CallWithSyncFeeErc2771(request, null);
         }
 
         // TODO: consume options
-        public async Task<RelayResponse> CallWithSyncFeeErc2771(CallWithSyncFeeErc2771Request request, ISigner wallet, RelayRequestOptions options)
+        public async Task<RelayResponse> CallWithSyncFeeErc2771(CallWithSyncFeeErc2771Request request, RelayRequestOptions options)
         {
             try
             {
@@ -58,7 +60,7 @@ namespace ChainSafe.GamingSdk.Gelato
                     ChainId = int.Parse(chainConfig.ChainId),
                     Target = request.Target,
                     Data = request.Data,
-                    User = await wallet.GetAddress(),
+                    User = await signer.GetAddress(),
                     UserDeadline = request.UserDeadline,
                     UserNonce = request.UserNonce,
                     FeeToken = request.FeeToken,
@@ -84,7 +86,7 @@ namespace ChainSafe.GamingSdk.Gelato
                     },
                 };
 
-                callRequest.Signature = await wallet.SignTypedData(GetEip712Domain(Erc2771Type.CallWithSyncFee), types, newStruct);
+                callRequest.Signature = await signer.SignTypedData(GetEip712Domain(Erc2771Type.CallWithSyncFee), types, newStruct);
 
                 return await gelatoClient.Post<CallWithErc2771Request, RelayResponse>(RelayCall.CallWithSyncFeeErc2771, callRequest);
             }
@@ -113,13 +115,13 @@ namespace ChainSafe.GamingSdk.Gelato
             }
         }
 
-        public async Task<RelayResponse> SponsoredCallErc2771(SponsoredCallErc2771Request request, ISigner wallet)
+        public async Task<RelayResponse> SponsoredCallErc2771(SponsoredCallErc2771Request request)
         {
-            return await SponsoredCallErc2771(request, wallet, null);
+            return await SponsoredCallErc2771(request, null);
         }
 
         // TODO: consume options
-        public async Task<RelayResponse> SponsoredCallErc2771(SponsoredCallErc2771Request request, ISigner wallet, RelayRequestOptions options)
+        public async Task<RelayResponse> SponsoredCallErc2771(SponsoredCallErc2771Request request, RelayRequestOptions options)
         {
             try
             {
@@ -156,7 +158,7 @@ namespace ChainSafe.GamingSdk.Gelato
                     },
                 };
 
-                callRequest.Signature = await wallet.SignTypedData(GetEip712Domain(Erc2771Type.SponsoredCall), types, newStruct);
+                callRequest.Signature = await signer.SignTypedData(GetEip712Domain(Erc2771Type.SponsoredCall), types, newStruct);
                 callRequest.SponsorApiKey = config.SponsorApiKey;
 
                 callRequest.UserDeadline ??= optional.UserDeadline;

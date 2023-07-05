@@ -1,8 +1,12 @@
 ﻿using ChainSafe.GamingSDK.EVM.Web3.Core;
 using ChainSafe.GamingSdk.Gelato.Types;
+using ChainSafe.GamingWeb3;
 using ChainSafe.GamingWeb3.Build;
+using ChainSafe.GamingWeb3.Environment;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Web3Unity.Scripts.Library.Ethers.Providers;
+using Web3Unity.Scripts.Library.Ethers.Signers;
 
 namespace ChainSafe.GamingSdk.Gelato
 {
@@ -40,7 +44,7 @@ namespace ChainSafe.GamingSdk.Gelato
             collection.TryAddSingleton(config);
 
             // Gelato module
-            collection.AddSingleton<IGelatoModule, ILifecycleParticipant, GelatoModule>();
+            collection.UseGelatoModule();
 
             return collection;
         }
@@ -56,7 +60,13 @@ namespace ChainSafe.GamingSdk.Gelato
             collection.TryAddSingleton(config);
 
             // Gelato module
-            collection.AddSingleton<IGelatoModule, ILifecycleParticipant, GelatoModule>();
+            collection.AddSingleton<IGelatoModule, ILifecycleParticipant, GelatoModule>(
+                sp => new GelatoModule(
+                    sp.GetRequiredService<IHttpClient>(),
+                    sp.GetRequiredService<IChainConfig>(),
+                    sp.GetRequiredService<GelatoConfig>(),
+                    sp.GetRequiredService<IRpcProvider>(),
+                    sp.GetService<ISigner>()));
 
             return collection;
         }

@@ -9,19 +9,17 @@ namespace ChainSafe.GamingSdk.Gelato.Types
     {
         Task<RelayResponse> CallWithSyncFee(CallWithSyncFeeRequest request);
 
-        Task<RelayResponse> CallWithSyncFeeErc2771(CallWithSyncFeeErc2771Request request, ISigner wallet);
+        Task<RelayResponse> CallWithSyncFeeErc2771(CallWithSyncFeeErc2771Request request);
 
-        Task<RelayResponse> CallWithSyncFeeErc2771(CallWithSyncFeeErc2771Request request, ISigner wallet, RelayRequestOptions options);
+        Task<RelayResponse> CallWithSyncFeeErc2771(CallWithSyncFeeErc2771Request request, RelayRequestOptions options);
 
         Task<RelayResponse> SponsoredCall(SponsoredCallRequest request);
 
         Task<RelayResponse> SponsoredCallErc2771(
-            SponsoredCallErc2771Request request,
-            ISigner wallet);
+            SponsoredCallErc2771Request request);
 
         Task<RelayResponse> SponsoredCallErc2771(
             SponsoredCallErc2771Request request,
-            ISigner wallet,
             RelayRequestOptions options);
 
         Task<HexBigInteger> GetEstimatedFee(
