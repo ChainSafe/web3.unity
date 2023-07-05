@@ -12,6 +12,8 @@ namespace ChainSafe.GamingSdk.Gelato
 {
     public static class GelatoModuleExtensions
     {
+        public static IGelatoModule Gelato(this Web3 web3) => web3.ServiceProvider.GetRequiredService<IGelatoModule>();
+
         public static GelatoConfig DefaultConfig() => new()
         {
             Url = "https://api.gelato.digital",
