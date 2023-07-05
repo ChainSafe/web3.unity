@@ -53,6 +53,11 @@ namespace ChainSafe.GamingSdk.Gelato
         // TODO: consume options
         public async Task<RelayResponse> CallWithSyncFeeErc2771(CallWithSyncFeeErc2771Request request, RelayRequestOptions options)
         {
+            if (signer == null)
+            {
+                throw new Web3Exception("GelatoRelaySDK/CallWithSyncFeeErc2771: No signer present for request");
+            }
+
             try
             {
                 var callRequest = new CallWithErc2771Request
@@ -123,6 +128,11 @@ namespace ChainSafe.GamingSdk.Gelato
         // TODO: consume options
         public async Task<RelayResponse> SponsoredCallErc2771(SponsoredCallErc2771Request request, RelayRequestOptions options)
         {
+            if (signer == null)
+            {
+                throw new Web3Exception("GelatoRelaySDK/SponsoredCallErc2771: No signer present for request");
+            }
+
             try
             {
                 if (config.SponsorApiKey == null)

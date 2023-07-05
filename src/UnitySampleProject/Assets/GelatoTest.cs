@@ -71,8 +71,8 @@ public class GelatoTest : MonoBehaviour
             vitalik,
             new BigInteger(5 * 10E12)
         });
-        var gelatoInstance = _web3.ServiceProvider.GetRequiredService<IGelatoModule>();
-        var relayResponse = await gelatoInstance.CallWithSyncFee(new CallWithSyncFeeRequest()
+        
+        var relayResponse = await _web3.Gelato().CallWithSyncFee(new CallWithSyncFeeRequest()
         {
             Data = data,
             FeeToken = feeToken,
@@ -83,7 +83,7 @@ public class GelatoTest : MonoBehaviour
         var complete = false;
         while (!complete)
         {
-            var status = await gelatoInstance.GetTaskStatus(relayResponse.TaskId);
+            var status = await _web3.Gelato().GetTaskStatus(relayResponse.TaskId);
             Debug.Log($"CallWithSyncFee status: {relayResponse.TaskId}: {status.TaskState}");
 
             switch (status.TaskState)
@@ -116,8 +116,7 @@ public class GelatoTest : MonoBehaviour
         var contract = new Contract(abi, counterContract);
         var data = contract.Calldata("increment");
 
-        var gelatoInstance = _web3.ServiceProvider.GetRequiredService<IGelatoModule>();
-        var relayResponse = await gelatoInstance.SponsoredCall(new SponsoredCallRequest()
+        var relayResponse = await _web3.Gelato().SponsoredCall(new SponsoredCallRequest()
         {
             Target = counterContract,
             Data = data,
@@ -127,7 +126,7 @@ public class GelatoTest : MonoBehaviour
         while (!complete)
         {
             Thread.Sleep(2000);
-            var status = await gelatoInstance.GetTaskStatus(relayResponse.TaskId);
+            var status = await _web3.Gelato().GetTaskStatus(relayResponse.TaskId);
             Debug.Log($"SponsorCall status: {relayResponse.TaskId}: {status.TaskState}");
 
             switch (status.TaskState)
@@ -161,20 +160,19 @@ public class GelatoTest : MonoBehaviour
         {
         });
 
-        var gelatoInstance = _web3.ServiceProvider.GetRequiredService<IGelatoModule>();
-        var relayResponse = await gelatoInstance.CallWithSyncFeeErc2771(new CallWithSyncFeeErc2771Request()
+        var relayResponse = await _web3.Gelato().CallWithSyncFeeErc2771(new CallWithSyncFeeErc2771Request()
         {
             Target = target,
             Data = data,
             FeeToken = feeToken,
             IsRelayContext = true,
-        }, _web3.Signer);
+        });
 
         var complete = false;
         while (!complete)
         {
             Thread.Sleep(2000);
-            var status = await gelatoInstance.GetTaskStatus(relayResponse.TaskId);
+            var status = await _web3.Gelato().GetTaskStatus(relayResponse.TaskId);
             Debug.Log($"CallWithSyncFeeErc2771 status: {relayResponse.TaskId}: {status.TaskState}");
 
             switch (status.TaskState)
@@ -206,19 +204,18 @@ public class GelatoTest : MonoBehaviour
         var contract = new Contract(abi, target);
         var data = contract.Calldata("increment");
 
-        var gelatoInstance = _web3.ServiceProvider.GetRequiredService<IGelatoModule>();
-        var relayResponse = await gelatoInstance.SponsoredCallErc2771(new SponsoredCallErc2771Request()
+        var relayResponse = await _web3.Gelato().SponsoredCallErc2771(new SponsoredCallErc2771Request()
         {
             Target = target,
             Data = data,
             User = await _web3.Signer.GetAddress(),
-        }, _web3.Signer);
+        });     
 
         var complete = false;
         while (!complete)
         {
             Thread.Sleep(2000);
-            var status = await gelatoInstance.GetTaskStatus(relayResponse.TaskId);
+            var status = await _web3.Gelato().GetTaskStatus(relayResponse.TaskId);
             Debug.Log($"SponsorCallErc2771 status: {relayResponse.TaskId}: {status.TaskState}");
 
             switch (status.TaskState)
