@@ -70,8 +70,8 @@ public class GelatoTest : MonoBehaviour
             feeToken,
             vitalik,
             new BigInteger(5 * 10E12)
-        });
-        
+        })
+
         var relayResponse = await _web3.Gelato().CallWithSyncFee(new CallWithSyncFeeRequest()
         {
             Data = data,
@@ -209,7 +209,7 @@ public class GelatoTest : MonoBehaviour
             Target = target,
             Data = data,
             User = await _web3.Signer.GetAddress(),
-        });     
+        })
 
         var complete = false;
         while (!complete)
