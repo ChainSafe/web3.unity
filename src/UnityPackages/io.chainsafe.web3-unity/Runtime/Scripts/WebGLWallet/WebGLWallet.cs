@@ -144,7 +144,7 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
         private static extern string JS_getSignMessageResponse();
         [DllImport("__Internal")]
         private static extern void JS_resetSignMessageResponse();
-        
+
         // SignMessage
         [DllImport("__Internal")]
         private static extern void JS_signTypedMessage<TStructType>(SerializableDomain domain, Dictionary<string, MemberDescription[]> types, TStructType message);
