@@ -11,7 +11,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
 
         Task<string> SignMessage(string message);
 
-        Task<string> SignMessage(string privateKey, string message);
+        Task<string> SignMessage(string message, string privateKey);
 
         Task<string> SignTypedData(Domain domain, Dictionary<string, MemberDescription[]> types, MemberValue[] message);
 
