@@ -6,16 +6,12 @@ using ChainSafe.GamingWeb3.Build;
 using ChainSafe.GamingWeb3.Unity;
 using ChainSafe.GamingSdk.Gelato;
 using ChainSafe.GamingSdk.Gelato.Dto;
-using ChainSafe.GamingSdk.Gelato.Types;
 using ChainSafe.GamingWeb3;
-using Microsoft.Extensions.DependencyInjection;
-using Nethereum.Hex.HexTypes;
 using UnityEngine;
 using Web3Unity.Scripts.Library.Ethers.JsonRpc;
-using Web3Unity.Scripts.Library.Ethers.Transactions;
 using Contract = Web3Unity.Scripts.Library.Ethers.Contracts.Contract;
 
-public class GelatoTest : MonoBehaviour
+public class GelatoModule : MonoBehaviour
 {
     private Web3 _web3;
 
@@ -23,16 +19,6 @@ public class GelatoTest : MonoBehaviour
     async void Start()
     {
         await InitWeb3();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
-    public async void TestingGelatoFunction()
-    {
-        Debug.Log("Testing works");
     }
 
     private async Task InitWeb3()
@@ -69,8 +55,8 @@ public class GelatoTest : MonoBehaviour
         {
             feeToken,
             vitalik,
-            new BigInteger(5 * 10E12)
-        })
+            new BigInteger(5 * 10E12),
+        }); 
 
         var relayResponse = await _web3.Gelato().CallWithSyncFee(new CallWithSyncFeeRequest()
         {
@@ -191,7 +177,7 @@ public class GelatoTest : MonoBehaviour
         }
     }
 
-    public async void sponsorCallErc2771Example()
+    public async void SponsorCallErc2771Example()
     {
         var target = "0x00172f67db60E5fA346e599cdE675f0ca213b47b";
 
@@ -209,7 +195,7 @@ public class GelatoTest : MonoBehaviour
             Target = target,
             Data = data,
             User = await _web3.Signer.GetAddress(),
-        })
+        });
 
         var complete = false;
         while (!complete)
