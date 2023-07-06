@@ -56,7 +56,7 @@ public class GelatoModule : MonoBehaviour
             feeToken,
             vitalik,
             new BigInteger(5 * 10E12),
-        }); 
+        });
 
         var relayResponse = await _web3.Gelato().CallWithSyncFee(new CallWithSyncFeeRequest()
         {
