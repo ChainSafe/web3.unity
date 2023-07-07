@@ -8,7 +8,7 @@ using UnityEngine;
 // creates a transaction for the wallet
 namespace Prefabs.Web3AuthWallet.Services
 {
-    public class SignatureService : ITransactionSigner, IMessageSigner
+    public class SignatureService : IMessageSigner
     {
         /// <summary>
         /// Signs a transaction using the provided private key and transaction data.

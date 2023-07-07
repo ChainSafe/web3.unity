@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using Newtonsoft.Json;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
+using Web3Unity.Scripts.Library.Ethers.Web3AuthWallet;
 
 public class Web3AuthLogin : MonoBehaviour
 {
@@ -100,7 +101,7 @@ public class Web3AuthLogin : MonoBehaviour
     {
         loginResponseText.text = JsonConvert.SerializeObject(response, Formatting.Indented);
         var userInfo = JsonConvert.SerializeObject(response.userInfo, Formatting.Indented);
-        PlayerPrefs.SetString("PK", response.privKey);
+        W3AWalletUtils.PrivateKey = response.privKey;
 
         loginButton.gameObject.SetActive(false);
         verifierDropdown.gameObject.SetActive(false);

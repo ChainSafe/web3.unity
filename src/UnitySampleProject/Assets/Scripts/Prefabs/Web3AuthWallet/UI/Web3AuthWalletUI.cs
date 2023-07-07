@@ -2,11 +2,11 @@ using System;
 using System.Globalization;
 using System.Numerics;
 using System.Threading.Tasks;
-using ChainSafe.GamingSDK.EVM.Web3AuthWallet;
 using ChainSafe.GamingWeb3;
 using ChainSafe.GamingWeb3.Build;
 using ChainSafe.GamingWeb3.Unity;
 using Nethereum.Hex.HexTypes;
+using Nethereum.RPC.Eth.DTOs;
 using Prefabs.Web3AuthWallet.Interfaces;
 using Prefabs.Web3AuthWallet.Services;
 using Prefabs.Web3AuthWallet.Utils;
@@ -54,18 +54,12 @@ namespace Prefabs.Web3AuthWallet.UI
         private Web3AuthWalletConfig _web3AuthWalletConfig;
         private Scripts.Web3AuthWallet.Web3AuthWallet _web3AuthWallet;
         private Web3 web3;
-        private TransactionService _transactionService;
         private SignatureService _signatureService;
-        private ITransactionConfig transactionConfig;
-        private IHttpRequestHandler httpRequestHandler;
         private IEthereumService ethereumService;
 
         async void Awake()
         {
             var projectConfig = ProjectConfigUtilities.Load();
-            transactionConfig = new TransactionConfig(projectConfig);
-            httpRequestHandler = new HttpRequestHandler();
-            ethereumService = new EthereumService();
             web3 = await new Web3Builder(projectConfig)
                 .Configure(services =>
                 {
@@ -74,20 +68,10 @@ namespace Prefabs.Web3AuthWallet.UI
                     services.UseWeb3AuthWallet();
                 })
                 .BuildAsync();
-            _web3AuthWalletConfig = new Web3AuthWalletConfig();
-            _transactionService = new TransactionService(transactionConfig, httpRequestHandler, ethereumService);
             _signatureService = new SignatureService();
 
             // keeps the wallet alive between scene changes
             DontDestroyOnLoad(this.gameObject);
-        }
-
-        public void SetPK()
-        {
-            // sets the pk to memory and clears it from player prefs
-            W3AWalletUtils.PrivateKey = PlayerPrefs.GetString("PK");
-            _web3AuthWalletConfig.PrivateKey = PlayerPrefs.GetString("PK");
-            PlayerPrefs.SetString("PK", string.Empty);
         }
 
         public void CloseButton()
@@ -106,7 +90,6 @@ namespace Prefabs.Web3AuthWallet.UI
                 if (!pkSet)
                 {
                     pkSet = true;
-                    SetPK();
                 }
 
                 walletOpen = true;
@@ -119,11 +102,13 @@ namespace Prefabs.Web3AuthWallet.UI
 
         async public void GetData()
         {
+            ethereumService = new EthereumService(W3AWalletUtils.PrivateKey, "https://goerli.infura.io/v3/2ea27900c8784457ac03b1cbd4e7b8f0");
+
             // updates the wallets balances and custom tokens if specified by dev
             Debug.Log("Updating wallet data");
 
             // populate wallet address
-            W3AWalletUtils.Account = ethereumService.GetAddressW3A(_web3AuthWalletConfig.PrivateKey);
+            W3AWalletUtils.Account = ethereumService.GetAddressW3A(W3AWalletUtils.PrivateKey);
             WalletAddress.text = W3AWalletUtils.Account;
 
             // populate native token balance
@@ -209,25 +194,37 @@ namespace Prefabs.Web3AuthWallet.UI
                 {
                     string to = W3AWalletUtils.OutgoingContract;
                     string data = W3AWalletUtils.IncomingTxData;
-                    var gasPrice = await web3.RpcProvider.GetGasPrice();
                     string gasLimit = "100000";
-                    var txRequest = new TransactionRequest
+
+                    TransactionInput txInput = new TransactionInput
                     {
                         To = to,
-                        Value = new HexBigInteger(0),
+                        From = ethereumService.GetAddressW3A(W3AWalletUtils.PrivateKey),
+                        Value = new HexBigInteger(0), // Convert the Ether amount to Wei
                         Data = data,
-                        GasPrice = gasPrice,
-                        GasLimit = new HexBigInteger(gasLimit),
+                        GasPrice = new HexBigInteger(100000),
+                        Gas = new HexBigInteger(56000),
                     };
-                    EVM.Response<string> transaction = await _transactionService.CreateTransaction(txRequest, W3AWalletUtils.Account, gasPrice.ToString(), gasLimit, string.Empty);
-                    string signedTx = _signatureService.SignTransaction(W3AWalletUtils.PrivateKey, transaction.response);
-                    EVM.Response<string> tx = await _transactionService.BroadcastTransaction(txRequest, W3AWalletUtils.Account, signedTx, gasPrice.ToString(), gasLimit);
+
+                    try
+                    {
+                        IncomingTxHash.text = "Broadcasting...";
+                        await new WaitForSeconds(3);
+                        var signedTransactionData = await ethereumService.CreateAndSignTransactionAsync(txInput);
+                        Debug.Log($"Signed transaction data: {signedTransactionData}");
+                        var transactionHash = await ethereumService.SendTransactionAsync(signedTransactionData);
+                        Debug.Log($"Transaction hash: {transactionHash}");
+                        W3AWalletUtils.SignedTxResponse = transactionHash;
+                        UpdateTxHistory(DateTime.Now.ToString(), "Transaction", W3AWalletUtils.Amount, transactionHash);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.Log($"An error occurred: {ex.Message}");
+                    }
                     IncomingTxHash.text = "Broadcasting...";
                     await new WaitForSeconds(3);
-                    W3AWalletUtils.SignedTxResponse = tx.response;
-                    Debug.Log("Tranascation: " + tx.response);
                     IncomingTxHash.text = "Broadcast Successful!";
-                    UpdateTxHistory(DateTime.Now.ToString(), "Transaction", W3AWalletUtils.Amount, tx.response);
                 }
                 catch (Exception e)
                 {
