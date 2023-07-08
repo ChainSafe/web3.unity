@@ -178,7 +178,7 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
             form.AddField("chain", _chain);
             form.AddField("network", _network);
             form.AddField("account", _account);
-            form.AddField("tokenId", _itemId);
+            form.AddField("itemId", _itemId);
             string url = host + "/createCancelNftTransaction";
             using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
             {
