@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Numerics;
 using System.Threading.Tasks;
 using Models;
 using Nethereum.Hex.HexTypes;
@@ -164,12 +165,12 @@ public class GetListedCollections : MonoBehaviour
         {
             var txRequest = new TransactionRequest
             {
-                ChainId = new HexBigInteger(int.Parse(chainConfig.ChainId)),
+                ChainId = new HexBigInteger(BigInteger.Parse(chainConfig.ChainId)),
                 To = response.tx.to,
-                Value = new HexBigInteger(int.Parse(response.tx.value)),
+                Value = new HexBigInteger(BigInteger.Parse(response.tx.value)),
                 Data = response.tx.data,
-                GasLimit = new HexBigInteger(int.Parse(response.tx.gasLimit)),
-                GasPrice = new HexBigInteger(int.Parse(response.tx.gasPrice)),
+                GasLimit = new HexBigInteger(BigInteger.Parse(response.tx.gasLimit)),
+                GasPrice = new HexBigInteger(BigInteger.Parse(response.tx.gasPrice)),
             };
             var responseNft = await Web3Accessor.Web3.TransactionExecutor.SendTransaction(txRequest);
             Debug.Log(JsonConvert.SerializeObject(responseNft));
@@ -196,7 +197,7 @@ public class GetListedCollections : MonoBehaviour
     // render the sprite into the image object
     Sprite SpriteFromTexture2D(Texture2D texture)
     {
-        return Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f),
+        return Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new UnityEngine.Vector2(0.5f, 0.5f),
             100.0f);
     }
     // parses the json response, as it has lists within the object

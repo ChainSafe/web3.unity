@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
 using Web3Unity.Scripts.Library.ETHEREUEM.Connect;
 using Web3Unity.Scripts.Library.Ethers.Transactions;
@@ -23,8 +24,8 @@ public class CreateApproval : MonoBehaviour
             {
                 To = response.tx.to,
                 Data = response.tx.data,
-                GasPrice = new HexBigInteger(int.Parse(response.tx.gasPrice)),
-                GasLimit = new HexBigInteger(int.Parse(response.tx.gasLimit)),
+                GasPrice = new HexBigInteger(BigInteger.Parse(response.tx.gasPrice)),
+                GasLimit = new HexBigInteger(BigInteger.Parse(response.tx.gasLimit)),
                 Value = new HexBigInteger(0),
             };
             var responseNft = await Web3Accessor.Web3.TransactionExecutor.SendTransaction(txRequest);

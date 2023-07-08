@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Globalization;
+using System.Numerics;
 using System.Text;
 using Models;
 using Nethereum.Hex.HexTypes;
@@ -111,7 +112,7 @@ namespace Web3Unity.Scripts.Prefabs.Minter
 
         private Sprite SpriteFromTexture2D(Texture2D texture)
         {
-            return Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f), 100.0f);
+            return Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new UnityEngine.Vector2(0.5f, 0.5f), 100.0f);
         }
 
         public async void ListItem()
@@ -130,12 +131,12 @@ namespace Web3Unity.Scripts.Prefabs.Minter
             {
                 var txRequest = new TransactionRequest
                 {
-                    ChainId = new HexBigInteger(int.Parse(chainConfig.ChainId)),
+                    ChainId = new HexBigInteger(BigInteger.Parse(chainConfig.ChainId)),
                     To = response.tx.to,
                     Value = new HexBigInteger(value),
                     Data = response.tx.data,
-                    GasLimit = new HexBigInteger(int.Parse(response.tx.gasLimit)),
-                    GasPrice = new HexBigInteger(int.Parse(response.tx.gasPrice)),
+                    GasLimit = new HexBigInteger(BigInteger.Parse(response.tx.gasLimit)),
+                    GasPrice = new HexBigInteger(BigInteger.Parse(response.tx.gasPrice)),
                 };
                 var responseNft = await Web3Accessor.Web3.TransactionExecutor.SendTransaction(txRequest);
                 Debug.Log(JsonConvert.SerializeObject(responseNft));

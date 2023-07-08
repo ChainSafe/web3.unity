@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using Models;
 using Nethereum.Hex.HexTypes;
 using Newtonsoft.Json;
@@ -28,12 +29,12 @@ public class Mint721Voucher : MonoBehaviour
         RedeemVoucherTxModel.Response voucherResponse = await EVM.CreateRedeemTransaction(Web3Accessor.Web3, chainConfig.Chain, chainConfig.Network, voucherArgs, "721", nftAddress, voucherResponse721.receiver);
         var txRequest = new TransactionRequest
         {
-            ChainId = new HexBigInteger(int.Parse(chainConfig.ChainId)),
+            ChainId = new HexBigInteger(BigInteger.Parse(chainConfig.ChainId)),
             To = voucherResponse.tx.to,
             Value = new HexBigInteger(voucherResponse.tx.value),
             Data = voucherResponse.tx.data,
-            GasLimit = new HexBigInteger(int.Parse(voucherResponse.tx.gasLimit)),
-            GasPrice = new HexBigInteger(int.Parse(voucherResponse.tx.gasPrice)),
+            GasLimit = new HexBigInteger(BigInteger.Parse(voucherResponse.tx.gasLimit)),
+            GasPrice = new HexBigInteger(BigInteger.Parse(voucherResponse.tx.gasPrice)),
         };
         var response = await Web3Accessor.Web3.TransactionExecutor.SendTransaction(txRequest);
         Debug.Log(JsonConvert.SerializeObject(response));
