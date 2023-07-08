@@ -15,12 +15,19 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
         private readonly ISigner signer;
         private readonly ITransactionExecutor transactionExecutor;
 
-        public ContractFactory(IRpcProvider rpcProvider, ISigner signer, ITransactionExecutor transactionExecutor)
+        public ContractFactory(IRpcProvider rpcProvider, ISigner signer)
+            : this(new(), rpcProvider, signer)
         {
-            registeredContracts = new();
-            this.rpcProvider = rpcProvider;
-            this.signer = signer;
-            this.transactionExecutor = transactionExecutor;
+        }
+
+        public ContractFactory(ContractFactoryConfig config, IRpcProvider rpcProvider, ISigner signer)
+            : this(config, rpcProvider, signer, null)
+        {
+        }
+
+        public ContractFactory(IRpcProvider rpcProvider, ISigner signer, ITransactionExecutor transactionExecutor)
+            : this(new(), rpcProvider, signer, transactionExecutor)
+        {
         }
 
         public ContractFactory(ContractFactoryConfig config, IRpcProvider rpcProvider, ISigner signer, ITransactionExecutor transactionExecutor)
