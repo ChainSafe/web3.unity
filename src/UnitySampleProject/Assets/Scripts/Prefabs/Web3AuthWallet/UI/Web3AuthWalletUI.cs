@@ -56,10 +56,11 @@ namespace Prefabs.Web3AuthWallet.UI
         private Web3 web3;
         private SignatureService _signatureService;
         private IEthereumService ethereumService;
+        ProjectConfigScriptableObject projectConfig = null;
 
         async void Awake()
         {
-            var projectConfig = ProjectConfigUtilities.Load();
+            projectConfig = ProjectConfigUtilities.Load();
             web3 = await new Web3Builder(projectConfig)
                 .Configure(services =>
                 {
@@ -102,7 +103,7 @@ namespace Prefabs.Web3AuthWallet.UI
 
         async public void GetData()
         {
-            ethereumService = new EthereumService(W3AWalletUtils.PrivateKey, "https://goerli.infura.io/v3/2ea27900c8784457ac03b1cbd4e7b8f0");
+            ethereumService = new EthereumService(W3AWalletUtils.PrivateKey, projectConfig.Rpc);
 
             // updates the wallets balances and custom tokens if specified by dev
             Debug.Log("Updating wallet data");
@@ -216,12 +217,12 @@ namespace Prefabs.Web3AuthWallet.UI
                         Debug.Log($"Transaction hash: {transactionHash}");
                         W3AWalletUtils.SignedTxResponse = transactionHash;
                         UpdateTxHistory(DateTime.Now.ToString(), "Transaction", W3AWalletUtils.Amount, transactionHash);
-
                     }
                     catch (Exception ex)
                     {
                         Debug.Log($"An error occurred: {ex.Message}");
                     }
+
                     IncomingTxHash.text = "Broadcasting...";
                     await new WaitForSeconds(3);
                     IncomingTxHash.text = "Broadcast Successful!";
