@@ -13,8 +13,8 @@ public class CreateApproval : MonoBehaviour
 
     public async void ApproveTransaction()
     {
-        var chainConfig = Web3Accessor.Instance.Web3.ChainConfig;
-        var response = await EVM.CreateApproveTransaction(Web3Accessor.Instance.Web3, chainConfig.Chain, chainConfig.Network, await Web3Accessor.Instance.Web3.Signer.GetAddress(), tokenType);
+        var chainConfig = Web3Accessor.Web3.ChainConfig;
+        var response = await EVM.CreateApproveTransaction(Web3Accessor.Web3, chainConfig.Chain, chainConfig.Network, await Web3Accessor.Web3.Signer.GetAddress(), tokenType);
         Debug.Log("Response: " + response.connection.chain);
 
         try
@@ -27,7 +27,7 @@ public class CreateApproval : MonoBehaviour
                 GasLimit = new HexBigInteger(int.Parse(response.tx.gasLimit)),
                 Value = new HexBigInteger(0),
             };
-            var responseNft = await Web3Accessor.Instance.Web3.TransactionExecutor.SendTransaction(txRequest);
+            var responseNft = await Web3Accessor.Web3.TransactionExecutor.SendTransaction(txRequest);
             Debug.Log(JsonConvert.SerializeObject(responseNft));
         }
         catch (Exception e)

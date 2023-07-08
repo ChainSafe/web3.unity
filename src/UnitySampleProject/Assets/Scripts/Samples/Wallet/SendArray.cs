@@ -11,7 +11,7 @@ public class SendArray : MonoBehaviour
         var method = "setStore";
         string[] stringArray =
             {"0xFb3aECf08940785D4fB3Ad87cDC6e1Ceb20e9aac", "0x92d4040e4f3591e60644aaa483821d1bd87001e3"};
-        var contract = Web3Accessor.Instance.Web3.ContractFactory.Build(abi, contractAddress);
+        var contract = Web3Accessor.Web3.ContractFactory.Build(abi, contractAddress);
         var response = await contract.Send(method, new object[]
         {
              stringArray

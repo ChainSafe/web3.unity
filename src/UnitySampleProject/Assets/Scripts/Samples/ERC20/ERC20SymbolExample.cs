@@ -7,7 +7,7 @@ public class ERC20SymbolExample : MonoBehaviour
     {
         string contract = "0x3E0C0447e47d49195fbE329265E330643eB42e6f";
 
-        string symbol = await ERC20.Symbol(Web3Accessor.Instance.Web3, contract);
+        string symbol = await ERC20.Symbol(Web3Accessor.Web3, contract);
         print(symbol);
     }
 }

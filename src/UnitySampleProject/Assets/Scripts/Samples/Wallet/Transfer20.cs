@@ -9,7 +9,7 @@ public class Transfer20 : MonoBehaviour
         string method = EthMethod.Transfer;
         string toAccount = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
         string amount = "1000000000000000";
-        var contract = Web3Accessor.Instance.Web3.ContractFactory.Build(abi, contractAddress);
+        var contract = Web3Accessor.Web3.ContractFactory.Build(abi, contractAddress);
         var response = await contract.Send(method, new object[]
         {
              toAccount,

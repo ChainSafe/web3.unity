@@ -5,6 +5,6 @@ public class GetBlockNumber : MonoBehaviour
 {
     public async void Start()
     {
-        Debug.Log("Block Number: " + await Web3Accessor.Instance.Web3.RpcProvider.GetBlockNumber());
+        Debug.Log("Block Number: " + await Web3Accessor.Web3.RpcProvider.GetBlockNumber());
     }
 }

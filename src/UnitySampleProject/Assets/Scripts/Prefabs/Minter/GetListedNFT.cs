@@ -44,8 +44,8 @@ public class GetListedNFT : MonoBehaviour
     // Start is called before the first frame update
     async void Start()
     {
-        var chainConfig = Web3Accessor.Instance.Web3.ChainConfig;
-        List<GetNftListModel.Response> response = await EVM.GetNftMarket(Web3Accessor.Instance.Web3, chainConfig.Chain, chainConfig.Network);
+        var chainConfig = Web3Accessor.Web3.ChainConfig;
+        List<GetNftListModel.Response> response = await EVM.GetNftMarket(Web3Accessor.Web3, chainConfig.Chain, chainConfig.Network);
         price.text = response[0].price;
         seller.text = response[0].seller;
         Debug.Log("Seller: " + response[0].seller);
@@ -124,9 +124,9 @@ public class GetListedNFT : MonoBehaviour
 
     public async void PurchaseItem()
     {
-        var chainConfig = Web3Accessor.Instance.Web3.ChainConfig;
-        BuyNFT.Response response = await EVM.CreatePurchaseNftTransaction(Web3Accessor.Instance.Web3, chainConfig.Chain, chainConfig.Network,
-            await Web3Accessor.Instance.Web3.Signer.GetAddress(), _itemID, _itemPrice, _tokenType);
+        var chainConfig = Web3Accessor.Web3.ChainConfig;
+        BuyNFT.Response response = await EVM.CreatePurchaseNftTransaction(Web3Accessor.Web3, chainConfig.Chain, chainConfig.Network,
+            await Web3Accessor.Web3.Signer.GetAddress(), _itemID, _itemPrice, _tokenType);
         Debug.Log("Account: " + response.tx.account);
         Debug.Log("To : " + response.tx.to);
         Debug.Log("Value : " + response.tx.value);
@@ -145,7 +145,7 @@ public class GetListedNFT : MonoBehaviour
                 GasLimit = new HexBigInteger(int.Parse(response.tx.gasLimit)),
                 GasPrice = new HexBigInteger(int.Parse(response.tx.gasPrice)),
             };
-            var responseNft = await Web3Accessor.Instance.Web3.TransactionExecutor.SendTransaction(txRequest);
+            var responseNft = await Web3Accessor.Web3.TransactionExecutor.SendTransaction(txRequest);
             Debug.Log(JsonConvert.SerializeObject(responseNft));
         }
         catch (Exception e)

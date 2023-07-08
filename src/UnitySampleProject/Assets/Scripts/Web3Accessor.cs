@@ -22,7 +22,7 @@ public class Web3Accessor : MonoBehaviour
         }
     }
 
-    public Web3 Web3 => web3 ?? throw new System.Exception("Web3 instance not initialized");
+    public static Web3 Web3 => Instance?.web3 ?? throw new System.Exception("Web3 instance not initialized");
 
     public void Set(Web3 web3)
     {

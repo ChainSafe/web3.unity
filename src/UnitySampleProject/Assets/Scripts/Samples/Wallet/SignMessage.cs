@@ -4,7 +4,7 @@ public class SignMessage : MonoBehaviour
 {
     public async void Start()
     {
-        string response = await Web3Accessor.Instance.Web3.Signer.SignMessage("Hello from CS gaming!");
+        string response = await Web3Accessor.Web3.Signer.SignMessage("Hello from CS gaming!");
         Debug.Log(response);
     }
 }

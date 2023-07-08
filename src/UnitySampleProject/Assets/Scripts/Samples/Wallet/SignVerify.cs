@@ -8,8 +8,8 @@ public class SignVerify : MonoBehaviour
     async void Start()
     {
         var message = "Hello from CS gaming!";
-        var address = await Web3Accessor.Instance.Web3.Signer.GetAddress();
-        string signatureString = await Web3Accessor.Instance.Web3.Signer.SignMessage(message);
+        var address = await Web3Accessor.Web3.Signer.GetAddress();
+        string signatureString = await Web3Accessor.Web3.Signer.SignMessage(message);
 
         string msg = "\x19" + "Ethereum Signed Message:\n" + message.Length + message;
         byte[] msgHash = new Sha3Keccack().CalculateHash(Encoding.UTF8.GetBytes(msg));

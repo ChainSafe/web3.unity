@@ -14,7 +14,7 @@ public class Mint721Voucher : MonoBehaviour
 
     public async void VoucherMintNft721()
     {
-        var voucherResponse721 = await EVM.Get721Voucher(Web3Accessor.Instance.Web3);
+        var voucherResponse721 = await EVM.Get721Voucher(Web3Accessor.Web3);
         CreateRedeemVoucherModel.CreateVoucher721 voucher721 = new CreateRedeemVoucherModel.CreateVoucher721();
         voucher721.tokenId = voucherResponse721.tokenId;
         voucher721.minPrice = voucherResponse721.minPrice;
@@ -24,8 +24,8 @@ public class Mint721Voucher : MonoBehaviour
         string voucherArgs = JsonUtility.ToJson(voucher721);
 
         // connects to user's browser wallet to call a transaction
-        var chainConfig = Web3Accessor.Instance.Web3.ChainConfig;
-        RedeemVoucherTxModel.Response voucherResponse = await EVM.CreateRedeemTransaction(Web3Accessor.Instance.Web3, chainConfig.Chain, chainConfig.Network, voucherArgs, "721", nftAddress, voucherResponse721.receiver);
+        var chainConfig = Web3Accessor.Web3.ChainConfig;
+        RedeemVoucherTxModel.Response voucherResponse = await EVM.CreateRedeemTransaction(Web3Accessor.Web3, chainConfig.Chain, chainConfig.Network, voucherArgs, "721", nftAddress, voucherResponse721.receiver);
         var txRequest = new TransactionRequest
         {
             ChainId = new HexBigInteger(int.Parse(chainConfig.ChainId)),
@@ -35,7 +35,7 @@ public class Mint721Voucher : MonoBehaviour
             GasLimit = new HexBigInteger(int.Parse(voucherResponse.tx.gasLimit)),
             GasPrice = new HexBigInteger(int.Parse(voucherResponse.tx.gasPrice)),
         };
-        var response = await Web3Accessor.Instance.Web3.TransactionExecutor.SendTransaction(txRequest);
+        var response = await Web3Accessor.Web3.TransactionExecutor.SendTransaction(txRequest);
         Debug.Log(JsonConvert.SerializeObject(response));
     }
 }

@@ -36,17 +36,17 @@ namespace Web3Unity.Scripts.Prefabs.Minter
             tokenURI.text = "";
             isApproved.text = "";
             contractAddr.text = "";
-            account = await Web3Accessor.Instance.Web3.Signer.GetAddress();
+            account = await Web3Accessor.Web3.Signer.GetAddress();
         }
 
         // Start is called before the first frame update
         private async void Start()
         {
-            var chainConfig = Web3Accessor.Instance.Web3.ChainConfig;
+            var chainConfig = Web3Accessor.Web3.ChainConfig;
             playerAccount.text = account;
             try
             {
-                var response = await EVM.GetMintedNFT(Web3Accessor.Instance.Web3, chainConfig.Chain, chainConfig.Network, account);
+                var response = await EVM.GetMintedNFT(Web3Accessor.Web3, chainConfig.Chain, chainConfig.Network, account);
 
                 if (response[1].uri == null)
                 {
@@ -116,13 +116,13 @@ namespace Web3Unity.Scripts.Prefabs.Minter
 
         public async void ListItem()
         {
-            var chainConfig = Web3Accessor.Instance.Web3.ChainConfig;
+            var chainConfig = Web3Accessor.Web3.ChainConfig;
             var eth = float.Parse(_itemPrice);
             float decimals = 1000000000000000000; // 18 decimals
             var wei = eth * decimals;
             Debug.Log("ItemID: " + _itemID);
             var response =
-                await EVM.CreateListNftTransaction(Web3Accessor.Instance.Web3, chainConfig.Chain, chainConfig.Network, account, _itemID, Convert.ToDecimal(wei).ToString(CultureInfo.InvariantCulture),
+                await EVM.CreateListNftTransaction(Web3Accessor.Web3, chainConfig.Chain, chainConfig.Network, account, _itemID, Convert.ToDecimal(wei).ToString(CultureInfo.InvariantCulture),
                     _tokenType);
             var value = Convert.ToInt32(response.tx.value.hex, 16);
             Debug.Log("Response: " + response);
@@ -137,7 +137,7 @@ namespace Web3Unity.Scripts.Prefabs.Minter
                     GasLimit = new HexBigInteger(int.Parse(response.tx.gasLimit)),
                     GasPrice = new HexBigInteger(int.Parse(response.tx.gasPrice)),
                 };
-                var responseNft = await Web3Accessor.Instance.Web3.TransactionExecutor.SendTransaction(txRequest);
+                var responseNft = await Web3Accessor.Web3.TransactionExecutor.SendTransaction(txRequest);
                 Debug.Log(JsonConvert.SerializeObject(responseNft));
             }
             catch (Exception e)

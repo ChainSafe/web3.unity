@@ -4,7 +4,7 @@ public class Transfer1155 : MonoBehaviour
 {
     public async void Start()
     {
-        var account = await Web3Accessor.Instance.Web3.Signer.GetAddress();
+        var account = await Web3Accessor.Web3.Signer.GetAddress();
         var toAccount = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
         var contractAddress = "0xae283E79a5361CF1077bf2638a1A953c872AD973";
         var abi = ABI.ERC_1155;
@@ -13,7 +13,7 @@ public class Transfer1155 : MonoBehaviour
         var amount = 1;
         byte[] dataObject = { };
 
-        var contract = Web3Accessor.Instance.Web3.ContractFactory.Build(abi, contractAddress);
+        var contract = Web3Accessor.Web3.ContractFactory.Build(abi, contractAddress);
         var response = await contract.Send(method, new object[]
         {
             account,
