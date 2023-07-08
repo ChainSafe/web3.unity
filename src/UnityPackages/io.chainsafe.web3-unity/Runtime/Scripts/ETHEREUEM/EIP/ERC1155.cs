@@ -45,15 +45,7 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.EIP
                 accounts,
                 tokenIds
             });
-            try
-            {
-                return contractData.Select(x => BigInteger.Parse(x.ToString())).ToList();
-            }
-            catch
-            {
-                Debug.LogError(contractData);
-                throw;
-            }
+            return contractData[0] as List<BigInteger> ?? throw new System.Exception("Unexpected result from contract call");
         }
         /// <summary>
         /// Token URI of ERC1155 Token
