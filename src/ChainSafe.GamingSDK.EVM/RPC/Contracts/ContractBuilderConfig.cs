@@ -4,15 +4,15 @@ using System.Text;
 
 namespace Web3Unity.Scripts.Library.Ethers.Contracts
 {
-    public class ContractFactoryConfig
+    public class ContractBuilderConfig
     {
-        internal ContractFactoryConfig()
+        internal ContractBuilderConfig()
         {
         }
 
         internal List<ContractData> RegisteredContracts { get; } = new List<ContractData>();
 
-        public ContractFactoryConfig RegisterContract(string name, string abi, string address)
+        public ContractBuilderConfig RegisterContract(string name, string abi, string address)
         {
             RegisteredContracts.Add(new ContractData(name, abi, address));
             return this;

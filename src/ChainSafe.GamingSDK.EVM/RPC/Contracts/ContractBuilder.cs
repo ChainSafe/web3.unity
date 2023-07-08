@@ -8,29 +8,29 @@ using Web3Unity.Scripts.Library.Ethers.Signers;
 
 namespace Web3Unity.Scripts.Library.Ethers.Contracts
 {
-    public class ContractFactory : IContractFactory
+    public class ContractBuilder : IContractBuilder
     {
         private readonly Dictionary<string, ContractData> registeredContracts;
         private readonly IRpcProvider rpcProvider;
         private readonly ISigner signer;
         private readonly ITransactionExecutor transactionExecutor;
 
-        public ContractFactory(IRpcProvider rpcProvider, ISigner signer)
+        public ContractBuilder(IRpcProvider rpcProvider, ISigner signer)
             : this(new(), rpcProvider, signer)
         {
         }
 
-        public ContractFactory(ContractFactoryConfig config, IRpcProvider rpcProvider, ISigner signer)
+        public ContractBuilder(ContractBuilderConfig config, IRpcProvider rpcProvider, ISigner signer)
             : this(config, rpcProvider, signer, null)
         {
         }
 
-        public ContractFactory(IRpcProvider rpcProvider, ISigner signer, ITransactionExecutor transactionExecutor)
+        public ContractBuilder(IRpcProvider rpcProvider, ISigner signer, ITransactionExecutor transactionExecutor)
             : this(new(), rpcProvider, signer, transactionExecutor)
         {
         }
 
-        public ContractFactory(ContractFactoryConfig config, IRpcProvider rpcProvider, ISigner signer, ITransactionExecutor transactionExecutor)
+        public ContractBuilder(ContractBuilderConfig config, IRpcProvider rpcProvider, ISigner signer, ITransactionExecutor transactionExecutor)
         {
             try
             {

@@ -13,7 +13,7 @@ public class Transfer1155 : MonoBehaviour
         var amount = 1;
         byte[] dataObject = { };
 
-        var contract = Web3Accessor.Web3.ContractFactory.Build(abi, contractAddress);
+        var contract = Web3Accessor.Web3.ContractBuilder.Build(abi, contractAddress);
         var response = await contract.Send(method, new object[]
         {
             account,

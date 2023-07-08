@@ -20,7 +20,7 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.EIP
         /// <returns></returns>
         public static async Task<int> BalanceOf(Web3 web3, string contractAddress, string account)
         {
-            var contract = web3.ContractFactory.Build(abi, contractAddress);
+            var contract = web3.ContractBuilder.Build(abi, contractAddress);
             var contractData = await contract.Call(EthMethod.BalanceOf, new object[]
             {
                 account
@@ -37,7 +37,7 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.EIP
         public static async Task<string> OwnerOf(Web3 web3, string contractAddress, string tokenId)
         {
             var method = EthMethod.OwnerOf;
-            var contract = web3.ContractFactory.Build(abi, contractAddress);
+            var contract = web3.ContractBuilder.Build(abi, contractAddress);
             var contractData = await contract.Call(method, new object[]
             {
                 tokenId
@@ -100,7 +100,7 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.EIP
         public static async Task<string> URI(Web3 web3, string contractAddress, string tokenId)
         {
             const string ipfsPath = "https://ipfs.io/ipfs/";
-            var contract = web3.ContractFactory.Build(abi, contractAddress);
+            var contract = web3.ContractBuilder.Build(abi, contractAddress);
             if (tokenId.StartsWith("0x"))
             {
                 var convertURI = tokenId.Replace("0x", "f");

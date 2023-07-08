@@ -16,7 +16,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
         private readonly string address;
         private readonly IRpcProvider provider;
         private readonly ISigner signer;
-        private readonly ContractBuilder contractBuilder;
+        private readonly Builders.ContractBuilder contractBuilder;
         private readonly ITransactionExecutor transactionExecutor;
 
         internal Contract(string abi, string address, IRpcProvider provider = null, ISigner signer = null, ITransactionExecutor transactionExecutor = null)
@@ -31,7 +31,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
             this.provider = provider;
             this.signer = signer;
             this.transactionExecutor = transactionExecutor;
-            contractBuilder = new ContractBuilder(abi, address);
+            contractBuilder = new Builders.ContractBuilder(abi, address);
         }
 
         /// <summary>

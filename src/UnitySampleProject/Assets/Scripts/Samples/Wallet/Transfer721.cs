@@ -10,7 +10,7 @@ public class Transfer721 : MonoBehaviour
         var account = await Web3Accessor.Web3.Signer.GetAddress();
         var toAccount = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
         var tokenId = "0";
-        var contract = Web3Accessor.Web3.ContractFactory.Build(abi, contractAddress);
+        var contract = Web3Accessor.Web3.ContractBuilder.Build(abi, contractAddress);
         var response = contract.Send(method, new object[]
          {
              account,

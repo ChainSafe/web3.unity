@@ -10,7 +10,7 @@ public class Mint721 : MonoBehaviour
         var method = "safeMint";
         var toAccount = await Web3Accessor.Web3.Signer.GetAddress();
         var uri = "ipfs://QmNn5EaGR26kU7aAMH7LhkNsAGcmcyJgun3Wia4MftVicW/1.json";
-        var contract = Web3Accessor.Web3.ContractFactory.Build(abi, contractAddress);
+        var contract = Web3Accessor.Web3.ContractBuilder.Build(abi, contractAddress);
 
         var response = await contract.Send(method, new object[]
         {

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Web3Unity.Scripts.Library.Ethers.Contracts
 {
-    public interface IContractFactory
+    public interface IContractBuilder
     {
         Contract Build(string name);
 

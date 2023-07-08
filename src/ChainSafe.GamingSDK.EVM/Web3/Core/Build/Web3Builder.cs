@@ -22,7 +22,7 @@ namespace ChainSafe.GamingWeb3.Build
             // Bind default services
             serviceCollection
                 .AddSingleton<ChainProvider>()
-                .AddSingleton<IContractFactory, ContractFactory>();
+                .AddSingleton<IContractBuilder, ContractBuilder>();
         }
 
         // todo inline parameterless constructor into this one (therefore remove that overload)

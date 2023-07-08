@@ -7,13 +7,13 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Web3Unity.Scripts.Library.Ethers.Contracts
 {
-    public static class ContractFactoryExtensions
+    public static class ContractBuilderExtensions
     {
-        public static IWeb3ServiceCollection ConfigureRegisteredContracts(this IWeb3ServiceCollection services, Action<ContractFactoryConfig> configure)
+        public static IWeb3ServiceCollection ConfigureRegisteredContracts(this IWeb3ServiceCollection services, Action<ContractBuilderConfig> configure)
         {
-            ContractFactoryConfig config =
-                services.FirstOrDefault(s => s.ServiceType == typeof(ContractFactoryConfig))
-                    ?.ImplementationInstance as ContractFactoryConfig;
+            ContractBuilderConfig config =
+                services.FirstOrDefault(s => s.ServiceType == typeof(ContractBuilderConfig))
+                    ?.ImplementationInstance as ContractBuilderConfig;
 
             if (config == null)
             {

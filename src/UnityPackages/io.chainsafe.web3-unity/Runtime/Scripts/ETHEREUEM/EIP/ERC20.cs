@@ -18,7 +18,7 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.EIP
         /// <returns></returns>
         public static async Task<BigInteger> BalanceOf(Web3 web3, string contractAddress, string account)
         {
-            var contract = web3.ContractFactory.Build(Abi, contractAddress);
+            var contract = web3.ContractBuilder.Build(Abi, contractAddress);
             var contractData = await contract.Call(EthMethod.BalanceOf, new object[]
             {
                 account
@@ -32,7 +32,7 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.EIP
         /// <returns></returns>
         public static async Task<string> Name(Web3 web3, string contractAddress)
         {
-            var contract = web3.ContractFactory.Build(Abi, contractAddress);
+            var contract = web3.ContractBuilder.Build(Abi, contractAddress);
             var name = await contract.Call(EthMethod.Name);
             return name[0].ToString();
         }
@@ -43,7 +43,7 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.EIP
         /// <returns></returns>
         public static async Task<string> Symbol(Web3 web3, string contractAddress)
         {
-            var contract = web3.ContractFactory.Build(Abi, contractAddress);
+            var contract = web3.ContractBuilder.Build(Abi, contractAddress);
             var symbol = await contract.Call(EthMethod.Symbol);
             return symbol[0].ToString();
         }
@@ -54,7 +54,7 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.EIP
         /// <returns></returns>
         public static async Task<BigInteger> Decimals(Web3 web3, string contractAddress)
         {
-            var contract = web3.ContractFactory.Build(Abi, contractAddress);
+            var contract = web3.ContractBuilder.Build(Abi, contractAddress);
             var decimals = await contract.Call(EthMethod.Decimals);
             return BigInteger.Parse(decimals[0].ToString());
         }
@@ -65,7 +65,7 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.EIP
         /// <returns></returns>
         public static async Task<BigInteger> TotalSupply(Web3 web3, string contractAddress)
         {
-            var contract = web3.ContractFactory.Build(Abi, contractAddress);
+            var contract = web3.ContractBuilder.Build(Abi, contractAddress);
             var totoalsupply = await contract.Call(EthMethod.TotalSupply);
             return BigInteger.Parse(totoalsupply[0].ToString());
         }

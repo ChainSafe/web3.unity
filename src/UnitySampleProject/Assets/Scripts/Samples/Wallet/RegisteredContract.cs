@@ -7,7 +7,7 @@ public class RegisteredContract : MonoBehaviour
     async void Start()
     {
         var account = await Web3Accessor.Web3.Signer.GetAddress();
-        var contract = Web3Accessor.Web3.ContractFactory.Build("shiba");
+        var contract = Web3Accessor.Web3.ContractBuilder.Build("shiba");
         var response = await contract.Call(EthMethod.BalanceOf, new[] { account });
         Debug.Log(response);
     }
