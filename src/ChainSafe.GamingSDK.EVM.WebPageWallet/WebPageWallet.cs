@@ -14,6 +14,7 @@ using Newtonsoft.Json;
 using Web3Unity.Scripts.Library.Ethers.Providers;
 using Web3Unity.Scripts.Library.Ethers.Signers;
 using Web3Unity.Scripts.Library.Ethers.Transactions;
+using AddressExtensions = ChainSafe.GamingSDK.EVM.Web3.Core.Debug.AddressExtensions;
 
 namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
 {
@@ -41,7 +42,8 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
 
         public async ValueTask WillStartAsync()
         {
-            address = await GetAccountVerifyUserOwns();
+            configuration.SavedUserAddress?.AssertIsPublicAddress(nameof(configuration.SavedUserAddress));
+            address = configuration.SavedUserAddress ?? await GetAccountVerifyUserOwns();
         }
 
         public ValueTask WillStopAsync() => new(Task.CompletedTask);
@@ -150,10 +152,10 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
             var signature = await SignMessage(message);
             var publicAddress = ExtractPublicAddress(signature, message);
 
-            if (publicAddress.Length != 42)
+            if (!AddressExtensions.IsPublicAddress(publicAddress))
             {
                 throw new Web3Exception(
-                    $"Public address recovered from signature has length {publicAddress.Length}. Expected length: 42.");
+                    $"Public address recovered from signature is not valid. Public address: {publicAddress}");
             }
 
             if (DateTime.Now > expirationTime)

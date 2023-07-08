@@ -22,6 +22,11 @@ https://docs.gaming.chainsafe.io/
 - Have a code contribution you'd like to make directly? Make a pull request to this repo!
 - Join our community! Say hi on [Discord](https://discord.gg/Q6A3YA2) in #web3unity-gaming-general and share your project built with web3.unity in #gaming-showcase.
 
+## Building the code
+- Clone the repository and run the `setup` script.
+- You can now open `src/UnitySampleProject` in Unity and start hacking!
+- Whenever you make changes to the code in the libraries, run the `src/ChainSafe.GamingSdk.EVM.Unity/publish-to-unity-package` script from within the folder it is in. This will build and publish the libraries to the UPM package's folder, thus making any new code accessible inside Unity.
+
 ## ChainSafe Security Policy
 
 ### Reporting a Security Bug
