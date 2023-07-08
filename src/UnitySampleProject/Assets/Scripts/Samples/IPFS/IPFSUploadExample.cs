@@ -5,12 +5,15 @@ using Web3Unity.Scripts.Library.IPFS;
 
 public class IPFSUploadExample : MonoBehaviour
 {
-    private const string apiKey = "YOUR_CHAINSAFE_STORE_API_KEY";
+    [SerializeField]
+    string apiKey = "YOUR_CHAINSAFE_STORE_API_KEY";
+
+    [SerializeField]
+    string data = "YOUR_DATA";
 
     async void Start()
     {
-        var data = System.Text.Encoding.UTF8.GetBytes("YOUR_DATA");
-
+        var data = System.Text.Encoding.UTF8.GetBytes(this.data);
         var ipfs = new Ipfs(apiKey);
         var cid = await ipfs.Upload("BUCKET_ID", "/PATH", "FILENAME.ext", data, "application/octet-stream");
         print(cid);
