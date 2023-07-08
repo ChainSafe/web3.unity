@@ -6,7 +6,7 @@ public class Logout : MonoBehaviour
     public void OnLogout()
     {
         // Remove the saved "remember me" data, if any
-        PlayerPrefs.DeleteKey("PlayerAccount");
+        PlayerPrefs.DeleteKey(Login.PlayerAccountKey);
 
         // Clear the web3 instance
         Web3Accessor.Instance.Clear();
