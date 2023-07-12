@@ -5,7 +5,7 @@ using Web3Unity.Scripts.Library.Ethers.Signers;
 
 namespace ChainSafe.GamingSdk.Gelato.Types
 {
-    public interface IGelatoModule
+    public interface IGelato
     {
         Task<RelayResponse> CallWithSyncFee(CallWithSyncFeeRequest request);
 
