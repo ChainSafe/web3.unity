@@ -15,7 +15,7 @@ using Web3Unity.Scripts.Library.Ethers.Signers;
 
 namespace ChainSafe.GamingSdk.Gelato
 {
-    public class GelatoModule : IGelatoModule, ILifecycleParticipant
+    public class Gelato : IGelato, ILifecycleParticipant
     {
         private readonly GelatoClient gelatoClient;
         private readonly IRpcProvider provider;
@@ -23,7 +23,7 @@ namespace ChainSafe.GamingSdk.Gelato
         private readonly GelatoConfig config;
         private readonly IChainConfig chainConfig;
 
-        public GelatoModule(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, IRpcProvider provider, ISigner signer)
+        public Gelato(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, IRpcProvider provider, ISigner signer)
         {
             gelatoClient = new GelatoClient(httpClient, config);
             this.provider = provider;

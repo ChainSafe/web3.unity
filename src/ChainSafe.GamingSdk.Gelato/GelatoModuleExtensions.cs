@@ -12,7 +12,7 @@ namespace ChainSafe.GamingSdk.Gelato
 {
     public static class GelatoModuleExtensions
     {
-        public static IGelatoModule Gelato(this Web3 web3) => web3.ServiceProvider.GetRequiredService<IGelatoModule>();
+        public static IGelato Gelato(this Web3 web3) => web3.ServiceProvider.GetRequiredService<IGelato>();
 
         public static GelatoConfig DefaultConfig() => new()
         {
@@ -62,8 +62,8 @@ namespace ChainSafe.GamingSdk.Gelato
             collection.TryAddSingleton(config);
 
             // Gelato module
-            collection.AddSingleton<IGelatoModule, ILifecycleParticipant, GelatoModule>(
-                sp => new GelatoModule(
+            collection.AddSingleton<IGelato, ILifecycleParticipant, Gelato>(
+                sp => new Gelato(
                     sp.GetRequiredService<IHttpClient>(),
                     sp.GetRequiredService<IChainConfig>(),
                     sp.GetRequiredService<GelatoConfig>(),
