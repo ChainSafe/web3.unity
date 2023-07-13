@@ -78,7 +78,6 @@ public class TransferW3A : MonoBehaviour
                 Gas = new HexBigInteger(100000),
             };
 
-            Debug.Log("Called From Desktop/Mobile ");
             var signedTransactionData = await _ethereumService.CreateAndSignTransactionAsync(txInput);
             Debug.Log($"Signed transaction data: {signedTransactionData}");
             var transactionHash = await _ethereumService.SendTransactionAsync(signedTransactionData);

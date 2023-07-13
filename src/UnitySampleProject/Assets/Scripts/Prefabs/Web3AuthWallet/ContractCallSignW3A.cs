@@ -1,14 +1,20 @@
+using System.Net;
 using ChainSafe.GamingSDK.EVM.Web3AuthWallet;
 using ChainSafe.GamingWeb3;
 using ChainSafe.GamingWeb3.Build;
 using ChainSafe.GamingWeb3.Unity;
+using Nethereum.Hex.HexTypes;
+using Nethereum.RPC.Eth.DTOs;
+using Nethereum.Unity.Rpc;
 using Prefabs.Web3AuthWallet.UI;
+using Prefabs.Web3AuthWallet.Utils;
 using Scripts.Web3AuthWallet;
 using Web3Unity.Scripts.Library.Ethers.Contracts;
 using UnityEngine.UI;
 using UnityEngine;
 using Web3Unity.Scripts.Library.Ethers.JsonRpc;
 using Web3Unity.Scripts.Library.Ethers.Web3AuthWallet;
+
 
 public class ContractCallSignW3A : MonoBehaviour
 {
@@ -27,6 +33,8 @@ public class ContractCallSignW3A : MonoBehaviour
     private Web3AuthWalletConfig _web3AuthWalletConfig;
     private Web3AuthWallet _web3AuthWallet;
     private Web3 _web3;
+    private EthereumService _ethereumService;
+    private ProjectConfigScriptableObject projectConfig;
 
     /*
         //Solidity Contract
@@ -43,7 +51,7 @@ public class ContractCallSignW3A : MonoBehaviour
     */
     private async void Awake()
     {
-        var projectConfig = ProjectConfigUtilities.Load();
+        projectConfig = ProjectConfigUtilities.Load();
         _web3 = await new Web3Builder(projectConfig)
             .Configure(services =>
             {
@@ -54,6 +62,7 @@ public class ContractCallSignW3A : MonoBehaviour
             .BuildAsync();
         _web3AuthWallet = new Web3AuthWallet(_web3.RpcProvider, _web3AuthWalletConfig);
         _web3AuthWalletConfig = new Web3AuthWalletConfig();
+        _ethereumService = new EthereumService(W3AWalletUtils.PrivateKey, projectConfig.Rpc);
     }
 
     public void OnEnable()
@@ -77,7 +86,7 @@ public class ContractCallSignW3A : MonoBehaviour
         responseText.text = "Contract Variable Total: " + calldata[0];
     }
 
-    public void AddOneToVariable()
+    public async void AddOneToVariable()
     {
         string method = "addTotal";
         string amount = "1";
@@ -91,22 +100,20 @@ public class ContractCallSignW3A : MonoBehaviour
         });
         Debug.Log("Contract Data: " + calldata);
 
-        // finds the wallet, sets sign and incoming tx conditions to true and opens
-        CSWallet = GameObject.FindGameObjectWithTag("CSWallet");
-        W3AWalletUtils.IncomingTx = true;
-        W3AWalletUtils.IncomingAction = "Broadcast";
-        W3AWalletUtils.IncomingTxData = calldata;
-        CSWallet.GetComponent<Web3AuthWalletUI>().OpenButton();
-        print("Please check the contract variable again in a few seconds once the chain has processed the request!");
-    }
-
-    void Update()
-    {
-        if (W3AWalletUtils.SignedTxResponse != string.Empty)
+        TransactionInput txInput = new TransactionInput
         {
-            // display signed tx response from wallet
-            responseText.text = W3AWalletUtils.SignedTxResponse;
-            W3AWalletUtils.SignedTxResponse = string.Empty;
-        }
+            To = contractAddress,
+            From = _ethereumService.GetAddressW3A(W3AWalletUtils.PrivateKey),
+            Value = new HexBigInteger(0), // Convert the Ether amount to Wei
+            Data = calldata,
+            GasPrice = new HexBigInteger(100000),
+            Gas = new HexBigInteger(100000),
+        };
+
+        var signedTransactionData = await _ethereumService.CreateAndSignTransactionAsync(txInput);
+        Debug.Log($"Signed transaction data: {signedTransactionData}");
+        var transactionHash = await _ethereumService.SendTransactionAsync(signedTransactionData);
+        Debug.Log($"Transaction hash: {transactionHash}");
+        responseText.text = transactionHash;
     }
 }

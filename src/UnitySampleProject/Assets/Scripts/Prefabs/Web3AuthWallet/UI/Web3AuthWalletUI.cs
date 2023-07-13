@@ -7,17 +7,14 @@ using ChainSafe.GamingWeb3.Build;
 using ChainSafe.GamingWeb3.Unity;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
-using Prefabs.Web3AuthWallet.Interfaces;
 using Prefabs.Web3AuthWallet.Services;
 using Prefabs.Web3AuthWallet.Utils;
 using Scripts.Web3AuthWallet;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Web3Unity.Scripts.Library.ETHEREUEM.Connect;
 using Web3Unity.Scripts.Library.Ethers.Contracts;
 using Web3Unity.Scripts.Library.Ethers.JsonRpc;
-using Web3Unity.Scripts.Library.Ethers.Transactions;
 using Web3Unity.Scripts.Library.Ethers.Web3AuthWallet;
 
 namespace Prefabs.Web3AuthWallet.UI
@@ -35,6 +32,7 @@ namespace Prefabs.Web3AuthWallet.UI
         public GameObject IncomingTxObjPlaceholder;
         public GameObject CustomTokenObj;
         public GameObject IncomingTxObj;
+        public GameObject CSWallet;
         public Text WalletAddress;
         public Text NativeTokenBalance;
         public Text NativeTokenBalanceName;
@@ -55,10 +53,10 @@ namespace Prefabs.Web3AuthWallet.UI
         private Scripts.Web3AuthWallet.Web3AuthWallet _web3AuthWallet;
         private Web3 web3;
         private SignatureService _signatureService;
-        private IEthereumService ethereumService;
+        private EthereumService ethereumService;
         ProjectConfigScriptableObject projectConfig = null;
 
-        async void Awake()
+        async void Start()
         {
             projectConfig = ProjectConfigUtilities.Load();
             web3 = await new Web3Builder(projectConfig)
@@ -72,7 +70,7 @@ namespace Prefabs.Web3AuthWallet.UI
             _signatureService = new SignatureService();
 
             // keeps the wallet alive between scene changes
-            DontDestroyOnLoad(this.gameObject);
+            DontDestroyOnLoad(CSWallet);
         }
 
         public void CloseButton()
@@ -82,6 +80,7 @@ namespace Prefabs.Web3AuthWallet.UI
             WalletCanvas.SetActive(false);
         }
 
+        // ReSharper disable Unity.PerformanceAnalysis
         public void OpenButton()
         {
             // opens the wallet and stops wallet being used on log in scene as it isn't ready
