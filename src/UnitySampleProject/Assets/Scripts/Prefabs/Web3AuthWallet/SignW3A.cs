@@ -12,7 +12,7 @@ public class SignW3A : MonoBehaviour, ISigner
     public Text responseText;
     public string message = "This is a test message to sign";
     private EthereumMessageSigner _signer;
-    
+
     private void Awake()
     {
         _signer = new EthereumMessageSigner();
@@ -37,8 +37,8 @@ public class SignW3A : MonoBehaviour, ISigner
 
     public Task<string> SignMessage(string message)
     {
-       var signedMessage = _signer.EncodeUTF8AndSign(message, new EthECKey(W3AWalletUtils.PrivateKey));
-       return Task.FromResult(signedMessage);
+        var signedMessage = _signer.EncodeUTF8AndSign(message, new EthECKey(W3AWalletUtils.PrivateKey));
+        return Task.FromResult(signedMessage);
     }
 
     public Task<string> SignTypedData(Domain domain, Dictionary<string, MemberDescription[]> types, MemberValue[] message)

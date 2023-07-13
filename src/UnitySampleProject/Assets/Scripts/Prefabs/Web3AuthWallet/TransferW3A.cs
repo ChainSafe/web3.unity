@@ -9,9 +9,9 @@ using Nethereum.RPC.Eth.DTOs;
 using Prefabs.Web3AuthWallet.UI;
 using Prefabs.Web3AuthWallet.Utils;
 using Scripts.Web3AuthWallet;
-using Web3Unity.Scripts.Library.Ethers.Contracts;
 using UnityEngine;
 using UnityEngine.UI;
+using Web3Unity.Scripts.Library.Ethers.Contracts;
 using Web3Unity.Scripts.Library.Ethers.JsonRpc;
 using Web3Unity.Scripts.Library.Ethers.Web3AuthWallet;
 
@@ -28,7 +28,7 @@ public class TransferW3A : MonoBehaviour
     private EthereumService _ethereumService;
 
 
-    async private void Awake()
+    private async void Awake()
     {
         var projectConfig = ProjectConfigUtilities.Load();
         _web3 = await new Web3Builder(projectConfig)
@@ -67,6 +67,7 @@ public class TransferW3A : MonoBehaviour
                 toAccount,
                 BigInteger.Parse(amount),
             });
+
             Debug.Log("Contract Data: " + calldata);
             TransactionInput txInput = new TransactionInput
             {
@@ -108,7 +109,7 @@ public class TransferW3A : MonoBehaviour
                 _ethereumService.GetAddressW3A(W3AWalletUtils.PrivateKey),
                 BigInteger.Parse(amount),
             });
-            
+
             TransactionInput txInput = new TransactionInput
             {
                 To = contractAddress,
@@ -118,7 +119,7 @@ public class TransferW3A : MonoBehaviour
                 GasPrice = new HexBigInteger(100000),
                 Gas = new HexBigInteger(100000),
             };
-            
+
             var signedTransactionData = await _ethereumService.CreateAndSignTransactionAsync(txInput);
             Debug.Log($"Signed transaction data: {signedTransactionData}");
             var transactionHash = await _ethereumService.SendTransactionAsync(signedTransactionData);

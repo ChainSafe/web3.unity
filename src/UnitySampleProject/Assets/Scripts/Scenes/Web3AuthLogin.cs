@@ -4,11 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Newtonsoft.Json;
-//using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using Web3Unity.Scripts.Library.Ethers.Web3AuthWallet;
-
-//using Web3Unity.Scripts.Library.Ethers.Web3AuthWallet;
 
 public class Web3AuthLogin : MonoBehaviour
 {
@@ -115,7 +112,6 @@ public class Web3AuthLogin : MonoBehaviour
 
         loginResponseText.text = string.Empty;
     }
-
 
     private void onVerifierDropDownChange(int selectedIndex)
     {
