@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Nethereum.ABI.EIP712;
-using UnityEngine.UI;
 using Nethereum.Signer;
 using Prefabs.Web3AuthWallet.Utils;
 using UnityEngine;
+using UnityEngine.UI;
 using Web3Unity.Scripts.Library.Ethers.Signers;
 using Web3Unity.Scripts.Library.Ethers.Web3AuthWallet;
 
@@ -30,7 +30,7 @@ public class VerifyW3A : MonoBehaviour, ISigner
     public void UserSign()
     {
         var signatureResponse = SignMessage(message).Result;
-        responseText.text = _verifier.VerifySignature(signatureResponse,message);;
+        responseText.text = _verifier.VerifySignature(signatureResponse, message);
     }
 
     public Task<string> GetAddress()
