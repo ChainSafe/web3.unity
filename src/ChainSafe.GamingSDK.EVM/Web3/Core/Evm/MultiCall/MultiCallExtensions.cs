@@ -7,7 +7,7 @@ namespace ChainSafe.GamingSDK.EVM.Web3.Core.Evm.MultiCall
 {
     public static class MultiCallExtensions
     {
-        private static readonly MultiCallConfig DefaultConfig = new();
+        private static readonly MultiCallConfig DefaultConfig = new MultiCallConfig(null);
 
         /// <summary>
         /// Binds implementation of MultiCall to Web3.
