@@ -31,12 +31,12 @@ public class Mint1155 : MonoBehaviour
         RedeemVoucherTxModel.Response voucherResponse = await EVM.CreateRedeemTransaction(Web3Accessor.Web3, chainConfig.Chain, chainConfig.Network, voucherArgs, "1155", nftAddress, voucherResponse1155.receiver);
         var txRequest = new TransactionRequest
         {
-            ChainId = new HexBigInteger(BigInteger.Parse(chainConfig.ChainId)),
+            ChainId = HexBigIntUtil.ParseHexBigInt(chainConfig.ChainId),
             To = voucherResponse.tx.to,
             Value = new HexBigInteger(voucherResponse.tx.value),
             Data = voucherResponse.tx.data,
-            GasLimit = new HexBigInteger(BigInteger.Parse(voucherResponse.tx.gasLimit)),
-            GasPrice = new HexBigInteger(BigInteger.Parse(voucherResponse.tx.gasPrice)),
+            GasLimit = HexBigIntUtil.ParseHexBigInt(voucherResponse.tx.gasLimit),
+            GasPrice = HexBigIntUtil.ParseHexBigInt(voucherResponse.tx.gasPrice),
         };
         var response = await Web3Accessor.Web3.TransactionExecutor.SendTransaction(txRequest);
         Debug.Log(JsonConvert.SerializeObject(response));

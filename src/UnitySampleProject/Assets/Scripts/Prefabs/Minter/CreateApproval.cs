@@ -24,8 +24,8 @@ public class CreateApproval : MonoBehaviour
             {
                 To = response.tx.to,
                 Data = response.tx.data,
-                GasPrice = new HexBigInteger(BigInteger.Parse(response.tx.gasPrice)),
-                GasLimit = new HexBigInteger(BigInteger.Parse(response.tx.gasLimit)),
+                GasPrice = HexBigIntUtil.ParseHexBigInt(response.tx.gasPrice),
+                GasLimit = HexBigIntUtil.ParseHexBigInt(response.tx.gasLimit),
                 Value = new HexBigInteger(0),
             };
             var responseNft = await Web3Accessor.Web3.TransactionExecutor.SendTransaction(txRequest);

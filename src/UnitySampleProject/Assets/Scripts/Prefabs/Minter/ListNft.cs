@@ -131,12 +131,12 @@ namespace Web3Unity.Scripts.Prefabs.Minter
             {
                 var txRequest = new TransactionRequest
                 {
-                    ChainId = new HexBigInteger(BigInteger.Parse(chainConfig.ChainId)),
+                    ChainId = HexBigIntUtil.ParseHexBigInt(chainConfig.ChainId),
                     To = response.tx.to,
                     Value = new HexBigInteger(value),
                     Data = response.tx.data,
-                    GasLimit = new HexBigInteger(BigInteger.Parse(response.tx.gasLimit)),
-                    GasPrice = new HexBigInteger(BigInteger.Parse(response.tx.gasPrice)),
+                    GasLimit = HexBigIntUtil.ParseHexBigInt(response.tx.gasLimit),
+                    GasPrice = HexBigIntUtil.ParseHexBigInt(response.tx.gasPrice),
                 };
                 var responseNft = await Web3Accessor.Web3.TransactionExecutor.SendTransaction(txRequest);
                 Debug.Log(JsonConvert.SerializeObject(responseNft));

@@ -110,7 +110,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
             txReq.Data = function.GetData(parameters);
 
             var tx = await transactionExecutor.SendTransaction(txReq);
-            var receipt = await tx.Wait();
+            var receipt = await provider.WaitForTransactionReceipt(tx.Hash);
 
             var output = function.DecodeOutput(tx.Data);
             return output.Select(x => x.Result).ToArray();

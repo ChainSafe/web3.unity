@@ -11,11 +11,20 @@ public class IPFSUploadExample : MonoBehaviour
     [SerializeField]
     string data = "YOUR_DATA";
 
+    [SerializeField]
+    string bucketId = "BUCKET_ID";
+
+    [SerializeField]
+    string path = "/PATH";
+
+    [SerializeField]
+    string filename = "FILENAME.EXT";
+
     async void Start()
     {
         var data = System.Text.Encoding.UTF8.GetBytes(this.data);
         var ipfs = new Ipfs(apiKey);
-        var cid = await ipfs.Upload("BUCKET_ID", "/PATH", "FILENAME.ext", data, "application/octet-stream");
+        var cid = await ipfs.Upload(bucketId, path, filename, data, "application/octet-stream");
         print(cid);
     }
 }

@@ -12,7 +12,7 @@ public class GetTxStatus : MonoBehaviour
             To = address,
             Value = new HexBigInteger(100000)
         });
-        var txReceipt = await tx.Wait();
+        var txReceipt = await Web3Accessor.Web3.RpcProvider.WaitForTransactionReceipt(tx.Hash);
         Debug.Log("Transaction receipt: " + txReceipt.Confirmations);
     }
 }
