@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ChainSafe.GamingSDK.EVM.Web3.Core.Evm.MultiCall3.Dto;
 using ChainSafe.GamingWeb3;
 using Nethereum.Contracts.QueryHandlers.MultiCall;
 using Web3Unity.Scripts.Library.Ethers.Contracts;
@@ -12,78 +13,50 @@ namespace ChainSafe.GamingSDK.EVM.Web3.Core.Evm.MultiCall3
     public class MultiCall : ILifecycleParticipant
     {
         private Contract multiCallContract;
-        public readonly Nethereum.Web3.Web3 web3;
+        private readonly MultiQueryHandler handler;
 
-        public MultiCall(IRpcProvider provider, IChainConfig chainConfig, MultiCallConfig config)
+        public MultiCall(IRpcProvider provider, IChainConfig chainConfig, MultiCallConfig config, MultiQueryHandler handler)
         {
+            this.handler = handler;
             if (MultiCallDefaults.DeployedNetworks.Contains(chainConfig.ChainId))
             {
                 multiCallContract = new Contract(MultiCallDefaults.MultiCallAbi, MultiCallDefaults.OfficialAddress, provider);
-                web3 = new Nethereum.Web3.Web3(chainConfig.Rpc);
-                web3.Eth.GetMultiQueryHandler().MultiCallAsync()
+                handler = new Nethereum.Web3.Web3(chainConfig.Rpc).Eth.GetMultiQueryHandler();
             }
             else
             {
                 if (config.CustomNetworks.TryGetValue(chainConfig.ChainId, out var address))
                 {
+                    handler = new Nethereum.Web3.Web3(chainConfig.Rpc).Eth.GetMultiQueryHandler(address);
+
                     multiCallContract = new Contract(MultiCallDefaults.MultiCallAbi, address, provider);
                 }
             }
         }
 
-        public async Task<TransactionResponse> Aggregate3(Call3[] calls, bool? staticCall = true)
+        public async Task<TransactionResponse> MultiCallV3(IMultiCallRequest[] calls, bool? staticCall = true)
         {
-            var callList = new List<IMulticallInputOutput>();
-            await web3.Eth.GetMultiQueryHandler().MultiCallAsync(callList.ToArray()).ConfigureAwait(false);
+            IMultiCallRequest temp = new MulticallInputOutput<>()
+            {
+                
+            };
+            await handler.MultiCallAsync(calls.ToArray()).ConfigureAwait(false);
+            return calls;
+
             // function aggregate3(Call3[] calldata calls) external payable returns (Result[] memory returnData);
-        }
-
-        public Task<TransactionResponse> Aggregate3Value(Call3[] calls, bool? staticCall)
-        {
-            // function aggregate3Value(Call3Value[] calldata calls)
-            // external
-            //     payable
-            // returns (Result[] memory returnData);
-        }
-
-        public Task<TransactionResponse> Aggregate(Call[] calls, bool? staticCall)
-        {
-            // function aggregate(Call[] calldata calls)
-            // external
-            //     payable
-            // returns (uint256 blockNumber, bytes[] memory returnData);
-        }
-
-        public Task<TransactionResponse> BlockAndAggregate(Call[] calls, bool? staticCall)
-        {
-            // function blockAndAggregate(Call[] calldata calls)
-            // external
-            //     payable
-            // returns (uint256 blockNumber, bytes32 blockHash, Result[] memory returnData);
-        }
-
-        public Task<TransactionResponse> TryAggregate(bool requireSuccess, Call[] calls, bool? staticCall)
-        {
-            // function tryAggregate(bool requireSuccess, Call[] calldata calls)
-            // external
-            //     payable
-            // returns (Result[] memory returnData);
-        }
-
-        public Task<TransactionResponse> TryBlockAndAggregate(bool requireSuccess, Call[] calls, bool? staticCall)
-        {
-            // function tryBlockAndAggregate(bool requireSuccess, Call[] calldata calls)
-            // external
-            //     payable
-            // returns (uint256 blockNumber, bytes32 blockHash, Result[] memory returnData);
         }
 
         /// <summary>
         /// Internal state data call
         /// </summary>
-        public Task<TransactionResponse> GetBasefee()
+        /// <returns>
+        /// Returns a MultiCall request item for getting the transaction base fee.
+        /// </returns>
+        public MultiCallRequest<GetBaseFeeFunction, GetBaseFeeOutputDto> GetBaseFeeCallData()
         {
-            // function getBasefee() external view returns (uint256 basefee);
+            return new MultiCallRequest<GetBaseFeeFunction, GetBaseFeeOutputDto>(
+                new GetBaseFeeFunction(),
+                handler.ContractAddress);
         }
 
         /// <summary>
