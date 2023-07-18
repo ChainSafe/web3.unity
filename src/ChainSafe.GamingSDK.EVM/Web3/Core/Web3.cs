@@ -29,6 +29,7 @@ namespace ChainSafe.GamingWeb3
             rpcProvider = serviceProvider.GetService<IRpcProvider>();
             signer = serviceProvider.GetService<ISigner>();
             transactionExecutor = serviceProvider.GetService<ITransactionExecutor>();
+            ContractBuilder = serviceProvider.GetRequiredService<IContractBuilder>();
             ProjectConfig = serviceProvider.GetRequiredService<IProjectConfig>();
             ChainConfig = serviceProvider.GetRequiredService<IChainConfig>();
         }
@@ -38,6 +39,8 @@ namespace ChainSafe.GamingWeb3
         public ISigner Signer => AssertComponentAccessible(signer, nameof(Signer))!;
 
         public ITransactionExecutor TransactionExecutor => AssertComponentAccessible(transactionExecutor, nameof(TransactionExecutor))!;
+
+        public IContractBuilder ContractBuilder { get; }
 
         public IProjectConfig ProjectConfig { get; }
 
