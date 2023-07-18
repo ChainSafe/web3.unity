@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ChainSafe.GamingWeb3;
 using Newtonsoft.Json;
 using UnityEngine;
 using Web3Unity.Scripts.Library.ETHEREUEM.Connect;
@@ -14,36 +15,32 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.EIP
         /// <summary>
         /// Balance Of ERC721 Token
         /// </summary>
-        /// <param name="_contract"></param>
-        /// <param name="_account"></param>
+        /// <param name="contractAddress"></param>
+        /// <param name="account"></param>
         /// <returns></returns>
-        public static async Task<int> BalanceOf(string _contract, string _account)
+        public static async Task<int> BalanceOf(Web3 web3, string contractAddress, string account)
         {
-            var method = ETH_METHOD.BalanceOf;
-            var provider = RPC.GetInstance.Provider();
-            var contract = new Contract(abi, _contract, provider);
-            var contractData = await contract.Call(method, new object[]
+            var contract = web3.ContractBuilder.Build(abi, contractAddress);
+            var contractData = await contract.Call(EthMethod.BalanceOf, new object[]
             {
-                _account
+                account
             });
-            Debug.Log("Value: " + contractData[0]);
             return int.Parse(contractData[0].ToString());
         }
 
         /// <summary>
         /// Owner Of ERC721 Token
         /// </summary>
-        /// <param name="_contract"></param>
-        /// <param name="_tokenId"></param>
+        /// <param name="contractAddress"></param>
+        /// <param name="tokenId"></param>
         /// <returns></returns>
-        public static async Task<string> OwnerOf(string _contract, string _tokenId)
+        public static async Task<string> OwnerOf(Web3 web3, string contractAddress, string tokenId)
         {
-            var method = ETH_METHOD.OwnerOf;
-            var provider = RPC.GetInstance.Provider();
-            var contract = new Contract(abi, _contract, provider);
+            var method = EthMethod.OwnerOf;
+            var contract = web3.ContractBuilder.Build(abi, contractAddress);
             var contractData = await contract.Call(method, new object[]
             {
-                _tokenId
+                tokenId
             });
             return contractData[0].ToString();
         }
@@ -51,24 +48,27 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.EIP
         /// <summary>
         /// Owner Of Batch ERC721 Token
         /// </summary>
-        /// <param name="_contract"></param>
-        /// <param name="_tokenIds"></param>
+        /// <param name="contractAddress"></param>
+        /// <param name="tokenIds"></param>
         /// <param name="_multicall"></param>
         /// <returns></returns>
-        public static async Task<List<string>> OwnerOfBatch(string _contract, string[] _tokenIds,
+        public static async Task<List<string>> OwnerOfBatch(
+            Web3 web3,
+            string contractAddress,
+            string[] tokenIds,
             string _multicall = "")
         {
-            var method = ETH_METHOD.OwnerOf;
+            var method = EthMethod.OwnerOf;
             // build array of args
-            var obj = new string[_tokenIds.Length][];
-            for (var i = 0; i < _tokenIds.Length; i++)
+            var obj = new string[tokenIds.Length][];
+            for (var i = 0; i < tokenIds.Length; i++)
                 obj[i] = new string[]
                 {
-                    _tokenIds[i]
+                    tokenIds[i]
                 };
             var args = JsonConvert.SerializeObject(obj);
-            var response = await EVM.Multicall(PlayerPrefs.GetString("ChainID"), PlayerPrefs.GetString("Network"),
-                _contract, abi, method, args, _multicall, PlayerPrefs.GetString("RPC"));
+            var response = await EVM.Multicall(web3, web3.ChainConfig.ChainId, web3.ChainConfig.Network,
+                contractAddress, abi, method, args, _multicall, web3.ChainConfig.Rpc);
             try
             {
                 var responses = JsonConvert.DeserializeObject<string[]>(response);
@@ -93,25 +93,23 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.EIP
         /// <summary>
         /// Token URI Of ERC721 Token
         /// </summary>
-        /// <param name="_contract"></param>
-        /// <param name="_tokenId"></param>
+        /// <param name="contractAddress"></param>
+        /// <param name="tokenId"></param>
         /// <param name="_rpc"></param>
         /// <returns></returns>
-        public static async Task<string> URI(string _contract, string _tokenId, string _rpc = "")
+        public static async Task<string> URI(Web3 web3, string contractAddress, string tokenId)
         {
             const string ipfsPath = "https://ipfs.io/ipfs/";
-            var method = ETH_METHOD.TokenUri;
-            var provider = RPC.GetInstance.Provider();
-            var contract = new Contract(abi, _contract, provider);
-            if (_tokenId.StartsWith("0x"))
+            var contract = web3.ContractBuilder.Build(abi, contractAddress);
+            if (tokenId.StartsWith("0x"))
             {
-                var convertURI = _tokenId.Replace("0x", "f");
+                var convertURI = tokenId.Replace("0x", "f");
                 return ipfsPath + convertURI;
             }
 
-            var contractData = await contract.Call(method, new object[]
+            var contractData = await contract.Call(EthMethod.TokenUri, new object[]
             {
-                _tokenId
+                tokenId
             });
             return contractData[0].ToString();
         }

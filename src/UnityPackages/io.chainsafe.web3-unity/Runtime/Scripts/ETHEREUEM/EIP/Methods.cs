@@ -1,6 +1,6 @@
 namespace Web3Unity.Scripts.Library.ETHEREUEM.EIP
 {
-    static class ETH_METHOD
+    static class EthMethod
     {
         public const string BalanceOf = "balanceOf";
         public const string Name = "name";

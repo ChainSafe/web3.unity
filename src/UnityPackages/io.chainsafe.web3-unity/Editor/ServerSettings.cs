@@ -103,7 +103,7 @@ public class ChainSafeServerSettings : EditorWindow
         }
         GUILayout.Label("Reminder: Your ProjectID Must Be Valid To Save & Build With Our SDK. You Can Register For One On Our Website At Dashboard.Gaming.Chainsafe.io", EditorStyles.label);
 
-        if (GUILayout.Button("Syncronize WebGL templates"))
+        if (GUILayout.Button("Synchronize WebGL templates"))
         {
             WebGLTemplateSync.Syncronize();
         }
