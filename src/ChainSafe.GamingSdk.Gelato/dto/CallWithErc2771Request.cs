@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ChainSafe.GamingSdk.Gelato.Types;
 using ChainSafe.GamingWeb3;
 using Newtonsoft.Json;
+using Web3Unity.Scripts.Library.Ethers.Contracts;
 using Web3Unity.Scripts.Library.Ethers.Providers;
 using Contract = Web3Unity.Scripts.Library.Ethers.Contracts.Contract;
 
@@ -135,9 +136,9 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
         public static async Task<CallWithErc2771RequestOptionalParameters> PopulateOptionalUserParameters(
             CallWithErc2771Request request,
             Erc2771Type type,
-            IRpcProvider provider,
             GelatoConfig config,
-            IChainConfig chainConfig)
+            IChainConfig chainConfig,
+            IContractBuilder contractBuilder)
         {
             var optionalParams = new CallWithErc2771RequestOptionalParameters();
             if (request.UserDeadline == null)
@@ -148,7 +149,7 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
             if (request.UserNonce == null)
             {
                 // Must be custom nonce from the relay contract
-                optionalParams.UserNonce = await GetUserNonce(request.User, type, provider, config, chainConfig);
+                optionalParams.UserNonce = await GetUserNonce(request.User, type, config, chainConfig, contractBuilder);
             }
 
             return optionalParams;
@@ -179,14 +180,13 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
         private static async Task<int> GetUserNonce(
             string account,
             Erc2771Type type,
-            IRpcProvider provider,
             GelatoConfig config,
-            IChainConfig chainConfig)
+            IChainConfig chainConfig,
+            IContractBuilder contractBuilder)
         {
-            var contract = new Contract(
+            var contract = contractBuilder.Build(
                 GelatoAbi.UserNonce,
-                GetGelatoRelayErc2771Address(type, config, chainConfig).ToString(),
-                provider);
+                GetGelatoRelayErc2771Address(type, config, chainConfig));
             var result = await contract.Call("userNonce", new object[] { account });
 
             return int.Parse(((BigInteger)result[0]).ToString());

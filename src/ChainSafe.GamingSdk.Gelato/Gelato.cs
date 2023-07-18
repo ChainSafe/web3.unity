@@ -10,6 +10,7 @@ using ChainSafe.GamingWeb3;
 using ChainSafe.GamingWeb3.Environment;
 using Nethereum.ABI.EIP712;
 using Nethereum.Hex.HexTypes;
+using Web3Unity.Scripts.Library.Ethers.Contracts;
 using Web3Unity.Scripts.Library.Ethers.Providers;
 using Web3Unity.Scripts.Library.Ethers.Signers;
 
@@ -19,17 +20,19 @@ namespace ChainSafe.GamingSdk.Gelato
     {
         private readonly GelatoClient gelatoClient;
         private readonly IRpcProvider provider;
+        private readonly IContractBuilder contractBuilder;
         private readonly ISigner signer;
         private readonly GelatoConfig config;
         private readonly IChainConfig chainConfig;
 
-        public Gelato(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, IRpcProvider provider, ISigner signer)
+        public Gelato(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, IRpcProvider provider, ISigner signer, IContractBuilder contractBuilder)
         {
             gelatoClient = new GelatoClient(httpClient, config);
             this.provider = provider;
             this.signer = signer;
             this.config = config;
             this.chainConfig = chainConfig;
+            this.contractBuilder = contractBuilder;
         }
 
         public async Task<RelayResponse> CallWithSyncFee(CallWithSyncFeeRequest request)
@@ -72,7 +75,7 @@ namespace ChainSafe.GamingSdk.Gelato
                     IsRelayContext = request.IsRelayContext,
                 };
 
-                var optional = await CallWithErc2771RequestOptionalParameters.PopulateOptionalUserParameters(callRequest, Erc2771Type.CallWithSyncFee, provider, config, chainConfig);
+                var optional = await CallWithErc2771RequestOptionalParameters.PopulateOptionalUserParameters(callRequest, Erc2771Type.CallWithSyncFee, config, chainConfig, contractBuilder);
                 var newStruct = callRequest.MapRequestToStruct<CallWithSyncFeeErc2771Struct>(optional, Erc2771Type.CallWithSyncFee);
 
                 callRequest.UserDeadline ??= optional.UserDeadline;
@@ -152,7 +155,7 @@ namespace ChainSafe.GamingSdk.Gelato
                 };
 
                 // Confirm Wallet & Provider chain ID match
-                var optional = await CallWithErc2771RequestOptionalParameters.PopulateOptionalUserParameters(callRequest, Erc2771Type.SponsoredCall, provider, config, chainConfig);
+                var optional = await CallWithErc2771RequestOptionalParameters.PopulateOptionalUserParameters(callRequest, Erc2771Type.SponsoredCall, config, chainConfig, contractBuilder);
                 var newStruct = callRequest.MapRequestToStruct<SponsoredCallErc2771Struct>(optional, Erc2771Type.SponsoredCall);
 
                 var types = new Dictionary<string, MemberDescription[]>
