@@ -40,9 +40,5 @@ namespace Web3Unity.Scripts.Library.Ethers.Transactions
 
         // TODO: raw
         public ulong? Confirmations { get; set; }
-
-        public Func<Task<TransactionReceipt>> Wait { get; set; }
-
-        public Func<uint, uint, Task<TransactionReceipt>> WaitParams { get; set; }
     }
 }

@@ -16,10 +16,10 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
         private readonly string address;
         private readonly IRpcProvider provider;
         private readonly ISigner signer;
-        private readonly ContractBuilder contractBuilder;
-        private ITransactionExecutor transactionExecutor;
+        private readonly Builders.ContractBuilder contractBuilder;
+        private readonly ITransactionExecutor transactionExecutor;
 
-        public Contract(string abi, string address = "", IRpcProvider provider = null, ISigner signer = null, ITransactionExecutor transactionExecutor = null)
+        internal Contract(string abi, string address, IRpcProvider provider = null, ISigner signer = null, ITransactionExecutor transactionExecutor = null)
         {
             if (string.IsNullOrEmpty(abi))
             {
@@ -31,44 +31,13 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
             this.provider = provider;
             this.signer = signer;
             this.transactionExecutor = transactionExecutor;
-            contractBuilder = new ContractBuilder(abi, address);
+            contractBuilder = new Builders.ContractBuilder(abi, address);
         }
 
         /// <summary>
-        /// Returns a new instance of the Contract, but connected to provider. This
-        /// will return a downgraded Contract which only has read-only access
-        /// (i.e. constant calls).
-        /// </summary>
-        /// <param name="provider">The provider.</param>
-        /// <returns>The new contract.</returns>
-        public Contract Connect(IRpcProvider provider)
-        {
-            if (provider == null)
-            {
-                throw new Exception("provider is not set");
-            }
-
-            return new Contract(abi, address, provider);
-        }
-
-        /// <summary>
-        /// Returns a new instance of the Contract, but connected to signer.
-        /// This will return a Contract which will act on behalf of the signer.
-        /// </summary>
-        /// <param name="signer">The signer.</param>
-        /// <returns>The new contract.</returns>
-        public Contract Connect(ISigner signer)
-        {
-            if (signer == null)
-            {
-                throw new Exception("signer is not set");
-            }
-
-            return new Contract(abi, address, provider, signer);
-        }
-
-        /// <summary>
-        /// Returns a new instance of the Contract attached to a new address. This is useful if there are multiple similar or identical copies of a Contract on the network and you wish to interact with each of them.
+        /// Returns a new instance of the Contract attached to a new address. This is useful
+        /// if there are multiple similar or identical copies of a Contract on the network
+        /// and you wish to interact with each of them.
         /// </summary>
         /// <param name="address">Address of the contract to attach to.</param>
         /// <returns>The new contract.</returns>
@@ -79,7 +48,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
                 throw new Exception("contract address is not set");
             }
 
-            return new Contract(abi, address, provider);
+            return new Contract(abi, address, provider, signer, transactionExecutor);
         }
 
         public async Task<object[]> Call(string method, object[] parameters = null, TransactionRequest overwrite = null)
@@ -141,7 +110,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
             txReq.Data = function.GetData(parameters);
 
             var tx = await transactionExecutor.SendTransaction(txReq);
-            var receipt = await tx.Wait();
+            var receipt = await provider.WaitForTransactionReceipt(tx.Hash);
 
             var output = function.DecodeOutput(tx.Data);
             return output.Select(x => x.Result).ToArray();
