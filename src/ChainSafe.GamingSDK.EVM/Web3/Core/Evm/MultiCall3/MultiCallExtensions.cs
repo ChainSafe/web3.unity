@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Web3Unity.Scripts.Library.Ethers.Signers;
 
-namespace ChainSafe.GamingSDK.EVM.Web3.Core.Evm.MultiCall
+namespace ChainSafe.GamingSDK.EVM.Web3.Core.Evm.MultiCall3
 {
     public static class MultiCallExtensions
     {
