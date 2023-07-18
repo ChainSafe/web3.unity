@@ -21,6 +21,8 @@
   -->
   <ItemGroup Condition="'$(Unity)' != 'True'">
     <PackageReference Include="Nethereum.ABI" Version="4.14.0" />
+    <PackageReference Include="Nethereum.Web3" Version="4.14.0" />
+    <PackageReference Include="Nethereum.Contracts" Version="4.14.0" />
     <PackageReference Include="Nethereum.RPC" Version="4.14.0" />
     <PackageReference Include="Nethereum.Signer" Version="4.14.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
