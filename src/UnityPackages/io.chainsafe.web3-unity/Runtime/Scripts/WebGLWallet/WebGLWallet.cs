@@ -8,6 +8,7 @@ using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
 using ChainSafe.GamingWeb3;
 using JetBrains.Annotations;
 using Nethereum.ABI.EIP712;
+using Newtonsoft.Json;
 using UnityEngine;
 using Web3Unity.Scripts.Library.Ethers.Providers;
 using Web3Unity.Scripts.Library.Ethers.Signers;
@@ -101,10 +102,10 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
         }
 
         // todo: implement before release
-        public Task<string> SignTypedData<TStructType>(SerializableDomain domain, Dictionary<string, MemberDescription[]> types, TStructType message)
+        public async Task<string> SignTypedData<TStructType>(SerializableDomain domain, Dictionary<string, MemberDescription[]> types, TStructType message)
         {
             JS_resetSignTypedMessageResponse();
-            JS_signTypedMessage(domain, types, message);
+            JS_signTypedMessage(JsonConvert.SerializeObject(domain), JsonConvert.SerializeObject(types), JsonConvert.SerializeObject(message));
             var signedTypedMessageResponse = await PollJsSide(JS_getSignTypedMessageResponse);
             AssertResponseSuccessful(signedTypedMessageResponse);
             return signedTypedMessageResponse;
@@ -147,7 +148,7 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
 
         // SignMessage
         [DllImport("__Internal")]
-        private static extern void JS_signTypedMessage<TStructType>(SerializableDomain domain, Dictionary<string, MemberDescription[]> types, TStructType message);
+        private static extern void JS_signTypedMessage(string domain, string types, string message);
         [DllImport("__Internal")]
         private static extern string JS_getSignTypedMessageResponse();
         [DllImport("__Internal")]

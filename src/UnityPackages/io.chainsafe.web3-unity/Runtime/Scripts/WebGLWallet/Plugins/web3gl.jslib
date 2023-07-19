@@ -14,11 +14,15 @@ mergeInto(LibraryManager.library, {
   JS_resetSignMessageResponse: function () {
       window.web3gl.signMessageResponse = "";
   },
-  
+
   JS_signTypedMessage: function (domain, types, value) {
-      window.web3gl.signTypedMessage(domain, types, value);
+    window.web3gl.signTypedMessage(
+      UTF8ToString(domain),
+      UTF8ToString(types),
+      UTF8ToString(value)
+    );
   },
-  
+
   JS_getSignTypedMessageResponse: function () {
     var bufferSize = lengthBytesUTF8(window.web3gl.signTypedMessageResponse) + 1;
     var buffer = _malloc(bufferSize);
