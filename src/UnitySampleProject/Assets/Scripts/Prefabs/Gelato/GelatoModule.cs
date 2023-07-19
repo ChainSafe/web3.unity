@@ -49,8 +49,7 @@ public class GelatoModule : MonoBehaviour
                   "\"stateMutability\":\"nonpayable\"," +
                   "\"type\":\"function\"" +
                   "}]";
-        var contract = new Contract(abi, target);
-
+        var contract = _web3.ContractBuilder.Build(abi, target);
         var data = contract.Calldata("sendToFriend", new object[]
         {
             feeToken,
@@ -99,7 +98,8 @@ public class GelatoModule : MonoBehaviour
                   "\"stateMutability\":\"nonpayable\"," +
                   "\"type\":\"function\"" +
                   "}]";
-        var contract = new Contract(abi, counterContract);
+        var contract = _web3.ContractBuilder.Build(abi, counterContract);
+
         var data = contract.Calldata("increment");
 
         var relayResponse = await _web3.Gelato().SponsoredCall(new SponsoredCallRequest()
@@ -141,7 +141,8 @@ public class GelatoModule : MonoBehaviour
                   "\"stateMutability\":\"nonpayable\"," +
                   "\"type\":\"function\"" +
                   "}]";
-        var contract = new Contract(abi, target);
+        var contract = _web3.ContractBuilder.Build(abi, target);
+
         var data = contract.Calldata("increment", new object[]
         {
         });
@@ -187,7 +188,8 @@ public class GelatoModule : MonoBehaviour
                   "\"stateMutability\":\"nonpayable\"," +
                   "\"type\":\"function\"" +
                   "}]";
-        var contract = new Contract(abi, target);
+        var contract = _web3.ContractBuilder.Build(abi, target);
+
         var data = contract.Calldata("increment");
 
         var relayResponse = await _web3.Gelato().SponsoredCallErc2771(new SponsoredCallErc2771Request()

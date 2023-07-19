@@ -101,7 +101,6 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
             }
         }
 
-        // todo: implement before release
         public async Task<string> SignTypedData<TStructType>(SerializableDomain domain, Dictionary<string, MemberDescription[]> types, TStructType message)
         {
             JS_resetSignTypedMessageResponse();
@@ -146,7 +145,7 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
         [DllImport("__Internal")]
         private static extern void JS_resetSignMessageResponse();
 
-        // SignMessage
+        // SignTypedMessage
         [DllImport("__Internal")]
         private static extern void JS_signTypedMessage(string domain, string types, string message);
         [DllImport("__Internal")]
