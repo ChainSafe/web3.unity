@@ -242,18 +242,6 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             var result = (TransactionResponse)tx;
             result.Hash = hash;
 
-            result.Wait = async () =>
-            {
-                var receipt = await provider.WaitForTransactionInternal(hash, 1, 0);
-                return receipt;
-            };
-
-            result.WaitParams = async (uint confirms, uint timeout) =>
-            {
-                var receipt = await provider.WaitForTransactionInternal(hash, confirms, timeout);
-                return receipt;
-            };
-
             return result;
         }
 
