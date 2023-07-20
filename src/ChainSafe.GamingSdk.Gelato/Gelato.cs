@@ -44,7 +44,7 @@ namespace ChainSafe.GamingSdk.Gelato
             }
             catch (Exception e)
             {
-                throw new Web3Exception($"GelatoRelaySDK/relayWithSyncFee: Failed with error: ${e.Message}");
+                throw new Web3Exception($"GelatoRelaySDK/relayWithSyncFee: Failed with error: {e.Message}");
             }
         }
 
@@ -100,7 +100,7 @@ namespace ChainSafe.GamingSdk.Gelato
             }
             catch (Exception e)
             {
-                throw new Web3Exception($"GelatoRelaySDK/relayWithSyncFee: Failed with error: ${e.Message}");
+                throw new Web3Exception($"GelatoRelaySDK/relayWithSyncFee: Failed with error: {e.Message}");
             }
         }
 
@@ -119,7 +119,7 @@ namespace ChainSafe.GamingSdk.Gelato
             }
             catch (Exception e)
             {
-                throw new Web3Exception($"GelatoRelaySDK/sponsoredCall: Failed with error: ${e.Message}");
+                throw new Web3Exception($"GelatoRelaySDK/sponsoredCall: Failed with error: {e.Message}");
             }
         }
 
@@ -180,7 +180,7 @@ namespace ChainSafe.GamingSdk.Gelato
             }
             catch (Exception e)
             {
-                throw new Web3Exception($"GelatoRelaySDK/sponsoredCallErc2771: Failed with error: ${e.Message}");
+                throw new Web3Exception($"GelatoRelaySDK/sponsoredCallErc2771: Failed with error: {e.Message}");
             }
         }
 
