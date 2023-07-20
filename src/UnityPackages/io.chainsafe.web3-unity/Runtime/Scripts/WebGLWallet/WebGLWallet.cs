@@ -79,16 +79,23 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
             async Task<string> SendRegularTransaction()
             {
                 JS_resetSendTransactionResponse();
-                JS_sendTransaction(transaction.To, transaction.Value.ToString(), transaction.GasLimit.ToString(),
-                    transaction.GasPrice.ToString());
+                JS_sendTransaction(
+                    transaction.To,
+                    transaction.Value?.ToString() ?? "",
+                    transaction.GasLimit?.ToString() ?? "",
+                    transaction.GasPrice?.ToString() ?? "");
                 return await PollJsSide(JS_getSendTransactionResponse);
             }
 
             async Task<string> SendTransactionWithData()
             {
                 JS_resetSendTransactionResponseData();
-                JS_sendTransactionData(transaction.To, transaction.Value.ToString(), transaction.GasLimit.ToString(),
-                    transaction.GasPrice.ToString(), transaction.Data);
+                JS_sendTransactionData(
+                    transaction.To,
+                    transaction.Value?.ToString() ?? "",
+                    transaction.GasLimit?.ToString() ?? "",
+                    transaction.GasPrice?.ToString() ?? "",
+                    transaction.Data);
                 return await PollJsSide(JS_getSendTransactionResponseData);
             }
 
