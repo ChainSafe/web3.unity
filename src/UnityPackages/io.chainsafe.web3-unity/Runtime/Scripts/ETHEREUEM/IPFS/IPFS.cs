@@ -6,27 +6,10 @@ using UnityEngine.Networking;
 
 namespace Web3Unity.Scripts.Library.IPFS
 {
-    public class IPFS
+    public class Ipfs
     {
         private string _apiKey;
         private static readonly string host = "https://api.chainsafe.io";
-
-        [System.Serializable]
-        private class Response<T>
-        {
-            //public T response;
-
-            [System.Serializable]
-            public struct Error
-            {
-                //public int code;
-
-                //public string message;
-                // public Array<Object> details;
-            }
-
-            public Error error;
-        }
 
         [System.Serializable]
         public class GetFileInfoResponse
@@ -40,7 +23,7 @@ namespace Web3Unity.Scripts.Library.IPFS
             public Content content;
         }
 
-        public IPFS(string apiKey)
+        public Ipfs(string apiKey)
         {
             _apiKey = apiKey;
         }
