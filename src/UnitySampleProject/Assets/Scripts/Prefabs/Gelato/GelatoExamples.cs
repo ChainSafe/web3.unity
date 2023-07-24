@@ -61,7 +61,7 @@ public class GelatoModule : MonoBehaviour
                     Debug.Log($"Transaction hash: {status.TransactionHash}: ");
                     break;
                 default:
-                    Thread.Sleep(2000);
+                    await Task.Delay(TimeSpan.FromSeconds(2));
                     continue;
             }
         }
@@ -90,7 +90,7 @@ public class GelatoModule : MonoBehaviour
         var complete = false;
         while (!complete)
         {
-            Thread.Sleep(2000);
+            await Task.Delay(TimeSpan.FromSeconds(2));
             var status = await Web3Accessor.Web3.Gelato().GetTaskStatus(relayResponse.TaskId);
             Debug.Log($"SponsorCall status: {relayResponse.TaskId}: {status.TaskState}");
 
@@ -137,7 +137,7 @@ public class GelatoModule : MonoBehaviour
         var complete = false;
         while (!complete)
         {
-            Thread.Sleep(2000);
+            await Task.Delay(TimeSpan.FromSeconds(2));
             var status = await Web3Accessor.Web3.Gelato().GetTaskStatus(relayResponse.TaskId);
             Debug.Log($"CallWithSyncFeeErc2771 status: {relayResponse.TaskId}: {status.TaskState}");
 
@@ -186,7 +186,7 @@ public class GelatoModule : MonoBehaviour
         var complete = false;
         while (!complete)
         {
-            Thread.Sleep(2000);
+            await Task.Delay(TimeSpan.FromSeconds(2));
             var status = await Web3Accessor.Web3.Gelato().GetTaskStatus(relayResponse.TaskId);
             Debug.Log($"SponsorCallErc2771 status: {relayResponse.TaskId}: {status.TaskState}");
 

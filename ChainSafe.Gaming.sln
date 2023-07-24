@@ -23,8 +23,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainSafe.GamingSdk.EVM.Uni
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainSafe.GamingSDK.EVM.WebPageWallet", "src\ChainSafe.GamingSDK.EVM.WebPageWallet\ChainSafe.GamingSDK.EVM.WebPageWallet.csproj", "{99E7A645-CAC5-441B-848D-1253405D6400}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0101C85D-25E4-43B4-8837-1B5043AA6A37}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.GamingSdk.Gelato", "src\ChainSafe.GamingSdk.Gelato\ChainSafe.GamingSdk.Gelato.csproj", "{205BA2B5-B8B0-4860-B8D0-1AFA148D882E}"
 EndProject
 Global

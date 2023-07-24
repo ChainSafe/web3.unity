@@ -19,7 +19,6 @@ namespace ChainSafe.GamingSdk.Gelato
     public class Gelato : IGelato, ILifecycleParticipant
     {
         private readonly GelatoClient gelatoClient;
-        private readonly IRpcProvider provider;
         private readonly IContractBuilder contractBuilder;
         private readonly ISigner signer;
         private readonly GelatoConfig config;
@@ -28,12 +27,29 @@ namespace ChainSafe.GamingSdk.Gelato
         public Gelato(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, IRpcProvider provider, ISigner signer, IContractBuilder contractBuilder)
         {
             gelatoClient = new GelatoClient(httpClient, config);
-            this.provider = provider;
             this.signer = signer;
             this.config = config;
             this.chainConfig = chainConfig;
             this.contractBuilder = contractBuilder;
         }
+
+        public Gelato(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, IRpcProvider provider, IContractBuilder contractBuilder)
+        {
+            gelatoClient = new GelatoClient(httpClient, config);
+            this.config = config;
+            this.chainConfig = chainConfig;
+            this.contractBuilder = contractBuilder;
+        }
+
+        public async ValueTask WillStartAsync()
+        {
+            if (!await IsNetworkSupported(chainConfig.ChainId))
+            {
+                throw new Web3Exception("network not supported by Gelato");
+            }
+        }
+
+        public ValueTask WillStopAsync() => new(Task.CompletedTask);
 
         public async Task<RelayResponse> CallWithSyncFee(CallWithSyncFeeRequest request)
         {
@@ -248,15 +264,5 @@ namespace ChainSafe.GamingSdk.Gelato
         {
             return await gelatoClient.GetPaymentTokens(chainConfig.ChainId);
         }
-
-        public async ValueTask WillStartAsync()
-        {
-            if (!await IsNetworkSupported(chainConfig.ChainId))
-            {
-                throw new Web3Exception("network not supported by Gelato");
-            }
-        }
-
-        public ValueTask WillStopAsync() => new(Task.CompletedTask);
     }
 }

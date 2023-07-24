@@ -28,9 +28,9 @@ namespace ChainSafe.GamingSdk.Gelato
         /// Binds Gelato module to Web3.
         /// </summary>
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
-        public static IWeb3ServiceCollection UseGelatoModule(this IWeb3ServiceCollection collection, GelatoConfig configuration)
+        public static IWeb3ServiceCollection UseGelato(this IWeb3ServiceCollection collection, GelatoConfig configuration)
         {
-            collection.UseGelatoModule();
+            collection.UseGelato();
             collection.ConfigureGelatoModule(configuration);
             return collection;
         }
@@ -39,7 +39,7 @@ namespace ChainSafe.GamingSdk.Gelato
         /// Binds Gelato module to Web3.
         /// </summary>
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
-        public static IWeb3ServiceCollection UseGelatoModule(this IWeb3ServiceCollection collection, string sponsorApiKey)
+        public static IWeb3ServiceCollection UseGelato(this IWeb3ServiceCollection collection, string sponsorApiKey)
         {
             // config
             var config = DefaultConfig();
@@ -47,7 +47,7 @@ namespace ChainSafe.GamingSdk.Gelato
             collection.TryAddSingleton(config);
 
             // Gelato module
-            collection.UseGelatoModule();
+            collection.UseGelato();
 
             return collection;
         }
@@ -56,7 +56,7 @@ namespace ChainSafe.GamingSdk.Gelato
         /// Binds Gelato module to Web3.
         /// </summary>
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
-        public static IWeb3ServiceCollection UseGelatoModule(this IWeb3ServiceCollection collection)
+        public static IWeb3ServiceCollection UseGelato(this IWeb3ServiceCollection collection)
         {
             // config
             var config = DefaultConfig();

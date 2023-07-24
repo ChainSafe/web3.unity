@@ -147,7 +147,7 @@ public class Login : MonoBehaviour
     {
         services
             .UseUnityEnvironment()
-            .UseGelatoModule(gelatoApiKey)
+            .UseGelato(gelatoApiKey)
             .UseJsonRpcProvider();
 
         /* As many contracts as needed may be registered here.
