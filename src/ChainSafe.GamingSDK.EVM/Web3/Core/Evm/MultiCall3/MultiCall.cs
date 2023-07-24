@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.GamingSDK.EVM.Web3.Core.Evm.MultiCall3.Dto;
 using ChainSafe.GamingWeb3;
@@ -7,13 +8,14 @@ using Nethereum.Contracts.QueryHandlers.MultiCall;
 using Web3Unity.Scripts.Library.Ethers.Contracts;
 using Web3Unity.Scripts.Library.Ethers.Providers;
 using Web3Unity.Scripts.Library.Ethers.Transactions;
+using BigInteger = Org.BouncyCastle.Math.BigInteger;
 
 namespace ChainSafe.GamingSDK.EVM.Web3.Core.Evm.MultiCall3
 {
     public class MultiCall : ILifecycleParticipant
     {
-        private Contract multiCallContract;
         private readonly MultiQueryHandler handler;
+        private Contract multiCallContract;
 
         public MultiCall(IRpcProvider provider, IChainConfig chainConfig, MultiCallConfig config, MultiQueryHandler handler)
         {
@@ -34,12 +36,8 @@ namespace ChainSafe.GamingSDK.EVM.Web3.Core.Evm.MultiCall3
             }
         }
 
-        public async Task<TransactionResponse> MultiCallV3(IMultiCallRequest[] calls, bool? staticCall = true)
+        public async Task<IMultiCallRequest[]> MultiCallV3(IMultiCallRequest[] calls, bool? staticCall = true)
         {
-            IMultiCallRequest temp = new MulticallInputOutput<>()
-            {
-                
-            };
             await handler.MultiCallAsync(calls.ToArray()).ConfigureAwait(false);
             return calls;
 
@@ -47,7 +45,7 @@ namespace ChainSafe.GamingSDK.EVM.Web3.Core.Evm.MultiCall3
         }
 
         /// <summary>
-        /// Internal state data call
+        /// Internal state data call.
         /// </summary>
         /// <returns>
         /// Returns a MultiCall request item for getting the transaction base fee.
@@ -60,74 +58,137 @@ namespace ChainSafe.GamingSDK.EVM.Web3.Core.Evm.MultiCall3
         }
 
         /// <summary>
-        /// Internal state data call
+        /// Internal state data call.
         /// </summary>
-        public Task<TransactionResponse> GetBlockHash(uint blockNumber)
+        /// <returns>
+        /// Returns the block hash for a given block.
+        /// </returns>
+        public MultiCallRequest<GetBlockHashFunction, GetBlockHashOutputDto> GetBlockHash(BigInteger blockNumber)
         {
+            return new MultiCallRequest<GetBlockHashFunction, GetBlockHashOutputDto>(
+                new GetBlockHashFunction() { BlockNumber = blockNumber },
+                handler.ContractAddress);
+
             // function getBlockHash(uint256 blockNumber) external view returns (bytes32 blockHash);
         }
 
         /// <summary>
-        /// Internal state data call
+        /// Internal state data call.
         /// </summary>
-        public Task<TransactionResponse> GetBlockNumber()
+        /// <returns>
+        /// Returns the block number.
+        /// </returns>
+        public MultiCallRequest<GetBlockNumberFunction, GetBlockNumberOutputDto> GetBlockNumber()
         {
+            return new MultiCallRequest<GetBlockNumberFunction, GetBlockNumberOutputDto>(
+                new GetBlockNumberFunction(),
+                handler.ContractAddress);
+
             // function getBlockNumber() external view returns (uint256 blockNumber);
         }
 
         /// <summary>
-        /// Internal state data call
+        /// Internal state data call.
         /// </summary>
-        public Task<TransactionResponse> GetChainId()
+        /// <returns>
+        /// Returns the chain ID.
+        /// </returns>
+        public MultiCallRequest<GetChainIdFunction, GetChainIdOutputDto> GetChainId()
         {
+            return new MultiCallRequest<GetChainIdFunction, GetChainIdOutputDto>(
+                new GetChainIdFunction(),
+                handler.ContractAddress);
+
             // function getChainId() external view returns (uint256 chainid);
         }
 
         /// <summary>
-        /// Internal state data call
+        /// Internal state data call.
         /// </summary>
-        public Task<TransactionResponse> GetCurrentBlockCoinbase()
+        /// <returns>
+        /// Returns the current coinbase.
+        /// </returns>
+        public MultiCallRequest<GetCurrentBlockCoinbaseFunction, GetCurrentBlockCoinbaseOutputDto> GetCurrentBlockCoinbase()
         {
+            return new MultiCallRequest<GetCurrentBlockCoinbaseFunction, GetCurrentBlockCoinbaseOutputDto>(
+                new GetCurrentBlockCoinbaseFunction(),
+                handler.ContractAddress);
+
             // function getCurrentBlockCoinbase() external view returns (address coinbase);
         }
 
         /// <summary>
-        /// Internal state data call
+        /// Internal state data call.
         /// </summary>
-        public Task<TransactionResponse> GetCurrentBlockDifficulty()
+        /// <returns>
+        /// Returns the current block difficulty.
+        /// </returns>
+        public MultiCallRequest<GetCurrentBlockDifficultyFunction, GetCurrentBlockDifficultyOutputDto> GetCurrentBlockDifficulty()
         {
+            return new MultiCallRequest<GetCurrentBlockDifficultyFunction, GetCurrentBlockDifficultyOutputDto>(
+                new GetCurrentBlockDifficultyFunction(),
+                handler.ContractAddress);
+
             // function getCurrentBlockDifficulty() external view returns (uint256 difficulty);
         }
 
         /// <summary>
-        /// Internal state data call
+        /// Internal state data call.
         /// </summary>
-        public Task<TransactionResponse> GetCurrentBlockGasLimit()
+        /// <returns>
+        /// Returns the current gas limit.
+        /// </returns>
+        public MultiCallRequest<GetCurrentBlockGasLimitFunction, GetCurrentBlockGasLimitOutputDto> GetCurrentBlockGasLimit()
         {
+            return new MultiCallRequest<GetCurrentBlockGasLimitFunction, GetCurrentBlockGasLimitOutputDto>(
+                new GetCurrentBlockGasLimitFunction(),
+                handler.ContractAddress);
+
             // function getCurrentBlockGasLimit() external view returns (uint256 gaslimit);
         }
 
         /// <summary>
-        /// Internal state data call
+        /// Internal state data call.
         /// </summary>
-        public Task<TransactionResponse> GetCurrentBlockTimestamp()
+        /// <returns>
+        /// Gets the current block timestamp.
+        /// </returns>
+        public MultiCallRequest<GetCurrentBlockTimestampFunction, GetCurrentBlockTimestampOutputDto> GetCurrentBlockTimestamp()
         {
+            return new MultiCallRequest<GetCurrentBlockTimestampFunction, GetCurrentBlockTimestampOutputDto>(
+                new GetCurrentBlockTimestampFunction(),
+                handler.ContractAddress);
+
             // function getCurrentBlockTimestamp() external view returns (uint256 timestamp);
         }
 
         /// <summary>
-        /// Internal state data call
+        /// Internal state data call.
         /// </summary>
-        public Task<TransactionResponse> GetEthBalance()
+        /// <returns>
+        /// Returns the Eth balance for a given address.
+        /// </returns>
+        public MultiCallRequest<GetEthBalanceFunction, GetEthBalanceOutputDto> GetEthBalance(string address)
         {
+            return new MultiCallRequest<GetEthBalanceFunction, GetEthBalanceOutputDto>(
+                new GetEthBalanceFunction() { Addr = address },
+                handler.ContractAddress);
+
             // function getEthBalance(address addr) external view returns (uint256 balance);
         }
 
         /// <summary>
-        /// Internal state data call
+        /// Internal state data call.
         /// </summary>
-        public Task<TransactionResponse> GetLastBlockHash()
+        /// <returns>
+        /// Returns the last block hash.
+        /// </returns>
+        public MultiCallRequest<GetLastBlockHashFunction, GetLastBlockHashOutputDto> GetLastBlockHash()
         {
+            return new MultiCallRequest<GetLastBlockHashFunction, GetLastBlockHashOutputDto>(
+                new GetLastBlockHashFunction(),
+                handler.ContractAddress);
+
             // function getLastBlockHash() external view returns (bytes32 blockHash);
         }
 
