@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
+using ChainSafe.GamingWeb3;
 using Newtonsoft.Json;
 using UnityEngine;
 using Web3Unity.Scripts.Library.Ethers.Contracts;
@@ -9,80 +11,60 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.EIP
 {
     public class ERC1155
     {
-        private static string abi = ABI.ERC_1155;
+        private static readonly string Abi = ABI.ERC_1155;
+
         /// <summary>
         /// Balance of ERC1155 Token
         /// </summary>
-        /// <param name="_contract"></param>
-        /// <param name="_account"></param>
-        /// <param name="_tokenId"></param>
+        /// <param name="contract"></param>
+        /// <param name="account"></param>
+        /// <param name="tokenId"></param>
         /// <returns></returns>
-        public static async Task<BigInteger> BalanceOf(string _contract, string _account, string _tokenId)
+        public static async Task<BigInteger> BalanceOf(Web3 web3, string contractAddress, string account, string tokenId)
         {
-            string method = ETH_METHOD.BalanceOf;
-            var provider = RPC.GetInstance.Provider();
-            var contract = new Contract(abi, _contract, provider);
-            var contractData = await contract.Call(method, new object[]
+            var contract = web3.ContractBuilder.Build(Abi, contractAddress);
+            var contractData = await contract.Call(EthMethod.BalanceOf, new object[]
             {
-                _account,
-                _tokenId
+                account,
+                tokenId
             });
             return BigInteger.Parse(contractData[0].ToString());
         }
         /// <summary>
         /// Balance of Batch ERC1155
         /// </summary>
-        /// <param name="_contract"></param>
-        /// <param name="_accounts"></param>
-        /// <param name="_tokenIds"></param>
+        /// <param name="contractAddress"></param>
+        /// <param name="accounts"></param>
+        /// <param name="tokenIds"></param>
         /// <returns></returns>
-        public static async Task<List<BigInteger>> BalanceOfBatch(string _contract, string[] _accounts, string[] _tokenIds)
+        public static async Task<List<BigInteger>> BalanceOfBatch(Web3 web3, string contractAddress, string[] accounts, string[] tokenIds)
         {
-            string method = ETH_METHOD.BalanceOfBatch;
-            var provider = RPC.GetInstance.Provider();
-            var contract = new Contract(abi, _contract, provider);
-            var contractData = await contract.Call(method, new object[]
+            var contract = web3.ContractBuilder.Build(Abi, contractAddress);
+            var contractData = await contract.Call(EthMethod.BalanceOfBatch, new object[]
             {
-                _accounts,
-                _tokenIds
+                accounts,
+                tokenIds
             });
-            try
-            {
-                //string[] responses = JsonConvert.DeserializeObject<string[]>(contractData.ToString());
-                //Debug.Log("Responses: " + responses);
-                List<BigInteger> balances = new List<BigInteger>();
-                for (int i = 0; i < contractData.Length; i++)
-                {
-                    Debug.Log(contractData[i].GetHashCode());//balances.Add(contractData[i].GetHashCode());
-                }
-                return balances;
-            }
-            catch
-            {
-                Debug.LogError(contractData);
-                throw;
-            }
+            return contractData[0] as List<BigInteger> ?? throw new System.Exception("Unexpected result from contract call");
         }
         /// <summary>
         /// Token URI of ERC1155 Token
         /// </summary>
-        /// <param name="_contract"></param>
-        /// <param name="_tokenId"></param>
+        /// <param name="contractAddress"></param>
+        /// <param name="tokenId"></param>
         /// <returns></returns>
-        public static async Task<string> URI(string _contract, string _tokenId)
+        public static async Task<string> URI(Web3 web3, string contractAddress, string tokenId)
         {
             const string ipfsPath = "https://ipfs.io/ipfs/";
-            string method = ETH_METHOD.Uri;
-            var provider = RPC.GetInstance.Provider();
-            var contract = new Contract(abi, _contract, provider);
-            if (_tokenId.StartsWith("0x"))
+            var contract = web3.ContractBuilder.Build(Abi, contractAddress);
+            if (tokenId.StartsWith("0x"))
             {
-                string convertURI = _tokenId.Replace("0x", "f");
+                string convertURI = tokenId.Replace("0x", "f");
                 return ipfsPath + convertURI;
             }
-            var contractData = await contract.Call(method, new object[]
+            var contractData = await contract.Call(EthMethod.Uri, new object[]
             {
-                _tokenId
+                tokenId
             });
             return contractData.ToString();
         }

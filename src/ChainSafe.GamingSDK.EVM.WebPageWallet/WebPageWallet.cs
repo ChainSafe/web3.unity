@@ -24,6 +24,7 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
 
         private readonly WebPageWalletConfig configuration;
         private readonly IOperatingSystemMediator operatingSystem;
+        private readonly IChainConfig chainConfig;
         private readonly IRpcProvider provider;
 
         private string? address;
@@ -31,10 +32,12 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
         public WebPageWallet(
             IRpcProvider provider,
             WebPageWalletConfig configuration,
-            IOperatingSystemMediator operatingSystem)
+            IOperatingSystemMediator operatingSystem,
+            IChainConfig chainConfig)
         {
             this.provider = provider;
             this.operatingSystem = operatingSystem;
+            this.chainConfig = chainConfig;
             this.configuration = configuration;
         }
 
@@ -83,14 +86,50 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
 
             string BuildUrl()
             {
-                return $"{configuration.ServiceUrl}" +
-                       "?action=send" +
-                       $"&chainId={transaction.ChainId}" +
-                       $"&to={transaction.To}" +
-                       $"&value={transaction.Value}" +
-                       $"&data={transaction.Data}" +
-                       $"&gasLimit={transaction.GasLimit}" +
-                       $"&gasPrice={transaction.GasPrice}";
+                var sb = new StringBuilder()
+                    .Append(configuration.ServiceUrl)
+                    .Append("?action=send");
+
+                if (transaction.ChainId != null)
+                {
+                    sb.Append("&chainId=").Append(transaction.ChainId);
+                }
+                else
+                {
+                    sb.Append("&chainId=").Append(chainConfig.ChainId);
+                }
+
+                if (transaction.Value != null)
+                {
+                    sb.Append("&value=").Append(transaction.Value);
+                }
+                else
+                {
+                    sb.Append("&value=").Append(0);
+                }
+
+                AppendStringIfNotNullOrEmtpy("to", transaction.To);
+                AppendStringIfNotNullOrEmtpy("data", transaction.Data);
+                AppendIfNotNull("gasLimit", transaction.GasLimit);
+                AppendIfNotNull("gasPrice", transaction.GasPrice);
+
+                return sb.ToString();
+
+                void AppendIfNotNull(string name, object value)
+                {
+                    if (value != null)
+                    {
+                        sb!.Append('&').Append(name).Append('=').Append(value);
+                    }
+                }
+
+                void AppendStringIfNotNullOrEmtpy(string name, string value)
+                {
+                    if (!string.IsNullOrEmpty(value))
+                    {
+                        sb!.Append('&').Append(name).Append('=').Append(value);
+                    }
+                }
             }
 
             // todo validate with regex
@@ -106,8 +145,8 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
             {
                 return $"{configuration.ServiceUrl}" +
                        "?action=sign-typed-data" +
-                       "&domain=" + JsonConvert.SerializeObject(domain) +
-                       "&types=" + JsonConvert.SerializeObject(types) +
+                       "&domain=" + Uri.EscapeDataString(JsonConvert.SerializeObject(domain)) +
+                       "&types=" + Uri.EscapeDataString(JsonConvert.SerializeObject(types)) +
                        "&message=" + Uri.EscapeDataString(JsonConvert.SerializeObject(message));
             }
 
@@ -167,11 +206,18 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
 
             string ExtractPublicAddress(string signature, string originalMessage)
             {
-                var msg = "\x19" + "Ethereum Signed Message:\n" + originalMessage.Length + originalMessage;
-                var msgHash = new Sha3Keccack().CalculateHash(Encoding.UTF8.GetBytes(msg));
-                var ecdsaSignature = MessageSigner.ExtractEcdsaSignature(signature);
-                var key = EthECKey.RecoverFromSignature(ecdsaSignature, msgHash);
-                return key.GetPublicAddress();
+                try
+                {
+                    var msg = "\x19" + "Ethereum Signed Message:\n" + originalMessage.Length + originalMessage;
+                    var msgHash = new Sha3Keccack().CalculateHash(Encoding.UTF8.GetBytes(msg));
+                    var ecdsaSignature = MessageSigner.ExtractEcdsaSignature(signature);
+                    var key = EthECKey.RecoverFromSignature(ecdsaSignature, msgHash);
+                    return key.GetPublicAddress();
+                }
+                catch
+                {
+                    throw new Web3Exception("Invalid signature");
+                }
             }
         }
 
