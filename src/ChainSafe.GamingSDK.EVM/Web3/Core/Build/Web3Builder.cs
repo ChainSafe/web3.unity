@@ -4,8 +4,7 @@ using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
 using ChainSafe.GamingWeb3.Environment;
 using Microsoft.Extensions.DependencyInjection;
 using Web3Unity.Scripts.Library.Ethers;
-using Web3Unity.Scripts.Library.Ethers.Providers;
-using Web3Unity.Scripts.Library.Ethers.Signers;
+using Web3Unity.Scripts.Library.Ethers.Contracts;
 
 namespace ChainSafe.GamingWeb3.Build
 {
@@ -21,7 +20,9 @@ namespace ChainSafe.GamingWeb3.Build
             serviceCollection = new Web3ServiceCollection();
 
             // Bind default services
-            serviceCollection.AddSingleton<ChainProvider>();
+            serviceCollection
+                .AddSingleton<ChainProvider>()
+                .AddSingleton<IContractBuilder, ContractBuilder>();
         }
 
         // todo inline parameterless constructor into this one (therefore remove that overload)

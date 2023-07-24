@@ -1,3 +1,4 @@
+using ChainSafe.GamingWeb3;
 using System.Numerics;
 using System.Threading.Tasks;
 using Web3Unity.Scripts.Library.Ethers.Contracts;
@@ -8,74 +9,64 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.EIP
     public class ERC20
     {
 
-        private static string abi = ABI.ERC_20;
+        private static readonly string Abi = ABI.ERC_20;
         /// <summary>
         /// Balance Of ERC20 Address
         /// </summary>
-        /// <param name="_contract"></param>
-        /// <param name="_account"></param>
+        /// <param name="contractAddress"></param>
+        /// <param name="account"></param>
         /// <returns></returns>
-        public static async Task<BigInteger> BalanceOf(string _contract, string _account)
+        public static async Task<BigInteger> BalanceOf(Web3 web3, string contractAddress, string account)
         {
-            var provider = RPC.GetInstance.Provider();
-            var contract = new Contract(abi, _contract, provider);
-            string method = ETH_METHOD.BalanceOf;
-            var contractData = await contract.Call(method, new object[]
+            var contract = web3.ContractBuilder.Build(Abi, contractAddress);
+            var contractData = await contract.Call(EthMethod.BalanceOf, new object[]
             {
-                _account
+                account
             });
             return BigInteger.Parse(contractData[0].ToString());
         }
         /// <summary>
         /// Name of ERC20 Token
         /// </summary>
-        /// <param name="_contract"></param>
+        /// <param name="contractAddress"></param>
         /// <returns></returns>
-        public static async Task<string> Name(string _contract)
+        public static async Task<string> Name(Web3 web3, string contractAddress)
         {
-            string method = ETH_METHOD.Name;
-            var provider = RPC.GetInstance.Provider();
-            var contract = new Contract(abi, _contract, provider);
-            var name = await contract.Call(method);
+            var contract = web3.ContractBuilder.Build(Abi, contractAddress);
+            var name = await contract.Call(EthMethod.Name);
             return name[0].ToString();
         }
         /// <summary>
         /// Symbol of ERC20 Token
         /// </summary>
-        /// <param name="_contract"></param>
+        /// <param name="contractAddress"></param>
         /// <returns></returns>
-        public static async Task<string> Symbol(string _contract)
+        public static async Task<string> Symbol(Web3 web3, string contractAddress)
         {
-            string method = ETH_METHOD.Symbol;
-            var provider = RPC.GetInstance.Provider();
-            var contract = new Contract(abi, _contract, provider);
-            var symbol = await contract.Call(method);
+            var contract = web3.ContractBuilder.Build(Abi, contractAddress);
+            var symbol = await contract.Call(EthMethod.Symbol);
             return symbol[0].ToString();
         }
         /// <summary>
         /// Decimals of ERC20 Token
         /// </summary>
-        /// <param name="_contract"></param>
+        /// <param name="contractAddress"></param>
         /// <returns></returns>
-        public static async Task<BigInteger> Decimals(string _contract)
+        public static async Task<BigInteger> Decimals(Web3 web3, string contractAddress)
         {
-            string method = ETH_METHOD.Decimals;
-            var provider = RPC.GetInstance.Provider();
-            var contract = new Contract(abi, _contract, provider);
-            var decimals = await contract.Call(method);
+            var contract = web3.ContractBuilder.Build(Abi, contractAddress);
+            var decimals = await contract.Call(EthMethod.Decimals);
             return BigInteger.Parse(decimals[0].ToString());
         }
         /// <summary>
         /// Total Supply of ERC20 Token
         /// </summary>
-        /// <param name="_contract"></param>
+        /// <param name="contractAddress"></param>
         /// <returns></returns>
-        public static async Task<BigInteger> TotalSupply(string _contract)
+        public static async Task<BigInteger> TotalSupply(Web3 web3, string contractAddress)
         {
-            string method = ETH_METHOD.TotalSupply;
-            var provider = RPC.GetInstance.Provider();
-            var contract = new Contract(abi, _contract, provider);
-            var totoalsupply = await contract.Call(method);
+            var contract = web3.ContractBuilder.Build(Abi, contractAddress);
+            var totoalsupply = await contract.Call(EthMethod.TotalSupply);
             return BigInteger.Parse(totoalsupply[0].ToString());
         }
     }
