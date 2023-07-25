@@ -11,7 +11,7 @@ using Web3Unity.Scripts.Library.Ethers.Signers;
 
 namespace ChainSafe.GamingSdk.Gelato
 {
-    public static class GelatoModuleExtensions
+    public static class GelatoExtensions
     {
         public static IGelato Gelato(this Web3 web3) => web3.ServiceProvider.GetRequiredService<IGelato>();
 
@@ -61,16 +61,6 @@ namespace ChainSafe.GamingSdk.Gelato
             // config
             var config = DefaultConfig();
             collection.TryAddSingleton(config);
-
-            // Gelato module
-            collection.AddSingleton<IGelato, ILifecycleParticipant, Gelato>(
-                sp => new Gelato(
-                    sp.GetRequiredService<IHttpClient>(),
-                    sp.GetRequiredService<IChainConfig>(),
-                    sp.GetRequiredService<GelatoConfig>(),
-                    sp.GetRequiredService<IRpcProvider>(),
-                    sp.GetService<ISigner>(),
-                    sp.GetRequiredService<IContractBuilder>()));
 
             return collection;
         }

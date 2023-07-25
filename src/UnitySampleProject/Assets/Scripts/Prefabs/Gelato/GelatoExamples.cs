@@ -12,7 +12,7 @@ using UnityEngine;
 using Web3Unity.Scripts.Library.Ethers.JsonRpc;
 using Contract = Web3Unity.Scripts.Library.Ethers.Contracts.Contract;
 
-public class GelatoModule : MonoBehaviour
+public class GelatoExamples : MonoBehaviour
 {
     public async void CallWithSyncFeeExample()
     {
