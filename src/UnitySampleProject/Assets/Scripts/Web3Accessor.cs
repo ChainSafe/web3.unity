@@ -7,7 +7,7 @@ public class Web3Accessor : MonoBehaviour
 
     Web3 web3;
 
-    public static Web3Accessor Instance
+    static Web3Accessor Instance
     {
         get
         {
@@ -22,17 +22,19 @@ public class Web3Accessor : MonoBehaviour
         }
     }
 
-    public static Web3 Web3 => Instance?.web3 ?? throw new System.Exception("Web3 instance not initialized");
+    public static Web3 Web3 => Instance.web3;
 
-    public void Set(Web3 web3)
+    public static Web3 TryWeb3 => instance ? instance.web3 : null;
+
+    public static void Set(Web3 web3)
     {
-        if (this.web3 != null)
+        if (Instance.web3 != null)
         {
             throw new System.Exception("Web3 instance was already initialized");
         }
 
-        this.web3 = web3;
+        Instance.web3 = web3;
     }
 
-    public void Clear() => web3 = null;
+    public static void Clear() => Instance.web3 = null;
 }

@@ -3,7 +3,6 @@ using System;
 using System.Threading.Tasks;
 using ChainSafe.GamingSDK.EVM.Web3.Core;
 using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
-using ChainSafe.GamingWeb3.Build;
 using Microsoft.Extensions.DependencyInjection;
 using Web3Unity.Scripts.Library.Ethers.Contracts;
 using Web3Unity.Scripts.Library.Ethers.Providers;
@@ -20,6 +19,7 @@ namespace ChainSafe.GamingWeb3
         private readonly IRpcProvider? rpcProvider;
         private readonly ISigner? signer;
         private readonly ITransactionExecutor? transactionExecutor;
+        private readonly IEvmEvents? events;
 
         private bool initialized;
         private bool terminated;
@@ -30,16 +30,19 @@ namespace ChainSafe.GamingWeb3
             rpcProvider = serviceProvider.GetService<IRpcProvider>();
             signer = serviceProvider.GetService<ISigner>();
             transactionExecutor = serviceProvider.GetService<ITransactionExecutor>();
+            events = serviceProvider.GetRequiredService<IEvmEvents>();
             ContractBuilder = serviceProvider.GetRequiredService<IContractBuilder>();
             ProjectConfig = serviceProvider.GetRequiredService<IProjectConfig>();
             ChainConfig = serviceProvider.GetRequiredService<IChainConfig>();
         }
 
-        public IRpcProvider RpcProvider => AssertComponentAccessible(rpcProvider, nameof(RpcProvider))!;
+        public IRpcProvider RpcProvider => AssertComponentAccessible(rpcProvider, nameof(RpcProvider));
 
-        public ISigner Signer => AssertComponentAccessible(signer, nameof(Signer))!;
+        public ISigner Signer => AssertComponentAccessible(signer, nameof(Signer));
 
-        public ITransactionExecutor TransactionExecutor => AssertComponentAccessible(transactionExecutor, nameof(TransactionExecutor))!;
+        public ITransactionExecutor TransactionExecutor => AssertComponentAccessible(transactionExecutor, nameof(TransactionExecutor));
+
+        public IEvmEvents Events => AssertComponentAccessible(events, nameof(Events));
 
         public IContractBuilder ContractBuilder { get; }
 
@@ -49,7 +52,8 @@ namespace ChainSafe.GamingWeb3
 
         public IServiceProvider ServiceProvider => serviceProvider;
 
-        private static T AssertComponentAccessible<T>(T value, string propertyName)
+        private static T AssertComponentAccessible<T>(T? value, string propertyName)
+            where T : notnull
         {
             if (value == null)
             {

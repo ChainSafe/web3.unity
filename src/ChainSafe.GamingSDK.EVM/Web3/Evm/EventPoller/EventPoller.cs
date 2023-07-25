@@ -85,11 +85,13 @@ namespace ChainSafe.GamingSDK.EVM.Web3.Evm.EventPoller
             new MulticastDelegate[]
             {
                 chainChanged,
+                poll,
+                newBlock,
             };
 
         private void PollableHandlerAdded()
         {
-            if (AllPollableDelegates().Any(d => d.GetInvocationList().Length > 0))
+            if (AllPollableDelegates().Any(d => d != null && d.GetInvocationList().Length > 0))
             {
                 SetPollLoopState(true);
             }
@@ -97,7 +99,7 @@ namespace ChainSafe.GamingSDK.EVM.Web3.Evm.EventPoller
 
         private void PollableHandlerRemoved()
         {
-            if (AllPollableDelegates().All(d => d.GetInvocationList().Length == 0))
+            if (AllPollableDelegates().All(d => d != null && d.GetInvocationList().Length == 0))
             {
                 SetPollLoopState(false);
             }
@@ -108,6 +110,7 @@ namespace ChainSafe.GamingSDK.EVM.Web3.Evm.EventPoller
             switch (enabled)
             {
                 case true when pollLoopCts == null:
+                    environment.LogWriter.Log("Starting event poll loop");
                     pollLoopCts = new();
                     RunPollLoop(pollLoopCts.Token);
                     break;
@@ -117,6 +120,7 @@ namespace ChainSafe.GamingSDK.EVM.Web3.Evm.EventPoller
                     // Note that restarting the poll loop will make a new task
                     // with a new cancellation token source and will not interfere
                     // with the one we're stopping here.
+                    environment.LogWriter.Log("Stopping event poll loop");
                     pollLoopCts.Cancel();
                     pollLoopCts = null;
                     break;
