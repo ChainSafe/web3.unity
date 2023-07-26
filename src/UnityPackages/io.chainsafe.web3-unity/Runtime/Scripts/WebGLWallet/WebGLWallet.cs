@@ -15,6 +15,7 @@ using Web3Unity.Scripts.Library.Ethers.Transactions;
 
 namespace ChainSafe.GamingSDK.EVM.WebGLWallet
 {
+#if UNITY_WEBGL && !UNITY_EDITOR
     // todo: check if window.web3gl is bound during initialization
     public class WebGLWallet : ISigner, ITransactionExecutor, ILifecycleParticipant
     {
@@ -28,18 +29,10 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
 
         public async ValueTask WillStartAsync()
         {
-            AssertRunningInWebGLPlayer();
-
             // Get user address
             JS_resetConnectAccount();
             JS_web3Connect();
             address = await PollJsSide(JS_getConnectAccount);
-
-            void AssertRunningInWebGLPlayer()
-            {
-                if (Application.platform == RuntimePlatform.WebGLPlayer) return;
-                throw new Web3Exception($"{nameof(WebGLWallet)} can only be used on {RuntimePlatform.WebGLPlayer} platform");
-            }
         }
 
         public ValueTask WillStopAsync() => new(Task.CompletedTask);
@@ -158,4 +151,39 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
         [DllImport("__Internal")]
         private static extern void JS_resetSendTransactionResponseData();
     }
+#else
+    // Stub implementation for other platforms
+    public class WebGLWallet : ISigner, ITransactionExecutor, ILifecycleParticipant
+    {
+        public Task<string> GetAddress()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<TransactionResponse> SendTransaction(TransactionRequest transaction)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> SignMessage(string message)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> SignTypedData(Domain domain, Dictionary<string, MemberDescription[]> types, MemberValue[] message)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ValueTask WillStartAsync()
+        {
+            throw new Web3Exception($"{nameof(WebGLWallet)} can only be used on {RuntimePlatform.WebGLPlayer} platform");
+        }
+
+        public ValueTask WillStopAsync()
+        {
+            throw new NotImplementedException();
+        }
+    }
+#endif
 }
