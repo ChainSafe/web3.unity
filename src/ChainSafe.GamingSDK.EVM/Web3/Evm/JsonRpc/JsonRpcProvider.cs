@@ -41,7 +41,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
         public override async Task<Network.Network> DetectNetwork()
         {
             // TODO: cache
-            var chainIdHexString = await Send<string>("eth_chainId");
+            var chainIdHexString = await Perform<string>("eth_chainId");
             var chainId = new HexBigInteger(chainIdHexString).ToUlong();
 
             if (chainId <= 0)
@@ -68,26 +68,28 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             }
         }
 
-        public async Task<TResponse> Send<TResponse>(string method, params object[] parameters)
-        {
-            var httpClient = environment.HttpClient;
-            var request = new RpcRequestMessage(nextMessageId++, method, parameters);
-            var response = (await httpClient.Post<RpcRequestMessage, RpcResponseMessage>(config.RpcNodeUrl, request)).EnsureResponse();
-
-            if (response.HasError)
-            {
-                var error = response.Error;
-                var errorMessage = $"RPC returned error for \"{method}\": {error.Code} {error.Message} {error.Data}";
-                throw new Web3Exception(errorMessage);
-            }
-
-            var serializer = JsonSerializer.Create();
-            return serializer.Deserialize<TResponse>(new JTokenReader(response.Result))!;
-        }
-
         public override async Task<T> Perform<T>(string method, params object[] parameters)
         {
-            return await Send<T>(method, parameters);
+            try
+            {
+                var httpClient = environment.HttpClient;
+                var request = new RpcRequestMessage(nextMessageId++, method, parameters);
+                var response = (await httpClient.Post<RpcRequestMessage, RpcResponseMessage>(config.RpcNodeUrl, request)).EnsureResponse();
+
+                if (response.HasError)
+                {
+                    var error = response.Error;
+                    var errorMessage = $"RPC returned error for \"{method}\": {error.Code} {error.Message} {error.Data}";
+                    throw new Web3Exception(errorMessage);
+                }
+
+                var serializer = JsonSerializer.Create();
+                return serializer.Deserialize<T>(new JTokenReader(response.Result))!;
+            }
+            catch (Exception ex)
+            {
+                throw new Web3Exception($"{method}: bad result from RPC endpoint", ex);
+            }
         }
     }
 }
