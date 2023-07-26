@@ -1,13 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using ChainSafe.GamingSDK.EVM.Web3.Core.Evm.MultiCall3.Dto;
 using ChainSafe.GamingWeb3;
 using Nethereum.Contracts.QueryHandlers.MultiCall;
-using Web3Unity.Scripts.Library.Ethers.Contracts;
-using Web3Unity.Scripts.Library.Ethers.Providers;
-using Web3Unity.Scripts.Library.Ethers.Transactions;
 using BigInteger = Org.BouncyCastle.Math.BigInteger;
 
 namespace ChainSafe.GamingSDK.EVM.Web3.Core.Evm.MultiCall3
@@ -15,14 +10,11 @@ namespace ChainSafe.GamingSDK.EVM.Web3.Core.Evm.MultiCall3
     public class MultiCall : ILifecycleParticipant
     {
         private readonly MultiQueryHandler handler;
-        private Contract multiCallContract;
 
-        public MultiCall(IRpcProvider provider, IChainConfig chainConfig, MultiCallConfig config, MultiQueryHandler handler)
+        public MultiCall(IChainConfig chainConfig, MultiCallConfig config)
         {
-            this.handler = handler;
             if (MultiCallDefaults.DeployedNetworks.Contains(chainConfig.ChainId))
             {
-                multiCallContract = new Contract(MultiCallDefaults.MultiCallAbi, MultiCallDefaults.OfficialAddress, provider);
                 handler = new Nethereum.Web3.Web3(chainConfig.Rpc).Eth.GetMultiQueryHandler();
             }
             else
@@ -30,8 +22,6 @@ namespace ChainSafe.GamingSDK.EVM.Web3.Core.Evm.MultiCall3
                 if (config.CustomNetworks.TryGetValue(chainConfig.ChainId, out var address))
                 {
                     handler = new Nethereum.Web3.Web3(chainConfig.Rpc).Eth.GetMultiQueryHandler(address);
-
-                    multiCallContract = new Contract(MultiCallDefaults.MultiCallAbi, address, provider);
                 }
             }
         }

@@ -7,6 +7,7 @@ using Org.BouncyCastle.Asn1.Mozilla;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using ChainSafe.GamingSDK.EVM.Web3.Core.Evm.MultiCall3;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -143,6 +144,7 @@ public class Login : MonoBehaviour
     {
         services
             .UseUnityEnvironment()
+            .UseMultiCall()
             .UseJsonRpcProvider();
 
         /* As many contracts as needed may be registered here.
