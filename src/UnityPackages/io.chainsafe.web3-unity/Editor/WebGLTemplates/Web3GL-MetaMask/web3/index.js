@@ -227,9 +227,11 @@ async function signTypedMessage(domain, types, value) {
         });
 
         var params = [from[0], msgParams];
+        var method = 'eth_signTypedData_v4'
+        
         web3.currentProvider.sendAsync(
             {
-                'eth_signTypedData_v4',
+                method,
                 params,
                 from: from[0],
             },
@@ -248,7 +250,7 @@ async function signTypedMessage(domain, types, value) {
             }
         );
     } catch (error) {
-        window.web3gl.signTypedMessageResponse = (error as Error).message;
+        window.web3gl.signTypedMessageResponse = error.message;
     }
 }
 
