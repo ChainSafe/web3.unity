@@ -5,6 +5,7 @@ using ChainSafe.GamingWeb3.Build;
 using ChainSafe.GamingWeb3.Environment;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Org.BouncyCastle.Crypto;
 using Web3Unity.Scripts.Library.Ethers.Contracts;
 using Web3Unity.Scripts.Library.Ethers.Providers;
 using Web3Unity.Scripts.Library.Ethers.Signers;
@@ -31,7 +32,7 @@ namespace ChainSafe.GamingSdk.Gelato
         public static IWeb3ServiceCollection UseGelato(this IWeb3ServiceCollection collection, GelatoConfig configuration)
         {
             collection.UseGelato();
-            collection.ConfigureGelatoModule(configuration);
+            collection.ConfigureGelato(configuration);
             return collection;
         }
 
@@ -62,6 +63,8 @@ namespace ChainSafe.GamingSdk.Gelato
             var config = DefaultConfig();
             collection.TryAddSingleton(config);
 
+            collection.AddSingleton<ILifecycleParticipant, IGelato, Gelato>();
+
             return collection;
         }
 
@@ -69,7 +72,7 @@ namespace ChainSafe.GamingSdk.Gelato
         /// Configures Gelato module.
         /// </summary>
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
-        public static IWeb3ServiceCollection ConfigureGelatoModule(this IWeb3ServiceCollection collection, GelatoConfig configuration)
+        public static IWeb3ServiceCollection ConfigureGelato(this IWeb3ServiceCollection collection, GelatoConfig configuration)
         {
             collection.Replace(ServiceDescriptor.Singleton(typeof(GelatoConfig), configuration));
             return collection;
