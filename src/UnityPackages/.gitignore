@@ -83,4 +83,4 @@ crashlytics-build.properties
 /io.chainsafe.web3-unity/Runtime/Libraries.meta
 
 # Since the folder is called 'Debug', it's being ignored, so negate that
-!/io.chainsafe.web3-unity/Runtime/Plugins/Web3AuthSDK/Debug
+!/io.chainsafe.web3-unity.web3auth/Runtime/Plugins/Web3AuthSDK/Debug
