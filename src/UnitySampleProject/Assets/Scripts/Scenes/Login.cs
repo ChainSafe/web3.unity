@@ -1,3 +1,4 @@
+using ChainSafe.GamingSdk.Web3Auth;
 using ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet;
 using ChainSafe.GamingSDK.EVM.WebGLWallet;
 using ChainSafe.GamingWeb3;
@@ -7,6 +8,7 @@ using Org.BouncyCastle.Asn1.Mozilla;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -17,13 +19,33 @@ public class Login : MonoBehaviour
 {
     internal const string PlayerAccountKey = "PlayerAccount";
 
+    private static Web3Auth web3AuthInstance;
+
     private Text errorText;
     private Toggle rememberMeToggle;
 
+    private Dropdown web3AuthProvidersDropdown;
+    private int selectedWeb3AuthProvider;
+    private IReadOnlyList<(string name, Provider provider)> web3AuthProviderList = new List<(string, Provider)>
+    {
+        // You can add as many providers as you like
+        ("Google", Provider.GOOGLE),
+        ("Twitter", Provider.TWITTER),
+        ("Facebook", Provider.FACEBOOK),
+        ("Reddit", Provider.REDDIT),
+        ("Discord", Provider.DISCORD),
+        ("Twitch", Provider.TWITCH),
+    };
+
     void Start()
     {
+        FindWeb3AuthInstance();
+
         errorText = FindComponent<Text>("ErrorText");
-        rememberMeToggle = FindComponent<Toggle>("RememberMe");
+        rememberMeToggle = FindComponent<Toggle>("RemoteWallet/RememberMe");
+
+        web3AuthProvidersDropdown = FindComponent<Dropdown>("Web3Auth/Providers");
+        web3AuthProvidersDropdown.ClearOptions();
 
         errorText.gameObject.SetActive(false);
 
@@ -37,6 +59,42 @@ public class Login : MonoBehaviour
         {
             rememberMeToggle.isOn = true;
             LoginFromSavedAccount(savedAccount);
+            return;
+        }
+
+        web3AuthProvidersDropdown.AddOptions(web3AuthProviderList.Select(x => x.name).ToList());
+        web3AuthProvidersDropdown.onValueChanged.AddListener(i => selectedWeb3AuthProvider = i);
+    }
+
+    private static void FindWeb3AuthInstance()
+    {
+        // We need to keep the same instance of Web3Auth alive throughout the application's lifetime
+        var web3Auths = FindObjectsByType<Web3Auth>(FindObjectsSortMode.None);
+
+        if (web3Auths.Length == 0)
+        {
+            Debug.LogWarning("No Web3Auth objects found in scene");
+        }
+
+        if (web3AuthInstance == null)
+        {
+            web3AuthInstance = web3Auths[0];
+            DontDestroyOnLoad(web3AuthInstance.gameObject);
+
+            for (int i = 1; i < web3Auths.Length; i++)
+            {
+                Destroy(web3Auths[i].gameObject);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < web3Auths.Length; ++i)
+            {
+                if (web3Auths[i] != web3AuthInstance)
+                {
+                    Destroy(web3Auths[i].gameObject);
+                }
+            }
         }
     }
 
@@ -116,6 +174,52 @@ public class Login : MonoBehaviour
             {
                 PlayerPrefs.SetString(PlayerAccountKey, await web3.Signer.GetAddress());
             }
+
+            PostLogin(web3);
+        }
+        catch (Web3Exception e)
+        {
+            Debug.LogException(e);
+            errorText.gameObject.SetActive(true);
+            errorText.text = "Login failed, please try again";
+        }
+        catch (Exception e)
+        {
+            Debug.LogException(e);
+            errorText.gameObject.SetActive(true);
+            errorText.text = "Implementation error";
+        }
+    }
+
+    public async void OnLoginWeb3Auth()
+    {
+        try
+        {
+            errorText.gameObject.SetActive(false);
+
+            var web3AuthConfig = new Web3AuthWalletConfig
+            {
+                Web3Auth = web3AuthInstance,
+                Web3AuthOptions = new()
+                {
+                    whiteLabel = new()
+                    {
+                        dark = true,
+                        defaultLanguage = "en",
+                        name = "ChainSafe Gaming SDK",
+                    }
+                },
+                LoginParams = new()
+                {
+                    loginProvider = web3AuthProviderList[selectedWeb3AuthProvider].provider
+                }
+            };
+
+            var web3 =
+                await new Web3Builder(ProjectConfigUtilities.Load())
+                    .Configure(ConfigureCommonServices)
+                    .Configure(services => services.UseWeb3AuthWallet(web3AuthConfig))
+                    .BuildAsync();
 
             PostLogin(web3);
         }
