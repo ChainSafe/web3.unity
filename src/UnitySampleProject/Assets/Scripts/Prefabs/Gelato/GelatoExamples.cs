@@ -14,6 +14,19 @@ using Contract = Web3Unity.Scripts.Library.Ethers.Contracts.Contract;
 
 public class GelatoExamples : MonoBehaviour
 {
+    async Task WaitForSeconds(int seconds)
+    {
+        // Task.Delay doesn't work on WebGL
+#if UNITY_WEBGL && !UNITY_EDITOR
+        var now = Time.time;
+        while (Time.time - now < 2)
+        {
+            await Task.Yield();
+        }
+#else
+        await Task.Delay(seconds * 1000);
+#endif
+    }
     public async void CallWithSyncFeeExample()
     {
         var vitalik = "0xd8da6bf26964af9d7eed9e03e53415d37aa96045";
@@ -62,7 +75,7 @@ public class GelatoExamples : MonoBehaviour
                     Debug.Log($"Transaction hash: {status.TransactionHash}: ");
                     break;
                 default:
-                    await Task.Delay(TimeSpan.FromSeconds(2));
+                    await WaitForSeconds(2);
                     continue;
             }
         }
@@ -91,7 +104,6 @@ public class GelatoExamples : MonoBehaviour
         var complete = false;
         while (!complete)
         {
-            await Task.Delay(TimeSpan.FromSeconds(2));
             var status = await Web3Accessor.Web3.Gelato().GetTaskStatus(relayResponse.TaskId);
             Debug.Log($"SponsorCall status: {relayResponse.TaskId}: {status.TaskState}");
 
@@ -106,6 +118,7 @@ public class GelatoExamples : MonoBehaviour
                     Debug.Log($"Transaction hash: {status.TransactionHash}: ");
                     break;
                 default:
+                    await WaitForSeconds(2);
                     continue;
             }
         }
@@ -138,7 +151,6 @@ public class GelatoExamples : MonoBehaviour
         var complete = false;
         while (!complete)
         {
-            await Task.Delay(TimeSpan.FromSeconds(2));
             var status = await Web3Accessor.Web3.Gelato().GetTaskStatus(relayResponse.TaskId);
             Debug.Log($"CallWithSyncFeeErc2771 status: {relayResponse.TaskId}: {status.TaskState}");
 
@@ -153,6 +165,7 @@ public class GelatoExamples : MonoBehaviour
                     Debug.Log($"Transaction hash: {status.TransactionHash}: ");
                     break;
                 default:
+                    await WaitForSeconds(2);
                     continue;
             }
         }
@@ -187,7 +200,6 @@ public class GelatoExamples : MonoBehaviour
         var complete = false;
         while (!complete)
         {
-            await Task.Delay(TimeSpan.FromSeconds(2));
             var status = await Web3Accessor.Web3.Gelato().GetTaskStatus(relayResponse.TaskId);
             Debug.Log($"SponsorCallErc2771 status: {relayResponse.TaskId}: {status.TaskState}");
 
@@ -202,6 +214,7 @@ public class GelatoExamples : MonoBehaviour
                     Debug.Log($"Transaction hash: {status.TransactionHash}: ");
                     break;
                 default:
+                    await WaitForSeconds(2);
                     continue;
             }
         }
