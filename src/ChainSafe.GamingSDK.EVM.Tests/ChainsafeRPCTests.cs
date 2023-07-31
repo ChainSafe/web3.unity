@@ -36,7 +36,7 @@ namespace ChainSafe.GamingSDK.EVM.Tests
         [Test]
         public void GetNetworkTest()
         {
-            var network = infuraProvider.GetNetwork().Result;
+            var network = infuraProvider.RefreshNetwork().Result;
             Assert.AreEqual("Goerli", network.Name);
             Assert.AreEqual(5, network.ChainId);
         }

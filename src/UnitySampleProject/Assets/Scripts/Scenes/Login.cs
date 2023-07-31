@@ -30,7 +30,7 @@ public class Login : MonoBehaviour
         // Remember me only works with the WebPageWallet
         rememberMeToggle.gameObject.SetActive(!IsWebGLBuild());
 
-        Web3Accessor.Instance.Clear();
+        Web3Accessor.Clear();
 
         var savedAccount = PlayerPrefs.GetString(PlayerAccountKey);
         if (!IsWebGLBuild() && !string.IsNullOrEmpty(savedAccount))
@@ -135,7 +135,7 @@ public class Login : MonoBehaviour
 
     private static void PostLogin(Web3 web3)
     {
-        Web3Accessor.Instance.Set(web3);
+        Web3Accessor.Set(web3);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
