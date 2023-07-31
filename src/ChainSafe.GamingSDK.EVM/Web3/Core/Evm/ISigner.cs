@@ -13,6 +13,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
 
         Task<string> SignTypedData(Domain domain, Dictionary<string, MemberDescription[]> types, MemberValue[] message);
 
+        // TODO: is this the right thing to do?
         Task<string> SignMessage(byte[] message) => SignMessage(message.ToHex());
     }
 }

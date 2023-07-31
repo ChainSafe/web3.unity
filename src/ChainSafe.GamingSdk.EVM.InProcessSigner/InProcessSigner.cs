@@ -25,7 +25,7 @@ namespace ChainSafe.GamingSdk.EVM.InProcessSigner
         public Task<string> GetAddress() => Task.FromResult(privateKey.GetPublicAddress());
 
         public Task<string> SignMessage(string message) =>
-            Task.FromResult(messageSigner.HashAndSign(Encoding.UTF8.GetBytes(message), privateKey));
+            Task.FromResult(messageSigner.EncodeUTF8AndSign(message, privateKey));
 
         // TODO: test this with Gelato
         public Task<string> SignTypedData(Domain domain, Dictionary<string, MemberDescription[]> types, MemberValue[] message) =>
