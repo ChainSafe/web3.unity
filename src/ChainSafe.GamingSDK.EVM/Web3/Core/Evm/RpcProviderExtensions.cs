@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using ChainSafe.GamingWeb3;
 using Nethereum.Hex.HexConvertors.Extensions;
@@ -19,7 +20,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
     {
         public static async Task<HexBigInteger> GetBalance(this IRpcProvider provider, string address, BlockParameter blockTag = null)
         {
-            await provider.GetNetwork();
+            await provider.RefreshNetwork();
 
             blockTag ??= new BlockParameter();
 
@@ -30,7 +31,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
         public static async Task<string> GetCode(this IRpcProvider provider, string address, BlockParameter blockTag = null)
         {
-            await provider.GetNetwork();
+            await provider.RefreshNetwork();
 
             blockTag ??= new BlockParameter();
 
@@ -41,7 +42,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
         public static async Task<string> GetStorageAt(this IRpcProvider provider, string address, BigInteger position, BlockParameter blockTag = null)
         {
-            await provider.GetNetwork();
+            await provider.RefreshNetwork();
 
             blockTag ??= new BlockParameter();
 
@@ -52,7 +53,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
         public static async Task<HexBigInteger> GetTransactionCount(this IRpcProvider provider, string address, BlockParameter blockTag = null)
         {
-            await provider.GetNetwork();
+            await provider.RefreshNetwork();
 
             blockTag ??= new BlockParameter();
 
@@ -63,7 +64,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
         public static async Task<Block> GetBlock(this IRpcProvider provider, BlockParameter blockTag = null)
         {
-            await provider.GetNetwork();
+            await provider.RefreshNetwork();
 
             blockTag ??= new BlockParameter();
 
@@ -74,7 +75,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
         public static async Task<Block> GetBlock(this IRpcProvider provider, string blockHash)
         {
-            await provider.GetNetwork();
+            await provider.RefreshNetwork();
 
             if (!blockHash.HasHexPrefix() || blockHash.Length != 66)
             {
@@ -88,7 +89,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
         public static async Task<BlockWithTransactions> GetBlockWithTransactions(this IRpcProvider provider, BlockParameter blockTag = null)
         {
-            await provider.GetNetwork();
+            await provider.RefreshNetwork();
 
             blockTag ??= new BlockParameter();
 
@@ -99,7 +100,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
         public static async Task<BlockWithTransactions> GetBlockWithTransactions(this IRpcProvider provider, string blockHash)
         {
-            await provider.GetNetwork();
+            await provider.RefreshNetwork();
 
             if (!blockHash.HasHexPrefix() || blockHash.Length != 66)
             {
@@ -113,14 +114,14 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
         public static async Task<HexBigInteger> GetBlockNumber(this IRpcProvider provider)
         {
-            await provider.GetNetwork();
+            await provider.RefreshNetwork();
 
             return new HexBigInteger(await provider.Perform<string>("eth_blockNumber", null));
         }
 
         public static async Task<HexBigInteger> GetGasPrice(this IRpcProvider provider)
         {
-            await provider.GetNetwork();
+            await provider.RefreshNetwork();
 
             return new HexBigInteger(await provider.Perform<string>("eth_gasPrice", null));
         }
@@ -149,7 +150,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
         public static async Task<string> Call(this IRpcProvider provider, TransactionRequest transaction, BlockParameter blockTag = null)
         {
-            await provider.GetNetwork();
+            await provider.RefreshNetwork();
 
             blockTag ??= new BlockParameter();
 
@@ -160,7 +161,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
         public static async Task<HexBigInteger> EstimateGas(this IRpcProvider provider, TransactionRequest transaction)
         {
-            await provider.GetNetwork();
+            await provider.RefreshNetwork();
 
             var parameters = new object[] { transaction };
 
@@ -169,7 +170,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
         public static async Task<TransactionResponse> GetTransaction(this IRpcProvider provider, string transactionHash)
         {
-            await provider.GetNetwork();
+            await provider.RefreshNetwork();
 
             var parameters = new object[] { transactionHash };
 
@@ -201,7 +202,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
         public static async Task<TransactionReceipt> GetTransactionReceipt(this IRpcProvider provider, string transactionHash)
         {
-            await provider.GetNetwork();
+            await provider.RefreshNetwork();
 
             var parameters = new object[] { transactionHash };
 
@@ -296,11 +297,14 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
         public static async Task<FilterLog[]> GetLogs(this IRpcProvider provider, NewFilterInput filter)
         {
-            await provider.GetNetwork();
+            await provider.RefreshNetwork();
 
             var parameters = new object[] { filter };
 
             return await provider.Perform<FilterLog[]>("eth_getLogs", parameters);
         }
+
+        public static async Task<string[]> ListAccounts(this IRpcProvider provider) =>
+            await provider.Perform<string[]>("eth_accounts");
     }
 }

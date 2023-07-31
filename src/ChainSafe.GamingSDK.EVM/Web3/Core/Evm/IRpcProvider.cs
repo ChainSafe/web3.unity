@@ -4,12 +4,10 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 {
     public interface IRpcProvider
     {
-        Network.Network Network { get; }
+        Network.Network LastKnownNetwork { get; }
 
         // Network
-        Task<Network.Network> DetectNetwork();
-
-        Task<Network.Network> GetNetwork();
+        Task<Network.Network> RefreshNetwork();
 
         // ENS
         Task<T> Perform<T>(string method, params object[] parameters);
