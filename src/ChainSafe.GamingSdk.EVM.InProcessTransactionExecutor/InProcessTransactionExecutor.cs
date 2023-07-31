@@ -18,6 +18,7 @@ namespace ChainSafe.GamingSdk.EVM.InProcessTransactionExecutor
     {
         private readonly NWeb3 web3;
         private readonly IRpcProvider rpcProvider;
+        private readonly string accountAddress;
 
         public InProcessTransactionExecutor(ISigner signer, IChainConfig chainConfig, IRpcProvider rpcProvider)
         {
@@ -26,6 +27,7 @@ namespace ChainSafe.GamingSdk.EVM.InProcessTransactionExecutor
             // broadcast it locally? I think not.
             var privateKey = (signer as InProcessSigner.InProcessSigner)?.GetKey() ??
                 throw new Web3Exception($"{nameof(InProcessTransactionExecutor)} only supports {nameof(InProcessSigner.InProcessSigner)}");
+            accountAddress = privateKey.GetPublicAddress();
             var account = new Account(privateKey);
             web3 = new NWeb3(account, chainConfig.Rpc);
             this.rpcProvider = rpcProvider;
@@ -33,6 +35,15 @@ namespace ChainSafe.GamingSdk.EVM.InProcessTransactionExecutor
 
         public async Task<TransactionResponse> SendTransaction(TransactionRequest transaction)
         {
+            if (string.IsNullOrEmpty(transaction.From))
+            {
+                transaction.From = accountAddress;
+            }
+            else if (transaction.From != accountAddress)
+            {
+                throw new Web3Exception("Cannot send trasnaction from other account");
+            }
+
             var txInput = new TransactionInput
             {
                 AccessList = transaction.AccessList,
