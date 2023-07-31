@@ -401,3 +401,7 @@ FodyWeavers.xsd
 
 # VS Code files
 .vscode/
+
+# Mobile builds
+src/UnitySampleProject/ProjectSettings/BurstAotSettings_Android.json
+src/UnitySampleProject/ProjectSettings/BurstAotSettings_iOS.json
