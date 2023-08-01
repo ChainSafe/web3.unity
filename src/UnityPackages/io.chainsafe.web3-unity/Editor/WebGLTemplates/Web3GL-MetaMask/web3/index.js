@@ -246,7 +246,7 @@ async function signTypedMessage(domain, types, value) {
                 if (result.error) {
                     throw result
                 };
-                window.web3gl.signTypedMessageResponse = signature;
+                window.web3gl.signTypedMessageResponse = result.result;
             }
         );
     } catch (error) {
