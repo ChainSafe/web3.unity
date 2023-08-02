@@ -13,6 +13,6 @@ public class SendTransaction : MonoBehaviour
             Value = new HexBigInteger(12300000000000000),
         };
         var response = await Web3Accessor.Web3.TransactionExecutor.SendTransaction(txRequest);
-        print(response);
+        Debug.Log("Transaction Hash: " + response.Hash);
     }
 }
