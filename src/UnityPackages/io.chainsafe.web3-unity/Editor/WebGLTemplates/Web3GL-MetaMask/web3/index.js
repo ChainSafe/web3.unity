@@ -201,7 +201,8 @@ window.web3gl.signTypedMessage(domain, types, value)
 async function signTypedMessage(domain, types, value) {
     const deducePrimaryType = (types) => {
         const typeNames = Object.keys(types);
-        if (typeNames.includes("EIP712Domain")) throw Error("EIP712Domain declaration not needed in types")
+        if (typeNames.includes("EIP712Domain")) throw Error("EIP712Domain declaration managed by SDK")
+        
         let primaryType = [...typeNames];
         typeNames.map(typeName => {
             types[typeName].map(propertyItem => {
