@@ -183,10 +183,8 @@ public class GelatoExamples : MonoBehaviour
                   "\"stateMutability\":\"nonpayable\"," +
                   "\"type\":\"function\"" +
                   "}]";
-        Debug.Log("Pre builder");
 
         var contract = Web3Accessor.Web3.ContractBuilder.Build(abi, target);
-        Debug.Log("Post builder");
 
         var data = contract.Calldata("increment");
 

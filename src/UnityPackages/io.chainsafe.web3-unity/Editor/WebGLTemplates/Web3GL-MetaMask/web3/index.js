@@ -87,7 +87,8 @@ async function connect() {
     // set current account
     // provider.selectedAddress works for metamask and torus
     // provider.accounts[0] works for walletconnect
-    web3gl.connectAccount = provider.selectedAddress || provider.accounts[0];
+
+    web3gl.connectAccount =  web3.utils.toChecksumAddress(provider.selectedAddress) || web3.utils.toChecksumAddress(provider.accounts[0]);
 
     // refresh page if player changes account
     provider.on("accountsChanged", (accounts) => {
@@ -216,24 +217,32 @@ async function signTypedMessage(domain, types, value) {
 
     try {
 
-        var from = await web3.eth.getAccounts();
+        var from = web3.utils.toChecksumAddress((await web3.eth.getAccounts())[0]);
 
         const parsedTypes = JSON.parse(types);
-        const msgParams = JSON.stringify({
+
+        const compiledTogether = {
+            types: {
+                EIP712Domain: [
+                    { name: "name", type: "string" },
+                    { name: "version", type: "string" },
+                    { name: "chainId", type: "uint256" },
+                    { name: "verifyingContract", type: "address" }
+                ],
+                ...parsedTypes,
+            },
+            primaryType: deducePrimaryType(parsedTypes),
             domain: JSON.parse(domain),
             message: JSON.parse(value),
-            primaryType: deducePrimaryType(parsedTypes),
-            types: parsedTypes,
-        });
+        }
+        var params = [from, JSON.stringify(compiledTogether)];
+        var method = 'eth_signTypedData_v4';
 
-        var params = [from[0], msgParams];
-        var method = 'eth_signTypedData_v4'
-        
         web3.currentProvider.sendAsync(
             {
                 method,
                 params,
-                from: from[0],
+                from: from,
             },
             function (err, result) {
                 if (err)  {
