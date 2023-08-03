@@ -24,7 +24,7 @@ namespace ChainSafe.GamingSdk.Gelato
         private readonly GelatoConfig config;
         private readonly IChainConfig chainConfig;
 
-        public Gelato(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, IRpcProvider provider, ISigner signer, IContractBuilder contractBuilder)
+        public Gelato(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, ISigner signer, IContractBuilder contractBuilder)
         {
             gelatoClient = new GelatoClient(httpClient, config);
             this.signer = signer;
@@ -33,7 +33,7 @@ namespace ChainSafe.GamingSdk.Gelato
             this.contractBuilder = contractBuilder;
         }
 
-        public Gelato(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, IRpcProvider provider, IContractBuilder contractBuilder)
+        public Gelato(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, IContractBuilder contractBuilder)
         {
             gelatoClient = new GelatoClient(httpClient, config);
             this.config = config;
