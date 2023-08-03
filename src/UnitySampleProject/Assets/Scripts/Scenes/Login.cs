@@ -7,6 +7,7 @@ using Org.BouncyCastle.Asn1.Mozilla;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using ChainSafe.GamingSdk.Gelato;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -16,6 +17,9 @@ using Web3Unity.Scripts.Library.Ethers.JsonRpc;
 public class Login : MonoBehaviour
 {
     internal const string PlayerAccountKey = "PlayerAccount";
+
+    [SerializeField]
+    private string gelatoApiKey = "";
 
     private Text errorText;
     private Toggle rememberMeToggle;
@@ -143,6 +147,7 @@ public class Login : MonoBehaviour
     {
         services
             .UseUnityEnvironment()
+            .UseGelato(gelatoApiKey)
             .UseJsonRpcProvider();
 
         /* As many contracts as needed may be registered here.

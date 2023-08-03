@@ -19,6 +19,6 @@ window.networks = [
     id: 5,
     label: "Ethereum Goerli",
     token: "goETH",
-    rpcUrl: `https://goerli.infura.io/v3/assdfsdf`,
+    rpcUrl: `https://goerli.infura.io/v3/634371d724e34613bfc66e595b853cf0`,
   }
 ]
