@@ -1053,6 +1053,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a09120b93a08b746af0090ff3fb23db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gelatoApiKey: 
 --- !u!1 &2132619529
 GameObject:
   m_ObjectHideFlags: 0

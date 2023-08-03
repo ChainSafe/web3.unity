@@ -8,6 +8,7 @@ using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
 using ChainSafe.GamingWeb3;
 using JetBrains.Annotations;
 using Nethereum.ABI.EIP712;
+using Newtonsoft.Json;
 using UnityEngine;
 using Web3Unity.Scripts.Library.Ethers.Providers;
 using Web3Unity.Scripts.Library.Ethers.Signers;
@@ -100,10 +101,20 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
             }
         }
 
-        // todo: implement before release
-        public Task<string> SignTypedData(Domain domain, Dictionary<string, MemberDescription[]> types, MemberValue[] message)
+        public async Task<string> SignTypedData<TStructType>(SerializableDomain domain, Dictionary<string, MemberDescription[]> types, TStructType message)
         {
-            throw new NotImplementedException();
+            JS_resetSignTypedMessageResponse();
+            JS_signTypedMessage(JsonConvert.SerializeObject(domain), JsonConvert.SerializeObject(types), JsonConvert.SerializeObject(message));
+            var signedTypedMessageResponse = await PollJsSide(JS_getSignTypedMessageResponse);
+            AssertResponseSuccessful(signedTypedMessageResponse);
+            return signedTypedMessageResponse;
+
+            void AssertResponseSuccessful(string response)
+            {
+                // todo: check with regex mb?
+                if (response.Length == 132) return;
+                throw new Web3Exception("Sign message operation was rejected.");
+            }
         }
 
         // todo: will break if running two of the same Poll tasks from different signers
@@ -133,6 +144,14 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
         private static extern string JS_getSignMessageResponse();
         [DllImport("__Internal")]
         private static extern void JS_resetSignMessageResponse();
+
+        // SignTypedMessage
+        [DllImport("__Internal")]
+        private static extern void JS_signTypedMessage(string domain, string types, string message);
+        [DllImport("__Internal")]
+        private static extern string JS_getSignTypedMessageResponse();
+        [DllImport("__Internal")]
+        private static extern void JS_resetSignTypedMessageResponse();
 
         // SendTransaction (no data)
         [DllImport("__Internal")]
