@@ -133,7 +133,7 @@ public class ChainSafeServerSettings : EditorWindow
         using UnityWebRequest www = UnityWebRequest.Post("https://api.gaming.chainsafe.io/project/checkId", form);
         await EditorUtilities.SendAndWait(www);
         const string dbgProjectIDMessage =
-            "Project ID is not valid! Please go to https://dashboard.daming.chainsafe.io to get a new Project ID"; 
+            "Project ID is not valid! Please go to https://dashboard.daming.chainsafe.io to get a new Project ID";
 
         if (www.result != UnityWebRequest.Result.Success)
         {
@@ -149,7 +149,7 @@ public class ChainSafeServerSettings : EditorWindow
             Debug.Log("ProjectID is valid, you may now build with The SDK!");
             return true;
         }
-        
+
         Debug.LogError(dbgProjectIDMessage);
         return false;
     }
