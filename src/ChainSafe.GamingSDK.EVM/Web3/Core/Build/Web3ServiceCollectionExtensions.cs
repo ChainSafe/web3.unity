@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ChainSafe.GamingWeb3.Build
@@ -42,6 +43,16 @@ namespace ChainSafe.GamingWeb3.Build
             serviceCollection.AddSingleton<TInterface2, TImplementation>(sp => sp.GetRequiredService<TImplementation>());
         }
 
+        public static void AddSingleton<TInterface1, TInterface2, TImplementation>(this IWeb3ServiceCollection serviceCollection, Func<IServiceProvider, TImplementation> implementationFactory)
+            where TInterface1 : class
+            where TInterface2 : class
+            where TImplementation : class, TInterface1, TInterface2
+        {
+            serviceCollection.AddSingleton(implementationFactory);
+            serviceCollection.AddSingleton<TInterface1, TImplementation>(sp => sp.GetRequiredService<TImplementation>());
+            serviceCollection.AddSingleton<TInterface2, TImplementation>(sp => sp.GetRequiredService<TImplementation>());
+        }
+
         public static void AddSingleton<TInterface1, TInterface2, TInterface3, TImplementation>(this IWeb3ServiceCollection serviceCollection)
             where TInterface1 : class
             where TInterface2 : class
@@ -49,6 +60,18 @@ namespace ChainSafe.GamingWeb3.Build
             where TImplementation : class, TInterface1, TInterface2, TInterface3
         {
             serviceCollection.AddSingleton<TImplementation>();
+            serviceCollection.AddSingleton<TInterface1, TImplementation>(sp => sp.GetRequiredService<TImplementation>());
+            serviceCollection.AddSingleton<TInterface2, TImplementation>(sp => sp.GetRequiredService<TImplementation>());
+            serviceCollection.AddSingleton<TInterface3, TImplementation>(sp => sp.GetRequiredService<TImplementation>());
+        }
+
+        public static void AddSingleton<TInterface1, TInterface2, TInterface3, TImplementation>(this IWeb3ServiceCollection serviceCollection, Func<IServiceProvider, TImplementation> implementationFactory)
+            where TInterface1 : class
+            where TInterface2 : class
+            where TInterface3 : class
+            where TImplementation : class, TInterface1, TInterface2, TInterface3
+        {
+            serviceCollection.AddSingleton(implementationFactory);
             serviceCollection.AddSingleton<TInterface1, TImplementation>(sp => sp.GetRequiredService<TImplementation>());
             serviceCollection.AddSingleton<TInterface2, TImplementation>(sp => sp.GetRequiredService<TImplementation>());
             serviceCollection.AddSingleton<TInterface3, TImplementation>(sp => sp.GetRequiredService<TImplementation>());

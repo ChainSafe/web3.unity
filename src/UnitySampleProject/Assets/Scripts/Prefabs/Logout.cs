@@ -9,7 +9,7 @@ public class Logout : MonoBehaviour
         PlayerPrefs.DeleteKey(Login.PlayerAccountKey);
 
         // Clear the web3 instance
-        Web3Accessor.Instance.Clear();
+        Web3Accessor.Clear();
 
         // Go back to the first scene to log in again
         SceneManager.LoadScene(0);

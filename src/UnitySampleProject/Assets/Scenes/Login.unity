@@ -2601,6 +2601,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2072494778}
   m_CullTransparentMesh: 1
+  gelatoApiKey: 
 --- !u!1 &2132619529
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ChainSafe.GamingSDK.EVM.Web3.Core;
 using ChainSafe.GamingWeb3;
 using ChainSafe.GamingWeb3.Environment;
 using Nethereum.Hex.HexTypes;
@@ -10,11 +11,13 @@ using Newtonsoft.Json.Linq;
 
 namespace Web3Unity.Scripts.Library.Ethers.Providers
 {
-    public class JsonRpcProvider : BaseProvider
+    public class JsonRpcProvider : IRpcProvider, ILifecycleParticipant
     {
         private readonly JsonRpcProviderConfig config;
         private readonly Web3Environment environment;
         private readonly ChainProvider chainProvider;
+
+        private Network.Network network;
 
         private uint nextMessageId;
 
@@ -23,7 +26,6 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             Web3Environment environment,
             ChainProvider chainProvider,
             IChainConfig chainConfig)
-            : base(config.Network, environment)
         {
             this.chainProvider = chainProvider;
             this.environment = environment;
@@ -35,10 +37,20 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             }
         }
 
-        // todo can be removed after Evm/Migration removed from project
-        public string RpcNodeUrl => config.RpcNodeUrl;
+        public Network.Network LastKnownNetwork
+        {
+            get => network;
+            protected set => network = value;
+        }
 
-        public override async Task<Network.Network> DetectNetwork()
+        public async ValueTask WillStartAsync()
+        {
+            network = await RefreshNetwork();
+        }
+
+        public ValueTask WillStopAsync() => new(Task.CompletedTask);
+
+        public async Task<Network.Network> DetectNetwork()
         {
             // TODO: cache
             var chainIdHexString = await Perform<string>("eth_chainId");
@@ -55,20 +67,20 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
                 : new Network.Network { Name = "Unknown", ChainId = chainId };
         }
 
-        public async Task<string[]> ListAccounts()
+        public async Task<Network.Network> RefreshNetwork()
         {
-            var result = await Perform<string[]>("eth_accounts");
-            try
+            var currentNetwork = await DetectNetwork();
+
+            if (network != null && network.ChainId == currentNetwork.ChainId)
             {
-                return result;
+                return network;
             }
-            catch (Exception e)
-            {
-                throw new Exception("bad result from backend", e);
-            }
+
+            network = currentNetwork;
+            return network;
         }
 
-        public override async Task<T> Perform<T>(string method, params object[] parameters)
+        public async Task<T> Perform<T>(string method, params object[] parameters)
         {
             try
             {

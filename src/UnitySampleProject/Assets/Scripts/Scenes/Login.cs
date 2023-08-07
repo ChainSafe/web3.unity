@@ -9,6 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using ChainSafe.GamingSdk.Gelato;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -18,6 +19,8 @@ using Web3Unity.Scripts.Library.Ethers.JsonRpc;
 public class Login : MonoBehaviour
 {
     internal const string PlayerAccountKey = "PlayerAccount";
+    [SerializeField]
+    private string gelatoApiKey = "";
 
     private static Web3Auth web3AuthInstance;
 
@@ -52,7 +55,7 @@ public class Login : MonoBehaviour
         // Remember me only works with the WebPageWallet
         rememberMeToggle.gameObject.SetActive(!IsWebGLBuild());
 
-        Web3Accessor.Instance.Clear();
+        Web3Accessor.Clear();
 
         var savedAccount = PlayerPrefs.GetString(PlayerAccountKey);
         if (!IsWebGLBuild() && !string.IsNullOrEmpty(savedAccount))
@@ -239,7 +242,7 @@ public class Login : MonoBehaviour
 
     private static void PostLogin(Web3 web3)
     {
-        Web3Accessor.Instance.Set(web3);
+        Web3Accessor.Set(web3);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
@@ -247,6 +250,7 @@ public class Login : MonoBehaviour
     {
         services
             .UseUnityEnvironment()
+            .UseGelato(gelatoApiKey)
             .UseJsonRpcProvider();
 
         /* As many contracts as needed may be registered here.
