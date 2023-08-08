@@ -32,7 +32,6 @@ namespace ChainSafe.GamingSdk.EVM.InProcessSigner
                 Eip712TypedDataSigner.Current.SignTypedData(
                     new TypedData<SerializableDomain>
                     {
-                        // TODO: missing the PrimaryType property, not sure if it's required
                         Domain = domain,
                         Types = types,
                         Message = MemberValueFactory.CreateFromMessage(message),

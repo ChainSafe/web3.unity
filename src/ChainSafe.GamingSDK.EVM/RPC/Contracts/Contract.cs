@@ -163,6 +163,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
                 var feeData = await provider.GetFeeData();
                 txReq.MaxFeePerGas = new HexBigInteger(feeData.MaxFeePerGas);
             }
+
             return await provider.EstimateGas(txReq);
         }
 
