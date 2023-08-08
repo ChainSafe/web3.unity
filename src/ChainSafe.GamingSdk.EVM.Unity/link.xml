@@ -1,0 +1,33 @@
+﻿<linker>
+    <!--This is required to avoid code stripping by Unity.
+    Types that are instantiated using DI (therefore reflection)
+    are not getting registered by the static code analyzer-->
+    
+    <!--TODO: would be great to have this automated,
+    possibly by using custom attributes and post-build link.xml generation-->
+    
+    <assembly fullname="ChainSafe.GamingSDK.EVM">
+        <type fullname="ChainSafe.GamingWeb3.Analytics.ApiAnalyticsClient" preserve="all"/>
+        <type fullname="ChainSafe.GamingWeb3.Analytics.NoOpAnalyticsClient" preserve="all"/>
+        <type fullname="Web3Unity.Scripts.Library.Ethers.ChainProvider" preserve="all"/>
+        <type fullname="Web3Unity.Scripts.Library.Ethers.Providers.EventPoller" preserve="all"/>
+        <type fullname="Web3Unity.Scripts.Library.Ethers.Providers.JsonRpcProvider" preserve="all"/>
+    </assembly>
+    <assembly fullname="ChainSafe.GamingSdk.EVM.Unity">
+        <type fullname="ChainSafe.GamingSdk.Evm.Unity.UnityDispatcherAdapter" preserve="all"/>
+        <type fullname="ChainSafe.GamingSdk.Evm.Unity.UnityHttpClient" preserve="all"/>
+        <type fullname="ChainSafe.GamingSdk.Evm.Unity.UnityLogWriter" preserve="all"/>
+        <type fullname="ChainSafe.GamingSdk.Evm.Unity.UnityOperatingSystemMediator" preserve="all"/>
+    </assembly>
+    <assembly fullname="ChainSafe.GamingSDK.EVM.WebPageWallet">
+        <type fullname="ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet.WebPageWallet" preserve="all"/>
+    </assembly>
+    <assembly fullname="ChainSafe.GamingSdk.Gelato">
+        <type fullname="ChainSafe.GamingSdk.Gelato.Gelato" preserve="all"/>
+    </assembly>
+    
+    <!--Assemblies from UnityPackages-->
+    <assembly fullname="chainsafe.web3-unity">
+        <type fullname="ChainSafe.GamingSDK.EVM.WebGLWallet.WebGLWallet" preserve="all"/>
+    </assembly>
+</linker>
