@@ -152,12 +152,17 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
 
             if (signer != null)
             {
-                txReq.From = txReq.From = await signer.GetAddress();
+                txReq.From ??= await signer.GetAddress();
             }
 
             txReq.To ??= address;
             txReq.Data ??= function.GetData(parameters);
 
+            if (txReq.GasPrice == null && txReq.MaxFeePerGas == null)
+            {
+                var feeData = await provider.GetFeeData();
+                txReq.MaxFeePerGas = new HexBigInteger(feeData.MaxFeePerGas);
+            }
             return await provider.EstimateGas(txReq);
         }
 

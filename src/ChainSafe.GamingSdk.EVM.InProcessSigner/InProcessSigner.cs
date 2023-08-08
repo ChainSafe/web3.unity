@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
 using ChainSafe.GamingWeb3;
 using Nethereum.ABI.EIP712;
 using Nethereum.Signer;
@@ -28,15 +27,15 @@ namespace ChainSafe.GamingSdk.EVM.InProcessSigner
             Task.FromResult(messageSigner.EncodeUTF8AndSign(message, privateKey));
 
         // TODO: test this with Gelato
-        public Task<string> SignTypedData(Domain domain, Dictionary<string, MemberDescription[]> types, MemberValue[] message) =>
+        public Task<string> SignTypedData<TStructType>(SerializableDomain domain, Dictionary<string, MemberDescription[]> types, TStructType message) =>
             Task.FromResult(
                 Eip712TypedDataSigner.Current.SignTypedData(
-                    new TypedData<Domain>
+                    new TypedData<SerializableDomain>
                     {
                         // TODO: missing the PrimaryType property, not sure if it's required
                         Domain = domain,
                         Types = types,
-                        Message = message,
+                        Message = MemberValueFactory.CreateFromMessage(message),
                     },
                     privateKey));
 
