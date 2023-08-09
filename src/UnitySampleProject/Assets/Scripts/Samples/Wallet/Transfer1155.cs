@@ -22,6 +22,7 @@ public class Transfer1155 : MonoBehaviour
             amount,
             dataObject
         });
-        Debug.Log(response);
+        Debug.Log("Transfer Length: " + response.Length);
+        Debug.Log("Transfer Rank: " + response.Rank);
     }
 }
