@@ -1,7 +1,7 @@
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using UnityEditor.UIElements;
 
 
 public class CreateDeepLink : EditorWindow
@@ -46,3 +46,4 @@ public class CreateDeepLink : EditorWindow
         EditorUtility.DisplayDialog("Deep link generated", "Uri \"" + uri.text + "\" is successfully generated", "Ok");
     }
 }
+#endif
