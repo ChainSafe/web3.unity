@@ -35,7 +35,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
         public async ValueTask WillStartAsync()
         {
             coreInstance = CreateCoreInstance();
-            
+
             TaskCompletionSource<string> loginTcs = new();
             coreInstance.onLogin += Web3Auth_OnLogin;
             coreInstance.login(config.LoginParams);
@@ -56,12 +56,12 @@ namespace ChainSafe.GamingSdk.Web3Auth
             TaskCompletionSource<object> logoutTcs = new();
             coreInstance.onLogout += Web3Auth_OnLogout;
             coreInstance.logout();
-            
+
             await logoutTcs.Task;
-            
+
             coreInstance.onLogout -= Web3Auth_OnLogout;
             Object.Destroy(coreInstance);
-            
+
             void Web3Auth_OnLogout() => logoutTcs.SetResult(null);
         }
 
@@ -72,13 +72,13 @@ namespace ChainSafe.GamingSdk.Web3Auth
         public Task<string> SignTypedData<TStructData>(SerializableDomain domain, Dictionary<string, MemberDescription[]> types, TStructData message) => signer.SignTypedData(domain, types, message);
 
         public Task<TransactionResponse> SendTransaction(TransactionRequest transaction) => transactionExecutor.SendTransaction(transaction);
-        
+
         private TWeb3Auth CreateCoreInstance()
         {
             var gameObject = new GameObject("Web3Auth", typeof(TWeb3Auth));
             gameObject.hideFlags = HideFlags.HideInHierarchy;
             Object.DontDestroyOnLoad(gameObject);
-            
+
             var instance = gameObject.GetComponent<TWeb3Auth>();
             instance.clientId = config.ClientId;
             instance.redirectUri = config.RedirectUri;

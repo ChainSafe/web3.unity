@@ -64,7 +64,7 @@ public class Login : MonoBehaviour
         web3AuthProvidersDropdown.AddOptions(web3AuthProviderList.Select(x => x.name).ToList());
         web3AuthProvidersDropdown.onValueChanged.AddListener(i => selectedWeb3AuthProvider = i);
     }
-    
+
     T FindComponent<T>(string path) where T : Component
     {
         var result = transform.Find(path)?.GetComponent<T>();

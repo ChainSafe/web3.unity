@@ -33,9 +33,9 @@ public class Web3Auth : MonoBehaviour
 
     public void Awake()
     {
-        if (!initializeOnStart) 
+        if (!initializeOnStart)
             return;
-        
+
         Initialize();
     }
 
