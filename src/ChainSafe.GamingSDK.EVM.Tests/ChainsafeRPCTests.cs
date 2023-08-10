@@ -1,16 +1,10 @@
-﻿using System.Threading.Tasks;
-using ChainSafe.GamingSDK.EVM.Web3.Core;
-using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
-using ChainSafe.GamingWeb3.Build;
-using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using System.Diagnostics;
+using ChainSafe.GamingSDK.EVM.Tests.Node;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
 using NUnit.Framework;
-using Web3Unity.Scripts.Library.Ethers.Contracts;
-using Web3Unity.Scripts.Library.Ethers.JsonRpc;
-using Web3Unity.Scripts.Library.Ethers.NetCore;
 using Web3Unity.Scripts.Library.Ethers.Providers;
-using Web3Unity.Scripts.Library.Ethers.Signers;
 using Web3Unity.Scripts.Library.Ethers.Transactions;
 using Web3Unity.Scripts.Library.Ethers.Utils;
 
@@ -24,6 +18,8 @@ namespace ChainSafe.GamingSDK.EVM.Tests
         // todo: we need to actually seed the Ganache instance with some transactions before the tests will run
         private Web3 web3;
         private string walletAddress;
+
+        private Process node;
         /* private string contractAddress; */
         /*
         private string nftAddress;
@@ -31,21 +27,38 @@ namespace ChainSafe.GamingSDK.EVM.Tests
         */
 
         [OneTimeSetUp]
-        public async Task SetUp()
+        public void SetUp()
         {
-            web3 = await Web3Util.CreateWeb3();
-            var secondAccount = await Web3Util.CreateWeb3(1);
+            node = Emulator.CreateInstance();
 
-            walletAddress = await web3.Signer.GetAddress();
-            var toAddress = await secondAccount.Signer.GetAddress();
+            // We can't get a .Result from ValueTask
+            // that is why we need to explicitly wait for
+            // it to finish
+            var web3Task = Web3Util.CreateWeb3().AsTask();
+            web3Task.Wait();
+            web3 = web3Task.Result;
+
+            var secondAccountTask = Web3Util.CreateWeb3(1).AsTask();
+            secondAccountTask.Wait();
+
+            var walletAddressTask = web3.Signer.GetAddress();
+            walletAddressTask.Wait();
+
+            walletAddress = walletAddressTask.Result;
+            var toAddressTask = secondAccountTask.Result.Signer.GetAddress();
+            toAddressTask.Wait();
 
             var amount = new HexBigInteger(1000000);
-            var tx = web3.TransactionExecutor.SendTransaction(new TransactionRequest
+            var txTask = web3.TransactionExecutor.SendTransaction(new TransactionRequest
             {
-                To = toAddress,
+                To = toAddressTask.Result,
                 Value = amount,
-            }).Result;
-            await tx.Wait();
+            });
+            txTask.Wait();
+
+            Console.Out.Write("Setup Transaction Hash: {0}", txTask.Result.Hash);
+
+            // web3.ContractBuilder.Build()
 
             /*
             nftAddress = "0xc81fa2eacc1c45688d481b11ce94c24a136e125d";
@@ -59,12 +72,18 @@ namespace ChainSafe.GamingSDK.EVM.Tests
             /* contractAddress = "0x2061c2B28F007DD0eD5064A61d352521CC1d2827"; */
         }
 
+        [OneTimeTearDown]
+        public void Cleanup()
+        {
+            node?.Kill();
+        }
+
         [Test]
         public void GetNetworkTest()
         {
             var network = web3.RpcProvider.GetNetwork().Result;
-            Assert.AreEqual("Geth Testnet", network.Name);
-            Assert.AreEqual(1337, network.ChainId);
+            Assert.AreEqual("GoChain Testnet", network.Name);
+            Assert.AreEqual(31337, network.ChainId);
         }
 
         [Test]
@@ -72,7 +91,7 @@ namespace ChainSafe.GamingSDK.EVM.Tests
         {
             var balance = web3.RpcProvider.GetBalance(walletAddress).Result;
             var balanceFormatted = Units.FormatEther(balance);
-            Assert.Greater(balanceFormatted, "0");
+            Assert.Greater(balanceFormatted, "9990");
         }
 
         [Test]
@@ -87,7 +106,7 @@ namespace ChainSafe.GamingSDK.EVM.Tests
         {
             var latestBlock = web3.RpcProvider.GetBlock().Result;
             Assert.AreEqual("0x0000000000000000", latestBlock.Nonce);
-            Assert.AreEqual("6721975", latestBlock.GasLimit.ToString());
+            Assert.AreEqual("30000000", latestBlock.GasLimit.ToString());
             Assert.True(latestBlock.BlockHash.StartsWith("0x"));
             Assert.True(latestBlock.ParentHash.StartsWith("0x"));
             Assert.IsNotEmpty(latestBlock.Number.ToString());
@@ -117,7 +136,7 @@ namespace ChainSafe.GamingSDK.EVM.Tests
             var blockWithTx = web3.RpcProvider.GetBlockWithTransactions(blockParameter).Result;
 
             var firstTransaction = blockWithTx.Transactions[0];
-            Assert.AreEqual(1337, firstTransaction.ChainId.ToUlong());
+            Assert.AreEqual(31337, firstTransaction.ChainId.ToUlong());
             Assert.AreEqual(currentBlockNumber, firstTransaction.BlockNumber);
         }
 
@@ -222,8 +241,8 @@ namespace ChainSafe.GamingSDK.EVM.Tests
         [Test]
         public void GetAccountsTest()
         {
-            var accounts = (web3.RpcProvider as JsonRpcProvider).ListAccounts().Result;
-            Assert.AreEqual(10, accounts.Length);
+            var accounts = (web3.RpcProvider as JsonRpcProvider)?.ListAccounts().Result;
+            Assert.AreEqual(10, accounts?.Length);
             foreach (var account in accounts)
             {
                 var accountBalance = web3.RpcProvider.GetBalance(account).Result;

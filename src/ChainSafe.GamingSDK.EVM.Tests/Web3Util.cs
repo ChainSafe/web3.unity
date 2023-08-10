@@ -1,6 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
 using ChainSafe.GamingSDK.EVM.Web3.Core;
 using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
+using ChainSafe.GamingWeb3;
 using ChainSafe.GamingWeb3.Build;
 using Microsoft.Extensions.DependencyInjection;
 using Web3Unity.Scripts.Library.Ethers.JsonRpc;
@@ -14,20 +17,18 @@ namespace ChainSafe.GamingSDK.EVM.Tests
 
     internal static class Web3Util
     {
-        public static ValueTask<Web3> CreateWeb3() => CreateWeb3(0);
+        public static ValueTask<Web3> CreateWeb3(int accountIndex = 0, uint port = 8545) => CreateWeb3(new JsonRpcWalletConfiguration() { AccountIndex = accountIndex }, port);
 
-        public static ValueTask<Web3> CreateWeb3(int accountIndex) => CreateWeb3(new JsonRpcWalletConfiguration() { AccountIndex = accountIndex });
-
-        public static ValueTask<Web3> CreateWeb3(JsonRpcWalletConfiguration jsonRpcWalletConfiguration)
+        private static ValueTask<Web3> CreateWeb3(JsonRpcWalletConfiguration jsonRpcWalletConfiguration, uint port)
         {
             return new Web3Builder(
                 new ProjectConfig { ProjectId = string.Empty },
                 new ChainConfig
                 {
-                    Chain = "Ganache",
-                    ChainId = "88888888",
-                    Network = "Geth Testnet",
-                    Rpc = "http://127.0.0.1:7545",
+                    Chain = "Anvil",
+                    ChainId = "31337",
+                    Network = "GoChain Testnet",
+                    Rpc = $"http://127.0.0.1:{port}",
                 })
                 .Configure(services =>
                 {

@@ -1,17 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
-using ChainSafe.GamingSDK.EVM.Web3.Core;
-using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
+﻿using System.Diagnostics;
+using ChainSafe.GamingSDK.EVM.Tests.Node;
 using ChainSafe.GamingWeb3;
-using ChainSafe.GamingWeb3.Build;
-using Microsoft.Extensions.DependencyInjection;
 using Nethereum.Hex.HexTypes;
 using NUnit.Framework;
-using Web3Unity.Scripts.Library.Ethers.JsonRpc;
-using Web3Unity.Scripts.Library.Ethers.NetCore;
-using Web3Unity.Scripts.Library.Ethers.Providers;
-using Web3Unity.Scripts.Library.Ethers.Signers;
 using Web3Unity.Scripts.Library.Ethers.Transactions;
+using static ChainSafe.GamingSDK.EVM.Tests.Web3Util;
 
 namespace ChainSafe.GamingSDK.EVM.Tests
 {
@@ -22,12 +15,21 @@ namespace ChainSafe.GamingSDK.EVM.Tests
     {
         private Web3 web3;
         private Web3 secondAccount;
+        private Process node;
 
         [OneTimeSetUp]
-        public void SetUp()
+        public async void SetUp()
         {
-            web3 = Web3Util.CreateWeb3().Result;
-            secondAccount = Web3Util.CreateWeb3(1).Result;
+            const uint port = 8546;
+            node = Emulator.CreateInstance(port);
+            web3 = await CreateWeb3(0, port);
+            secondAccount = await CreateWeb3(1, port);
+        }
+
+        [TearDown]
+        public void Cleanup()
+        {
+            node?.Kill();
         }
 
         [Test]
@@ -44,15 +46,18 @@ namespace ChainSafe.GamingSDK.EVM.Tests
             {
                 To = toAddress,
                 Value = amount,
-            }).Result;
-            Assert.True(tx.Hash.StartsWith("0x"));
+            });
+            tx.Wait();
 
-            var txReceipt = tx.Wait().Result;
+            Assert.True(tx.Result.Hash.StartsWith("0x"));
 
-            Assert.AreEqual(txReceipt.Confirmations, 1);
+            var txReceipt = web3.RpcProvider.GetTransactionReceipt(tx.Result.Hash);
+            txReceipt.Wait();
+
+            Assert.AreEqual(txReceipt.Result.Confirmations, 1);
             Assert.AreEqual(toInitialBalance + amount.Value, web3.RpcProvider.GetBalance(toAddress).Result.Value);
             Assert.AreEqual(
-                fromInitialBalance - amount.Value - (txReceipt.CumulativeGasUsed.Value * txReceipt.EffectiveGasPrice.Value),
+                fromInitialBalance - amount.Value - (txReceipt.Result.CumulativeGasUsed.Value * txReceipt.Result.EffectiveGasPrice.Value),
                 web3.RpcProvider.GetBalance(fromAddress).Result.Value);
         }
 
