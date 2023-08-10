@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
 using ChainSafe.GamingWeb3;
+using Nethereum.Contracts.Standards.ENS.Registrar.ContractDefinition;
+using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
 using Nethereum.Web3.Accounts;
 using Web3Unity.Scripts.Library.Ethers.Providers;
@@ -39,9 +39,15 @@ namespace ChainSafe.GamingSdk.EVM.InProcessTransactionExecutor
             {
                 transaction.From = accountAddress;
             }
-            else if (transaction.From != accountAddress)
+
+            if (transaction.GasLimit == null && transaction.MaxFeePerGas == null)
             {
-                throw new Web3Exception("Cannot send trasnaction from other account");
+                var feeStrategy = web3.FeeSuggestion.GetSimpleFeeSuggestionStrategy();
+                var feeData = await feeStrategy.SuggestFeeAsync();
+                if (feeData.MaxFeePerGas is not null)
+                {
+                    transaction.MaxFeePerGas = new HexBigInteger(feeData.MaxFeePerGas.Value);
+                }
             }
 
             var txInput = new TransactionInput
