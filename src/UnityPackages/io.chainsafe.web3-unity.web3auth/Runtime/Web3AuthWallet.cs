@@ -7,9 +7,11 @@ using Nethereum.ABI.EIP712;
 using Nethereum.Signer;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UnityEngine;
 using Web3Unity.Scripts.Library.Ethers.Providers;
 using Web3Unity.Scripts.Library.Ethers.Signers;
 using Web3Unity.Scripts.Library.Ethers.Transactions;
+using TWeb3Auth = Web3Auth;
 
 namespace ChainSafe.GamingSdk.Web3Auth
 {
@@ -17,6 +19,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
     {
         private InProcessSigner signer;
         private InProcessTransactionExecutor transactionExecutor;
+        private TWeb3Auth coreInstance;
 
         private readonly Web3AuthWalletConfig config;
         private readonly IChainConfig chainConfig;
@@ -31,16 +34,13 @@ namespace ChainSafe.GamingSdk.Web3Auth
 
         public async ValueTask WillStartAsync()
         {
+            coreInstance = CreateCoreInstance();
+            
             TaskCompletionSource<string> loginTcs = new();
-
-            config.Web3Auth.setOptions(config.Web3AuthOptions);
-            config.Web3Auth.onLogin += Web3Auth_OnLogin;
-
-            config.Web3Auth.login(config.LoginParams);
-
+            coreInstance.onLogin += Web3Auth_OnLogin;
+            coreInstance.login(config.LoginParams);
             var privateKeyString = await loginTcs.Task;
-
-            config.Web3Auth.onLogin -= Web3Auth_OnLogin;
+            coreInstance.onLogin -= Web3Auth_OnLogin;
 
             var privateKey = new EthECKey(privateKeyString);
             var signerConfig = new InProcessSignerConfig { PrivateKey = privateKey };
@@ -48,28 +48,21 @@ namespace ChainSafe.GamingSdk.Web3Auth
 
             transactionExecutor = new(signer, chainConfig, rpcProvider);
 
-            void Web3Auth_OnLogin(Web3AuthResponse response)
-            {
-                loginTcs.SetResult(response.privKey);
-            }
+            void Web3Auth_OnLogin(Web3AuthResponse response) => loginTcs.SetResult(response.privKey);
         }
 
         public async ValueTask WillStopAsync()
         {
             TaskCompletionSource<object> logoutTcs = new();
-
-            config.Web3Auth.onLogout += Web3Auth_OnLogout;
-
-            config.Web3Auth.logout();
-
+            coreInstance.onLogout += Web3Auth_OnLogout;
+            coreInstance.logout();
+            
             await logoutTcs.Task;
-
-            config.Web3Auth.onLogout -= Web3Auth_OnLogout;
-
-            void Web3Auth_OnLogout()
-            {
-                logoutTcs.SetResult(null);
-            }
+            
+            coreInstance.onLogout -= Web3Auth_OnLogout;
+            Object.Destroy(coreInstance);
+            
+            void Web3Auth_OnLogout() => logoutTcs.SetResult(null);
         }
 
         public Task<string> GetAddress() => signer.GetAddress();
@@ -79,5 +72,21 @@ namespace ChainSafe.GamingSdk.Web3Auth
         public Task<string> SignTypedData<TStructData>(SerializableDomain domain, Dictionary<string, MemberDescription[]> types, TStructData message) => signer.SignTypedData(domain, types, message);
 
         public Task<TransactionResponse> SendTransaction(TransactionRequest transaction) => transactionExecutor.SendTransaction(transaction);
+        
+        private TWeb3Auth CreateCoreInstance()
+        {
+            var gameObject = new GameObject("Web3Auth", typeof(TWeb3Auth));
+            gameObject.hideFlags = HideFlags.HideInHierarchy;
+            Object.DontDestroyOnLoad(gameObject);
+            
+            var instance = gameObject.GetComponent<TWeb3Auth>();
+            instance.clientId = config.ClientId;
+            instance.redirectUri = config.RedirectUri;
+            instance.network = config.Network;
+            instance.Initialize();
+            instance.setOptions(config.Web3AuthOptions);
+
+            return instance;
+        }
     }
 }

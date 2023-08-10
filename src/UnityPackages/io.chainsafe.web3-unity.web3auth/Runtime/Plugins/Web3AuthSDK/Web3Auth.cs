@@ -24,18 +24,22 @@ public class Web3Auth : MonoBehaviour
     public event Action<Web3AuthResponse> onLogin;
     public event Action onLogout;
 
-    [SerializeField]
-    private string clientId;
-
-    [SerializeField]
-    private string redirectUri;
-
-    [SerializeField]
-    private Web3Auth.Network network;
+    public bool initializeOnStart;
+    public string clientId;
+    public string redirectUri;
+    public Web3Auth.Network network;
 
     private static readonly Queue<Action> _executionQueue = new Queue<Action>();
 
     public void Awake()
+    {
+        if (!initializeOnStart) 
+            return;
+        
+        Initialize();
+    }
+
+    public void Initialize()
     {
         this.initParams = new Dictionary<string, object>();
 

@@ -22,8 +22,6 @@ public class Login : MonoBehaviour
     [SerializeField]
     private string gelatoApiKey = "";
 
-    private static Web3Auth web3AuthInstance;
-
     private Text errorText;
     private Toggle rememberMeToggle;
 
@@ -42,8 +40,6 @@ public class Login : MonoBehaviour
 
     void Start()
     {
-        FindWeb3AuthInstance();
-
         errorText = FindComponent<Text>("ErrorText");
         rememberMeToggle = FindComponent<Toggle>("RemoteWallet/RememberMe");
 
@@ -68,39 +64,7 @@ public class Login : MonoBehaviour
         web3AuthProvidersDropdown.AddOptions(web3AuthProviderList.Select(x => x.name).ToList());
         web3AuthProvidersDropdown.onValueChanged.AddListener(i => selectedWeb3AuthProvider = i);
     }
-
-    private static void FindWeb3AuthInstance()
-    {
-        // We need to keep the same instance of Web3Auth alive throughout the application's lifetime
-        var web3Auths = FindObjectsByType<Web3Auth>(FindObjectsSortMode.None);
-
-        if (web3Auths.Length == 0)
-        {
-            Debug.LogWarning("No Web3Auth objects found in scene");
-        }
-
-        if (web3AuthInstance == null)
-        {
-            web3AuthInstance = web3Auths[0];
-            DontDestroyOnLoad(web3AuthInstance.gameObject);
-
-            for (int i = 1; i < web3Auths.Length; i++)
-            {
-                Destroy(web3Auths[i].gameObject);
-            }
-        }
-        else
-        {
-            for (int i = 0; i < web3Auths.Length; ++i)
-            {
-                if (web3Auths[i] != web3AuthInstance)
-                {
-                    Destroy(web3Auths[i].gameObject);
-                }
-            }
-        }
-    }
-
+    
     T FindComponent<T>(string path) where T : Component
     {
         var result = transform.Find(path)?.GetComponent<T>();
@@ -202,7 +166,10 @@ public class Login : MonoBehaviour
 
             var web3AuthConfig = new Web3AuthWalletConfig
             {
-                Web3Auth = web3AuthInstance,
+                // todo: will move out to inspector in #393
+                ClientId = "BIM5jpn-sejNdSrW9LMf5YSIieSluWoEZ2Fp0YmuOb_E0oCXO1vCj_mtQqz6qXYLOEqtQdLHA3OQ-vseahybUww",
+                RedirectUri = "torusapp://io.chainsafe.gamingsdk.sampleproject/auth",
+                Network = Web3Auth.Network.CYAN,
                 Web3AuthOptions = new()
                 {
                     whiteLabel = new()
