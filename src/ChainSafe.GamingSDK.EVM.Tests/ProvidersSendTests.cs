@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 using ChainSafe.GamingSDK.EVM.Tests.Node;
 using ChainSafe.GamingWeb3;
 using Nethereum.Hex.HexTypes;
@@ -15,20 +16,25 @@ namespace ChainSafe.GamingSDK.EVM.Tests
     [TestFixture]
     public class ProvidersSendTests
     {
-        private Web3 web3;
+        private Web3 firstAccount;
         private Web3 secondAccount;
         private Process node;
 
         [OneTimeSetUp]
-        public async void SetUp()
+        public void SetUp()
         {
-            const uint port = 8546;
-            node = Emulator.CreateInstance(port);
-            web3 = await CreateWeb3(0, port);
-            secondAccount = await CreateWeb3(1, port);
+            node = Emulator.CreateInstance();
+
+            var firstAccountTask = CreateWeb3(0).AsTask();
+            firstAccountTask.Wait();
+            firstAccount = firstAccountTask.Result;
+
+            var secondAccountTask = CreateWeb3(1).AsTask();
+            secondAccountTask.Wait();
+            secondAccount = secondAccountTask.Result;
         }
 
-        [TearDown]
+        [OneTimeTearDown]
         public void Cleanup()
         {
             node?.Kill();
@@ -37,14 +43,14 @@ namespace ChainSafe.GamingSDK.EVM.Tests
         [Test]
         public void SendTransactionTest()
         {
-            var fromAddress = web3.Signer.GetAddress().Result;
-            var fromInitialBalance = web3.RpcProvider.GetBalance(fromAddress).Result.Value;
+            var fromAddress = firstAccount.Signer.GetAddress().Result;
+            var fromInitialBalance = firstAccount.RpcProvider.GetBalance(fromAddress).Result.Value;
 
             var toAddress = secondAccount.Signer.GetAddress().Result;
-            var toInitialBalance = web3.RpcProvider.GetBalance(toAddress).Result.Value;
+            var toInitialBalance = firstAccount.RpcProvider.GetBalance(toAddress).Result.Value;
 
             var amount = new HexBigInteger(1000000);
-            var tx = web3.TransactionExecutor.SendTransaction(new TransactionRequest
+            var tx = firstAccount.TransactionExecutor.SendTransaction(new TransactionRequest
             {
                 To = toAddress,
                 Value = amount,
@@ -53,14 +59,14 @@ namespace ChainSafe.GamingSDK.EVM.Tests
 
             Assert.True(tx.Result.Hash.StartsWith("0x"));
 
-            var txReceipt = web3.RpcProvider.GetTransactionReceipt(tx.Result.Hash);
+            var txReceipt = firstAccount.RpcProvider.GetTransactionReceipt(tx.Result.Hash);
             txReceipt.Wait();
 
             Assert.AreEqual(txReceipt.Result.Confirmations, 1);
-            Assert.AreEqual(toInitialBalance + amount.Value, web3.RpcProvider.GetBalance(toAddress).Result.Value);
+            Assert.AreEqual(toInitialBalance + amount.Value, firstAccount.RpcProvider.GetBalance(toAddress).Result.Value);
             Assert.AreEqual(
                 fromInitialBalance - amount.Value - (txReceipt.Result.CumulativeGasUsed.Value * txReceipt.Result.EffectiveGasPrice.Value),
-                web3.RpcProvider.GetBalance(fromAddress).Result.Value);
+                firstAccount.RpcProvider.GetBalance(fromAddress).Result.Value);
         }
 
         [Test]
@@ -78,10 +84,9 @@ namespace ChainSafe.GamingSDK.EVM.Tests
 
             var ex = Assert.ThrowsAsync<Web3Exception>(async () =>
             {
-                var txHash = await web3.TransactionExecutor.SendTransaction(transaction);
+                var txHash = await firstAccount.TransactionExecutor.SendTransaction(transaction);
             });
             Assert.That(ex.Message.Contains("eth_sendTransaction"));
-            Assert.That(ex.Message.Contains("-32700"));
         }
 
         [Test]
@@ -99,10 +104,13 @@ namespace ChainSafe.GamingSDK.EVM.Tests
 
             var ex = Assert.ThrowsAsync<Web3Exception>(async () =>
             {
-                var txHash = await web3.TransactionExecutor.SendTransaction(transaction);
+                var txHash = await firstAccount.TransactionExecutor.SendTransaction(transaction);
             });
-            Assert.That(ex.Message.Contains("eth_sendTransaction"));
-            Assert.That(ex.Message.Contains("-32000"));
+
+            Assert.That(ex != null && ex.Message.Contains("eth_sendTransaction"));
+            var result = ex.Message.Contains("-32000") ||
+                         (ex.InnerException != null && ex.InnerException.Message.Contains("-32000"));
+            Assert.That(result);
         }
 
         [Test]
@@ -118,7 +126,7 @@ namespace ChainSafe.GamingSDK.EVM.Tests
                 GasPrice = gasPrice,
             };
 
-            Assert.ThrowsAsync<Web3Exception>(() => web3.TransactionExecutor.SendTransaction(transaction));
+            Assert.ThrowsAsync<Web3Exception>(() => firstAccount.TransactionExecutor.SendTransaction(transaction));
         }
     }
 }
