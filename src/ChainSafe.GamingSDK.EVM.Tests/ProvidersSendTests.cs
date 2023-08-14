@@ -3,11 +3,13 @@ using ChainSafe.GamingSDK.EVM.Tests.Node;
 using ChainSafe.GamingWeb3;
 using Nethereum.Hex.HexTypes;
 using NUnit.Framework;
+using Web3Unity.Scripts.Library.Ethers.Providers;
 using Web3Unity.Scripts.Library.Ethers.Transactions;
 using static ChainSafe.GamingSDK.EVM.Tests.Web3Util;
 
 namespace ChainSafe.GamingSDK.EVM.Tests
 {
+    using static RpcProviderExtensions;
     using Web3 = ChainSafe.GamingWeb3.Web3;
 
     [TestFixture]

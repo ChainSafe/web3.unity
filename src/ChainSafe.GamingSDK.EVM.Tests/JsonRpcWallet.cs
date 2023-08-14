@@ -7,6 +7,7 @@ using ChainSafe.GamingWeb3;
 using Nethereum.ABI.EIP712;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
+using Nethereum.Signer.EIP712;
 using Web3Unity.Scripts.Library.Ethers.Providers;
 using TransactionRequest = Web3Unity.Scripts.Library.Ethers.Transactions.TransactionRequest;
 using TransactionResponse = Web3Unity.Scripts.Library.Ethers.Transactions.TransactionResponse;
@@ -104,13 +105,20 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
 
         private async Task<string> SignMessageImpl(string hexMessage)
         {
-            var address = await GetAddress();
-            return await provider.Perform<string>("personal_sign", hexMessage, address.ToLower());
+            var adr = await GetAddress();
+            return await provider.Perform<string>("personal_sign", hexMessage, adr.ToLower());
         }
 
-        public Task<string> SignTypedData(Domain domain, Dictionary<string, MemberDescription[]> types, MemberValue[] message)
+        public Task<string> SignTypedData<TStructType>(SerializableDomain domain, Dictionary<string, MemberDescription[]> types, TStructType message)
         {
-            throw new NotImplementedException("FXIME @Ryan");
+            var data = Eip712TypedDataSigner.Current.EncodeTypedData(
+                    new TypedData<SerializableDomain>
+                    {
+                        Domain = domain,
+                        Types = types,
+                        Message = MemberValueFactory.CreateFromMessage(message),
+                    });
+            return SignMessage(data);
         }
     }
 }

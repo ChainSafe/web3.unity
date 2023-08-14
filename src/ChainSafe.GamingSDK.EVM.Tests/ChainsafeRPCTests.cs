@@ -1,10 +1,11 @@
-using Nethereum.Hex.HexTypes;
 using System;
 using System.Diagnostics;
 using ChainSafe.GamingSDK.EVM.Tests.Node;
+using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
 using NUnit.Framework;
 using Web3Unity.Scripts.Library.Ethers.Providers;
+using Web3Unity.Scripts.Library.Ethers.Transactions;
 using Web3Unity.Scripts.Library.Ethers.Utils;
 
 namespace ChainSafe.GamingSDK.EVM.Tests
@@ -80,7 +81,7 @@ namespace ChainSafe.GamingSDK.EVM.Tests
         [Test]
         public void GetNetworkTest()
         {
-            var network = web3.RpcProvider.GetNetwork().Result;
+            var network = web3.RpcProvider.LastKnownNetwork;
             Assert.AreEqual("GoChain Testnet", network.Name);
             Assert.AreEqual(31337, network.ChainId);
         }
