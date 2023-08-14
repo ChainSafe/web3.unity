@@ -1,11 +1,10 @@
-﻿using System;
+using Nethereum.Hex.HexTypes;
+using System;
 using System.Diagnostics;
 using ChainSafe.GamingSDK.EVM.Tests.Node;
-using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
 using NUnit.Framework;
 using Web3Unity.Scripts.Library.Ethers.Providers;
-using Web3Unity.Scripts.Library.Ethers.Transactions;
 using Web3Unity.Scripts.Library.Ethers.Utils;
 
 namespace ChainSafe.GamingSDK.EVM.Tests

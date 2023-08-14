@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
+using ChainSafe.GamingSDK.EVM.Web3.Evm.EventPoller;
 using ChainSafe.GamingWeb3.Environment;
 using Microsoft.Extensions.DependencyInjection;
 using Web3Unity.Scripts.Library.Ethers;
@@ -21,6 +22,7 @@ namespace ChainSafe.GamingWeb3.Build
 
             // Bind default services
             serviceCollection
+                .UseEventPoller()
                 .AddSingleton<ChainProvider>()
                 .AddSingleton<IContractBuilder, ContractBuilder>();
         }
@@ -29,6 +31,16 @@ namespace ChainSafe.GamingWeb3.Build
         public Web3Builder(IProjectConfig projectConfig, IChainConfig chainConfig)
             : this()
         {
+            if (projectConfig == null)
+            {
+                throw new Web3Exception($"{nameof(IProjectConfig)} is required for Web3 to work.");
+            }
+
+            if (chainConfig == null)
+            {
+                throw new Web3Exception($"{nameof(IChainConfig)} is required for Web3 to work.");
+            }
+
             serviceCollection.AddSingleton(projectConfig);
             serviceCollection.AddSingleton(chainConfig);
         }

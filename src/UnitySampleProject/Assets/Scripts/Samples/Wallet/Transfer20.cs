@@ -15,6 +15,7 @@ public class Transfer20 : MonoBehaviour
              toAccount,
              amount
         });
-        Debug.Log(response);
+        Debug.Log("Transfer Length: " + response.Length);
+        Debug.Log("Transfer Rank: " + response.Rank);
     }
 }

@@ -1,0 +1,7 @@
+﻿<linker>
+    <assembly fullname="ChainSafe.GamingSDK.EVM">
+        <type fullname="Web3Unity.Scripts.Library.Ethers.Providers.JsonRpcProvider">
+            <method signature="System.Void .ctor(Web3Unity.Scripts.Library.Ethers.Providers.JsonRpcProviderConfig, ChainSafe.GamingWeb3.Environment.Web3Environment, Web3Unity.Scripts.Library.Ethers.ChainProvider, ChainSafe.GamingWeb3.IChainConfig)"/>
+        </type>
+    </assembly>
+</linker>

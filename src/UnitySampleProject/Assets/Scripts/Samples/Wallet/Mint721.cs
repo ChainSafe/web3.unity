@@ -18,6 +18,7 @@ public class Mint721 : MonoBehaviour
              uri
         });
 
-        Debug.Log(response);
+        Debug.Log("Mint Length: " + response.Length);
+        Debug.Log("Mint Rank: " + response.Rank);
     }
 }
