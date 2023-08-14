@@ -10,8 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ChainSafe.GamingSDK.EVM.WebPageWallet\ChainSafe.GamingSDK.EVM.WebPageWallet.csproj" />
     <ProjectReference Include="..\ChainSafe.GamingSDK.EVM\ChainSafe.GamingSDK.EVM.csproj" />
+    <ProjectReference Include="..\ChainSafe.GamingSdk.EVM.InProcessSigner\ChainSafe.GamingSdk.EVM.InProcessSigner.csproj" />
+    <ProjectReference Include="..\ChainSafe.GamingSdk.EVM.InProcessTransactionExecutor\ChainSafe.GamingSdk.EVM.InProcessTransactionExecutor.csproj" />
+    <ProjectReference Include="..\ChainSafe.GamingSDK.EVM.WebPageWallet\ChainSafe.GamingSDK.EVM.WebPageWallet.csproj" />
     <ProjectReference Include="..\ChainSafe.GamingSdk.EVM.Unity.ThirdParty\ChainSafe.GamingSdk.EVM.Unity.ThirdParty.csproj" />
     <ProjectReference Include="..\ChainSafe.GamingSdk.Gelato\ChainSafe.GamingSdk.Gelato.csproj" />
   </ItemGroup>

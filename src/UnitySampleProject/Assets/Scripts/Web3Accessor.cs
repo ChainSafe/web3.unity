@@ -1,5 +1,6 @@
 using ChainSafe.GamingWeb3;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Web3Accessor : MonoBehaviour
 {
@@ -13,6 +14,18 @@ public class Web3Accessor : MonoBehaviour
         {
             if (!instance)
             {
+#if UNITY_EDITOR
+                // Having to switch to the first scene while working is a pain.
+                // Instead, we refuse to create an instance if the editor is
+                // currently running in any other scene and load the first scene
+                // instead.
+                if (SceneManager.GetActiveScene().buildIndex != 0)
+                {
+                    SceneManager.LoadScene(0);
+                    // Throw exception to prevent rest of code from running
+                    throw new System.Exception("Refusing to create Web3 instance since current scene is not first scene");
+                }
+#endif
                 var go = new GameObject("Web3Accessor");
                 DontDestroyOnLoad(go);
                 instance = go.AddComponent<Web3Accessor>();

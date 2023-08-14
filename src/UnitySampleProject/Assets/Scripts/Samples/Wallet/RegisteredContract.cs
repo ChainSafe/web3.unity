@@ -9,6 +9,7 @@ public class RegisteredContract : MonoBehaviour
         var account = await Web3Accessor.Web3.Signer.GetAddress();
         var contract = Web3Accessor.Web3.ContractBuilder.Build("shiba");
         var response = await contract.Call(EthMethod.BalanceOf, new[] { account });
-        Debug.Log(response);
+        Debug.Log("Contract Length: " + response.Length);
+        Debug.Log("Contract Rank: " + response.Rank);
     }
 }

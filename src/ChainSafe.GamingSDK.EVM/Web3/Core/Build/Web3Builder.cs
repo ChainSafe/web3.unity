@@ -31,6 +31,16 @@ namespace ChainSafe.GamingWeb3.Build
         public Web3Builder(IProjectConfig projectConfig, IChainConfig chainConfig)
             : this()
         {
+            if (projectConfig == null)
+            {
+                throw new Web3Exception($"{nameof(IProjectConfig)} is required for Web3 to work.");
+            }
+
+            if (chainConfig == null)
+            {
+                throw new Web3Exception($"{nameof(IChainConfig)} is required for Web3 to work.");
+            }
+
             serviceCollection.AddSingleton(projectConfig);
             serviceCollection.AddSingleton(chainConfig);
         }
