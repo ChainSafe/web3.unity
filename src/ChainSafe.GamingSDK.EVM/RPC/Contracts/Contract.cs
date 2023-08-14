@@ -113,7 +113,9 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
             if (txReq.GasPrice == null && txReq.MaxFeePerGas == null)
             {
                 var feeData = await provider.GetFeeData();
-                txReq.MaxFeePerGas = new HexBigInteger(feeData.MaxFeePerGas);
+
+                // txReq.MaxFeePerGas = new HexBigInteger(feeData.MaxFeePerGas);
+                txReq.GasPrice = new HexBigInteger(feeData.GasPrice);
             }
 
             txReq.GasLimit ??= await provider.EstimateGas(txReq);

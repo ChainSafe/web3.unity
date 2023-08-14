@@ -77,26 +77,16 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
 
         private async Task<string> SendUncheckedTransaction(TransactionRequest transaction)
         {
-            var fromAddress = (await GetAddress()).ToLower();
+            if (transaction.From == null)
+            {
+                var fromAddress = (await GetAddress()).ToLower();
+                transaction.From = fromAddress;
+            }
 
             if (transaction.GasLimit == null)
             {
-                var estimate = (TransactionRequest)transaction.Clone();
-                estimate.From = fromAddress;
-                transaction.GasLimit = await provider.EstimateGas(transaction);
-                transaction.GasLimit = new HexBigInteger(transaction.GasLimit.Value * 2);
-            }
-
-            if (transaction.From != null)
-            {
-                if (transaction.From.ToLower() != fromAddress)
-                {
-                    throw new Exception("from address mismatch");
-                }
-            }
-            else
-            {
-                transaction.From = fromAddress;
+                var feeData = await provider.GetFeeData();
+                transaction.MaxFeePerGas = new HexBigInteger(feeData.MaxFeePerGas);
             }
 
             var rpcTxParams = transaction.ToRPCParam();

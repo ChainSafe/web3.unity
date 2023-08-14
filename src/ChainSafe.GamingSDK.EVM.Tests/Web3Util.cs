@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Text.Json;
 using System.Threading.Tasks;
 using ChainSafe.GamingSDK.EVM.Web3.Core;
 using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
-using ChainSafe.GamingWeb3;
 using ChainSafe.GamingWeb3.Build;
 using Microsoft.Extensions.DependencyInjection;
+using Web3Unity.Scripts.Library.Ethers.Contracts.Builders;
 using Web3Unity.Scripts.Library.Ethers.JsonRpc;
 using Web3Unity.Scripts.Library.Ethers.NetCore;
 using Web3Unity.Scripts.Library.Ethers.Providers;
@@ -39,6 +39,20 @@ namespace ChainSafe.GamingSDK.EVM.Tests
                     services.AddSingleton<ISigner, ITransactionExecutor, ILifecycleParticipant, JsonRpcWallet>();
                 })
                 .BuildAsync();
+        }
+
+        public static string DeployContracts(Web3 web3, string bytecode, string abi)
+        {
+            var builder = new DeployContractTransactionBuilder();
+            var txReq = builder.BuildTransaction(bytecode, abi, null);
+            Console.Out.Write(txReq);
+
+            var txTask = web3.TransactionExecutor.SendTransaction(txReq);
+            txTask.Wait();
+
+            var receiptTask = web3.RpcProvider.GetTransactionReceipt(txTask.Result.Hash);
+            receiptTask.Wait();
+            return receiptTask.Result.ContractAddress ?? string.Empty;
         }
     }
 }
