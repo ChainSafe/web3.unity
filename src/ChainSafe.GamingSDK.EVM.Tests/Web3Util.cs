@@ -45,13 +45,13 @@ namespace ChainSafe.GamingSDK.EVM.Tests
         {
             var builder = new DeployContractTransactionBuilder();
             var txReq = builder.BuildTransaction(bytecode, abi, null);
-            Console.Out.Write(txReq);
 
             var txTask = web3.TransactionExecutor.SendTransaction(txReq);
             txTask.Wait();
 
             var receiptTask = web3.RpcProvider.GetTransactionReceipt(txTask.Result.Hash);
             receiptTask.Wait();
+
             return receiptTask.Result.ContractAddress ?? string.Empty;
         }
     }

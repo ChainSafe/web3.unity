@@ -87,6 +87,9 @@ namespace ChainSafe.GamingSDK.EVM.Tests
         {
             var code = web3.RpcProvider.GetCode(walletAddress).Result;
             Assert.AreEqual("0x", code);
+
+            code = web3.RpcProvider.GetCode(nft721Address).Result;
+            Assert.AreNotEqual("0x", code);
         }
 
         [Test]
