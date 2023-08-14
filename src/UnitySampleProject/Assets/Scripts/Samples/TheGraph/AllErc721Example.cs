@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Newtonsoft.Json;
 using Web3Unity.Scripts.Library.ETHEREUEM.Connect;
@@ -29,8 +30,9 @@ public class AllErc721Example : MonoBehaviour
             print(erc721s[0].uri);
             print(erc721s[0].balance);
         }
-        catch
+        catch (Exception e)
         {
+            Debug.LogException(e);
             print("Error: " + response);
         }
     }

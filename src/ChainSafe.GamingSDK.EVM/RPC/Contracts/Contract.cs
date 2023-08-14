@@ -67,8 +67,8 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
 
             var function = contractBuilder.GetFunctionBuilder(method);
             var txReq = overwrite ?? new TransactionRequest();
-            txReq.To = address;
-            txReq.Data = function.GetData(parameters);
+            txReq.To ??= address;
+            txReq.Data ??= function.GetData(parameters);
 
             var result = await provider.Call(txReq);
 
@@ -105,9 +105,18 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
 
             var function = contractBuilder.GetFunctionBuilder(method);
             var txReq = overwrite ?? new TransactionRequest();
-            txReq.From = await signer.GetAddress();
-            txReq.To = address;
-            txReq.Data = function.GetData(parameters);
+
+            txReq.From ??= await signer.GetAddress();
+            txReq.To ??= address;
+            txReq.Data ??= function.GetData(parameters);
+
+            if (txReq.GasPrice == null && txReq.MaxFeePerGas == null)
+            {
+                var feeData = await provider.GetFeeData();
+                txReq.MaxFeePerGas = new HexBigInteger(feeData.MaxFeePerGas);
+            }
+
+            txReq.GasLimit ??= await provider.EstimateGas(txReq);
 
             var tx = await transactionExecutor.SendTransaction(txReq);
             var receipt = await provider.WaitForTransactionReceipt(tx.Hash);
@@ -143,11 +152,17 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
 
             if (signer != null)
             {
-                txReq.From = txReq.From = await signer.GetAddress();
+                txReq.From ??= await signer.GetAddress();
             }
 
-            txReq.To = address;
-            txReq.Data = function.GetData(parameters);
+            txReq.To ??= address;
+            txReq.Data ??= function.GetData(parameters);
+
+            if (txReq.GasPrice == null && txReq.MaxFeePerGas == null)
+            {
+                var feeData = await provider.GetFeeData();
+                txReq.MaxFeePerGas = new HexBigInteger(feeData.MaxFeePerGas);
+            }
 
             return await provider.EstimateGas(txReq);
         }

@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.1</TargetFrameworks>
+    <LangVersion>9.0</LangVersion>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <EnableNETAnalyzers>True</EnableNETAnalyzers>
+    <CodeAnalysisRuleSet>../../global.ruleset</CodeAnalysisRuleSet>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ChainSafe.GamingSDK.EVM\ChainSafe.GamingSDK.EVM.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Unity)' != 'True'">
+    <PackageReference Include="Nethereum.Signer" Version="4.14.0" />
+    <PackageReference Include="Nethereum.Web3" Version="4.14.0" />
+  </ItemGroup>
+
+</Project>

@@ -11,7 +11,7 @@ public class GetTxStatus : MonoBehaviour
         var tx = await Web3Accessor.Web3.TransactionExecutor.SendTransaction(new TransactionRequest
         {
             To = address,
-            Value = new HexBigInteger(100000)
+            Value = new HexBigInteger(10000000)
         });
         var txReceipt = await Web3Accessor.Web3.RpcProvider.WaitForTransactionReceipt(tx.Hash);
         Debug.Log("Transaction receipt: " + txReceipt.Confirmations);

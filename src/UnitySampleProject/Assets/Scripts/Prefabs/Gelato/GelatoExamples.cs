@@ -1,16 +1,8 @@
-using System;
 using System.Numerics;
-using System.Threading;
 using System.Threading.Tasks;
-using ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet;
-using ChainSafe.GamingWeb3.Build;
-using ChainSafe.GamingWeb3.Unity;
 using ChainSafe.GamingSdk.Gelato;
 using ChainSafe.GamingSdk.Gelato.Dto;
-using ChainSafe.GamingWeb3;
 using UnityEngine;
-using Web3Unity.Scripts.Library.Ethers.JsonRpc;
-using Contract = Web3Unity.Scripts.Library.Ethers.Contracts.Contract;
 
 public class GelatoExamples : MonoBehaviour
 {

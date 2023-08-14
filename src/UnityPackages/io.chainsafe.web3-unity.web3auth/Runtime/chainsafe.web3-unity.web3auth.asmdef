@@ -1,0 +1,16 @@
+{
+    "name": "chainsafe.web3-unity.web3auth",
+    "rootNamespace": "",
+    "references": [
+        "GUID:5426c6b788696eb4c88f4198b59839eb"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

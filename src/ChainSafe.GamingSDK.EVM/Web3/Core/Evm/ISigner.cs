@@ -14,6 +14,9 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
 
         Task<string> SignTypedData<TStructType>(SerializableDomain domain, Dictionary<string, MemberDescription[]> types, TStructType message);
 
-        Task<string> SignMessage(byte[] message) => SignMessage(message.ToHex());
+        // TODO: is this the right thing to do?
+        // Task<string> SignMessage(byte[] message) => SignMessage(message.ToHex());
+        // This needs to be refactored byte[] should be default data type and message
+        // string should be adopted to the byte[]
     }
 }
