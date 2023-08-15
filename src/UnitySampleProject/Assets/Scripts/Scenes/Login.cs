@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet;
 using ChainSafe.GamingSDK.EVM.WebGLWallet;
 using ChainSafe.GamingSdk.Gelato;
@@ -120,9 +121,7 @@ namespace Scenes
                     }
                 });
             
-            ProcessLogin(web3Builder);
-            
-            // todo await process login before what's down there
+            await ProcessLogin(web3Builder);
 
             if (useWebPageWallet && RememberMeToggle.isOn)
             {
@@ -159,7 +158,7 @@ namespace Scenes
             ProcessLogin(web3Builder);
         }
 
-        private async void ProcessLogin(Web3Builder builder)
+        private async Task ProcessLogin(Web3Builder builder)
         {
             Web3 web3;
             try
