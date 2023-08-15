@@ -9,6 +9,8 @@
     <EnableNETAnalyzers>True</EnableNETAnalyzers>
     <CodeAnalysisRuleSet>../../global.ruleset</CodeAnalysisRuleSet>
     <RootNamespace>ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet</RootNamespace>
+    <Configurations>Debug;Release;Test</Configurations>
+    <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
 
   <ItemGroup>

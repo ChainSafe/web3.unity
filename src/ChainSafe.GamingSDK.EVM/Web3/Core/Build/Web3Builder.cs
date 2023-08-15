@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
 using ChainSafe.GamingSDK.EVM.Web3.Evm.EventPoller;
 using ChainSafe.GamingWeb3.Environment;
 using Microsoft.Extensions.DependencyInjection;

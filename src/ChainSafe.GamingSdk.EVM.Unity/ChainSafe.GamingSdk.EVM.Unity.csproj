@@ -7,6 +7,8 @@
 
     <EnableNETAnalyzers>True</EnableNETAnalyzers>
     <CodeAnalysisRuleSet>../../global.ruleset</CodeAnalysisRuleSet>
+    <Configurations>Debug;Release;Test</Configurations>
+    <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
