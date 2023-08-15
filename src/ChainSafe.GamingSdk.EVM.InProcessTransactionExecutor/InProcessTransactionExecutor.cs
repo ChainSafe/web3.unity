@@ -40,13 +40,18 @@ namespace ChainSafe.GamingSdk.EVM.InProcessTransactionExecutor
                 transaction.From = accountAddress;
             }
 
-            if (transaction.GasLimit == null && transaction.MaxFeePerGas == null)
+            if (transaction.GasPrice == null && transaction.MaxFeePerGas == null)
             {
                 var feeStrategy = web3.FeeSuggestion.GetSimpleFeeSuggestionStrategy();
                 var feeData = await feeStrategy.SuggestFeeAsync();
-                if (feeData.MaxFeePerGas is not null)
+                if (feeData.MaxFeePerGas != null && feeData.MaxPriorityFeePerGas != null)
                 {
                     transaction.MaxFeePerGas = new HexBigInteger(feeData.MaxFeePerGas.Value);
+                    transaction.MaxPriorityFeePerGas = new HexBigInteger(feeData.MaxPriorityFeePerGas.Value);
+                }
+                else
+                {
+                    transaction.GasPrice = await rpcProvider.GetGasPrice();
                 }
             }
 

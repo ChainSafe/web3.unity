@@ -1,0 +1,35 @@
+name: NUnit Tests
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  check:
+    name: Web3 Tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: [ '3.1.x', '6.0.x' ]
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+
+      - name: Install dependencies
+        run: dotnet restore
+      
+      - name: Build
+        run: dotnet build --configuration Test --no-restore
+      
+      - name: Test
+        run: dotnet test --no-restore --verbosity normal

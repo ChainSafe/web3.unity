@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using ChainSafe.GamingSDK.EVM.Web3.Core;
 using ChainSafe.GamingWeb3;

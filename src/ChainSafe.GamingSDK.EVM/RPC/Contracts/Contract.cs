@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
 using Nethereum.Hex.HexTypes;
-using Web3Unity.Scripts.Library.Ethers.Contracts.Builders;
 using Web3Unity.Scripts.Library.Ethers.Providers;
 using Web3Unity.Scripts.Library.Ethers.Signers;
 using Web3Unity.Scripts.Library.Ethers.Transactions;
@@ -110,12 +109,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
             txReq.To ??= address;
             txReq.Data ??= function.GetData(parameters);
 
-            if (txReq.GasPrice == null && txReq.MaxFeePerGas == null)
-            {
-                var feeData = await provider.GetFeeData();
-                txReq.MaxFeePerGas = new HexBigInteger(feeData.MaxFeePerGas);
-            }
-
+            txReq = await provider.ApplyGasFeeStrategy(txReq);
             txReq.GasLimit ??= await provider.EstimateGas(txReq);
 
             var tx = await transactionExecutor.SendTransaction(txReq);
@@ -157,12 +151,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
 
             txReq.To ??= address;
             txReq.Data ??= function.GetData(parameters);
-
-            if (txReq.GasPrice == null && txReq.MaxFeePerGas == null)
-            {
-                var feeData = await provider.GetFeeData();
-                txReq.MaxFeePerGas = new HexBigInteger(feeData.MaxFeePerGas);
-            }
+            txReq = await provider.ApplyGasFeeStrategy(txReq);
 
             return await provider.EstimateGas(txReq);
         }

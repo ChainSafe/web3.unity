@@ -2,13 +2,8 @@
 using ChainSafe.GamingSdk.Gelato.Types;
 using ChainSafe.GamingWeb3;
 using ChainSafe.GamingWeb3.Build;
-using ChainSafe.GamingWeb3.Environment;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Org.BouncyCastle.Crypto;
-using Web3Unity.Scripts.Library.Ethers.Contracts;
-using Web3Unity.Scripts.Library.Ethers.Providers;
-using Web3Unity.Scripts.Library.Ethers.Signers;
 
 namespace ChainSafe.GamingSdk.Gelato
 {
