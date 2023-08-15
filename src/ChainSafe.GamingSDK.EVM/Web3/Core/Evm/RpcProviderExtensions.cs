@@ -7,6 +7,7 @@ using ChainSafe.GamingWeb3;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
+using Org.BouncyCastle.Utilities.Encoders;
 using Web3Unity.Scripts.Library.Ethers.Transactions;
 
 using Block = Web3Unity.Scripts.Library.Ethers.Blocks.Block;
@@ -136,16 +137,39 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
             if (block.BaseFeePerGas > BigInteger.Zero)
             {
-                maxPriorityFeePerGas = new BigInteger(1500000000);
-                maxFeePerGas = (block.BaseFeePerGas * new BigInteger(2)) + maxPriorityFeePerGas;
+                // Post London Fork
+                var tip = new HexBigInteger(await provider.Perform<string>("eth_maxPriorityFeePerGas"));
+                var max = tip.Value + block.BaseFeePerGas.Value - 1;
+                maxPriorityFeePerGas = tip;
+                maxFeePerGas = max;
             }
 
             return new FeeData
             {
+                BaseFeePerGas = block.BaseFeePerGas,
                 GasPrice = gasPrice,
                 MaxFeePerGas = maxFeePerGas,
                 MaxPriorityFeePerGas = maxPriorityFeePerGas,
             };
+        }
+
+        public static async Task<TransactionRequest> ApplyGasFeeStrategy(this IRpcProvider provider, TransactionRequest tx)
+        {
+            if (tx.GasPrice == null && tx.MaxFeePerGas == null)
+            {
+                var feeData = await provider.GetFeeData();
+                if (feeData.MaxFeePerGas == 0)
+                {
+                    tx.GasPrice = new HexBigInteger(feeData.GasPrice);
+                }
+                else
+                {
+                    tx.MaxPriorityFeePerGas = new HexBigInteger(feeData.MaxPriorityFeePerGas);
+                    tx.MaxFeePerGas = new HexBigInteger(feeData.MaxFeePerGas);
+                }
+            }
+
+            return tx;
         }
 
         public static async Task<string> Call(this IRpcProvider provider, TransactionRequest transaction, BlockParameter blockTag = null)

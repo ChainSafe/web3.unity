@@ -1,4 +1,4 @@
-name: NUnti Tests
+name: NUnit Tests
 
 on:
   pull_request:

@@ -154,7 +154,7 @@ namespace ChainSafe.GamingSDK.EVM.Tests
             var feeData = firstAccount.RpcProvider.GetFeeData().Result;
             Assert.Greater(Units.FormatUnits(feeData.MaxFeePerGas, "gwei"), "0");
             Assert.Greater(Units.FormatUnits(feeData.GasPrice, "gwei"), "0");
-            Assert.AreEqual(Units.FormatUnits(feeData.MaxPriorityFeePerGas, "gwei"), "1.5");
+            Assert.Greater(Units.FormatUnits(feeData.MaxPriorityFeePerGas, "gwei"), "0");
         }
 
         [Test]
