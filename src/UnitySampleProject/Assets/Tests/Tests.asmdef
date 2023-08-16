@@ -4,7 +4,8 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "chainsafe.web3-unity"
+        "chainsafe.web3-unity",
+        "Samples"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
