@@ -14,6 +14,6 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
         public TimeSpan ConnectRequestExpiresAfter { get; set; } = TimeSpan.FromMinutes(1);
 
         public WebPageWallet.ConnectMessageBuildDelegate ConnectMessageBuilder { get; set; } =
-            time => $"Sign this message before {time:hh:mm:ss} to connect your account.";
+            time => $"Sign this message to connect your account. This request will expire at {time:hh:mm:ss}.";
     }
 }

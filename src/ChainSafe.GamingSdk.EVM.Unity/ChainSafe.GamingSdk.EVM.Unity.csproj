@@ -7,6 +7,8 @@
 
     <EnableNETAnalyzers>True</EnableNETAnalyzers>
     <CodeAnalysisRuleSet>../../global.ruleset</CodeAnalysisRuleSet>
+    <Configurations>Debug;Release;Test</Configurations>
+    <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,6 +28,12 @@
   <ItemGroup>
     <!-- Resolve dependency conflict by referencing this version directly -->
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <EmbeddedResource Include="link.xml">
+      <LogicalName>ChainSafe.GamingSdk.EVM.Unity.xml</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
