@@ -23,7 +23,7 @@ public static class SampleOutputUtil
 
         string FormatClassName(string className)
         {
-            var redundantPartIndex = className.LastIndexOf("SampleLogic", StringComparison.InvariantCulture);
+            var redundantPartIndex = className.LastIndexOf("Sample", StringComparison.InvariantCulture);
 
             if (redundantPartIndex > 0)
             {

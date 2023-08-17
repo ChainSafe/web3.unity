@@ -84,7 +84,7 @@ namespace Scenes
             if (string.IsNullOrEmpty(savedAccount))
                 return;
             
-            Debug.Log("Saved account detected. Trying to auto-login.");
+            Debug.Log("Saved account detected. Logging in...");
 
             var web3Builder = new Web3Builder(ProjectConfigUtilities.Load())
                 .Configure(ConfigureCommonServices)
