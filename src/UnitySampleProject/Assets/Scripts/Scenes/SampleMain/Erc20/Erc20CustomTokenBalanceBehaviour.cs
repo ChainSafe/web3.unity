@@ -1,6 +1,8 @@
-﻿namespace Samples.Behaviours
+﻿using System.Threading.Tasks;
+
+namespace Samples.Behaviours
 {
-    public class Erc20CustomTokenBalanceBehaviour : ButtonBehaviour
+    public class Erc20CustomTokenBalanceBehaviour : SampleBehaviour
     {
         public string contractAbi;
         public string contractAddress;
@@ -13,7 +15,7 @@
             logic = new Erc20Sample(Web3Accessor.Web3);
         }
 
-        protected override async void Execute()
+        protected override async Task ExecuteSample()
         {
             var result = await logic.CustomTokenBalance(contractAbi, contractAddress);
             SampleOutputUtil.PrintResult(result, nameof(Erc20Sample), nameof(Erc20Sample.CustomTokenBalance));

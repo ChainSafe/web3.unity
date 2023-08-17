@@ -29,7 +29,7 @@ namespace Web3Unity.Scripts.Prefabs
             return await ERC721.OwnerOfBatch(web3, contractAddress, tokenIds, multicall);
         }
 
-        public async Task<string> URI(string contractAddress, string tokenId)
+        public async Task<string> Uri(string contractAddress, string tokenId)
         {
             return await ERC721.URI(web3, contractAddress, tokenId);
         }

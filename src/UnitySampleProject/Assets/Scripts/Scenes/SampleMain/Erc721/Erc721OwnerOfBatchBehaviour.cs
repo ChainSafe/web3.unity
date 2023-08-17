@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using Web3Unity.Scripts.Prefabs;
 
 namespace Samples.Behaviours.Erc721
 {
-    public class Erc721OwnerOfBatchBehaviour : ButtonBehaviour
+    public class Erc721OwnerOfBatchBehaviour : SampleBehaviour
     {
         public string contractAddress = "0x47381c5c948254e6e0E324F1AA54b7B24104D92D";
         public List<string> tokenIds = new() { "33", "29" };
@@ -21,7 +22,7 @@ namespace Samples.Behaviours.Erc721
             logic = new Erc721Sample(Web3Accessor.Web3);
         }
 
-        protected override async void Execute()
+        protected override async Task ExecuteSample()
         {
             var owners = await logic.OwnerOfBatch(contractAddress, tokenIds.ToArray(), multicall);
             var ownersString = $"{owners.Count} owner(s):\n" + string.Join(",\n", owners);
