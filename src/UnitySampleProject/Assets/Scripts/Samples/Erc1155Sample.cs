@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.GamingWeb3;
+using Web3Unity.Scripts.Library.ETHEREUEM.Connect;
 using Web3Unity.Scripts.Library.ETHEREUEM.EIP;
 
 namespace Web3Unity.Scripts.Prefabs
@@ -34,6 +35,11 @@ namespace Web3Unity.Scripts.Prefabs
         public async Task<BigInteger> ImportNftTexture()
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<Nft[]> All(string chain, string network, string account, string contract, int take, int skip)
+        {
+            return await EVM.AllErc1155(web3, chain, network, account, contract, take, skip);
         }
     }
 }

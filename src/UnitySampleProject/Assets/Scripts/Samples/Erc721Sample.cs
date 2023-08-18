@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using ChainSafe.GamingWeb3;
+using Newtonsoft.Json;
+using UnityEngine;
+using Web3Unity.Scripts.Library.ETHEREUEM.Connect;
 using Web3Unity.Scripts.Library.ETHEREUEM.EIP;
 
 namespace Web3Unity.Scripts.Prefabs
@@ -32,6 +36,11 @@ namespace Web3Unity.Scripts.Prefabs
         public async Task<string> Uri(string contractAddress, string tokenId)
         {
             return await ERC721.URI(web3, contractAddress, tokenId);
+        }
+
+        public async Task<Nft[]> All(string chain, string network, string account, string contract, int take, int skip)
+        {
+            return await EVM.AllErc721(web3, chain, network, account, contract, take, skip);
         }
     }
 }

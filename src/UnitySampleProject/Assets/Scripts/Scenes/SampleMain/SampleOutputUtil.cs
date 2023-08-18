@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 
 public static class SampleOutputUtil
@@ -14,6 +15,11 @@ public static class SampleOutputUtil
         var processName = BuildProcessName(sampleClassName, sampleMethodName);
         var msg = $"{processName} executed successfully.\nOutput: {value}";
         return msg;
+    }
+
+    public static string BuildOutputValue(object[] dynamicResponse)
+    {
+        return string.Join(",\n", dynamicResponse.Select(o => o.ToString()));
     }
 
     private static string BuildProcessName(string sampleClassName, string sampleMethodName)

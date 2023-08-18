@@ -232,42 +232,62 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
         }
 
 
-        public static async Task<string> AllErc721(Web3 web3, string _chain, string _network, string _account, string _contract = "", int _first = 500, int _skip = 0)
+        public static async Task<Nft[]> AllErc721(Web3 web3, string chain, string network, string account, string contract = "", int take = 500, int skip = 0)
         {
             WWWForm form = new WWWForm();
             form.AddField("projectId", web3.ProjectConfig.ProjectId);
-            form.AddField("chain", _chain);
-            form.AddField("network", _network);
-            form.AddField("account", _account);
-            form.AddField("contract", _contract);
-            form.AddField("first", _first);
-            form.AddField("skip", _skip);
+            form.AddField("chain", chain);
+            form.AddField("network", network);
+            form.AddField("account", account);
+            form.AddField("contract", contract);
+            form.AddField("first", take);
+            form.AddField("skip", skip);
 
             string url = host + "/all721";
+            string rawNfts;
             using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
             {
                 await webRequest.SendWebRequest();
                 Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
-                return data.response;
+                rawNfts = data.response;
+            }
+
+            try
+            {
+                return JsonConvert.DeserializeObject<Nft[]>(rawNfts);
+            }
+            catch (JsonException e)
+            {
+                throw new Web3Exception("NFTs deserialization failed.", e);
             }
         }
 
-        public static async Task<string> AllErc1155(Web3 web3, string _chain, string _network, string _account, string _contract = "", int _first = 500, int _skip = 0)
+        public static async Task<Nft[]> AllErc1155(Web3 web3, string chain, string network, string account, string contract = "", int take = 500, int skip = 0)
         {
             WWWForm form = new WWWForm();
             form.AddField("projectId", web3.ProjectConfig.ProjectId);
-            form.AddField("chain", _chain);
-            form.AddField("network", _network);
-            form.AddField("account", _account);
-            form.AddField("contract", _contract);
-            form.AddField("first", _first);
-            form.AddField("skip", _skip);
+            form.AddField("chain", chain);
+            form.AddField("network", network);
+            form.AddField("account", account);
+            form.AddField("contract", contract);
+            form.AddField("first", take);
+            form.AddField("skip", skip);
             string url = host + "/all1155";
+            string rawNfts;
             using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
             {
                 await webRequest.SendWebRequest();
                 Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
-                return data.response;
+                rawNfts = data.response;
+            }
+
+            try
+            {
+                return JsonConvert.DeserializeObject<Nft[]>(rawNfts);
+            }
+            catch (JsonException e)
+            {
+                throw new Web3Exception("NFTs deserialization failed.", e);
             }
         }
         public static async Task<RedeemVoucherTxModel.Response> CreateRedeemTransaction(Web3 web3, string _chain, string _network, string _voucher, string _type, string _nftAddress, string _account)
