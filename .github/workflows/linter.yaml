@@ -4,7 +4,7 @@
 ## Super Linter GitHub Actions ##
 #################################
 #################################
-name: Lint Code Base
+name: Lint Code Action
 
 #############################
 # Start the job on all push #
@@ -19,7 +19,7 @@ on:
 jobs:
   build:
     # Name the Job
-    name: Lint Code Base
+    name: Lint Job
     # Set the agent to run on
     runs-on: ubuntu-latest
 
@@ -40,7 +40,7 @@ jobs:
       ################################
       # Run Linter against code base #
       ################################
-      - name: Lint Code Base
+      - name: Lint Code
         uses: github/super-linter@v4
         env:
           VALIDATE_ALL_CODEBASE: false
