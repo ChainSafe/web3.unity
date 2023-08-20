@@ -1,6 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Nethereum.Web3;
-using UnityEngine;
 using Web3Unity.Scripts.Library.IPFS;
 
 namespace Web3Unity.Scripts.Prefabs

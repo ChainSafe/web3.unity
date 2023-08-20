@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.GamingWeb3;
-using Web3Unity.Scripts.Library.ETHEREUEM.EIP;
+using Scripts.EVM.Token;
 using Web3Unity.Scripts.Library.Ethers.Providers;
 
 public class Erc20Sample
@@ -15,7 +15,7 @@ public class Erc20Sample
     
     public async Task<BigInteger> BalanceOf(string contractAddress, string account)
     {
-        return await ERC20.BalanceOf(web3, contractAddress, account);
+        return await Erc20.BalanceOf(web3, contractAddress, account);
     }
 
     // TODO similar to previous, remove?
@@ -30,12 +30,12 @@ public class Erc20Sample
 
     public async Task<BigInteger> Decimals(string contractAddress)
     {
-        return await ERC20.Decimals(web3, contractAddress);
+        return await Erc20.Decimals(web3, contractAddress);
     }
 
     public async Task<string> Name(string contractAddress)
     {
-        return await ERC20.Name(web3, contractAddress);
+        return await Erc20.Name(web3, contractAddress);
     }
 
     public async Task<BigInteger> NativeBalanceOf(string account)
@@ -45,11 +45,11 @@ public class Erc20Sample
 
     public async Task<string> Symbol(string contractAddress)
     {
-        return await ERC20.Symbol(web3, contractAddress);
+        return await Erc20.Symbol(web3, contractAddress);
     }
 
     public async Task<BigInteger> TotalSupply(string contractAddress)
     {
-        return await ERC20.TotalSupply(web3, contractAddress);;
+        return await Erc20.TotalSupply(web3, contractAddress);;
     }
 }

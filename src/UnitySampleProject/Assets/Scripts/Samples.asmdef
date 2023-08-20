@@ -6,7 +6,8 @@
         "GUID:a37273c0f1cc99640b9cce89c64b02d0",
         "GUID:d0e5603e6af957942922f5d22bbbfa0c",
         "GUID:065b2a8044c813947b0e4d52126f5a26",
-        "GUID:6055be8ebefd69e48b49212b09b47b2f"
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "chainsafe.web3-unity.web3auth"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
