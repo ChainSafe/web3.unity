@@ -17,7 +17,7 @@ namespace Samples.Behaviours.Unsorted
 
         protected override async Task ExecuteSample()
         {
-            var hash = await logic.Sha3(message);
+            var hash = logic.Sha3(message);
             
             SampleOutputUtil.PrintResult(hash, nameof(UnsortedSample), nameof(UnsortedSample.Sha3));
         }

@@ -11,7 +11,7 @@ namespace Samples.Behaviours.Erc721
         public string network = "goerli"; // mainnet goerli
         public string account = "0xfaecAE4464591F8f2025ba8ACF58087953E613b1";
         [Header("Optional")]
-        public string contract = "";
+        public string contract = "0x2c1867BC3026178A47a677513746DCc6822A137A";
         public int take = 500;
         public int skip = 0;
         

@@ -213,20 +213,20 @@ namespace Scripts.EVM.Remote
             }
         }
 
-        public static async Task<CreateApprovalModel.Response> CreateApproveTransaction(Web3 web3, string _chain, string _network, string _account, string _tokenType)
+        public static async Task<CreateApprovalModel.Response> CreateApproveTransaction(Web3 web3, string chain, string network, string account, string tokenType)
         {
             WWWForm form = new WWWForm();
             form.AddField("projectId", web3.ProjectConfig.ProjectId);
-            form.AddField("chain", _chain);
-            form.AddField("network", _network);
-            form.AddField("account", _account);
-            form.AddField("tokenType", _tokenType);
+            form.AddField("chain", chain);
+            form.AddField("network", network);
+            form.AddField("account", account);
+            form.AddField("tokenType", tokenType);
 
             string url = host + "/createApproveTransaction";
             using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
             {
                 await webRequest.SendWebRequest();
-                CreateApprovalModel.Root data = JsonUtility.FromJson<CreateApprovalModel.Root>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+                CreateApprovalModel.Root data = JsonUtility.FromJson<CreateApprovalModel.Root>(Encoding.UTF8.GetString(webRequest.downloadHandler.data));
                 return data.response;
             }
         }
@@ -248,7 +248,7 @@ namespace Scripts.EVM.Remote
             using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
             {
                 await webRequest.SendWebRequest();
-                Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+                Response<string> data = JsonUtility.FromJson<Response<string>>(Encoding.UTF8.GetString(webRequest.downloadHandler.data));
                 rawNfts = data.response;
             }
 
@@ -277,7 +277,7 @@ namespace Scripts.EVM.Remote
             using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
             {
                 await webRequest.SendWebRequest();
-                Response<string> data = JsonUtility.FromJson<Response<string>>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+                Response<string> data = JsonUtility.FromJson<Response<string>>(Encoding.UTF8.GetString(webRequest.downloadHandler.data));
                 rawNfts = data.response;
             }
 
@@ -290,21 +290,21 @@ namespace Scripts.EVM.Remote
                 throw new Web3Exception("NFTs deserialization failed.", e);
             }
         }
-        public static async Task<RedeemVoucherTxModel.Response> CreateRedeemTransaction(Web3 web3, string _chain, string _network, string _voucher, string _type, string _nftAddress, string _account)
+        public static async Task<RedeemVoucherTxModel.Response> CreateRedeemTransaction(Web3 web3, string chain, string network, string voucher, string type, string nftAddress, string account)
         {
             WWWForm form = new WWWForm();
             form.AddField("projectId", web3.ProjectConfig.ProjectId);
-            form.AddField("chain", _chain);
-            form.AddField("network", _network);
-            form.AddField("voucher", _voucher);
-            form.AddField("type", _type);
-            form.AddField("nftAdrress", _nftAddress);
-            form.AddField("account", _account);
+            form.AddField("chain", chain);
+            form.AddField("network", network);
+            form.AddField("voucher", voucher);
+            form.AddField("type", type);
+            form.AddField("nftAdrress", nftAddress);
+            form.AddField("account", account);
             string url = host + "/createRedeemTransaction";
             using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
             {
                 await webRequest.SendWebRequest();
-                RedeemVoucherTxModel.Root data = JsonConvert.DeserializeObject<RedeemVoucherTxModel.Root>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+                RedeemVoucherTxModel.Root data = JsonConvert.DeserializeObject<RedeemVoucherTxModel.Root>(Encoding.UTF8.GetString(webRequest.downloadHandler.data));
                 return data.response;
             }
         }

@@ -118,7 +118,7 @@ namespace Web3Unity.Scripts.Prefabs
         }
 
         // todo extract in a separate service
-        public async Task<string> Sha3(string message)
+        public string Sha3(string message)
         {
             return new Sha3Keccack().CalculateHash(message);
         }

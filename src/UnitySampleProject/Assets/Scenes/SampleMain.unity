@@ -1676,7 +1676,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 37375165}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.312753
+  m_Size: 0.38627988
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2270,7 +2270,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8781309615174179339, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_text
-      value: All
+      value: All (Legacy Indexer)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
@@ -2294,7 +2294,7 @@ MonoBehaviour:
   chain: ethereum
   network: goerli
   account: 0xfaecAE4464591F8f2025ba8ACF58087953E613b1
-  contract: 
+  contract: 0x06dc21f89f01409e7ed0e4c80eae1430962ae52c
   take: 500
   skip: 0
 --- !u!1 &519420028
@@ -5124,7 +5124,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1340848927}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.9999999
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -7241,7 +7241,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8781309615174179339, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_text
-      value: All
+      value: All (Legacy Indexer)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
