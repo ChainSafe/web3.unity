@@ -6,12 +6,12 @@ using Models;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
-using Web3Unity.Scripts.Library.Ethers.Contracts;
+using Scripts.EVM.Token;
 
-namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
+namespace Scripts.EVM.Remote
 {
     // todo: should we take chain and network from the Web3 object as well?
-    public class EVM
+    public class CSServer
     {
         public class Response<T> { public T response; }
         private static readonly string host = "https://api.gaming.chainsafe.io/evm";
@@ -232,7 +232,7 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
         }
 
 
-        public static async Task<Nft[]> AllErc721(Web3 web3, string chain, string network, string account, string contract = "", int take = 500, int skip = 0)
+        public static async Task<TokenResponse[]> AllErc721(Web3 web3, string chain, string network, string account, string contract = "", int take = 500, int skip = 0)
         {
             WWWForm form = new WWWForm();
             form.AddField("projectId", web3.ProjectConfig.ProjectId);
@@ -254,7 +254,7 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
 
             try
             {
-                return JsonConvert.DeserializeObject<Nft[]>(rawNfts);
+                return JsonConvert.DeserializeObject<TokenResponse[]>(rawNfts);
             }
             catch (JsonException e)
             {
@@ -262,7 +262,7 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
             }
         }
 
-        public static async Task<Nft[]> AllErc1155(Web3 web3, string chain, string network, string account, string contract = "", int take = 500, int skip = 0)
+        public static async Task<TokenResponse[]> AllErc1155(Web3 web3, string chain, string network, string account, string contract = "", int take = 500, int skip = 0)
         {
             WWWForm form = new WWWForm();
             form.AddField("projectId", web3.ProjectConfig.ProjectId);
@@ -283,7 +283,7 @@ namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
 
             try
             {
-                return JsonConvert.DeserializeObject<Nft[]>(rawNfts);
+                return JsonConvert.DeserializeObject<TokenResponse[]>(rawNfts);
             }
             catch (JsonException e)
             {

@@ -1,7 +1,6 @@
-﻿namespace Web3Unity.Scripts.Library.ETHEREUEM.Connect
+﻿namespace Scripts.EVM.Token
 {
-    // todo move me to where I belong
-    public class Nft
+    public class TokenResponse
     {
         public string Contract { get; set; }
         public string TokenId { get; set; }

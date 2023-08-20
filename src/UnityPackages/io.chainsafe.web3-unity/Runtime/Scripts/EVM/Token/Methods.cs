@@ -1,6 +1,6 @@
-namespace Web3Unity.Scripts.Library.ETHEREUEM.EIP
+namespace Scripts.EVM.Token
 {
-    static class EthMethod
+    static class CommonMethod
     {
         public const string BalanceOf = "balanceOf";
         public const string Name = "name";
