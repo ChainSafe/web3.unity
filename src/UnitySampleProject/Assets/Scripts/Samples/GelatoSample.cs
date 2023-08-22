@@ -6,11 +6,11 @@ using ChainSafe.GamingWeb3;
 
 public class GelatoSample
 {
-    private Web3 web3;
+    private readonly Web3 _web3;
 
     public GelatoSample(Web3 web3)
     {
-        this.web3 = web3;
+        _web3 = web3;
     }
     
     public class TaskResult
@@ -27,20 +27,20 @@ public class GelatoSample
 
     public async Task<TaskResult> CallWithSyncFee()
     {
-        var vitalik = "0xd8da6bf26964af9d7eed9e03e53415d37aa96045";
-        var target = "0xA045eb75e78f4988d42c3cd201365bDD5D76D406";
-        var feeToken = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
-        var abi = "[{\"inputs\": [" +
-                  "{\"internalType\":\"address\",\"name\":\"_token\",\"type\":\"address\"}," +
-                  "{\"internalType\":\"address\",\"name\":\"_to\",\"type\":\"address\"}," +
-                  "{\"internalType\":\"uint256\",\"name\":\"_amount\",\"type\":\"uint256\"}" +
-                  "]," +
-                  "\"name\":\"sendToFriend\"," +
-                  "\"outputs\":[]," +
-                  "\"stateMutability\":\"nonpayable\"," +
-                  "\"type\":\"function\"" +
-                  "}]";
-        var contract = web3.ContractBuilder.Build(abi, target);
+        const string vitalik = "0xd8da6bf26964af9d7eed9e03e53415d37aa96045";
+        const string target = "0xA045eb75e78f4988d42c3cd201365bDD5D76D406";
+        const string feeToken = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
+        const string abi = "[{\"inputs\": [" +
+                           "{\"internalType\":\"address\",\"name\":\"_token\",\"type\":\"address\"}," +
+                           "{\"internalType\":\"address\",\"name\":\"_to\",\"type\":\"address\"}," +
+                           "{\"internalType\":\"uint256\",\"name\":\"_amount\",\"type\":\"uint256\"}" +
+                           "]," +
+                           "\"name\":\"sendToFriend\"," +
+                           "\"outputs\":[]," +
+                           "\"stateMutability\":\"nonpayable\"," +
+                           "\"type\":\"function\"" +
+                           "}]";
+        var contract = _web3.ContractBuilder.Build(abi, target);
         var data = contract.Calldata("sendToFriend", new object[]
         {
             feeToken,
@@ -48,7 +48,7 @@ public class GelatoSample
             new BigInteger(5 * 10E12),
         });
 
-        var relayResponse = await web3.Gelato().CallWithSyncFee(new CallWithSyncFeeRequest()
+        var relayResponse = await _web3.Gelato().CallWithSyncFee(new CallWithSyncFeeRequest()
         {
             Data = data,
             FeeToken = feeToken,
@@ -58,7 +58,7 @@ public class GelatoSample
 
         while (true)
         {
-            var status = await web3.Gelato().GetTaskStatus(relayResponse.TaskId);
+            var status = await _web3.Gelato().GetTaskStatus(relayResponse.TaskId);
 
             switch (status.TaskState)
             {
@@ -75,19 +75,19 @@ public class GelatoSample
 
     public async Task<TaskResult> SponsorCall()
     {
-        var counterContract = "0x763D37aB388C5cdd2Fb0849d6275802F959fbF30";
+        const string counterContract = "0x763D37aB388C5cdd2Fb0849d6275802F959fbF30";
 
-        var abi = "[{\"inputs\": []," +
-                  "\"name\":\"increment\"," +
-                  "\"outputs\":[]," +
-                  "\"stateMutability\":\"nonpayable\"," +
-                  "\"type\":\"function\"" +
-                  "}]";
-        var contract = web3.ContractBuilder.Build(abi, counterContract);
+        const string abi = "[{\"inputs\": []," +
+                           "\"name\":\"increment\"," +
+                           "\"outputs\":[]," +
+                           "\"stateMutability\":\"nonpayable\"," +
+                           "\"type\":\"function\"" +
+                           "}]";
+        var contract = _web3.ContractBuilder.Build(abi, counterContract);
 
         var data = contract.Calldata("increment");
 
-        var relayResponse = await web3.Gelato().SponsoredCall(new SponsoredCallRequest()
+        var relayResponse = await _web3.Gelato().SponsoredCall(new SponsoredCallRequest()
         {
             Target = counterContract,
             Data = data,
@@ -95,7 +95,7 @@ public class GelatoSample
 
         while (true)
         {
-            var status = await web3.Gelato().GetTaskStatus(relayResponse.TaskId);
+            var status = await _web3.Gelato().GetTaskStatus(relayResponse.TaskId);
 
             switch (status.TaskState)
             {
@@ -112,21 +112,21 @@ public class GelatoSample
 
     public async Task<TaskResult> CallWithSyncFeeErc2771()
     {
-        var target = "0x5dD1100f23278e0e27972eacb4F1B81D97D071B7";
-        var feeToken = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
-        var abi = "[{\"inputs\": []," +
-                  "\"name\":\"increment\"," +
-                  "\"outputs\":[]," +
-                  "\"stateMutability\":\"nonpayable\"," +
-                  "\"type\":\"function\"" +
-                  "}]";
-        var contract = web3.ContractBuilder.Build(abi, target);
+        const string target = "0x5dD1100f23278e0e27972eacb4F1B81D97D071B7";
+        const string feeToken = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
+        const string abi = "[{\"inputs\": []," +
+                           "\"name\":\"increment\"," +
+                           "\"outputs\":[]," +
+                           "\"stateMutability\":\"nonpayable\"," +
+                           "\"type\":\"function\"" +
+                           "}]";
+        var contract = _web3.ContractBuilder.Build(abi, target);
 
         var data = contract.Calldata("increment", new object[]
         {
         });
 
-        var relayResponse = await web3.Gelato().CallWithSyncFeeErc2771(new CallWithSyncFeeErc2771Request()
+        var relayResponse = await _web3.Gelato().CallWithSyncFeeErc2771(new CallWithSyncFeeErc2771Request()
         {
             Target = target,
             Data = data,
@@ -136,7 +136,7 @@ public class GelatoSample
 
         while (true)
         {
-            var status = await web3.Gelato().GetTaskStatus(relayResponse.TaskId);
+            var status = await _web3.Gelato().GetTaskStatus(relayResponse.TaskId);
 
             switch (status.TaskState)
             {
@@ -153,29 +153,29 @@ public class GelatoSample
 
     public async Task<TaskResult> SponsorCallErc2771()
     {
-        var target = "0x00172f67db60E5fA346e599cdE675f0ca213b47b";
+        const string target = "0x00172f67db60E5fA346e599cdE675f0ca213b47b";
 
-        var abi = "[{\"inputs\": []," +
+        const string abi = "[{\"inputs\": []," +
                   "\"name\":\"increment\"," +
                   "\"outputs\":[]," +
                   "\"stateMutability\":\"nonpayable\"," +
                   "\"type\":\"function\"" +
                   "}]";
 
-        var contract = web3.ContractBuilder.Build(abi, target);
+        var contract = _web3.ContractBuilder.Build(abi, target);
 
         var data = contract.Calldata("increment");
 
-        var relayResponse = await web3.Gelato().SponsoredCallErc2771(new SponsoredCallErc2771Request()
+        var relayResponse = await _web3.Gelato().SponsoredCallErc2771(new SponsoredCallErc2771Request()
         {
             Target = target,
             Data = data,
-            User = await web3.Signer.GetAddress(),
+            User = await _web3.Signer.GetAddress(),
         });
 
         while (true)
         {
-            var status = await web3.Gelato().GetTaskStatus(relayResponse.TaskId);
+            var status = await _web3.Gelato().GetTaskStatus(relayResponse.TaskId);
 
             switch (status.TaskState)
             {
