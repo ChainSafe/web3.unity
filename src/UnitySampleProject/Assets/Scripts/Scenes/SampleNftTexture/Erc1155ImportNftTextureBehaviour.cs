@@ -12,7 +12,7 @@ namespace Scenes.SampleNftTexture
         public string tokenId = "0x01559ae4021aee70424836ca173b6a4e647287d15cee8ac42d8c2d8d128927e5"; // gitleaks:allow
 
         public RawImage textureContainer;
-        
+
         private Erc1155Sample logic;
         private Texture nullTexture;
 

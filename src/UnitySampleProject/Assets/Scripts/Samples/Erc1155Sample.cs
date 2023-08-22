@@ -17,7 +17,7 @@ namespace Web3Unity.Scripts.Prefabs
     {
         public string ImageUri { get; set; }
     }
-    
+
     public class Erc1155Sample
     {
         private readonly Web3 web3;
@@ -79,7 +79,7 @@ namespace Web3Unity.Scripts.Prefabs
             {
                 if (!originalUri.StartsWith("ipfs://"))
                     return originalUri;
-                
+
                 return originalUri.Replace("ipfs://", "https://ipfs.io/ipfs/");
             }
 
