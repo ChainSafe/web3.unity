@@ -1,109 +1,132 @@
-﻿using System;
+﻿using System.Diagnostics;
+using System.Linq;
+using ChainSafe.GamingSDK.EVM.Tests.Node;
+using ChainSafe.GamingWeb3;
 using Nethereum.Hex.HexTypes;
 using NUnit.Framework;
 using Web3Unity.Scripts.Library.Ethers.Providers;
 using Web3Unity.Scripts.Library.Ethers.Transactions;
+using static ChainSafe.GamingSDK.EVM.Tests.Web3Util;
 
 namespace ChainSafe.GamingSDK.EVM.Tests
 {
+    using static RpcProviderExtensions;
+    using Web3 = ChainSafe.GamingWeb3.Web3;
+
     [TestFixture]
     public class ProvidersSendTests
     {
-        private JsonRpcProvider ganacheProvider;
+        private Web3 firstAccount;
+        private Web3 secondAccount;
+        private Process node;
 
         [OneTimeSetUp]
         public void SetUp()
         {
-            ganacheProvider = ProviderMigration.NewJsonRpcProviderAsync("http://127.0.0.1:7545").Result;
+            node = Emulator.CreateInstance();
+
+            var firstAccountTask = CreateWeb3(0).AsTask();
+            firstAccountTask.Wait();
+            firstAccount = firstAccountTask.Result;
+
+            var secondAccountTask = CreateWeb3(1).AsTask();
+            secondAccountTask.Wait();
+            secondAccount = secondAccountTask.Result;
         }
 
-        // todo: disabled due to core interfaces being reworked
-        // [Test]
-        // public void SendTransactionTest()
-        // {
-        //     TestHelper.VerifyGanacheConnection(ganacheProvider);
-        //
-        //     var from = ganacheProvider.GetSigner();
-        //     var fromInitialBalance = from.GetBalance().Result.Value;
-        //
-        //     var to = ganacheProvider.GetSigner(1);
-        //     var toInitialBalance = to.GetBalance().Result.Value;
-        //
-        //     var amount = new HexBigInteger(1000000);
-        //     var tx = from.SendTransaction(new TransactionRequest
-        //     {
-        //         To = to.GetAddress().Result,
-        //         Value = amount,
-        //     }).Result;
-        //     Assert.True(tx.Hash.StartsWith("0x"));
-        //
-        //     var txReceipt = tx.Wait().Result;
-        //
-        //     Assert.AreEqual(txReceipt.Confirmations, 1);
-        //     Assert.AreEqual(toInitialBalance + amount.Value, to.GetBalance().Result.Value);
-        //     Assert.AreEqual(fromInitialBalance - amount.Value - (txReceipt.CumulativeGasUsed.Value * txReceipt.EffectiveGasPrice.Value), from.GetBalance().Result.Value);
-        // }
-        //
-        // [Test]
-        // public void SendTransactionWithInvalidAddress()
-        // {
-        //     TestHelper.VerifyGanacheConnection(ganacheProvider);
-        //     var from = ganacheProvider.GetSigner();
-        //     const string to = "not_a_valid_address";
-        //     var amount = new HexBigInteger(1000000);
-        //     var transaction = new TransactionRequest
-        //     {
-        //         To = to,
-        //         Value = amount,
-        //         GasLimit = new HexBigInteger("10000"),
-        //         GasPrice = new HexBigInteger("100000000"),
-        //     };
-        //
-        //     var ex = Assert.ThrowsAsync<Exception>(async () =>
-        //     {
-        //         var txHash = await from.SendTransaction(transaction);
-        //     });
-        //     Assert.AreEqual($"eth_sendTransaction: -32700 Cannot wrap string value \"{to}\" as a json-rpc type; strings must be prefixed with \"0x\". ", ex.Message);
-        // }
-        //
-        // [Test]
-        // public void SendTransactionWithLowGasLimit()
-        // {
-        //     TestHelper.VerifyGanacheConnection(ganacheProvider);
-        //     var from = ganacheProvider.GetSigner();
-        //     const string to = "0x1234567890123456789012345678901234567890";
-        //     var amount = new HexBigInteger(1000000);
-        //     var gasLimit = new HexBigInteger(1);
-        //     var transaction = new TransactionRequest
-        //     {
-        //         To = to,
-        //         Value = amount,
-        //         GasLimit = gasLimit,
-        //     };
-        //
-        //     var ex = Assert.ThrowsAsync<Exception>(async () =>
-        //     {
-        //         var txHash = await from.SendTransaction(transaction);
-        //     });
-        //     Assert.AreEqual("eth_sendTransaction: -32000 intrinsic gas too low ", ex.Message);
-        // }
-        //
-        // [Test]
-        // public void SendTransactionWithLowGasPrice()
-        // {
-        //     TestHelper.VerifyGanacheConnection(ganacheProvider);
-        //     var from = ganacheProvider.GetSigner();
-        //     const string to = "0x1234567890123456789012345678901234567890";
-        //     var amount = new HexBigInteger(1000000);
-        //     var gasPrice = new HexBigInteger(1);
-        //     var transaction = new TransactionRequest
-        //     {
-        //         To = to,
-        //         Value = amount,
-        //         GasPrice = gasPrice,
-        //     };
-        //
-        //     Assert.ThrowsAsync<Exception>(() => from.SendTransaction(transaction));
-        // }
+        [OneTimeTearDown]
+        public void Cleanup()
+        {
+            node?.Kill();
+        }
+
+        [Test]
+        public void SendTransactionTest()
+        {
+            var fromAddress = firstAccount.Signer.GetAddress().Result;
+            var fromInitialBalance = firstAccount.RpcProvider.GetBalance(fromAddress).Result.Value;
+
+            var toAddress = secondAccount.Signer.GetAddress().Result;
+            var toInitialBalance = firstAccount.RpcProvider.GetBalance(toAddress).Result.Value;
+
+            var amount = new HexBigInteger(1000000);
+            var tx = firstAccount.TransactionExecutor.SendTransaction(new TransactionRequest
+            {
+                To = toAddress,
+                Value = amount,
+            });
+            tx.Wait();
+
+            Assert.True(tx.Result.Hash.StartsWith("0x"));
+
+            var txReceipt = firstAccount.RpcProvider.GetTransactionReceipt(tx.Result.Hash);
+            txReceipt.Wait();
+
+            Assert.AreEqual(txReceipt.Result.Confirmations, 1);
+            Assert.AreEqual(toInitialBalance + amount.Value, firstAccount.RpcProvider.GetBalance(toAddress).Result.Value);
+            Assert.AreEqual(
+                fromInitialBalance - amount.Value - (txReceipt.Result.CumulativeGasUsed.Value * txReceipt.Result.EffectiveGasPrice.Value),
+                firstAccount.RpcProvider.GetBalance(fromAddress).Result.Value);
+        }
+
+        [Test]
+        public void SendTransactionWithInvalidAddress()
+        {
+            const string to = "not_a_valid_address";
+            var amount = new HexBigInteger(1000000);
+            var transaction = new TransactionRequest
+            {
+                To = to,
+                Value = amount,
+                GasLimit = new HexBigInteger("10000"),
+                GasPrice = new HexBigInteger("100000000"),
+            };
+
+            var ex = Assert.ThrowsAsync<Web3Exception>(async () =>
+            {
+                var txHash = await firstAccount.TransactionExecutor.SendTransaction(transaction);
+            });
+            Assert.That(ex.Message.Contains("eth_sendTransaction"));
+        }
+
+        [Test]
+        public void SendTransactionWithLowGasLimit()
+        {
+            const string to = "0x1234567890123456789012345678901234567890";
+            var amount = new HexBigInteger(1000000);
+            var gasLimit = new HexBigInteger(1);
+            var transaction = new TransactionRequest
+            {
+                To = to,
+                Value = amount,
+                GasLimit = gasLimit,
+            };
+
+            var ex = Assert.ThrowsAsync<Web3Exception>(async () =>
+            {
+                var txHash = await firstAccount.TransactionExecutor.SendTransaction(transaction);
+            });
+
+            Assert.That(ex != null && ex.Message.Contains("eth_sendTransaction"));
+            var result = ex.Message.Contains("-32000") ||
+                         (ex.InnerException != null && ex.InnerException.Message.Contains("-32000"));
+            Assert.That(result);
+        }
+
+        [Test]
+        public void SendTransactionWithLowGasPrice()
+        {
+            const string to = "0x1234567890123456789012345678901234567890";
+            var amount = new HexBigInteger(1000000);
+            var gasPrice = new HexBigInteger(1);
+            var transaction = new TransactionRequest
+            {
+                To = to,
+                Value = amount,
+                GasPrice = gasPrice,
+            };
+
+            Assert.ThrowsAsync<Web3Exception>(() => firstAccount.TransactionExecutor.SendTransaction(transaction));
+        }
     }
 }

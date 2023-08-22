@@ -7,12 +7,17 @@
 
     <EnableNETAnalyzers>True</EnableNETAnalyzers>
     <CodeAnalysisRuleSet>../../global.ruleset</CodeAnalysisRuleSet>
+    <Configurations>Debug;Release;Test</Configurations>
+    <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ChainSafe.GamingSDK.EVM.WebPageWallet\ChainSafe.GamingSDK.EVM.WebPageWallet.csproj" />
     <ProjectReference Include="..\ChainSafe.GamingSDK.EVM\ChainSafe.GamingSDK.EVM.csproj" />
+    <ProjectReference Include="..\ChainSafe.GamingSdk.EVM.InProcessSigner\ChainSafe.GamingSdk.EVM.InProcessSigner.csproj" />
+    <ProjectReference Include="..\ChainSafe.GamingSdk.EVM.InProcessTransactionExecutor\ChainSafe.GamingSdk.EVM.InProcessTransactionExecutor.csproj" />
+    <ProjectReference Include="..\ChainSafe.GamingSDK.EVM.WebPageWallet\ChainSafe.GamingSDK.EVM.WebPageWallet.csproj" />
     <ProjectReference Include="..\ChainSafe.GamingSdk.EVM.Unity.ThirdParty\ChainSafe.GamingSdk.EVM.Unity.ThirdParty.csproj" />
+    <ProjectReference Include="..\ChainSafe.GamingSdk.Gelato\ChainSafe.GamingSdk.Gelato.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +28,12 @@
   <ItemGroup>
     <!-- Resolve dependency conflict by referencing this version directly -->
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <EmbeddedResource Include="link.xml">
+      <LogicalName>ChainSafe.GamingSdk.EVM.Unity.xml</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
