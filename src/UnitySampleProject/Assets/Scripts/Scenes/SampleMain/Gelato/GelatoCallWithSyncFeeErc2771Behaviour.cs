@@ -19,7 +19,7 @@ namespace Samples.Behaviours.Gelato
             SampleOutputUtil.PrintResult(
                 $"Task complete. Final status of {result.TaskId}: {result.Status.TaskState}. " +
                 $"Transaction hash: {result.Status.TransactionHash}",
-                nameof(GelatoSample), nameof(GelatoSample.CallWithSyncFee));
+                nameof(GelatoSample), nameof(GelatoSample.CallWithSyncFeeErc2771));
         }
     }
 }
