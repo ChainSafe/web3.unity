@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Scripts.EVM.Token
 {
+    // todo convert this into a service
     public class Erc721
     {
         private static string _abi = ABI.Erc721;

@@ -12,7 +12,7 @@ namespace Samples.Behaviours
         protected override void Awake()
         {
             base.Awake();
-            logic = new Erc20Sample(Web3Accessor.Web3);
+            logic = new Erc20Sample(Web3);
         }
 
         protected override async Task ExecuteSample()

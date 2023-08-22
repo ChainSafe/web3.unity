@@ -5,6 +5,7 @@ using ChainSafe.GamingWeb3;
 
 namespace Scripts.EVM.Token
 {
+    // todo convert this into a service
     public class Erc1155
     {
         private static readonly string Abi = ABI.Erc1155;
