@@ -16,7 +16,7 @@ namespace Samples.Behaviours.Unsorted
         protected override async Task ExecuteSample()
         {
             var blockNumber = await logic.GetBlockNumber();
-            
+
             SampleOutputUtil.PrintResult(blockNumber.ToString(), nameof(UnsortedSample), nameof(UnsortedSample.GetBlockNumber));
         }
     }

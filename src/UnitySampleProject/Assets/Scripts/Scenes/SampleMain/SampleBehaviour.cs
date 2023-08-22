@@ -9,7 +9,7 @@ namespace Samples.Behaviours
     public abstract class SampleBehaviour : MonoBehaviour
     {
         protected Web3 Web3 => Web3Accessor.Web3;
-        
+
         protected virtual void Awake()
         {
             var button = GetComponent<Button>();
@@ -19,7 +19,7 @@ namespace Samples.Behaviours
         private async void Execute()
         {
             SampleFeedback.Instance?.Activate();
-            
+
             try
             {
                 await Task.Yield();

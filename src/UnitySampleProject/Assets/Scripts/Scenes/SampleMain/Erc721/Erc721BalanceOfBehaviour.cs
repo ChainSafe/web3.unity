@@ -7,7 +7,7 @@ namespace Samples.Behaviours.Erc721
     {
         public string contractAddress = "0x9123541E259125657F03D7AD2A7D1a8Ec79375BA";
         public string account = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
-        
+
         private Erc721Sample logic;
 
         protected override void Awake()

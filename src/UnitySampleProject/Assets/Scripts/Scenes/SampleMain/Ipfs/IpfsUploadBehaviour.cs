@@ -10,7 +10,7 @@ namespace Samples.Behaviours.Ipfs
         public string bucketId = "BUCKET_ID";
         public string path = "/PATH";
         public string filename = "FILENAME.EXT";
-        
+
         private IpfsSample logic;
 
         protected override void Awake()
@@ -28,7 +28,7 @@ namespace Samples.Behaviours.Ipfs
                 Path = path,
                 Filename = filename
             });
-            
+
             SampleOutputUtil.PrintResult(cid, nameof(IpfsSample), nameof(IpfsSample.Upload));
         }
     }

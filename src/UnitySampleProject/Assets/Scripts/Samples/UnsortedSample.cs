@@ -32,7 +32,7 @@ namespace Web3Unity.Scripts.Prefabs
             var contractAddress = "0x5244d0453A727EDa96299384370359f4A2B5b20a";
             var abi = "[{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"_addresses\",\"type\":\"address[]\"}],\"name\":\"setStore\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"bought\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getStore\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]";
             var method = "getStore";
-            
+
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
             var rawResponse = await contract.Call(method);
             return rawResponse.Select(raw => raw as List<string>).ToList();
@@ -75,7 +75,7 @@ namespace Web3Unity.Scripts.Prefabs
             var transactionResponse = await web3.TransactionExecutor.SendTransaction(transactionRequest);
             return await web3.RpcProvider.WaitForTransactionReceipt(transactionResponse.Hash);
         }
-        
+
         // todo weird one, needs explanation on how to interpret the response
         public async Task<object[]> Mint721(string abi, string contractAddress, string uri)
         {
@@ -84,7 +84,7 @@ namespace Web3Unity.Scripts.Prefabs
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
             return await contract.Send(method, new object[] { destination, uri });
         }
-        
+
         // ProviderEvent skipped
 
         public async Task<BigInteger> UseRegisteredContract()
@@ -149,13 +149,13 @@ namespace Web3Unity.Scripts.Prefabs
             var abi = ABI.ERC_20;
             var method = EthMethod.Transfer;
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
-            
+
             var response = await contract.Send(method, new object[]
             {
                 toAccount,
                 amount
             });
-            
+
             return response;
         }
 
@@ -166,14 +166,14 @@ namespace Web3Unity.Scripts.Prefabs
             var method = EthMethod.SafeTransferFrom;
             var account = await web3.Signer.GetAddress();
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
-            
+
             var response = await contract.Send(method, new object[]
             {
                 account,
                 toAccount,
                 tokenId.ToString()
             });
-            
+
             return response;
         }
 

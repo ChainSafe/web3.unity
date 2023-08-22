@@ -32,21 +32,21 @@ namespace Scenes
         public string RedirectUri;
         public Web3Auth.Network Network;
     }
-    
+
     public class Login : MonoBehaviour
     {
         internal const string PlayerAccountKey = "PlayerAccount";
-        
+
         [Header("Configuration")]
         public string GelatoApiKey = "";
         public Web3AuthSettings Web3AuthSettings;
-        
+
         [Header("UI")]
         public Button ExistingWalletButton;
         public Toggle RememberMeToggle;
         public ErrorPopup ErrorPopup;
         public List<Web3AuthButtonAndProvider> Web3AuthButtons;
-        
+
         private bool useWebPageWallet;
 
         private void Awake()
@@ -58,12 +58,12 @@ namespace Scenes
             Assert.IsNotNull(RememberMeToggle);
 
             useWebPageWallet = Application.platform != RuntimePlatform.WebGLPlayer;
-            
+
             // Remember me only works with the WebPageWallet
             RememberMeToggle.gameObject.SetActive(useWebPageWallet);
-            
+
             TryAutoLogin();
-            
+
             ExistingWalletButton.onClick.AddListener(LoginWithExistingAccount);
 
             foreach (var buttonAndProvider in Web3AuthButtons)
@@ -73,17 +73,17 @@ namespace Scenes
                 button.onClick.AddListener(() => LoginWithWeb3Auth(provider));
             }
         }
-        
+
         private void TryAutoLogin()
         {
             if (!useWebPageWallet)
                 return;
-            
+
             var savedAccount = PlayerPrefs.GetString(PlayerAccountKey);
-            
+
             if (string.IsNullOrEmpty(savedAccount))
                 return;
-            
+
             Debug.Log("Saved account detected. Logging in...");
 
             var web3Builder = new Web3Builder(ProjectConfigUtilities.Load())
@@ -96,7 +96,7 @@ namespace Scenes
                             SavedUserAddress = savedAccount,
                         });
                 });
-            
+
             ProcessLogin(web3Builder);
         }
 
@@ -120,7 +120,7 @@ namespace Scenes
                         services.UseWebGLWallet();
                     }
                 });
-            
+
             await ProcessLogin(web3Builder);
 
             if (useWebPageWallet && RememberMeToggle.isOn)
@@ -154,7 +154,7 @@ namespace Scenes
 
                     services.UseWeb3AuthWallet(web3AuthConfig);
                 });
-            
+
             ProcessLogin(web3Builder);
         }
 
@@ -175,11 +175,11 @@ namespace Scenes
                 ErrorPopup.ShowError($"Unknown error occured\n(see console for more details)");
                 throw;
             }
-            
+
             Web3Accessor.Set(web3);
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
-        
+
         private void ConfigureCommonServices(IWeb3ServiceCollection services)
         {
             services

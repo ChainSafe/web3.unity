@@ -27,7 +27,7 @@ namespace Scripts.EVM.Token
             });
             return BigInteger.Parse(contractData[0].ToString());
         }
-        
+
         /// <summary>
         /// Balance of Batch ERC1155
         /// </summary>
@@ -46,7 +46,7 @@ namespace Scripts.EVM.Token
             });
             return contractData[0] as List<BigInteger> ?? throw new System.Exception("Unexpected result from contract call");
         }
-        
+
         /// <summary>
         /// Token URI of ERC1155 Token
         /// </summary>

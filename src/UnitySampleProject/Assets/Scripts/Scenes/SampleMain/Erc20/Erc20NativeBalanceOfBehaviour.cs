@@ -5,7 +5,7 @@ namespace Samples.Behaviours
     public class Erc20NativeBalanceOfBehaviour : SampleBehaviour
     {
         public string account = "0xaBed4239E4855E120fDA34aDBEABDd2911626BA1";
-        
+
         private Erc20Sample logic;
 
         protected override void Awake()

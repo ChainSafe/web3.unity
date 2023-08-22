@@ -6,7 +6,7 @@ using UnityEngine;
 public class SelectAssetInEditor : MonoBehaviour
 {
     public Object Target;
-    
+
     public void Select()
     {
 #if UNITY_EDITOR

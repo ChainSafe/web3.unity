@@ -11,7 +11,7 @@ namespace Web3Unity.Scripts.Prefabs
         public string Path { get; set; }
         public string Filename { get; set; }
     }
-    
+
     public class IpfsSample
     {
         public async Task<string> Upload(IpfsUploadRequest request)

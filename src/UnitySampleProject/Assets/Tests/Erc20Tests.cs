@@ -21,7 +21,7 @@ public class Erc20Tests
         var buildWeb3Task = web3Builder.BuildAsync().AsTask();
         buildWeb3Task.Wait();
         var web3 = buildWeb3Task.Result;
-        
+
         logic = new Erc20Sample(web3);
     }
 
@@ -30,10 +30,10 @@ public class Erc20Tests
     {
         // Arrange
         var contractAddress = "0x3E0C0447e47d49195fbE329265E330643eB42e6f";
-        
+
         // Act
         var name = await logic.Name(contractAddress);
-        
+
         // Assert
         Assert.AreEqual("ChainToken", name);
     }

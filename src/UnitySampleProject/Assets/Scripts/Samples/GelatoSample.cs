@@ -12,7 +12,7 @@ public class GelatoSample
     {
         _web3 = web3;
     }
-    
+
     public class TaskResult
     {
         public readonly string TaskId;

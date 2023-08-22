@@ -6,7 +6,7 @@ namespace Samples.Behaviours.Unsorted
     public class SendTransactionBehaviour : SampleBehaviour
     {
         public string to = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
-        
+
         private UnsortedSample logic;
 
         protected override void Awake()
@@ -18,7 +18,7 @@ namespace Samples.Behaviours.Unsorted
         protected override async Task ExecuteSample()
         {
             var transactionHash = await logic.SendTransaction(to);
-            
+
             SampleOutputUtil.PrintResult(transactionHash, nameof(UnsortedSample), nameof(UnsortedSample.SendTransaction));
         }
     }

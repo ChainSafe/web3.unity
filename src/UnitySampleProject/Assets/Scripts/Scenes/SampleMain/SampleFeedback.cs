@@ -6,7 +6,7 @@ public class SampleFeedback : MonoBehaviour
 {
     public Animator animator;
     public EventSystem eventSystem;
-    
+
     public static SampleFeedback Instance { get; private set; }
 
     private void OnEnable()

@@ -14,13 +14,13 @@ public class Mint721Voucher : MonoBehaviour
     {
         var voucherResponse721 = await CSServer.Get721Voucher(Web3Accessor.Web3);
         CreateRedeemVoucherModel.CreateVoucher721 voucher721 = new CreateRedeemVoucherModel.CreateVoucher721
-            {
-                tokenId = voucherResponse721.tokenId,
-                minPrice = voucherResponse721.minPrice,
-                signer = voucherResponse721.signer,
-                receiver = voucherResponse721.receiver,
-                signature = voucherResponse721.signature
-            };
+        {
+            tokenId = voucherResponse721.tokenId,
+            minPrice = voucherResponse721.minPrice,
+            signer = voucherResponse721.signer,
+            receiver = voucherResponse721.receiver,
+            signature = voucherResponse721.signature
+        };
         var voucherArgs = JsonUtility.ToJson(voucher721);
 
         // connects to user's browser wallet to call a transaction

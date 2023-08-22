@@ -15,7 +15,7 @@ namespace Samples.Behaviours.Gelato
         protected override async Task ExecuteSample()
         {
             var result = await logic.CallWithSyncFeeErc2771();
-            
+
             SampleOutputUtil.PrintResult(
                 $"Task complete. Final status of {result.TaskId}: {result.Status.TaskState}. " +
                 $"Transaction hash: {result.Status.TransactionHash}",

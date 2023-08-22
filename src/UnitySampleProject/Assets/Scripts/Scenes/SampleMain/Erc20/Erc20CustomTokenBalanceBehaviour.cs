@@ -6,7 +6,7 @@ namespace Samples.Behaviours
     {
         public string contractAbi;
         public string contractAddress;
-        
+
         private Erc20Sample logic;
 
         protected override void Awake()
