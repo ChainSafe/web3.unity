@@ -24,7 +24,7 @@ namespace Scripts.EVM.Token
             });
             return BigInteger.Parse(contractData[0].ToString());
         }
-        
+
         /// <summary>
         /// Name of ERC20 Token
         /// </summary>
@@ -37,7 +37,7 @@ namespace Scripts.EVM.Token
             var name = await contract.Call(CommonMethod.Name);
             return name[0].ToString();
         }
-        
+
         /// <summary>
         /// Symbol of ERC20 Token
         /// </summary>
@@ -50,7 +50,7 @@ namespace Scripts.EVM.Token
             var symbol = await contract.Call(CommonMethod.Symbol);
             return symbol[0].ToString();
         }
-        
+
         /// <summary>
         /// Decimals of ERC20 Token
         /// </summary>
@@ -63,7 +63,7 @@ namespace Scripts.EVM.Token
             var decimals = await contract.Call(CommonMethod.Decimals);
             return BigInteger.Parse(decimals[0].ToString());
         }
-        
+
         /// <summary>
         /// Total Supply of ERC20 Token
         /// </summary>
