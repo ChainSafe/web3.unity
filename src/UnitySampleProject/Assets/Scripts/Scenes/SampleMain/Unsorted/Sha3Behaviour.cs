@@ -6,7 +6,7 @@ namespace Samples.Behaviours.Unsorted
     public class Sha3Behaviour : SampleBehaviour
     {
         public string message = "It’s dangerous to go alone, take this!";
-        
+
         private UnsortedSample logic;
 
         protected override void Awake()
@@ -18,7 +18,7 @@ namespace Samples.Behaviours.Unsorted
         protected override async Task ExecuteSample()
         {
             var hash = logic.Sha3(message);
-            
+
             SampleOutputUtil.PrintResult(hash, nameof(UnsortedSample), nameof(UnsortedSample.Sha3));
         }
     }

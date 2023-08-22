@@ -6,7 +6,7 @@ namespace Samples.Behaviours.Unsorted
     public class SignVerifyBehaviour : SampleBehaviour
     {
         public string message = "A man chooses, a slave obeys.";
-        
+
         private UnsortedSample logic;
 
         protected override void Awake()
@@ -18,10 +18,10 @@ namespace Samples.Behaviours.Unsorted
         protected override async Task ExecuteSample()
         {
             var signatureVerified = await logic.SignVerify(message);
-            
+
             var output = signatureVerified ? "Verified" : "Failed to verify";
             SampleOutputUtil.PrintResult(output, nameof(UnsortedSample), nameof(UnsortedSample.SignVerify));
-            
+
         }
     }
 }

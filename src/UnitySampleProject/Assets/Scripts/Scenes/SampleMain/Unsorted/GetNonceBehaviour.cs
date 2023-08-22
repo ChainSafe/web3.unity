@@ -16,7 +16,7 @@ namespace Samples.Behaviours.Unsorted
         protected override async Task ExecuteSample()
         {
             var nonce = await logic.GetNonce();
-            
+
             SampleOutputUtil.PrintResult(nonce.ToString(), nameof(UnsortedSample), nameof(UnsortedSample.GetNonce));
         }
     }

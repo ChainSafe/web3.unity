@@ -8,7 +8,7 @@ namespace Samples.Behaviours.Erc1155
         public string contractAddress = "0xdc4aff511e1b94677142a43df90f948f9ae181dd";
         public string[] accounts = { "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2", "0xE51995Cdb3b1c109E0e6E67ab5aB31CDdBB83E4a" };
         public string[] tokenIds = { "1", "2" };
-        
+
         private Erc1155Sample logic;
 
         protected override void Awake()

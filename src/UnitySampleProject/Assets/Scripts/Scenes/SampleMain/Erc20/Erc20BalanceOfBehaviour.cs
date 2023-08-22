@@ -6,7 +6,7 @@ namespace Samples.Behaviours
     {
         public string contractAddress = "0x3E0C0447e47d49195fbE329265E330643eB42e6f";
         public string account = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
-        
+
         private Erc20Sample logic;
 
         protected override void Awake()

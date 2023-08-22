@@ -16,7 +16,7 @@ namespace Samples.Behaviours.Unsorted
         protected override async Task ExecuteSample()
         {
             var balance = await logic.UseRegisteredContract();
-            
+
             SampleOutputUtil.PrintResult(balance.ToString(), nameof(UnsortedSample), nameof(UnsortedSample.UseRegisteredContract));
         }
     }

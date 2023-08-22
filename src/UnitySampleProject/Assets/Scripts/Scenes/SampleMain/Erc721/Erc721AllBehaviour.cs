@@ -14,7 +14,7 @@ namespace Samples.Behaviours.Erc721
         public string contract = "0x2c1867BC3026178A47a677513746DCc6822A137A";
         public int take = 500;
         public int skip = 0;
-        
+
         private Erc721Sample logic;
 
         protected override void Awake()

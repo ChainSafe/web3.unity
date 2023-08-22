@@ -14,7 +14,7 @@ namespace Samples.Behaviours.Erc1155
         public string contract = "";
         public int take = 1000;
         public int skip = 0;
-        
+
         private Erc1155Sample logic;
 
         protected override void Awake()

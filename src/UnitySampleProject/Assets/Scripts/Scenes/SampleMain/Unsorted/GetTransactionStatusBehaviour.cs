@@ -16,11 +16,11 @@ namespace Samples.Behaviours.Unsorted
         protected override async Task ExecuteSample()
         {
             var receipt = await logic.GetTransactionStatus();
-            
+
             var output = $"Confirmations: {receipt.Confirmations}," +
                          $" Block Number: {receipt.BlockNumber}," +
                          $" Status {receipt.Status}";
-            
+
             SampleOutputUtil.PrintResult(output, nameof(UnsortedSample), nameof(UnsortedSample.GetTransactionStatus));
         }
     }

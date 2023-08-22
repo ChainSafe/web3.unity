@@ -9,7 +9,7 @@ namespace Samples.Behaviours.Unsorted
         public string contractAddress = "0xae283E79a5361CF1077bf2638a1A953c872AD973";
         public int tokenId = 0;
         public int amount = 1;
-        
+
         private UnsortedSample logic;
 
         protected override void Awake()
@@ -21,7 +21,7 @@ namespace Samples.Behaviours.Unsorted
         protected override async Task ExecuteSample()
         {
             var response = await logic.TransferErc1155(contractAddress, tokenId, amount, toAccount);
-            
+
             var output = SampleOutputUtil.BuildOutputValue(response);
             SampleOutputUtil.PrintResult(output, nameof(UnsortedSample), nameof(UnsortedSample.TransferErc1155));
         }

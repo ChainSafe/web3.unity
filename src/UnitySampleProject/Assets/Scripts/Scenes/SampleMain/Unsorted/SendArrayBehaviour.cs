@@ -14,7 +14,7 @@ namespace Samples.Behaviours.Unsorted
             "0xFb3aECf08940785D4fB3Ad87cDC6e1Ceb20e9aac",
             "0x92d4040e4f3591e60644aaa483821d1bd87001e3"
         };
-        
+
         private UnsortedSample logic;
 
         protected override void Awake()
@@ -26,7 +26,7 @@ namespace Samples.Behaviours.Unsorted
         protected override async Task ExecuteSample()
         {
             var response = await logic.SendArray(method, abi, contractAddress, stringArray);
-            
+
             var output = SampleOutputUtil.BuildOutputValue(response);
             SampleOutputUtil.PrintResult(output, nameof(UnsortedSample), nameof(UnsortedSample.SendArray));
         }

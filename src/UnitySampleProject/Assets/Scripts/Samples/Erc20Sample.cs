@@ -12,7 +12,7 @@ public class Erc20Sample
     {
         this.web3 = web3;
     }
-    
+
     public async Task<BigInteger> BalanceOf(string contractAddress, string account)
     {
         return await Erc20.BalanceOf(web3, contractAddress, account);
@@ -50,6 +50,6 @@ public class Erc20Sample
 
     public async Task<BigInteger> TotalSupply(string contractAddress)
     {
-        return await Erc20.TotalSupply(web3, contractAddress);;
+        return await Erc20.TotalSupply(web3, contractAddress);
     }
 }
