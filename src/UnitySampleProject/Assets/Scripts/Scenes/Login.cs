@@ -1,3 +1,4 @@
+using ChainSafe.GamingSdk.Web3Auth;
 using ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet;
 using ChainSafe.GamingSDK.EVM.WebGLWallet;
 using ChainSafe.GamingWeb3;
@@ -7,6 +8,8 @@ using Org.BouncyCastle.Asn1.Mozilla;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using ChainSafe.GamingSdk.Gelato;
 using ChainSafe.GamingSDK.EVM.Web3.Core.Evm.MultiCall3;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -17,28 +20,50 @@ using Web3Unity.Scripts.Library.Ethers.JsonRpc;
 public class Login : MonoBehaviour
 {
     internal const string PlayerAccountKey = "PlayerAccount";
+    [SerializeField]
+    private string gelatoApiKey = "";
 
     private Text errorText;
     private Toggle rememberMeToggle;
 
+    private Dropdown web3AuthProvidersDropdown;
+    private int selectedWeb3AuthProvider;
+    private IReadOnlyList<(string name, Provider provider)> web3AuthProviderList = new List<(string, Provider)>
+    {
+        // You can add as many providers as you like
+        ("Google", Provider.GOOGLE),
+        ("Twitter", Provider.TWITTER),
+        ("Facebook", Provider.FACEBOOK),
+        ("Reddit", Provider.REDDIT),
+        ("Discord", Provider.DISCORD),
+        ("Twitch", Provider.TWITCH),
+    };
+
     void Start()
     {
         errorText = FindComponent<Text>("ErrorText");
-        rememberMeToggle = FindComponent<Toggle>("RememberMe");
+        rememberMeToggle = FindComponent<Toggle>("RemoteWallet/RememberMe");
+
+        web3AuthProvidersDropdown = FindComponent<Dropdown>("Web3Auth/Providers");
+        web3AuthProvidersDropdown.ClearOptions();
 
         errorText.gameObject.SetActive(false);
 
         // Remember me only works with the WebPageWallet
         rememberMeToggle.gameObject.SetActive(!IsWebGLBuild());
 
-        Web3Accessor.Instance.Clear();
+        Web3Accessor.Clear();
 
         var savedAccount = PlayerPrefs.GetString(PlayerAccountKey);
         if (!IsWebGLBuild() && !string.IsNullOrEmpty(savedAccount))
         {
             rememberMeToggle.isOn = true;
             LoginFromSavedAccount(savedAccount);
+            return;
         }
+
+        web3AuthProvidersDropdown.AddOptions(web3AuthProviderList.Select(x => x.name).ToList());
+        web3AuthProvidersDropdown.onValueChanged.AddListener(i => selectedWeb3AuthProvider = i);
     }
 
     T FindComponent<T>(string path) where T : Component
@@ -134,9 +159,58 @@ public class Login : MonoBehaviour
         }
     }
 
+    public async void OnLoginWeb3Auth()
+    {
+        try
+        {
+            errorText.gameObject.SetActive(false);
+
+            var web3AuthConfig = new Web3AuthWalletConfig
+            {
+                // todo: will move out to inspector in #393
+                ClientId = "BIM5jpn-sejNdSrW9LMf5YSIieSluWoEZ2Fp0YmuOb_E0oCXO1vCj_mtQqz6qXYLOEqtQdLHA3OQ-vseahybUww",
+                RedirectUri = "torusapp://io.chainsafe.gamingsdk.sampleproject/auth",
+                Network = Web3Auth.Network.CYAN,
+                Web3AuthOptions = new()
+                {
+                    whiteLabel = new()
+                    {
+                        dark = true,
+                        defaultLanguage = "en",
+                        name = "ChainSafe Gaming SDK",
+                    }
+                },
+                LoginParams = new()
+                {
+                    loginProvider = web3AuthProviderList[selectedWeb3AuthProvider].provider
+                }
+            };
+
+            var web3 =
+                await new Web3Builder(ProjectConfigUtilities.Load())
+                    .Configure(ConfigureCommonServices)
+                    .Configure(services => services.UseWeb3AuthWallet(web3AuthConfig))
+                    .BuildAsync();
+
+            PostLogin(web3);
+        }
+        catch (Web3Exception e)
+        {
+            Debug.LogException(e);
+            errorText.gameObject.SetActive(true);
+            errorText.text = "Login failed, please try again";
+        }
+        catch (Exception e)
+        {
+            Debug.LogException(e);
+            errorText.gameObject.SetActive(true);
+            errorText.text = "Implementation error";
+        }
+    }
+
     private static void PostLogin(Web3 web3)
     {
-        Web3Accessor.Instance.Set(web3);
+        Web3Accessor.Set(web3);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
@@ -144,6 +218,7 @@ public class Login : MonoBehaviour
     {
         services
             .UseUnityEnvironment()
+            .UseGelato(gelatoApiKey)
             .UseMultiCall()
             .UseJsonRpcProvider();
 

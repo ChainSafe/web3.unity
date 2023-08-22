@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ChainSafe.GamingSdk.EVM.Unity
+﻿namespace ChainSafe.GamingSdk.EVM.Unity
 {
     internal class EnsureUnityBuild
     {

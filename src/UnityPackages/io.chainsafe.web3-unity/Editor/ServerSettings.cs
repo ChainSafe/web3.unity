@@ -132,26 +132,26 @@ public class ChainSafeServerSettings : EditorWindow
         Debug.Log("Checking Project ID!");
         using UnityWebRequest www = UnityWebRequest.Post("https://api.gaming.chainsafe.io/project/checkId", form);
         await EditorUtilities.SendAndWait(www);
+        const string dbgProjectIDMessage =
+            "Project ID is not valid! Please go to https://dashboard.daming.chainsafe.io to get a new Project ID";
 
         if (www.result != UnityWebRequest.Result.Success)
         {
             Debug.Log(www.error);
             Debug.Log("Error Checking Project ID!");
-            Debug.LogError("ProjectID Not Valid! Please Go To Dashboard.Gaming.Chainsafe.io To Get A New ProjectID");
+            Debug.LogError(dbgProjectIDMessage);
             return false;
         }
 
         var response = JsonConvert.DeserializeObject<ValidateProjectIDResponse>(www.downloadHandler.text);
         if (response.Response.ToString().Equals("True", StringComparison.InvariantCultureIgnoreCase))
         {
-            Debug.Log("ProjectID Valid, You May Now Build With The SDK!");
+            Debug.Log("ProjectID is valid, you may now build with The SDK!");
             return true;
         }
-        else
-        {
-            Debug.LogError("ProjectID Not Valid! Please Go To Dashboard.Gaming.Chainsafe.IO To Get A New Project ID");
-            return false;
-        }
+
+        Debug.LogError(dbgProjectIDMessage);
+        return false;
     }
 
     public static void WriteNetworkFile()
