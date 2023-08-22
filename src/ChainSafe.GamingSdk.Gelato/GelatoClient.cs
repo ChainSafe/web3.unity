@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.GamingSdk.Gelato.Dto;
 using ChainSafe.GamingSdk.Gelato.Types;
@@ -30,6 +32,11 @@ namespace ChainSafe.GamingSdk.Gelato
                 RelayCall.SponsoredCallErc2771 => $"{config.Url}/relays/v2/sponsored-call-erc2771",
                 _ => throw new Web3Exception("relayCall option not found")
             };
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append($"Gelato URL is: {url}");
+            File.AppendAllText("gaming-log.txt", sb.ToString());
+            sb.Clear();
 
             return (await httpClient.Post<TRequest, TResponse>(url, request)).EnsureResponse();
         }
