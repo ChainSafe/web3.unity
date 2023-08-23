@@ -4,6 +4,7 @@ using ChainSafe.GamingWeb3;
 
 namespace Scripts.EVM.Token
 {
+    // todo convert this into a service
     public class Erc20
     {
 
