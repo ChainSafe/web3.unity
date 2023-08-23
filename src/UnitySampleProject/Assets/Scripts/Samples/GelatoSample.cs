@@ -153,7 +153,7 @@ public class GelatoSample
 
     public async Task<TaskResult> SponsorCallErc2771()
     {
-        const string target = "0x0FdcbA77fCF70E91988507F89864088a25b752a1";
+        const string target = "0x00172f67db60E5fA346e599cdE675f0ca213b47b";
 
         const string abi = "[{\"inputs\": []," +
                   "\"name\":\"increment\"," +

@@ -1635,7 +1635,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9473851428864b439d6561c87053272a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GelatoApiKey: e3o3y_Kmg_9aQ_trn_MuzQtJvD2_ARBXdZ7UnjTdiKE_
+  GelatoApiKey: 
   Web3AuthSettings:
     ClientId: BIM5jpn-sejNdSrW9LMf5YSIieSluWoEZ2Fp0YmuOb_E0oCXO1vCj_mtQqz6qXYLOEqtQdLHA3OQ-vseahybUww
     RedirectUri: torusapp://io.chainsafe.gamingsdk.sampleproject/auth
