@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 public class SampleFeedback : MonoBehaviour
 {
     public Animator animator;
+    public Animation LoadingAnimation;
     public EventSystem eventSystem;
 
     public static SampleFeedback Instance { get; private set; }
@@ -31,11 +32,14 @@ public class SampleFeedback : MonoBehaviour
     {
         eventSystem.enabled = false;
         animator.SetBool("On", true);
+        LoadingAnimation.Play();
     }
 
     public void Deactivate()
     {
         eventSystem.enabled = true;
         animator.SetBool("On", false);
+        LoadingAnimation.Stop();
+        LoadingAnimation.Rewind();
     }
 }
