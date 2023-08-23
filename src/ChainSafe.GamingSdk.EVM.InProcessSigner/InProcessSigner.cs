@@ -28,24 +28,20 @@ namespace ChainSafe.GamingSdk.EVM.InProcessSigner
             Task.FromResult(messageSigner.EncodeUTF8AndSign(message, privateKey));
 
         // TODO: test this with Gelato
-        public Task<string> SignTypedData<TStructType>(SerializableDomain domain, Dictionary<string, MemberDescription[]> types, TStructType message)
+        public Task<string> SignTypedData<TStructType>(
+            SerializableDomain domain, Dictionary<string, MemberDescription[]> types, string primaryType, TStructType message)
         {
             var typedData = new TypedData<SerializableDomain>
             {
-                PrimaryType = domain.Name,
+                PrimaryType = primaryType,
                 Domain = domain,
                 Types = types,
                 Message = MemberValueFactory.CreateFromMessage(message),
             };
 
-            if (!typedData.Types.ContainsKey("EIP712Domain"))
+            if (!typedData.Types.ContainsKey(DomainSeparator.DomainName))
             {
-                var domain712 = new[]
-                {
-                    new MemberDescription { Name = "name", Type = "string" },
-                    new MemberDescription { Name = "chainId", Type = "uint256" },
-                };
-                typedData.Types.Add("EIP712Domain", domain712);
+                typedData.Types.Add(DomainSeparator.DomainName, DomainSeparator.Eip712Domain);
             }
 
             return Task.FromResult(

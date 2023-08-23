@@ -99,11 +99,12 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
             return await provider.Perform<string>("personal_sign", hexMessage, adr.ToLower());
         }
 
-        public async Task<string> SignTypedData<TStructType>(SerializableDomain domain, Dictionary<string, MemberDescription[]> types, TStructType message)
+        public async Task<string> SignTypedData<TStructType>(
+            SerializableDomain domain, Dictionary<string, MemberDescription[]> types, string primaryType, TStructType message)
         {
             var typedData = new TypedData<SerializableDomain>
             {
-                PrimaryType = domain.Name,
+                PrimaryType = primaryType,
                 Domain = domain,
                 Types = types,
                 Message = MemberValueFactory.CreateFromMessage(message),

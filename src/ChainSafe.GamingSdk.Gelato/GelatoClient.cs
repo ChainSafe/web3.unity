@@ -33,11 +33,6 @@ namespace ChainSafe.GamingSdk.Gelato
                 _ => throw new Web3Exception("relayCall option not found")
             };
 
-            StringBuilder sb = new StringBuilder();
-            sb.Append($"Gelato URL is: {url}");
-            File.AppendAllText("gaming-log.txt", sb.ToString());
-            sb.Clear();
-
             return (await httpClient.Post<TRequest, TResponse>(url, request)).EnsureResponse();
         }
 
