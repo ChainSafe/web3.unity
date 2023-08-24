@@ -101,7 +101,8 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
             }
         }
 
-        public async Task<string> SignTypedData<TStructType>(SerializableDomain domain, Dictionary<string, MemberDescription[]> types, TStructType message)
+        public async Task<string> SignTypedData<TStructType>(
+                SerializableDomain domain, Dictionary<string, MemberDescription[]> types, string primaryType, TStructType message)
         {
             JS_resetSignTypedMessageResponse();
             JS_signTypedMessage(JsonConvert.SerializeObject(domain), JsonConvert.SerializeObject(types), JsonConvert.SerializeObject(message));

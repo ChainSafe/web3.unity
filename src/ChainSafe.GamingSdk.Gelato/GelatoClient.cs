@@ -1,6 +1,4 @@
 using System;
-using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.GamingSdk.Gelato.Dto;
 using ChainSafe.GamingSdk.Gelato.Types;
