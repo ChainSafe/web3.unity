@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.Common;
 using System.Threading.Tasks;
 using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
 using ChainSafe.GamingWeb3;
@@ -27,16 +28,25 @@ namespace ChainSafe.GamingSdk.EVM.InProcessSigner
             Task.FromResult(messageSigner.EncodeUTF8AndSign(message, privateKey));
 
         // TODO: test this with Gelato
-        public Task<string> SignTypedData<TStructType>(SerializableDomain domain, Dictionary<string, MemberDescription[]> types, TStructType message) =>
-            Task.FromResult(
-                Eip712TypedDataSigner.Current.SignTypedData(
-                    new TypedData<SerializableDomain>
-                    {
-                        Domain = domain,
-                        Types = types,
-                        Message = MemberValueFactory.CreateFromMessage(message),
-                    },
-                    privateKey));
+        public Task<string> SignTypedData<TStructType>(
+            SerializableDomain domain, Dictionary<string, MemberDescription[]> types, string primaryType, TStructType message)
+        {
+            var typedData = new TypedData<SerializableDomain>
+            {
+                PrimaryType = primaryType,
+                Domain = domain,
+                Types = types,
+                Message = MemberValueFactory.CreateFromMessage(message),
+            };
+
+            if (!typedData.Types.ContainsKey(DomainSeparator.DomainName))
+            {
+                typedData.Types.Add(DomainSeparator.DomainName, DomainSeparator.Eip712Domain);
+            }
+
+            return Task.FromResult(
+                Eip712TypedDataSigner.Current.SignTypedData(typedData, privateKey));
+        }
 
         public EthECKey GetKey() => privateKey;
     }

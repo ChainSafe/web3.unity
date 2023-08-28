@@ -1,3 +1,4 @@
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.GamingSdk.Evm.Unity;
@@ -23,7 +24,7 @@ namespace ChainSafe.GamingWeb3.Unity
 
             if (request.result != UnityWebRequest.Result.Success)
             {
-                throw new Web3Exception($"HTTP.Get responded with error: {request.error}");
+                throw new Web3Exception($"HTTP.{request.method} to {request.url} responded with error: {request.downloadHandler.text}");
             }
 
             return NetworkResponse<string>.Success(request.downloadHandler.text);

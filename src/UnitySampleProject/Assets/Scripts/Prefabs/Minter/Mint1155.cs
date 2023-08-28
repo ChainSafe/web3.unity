@@ -1,12 +1,9 @@
 using Models;
 using UnityEngine;
-// using Web3Unity.Scripts.Library.Web3Wallet;
-using Web3Unity.Scripts.Library.ETHEREUEM.Connect;
-using System;
+using Scripts.EVM.Remote;
 using Web3Unity.Scripts.Library.Ethers.Transactions;
 using Nethereum.Hex.HexTypes;
 using Newtonsoft.Json;
-using System.Numerics;
 
 public class Mint1155 : MonoBehaviour
 {
@@ -15,7 +12,7 @@ public class Mint1155 : MonoBehaviour
 
     public async void VoucherMintNft1155()
     {
-        var voucherResponse1155 = await EVM.Get1155Voucher(Web3Accessor.Web3);
+        var voucherResponse1155 = await CSServer.Get1155Voucher(Web3Accessor.Web3);
         CreateRedeemVoucherModel.CreateVoucher1155 voucher1155 = new CreateRedeemVoucherModel.CreateVoucher1155();
         voucher1155.tokenId = voucherResponse1155.tokenId;
         voucher1155.minPrice = voucherResponse1155.minPrice;
@@ -28,7 +25,7 @@ public class Mint1155 : MonoBehaviour
 
         // connects to user's browser wallet to call a transaction
         var chainConfig = Web3Accessor.Web3.ChainConfig;
-        RedeemVoucherTxModel.Response voucherResponse = await EVM.CreateRedeemTransaction(Web3Accessor.Web3, chainConfig.Chain, chainConfig.Network, voucherArgs, "1155", nftAddress, voucherResponse1155.receiver);
+        RedeemVoucherTxModel.Response voucherResponse = await CSServer.CreateRedeemTransaction(Web3Accessor.Web3, chainConfig.Chain, chainConfig.Network, voucherArgs, "1155", nftAddress, voucherResponse1155.receiver);
         var txRequest = new TransactionRequest
         {
             ChainId = HexBigIntUtil.ParseHexBigInt(chainConfig.ChainId),

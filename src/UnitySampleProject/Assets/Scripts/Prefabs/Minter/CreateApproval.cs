@@ -1,11 +1,8 @@
 using Nethereum.Hex.HexTypes;
 using Newtonsoft.Json;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Numerics;
 using UnityEngine;
-using Web3Unity.Scripts.Library.ETHEREUEM.Connect;
+using Scripts.EVM.Remote;
 using Web3Unity.Scripts.Library.Ethers.Transactions;
 
 public class CreateApproval : MonoBehaviour
@@ -15,7 +12,7 @@ public class CreateApproval : MonoBehaviour
     public async void ApproveTransaction()
     {
         var chainConfig = Web3Accessor.Web3.ChainConfig;
-        var response = await EVM.CreateApproveTransaction(Web3Accessor.Web3, chainConfig.Chain, chainConfig.Network, await Web3Accessor.Web3.Signer.GetAddress(), tokenType);
+        var response = await CSServer.CreateApproveTransaction(Web3Accessor.Web3, chainConfig.Chain, chainConfig.Network, await Web3Accessor.Web3.Signer.GetAddress(), tokenType);
         Debug.Log("Response: " + response.connection.chain);
 
         try
