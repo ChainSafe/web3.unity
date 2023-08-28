@@ -6,9 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Login.unity
+    path: Assets/Scenes/SampleLogin.unity
     guid: 1c1af5c5662d105498b2412267dde0df
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
+    path: Assets/Scenes/SampleMain.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/SampleImportNftTexture.unity
+    guid: d31091c4b9c13af48af91512a5127882
   m_configObjects: {}
