@@ -6,11 +6,16 @@ addAssignees: author
 
 # A list of reviewers to be added to pull requests (GitHub username)
 reviewers:
-  - ChainSafe/gaming-sdk
+  - kalambet
+  - oleksandrchainsafe
+  - robGG1997
+  - RyRy79261
+  - sneakzttv
 
 # A list of keywords to be skipped the process that add reviewers if pull requests include it 
 skipKeywords:
   - WIP
+  - wip
 
 # Set 0 to add all the reviewers (default: 0)
 numberOfReviewers: 0
