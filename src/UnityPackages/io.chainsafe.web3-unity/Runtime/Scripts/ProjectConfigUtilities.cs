@@ -17,7 +17,6 @@ public static class ProjectConfigUtilities
         if (projectConfig == null)
         {
             projectConfig = ScriptableObject.CreateInstance<ProjectConfigScriptableObject>();
-            UnityEditor.AssetDatabase.CreateFolder("Assets", "Resources");
             UnityEditor.AssetDatabase.CreateAsset(projectConfig, "Assets/Resources/ProjectConfigData.asset");
         }
 
