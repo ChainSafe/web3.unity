@@ -7,7 +7,7 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
     {
         public string? SavedUserAddress { get; set; } = null;
 
-        public string ServiceUrl { get; set; } = "https://chainsafe.github.io/game-web3wallet/";
+        public string ServiceUrl { get; set; } = "http://localhost:1234/"; // "https://chainsafe.github.io/game-web3wallet/";
 
         public TimeSpan ClipboardCheckPeriod { get; set; } = TimeSpan.FromMilliseconds(100);
 

@@ -136,14 +136,14 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
             bool ValidateResponse(string response) => response.StartsWith("0x") && response.Length == 66;
         }
 
-        public async Task<string> SignTypedData<TStructType>(
-            SerializableDomain domain, Dictionary<string, MemberDescription[]> types, string primaryType, TStructType message)
+        public async Task<string> SignTypedData<TStructType>(Domain domain, TStructType message)
         {
             var pageUrl = BuildUrl();
             return await OpenPageWaitResponse(pageUrl, ValidateResponse);
 
             string BuildUrl()
             {
+                var types = MemberDescriptionFactory.GetTypesMemberDescription(typeof(TStructType));
                 return $"{configuration.ServiceUrl}" +
                        "?action=sign-typed-data" +
                        "&domain=" + Uri.EscapeDataString(JsonConvert.SerializeObject(domain)) +

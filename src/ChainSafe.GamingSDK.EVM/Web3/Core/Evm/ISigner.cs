@@ -11,8 +11,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
 
         Task<string> SignMessage(string message);
 
-        Task<string> SignTypedData<TStructType>(
-            SerializableDomain domain, Dictionary<string, MemberDescription[]> types, string primaryType, TStructType message);
+        Task<string> SignTypedData<TStructType>(Domain domain, TStructType message);
 
         // TODO: is this the right thing to do?
         // Task<string> SignMessage(byte[] message) => SignMessage(message.ToHex());
