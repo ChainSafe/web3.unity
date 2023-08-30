@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
 using ChainSafe.GamingWeb3;
-using Nethereum.Contracts.Standards.ENS.Registrar.ContractDefinition;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
 using Nethereum.Web3.Accounts;
@@ -10,6 +9,7 @@ using Web3Unity.Scripts.Library.Ethers.Providers;
 using Web3Unity.Scripts.Library.Ethers.Signers;
 using Web3Unity.Scripts.Library.Ethers.Transactions;
 
+using NIpcClient = Nethereum.JsonRpc.IpcClient.IpcClient;
 using NWeb3 = Nethereum.Web3.Web3;
 
 namespace ChainSafe.GamingSdk.EVM.InProcessTransactionExecutor
@@ -29,7 +29,20 @@ namespace ChainSafe.GamingSdk.EVM.InProcessTransactionExecutor
                 throw new Web3Exception($"{nameof(InProcessTransactionExecutor)} only supports {nameof(InProcessSigner.InProcessSigner)}");
             accountAddress = privateKey.GetPublicAddress();
             var account = new Account(privateKey);
-            web3 = new NWeb3(account, chainConfig.Rpc);
+            if (chainConfig.Rpc is not null && !string.Empty.Equals(chainConfig.Rpc))
+            {
+                web3 = new NWeb3(account, chainConfig.Rpc);
+            }
+            else if (chainConfig.Ipc is not null && !string.Empty.Equals(chainConfig.Ipc))
+            {
+                var client = new NIpcClient(chainConfig.Rpc);
+                web3 = new NWeb3(client);
+            }
+            else
+            {
+                throw new Web3Exception($"{nameof(IChainConfig)} should have at least one communication method set.");
+            }
+
             this.rpcProvider = rpcProvider;
         }
 

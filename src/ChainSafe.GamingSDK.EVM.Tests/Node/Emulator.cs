@@ -8,10 +8,10 @@ namespace ChainSafe.GamingSDK.EVM.Tests.Node
     {
         private const string Mnemonic = "test test test test test test test test test test test junk";
 
-        public static Process CreateInstance(uint port = 8545)
+        public static Process CreateInstance()
         {
             var anvilProc =
-                new ProcessStartInfo("anvil", $"-m \"{Mnemonic}\" -p {port}")
+                new ProcessStartInfo("anvil", $"--mnemonic \"{Mnemonic}\" --ipc")
                 {
                     CreateNoWindow = true,
                     WindowStyle = ProcessWindowStyle.Hidden,
