@@ -11,7 +11,7 @@ namespace ChainSafe.GamingSDK.EVM.Tests.Node
         public static Process CreateInstance(uint port = 8545)
         {
             var anvilProc =
-                new ProcessStartInfo("anvil", $"-m \"{Mnemonic}\" -p {port} --silent")
+                new ProcessStartInfo("anvil", $"-m \"{Mnemonic}\" -p {port}")
                 {
                     CreateNoWindow = true,
                     WindowStyle = ProcessWindowStyle.Hidden,
@@ -29,8 +29,8 @@ namespace ChainSafe.GamingSDK.EVM.Tests.Node
                 throw new Web3Exception("Anvil is not starting");
             }
 
-            // Wait 3 seconds since it's hard to figure out when anvil finish starting
-            Thread.Sleep(3000);
+            // Wait 2 seconds since it's hard to figure out when anvil finish starting
+            Thread.Sleep(2000);
 
             return anvil;
         }
