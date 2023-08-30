@@ -28,12 +28,12 @@ namespace ChainSafe.GamingSDK.EVM.Tests
                     Chain = "Anvil",
                     ChainId = "31337",
                     Network = "GoChain Testnet",
-                    Ipc = "/tmp/anvil.ipc",
+                    Rpc = "http://127.0.0.1:8545",
                 })
                 .Configure(services =>
                 {
                     services.UseNetCoreEnvironment();
-                    services.UseIpcProvider();
+                    services.UseRpcProvider();
 
                     services.AddSingleton(jsonRpcWalletConfiguration);
                     services.AddSingleton<ISigner, ITransactionExecutor, ILifecycleParticipant, JsonRpcWallet>();

@@ -1,6 +1,8 @@
+using System;
 using System.Diagnostics;
 using System.Threading;
 using ChainSafe.GamingWeb3;
+using Org.BouncyCastle.Asn1.X509;
 
 namespace ChainSafe.GamingSDK.EVM.Tests.Node
 {
@@ -11,7 +13,7 @@ namespace ChainSafe.GamingSDK.EVM.Tests.Node
         public static Process CreateInstance()
         {
             var anvilProc =
-                new ProcessStartInfo("anvil", $"--mnemonic \"{Mnemonic}\" --ipc")
+                new ProcessStartInfo("anvil", $"--mnemonic \"{Mnemonic}\" --silent")
                 {
                     CreateNoWindow = true,
                     WindowStyle = ProcessWindowStyle.Hidden,
@@ -29,8 +31,8 @@ namespace ChainSafe.GamingSDK.EVM.Tests.Node
                 throw new Web3Exception("Anvil is not starting");
             }
 
-            // Wait 3 seconds since it's hard to figure out when anvil finish starting
-            Thread.Sleep(3000);
+            // Wait 2 seconds since it's hard to figure out when anvil finish starting
+            Thread.Sleep(TimeSpan.FromSeconds(2));
 
             return anvil;
         }
