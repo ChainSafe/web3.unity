@@ -29,8 +29,8 @@ namespace ChainSafe.GamingSDK.EVM.Tests.Node
                 throw new Web3Exception("Anvil is not starting");
             }
 
-            // Wait 2 seconds since it's hard to figure out when anvil finish starting
-            Thread.Sleep(2000);
+            // Wait 3 seconds since it's hard to figure out when anvil finish starting
+            Thread.Sleep(3000);
 
             return anvil;
         }
