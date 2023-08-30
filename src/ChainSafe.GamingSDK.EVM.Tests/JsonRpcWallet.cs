@@ -99,16 +99,31 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
             return await provider.Perform<string>("personal_sign", hexMessage, adr.ToLower());
         }
 
-        public Task<string> SignTypedData<TStructType>(SerializableDomain domain, Dictionary<string, MemberDescription[]> types, TStructType message)
+        public async Task<string> SignTypedData<TStructType>(
+            SerializableDomain domain, Dictionary<string, MemberDescription[]> types, string primaryType, TStructType message)
         {
-            var data = Eip712TypedDataSigner.Current.EncodeTypedData(
-                    new TypedData<SerializableDomain>
-                    {
-                        Domain = domain,
-                        Types = types,
-                        Message = MemberValueFactory.CreateFromMessage(message),
-                    });
-            return SignMessage(data);
+            var typedData = new TypedData<SerializableDomain>
+            {
+                PrimaryType = primaryType,
+                Domain = domain,
+                Types = types,
+                Message = MemberValueFactory.CreateFromMessage(message),
+            };
+
+            if (!typedData.Types.ContainsKey("EIP712Domain"))
+            {
+                var domain712 = new[]
+                {
+                    new MemberDescription { Name = "name", Type = "string" },
+                    new MemberDescription { Name = "chainId", Type = "uint256" },
+                };
+                typedData.Types.Add("EIP712Domain", domain712);
+            }
+
+            var data = Eip712TypedDataSigner.Current.EncodeTypedData(typedData);
+
+            var adr = await GetAddress();
+            return await provider.Perform<string>("eth_signTypedData_v4", adr.ToLower(), data);
         }
     }
 }

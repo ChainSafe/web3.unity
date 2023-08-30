@@ -15,6 +15,11 @@ namespace Web3Unity.Scripts.Library.Ethers.Contracts
         private readonly ISigner signer;
         private readonly ITransactionExecutor transactionExecutor;
 
+        public ContractBuilder(IRpcProvider rpcProvider)
+            : this(new(), rpcProvider, null)
+        {
+        }
+
         public ContractBuilder(IRpcProvider rpcProvider, ISigner signer)
             : this(new(), rpcProvider, signer)
         {

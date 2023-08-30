@@ -11,7 +11,6 @@ using ChainSafe.GamingWeb3.Environment;
 using Nethereum.ABI.EIP712;
 using Nethereum.Hex.HexTypes;
 using Web3Unity.Scripts.Library.Ethers.Contracts;
-using Web3Unity.Scripts.Library.Ethers.Providers;
 using Web3Unity.Scripts.Library.Ethers.Signers;
 
 namespace ChainSafe.GamingSdk.Gelato
@@ -23,6 +22,9 @@ namespace ChainSafe.GamingSdk.Gelato
         private readonly ISigner signer;
         private readonly GelatoConfig config;
         private readonly IChainConfig chainConfig;
+
+        public const string SponsoredCallErc2771TypeName = "SponsoredCallERC2771";
+        public const string CallWithSyncFeeErc2771TypeName = "CallWithSyncFeeERC2771";
 
         public Gelato(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, ISigner signer, IContractBuilder contractBuilder)
         {
@@ -99,7 +101,7 @@ namespace ChainSafe.GamingSdk.Gelato
 
                 var types = new Dictionary<string, MemberDescription[]>
                 {
-                    ["CallWithSyncFeeERC2771"] = new[]
+                    [CallWithSyncFeeErc2771TypeName] = new[]
                     {
                         new MemberDescription { Name = "chainId", Type = "uint256" },
                         new MemberDescription { Name = "target", Type = "address" },
@@ -110,7 +112,8 @@ namespace ChainSafe.GamingSdk.Gelato
                     },
                 };
 
-                callRequest.Signature = await signer.SignTypedData(GetEip712Domain(Erc2771Type.CallWithSyncFee), types, newStruct);
+                callRequest.Signature = await signer.SignTypedData(
+                    GetEip712Domain(Erc2771Type.CallWithSyncFee), types, CallWithSyncFeeErc2771TypeName, newStruct);
 
                 return await gelatoClient.Post<CallWithErc2771Request, RelayResponse>(RelayCall.CallWithSyncFeeErc2771, callRequest);
             }
@@ -176,7 +179,7 @@ namespace ChainSafe.GamingSdk.Gelato
 
                 var types = new Dictionary<string, MemberDescription[]>
                 {
-                    ["SponsoredCallERC2771"] = new[]
+                    [SponsoredCallErc2771TypeName] = new[]
                     {
                         new MemberDescription { Name = "chainId", Type = "uint256" },
                         new MemberDescription { Name = "target", Type = "address" },
@@ -187,7 +190,8 @@ namespace ChainSafe.GamingSdk.Gelato
                     },
                 };
 
-                callRequest.Signature = await signer.SignTypedData(GetEip712Domain(Erc2771Type.SponsoredCall), types, newStruct);
+                callRequest.Signature = await signer.SignTypedData(
+                    GetEip712Domain(Erc2771Type.SponsoredCall), types, SponsoredCallErc2771TypeName, newStruct);
                 callRequest.SponsorApiKey = config.SponsorApiKey;
 
                 callRequest.UserDeadline ??= optional.UserDeadline;
