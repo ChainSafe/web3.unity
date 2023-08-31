@@ -3,7 +3,7 @@
 namespace Web3Unity.Scripts.Library.Ethers.Providers
 {
     [Serializable]
-    public class JsonRpcProviderConfig
+    public class RpcClientConfig
     {
         /// <summary>
         /// (Optional) Url of RPC Node.
