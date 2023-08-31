@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Linq;
 using ChainSafe.GamingSDK.EVM.Tests.Node;
 using ChainSafe.GamingWeb3;
 using Nethereum.Hex.HexTypes;
@@ -108,8 +107,7 @@ namespace ChainSafe.GamingSDK.EVM.Tests
             });
 
             Assert.That(ex != null && ex.Message.Contains("eth_sendTransaction"));
-            var result = ex.Message.Contains("-32000") ||
-                         (ex.InnerException != null && ex.InnerException.Message.Contains("-32000"));
+            var result = ex.InnerException != null && ex.InnerException.Message.Contains("gas too low");
             Assert.That(result);
         }
 
