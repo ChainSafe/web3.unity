@@ -54,9 +54,7 @@ namespace ChainSafe.GamingSdk.Editor
             try
             {
                 var projectID = ProjectConfigUtilities.Load()?.ProjectId;
-                if (
-                    string.IsNullOrEmpty(projectID) ||
-                    !await ChainSafeServerSettings.ValidateProjectIDAsync(projectID))
+                if (string.IsNullOrEmpty(projectID))
                 {
                     ChainSafeServerSettings.ShowWindow();
                 }

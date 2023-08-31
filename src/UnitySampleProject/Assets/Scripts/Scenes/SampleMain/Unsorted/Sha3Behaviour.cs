@@ -15,11 +15,12 @@ namespace Samples.Behaviours.Unsorted
             logic = new UnsortedSample(Web3);
         }
 
-        protected override async Task ExecuteSample()
+        protected override Task ExecuteSample()
         {
             var hash = logic.Sha3(message);
 
             SampleOutputUtil.PrintResult(hash, nameof(UnsortedSample), nameof(UnsortedSample.Sha3));
+            return Task.CompletedTask;
         }
     }
 }
