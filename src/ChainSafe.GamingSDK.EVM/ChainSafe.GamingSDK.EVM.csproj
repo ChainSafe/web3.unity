@@ -13,7 +13,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
     <PackageReference Include="NBitcoin" Version="7.0.24" />
-    <PackageReference Include="Nethereum.JsonRpc.IpcClient" Version="4.16.0" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" />
   </ItemGroup>
 

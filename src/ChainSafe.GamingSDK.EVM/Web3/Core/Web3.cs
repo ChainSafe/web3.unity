@@ -61,7 +61,7 @@ namespace ChainSafe.GamingWeb3
                   $"{propertyName} is not bound. Make sure to add an implementation of {propertyName} before using it.");
             }
 
-            // TODO: uncomment after migration complete
+            // todo uncomment after migration complete
             // if (!_initialized)
             // {
             //   throw new Web3Exception($"Can't access {propertyName}. Initialize Web3 first.");
@@ -87,7 +87,7 @@ namespace ChainSafe.GamingWeb3
                 await lifecycleParticipant.WillStartAsync();
             }
 
-            // TODO: initialize other components
+            // todo initialize other components
             initialized = true;
         }
 
