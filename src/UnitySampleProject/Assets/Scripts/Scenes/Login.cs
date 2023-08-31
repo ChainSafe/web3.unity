@@ -62,6 +62,18 @@ namespace Scenes
             // Remember me only works with the WebPageWallet
             RememberMeToggle.gameObject.SetActive(useWebPageWallet);
 
+            Debug.Log("Init");
+
+            if (!useWebPageWallet)
+            {
+                var urlWithPotentialToken = Application.absoluteURL.Split('#');
+                if (urlWithPotentialToken.Length > 0)
+                {
+                    var potentialToken = urlWithPotentialToken[^1];
+
+                }
+            }
+            
             TryAutoLogin();
 
             ExistingWalletButton.onClick.AddListener(LoginWithExistingAccount);
@@ -185,7 +197,7 @@ namespace Scenes
             services
                 .UseUnityEnvironment()
                 .UseGelato(GelatoApiKey)
-                .UseJsonRpcProvider();
+                .UseRpcProvider();
 
             /* As many contracts as needed may be registered here.
              * It is better to register all contracts the application
