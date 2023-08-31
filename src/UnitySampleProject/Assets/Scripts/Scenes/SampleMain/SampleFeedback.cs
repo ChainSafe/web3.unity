@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -8,8 +10,12 @@ public class SampleFeedback : MonoBehaviour
     public Animation LoadingAnimation;
     public EventSystem eventSystem;
 
+    [SerializeField] private TMP_Text _messageLabel;
+    
     public static SampleFeedback Instance { get; private set; }
 
+    private Coroutine _showMessageCoroutine;
+    
     private void OnEnable()
     {
         if (Instance)
@@ -41,5 +47,33 @@ public class SampleFeedback : MonoBehaviour
         animator.SetBool("On", false);
         LoadingAnimation.Stop();
         LoadingAnimation.Rewind();
+    }
+
+    public void ShowMessage(string message, Color color = default, float timeout = 4f)
+    {
+        if (color == default)
+            color = Color.white;
+
+        //stop any previous messages being displayed
+        if (_showMessageCoroutine != null)
+        {
+            StopCoroutine(_showMessageCoroutine);
+
+            _showMessageCoroutine = null;
+        }
+
+        _showMessageCoroutine = StartCoroutine(DisplayMessage(message, color, timeout));
+    }
+    
+    private IEnumerator DisplayMessage(string message, Color color, float timeout)
+    {
+        _messageLabel.text = message;
+        
+        _messageLabel.color = color;
+        
+        yield return new WaitForSeconds(timeout);
+
+        //revert to empty string
+        _messageLabel.text = string.Empty;
     }
 }
