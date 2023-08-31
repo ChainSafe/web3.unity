@@ -11,9 +11,5 @@ namespace Web3Unity.Scripts.Library.Ethers.NetCore
         public string Network { get; set; }
 
         public string Rpc { get; set; }
-
-        public string Ipc { get; set; }
-
-        public string Ws { get; set; }
     }
 }
