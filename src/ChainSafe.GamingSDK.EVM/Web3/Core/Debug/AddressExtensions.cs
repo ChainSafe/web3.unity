@@ -6,7 +6,7 @@ namespace ChainSafe.GamingSDK.EVM.Web3.Core.Debug
     {
         public static bool IsPublicAddress(string value)
         {
-            // TODO: more accurate test
+            // todo: more accurate test
             return value.Length == 42;
         }
 

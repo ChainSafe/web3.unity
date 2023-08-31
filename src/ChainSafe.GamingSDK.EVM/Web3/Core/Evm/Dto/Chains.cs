@@ -11,7 +11,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Network
     {
         private static Dictionary<ulong, Chain> cached = new Dictionary<ulong, Chain>();
 
-        // TODO: duplicates ChainProvider, remove, update usages
+        // todo: duplicates ChainProvider, remove, update usages
         public static async Task<Dictionary<ulong, Chain>> GetChains(Web3Environment environment)
         {
             if (cached.Count > 0)
@@ -50,7 +50,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Network
                 { "error", error },
             };
 
-            // TODO: log error using new event format
+            // todo log error using new event format
         }
 
         public class Chain

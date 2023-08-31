@@ -17,9 +17,9 @@ namespace ChainSafe.GamingSDK.EVM.Tests
 
     internal static class Web3Util
     {
-        public static ValueTask<Web3> CreateWeb3(int accountIndex = 0) => CreateWeb3(new JsonRpcWalletConfiguration() { AccountIndex = accountIndex });
+        public static ValueTask<Web3> CreateWeb3(int accountIndex = 0, uint port = 8545) => CreateWeb3(new JsonRpcWalletConfiguration() { AccountIndex = accountIndex }, port);
 
-        private static ValueTask<Web3> CreateWeb3(JsonRpcWalletConfiguration jsonRpcWalletConfiguration)
+        private static ValueTask<Web3> CreateWeb3(JsonRpcWalletConfiguration jsonRpcWalletConfiguration, uint port)
         {
             return new Web3Builder(
                 new ProjectConfig { ProjectId = string.Empty },
@@ -28,12 +28,12 @@ namespace ChainSafe.GamingSDK.EVM.Tests
                     Chain = "Anvil",
                     ChainId = "31337",
                     Network = "GoChain Testnet",
-                    Rpc = "http://127.0.0.1:8545",
+                    Rpc = $"http://127.0.0.1:{port}",
                 })
                 .Configure(services =>
                 {
                     services.UseNetCoreEnvironment();
-                    services.UseRpcProvider();
+                    services.UseJsonRpcProvider();
 
                     services.AddSingleton(jsonRpcWalletConfiguration);
                     services.AddSingleton<ISigner, ITransactionExecutor, ILifecycleParticipant, JsonRpcWallet>();
