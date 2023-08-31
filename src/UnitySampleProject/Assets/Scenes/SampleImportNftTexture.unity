@@ -549,8 +549,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b9bec61a12d447589906f16425c4258, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  contractAddress: 0x162BA1d478948e0ab2d4B21dca2471982C1Fb797
-  tokenId: 0x01559ae4021aee70424836ca173b6a4e647287d15cee8ac42d8c2d8d128927e5
+  contractAddress: 0x0288B4F1389ED7b3d3f9C7B73d4408235c0CBbc6
+  tokenId: 0
   textureContainer: {fileID: 159726534}
 --- !u!114 &593227350
 MonoBehaviour:
@@ -1711,7 +1711,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 18.1
+  m_fontSize: 26
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1

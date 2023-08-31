@@ -15,7 +15,7 @@ namespace Web3Unity.Scripts.Prefabs
 {
     public class NftMetaDataSample
     {
-        public string ImageUri { get; set; }
+        public string image { get; set; }
     }
 
     public class Erc1155Sample
@@ -57,7 +57,7 @@ namespace Web3Unity.Scripts.Prefabs
             var metaData = await DownloadMetaData();
 
             // unpack image URI if IPFS
-            var imageUri = metaData.ImageUri;
+            var imageUri = metaData.image;
             imageUri = UnpackUriIfIpfs(imageUri);
 
             // download texture
