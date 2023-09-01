@@ -2,7 +2,6 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 using ChainSafe.GamingWeb3;
-using Org.BouncyCastle.Asn1.X509;
 
 namespace ChainSafe.GamingSDK.EVM.Tests.Node
 {
