@@ -24,20 +24,20 @@ namespace Samples.Behaviours
             try
             {
                 await Task.Yield();
-                
+
                 try
                 {
                     await Task.WhenAll(ExecuteSample());
                 }
-                
+
                 catch (Exception e)
                 {
                     Debug.LogError(e);
-                    
+
                     SampleFeedback.Instance?.ShowMessage($"{e.Message} : check console for more detail", Color.red, 5f);
                 }
             }
-            
+
             finally
             {
                 SampleFeedback.Instance?.Deactivate();

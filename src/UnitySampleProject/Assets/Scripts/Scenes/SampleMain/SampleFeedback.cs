@@ -11,11 +11,11 @@ public class SampleFeedback : MonoBehaviour
     public EventSystem eventSystem;
 
     [SerializeField] private TMP_Text _messageLabel;
-    
-    public static SampleFeedback Instance { get; private set; }
 
-    private Coroutine _showMessageCoroutine;
+    public static SampleFeedback Instance { get; private set; }
     
+    private Coroutine _showMessageCoroutine;
+
     private void OnEnable()
     {
         if (Instance)
@@ -39,8 +39,7 @@ public class SampleFeedback : MonoBehaviour
         eventSystem.enabled = false;
         animator.SetBool("On", true);
         LoadingAnimation.Play();
-        
-        //stop any previous messages being displayed
+
         ClearMessage();
     }
 
@@ -62,7 +61,7 @@ public class SampleFeedback : MonoBehaviour
 
         _showMessageCoroutine = StartCoroutine(DisplayMessage(message, color, timeout));
     }
-    
+
     private IEnumerator DisplayMessage(string message, Color color, float timeout)
     {
         _messageLabel.text = message;
@@ -71,7 +70,6 @@ public class SampleFeedback : MonoBehaviour
         
         yield return new WaitForSeconds(timeout);
 
-        //revert to empty string
         _messageLabel.text = string.Empty;
     }
 
