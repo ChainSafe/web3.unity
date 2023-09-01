@@ -39,6 +39,9 @@ public class SampleFeedback : MonoBehaviour
         eventSystem.enabled = false;
         animator.SetBool("On", true);
         LoadingAnimation.Play();
+        
+        //stop any previous messages being displayed
+        ClearMessage();
     }
 
     public void Deactivate()
@@ -55,12 +58,7 @@ public class SampleFeedback : MonoBehaviour
             color = Color.white;
 
         //stop any previous messages being displayed
-        if (_showMessageCoroutine != null)
-        {
-            StopCoroutine(_showMessageCoroutine);
-
-            _showMessageCoroutine = null;
-        }
+        ClearMessage();
 
         _showMessageCoroutine = StartCoroutine(DisplayMessage(message, color, timeout));
     }
@@ -74,6 +72,18 @@ public class SampleFeedback : MonoBehaviour
         yield return new WaitForSeconds(timeout);
 
         //revert to empty string
+        _messageLabel.text = string.Empty;
+    }
+
+    private void ClearMessage()
+    {
+        if (_showMessageCoroutine != null)
+        {
+            StopCoroutine(_showMessageCoroutine);
+
+            _showMessageCoroutine = null;
+        }
+
         _messageLabel.text = string.Empty;
     }
 }
