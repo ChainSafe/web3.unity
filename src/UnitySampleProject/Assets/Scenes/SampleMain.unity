@@ -3671,8 +3671,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ce73e85a6834bc2bfbd824e04cd5ec1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  contractAddress: 0x2c1867BC3026178A47a677513746DCc6822A137A
-  tokenId: 0x01559ae4021aee70424836ca173b6a4e647287d15cee8ac42d8c2d8d128927e5
+  contractAddress: 0x0288B4F1389ED7b3d3f9C7B73d4408235c0CBbc6
+  tokenId: 0
 --- !u!114 &963882744
 MonoBehaviour:
   m_ObjectHideFlags: 0

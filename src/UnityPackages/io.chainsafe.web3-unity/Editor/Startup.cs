@@ -49,14 +49,12 @@ namespace ChainSafe.GamingSdk.Editor
             };
         }
 
-        static async void ValidateProjectID()
+        static void ValidateProjectID()
         {
             try
             {
                 var projectID = ProjectConfigUtilities.Load()?.ProjectId;
-                if (
-                    string.IsNullOrEmpty(projectID) ||
-                    !await ChainSafeServerSettings.ValidateProjectIDAsync(projectID))
+                if (string.IsNullOrEmpty(projectID))
                 {
                     ChainSafeServerSettings.ShowWindow();
                 }

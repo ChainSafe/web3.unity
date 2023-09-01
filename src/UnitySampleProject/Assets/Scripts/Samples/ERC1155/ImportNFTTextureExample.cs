@@ -11,8 +11,8 @@ public class ImportNFTTextureExample : MonoBehaviour
 
     async void Start()
     {
-        string contract = "0x162BA1d478948e0ab2d4B21dca2471982C1Fb797"; // gitleaks:allow
-        string tokenId = "0x01559ae4021aee70424836ca173b6a4e647287d15cee8ac42d8c2d8d128927e5"; // gitleaks:allow
+        string contract = "0x0288B4F1389ED7b3d3f9C7B73d4408235c0CBbc6";
+        string tokenId = "0";
 
         // fetch uri from chain
         string uri = await Erc1155.URI(Web3Accessor.Web3, contract, tokenId);

@@ -74,7 +74,7 @@ namespace Scenes
             }
         }
 
-        private void TryAutoLogin()
+        private async void TryAutoLogin()
         {
             if (!useWebPageWallet)
                 return;
@@ -97,7 +97,7 @@ namespace Scenes
                         });
                 });
 
-            ProcessLogin(web3Builder);
+            await ProcessLogin(web3Builder);
         }
 
         private async void LoginWithExistingAccount()
@@ -129,7 +129,7 @@ namespace Scenes
             }
         }
 
-        private void LoginWithWeb3Auth(Provider provider)
+        private async void LoginWithWeb3Auth(Provider provider)
         {
             var web3Builder = new Web3Builder(ProjectConfigUtilities.Load())
                 .Configure(ConfigureCommonServices)
@@ -155,7 +155,7 @@ namespace Scenes
                     services.UseWeb3AuthWallet(web3AuthConfig);
                 });
 
-            ProcessLogin(web3Builder);
+            await ProcessLogin(web3Builder);
         }
 
         private async Task ProcessLogin(Web3Builder builder)
