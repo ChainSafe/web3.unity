@@ -13,7 +13,7 @@ public class SampleFeedback : MonoBehaviour
     [SerializeField] private TMP_Text _messageLabel;
 
     public static SampleFeedback Instance { get; private set; }
-    
+
     private Coroutine _showMessageCoroutine;
 
     private void OnEnable()
@@ -65,9 +65,9 @@ public class SampleFeedback : MonoBehaviour
     private IEnumerator DisplayMessage(string message, Color color, float timeout)
     {
         _messageLabel.text = message;
-        
+
         _messageLabel.color = color;
-        
+
         yield return new WaitForSeconds(timeout);
 
         _messageLabel.text = string.Empty;
