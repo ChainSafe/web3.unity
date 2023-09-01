@@ -49,7 +49,7 @@ namespace ChainSafe.GamingSdk.Editor
             };
         }
 
-        static async void ValidateProjectID()
+        static void ValidateProjectID()
         {
             try
             {
