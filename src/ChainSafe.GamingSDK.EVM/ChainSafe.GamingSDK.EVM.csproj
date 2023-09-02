@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1</TargetFrameworks>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <LangVersion>9.0</LangVersion>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <EnableNETAnalyzers>True</EnableNETAnalyzers>
@@ -25,6 +25,7 @@
     <PackageReference Include="Nethereum.ABI" Version="4.14.0" />
     <PackageReference Include="Nethereum.RPC" Version="4.14.0" />
     <PackageReference Include="Nethereum.Signer" Version="4.14.0" />
+    <PackageReference Include="Nethereum.JsonRpc.IpcClient" Version="4.14.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 

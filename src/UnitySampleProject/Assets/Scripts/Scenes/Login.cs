@@ -185,7 +185,7 @@ namespace Scenes
             services
                 .UseUnityEnvironment()
                 .UseGelato(GelatoApiKey)
-                .UseJsonRpcProvider();
+                .UseRpcProvider();
 
             /* As many contracts as needed may be registered here.
              * It is better to register all contracts the application

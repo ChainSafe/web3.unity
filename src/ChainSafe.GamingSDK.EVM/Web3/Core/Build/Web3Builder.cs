@@ -22,11 +22,11 @@ namespace ChainSafe.GamingWeb3.Build
             // Bind default services
             serviceCollection
                 .UseEventPoller()
-                .AddSingleton<ChainProvider>()
+                .AddSingleton<ChainRegistryProvider>()
                 .AddSingleton<IContractBuilder, ContractBuilder>();
         }
 
-        // todo inline parameterless constructor into this one (therefore remove that overload)
+        // TODO: inline parameterless constructor into this one (therefore remove that overload)
         public Web3Builder(IProjectConfig projectConfig, IChainConfig chainConfig)
             : this()
         {
@@ -71,7 +71,7 @@ namespace ChainSafe.GamingWeb3.Build
 
         private static void AssertWeb3EnvironmentBound(IServiceProvider serviceProvider)
         {
-            // todo test what happens when of environment components is not bound
+            // TODO: test what happens when of environment components is not bound
             try
             {
                 serviceProvider.GetRequiredService<Web3Environment>();

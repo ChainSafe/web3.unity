@@ -7,14 +7,14 @@ using Web3Unity.Scripts.Library.Ethers.Network;
 
 namespace Web3Unity.Scripts.Library.Ethers
 {
-    public class ChainProvider
+    public class ChainRegistryProvider
     {
         private const string FetchUrl = "https://chainid.network/chains.json";
 
         private readonly Web3Environment environment;
         private Dictionary<ulong, Chains.Chain>? chains;
 
-        public ChainProvider(Web3Environment environment)
+        public ChainRegistryProvider(Web3Environment environment)
         {
             this.environment = environment;
         }

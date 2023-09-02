@@ -48,4 +48,16 @@ public class ProjectConfigScriptableObject : ScriptableObject, ICompleteProjectC
         get => rpc;
         set => rpc = value;
     }
+
+    public string Ipc
+    {
+        get => rpc;
+        set => rpc = value;
+    }
+
+    public string Ws
+    {
+        get => rpc;
+        set => rpc = value;
+    }
 }

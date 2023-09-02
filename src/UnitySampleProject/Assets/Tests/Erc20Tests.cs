@@ -15,7 +15,7 @@ public class Erc20Tests
             .Configure(services =>
             {
                 services.UseUnityEnvironment();
-                services.UseJsonRpcProvider();
+                services.UseRpcProvider();
             });
 
         var buildWeb3Task = web3Builder.BuildAsync().AsTask();
