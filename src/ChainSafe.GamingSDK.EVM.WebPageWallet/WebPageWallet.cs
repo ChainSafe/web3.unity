@@ -61,7 +61,7 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
             var pageUrl = BuildUrl();
             var hash = await OpenPageWaitResponse(pageUrl, ValidateResponse);
 
-            // todo: log event on success
+            // TODO: log event on success
             return hash;
 
             string BuildUrl()
@@ -71,7 +71,7 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
                        $"&message={Uri.EscapeDataString(message)}";
             }
 
-            // todo validate with regex
+            // TODO: validate with regex
             bool ValidateResponse(string response) => response.StartsWith("0x") && response.Length == 132;
         }
 
@@ -80,7 +80,7 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
             var pageUrl = BuildUrl();
             var hash = await OpenPageWaitResponse(pageUrl, ValidateResponse);
 
-            // todo: log event on success (see example near end of file)
+            // TODO: log event on success (see example near end of file)
             return await provider.GetTransaction(hash);
 
             string BuildUrl()
@@ -131,7 +131,7 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
                 }
             }
 
-            // todo validate with regex
+            // TODO: validate with regex
             bool ValidateResponse(string response) => response.StartsWith("0x") && response.Length == 66;
         }
 
@@ -150,11 +150,11 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
                        "&message=" + Uri.EscapeDataString(JsonConvert.SerializeObject(message));
             }
 
-            // todo validate with regex
+            // TODO: validate with regex
             bool ValidateResponse(string response) => response.StartsWith("0x") && response.Length == 132;
         }
 
-        // todo: extract hash from deeplink instead of clipboard
+        // TODO: extract hash from deeplink instead of clipboard
         private async Task<string> OpenPageWaitResponse(string pageUrl, Func<string, bool> validator)
         {
             operatingSystem.OpenUrl(pageUrl);
