@@ -20,5 +20,12 @@
         "name": "ChainSafe Gaming",
         "email": "bd@chainsafe.io",
         "url": "https://gaming.chainsafe.io/"
-    }
+    },
+    "samples": [
+        {
+            "displayName": "Web3.Unity Samples",
+            "description": "Contains implementations of sample Web3 operations using Web3.Unity",
+            "path": "Samples~/Web3.Unity"
+        }
+    ]
 }
