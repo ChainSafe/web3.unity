@@ -1,3 +1,4 @@
+using UnityEngine;
 using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.GamingSdk.Gelato;
