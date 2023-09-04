@@ -10,23 +10,21 @@ using Newtonsoft.Json.Linq;
 
 namespace Web3Unity.Scripts.Library.Ethers.Providers
 {
-    public class JsonRpcProvider : IRpcProvider, ILifecycleParticipant
+    public class RpcClientProvider : IRpcProvider, ILifecycleParticipant
     {
-        private readonly JsonRpcProviderConfig config;
+        private readonly RpcClientConfig config;
         private readonly Web3Environment environment;
-        private readonly ChainProvider chainProvider;
+        private readonly ChainRegistryProvider chainRegistryProvider;
 
         private Network.Network network;
 
-        private uint nextMessageId;
-
-        public JsonRpcProvider(
-            JsonRpcProviderConfig config,
+        public RpcClientProvider(
+            RpcClientConfig config,
             Web3Environment environment,
-            ChainProvider chainProvider,
+            ChainRegistryProvider chainRegistryProvider,
             IChainConfig chainConfig)
         {
-            this.chainProvider = chainProvider;
+            this.chainRegistryProvider = chainRegistryProvider;
             this.environment = environment;
             this.config = config;
 
@@ -44,7 +42,10 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
         public async ValueTask WillStartAsync()
         {
-            network = await RefreshNetwork();
+            if (network is null || network.ChainId == 0)
+            {
+                network = await RefreshNetwork();
+            }
         }
 
         public ValueTask WillStopAsync() => new(Task.CompletedTask);
@@ -60,7 +61,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
                 throw new Web3Exception("Couldn't detect network");
             }
 
-            var chain = await chainProvider.GetChain(chainId);
+            var chain = await chainRegistryProvider.GetChain(chainId);
             return chain != null
                 ? new Network.Network { Name = chain.Name, ChainId = chainId }
                 : new Network.Network { Name = "Unknown", ChainId = chainId };
@@ -84,7 +85,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
             try
             {
                 var httpClient = environment.HttpClient;
-                var request = new RpcRequestMessage(nextMessageId++, method, parameters);
+                var request = new RpcRequestMessage(Guid.NewGuid().ToString(), method, parameters);
                 var response = (await httpClient.Post<RpcRequestMessage, RpcResponseMessage>(config.RpcNodeUrl, request)).EnsureResponse();
 
                 if (response.HasError)

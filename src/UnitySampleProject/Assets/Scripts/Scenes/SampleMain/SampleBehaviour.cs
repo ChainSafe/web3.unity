@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using ChainSafe.GamingWeb3;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,8 +24,20 @@ namespace Samples.Behaviours
             try
             {
                 await Task.Yield();
-                await Task.WhenAll(ExecuteSample());
+
+                try
+                {
+                    await Task.WhenAll(ExecuteSample());
+                }
+
+                catch (Exception e)
+                {
+                    Debug.LogError(e);
+
+                    SampleFeedback.Instance?.ShowMessage($"{e.Message} : check console for more detail", Color.red, 5f);
+                }
             }
+
             finally
             {
                 SampleFeedback.Instance?.Deactivate();
