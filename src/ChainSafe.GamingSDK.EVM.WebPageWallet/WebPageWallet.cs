@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.GamingSDK.EVM.Web3.Core;
@@ -136,7 +135,7 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
             bool ValidateResponse(string response) => response.StartsWith("0x") && response.Length == 66;
         }
 
-        public async Task<string> SignTypedData<TStructType>(Domain domain, TStructType message)
+        public async Task<string> SignTypedData<TStructType>(SerializableDomain domain, TStructType message)
         {
             var pageUrl = BuildUrl();
             return await OpenPageWaitResponse(pageUrl, ValidateResponse);
@@ -205,13 +204,13 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
 
             return publicAddress;
 
-            string ExtractPublicAddress(string signature, string originalMessage)
+            string ExtractPublicAddress(string sig, string originalMessage)
             {
                 try
                 {
                     var msg = "\x19" + "Ethereum Signed Message:\n" + originalMessage.Length + originalMessage;
                     var msgHash = new Sha3Keccack().CalculateHash(Encoding.UTF8.GetBytes(msg));
-                    var ecdsaSignature = MessageSigner.ExtractEcdsaSignature(signature);
+                    var ecdsaSignature = MessageSigner.ExtractEcdsaSignature(sig);
                     var key = EthECKey.RecoverFromSignature(ecdsaSignature, msgHash);
                     return key.GetPublicAddress();
                 }

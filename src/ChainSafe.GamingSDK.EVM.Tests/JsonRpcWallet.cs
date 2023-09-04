@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using ChainSafe.GamingSDK.EVM.Web3.Core;
 using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
@@ -99,9 +98,9 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
             return await provider.Perform<string>("personal_sign", hexMessage, adr.ToLower());
         }
 
-        public async Task<string> SignTypedData<TStructType>(Domain domain, TStructType message)
+        public async Task<string> SignTypedData<TStructType>(SerializableDomain domain, TStructType message)
         {
-            var typedData = new TypedData<Domain>
+            var typedData = new TypedData<SerializableDomain>
             {
                 PrimaryType = nameof(TStructType),
                 Domain = domain,

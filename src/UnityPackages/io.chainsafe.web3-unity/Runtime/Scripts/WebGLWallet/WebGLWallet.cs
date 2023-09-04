@@ -190,7 +190,7 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
             throw new NotImplementedException();
         }
 
-        public Task<string> SignTypedData<TStructType>(Domain domain, TStructType message)
+        public Task<string> SignTypedData<TStructType>(SerializableDomain domain, TStructType message)
         {
             throw new NotImplementedException();
         }

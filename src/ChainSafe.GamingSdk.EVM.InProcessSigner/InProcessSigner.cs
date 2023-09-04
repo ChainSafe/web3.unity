@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
@@ -31,7 +30,7 @@ namespace ChainSafe.GamingSdk.EVM.InProcessSigner
             Task.FromResult(messageSigner.EncodeUTF8AndSign(message, privateKey));
 
         // TODO: test this with Gelato
-        public Task<string> SignTypedData<TStructType>(Domain domain, TStructType message)
+        public Task<string> SignTypedData<TStructType>(SerializableDomain domain, TStructType message)
         {
             var primaryType = typeof(TStructType).Name;
             if (StructAttribute.IsStructType(message))
@@ -39,7 +38,7 @@ namespace ChainSafe.GamingSdk.EVM.InProcessSigner
                 primaryType = StructAttribute.GetAttribute(message).Name;
             }
 
-            var typedData = new TypedData<Domain>
+            var typedData = new TypedData<SerializableDomain>
             {
                 PrimaryType = primaryType,
                 Domain = domain,

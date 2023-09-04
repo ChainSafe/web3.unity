@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.GamingSDK.EVM.Web3.Core;
 using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
@@ -9,8 +7,6 @@ using ChainSafe.GamingSdk.Gelato.Dto;
 using ChainSafe.GamingSdk.Gelato.Types;
 using ChainSafe.GamingWeb3;
 using ChainSafe.GamingWeb3.Environment;
-using Nethereum.ABI.EIP712;
-using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
 using Web3Unity.Scripts.Library.Ethers.Contracts;
 using Web3Unity.Scripts.Library.Ethers.Signers;
@@ -24,9 +20,6 @@ namespace ChainSafe.GamingSdk.Gelato
         private readonly ISigner signer;
         private readonly GelatoConfig config;
         private readonly IChainConfig chainConfig;
-
-        public const string SponsoredCallErc2771TypeName = "SponsoredCallERC2771";
-        public const string CallWithSyncFeeErc2771TypeName = "CallWithSyncFeeERC2771";
 
         public Gelato(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, ISigner signer, IContractBuilder contractBuilder)
         {
@@ -208,23 +201,23 @@ namespace ChainSafe.GamingSdk.Gelato
             return oracles.Contains(chainId);
         }
 
-        private Domain GetEip712Domain(Erc2771Type type)
+        private SerializableDomain GetEip712Domain(Erc2771Type type)
         {
             return type switch
             {
-                Erc2771Type.CallWithSyncFee => new Domain()
+                Erc2771Type.CallWithSyncFee => new SerializableDomain()
                 {
                     Name = "GelatoRelayERC2771",
                     Version = "1",
-                    ChainId = BigInteger.Parse(chainConfig.ChainId),
+                    ChainId = chainConfig.ChainId,
                     VerifyingContract = CallWithErc2771RequestOptionalParameters
                         .GetGelatoRelayErc2771Address(type, config, chainConfig),
                 },
-                Erc2771Type.SponsoredCall => new Domain()
+                Erc2771Type.SponsoredCall => new SerializableDomain()
                 {
                     Name = "GelatoRelay1BalanceERC2771",
                     Version = "1",
-                    ChainId = BigInteger.Parse(chainConfig.ChainId),
+                    ChainId = chainConfig.ChainId,
                     VerifyingContract = CallWithErc2771RequestOptionalParameters
                         .GetGelatoRelayErc2771Address(type, config, chainConfig),
                 },

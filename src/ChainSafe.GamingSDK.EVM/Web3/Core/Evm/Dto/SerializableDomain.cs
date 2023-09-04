@@ -1,4 +1,5 @@
-﻿using Nethereum.ABI.EIP712;
+﻿using System.Numerics;
+using Nethereum.ABI.EIP712;
 using Nethereum.ABI.FunctionEncoding.Attributes;
 using Newtonsoft.Json;
 
