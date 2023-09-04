@@ -56,7 +56,7 @@ namespace Scenes
             Assert.IsTrue(Web3AuthButtons.All(b => b.Button));
             Assert.IsNotNull(ExistingWalletButton);
             Assert.IsNotNull(RememberMeToggle);
-
+            
             useWebPageWallet = Application.platform != RuntimePlatform.WebGLPlayer;
 
             // Remember me only works with the WebPageWallet
@@ -64,16 +64,19 @@ namespace Scenes
 
             Debug.Log("Init");
 
-            if (!useWebPageWallet)
-            {
+            #if UNITY_WEBGL
+                Application.runInBackground = true;
                 var urlWithPotentialToken = Application.absoluteURL.Split('#');
-                if (urlWithPotentialToken.Length > 0)
+                Debug.Log(urlWithPotentialToken.Length);
+                if (urlWithPotentialToken.Length > 1)
                 {
-                    var potentialToken = urlWithPotentialToken[^1];
-
+                    var potentialJwt = urlWithPotentialToken[^1];
+                    Debug.Log("Hit the ");
+                    //todo: validate it is a JWT
+                    //todo: Extract provider & pvk from token
+                    //LoginWithWeb3Auth(Web3AuthButtons[0].Provider, potentialToken);
                 }
-            }
-            
+            #endif
             TryAutoLogin();
 
             ExistingWalletButton.onClick.AddListener(LoginWithExistingAccount);
@@ -141,7 +144,7 @@ namespace Scenes
             }
         }
 
-        private async void LoginWithWeb3Auth(Provider provider)
+        private async void LoginWithWeb3Auth(Provider provider, string fetchedPrivateKey = null)
         {
             var web3Builder = new Web3Builder(ProjectConfigUtilities.Load())
                 .Configure(ConfigureCommonServices)
@@ -149,6 +152,7 @@ namespace Scenes
                 {
                     var web3AuthConfig = new Web3AuthWalletConfig
                     {
+                        PrivateKey = fetchedPrivateKey,
                         ClientId = Web3AuthSettings.ClientId,
                         RedirectUri = Web3AuthSettings.RedirectUri,
                         Network = Web3AuthSettings.Network,
@@ -169,6 +173,8 @@ namespace Scenes
 
             await ProcessLogin(web3Builder);
         }
+        
+        
 
         private async Task ProcessLogin(Web3Builder builder)
         {
@@ -197,7 +203,7 @@ namespace Scenes
             services
                 .UseUnityEnvironment()
                 .UseGelato(GelatoApiKey)
-                .UseRpcProvider();
+                .UseJsonRpcProvider();
 
             /* As many contracts as needed may be registered here.
              * It is better to register all contracts the application
