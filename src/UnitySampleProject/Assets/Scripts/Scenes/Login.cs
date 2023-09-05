@@ -62,20 +62,8 @@ namespace Scenes
             // Remember me only works with the WebPageWallet
             RememberMeToggle.gameObject.SetActive(useWebPageWallet);
 
-            Debug.Log("Init");
-
             #if UNITY_WEBGL
-                Application.runInBackground = true;
-                var urlWithPotentialToken = Application.absoluteURL.Split('#');
-                Debug.Log(urlWithPotentialToken.Length);
-                if (urlWithPotentialToken.Length > 1)
-                {
-                    var potentialJwt = urlWithPotentialToken[^1];
-                    Debug.Log("Hit the ");
-                    //todo: validate it is a JWT
-                    //todo: Extract provider & pvk from token
-                    //LoginWithWeb3Auth(Web3AuthButtons[0].Provider, potentialToken);
-                }
+                ProcessWeb3Auth();
             #endif
             TryAutoLogin();
 
@@ -144,7 +132,7 @@ namespace Scenes
             }
         }
 
-        private async void LoginWithWeb3Auth(Provider provider, string fetchedPrivateKey = null)
+        private async void LoginWithWeb3Auth(Provider provider)
         {
             var web3Builder = new Web3Builder(ProjectConfigUtilities.Load())
                 .Configure(ConfigureCommonServices)
@@ -152,7 +140,6 @@ namespace Scenes
                 {
                     var web3AuthConfig = new Web3AuthWalletConfig
                     {
-                        PrivateKey = fetchedPrivateKey,
                         ClientId = Web3AuthSettings.ClientId,
                         RedirectUri = Web3AuthSettings.RedirectUri,
                         Network = Web3AuthSettings.Network,
@@ -165,19 +152,36 @@ namespace Scenes
                                 name = "ChainSafe Gaming SDK",
                             }
                         },
-                    #if  UNITY_WEBGL
-                        LoginParams = new() { loginProvider = provider, extraLoginOptions =
-                        {
-                            prompt = Prompt.LOGIN,
-                        }}
-                    #else
                         LoginParams = new() { loginProvider = provider }
-                    #endif
                     };
-                    
                     services.UseWeb3AuthWallet(web3AuthConfig);
                 });
+            await ProcessLogin(web3Builder);
+        }
 
+        private async void ProcessWeb3Auth()
+        {
+            var web3Builder = new Web3Builder(ProjectConfigUtilities.Load())
+                .Configure(ConfigureCommonServices)
+                .Configure(services =>
+                {
+                    var web3AuthConfig = new Web3AuthWalletConfig
+                    {
+                        ClientId = Web3AuthSettings.ClientId,
+                        RedirectUri = Web3AuthSettings.RedirectUri,
+                        Network = Web3AuthSettings.Network,
+                        Web3AuthOptions = new()
+                        {
+                            whiteLabel = new()
+                            {
+                                dark = true,
+                                defaultLanguage = "en",
+                                name = "ChainSafe Gaming SDK",
+                            }
+                        },
+                    };
+                    services.UseWeb3AuthWallet(web3AuthConfig);
+                });
             await ProcessLogin(web3Builder);
         }
         

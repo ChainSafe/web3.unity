@@ -68,8 +68,9 @@ public class Web3Auth : MonoBehaviour
 //            this.setResultUrl(new Uri($"http://localhost#{code}"));
 //        } 
 #endif
-
-        //authorizeSession();
+        #if UNITY_WEBGL
+        authorizeSession();
+        #endif
     }
 
     public void setOptions(Web3AuthOptions web3AuthOptions)
@@ -313,6 +314,7 @@ public class Web3Auth : MonoBehaviour
     private void authorizeSession()
     {
         string sessionId = KeyStoreManagerUtils.getPreferencesData(KeyStoreManagerUtils.SESSION_ID);
+        Debug.Log($"in auth check {sessionId}");
         if (!string.IsNullOrEmpty(sessionId))
         {
             var pubKey = KeyStoreManagerUtils.getPubKey(sessionId);

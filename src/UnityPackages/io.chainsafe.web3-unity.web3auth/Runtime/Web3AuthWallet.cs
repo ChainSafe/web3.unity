@@ -37,26 +37,15 @@ namespace ChainSafe.GamingSdk.Web3Auth
             coreInstance = CreateCoreInstance();
             string privateKeyString;
             TaskCompletionSource<string> loginTcs = new();
-
             coreInstance.onLogin += Web3Auth_OnLogin;
 
-            coreInstance.login(config.LoginParams);
+            if (config.LoginParams != null)
+            {
+                coreInstance.login(config.LoginParams);
+            }
+
             privateKeyString = await loginTcs.Task;
             
-			// Debug.Log("About to check");
-			// if (config.PrivateKey == null)
-			// {
-   //              Debug.Log("Standard");
-			//     coreInstance.onLogin += Web3Auth_OnLogin;
-   //              coreInstance.login(config.LoginParams);
-   //              privateKeyString = await loginTcs.Task;
-			// }
-			// else
-			// {
-   //              Debug.Log("Skipping the login");
-			// 	privateKeyString = config.PrivateKey;
-			// }
-   //          
             var privateKey = new EthECKey(privateKeyString);
             var signerConfig = new InProcessSignerConfig { PrivateKey = privateKey };
             signer = new(signerConfig);
