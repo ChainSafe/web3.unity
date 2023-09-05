@@ -17,19 +17,20 @@ namespace ChainSafe.GamingSDK.EVM.Tests
 
     internal static class Web3Util
     {
-        public static ValueTask<Web3> CreateWeb3(int accountIndex = 0, uint port = 8545) => CreateWeb3(new JsonRpcWalletConfiguration() { AccountIndex = accountIndex }, port);
+        public static ValueTask<Web3> CreateWeb3(int accountIndex = 0, uint port = 8545, Web3Builder.ConfigureServicesDelegate configureDelegate = null)
+            => CreateWeb3(new JsonRpcWalletConfiguration() { AccountIndex = accountIndex }, port, configureDelegate);
 
-        private static ValueTask<Web3> CreateWeb3(JsonRpcWalletConfiguration jsonRpcWalletConfiguration, uint port)
+        private static ValueTask<Web3> CreateWeb3(JsonRpcWalletConfiguration jsonRpcWalletConfiguration, uint port, Web3Builder.ConfigureServicesDelegate configureDelegate)
         {
-            return new Web3Builder(
-                new ProjectConfig { ProjectId = string.Empty },
-                new ChainConfig
-                {
-                    Chain = "Anvil",
-                    ChainId = "31337",
-                    Network = "GoChain Testnet",
-                    Rpc = $"http://127.0.0.1:{port}",
-                })
+            var web3Builder = new Web3Builder(
+                    new ProjectConfig { ProjectId = string.Empty },
+                    new ChainConfig
+                    {
+                        Chain = "Anvil",
+                        ChainId = "31337",
+                        Network = "GoChain Testnet",
+                        Rpc = $"http://127.0.0.1:{port}",
+                    })
                 .Configure(services =>
                 {
                     services.UseNetCoreEnvironment();
@@ -37,7 +38,14 @@ namespace ChainSafe.GamingSDK.EVM.Tests
 
                     services.AddSingleton(jsonRpcWalletConfiguration);
                     services.AddSingleton<ISigner, ITransactionExecutor, ILifecycleParticipant, JsonRpcWallet>();
-                })
+                });
+
+            if (configureDelegate != null)
+            {
+                web3Builder = web3Builder.Configure(configureDelegate);
+            }
+
+            return web3Builder
                 .BuildAsync();
         }
 
