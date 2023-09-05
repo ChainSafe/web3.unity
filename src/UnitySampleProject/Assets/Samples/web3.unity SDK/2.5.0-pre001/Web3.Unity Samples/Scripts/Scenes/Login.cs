@@ -149,15 +149,23 @@ namespace Scenes
                                 name = "ChainSafe Gaming SDK",
                             }
                         },
+                    #if  UNITY_WEBGL
+                        LoginParams = new() { loginProvider = provider, extraLoginOptions =
+                        {
+                            prompt = Prompt.LOGIN,
+                        }}
+                    #else
                         LoginParams = new() { loginProvider = provider }
+                    #endif
                     };
-
+                    
                     services.UseWeb3AuthWallet(web3AuthConfig);
                 });
 
             await ProcessLogin(web3Builder);
         }
 
+        
         private async Task ProcessLogin(Web3Builder builder)
         {
             Web3 web3;
