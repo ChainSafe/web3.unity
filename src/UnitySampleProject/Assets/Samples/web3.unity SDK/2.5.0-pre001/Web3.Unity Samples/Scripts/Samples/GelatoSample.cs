@@ -190,7 +190,7 @@ public class GelatoSample
             }
         }
     }
-    
+
     public bool GetGelatoDisabled()
     {
         return _web3.Gelato().GetGelatoDisabled();
