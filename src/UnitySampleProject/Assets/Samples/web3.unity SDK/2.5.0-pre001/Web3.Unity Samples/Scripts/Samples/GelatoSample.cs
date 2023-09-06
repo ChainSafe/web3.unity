@@ -191,6 +191,11 @@ public class GelatoSample
         }
     }
 
+    public bool GetGelatoDisabled()
+    {
+        return _web3.Gelato().GetGelatoDisabled();
+    }
+
     async Task WaitForSeconds(int seconds)
     {
         // Task.Delay doesn't work on WebGL
