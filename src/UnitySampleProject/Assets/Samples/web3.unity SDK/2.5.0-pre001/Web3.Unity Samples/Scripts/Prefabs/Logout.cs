@@ -6,6 +6,7 @@ public class Logout : MonoBehaviour
 {
     public async void OnLogout()
     {
+        Debug.Log("Trying the other login");
         // Remove the saved "remember me" data, if any
         PlayerPrefs.DeleteKey(Login.PlayerAccountKey);
 

@@ -332,6 +332,7 @@ public class Web3Auth : MonoBehaviour
 
     public void logout(Uri redirectUrl = null, string appState = null)
     {
+        Debug.Log($"redirectUrl: {redirectUrl} appState:{appState}");
         Dictionary<string, object> extraParams = new Dictionary<string, object>();
         if (redirectUrl != null)
             extraParams["redirectUrl"] = redirectUrl.ToString();
@@ -346,6 +347,7 @@ public class Web3Auth : MonoBehaviour
     {
         string sessionId = KeyStoreManagerUtils.getPreferencesData(KeyStoreManagerUtils.SESSION_ID);
         Debug.Log($"in auth check {sessionId}");
+        Debug.Log($"Session check is: {!string.IsNullOrEmpty(sessionId)}");
         if (!string.IsNullOrEmpty(sessionId))
         {
             var pubKey = KeyStoreManagerUtils.getPubKey(sessionId);
@@ -429,15 +431,18 @@ public class Web3Auth : MonoBehaviour
                         {
                             if (result != null)
                             {
+                                Debug.Log("Coroutine logout result not null");
                                 try
                                 {
                                     KeyStoreManagerUtils.deletePreferencesData(KeyStoreManagerUtils.SESSION_ID);
                                     KeyStoreManagerUtils.deletePreferencesData(web3AuthOptions.loginConfig?.Values.First()?.verifier);
+                                    Debug.Log("DEleted things probably");
 
                                     this.Enqueue(() => this.onLogout?.Invoke());
                                 }
                                 catch (Exception ex)
                                 {
+                                    Debug.Log("Errored deleting");
                                     Debug.LogError(ex.Message);
                                 }
                             }
