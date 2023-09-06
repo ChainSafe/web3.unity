@@ -13,7 +13,7 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
         /// claimed by user when he opens the lootbox.
         /// </summary>
         /// <returns>Lootbox type ids registered in the smart-contract.</returns>
-        Task<List<int>> GetLootboxTypes();
+        Task<List<uint>> GetLootboxTypes();
 
         /// <summary>
         /// This method returns the balance of lootboxes for the current user.
@@ -21,7 +21,7 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
         /// <param name="lootboxType">Lootbox type id.</param>
         /// <returns>The balance of lootboxes for the current user.</returns>
         /// <exception cref="Web3Exception">No signer was registered when building Web3. Can't get current user's address.</exception>
-        Task<int> BalanceOf(int lootboxType);
+        Task<uint> BalanceOf(uint lootboxType);
 
         /// <summary>
         /// This method returns the balance of lootboxes for the specified user.
@@ -29,7 +29,7 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
         /// <param name="account">User's public address.</param>
         /// <param name="lootboxType">Lootbox type id.</param>
         /// <returns>The balance of lootboxes for the specified user.</returns>
-        Task<int> BalanceOf(string account, int lootboxType);
+        Task<uint> BalanceOf(string account, uint lootboxType);
 
         /// <summary>
         /// Calculates open price for the player.
@@ -37,12 +37,12 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
         /// <param name="lootboxType">Lootbox type id.</param>
         /// <param name="lootboxCount">Number of lootboxes to open.</param>
         /// <returns>Price in network's default currency.</returns>
-        Task<BigInteger> CalculateOpenPrice(int lootboxType, int lootboxCount);
+        Task<BigInteger> CalculateOpenPrice(uint lootboxType, uint lootboxCount);
 
         /// <summary>
         /// TODO
         /// </summary>
-        Task OpenLootbox(int lootboxType, int lootboxCount = 1);
+        Task OpenLootbox(uint lootboxType, uint lootboxCount = 1);
 
         Task<bool> CanClaimRewards();
 

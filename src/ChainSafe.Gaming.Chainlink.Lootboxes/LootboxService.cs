@@ -55,7 +55,7 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
 
         ValueTask ILifecycleParticipant.WillStopAsync() => new ValueTask(Task.CompletedTask);
 
-        public async Task<List<int>> GetLootboxTypes()
+        public async Task<List<uint>> GetLootboxTypes()
         {
             var response = await contract.Call("getLootboxTypes");
             var bigIntTypes = (List<BigInteger>)response[0];
@@ -66,12 +66,12 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
                     "Internal Error. Lootbox type is greater than int.MaxValue. Please contact ChainSafe to resolve this problem.");
             }
 
-            var types = bigIntTypes.Select(bigInt => (int)bigInt).ToList();
+            var types = bigIntTypes.Select(bigInt => (uint)bigInt).ToList();
 
             return types;
         }
 
-        public async Task<int> BalanceOf(int lootboxType)
+        public async Task<uint> BalanceOf(uint lootboxType)
         {
             if (signer is null)
             {
@@ -83,7 +83,7 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
             return await BalanceOf(playerAddress, lootboxType);
         }
 
-        public async Task<int> BalanceOf(string account, int lootboxType)
+        public async Task<uint> BalanceOf(string account, uint lootboxType)
         {
             var response = await contract.Call(
                 "balanceOf",
@@ -96,12 +96,12 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
                     "Internal Error. Balance is greater than int.MaxValue. Please contact ChainSafe to resolve this problem.");
             }
 
-            var balance = (int)bigIntBalance;
+            var balance = (uint)bigIntBalance;
 
             return balance;
         }
 
-        public async Task<BigInteger> CalculateOpenPrice(int lootboxType, int lootboxCount)
+        public async Task<BigInteger> CalculateOpenPrice(uint lootboxType, uint lootboxCount)
         {
             var rewardCount = lootboxType * lootboxCount;
             var rawGasPrice = (await rpcProvider.GetGasPrice()).AssertNotNull("gasPrice").Value;
@@ -115,14 +115,14 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
             return openPrice;
         }
 
-        public async Task OpenLootbox(int lootboxType, int lootboxCount = 1)
+        public async Task OpenLootbox(uint lootboxType, uint lootboxCount = 1)
         {
             var rewardCount = lootboxType * lootboxCount;
             var openPrice = await CalculateOpenPrice(lootboxCount, lootboxCount);
 
             await contract.Send(
                 "open",
-                new object[] { GasPerUnit * rewardCount, lootboxType, lootboxCount },
+                new object[] { GasPerUnit * rewardCount, new[] { lootboxType }, new[] { lootboxCount } },
                 new TransactionRequest { Value = new HexBigInteger(openPrice) });
         }
 
@@ -162,7 +162,8 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
 
         public async Task ClaimRewards(string account)
         {
-            await contract.Send("claimRewards", new object[] { account });
+            var (_, receipt) = await contract.SendWithReceipt("claimRewards", new object[] { account });
+            receipt.
         }
     }
 }
