@@ -1,0 +1,7 @@
+repos:
+- repo: local
+  hooks:
+    - id: duplicate-package-sample
+      name: duplicate package sample
+      entry: bash -c 'git log'
+      language: system
