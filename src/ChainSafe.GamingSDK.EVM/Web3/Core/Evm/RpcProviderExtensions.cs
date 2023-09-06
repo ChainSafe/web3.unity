@@ -134,15 +134,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
 
             var maxPriorityFeePerGas = BigInteger.Zero;
             var maxFeePerGas = BigInteger.Zero;
-
-            if (block.BaseFeePerGas > BigInteger.Zero)
-            {
-                // Post London Fork
-                var tip = new HexBigInteger(await provider.Perform<string>("eth_maxPriorityFeePerGas"));
-                var max = tip.Value + block.BaseFeePerGas.Value - 1;
-                maxPriorityFeePerGas = tip;
-                maxFeePerGas = max;
-            }
+            await TryFetchMaxFees();
 
             return new FeeData
             {
@@ -151,6 +143,30 @@ namespace Web3Unity.Scripts.Library.Ethers.Providers
                 MaxFeePerGas = maxFeePerGas,
                 MaxPriorityFeePerGas = maxPriorityFeePerGas,
             };
+
+            async Task TryFetchMaxFees()
+            {
+                if (block.BaseFeePerGas <= BigInteger.Zero)
+                {
+                    return;
+                }
+
+                HexBigInteger tip;
+                try
+                {
+                    // Post London Fork
+                    tip = new HexBigInteger(await provider.Perform<string>("eth_maxPriorityFeePerGas"));
+                }
+                catch (Web3Exception)
+                {
+                    // eth_maxPriorityFeePerGas not supported by the RPC node, skipping..
+                    return;
+                }
+
+                var max = tip.Value + block.BaseFeePerGas.Value - 1;
+                maxPriorityFeePerGas = tip;
+                maxFeePerGas = max;
+            }
         }
 
         public static async Task<TransactionRequest> ApplyGasFeeStrategy(this IRpcProvider provider, TransactionRequest tx)
