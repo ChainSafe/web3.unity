@@ -3,7 +3,7 @@ repos:
   hooks:
     - id: duplicate-package-sample
       name: duplicate package sample
-      entry: src/duplicate_package_sample.sh
+      entry: ./duplicate_package_sample.sh
       language: script
       types: [ python ]
       pass_filenames: false
