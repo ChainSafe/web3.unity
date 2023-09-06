@@ -3,5 +3,7 @@ repos:
   hooks:
     - id: duplicate-package-sample
       name: duplicate package sample
-      entry: bash -c 'git log'
-      language: system
+      entry: duplicate_package_sample.sh
+      language: script
+      types: [ python ]
+      pass_filenames: false
