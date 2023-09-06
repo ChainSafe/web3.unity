@@ -1,9 +1,9 @@
 repos:
-- repo: local
-  hooks:
-    - id: duplicate-package-sample
-      name: duplicate package sample
-      entry: duplicate_package_sample.sh
-      language: script
-      types: [ python ]
-      pass_filenames: false
+  - repo: local
+    hooks:
+      - id: duplicate-package-sample
+        name: duplicate package sample
+        entry: duplicate_package_sample.sh
+        language: script
+        types: [ python ]
+        pass_filenames: false
