@@ -68,7 +68,7 @@ namespace Scripts.EVM.Token
             {
                 tokenId
             });
-            return contractData[0].ToString();
+            return contractData.ToString();
         }
 
     }
