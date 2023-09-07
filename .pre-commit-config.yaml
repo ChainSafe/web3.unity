@@ -5,5 +5,5 @@ repos:
         name: duplicate package sample
         entry: duplicate_package_sample.sh
         language: script
-        types: [ python ]
-        pass_filenames: false
+        types:
+          - c#
