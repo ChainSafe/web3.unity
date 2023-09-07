@@ -31,5 +31,7 @@ namespace ChainSafe.GamingSdk.Gelato.Types
         Task<RelayedTask> GetTaskStatus(string taskId);
 
         Task<string[]> GetPaymentTokens();
+
+        bool GetGelatoDisabled();
     }
 }

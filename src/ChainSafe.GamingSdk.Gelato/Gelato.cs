@@ -22,6 +22,7 @@ namespace ChainSafe.GamingSdk.Gelato
         private readonly ISigner signer;
         private readonly GelatoConfig config;
         private readonly IChainConfig chainConfig;
+        private bool gelatoDisabled;
 
         public Gelato(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, ISigner signer, IContractBuilder contractBuilder)
         {
@@ -44,9 +45,11 @@ namespace ChainSafe.GamingSdk.Gelato
         {
             if (!await IsNetworkSupported(chainConfig.ChainId))
             {
-                throw new Web3Exception("network not supported by Gelato");
+                gelatoDisabled = true;
             }
         }
+
+        public bool GetGelatoDisabled() => gelatoDisabled;
 
         public ValueTask WillStopAsync() => new(Task.CompletedTask);
 
