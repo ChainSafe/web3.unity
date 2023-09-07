@@ -101,9 +101,9 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
             }
         }
 
-        public async Task<string> SignTypedData<TStructType>(
-                SerializableDomain domain, Dictionary<string, MemberDescription[]> types, string primaryType, TStructType message)
+        public async Task<string> SignTypedData<TStructType>(SerializableDomain domain, TStructType message)
         {
+            var types = MemberDescriptionFactory.GetTypesMemberDescription(typeof(TStructType));
             JS_resetSignTypedMessageResponse();
             JS_signTypedMessage(JsonConvert.SerializeObject(domain), JsonConvert.SerializeObject(types), JsonConvert.SerializeObject(message));
             var signedTypedMessageResponse = await PollJsSide(JS_getSignTypedMessageResponse);
