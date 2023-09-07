@@ -21,7 +21,7 @@ namespace ChainSafe.GamingSDK.EVM.Web3.Core.Evm
 
         [Parameter("uint256", "chainId", 3)]
         [JsonProperty(PropertyName = "chainId")]
-        public virtual string ChainId { get; set; }
+        public virtual BigInteger? ChainId { get; set; }
 
         [Parameter("address", "verifyingContract", 4)]
         [JsonProperty(PropertyName = "verifyingContract")]

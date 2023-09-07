@@ -142,11 +142,11 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
 
             string BuildUrl()
             {
-                var types = MemberDescriptionFactory.GetTypesMemberDescription(typeof(TStructType));
                 return $"{configuration.ServiceUrl}" +
                        "?action=sign-typed-data" +
                        "&domain=" + Uri.EscapeDataString(JsonConvert.SerializeObject(domain)) +
-                       "&types=" + Uri.EscapeDataString(JsonConvert.SerializeObject(types)) +
+                       "&types=" + Uri.EscapeDataString(JsonConvert.SerializeObject(
+                           MemberDescriptionFactory.GetTypesMemberDescription(typeof(TStructType)))) +
                        "&message=" + Uri.EscapeDataString(JsonConvert.SerializeObject(message));
             }
 
