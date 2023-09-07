@@ -45,6 +45,10 @@ paste this in inspector to connect to wallet:
 window.web3gl.connect()
 */
 async function connect() {
+    if (window.ethereum?.request === undefined) {
+        alert("No browser wallet extension detected. Please install one & retry");
+        return;
+    };
     // uncomment to enable torus and walletconnect
     const providerOptions = {
         // torus: {
