@@ -19,13 +19,13 @@ jobs:
           - editmode
           - standalone
     steps:
+      - uses: actions/checkout@v2
+        with:
+          lfs: true
       - name: run setup bash script
         run: |
           ${GITHUB_WORKSPACE}/setup.sh
         shell: bash
-      - uses: actions/checkout@v2
-        with:
-          lfs: true
       - uses: actions/cache@v2
         with:
           path: ${{ matrix.projectPath }}/Library
