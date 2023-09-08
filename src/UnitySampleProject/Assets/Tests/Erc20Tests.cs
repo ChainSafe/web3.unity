@@ -1,40 +1,47 @@
+using System.Collections;
 using System.Threading.Tasks;
+using ChainSafe.GamingWeb3;
 using ChainSafe.GamingWeb3.Build;
 using ChainSafe.GamingWeb3.Unity;
 using NUnit.Framework;
+using UnityEngine;
+using UnityEngine.TestTools;
 using Web3Unity.Scripts.Library.Ethers.JsonRpc;
 
 public class Erc20Tests
 {
-    private Erc20Sample logic;
+    private Erc20Sample _logic;
 
-    [OneTimeSetUp]
-    public void Setup()
+    [UnitySetUp]
+    public IEnumerator Setup()
     {
-        var web3Builder = new Web3Builder(ProjectConfigUtilities.Load())
-            .Configure(services =>
-            {
-                services.UseUnityEnvironment();
-                services.UseJsonRpcProvider();
-            });
+        //wait for some time to initialize
+        yield return new WaitForSeconds(5f);
 
-        var buildWeb3Task = web3Builder.BuildAsync().AsTask();
-        buildWeb3Task.Wait();
-        var web3 = buildWeb3Task.Result;
+        Web3Builder web3Builder = new Web3Builder(ProjectConfigUtilities.Load()).Configure(services =>
+        {
+            services.UseUnityEnvironment();
+            services.UseRpcProvider();
+        });
 
-        logic = new Erc20Sample(web3);
+        ValueTask<Web3> buildWeb3 = web3Builder.BuildAsync();
+
+        //wait until for async task to finish
+        yield return new WaitUntil(() => buildWeb3.IsCompleted);
+
+        _logic = new Erc20Sample(buildWeb3.Result);
     }
 
-    [Test]
-    public async Task Erc20SampleTest()
+    [UnityTest]
+    public IEnumerator Erc20SampleTest()
     {
-        // Arrange
         var contractAddress = "0x3E0C0447e47d49195fbE329265E330643eB42e6f";
 
-        // Act
-        var name = await logic.Name(contractAddress);
+        Task<string> getName = _logic.Name(contractAddress);
 
-        // Assert
-        Assert.AreEqual("ChainToken", name);
+        //wait until for async task to finish
+        yield return new WaitUntil(() => getName.IsCompleted);
+
+        Assert.AreEqual("ChainToken", getName.Result);
     }
 }
