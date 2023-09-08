@@ -20,13 +20,19 @@ jobs:
           - editmode
           - standalone
     steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
 
       - name: Install dependencies
-        run: dotnet restore
+        run: |
+          dotnet restore
       - uses: actions/checkout@v2
       - name: run setup bash script
         run: |
