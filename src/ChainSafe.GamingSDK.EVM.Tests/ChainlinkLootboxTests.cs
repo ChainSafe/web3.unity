@@ -1,4 +1,6 @@
+using System;
 using System.IO;
+using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using Chainsafe.Gaming.Chainlink;
@@ -12,14 +14,14 @@ namespace ChainSafe.GamingSDK.EVM.Tests
     {
         private GamingWeb3.Web3 web3;
 
-        // todo add emulator boot up
+        // todo add automatic emulator boot up
         [OneTimeSetUp]
         public void Setup()
         {
             var lootBoxesConfig = new LootboxServiceConfig
             {
-                ContractAddress = "0xfF1Ca68Ac8A7D0267507f756Be8AE813cEEA2E78",
-                ContractAbi = File.ReadAllText("Resources/Lootbox.abi.json"),
+                ContractAddress = "0x46E334e90454aDDF311Cd75D4Ae19e2fA06285Ff",
+                ContractAbi = File.ReadAllText("Resources/LootboxInterface.abi.json"),
             };
 
             var web3BuildTask = Web3Util.CreateWeb3(
@@ -64,21 +66,56 @@ namespace ChainSafe.GamingSDK.EVM.Tests
         }
 
         [Test]
-        public async Task OpenLootboxTest()
+        public async Task OpenLootBoxClaimRewardsTest()
         {
+            // Act
             await web3.Chainlink().Lootboxes().OpenLootbox(1);
+
+            // todo call "npm run hardhat -- fulfill" after this one automatically
+            await WaitTillCanClaimRewards();
+            var rewards = await web3.Chainlink().Lootboxes().ClaimRewards();
+            var hasRewards = rewards.Erc20Rewards.Any() || rewards.Erc721Rewards.Any() ||
+                             rewards.Erc1155Rewards.Any() || rewards.Erc1155NftRewards.Any();
+            Assert.IsTrue(hasRewards);
+
+            async Task WaitTillCanClaimRewards()
+            {
+                var pollDelay = TimeSpan.FromSeconds(1);
+                var pollTimeOut = TimeSpan.FromMinutes(10);
+                var pollStartTime = DateTime.Now;
+                while (DateTime.Now - pollStartTime < pollTimeOut)
+                {
+                    await Task.Delay(pollDelay);
+
+                    var canClaimRewards = await web3.Chainlink().Lootboxes().CanClaimRewards();
+
+                    if (canClaimRewards)
+                    {
+                        return;
+                    }
+                }
+
+                throw new Exception($"Poll timed out when waiting for " +
+                                    $"{nameof(ILootboxService.CanClaimRewards)} to become true.");
+            }
         }
 
-        [Test]
-        public async Task CanClaimRewardsTest()
-        {
-            await web3.Chainlink().Lootboxes().CanClaimRewards();
-        }
-
-        [Test]
-        public async Task ClaimRewardsTest()
-        {
-            await web3.Chainlink().Lootboxes().ClaimRewards();
-        }
+        // [Test]
+        // public async Task OpenLootboxTest()
+        // {
+        //     await web3.Chainlink().Lootboxes().OpenLootbox(1);
+        // }
+        //
+        // [Test]
+        // public async Task CanClaimRewardsTest()
+        // {
+        //     await web3.Chainlink().Lootboxes().CanClaimRewards();
+        // }
+        //
+        // [Test]
+        // public async Task ClaimRewardsTest()
+        // {
+        //     await web3.Chainlink().Lootboxes().ClaimRewards();
+        // }
     }
 }

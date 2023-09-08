@@ -1,48 +1,53 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.GamingSDK.EVM.Web3.Core;
 using ChainSafe.GamingSDK.EVM.Web3.Core.Debug;
 using ChainSafe.GamingWeb3;
+using ChainSafe.GamingWeb3.Environment;
 using Nethereum.Hex.HexTypes;
+using Nethereum.RPC.Eth.DTOs;
+using Newtonsoft.Json;
 using Web3Unity.Scripts.Library.Ethers.Contracts;
+using Web3Unity.Scripts.Library.Ethers.Contracts.Extensions;
 using Web3Unity.Scripts.Library.Ethers.Providers;
 using Web3Unity.Scripts.Library.Ethers.Signers;
 using Web3Unity.Scripts.Library.Ethers.Transactions;
 
 namespace ChainSafe.Gaming.Chainlink.Lootboxes
 {
-    public class LootboxServiceConfig
-    {
-        public string? ContractAddress { get; set; }
-
-        public string? ContractAbi { get; set; }
-    }
-
     public class LootboxService : ILootboxService, ILifecycleParticipant
     {
         public const int GasPerUnit = 100000;
 
-        private IContractBuilder contractBuilder;
-        private LootboxServiceConfig config;
-        private Contract contract;
-        private ISigner signer;
-        private IRpcProvider rpcProvider;
+        private readonly IContractBuilder contractBuilder;
+        private readonly LootboxServiceConfig config;
+        private readonly ISigner signer;
+        private readonly IRpcProvider rpcProvider;
 
-        public LootboxService(LootboxServiceConfig config, IContractBuilder contractBuilder, IRpcProvider rpcProvider)
+        private Contract contract;
+        private Dictionary<string,RewardType> rewardTypeByTokenAddress;
+
+        public LootboxService(
+            LootboxServiceConfig config,
+            IContractBuilder contractBuilder,
+            IRpcProvider rpcProvider)
         {
             this.rpcProvider = rpcProvider;
             this.config = config;
             this.contractBuilder = contractBuilder;
         }
 
-        public LootboxService(LootboxServiceConfig config, IContractBuilder contractBuilder, IRpcProvider rpcProvider, ISigner signer)
+        public LootboxService(
+            LootboxServiceConfig config,
+            IContractBuilder contractBuilder,
+            IRpcProvider rpcProvider,
+            ISigner signer)
+            : this(config, contractBuilder, rpcProvider)
         {
             this.signer = signer;
-            this.rpcProvider = rpcProvider;
-            this.config = config;
-            this.contractBuilder = contractBuilder;
         }
 
         async ValueTask ILifecycleParticipant.WillStartAsync()
@@ -50,7 +55,30 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
             var contractAbi = config.ContractAbi.AssertNotNull(nameof(config.ContractAbi));
             var contractAddress = config.ContractAddress.AssertNotNull(nameof(config.ContractAddress));
 
+            // todo check if contract is correct
             contract = contractBuilder.Build(contractAbi, contractAddress);
+
+            rewardTypeByTokenAddress = await MapTokenAddressToRewardType();
+
+            async Task<Dictionary<string, RewardType>> MapTokenAddressToRewardType()
+            {
+                var tokenAddresses = (List<string>)(await contract.Call("getAllowedTokens"))[0];
+
+                // Array of token reward types in the same order as getAllowedTokens()
+                var rewardTypes = ((List<BigInteger>)(await contract.Call("getAllowedTokenTypes"))[0])
+                    .Select(bi => (int)bi)
+                    .Cast<RewardType>()
+                    .ToList();
+
+                if (tokenAddresses.Count != rewardTypes.Count)
+                {
+                    throw new Web3Exception(
+                        "Element count mismatch between \"getAllowedTokens\" and \"getAllowedTokenTypes\"");
+                }
+
+                return Enumerable.Range(0, tokenAddresses.Count)
+                    .ToDictionary(index => tokenAddresses[index], index => rewardTypes[index]);
+            }
         }
 
         ValueTask ILifecycleParticipant.WillStopAsync() => new ValueTask(Task.CompletedTask);
@@ -63,7 +91,7 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
             if (bigIntTypes.Any(v => v > int.MaxValue))
             {
                 throw new Web3Exception(
-                    "Internal Error. Lootbox type is greater than int.MaxValue. Please contact ChainSafe to resolve this problem.");
+                    "Internal Error. Lootbox type is greater than int.MaxValue.");
             }
 
             var types = bigIntTypes.Select(bigInt => (uint)bigInt).ToList();
@@ -93,7 +121,7 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
             if (bigIntBalance > int.MaxValue)
             {
                 throw new Web3Exception(
-                    "Internal Error. Balance is greater than int.MaxValue. Please contact ChainSafe to resolve this problem.");
+                    "Internal Error. Balance is greater than int.MaxValue.");
             }
 
             var balance = (uint)bigIntBalance;
@@ -148,7 +176,7 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
             return canClaimRewards;
         }
 
-        public async Task ClaimRewards()
+        public async Task<LootboxRewards> ClaimRewards()
         {
             if (signer is null)
             {
@@ -157,13 +185,73 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
 
             var playerAddress = await signer.GetAddress();
 
-            await ClaimRewards(playerAddress);
+            return await ClaimRewards(playerAddress);
         }
 
-        public async Task ClaimRewards(string account)
+        public async Task<LootboxRewards> ClaimRewards(string account)
         {
             var (_, receipt) = await contract.SendWithReceipt("claimRewards", new object[] { account });
-            receipt.
+            var logs = receipt.Logs.Select(jToken => JsonConvert.DeserializeObject<FilterLog>(jToken.ToString()));
+            var eventAbi = EventExtensions.GetEventABI<RewardsClaimedEvent>();
+            var eventLogs = logs
+                .Select(log => eventAbi.DecodeEvent<RewardsClaimedEvent>(log))
+                .Where(l => l != null);
+
+            if (!eventLogs.Any())
+            {
+                throw new Web3Exception("No \"RewardsClaimed\" events were found in log's receipt.");
+            }
+
+            return ExtractRewards(eventLogs);
+
+            LootboxRewards ExtractRewards(IEnumerable<EventLog<RewardsClaimedEvent>> eventLogs)
+            {
+                var rewards = LootboxRewards.Empty;
+
+                foreach (var eventLog in eventLogs)
+                {
+                    var eventData = eventLog.Event;
+                    var rewardType = rewardTypeByTokenAddress[eventData.TokenAddress];
+
+                    switch (rewardType)
+                    {
+                        case RewardType.Erc20:
+                            rewards.Erc20Rewards.Add(new Erc20Reward
+                            {
+                                ContractAddress = eventData.TokenAddress,
+                                AmountRaw = eventData.Amount,
+                            });
+                            break;
+                        case RewardType.Erc721:
+                            rewards.Erc721Rewards.Add(new Erc721Reward
+                            {
+                                ContractAddress = eventData.TokenAddress,
+                                TokenId = eventData.TokenId,
+                            });
+                            break;
+                        case RewardType.Erc1155:
+                            rewards.Erc1155Rewards.Add(new Erc1155Reward
+                            {
+                                ContractAddress = eventData.TokenAddress,
+                                TokenId = eventData.TokenId,
+                                Amount = eventData.Amount,
+                            });
+                            break;
+                        case RewardType.Erc1155Nft:
+                            rewards.Erc1155NftRewards.Add(new Erc1155NftReward
+                            {
+                                ContractAddress = eventData.TokenAddress,
+                                TokenId = eventData.TokenId,
+                            });
+                            break;
+                        case RewardType.Unset:
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                }
+
+                return rewards;
+            }
         }
     }
 }

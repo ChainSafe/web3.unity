@@ -48,8 +48,8 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
 
         Task<bool> CanClaimRewards(string account);
 
-        Task ClaimRewards();
+        Task<LootboxRewards> ClaimRewards();
 
-        Task ClaimRewards(string account);
+        Task<LootboxRewards> ClaimRewards(string account);
     }
 }
