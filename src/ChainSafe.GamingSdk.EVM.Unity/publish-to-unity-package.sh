@@ -21,6 +21,6 @@ rm Newtonsoft.Json.dll
 rm UnityEngine.dll
 mkdir -p ../../../../../UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries
 rm -f ../../../../../UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries/*
-cp *.dll ../../../../../UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries
+cp -f *.dll ../../../../../UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries
 
 echo Done
