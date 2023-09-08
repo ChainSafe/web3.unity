@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using ChainSafe.GamingSdk.Gelato.Dto;
 using Nethereum.Hex.HexTypes;
-using Web3Unity.Scripts.Library.Ethers.Signers;
 
 namespace ChainSafe.GamingSdk.Gelato.Types
 {
@@ -31,5 +30,7 @@ namespace ChainSafe.GamingSdk.Gelato.Types
         Task<RelayedTask> GetTaskStatus(string taskId);
 
         Task<string[]> GetPaymentTokens();
+
+        bool GetGelatoDisabled();
     }
 }
