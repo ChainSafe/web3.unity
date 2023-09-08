@@ -16,7 +16,7 @@ using Web3Unity.Scripts.Library.Ethers.Transactions;
 
 namespace ChainSafe.GamingSDK.EVM.WebGLWallet
 {
-#if UNITY_WEBGL && !UNITY_EDITOR
+    #if UNITY_WEBGL && !UNITY_EDITOR
     // todo: check if window.web3gl is bound during initialization
     public class WebGLWallet : ISigner, ITransactionExecutor, ILifecycleParticipant
     {
@@ -101,9 +101,8 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
             }
         }
 
-        public async Task<string> SignTypedData<TStructType>(SerializableDomain domain, TStructType message)
+        public async Task<string> SignTypedData<TStructType>(SerializableDomain domain, Dictionary<string, MemberDescription[]> types, string primaryType, TStructType message)
         {
-            var types = MemberDescriptionFactory.GetTypesMemberDescription(typeof(TStructType));
             JS_resetSignTypedMessageResponse();
             JS_signTypedMessage(JsonConvert.SerializeObject(domain), JsonConvert.SerializeObject(types), JsonConvert.SerializeObject(message));
             var signedTypedMessageResponse = await PollJsSide(JS_getSignTypedMessageResponse);
@@ -190,10 +189,12 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
             throw new NotImplementedException();
         }
 
-        public Task<string> SignTypedData<TStructType>(SerializableDomain domain, TStructType message)
+        public Task<string> SignTypedData<TStructType>(SerializableDomain domain, Dictionary<string, MemberDescription[]> types, string primaryType, TStructType message)
         {
             throw new NotImplementedException();
         }
+
+       
 
         public ValueTask WillStartAsync()
         {

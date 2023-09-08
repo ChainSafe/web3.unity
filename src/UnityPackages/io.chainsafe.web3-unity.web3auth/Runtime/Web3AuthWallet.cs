@@ -73,8 +73,11 @@ namespace ChainSafe.GamingSdk.Web3Auth
         public Task<string> GetAddress() => signer.GetAddress();
 
         public Task<string> SignMessage(string message) => signer.SignMessage(message);
+        public Task<string> SignTypedData<TStructType>(SerializableDomain domain, Dictionary<string, MemberDescription[]> types, string primaryType, TStructType message)
+        {
+            return signer.SignTypedData(domain, types, primaryType, message);
+        }
 
-        public Task<string> SignTypedData<TStructData>(SerializableDomain domain, TStructData message) => signer.SignTypedData(domain, message);
 
         public Task<TransactionResponse> SendTransaction(TransactionRequest transaction) => transactionExecutor.SendTransaction(transaction);
 
