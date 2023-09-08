@@ -12,6 +12,8 @@ public class ProjectConfigScriptableObject : ScriptableObject, ICompleteProjectC
     [SerializeField] private string network;
     [SerializeField] private string symbol;
     [SerializeField] private string rpc;
+    [SerializeField] private string ipc;
+    [SerializeField] private string ws;
 
     public string ProjectId
     {
@@ -47,5 +49,17 @@ public class ProjectConfigScriptableObject : ScriptableObject, ICompleteProjectC
     {
         get => rpc;
         set => rpc = value;
+    }
+
+    public string Ipc
+    {
+        get => ipc;
+        set => ipc = value;
+    }
+
+    public string Ws
+    {
+        get => ws;
+        set => ws = value;
     }
 }
