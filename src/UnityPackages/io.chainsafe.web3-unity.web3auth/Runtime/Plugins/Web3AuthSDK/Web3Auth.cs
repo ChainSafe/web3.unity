@@ -236,7 +236,7 @@ public class Web3Auth : MonoBehaviour
 #endif
         Dictionary<string, object> paramMap = new Dictionary<string, object>();
         paramMap["init"] = this.initParams;
-        paramMap["params"] = loginParams == null ? (object) new Dictionary<string, object>() : (object) loginParams;
+        paramMap["params"] = loginParams == null ? (object)new Dictionary<string, object>() : (object)loginParams;
 
         if (extraParams != null && extraParams.Count > 0)
             foreach (KeyValuePair<string, object> item in extraParams)

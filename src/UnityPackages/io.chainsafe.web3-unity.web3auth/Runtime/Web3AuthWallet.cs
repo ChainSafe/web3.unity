@@ -45,7 +45,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
             }
 
             privateKeyString = await loginTcs.Task;
-            
+
             var privateKey = new EthECKey(privateKeyString);
             var signerConfig = new InProcessSignerConfig { PrivateKey = privateKey };
             signer = new(signerConfig);
@@ -73,13 +73,15 @@ namespace ChainSafe.GamingSdk.Web3Auth
         public Task<string> GetAddress() => signer.GetAddress();
 
         public Task<string> SignMessage(string message) => signer.SignMessage(message);
+
         public Task<string> SignTypedData<TStructType>(SerializableDomain domain, TStructType message)
         {
             return signer.SignTypedData(domain, message);
         }
 
 
-        public Task<TransactionResponse> SendTransaction(TransactionRequest transaction) => transactionExecutor.SendTransaction(transaction);
+        public Task<TransactionResponse> SendTransaction(TransactionRequest transaction) =>
+            transactionExecutor.SendTransaction(transaction);
 
         private TWeb3Auth CreateCoreInstance()
         {

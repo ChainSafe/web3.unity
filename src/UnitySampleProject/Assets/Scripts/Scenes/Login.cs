@@ -150,7 +150,7 @@ namespace Scenes
                                 name = "ChainSafe Gaming SDK",
                             }
                         },
-                        LoginParams = new() {loginProvider = provider}
+                        LoginParams = new() { loginProvider = provider }
                     };
                     services.UseWeb3AuthWallet(web3AuthConfig);
                 });
