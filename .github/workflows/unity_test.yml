@@ -1,6 +1,6 @@
 name: Test package
 
-on: [push, pull_request]
+on: push
 
 jobs:
   testAllModes:
