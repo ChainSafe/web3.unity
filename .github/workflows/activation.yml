@@ -1,6 +1,8 @@
 name: Acquire activation file
 on:
-  workflow_dispatch: {}
+  push:
+    branches:
+      - rob/automated-unity-tests-603
 jobs:
   activation:
     name: Request manual activation file 🔑
