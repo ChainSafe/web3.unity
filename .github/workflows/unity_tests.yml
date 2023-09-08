@@ -24,7 +24,7 @@ jobs:
           lfs: true
       - name: run setup bash script
         run: |
-          ${GITHUB_WORKSPACE}/setup.sh
+          ${GITHUB_WORKSPACE}/src/ChainSafe.GamingSdk.EVM.Unity/publish-to-unity-package.sh
         shell: bash
       - uses: actions/cache@v2
         with:
