@@ -16,7 +16,7 @@ using Web3Unity.Scripts.Library.Ethers.Transactions;
 
 namespace ChainSafe.GamingSDK.EVM.WebGLWallet
 {
-    #if UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_WEBGL && !UNITY_EDITOR
     // todo: check if window.web3gl is bound during initialization
     public class WebGLWallet : ISigner, ITransactionExecutor, ILifecycleParticipant
     {
@@ -194,11 +194,10 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
             throw new NotImplementedException();
         }
 
-       
-
         public ValueTask WillStartAsync()
         {
-            throw new Web3Exception($"{nameof(WebGLWallet)} can only be used on {RuntimePlatform.WebGLPlayer} platform");
+            throw new Web3Exception(
+                $"{nameof(WebGLWallet)} can only be used on {RuntimePlatform.WebGLPlayer} platform");
         }
 
         public ValueTask WillStopAsync()

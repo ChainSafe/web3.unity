@@ -157,11 +157,11 @@ public class GelatoSample
         const string target = "0x00172f67db60E5fA346e599cdE675f0ca213b47b";
 
         const string abi = "[{\"inputs\": []," +
-                  "\"name\":\"increment\"," +
-                  "\"outputs\":[]," +
-                  "\"stateMutability\":\"nonpayable\"," +
-                  "\"type\":\"function\"" +
-                  "}]";
+                           "\"name\":\"increment\"," +
+                           "\"outputs\":[]," +
+                           "\"stateMutability\":\"nonpayable\"," +
+                           "\"type\":\"function\"" +
+                           "}]";
 
         var contract = _web3.ContractBuilder.Build(abi, target);
 
@@ -190,7 +190,7 @@ public class GelatoSample
             }
         }
     }
-    
+
     public bool GetGelatoDisabled()
     {
         return _web3.Gelato().GetGelatoDisabled();

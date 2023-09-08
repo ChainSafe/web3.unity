@@ -14,7 +14,9 @@ public class Web3Auth : MonoBehaviour
 {
     public enum Network
     {
-        MAINNET, TESTNET, CYAN
+        MAINNET,
+        TESTNET,
+        CYAN
     }
 
     private Web3AuthOptions web3AuthOptions;
@@ -31,11 +33,11 @@ public class Web3Auth : MonoBehaviour
     public Web3Auth.Network network;
 
     private static readonly Queue<Action> _executionQueue = new Queue<Action>();
-    
-    #if UNITY_WEBGL && !UNITY_EDITOR
+
+#if UNITY_WEBGL && !UNITY_EDITOR
     [DllImport("__Internal")]
     private static extern string GetAddressBarURL();
-    #endif
+#endif
 
     public void Awake()
     {
@@ -61,19 +63,16 @@ public class Web3Auth : MonoBehaviour
 
         if (!string.IsNullOrEmpty(redirectUri))
             this.initParams["redirectUrl"] = redirectUri;
-        
+
         Application.deepLinkActivated += onDeepLinkActivated;
         var absoluteURL = GetAbsoluteURL();
-        
+
         if (!string.IsNullOrEmpty(absoluteURL))
             onDeepLinkActivated(absoluteURL);
-        
+
 
 #if UNITY_EDITOR
-        Web3AuthSDK.Editor.Web3AuthDebug.onURLRecieved += (Uri url) =>
-        {
-            this.setResultUrl(url);
-        };
+        Web3AuthSDK.Editor.Web3AuthDebug.onURLRecieved += (Uri url) => { this.setResultUrl(url); };
 
 //#elif UNITY_WEBGL
 //        var code = Utils.GetAuthCode();
@@ -84,9 +83,9 @@ public class Web3Auth : MonoBehaviour
 //            this.setResultUrl(new Uri($"http://localhost#{code}"));
 //        } 
 #endif
-        #if UNITY_WEBGL
+#if UNITY_WEBGL
         authorizeSession();
-        #endif
+#endif
     }
 
     private string GetAbsoluteURL()
@@ -94,16 +93,15 @@ public class Web3Auth : MonoBehaviour
         //Because we can't change Unitys Application.absoluteURL we need to use a workaround for WebGL.
         //There is a ReadAddressBar.jslib file in the plugins folder that is kinda like a bridge
         //Between Unity's code and Javascript, there I retrieve the actual addressBar URL, which is used later.
-        #if UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_WEBGL && !UNITY_EDITOR
         return GetAddressBarURL();
-        #else 
+#else
         return Application.absoluteURL;
-        #endif
+#endif
     }
 
     public void setOptions(Web3AuthOptions web3AuthOptions)
     {
-
         this.web3AuthOptions = web3AuthOptions;
 
         if (this.web3AuthOptions.redirectUrl != null)
@@ -114,7 +112,6 @@ public class Web3Auth : MonoBehaviour
 
         if (this.web3AuthOptions.loginConfig != null)
             this.initParams["loginConfig"] = JsonConvert.SerializeObject(this.web3AuthOptions.loginConfig);
-
     }
 
     private void onDeepLinkActivated(string url)
@@ -139,9 +136,8 @@ public class Web3Auth : MonoBehaviour
 
     private void IncomingHttpRequest(IAsyncResult result)
     {
-
         // get back the reference to our http listener
-        HttpListener httpListener = (HttpListener)result.AsyncState;
+        HttpListener httpListener = (HttpListener) result.AsyncState;
 
         // fetch the context object
         HttpListenerContext httpContext = httpListener.EndGetContext(result);
@@ -158,7 +154,6 @@ public class Web3Auth : MonoBehaviour
 
         if (httpRequest.Url.LocalPath == "/complete/")
         {
-
             httpListener.BeginGetContext(new AsyncCallback(IncomingHttpRequest), httpListener);
 
             var responseString = @"
@@ -207,7 +202,6 @@ public class Web3Auth : MonoBehaviour
             System.IO.Stream output = httpResponse.OutputStream;
             output.Write(buffer, 0, buffer.Length);
             output.Close();
-
         }
 
         if (httpRequest.Url.LocalPath == "/auth/")
@@ -242,7 +236,7 @@ public class Web3Auth : MonoBehaviour
 #endif
         Dictionary<string, object> paramMap = new Dictionary<string, object>();
         paramMap["init"] = this.initParams;
-        paramMap["params"] = loginParams == null ? (object)new Dictionary<string, object>() : (object)loginParams;
+        paramMap["params"] = loginParams == null ? (object) new Dictionary<string, object>() : (object) loginParams;
 
         if (extraParams != null && extraParams.Count > 0)
             foreach (KeyValuePair<string, object> item in extraParams)
@@ -250,11 +244,12 @@ public class Web3Auth : MonoBehaviour
                 (paramMap["params"] as Dictionary<string, object>)[item.Key] = item.Value;
             }
 
-        string hash = Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(paramMap, Newtonsoft.Json.Formatting.None,
-                            new JsonSerializerSettings
-                            {
-                                NullValueHandling = NullValueHandling.Ignore
-                            })));
+        string hash = Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(paramMap,
+            Newtonsoft.Json.Formatting.None,
+            new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            })));
 
         UriBuilder uriBuilder = new UriBuilder(this.web3AuthOptions.sdkUrl);
         uriBuilder.Path = path;
@@ -280,17 +275,21 @@ public class Web3Auth : MonoBehaviour
         if (queryParameters.Keys.Contains("error"))
             throw new UnKnownException(queryParameters["error"]);
 
-        this.web3AuthResponse = JsonConvert.DeserializeObject<Web3AuthResponse>(Encoding.UTF8.GetString(Utils.DecodeBase64(hash)));
+        this.web3AuthResponse =
+            JsonConvert.DeserializeObject<Web3AuthResponse>(Encoding.UTF8.GetString(Utils.DecodeBase64(hash)));
         if (!string.IsNullOrEmpty(this.web3AuthResponse.error))
             throw new UnKnownException(web3AuthResponse.error);
 
-        if (string.IsNullOrEmpty(this.web3AuthResponse.privKey) || string.IsNullOrEmpty(this.web3AuthResponse.privKey.Trim('0')))
+        if (string.IsNullOrEmpty(this.web3AuthResponse.privKey) ||
+            string.IsNullOrEmpty(this.web3AuthResponse.privKey.Trim('0')))
             this.Enqueue(() => this.onLogout?.Invoke());
         else
             this.Enqueue(() => this.onLogin?.Invoke(this.web3AuthResponse));
 
         if (!string.IsNullOrEmpty(this.web3AuthResponse.sessionId))
-            this.Enqueue(() => KeyStoreManagerUtils.savePreferenceData(KeyStoreManagerUtils.SESSION_ID, this.web3AuthResponse.sessionId));
+            this.Enqueue(() =>
+                KeyStoreManagerUtils.savePreferenceData(KeyStoreManagerUtils.SESSION_ID,
+                    this.web3AuthResponse.sessionId));
 
         if (!string.IsNullOrEmpty(web3AuthResponse.userInfo?.dappShare))
         {
@@ -303,7 +302,7 @@ public class Web3Auth : MonoBehaviour
         if (this.web3AuthResponse != null) 
         {
             Utils.RemoveAuthCodeFromURL();
-        } 
+        }
 #endif
     }
 
@@ -376,13 +375,13 @@ public class Web3Auth : MonoBehaviour
                             throw new UnKnownException(this.web3AuthResponse.error ?? "Something went wrong");
                         }
 
-                        if (string.IsNullOrEmpty(this.web3AuthResponse.privKey) || string.IsNullOrEmpty(this.web3AuthResponse.privKey.Trim('0')))
+                        if (string.IsNullOrEmpty(this.web3AuthResponse.privKey) ||
+                            string.IsNullOrEmpty(this.web3AuthResponse.privKey.Trim('0')))
                             this.Enqueue(() => this.onLogout?.Invoke());
                         else
                             this.Enqueue(() => this.onLogin?.Invoke(this.web3AuthResponse));
                     }
                 }
-
             })));
         }
     }
@@ -433,7 +432,8 @@ public class Web3Auth : MonoBehaviour
                                 try
                                 {
                                     KeyStoreManagerUtils.deletePreferencesData(KeyStoreManagerUtils.SESSION_ID);
-                                    KeyStoreManagerUtils.deletePreferencesData(web3AuthOptions.loginConfig?.Values.First()?.verifier);
+                                    KeyStoreManagerUtils.deletePreferencesData(web3AuthOptions.loginConfig?.Values
+                                        .First()?.verifier);
                                     Debug.Log("DEleted things probably");
 
                                     this.Enqueue(() => this.onLogout?.Invoke());
@@ -467,10 +467,7 @@ public class Web3Auth : MonoBehaviour
     {
         lock (_executionQueue)
         {
-            _executionQueue.Enqueue(() =>
-            {
-                StartCoroutine(ActionWrapper(action));
-            });
+            _executionQueue.Enqueue(() => { StartCoroutine(ActionWrapper(action)); });
         }
     }
 
