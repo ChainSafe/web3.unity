@@ -20,6 +20,7 @@ jobs:
           - standalone
     steps:
       - uses: actions/checkout@v2
+      - name: run setup bash script
         run: |
           ${GITHUB_WORKSPACE}/setup.sh
         shell: bash
