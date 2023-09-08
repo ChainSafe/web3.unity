@@ -36,6 +36,8 @@ jobs:
       - name: Build
         run: |
           dotnet build --no-restore /property:Unity=true
+          echo Generated DLLs
+          ls ${GITHUB_WORKSPACE}/src/ChainSafe.GamingSdk.EVM.Unity/bin/Debug/netstandard2.1/
       - name: Publish to Unity Package
         run: |
           rm -f ${GITHUB_WORKSPACE}/src/ChainSafe.GamingSdk.EVM.Unity/bin/Debug/netstandard2.1/Newtonsoft.Json.dll
@@ -43,7 +45,7 @@ jobs:
           mkdir -p ${GITHUB_WORKSPACE}/src/UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries
           rm -f ${GITHUB_WORKSPACE}/src/UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries/*
           cp ${GITHUB_WORKSPACE}/src/ChainSafe.GamingSdk.EVM.Unity/bin/Debug/netstandard2.1/*.dll ${GITHUB_WORKSPACE}/src/UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries/
-          ls ${GITHUB_WORKSPACE}/src/ChainSafe.GamingSdk.EVM.Unity/bin/Debug/netstandard2.1/
+          echo Copied DLLs
           ls ${GITHUB_WORKSPACE}/src/UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries/
         shell: bash
       - uses: actions/cache@v2
