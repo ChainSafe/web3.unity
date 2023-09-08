@@ -1,6 +1,9 @@
 name: Test package
 
-on: push
+on:
+  push:
+    branches:
+      - rob/automated-unity-tests-603
 
 jobs:
   testAllModes:
