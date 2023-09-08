@@ -43,7 +43,8 @@ jobs:
           mkdir -p ${GITHUB_WORKSPACE}/src/UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries
           rm -f ${GITHUB_WORKSPACE}/src/UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries/*
           cp ${GITHUB_WORKSPACE}/src/ChainSafe.GamingSdk.EVM.Unity/bin/Debug/netstandard2.1/*.dll ${GITHUB_WORKSPACE}/src/UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries/
-          ls
+          ls ${GITHUB_WORKSPACE}/src/ChainSafe.GamingSdk.EVM.Unity/bin/Debug/netstandard2.1/
+          ls ${GITHUB_WORKSPACE}/src/UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries/
         shell: bash
       - uses: actions/cache@v2
         with:
