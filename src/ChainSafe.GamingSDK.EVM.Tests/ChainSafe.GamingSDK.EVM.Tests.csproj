@@ -1,13 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
     <LangVersion>9.0</LangVersion>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <EnableNETAnalyzers>True</EnableNETAnalyzers>
     <CodeAnalysisRuleSet>../../global.ruleset</CodeAnalysisRuleSet>
     <Configurations>Debug;Release;Test</Configurations>
     <Platforms>AnyCPU</Platforms>
+    <TargetFrameworks>net6.0;netstandard2.1</TargetFrameworks>
+    <OutputType>Library</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
