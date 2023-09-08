@@ -12,6 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        dotnet-version: [ '6.0.x' ]
         projectPath:
         - src/UnitySampleProject
         testMode:
@@ -19,6 +20,18 @@ jobs:
           - editmode
           - standalone
     steps:
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+
+      - name: Install dependencies
+        run: dotnet restore
+      - uses: actions/checkout@v2
+      - name: run setup bash script
+        run: |
+          ${GITHUB_WORKSPACE}/setup.sh
+        shell: bash
       - uses: actions/checkout@v2
         with:
           lfs: true
