@@ -8,12 +8,6 @@ rm -rf obj
 rm -rf bin
 dotnet publish -c release -f netstandard2.1 /property:Unity=true
 
-echo Restoring non-Unity packages...
-
-cd ../..
-dotnet restore
-cd src/ChainSafe.GamingSdk.EVM.Unity
-
 echo Moving files to Unity package...
 
 cd bin/release/netstandard2.1/publish
