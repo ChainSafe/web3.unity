@@ -15,9 +15,8 @@ rm -f bin/release/netstandard2.1/publish/UnityEngine.dll
 mkdir -p ../UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries
 rm -f ../UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries/*
 
-SOURCE_DIRECTORY="bin/release/netstandard2.1/publish/"
-DESTINATION_DIRECTORY="../UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries"
+cd bin/release/netstandard2.1/publish/
 
-cp -r "$SOURCE_DIRECTORY"* "$DESTINATION_DIRECTORY"
+cp *dll ../../../../../UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries
 
 echo Done
