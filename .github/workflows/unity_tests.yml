@@ -27,7 +27,15 @@ jobs:
         run: |
           git submodule update --init
         shell: bash
-      - name: run setup bash script
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore
+      - name: Publish to Unity Package
         run: |
           ${GITHUB_WORKSPACE}/src/ChainSafe.GamingSdk.EVM.Unity/publish-to-unity-package.sh
         shell: bash

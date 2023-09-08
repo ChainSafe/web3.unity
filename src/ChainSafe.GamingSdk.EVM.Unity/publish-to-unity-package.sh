@@ -8,16 +8,6 @@ rm -rf obj
 rm -rf bin
 dotnet publish -c release -f netstandard2.1 /property:Unity=true
 
-ls
-cd bin
-ls
-cd release
-ls
-cd netstandard2.1
-ls
-cd publish
-ls
-
 echo Moving files to Unity package...
 
 rm -f bin/release/netstandard2.1/publish/Newtonsoft.Json.dll
