@@ -35,7 +35,7 @@ jobs:
         run: dotnet restore
       - name: Build
         run: |
-          dotnet build --no-restore /property:Unity=true
+          dotnet build --no-restore --self-contained false /property:Unity=true
           echo Generated DLLs
           ls ${GITHUB_WORKSPACE}/src/ChainSafe.GamingSdk.EVM.Unity/bin/Debug/netstandard2.1/
       - name: Publish to Unity Package
