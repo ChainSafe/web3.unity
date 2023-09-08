@@ -35,9 +35,12 @@ jobs:
         run: dotnet restore
       - name: Build
         run: |
+          dotnet build --no-restore /property:Unity=true
+      - name: Publish
+        run: |
           rm -rf ${GITHUB_WORKSPACE}/src/ChainSafe.GamingSdk.EVM.Unity/obj
           rm -rf ${GITHUB_WORKSPACE}/src/ChainSafe.GamingSdk.EVM.Unity/bin
-          dotnet publish -c release -f netstandard2.1 /property:Unity=true
+          dotnet publish --no-restore -c release -f netstandard2.1 /property:Unity=true
       - name: Publish to Unity Package
         run: |
           cp ${GITHUB_WORKSPACE}/src/ChainSafe.GamingSdk.EVM.Unity/bin/release/netstandard2.1/publish/*.dll ${GITHUB_WORKSPACE}/src/UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries/
