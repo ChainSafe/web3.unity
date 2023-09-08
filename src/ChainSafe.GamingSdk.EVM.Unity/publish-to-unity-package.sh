@@ -10,9 +10,9 @@ dotnet publish -c release -f netstandard2.1 /property:Unity=true
 
 echo Restoring non-Unity packages...
 
-pushd ../..
+cd ../..
 dotnet restore
-popd
+cd src/ChainSafe.GamingSdk.EVM.Unity
 
 echo Moving files to Unity package...
 
