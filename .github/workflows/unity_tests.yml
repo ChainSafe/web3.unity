@@ -43,13 +43,13 @@ jobs:
           ls ${{ matrix.publishPath }}
       - name: Publish to Unity Package
         run: |
-          rm -f ${{ matrix.publishPath }}/Newtonsoft.Json.dll
           rm -f ${{ matrix.publishPath }}/UnityEngine.dll
           mkdir -p ${{ matrix.packageLibraryPath }}
           rm -f ${{ matrix.packageLibraryPath }}/*
           cp ${{ matrix.publishPath }}/*.dll ${{ matrix.packageLibraryPath }}/
           echo Copied DLLs
           ls ${{ matrix.packageLibraryPath }}/
+          cp ${GITHUB_WORKSPACE}/src/UnityPackages/io.chainsafe.web3-unity/TestPackage~/package.json ${GITHUB_WORKSPACE}/src/UnityPackages/io.chainsafe.web3-unity/package.json
         shell: bash
       - uses: game-ci/unity-test-runner@v3
         id: tests
