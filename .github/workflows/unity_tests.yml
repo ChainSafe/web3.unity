@@ -14,8 +14,8 @@ jobs:
       matrix:
         projectPath:
         - src/UnitySampleProject
-        releasePath:
-        - ${GITHUB_WORKSPACE}/src/ChainSafe.GamingSdk.EVM.Unity/bin/Release/netstandard2.1
+        publishPath:
+        - ${GITHUB_WORKSPACE}/src/ChainSafe.GamingSdk.EVM.Unity/bin/Release/netstandard2.1/publish
         packageLibraryPath:
         - ${GITHUB_WORKSPACE}/src/UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries
         testMode:
@@ -37,18 +37,18 @@ jobs:
           dotnet-version: 6.0.x
       - name: Restore dependencies
         run: dotnet restore
-      - name: Build
+      - name: Publish
         run: |
-          dotnet build --no-restore -c release /property:Unity=true
+          dotnet publish --no-restore src/ChainSafe.GamingSdk.EVM.Unity/ChainSafe.GamingSdk.EVM.Unity.csproj -c Release /property:Unity=true
           echo Generated DLLs
-          ls ${{ matrix.releasePath }}
+          ls ${{ matrix.publishPath }}
       - name: Publish to Unity Package
         run: |
-          rm -f ${{ matrix.releasePath }}/Newtonsoft.Json.dll
-          rm -f ${{ matrix.releasePath }}/UnityEngine.dll
+          rm -f ${{ matrix.publishPath }}/Newtonsoft.Json.dll
+          rm -f ${{ matrix.publishPath }}/UnityEngine.dll
           mkdir -p ${{ matrix.packageLibraryPath }}
           rm -f ${{ matrix.packageLibraryPath }}/*
-          cp ${{ matrix.releasePath }}/*.dll ${{ matrix.packageLibraryPath }}/
+          cp ${{ matrix.publishPath }}/*.dll ${{ matrix.packageLibraryPath }}/
           echo Copied DLLs
           ls ${{ matrix.packageLibraryPath }}/
         shell: bash
