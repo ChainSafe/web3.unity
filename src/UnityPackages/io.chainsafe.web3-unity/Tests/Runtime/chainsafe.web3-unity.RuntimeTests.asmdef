@@ -1,5 +1,5 @@
 {
-    "name": "Tests",
+    "name": "chainsafe.web3-unity.RuntimeTests",
     "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
@@ -20,5 +20,6 @@
     "defineConstraints": [
         "UNITY_INCLUDE_TESTS"
     ],
-    "versionDefines": []
+    "versionDefines": [],
+    "noEngineReferences": false
 }
