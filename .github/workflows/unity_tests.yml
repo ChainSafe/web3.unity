@@ -1,9 +1,9 @@
 name: Test Package
 
 on:
-  push:
+  pull_request:
     branches:
-      - rob/automated-unity-tests-603
+      - main
 
 jobs:
   testAllModes:
