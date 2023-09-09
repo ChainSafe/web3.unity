@@ -7,7 +7,8 @@
     <CodeAnalysisRuleSet>../../global.ruleset</CodeAnalysisRuleSet>
     <Configurations>Debug;Release;Test</Configurations>
     <Platforms>AnyCPU</Platforms>
-    <TargetFrameworks>net6.0;netstandard2.1</TargetFrameworks>
+    <TargetFramework>net6.0</TargetFramework>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <OutputType>Library</OutputType>
   </PropertyGroup>
 
@@ -21,9 +22,6 @@
     <PackageReference Include="Nethereum.Signer.EIP712" Version="4.16.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="NUnit" Version="3.13.3" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
     <PackageReference Include="NUnit3TestAdapter" Version="4.4.2" />
   </ItemGroup>
-
 </Project>
