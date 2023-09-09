@@ -35,7 +35,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
             }
         }
 
-        public ValueTask WillStopAsync() => default;
+        public ValueTask WillStopAsync() => ValueTask.CompletedTask;
 
         public Task<string> GetAddress() => Task.FromResult(address);
 
