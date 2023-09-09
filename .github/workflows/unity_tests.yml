@@ -14,7 +14,6 @@ jobs:
       matrix:
         projectPath:
         - src/UnityPackages/io.chainsafe.web3-unity
-        unityVersion: '2020.3.0f1'
         publishPath:
         - ${GITHUB_WORKSPACE}/src/ChainSafe.GamingSdk.EVM.Unity/bin/Release/netstandard2.1/publish
         packageLibraryPath:
@@ -59,7 +58,7 @@ jobs:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
           projectPath: ${{ matrix.projectPath }}
-          unityVersion: ${{ matrix.unityVersion }}
+          unityVersion: '2021.3.22f1'
           testMode: ${{ matrix.testMode }}
           artifactsPath: ${{ matrix.testMode }}-artifacts
           githubToken: ${{ secrets.GITHUB_TOKEN }}
