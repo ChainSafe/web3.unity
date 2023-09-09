@@ -18,7 +18,10 @@ public class Erc20Tests
         //wait for some time to initialize
         yield return new WaitForSeconds(5f);
 
-        Web3Builder web3Builder = new Web3Builder(ProjectConfigUtilities.Load()).Configure(services =>
+        var config = ProjectConfigUtilities.Load("7e99206b-e098-4666-bfbf-4991a1800a33", "5", "ethereum", "goerli",
+            string.Empty, "https://goerli.infura.io/v3/06f3f78b0f324d9c8cde54f90cd4fb5b");
+
+        Web3Builder web3Builder = new Web3Builder(config).Configure(services =>
         {
             services.UseUnityEnvironment();
             services.UseRpcProvider();
