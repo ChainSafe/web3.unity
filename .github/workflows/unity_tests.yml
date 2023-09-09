@@ -14,6 +14,10 @@ jobs:
       matrix:
         projectPath:
         - src/UnitySampleProject
+        releasePath:
+        - ${GITHUB_WORKSPACE}/src/ChainSafe.GamingSdk.EVM.Unity/bin/Release/netstandard2.1
+        packageLibraryPath:
+        - ${GITHUB_WORKSPACE}/src/UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries
         testMode:
           - playmode
           - editmode
@@ -35,18 +39,18 @@ jobs:
         run: dotnet restore
       - name: Build
         run: |
-          dotnet build --no-restore -c release -f netstandard2.1 /property:Unity=true
+          dotnet build --no-restore -c release /property:Unity=true
           echo Generated DLLs
-          ls ${GITHUB_WORKSPACE}/src/ChainSafe.GamingSdk.EVM.Unity/bin/Release/netstandard2.1/
+          ls ${{ matrix.releasePath }}
       - name: Publish to Unity Package
         run: |
-          rm -f ${GITHUB_WORKSPACE}/src/ChainSafe.GamingSdk.EVM.Unity/bin/Release/netstandard2.1/Newtonsoft.Json.dll
-          rm -f ${GITHUB_WORKSPACE}/src/ChainSafe.GamingSdk.EVM.Unity/bin/Release/netstandard2.1/UnityEngine.dll
-          mkdir -p ${GITHUB_WORKSPACE}/src/UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries
-          rm -f ${GITHUB_WORKSPACE}/src/UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries/*
-          cp ${GITHUB_WORKSPACE}/src/ChainSafe.GamingSdk.EVM.Unity/bin/Release/netstandard2.1/*.dll ${GITHUB_WORKSPACE}/src/UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries/
+          rm -f ${{ matrix.releasePath }}/Newtonsoft.Json.dll
+          rm -f ${{ matrix.releasePath }}/UnityEngine.dll
+          mkdir -p ${{ matrix.packageLibraryPath }}
+          rm -f ${{ matrix.packageLibraryPath }}/*
+          cp ${{ matrix.releasePath }}/*.dll ${{ matrix.packageLibraryPath }}/
           echo Copied DLLs
-          ls ${GITHUB_WORKSPACE}/src/UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries/
+          ls ${{ matrix.packageLibraryPath }}/
         shell: bash
       - uses: actions/cache@v2
         with:
