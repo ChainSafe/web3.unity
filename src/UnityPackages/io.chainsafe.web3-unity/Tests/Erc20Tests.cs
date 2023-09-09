@@ -8,7 +8,6 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using Web3Unity.Scripts.Library.Ethers.JsonRpc;
 
-[RequiresPlayMode]
 public class Erc20Tests
 {
     private Erc20Sample _logic;
@@ -37,6 +36,7 @@ public class Erc20Tests
     }
 
     [UnityTest]
+    [RequiresPlayMode]
     public IEnumerator Erc20SampleTest()
     {
         var contractAddress = "0x3E0C0447e47d49195fbE329265E330643eB42e6f";
