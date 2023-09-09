@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using Web3Unity.Scripts.Library.Ethers.JsonRpc;
 
+[RequiresPlayMode]
 public class Erc20Tests
 {
     private Erc20Sample _logic;
