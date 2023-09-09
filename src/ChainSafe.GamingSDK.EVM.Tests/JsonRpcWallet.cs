@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using ChainSafe.GamingSDK.EVM.Web3.Core;
 using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
@@ -99,26 +98,15 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
             return await provider.Perform<string>("personal_sign", hexMessage, adr.ToLower());
         }
 
-        public async Task<string> SignTypedData<TStructType>(
-            SerializableDomain domain, Dictionary<string, MemberDescription[]> types, string primaryType, TStructType message)
+        public async Task<string> SignTypedData<TStructType>(SerializableDomain domain, TStructType message)
         {
             var typedData = new TypedData<SerializableDomain>
             {
-                PrimaryType = primaryType,
+                PrimaryType = nameof(TStructType),
                 Domain = domain,
-                Types = types,
+                Types = MemberDescriptionFactory.GetTypesMemberDescription(typeof(Domain), typeof(TStructType)),
                 Message = MemberValueFactory.CreateFromMessage(message),
             };
-
-            if (!typedData.Types.ContainsKey("EIP712Domain"))
-            {
-                var domain712 = new[]
-                {
-                    new MemberDescription { Name = "name", Type = "string" },
-                    new MemberDescription { Name = "chainId", Type = "uint256" },
-                };
-                typedData.Types.Add("EIP712Domain", domain712);
-            }
 
             var data = Eip712TypedDataSigner.Current.EncodeTypedData(typedData);
 

@@ -1,6 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.GamingSDK.EVM.Web3.Core;
 using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
@@ -8,7 +8,6 @@ using ChainSafe.GamingSdk.Gelato.Dto;
 using ChainSafe.GamingSdk.Gelato.Types;
 using ChainSafe.GamingWeb3;
 using ChainSafe.GamingWeb3.Environment;
-using Nethereum.ABI.EIP712;
 using Nethereum.Hex.HexTypes;
 using Web3Unity.Scripts.Library.Ethers.Contracts;
 using Web3Unity.Scripts.Library.Ethers.Signers;
@@ -23,9 +22,6 @@ namespace ChainSafe.GamingSdk.Gelato
         private readonly GelatoConfig config;
         private readonly IChainConfig chainConfig;
         private bool gelatoDisabled;
-
-        public const string SponsoredCallErc2771TypeName = "SponsoredCallERC2771";
-        public const string CallWithSyncFeeErc2771TypeName = "CallWithSyncFeeERC2771";
 
         public Gelato(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, ISigner signer, IContractBuilder contractBuilder)
         {
@@ -65,7 +61,7 @@ namespace ChainSafe.GamingSdk.Gelato
             }
             catch (Exception e)
             {
-                throw new Web3Exception($"GelatoRelaySDK/relayWithSyncFee: Failed with error: {e.Message}");
+                throw new Web3Exception($"GelatoRelaySDK/CallWithSyncFee: Failed with error: {e.Message}");
             }
         }
 
@@ -96,33 +92,22 @@ namespace ChainSafe.GamingSdk.Gelato
                     IsRelayContext = request.IsRelayContext,
                 };
 
-                var optional = await CallWithErc2771RequestOptionalParameters.PopulateOptionalUserParameters(callRequest, Erc2771Type.CallWithSyncFee, config, chainConfig, contractBuilder);
-                var newStruct = callRequest.MapRequestToStruct<CallWithSyncFeeErc2771Struct>(optional, Erc2771Type.CallWithSyncFee);
+                var optional =
+                    await CallWithErc2771RequestOptionalParameters.PopulateOptionalUserParameters(
+                        callRequest, Erc2771Type.CallWithSyncFee, config, chainConfig, contractBuilder);
 
+                var newStruct =
+                    callRequest.MapRequestToStruct<CallWithSyncFeeErc2771Struct>(optional, Erc2771Type.CallWithSyncFee);
+
+                callRequest.Signature =
+                    await signer.SignTypedData(GetEip712Domain(Erc2771Type.CallWithSyncFee), newStruct);
                 callRequest.UserDeadline ??= optional.UserDeadline;
                 callRequest.UserNonce ??= optional.UserNonce;
-
-                var types = new Dictionary<string, MemberDescription[]>
-                {
-                    [CallWithSyncFeeErc2771TypeName] = new[]
-                    {
-                        new MemberDescription { Name = "chainId", Type = "uint256" },
-                        new MemberDescription { Name = "target", Type = "address" },
-                        new MemberDescription { Name = "data", Type = "bytes" },
-                        new MemberDescription { Name = "user", Type = "address" },
-                        new MemberDescription { Name = "userNonce", Type = "uint256" },
-                        new MemberDescription { Name = "userDeadline", Type = "uint256" },
-                    },
-                };
-
-                callRequest.Signature = await signer.SignTypedData(
-                    GetEip712Domain(Erc2771Type.CallWithSyncFee), types, CallWithSyncFeeErc2771TypeName, newStruct);
-
                 return await gelatoClient.Post<CallWithErc2771Request, RelayResponse>(RelayCall.CallWithSyncFeeErc2771, callRequest);
             }
             catch (Exception e)
             {
-                throw new Web3Exception($"GelatoRelaySDK/relayWithSyncFee: Failed with error: {e.Message}");
+                throw new Web3Exception($"GelatoRelaySDK/CallWithSyncFeeErc721: Failed with error: {e.Message}");
             }
         }
 
@@ -130,7 +115,7 @@ namespace ChainSafe.GamingSdk.Gelato
         {
             if (config.SponsorApiKey == null)
             {
-                throw new Web3Exception("GelatoRelaySDK/sponsoredCall: Sponsor api key not provided");
+                throw new Web3Exception("GelatoRelaySDK/SponsoredCall: Sponsor api key not provided");
             }
 
             try
@@ -141,7 +126,7 @@ namespace ChainSafe.GamingSdk.Gelato
             }
             catch (Exception e)
             {
-                throw new Web3Exception($"GelatoRelaySDK/sponsoredCall: Failed with error: {e.Message}");
+                throw new Web3Exception($"GelatoRelaySDK/SponsoredCall: Failed with error: {e.Message}");
             }
         }
 
@@ -162,7 +147,7 @@ namespace ChainSafe.GamingSdk.Gelato
             {
                 if (config.SponsorApiKey == null)
                 {
-                    throw new Web3Exception("GelatoRelaySDK/sponsoredCall: Sponsor api key not provided");
+                    throw new Web3Exception("GelatoRelaySDK/SponsoredCallErc2771: Sponsor api key not provided");
                 }
 
                 var callRequest = new CallWithErc2771Request
@@ -177,33 +162,25 @@ namespace ChainSafe.GamingSdk.Gelato
                 };
 
                 // Confirm Wallet & Provider chain ID match
-                var optional = await CallWithErc2771RequestOptionalParameters.PopulateOptionalUserParameters(callRequest, Erc2771Type.SponsoredCall, config, chainConfig, contractBuilder);
-                var newStruct = callRequest.MapRequestToStruct<SponsoredCallErc2771Struct>(optional, Erc2771Type.SponsoredCall);
+                var optional =
+                    await CallWithErc2771RequestOptionalParameters.PopulateOptionalUserParameters(
+                        callRequest, Erc2771Type.SponsoredCall, config, chainConfig, contractBuilder);
 
-                var types = new Dictionary<string, MemberDescription[]>
-                {
-                    [SponsoredCallErc2771TypeName] = new[]
-                    {
-                        new MemberDescription { Name = "chainId", Type = "uint256" },
-                        new MemberDescription { Name = "target", Type = "address" },
-                        new MemberDescription { Name = "data", Type = "bytes" },
-                        new MemberDescription { Name = "user", Type = "address" },
-                        new MemberDescription { Name = "userNonce", Type = "uint256" },
-                        new MemberDescription { Name = "userDeadline", Type = "uint256" },
-                    },
-                };
+                var newStruct =
+                    callRequest.MapRequestToStruct<SponsoredCallErc2771Struct>(optional, Erc2771Type.SponsoredCall);
 
-                callRequest.Signature = await signer.SignTypedData(
-                    GetEip712Domain(Erc2771Type.SponsoredCall), types, SponsoredCallErc2771TypeName, newStruct);
-                callRequest.SponsorApiKey = config.SponsorApiKey;
+                callRequest.Signature =
+                    await signer.SignTypedData(GetEip712Domain(Erc2771Type.SponsoredCall), newStruct);
 
                 callRequest.UserDeadline ??= optional.UserDeadline;
                 callRequest.UserNonce ??= optional.UserNonce;
+                callRequest.SponsorApiKey = config.SponsorApiKey;
+
                 return await gelatoClient.Post<CallWithErc2771Request, RelayResponse>(RelayCall.SponsoredCallErc2771, callRequest);
             }
             catch (Exception e)
             {
-                throw new Web3Exception($"GelatoRelaySDK/sponsoredCallErc2771: Failed with error: {e.Message}");
+                throw new Web3Exception($"GelatoRelaySDK/SponsoredCallErc2771: Failed with error: {e.Message}");
             }
         }
 
@@ -246,7 +223,7 @@ namespace ChainSafe.GamingSdk.Gelato
                 {
                     Name = "GelatoRelayERC2771",
                     Version = "1",
-                    ChainId = chainConfig.ChainId,
+                    ChainId = BigInteger.Parse(chainConfig.ChainId),
                     VerifyingContract = CallWithErc2771RequestOptionalParameters
                         .GetGelatoRelayErc2771Address(type, config, chainConfig),
                 },
@@ -254,7 +231,7 @@ namespace ChainSafe.GamingSdk.Gelato
                 {
                     Name = "GelatoRelay1BalanceERC2771",
                     Version = "1",
-                    ChainId = chainConfig.ChainId,
+                    ChainId = BigInteger.Parse(chainConfig.ChainId),
                     VerifyingContract = CallWithErc2771RequestOptionalParameters
                         .GetGelatoRelayErc2771Address(type, config, chainConfig),
                 },
