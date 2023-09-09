@@ -57,6 +57,7 @@ jobs:
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
+          packageMode: true
           projectPath: ${{ matrix.projectPath }}
           unityVersion: '2021.3.22f1'
           testMode: ${{ matrix.testMode }}
