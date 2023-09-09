@@ -35,16 +35,16 @@ jobs:
         run: dotnet restore
       - name: Build
         run: |
-          dotnet build --no-restore --self-contained false /property:Unity=true
+          dotnet build --no-restore -c release /property:Unity=true
           echo Generated DLLs
-          ls ${GITHUB_WORKSPACE}/src/ChainSafe.GamingSdk.EVM.Unity/bin/Debug/netstandard2.1/
+          ls ${GITHUB_WORKSPACE}/src/ChainSafe.GamingSdk.EVM.Unity/bin/Release/netstandard2.1/
       - name: Publish to Unity Package
         run: |
-          rm -f ${GITHUB_WORKSPACE}/src/ChainSafe.GamingSdk.EVM.Unity/bin/Debug/netstandard2.1/Newtonsoft.Json.dll
-          rm -f ${GITHUB_WORKSPACE}/src/ChainSafe.GamingSdk.EVM.Unity/bin/Debug/netstandard2.1/UnityEngine.dll
+          rm -f ${GITHUB_WORKSPACE}/src/ChainSafe.GamingSdk.EVM.Unity/bin/Release/netstandard2.1/Newtonsoft.Json.dll
+          rm -f ${GITHUB_WORKSPACE}/src/ChainSafe.GamingSdk.EVM.Unity/bin/Release/netstandard2.1/UnityEngine.dll
           mkdir -p ${GITHUB_WORKSPACE}/src/UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries
           rm -f ${GITHUB_WORKSPACE}/src/UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries/*
-          cp ${GITHUB_WORKSPACE}/src/ChainSafe.GamingSdk.EVM.Unity/bin/Debug/netstandard2.1/*.dll ${GITHUB_WORKSPACE}/src/UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries/
+          cp ${GITHUB_WORKSPACE}/src/ChainSafe.GamingSdk.EVM.Unity/bin/Release/netstandard2.1/*.dll ${GITHUB_WORKSPACE}/src/UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries/
           echo Copied DLLs
           ls ${GITHUB_WORKSPACE}/src/UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries/
         shell: bash
