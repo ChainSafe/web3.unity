@@ -8,6 +8,9 @@ using System.Net;
 using System.Collections;
 using Org.BouncyCastle.Math;
 using Newtonsoft.Json.Linq;
+#if UNITY_WEBGL && !UNITY_EDITOR
+using System.Runtime.InteropServices;
+#endif
 
 public class Web3Auth : MonoBehaviour
 {
