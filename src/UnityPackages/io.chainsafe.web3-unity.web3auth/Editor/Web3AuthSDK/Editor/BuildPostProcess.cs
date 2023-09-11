@@ -1,5 +1,4 @@
 #if UNITY_IOS
-using System;
 using UnityEditor;
 using UnityEditor.Callbacks;
 
