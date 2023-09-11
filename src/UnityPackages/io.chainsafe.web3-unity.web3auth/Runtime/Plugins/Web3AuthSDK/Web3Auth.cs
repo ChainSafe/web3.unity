@@ -74,14 +74,14 @@ public class Web3Auth : MonoBehaviour
 #if UNITY_EDITOR
         Web3AuthSDK.Editor.Web3AuthDebug.onURLRecieved += (Uri url) => { this.setResultUrl(url); };
 
-//#elif UNITY_WEBGL
-//        var code = Utils.GetAuthCode();
-//        Debug.Log("code is " + code);
-//        if (Utils.GetAuthCode() != "") 
-//        {
-//            Debug.Log("I am here");
-//            this.setResultUrl(new Uri($"http://localhost#{code}"));
-//        } 
+        //#elif UNITY_WEBGL
+        //        var code = Utils.GetAuthCode();
+        //        Debug.Log("code is " + code);
+        //        if (Utils.GetAuthCode() != "") 
+        //        {
+        //            Debug.Log("I am here");
+        //            this.setResultUrl(new Uri($"http://localhost#{code}"));
+        //        } 
 #endif
 #if UNITY_WEBGL
         authorizeSession();
@@ -137,7 +137,7 @@ public class Web3Auth : MonoBehaviour
     private void IncomingHttpRequest(IAsyncResult result)
     {
         // get back the reference to our http listener
-        HttpListener httpListener = (HttpListener) result.AsyncState;
+        HttpListener httpListener = (HttpListener)result.AsyncState;
 
         // fetch the context object
         HttpListenerContext httpContext = httpListener.EndGetContext(result);
