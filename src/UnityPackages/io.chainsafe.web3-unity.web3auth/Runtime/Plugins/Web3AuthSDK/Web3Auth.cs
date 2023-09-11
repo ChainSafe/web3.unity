@@ -86,9 +86,9 @@ public class Web3Auth : MonoBehaviour
         //            this.setResultUrl(new Uri($"http://localhost#{code}"));
         //        } 
 #endif
-        #if UNITY_WEBGL
+#if UNITY_WEBGL
         authorizeSession();
-        #endif
+#endif
     }
 
     private string GetAbsoluteURL()

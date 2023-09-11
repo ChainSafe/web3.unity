@@ -45,7 +45,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
             }
 
             privateKeyString = await loginTcs.Task;
-            
+
             var privateKey = new EthECKey(privateKeyString);
             var signerConfig = new InProcessSignerConfig { PrivateKey = privateKey };
             signer = new(signerConfig);

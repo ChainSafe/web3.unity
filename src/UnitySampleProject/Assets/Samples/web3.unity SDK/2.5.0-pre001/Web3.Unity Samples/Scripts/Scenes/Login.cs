@@ -62,9 +62,9 @@ namespace Scenes
             // Remember me only works with the WebPageWallet
             RememberMeToggle.gameObject.SetActive(useWebPageWallet);
 
-            #if UNITY_WEBGL
+#if UNITY_WEBGL
                 ProcessWeb3Auth();
-            #endif
+#endif
             TryAutoLogin();
 
             ExistingWalletButton.onClick.AddListener(LoginWithExistingAccount);
@@ -185,7 +185,7 @@ namespace Scenes
             await ProcessLogin(web3Builder);
         }
 
-        
+
         private async Task ProcessLogin(Web3Builder builder)
         {
             Web3 web3;
