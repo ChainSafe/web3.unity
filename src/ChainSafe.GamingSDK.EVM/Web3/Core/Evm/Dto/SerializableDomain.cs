@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using Nethereum.ABI.EIP712;
+﻿using Nethereum.ABI.EIP712;
 using Nethereum.ABI.FunctionEncoding.Attributes;
 using Newtonsoft.Json;
 
@@ -21,7 +20,7 @@ namespace ChainSafe.GamingSDK.EVM.Web3.Core.Evm
 
         [Parameter("uint256", "chainId", 3)]
         [JsonProperty(PropertyName = "chainId")]
-        public virtual BigInteger? ChainId { get; set; }
+        public virtual string ChainId { get; set; }
 
         [Parameter("address", "verifyingContract", 4)]
         [JsonProperty(PropertyName = "verifyingContract")]

@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
+using Nethereum.ABI.EIP712;
 
 namespace Web3Unity.Scripts.Library.Ethers.Signers
 {
@@ -9,7 +11,8 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
 
         Task<string> SignMessage(string message);
 
-        Task<string> SignTypedData<TStructType>(SerializableDomain domain, TStructType message);
+        Task<string> SignTypedData<TStructType>(
+            SerializableDomain domain, Dictionary<string, MemberDescription[]> types, string primaryType, TStructType message);
 
         // TODO: is this the right thing to do?
         // Task<string> SignMessage(byte[] message) => SignMessage(message.ToHex());

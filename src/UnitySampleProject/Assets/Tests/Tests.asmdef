@@ -2,22 +2,32 @@
     "name": "Tests",
     "rootNamespace": "",
     "references": [
-        "GUID:27619889b8ba8c24980f49ee34dbb44a",
-        "GUID:0c370a41a98240ff8e4dd4b17c2813bf",
-        "chainsafe.web3-unity"
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "chainsafe.web3-unity",
+        "Samples"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
-    "overrideReferences": true,
+    "overrideReferences": false,
     "precompiledReferences": [
         "nunit.framework.dll",
         "ChainSafe.GamingSDK.EVM.dll",
+        "ChainSafe.GamingSdk.EVM.InProcessSigner.dll",
+        "ChainSafe.GamingSdk.EVM.InProcessTransactionExecutor.dll",
         "ChainSafe.GamingSdk.EVM.Unity.dll",
-        "Microsoft.Extensions.DependencyInjection.Abstractions.dll"
+        "ChainSafe.GamingSDK.EVM.WebPageWallet.dll",
+        "ChainSafe.GamingSdk.Gelato.dll",
+        "Microsoft.Extensions.DependencyInjection.Abstractions.dll",
+        "Microsoft.Extensions.DependencyInjection.dll",
+        "Nethereum.RPC.dll",
+        "Nethereum.Hex.dll"
     ],
-    "autoReferenced": true,
-    "defineConstraints": [],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
     "versionDefines": [],
     "noEngineReferences": false
 }

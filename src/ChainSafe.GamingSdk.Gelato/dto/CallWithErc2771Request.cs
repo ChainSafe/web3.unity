@@ -3,8 +3,6 @@ using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.GamingSdk.Gelato.Types;
 using ChainSafe.GamingWeb3;
-using Nethereum.Hex.HexConvertors.Extensions;
-using Nethereum.Hex.HexTypes;
 using Newtonsoft.Json;
 using Web3Unity.Scripts.Library.Ethers.Contracts;
 using Web3Unity.Scripts.Library.Ethers.Providers;
@@ -27,7 +25,7 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
 
     [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
 
-    public class CallWithErc2771Request : RelayRequestOptions
+    public class CallWithErc2771Request
     {
         /// <summary>
         ///    QUANTITY - The transaction chain id.
@@ -110,12 +108,12 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
             newStruct.UserDeadline = overrides.UserDeadline ?? UserDeadline;
 
             var formattedStruct = (TStructType)Activator.CreateInstance(typeof(TStructType));
-            formattedStruct.ChainId = newStruct.ChainId.ToHexBigInteger().GetValue();
+            formattedStruct.ChainId = newStruct.ChainId.ToString();
             formattedStruct.Target = newStruct.Target;
             formattedStruct.Data = newStruct.Data;
             formattedStruct.User = newStruct.User;
-            formattedStruct.UserNonce = newStruct.UserNonce;
-            formattedStruct.UserDeadline = newStruct.UserDeadline;
+            formattedStruct.UserNonce = newStruct.UserNonce.ToString();
+            formattedStruct.UserDeadline = newStruct.UserDeadline.ToString();
 
             return formattedStruct;
         }

@@ -1,16 +1,15 @@
-﻿using System.Numerics;
-using Nethereum.ABI.FunctionEncoding.Attributes;
+﻿using Nethereum.ABI.FunctionEncoding.Attributes;
 using Newtonsoft.Json;
 
 namespace ChainSafe.GamingSdk.Gelato.Dto
 {
     public interface IErc2771StructTypes
     {
-        [Parameter("unit25t6", "chainId", 1)]
+        [Parameter("string", "chainId", 1)]
         [JsonProperty(PropertyName = "chainId")]
-        public BigInteger? ChainId { get; set; }
+        public string ChainId { get; set; }
 
-        [Parameter("address", "target", 2)]
+        [Parameter("string", "target", 2)]
         [JsonProperty(PropertyName = "target")]
         public string Target { get; set; }
 
@@ -24,10 +23,10 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
 
         [Parameter("uint256", "userNonce", 5)]
         [JsonProperty(PropertyName = "userNonce")]
-        public BigInteger? UserNonce { get; set; }
+        public string UserNonce { get; set; }
 
         [Parameter("uint256", "userDeadline", 6)]
         [JsonProperty(PropertyName = "userDeadline")]
-        public BigInteger? UserDeadline { get; set; }
+        public string UserDeadline { get; set; }
     }
 }

@@ -7,7 +7,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 using Web3Unity.Scripts.Library.Ethers.JsonRpc;
-#if UNITY_EDITOR
+
 public class Erc20Tests
 {
     private Erc20Sample _logic;
@@ -21,7 +21,7 @@ public class Erc20Tests
         Web3Builder web3Builder = new Web3Builder(ProjectConfigUtilities.Load()).Configure(services =>
         {
             services.UseUnityEnvironment();
-            services.UseJsonRpcProvider();
+            services.UseRpcProvider();
         });
 
         ValueTask<Web3> buildWeb3 = web3Builder.BuildAsync();
@@ -45,4 +45,3 @@ public class Erc20Tests
         Assert.AreEqual("ChainToken", getName.Result);
     }
 }
-#endif
