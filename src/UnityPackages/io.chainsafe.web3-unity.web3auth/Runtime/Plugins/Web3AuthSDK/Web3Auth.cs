@@ -31,6 +31,11 @@ public class Web3Auth : MonoBehaviour
 
     private static readonly Queue<Action> _executionQueue = new Queue<Action>();
 
+#if UNITY_WEBGL && !UNITY_EDITOR
+    [DllImport("__Internal")]
+    private static extern string GetAddressBarURL();
+#endif
+
     public void Awake()
     {
         if (!initializeOnStart)
@@ -38,6 +43,14 @@ public class Web3Auth : MonoBehaviour
 
         Initialize();
     }
+
+    private void OnDestroy()
+    {
+        // Better be safe than sorry and remove the event listener when the object is destroyed so we don't have
+        // Memory leaks.
+        Application.deepLinkActivated -= onDeepLinkActivated;
+    }
+
 
     public void Initialize()
     {
@@ -50,27 +63,42 @@ public class Web3Auth : MonoBehaviour
             this.initParams["redirectUrl"] = redirectUri;
 
         Application.deepLinkActivated += onDeepLinkActivated;
-        if (!string.IsNullOrEmpty(Application.absoluteURL))
-            onDeepLinkActivated(Application.absoluteURL);
-
+        var absoluteURL = GetAbsoluteURL();
+        if (!string.IsNullOrEmpty(absoluteURL))
+        {
+            onDeepLinkActivated(absoluteURL);
+        }
 #if UNITY_EDITOR
         Web3AuthSDK.Editor.Web3AuthDebug.onURLRecieved += (Uri url) =>
         {
             this.setResultUrl(url);
         };
 
-//#elif UNITY_WEBGL
-//        var code = Utils.GetAuthCode();
-//        Debug.Log("code is " + code);
-//        if (Utils.GetAuthCode() != "") 
-//        {
-//            Debug.Log("I am here");
-//            this.setResultUrl(new Uri($"http://localhost#{code}"));
-//        } 
+        //#elif UNITY_WEBGL
+        //        var code = Utils.GetAuthCode();
+        //        Debug.Log("code is " + code);
+        //        if (Utils.GetAuthCode() != "") 
+        //        {
+        //            Debug.Log("I am here");
+        //            this.setResultUrl(new Uri($"http://localhost#{code}"));
+        //        } 
 #endif
 
         //authorizeSession();
     }
+
+    private string GetAbsoluteURL()
+    {
+        //Because we can't change Unitys Application.absoluteURL we need to use a workaround for WebGL.
+        //There is a ReadAddressBar.jslib file in the plugins folder that is kinda like a bridge
+        //Between Unity's code and Javascript, there I retrieve the actual addressBar URL, which is used later.
+#if UNITY_WEBGL && !UNITY_EDITOR
+        return GetAddressBarURL();
+#else 
+        return Application.absoluteURL;
+#endif
+    }
+
 
     public void setOptions(Web3AuthOptions web3AuthOptions)
     {
