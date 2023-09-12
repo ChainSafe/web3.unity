@@ -1508,8 +1508,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 37375166}
   m_HandleRect: {fileID: 37375165}
   m_Direction: 0
-  m_Value: 0
-  m_Size: 0.37209302
+  m_Value: -0.000000050924633
+  m_Size: 0.30317497
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4032,7 +4032,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f404484bf3c7d4246a08e60ab1cd69b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gelatoObj: {fileID: 98914093}
 --- !u!114 &1019211780
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8001,6 +8000,10 @@ PrefabInstance:
     - target: {fileID: 419827144834286036, guid: dcf96d5d1be365e43a4caa7561dc9ec4, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 419827144834286037, guid: dcf96d5d1be365e43a4caa7561dc9ec4, type: 3}
+      propertyPath: m_text
+      value: 'Logged in as:'
       objectReference: {fileID: 0}
     - target: {fileID: 419827145282415510, guid: dcf96d5d1be365e43a4caa7561dc9ec4, type: 3}
       propertyPath: m_Name
