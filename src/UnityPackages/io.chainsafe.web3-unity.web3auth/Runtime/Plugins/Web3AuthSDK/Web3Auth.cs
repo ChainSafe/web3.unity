@@ -354,7 +354,6 @@ public class Web3Auth : MonoBehaviour
 
     public void logout(Uri redirectUrl = null, string appState = null)
     {
-        Debug.Log($"redirectUrl: {redirectUrl} appState:{appState}");
         Dictionary<string, object> extraParams = new Dictionary<string, object>();
         if (redirectUrl != null)
             extraParams["redirectUrl"] = redirectUrl.ToString();
