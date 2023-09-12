@@ -33,7 +33,7 @@ public class Web3Auth : MonoBehaviour
     public event Action onLogout;
 
     private bool initializeOnStart;
-    
+
     [SerializeField]
     private string clientId;
 

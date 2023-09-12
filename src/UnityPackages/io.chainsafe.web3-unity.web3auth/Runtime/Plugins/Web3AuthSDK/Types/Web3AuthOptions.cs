@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-public class Web3AuthOptions {
+public class Web3AuthOptions
+{
     public string clientId { get; set; }
     public Web3Auth.Network network { get; set; }
     public Uri redirectUrl { get; set; }
-    public string sdkUrl {
-        get {
+    public string sdkUrl
+    {
+        get
+        {
             if (network == Web3Auth.Network.TESTNET)
                 return "https://dev-sdk.openlogin.com";
             else
