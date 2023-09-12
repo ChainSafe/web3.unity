@@ -1,5 +1,4 @@
-﻿public class LoginVerifier
-{
+﻿public class LoginVerifier {
     public string name { get; set; }
     public Provider loginProvider { get; set; }
 
