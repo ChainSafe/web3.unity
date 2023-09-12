@@ -38,7 +38,6 @@ namespace ChainSafe.GamingSdk.Web3Auth
         public async ValueTask WillStartAsync()
         {
             coreInstance = CreateCoreInstance();
-            string privateKeyString;
             TaskCompletionSource<string> loginTcs = new();
             coreInstance.onLogin += Web3Auth_OnLogin;
 
