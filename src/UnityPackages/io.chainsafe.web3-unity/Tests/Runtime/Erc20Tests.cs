@@ -7,9 +7,6 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using Web3Unity.Scripts.Library.Ethers.JsonRpc;
 
-//Coroutines dont work in Editor, thus we're using playmode
-//(There Are Editor Coroutines, but Setup and tests themselves don't work with them)
-[RequiresPlayMode]
 public class Erc20Tests
 {
     private const string Account = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";

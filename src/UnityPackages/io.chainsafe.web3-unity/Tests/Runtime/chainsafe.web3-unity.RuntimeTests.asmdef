@@ -6,9 +6,7 @@
         "UnityEditor.TestRunner",
         "chainsafe.web3-unity"
     ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,
