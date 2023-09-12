@@ -1,6 +1,5 @@
 using System.Collections;
-using System.Threading.Tasks;
-using ChainSafe.GamingWeb3;
+using System.Numerics;
 using ChainSafe.GamingWeb3.Build;
 using ChainSafe.GamingWeb3.Unity;
 using NUnit.Framework;
@@ -8,8 +7,13 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using Web3Unity.Scripts.Library.Ethers.JsonRpc;
 
+//Coroutines dont work in Editor, thus we're using playmode
+//(There Are Editor Coroutines, but Setup and tests themselves don't work with them)
+[RequiresPlayMode]
 public class Erc20Tests
 {
+    private const string Account = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
+    private const string ContractAddress = "0x3E0C0447e47d49195fbE329265E330643eB42e6f";
     private Erc20Sample _logic;
 
     [UnitySetUp]
@@ -18,16 +22,13 @@ public class Erc20Tests
         //wait for some time to initialize
         yield return new WaitForSeconds(5f);
 
-        var config = ProjectConfigUtilities.Load("7e99206b-e098-4666-bfbf-4991a1800a33", "5", "ethereum", "goerli",
-            string.Empty, "https://goerli.infura.io/v3/06f3f78b0f324d9c8cde54f90cd4fb5b");
-
-        Web3Builder web3Builder = new Web3Builder(config).Configure(services =>
+        var web3Builder = new Web3Builder(ProjectConfigUtilities.Load()).Configure(services =>
         {
             services.UseUnityEnvironment();
             services.UseRpcProvider();
         });
 
-        ValueTask<Web3> buildWeb3 = web3Builder.BuildAsync();
+        var buildWeb3 = web3Builder.BuildAsync();
 
         //wait until for async task to finish
         yield return new WaitUntil(() => buildWeb3.IsCompleted);
@@ -36,15 +37,69 @@ public class Erc20Tests
     }
 
     [UnityTest]
-    public IEnumerator Erc20SampleTest()
+    public IEnumerator TestBalanceOf()
     {
-        var contractAddress = "0x3E0C0447e47d49195fbE329265E330643eB42e6f";
+        var getBalanceOf = _logic.BalanceOf(ContractAddress, Account);
+        yield return new WaitUntil(() => getBalanceOf.IsCompleted);
 
-        Task<string> getName = _logic.Name(contractAddress);
+        Assert.AreEqual(new BigInteger(new byte[]
+        {
+            0, 0, 0, 64, 234, 237, 116, 70, 208, 156, 44, 159, 12
+        }), getBalanceOf.Result);
+    }
 
-        //wait until for async task to finish
-        yield return new WaitUntil(() => getName.IsCompleted);
+    [UnityTest]
+    public IEnumerator TestDecimals()
+    {
+        var getDecimals = _logic.Decimals(ContractAddress);
+        yield return new WaitUntil(() => getDecimals.IsCompleted);
+
+        Assert.AreEqual(new BigInteger(18), getDecimals.Result);
+    }
+
+    [UnityTest]
+    public IEnumerator TestName()
+    {
+        var getName = _logic.Name(ContractAddress);
+        yield return new WaitUntil(() => getName.IsCompleted);  
 
         Assert.AreEqual("ChainToken", getName.Result);
+    }
+
+    [UnityTest]
+    public IEnumerator TestNativeBalanceOf()
+    {
+        var getNativeBalanceOf = _logic.NativeBalanceOf(Account);
+
+        yield return new WaitUntil(() => getNativeBalanceOf.IsCompleted);
+
+
+        Assert.AreEqual(new BigInteger(new byte[]
+        {
+            0, 144, 99, 20, 5, 161, 13, 3
+        }), getNativeBalanceOf.Result);
+    }
+    
+    [UnityTest]
+    public IEnumerator TestSymbol()
+    {
+        var getSymbol = _logic.Symbol(ContractAddress);
+
+        yield return new WaitUntil(() => getSymbol.IsCompleted);
+        
+        Assert.AreEqual("CT", getSymbol.Result);
+    } 
+    
+    [UnityTest]
+    public IEnumerator TestTotalSupply()
+    {
+        var getTotalSupply = _logic.TotalSupply(ContractAddress);
+        
+        yield return new WaitUntil(() => getTotalSupply.IsCompleted);
+        
+        Assert.AreEqual(new BigInteger(new byte[]
+        {
+            0, 0, 0, 64, 234, 237, 116, 70, 208, 156, 44, 159, 12 
+        }), getTotalSupply.Result);   
     }
 }
