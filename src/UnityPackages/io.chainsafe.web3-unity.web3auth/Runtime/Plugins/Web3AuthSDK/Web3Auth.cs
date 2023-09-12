@@ -8,12 +8,20 @@ using System.Net;
 using System.Collections;
 using Org.BouncyCastle.Math;
 using Newtonsoft.Json.Linq;
+#if UNITY_WEBGL && !UNITY_EDITOR
+using System.Runtime.InteropServices;
+#endif
 
 public class Web3Auth : MonoBehaviour
 {
     public enum Network
     {
-        MAINNET, TESTNET, CYAN
+        MAINNET, TESTNET, CYAN, AQUA
+    }
+
+    public enum ChainNamespace
+    {
+        EIP155, SOLANA
     }
 
     private Web3AuthOptions web3AuthOptions;
@@ -24,12 +32,23 @@ public class Web3Auth : MonoBehaviour
     public event Action<Web3AuthResponse> onLogin;
     public event Action onLogout;
 
-    public bool initializeOnStart;
-    public string clientId;
-    public string redirectUri;
-    public Web3Auth.Network network;
+    private bool initializeOnStart;
+
+    [SerializeField]
+    private string clientId;
+
+    [SerializeField]
+    private string redirectUri;
+
+    [SerializeField]
+    private Web3Auth.Network network;
 
     private static readonly Queue<Action> _executionQueue = new Queue<Action>();
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+    [DllImport("__Internal")]
+    private static extern string GetAddressBarURL();
+#endif
 
     public void Awake()
     {
@@ -38,6 +57,14 @@ public class Web3Auth : MonoBehaviour
 
         Initialize();
     }
+
+    private void OnDestroy()
+    {
+        // Better be safe than sorry and remove the event listener when the object is destroyed so we don't have
+        // Memory leaks.
+        Application.deepLinkActivated -= onDeepLinkActivated;
+    }
+
 
     public void Initialize()
     {
@@ -50,9 +77,11 @@ public class Web3Auth : MonoBehaviour
             this.initParams["redirectUrl"] = redirectUri;
 
         Application.deepLinkActivated += onDeepLinkActivated;
-        if (!string.IsNullOrEmpty(Application.absoluteURL))
-            onDeepLinkActivated(Application.absoluteURL);
-
+        var absoluteURL = GetAbsoluteURL();
+        if (!string.IsNullOrEmpty(absoluteURL))
+        {
+            onDeepLinkActivated(absoluteURL);
+        }
 #if UNITY_EDITOR
         Web3AuthSDK.Editor.Web3AuthDebug.onURLRecieved += (Uri url) =>
         {
@@ -68,9 +97,23 @@ public class Web3Auth : MonoBehaviour
         //            this.setResultUrl(new Uri($"http://localhost#{code}"));
         //        } 
 #endif
-
-        //authorizeSession();
+#if UNITY_WEBGL
+        authorizeSession();
+#endif
     }
+
+    private string GetAbsoluteURL()
+    {
+        //Because we can't change Unitys Application.absoluteURL we need to use a workaround for WebGL.
+        //There is a ReadAddressBar.jslib file in the plugins folder that is kinda like a bridge
+        //Between Unity's code and Javascript, there I retrieve the actual addressBar URL, which is used later.
+#if UNITY_WEBGL && !UNITY_EDITOR
+        return GetAddressBarURL();
+#else 
+        return Application.absoluteURL;
+#endif
+    }
+
 
     public void setOptions(Web3AuthOptions web3AuthOptions)
     {
@@ -86,6 +129,17 @@ public class Web3Auth : MonoBehaviour
         if (this.web3AuthOptions.loginConfig != null)
             this.initParams["loginConfig"] = JsonConvert.SerializeObject(this.web3AuthOptions.loginConfig);
 
+        if (this.web3AuthOptions.clientId != null)
+            this.initParams["clientId"] = this.web3AuthOptions.clientId;
+
+        this.initParams["network"] = this.web3AuthOptions.network.ToString().ToLower();
+
+
+        if (this.web3AuthOptions.useCoreKitKey.HasValue)
+            this.initParams["useCoreKitKey"] = this.web3AuthOptions.useCoreKitKey.Value;
+
+        if (this.web3AuthOptions.chainNamespace != null)
+            this.initParams["chainNamespace"] = this.web3AuthOptions.chainNamespace;
     }
 
     private void onDeepLinkActivated(string url)
@@ -415,6 +469,29 @@ public class Web3Auth : MonoBehaviour
         }
     }
 
+    public string getPrivKey()
+    {
+        if (web3AuthResponse == null)
+            return "";
+
+        return web3AuthOptions.useCoreKitKey.Value ? web3AuthResponse.coreKitKey : web3AuthResponse.privKey;
+    }
+
+    public string getEd25519PrivKey()
+    {
+        if (web3AuthResponse == null)
+            return "";
+
+        return web3AuthOptions.useCoreKitKey.Value ? web3AuthResponse.coreKitEd25519PrivKey : web3AuthResponse.ed25519PrivKey;
+    }
+
+    public UserInfo getUserInfo()
+    {
+        if (web3AuthResponse == null)
+            throw new Exception(Web3AuthError.getError(ErrorCode.NOUSERFOUND));
+
+        return web3AuthResponse.userInfo;
+    }
 
     public void Update()
     {

@@ -28,13 +28,13 @@ namespace Web3AuthSDK.Editor
             VisualElement root = rootVisualElement;
 
             // Import UXML
-            var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Packages/io.chainsafe.web3-unity/Runtime/Plugins/Web3AuthSDK/Debug/Web3AuthDebug.uxml");
+            var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Plugins/Web3AuthSDK/Debug/Web3AuthDebug.uxml");
             VisualElement labelFromUXML = visualTree.CloneTree();
             root.Add(labelFromUXML);
 
             // A stylesheet can be added to a VisualElement.
             // The style will be applied to the VisualElement and all of its children.
-            var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Packages/io.chainsafe.web3-unity/Runtime/Plugins/Web3AuthSDK/Debug/Web3AuthDebug.uss");
+            var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Plugins/Web3AuthSDK/Debug/Web3AuthDebug.uss");
             root.styleSheets.Add(styleSheet);
 
             debugButton = root.Q<Button>("debugButton");
