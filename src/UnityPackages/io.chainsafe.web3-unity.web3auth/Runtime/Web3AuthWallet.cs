@@ -60,7 +60,6 @@ namespace ChainSafe.GamingSdk.Web3Auth
         public async ValueTask WillStopAsync()
         {
             TaskCompletionSource<object> logoutTcs = new();
-            Debug.Log("Logging out via WillStop");
             coreInstance.onLogout += Web3Auth_OnLogout;
             coreInstance.logout();
 
