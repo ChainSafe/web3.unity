@@ -9,15 +9,15 @@ public class BuildPostProcess
     [PostProcessBuildAttribute(0)] // Configures this this post process to run first
     public static void OnPostprocessBuild(BuildTarget target, string pathToBuiltProject)
     {
-        
+
         Uri uri = null;
-        
+
         try
         {
             uri = new Uri(System.IO.File.ReadAllText("Assets/Resources/webauth"));
         }
         catch
-        { 
+        {
 
             throw new Exception("Deep Link uri is invalid or does not exist. Please generate from \"Window > Web3Auth > Generate Deep Link\" Menu");
         }
