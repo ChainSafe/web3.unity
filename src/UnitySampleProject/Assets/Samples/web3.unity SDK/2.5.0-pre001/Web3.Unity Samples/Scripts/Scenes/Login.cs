@@ -83,9 +83,7 @@ namespace Scenes
 
             if (string.IsNullOrEmpty(savedAccount))
                 return;
-
-            Debug.Log("Saved account detected. Logging in...");
-
+            
             var web3Builder = new Web3Builder(ProjectConfigUtilities.Load())
                 .Configure(ConfigureCommonServices)
                 .Configure(services =>
@@ -137,11 +135,11 @@ namespace Scenes
                 {
                     var web3AuthConfig = new Web3AuthWalletConfig
                     {
-                        ClientId = Web3AuthSettings.ClientId,
-                        RedirectUri = Web3AuthSettings.RedirectUri,
-                        Network = Web3AuthSettings.Network,
                         Web3AuthOptions = new()
                         {
+                            clientId = Web3AuthSettings.ClientId,
+                            redirectUrl = new Uri(Web3AuthSettings.RedirectUri),
+                            network = Web3AuthSettings.Network,
                             whiteLabel = new()
                             {
                                 dark = true,

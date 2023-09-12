@@ -13,7 +13,12 @@ public class Web3Auth : MonoBehaviour
 {
     public enum Network
     {
-        MAINNET, TESTNET, CYAN
+        MAINNET, TESTNET, CYAN, AQUA
+    }
+
+    public enum ChainNamespace
+    {
+        EIP155, SOLANA
     }
 
     private Web3AuthOptions web3AuthOptions;
@@ -24,10 +29,16 @@ public class Web3Auth : MonoBehaviour
     public event Action<Web3AuthResponse> onLogin;
     public event Action onLogout;
 
-    public bool initializeOnStart;
-    public string clientId;
-    public string redirectUri;
-    public Web3Auth.Network network;
+    private bool initializeOnStart;
+    
+    [SerializeField]
+    private string clientId;
+
+    [SerializeField]
+    private string redirectUri;
+
+    [SerializeField]
+    private Web3Auth.Network network;
 
     private static readonly Queue<Action> _executionQueue = new Queue<Action>();
 
@@ -69,7 +80,7 @@ public class Web3Auth : MonoBehaviour
 //        } 
 #endif
 
-        //authorizeSession();
+        authorizeSession();
     }
 
     public void setOptions(Web3AuthOptions web3AuthOptions)
@@ -86,6 +97,17 @@ public class Web3Auth : MonoBehaviour
         if (this.web3AuthOptions.loginConfig != null)
             this.initParams["loginConfig"] = JsonConvert.SerializeObject(this.web3AuthOptions.loginConfig);
 
+        if (this.web3AuthOptions.clientId != null)
+            this.initParams["clientId"] = this.web3AuthOptions.clientId;
+
+        this.initParams["network"] = this.web3AuthOptions.network.ToString().ToLower();
+
+
+        if (this.web3AuthOptions.useCoreKitKey.HasValue)
+            this.initParams["useCoreKitKey"] = this.web3AuthOptions.useCoreKitKey.Value;
+
+        if (this.web3AuthOptions.chainNamespace != null)
+            this.initParams["chainNamespace"] = this.web3AuthOptions.chainNamespace;
     }
 
     private void onDeepLinkActivated(string url)
@@ -415,6 +437,29 @@ public class Web3Auth : MonoBehaviour
         }
     }
 
+    public string getPrivKey()
+    {
+        if (web3AuthResponse == null)
+            return "";
+
+        return web3AuthOptions.useCoreKitKey.Value ? web3AuthResponse.coreKitKey : web3AuthResponse.privKey;
+    }
+
+    public string getEd25519PrivKey()
+    {
+        if (web3AuthResponse == null)
+            return "";
+
+        return web3AuthOptions.useCoreKitKey.Value ? web3AuthResponse.coreKitEd25519PrivKey : web3AuthResponse.ed25519PrivKey;
+    }
+
+    public UserInfo getUserInfo()
+    {
+        if (web3AuthResponse == null)
+            throw new Exception(Web3AuthError.getError(ErrorCode.NOUSERFOUND));
+
+        return web3AuthResponse.userInfo;
+    }
 
     public void Update()
     {

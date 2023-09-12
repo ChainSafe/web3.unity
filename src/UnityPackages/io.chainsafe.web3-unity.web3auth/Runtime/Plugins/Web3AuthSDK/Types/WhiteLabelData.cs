@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 
-public class WhiteLabelData
-{
+public class WhiteLabelData { 
     public string name { get; set; }
     public string logoLight { get; set; }
     public string logoDark { get; set; }

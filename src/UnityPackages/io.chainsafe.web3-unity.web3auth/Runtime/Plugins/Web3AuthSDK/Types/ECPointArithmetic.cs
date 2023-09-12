@@ -10,12 +10,10 @@ public class ECPointArithmetic
     private BigInteger x;
     private BigInteger y;
     private BigInteger z;
-    private BigInteger zinv;
+    private BigInteger? zinv;
     private BigInteger one = BigInteger.One;
     private BigInteger zero = BigInteger.Zero;
-#pragma warning disable CS0414
     private bool infinity;
-#pragma warning restore CS0414
 
     public ECPointArithmetic(ECCurve ec, BigInteger x, BigInteger y, BigInteger z)
     {
