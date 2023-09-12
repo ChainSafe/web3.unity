@@ -58,7 +58,7 @@ public class Erc20Tests
     public IEnumerator TestName()
     {
         var getName = _logic.Name(ContractAddress);
-        yield return new WaitUntil(() => getName.IsCompleted);  
+        yield return new WaitUntil(() => getName.IsCompleted);
 
         Assert.AreEqual("ChainToken", getName.Result);
     }
@@ -76,27 +76,27 @@ public class Erc20Tests
             0, 144, 99, 20, 5, 161, 13, 3
         }), getNativeBalanceOf.Result);
     }
-    
+
     [UnityTest]
     public IEnumerator TestSymbol()
     {
         var getSymbol = _logic.Symbol(ContractAddress);
 
         yield return new WaitUntil(() => getSymbol.IsCompleted);
-        
+
         Assert.AreEqual("CT", getSymbol.Result);
-    } 
-    
+    }
+
     [UnityTest]
     public IEnumerator TestTotalSupply()
     {
         var getTotalSupply = _logic.TotalSupply(ContractAddress);
-        
+
         yield return new WaitUntil(() => getTotalSupply.IsCompleted);
-        
+
         Assert.AreEqual(new BigInteger(new byte[]
         {
-            0, 0, 0, 64, 234, 237, 116, 70, 208, 156, 44, 159, 12 
-        }), getTotalSupply.Result);   
+            0, 0, 0, 64, 234, 237, 116, 70, 208, 156, 44, 159, 12
+        }), getTotalSupply.Result);
     }
 }
