@@ -1,10 +1,10 @@
 {
-    "name": "Tests",
+    "name": "chainsafe.web3-unity.RuntimeTests",
     "rootNamespace": "",
     "references": [
-        "GUID:27619889b8ba8c24980f49ee34dbb44a",
-        "GUID:0c370a41a98240ff8e4dd4b17c2813bf",
-        "GUID:5426c6b788696eb4c88f4198b59839eb"
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "chainsafe.web3-unity"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -16,8 +16,10 @@
         "ChainSafe.GamingSdk.EVM.Unity.dll",
         "Microsoft.Extensions.DependencyInjection.Abstractions.dll"
     ],
-    "autoReferenced": true,
-    "defineConstraints": [],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
     "versionDefines": [],
     "noEngineReferences": false
 }

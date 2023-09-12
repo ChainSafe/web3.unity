@@ -1,0 +1,76 @@
+name: Test Package
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  testAllModes:
+    name: Test in ${{ matrix.testMode }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        projectPath:
+        - src/UnityPackages/io.chainsafe.web3-unity
+        publishPath:
+        - ${GITHUB_WORKSPACE}/src/ChainSafe.GamingSdk.EVM.Unity/bin/Release/netstandard2.1/publish
+        packageLibraryPath:
+        - ${GITHUB_WORKSPACE}/src/UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries
+        testMode:
+          - playmode
+          - editmode
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          lfs: true
+      - name: update submodules
+        # clone submodules
+        run: |
+          git submodule update --init
+        shell: bash
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Publish
+        run: |
+          dotnet publish --no-restore src/ChainSafe.GamingSdk.EVM.Unity/ChainSafe.GamingSdk.EVM.Unity.csproj -c Release /property:Unity=true
+          echo Generated DLLs
+          ls ${{ matrix.publishPath }}
+      - name: Publish to Unity Package
+        run: |
+          rm -f ${{ matrix.publishPath }}/UnityEngine.dll
+          mkdir -p ${{ matrix.packageLibraryPath }}
+          rm -f ${{ matrix.packageLibraryPath }}/*
+          cp ${{ matrix.publishPath }}/*.dll ${{ matrix.packageLibraryPath }}/
+          echo Copied DLLs
+          ls ${{ matrix.packageLibraryPath }}/
+          cp ${GITHUB_WORKSPACE}/src/UnityPackages/io.chainsafe.web3-unity/TestPackage~/package.json ${GITHUB_WORKSPACE}/src/UnityPackages/io.chainsafe.web3-unity/package.json
+        shell: bash
+      - uses: game-ci/unity-test-runner@v3
+        id: tests
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          unityVersion: '2021.3.22f1'
+          testMode: ${{ matrix.testMode }}
+          artifactsPath: ${{ matrix.testMode }}-artifacts
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          checkName: ${{ matrix.testMode }} Test Results
+          coverageOptions: 'generateAdditionalMetrics;generateHtmlReport;generateBadgeReport;'
+          packageMode: true
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: Test results for ${{ matrix.testMode }}
+          path: ${{ steps.tests.outputs.artifactsPath }}
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: Coverage results for ${{ matrix.testMode }}
+          path: ${{ steps.tests.outputs.coveragePath }}
