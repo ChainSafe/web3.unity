@@ -62,6 +62,9 @@ namespace Scenes
             // Remember me only works with the WebPageWallet
             RememberMeToggle.gameObject.SetActive(useWebPageWallet);
 
+#if UNITY_WEBGL
+                ProcessWeb3Auth();
+#endif
             TryAutoLogin();
 
             ExistingWalletButton.onClick.AddListener(LoginWithExistingAccount);
@@ -83,8 +86,6 @@ namespace Scenes
 
             if (string.IsNullOrEmpty(savedAccount))
                 return;
-
-            Debug.Log("Saved account detected. Logging in...");
 
             var web3Builder = new Web3Builder(ProjectConfigUtilities.Load())
                 .Configure(ConfigureCommonServices)
@@ -137,11 +138,11 @@ namespace Scenes
                 {
                     var web3AuthConfig = new Web3AuthWalletConfig
                     {
-                        ClientId = Web3AuthSettings.ClientId,
-                        RedirectUri = Web3AuthSettings.RedirectUri,
-                        Network = Web3AuthSettings.Network,
                         Web3AuthOptions = new()
                         {
+                            clientId = Web3AuthSettings.ClientId,
+                            redirectUrl = new Uri(Web3AuthSettings.RedirectUri),
+                            network = Web3AuthSettings.Network,
                             whiteLabel = new()
                             {
                                 dark = true,
@@ -151,12 +152,38 @@ namespace Scenes
                         },
                         LoginParams = new() { loginProvider = provider }
                     };
-
                     services.UseWeb3AuthWallet(web3AuthConfig);
                 });
-
             await ProcessLogin(web3Builder);
         }
+
+        private async void ProcessWeb3Auth()
+        {
+            var web3Builder = new Web3Builder(ProjectConfigUtilities.Load())
+                .Configure(ConfigureCommonServices)
+                .Configure(services =>
+                {
+                    var web3AuthConfig = new Web3AuthWalletConfig
+                    {
+                        Web3AuthOptions = new()
+                        {
+                            whiteLabel = new()
+                            {
+                                dark = true,
+                                defaultLanguage = "en",
+                                name = "ChainSafe Gaming SDK",
+                            },
+                            clientId = Web3AuthSettings.ClientId,
+                            redirectUrl = new Uri(Web3AuthSettings.RedirectUri),
+                            network = Web3AuthSettings.Network,
+
+                        },
+                    };
+                    services.UseWeb3AuthWallet(web3AuthConfig);
+                });
+            await ProcessLogin(web3Builder);
+        }
+
 
         private async Task ProcessLogin(Web3Builder builder)
         {

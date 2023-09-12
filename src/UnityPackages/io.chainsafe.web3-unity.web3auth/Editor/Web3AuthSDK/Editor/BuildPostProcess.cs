@@ -1,15 +1,18 @@
-#if UNITY_IOS
-using System;
+using UnityEngine;
 using UnityEditor;
 using UnityEditor.Callbacks;
+using System.IO;
+using System.Collections;
+using System;
 
 public class BuildPostProcess
 {
+
     // Runs all the post process build steps. Called from Unity during build
     [PostProcessBuildAttribute(0)] // Configures this this post process to run first
     public static void OnPostprocessBuild(BuildTarget target, string pathToBuiltProject)
     {
-
+#if UNITY_IOS
         Uri uri = null;
 
         try
@@ -35,7 +38,6 @@ public class BuildPostProcess
         urlSchemes.AddString(uri.Scheme);
 
         infoPlist.WriteToFile(infoPlistPath);
-
+#endif
     }
 }
-#endif

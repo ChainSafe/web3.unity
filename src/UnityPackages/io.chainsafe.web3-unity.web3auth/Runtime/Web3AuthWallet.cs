@@ -1,3 +1,4 @@
+using System;
 using ChainSafe.GamingSdk.EVM.InProcessSigner;
 using ChainSafe.GamingSdk.EVM.InProcessTransactionExecutor;
 using ChainSafe.GamingSDK.EVM.Web3.Core;
@@ -7,10 +8,12 @@ using Nethereum.ABI.EIP712;
 using Nethereum.Signer;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Org.BouncyCastle.Utilities.Encoders;
 using UnityEngine;
 using Web3Unity.Scripts.Library.Ethers.Providers;
 using Web3Unity.Scripts.Library.Ethers.Signers;
 using Web3Unity.Scripts.Library.Ethers.Transactions;
+using Object = UnityEngine.Object;
 using TWeb3Auth = Web3Auth;
 
 namespace ChainSafe.GamingSdk.Web3Auth
@@ -35,12 +38,15 @@ namespace ChainSafe.GamingSdk.Web3Auth
         public async ValueTask WillStartAsync()
         {
             coreInstance = CreateCoreInstance();
-
             TaskCompletionSource<string> loginTcs = new();
             coreInstance.onLogin += Web3Auth_OnLogin;
-            coreInstance.login(config.LoginParams);
+
+            if (config.LoginParams != null)
+            {
+                coreInstance.login(config.LoginParams);
+            }
+
             var privateKeyString = await loginTcs.Task;
-            coreInstance.onLogin -= Web3Auth_OnLogin;
 
             var privateKey = new EthECKey(privateKeyString);
             var signerConfig = new InProcessSignerConfig { PrivateKey = privateKey };
@@ -80,9 +86,6 @@ namespace ChainSafe.GamingSdk.Web3Auth
             Object.DontDestroyOnLoad(gameObject);
 
             var instance = gameObject.GetComponent<TWeb3Auth>();
-            instance.clientId = config.ClientId;
-            instance.redirectUri = config.RedirectUri;
-            instance.network = config.Network;
             instance.Initialize();
             instance.setOptions(config.Web3AuthOptions);
 

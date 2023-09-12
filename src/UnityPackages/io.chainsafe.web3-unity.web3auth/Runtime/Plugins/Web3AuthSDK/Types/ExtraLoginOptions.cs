@@ -12,6 +12,7 @@ public class ExtraLoginOptions
     public Prompt prompt { get; set; }
     public string max_age { get; set; }
     public string ui_locales { get; set; }
+    public string id_token { get; set; }
     public string id_token_hint { get; set; }
     public string login_hint { get; set; }
     public string acr_values { get; set; }
