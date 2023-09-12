@@ -59,14 +59,14 @@ public class Web3Auth : MonoBehaviour
             this.setResultUrl(url);
         };
 
-//#elif UNITY_WEBGL
-//        var code = Utils.GetAuthCode();
-//        Debug.Log("code is " + code);
-//        if (Utils.GetAuthCode() != "") 
-//        {
-//            Debug.Log("I am here");
-//            this.setResultUrl(new Uri($"http://localhost#{code}"));
-//        } 
+        //#elif UNITY_WEBGL
+        //        var code = Utils.GetAuthCode();
+        //        Debug.Log("code is " + code);
+        //        if (Utils.GetAuthCode() != "") 
+        //        {
+        //            Debug.Log("I am here");
+        //            this.setResultUrl(new Uri($"http://localhost#{code}"));
+        //        } 
 #endif
 
         //authorizeSession();
