@@ -3,7 +3,7 @@ name: Duplicate-Package-Sample
 on:
   push:
     branches:
-      - main
+      - rob/automate-sample-modifications-593
 
 jobs:
   duplicate:
@@ -19,9 +19,10 @@ jobs:
 
       - name: Commit and Push
         run: |
-          git config --global user.email "robel@chainsafe.io"
-          git config --global user.name "Robel Getnet"
-          git config --global user.username "robGG1997"
+          git config --global user.email $git_email
+          git config --global user.name "${{ github.actor }}"
           git add ./src/UnityPackages/io.chainsafe.web3-unity/Samples~/Web3.Unity/. -f
           git diff-index --cached --quiet HEAD || git commit -m "Auto-duplicate Package Samples"
           git push
+        env:
+          git_email: "${{ github.actor }}@users.noreply.github.com"
