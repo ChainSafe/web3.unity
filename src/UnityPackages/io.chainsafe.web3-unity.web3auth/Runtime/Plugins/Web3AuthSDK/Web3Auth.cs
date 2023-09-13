@@ -385,7 +385,7 @@ public class Web3Auth : MonoBehaviour
                     var encryptedShareBytes = AES256CBC.toByteArray(new BigInteger(shareMetadata.ciphertext, 16));
                     var share = aes256cbc.decrypt(encryptedShareBytes);
                     var tempJson = JsonConvert.DeserializeObject<JObject>(share);
-                    if(!tempJson.ContainsKey("userInfo"))
+                    if (!tempJson.ContainsKey("userInfo"))
                         tempJson.Add("userInfo", null);
                     tempJson["userInfo"] = tempJson["store"];
                     tempJson.Remove("store");

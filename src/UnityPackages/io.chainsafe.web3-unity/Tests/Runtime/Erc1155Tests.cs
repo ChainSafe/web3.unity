@@ -10,11 +10,12 @@ using UnityEngine.TestTools;
 using Web3Unity.Scripts.Library.Ethers.JsonRpc;
 using Web3Unity.Scripts.Prefabs;
 
-public class Erc1155Tests {
-    
-    private readonly string[] _accounts = new [] { "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2", "0xE51995Cdb3b1c109E0e6E67ab5aB31CDdBB83E4a"};
+public class Erc1155Tests
+{
+
+    private readonly string[] _accounts = new[] { "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2", "0xE51995Cdb3b1c109E0e6E67ab5aB31CDdBB83E4a" };
     private const string ContractAddress = "0x2c1867bc3026178a47a677513746dcc6822a137a";
-    private readonly string[] _tokenIds = {"0x01559ae4021aee70424836ca173b6a4e647287d15cee8ac42d8c2d8d128927e5", "0x01559ae4021aee70424836ca173b6a4e647287d15cee8ac42d8c2d8d128927e5"};
+    private readonly string[] _tokenIds = { "0x01559ae4021aee70424836ca173b6a4e647287d15cee8ac42d8c2d8d128927e5", "0x01559ae4021aee70424836ca173b6a4e647287d15cee8ac42d8c2d8d128927e5" };
     private Erc1155Sample _logic;
 
     private const string NftTextureContractAddress = "0x0288B4F1389ED7b3d3f9C7B73d4408235c0CBbc6";
@@ -29,10 +30,10 @@ public class Erc1155Tests {
     private const int IndexerSkip = 0;
 
     #endregion
-    
-    
-    
-    
+
+
+
+
 
     [UnitySetUp]
     public IEnumerator Setup()
@@ -62,7 +63,7 @@ public class Erc1155Tests {
 
         _logic = new Erc1155Sample(buildWeb3.Result);
     }
-    
+
     [UnityTest]
     public IEnumerator TestBalanceOf()
     {
@@ -71,18 +72,18 @@ public class Erc1155Tests {
 
         Assert.AreEqual(new BigInteger(2), getBalanceOf.Result);
     }
-    
+
     [UnityTest]
     public IEnumerator TestBalanceOfBatch()
     {
         var getBalanceOf = _logic.BalanceOfBatch(ContractAddress, _accounts, _tokenIds);
         yield return new WaitUntil(() => getBalanceOf.IsCompleted);
-        CollectionAssert.AreEqual(new List<BigInteger>{2,0}, getBalanceOf.Result);
+        CollectionAssert.AreEqual(new List<BigInteger> { 2, 0 }, getBalanceOf.Result);
     }
 
     private const string ExpectedUriResult =
         "https://ipfs.io/ipfs/f01559ae4021aee70424836ca173b6a4e647287d15cee8ac42d8c2d8d128927e5";
-    
+
     [UnityTest]
     public IEnumerator TestUri()
     {
@@ -90,7 +91,7 @@ public class Erc1155Tests {
         yield return new WaitUntil(() => uri.IsCompleted);
         Assert.AreEqual(ExpectedUriResult, uri.Result);
     }
-    
+
     //Something is really off with the indexer, since some values seem to be null (on SampleMain scene),
     //So I can't run this test until the root cause is fixed (or the All button is removed :D )
     /*[UnityTest]
@@ -168,6 +169,6 @@ public class Erc1155Tests {
         #endregion
         var texture = _logic.ImportNftTexture(NftTextureContractAddress, "0");
         yield return new WaitUntil(() => texture.IsCompleted);
-        CollectionAssert.AreEqual(bytesOfTheTexture,texture.Result.EncodeToJPG(1));
+        CollectionAssert.AreEqual(bytesOfTheTexture, texture.Result.EncodeToJPG(1));
     }
 }
