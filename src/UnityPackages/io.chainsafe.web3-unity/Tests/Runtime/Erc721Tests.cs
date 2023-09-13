@@ -98,8 +98,7 @@ public class Erc721Tests
         var getOwnerOfBatch = _logic.OwnerOfBatch(ownerOfBatchContractAddress, ownerOfBatchTokenIds, multicall);
         yield return new WaitUntil(() => getOwnerOfBatch.IsCompleted);
 
-        Assert.AreEqual(ownerOfBatchExpected[0], getOwnerOfBatch.Result[0]);
-        Assert.AreEqual(ownerOfBatchExpected[1], getOwnerOfBatch.Result[1]);
+        CollectionAssert.AreEqual(ownerOfBatchExpected, getOwnerOfBatch.Result);
     }
 
     private const string ExpectedUriResult =
