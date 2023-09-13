@@ -3,7 +3,7 @@ name: Duplicate-Package-Sample
 on:
   push:
     branches:
-      - rob/automate-sample-modifications-593
+      - main
 
 jobs:
   duplicate:
