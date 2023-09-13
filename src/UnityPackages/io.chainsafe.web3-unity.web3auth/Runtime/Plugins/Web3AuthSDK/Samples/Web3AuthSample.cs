@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Newtonsoft.Json;
+using static Web3Auth;
 
 public class Web3AuthSample : MonoBehaviour
 {
@@ -62,7 +63,7 @@ public class Web3AuthSample : MonoBehaviour
                 {
                     { "primary", "#123456" }
                 }
-            }
+            },
             // If using your own custom verifier, uncomment this code. 
             /*
             ,
@@ -71,6 +72,7 @@ public class Web3AuthSample : MonoBehaviour
                 {"CUSTOM_VERIFIER", loginConfigItem}
             }
             */
+            network = Web3Auth.Network.TESTNET
         });
         web3Auth.onLogin += onLogin;
         web3Auth.onLogout += onLogout;
