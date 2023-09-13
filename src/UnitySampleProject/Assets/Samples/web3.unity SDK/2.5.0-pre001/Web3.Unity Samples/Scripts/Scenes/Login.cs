@@ -63,7 +63,7 @@ namespace Scenes
             RememberMeToggle.gameObject.SetActive(useWebPageWallet);
 
 #if UNITY_WEBGL
-                ProcessWeb3Auth();
+            ProcessWeb3Auth();
 #endif
             TryAutoLogin();
 
