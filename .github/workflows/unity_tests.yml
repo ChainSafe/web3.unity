@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         projectPath:
-        - src/UnityPackages/io.chainsafe.web3-unity
+        - Packages/io.chainsafe.web3-unity
         publishPath:
         - ${GITHUB_WORKSPACE}/src/ChainSafe.GamingSdk.EVM.Unity/bin/Release/netstandard2.1/publish
         packageLibraryPath:
