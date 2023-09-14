@@ -1,7 +1,0 @@
-<linker>
-    <assembly fullname="Newtonsoft.Json">
-        <type fullname="Newtonsoft.Json.Converters.StringEnumConverter">
-            <method signature="System.Void .ctor()"/>
-        </type>
-    </assembly>
-</linker>
