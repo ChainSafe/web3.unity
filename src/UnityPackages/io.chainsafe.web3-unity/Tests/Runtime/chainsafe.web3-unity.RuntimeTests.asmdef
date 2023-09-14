@@ -12,6 +12,7 @@
     "overrideReferences": true,
     "precompiledReferences": [
         "nunit.framework.dll",
+        "Nethereum.Hex.dll",
         "ChainSafe.GamingSDK.EVM.dll",
         "ChainSafe.GamingSdk.EVM.Unity.dll",
         "Microsoft.Extensions.DependencyInjection.Abstractions.dll"
