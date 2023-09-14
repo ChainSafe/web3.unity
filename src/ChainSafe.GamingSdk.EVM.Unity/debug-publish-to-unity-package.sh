@@ -19,9 +19,9 @@ echo Moving files to Unity package...
 cd bin/debug/netstandard2.1/publish
 rm Newtonsoft.Json.dll
 rm UnityEngine.dll
-mkdir -p ../../../../../UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries
-rm -f ../../../../../UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries/*
-cp *.dll ../../../../../UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries
-cp *.pdb ../../../../../UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries
+mkdir -p ../../../../../../packages/UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries
+rm -f ../../../../../../packagesUnityPackages/io.chainsafe.web3-unity/Runtime/Libraries/*
+cp *.dll ../../../../../../packagesUnityPackages/io.chainsafe.web3-unity/Runtime/Libraries
+cp *.pdb ../../../../../../packagesUnityPackages/io.chainsafe.web3-unity/Runtime/Libraries
 
 echo Done
