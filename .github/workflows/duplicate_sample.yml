@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref_name }}
 
       - name: Run duplicate script file
         run: bash ${GITHUB_WORKSPACE}/duplicate_package_sample.sh
