@@ -12,9 +12,9 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
         with:
-          ref: ${{ github.ref_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Run duplicate script file
         run: bash ${GITHUB_WORKSPACE}/duplicate_package_sample.sh
@@ -25,6 +25,6 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git add ./src/UnityPackages/io.chainsafe.web3-unity/Samples~/Web3.Unity/. -f
           git diff-index --cached --quiet HEAD || git commit -m "Auto-duplicate Package Samples"
-          git push
+          git push origin HEAD:
         env:
           git_email: "${{ github.actor }}@users.noreply.github.com"
