@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet;
+using ChainSafe.GamingSdk.Gelato;
 using ChainSafe.GamingWeb3;
 using ChainSafe.GamingWeb3.Build;
 using ChainSafe.GamingWeb3.Unity;
@@ -29,7 +31,12 @@ public class SampleTestsBase
         var web3Builder = new Web3Builder(projectConfigScriptableObject).Configure(services =>
         {
             services.UseUnityEnvironment();
+            services.UseGelato("_UzPz_Yk_WTjWMfcl45fLvQNGQ9ISx5ZE8TnwnVKYrE_");
             services.UseRpcProvider();
+
+            //add any contracts we would want to use
+            
+            services.UseWebPageWallet(new WebPageWalletConfig { SavedUserAddress = "0x55ffe9E30347266f02b9BdAe20aD3a86493289ea" });
         });
 
         var buildWeb3 = web3Builder.BuildAsync();

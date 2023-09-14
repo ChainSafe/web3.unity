@@ -139,7 +139,7 @@ public class MiscTests : SampleTestsBase
     }
     
     [UnityTest]
-    public IEnumerator TestMisc721()
+    public IEnumerator TestMint721()
     {
         var mint721 = _sample.Mint721(Mint721Abi, Mint721Address, MintUri);
 
