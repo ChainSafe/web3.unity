@@ -21,10 +21,8 @@ jobs:
 
       - name: Commit and Push
         run: |
-          git config --global user.email $git_email
-          git config --global user.name "${{ github.actor }}"
+          git config user.name "Automated"
+          git config user.email "actions@users.noreply.github.com"
           git add ./src/UnityPackages/io.chainsafe.web3-unity/Samples~/Web3.Unity/. -f
           git diff-index --cached --quiet HEAD || git commit -m "Auto-duplicate Package Samples"
           git push
-        env:
-          git_email: "${{ github.actor }}@users.noreply.github.com"
