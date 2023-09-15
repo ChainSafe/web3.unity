@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Chainsafe.Gaming.Web3.Core.Evm
+namespace ChainSafe.Gaming.Web3.Core.Evm
 {
     public interface IEvmEvents
     {

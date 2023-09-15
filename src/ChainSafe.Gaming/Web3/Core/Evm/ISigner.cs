@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Chainsafe.Gaming.Web3.Core.Evm;
+using ChainSafe.Gaming.Web3.Core.Evm;
 
 namespace ChainSafe.Gaming.Evm.Signers
 {

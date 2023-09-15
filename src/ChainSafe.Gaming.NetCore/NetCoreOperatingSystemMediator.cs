@@ -1,6 +1,6 @@
 ﻿using ChainSafe.Gaming.Web3.Environment;
 
-namespace Chainsafe.Gaming.NetCore
+namespace ChainSafe.Gaming.NetCore
 {
     public class NetCoreOperatingSystemMediator : IOperatingSystemMediator
     {

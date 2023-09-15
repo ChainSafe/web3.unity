@@ -3,7 +3,7 @@ using Nethereum.ABI.EIP712;
 using Nethereum.ABI.FunctionEncoding.Attributes;
 using Newtonsoft.Json;
 
-namespace Chainsafe.Gaming.Web3.Core.Evm
+namespace ChainSafe.Gaming.Web3.Core.Evm
 {
     /// <summary>
     /// A variant of Nethereum's domain which has set JSON deserialization parameters.

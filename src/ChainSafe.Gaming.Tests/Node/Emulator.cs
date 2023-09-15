@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Threading;
 using ChainSafe.Gaming.Web3;
 
-namespace Chainsafe.Gaming.Tests.Node
+namespace ChainSafe.Gaming.Tests.Node
 {
     public static class Emulator
     {

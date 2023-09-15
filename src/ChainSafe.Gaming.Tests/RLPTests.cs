@@ -4,7 +4,7 @@ using ChainSafe.Gaming.Evm.RLP;
 using Nethereum.Hex.HexConvertors.Extensions;
 using NUnit.Framework;
 
-namespace Chainsafe.Gaming.Tests
+namespace ChainSafe.Gaming.Tests
 {
     public class RLPTests
     {

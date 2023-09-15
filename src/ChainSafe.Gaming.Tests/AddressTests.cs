@@ -1,7 +1,7 @@
 ﻿using Nethereum.Util;
 using NUnit.Framework;
 
-namespace Chainsafe.Gaming.Tests
+namespace ChainSafe.Gaming.Tests
 {
     public class AddressTests
     {

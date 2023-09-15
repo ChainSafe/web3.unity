@@ -3,7 +3,7 @@ using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Environment;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Chainsafe.Gaming.NetCore
+namespace ChainSafe.Gaming.NetCore
 {
     public static class NetCoreEnvironmentExtensions
     {

@@ -1,6 +1,6 @@
 ﻿using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
-using Chainsafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.GamingSdk.Gelato.Types;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;

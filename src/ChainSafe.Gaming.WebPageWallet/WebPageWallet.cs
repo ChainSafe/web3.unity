@@ -5,17 +5,17 @@ using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Web3;
-using Chainsafe.Gaming.Web3.Core;
-using Chainsafe.Gaming.Web3.Core.Debug;
-using Chainsafe.Gaming.Web3.Core.Evm;
+using ChainSafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.Web3.Core.Debug;
+using ChainSafe.Gaming.Web3.Core.Evm;
 using ChainSafe.Gaming.Web3.Environment;
 using Nethereum.ABI.EIP712;
 using Nethereum.Signer;
 using Nethereum.Util;
 using Newtonsoft.Json;
-using AddressExtensions = Chainsafe.Gaming.Web3.Core.Debug.AddressExtensions;
+using AddressExtensions = ChainSafe.Gaming.Web3.Core.Debug.AddressExtensions;
 
-namespace Chainsafe.Gaming.Wallets
+namespace ChainSafe.Gaming.Wallets
 {
     public class WebPageWallet : ISigner, ITransactionExecutor, ILifecycleParticipant
     {
@@ -205,7 +205,7 @@ namespace Chainsafe.Gaming.Wallets
             var signature = await SignMessage(message);
             var publicAddress = ExtractPublicAddress(signature, message);
 
-            if (!AddressExtensions.IsPublicAddress(publicAddress))
+            if (!Web3.Core.Debug.AddressExtensions.IsPublicAddress(publicAddress))
             {
                 throw new Web3Exception(
                     $"Public address recovered from signature is not valid. Public address: {publicAddress}");

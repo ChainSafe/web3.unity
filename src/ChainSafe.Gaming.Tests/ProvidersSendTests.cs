@@ -1,13 +1,13 @@
 ﻿using System.Diagnostics;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Transactions;
-using Chainsafe.Gaming.Tests.Node;
+using ChainSafe.Gaming.Tests.Node;
 using ChainSafe.Gaming.Web3;
 using Nethereum.Hex.HexTypes;
 using NUnit.Framework;
-using static Chainsafe.Gaming.Tests.Web3Util;
+using static ChainSafe.Gaming.Tests.Web3Util;
 
-namespace Chainsafe.Gaming.Tests
+namespace ChainSafe.Gaming.Tests
 {
     using static RpcProviderExtensions;
     using Web3 = ChainSafe.Gaming.Web3.Web3;

@@ -4,11 +4,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Network;
 using ChainSafe.Gaming.Evm.Providers;
-using Chainsafe.Gaming.Web3.Core.Evm;
+using ChainSafe.Gaming.Web3.Core.Evm;
 using ChainSafe.Gaming.Web3.Environment;
 using Nethereum.Hex.HexTypes;
 
-namespace Chainsafe.Gaming.Web3.Evm.EventPoller
+namespace ChainSafe.Gaming.Web3.Evm.EventPoller
 {
     internal class EventPoller : IEvmEvents
     {

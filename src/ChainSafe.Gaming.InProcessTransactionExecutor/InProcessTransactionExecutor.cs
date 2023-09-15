@@ -4,7 +4,7 @@ using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Web3;
-using Chainsafe.Gaming.Web3.Core.Evm;
+using ChainSafe.Gaming.Web3.Core.Evm;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
 using Nethereum.Web3.Accounts;

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
-using Chainsafe.Gaming.Web3.Core.Evm;
+using ChainSafe.Gaming.Web3.Core.Evm;
 using Nethereum.Hex.HexTypes;
 
 namespace ChainSafe.Gaming.Evm.Contracts

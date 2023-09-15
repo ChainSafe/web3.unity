@@ -3,12 +3,12 @@ using System.Diagnostics;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Evm.Utils;
-using Chainsafe.Gaming.Tests.Node;
+using ChainSafe.Gaming.Tests.Node;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
 using NUnit.Framework;
 
-namespace Chainsafe.Gaming.Tests
+namespace ChainSafe.Gaming.Tests
 {
     [TestFixture]
     public class ChainSafeRpcTests

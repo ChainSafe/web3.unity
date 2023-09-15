@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Chainsafe.Gaming.Wallets
+namespace ChainSafe.Gaming.Wallets
 {
     [Serializable]
     public class WebPageWalletConfig

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Chainsafe.Gaming.Web3.Evm.EventPoller
+namespace ChainSafe.Gaming.Web3.Evm.EventPoller
 {
     public class EventPollerConfiguration
     {

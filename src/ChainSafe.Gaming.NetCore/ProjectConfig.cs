@@ -1,6 +1,6 @@
 using ChainSafe.Gaming.Web3;
 
-namespace Chainsafe.Gaming.NetCore
+namespace ChainSafe.Gaming.NetCore
 {
     public class ProjectConfig : IProjectConfig
     {

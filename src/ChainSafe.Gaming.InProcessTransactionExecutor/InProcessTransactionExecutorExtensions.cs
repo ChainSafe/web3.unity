@@ -1,5 +1,5 @@
 ﻿using ChainSafe.Gaming.Web3.Build;
-using Chainsafe.Gaming.Web3.Core.Evm;
+using ChainSafe.Gaming.Web3.Core.Evm;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ChainSafe.Gaming.InProcessTransactionExecutor

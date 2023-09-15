@@ -4,14 +4,14 @@ using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Web3;
-using Chainsafe.Gaming.Web3.Core;
-using Chainsafe.Gaming.Web3.Core.Evm;
+using ChainSafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.Web3.Core.Evm;
 using Nethereum.ABI.EIP712;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
 using Nethereum.Signer.EIP712;
 
-namespace Chainsafe.Gaming.Wallets
+namespace ChainSafe.Gaming.Wallets
 {
     public class JsonRpcWallet : ISigner, ITransactionExecutor, ILifecycleParticipant
     {

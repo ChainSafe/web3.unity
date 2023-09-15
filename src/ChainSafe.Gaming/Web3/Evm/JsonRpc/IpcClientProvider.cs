@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Web3;
-using Chainsafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Environment;
 using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.Client;

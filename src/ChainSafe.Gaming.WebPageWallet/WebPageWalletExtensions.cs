@@ -1,11 +1,11 @@
 ﻿using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Web3.Build;
-using Chainsafe.Gaming.Web3.Core;
-using Chainsafe.Gaming.Web3.Core.Evm;
+using ChainSafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.Web3.Core.Evm;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace Chainsafe.Gaming.Wallets
+namespace ChainSafe.Gaming.Wallets
 {
     public static class WebPageWalletExtensions
     {

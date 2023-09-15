@@ -3,14 +3,14 @@ using ChainSafe.Gaming.Evm.Contracts.Builders;
 using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
-using Chainsafe.Gaming.NetCore;
-using Chainsafe.Gaming.Wallets;
+using ChainSafe.Gaming.NetCore;
+using ChainSafe.Gaming.Wallets;
 using ChainSafe.Gaming.Web3.Build;
-using Chainsafe.Gaming.Web3.Core;
-using Chainsafe.Gaming.Web3.Core.Evm;
+using ChainSafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.Web3.Core.Evm;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Chainsafe.Gaming.Tests
+namespace ChainSafe.Gaming.Tests
 {
     internal static class Web3Util
     {

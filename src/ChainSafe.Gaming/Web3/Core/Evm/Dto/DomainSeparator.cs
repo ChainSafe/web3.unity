@@ -1,6 +1,6 @@
 using Nethereum.ABI.EIP712;
 
-namespace Chainsafe.Gaming.Web3.Core.Evm
+namespace ChainSafe.Gaming.Web3.Core.Evm
 {
     public static class DomainSeparator
     {

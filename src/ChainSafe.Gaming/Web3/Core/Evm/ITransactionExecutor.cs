@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Transactions;
 
-namespace Chainsafe.Gaming.Web3.Core.Evm
+namespace ChainSafe.Gaming.Web3.Core.Evm
 {
     public interface ITransactionExecutor
     {

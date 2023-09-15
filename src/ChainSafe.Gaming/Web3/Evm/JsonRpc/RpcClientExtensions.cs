@@ -1,6 +1,6 @@
 ﻿using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Web3.Build;
-using Chainsafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.Web3.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
