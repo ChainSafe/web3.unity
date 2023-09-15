@@ -1,0 +1,14 @@
+﻿using UnityEngine;
+using UnityEngine.UI;
+
+namespace LootBoxes.Scene
+{
+    public class SelectLootBoxesUI : MonoBehaviour
+    {
+        public Button PrevTypeButton;
+        public Button NextTypeButton;
+        public Button PrevLootBoxButton;
+        public Button NextLootBoxButton;
+        public Button OpenSelectedButton;
+    }
+}
