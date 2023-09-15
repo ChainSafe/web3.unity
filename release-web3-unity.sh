@@ -10,3 +10,4 @@ MESSAGE="release-v$1"
 
 git commit -m "$MESSAGE"
 git tag -a "io.chainsafe.web3-unity/$1" -m "$MESSAGE"
+git push
