@@ -19,10 +19,10 @@ pushd bin\debug\netstandard2.1\publish
 
 del Newtonsoft.Json.dll
 del UnityEngine.dll
-if not exist ..\..\..\..\..\..\Packages\UnityPackages\io.chainsafe.web3-unity\Runtime\Libraries mkdir ..\..\..\..\..\..\Packages\UnityPackages\io.chainsafe.web3-unity\Runtime\Libraries\
-del ..\..\..\..\..\..\Packages\UnityPackages\io.chainsafe.web3-unity\Runtime\Libraries\* /F /Q
-copy *.dll ..\..\..\..\..\..\Packages\UnityPackages\io.chainsafe.web3-unity\Runtime\Libraries
-copy *.pdb ..\..\..\..\..\..\Packages\UnityPackages\io.chainsafe.web3-unity\Runtime\Libraries
+if not exist ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries mkdir ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries\
+del ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries\* /F /Q
+copy *.dll ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries
+copy *.pdb ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries
 
 popd
 
