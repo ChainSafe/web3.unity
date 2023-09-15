@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
+using ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet;
 using Nethereum.Hex.HexTypes;
 using NUnit.Framework;
 using UnityEngine;
@@ -161,11 +162,17 @@ public class MiscTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestSendArray()
     {
+        WebPageWallet.TestResponse = "0x6a33280f3b2b907da613b18b09f863cd835f1977a4131001ace5602899fc98c7";
+        
         var sendArray = _sample.SendArray(SendArrayMethodName, SendArrayAbi, SendArrayAddress, ArrayToSend.ToArray());
-
+        
         yield return new WaitUntil(() => sendArray.IsCompleted);
 
-        Assert.AreEqual(sendArray.Result, "0");
+        Assert.IsTrue(sendArray.IsCompletedSuccessfully);
+        
+        Assert.AreEqual(sendArray.Result, string.Empty);
+        
+        yield return null;
     }
     
     [UnityTest]

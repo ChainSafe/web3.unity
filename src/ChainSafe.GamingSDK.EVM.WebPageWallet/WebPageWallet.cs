@@ -28,11 +28,7 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
 
         private string? address;
 
-        public WebPageWallet(
-            IRpcProvider provider,
-            WebPageWalletConfig configuration,
-            IOperatingSystemMediator operatingSystem,
-            IChainConfig chainConfig)
+        public WebPageWallet(IRpcProvider provider, WebPageWalletConfig configuration, IOperatingSystemMediator operatingSystem, IChainConfig chainConfig)
         {
             this.provider = provider;
             this.operatingSystem = operatingSystem;
@@ -41,6 +37,10 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
         }
 
         public delegate string ConnectMessageBuildDelegate(DateTime expirationTime);
+
+        public static bool Testing { get; set; } = false;
+
+        public static string TestResponse { get; set; } = string.Empty;
 
         public async ValueTask WillStartAsync()
         {
@@ -66,9 +66,7 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
 
             string BuildUrl()
             {
-                return $"{configuration.ServiceUrl}" +
-                       "?action=sign" +
-                       $"&message={Uri.EscapeDataString(message)}";
+                return $"{configuration.ServiceUrl}" + "?action=sign" + $"&message={Uri.EscapeDataString(message)}";
             }
 
             // TODO: validate with regex
@@ -85,9 +83,7 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
 
             string BuildUrl()
             {
-                var sb = new StringBuilder()
-                    .Append(configuration.ServiceUrl)
-                    .Append("?action=send");
+                var sb = new StringBuilder().Append(configuration.ServiceUrl).Append("?action=send");
 
                 if (transaction.ChainId != null)
                 {
@@ -142,12 +138,12 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
 
             string BuildUrl()
             {
-                return $"{configuration.ServiceUrl}" +
-                       "?action=sign-typed-data" +
-                       "&domain=" + Uri.EscapeDataString(JsonConvert.SerializeObject(domain)) +
-                       "&types=" + Uri.EscapeDataString(JsonConvert.SerializeObject(
-                           MemberDescriptionFactory.GetTypesMemberDescription(typeof(TStructType)))) +
-                       "&message=" + Uri.EscapeDataString(JsonConvert.SerializeObject(message));
+                return $"{configuration.ServiceUrl}" + "?action=sign-typed-data" + "&domain=" +
+                       Uri.EscapeDataString(JsonConvert.SerializeObject(domain)) + "&types=" +
+                       Uri.EscapeDataString(
+                           JsonConvert.SerializeObject(
+                               MemberDescriptionFactory.GetTypesMemberDescription(typeof(TStructType)))) + "&message=" +
+                       Uri.EscapeDataString(JsonConvert.SerializeObject(message));
             }
 
             // TODO: validate with regex
@@ -157,30 +153,38 @@ namespace ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet
         // TODO: extract hash from deeplink instead of clipboard
         private async Task<string> OpenPageWaitResponse(string pageUrl, Func<string, bool> validator)
         {
-            operatingSystem.OpenUrl(pageUrl);
-            operatingSystem.ClipboardContent = string.Empty;
+            string response;
 
-            var updateDelay = GetUpdatePeriodSafe();
-            while (string.IsNullOrEmpty(operatingSystem.ClipboardContent))
+            if (Testing)
             {
-                await Task.Delay(updateDelay);
+                response = TestResponse;
+            }
+            else
+            {
+                operatingSystem.OpenUrl(pageUrl);
+                operatingSystem.ClipboardContent = string.Empty;
+
+                var updateDelay = GetUpdatePeriodSafe();
+                while (string.IsNullOrEmpty(operatingSystem.ClipboardContent))
+                {
+                    await Task.Delay(updateDelay);
+                }
+
+                response = operatingSystem.ClipboardContent!;
             }
 
-            var response = operatingSystem.ClipboardContent!;
             var validResponse = validator(response);
             if (!validResponse)
             {
                 throw new Web3Exception("Incorrect response format extracted from clipboard.");
             }
 
-            return response;
-
             int GetUpdatePeriodSafe()
             {
-                return (int)Math.Max(
-                    MinClipboardCheckPeriod.TotalMilliseconds,
-                    configuration.ClipboardCheckPeriod.TotalMilliseconds);
+                return (int)Math.Max(MinClipboardCheckPeriod.TotalMilliseconds, configuration.ClipboardCheckPeriod.TotalMilliseconds);
             }
+
+            return response;
         }
 
         private async Task<string> GetAccountVerifyUserOwns()
