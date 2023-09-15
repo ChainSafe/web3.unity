@@ -9,8 +9,8 @@ using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.InProcessSigner;
 using ChainSafe.Gaming.InProcessTransactionExecutor;
 using ChainSafe.Gaming.Web3;
-using Chainsafe.Gaming.Web3.Core;
-using Chainsafe.Gaming.Web3.Core.Evm;
+using ChainSafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.Web3.Core.Evm;
 using UnityEngine;
 
 using Object = UnityEngine.Object;

@@ -1,7 +1,7 @@
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Web3.Build;
-using Chainsafe.Gaming.Web3.Core;
-using Chainsafe.Gaming.Web3.Core.Evm;
+using ChainSafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.Web3.Core.Evm;
 using ChainSafe.GamingSdk.Web3Auth;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
