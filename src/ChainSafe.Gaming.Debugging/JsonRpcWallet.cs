@@ -9,18 +9,19 @@ using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
 using Nethereum.Signer.EIP712;
 using Web3Unity.Scripts.Library.Ethers.Providers;
+using Web3Unity.Scripts.Library.Ethers.Signers;
 using TransactionRequest = Web3Unity.Scripts.Library.Ethers.Transactions.TransactionRequest;
 using TransactionResponse = Web3Unity.Scripts.Library.Ethers.Transactions.TransactionResponse;
 
-namespace Web3Unity.Scripts.Library.Ethers.Signers
+namespace ChainSafe.Gaming.Debugging
 {
     public class JsonRpcWallet : ISigner, ITransactionExecutor, ILifecycleParticipant
     {
-        private readonly JsonRpcWalletConfiguration configuration;
+        private readonly JsonRpcWalletConfig configuration;
         private readonly IRpcProvider provider;
         private string address;
 
-        public JsonRpcWallet(JsonRpcWalletConfiguration configuration, IRpcProvider provider)
+        public JsonRpcWallet(JsonRpcWalletConfig configuration, IRpcProvider provider)
         {
             this.configuration = configuration;
             this.provider = provider;
@@ -35,7 +36,7 @@ namespace Web3Unity.Scripts.Library.Ethers.Signers
             }
         }
 
-        public ValueTask WillStopAsync() => ValueTask.CompletedTask;
+        public ValueTask WillStopAsync() => new ValueTask(Task.CompletedTask);
 
         public Task<string> GetAddress() => Task.FromResult(address);
 

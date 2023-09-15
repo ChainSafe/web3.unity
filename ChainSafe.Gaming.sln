@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.Chainlink.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chainsafe.Gaming.Chainlink", "src\Chainsafe.Gaming.Chainlink\Chainsafe.Gaming.Chainlink.csproj", "{A8A29975-3146-445E-87F6-7B2447C39760}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.Debugging", "src\ChainSafe.Gaming.Debugging\ChainSafe.Gaming.Debugging.csproj", "{88B2E2F4-96BC-44B1-AE4D-5FBA6B4C399F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +107,12 @@ Global
 		{A8A29975-3146-445E-87F6-7B2447C39760}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A8A29975-3146-445E-87F6-7B2447C39760}.Test|Any CPU.ActiveCfg = Debug|Any CPU
 		{A8A29975-3146-445E-87F6-7B2447C39760}.Test|Any CPU.Build.0 = Debug|Any CPU
+		{88B2E2F4-96BC-44B1-AE4D-5FBA6B4C399F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88B2E2F4-96BC-44B1-AE4D-5FBA6B4C399F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88B2E2F4-96BC-44B1-AE4D-5FBA6B4C399F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88B2E2F4-96BC-44B1-AE4D-5FBA6B4C399F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88B2E2F4-96BC-44B1-AE4D-5FBA6B4C399F}.Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{88B2E2F4-96BC-44B1-AE4D-5FBA6B4C399F}.Test|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

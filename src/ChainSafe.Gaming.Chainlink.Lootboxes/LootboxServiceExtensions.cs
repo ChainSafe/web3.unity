@@ -18,9 +18,9 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
             return services;
         }
 
-        public static ILootboxService Lootboxes(this ChainlinkClient chainlink)
+        public static ILootboxService Lootboxes(this ChainlinkSubCategory chainlink)
         {
-            return ((IWeb3Container)chainlink).Web3.ServiceProvider.GetRequiredService<ILootboxService>();
+            return ((IWeb3SubCategory)chainlink).Web3.ServiceProvider.GetRequiredService<ILootboxService>();
         }
     }
 }

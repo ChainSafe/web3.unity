@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using ChainSafe.GamingSDK.EVM.Web3.Core;
 using ChainSafe.GamingSDK.EVM.Web3.Core.Debug;
 using ChainSafe.GamingWeb3;
-using ChainSafe.GamingWeb3.Environment;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
 using Newtonsoft.Json;
@@ -101,12 +100,7 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
 
         public async Task<uint> BalanceOf(uint lootboxType)
         {
-            if (signer is null)
-            {
-                throw new Web3Exception($"No {nameof(ISigner)} was registered. Can't get current user's address.");
-            }
-
-            var playerAddress = await signer.GetAddress();
+            var playerAddress = await GetCurrentPlayerAddress();
 
             return await BalanceOf(playerAddress, lootboxType);
         }
@@ -143,6 +137,19 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
             return openPrice;
         }
 
+        public async Task<bool> IsOpeningLootbox()
+        {
+            var playerAddress = await GetCurrentPlayerAddress();
+            var response = await contract.Call("openerRequests", new object[] { playerAddress });
+            var requests = (BigInteger)response[0];
+            return requests > 0;
+        }
+
+        public async Task<uint> OpeningLootboxType()
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task OpenLootbox(uint lootboxType, uint lootboxCount = 1)
         {
             var rewardCount = lootboxType * lootboxCount;
@@ -156,12 +163,7 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
 
         public async Task<bool> CanClaimRewards()
         {
-            if (signer is null)
-            {
-                throw new Web3Exception($"No {nameof(ISigner)} was registered. Can't get current user's address.");
-            }
-
-            var playerAddress = await signer.GetAddress();
+            var playerAddress = await GetCurrentPlayerAddress();
 
             return await CanClaimRewards(playerAddress);
         }
@@ -178,12 +180,7 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
 
         public async Task<LootboxRewards> ClaimRewards()
         {
-            if (signer is null)
-            {
-                throw new Web3Exception($"No {nameof(ISigner)} was registered. Can't get current user's address.");
-            }
-
-            var playerAddress = await signer.GetAddress();
+            var playerAddress = await GetCurrentPlayerAddress();
 
             return await ClaimRewards(playerAddress);
         }
@@ -252,6 +249,16 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
 
                 return rewards;
             }
+        }
+
+        private async Task<string> GetCurrentPlayerAddress()
+        {
+            if (signer is null)
+            {
+                throw new Web3Exception($"No {nameof(ISigner)} was registered. Can't get current user's address.");
+            }
+
+            return await signer.GetAddress();
         }
     }
 }

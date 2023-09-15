@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text.Json;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Debugging;
 using ChainSafe.GamingSDK.EVM.Web3.Core;
 using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
 using ChainSafe.GamingWeb3.Build;
@@ -18,9 +19,9 @@ namespace ChainSafe.GamingSDK.EVM.Tests
     internal static class Web3Util
     {
         public static ValueTask<Web3> CreateWeb3(int accountIndex = 0, uint port = 8545, Web3Builder.ConfigureServicesDelegate configureDelegate = null)
-            => CreateWeb3(new JsonRpcWalletConfiguration() { AccountIndex = accountIndex }, port, configureDelegate);
+            => CreateWeb3(new JsonRpcWalletConfig() { AccountIndex = accountIndex }, port, configureDelegate);
 
-        private static ValueTask<Web3> CreateWeb3(JsonRpcWalletConfiguration jsonRpcWalletConfiguration, uint port, Web3Builder.ConfigureServicesDelegate configureDelegate)
+        private static ValueTask<Web3> CreateWeb3(JsonRpcWalletConfig jsonRpcWalletConfiguration, uint port, Web3Builder.ConfigureServicesDelegate configureDelegate)
         {
             var web3Builder = new Web3Builder(
                     new ProjectConfig { ProjectId = string.Empty },
@@ -35,9 +36,7 @@ namespace ChainSafe.GamingSDK.EVM.Tests
                 {
                     services.UseNetCoreEnvironment();
                     services.UseJsonRpcProvider();
-
-                    services.AddSingleton(jsonRpcWalletConfiguration);
-                    services.AddSingleton<ISigner, ITransactionExecutor, ILifecycleParticipant, JsonRpcWallet>();
+                    services.Debug().UseJsonRpcWallet(jsonRpcWalletConfiguration);
                 });
 
             if (configureDelegate != null)

@@ -4,9 +4,9 @@ namespace Chainsafe.Gaming.Chainlink
 {
     public static class ChainlinkClientExtensions
     {
-        public static ChainlinkClient Chainlink(this Web3 web3)
+        public static ChainlinkSubCategory Chainlink(this Web3 web3)
         {
-            return new ChainlinkClient(web3);
+            return new ChainlinkSubCategory(web3);
         }
     }
 }

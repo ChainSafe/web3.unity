@@ -5,6 +5,7 @@ using System.Numerics;
 using System.Threading.Tasks;
 using Chainsafe.Gaming.Chainlink;
 using ChainSafe.Gaming.Chainlink.Lootboxes;
+using ChainSafe.GamingWeb3;
 using NUnit.Framework;
 
 namespace ChainSafe.GamingSDK.EVM.Tests
@@ -18,6 +19,7 @@ namespace ChainSafe.GamingSDK.EVM.Tests
         [OneTimeSetUp]
         public void Setup()
         {
+            // LootboxesNetworkEmulator.Run();
             var lootBoxesConfig = new LootboxServiceConfig
             {
                 ContractAddress = "0x46E334e90454aDDF311Cd75D4Ae19e2fA06285Ff",
@@ -34,6 +36,12 @@ namespace ChainSafe.GamingSDK.EVM.Tests
 
             web3BuildTask.Wait();
             web3 = web3BuildTask.Result;
+        }
+
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            // LootboxesNetworkEmulator.Stop();
         }
 
         [Test]
@@ -98,6 +106,30 @@ namespace ChainSafe.GamingSDK.EVM.Tests
                 throw new Exception($"Poll timed out when waiting for " +
                                     $"{nameof(ILootboxService.CanClaimRewards)} to become true.");
             }
+        }
+
+        [Test]
+        public async Task OpenInProgressIsTrueWhenOpeningTest()
+        {
+            await web3.Chainlink().Lootboxes().OpenLootbox(1);
+            var openInProgress = await web3.Chainlink().Lootboxes().IsOpeningLootbox();
+
+            Assert.IsTrue(openInProgress);
+        }
+
+        [Test]
+        public async Task OpenInProgressIsFalseWhenNotOpeningTest()
+        {
+            var openInProgress = await web3.Chainlink().Lootboxes().IsOpeningLootbox();
+
+            Assert.IsFalse(openInProgress);
+        }
+
+        [Test]
+        public async Task ThrowsWhenTryOpenBeforeClaim()
+        {
+            await web3.Chainlink().Lootboxes().OpenLootbox(1);
+            Assert.ThrowsAsync<Web3Exception>(() => web3.Chainlink().Lootboxes().OpenLootbox(2));
         }
 
         // [Test]

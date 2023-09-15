@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace Web3Unity.Scripts.Library.Ethers.Providers
+namespace ChainSafe.Gaming.Debugging
 {
     [Serializable]
-    public class JsonRpcWalletConfiguration
+    public class JsonRpcWalletConfig
     {
         public int AccountIndex { get; set; }
 

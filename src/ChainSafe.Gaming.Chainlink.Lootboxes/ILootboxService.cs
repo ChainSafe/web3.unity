@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.GamingWeb3;
@@ -39,6 +40,10 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
         /// <returns>Price in network's default currency.</returns>
         Task<BigInteger> CalculateOpenPrice(uint lootboxType, uint lootboxCount);
 
+        Task<bool> IsOpeningLootbox();
+
+        Task<uint> OpeningLootboxType();
+
         /// <summary>
         /// TODO
         /// </summary>
@@ -51,5 +56,16 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
         Task<LootboxRewards> ClaimRewards();
 
         Task<LootboxRewards> ClaimRewards(string account);
+
+        async Task<List<LootboxTypeInfo>> FetchAllLootboxes()
+        {
+            var typeIds = await GetLootboxTypes();
+            var loadBalanceTasks = typeIds.Select(BalanceOf);
+            var balances = await Task.WhenAll(loadBalanceTasks);
+
+            return Enumerable.Range(0, typeIds.Count)
+                .Select(i => new LootboxTypeInfo { TypeId = typeIds[i], Amount = balances[i] })
+                .ToList();
+        }
     }
 }
