@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ChainSafe.GamingWeb3;
+using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.Web3;
 using UnityEngine;
 using UnityEngine.UI;
 

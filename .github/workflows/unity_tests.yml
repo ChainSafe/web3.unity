@@ -15,7 +15,7 @@ jobs:
         projectPath:
         - Packages/io.chainsafe.web3-unity
         publishPath:
-        - ${GITHUB_WORKSPACE}/src/ChainSafe.GamingSdk.EVM.Unity/bin/Release/netstandard2.1/publish
+        - ${GITHUB_WORKSPACE}/src/ChainSafe.Gaming.Unity/bin/Release/netstandard2.1/publish
         packageLibraryPath:
         - ${GITHUB_WORKSPACE}/Packages/io.chainsafe.web3-unity/Runtime/Libraries
         testMode:
@@ -38,7 +38,7 @@ jobs:
         run: dotnet restore
       - name: Publish
         run: |
-          dotnet publish --no-restore src/ChainSafe.GamingSdk.EVM.Unity/ChainSafe.GamingSdk.EVM.Unity.csproj -c Release /property:Unity=true
+          dotnet publish --no-restore src/ChainSafe.Gaming.Unity/ChainSafe.Gaming.Unity.csproj -c Release /property:Unity=true
           echo Generated DLLs
           ls ${{ matrix.publishPath }}
       - name: Publish to Unity Package
