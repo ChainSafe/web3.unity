@@ -15,7 +15,7 @@ using UnityEngine;
 
 namespace ChainSafe.Gaming.Wallets
 {
-    #if !UNITY_EDITOR && UNITY_WEBGL
+#if !UNITY_EDITOR && UNITY_WEBGL
     // todo: check if window.web3gl is bound during initialization
     public class WebGLWallet : ISigner, ITransactionExecutor, ILifecycleParticipant
     {
@@ -185,7 +185,7 @@ namespace ChainSafe.Gaming.Wallets
         [DllImport("__Internal")]
         private static extern void JS_resetSendTransactionResponseData();
     }
-#else 
+#else
     // Stub implementation for other platforms
     public class WebGLWallet : ISigner, ITransactionExecutor, ILifecycleParticipant
     {
@@ -220,5 +220,5 @@ namespace ChainSafe.Gaming.Wallets
             throw new NotImplementedException();
         }
     }
-    #endif
+#endif
 }
