@@ -1,13 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Models;
+using ChainSafe.Gaming.Evm.Transactions;
+using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.UnityPackage.Model;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using Scripts.EVM.Remote;
-using Web3Unity.Scripts.Library.Ethers.Transactions;
 // using Web3Unity.Scripts.Library.Web3Wallet;
 
 public class GetListedCollections : MonoBehaviour
