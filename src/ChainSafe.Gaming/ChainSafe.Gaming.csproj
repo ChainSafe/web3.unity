@@ -16,7 +16,6 @@
     <PackageReference Include="NBitcoin" Version="7.0.24" />
     <PackageReference Include="Nethereum.Hex" Version="4.14.0" />
     <PackageReference Include="Nethereum.JsonRpc.Client" Version="4.14.0" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" />
   </ItemGroup>
 
   <!-- 
