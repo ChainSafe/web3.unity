@@ -2,8 +2,7 @@ name: Duplicate Package Sample Workflow
 
 on:
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   duplicate:
