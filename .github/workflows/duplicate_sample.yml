@@ -23,7 +23,7 @@ jobs:
         run: |
           git config user.email $git_email
           git config user.name "${{ github.actor }}"
-          git add ./src/UnityPackages/io.chainsafe.web3-unity/Samples~/Web3.Unity/. -f
+          git add ./Packages/io.chainsafe.web3-unity/Samples~/Web3.Unity/. -f
           git diff-index --cached --quiet HEAD || git commit -m "Auto-duplicate Package Samples"
           git push
         env:
