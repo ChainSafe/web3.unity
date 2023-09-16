@@ -1,4 +1,4 @@
-name: Test Package
+name: Test Unity Package Workflow
 
 on:
   pull_request:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   testAllModes:
-    name: Test in ${{ matrix.testMode }}
+    name: Test Job for Unity Package in ${{ matrix.testMode }} 🕹️
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -19,10 +19,10 @@ jobs:
         packageLibraryPath:
         - ${GITHUB_WORKSPACE}/Packages/io.chainsafe.web3-unity/Runtime/Libraries
         testMode:
-          - playmode
-          - editmode
+          - PlayMode
+          - EditMode
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           lfs: true
       - name: update submodules
@@ -64,12 +64,12 @@ jobs:
           checkName: ${{ matrix.testMode }} Test Results
           coverageOptions: 'generateAdditionalMetrics;generateHtmlReport;generateBadgeReport;'
           packageMode: true
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: Test results for ${{ matrix.testMode }}
           path: ${{ steps.tests.outputs.artifactsPath }}
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: Coverage results for ${{ matrix.testMode }}

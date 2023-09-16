@@ -35,9 +35,14 @@
   <!--
     The Unity version of Nethereum is referenced inside src/Directory.Build.props
   -->
-
+  
   <PropertyGroup Condition="'$(Unity)' == 'True'">
     <DefineConstants>Unity</DefineConstants>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" />
+    <AdditionalFiles Include="../../stylecop.json" />
+  </ItemGroup>
 
 </Project>

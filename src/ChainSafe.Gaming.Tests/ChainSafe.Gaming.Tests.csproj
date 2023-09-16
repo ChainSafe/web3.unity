@@ -24,4 +24,9 @@
     <PackageReference Include="NUnit3TestAdapter" Version="4.4.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" />
+    <AdditionalFiles Include="../../stylecop.json" />
+  </ItemGroup>
+
 </Project>
