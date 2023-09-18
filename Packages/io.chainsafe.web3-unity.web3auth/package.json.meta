@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:src/UnitySampleProject/Assets/Scenes/SampleLogin/Button - Login.prefab.meta
+guid: 87296ad088fc8844d8105062ec37713d
+PrefabImporter:
+========
+guid: ded39198b1e7bb149b5f28641db73c0c
+PackageManifestImporter:
+>>>>>>>> main:src/UnityPackages/io.chainsafe.web3-unity.web3auth/package.json.meta
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

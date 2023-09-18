@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:src/UnityPackages/io.chainsafe.web3-unity.web3auth/Editor.meta
+guid: 2bd07d3a0bef6cc45b9820a73e31b84f
+========
+guid: de66600a6d2f6bd4c8342b439e1415ac
+>>>>>>>> main:src/UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries.meta
+folderAsset: yes
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

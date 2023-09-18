@@ -4,6 +4,6 @@
 git submodule update --init
 
 # publish DLLs to unity package
-pushd src/ChainSafe.GamingSdk.EVM.Unity
+pushd src/ChainSafe.Gaming.Unity
 ./publish-to-unity-package.sh
 popd

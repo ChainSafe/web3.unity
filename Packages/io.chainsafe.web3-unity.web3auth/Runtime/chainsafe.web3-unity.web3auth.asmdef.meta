@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:src/UnitySampleProject/Assets/Scenes/SampleMain/Category.prefab.meta
+guid: 065b2a8044c813947b0e4d52126f5a26
+PrefabImporter:
+========
+guid: d0e5603e6af957942922f5d22bbbfa0c
+AssemblyDefinitionImporter:
+>>>>>>>> main:src/UnityPackages/io.chainsafe.web3-unity.web3auth/Runtime/chainsafe.web3-unity.web3auth.asmdef.meta
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

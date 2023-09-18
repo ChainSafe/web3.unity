@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:src/UnitySampleProject/Assets/Scenes/SampleMain/Button - Execute Test.prefab.meta
+guid: 6ff92db130ba7134a9348e245b4e7344
+PrefabImporter:
+========
+guid: 17cc975f24974dc43a0d6abe38744d59
+AssemblyDefinitionImporter:
+>>>>>>>> main:src/UnityPackages/io.chainsafe.web3-unity.web3auth/Editor/chainsafe.web3-unity.web3auth.Editor.asmdef.meta
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,4 +1,4 @@
-name: NUnit Tests
+name: NUnit Tests Workflow
 
 on:
   pull_request:
@@ -6,20 +6,25 @@ on:
 
 jobs:
   check:
-    name: Web3 Tests
+    name: Web3 tests job 🕸️
     runs-on: ubuntu-latest
     strategy:
       matrix:
         dotnet-version: [ '6.0.x' ]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
+      - name: Install dependencies
+        run: dotnet restore
+
+      - name: Lint
+        run: ./lint.sh ci
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
-        
+
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v3
         with:
