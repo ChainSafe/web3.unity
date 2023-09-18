@@ -13,11 +13,11 @@ jobs:
       fail-fast: false
       matrix:
         projectPath:
-        - src/UnityPackages/io.chainsafe.web3-unity
+        - Packages/io.chainsafe.web3-unity
         publishPath:
         - ${GITHUB_WORKSPACE}/src/ChainSafe.GamingSdk.EVM.Unity/bin/Release/netstandard2.1/publish
         packageLibraryPath:
-        - ${GITHUB_WORKSPACE}/src/UnityPackages/io.chainsafe.web3-unity/Runtime/Libraries
+        - ${GITHUB_WORKSPACE}/Packages/io.chainsafe.web3-unity/Runtime/Libraries
         testMode:
           - playmode
           - editmode
@@ -49,7 +49,7 @@ jobs:
           cp ${{ matrix.publishPath }}/*.dll ${{ matrix.packageLibraryPath }}/
           echo Copied DLLs
           ls ${{ matrix.packageLibraryPath }}/
-          cp ${GITHUB_WORKSPACE}/src/UnityPackages/io.chainsafe.web3-unity/TestPackage~/package.json ${GITHUB_WORKSPACE}/src/UnityPackages/io.chainsafe.web3-unity/package.json
+          cp ${GITHUB_WORKSPACE}/Packages/io.chainsafe.web3-unity/TestPackage~/package.json ${GITHUB_WORKSPACE}/Packages/io.chainsafe.web3-unity/package.json
         shell: bash
       - uses: game-ci/unity-test-runner@v3
         id: tests

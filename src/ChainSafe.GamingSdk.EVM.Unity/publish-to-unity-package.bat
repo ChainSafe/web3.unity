@@ -18,9 +18,9 @@ echo Moving files to Unity package...
 pushd bin\release\netstandard2.1\publish
 del Newtonsoft.Json.dll
 del UnityEngine.dll
-if not exist ..\..\..\..\..\UnityPackages\io.chainsafe.web3-unity\Runtime\Libraries mkdir ..\..\..\..\..\UnityPackages\io.chainsafe.web3-unity\Runtime\Libraries\
-del ..\..\..\..\..\UnityPackages\io.chainsafe.web3-unity\Runtime\Libraries\* /F /Q
-copy *.dll ..\..\..\..\..\UnityPackages\io.chainsafe.web3-unity\Runtime\Libraries
+if not exist ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries mkdir ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries\
+del ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries\* /F /Q
+copy *.dll ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries
 popd
 
 echo Done
