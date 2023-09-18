@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>9.0</LangVersion>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+
+    <EnableNETAnalyzers>True</EnableNETAnalyzers>
+    <CodeAnalysisRuleSet>../../global.ruleset</CodeAnalysisRuleSet>
+    <Configurations>Debug;Release;Test</Configurations>
+    <Platforms>AnyCPU</Platforms>
+    <RootNamespace>ChainSafe.Gaming.Unity</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ChainSafe.Gaming\ChainSafe.Gaming.csproj" />
+    <ProjectReference Include="..\ChainSafe.Gaming.InProcessSigner\ChainSafe.Gaming.InProcessSigner.csproj" />
+    <ProjectReference Include="..\ChainSafe.Gaming.InProcessTransactionExecutor\ChainSafe.Gaming.InProcessTransactionExecutor.csproj" />
+    <ProjectReference Include="..\ChainSafe.Gaming.WebPageWallet\ChainSafe.Gaming.WebPageWallet.csproj" />
+    <ProjectReference Include="..\ChainSafe.Gaming.Unity.ThirdParty\ChainSafe.Gaming.Unity.ThirdParty.csproj" />
+    <ProjectReference Include="..\ChainSafe.Gaming.Gelato\ChainSafe.Gaming.Gelato.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="../../libs/UnityEngine/UnityEngine.dll" />
+    <Reference Include="../../libs/Nethereum-UnityAOT/Newtonsoft.Json.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Resolve dependency conflict by referencing this version directly -->
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <EmbeddedResource Include="link.xml">
+      <LogicalName>ChainSafe.Gaming.Unity.xml</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

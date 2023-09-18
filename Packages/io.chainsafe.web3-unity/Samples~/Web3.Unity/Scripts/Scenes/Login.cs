@@ -2,19 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet;
-using ChainSafe.GamingSDK.EVM.WebGLWallet;
+using ChainSafe.Gaming.Evm.Contracts;
+using ChainSafe.Gaming.Evm.JsonRpc;
+using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.Wallets;
+using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Build;
+using ChainSafe.Gaming.Web3.Unity;
 using ChainSafe.GamingSdk.Gelato;
 using ChainSafe.GamingSdk.Web3Auth;
-using ChainSafe.GamingWeb3;
-using ChainSafe.GamingWeb3.Build;
-using ChainSafe.GamingWeb3.Unity;
+
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Web3Unity.Scripts.Library.Ethers.Contracts;
-using Web3Unity.Scripts.Library.Ethers.JsonRpc;
+
 
 namespace Scenes
 {

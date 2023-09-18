@@ -4,7 +4,7 @@ using System.Net;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using ChainSafe.GamingWeb3;
+using ChainSafe.Gaming.Web3;
 using Newtonsoft.Json;
 using Scripts.EVM.Remote;
 using Scripts.EVM.Token;
