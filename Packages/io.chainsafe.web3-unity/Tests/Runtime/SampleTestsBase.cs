@@ -34,10 +34,9 @@ public class SampleTestsBase
             services.UseGelato("_UzPz_Yk_WTjWMfcl45fLvQNGQ9ISx5ZE8TnwnVKYrE_");
             services.UseRpcProvider();
 
-            //add any contracts we would want to use
-            
             services.UseWebPageWallet(new WebPageWalletConfig { SavedUserAddress = "0x55ffe9E30347266f02b9BdAe20aD3a86493289ea" });
             
+            //add any contracts we would want to use
             services.ConfigureRegisteredContracts(contracts =>
                 contracts.RegisterContract(
                     "shiba",
