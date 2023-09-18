@@ -1,12 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
-using ChainSafe.GamingSDK.EVM.MetaMaskBrowserWallet;
-using Nethereum.Hex.HexTypes;
+using ChainSafe.Gaming.Wallets;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
-using Web3Unity.Scripts.Library.Ethers.Transactions;
 using Web3Unity.Scripts.Prefabs;
 
 public class MiscTests : SampleTestsBase

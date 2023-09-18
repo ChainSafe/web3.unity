@@ -13,13 +13,11 @@
     "precompiledReferences": [
         "nunit.framework.dll",
         "Nethereum.Hex.dll",
-        "ChainSafe.GamingSDK.EVM.dll",
-        "ChainSafe.GamingSdk.EVM.Unity.dll",
-        "ChainSafe.GamingSDK.EVM.WebPageWallet.dll",
-        "ChainSafe.GamingSdk.Gelato.dll",
         "Microsoft.Extensions.DependencyInjection.Abstractions.dll",
         "ChainSafe.Gaming.dll",
-        "ChainSafe.Gaming.Unity.dll"
+        "ChainSafe.Gaming.Unity.dll",
+        "ChainSafe.Gaming.WebPageWallet.dll",
+        "ChainSafe.Gaming.Gelato.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [
