@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.MultiCall;
 using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.UnityPackage;
@@ -214,6 +215,7 @@ namespace Scenes
             services
                 .UseUnityEnvironment()
                 .UseGelato(GelatoApiKey)
+                .useMultiCall()
                 .UseRpcProvider();
 
             /* As many contracts as needed may be registered here.
