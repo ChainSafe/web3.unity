@@ -9,7 +9,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: OpenInitiated
+    m_ConditionEvent: OpenLootboxes
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -1123389646953461258}
@@ -709,7 +709,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Initiate Opening
+  m_Name: Open Lootboxes
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -745,7 +745,8 @@ AnimatorState:
   - {fileID: 36677009816558192}
   - {fileID: -6295559933366799354}
   - {fileID: -4742267279351756998}
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: 135074859088508999}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -881,7 +882,7 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: OpenInitiated
+  - m_Name: OpenLootboxes
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -971,6 +972,18 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!114 &135074859088508999
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88b5656afa40423a86cd330fa545bdad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1102 &263959433615385968
 AnimatorState:
   serializedVersion: 6

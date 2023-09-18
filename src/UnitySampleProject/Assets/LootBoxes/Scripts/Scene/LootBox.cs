@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace LootBoxes.Scene
 {
@@ -7,6 +8,7 @@ namespace LootBoxes.Scene
         public Animator animator;
         
         private bool _selected;
+        public event Action<LootBox> Clicked;
 
         public bool Selected
         {
@@ -18,13 +20,15 @@ namespace LootBoxes.Scene
             }
         }
 
-        public void PlayDisintegrate() => animator.SetTrigger("Disintegrate");
+        public void PlayOpenInitiated() => animator.SetBool("Openning", true);
 
-        public void PlayOpenInitiated() => animator.SetTrigger("OpenInitiated");
+        public void PlayClaimingRewards() => animator.SetBool("ClaimingRewards", true);
+
+        public void PlayDisintegrate() => animator.SetTrigger("Disintegrate");
 
         public void OnClick()
         {
-            Selected = !Selected;
+            Clicked?.Invoke(this);
         }
     }
 }

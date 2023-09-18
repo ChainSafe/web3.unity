@@ -43,5 +43,6 @@ namespace LootBoxes.Scene
         public Task<bool> IsOpeningLootBox() => lootBoxService.IsOpeningLootbox();
         public Task<List<LootboxTypeInfo>> FetchAllLootBoxes() => lootBoxService.FetchAllLootboxes();
         public Task<uint> OpeningLootBoxType() => lootBoxService.OpeningLootboxType();
+        public Task OpenLootBoxes(uint lootBoxType, uint count) => lootBoxService.OpenLootbox(lootBoxType, count);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,7 +31,12 @@ namespace LootBoxes.Scene
             {
                 return;
             }
-            
+
+            Alpha = 0f;
+        }
+
+        private void Awake()
+        {
             Alpha = FadeOutInitially ? 1f : 0f;
         }
 

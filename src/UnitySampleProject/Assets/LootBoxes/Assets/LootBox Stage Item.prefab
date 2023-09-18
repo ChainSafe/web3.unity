@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6083194539556676678}
   m_Layer: 0
-  m_Name: Item Container
+  m_Name: Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23,13 +23,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1674093242289462917}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8525561194672460351}
-  m_Father: {fileID: 8389753719310394298}
+  m_Father: {fileID: 1598680851546001903}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4389918643029305855
@@ -42,7 +42,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8389753719310394298}
   - component: {fileID: 3353174814749227321}
-  - component: {fileID: 7530892036823684030}
   m_Layer: 0
   m_Name: LootBox Stage Item
   m_TagString: Untagged
@@ -62,7 +61,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 6083194539556676678}
+  - {fileID: 1598680851546001903}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -78,29 +77,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b27c9dd53ca481e8075668da0fd1be4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  strategyPrototype: {fileID: 11400000, guid: fc7cb900ae0c496408b62304f64e3c7f, type: 2}
-  animator: {fileID: 7530892036823684030}
---- !u!95 &7530892036823684030
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4389918643029305855}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 809c2f513a975f649bbd4c8f3c03ddac, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
+  LootBox: {fileID: 2047617812886570396}
+  Reward: {fileID: 0}
 --- !u!1 &5534862313302892549
 GameObject:
   m_ObjectHideFlags: 0
@@ -216,9 +194,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 3353174814749227321}
-          m_TargetAssemblyTypeName: ChainSafe.Gaming.Chainlink.Lootboxes.LootBoxStageItem,
-            chainsafe.web3-unity
+        - m_Target: {fileID: 2047617812886570396}
+          m_TargetAssemblyTypeName: LootBoxes.Scene.LootBox, Assembly-CSharp
           m_MethodName: OnClick
           m_Mode: 1
           m_Arguments:
@@ -229,3 +206,71 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!1 &5761731750114906526
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1598680851546001903}
+  - component: {fileID: 1079244616818332263}
+  - component: {fileID: 2047617812886570396}
+  m_Layer: 0
+  m_Name: Loot Box
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1598680851546001903
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5761731750114906526}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6083194539556676678}
+  m_Father: {fileID: 8389753719310394298}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &1079244616818332263
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5761731750114906526}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 809c2f513a975f649bbd4c8f3c03ddac, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2047617812886570396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5761731750114906526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e940c460d2de4fe0961e29ff4b72e57c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 1079244616818332263}

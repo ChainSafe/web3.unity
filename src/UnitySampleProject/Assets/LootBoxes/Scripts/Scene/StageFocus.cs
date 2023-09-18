@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using LootBoxes.Scene.StageItems;
 using UnityEngine;
 
 namespace LootBoxes.Scene
@@ -9,6 +11,7 @@ namespace LootBoxes.Scene
         private StageCamera camera;
         
         public int FocusedItemIndex { get; private set; }
+        public StageItem FocusedItem => stage.StageItems.Skip(FocusedItemIndex).First();
         
         public void Configure(Stage stage, StageCamera camera)
         {
@@ -18,7 +21,7 @@ namespace LootBoxes.Scene
 
         public void Focus(int index)
         {
-            if (index < 0 || index >= stage.StageItemCount)
+            if (index < 0 || (index >= stage.StageItemCount && index != 0))
             {
                 throw new ArgumentOutOfRangeException(nameof(index));
             }

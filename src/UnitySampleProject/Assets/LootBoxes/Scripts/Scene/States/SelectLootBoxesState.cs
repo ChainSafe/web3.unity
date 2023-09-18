@@ -4,8 +4,6 @@ namespace LootBoxes.Scene.States
 {
     public class SelectLootBoxesState : LootBoxSceneState
     {
-        private int FocusedLootBoxIndex;
-        
         protected override void OnLootBoxSceneStateEnter()
         {
             Context.selectLootBoxesUI.gameObject.SetActive(true);
@@ -16,8 +14,10 @@ namespace LootBoxes.Scene.States
             Context.selectLootBoxesUI.NextLootBoxButton.onClick.AddListener(OnNextLootBoxClick);
             Context.selectLootBoxesUI.OpenSelectedButton.onClick.AddListener(OnOpenSelectedClick);
 
-            FocusedLootBoxIndex = 0;
-            Context.stageFocus.Focus(0);
+            foreach (var stageItem in Context.stage.StageItems)
+            {
+                stageItem.LootBox.Clicked += OnLootBoxClicked;
+            }
         }
 
         protected override void OnLootBoxSceneStateExit()
@@ -29,6 +29,11 @@ namespace LootBoxes.Scene.States
             Context.selectLootBoxesUI.PrevLootBoxButton.onClick.RemoveListener(OnPrevLootBoxClick);
             Context.selectLootBoxesUI.NextLootBoxButton.onClick.RemoveListener(OnNextLootBoxClick);
             Context.selectLootBoxesUI.OpenSelectedButton.onClick.RemoveListener(OnOpenSelectedClick);
+
+            foreach (var stageItem in Context.stage.StageItems)
+            {
+                stageItem.LootBox.Clicked -= OnLootBoxClicked;
+            }
         }
 
         private void OnNextLootBoxClick()
@@ -58,8 +63,17 @@ namespace LootBoxes.Scene.States
                 return;
             }
             
-            // var selected = Context.stage.StageItems.Select(item => item.LootBox.Selected);
-            Context.animator.SetTrigger("OpenInitiated");
+            Context.animator.SetTrigger("OpenLootboxes");
+        }
+
+        private void OnLootBoxClicked(LootBox lootBox)
+        {
+            if (Context.stageFocus.FocusedItem.LootBox != lootBox)
+            {
+                return;
+            }
+
+            lootBox.Selected = !lootBox.Selected;
         }
     }
 }

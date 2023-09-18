@@ -47,13 +47,16 @@ namespace LootBoxes.Scene.States
 
         private async void LaunchOpening()
         {
-            Context.ActiveType = await Context.OpeningLootBoxType();
+            // todo implement
+            // Context.ActiveType = await Context.OpeningLootBoxType();
+            Context.ActiveType = 1;
             Context.animator.SetTrigger("LaunchOpeningLootboxes");
         }
 
         private async void LaunchCanClaimRewards()
         {
-            Context.ActiveType = await Context.OpeningLootBoxType();
+            // Context.ActiveType = await Context.OpeningLootBoxType();
+            Context.ActiveType = 1;
             Context.animator.SetTrigger("LaunchCanClaimRewards");
         }
     }

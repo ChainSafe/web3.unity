@@ -12,14 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b00190a30054c5593c194ae914efb3b, type: 3}
   m_Name: LootBoxPrefabSet
   m_EditorClassIdentifier: 
-  PrefabByTypeIdList:
+  LootBoxPrefabByTypeIdList:
   - TypeId: 1
-    Prefab: {fileID: 3353174814749227321, guid: d79c7fd2bf75f3a4ca3c804a7d6f5229, type: 3}
-  - TypeId: 2
-    Prefab: {fileID: 3353174814749227321, guid: d79c7fd2bf75f3a4ca3c804a7d6f5229, type: 3}
-  - TypeId: 3
-    Prefab: {fileID: 3353174814749227321, guid: d79c7fd2bf75f3a4ca3c804a7d6f5229, type: 3}
-  - TypeId: 4
-    Prefab: {fileID: 3353174814749227321, guid: d79c7fd2bf75f3a4ca3c804a7d6f5229, type: 3}
-  - TypeId: 5
     Prefab: {fileID: 3353174814749227321, guid: d79c7fd2bf75f3a4ca3c804a7d6f5229, type: 3}
