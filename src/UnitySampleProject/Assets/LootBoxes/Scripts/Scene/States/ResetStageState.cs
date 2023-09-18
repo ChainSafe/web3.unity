@@ -1,13 +1,60 @@
-﻿namespace LootBoxes.Scene.States
+﻿using System.Collections.Generic;
+using System.Linq;
+using ChainSafe.Gaming.Chainlink.Lootboxes;
+
+namespace LootBoxes.Scene.States
 {
     public class ResetStageState : LootBoxSceneState
     {
-        protected override void OnLootBoxSceneStateEnter()
+        protected override async void OnLootBoxSceneStateEnter()
         {
             Context.stage.Clear();
-            Context.stageFocus.FocusImmediately(0);
             Context.LastClaimedRewards = null;
-            Context.animator.SetTrigger("Next");
+            Context.stageFocus.FocusImmediately(0);
+
+            if (await Context.CanClaimRewards())
+            {
+                LaunchCanClaimRewards();
+                return;
+            }
+            
+            if (await Context.IsOpeningLootBox())
+            {
+                LaunchOpening();
+                return;
+            }
+            
+            var lootBoxTypes = await Context.FetchAllLootBoxes();
+            if (!lootBoxTypes.Any(info => info.Amount > 0))
+            {
+                LaunchEmpty();
+                return;
+            }
+            
+            LaunchSelection(lootBoxTypes);
+        }
+
+        private void LaunchSelection(List<LootboxTypeInfo> lootBoxTypes)
+        {
+            Context.ActiveType = lootBoxTypes.First(info => info.Amount > 0).TypeId;
+            Context.animator.SetTrigger("LaunchSelection");
+        }
+
+        private void LaunchEmpty()
+        {
+            Context.animator.SetTrigger("LaunchEmpty");
+        }
+
+        private async void LaunchOpening()
+        {
+            Context.ActiveType = await Context.OpeningLootBoxType();
+            Context.animator.SetTrigger("LaunchOpeningLootboxes");
+        }
+
+        private async void LaunchCanClaimRewards()
+        {
+            Context.ActiveType = await Context.OpeningLootBoxType();
+            Context.animator.SetTrigger("LaunchCanClaimRewards");
         }
     }
 }
