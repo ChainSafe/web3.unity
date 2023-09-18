@@ -215,7 +215,7 @@ namespace Scenes
             services
                 .UseUnityEnvironment()
                 .UseGelato(GelatoApiKey)
-                .useMultiCall()
+                .UseMultiCall()
                 .UseRpcProvider();
 
             /* As many contracts as needed may be registered here.
