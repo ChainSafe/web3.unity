@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-namespace Models
+namespace ChainSafe.Gaming.UnityPackage.Model
 {
     public class BuyNFT
     {
@@ -14,6 +11,7 @@ namespace Models
             public string chain;
             public string network;
         }
+
         [Serializable]
         public class Response
         {
@@ -21,11 +19,13 @@ namespace Models
             public Connection connection;
             public Tx tx;
         }
+
         [Serializable]
         public class Root
         {
             public Response response;
         }
+
         [Serializable]
         public class Tx
         {

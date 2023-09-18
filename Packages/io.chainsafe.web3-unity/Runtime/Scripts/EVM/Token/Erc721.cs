@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ChainSafe.GamingWeb3;
+using ChainSafe.Gaming.Web3;
 using Newtonsoft.Json;
 using UnityEngine;
 

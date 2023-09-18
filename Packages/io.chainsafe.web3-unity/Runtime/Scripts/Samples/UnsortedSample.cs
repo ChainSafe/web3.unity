@@ -3,12 +3,12 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using ChainSafe.GamingWeb3;
+using ChainSafe.Gaming.Evm.Providers;
+using ChainSafe.Gaming.Evm.Transactions;
+using ChainSafe.Gaming.Web3;
 using Nethereum.Hex.HexTypes;
 using Nethereum.Signer;
 using Nethereum.Util;
-using Web3Unity.Scripts.Library.Ethers.Providers;
-using Web3Unity.Scripts.Library.Ethers.Transactions;
 
 namespace Web3Unity.Scripts.Prefabs
 {

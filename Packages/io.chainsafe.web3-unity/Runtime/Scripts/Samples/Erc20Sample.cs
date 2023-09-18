@@ -1,8 +1,8 @@
 ﻿using System.Numerics;
 using System.Threading.Tasks;
-using ChainSafe.GamingWeb3;
+using ChainSafe.Gaming.Evm.Providers;
+using ChainSafe.Gaming.Web3;
 using Scripts.EVM.Token;
-using Web3Unity.Scripts.Library.Ethers.Providers;
 
 public class Erc20Sample
 {

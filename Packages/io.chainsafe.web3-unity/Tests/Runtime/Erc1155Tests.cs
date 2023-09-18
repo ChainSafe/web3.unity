@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using ChainSafe.GamingWeb3.Build;
-using ChainSafe.GamingWeb3.Unity;
+using ChainSafe.Gaming.Evm.JsonRpc;
+using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.Web3.Build;
+using ChainSafe.Gaming.Web3.Unity;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
-using Web3Unity.Scripts.Library.Ethers.JsonRpc;
 using Web3Unity.Scripts.Prefabs;
 
 public class Erc1155Tests

@@ -1,9 +1,10 @@
 using Nethereum.Hex.HexTypes;
 using Newtonsoft.Json;
 using System;
+using ChainSafe.Gaming.Evm.Transactions;
+using ChainSafe.Gaming.UnityPackage;
 using UnityEngine;
 using Scripts.EVM.Remote;
-using Web3Unity.Scripts.Library.Ethers.Transactions;
 
 public class CreateApproval : MonoBehaviour
 {

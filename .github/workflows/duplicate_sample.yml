@@ -1,23 +1,26 @@
-name: Duplicate Package Sample
+name: Duplicate Package Sample Workflow
 
 on:
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   duplicate:
-    name: duplicate package sample
+    name: Duplicate samples job 👯
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Run duplicate script file
-        run: bash ${GITHUB_WORKSPACE}/duplicate_package_sample.sh
+        run: |
+          export SOURCE_DIRECTORY="${GITHUB_WORKSPACE}/src/UnitySampleProject/Assets/Samples/web3.unity SDK/2.5.0-pre001/Web3.Unity Samples/"
+          export DESTINATION_DIRECTORY="${GITHUB_WORKSPACE}/Packages/io.chainsafe.web3-unity/Samples~/Web3.Unity/"
+          rm -r "$DESTINATION_DIRECTORY"
+          cp -r "$SOURCE_DIRECTORY" "$DESTINATION_DIRECTORY"
 
       - name: Commit and Push
         run: |

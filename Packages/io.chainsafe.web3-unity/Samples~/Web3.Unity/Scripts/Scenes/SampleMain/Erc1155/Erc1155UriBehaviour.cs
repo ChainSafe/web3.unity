@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.UnityPackage;
 using Web3Unity.Scripts.Prefabs;
 
 namespace Samples.Behaviours.Erc1155

@@ -1,18 +1,18 @@
-using System;
-using ChainSafe.GamingSdk.EVM.InProcessSigner;
-using ChainSafe.GamingSdk.EVM.InProcessTransactionExecutor;
-using ChainSafe.GamingSDK.EVM.Web3.Core;
-using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
-using ChainSafe.GamingWeb3;
+
 using Nethereum.ABI.EIP712;
 using Nethereum.Signer;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Org.BouncyCastle.Utilities.Encoders;
+using ChainSafe.Gaming.Evm.Providers;
+using ChainSafe.Gaming.Evm.Signers;
+using ChainSafe.Gaming.Evm.Transactions;
+using ChainSafe.Gaming.InProcessSigner;
+using ChainSafe.Gaming.InProcessTransactionExecutor;
+using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.Web3.Core.Evm;
 using UnityEngine;
-using Web3Unity.Scripts.Library.Ethers.Providers;
-using Web3Unity.Scripts.Library.Ethers.Signers;
-using Web3Unity.Scripts.Library.Ethers.Transactions;
+
 using Object = UnityEngine.Object;
 using TWeb3Auth = Web3Auth;
 

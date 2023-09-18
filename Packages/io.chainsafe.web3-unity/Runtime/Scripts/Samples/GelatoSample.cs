@@ -1,9 +1,10 @@
 using System.Numerics;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Web3;
 using ChainSafe.GamingSdk.Gelato;
 using ChainSafe.GamingSdk.Gelato.Dto;
-using ChainSafe.GamingWeb3;
 using UnityEngine;
+
 
 public class GelatoSample
 {

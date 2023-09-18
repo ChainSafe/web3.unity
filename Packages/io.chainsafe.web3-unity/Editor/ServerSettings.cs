@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using ChainSafe.GamingSdk.Editor;
 using System.IO;
 using System.Text;
+using ChainSafe.Gaming.UnityPackage;
 
 public class ChainSafeServerSettings : EditorWindow
 {

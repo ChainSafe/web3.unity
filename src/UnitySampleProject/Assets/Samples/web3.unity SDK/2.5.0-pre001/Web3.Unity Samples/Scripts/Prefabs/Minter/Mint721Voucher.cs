@@ -1,9 +1,10 @@
-using Models;
+using ChainSafe.Gaming.Evm.Transactions;
+using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.UnityPackage.Model;
 using Nethereum.Hex.HexTypes;
 using Newtonsoft.Json;
 using UnityEngine;
 using Scripts.EVM.Remote;
-using Web3Unity.Scripts.Library.Ethers.Transactions;
 
 public class Mint721Voucher : MonoBehaviour
 {

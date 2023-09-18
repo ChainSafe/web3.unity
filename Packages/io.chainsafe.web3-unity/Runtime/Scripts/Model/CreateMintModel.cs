@@ -1,5 +1,5 @@
 using System;
-namespace Models
+namespace ChainSafe.Gaming.UnityPackage.Model
 {
     public class CreateMintModel
     {

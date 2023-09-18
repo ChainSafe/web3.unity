@@ -1,9 +1,10 @@
-﻿using ChainSafe.GamingSDK.EVM.Web3.Core;
-using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
-using ChainSafe.GamingWeb3.Build;
-using Web3Unity.Scripts.Library.Ethers.Signers;
+﻿
+using ChainSafe.Gaming.Evm.Signers;
+using ChainSafe.Gaming.Web3.Build;
+using ChainSafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.Web3.Core.Evm;
 
-namespace ChainSafe.GamingSDK.EVM.WebGLWallet
+namespace ChainSafe.Gaming.Wallets
 {
     public static class WebGLWalletExtensions
     {
