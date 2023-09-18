@@ -1,12 +1,13 @@
 ﻿namespace LootBoxes.Scene.States
 {
-    public class ResetStageState : LootboxSceneState
+    public class ResetStageState : LootBoxSceneState
     {
         protected override void OnLootBoxSceneStateEnter()
         {
             Context.stage.Clear();
-            Context.ActiveStageItem = 0;
-            Context.Animator.SetTrigger("Next");
+            Context.stageFocus.FocusImmediately(0);
+            Context.LastClaimedRewards = null;
+            Context.animator.SetTrigger("Next");
         }
     }
 }

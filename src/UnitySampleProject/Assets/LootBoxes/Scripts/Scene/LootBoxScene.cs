@@ -9,30 +9,28 @@ namespace LootBoxes.Scene
 {
     public class LootBoxScene : MonoBehaviour
     {
-        public Animator Animator;
-        public StageItemFactory StageItemFactory;
+        public Animator animator;
         public Stage stage;
         public StageCamera stageCamera;
         public StageFocus stageFocus;
         public StageItemPrefabSet prefabSet;
         public Blackout blackout;
         [Header("UI")]
-        public SelectLootBoxesUI SelectLootBoxesUI;
+        public SelectLootBoxesUI selectLootBoxesUI;
+        public PromptClaimRewardsUI promptClaimRewardsUI;
         
+        private StageItemFactory stageItemFactory;
         private ILootboxService lootBoxService;
         
         public uint ActiveType { get; set; }
-        public uint ActiveStageItem { get; set; }
-        
-        public Task<List<uint>> GetTypes() => lootBoxService.GetLootboxTypes();
-        public Task<uint> GetBalance(uint typeId) => lootBoxService.BalanceOf(typeId);
+        public LootboxRewards LastClaimedRewards { get; set; }
 
         public void Configure(ILootboxService lootBoxService)
         {
             this.lootBoxService = lootBoxService;
-            StageItemFactory = new StageItemFactory();
+            stageItemFactory = new StageItemFactory();
             
-            stage.Configure(StageItemFactory);
+            stage.Configure(stageItemFactory);
             stageCamera.Configure(stage);
             stageFocus.Configure(stage, stageCamera);
         }
@@ -58,18 +56,23 @@ namespace LootBoxes.Scene
 
             void LaunchEmpty()
             {
-                Animator.SetTrigger("LaunchEmpty");
+                animator.SetTrigger("LaunchEmpty");
             }
 
             void LaunchSelection()
             {
-                Animator.SetTrigger("LaunchSelection");
+                animator.SetTrigger("LaunchSelection");
             }
 
             void LaunchOpening()
             {
-                Animator.SetTrigger("LaunchOpening");
+                animator.SetTrigger("LaunchOpening");
             }
         }
+        
+        public Task<List<uint>> GetTypes() => lootBoxService.GetLootboxTypes();
+        public Task<uint> GetBalance(uint typeId) => lootBoxService.BalanceOf(typeId);
+        public Task<bool> CanClaimRewards() => lootBoxService.CanClaimRewards();
+        public Task<LootboxRewards> ClaimRewards() => lootBoxService.ClaimRewards();
     }
 }

@@ -446,13 +446,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0da23a265664e4e9d6ef1c6ec13d31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Animator: {fileID: 607972694}
+  animator: {fileID: 607972694}
   stage: {fileID: 1875656411}
   stageCamera: {fileID: 403120803}
   stageFocus: {fileID: 1875656413}
   prefabSet: {fileID: 11400000, guid: bda231b78de1ac64fb78fe7821c0bf12, type: 2}
   blackout: {fileID: 689737223}
-  SelectLootBoxesUI: {fileID: 2143337873}
+  selectLootBoxesUI: {fileID: 2143337873}
 --- !u!1 &689737222
 GameObject:
   m_ObjectHideFlags: 0

@@ -67,7 +67,7 @@ public class GelatoSample
                 case TaskState.Cancelled:
                     return new TaskResult(relayResponse.TaskId, status);
                 default:
-                    await WaitForSeconds(2);
+                    await SafeDelay.WaitForSeconds(2);
                     continue;
             }
         }
@@ -104,7 +104,7 @@ public class GelatoSample
                 case TaskState.Cancelled:
                     return new TaskResult(relayResponse.TaskId, status);
                 default:
-                    await WaitForSeconds(2);
+                    await SafeDelay.WaitForSeconds(2);
                     continue;
             }
         }
@@ -145,7 +145,7 @@ public class GelatoSample
                 case TaskState.Cancelled:
                     return new TaskResult(relayResponse.TaskId, status);
                 default:
-                    await WaitForSeconds(2);
+                    await SafeDelay.WaitForSeconds(2);
                     continue;
             }
         }
@@ -184,23 +184,9 @@ public class GelatoSample
                 case TaskState.Cancelled:
                     return new TaskResult(relayResponse.TaskId, status);
                 default:
-                    await WaitForSeconds(2);
+                    await SafeDelay.WaitForSeconds(2);
                     continue;
             }
         }
-    }
-
-    async Task WaitForSeconds(int seconds)
-    {
-        // Task.Delay doesn't work on WebGL
-#if UNITY_WEBGL && !UNITY_EDITOR
-        var now = Time.time;
-        while (Time.time - now < 2)
-        {
-            await Task.Yield();
-        }
-#else
-        await Task.Delay(seconds * 1000);
-#endif
     }
 }

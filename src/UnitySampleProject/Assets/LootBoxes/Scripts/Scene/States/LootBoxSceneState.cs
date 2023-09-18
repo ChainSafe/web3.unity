@@ -2,7 +2,7 @@
 
 namespace LootBoxes.Scene.States
 {
-    public abstract class LootboxSceneState : StateMachineBehaviour
+    public abstract class LootBoxSceneState : StateMachineBehaviour
     {
         private LootBoxScene context;
         private Animator animator;

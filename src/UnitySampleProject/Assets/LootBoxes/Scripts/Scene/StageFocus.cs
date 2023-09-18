@@ -18,7 +18,7 @@ namespace LootBoxes.Scene
 
         public void Focus(int index)
         {
-            if (index < 0 || index >= stage.LootBoxCount)
+            if (index < 0 || index >= stage.StageItemCount)
             {
                 throw new ArgumentOutOfRangeException(nameof(index));
             }
@@ -29,7 +29,7 @@ namespace LootBoxes.Scene
 
         public void FocusDelta(int delta)
         {
-            var focusIndex = Mathf.Clamp(FocusedItemIndex + delta, 0, stage.LootBoxCount - 1);
+            var focusIndex = Mathf.Clamp(FocusedItemIndex + delta, 0, stage.StageItemCount - 1);
             Focus(focusIndex);
         }
 

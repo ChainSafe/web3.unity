@@ -15,11 +15,21 @@ namespace LootBoxes.Scene.StageItems
             public StageItem Prefab;
         }
 
-        public List<LootBoxPrefabByTypeId> PrefabByTypeIdList;
+        public List<LootBoxPrefabByTypeId> LootBoxPrefabByTypeIdList;
         
-        private Dictionary<uint, StageItem> _prefabByTypeId;
+        private Dictionary<uint, StageItem> _lootBoxPrefabByTypeId;
 
-        public Dictionary<uint, StageItem> PrefabByTypeId =>
-            _prefabByTypeId ??= PrefabByTypeIdList.ToDictionary(t => t.TypeId, t => t.Prefab);
+        private Dictionary<uint, StageItem> PrefabByTypeId =>
+            _lootBoxPrefabByTypeId ??= LootBoxPrefabByTypeIdList.ToDictionary(t => t.TypeId, t => t.Prefab);
+
+        public StageItem GetLootBoxStageItemPrefab(uint typeId)
+        {
+            if (!PrefabByTypeId.ContainsKey(typeId))
+            {
+                throw new LootBoxSceneException($"No {nameof(StageItem)} prefab found for lootbox type {typeId}.");
+            }
+            
+            return PrefabByTypeId[typeId];
+        }
     }
 }

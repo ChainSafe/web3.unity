@@ -13,7 +13,7 @@ namespace LootBoxes.Scene
         private StageItemFactory factory;
         private List<StageItem> stageItems;
         
-        public int LootBoxCount => stageItems?.Count ?? 0;
+        public int StageItemCount => stageItems?.Count ?? 0;
         public IReadOnlyCollection<StageItem> StageItems => stageItems?.AsReadOnly();
 
         public void Configure(StageItemFactory factory)

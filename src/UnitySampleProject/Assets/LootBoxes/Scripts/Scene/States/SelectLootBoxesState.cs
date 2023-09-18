@@ -2,19 +2,19 @@
 
 namespace LootBoxes.Scene.States
 {
-    public class SelectLootBoxesState : LootboxSceneState
+    public class SelectLootBoxesState : LootBoxSceneState
     {
         private int FocusedLootBoxIndex;
         
         protected override void OnLootBoxSceneStateEnter()
         {
-            Context.SelectLootBoxesUI.gameObject.SetActive(true);
+            Context.selectLootBoxesUI.gameObject.SetActive(true);
             
-            Context.SelectLootBoxesUI.PrevTypeButton.onClick.AddListener(OnPrevTypeClick);
-            Context.SelectLootBoxesUI.NextTypeButton.onClick.AddListener(OnNextTypeClick);
-            Context.SelectLootBoxesUI.PrevLootBoxButton.onClick.AddListener(OnPrevLootBoxClick);
-            Context.SelectLootBoxesUI.NextLootBoxButton.onClick.AddListener(OnNextLootBoxClick);
-            Context.SelectLootBoxesUI.OpenSelectedButton.onClick.AddListener(OnOpenSelectedClick);
+            Context.selectLootBoxesUI.PrevTypeButton.onClick.AddListener(OnPrevTypeClick);
+            Context.selectLootBoxesUI.NextTypeButton.onClick.AddListener(OnNextTypeClick);
+            Context.selectLootBoxesUI.PrevLootBoxButton.onClick.AddListener(OnPrevLootBoxClick);
+            Context.selectLootBoxesUI.NextLootBoxButton.onClick.AddListener(OnNextLootBoxClick);
+            Context.selectLootBoxesUI.OpenSelectedButton.onClick.AddListener(OnOpenSelectedClick);
 
             FocusedLootBoxIndex = 0;
             Context.stageFocus.Focus(0);
@@ -22,13 +22,13 @@ namespace LootBoxes.Scene.States
 
         protected override void OnLootBoxSceneStateExit()
         {
-            Context.SelectLootBoxesUI.gameObject.SetActive(false);
+            Context.selectLootBoxesUI.gameObject.SetActive(false);
             
-            Context.SelectLootBoxesUI.PrevTypeButton.onClick.RemoveListener(OnPrevTypeClick);
-            Context.SelectLootBoxesUI.NextTypeButton.onClick.RemoveListener(OnNextTypeClick);
-            Context.SelectLootBoxesUI.PrevLootBoxButton.onClick.RemoveListener(OnPrevLootBoxClick);
-            Context.SelectLootBoxesUI.NextLootBoxButton.onClick.RemoveListener(OnNextLootBoxClick);
-            Context.SelectLootBoxesUI.OpenSelectedButton.onClick.RemoveListener(OnOpenSelectedClick);
+            Context.selectLootBoxesUI.PrevTypeButton.onClick.RemoveListener(OnPrevTypeClick);
+            Context.selectLootBoxesUI.NextTypeButton.onClick.RemoveListener(OnNextTypeClick);
+            Context.selectLootBoxesUI.PrevLootBoxButton.onClick.RemoveListener(OnPrevLootBoxClick);
+            Context.selectLootBoxesUI.NextLootBoxButton.onClick.RemoveListener(OnNextLootBoxClick);
+            Context.selectLootBoxesUI.OpenSelectedButton.onClick.RemoveListener(OnOpenSelectedClick);
         }
 
         private void OnNextLootBoxClick()
@@ -53,7 +53,13 @@ namespace LootBoxes.Scene.States
 
         private void OnOpenSelectedClick()
         {
-            var selected = Context.stage.StageItems.Select(item => item.Selected);
+            if (!Context.stage.StageItems.Any(item => item.LootBox.Selected))
+            {
+                return;
+            }
+            
+            // var selected = Context.stage.StageItems.Select(item => item.LootBox.Selected);
+            Context.animator.SetTrigger("OpenInitiated");
         }
     }
 }

@@ -9,7 +9,7 @@ namespace LootBoxes.Scene.States
         FadeOut
     }
     
-    public class FadeState : LootboxSceneState
+    public class FadeState : LootBoxSceneState
     {
         public FadeGoal Goal = FadeGoal.FadeIn;
         public bool Await = true;
@@ -22,7 +22,7 @@ namespace LootBoxes.Scene.States
                 await task;
             }
             
-            Context.Animator.SetTrigger("Next");
+            Context.animator.SetTrigger("Next");
         }
 
         private Task LaunchFade()
