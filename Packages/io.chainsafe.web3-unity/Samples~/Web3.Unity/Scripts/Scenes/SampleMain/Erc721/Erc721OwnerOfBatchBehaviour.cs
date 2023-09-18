@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.UnityPackage;
 using UnityEngine;
 using Web3Unity.Scripts.Prefabs;
 

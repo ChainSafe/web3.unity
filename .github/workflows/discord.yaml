@@ -1,6 +1,5 @@
 # This workflow is used to automate the release of notifications to discord
-
-name: Notification on push
+name: Notification on Push Workflow
 
 on:
   release:
@@ -10,7 +9,7 @@ jobs:
   sending:
     runs-on: ubuntu-latest
     steps:
-    - name: Discord notification
+    - name: Discord notification job
       uses: LeGitHubDeTai/github-to-discord@main
       env:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_SECRET }}

@@ -1,10 +1,11 @@
+using ChainSafe.Gaming.Evm.Signers;
+using ChainSafe.Gaming.Web3.Build;
+using ChainSafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.Web3.Core.Evm;
 using ChainSafe.GamingSdk.Web3Auth;
-using ChainSafe.GamingSDK.EVM.Web3.Core;
-using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
-using ChainSafe.GamingWeb3.Build;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Web3Unity.Scripts.Library.Ethers.Signers;
+
 
 public static class Web3AuthWalletExtensions
 {
