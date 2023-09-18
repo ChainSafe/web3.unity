@@ -66,11 +66,15 @@ public class MiscTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestContractSend()
     {
+        WebPageWallet.TestResponse = "0x9de3bb69db4bd93babef923f5da1f53cdb287d9ebab9b4177ba2fb25e6a09225";
+        
         var sendContract = _sample.ContractSend(ContractSendMethodName, Abi, ContractAddress);
 
         yield return new WaitUntil(() => sendContract.IsCompleted);
         
-        //sendContract.Result
+        Assert.IsTrue(sendContract.IsCompletedSuccessfully);
+        
+        Assert.AreEqual(sendContract.Result, string.Empty);
     }
 
     [UnityTest]
@@ -80,9 +84,12 @@ public class MiscTests : SampleTestsBase
 
         yield return new WaitUntil(() => getArray.IsCompleted);
 
-        Assert.AreEqual(getArray.Result, new List<List<string>>
+        //convert toLower to make comparing easier
+        var result = getArray.Result.ConvertAll(a => a.ConvertAll(b => b.ToLower()));
+
+        Assert.AreEqual(result, new List<List<string>>
         {
-            ArrayToSend
+            ArrayToSend.ConvertAll(a => a.ToLower())
         });
     }
     
@@ -93,7 +100,8 @@ public class MiscTests : SampleTestsBase
 
         yield return new WaitUntil(() => getBlockNumber.IsCompleted);
 
-        Assert.AreEqual(getBlockNumber.Result.ToString(), "9691998");
+        //just assert successful completion because result is always changing
+        Assert.IsTrue(getBlockNumber.IsCompletedSuccessfully);
     }
     
     [UnityTest]
@@ -103,7 +111,8 @@ public class MiscTests : SampleTestsBase
 
         yield return new WaitUntil(() => getGasLimit.IsCompleted);
 
-        Assert.AreEqual(getGasLimit.Result, "9691998");
+        //just assert successful completion because result is always changing
+        Assert.IsTrue(getGasLimit.IsCompletedSuccessfully);
     }
     
     [UnityTest]
@@ -113,40 +122,48 @@ public class MiscTests : SampleTestsBase
 
         yield return new WaitUntil(() => getGasPrice.IsCompleted);
 
-        Assert.AreEqual(getGasPrice.Result, "92");
+        //just assert successful completion because result is always changing
+        Assert.IsTrue(getGasPrice.IsCompletedSuccessfully);
     }
     
     [UnityTest]
     public IEnumerator TestGetGasNonce()
     {
+        WebPageWallet.TestResponse = "0x527fcd7356738389d29a96342b5fba92ab1348b744409d5bf4ce0ca2fbc2f25e";
+        
         var getGasNonce = _sample.GetNonce();
 
         yield return new WaitUntil(() => getGasNonce.IsCompleted);
 
-        Assert.AreEqual(getGasNonce.Result, "92");
+        //just assert successful completion because result is always changing
+        Assert.IsTrue(getGasNonce.IsCompletedSuccessfully);
     }
     
     [UnityTest]
     public IEnumerator TestTransactionStatus()
     {
+        WebPageWallet.TestResponse = "0x1e989dbcc43e078b19ea8ea201af195e74397b494b7acd4afcca67e65e5c3339";
+        
         var getTransactionStatus = _sample.GetTransactionStatus();
 
         yield return new WaitUntil(() => getTransactionStatus.IsCompleted);
 
-        Assert.AreEqual(getTransactionStatus.Result, new TransactionReceipt
-        {
-            
-        });
+        //just assert successful completion because result is always changing
+        Assert.IsTrue(getTransactionStatus.IsCompletedSuccessfully);
     }
     
     [UnityTest]
     public IEnumerator TestMint721()
     {
+        WebPageWallet.TestResponse = "0xa9f953f9845e7d49d778d6fed622d566daf09e8e1c793297c7cab54782e1aae9";
+        
         var mint721 = _sample.Mint721(Mint721Abi, Mint721Address, MintUri);
 
         yield return new WaitUntil(() => mint721.IsCompleted);
 
-        Assert.AreEqual(mint721.Result, null);
+        Assert.IsTrue(mint721.IsCompletedSuccessfully);
+        
+        Assert.AreEqual(mint721.Result, string.Empty);
     }
     
     [UnityTest]
@@ -156,7 +173,9 @@ public class MiscTests : SampleTestsBase
 
         yield return new WaitUntil(() => useRegisteredContract.IsCompleted);
 
-        Assert.AreEqual(useRegisteredContract.Result, "0");
+        Assert.IsTrue(useRegisteredContract.IsCompletedSuccessfully);
+        
+        Assert.AreEqual(useRegisteredContract.Result, new BigInteger(0));
     }
     
     [UnityTest]
@@ -171,18 +190,20 @@ public class MiscTests : SampleTestsBase
         Assert.IsTrue(sendArray.IsCompletedSuccessfully);
         
         Assert.AreEqual(sendArray.Result, string.Empty);
-        
-        yield return null;
     }
     
     [UnityTest]
     public IEnumerator TestSendTransaction()
     {
+        WebPageWallet.TestResponse = "0xa60bef1df91bedcd2f3f79e6609716ef245fd1202d66c6e35694b43529bf2e71";
+        
         var sendTransaction = _sample.SendTransaction(SendToAddress);
 
         yield return new WaitUntil(() => sendTransaction.IsCompleted);
 
-        Assert.AreEqual(sendTransaction.Result, "0");
+        Assert.IsTrue(sendTransaction.IsCompletedSuccessfully);
+        
+        Assert.AreEqual(sendTransaction.Result, WebPageWallet.TestResponse);
     }
     
     [UnityTest]
@@ -198,41 +219,59 @@ public class MiscTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestSignMessage()
     {
+        WebPageWallet.TestResponse =
+            "0x87dfaa646f476ca53ba8b6e8d122839571e52866be0984ec0497617ad3e988b7401c6b816858df27625166cb98a688f99ba92fa593da3c86c78b19c78c1f51cc1c";
+        
         var signMessage = _sample.SignMessage("The right man in the wrong place can make all the difference in the world.");
 
         yield return new WaitUntil(() => signMessage.IsCompleted);
         
-        Assert.AreEqual(signMessage.Result, "");
+        Assert.IsTrue(signMessage.IsCompletedSuccessfully);
+        
+        Assert.AreEqual(signMessage.Result, WebPageWallet.TestResponse);
     }
     
     [UnityTest]
     public IEnumerator TestSignVerify()
     {
+        WebPageWallet.TestResponse =
+            "0x5c996d43c2e804a0d0de7f8b07cc660bbae638aa7ea137df6156621abe5e1fbb1727ebb06f7e0067537cb0f942825fa15ead9dea6d74e4d17fa6e69007cb59561c";
+        
         var signVerify = _sample.SignVerify("A man chooses, a slave obeys.");
 
         yield return new WaitUntil(() => signVerify.IsCompleted);
         
-        Assert.AreEqual(signVerify.Result, "");
+        Assert.IsTrue(signVerify.IsCompletedSuccessfully);
+        
+        Assert.AreEqual(signVerify.Result, true);
     }
     
     [UnityTest]
     public IEnumerator TestTransferErc20()
     {
+        WebPageWallet.TestResponse = "0xba90b6fb8cbee5fd0ad423cc74bb4a365bb88b260601933aac86b947945c5465";
+        
         var transferErc20 = _sample.TransferErc20(TransferErc20ContractAddress, SendToAddress, "1000000000000000");
 
         yield return new WaitUntil(() => transferErc20.IsCompleted);
         
-        Assert.AreEqual(transferErc20.Result, "");
+        Assert.IsTrue(transferErc20.IsCompletedSuccessfully);
+        
+        Assert.AreEqual(transferErc20.Result, new object[]{ false });
     }
     
     [UnityTest]
     public IEnumerator TestTransferErc721()
     {
+        WebPageWallet.TestResponse = "0x0e292ae8c5ab005d87581f32fd791e1b18b0cfa944d6877b41edbdb740ee8586";
+        
         var transferErc721 = _sample.TransferErc721(TransferErc721ContractAddress, SendToAddress, 0);
 
         yield return new WaitUntil(() => transferErc721.IsCompleted);
         
-        Assert.AreEqual(transferErc721.Result, "");
+        Assert.IsTrue(transferErc721.IsCompletedSuccessfully);
+        
+        Assert.AreEqual(transferErc721.Result, string.Empty);
     }
     
     [UnityTest]
