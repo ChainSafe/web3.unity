@@ -1,22 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using ChainSafe.GamingSDK.EVM.Web3.Core;
-using ChainSafe.GamingSDK.EVM.Web3.Core.Debug;
-using ChainSafe.GamingSDK.EVM.Web3.Core.Evm;
-using ChainSafe.GamingWeb3;
+using ChainSafe.Gaming.Evm.Providers;
+using ChainSafe.Gaming.Evm.Signers;
+using ChainSafe.Gaming.Evm.Transactions;
+using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.Web3.Core.Debug;
+using ChainSafe.Gaming.Web3.Core.Evm;
 using JetBrains.Annotations;
 using Nethereum.ABI.EIP712;
 using Newtonsoft.Json;
 using UnityEngine;
-using Web3Unity.Scripts.Library.Ethers.Providers;
-using Web3Unity.Scripts.Library.Ethers.Signers;
-using Web3Unity.Scripts.Library.Ethers.Transactions;
 
-namespace ChainSafe.GamingSDK.EVM.WebGLWallet
+namespace ChainSafe.Gaming.Wallets
 {
-#if UNITY_WEBGL && !UNITY_EDITOR
+#if !UNITY_EDITOR && UNITY_WEBGL
     // todo: check if window.web3gl is bound during initialization
     public class WebGLWallet : ISigner, ITransactionExecutor, ILifecycleParticipant
     {
@@ -36,7 +35,10 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
             address = await PollJsSide(JS_getConnectAccount);
         }
 
-        public ValueTask WillStopAsync() => new(Task.CompletedTask);
+        public ValueTask WillStopAsync()
+        {
+            return new ValueTask(Task.CompletedTask);
+        }
 
         public Task<string> GetAddress()
         {
@@ -105,7 +107,8 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
         {
             var types = MemberDescriptionFactory.GetTypesMemberDescription(typeof(TStructType));
             JS_resetSignTypedMessageResponse();
-            JS_signTypedMessage(JsonConvert.SerializeObject(domain), JsonConvert.SerializeObject(types), JsonConvert.SerializeObject(message));
+            JS_signTypedMessage(JsonConvert.SerializeObject(domain), JsonConvert.SerializeObject(types),
+                JsonConvert.SerializeObject(message));
             var signedTypedMessageResponse = await PollJsSide(JS_getSignTypedMessageResponse);
             AssertResponseSuccessful(signedTypedMessageResponse);
             return signedTypedMessageResponse;
@@ -127,38 +130,47 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
                 jsResponse = getMethod();
                 await Task.Yield();
             } while (string.IsNullOrEmpty(jsResponse));
+
             return jsResponse;
         }
 
         // Connect
         [DllImport("__Internal")]
         private static extern void JS_web3Connect();
+
         [DllImport("__Internal")]
         private static extern string JS_getConnectAccount();
+
         [DllImport("__Internal")]
         private static extern void JS_resetConnectAccount();
 
         // SignMessage
         [DllImport("__Internal")]
         private static extern void JS_signMessage(string value);
+
         [DllImport("__Internal")]
         private static extern string JS_getSignMessageResponse();
+
         [DllImport("__Internal")]
         private static extern void JS_resetSignMessageResponse();
 
         // SignTypedMessage
         [DllImport("__Internal")]
         private static extern void JS_signTypedMessage(string domain, string types, string message);
+
         [DllImport("__Internal")]
         private static extern string JS_getSignTypedMessageResponse();
+
         [DllImport("__Internal")]
         private static extern void JS_resetSignTypedMessageResponse();
 
         // SendTransaction (no data)
         [DllImport("__Internal")]
         private static extern void JS_sendTransaction(string to, string value, string gasLimit, string gasPrice);
+
         [DllImport("__Internal")]
         private static extern string JS_getSendTransactionResponse();
+
         [DllImport("__Internal")]
         private static extern void JS_resetSendTransactionResponse();
 
@@ -166,8 +178,10 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
         [DllImport("__Internal")]
         private static extern void JS_sendTransactionData(string to, string value, string gasPrice, string gasLimit,
             string data);
+
         [DllImport("__Internal")]
         private static extern string JS_getSendTransactionResponseData();
+
         [DllImport("__Internal")]
         private static extern void JS_resetSendTransactionResponseData();
     }
@@ -197,7 +211,8 @@ namespace ChainSafe.GamingSDK.EVM.WebGLWallet
 
         public ValueTask WillStartAsync()
         {
-            throw new Web3Exception($"{nameof(WebGLWallet)} can only be used on {RuntimePlatform.WebGLPlayer} platform");
+            throw new Web3Exception(
+                $"{nameof(WebGLWallet)} can only be used on {RuntimePlatform.WebGLPlayer} platform");
         }
 
         public ValueTask WillStopAsync()

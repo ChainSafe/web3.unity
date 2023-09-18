@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33414.496
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainSafe.GamingSDK.EVM", "src\ChainSafe.GamingSDK.EVM\ChainSafe.GamingSDK.EVM.csproj", "{E6CC674F-C552-412E-8272-692CE182AB7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainSafe.Gaming", "src\ChainSafe.Gaming\ChainSafe.Gaming.csproj", "{E6CC674F-C552-412E-8272-692CE182AB7A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainSafe.GamingSDK.EVM.Tests", "src\ChainSafe.GamingSDK.EVM.Tests\ChainSafe.GamingSDK.EVM.Tests.csproj", "{D63ACB2E-71E2-49C1-AE55-92DFA723391E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainSafe.Gaming.Tests", "src\ChainSafe.Gaming.Tests\ChainSafe.Gaming.Tests.csproj", "{D63ACB2E-71E2-49C1-AE55-92DFA723391E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainSafe.GamingSdk.EVM.Unity", "src\ChainSafe.GamingSdk.EVM.Unity\ChainSafe.GamingSdk.EVM.Unity.csproj", "{14C3ACCB-285C-493C-AD59-73853386095E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainSafe.Gaming.Unity", "src\ChainSafe.Gaming.Unity\ChainSafe.Gaming.Unity.csproj", "{14C3ACCB-285C-493C-AD59-73853386095E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainSafe.GamingSdk.EVM.NetCore", "src\ChainSafe.GamingSdk.EVM.NetCore\ChainSafe.GamingSdk.EVM.NetCore.csproj", "{C1FA80C9-64F5-4213-9938-2CB5323A4823}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainSafe.Gaming.NetCore", "src\ChainSafe.Gaming.NetCore\ChainSafe.Gaming.NetCore.csproj", "{C1FA80C9-64F5-4213-9938-2CB5323A4823}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3F500611-617F-413F-8607-2393B7493585}"
 	ProjectSection(SolutionItems) = preProject
@@ -17,17 +17,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 		setup.bat = setup.bat
 		setup.sh = setup.sh
+		release-web3-auth.sh = release-web3-auth.sh
+		release-web3-unity.sh = release-web3-unity.sh
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainSafe.GamingSdk.EVM.Unity.ThirdParty", "src\ChainSafe.GamingSdk.EVM.Unity.ThirdParty\ChainSafe.GamingSdk.EVM.Unity.ThirdParty.csproj", "{9EC71CB4-9401-4E02-AC63-FC13B3D1AA53}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainSafe.Gaming.Unity.ThirdParty", "src\ChainSafe.Gaming.Unity.ThirdParty\ChainSafe.Gaming.Unity.ThirdParty.csproj", "{9EC71CB4-9401-4E02-AC63-FC13B3D1AA53}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainSafe.GamingSDK.EVM.WebPageWallet", "src\ChainSafe.GamingSDK.EVM.WebPageWallet\ChainSafe.GamingSDK.EVM.WebPageWallet.csproj", "{99E7A645-CAC5-441B-848D-1253405D6400}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainSafe.Gaming.WebPageWallet", "src\ChainSafe.Gaming.WebPageWallet\ChainSafe.Gaming.WebPageWallet.csproj", "{99E7A645-CAC5-441B-848D-1253405D6400}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.GamingSdk.EVM.InProcessSigner", "src\ChainSafe.GamingSdk.EVM.InProcessSigner\ChainSafe.GamingSdk.EVM.InProcessSigner.csproj", "{3C01FD36-4D44-4886-A971-4786D99CBFCC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.InProcessSigner", "src\ChainSafe.Gaming.InProcessSigner\ChainSafe.Gaming.InProcessSigner.csproj", "{3C01FD36-4D44-4886-A971-4786D99CBFCC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.GamingSdk.EVM.InProcessTransactionExecutor", "src\ChainSafe.GamingSdk.EVM.InProcessTransactionExecutor\ChainSafe.GamingSdk.EVM.InProcessTransactionExecutor.csproj", "{457E4582-4CC5-4D42-A0CB-5F48204328FE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.InProcessTransactionExecutor", "src\ChainSafe.Gaming.InProcessTransactionExecutor\ChainSafe.Gaming.InProcessTransactionExecutor.csproj", "{457E4582-4CC5-4D42-A0CB-5F48204328FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.GamingSdk.Gelato", "src\ChainSafe.GamingSdk.Gelato\ChainSafe.GamingSdk.Gelato.csproj", "{205BA2B5-B8B0-4860-B8D0-1AFA148D882E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.Gelato", "src\ChainSafe.Gaming.Gelato\ChainSafe.Gaming.Gelato.csproj", "{205BA2B5-B8B0-4860-B8D0-1AFA148D882E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
