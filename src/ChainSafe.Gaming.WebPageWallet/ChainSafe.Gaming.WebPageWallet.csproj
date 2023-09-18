@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Nullable>enable</Nullable>
+    <LangVersion>9.0</LangVersion>
+    <PackageId>ChainSafe.Gaming.WebPageWallet</PackageId>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <EnableNETAnalyzers>True</EnableNETAnalyzers>
+    <CodeAnalysisRuleSet>../../global.ruleset</CodeAnalysisRuleSet>
+    <RootNamespace>ChainSafe.Gaming.MetaMaskBrowserWallet</RootNamespace>
+    <Configurations>Debug;Release;Test</Configurations>
+    <Platforms>AnyCPU</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ChainSafe.Gaming\ChainSafe.Gaming.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Nethereum.ABI" Version="4.14.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" />
+    <AdditionalFiles Include="../../stylecop.json" />
+  </ItemGroup>
+
+</Project>

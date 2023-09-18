@@ -1,7 +1,7 @@
 using System;
 using System.Numerics;
 
-namespace Models
+namespace ChainSafe.Gaming.UnityPackage.Model
 {
     public class GetVoucherModel
     {

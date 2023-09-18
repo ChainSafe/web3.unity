@@ -25,7 +25,7 @@ https://docs.gaming.chainsafe.io/
 ## Building the code
 - Clone the repository and run the `setup` script.
 - You can now open `src/UnitySampleProject` in Unity and start hacking!
-- Whenever you make changes to the code in the libraries, run the `src/ChainSafe.GamingSdk.EVM.Unity/publish-to-unity-package` script from within the folder it is in. This will build and publish the libraries to the UPM package's folder, thus making any new code accessible inside Unity.
+- Whenever you make changes to the code in the libraries, run the `src/ChainSafe.Gaming.Unity/publish-to-unity-package` script from within the folder it is in. This will build and publish the libraries to the UPM package's folder, thus making any new code accessible inside Unity.
 
 ## ChainSafe Security Policy
 

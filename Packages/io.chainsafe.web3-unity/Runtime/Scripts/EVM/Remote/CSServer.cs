@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using ChainSafe.GamingWeb3;
-using Models;
+using ChainSafe.Gaming.UnityPackage.Model;
+using ChainSafe.Gaming.Web3;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
