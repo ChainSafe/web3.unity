@@ -49,7 +49,7 @@ public class MiscTests : SampleTestsBase
     
     private const string TransferErc20ContractAddress = "0xc778417e063141139fce010982780140aa0cd5ab";
     private const string TransferErc721ContractAddress = "0x358AA13c52544ECCEF6B0ADD0f801012ADAD5eE3";
-    private const string TransferErc1155ContractAddress = "0xae283E79a5361CF1077bf2638a1A953c872AD973";
+    private const string TransferErc1155ContractAddress = "0xe793e17Ec93bEc809C5Ac6dd0d8b383446E65B78";
 
     #endregion
     
@@ -275,10 +275,14 @@ public class MiscTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestTransferErc1155()
     {
-        var transferErc1155 = _sample.TransferErc1155(TransferErc1155ContractAddress, 0, 1, SendToAddress);
+        WebPageWallet.TestResponse = "0xb018a043ac0affe05159a53daa8656dbbad61c839eaf89622d7813226f222876";
+        
+        var transferErc1155 = _sample.TransferErc1155(TransferErc1155ContractAddress, 101, 1, SendToAddress);
 
         yield return new WaitUntil(() => transferErc1155.IsCompleted);
         
-        Assert.AreEqual(transferErc1155.Result, "");
+        yield return new WaitUntil(() => transferErc1155.IsCompletedSuccessfully);
+        
+        Assert.AreEqual(transferErc1155.Result, string.Empty);
     }
 }
