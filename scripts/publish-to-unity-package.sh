@@ -16,12 +16,12 @@ popd
 
 echo Moving files to Unity package...
 
-cd bin/release/netstandard2.1/publish
+pushd bin/release/netstandard2.1/publish
 rm Newtonsoft.Json.dll
 rm UnityEngine.dll
 mkdir -p ../../../../../../Packages/io.chainsafe.web3-unity/Runtime/Libraries
 rm -f ../../../../../../Packages/io.chainsafe.web3-unity/Runtime/Libraries/*
 cp *.dll ../../../../../../Packages/io.chainsafe.web3-unity/Runtime/Libraries
 popd
-
+popd
 echo Done
