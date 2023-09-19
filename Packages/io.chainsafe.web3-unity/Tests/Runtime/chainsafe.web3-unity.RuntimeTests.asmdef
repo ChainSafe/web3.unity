@@ -12,9 +12,9 @@
     "overrideReferences": true,
     "precompiledReferences": [
         "nunit.framework.dll",
-        "ChainSafe.GamingSDK.EVM.dll",
-        "ChainSafe.GamingSdk.EVM.Unity.dll",
-        "Microsoft.Extensions.DependencyInjection.Abstractions.dll"
+        "Microsoft.Extensions.DependencyInjection.Abstractions.dll",
+        "ChainSafe.Gaming.dll",
+        "ChainSafe.Gaming.Unity.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [

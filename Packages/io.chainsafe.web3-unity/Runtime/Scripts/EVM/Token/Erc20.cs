@@ -1,6 +1,6 @@
 using System.Numerics;
 using System.Threading.Tasks;
-using ChainSafe.GamingWeb3;
+using ChainSafe.Gaming.Web3;
 
 namespace Scripts.EVM.Token
 {

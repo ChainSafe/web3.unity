@@ -230,7 +230,7 @@
       "url": "https://packages.unity.com"
     },
     "io.chainsafe.web3-unity": {
-      "version": "file:../../UnityPackages/io.chainsafe.web3-unity",
+      "version": "file:../../../Packages/io.chainsafe.web3-unity",
       "depth": 0,
       "source": "local",
       "dependencies": {
@@ -238,7 +238,7 @@
       }
     },
     "io.chainsafe.web3-unity.web3auth": {
-      "version": "file:../../UnityPackages/io.chainsafe.web3-unity.web3auth",
+      "version": "file:../../../Packages/io.chainsafe.web3-unity.web3auth",
       "depth": 0,
       "source": "local",
       "dependencies": {
