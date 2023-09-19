@@ -1,10 +1,12 @@
+using ChainSafe.Gaming.Web3.Analytics;
+
 namespace ChainSafe.Gaming.Web3.Analytics
 {
     public class NoOpAnalyticsClient : IAnalyticsClient
     {
         public void CaptureEvent(AnalyticsEvent eventData)
         {
-            // ignore
+            // ignore everything. analytics is disabled
         }
     }
 }

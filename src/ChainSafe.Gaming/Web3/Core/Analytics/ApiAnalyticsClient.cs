@@ -1,4 +1,5 @@
 using ChainSafe.Gaming.Web3.Environment;
+using Newtonsoft.Json;
 
 namespace ChainSafe.Gaming.Web3.Analytics
 {
@@ -19,13 +20,11 @@ namespace ChainSafe.Gaming.Web3.Analytics
 
         public async void CaptureEvent(AnalyticsEvent eventData)
         {
-            eventData.ProjectId = projectConfig.ProjectId;
+            eventData.ProjectId ??= projectConfig.ProjectId;
             eventData.ChainId ??= chainConfig.Chain;
-            eventData.Rpc ??= chainConfig.Rpc;
+            eventData.Network ??= chainConfig.Network;
 
-            var data = $"chain={eventData.ChainId}&network={eventData.Rpc}&gameData={eventData}";
-
-            await httpClient.PostRaw(LoggingUrl, data, "application/x-www-form-urlencoded");
+            await httpClient.PostRaw(LoggingUrl, JsonConvert.SerializeObject(eventData), "application/json");
         }
     }
 }

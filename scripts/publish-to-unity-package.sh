@@ -1,8 +1,8 @@
 #! /usr/bin/env sh
-
 set -e
 
 echo Building project...
+pushd src/ChainSafe.Gaming.Unity
 
 rm -rf obj
 rm -rf bin
@@ -22,5 +22,6 @@ rm UnityEngine.dll
 mkdir -p ../../../../../../Packages/io.chainsafe.web3-unity/Runtime/Libraries
 rm -f ../../../../../../Packages/io.chainsafe.web3-unity/Runtime/Libraries/*
 cp *.dll ../../../../../../Packages/io.chainsafe.web3-unity/Runtime/Libraries
+popd
 
 echo Done
