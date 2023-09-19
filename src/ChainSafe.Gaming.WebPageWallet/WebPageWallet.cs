@@ -32,17 +32,17 @@ namespace ChainSafe.Gaming.Wallets
 
         private string? address;
 
-        public WebPageWallet(
-            IRpcProvider provider,
-            WebPageWalletConfig configuration,
-            IOperatingSystemMediator operatingSystem,
-            IChainConfig chainConfig)
+        public WebPageWallet(IRpcProvider provider, WebPageWalletConfig configuration, IOperatingSystemMediator operatingSystem, IChainConfig chainConfig)
         {
             this.provider = provider;
             this.operatingSystem = operatingSystem;
             this.chainConfig = chainConfig;
             this.configuration = configuration;
         }
+
+        public static bool Testing { get; set; } = false;
+
+        public static string TestResponse { get; set; } = string.Empty;
 
         public async ValueTask WillStartAsync()
         {
@@ -171,30 +171,38 @@ namespace ChainSafe.Gaming.Wallets
         // TODO: extract hash from deeplink instead of clipboard
         private async Task<string> OpenPageWaitResponse(string pageUrl, Func<string, bool> validator)
         {
-            operatingSystem.OpenUrl(pageUrl);
-            operatingSystem.ClipboardContent = string.Empty;
+            string response;
 
-            var updateDelay = GetUpdatePeriodSafe();
-            while (string.IsNullOrEmpty(operatingSystem.ClipboardContent))
+            if (Testing)
             {
-                await Task.Delay(updateDelay);
+                response = TestResponse;
+            }
+            else
+            {
+                operatingSystem.OpenUrl(pageUrl);
+                operatingSystem.ClipboardContent = string.Empty;
+
+                var updateDelay = GetUpdatePeriodSafe();
+                while (string.IsNullOrEmpty(operatingSystem.ClipboardContent))
+                {
+                    await Task.Delay(updateDelay);
+                }
+
+                response = operatingSystem.ClipboardContent!;
             }
 
-            var response = operatingSystem.ClipboardContent!;
             var validResponse = validator(response);
             if (!validResponse)
             {
                 throw new Web3Exception("Incorrect response format extracted from clipboard.");
             }
 
-            return response;
-
             int GetUpdatePeriodSafe()
             {
-                return (int)Math.Max(
-                    MinClipboardCheckPeriod.TotalMilliseconds,
-                    configuration.ClipboardCheckPeriod.TotalMilliseconds);
+                return (int)Math.Max(MinClipboardCheckPeriod.TotalMilliseconds, configuration.ClipboardCheckPeriod.TotalMilliseconds);
             }
+
+            return response;
         }
 
         private async Task<string> GetAccountVerifyUserOwns()
@@ -205,7 +213,7 @@ namespace ChainSafe.Gaming.Wallets
             var signature = await SignMessage(message);
             var publicAddress = ExtractPublicAddress(signature, message);
 
-            if (!Web3.Core.Debug.AddressExtensions.IsPublicAddress(publicAddress))
+            if (!AddressExtensions.IsPublicAddress(publicAddress))
             {
                 throw new Web3Exception(
                     $"Public address recovered from signature is not valid. Public address: {publicAddress}");
