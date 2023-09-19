@@ -20,6 +20,7 @@ namespace LootBoxes.Scene
         public OpenLootBoxUI openLootBoxUI;
         public PromptClaimRewardsUI promptClaimRewardsUI;
         public ViewRewardsUI viewRewardsUI;
+        public EmptyStateUI emptyStateUI;
         
         private ILootboxService lootBoxService;
         
