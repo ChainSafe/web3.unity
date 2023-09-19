@@ -1,14 +1,21 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using ChainSafe.Gaming.Chainlink.Lootboxes;
+using UnityEngine;
 
 namespace LootBoxes.Scene.States
 {
     public class SelectLootBoxesState : LootBoxSceneState
     {
+        private List<LootboxTypeInfo> availableLootBoxTypes;
+
         protected override async void OnLootBoxSceneStateEnter()
         {
             Context.selectLootBoxesUI.gameObject.SetActive(true);
 
             SetTypeAndAmountLabel();
+
+            availableLootBoxTypes = Context.LastFetchedLootBoxes.Where(info => info.Amount > 0).ToList();
             
             Context.selectLootBoxesUI.PrevTypeButton.onClick.AddListener(OnPrevTypeClick);
             Context.selectLootBoxesUI.NextTypeButton.onClick.AddListener(OnNextTypeClick);
@@ -53,6 +60,15 @@ namespace LootBoxes.Scene.States
             label.color = typeInfo.Color;
         }
 
+        private void ChangeLootBoxType(int delta)
+        {
+            var currentTypeIndex = availableLootBoxTypes.FindIndex(info => info.TypeId == Context.ActiveType);
+            var nextTypeIndex = (int)Mathf.Repeat(currentTypeIndex + delta, availableLootBoxTypes.Count);
+            var nextType = availableLootBoxTypes[nextTypeIndex].TypeId;
+            Context.ActiveType = nextType;
+            Context.animator.SetTrigger("LootBoxTypeChanged");
+        }
+
         private void OnNextLootBoxClick()
         {
             Context.stageFocus.FocusDelta(+1);
@@ -65,12 +81,12 @@ namespace LootBoxes.Scene.States
 
         private void OnNextTypeClick()
         {
-            throw new System.NotImplementedException();
+            ChangeLootBoxType(+1);
         }
 
         private void OnPrevTypeClick()
         {
-            throw new System.NotImplementedException();
+            ChangeLootBoxType(-1);
         }
 
         private void OnOpenSelectedClick()

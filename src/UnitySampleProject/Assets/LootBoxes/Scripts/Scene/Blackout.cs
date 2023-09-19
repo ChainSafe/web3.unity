@@ -40,19 +40,19 @@ namespace LootBoxes.Scene
             Alpha = FadeOutInitially ? 1f : 0f;
         }
 
-        public Task FadeOut()
+        public Task FadeOut(float timeScale = 1f)
         {
             CancelActiveTask();
-            return FadeTo(1f, activeTaskCancelSource.Token);
+            return FadeTo(1f, activeTaskCancelSource.Token, timeScale);
         }
 
-        public Task FadeIn()
+        public Task FadeIn(float timeScale = 1f)
         {
             CancelActiveTask();
-            return FadeTo(0f, activeTaskCancelSource.Token);
+            return FadeTo(0f, activeTaskCancelSource.Token, timeScale);
         }
 
-        private async Task FadeTo(float alpha, CancellationToken cancellationToken)
+        private async Task FadeTo(float alpha, CancellationToken cancellationToken, float timeScale)
         {
             while (Mathf.Abs(alpha - Alpha) > 0.01f)
             {
@@ -61,7 +61,7 @@ namespace LootBoxes.Scene
                     return;
                 }
 
-                Alpha = Mathf.Lerp(Alpha, alpha, Time.unscaledDeltaTime * Speed);
+                Alpha = Mathf.Lerp(Alpha, alpha, Time.unscaledDeltaTime * Speed * timeScale);
                 
                 await Task.Yield();
             }

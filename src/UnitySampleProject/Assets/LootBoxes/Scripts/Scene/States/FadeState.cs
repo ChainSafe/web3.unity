@@ -12,6 +12,7 @@ namespace LootBoxes.Scene.States
     public class FadeState : LootBoxSceneState
     {
         public FadeGoal Goal = FadeGoal.FadeIn;
+        public float timeScale = 1f;
         public bool Await = true;
         
         protected override async void OnLootBoxSceneStateEnter()
@@ -29,8 +30,8 @@ namespace LootBoxes.Scene.States
         {
             return Goal switch
             {
-                FadeGoal.FadeIn => Context.blackout.FadeIn(),
-                FadeGoal.FadeOut => Context.blackout.FadeOut(),
+                FadeGoal.FadeIn => Context.blackout.FadeIn(timeScale),
+                FadeGoal.FadeOut => Context.blackout.FadeOut(timeScale),
                 _ => throw new ArgumentOutOfRangeException(nameof(Goal), Goal, null)
             };
         }

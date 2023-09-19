@@ -19,7 +19,7 @@ namespace LootBoxes.Scene
             this.stage = stage;
         }
 
-        public void Focus(int index)
+        public void Focus(int index, bool immediately = false)
         {
             if (index < 0 || (index >= stage.StageItemCount && index != 0))
             {
@@ -27,19 +27,21 @@ namespace LootBoxes.Scene
             }
             
             FocusedItemIndex = index;
-            camera.LookAt(FocusedItemIndex);
+            
+            if (!immediately)
+            {
+                camera.LookAt(FocusedItemIndex);
+            }
+            else
+            {
+                camera.LookAtImmediately(FocusedItemIndex);
+            }
         }
 
         public void FocusDelta(int delta)
         {
             var focusIndex = Mathf.Clamp(FocusedItemIndex + delta, 0, stage.StageItemCount - 1);
             Focus(focusIndex);
-        }
-
-        public void FocusImmediately(int index)
-        {
-            // todo implement immediate
-            Focus(index);
         }
     }
 }

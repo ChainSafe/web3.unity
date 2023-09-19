@@ -10,6 +10,7 @@ namespace LootBoxes.Scene
         private Vector3 targetPosition;
         private Stage stage;
         private Quaternion targetRotation;
+        private new Transform transform;
 
         public void Configure(Stage stage)
         {
@@ -18,6 +19,7 @@ namespace LootBoxes.Scene
 
         private void Awake()
         {
+            transform = GetComponent<Transform>();
             targetPosition = transform.position;
             targetRotation = transform.rotation;
         }
@@ -44,6 +46,14 @@ namespace LootBoxes.Scene
             targetPosition = itemPosition + vector * distanceFromItem;
             targetPosition.y = transform.position.y;
             targetRotation = Quaternion.LookRotation(-vector);
+        }
+
+        public void LookAtImmediately(int stageItemIndex)
+        {
+            LookAt(stageItemIndex);
+            
+            transform.position = targetPosition;
+            transform.rotation = targetRotation;
         }
     }
 }

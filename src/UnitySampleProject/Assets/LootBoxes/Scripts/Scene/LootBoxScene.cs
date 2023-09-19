@@ -27,6 +27,7 @@ namespace LootBoxes.Scene
         public LootBoxStageItemFactory LootBoxStageItemFactory { get; private set; }
         public uint ActiveType { get; set; }
         public LootboxRewards LastClaimedRewards { get; set; }
+        public List<LootboxTypeInfo> LastFetchedLootBoxes { get; set; }
 
         public void Configure(ILootboxService lootBoxService)
         {

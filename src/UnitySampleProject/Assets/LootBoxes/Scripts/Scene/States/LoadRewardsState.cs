@@ -13,7 +13,7 @@
             }
             
             Context.stage.SetItems(stageItems);
-            Context.stageFocus.FocusImmediately(0);
+            Context.stageFocus.Focus(0, immediately: true);
             Context.animator.SetTrigger("RewardsLoaded");
         }
     }

@@ -11,8 +11,9 @@ namespace LootBoxes.Scene.States
         protected override async void OnLootBoxSceneStateEnter()
         {
             var stageItems = await SpawnStageItems();
+            Context.stage.Clear();
             Context.stage.SetItems(stageItems);
-            Context.stageFocus.FocusImmediately(0);
+            Context.stageFocus.Focus(0, immediately: true);
             Context.animator.SetTrigger("LootBoxesLoaded");
         }
 

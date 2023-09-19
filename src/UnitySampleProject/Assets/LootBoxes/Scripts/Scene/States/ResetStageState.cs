@@ -10,7 +10,7 @@ namespace LootBoxes.Scene.States
         {
             Context.stage.Clear();
             Context.LastClaimedRewards = null;
-            Context.stageFocus.FocusImmediately(0);
+            Context.stageFocus.Focus(0, immediately: true);
 
             if (await Context.CanClaimRewards())
             {
@@ -25,6 +25,7 @@ namespace LootBoxes.Scene.States
             }
             
             var lootBoxTypes = await Context.FetchAllLootBoxes();
+            Context.LastFetchedLootBoxes = lootBoxTypes;
             if (!lootBoxTypes.Any(info => info.Amount > 0))
             {
                 LaunchEmpty();
