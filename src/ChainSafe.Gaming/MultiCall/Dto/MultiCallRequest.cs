@@ -4,7 +4,7 @@ using Nethereum.Contracts.QueryHandlers.MultiCall;
 
 namespace ChainSafe.Gaming.MultiCall.Dto
 {
-    public class MultiCallRequest<TFunctionMessage, TFunctionOutput> : MulticallInputOutput<TFunctionMessage, TFunctionOutput>
+    public class MultiCallRequest<TFunctionMessage, TFunctionOutput> : MulticallInputOutput<TFunctionMessage, TFunctionOutput>, IMultiCallRequest
         where TFunctionMessage : FunctionMessage, new()
         where TFunctionOutput : IFunctionOutputDTO, new()
     {

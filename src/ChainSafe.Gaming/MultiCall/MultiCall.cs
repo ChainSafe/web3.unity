@@ -2,13 +2,12 @@
 using System.Threading.Tasks;
 using ChainSafe.Gaming.MultiCall.Dto;
 using ChainSafe.Gaming.Web3;
-using ChainSafe.Gaming.Web3.Core;
 using Nethereum.Contracts.QueryHandlers.MultiCall;
 using Org.BouncyCastle.Math;
 
 namespace ChainSafe.Gaming.MultiCall
 {
-     public class MultiCall : ILifecycleParticipant
+    public class MultiCall : IMultiCall
     {
         private readonly MultiQueryHandler handler;
 

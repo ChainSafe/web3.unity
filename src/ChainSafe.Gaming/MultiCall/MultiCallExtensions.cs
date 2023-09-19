@@ -11,6 +11,8 @@ namespace ChainSafe.Gaming.MultiCall
     {
         private static readonly MultiCallConfig DefaultConfig = new MultiCallConfig(null);
 
+        public static IMultiCall MultiCall(this Web3.Web3 web3) => web3.ServiceProvider.GetRequiredService<IMultiCall>();
+
         /// <summary>
         /// Binds implementation of MultiCall to Web3.
         /// </summary>
@@ -35,7 +37,7 @@ namespace ChainSafe.Gaming.MultiCall
             collection.TryAddSingleton(DefaultConfig);
 
             // wallet
-            collection.AddSingleton<ILifecycleParticipant, MultiCall>();
+            collection.AddSingleton<ILifecycleParticipant, IMultiCall, MultiCall>();
 
             return collection;
         }
