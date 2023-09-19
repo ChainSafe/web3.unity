@@ -12,9 +12,12 @@
     "overrideReferences": true,
     "precompiledReferences": [
         "nunit.framework.dll",
+        "Nethereum.Hex.dll",
         "Microsoft.Extensions.DependencyInjection.Abstractions.dll",
         "ChainSafe.Gaming.dll",
-        "ChainSafe.Gaming.Unity.dll"
+        "ChainSafe.Gaming.Unity.dll",
+        "ChainSafe.Gaming.WebPageWallet.dll",
+        "ChainSafe.Gaming.Gelato.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [
