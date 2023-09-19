@@ -11,6 +11,8 @@ namespace LootBoxes.Scene.States
         
         protected override async void OnLootBoxSceneStateEnter()
         {
+            Context.openLootBoxUI.gameObject.SetActive(true);
+            
             try
             {
                 await PollTillCanClaimReward(cancellationSource.Token);
@@ -25,6 +27,8 @@ namespace LootBoxes.Scene.States
 
         protected override void OnLootBoxSceneStateExit()
         {
+            Context.openLootBoxUI.gameObject.SetActive(false);
+            
             cancellationSource.Cancel();
         }
 

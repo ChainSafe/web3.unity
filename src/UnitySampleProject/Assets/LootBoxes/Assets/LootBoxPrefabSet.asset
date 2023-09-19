@@ -12,6 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b00190a30054c5593c194ae914efb3b, type: 3}
   m_Name: LootBoxPrefabSet
   m_EditorClassIdentifier: 
-  LootBoxPrefabByTypeIdList:
+  lootBoxPrefabByTypeIdList:
   - TypeId: 1
-    Prefab: {fileID: 3353174814749227321, guid: d79c7fd2bf75f3a4ca3c804a7d6f5229, type: 3}
+    Name: Common Loot Box
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    StageItemPrefab: {fileID: 3353174814749227321, guid: d79c7fd2bf75f3a4ca3c804a7d6f5229, type: 3}
+  - TypeId: 2
+    Name: Uncommon Loot Box
+    Color: {r: 0.7372549, g: 0.7372549, b: 0.7372549, a: 1}
+    StageItemPrefab: {fileID: 3353174814749227321, guid: d79c7fd2bf75f3a4ca3c804a7d6f5229, type: 3}
+  - TypeId: 3
+    Name: Rare Loot Box
+    Color: {r: 0.64705884, g: 0.6627451, b: 1, a: 1}
+    StageItemPrefab: {fileID: 3353174814749227321, guid: d79c7fd2bf75f3a4ca3c804a7d6f5229, type: 3}
+  - TypeId: 4
+    Name: Epic Loot Box
+    Color: {r: 0.9843137, g: 0.64705884, b: 1, a: 1}
+    StageItemPrefab: {fileID: 3353174814749227321, guid: d79c7fd2bf75f3a4ca3c804a7d6f5229, type: 3}
+  - TypeId: 5
+    Name: Legendary Loot Box
+    Color: {r: 1, g: 0.9019608, b: 0.31764707, a: 1}
+    StageItemPrefab: {fileID: 3353174814749227321, guid: d79c7fd2bf75f3a4ca3c804a7d6f5229, type: 3}

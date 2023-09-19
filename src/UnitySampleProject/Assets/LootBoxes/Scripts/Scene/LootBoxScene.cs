@@ -12,24 +12,26 @@ namespace LootBoxes.Scene
         public Stage stage;
         public StageCamera stageCamera;
         public StageFocus stageFocus;
-        public StageItemPrefabSet prefabSet;
+        public LootBoxesFrontEndDataSet frontEndDataSet;
         public Blackout blackout;
+        public RewardStageItemSpawner rewardSpawner;
         [Header("UI")]
         public SelectLootBoxesUI selectLootBoxesUI;
+        public OpenLootBoxUI openLootBoxUI;
         public PromptClaimRewardsUI promptClaimRewardsUI;
+        public ViewRewardsUI viewRewardsUI;
         
-        private StageItemFactory stageItemFactory;
         private ILootboxService lootBoxService;
         
+        public LootBoxStageItemFactory LootBoxStageItemFactory { get; private set; }
         public uint ActiveType { get; set; }
         public LootboxRewards LastClaimedRewards { get; set; }
 
         public void Configure(ILootboxService lootBoxService)
         {
             this.lootBoxService = lootBoxService;
-            stageItemFactory = new StageItemFactory();
+            LootBoxStageItemFactory = new LootBoxStageItemFactory();
             
-            stage.Configure(stageItemFactory);
             stageCamera.Configure(stage);
             stageFocus.Configure(stage, stageCamera);
         }

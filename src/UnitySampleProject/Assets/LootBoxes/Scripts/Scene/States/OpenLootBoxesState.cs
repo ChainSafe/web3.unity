@@ -16,7 +16,7 @@ namespace LootBoxes.Scene.States
             var amountToOpen = (uint) Context.stage.StageItems.Count(item => item.LootBox.Selected);
             await Context.OpenLootBoxes(Context.ActiveType, amountToOpen);
             
-            Context.animator.SetTrigger("Next");
+            Context.animator.SetTrigger("LootBoxesOpenInitiated");
 
             int GetStageItemToFocus()
             {
@@ -43,7 +43,7 @@ namespace LootBoxes.Scene.States
                 var itemsToOpen = Context.stage.StageItems.Where(item => item.LootBox.Selected);
                 foreach (var itemToOpen in itemsToOpen)
                 {
-                    itemToOpen.LootBox.PlayOpenInitiated();
+                    itemToOpen.LootBox.PlayOpening();
                 }
             }
         }

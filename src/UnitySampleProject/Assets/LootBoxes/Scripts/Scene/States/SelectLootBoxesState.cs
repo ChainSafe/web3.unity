@@ -4,9 +4,11 @@ namespace LootBoxes.Scene.States
 {
     public class SelectLootBoxesState : LootBoxSceneState
     {
-        protected override void OnLootBoxSceneStateEnter()
+        protected override async void OnLootBoxSceneStateEnter()
         {
             Context.selectLootBoxesUI.gameObject.SetActive(true);
+
+            SetTypeAndAmountLabel();
             
             Context.selectLootBoxesUI.PrevTypeButton.onClick.AddListener(OnPrevTypeClick);
             Context.selectLootBoxesUI.NextTypeButton.onClick.AddListener(OnNextTypeClick);
@@ -34,6 +36,21 @@ namespace LootBoxes.Scene.States
             {
                 stageItem.LootBox.Clicked -= OnLootBoxClicked;
             }
+        }
+
+        protected override void OnLootBoxSceneStateUpdate()
+        {
+            // todo use keyboard input 
+        }
+
+        private async void SetTypeAndAmountLabel()
+        {
+            var typeInfo = Context.frontEndDataSet.GetLootBoxTypeInfo(Context.ActiveType);
+            var amount = await Context.GetBalance(Context.ActiveType);
+            var label = Context.selectLootBoxesUI.LootBoxTypeAndAmount;
+            label.text = string.Empty;
+            label.text = $"({amount}) {typeInfo.Name}";
+            label.color = typeInfo.Color;
         }
 
         private void OnNextLootBoxClick()

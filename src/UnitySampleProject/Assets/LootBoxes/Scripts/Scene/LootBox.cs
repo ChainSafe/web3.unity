@@ -20,11 +20,10 @@ namespace LootBoxes.Scene
             }
         }
 
-        public void PlayOpenInitiated() => animator.SetBool("Openning", true);
-
-        public void PlayClaimingRewards() => animator.SetBool("ClaimingRewards", true);
-
+        public void PlayOpening() => animator.SetTrigger("Opening");
+        public void PlayClaimingRewards() => animator.SetTrigger("ClaimingRewards");
         public void PlayDisintegrate() => animator.SetTrigger("Disintegrate");
+        public void PlayCanBeClaimed() => animator.SetTrigger("CanBeClaimed");
 
         public void OnClick()
         {

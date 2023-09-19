@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using LootBoxes.Scene.StageItems;
 using UnityEngine;
 
@@ -8,22 +7,18 @@ namespace LootBoxes.Scene
     public class Stage : MonoBehaviour
     {
         public float radius = 10;
-        public int maxItems = 10;
+        [SerializeField] private int maxItems = 10;
         
-        private StageItemFactory factory;
         private List<StageItem> stageItems;
-        
+        private int? tempMaxItems;
+
+        public int CurrentMaxItems => tempMaxItems ?? maxItems;
         public int StageItemCount => stageItems?.Count ?? 0;
         public IReadOnlyCollection<StageItem> StageItems => stageItems?.AsReadOnly();
 
-        public void Configure(StageItemFactory factory)
-        {
-            this.factory = factory;
-        }
-
         public Vector3 GetStagePosition(int index)
         {
-            var rotation = Quaternion.AngleAxis(-1 * index * 360f / maxItems, Vector3.up);
+            var rotation = Quaternion.AngleAxis(-1 * index * 360f / CurrentMaxItems, Vector3.up);
             return transform.position + rotation * new Vector3(0, 0, -radius);
         }
 
@@ -31,23 +26,26 @@ namespace LootBoxes.Scene
         {
             return (GetStagePosition(index) - transform.position).normalized;
         }
-        
-        public void SpawnItems(StageItem prefab, uint amount)
+
+        public void SetItems(List<StageItem> items)
         {
             if (stageItems != null)
             {
                 throw new LootBoxSceneException("Stage items should be cleared first.");
             }
-            
-            var itemCount = Mathf.Min((int)amount, maxItems);
-            stageItems = Enumerable.Range(0, itemCount)
-                .Select(index =>
-                {
-                    var position = GetStagePosition(index);
-                    var rotation = Quaternion.LookRotation(GetStageVector(index));
-                    return factory.Create(prefab, index, position, rotation, transform);
-                })
-                .ToList();
+
+            stageItems = items;
+
+            for (var index = 0; index < items.Count; index++)
+            {
+                var item = items[index];
+                var position = GetStagePosition(index);
+                var rotation = Quaternion.LookRotation(GetStageVector(index));
+                var itemTransform = item.transform;
+                itemTransform.parent = transform;
+                itemTransform.position = position;
+                itemTransform.rotation = rotation;
+            }
         }
         
         public void Clear()
@@ -59,10 +57,20 @@ namespace LootBoxes.Scene
             
             foreach (var stageItem in stageItems)
             {
-                Destroy(stageItem);
+                Destroy(stageItem.gameObject);
             }
 
             stageItems = null;
+        }
+
+        public void SetTempMaxItems(int tempMaxItems)
+        {
+            this.tempMaxItems = tempMaxItems;
+        }
+
+        public void ResetTempMaxItems()
+        {
+            this.tempMaxItems = null;
         }
     }
 }

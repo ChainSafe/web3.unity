@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace LootBoxes.Scene
@@ -10,5 +11,6 @@ namespace LootBoxes.Scene
         public Button PrevLootBoxButton;
         public Button NextLootBoxButton;
         public Button OpenSelectedButton;
+        public TMP_Text LootBoxTypeAndAmount;
     }
 }
