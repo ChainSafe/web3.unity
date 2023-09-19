@@ -6,6 +6,7 @@ namespace LootBoxes.Scene
     public class LootBox : MonoBehaviour
     {
         public Animator animator;
+        public ParticleSystem claimedFx;
         
         private bool _selected;
         public event Action<LootBox> Clicked;
@@ -16,14 +17,28 @@ namespace LootBoxes.Scene
             set
             {
                 _selected = value;
-                animator.SetBool("Selected", _selected);
+                animator.SetBool("Float", _selected);
             }
         }
 
-        public void PlayOpening() => animator.SetTrigger("Opening");
-        public void PlayClaimingRewards() => animator.SetTrigger("ClaimingRewards");
+        public void PlayOpening()
+        {
+            animator.SetTrigger("Opening");
+            animator.SetBool("Float", true);
+        }
+        
+        public void PlayReadyToBeClaimed()
+        {
+            animator.SetTrigger("ReadyToBeClaimed");
+            animator.SetBool("Float", true);
+        }
+
+        public void PlayClaimingRewards()
+        {
+            claimedFx.Play();
+        }
+
         public void PlayDisintegrate() => animator.SetTrigger("Disintegrate");
-        public void PlayCanBeClaimed() => animator.SetTrigger("CanBeClaimed");
 
         public void OnClick()
         {

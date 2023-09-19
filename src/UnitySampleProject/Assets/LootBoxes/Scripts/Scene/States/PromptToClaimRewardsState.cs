@@ -11,7 +11,7 @@ namespace LootBoxes.Scene.States
             Context.promptClaimRewardsUI.gameObject.SetActive(true);
             
             focusedItem = Context.stageFocus.FocusedItem;
-            focusedItem.LootBox.PlayCanBeClaimed();
+            focusedItem.LootBox.PlayReadyToBeClaimed();
             
             focusedItem.LootBox.Clicked += OnLootBoxClicked;
         }
