@@ -124,7 +124,7 @@ GameObject:
   - component: {fileID: 8389753719310394298}
   - component: {fileID: 3353174814749227321}
   m_Layer: 0
-  m_Name: LootBox Stage Item
+  m_Name: Common LootBox Stage Item
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
