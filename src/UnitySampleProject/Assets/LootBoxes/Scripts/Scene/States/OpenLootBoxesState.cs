@@ -20,7 +20,7 @@ namespace LootBoxes.Scene.States
 
             int GetStageItemToFocus()
             {
-                // nearest selected item to the focused one
+                // Nearest selected item to the focused one
                 return Context.stage.StageItems
                     .Select((item, index) => (item, index))
                     .Where(itemAndIndex => itemAndIndex.item.LootBox.Selected)
