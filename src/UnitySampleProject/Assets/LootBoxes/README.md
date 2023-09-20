@@ -15,3 +15,11 @@
 3. Open 'Assets\LootBoxes\LootBoxes.unity' scene in UnityEditor.
 4. Hit Play.
 5. Enjoy!
+
+### Opening lootboxes
+
+After you've sent an open request from Unity scene, you have to manually
+open those lootboxes on the hardhat side. You can do this by calling:
+```shell
+npm run hardhat -- fulfill
+```
