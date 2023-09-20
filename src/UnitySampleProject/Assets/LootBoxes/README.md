@@ -15,15 +15,3 @@
 3. Open 'Assets\LootBoxes\LootBoxes.unity' scene in UnityEditor.
 4. Hit Play.
 5. Enjoy!
-
-### Adding lootboxes of different type
-
-By default 'devsetup' script will only add lootboxes of one type.
-In 'vrf-lootbox-contracts' project add this to file 'hardhat.config.js', task('devsetup'..) to
-add more lootboxes of different types:
-```ts
-await hre.run('mint', { tokenid: 2, amount: 4 });
-await hre.run('mint', { tokenid: 3, amount: 3 });
-await hre.run('mint', { tokenid: 4, amount: 2 });
-await hre.run('mint', { tokenid: 5, amount: 1 });
-```
