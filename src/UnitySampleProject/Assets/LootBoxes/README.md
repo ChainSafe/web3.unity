@@ -23,3 +23,9 @@ open those lootboxes on the hardhat side. You can do this by calling:
 ```shell
 npm run hardhat -- fulfill
 ```
+
+### Keyboard
+
+- You can use WASD/Arrows to move around.
+- Space to Select/Deselect
+- Enter/Return to open selected.

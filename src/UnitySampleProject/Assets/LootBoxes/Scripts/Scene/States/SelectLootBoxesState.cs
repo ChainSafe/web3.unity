@@ -9,7 +9,7 @@ namespace LootBoxes.Scene.States
     {
         private List<LootboxTypeInfo> availableLootBoxTypes;
 
-        protected override async void OnLootBoxSceneStateEnter()
+        protected override void OnLootBoxSceneStateEnter()
         {
             Context.selectLootBoxesUI.gameObject.SetActive(true);
 
@@ -47,7 +47,36 @@ namespace LootBoxes.Scene.States
 
         protected override void OnLootBoxSceneStateUpdate()
         {
-            // todo use keyboard input 
+            if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                Context.stageFocus.FocusDelta(-1);
+            }
+            
+            if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                Context.stageFocus.FocusDelta(+1);
+            }
+            
+            if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                ChangeLootBoxType(-1);
+            }
+            
+            if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                ChangeLootBoxType(+1);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                var focusedLootBox = Context.stageFocus.FocusedItem.LootBox;
+                focusedLootBox.Selected = !focusedLootBox.Selected;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                OpenSelectedLootBoxes();
+            }
         }
 
         private async void SetTypeAndAmountLabel()
@@ -67,6 +96,16 @@ namespace LootBoxes.Scene.States
             var nextType = availableLootBoxTypes[nextTypeIndex].TypeId;
             Context.ActiveType = nextType;
             Context.animator.SetTrigger("LootBoxTypeChanged");
+        }
+
+        private void OpenSelectedLootBoxes()
+        {
+            if (!Context.stage.StageItems.Any(item => item.LootBox.Selected))
+            {
+                return;
+            }
+
+            Context.animator.SetTrigger("OpenLootboxes");
         }
 
         private void OnNextLootBoxClick()
@@ -91,12 +130,7 @@ namespace LootBoxes.Scene.States
 
         private void OnOpenSelectedClick()
         {
-            if (!Context.stage.StageItems.Any(item => item.LootBox.Selected))
-            {
-                return;
-            }
-            
-            Context.animator.SetTrigger("OpenLootboxes");
+            OpenSelectedLootBoxes();
         }
 
         private void OnLootBoxClicked(LootBox lootBox)
