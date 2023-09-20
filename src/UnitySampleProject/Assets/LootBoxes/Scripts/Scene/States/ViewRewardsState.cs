@@ -1,4 +1,6 @@
-﻿namespace LootBoxes.Scene.States
+﻿using UnityEngine;
+
+namespace LootBoxes.Scene.States
 {
     public class ViewRewardsState : LootBoxSceneState
     {
@@ -23,7 +25,25 @@
 
         protected override void OnLootBoxSceneStateUpdate()
         {
-            // todo use keyboard input 
+            if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                Context.stageFocus.FocusDelta(-1);
+            }
+            
+            if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                Context.stageFocus.FocusDelta(+1);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                Continue();
+            }
+        }
+
+        private void Continue()
+        {
+            Context.animator.SetTrigger("FinishedViewingRewards");
         }
 
         private void OnPrevRewardClick()
@@ -38,7 +58,7 @@
 
         private void OnContinueClick()
         {
-            Context.animator.SetTrigger("FinishedViewingRewards");
+            Continue();
         }
     }
 }

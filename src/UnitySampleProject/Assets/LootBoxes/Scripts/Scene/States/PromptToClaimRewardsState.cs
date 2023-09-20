@@ -1,4 +1,6 @@
-﻿using LootBoxes.Scene.StageItems;
+﻿using System.Threading.Tasks;
+using LootBoxes.Scene.StageItems;
+using UnityEngine;
 
 namespace LootBoxes.Scene.States
 {
@@ -23,12 +25,25 @@ namespace LootBoxes.Scene.States
             focusedItem.LootBox.Clicked -= OnLootBoxClicked;
         }
 
-        private async void OnLootBoxClicked(LootBox lootBox)
+        protected override async void OnLootBoxSceneStateUpdate()
+        {
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                await ClaimRewards();
+            }
+        }
+
+        private async Task ClaimRewards()
         {
             focusedItem.LootBox.PlayClaimingRewards();
             Context.LastClaimedRewards = await Context.ClaimRewards();
             focusedItem.LootBox.PlayDisintegrate();
             Context.animator.SetTrigger("ClaimedRewards");
+        }
+
+        private async void OnLootBoxClicked(LootBox lootBox)
+        {
+            await ClaimRewards();
         }
     }
 }
