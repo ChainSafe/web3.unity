@@ -1,9 +1,9 @@
 ﻿using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.MultiCall.Dto;
 using ChainSafe.Gaming.Web3;
 using Nethereum.Contracts.QueryHandlers.MultiCall;
-using Org.BouncyCastle.Math;
 
 namespace ChainSafe.Gaming.MultiCall
 {

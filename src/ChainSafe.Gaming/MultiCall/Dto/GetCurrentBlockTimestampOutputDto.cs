@@ -1,5 +1,5 @@
-﻿using Nethereum.ABI.FunctionEncoding.Attributes;
-using Org.BouncyCastle.Math;
+﻿using System.Numerics;
+using Nethereum.ABI.FunctionEncoding.Attributes;
 
 namespace ChainSafe.Gaming.MultiCall.Dto
 {

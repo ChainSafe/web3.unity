@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Numerics;
+using System.Threading.Tasks;
 using ChainSafe.Gaming.MultiCall.Dto;
 using ChainSafe.Gaming.Web3.Core;
-using Org.BouncyCastle.Math;
 
 namespace ChainSafe.Gaming.MultiCall
 {
