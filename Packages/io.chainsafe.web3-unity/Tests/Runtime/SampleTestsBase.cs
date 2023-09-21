@@ -13,7 +13,7 @@ using UnityEngine.TestTools;
 public class SampleTestsBase
 {
     protected Web3 Web3Result;
-    
+
     [UnitySetUp]
     public virtual IEnumerator Setup()
     {
@@ -27,7 +27,7 @@ public class SampleTestsBase
             projectConfigScriptableObject = ProjectConfigUtilities.Load("3dc3e125-71c4-4511-a367-e981a6a94371", "5",
                 "Ethereum", "Goerli", "Geth", "https://goerli.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f");
         }
-        
+
         var web3Builder = new Web3Builder(projectConfigScriptableObject).Configure(services =>
         {
             services.UseUnityEnvironment();
@@ -35,7 +35,7 @@ public class SampleTestsBase
             services.UseRpcProvider();
 
             services.UseWebPageWallet(new WebPageWalletConfig { SavedUserAddress = "0x55ffe9E30347266f02b9BdAe20aD3a86493289ea" });
-            
+
             //add any contracts we would want to use
             services.ConfigureRegisteredContracts(contracts =>
                 contracts.RegisterContract(
@@ -50,7 +50,7 @@ public class SampleTestsBase
         yield return new WaitUntil(() => buildWeb3.IsCompleted);
 
         Web3Result = buildWeb3.Result;
-        
+
         WebPageWallet.Testing = true;
     }
 
