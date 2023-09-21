@@ -590,7 +590,6 @@ GameObject:
   - component: {fileID: 607972695}
   - component: {fileID: 607972694}
   - component: {fileID: 607972696}
-  - component: {fileID: 607972697}
   m_Layer: 0
   m_Name: Logic
   m_TagString: Untagged
@@ -630,7 +629,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 842756475}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -652,25 +652,12 @@ MonoBehaviour:
   stageFocus: {fileID: 1875656413}
   frontEndDataSet: {fileID: 11400000, guid: bda231b78de1ac64fb78fe7821c0bf12, type: 2}
   blackout: {fileID: 689737223}
-  rewardSpawner: {fileID: 607972697}
+  rewardSpawner: {fileID: 842756472}
   selectLootBoxesUI: {fileID: 3984737239998031813}
   openLootBoxUI: {fileID: 143767369}
   promptClaimRewardsUI: {fileID: 397736650}
   viewRewardsUI: {fileID: 1020177645}
   emptyStateUI: {fileID: 1821518033}
---- !u!114 &607972697
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 607972692}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3a4b30e690743f18e93ae3dcd3436c4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  StubStageItemPrefab: {fileID: 1976931092136923515, guid: 6503fed41c84a6d4e98ebafc9b6000b6, type: 3}
 --- !u!1 &689737222
 GameObject:
   m_ObjectHideFlags: 0
@@ -905,6 +892,97 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 708298109}
   m_CullTransparentMesh: 1
+--- !u!1 &842756471
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 842756475}
+  - component: {fileID: 842756472}
+  - component: {fileID: 842756474}
+  - component: {fileID: 842756473}
+  - component: {fileID: 842756476}
+  m_Layer: 0
+  m_Name: Rewards
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &842756472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 842756471}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3a4b30e690743f18e93ae3dcd3436c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Erc20Factory: {fileID: 842756474}
+  Erc1155Factory: {fileID: 842756473}
+  Erc1155NftFactory: {fileID: 842756476}
+  StubStageItemPrefab: {fileID: 1976931092136923515, guid: 6503fed41c84a6d4e98ebafc9b6000b6, type: 3}
+--- !u!114 &842756473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 842756471}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8387940b09ae4e01a16dfadd8e93528c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CoinRewardItemPrefab: {fileID: 2154324449731940736, guid: f21d61aebdae3694b8235c07066ac1b4, type: 3}
+--- !u!114 &842756474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 842756471}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4227467531de4fc291ec92b7a9215315, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CoinRewardItemPrefab: {fileID: 2154324449731940736, guid: f21d61aebdae3694b8235c07066ac1b4, type: 3}
+  AmountDigits: 2
+--- !u!4 &842756475
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 842756471}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 607972695}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &842756476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 842756471}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26f45fea0ded405aa0fb1a6dbab56357, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NftRewardItemPrefab: {fileID: 1882221419699851061, guid: f3f9e2ff9d587a9489ab9e589eada501, type: 3}
 --- !u!1 &906961042
 GameObject:
   m_ObjectHideFlags: 0

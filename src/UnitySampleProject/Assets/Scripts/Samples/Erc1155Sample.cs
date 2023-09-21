@@ -4,6 +4,7 @@ using System.Net;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using ChainSafe.GamingSDK.EVM.Web3.Core.Extensions;
 using ChainSafe.GamingWeb3;
 using Newtonsoft.Json;
 using Scripts.EVM.Remote;
@@ -57,8 +58,7 @@ namespace Web3Unity.Scripts.Prefabs
             var metaData = await DownloadMetaData();
 
             // unpack image URI if IPFS
-            var imageUri = metaData.ImageUri;
-            imageUri = UnpackUriIfIpfs(imageUri);
+            var imageUri = metaData.ImageUri.UnpackIfIpfs();
 
             // download texture
             var texture = await DownloadTexture(imageUri);
@@ -73,14 +73,6 @@ namespace Web3Unity.Scripts.Prefabs
                 var json = Encoding.UTF8.GetString(request.downloadHandler.data);
                 var data = JsonConvert.DeserializeObject<NftMetaDataSample>(json);
                 return data;
-            }
-
-            string UnpackUriIfIpfs(string originalUri)
-            {
-                if (!originalUri.StartsWith("ipfs://"))
-                    return originalUri;
-
-                return originalUri.Replace("ipfs://", "https://ipfs.io/ipfs/");
             }
 
             async Task<Texture2D> DownloadTexture(string textureUri)

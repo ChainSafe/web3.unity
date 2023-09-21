@@ -2,11 +2,11 @@
 {
     public class LoadRewardsState : LootBoxSceneState
     {
-        protected override void OnLootBoxSceneStateEnter()
+        protected override async void OnLootBoxSceneStateEnter()
         {
             Context.stage.Clear();
             
-            var stageItems = Context.rewardSpawner.Spawn(Context.LastClaimedRewards);
+            var stageItems = await Context.rewardSpawner.Spawn(Context.LastClaimedRewards);
             if (stageItems.Count > Context.stage.CurrentMaxItems)
             {
                 Context.stage.SetTempMaxItems(stageItems.Count);

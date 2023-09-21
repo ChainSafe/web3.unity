@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Chainlink.Lootboxes;
 using LootBoxes.Scene.StageItems;
 using UnityEngine;
+using Web3Unity.Scripts.Library.Ethers.Contracts;
+using Web3Unity.Scripts.Library.Ethers.Providers;
 
 namespace LootBoxes.Scene
 {
@@ -29,13 +31,15 @@ namespace LootBoxes.Scene
         public LootboxRewards LastClaimedRewards { get; set; }
         public List<LootboxTypeInfo> LastFetchedLootBoxes { get; set; }
 
-        public void Configure(ILootboxService lootBoxService)
+        public void Configure(ILootboxService lootBoxService, IContractBuilder contractBuilder,
+            Erc1155MetaDataReader erc1155MetaDataReader)
         {
             this.lootBoxService = lootBoxService;
             LootBoxStageItemFactory = new LootBoxStageItemFactory();
             
             stageCamera.Configure(stage);
             stageFocus.Configure(stage, stageCamera);
+            rewardSpawner.Configure(contractBuilder, erc1155MetaDataReader);
         }
 
         public void Launch() => animator.SetTrigger("Launch");

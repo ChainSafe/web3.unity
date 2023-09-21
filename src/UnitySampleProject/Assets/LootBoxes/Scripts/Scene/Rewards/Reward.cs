@@ -2,8 +2,7 @@
 
 namespace LootBoxes.Scene
 {
-    public class Reward : MonoBehaviour
+    public abstract class Reward : MonoBehaviour
     {
-        
     }
 }

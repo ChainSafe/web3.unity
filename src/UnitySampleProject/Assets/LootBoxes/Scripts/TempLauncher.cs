@@ -5,11 +5,15 @@ using ChainSafe.GamingWeb3;
 using ChainSafe.GamingWeb3.Build;
 using ChainSafe.GamingWeb3.Unity;
 using LootBoxes.Scene;
+using Microsoft.Extensions.DependencyInjection;
 using UnityEngine;
 using Web3Unity.Scripts.Library.Ethers.JsonRpc;
 
 namespace LootBoxes
 {
+    /// <summary>
+    /// Initializes Web3 using local RPC node and node's user
+    /// </summary>
     public class TempLauncher : MonoBehaviour
     {
         public LootBoxScene lootBoxScene;
@@ -39,10 +43,15 @@ namespace LootBoxes
                         ContractAddress = "0x46E334e90454aDDF311Cd75D4Ae19e2fA06285Ff",
                         ContractAbi = ContractAbi
                     });
+                    services.AddSingleton<Erc1155MetaDataReader>();
                 })
                 .BuildAsync();
             
-            lootBoxScene.Configure(web3.Chainlink().Lootboxes());
+            lootBoxScene.Configure(
+                web3.Chainlink().Lootboxes(), 
+                web3.ContractBuilder,
+                web3.ServiceProvider.GetRequiredService<Erc1155MetaDataReader>());
+            
             lootBoxScene.Launch();
         }
     }
