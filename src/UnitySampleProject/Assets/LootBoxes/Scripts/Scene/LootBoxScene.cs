@@ -4,7 +4,6 @@ using ChainSafe.Gaming.Chainlink.Lootboxes;
 using LootBoxes.Scene.StageItems;
 using UnityEngine;
 using Web3Unity.Scripts.Library.Ethers.Contracts;
-using Web3Unity.Scripts.Library.Ethers.Providers;
 
 namespace LootBoxes.Scene
 {

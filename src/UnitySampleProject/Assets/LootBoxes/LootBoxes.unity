@@ -903,6 +903,7 @@ GameObject:
   - component: {fileID: 842756475}
   - component: {fileID: 842756472}
   - component: {fileID: 842756474}
+  - component: {fileID: 842756477}
   - component: {fileID: 842756473}
   - component: {fileID: 842756476}
   m_Layer: 0
@@ -925,9 +926,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Erc20Factory: {fileID: 842756474}
+  Erc721NftFactory: {fileID: 842756477}
   Erc1155Factory: {fileID: 842756473}
   Erc1155NftFactory: {fileID: 842756476}
-  StubStageItemPrefab: {fileID: 1976931092136923515, guid: 6503fed41c84a6d4e98ebafc9b6000b6, type: 3}
 --- !u!114 &842756473
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -980,6 +981,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 26f45fea0ded405aa0fb1a6dbab56357, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NftRewardItemPrefab: {fileID: 1882221419699851061, guid: f3f9e2ff9d587a9489ab9e589eada501, type: 3}
+--- !u!114 &842756477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 842756471}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0626b372320f484a871cc4219e42dfa3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   NftRewardItemPrefab: {fileID: 1882221419699851061, guid: f3f9e2ff9d587a9489ab9e589eada501, type: 3}
