@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LootBoxes.Scene.States
@@ -7,17 +8,18 @@ namespace LootBoxes.Scene.States
     {
         public float pollInterval = 1f;
 
-        private readonly CancellationTokenSource cancellationSource = new();
+        private CancellationTokenSource cancellationSource;
         
         protected override async void OnLootBoxSceneStateEnter()
         {
             Context.openLootBoxUI.gameObject.SetActive(true);
             
+            cancellationSource = new CancellationTokenSource();
             try
             {
                 await PollTillCanClaimReward(cancellationSource.Token);
             }
-            catch (TaskCanceledException)
+            catch (OperationCanceledException)
             {
                 return;
             }
