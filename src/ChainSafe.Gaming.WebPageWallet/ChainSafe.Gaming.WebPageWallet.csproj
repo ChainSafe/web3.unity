@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <PackageReference Include="Nethereum.ABI" Version="4.14.0" />
+    <PackageReference Include="WalletConnect.Web3Wallet" Version="2.1.0" />
   </ItemGroup>
 
   <ItemGroup>
