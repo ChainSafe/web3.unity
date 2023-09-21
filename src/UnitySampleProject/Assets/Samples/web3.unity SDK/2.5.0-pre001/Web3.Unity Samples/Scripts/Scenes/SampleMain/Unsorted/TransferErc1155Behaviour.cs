@@ -6,8 +6,8 @@ namespace Samples.Behaviours.Unsorted
     public class TransferErc1155Behaviour : SampleBehaviour
     {
         public string toAccount = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
-        public string contractAddress = "0xae283E79a5361CF1077bf2638a1A953c872AD973";
-        public int tokenId = 0;
+        public string contractAddress = "0xe793e17Ec93bEc809C5Ac6dd0d8b383446E65B78";
+        public int tokenId = 101;
         public int amount = 1;
 
         private UnsortedSample logic;
