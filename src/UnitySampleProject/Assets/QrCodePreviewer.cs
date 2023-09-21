@@ -16,9 +16,12 @@ public class QrCodePreviewer : MonoBehaviour
         
         _walletConnect.OnSessionApproved += session =>
         {
-            Debug.LogError(session.Peer.PublicKey);
+            MainThreadDispatcher.Instance.Invoke(delegate
+            {
+                Debug.LogError(session.Peer.PublicKey);
             
-            Debug.LogError(session.Self.PublicKey);
+                Debug.LogError(session.Self.PublicKey);
+            });
         };
     }
 }
