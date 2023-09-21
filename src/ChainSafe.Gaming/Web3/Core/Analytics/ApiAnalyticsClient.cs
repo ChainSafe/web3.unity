@@ -6,6 +6,7 @@ namespace ChainSafe.Gaming.Web3.Analytics
     public class ApiAnalyticsClient : IAnalyticsClient
     {
         private const string LoggingUrl = "https://api.gaming.chainsafe.io/logging/logEvent";
+        private const string AnalyticsVersion = "2.5";
 
         private readonly IProjectConfig projectConfig;
         private readonly IChainConfig chainConfig;
@@ -21,8 +22,9 @@ namespace ChainSafe.Gaming.Web3.Analytics
         public async void CaptureEvent(AnalyticsEvent eventData)
         {
             eventData.ProjectId ??= projectConfig.ProjectId;
-            eventData.ChainId ??= chainConfig.Chain;
+            eventData.ChainId ??= chainConfig.ChainId;
             eventData.Network ??= chainConfig.Network;
+            eventData.Version ??= AnalyticsVersion;
 
             await httpClient.PostRaw(LoggingUrl, JsonConvert.SerializeObject(eventData), "application/json");
         }
