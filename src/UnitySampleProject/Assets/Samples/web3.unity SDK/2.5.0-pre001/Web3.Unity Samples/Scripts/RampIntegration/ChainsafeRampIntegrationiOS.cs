@@ -22,7 +22,7 @@ namespace ChainSafe.GamingSdk.RampIntegration
                 _rampData.FiatCurrency, _rampData.FiatValue, _rampData.UserAddress, _rampData.HostLogoUrl,
                 _rampData.HostAppName, _rampData.UserEmailAddress, _rampData.SelectedCountryCode,
                 _rampData.DefaultAsset, _rampData.Url, _rampData.WebhookStatusUrl, _rampData.FinalUrl,
-                _rampData.ContainerNode, _rampData.HostApiKey, _rampData.UseSendCryptoCallbackVersion ? 1 : 0);      
+                _rampData.ContainerNode, _rampData.HostApiKey, _rampData.UseSendCryptoCallbackVersion ? 1 : 0);
         }
     }
 }

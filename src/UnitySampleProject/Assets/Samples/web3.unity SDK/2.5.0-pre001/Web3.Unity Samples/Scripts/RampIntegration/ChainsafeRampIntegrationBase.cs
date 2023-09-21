@@ -10,7 +10,7 @@ namespace ChainSafe.GamingSdk.RampIntegration
         {
             _rampData = rampData;
         }
-        
+
         public abstract void OpenRamp();
     }
 }
