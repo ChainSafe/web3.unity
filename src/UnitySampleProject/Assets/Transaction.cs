@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Numerics;
 using Newtonsoft.Json;
 using UnityEngine.Scripting;
 using WalletConnectSharp.Common.Utils;
@@ -35,5 +36,20 @@ public class EthSendTransaction : List<Transaction>
     [Preserve] //Needed for JSON.NET serialization
     public EthSendTransaction()
     {
+    }
+}
+
+[RpcMethod("personal_sign"), RpcRequestOptions(Clock.ONE_MINUTE, 99998)]
+public class EthSignMessage : List<string>
+{
+    public EthSignMessage(string message, string address) : base(new string[]{message, address})
+    {
+        
+    }
+
+    [Preserve] //Needed for JSON.NET serialization
+    public EthSignMessage()
+    {
+        
     }
 }

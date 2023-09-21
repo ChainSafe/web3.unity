@@ -7,12 +7,23 @@ using UnityEngine;
 using WalletConnectSharp.Common.Utils;
 using WalletConnectSharp.Network.Models;
 using WalletConnectSharp.Sign.Models;
+using WalletConnectSharp.Sign.Models.Engine;
 
 public class WalletConnectSigner : MonoBehaviour
 {
     [SerializeField] private WalletConnectUnity _walletConnect;
+
+    private ConnectedData _cachedConnectedData;
     
-    public async void SendSignRequest()
+    private void Start()
+    {
+        _walletConnect.OnConnected += data =>
+        {
+            _cachedConnectedData = data;
+        };
+    }
+
+    public async void SendTransaction(string to, string value)
     {
         var (session, address, chainId) = GetCurrentAddress();
         if (string.IsNullOrWhiteSpace(address))
@@ -21,16 +32,33 @@ public class WalletConnectSigner : MonoBehaviour
         var request = new EthSendTransaction(new Transaction()
         {
             From = address,
-            To = address,
-            Value = "0"
+            To = to,
+            Value = value
         });
-
+        
         var result =
             await _walletConnect.SignClient.Request<EthSendTransaction, string>(session.Topic, request, chainId);
         
         MainThreadDispatcher.Instance.Invoke(delegate
         {
-            Debug.LogError("Got result from request: " + result);
+            Debug.Log($"eth_sendTransaction result: {result}");
+        });
+    }
+    
+    public async void SignMessage(string message)
+    {
+        var (session, address, chainId) = GetCurrentAddress();
+        if (string.IsNullOrWhiteSpace(address))
+            return;
+        
+        var request = new EthSignMessage(message, address);
+        
+        var result =
+            await _walletConnect.SignClient.Request<EthSignMessage, string>(session.Topic, request, chainId);
+        
+        MainThreadDispatcher.Instance.Invoke(delegate
+        {
+            Debug.Log($"personal_sign result: {result}");
         });
     }
     
@@ -61,7 +89,7 @@ public class WalletConnectSigner : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.S))
         {
-            SendSignRequest();
+            SignMessage("message to sign");
         }
     }
 }

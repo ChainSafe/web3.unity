@@ -308,6 +308,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1258762729}
   - component: {fileID: 1258762730}
+  - component: {fileID: 1258762731}
   m_Layer: 0
   m_Name: WCTest
   m_TagString: Untagged
@@ -359,6 +360,19 @@ MonoBehaviour:
       Native: 
       Universal: 
     VerifyUrl: 
+--- !u!114 &1258762731
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1258762728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dea1e9b9b510e914bbb475034d6f8016, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _walletConnect: {fileID: 1258762730}
 --- !u!1 &1333275946
 GameObject:
   m_ObjectHideFlags: 0

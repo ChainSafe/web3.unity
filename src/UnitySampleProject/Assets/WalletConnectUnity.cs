@@ -120,17 +120,17 @@ public class WalletConnectUnity : MonoBehaviour
             "personal_sign",
             "eth_signTypedData",
         };
-
+        
         var events = new string[]
         {
             "chainChanged", "accountsChanged"
         };
-
+        
         requiredNamespaces.Add(Chain.EvmNamespace, new ProposedNamespace
         {
             Chains = new string[]
             {
-                Chain.Goerli.FullChainId,
+                Chain.Goerli.FullChainId
             },
             Events = events,
             Methods = methods
