@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ChainSafe.Gaming.Chainlink.Lootboxes;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace LootBoxes.Scene.States
@@ -13,7 +14,8 @@ namespace LootBoxes.Scene.States
         {
             Context.selectLootBoxesUI.gameObject.SetActive(true);
 
-            SetTypeAndAmountLabel();
+            SetCallToAction();
+            OnSelectedCountUpdated();
 
             availableLootBoxTypes = Context.LastFetchedLootBoxes.Where(info => info.Amount > 0).ToList();
             
@@ -69,8 +71,7 @@ namespace LootBoxes.Scene.States
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                var focusedLootBox = Context.stageFocus.FocusedItem.LootBox;
-                focusedLootBox.Selected = !focusedLootBox.Selected;
+                ToggleFocusedSelected();
             }
 
             if (Input.GetKeyDown(KeyCode.Return))
@@ -79,14 +80,20 @@ namespace LootBoxes.Scene.States
             }
         }
 
-        private async void SetTypeAndAmountLabel()
+        private void ToggleFocusedSelected()
+        {
+            var focusedLootBox = Context.stageFocus.FocusedItem.LootBox;
+            focusedLootBox.Selected = !focusedLootBox.Selected;
+            OnSelectedCountUpdated();
+        }
+
+        private async void SetCallToAction()
         {
             var typeInfo = Context.frontEndDataSet.GetLootBoxTypeInfo(Context.ActiveType);
             var amount = await Context.GetBalance(Context.ActiveType);
-            var label = Context.selectLootBoxesUI.LootBoxTypeAndAmount;
+            var label = Context.selectLootBoxesUI.CallToAction;
             label.text = string.Empty;
-            label.text = $"({amount}) {typeInfo.Name}";
-            label.color = typeInfo.Color;
+            label.text = $"Open <color=#{typeInfo.Color.ToHexString()}><b>{typeInfo.Name}</b></color> loot box(es)";
         }
 
         private void ChangeLootBoxType(int delta)
@@ -140,7 +147,14 @@ namespace LootBoxes.Scene.States
                 return;
             }
 
-            lootBox.Selected = !lootBox.Selected;
+            ToggleFocusedSelected();
+        }
+
+        private void OnSelectedCountUpdated()
+        {
+            var selectedAmount = Context.stage.StageItems.Count(item => item.LootBox.Selected);
+            Context.selectLootBoxesUI.SelectedAmount.text = selectedAmount.ToString();
+            Context.selectLootBoxesUI.OpenSelectedButton.interactable = selectedAmount > 0;
         }
     }
 }

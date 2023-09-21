@@ -11,6 +11,7 @@ namespace LootBoxes.Scene
         public Button PrevLootBoxButton;
         public Button NextLootBoxButton;
         public Button OpenSelectedButton;
-        public TMP_Text LootBoxTypeAndAmount;
+        public TMP_Text SelectedAmount;
+        public TMP_Text CallToAction;
     }
 }

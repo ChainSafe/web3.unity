@@ -6,5 +6,16 @@ namespace LootBoxes.Scene.StageItems
     {
         public LootBox LootBox;
         public Reward Reward;
+        public Light SpotLight;
+
+        private void Awake()
+        {
+            SetSpotlightActive(false);
+        }
+
+        public void SetSpotlightActive(bool active)
+        {
+            SpotLight.gameObject.SetActive(active);
+        }
     }
 }

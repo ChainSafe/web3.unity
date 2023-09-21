@@ -11,8 +11,25 @@ namespace LootBoxes.Scene
         private StageCamera camera;
         
         public int FocusedItemIndex { get; private set; }
-        public StageItem FocusedItem => stage.StageItems.Skip(FocusedItemIndex).First();
         
+        public StageItem FocusedItem
+        {
+            get
+            {
+                if (stage.StageItems == null)
+                {
+                    return null;
+                }
+
+                if (FocusedItemIndex >= stage.StageItems.Count)
+                {
+                    return null;
+                }
+                
+                return stage.StageItems.Skip(FocusedItemIndex).First();
+            }
+        }
+
         public void Configure(Stage stage, StageCamera camera)
         {
             this.camera = camera;
@@ -26,6 +43,8 @@ namespace LootBoxes.Scene
                 throw new ArgumentOutOfRangeException(nameof(index));
             }
             
+            FocusedItem?.SetSpotlightActive(false);
+            
             FocusedItemIndex = index;
             
             if (!immediately)
@@ -36,6 +55,8 @@ namespace LootBoxes.Scene
             {
                 camera.LookAtImmediately(FocusedItemIndex);
             }
+
+            FocusedItem?.SetSpotlightActive(true);
         }
 
         public void FocusDelta(int delta)

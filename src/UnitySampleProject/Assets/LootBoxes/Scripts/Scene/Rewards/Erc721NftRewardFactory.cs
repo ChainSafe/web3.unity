@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using ChainSafe.Gaming.Chainlink.Lootboxes;
 using LootBoxes.Scene.StageItems;
 using UnityEngine;
@@ -32,8 +33,17 @@ namespace LootBoxes.Scene
             var reward = (NftReward)item.Reward;
             var contract = contractBuilder.Build(ABI.ERC_721, data.ContractAddress);
             var uri = (await contract.Call("tokenURI", new object[] { data.TokenId.ToString() }))[0].ToString();
-            var texture = DownloadImage();
-            reward.ImageRenderer.material.mainTexture = texture;
+            Debug.Log(uri);
+
+            try
+            {
+                var texture = DownloadImage();
+                reward.ImageRenderer.material.mainTexture = texture;
+            }
+            catch (NotImplementedException)
+            {
+                Debug.LogError("Image loading for ERC721 is not implemented yet.");
+            }
             
             return item;
         }

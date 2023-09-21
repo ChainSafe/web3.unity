@@ -7,6 +7,8 @@ namespace LootBoxes.Scene.States
     {
         protected override async void OnLootBoxSceneStateEnter()
         {
+            Context.openLootBoxUI.gameObject.SetActive(true);
+            
             // Focus nearest selected item, play animations
             var stageItemToFocusIndex = GetStageItemToFocus();
             Context.stageFocus.Focus(stageItemToFocusIndex);
@@ -46,6 +48,11 @@ namespace LootBoxes.Scene.States
                     itemToOpen.LootBox.PlayOpening();
                 }
             }
+        }
+
+        protected override void OnLootBoxSceneStateExit()
+        {
+            Context.openLootBoxUI.gameObject.SetActive(false);
         }
     }
 }
