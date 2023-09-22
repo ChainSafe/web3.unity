@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using WalletConnectSharp.Common.Logging;
 using WalletConnectSharp.Core;
 using WalletConnectSharp.Core.Models;
@@ -42,7 +39,10 @@ namespace ChainSafe.Gaming.Wallets.WalletConnect
 
             Core = new WalletConnectCore(new CoreOptions()
             {
-                Name = Config.ProjectName, ProjectId = Config.ProjectId, Storage = BuildStorage(Config.StoragePath), BaseContext = Config.BaseContext,
+                Name = Config.ProjectName,
+                ProjectId = Config.ProjectId,
+                Storage = BuildStorage(Config.StoragePath),
+                BaseContext = Config.BaseContext,
             });
 
             await Core.Start();
@@ -75,8 +75,7 @@ namespace ChainSafe.Gaming.Wallets.WalletConnect
 
             var events = new string[] { "chainChanged", "accountsChanged" };
 
-            requiredNamespaces.Add(
-                Chain.EvmNamespace,
+            requiredNamespaces.Add(Chain.EvmNamespace,
                 new ProposedNamespace
                 {
                     Chains = new string[] { Config.Chain.FullChainId }, Events = events, Methods = methods,
