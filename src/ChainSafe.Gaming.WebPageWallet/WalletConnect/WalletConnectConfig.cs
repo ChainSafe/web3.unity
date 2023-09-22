@@ -13,6 +13,8 @@ namespace ChainSafe.Gaming.Wallets.WalletConnect
 
         public string BaseContext { get;  set; }
 
+        public Chain Chain { get;  set; }
+
         public string StoragePath { get;  set; }
 
         public Metadata Metadata { get;  set; }

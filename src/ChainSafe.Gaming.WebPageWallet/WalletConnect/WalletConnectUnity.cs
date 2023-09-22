@@ -79,7 +79,7 @@ namespace ChainSafe.Gaming.Wallets.WalletConnect
                 Chain.EvmNamespace,
                 new ProposedNamespace
                 {
-                    Chains = new string[] { Chain.Goerli.FullChainId }, Events = events, Methods = methods,
+                    Chains = new string[] { Config.Chain.FullChainId }, Events = events, Methods = methods,
                 });
 
             // start connecting

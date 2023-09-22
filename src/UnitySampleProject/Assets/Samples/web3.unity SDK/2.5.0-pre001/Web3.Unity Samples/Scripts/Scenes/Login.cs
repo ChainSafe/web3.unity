@@ -14,6 +14,7 @@ using ChainSafe.Gaming.Web3.Unity;
 using ChainSafe.GamingSdk.Gelato;
 using ChainSafe.GamingSdk.Web3Auth;
 using Newtonsoft.Json;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Networking;
@@ -56,8 +57,6 @@ namespace Scenes
 
         private bool useWebPageWallet;
 
-        public WalletConnectConfig WalletConnectConfig { get; private set; }
-
         #region Wallet Connect
 
         [field: Header("Wallet Connect")]
@@ -76,8 +75,17 @@ namespace Scenes
             Url = "https://chainsafe.io/"
         };
 
+        [field: SerializeField] private TMP_Dropdown _chainDropdown;
+        
         public string StoragePath => $"{Application.persistentDataPath}/wc_storage.json";
 
+        // chain id, name pairs
+        public static Dictionary<int, string> SupportedChains { get; private set; } = new Dictionary<int, string>()
+        {
+            {1, "Ethereum"},
+            {5, "Goerli"},
+        };
+        
         #endregion
 
         private IEnumerator Start()
@@ -94,9 +102,9 @@ namespace Scenes
             RememberMeToggle.gameObject.SetActive(useWebPageWallet);
             
             // Wallet Connect
+            PopulateChainDropDown();
+            
             yield return FetchSupportedWallets();
-
-            WalletConnectConfig = BuildConfig();
             
 #if UNITY_WEBGL
             ProcessWeb3Auth();
@@ -131,7 +139,7 @@ namespace Scenes
                         new WebPageWalletConfig
                         {
                             SavedUserAddress = savedAccount,
-                            WalletConnectConfig = WalletConnectConfig
+                            WalletConnectConfig = BuildConfig()
                         });
                 });
 
@@ -154,7 +162,7 @@ namespace Scenes
                         services.UseWebPageWallet(
                             new WebPageWalletConfig
                             {
-                                WalletConnectConfig = WalletConnectConfig
+                                WalletConnectConfig = BuildConfig()
                             });
                     }
                     else
@@ -275,13 +283,26 @@ namespace Scenes
 
         private Dictionary<string, Wallet> _supportedWallets;
 
+        private void PopulateChainDropDown()
+        {
+            _chainDropdown.AddOptions(SupportedChains.Values.ToList());
+        }
+        
         private WalletConnectConfig BuildConfig()
         {
+            // build chain
+            int index = _chainDropdown.value;
+
+            int key = SupportedChains.Keys.ToArray()[index];
+            
+            Chain chain = new Chain(Chain.EvmNamespace, $"{key}", SupportedChains[key]);
+            
             return new WalletConnectConfig
             {
                 ProjectId = ProjectId, 
                 ProjectName = ProjectName, 
-                BaseContext = BaseContext, 
+                BaseContext = BaseContext,
+                Chain = chain,
                 StoragePath = StoragePath, 
                 Metadata = Metadata, 
                 SupportedWallets = _supportedWallets, 
