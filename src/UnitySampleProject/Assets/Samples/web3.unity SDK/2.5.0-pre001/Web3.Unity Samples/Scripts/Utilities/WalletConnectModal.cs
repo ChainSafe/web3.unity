@@ -1,31 +1,26 @@
-using System;
-using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Wallets;
-using ChainSafe.Gaming.Wallets.WalletConnect;
-using ChainSafe.Gaming.Web3;
-using QRCoder;
-using QRCoder.Unity;
-using Scenes;
 using UnityEngine;
 using UnityEngine.UI;
 using WalletConnectSharp.Sign.Models;
 using WalletConnectSharp.Sign.Models.Engine;
 using Web3Unity.Scripts;
+using ZXing;
+using ZXing.QrCode;
 
 public class WalletConnectModal : MonoBehaviour
 {
     [SerializeField] private Image _qrCodeImage;
     [SerializeField] private Button _copyToClipboardButton;
     [SerializeField] private Button _backButton;
-    
+
     [SerializeField] private Transform _container;
 
     private void Start()
     {
         _backButton.onClick.AddListener(Disable);
-        
+
         WebPageWallet.OnConnected += WalletConnected;
-        
+
         WebPageWallet.OnSessionApproved += SessionApproved;
     }
 
@@ -37,50 +32,49 @@ public class WalletConnectModal : MonoBehaviour
             _container.gameObject.SetActive(true);
 
             string uri = data.Uri;
-                
+
             GenerateQrCode(uri);
-                
+
             SetClipboard(uri);
         });
     }
-    
+
     private void SessionApproved(SessionStruct session)
     {
         MainThreadDispatcher.Instance.Invoke(delegate
         {
             // disable display
             Disable();
-            
+
             Debug.Log($"{session.Topic} Approved");
         });
     }
-    
+
     private void SetClipboard(string uri)
     {
         _copyToClipboardButton.onClick.RemoveAllListeners();
-        
-        _copyToClipboardButton.onClick.AddListener(delegate
-        {
-            GUIUtility.systemCopyBuffer = uri;
-        });
+
+        _copyToClipboardButton.onClick.AddListener(delegate { GUIUtility.systemCopyBuffer = uri; });
     }
-    
-    private void GenerateQrCode(string uri)
+
+    private static Color32[] Encode(string textForEncoding, int width, int height)
     {
-        Debug.Log("Connecting to: " + uri);
-        QRCodeGenerator generator = new QRCodeGenerator();
-        QRCodeData data = generator.CreateQrCode(uri, QRCodeGenerator.ECCLevel.Q);
-        UnityQRCode qrCode = new UnityQRCode(data);
+        var writer = new BarcodeWriter
+        {
+            Format = BarcodeFormat.QR_CODE, Options = new QrCodeEncodingOptions { Height = height, Width = width }
+        };
+        return writer.Write(textForEncoding);
+    }
 
-        // pixelsPerModule:10 gives us a 690x690 pixel image.
-        Texture2D qrCodeAsTexture2D = qrCode.GetGraphic(pixelsPerModule:10);
-
-        // Change the filtering mode to point (i.e. nearest) rather than the default of linear - we want sharp edges on
-        // the blocks, not blurry interpolated edges!
-        qrCodeAsTexture2D.filterMode = FilterMode.Point;
-
+    private void GenerateQrCode(string text)
+    {
+        var encoded = new Texture2D(256, 256);
+        var color32 = Encode(text, encoded.width, encoded.height);
+        encoded.SetPixels32(color32);
+        encoded.Apply();
+        
         // Convert the texture into a sprite and assign it to our QR code image
-        var qrCodeSprite = Sprite.Create(qrCodeAsTexture2D, new Rect(0, 0, qrCodeAsTexture2D.width, qrCodeAsTexture2D.height),
+        var qrCodeSprite = Sprite.Create(encoded, new Rect(0, 0, encoded.width, encoded.height),
             new Vector2(0.5f, 0.5f), 100f);
         _qrCodeImage.sprite = qrCodeSprite;
     }
@@ -89,11 +83,11 @@ public class WalletConnectModal : MonoBehaviour
     {
         _container.gameObject.SetActive(false);
     }
-    
+
     private void OnDisable()
     {
         WebPageWallet.OnConnected -= WalletConnected;
-        
+
         WebPageWallet.OnSessionApproved -= SessionApproved;
     }
 }
