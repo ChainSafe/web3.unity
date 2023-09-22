@@ -74,6 +74,14 @@ namespace ChainSafe.Gaming.Wallets
         {
             configuration.SavedUserAddress?.AssertIsPublicAddress(nameof(configuration.SavedUserAddress));
 
+            // if testing just don't initialize wallet connect
+            if (Testing)
+            {
+                Address = configuration.SavedUserAddress;
+
+                return;
+            }
+
             // Wallet Connect
             WalletConnectUnity.OnConnected += InvokeConnected;
             WalletConnectUnity.OnSessionApproved += InvokeSessionApproved;
@@ -95,7 +103,12 @@ namespace ChainSafe.Gaming.Wallets
 
         public async Task<string> SignMessage(string message)
         {
-            var pageUrl = BuildUrl();
+            if (Testing)
+            {
+                return TestResponse;
+            }
+
+            // var pageUrl = BuildUrl();
 
             // Wallet connect
             SessionStruct session = GetSession();
@@ -113,15 +126,21 @@ namespace ChainSafe.Gaming.Wallets
                 await WalletConnectUnity.SignClient.Request<EthSignMessage, string>(session.Topic, request, chainId);
 
 
+            var isValid = ValidateResponse(hash);
+            if (!isValid)
+            {
+                throw new Web3Exception("Incorrect response format extracted from clipboard.");
+            }
+
             // TODO: log event on success
             return hash;
 
-            string BuildUrl()
-            {
-                return $"{configuration.ServiceUrl}" +
-                       "?action=sign" +
-                       $"&message={Uri.EscapeDataString(message)}";
-            }
+            // string BuildUrl()
+            // {
+            //     return $"{configuration.ServiceUrl}" +
+            //            "?action=sign" +
+            //            $"&message={Uri.EscapeDataString(message)}";
+            // }
 
             // TODO: validate with regex
             bool ValidateResponse(string response)

@@ -17,10 +17,13 @@ public class SampleTestsBase
     [UnitySetUp]
     public virtual IEnumerator Setup()
     {
-        //wait for some time to initialize
+        // wait for some time to initialize
         yield return new WaitForSeconds(5f);
 
-        //For whatever reason, in github this won't load
+        // set wallet to testing
+        WebPageWallet.Testing = true;
+        
+        // For whatever reason, in github this won't load
         var projectConfigScriptableObject = ProjectConfigUtilities.Load();
         if (projectConfigScriptableObject == null)
         {
@@ -50,8 +53,6 @@ public class SampleTestsBase
         yield return new WaitUntil(() => buildWeb3.IsCompleted);
 
         Web3Result = buildWeb3.Result;
-
-        WebPageWallet.Testing = true;
     }
 
     [UnityTearDown]
