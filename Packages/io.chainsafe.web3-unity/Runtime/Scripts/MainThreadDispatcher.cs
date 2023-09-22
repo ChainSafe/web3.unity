@@ -22,15 +22,15 @@ namespace Web3Unity.Scripts
 
         #endregion
 
-        private readonly ConcurrentQueue<Action> _pending = new ConcurrentQueue<Action>();
+        private readonly Queue<Action> _pending = new Queue<Action>();
 
-        public void Invoke(Action fn) => _pending.Enqueue(fn);
+        public void Invoke(Action action) => _pending.Enqueue(action);
 
-        public static void Enqueue(Action a)
+        public static void Enqueue(Action action)
         {
             if (Instance == null) return;
 
-            Instance.Invoke(a);
+            Instance.Invoke(action);
         }
 
         private void Update()
@@ -44,9 +44,7 @@ namespace Web3Unity.Scripts
 
                 catch (Exception e)
                 {
-                    Debug.LogError(
-                        $"An error has occurred during processing one of the queued actions in the main thread dispatcher:\n{e}",
-                        this);
+                    Debug.LogError($"{nameof(MainThreadDispatcher)} exception:\n{e}", this);
                 }
             }
         }

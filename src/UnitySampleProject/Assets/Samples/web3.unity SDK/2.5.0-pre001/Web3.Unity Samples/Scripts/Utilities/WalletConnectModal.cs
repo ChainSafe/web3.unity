@@ -43,9 +43,6 @@ public class WalletConnectModal : MonoBehaviour
     {
         MainThreadDispatcher.Instance.Invoke(delegate
         {
-            // disable display
-            Disable();
-
             Debug.Log($"{session.Topic} Approved");
         });
     }
