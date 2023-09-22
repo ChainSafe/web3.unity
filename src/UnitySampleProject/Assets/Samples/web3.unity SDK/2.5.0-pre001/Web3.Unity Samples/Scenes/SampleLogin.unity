@@ -1060,6 +1060,56 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
   m_VerticalFit: 2
+--- !u!1 &395689439
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 395689440}
+  - component: {fileID: 395689441}
+  m_Layer: 5
+  m_Name: QrPreviewer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &395689440
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 395689439}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1880270956}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &395689441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 395689439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb890e484538c444da09be8d0f89dcd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _qrCodeImage: {fileID: 0}
 --- !u!1001 &452118933
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1740,6 +1790,24 @@ MonoBehaviour:
     Provider: 3
   - Button: {fileID: 1508551058}
     Provider: 4
+  <ProjectId>k__BackingField: f4bff60eb260841f46b1c77588cd8acb
+  <ProjectName>k__BackingField: Web3.Unity
+  <BaseContext>k__BackingField: unity-game
+  <Metadata>k__BackingField:
+    Name: Web3.Unity
+    Description: web3.unity is an open-source gaming SDK written in C# and developed
+      by ChainSafe Gaming. It connects games built in the Unity game engine to the
+      blockchain. The library currently supports games built for web browsers (WebGL),
+      iOS/Android mobile, and desktop. web3.unity is compatible with most EVM-based
+      chains such as Ethereum, Polygon, Moonbeam, Cronos, Nervos, and Binance Smart
+      Chain, letting developers easily choose and switch between them to create the
+      best in-game experience.
+    Url: https://chainsafe.io/
+    Icons: []
+    Redirect:
+      Native: 
+      Universal: 
+    VerifyUrl: 
 --- !u!1 &1434038407
 GameObject:
   m_ObjectHideFlags: 0
@@ -2383,6 +2451,7 @@ RectTransform:
   - {fileID: 920270120}
   - {fileID: 1434038408}
   - {fileID: 1701305867}
+  - {fileID: 395689440}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
+using ChainSafe.Gaming.Wallets.WalletConnect;
+using ChainSafe.Gaming.Wallets.WalletConnect.Methods;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Debug;
@@ -13,6 +16,9 @@ using Nethereum.ABI.EIP712;
 using Nethereum.Signer;
 using Nethereum.Util;
 using Newtonsoft.Json;
+using UnityEngine;
+using WalletConnectSharp.Sign.Models;
+using WalletConnectSharp.Sign.Models.Engine;
 using AddressExtensions = ChainSafe.Gaming.Web3.Core.Debug.AddressExtensions;
 
 namespace ChainSafe.Gaming.Wallets
@@ -20,6 +26,24 @@ namespace ChainSafe.Gaming.Wallets
     public class WebPageWallet : ISigner, ITransactionExecutor, ILifecycleParticipant
     {
         public delegate string ConnectMessageBuildDelegate(DateTime expirationTime);
+
+        public delegate void Connected(ConnectedData connectedData);
+
+        public delegate void SessionApproved(SessionStruct session);
+
+        public static event Connected OnConnected;
+
+        public static event SessionApproved OnSessionApproved;
+
+        private static void InvokeConnected(ConnectedData connectedData)
+        {
+            OnConnected?.Invoke(connectedData);
+        }
+
+        private static void InvokeSessionApproved(SessionStruct session)
+        {
+            OnSessionApproved?.Invoke(session);
+        }
 
 #pragma warning disable SA1201
         private static readonly TimeSpan MinClipboardCheckPeriod = TimeSpan.FromMilliseconds(10);
@@ -30,7 +54,9 @@ namespace ChainSafe.Gaming.Wallets
         private readonly IOperatingSystemMediator operatingSystem;
         private readonly IRpcProvider provider;
 
-        private string? address;
+        public string Address { get; private set; }
+
+        public WalletConnectUnity WalletConnectUnity { get; private set; } = new WalletConnectUnity();
 
         public WebPageWallet(IRpcProvider provider, WebPageWalletConfig configuration, IOperatingSystemMediator operatingSystem, IChainConfig chainConfig)
         {
@@ -47,7 +73,13 @@ namespace ChainSafe.Gaming.Wallets
         public async ValueTask WillStartAsync()
         {
             configuration.SavedUserAddress?.AssertIsPublicAddress(nameof(configuration.SavedUserAddress));
-            address = configuration.SavedUserAddress ?? await GetAccountVerifyUserOwns();
+
+            // Wallet Connect
+            WalletConnectUnity.OnConnected += InvokeConnected;
+            WalletConnectUnity.OnSessionApproved += InvokeSessionApproved;
+            await WalletConnectUnity.Initialize(configuration.WalletConnectConfig);
+
+            Address = configuration.SavedUserAddress ?? await GetAccountVerifyUserOwns();
         }
 
         public ValueTask WillStopAsync()
@@ -57,14 +89,29 @@ namespace ChainSafe.Gaming.Wallets
 
         public Task<string> GetAddress()
         {
-            address.AssertNotNull(nameof(address));
-            return Task.FromResult(address!);
+            Address.AssertNotNull(nameof(Address));
+            return Task.FromResult(Address!);
         }
 
         public async Task<string> SignMessage(string message)
         {
             var pageUrl = BuildUrl();
-            var hash = await OpenPageWaitResponse(pageUrl, ValidateResponse);
+
+            // Wallet connect
+            SessionStruct session = GetSession();
+
+            var (address, chainId) = GetCurrentAddress();
+
+            if (string.IsNullOrWhiteSpace(address))
+            {
+                return null;
+            }
+
+            var request = new EthSignMessage(message, address);
+
+            string hash =
+                await WalletConnectUnity.SignClient.Request<EthSignMessage, string>(session.Topic, request, chainId);
+
 
             // TODO: log event on success
             return hash;
@@ -168,6 +215,38 @@ namespace ChainSafe.Gaming.Wallets
             }
         }
 
+        private SessionStruct GetSession()
+        {
+            return WalletConnectUnity.SignClient.Session.Get(WalletConnectUnity.SignClient.Session.Keys[0]);
+        }
+
+        private (string, string) GetCurrentAddress()
+        {
+            var currentSession = GetSession();
+
+            var defaultChain = currentSession.Namespaces.Keys.FirstOrDefault();
+
+            if (string.IsNullOrWhiteSpace(defaultChain))
+            {
+                return (null, null);
+            }
+
+            var defaultNamespace = currentSession.Namespaces[defaultChain];
+
+            if (defaultNamespace.Accounts.Length == 0)
+            {
+                return (null, null);
+            }
+
+            var fullAddress = defaultNamespace.Accounts[0];
+            var addressParts = fullAddress.Split(":");
+
+            var address = addressParts[2];
+            var chainId = string.Join(':', addressParts.Take(2));
+
+            return (address, chainId);
+        }
+
         // TODO: extract hash from deeplink instead of clipboard
         private async Task<string> OpenPageWaitResponse(string pageUrl, Func<string, bool> validator)
         {
@@ -209,14 +288,14 @@ namespace ChainSafe.Gaming.Wallets
         {
             // sign current time
             var expirationTime = DateTime.Now + configuration.ConnectRequestExpiresAfter;
-            var message = configuration.ConnectMessageBuilder(expirationTime);
-            var signature = await SignMessage(message);
-            var publicAddress = ExtractPublicAddress(signature, message);
+            ConnectedData connectedData = await WalletConnectUnity.ConnectClient();
 
-            if (!AddressExtensions.IsPublicAddress(publicAddress))
+            var (address, _) = GetCurrentAddress();
+
+            if (!AddressExtensions.IsPublicAddress(address))
             {
                 throw new Web3Exception(
-                    $"Public address recovered from signature is not valid. Public address: {publicAddress}");
+                    $"Public address recovered from signature is not valid. Public address: {address}");
             }
 
             if (DateTime.Now > expirationTime)
@@ -224,7 +303,7 @@ namespace ChainSafe.Gaming.Wallets
                 throw new Web3Exception("Signature has already expired. Try again.");
             }
 
-            return publicAddress;
+            return address;
 
             string ExtractPublicAddress(string sig, string originalMessage)
             {

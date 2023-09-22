@@ -1,4 +1,5 @@
 ﻿using System;
+using ChainSafe.Gaming.Wallets.WalletConnect;
 
 namespace ChainSafe.Gaming.Wallets
 {
@@ -15,5 +16,7 @@ namespace ChainSafe.Gaming.Wallets
 
         public WebPageWallet.ConnectMessageBuildDelegate ConnectMessageBuilder { get; set; } =
             time => $"Sign this message to connect your account. This request will expire at {time:hh:mm:ss}.";
+
+        public WalletConnectConfig WalletConnectConfig { get; set; }
     }
 }
