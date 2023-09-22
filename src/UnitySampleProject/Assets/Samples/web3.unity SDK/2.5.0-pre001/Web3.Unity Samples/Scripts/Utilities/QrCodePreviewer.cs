@@ -12,24 +12,9 @@ public class QrCodePreviewer : MonoBehaviour
 {
     [SerializeField] private Image _qrCodeImage;
 
-    private void Start()
+    public void Start()
     {
-        // Initialize when web3 is initialized
-        Web3Accessor.Instance.OnWeb3Initialized += Initialize;
-    }
-
-    public void Initialize()
-    {
-        WebPageWallet wallet = Web3Accessor.Web3.Signer as WebPageWallet;
-
-        if (wallet == null)
-        {
-            Debug.LogError("Wallet not Initialized");
-            
-            return;
-        }
-        
-        wallet.WalletConnectUnity.OnConnected += data =>
+        WebPageWallet.OnConnected += data =>
         {
             MainThreadDispatcher.Instance.Invoke(delegate
             {
@@ -37,7 +22,7 @@ public class QrCodePreviewer : MonoBehaviour
             });
         };
         
-        wallet.WalletConnectUnity.OnSessionApproved += session =>
+        WebPageWallet.OnSessionApproved += session =>
         {
             MainThreadDispatcher.Instance.Invoke(delegate
             {
