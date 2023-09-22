@@ -26,7 +26,7 @@ namespace ChainSafe.Gaming.MultiCall
             }
         }
 
-        public async Task<IMultiCallRequest[]> MultiCallV3(IMultiCallRequest[] calls, bool? staticCall = true)
+        public async Task<IMultiCallRequest[]> MultiCallV3(IMultiCallRequest[] calls)
         {
             await handler.MultiCallAsync(calls.ToArray()).ConfigureAwait(false);
             return calls;

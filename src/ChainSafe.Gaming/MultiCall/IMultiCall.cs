@@ -7,7 +7,7 @@ namespace ChainSafe.Gaming.MultiCall
 {
     public interface IMultiCall : ILifecycleParticipant
     {
-        public Task<IMultiCallRequest[]> MultiCallV3(IMultiCallRequest[] calls, bool? staticCall = true);
+        public Task<IMultiCallRequest[]> MultiCallV3(IMultiCallRequest[] calls);
 
         public MultiCallRequest<GetBaseFeeFunction, GetBaseFeeOutputDto> GetBaseFeeCallData();
 

@@ -16,10 +16,10 @@ public class MultiCallSample
 
     public async Task<IMultiCallRequest[]> BlockStateExample()
     {
-        var currentBlockNumber = _web3.MultiCall().GetCurrentBlockDifficulty();
+        var currentDifficulty = _web3.MultiCall().GetCurrentBlockDifficulty();
         return await _web3.MultiCall().MultiCallV3(new IMultiCallRequest[]
         {
-            currentBlockNumber
+            currentDifficulty
         });
     }
 }
