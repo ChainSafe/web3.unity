@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Nethereum.ABI" Version="4.14.0" />
+    <PackageReference Include="Nethereum.ABI" Version="4.16.0" />
   </ItemGroup>
 
   <ItemGroup>

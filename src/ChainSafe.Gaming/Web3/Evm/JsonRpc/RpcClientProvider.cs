@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Environment;
 using Nethereum.Hex.HexTypes;
@@ -15,6 +16,7 @@ namespace ChainSafe.Gaming.Evm.Providers
         private readonly RpcClientConfig config;
         private readonly Web3Environment environment;
         private readonly ChainRegistryProvider chainRegistryProvider;
+        private readonly IChainConfig chainConfig;
 
         private Network.Network network;
 
@@ -27,6 +29,7 @@ namespace ChainSafe.Gaming.Evm.Providers
             this.chainRegistryProvider = chainRegistryProvider;
             this.environment = environment;
             this.config = config;
+            this.chainConfig = chainConfig;
 
             if (string.IsNullOrEmpty(this.config.RpcNodeUrl))
             {
@@ -44,6 +47,16 @@ namespace ChainSafe.Gaming.Evm.Providers
         {
             if (network is null || network.ChainId == 0)
             {
+                if (ulong.TryParse(chainConfig.ChainId, out var chainId))
+                {
+                    var chain = await chainRegistryProvider.GetChain(chainId);
+                    network = new Network.Network()
+                    {
+                        ChainId = chainId,
+                        Name = chain?.Name,
+                    };
+                }
+
                 network = await RefreshNetwork();
             }
         }
@@ -86,12 +99,15 @@ namespace ChainSafe.Gaming.Evm.Providers
             {
                 var httpClient = environment.HttpClient;
                 var request = new RpcRequestMessage(Guid.NewGuid().ToString(), method, parameters);
-                var response = (await httpClient.Post<RpcRequestMessage, RpcResponseMessage>(config.RpcNodeUrl, request)).EnsureResponse();
+                var response =
+                    (await httpClient.Post<RpcRequestMessage, RpcResponseMessage>(config.RpcNodeUrl, request))
+                    .EnsureResponse();
 
                 if (response.HasError)
                 {
                     var error = response.Error;
-                    var errorMessage = $"RPC returned error for \"{method}\": {error.Code} {error.Message} {error.Data}";
+                    var errorMessage =
+                        $"RPC returned error for \"{method}\": {error.Code} {error.Message} {error.Data}";
                     throw new Web3Exception(errorMessage);
                 }
 
@@ -101,6 +117,19 @@ namespace ChainSafe.Gaming.Evm.Providers
             catch (Exception ex)
             {
                 throw new Web3Exception($"{method}: bad result from RPC endpoint", ex);
+            }
+            finally
+            {
+                environment.AnalyticsClient.CaptureEvent(new AnalyticsEvent()
+                {
+                    Rpc = method,
+                    Network = network?.Name,
+                    ChainId = network?.ChainId.ToString(),
+                    GameData = new AnalyticsGameData()
+                    {
+                        Params = parameters,
+                    },
+                });
             }
         }
     }
