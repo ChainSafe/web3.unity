@@ -75,10 +75,16 @@ namespace ChainSafe.Gaming.Wallets.WalletConnect
 
             var events = new string[] { "chainChanged", "accountsChanged" };
 
-            requiredNamespaces.Add(Chain.EvmNamespace,
+            requiredNamespaces.Add(
+                Chain.EvmNamespace,
                 new ProposedNamespace
                 {
-                    Chains = new string[] { Config.Chain.FullChainId }, Events = events, Methods = methods,
+                    Chains = new string[]
+                    {
+                        Config.Chain.FullChainId,
+                    },
+                    Events = events,
+                    Methods = methods,
                 });
 
             // start connecting
