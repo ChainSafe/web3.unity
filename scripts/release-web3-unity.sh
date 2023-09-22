@@ -1,6 +1,6 @@
 #! /usr/bin/env sh
 
-./setup.sh
+./scripts/setup.sh
 
 git add ./Packages/io.chainsafe.web3-unity/.
 

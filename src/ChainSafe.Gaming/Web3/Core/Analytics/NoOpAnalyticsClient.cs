@@ -4,7 +4,7 @@ namespace ChainSafe.Gaming.Web3.Analytics
     {
         public void CaptureEvent(AnalyticsEvent eventData)
         {
-            // ignore
+            // ignore everything. analytics is disabled
         }
     }
 }
