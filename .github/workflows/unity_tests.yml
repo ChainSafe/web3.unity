@@ -34,7 +34,7 @@ jobs:
         with:
           dotnet-version: 6.0.x
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore /property:Unity=true
       - name: Publish
         run: |
           dotnet publish --no-restore src/ChainSafe.Gaming.Unity/ChainSafe.Gaming.Unity.csproj -c Release /property:Unity=true

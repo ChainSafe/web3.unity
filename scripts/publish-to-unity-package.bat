@@ -1,6 +1,7 @@
 @ECHO OFF
 
 echo Building project...
+pushd src/ChainSafe.Gaming.Unity
 
 del obj /F /Q
 del bin /F /Q
@@ -22,5 +23,5 @@ if not exist ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Librarie
 del ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries\* /F /Q
 copy *.dll ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries
 popd
-
+popd
 echo Done
