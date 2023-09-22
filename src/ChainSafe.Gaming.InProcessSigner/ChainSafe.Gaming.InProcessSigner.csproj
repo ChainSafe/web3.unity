@@ -15,12 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ChainSafe.Gaming\ChainSafe.Gaming.csproj" />
   </ItemGroup>
-
-  <ItemGroup Condition="'$(Unity)' != 'True'">
-    <PackageReference Include="Nethereum.Signer" Version="4.14.0" />
-    <PackageReference Include="Nethereum.Web3" Version="4.14.0" />
-  </ItemGroup>
-
+  
   <ItemGroup>
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" />
     <AdditionalFiles Include="../../stylecop.json" />

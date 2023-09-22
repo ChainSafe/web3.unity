@@ -20,7 +20,7 @@ jobs:
         run: dotnet restore
 
       - name: Lint
-        run: ./lint.sh ci
+        run: ./scripts/lint.sh ci
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
