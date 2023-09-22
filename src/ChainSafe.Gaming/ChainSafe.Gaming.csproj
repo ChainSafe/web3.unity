@@ -13,22 +13,23 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
-    <PackageReference Include="NBitcoin" Version="7.0.24" />
-    <PackageReference Include="Nethereum.Hex" Version="4.14.0" />
-    <PackageReference Include="Nethereum.JsonRpc.Client" Version="4.14.0" />
   </ItemGroup>
-
+  
   <!-- 
     Note: When updating the Nethereum dependency, the Unity version of
     the libraries must manually be downloaded and placed in the libs
     directory as well.
   -->
   <ItemGroup Condition="'$(Unity)' != 'True'">
-    <PackageReference Include="Nethereum.ABI" Version="4.14.0" />
-    <PackageReference Include="Nethereum.RPC" Version="4.14.0" />
-    <PackageReference Include="Nethereum.Signer" Version="4.14.0" />
-    <PackageReference Include="Nethereum.JsonRpc.IpcClient" Version="4.14.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="NBitcoin" Version="7.0.24" />
+    <PackageReference Include="Nethereum.ABI" Version="4.16.0" />
+    <PackageReference Include="Nethereum.Hex" Version="4.16.0" />
+    <PackageReference Include="Nethereum.JsonRpc.Client" Version="4.16.0" />
+    <PackageReference Include="Nethereum.JsonRpc.IpcClient" Version="4.16.0" />
+    <PackageReference Include="Nethereum.RPC" Version="4.16.0" />
+    <PackageReference Include="Nethereum.Signer" Version="4.16.0" />
+    <PackageReference Include="Nethereum.Web3" Version="4.16.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="[13.0.1,14)" />
   </ItemGroup>
 
   <!--
