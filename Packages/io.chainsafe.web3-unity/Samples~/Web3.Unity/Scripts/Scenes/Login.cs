@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,16 +7,21 @@ using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Wallets;
+using ChainSafe.Gaming.Wallets.WalletConnect;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Unity;
 using ChainSafe.GamingSdk.Gelato;
 using ChainSafe.GamingSdk.Web3Auth;
-
+using Newtonsoft.Json;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using WalletConnectSharp.Core;
+using Web3Unity.Scripts.WalletConnect;
 
 
 namespace Scenes
@@ -51,7 +57,38 @@ namespace Scenes
 
         private bool useWebPageWallet;
 
-        private void Awake()
+        #region Wallet Connect
+
+        [field: Header("Wallet Connect")]
+        
+        [field: SerializeField] public string ProjectId { get; private set; }
+        
+        [field: SerializeField] public string ProjectName { get; private set; }
+        
+        [field: SerializeField] public string BaseContext { get; private set; }
+        
+        [field: SerializeField] public Metadata Metadata { get; private set; } = new Metadata
+        {
+            Name = "Web3.Unity",
+            //from package.json
+            Description = "web3.unity is an open-source gaming SDK written in C# and developed by ChainSafe Gaming. It connects games built in the Unity game engine to the blockchain. The library currently supports games built for web browsers (WebGL), iOS/Android mobile, and desktop. web3.unity is compatible with most EVM-based chains such as Ethereum, Polygon, Moonbeam, Cronos, Nervos, and Binance Smart Chain, letting developers easily choose and switch between them to create the best in-game experience.",
+            Url = "https://chainsafe.io/"
+        };
+
+        [field: SerializeField] private TMP_Dropdown _chainDropdown;
+        
+        public string StoragePath => $"{Application.persistentDataPath}/wc_storage.json";
+
+        // chain id, name pairs
+        public static Dictionary<int, string> SupportedChains { get; private set; } = new Dictionary<int, string>()
+        {
+            {1, "Ethereum"},
+            {5, "Goerli"},
+        };
+        
+        #endregion
+
+        private IEnumerator Start()
         {
             Assert.IsNotNull(Web3AuthButtons);
             Assert.IsTrue(Web3AuthButtons.Count > 0);
@@ -63,7 +100,12 @@ namespace Scenes
 
             // Remember me only works with the WebPageWallet
             RememberMeToggle.gameObject.SetActive(useWebPageWallet);
-
+            
+            // Wallet Connect
+            PopulateChainDropDown();
+            
+            yield return FetchSupportedWallets();
+            
 #if UNITY_WEBGL
             ProcessWeb3Auth();
 #endif
@@ -97,6 +139,7 @@ namespace Scenes
                         new WebPageWalletConfig
                         {
                             SavedUserAddress = savedAccount,
+                            WalletConnectConfig = BuildConfig()
                         });
                 });
 
@@ -116,7 +159,11 @@ namespace Scenes
                      */
                     if (useWebPageWallet)
                     {
-                        services.UseWebPageWallet();
+                        services.UseWebPageWallet(
+                            new WebPageWalletConfig
+                            {
+                                WalletConnectConfig = BuildConfig()
+                            });
                     }
                     else
                     {
@@ -231,5 +278,65 @@ namespace Scenes
                     "0x1d6f31b71e12a1a584ca20853495161c48ba491f"));
 
         }
+
+        #region Wallet Connect
+
+        private Dictionary<string, Wallet> _supportedWallets;
+
+        private void PopulateChainDropDown()
+        {
+            _chainDropdown.AddOptions(SupportedChains.Values.ToList());
+        }
+        
+        private WalletConnectConfig BuildConfig()
+        {
+            // build chain
+            int index = _chainDropdown.value;
+
+            int key = SupportedChains.Keys.ToArray()[index];
+            
+            Chain chain = new Chain(Chain.EvmNamespace, $"{key}", SupportedChains[key]);
+            
+            return new WalletConnectConfig
+            {
+                ProjectId = ProjectId, 
+                ProjectName = ProjectName, 
+                BaseContext = BaseContext,
+                Chain = chain,
+                StoragePath = StoragePath, 
+                Metadata = Metadata, 
+                SupportedWallets = _supportedWallets, 
+                IsMobilePlatform = Application.isMobilePlatform, 
+                Logger = new WCUnityLogger()
+            };
+        }
+        
+        private IEnumerator FetchSupportedWallets()
+        {
+            using (UnityWebRequest webRequest = UnityWebRequest.Get("https://registry.walletconnect.org/data/wallets.json"))
+            {
+                // Request and wait for the desired page.
+                yield return webRequest.SendWebRequest();
+
+                if (webRequest.result != UnityWebRequest.Result.Success)
+                {
+                    Debug.LogError("Error Getting Supported Wallets: " + webRequest.error);
+                
+                    yield return null;
+                }
+            
+                else
+                {
+                    var json = webRequest.downloadHandler.text;
+
+                    _supportedWallets = JsonConvert.DeserializeObject<Dictionary<string, UnityWallet>>(json)
+                        .ToDictionary(w => w.Key, w => (Wallet)w.Value);
+
+                    Debug.Log($"Fetched {_supportedWallets.Count} Supported Wallets.");
+                }
+            }
+        }
+
+        #endregion
     }
 }
