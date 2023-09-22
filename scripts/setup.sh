@@ -4,4 +4,4 @@
 git submodule update --init
 
 # publish DLLs to unity package
-./scripts/publish-to-unity-package.sh
+./publish-to-unity-package.sh

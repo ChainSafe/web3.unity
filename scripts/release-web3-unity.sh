@@ -2,9 +2,9 @@
 
 ./scripts/setup.sh
 
-git add ./Packages/io.chainsafe.web3-unity/.
+git add ../Packages/io.chainsafe.web3-unity/.
 
-git add ./Packages/io.chainsafe.web3-unity/Runtime/Libraries/. -f
+git add ../Packages/io.chainsafe.web3-unity/Runtime/Libraries/. -f
 
 MESSAGE="release-v$1"
 

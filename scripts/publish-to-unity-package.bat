@@ -1,7 +1,7 @@
 @ECHO OFF
 
 echo Building project...
-pushd src/ChainSafe.Gaming.Unity
+pushd ..\src\ChainSafe.Gaming.Unity
 
 del obj /F /Q
 del bin /F /Q
@@ -19,6 +19,7 @@ echo Moving files to Unity package...
 pushd bin\release\netstandard2.1\publish
 del Newtonsoft.Json.dll
 del UnityEngine.dll
+del Microsoft.CSharp.dll
 if not exist ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries mkdir ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries\
 del ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries\* /F /Q
 copy *.dll ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries

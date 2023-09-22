@@ -2,7 +2,7 @@
 
 ./scripts/setup.sh
 
-git add ./Packages/io.chainsafe.web3-unity.web3auth/.
+git add ../Packages/io.chainsafe.web3-unity.web3auth/.
 
 MESSAGE="release-v$1"
 
