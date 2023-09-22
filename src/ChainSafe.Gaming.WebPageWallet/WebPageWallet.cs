@@ -25,6 +25,14 @@ namespace ChainSafe.Gaming.Wallets
 {
     public class WebPageWallet : ISigner, ITransactionExecutor, ILifecycleParticipant
     {
+        public WebPageWallet(IRpcProvider provider, WebPageWalletConfig configuration, IOperatingSystemMediator operatingSystem, IChainConfig chainConfig)
+        {
+            this.provider = provider;
+            this.operatingSystem = operatingSystem;
+            this.chainConfig = chainConfig;
+            this.configuration = configuration;
+        }
+
         public delegate string ConnectMessageBuildDelegate(DateTime expirationTime);
 
         public delegate void Connected(ConnectedData connectedData);
@@ -34,6 +42,10 @@ namespace ChainSafe.Gaming.Wallets
         public static event Connected OnConnected;
 
         public static event SessionApproved OnSessionApproved;
+
+        public static bool Testing { get; set; } = false;
+
+        public static string TestResponse { get; set; } = string.Empty;
 
         private static void InvokeConnected(ConnectedData connectedData)
         {
@@ -57,18 +69,6 @@ namespace ChainSafe.Gaming.Wallets
         public string Address { get; private set; }
 
         public WalletConnectUnity WalletConnectUnity { get; private set; } = new WalletConnectUnity();
-
-        public WebPageWallet(IRpcProvider provider, WebPageWalletConfig configuration, IOperatingSystemMediator operatingSystem, IChainConfig chainConfig)
-        {
-            this.provider = provider;
-            this.operatingSystem = operatingSystem;
-            this.chainConfig = chainConfig;
-            this.configuration = configuration;
-        }
-
-        public static bool Testing { get; set; } = false;
-
-        public static string TestResponse { get; set; } = string.Empty;
 
         public async ValueTask WillStartAsync()
         {
@@ -124,7 +124,6 @@ namespace ChainSafe.Gaming.Wallets
 
             string hash =
                 await WalletConnectUnity.SignClient.Request<EthSignMessage, string>(session.Topic, request, chainId);
-
 
             var isValid = ValidateResponse(hash);
             if (!isValid)
@@ -307,7 +306,7 @@ namespace ChainSafe.Gaming.Wallets
         {
             // sign current time
             var expirationTime = DateTime.Now + configuration.ConnectRequestExpiresAfter;
-            ConnectedData connectedData = await WalletConnectUnity.ConnectClient();
+            await WalletConnectUnity.ConnectClient();
 
             var (address, _) = GetCurrentAddress();
 
@@ -324,21 +323,21 @@ namespace ChainSafe.Gaming.Wallets
 
             return address;
 
-            string ExtractPublicAddress(string sig, string originalMessage)
-            {
-                try
-                {
-                    var msg = "\x19" + "Ethereum Signed Message:\n" + originalMessage.Length + originalMessage;
-                    var msgHash = new Sha3Keccack().CalculateHash(Encoding.UTF8.GetBytes(msg));
-                    var ecdsaSignature = MessageSigner.ExtractEcdsaSignature(sig);
-                    var key = EthECKey.RecoverFromSignature(ecdsaSignature, msgHash);
-                    return key.GetPublicAddress();
-                }
-                catch
-                {
-                    throw new Web3Exception("Invalid signature");
-                }
-            }
+            // string ExtractPublicAddress(string sig, string originalMessage)
+            // {
+            //     try
+            //     {
+            //         var msg = "\x19" + "Ethereum Signed Message:\n" + originalMessage.Length + originalMessage;
+            //         var msgHash = new Sha3Keccack().CalculateHash(Encoding.UTF8.GetBytes(msg));
+            //         var ecdsaSignature = MessageSigner.ExtractEcdsaSignature(sig);
+            //         var key = EthECKey.RecoverFromSignature(ecdsaSignature, msgHash);
+            //         return key.GetPublicAddress();
+            //     }
+            //     catch
+            //     {
+            //         throw new Web3Exception("Invalid signature");
+            //     }
+            // }
         }
 
         /*
