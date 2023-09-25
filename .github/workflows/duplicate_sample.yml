@@ -17,7 +17,7 @@ jobs:
 
       - name: Run duplicate script file
         run: |
-          export SOURCE_DIRECTORY="${GITHUB_WORKSPACE}/src/UnitySampleProject/Assets/Samples/web3.unity SDK/2.5.0-pre001/Web3.Unity Samples/"
+          export SOURCE_DIRECTORY="${GITHUB_WORKSPACE}/src/UnitySampleProject/Assets/Samples/web3.unity SDK/2.5.0/Web3.Unity Samples/"
           export DESTINATION_DIRECTORY="${GITHUB_WORKSPACE}/Packages/io.chainsafe.web3-unity/Samples~/Web3.Unity/"
           rm -r "$DESTINATION_DIRECTORY"
           cp -r "$SOURCE_DIRECTORY" "$DESTINATION_DIRECTORY"
