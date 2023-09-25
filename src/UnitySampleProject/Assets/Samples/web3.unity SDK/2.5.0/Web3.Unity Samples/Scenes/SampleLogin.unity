@@ -1721,8 +1721,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GelatoApiKey: _UzPz_Yk_WTjWMfcl45fLvQNGQ9ISx5ZE8TnwnVKYrE_
   Web3AuthSettings:
-    ClientId: BIM5jpn-sejNdSrW9LMf5YSIieSluWoEZ2Fp0YmuOb_E0oCXO1vCj_mtQqz6qXYLOEqtQdLHA3OQ-vseahybUww
-    RedirectUri: torusapp://io.chainsafe.gamingsdk.sampleproject/auth
+    ClientId: BCc0wTmuXureEzgawhUSZOWu4bgWo56sZPrxLiHQCpg5OHcNrfa44esdTS8Dm77VtmaIyjhbthdWfbLhSwf7jtU
+    RedirectUri: torusapp://io.chainsafe.gamingsdk.sdkdemoscene/auth
     Network: 1
   ExistingWalletButton: {fileID: 787012150}
   RememberMeToggle: {fileID: 724612376}
