@@ -336,11 +336,11 @@ namespace ChainSafe.Gaming.Wallets
             // }
         }
 
-        public void Disconnect()
+        public async Task Disconnect()
         {
             configuration.SavedUserAddress = null;
 
-            WalletConnectUnity.Disconnect();
+            await WalletConnectUnity.Disconnect();
         }
 
         /*

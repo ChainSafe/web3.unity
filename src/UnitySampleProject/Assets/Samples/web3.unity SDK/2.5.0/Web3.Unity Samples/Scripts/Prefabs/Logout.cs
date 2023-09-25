@@ -14,7 +14,7 @@ public class Logout : MonoBehaviour
         // disconnect wallet
         if (Web3Accessor.Web3.Signer is WebPageWallet wallet)
         {
-            wallet.Disconnect();
+            await wallet.Disconnect();
         }
         
         // Terminate Web3

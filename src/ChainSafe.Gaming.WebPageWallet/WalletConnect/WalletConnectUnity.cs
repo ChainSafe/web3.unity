@@ -120,9 +120,9 @@ namespace ChainSafe.Gaming.Wallets.WalletConnect
             return connectData;
         }
 
-        public void Disconnect()
+        public async Task Disconnect()
         {
-            SignClient.Disconnect(Session.Topic, Error.FromErrorType(ErrorType.USER_DISCONNECTED));
+            await SignClient.Disconnect(Session.Topic, Error.FromErrorType(ErrorType.USER_DISCONNECTED));
         }
 
         private void InvokeConnected(ConnectedData connectedData)
