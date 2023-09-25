@@ -1,0 +1,4 @@
+<linker>
+    <assembly fullname="chainsafe.web3-unity.web3auth" preserve="all">
+    </assembly>
+</linker>
