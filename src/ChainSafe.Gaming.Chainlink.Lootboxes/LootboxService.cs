@@ -131,7 +131,7 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
 
             var response = await contract.Call(
                 "calculateOpenPrice",
-                new object[] { GasPerUnit * rewardCount, safeGasPrice, rewardCount, });
+                new object[] { 50000 + GasPerUnit * rewardCount, safeGasPrice, rewardCount, });
             var openPrice = (BigInteger)response[0];
 
             return openPrice;
@@ -157,7 +157,7 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
 
             await contract.Send(
                 "open",
-                new object[] { GasPerUnit * rewardCount, new[] { lootboxType }, new[] { lootboxCount } },
+                new object[] { 50000 + GasPerUnit * rewardCount, new[] { lootboxType }, new[] { lootboxCount } },
                 new TransactionRequest { Value = new HexBigInteger(openPrice) });
         }
 
