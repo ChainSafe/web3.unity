@@ -22,11 +22,11 @@ public class CreateDeepLink : EditorWindow
         VisualElement root = rootVisualElement;
 
         // Import UXML
-        var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Plugins/Web3AuthSDK/Editor/CreateDeepLink.uxml");
+        var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Packages/io.chainsafe.web3-unity.web3auth/Editor/Web3AuthSDK/Editor/CreateDeepLink.uxml");
         VisualElement labelFromUXML = visualTree.CloneTree();
         root.Add(labelFromUXML);
 
-        var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Plugins/Web3AuthSDK/Editor/CreateDeepLink.uss");
+        var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Packages/io.chainsafe.web3-unity.web3auth/Editor/Web3AuthSDK/Editor/CreateDeepLink.uss");
         root.styleSheets.Add(styleSheet);
 
         generateButton = root.Q<Button>("generateButton");
