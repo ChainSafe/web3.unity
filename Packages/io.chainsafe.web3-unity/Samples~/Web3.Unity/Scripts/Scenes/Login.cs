@@ -75,18 +75,22 @@ namespace Scenes
             Url = "https://chainsafe.io/"
         };
 
-        [field: SerializeField] private TMP_Dropdown _chainDropdown;
-        
-        public string StoragePath => $"{Application.persistentDataPath}/wc_storage.json";
-
-        // chain id, name pairs
-        public static Dictionary<int, string> SupportedChains { get; private set; } = new Dictionary<int, string>()
-        {
-            {1, "Ethereum"},
-            {5, "Goerli"},
-        };
-        
         #endregion
+
+        [RuntimeInitializeOnLoadMethod]
+        static void DisconnectWallet()
+        {
+            Application.quitting += async delegate
+            {
+                Debug.Log("Disconnecting wallet...");
+
+                //if already connected
+                if (Web3Accessor.Web3 != null && Web3Accessor.Web3.Signer is WebPageWallet wallet)
+                {
+                    await wallet.Disconnect();
+                }
+            };
+        }
 
         private IEnumerator Start()
         {
@@ -102,14 +106,12 @@ namespace Scenes
             RememberMeToggle.gameObject.SetActive(useWebPageWallet);
             
             // Wallet Connect
-            PopulateChainDropDown();
-            
             yield return FetchSupportedWallets();
             
 #if UNITY_WEBGL
             ProcessWeb3Auth();
 #endif
-            TryAutoLogin();
+            //TryAutoLogin();
 
             ExistingWalletButton.onClick.AddListener(LoginWithExistingAccount);
 
@@ -283,19 +285,12 @@ namespace Scenes
 
         private Dictionary<string, Wallet> _supportedWallets;
 
-        private void PopulateChainDropDown()
-        {
-            _chainDropdown.AddOptions(SupportedChains.Values.ToList());
-        }
-        
         private WalletConnectConfig BuildConfig()
         {
             // build chain
-            int index = _chainDropdown.value;
+            var projectConfig = ProjectConfigUtilities.Load();
 
-            int key = SupportedChains.Keys.ToArray()[index];
-            
-            Chain chain = new Chain(Chain.EvmNamespace, $"{key}", SupportedChains[key]);
+            Chain chain = new Chain(Chain.EvmNamespace, projectConfig.ChainId, projectConfig.Network);
             
             return new WalletConnectConfig
             {
@@ -303,7 +298,6 @@ namespace Scenes
                 ProjectName = ProjectName, 
                 BaseContext = BaseContext,
                 Chain = chain,
-                StoragePath = StoragePath, 
                 Metadata = Metadata, 
                 SupportedWallets = _supportedWallets, 
                 IsMobilePlatform = Application.isMobilePlatform, 

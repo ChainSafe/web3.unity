@@ -1,4 +1,5 @@
 using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.Wallets;
 using Scenes;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -10,6 +11,12 @@ public class Logout : MonoBehaviour
         // Remove the saved "remember me" data, if any
         PlayerPrefs.DeleteKey(Login.PlayerAccountKey);
 
+        // disconnect wallet
+        if (Web3Accessor.Web3.Signer is WebPageWallet wallet)
+        {
+            await wallet.Disconnect();
+        }
+        
         // Terminate Web3
         await Web3Accessor.Web3.TerminateAsync();
 
