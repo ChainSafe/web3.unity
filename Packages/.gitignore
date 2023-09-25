@@ -79,8 +79,8 @@ crashlytics-build.properties
 !*.meta
 
 # Ignore the build artifacts from our libraries
-/io.chainsafe.web3-unity/Runtime/Libraries/*.dll
-/io.chainsafe.web3-unity/Runtime/Libraries/*.dll.meta
+# /io.chainsafe.web3-unity/Runtime/Libraries/*.dll
+# /io.chainsafe.web3-unity/Runtime/Libraries/*.dll.meta
 /io.chainsafe.web3-unity/Runtime/Libraries/*.pdb
 /io.chainsafe.web3-unity/Runtime/Libraries/*.pdb.meta
 
