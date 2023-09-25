@@ -47,6 +47,9 @@ namespace ChainSafe.Gaming.Wallets
 
         public static string TestResponse { get; set; } = string.Empty;
 
+        // static to keep instance through runtime - related to logout/disconnect
+        public static WalletConnectUnity WalletConnectUnity { get; private set; } = new WalletConnectUnity();
+
         private static void InvokeConnected(ConnectedData connectedData)
         {
             OnConnected?.Invoke(connectedData);
@@ -67,8 +70,6 @@ namespace ChainSafe.Gaming.Wallets
         private readonly IRpcProvider provider;
 
         public string Address { get; private set; }
-
-        public WalletConnectUnity WalletConnectUnity { get; private set; } = new WalletConnectUnity();
 
         public async ValueTask WillStartAsync()
         {
@@ -111,7 +112,7 @@ namespace ChainSafe.Gaming.Wallets
             // var pageUrl = BuildUrl();
 
             // Wallet connect
-            SessionStruct session = GetSession();
+            SessionStruct session = WalletConnectUnity.Session;
 
             var (address, chainId) = GetCurrentAddress();
 
@@ -233,14 +234,9 @@ namespace ChainSafe.Gaming.Wallets
             }
         }
 
-        private SessionStruct GetSession()
-        {
-            return WalletConnectUnity.SignClient.Session.Get(WalletConnectUnity.SignClient.Session.Keys[0]);
-        }
-
         private (string, string) GetCurrentAddress()
         {
-            var currentSession = GetSession();
+            var currentSession = WalletConnectUnity.Session;
 
             var defaultChain = currentSession.Namespaces.Keys.FirstOrDefault();
 
@@ -338,6 +334,13 @@ namespace ChainSafe.Gaming.Wallets
             //         throw new Web3Exception("Invalid signature");
             //     }
             // }
+        }
+
+        public void Disconnect()
+        {
+            configuration.SavedUserAddress = null;
+
+            WalletConnectUnity.Disconnect();
         }
 
         /*

@@ -77,8 +77,6 @@ namespace Scenes
 
         [field: SerializeField] private TMP_Dropdown _chainDropdown;
         
-        public string StoragePath => $"{Application.persistentDataPath}/wc_storage.json";
-
         // chain id, name pairs
         public static Dictionary<int, string> SupportedChains { get; private set; } = new Dictionary<int, string>()
         {
@@ -109,7 +107,7 @@ namespace Scenes
 #if UNITY_WEBGL
             ProcessWeb3Auth();
 #endif
-            TryAutoLogin();
+            //TryAutoLogin();
 
             ExistingWalletButton.onClick.AddListener(LoginWithExistingAccount);
 
@@ -303,7 +301,6 @@ namespace Scenes
                 ProjectName = ProjectName, 
                 BaseContext = BaseContext,
                 Chain = chain,
-                StoragePath = StoragePath, 
                 Metadata = Metadata, 
                 SupportedWallets = _supportedWallets, 
                 IsMobilePlatform = Application.isMobilePlatform, 

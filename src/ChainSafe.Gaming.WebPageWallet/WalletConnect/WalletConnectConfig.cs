@@ -15,8 +15,6 @@ namespace ChainSafe.Gaming.Wallets.WalletConnect
 
         public Chain Chain { get; set; }
 
-        public string StoragePath { get; set; }
-
         public Metadata Metadata { get; set; }
 
         public ILogger Logger { get; set; }

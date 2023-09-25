@@ -2,8 +2,10 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using WalletConnectSharp.Common.Logging;
+using WalletConnectSharp.Common.Model.Errors;
 using WalletConnectSharp.Core;
 using WalletConnectSharp.Core.Models;
+using WalletConnectSharp.Network.Models;
 using WalletConnectSharp.Sign;
 using WalletConnectSharp.Sign.Models;
 using WalletConnectSharp.Sign.Models.Engine;
@@ -26,10 +28,19 @@ namespace ChainSafe.Gaming.Wallets.WalletConnect
 
         public WalletConnectSignClient SignClient { get; private set; }
 
+        public SessionStruct Session => SignClient.Session.Get(SignClient.Session.Keys[0]);
+
         public WalletConnectConfig Config { get; private set; }
 
         public async Task Initialize(WalletConnectConfig config)
         {
+            if (Core != null && Core.Initialized)
+            {
+                WCLogger.Log("Core already initialized");
+
+                return;
+            }
+
             Config = config;
 
             if (Config.Logger != null)
@@ -41,7 +52,7 @@ namespace ChainSafe.Gaming.Wallets.WalletConnect
             {
                 Name = Config.ProjectName,
                 ProjectId = Config.ProjectId,
-                Storage = BuildStorage(Config.StoragePath),
+                Storage = new InMemoryStorage(),
                 BaseContext = Config.BaseContext,
             });
 
@@ -56,12 +67,6 @@ namespace ChainSafe.Gaming.Wallets.WalletConnect
                 ProjectId = Config.ProjectId,
                 Storage = Core.Storage,
             });
-        }
-
-        private IKeyValueStorage BuildStorage(string path)
-        {
-            path = Path.Combine(path);
-            return new FileSystemStorage(path);
         }
 
         public async Task<ConnectedData> ConnectClient()
@@ -113,6 +118,11 @@ namespace ChainSafe.Gaming.Wallets.WalletConnect
             }
 
             return connectData;
+        }
+
+        public void Disconnect()
+        {
+            SignClient.Disconnect(Session.Topic, Error.FromErrorType(ErrorType.USER_DISCONNECTED));
         }
 
         private void InvokeConnected(ConnectedData connectedData)
