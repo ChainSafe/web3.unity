@@ -5,18 +5,18 @@ using UnityEngine;
 public class RampIntegrationSample : MonoBehaviour
 {
     [SerializeField] private RampData rampData;
-    private ChainsafeRampIntegrationBase rampIntegration;
+    private RampChainsafeIntegrationBase _integration;
 
     private void Awake()
     {
         Debug.LogError("AWAKE");
 #if UNITY_IOS
-        rampIntegration = new ChainsafeRampIntegrationiOS(rampData);
+        _integration = new RampChainsafeIntegrationiOS(rampData);
 #endif
     }
 
     public void ButtonClicked()
     {
-        rampIntegration.OpenRamp();
+        _integration.OpenRamp();
     }
 }

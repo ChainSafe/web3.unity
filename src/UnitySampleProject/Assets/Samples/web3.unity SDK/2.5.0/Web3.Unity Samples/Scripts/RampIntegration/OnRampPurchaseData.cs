@@ -1,8 +1,5 @@
-using System;
-
 namespace ChainSafe.GamingSdk.RampIntegration
 {
-    
     public struct OnRampPurchaseData
     {
         public double AppliedFee { get; set; }
@@ -23,6 +20,19 @@ namespace ChainSafe.GamingSdk.RampIntegration
         public string ReceiverAddress { get; set; }
         public string Status { get; set; }
         public string UpdatedAt { get; set; }
+
+        public override string ToString()
+        {
+            return
+                $"{nameof(AppliedFee)}: {AppliedFee}, {nameof(Asset)}: {Asset}, {nameof(AssetExchangeRate)}: " +
+                $"{AssetExchangeRate}, {nameof(BaseRampFee)}: {BaseRampFee}, {nameof(CreatedAt)}: " +
+                $"{CreatedAt}, {nameof(CryptoAmount)}: {CryptoAmount}, {nameof(EndTime)}: {EndTime}, " +
+                $"{nameof(EscrowAddress)}: {EscrowAddress}, {nameof(EscrowDetailsHash)}: {EscrowDetailsHash}," +
+                $" {nameof(FiatCurrency)}: {FiatCurrency}, {nameof(FiatValue)}: {FiatValue}, {nameof(FinalTxHash)}: " +
+                $"{FinalTxHash}, {nameof(Id)}: {Id}, {nameof(NetworkFee)}: {NetworkFee}, {nameof(PaymentMethodType)}: " +
+                $"{PaymentMethodType}, {nameof(ReceiverAddress)}: {ReceiverAddress}, {nameof(Status)}: " +
+                $"{Status}, {nameof(UpdatedAt)}: {UpdatedAt}";
+        }
 
         public OnRampPurchaseData(double appliedFee, AssetInfo asset, double assetExchangeRate,
             double baseRampFee, string createdAt, string cryptoAmount,
@@ -67,8 +77,13 @@ namespace ChainSafe.GamingSdk.RampIntegration
                 Symbol = symbol;
                 Type = type;
             }
+
+            public override string ToString()
+            {
+                return
+                    $"{nameof(Address)}: {Address}, {nameof(Decimals)}: " +
+                    $"{Decimals}, {nameof(Name)}: {Name}, {nameof(Symbol)}: {Symbol}, {nameof(Type)}: {Type}";
+            }
         }
     }
 }
-
-

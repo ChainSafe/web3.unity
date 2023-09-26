@@ -1,4 +1,0 @@
-framework module ChainsafeRampIntegration {
-  header "ChainsafeRampIntegration-Swift.h"
-  requires objc
-}

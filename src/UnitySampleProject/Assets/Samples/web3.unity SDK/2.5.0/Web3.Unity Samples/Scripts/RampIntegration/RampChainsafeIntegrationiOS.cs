@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Runtime.InteropServices;
 using AOT;
@@ -7,9 +8,9 @@ using UnityEngine;
 #if UNITY_IOS
 namespace ChainSafe.GamingSdk.RampIntegration
 {
-    public class ChainsafeRampIntegrationiOS : ChainsafeRampIntegrationBase
+    public class RampChainsafeIntegrationiOS : RampChainsafeIntegrationBase
     {
-        public ChainsafeRampIntegrationiOS(RampData rampData) : base(rampData)
+        public RampChainsafeIntegrationiOS(RampData rampData) : base(rampData)
         {
             setOnRampPurchase(SetOnRampPurchase);
             setOffRampSale(SetOffRampSale);
@@ -22,24 +23,49 @@ namespace ChainSafe.GamingSdk.RampIntegration
         private static extern void setOffRampSale(OffRampSaleCallback callback);
 
         [MonoPInvokeCallback(typeof(OnRampPurchaseCallback))]
-        public static void SetOnRampPurchase(OnRampPurchaseData data)
+        public static void SetOnRampPurchase(double appliedFee, 
+            string? assetAddress, 
+            int assetDecimals, 
+            string assetName, 
+            string assetSymbol, 
+            string assetType, 
+            double assetExchangeRate, 
+            double baseRampFee, 
+            string createdAt, 
+            string cryptoAmount, 
+            string? endTime, 
+            string? escrowAddress, 
+            string? escrowDetailsHash, 
+            string fiatCurrency, 
+            double fiatValue, 
+            string? finalTxHash, 
+            string id, 
+            double networkFee, 
+            string paymentMethodType, 
+            string receiverAddress, 
+            string status, 
+            string updatedAt)
         {
-            OnRampPurchaseEvent?.Invoke(data);
-            Debug.LogError("RAMP PURCHASEDDD");
+            var onRampPurchased = new OnRampPurchaseData(appliedFee,
+                new OnRampPurchaseData.AssetInfo(assetAddress, assetDecimals, assetName, assetSymbol, assetType),
+                assetExchangeRate, baseRampFee, createdAt, cryptoAmount, endTime, escrowAddress, escrowDetailsHash,
+                fiatCurrency, fiatValue, finalTxHash, id, networkFee, paymentMethodType, receiverAddress, status,
+                updatedAt);
+            OnRampPurchaseEvent?.Invoke(onRampPurchased);
         }
 
         [MonoPInvokeCallback(typeof(OffRampSaleCallback))]
-        public static void SetOffRampSale(string createdAt, // createdAt
-            string cryptoAmount, // cryptoAmount
-            string cryptoAssetAddress, // cryptoAssetAddress (nullable in Swift, so it's optional)
-            string cryptoAssetChain, // cryptoAssetChain
-            int cryptoAssetDecimals, // cryptoAssetDecimals
-            string cryptoAssetName, // cryptoAssetName
-            string cryptoAssetSymbol, // cryptoAssetSymbol
-            string cryptoAssetType, // cryptoAssetType
-            double fiatAmount, // fiatAmount
-            string fiatCurrencySymbol, // fiatCurrencySymbol
-            Guid id) // id (UUID in Swift) data)
+        public static void SetOffRampSale(string createdAt, 
+            string cryptoAmount, 
+            string cryptoAssetAddress, 
+            string cryptoAssetChain, 
+            int cryptoAssetDecimals, 
+            string cryptoAssetName, 
+            string cryptoAssetSymbol, 
+            string cryptoAssetType, 
+            double fiatAmount, 
+            string fiatCurrencySymbol, 
+            Guid id) 
         {
             OffRampSaleEvent?.Invoke(new OffRampSaleData
             {
@@ -49,17 +75,7 @@ namespace ChainSafe.GamingSdk.RampIntegration
                         cryptoAssetSymbol, cryptoAssetType)),
                 Fiat = new OffRampSaleData.FiatOffRamp(fiatAmount, fiatCurrencySymbol)
             });
-            Debug.LogError("RAMP SOLLDDDD");
-            Debug.Log($"{nameof(cryptoAmount)}: {cryptoAmount}\n" +
-                      $"{nameof(cryptoAssetAddress)}: {cryptoAssetAddress ?? "null"}\n" +
-                      $"{nameof(cryptoAssetChain)}: {cryptoAssetChain}\n" +
-                      $"{nameof(cryptoAssetDecimals)}: {cryptoAssetDecimals}\n" +
-                      $"{nameof(cryptoAssetName)}: {cryptoAssetName}\n" +
-                      $"{nameof(cryptoAssetSymbol)}: {cryptoAssetSymbol}\n" +
-                      $"{nameof(cryptoAssetType)}: {cryptoAssetType}\n" +
-                      $"{nameof(fiatAmount)}: {fiatAmount}\n" +
-                      $"{nameof(fiatCurrencySymbol)}: {fiatCurrencySymbol}\n" +
-                      $"{nameof(id)}: {id}");
+           
         }
 
         [DllImport("__Internal")]

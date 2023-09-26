@@ -4,77 +4,77 @@
 <dict>
 	<key>files</key>
 	<dict>
-		<key>Headers/ChainsafeRampIntegration-Swift.h</key>
+		<key>Headers/RampChainsafeIntegration-Swift.h</key>
 		<data>
-		blrGqZh87/JV723f0E81vtA9ZFY=
+		o1IPS2PyvggoaIXMtkGDR0SjTx8=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		Pdm9Vb1JFo9u++f8k8Wk5wH+2OE=
+		4gDFPhLDb4R53FF41V7+61MMens=
 		</data>
-		<key>Modules/ChainsafeRampIntegration.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo</key>
+		<key>Modules/RampChainsafeIntegration.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo</key>
 		<data>
-		QZDPh2o+okuZUrkmrmJg43EbiJI=
+		KBGvV51sB8ZnhWn0sfErQmE1l7U=
 		</data>
-		<key>Modules/ChainsafeRampIntegration.swiftmodule/arm64-apple-ios.abi.json</key>
+		<key>Modules/RampChainsafeIntegration.swiftmodule/arm64-apple-ios.abi.json</key>
 		<data>
 		FSPnLbho3G+LL9smI3XgVOqBIQ4=
 		</data>
-		<key>Modules/ChainsafeRampIntegration.swiftmodule/arm64-apple-ios.swiftdoc</key>
+		<key>Modules/RampChainsafeIntegration.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<data>
-		yjY0NZojHEdL9KWx8y0Jn/3oqx0=
+		HR+u7DtyUGwEhaKY0pzhDDWYU/Y=
 		</data>
-		<key>Modules/ChainsafeRampIntegration.swiftmodule/arm64-apple-ios.swiftmodule</key>
+		<key>Modules/RampChainsafeIntegration.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<data>
-		/NSAqb6WnfSV7QIJ3A3T+QnZHNc=
+		bJJibIXs3WZpsMV2KmPk4YzzjHg=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
-		c5QBQgH5q8dokMhy9a9nmNOtQ40=
+		hhoT+gr59Viy4yMNakq2I7S5tJA=
 		</data>
 	</dict>
 	<key>files2</key>
 	<dict>
-		<key>Headers/ChainsafeRampIntegration-Swift.h</key>
+		<key>Headers/RampChainsafeIntegration-Swift.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Lcjlv8fiOeyHenV00CB4+qSt3LFgdFFRUnQ2jIYbrwk=
+			JGXPkiQe/Q+4Bi+rA64Q2ljCSRTAYgZZE/AM1DJXZCk=
 			</data>
 		</dict>
-		<key>Modules/ChainsafeRampIntegration.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo</key>
+		<key>Modules/RampChainsafeIntegration.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			i/LHwP1aWw0jm/7DE+S+TW+OCVpIU7nmzb4crY5CShE=
+			wM0iKog7vxDubkUlr9BrFUAMHPUhETAucA+wTsmcdv0=
 			</data>
 		</dict>
-		<key>Modules/ChainsafeRampIntegration.swiftmodule/arm64-apple-ios.abi.json</key>
+		<key>Modules/RampChainsafeIntegration.swiftmodule/arm64-apple-ios.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
 			KnRdWE4y6t4QM5zi5JDptPdHFgJy1Tku+7GLkZS2aNM=
 			</data>
 		</dict>
-		<key>Modules/ChainsafeRampIntegration.swiftmodule/arm64-apple-ios.swiftdoc</key>
+		<key>Modules/RampChainsafeIntegration.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			2qZVIITIb4J7ynLxA3u7TxwbODhzvu5Zm+k/MGlrdKU=
+			gvipHxhFLOr8jRYI7NFKJ6u8nqJP1Luvxigb9inhsAE=
 			</data>
 		</dict>
-		<key>Modules/ChainsafeRampIntegration.swiftmodule/arm64-apple-ios.swiftmodule</key>
+		<key>Modules/RampChainsafeIntegration.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			8Mq9hjclEevDgJ6gBQA/ohL593YcgzXTufbkmkf1z4A=
+			4iwYMRGjAqjno2imXZ4rd9Qoe9UlWeg0VbnZAhFXUBM=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			5HLuldK3XMrBGifaUFh0nAKwsJaslUmPx48YDff4uyA=
+			TksYvfVjIRHZ6aKP9v3SApHLqGecPIwSJvYXrwHrUt0=
 			</data>
 		</dict>
 	</dict>
