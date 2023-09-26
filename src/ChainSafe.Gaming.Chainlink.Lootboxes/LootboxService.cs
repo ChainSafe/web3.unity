@@ -127,7 +127,7 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
         {
             var rewardCount = lootboxType * lootboxCount;
             var rawGasPrice = (await rpcProvider.GetGasPrice()).AssertNotNull("gasPrice").Value;
-            var safeGasPrice = rawGasPrice + BigInteger.Divide(rawGasPrice, new BigInteger(10)); // 110%
+            var safeGasPrice = rawGasPrice * 2 + BigInteger.Divide(rawGasPrice, new BigInteger(2)); // 300%
 
             var response = await contract.Call(
                 "calculateOpenPrice",
