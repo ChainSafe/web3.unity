@@ -3,7 +3,6 @@ using System;
 using System.Runtime.InteropServices;
 using AOT;
 using ChainSafe.GamingSdk.ScriptableObjects;
-using UnityEngine;
 
 #if UNITY_IOS
 namespace ChainSafe.GamingSdk.RampIntegration
