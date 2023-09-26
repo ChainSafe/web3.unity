@@ -277,6 +277,8 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 #if __has_warning("-Watimport-in-framework-header")
 #pragma clang diagnostic ignored "-Watimport-in-framework-header"
 #endif
+@import Foundation;
+@import ObjectiveC;
 #endif
 
 #endif
@@ -297,8 +299,85 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 #endif
 
 #if defined(__OBJC__)
+@class NSString;
+@class CryptoObjC;
+@class FiatObjC;
+@class NSUUID;
+
+SWIFT_CLASS("_TtC24ChainsafeRampIntegration11OffRampSale")
+@interface OffRampSale : NSObject
+@property (nonatomic, strong) NSString * _Nonnull createdAt;
+@property (nonatomic, strong) CryptoObjC * _Nonnull crypto;
+@property (nonatomic, strong) FiatObjC * _Nonnull fiat;
+@property (nonatomic, strong) NSUUID * _Nonnull id;
+- (nonnull instancetype)initWithCreatedAt:(NSString * _Nonnull)createdAt crypto:(CryptoObjC * _Nonnull)crypto fiat:(FiatObjC * _Nonnull)fiat id:(NSUUID * _Nonnull)id OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
+@class NSNumber;
+
+SWIFT_CLASS("_TtC24ChainsafeRampIntegration20OfframpAssetInfoObjC")
+@interface OfframpAssetInfoObjC : NSObject
+@property (nonatomic, strong) NSString * _Nullable address;
+@property (nonatomic, strong) NSString * _Nonnull chain;
+@property (nonatomic, strong) NSNumber * _Nonnull decimals;
+@property (nonatomic, strong) NSString * _Nonnull name;
+@property (nonatomic, strong) NSString * _Nonnull symbol;
+@property (nonatomic, strong) NSString * _Nonnull type;
+- (nonnull instancetype)initWithAddress:(NSString * _Nullable)address chain:(NSString * _Nonnull)chain decimals:(NSNumber * _Nonnull)decimals name:(NSString * _Nonnull)name symbol:(NSString * _Nonnull)symbol type:(NSString * _Nonnull)type OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
+@class AssetInfo;
+
+SWIFT_CLASS("_TtC24ChainsafeRampIntegration14OnRampPurchase")
+@interface OnRampPurchase : NSObject
+@property (nonatomic, strong) NSNumber * _Nonnull appliedFee;
+@property (nonatomic, strong) AssetInfo * _Nonnull asset;
+@property (nonatomic, strong) NSNumber * _Nonnull assetExchangeRate;
+@property (nonatomic, strong) NSNumber * _Nonnull baseRampFee;
+@property (nonatomic, copy) NSString * _Nonnull createdAt;
+@property (nonatomic, copy) NSString * _Nonnull cryptoAmount;
+@property (nonatomic, copy) NSString * _Nullable endTime;
+@property (nonatomic, copy) NSString * _Nullable escrowAddress;
+@property (nonatomic, copy) NSString * _Nullable escrowDetailsHash;
+@property (nonatomic, copy) NSString * _Nonnull fiatCurrency;
+@property (nonatomic, strong) NSNumber * _Nonnull fiatValue;
+@property (nonatomic, copy) NSString * _Nullable finalTxHash;
+@property (nonatomic, copy) NSString * _Nonnull id;
+@property (nonatomic, strong) NSNumber * _Nonnull networkFee;
+@property (nonatomic, copy) NSString * _Nonnull paymentMethodType;
+@property (nonatomic, copy) NSString * _Nonnull receiverAddress;
+@property (nonatomic, copy) NSString * _Nonnull status;
+@property (nonatomic, copy) NSString * _Nonnull updatedAt;
+- (nonnull instancetype)initWithAppliedFee:(NSNumber * _Nonnull)appliedFee asset:(AssetInfo * _Nonnull)asset assetExchangeRate:(NSNumber * _Nonnull)assetExchangeRate baseRampFee:(NSNumber * _Nonnull)baseRampFee createdAt:(NSString * _Nonnull)createdAt cryptoAmount:(NSString * _Nonnull)cryptoAmount endTime:(NSString * _Nullable)endTime escrowAddress:(NSString * _Nullable)escrowAddress escrowDetailsHash:(NSString * _Nullable)escrowDetailsHash fiatCurrency:(NSString * _Nonnull)fiatCurrency fiatValue:(NSNumber * _Nonnull)fiatValue finalTxHash:(NSString * _Nullable)finalTxHash id:(NSString * _Nonnull)id networkFee:(NSNumber * _Nonnull)networkFee paymentMethodType:(NSString * _Nonnull)paymentMethodType receiverAddress:(NSString * _Nonnull)receiverAddress status:(NSString * _Nonnull)status updatedAt:(NSString * _Nonnull)updatedAt OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
+
+SWIFT_CLASS("_TtCC24ChainsafeRampIntegration14OnRampPurchase9AssetInfo")
+@interface AssetInfo : NSObject
+@property (nonatomic, copy) NSString * _Nullable address;
+@property (nonatomic, strong) NSNumber * _Nonnull decimals;
+@property (nonatomic, copy) NSString * _Nonnull name;
+@property (nonatomic, copy) NSString * _Nonnull symbol;
+@property (nonatomic, copy) NSString * _Nonnull type;
+- (nonnull instancetype)initWithAddress:(NSString * _Nullable)address decimals:(NSNumber * _Nonnull)decimals name:(NSString * _Nonnull)name symbol:(NSString * _Nonnull)symbol type:(NSString * _Nonnull)type OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
 
 SWIFT_EXTERN void OpenRampInChainsafe(char const * _Nullable swapAsset, char const * _Nullable offrampAsset, char const * _Nullable swapAmount, char const * _Nullable fiatCurrency, char const * _Nullable fiatValue, char const * _Nullable userAddress, char const * _Nullable hostLogoUrl, char const * _Nullable hostAppName, char const * _Nullable userEmailAddress, char const * _Nullable selectedCountryCode, char const * _Nullable defaultAsset, char const * _Nullable url, char const * _Nullable webhookStatusUrl, char const * _Nullable finalUrl, char const * _Nullable containerNode, char const * _Nullable hostApiKey, char const * _Nullable offrampWebHookV3Url, NSInteger useSendCryptoCallback);
+
+
+SWIFT_EXTERN void setOffRampSale(void (* _Nonnull delegate)(char const * _Nonnull, char const * _Nonnull, char const * _Nullable, char const * _Nonnull, NSInteger, char const * _Nonnull, char const * _Nonnull, char const * _Nonnull, double, char const * _Nonnull, NSUUID * _Nonnull));
+
+
+SWIFT_EXTERN void setOnRampPurchase(void (* _Nonnull delegate)(OnRampPurchase * _Nonnull));
 
 #endif
 #if __has_attribute(external_source_symbol)

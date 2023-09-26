@@ -9,7 +9,8 @@ public class RampIntegrationSample : MonoBehaviour
 
     private void Awake()
     {
-#if UNITY_IOS && !UNITY_EDITOR
+        Debug.LogError("AWAKE");
+#if UNITY_IOS
         rampIntegration = new ChainsafeRampIntegrationiOS(rampData);
 #endif
     }
