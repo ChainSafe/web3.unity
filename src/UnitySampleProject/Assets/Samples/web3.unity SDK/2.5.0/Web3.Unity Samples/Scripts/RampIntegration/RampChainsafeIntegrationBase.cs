@@ -33,7 +33,7 @@ namespace ChainSafe.GamingSdk.RampIntegration
         
         protected readonly RampData _rampData;
         
-        protected static  Action<OnRampPurchaseData> OnRampPurchaseEvent = null!;
+        public static  Action<OnRampPurchaseData> OnRampPurchaseEvent = null!;
         #endregion
         #region Off Ramp
         protected delegate void OffRampSaleCallback(
@@ -50,7 +50,7 @@ namespace ChainSafe.GamingSdk.RampIntegration
             Guid id                    
         );
         
-        public static  Action<OffRampSaleData> OffRampSaleEvent;
+        public static Action<OffRampSaleData> OffRampSaleEvent = null;
         #endregion
 
         protected RampChainsafeIntegrationBase(RampData rampData)

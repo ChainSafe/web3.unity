@@ -1,10 +1,8 @@
 using System;
-using System.Runtime.InteropServices;
 
 namespace ChainSafe.GamingSdk.RampIntegration
 {
-    [StructLayout(LayoutKind.Sequential)]
-    public struct OfframpAssetInfo
+    public class OfframpAssetInfo
     {
         public OfframpAssetInfo(string address, string chain, int decimals, string name, string symbol, string type)
         {
@@ -16,15 +14,14 @@ namespace ChainSafe.GamingSdk.RampIntegration
             Type = type;
         }
 
+        public OfframpAssetInfo()
+        {
+        }
+
         public string Address { get; set; }
         public string Chain { get; set; }
 
-        public int
-            Decimals
-        {
-            get;
-            set;
-        } // Using int for simplicity, but you might need to adjust if decimals can have fractional values.
+        public int Decimals { get; set; }
 
         public string Name { get; set; }
         public string Symbol { get; set; }
@@ -32,21 +29,13 @@ namespace ChainSafe.GamingSdk.RampIntegration
 
         public override string ToString()
         {
-            return $"{nameof(Address)}: {Address}, {nameof(Chain)}: {Chain}, {nameof(Decimals)}: {Decimals}, {nameof(Name)}: {Name}, {nameof(Symbol)}: {Symbol}, {nameof(Type)}: {Type}";
+            return
+                $"{nameof(Address)}: {Address}, {nameof(Chain)}: {Chain}, {nameof(Decimals)}: {Decimals}, {nameof(Name)}: {Name}, {nameof(Symbol)}: {Symbol}, {nameof(Type)}: {Type}";
         }
     }
 
-    [StructLayout(LayoutKind.Sequential)]
-    public struct OffRampSaleData
+    public class OffRampSaleData
     {
-        public OffRampSaleData(string createdAt, CryptoOffRamp crypto, FiatOffRamp fiat, Guid id)
-        {
-            CreatedAt = createdAt;
-            Crypto = crypto;
-            Fiat = fiat;
-            Id = id;
-        }
-
         public string CreatedAt { get; set; }
         public CryptoOffRamp Crypto { get; set; }
         public FiatOffRamp Fiat { get; set; }
@@ -54,16 +43,20 @@ namespace ChainSafe.GamingSdk.RampIntegration
 
         public override string ToString()
         {
-            return $"{nameof(CreatedAt)}: {CreatedAt}, {nameof(Crypto)}: {Crypto}, {nameof(Fiat)}: {Fiat}, {nameof(Id)}: {Id}";
+            return
+                $"{nameof(CreatedAt)}: {CreatedAt}, {nameof(Crypto)}: {Crypto}, {nameof(Fiat)}: {Fiat}, {nameof(Id)}: {Id}";
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public struct CryptoOffRamp
+        public class CryptoOffRamp
         {
             public CryptoOffRamp(string amount, OfframpAssetInfo assetInfo)
             {
                 Amount = amount;
                 AssetInfo = assetInfo;
+            }
+
+            public CryptoOffRamp()
+            {
             }
 
             public string Amount { get; set; }
@@ -75,13 +68,16 @@ namespace ChainSafe.GamingSdk.RampIntegration
             }
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public struct FiatOffRamp
+        public class FiatOffRamp
         {
             public FiatOffRamp(double amount, string currencySymbol)
             {
                 Amount = amount;
                 CurrencySymbol = currencySymbol;
+            }
+
+            public FiatOffRamp()
+            {
             }
 
             public double Amount { get; set; } // Using decimal for currency values in C#
