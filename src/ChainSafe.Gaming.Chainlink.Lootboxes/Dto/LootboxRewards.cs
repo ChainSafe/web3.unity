@@ -1,17 +1,9 @@
-using System.Collections.Generic;
-
 namespace ChainSafe.Gaming.Chainlink.Lootboxes
 {
+    using System.Collections.Generic;
+
     public class LootboxRewards
     {
-        public List<Erc20Reward> Erc20Rewards { get; set; }
-
-        public List<Erc721Reward> Erc721Rewards { get; set; }
-
-        public List<Erc1155Reward> Erc1155Rewards { get; set; }
-
-        public List<Erc1155NftReward> Erc1155NftRewards { get; set; }
-
         public static LootboxRewards Empty =>
             new LootboxRewards
             {
@@ -21,5 +13,12 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
                 Erc1155NftRewards = new List<Erc1155NftReward>(),
             };
 
+        public List<Erc20Reward> Erc20Rewards { get; set; }
+
+        public List<Erc721Reward> Erc721Rewards { get; set; }
+
+        public List<Erc1155Reward> Erc1155Rewards { get; set; }
+
+        public List<Erc1155NftReward> Erc1155NftRewards { get; set; }
     }
 }

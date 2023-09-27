@@ -6,6 +6,6 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
         Erc20,
         Erc721,
         Erc1155,
-        Erc1155Nft
+        Erc1155Nft,
     }
 }

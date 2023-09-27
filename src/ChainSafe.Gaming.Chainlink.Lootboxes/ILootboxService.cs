@@ -1,10 +1,10 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Threading.Tasks;
-
 namespace ChainSafe.Gaming.Chainlink.Lootboxes
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Numerics;
+    using System.Threading.Tasks;
+
     public interface ILootboxService
     {
         /// <summary>
@@ -44,8 +44,9 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
         Task<uint> OpeningLootboxType();
 
         /// <summary>
-        /// TODO
+        /// TODO.
         /// </summary>
+        /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
         Task OpenLootbox(uint lootboxType, uint lootboxCount = 1);
 
         Task<bool> CanClaimRewards();
@@ -58,8 +59,8 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
 
         async Task<List<LootboxTypeInfo>> FetchAllLootboxes()
         {
-            var typeIds = await GetLootboxTypes();
-            var loadBalanceTasks = typeIds.Select(BalanceOf);
+            var typeIds = await this.GetLootboxTypes();
+            var loadBalanceTasks = typeIds.Select(this.BalanceOf);
             var balances = await Task.WhenAll(loadBalanceTasks);
 
             return Enumerable.Range(0, typeIds.Count)

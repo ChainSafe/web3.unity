@@ -1,8 +1,8 @@
-using System.Numerics;
-using Nethereum.ABI.FunctionEncoding.Attributes;
-
 namespace ChainSafe.Gaming.Chainlink.Lootboxes
 {
+    using System.Numerics;
+    using Nethereum.ABI.FunctionEncoding.Attributes;
+
     [Event("RewardsClaimed")]
     public class RewardsClaimedEvent : IEventDTO
     {

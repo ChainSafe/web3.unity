@@ -1,23 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Threading.Tasks;
-using ChainSafe.Gaming.Evm.Contracts;
-using ChainSafe.Gaming.Evm.Contracts.Extensions;
-using ChainSafe.Gaming.Evm.Providers;
-using ChainSafe.Gaming.Evm.Signers;
-using ChainSafe.Gaming.Evm.Transactions;
-using ChainSafe.Gaming.Web3;
-using ChainSafe.Gaming.Web3.Core;
-using ChainSafe.Gaming.Web3.Core.Debug;
-using Nethereum.Hex.HexTypes;
-using Nethereum.RPC.Eth.DTOs;
-using Newtonsoft.Json;
-
-
-namespace ChainSafe.Gaming.Chainlink.Lootboxes
+﻿namespace ChainSafe.Gaming.Chainlink.Lootboxes
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Numerics;
+    using System.Threading.Tasks;
+    using ChainSafe.Gaming.Evm.Contracts;
+    using ChainSafe.Gaming.Evm.Contracts.Extensions;
+    using ChainSafe.Gaming.Evm.Providers;
+    using ChainSafe.Gaming.Evm.Signers;
+    using ChainSafe.Gaming.Evm.Transactions;
+    using ChainSafe.Gaming.Web3;
+    using ChainSafe.Gaming.Web3.Core;
+    using ChainSafe.Gaming.Web3.Core.Debug;
+    using Nethereum.Hex.HexTypes;
+    using Nethereum.RPC.Eth.DTOs;
+    using Newtonsoft.Json;
+
     public class LootboxService : ILootboxService, ILifecycleParticipant
     {
         public const int GasPerUnit = 100000;
@@ -28,7 +27,7 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
         private readonly IRpcProvider rpcProvider;
 
         private Contract contract;
-        private Dictionary<string,RewardType> rewardTypeByTokenAddress;
+        private Dictionary<string, RewardType> rewardTypeByTokenAddress;
 
         public LootboxService(
             LootboxServiceConfig config,
@@ -52,20 +51,20 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
 
         async ValueTask ILifecycleParticipant.WillStartAsync()
         {
-            var contractAbi = config.ContractAbi.AssertNotNull(nameof(config.ContractAbi));
-            var contractAddress = config.ContractAddress.AssertNotNull(nameof(config.ContractAddress));
+            var contractAbi = this.config.ContractAbi.AssertNotNull(nameof(this.config.ContractAbi));
+            var contractAddress = this.config.ContractAddress.AssertNotNull(nameof(this.config.ContractAddress));
 
             // todo check if contract is correct
-            contract = contractBuilder.Build(contractAbi, contractAddress);
+            this.contract = this.contractBuilder.Build(contractAbi, contractAddress);
 
-            rewardTypeByTokenAddress = await MapTokenAddressToRewardType();
+            this.rewardTypeByTokenAddress = await MapTokenAddressToRewardType();
 
             async Task<Dictionary<string, RewardType>> MapTokenAddressToRewardType()
             {
-                var tokenAddresses = (List<string>)(await contract.Call("getAllowedTokens"))[0];
+                var tokenAddresses = (List<string>)(await this.contract.Call("getAllowedTokens"))[0];
 
                 // Array of token reward types in the same order as getAllowedTokens()
-                var rewardTypes = ((List<BigInteger>)(await contract.Call("getAllowedTokenTypes"))[0])
+                var rewardTypes = ((List<BigInteger>)(await this.contract.Call("getAllowedTokenTypes"))[0])
                     .Select(bi => (int)bi)
                     .Cast<RewardType>()
                     .ToList();
@@ -85,7 +84,7 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
 
         public async Task<List<uint>> GetLootboxTypes()
         {
-            var response = await contract.Call("getLootboxTypes");
+            var response = await this.contract.Call("getLootboxTypes");
             var bigIntTypes = (List<BigInteger>)response[0];
 
             if (bigIntTypes.Any(v => v > int.MaxValue))
@@ -101,14 +100,14 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
 
         public async Task<uint> BalanceOf(uint lootboxType)
         {
-            var playerAddress = await GetCurrentPlayerAddress();
+            var playerAddress = await this.GetCurrentPlayerAddress();
 
-            return await BalanceOf(playerAddress, lootboxType);
+            return await this.BalanceOf(playerAddress, lootboxType);
         }
 
         public async Task<uint> BalanceOf(string account, uint lootboxType)
         {
-            var response = await contract.Call(
+            var response = await this.contract.Call(
                 "balanceOf",
                 new object[] { account, lootboxType });
             var bigIntBalance = (BigInteger)response[0];
@@ -127,12 +126,12 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
         public async Task<BigInteger> CalculateOpenPrice(uint lootboxType, uint lootboxCount)
         {
             var rewardCount = lootboxType * lootboxCount;
-            var rawGasPrice = (await rpcProvider.GetGasPrice()).AssertNotNull("gasPrice").Value;
-            var safeGasPrice = rawGasPrice * 2 + BigInteger.Divide(rawGasPrice, new BigInteger(2)); // 300%
+            var rawGasPrice = (await this.rpcProvider.GetGasPrice()).AssertNotNull("gasPrice").Value;
+            var safeGasPrice = (rawGasPrice * 2) + BigInteger.Divide(rawGasPrice, new BigInteger(2)); // 300%
 
-            var response = await contract.Call(
+            var response = await this.contract.Call(
                 "calculateOpenPrice",
-                new object[] { 50000 + GasPerUnit * rewardCount, safeGasPrice, rewardCount, });
+                new object[] { 50000 + (GasPerUnit * rewardCount), safeGasPrice, rewardCount, });
             var openPrice = (BigInteger)response[0];
 
             return openPrice;
@@ -140,8 +139,8 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
 
         public async Task<bool> IsOpeningLootbox()
         {
-            var playerAddress = await GetCurrentPlayerAddress();
-            var response = await contract.Call("openerRequests", new object[] { playerAddress });
+            var playerAddress = await this.GetCurrentPlayerAddress();
+            var response = await this.contract.Call("openerRequests", new object[] { playerAddress });
             var requests = (BigInteger)response[0];
             return requests > 0;
         }
@@ -154,24 +153,24 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
         public async Task OpenLootbox(uint lootboxType, uint lootboxCount = 1)
         {
             var rewardCount = lootboxType * lootboxCount;
-            var openPrice = await CalculateOpenPrice(lootboxCount, lootboxCount);
+            var openPrice = await this.CalculateOpenPrice(lootboxCount, lootboxCount);
 
-            await contract.Send(
+            await this.contract.Send(
                 "open",
-                new object[] { 50000 + GasPerUnit * rewardCount, new[] { lootboxType }, new[] { lootboxCount } },
+                new object[] { 50000 + (GasPerUnit * rewardCount), new[] { lootboxType }, new[] { lootboxCount } },
                 new TransactionRequest { Value = new HexBigInteger(openPrice) });
         }
 
         public async Task<bool> CanClaimRewards()
         {
-            var playerAddress = await GetCurrentPlayerAddress();
+            var playerAddress = await this.GetCurrentPlayerAddress();
 
-            return await CanClaimRewards(playerAddress);
+            return await this.CanClaimRewards(playerAddress);
         }
 
         public async Task<bool> CanClaimRewards(string account)
         {
-            var response = await contract.Call(
+            var response = await this.contract.Call(
                 "canClaimRewards",
                 new object[] { account });
             var canClaimRewards = (bool)response[0];
@@ -181,14 +180,14 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
 
         public async Task<LootboxRewards> ClaimRewards()
         {
-            var playerAddress = await GetCurrentPlayerAddress();
+            var playerAddress = await this.GetCurrentPlayerAddress();
 
-            return await ClaimRewards(playerAddress);
+            return await this.ClaimRewards(playerAddress);
         }
 
         public async Task<LootboxRewards> ClaimRewards(string account)
         {
-            var (_, receipt) = await contract.SendWithReceipt("claimRewards", new object[] { account });
+            var (_, receipt) = await this.contract.SendWithReceipt("claimRewards", new object[] { account });
             var logs = receipt.Logs.Select(jToken => JsonConvert.DeserializeObject<FilterLog>(jToken.ToString()));
             var eventAbi = EventExtensions.GetEventABI<RewardsClaimedEvent>();
             var eventLogs = logs
@@ -209,7 +208,7 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
                 foreach (var eventLog in eventLogs)
                 {
                     var eventData = eventLog.Event;
-                    var rewardType = rewardTypeByTokenAddress[eventData.TokenAddress];
+                    var rewardType = this.rewardTypeByTokenAddress[eventData.TokenAddress];
 
                     switch (rewardType)
                     {
@@ -254,12 +253,12 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
 
         private async Task<string> GetCurrentPlayerAddress()
         {
-            if (signer is null)
+            if (this.signer is null)
             {
                 throw new Web3Exception($"No {nameof(ISigner)} was registered. Can't get current user's address.");
             }
 
-            return await signer.GetAddress();
+            return await this.signer.GetAddress();
         }
     }
 }
