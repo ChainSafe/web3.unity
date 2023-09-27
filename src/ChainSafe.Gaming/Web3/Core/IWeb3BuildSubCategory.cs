@@ -1,6 +1,6 @@
-using ChainSafe.GamingWeb3.Build;
+using ChainSafe.Gaming.Web3.Build;
 
-namespace ChainSafe.GamingSDK.EVM.Web3.Core
+namespace ChainSafe.Gaming.Web3
 {
     public interface IWeb3BuildSubCategory
     {

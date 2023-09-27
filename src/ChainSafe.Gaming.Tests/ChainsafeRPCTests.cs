@@ -20,7 +20,7 @@ namespace ChainSafe.Gaming.Tests
 
             // We shouldn't be relaying on a .Result from ValueTask
             // that is why we need to explicitly wait for it to finish
-            var firstAccountTask = Web3Util.CreateWeb3().AsTask();
+            var firstAccountTask = Web3Util.CreateWeb3(0).AsTask();
             firstAccountTask.Wait();
             firstAccount = firstAccountTask.Result;
 

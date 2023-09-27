@@ -3,32 +3,22 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
-using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using Nethereum.ABI.EIP712;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
 using Nethereum.Signer.EIP712;
-<<<<<<<< HEAD:src/ChainSafe.Gaming.Debugging/JsonRpcWallet.cs
-using Web3Unity.Scripts.Library.Ethers.Providers;
-using Web3Unity.Scripts.Library.Ethers.Signers;
-using TransactionRequest = Web3Unity.Scripts.Library.Ethers.Transactions.TransactionRequest;
-using TransactionResponse = Web3Unity.Scripts.Library.Ethers.Transactions.TransactionResponse;
-
-namespace ChainSafe.Gaming.Debugging
-========
 
 namespace ChainSafe.Gaming.Wallets
->>>>>>>> main:src/ChainSafe.Gaming.Tests/JsonRpcWallet.cs
 {
     public class JsonRpcWallet : ISigner, ITransactionExecutor, ILifecycleParticipant
     {
-        private readonly JsonRpcWalletConfig configuration;
+        private readonly JsonRpcWalletConfiguration configuration;
         private readonly IRpcProvider provider;
         private string address;
 
-        public JsonRpcWallet(JsonRpcWalletConfig configuration, IRpcProvider provider)
+        public JsonRpcWallet(JsonRpcWalletConfiguration configuration, IRpcProvider provider)
         {
             this.configuration = configuration;
             this.provider = provider;

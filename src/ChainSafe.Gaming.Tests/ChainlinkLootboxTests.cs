@@ -5,7 +5,8 @@ using System.Numerics;
 using System.Threading.Tasks;
 using Chainsafe.Gaming.Chainlink;
 using ChainSafe.Gaming.Chainlink.Lootboxes;
-using ChainSafe.GamingWeb3;
+using ChainSafe.Gaming.Tests;
+using ChainSafe.Gaming.Web3.Core;
 using NUnit.Framework;
 
 namespace ChainSafe.GamingSDK.EVM.Tests
@@ -13,7 +14,7 @@ namespace ChainSafe.GamingSDK.EVM.Tests
     [TestFixture]
     public class ChainlinkLootboxTests // todo: not sure if should assert default network values
     {
-        private GamingWeb3.Web3 web3;
+        private Gaming.Web3.Web3 web3;
 
         // todo add automatic emulator boot up
         [OneTimeSetUp]

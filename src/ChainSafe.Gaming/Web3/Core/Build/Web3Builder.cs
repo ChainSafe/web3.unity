@@ -2,8 +2,9 @@
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm;
 using ChainSafe.Gaming.Evm.Contracts;
+using ChainSafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.Web3.Core.Evm.EventPoller;
 using ChainSafe.Gaming.Web3.Environment;
-using ChainSafe.Gaming.Web3.Evm.EventPoller;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ChainSafe.Gaming.Web3.Build

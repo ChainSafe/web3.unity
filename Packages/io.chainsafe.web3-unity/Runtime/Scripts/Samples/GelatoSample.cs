@@ -1,5 +1,6 @@
 using System.Numerics;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Web3;
 using ChainSafe.GamingSdk.Gelato;
 using ChainSafe.GamingSdk.Gelato.Dto;
 using UnityEngine;
@@ -185,7 +186,7 @@ public class GelatoSample
                 case TaskState.Cancelled:
                     return new TaskResult(relayResponse.TaskId, status);
                 default:
-                    await SafeDelay.WaitForSeconds(2);
+                    await WaitForSeconds(2);
                     continue;
             }
         }

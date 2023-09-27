@@ -2,7 +2,7 @@ using ChainSafe.Gaming.Unity;
 using ChainSafe.Gaming.Web3.Environment;
 using UnityEngine;
 
-namespace ChainSafe.Gaming.Web3.Unity
+namespace ChainSafe.Gaming.Web3.Core.Unity
 {
     public class UnityLogWriter : ILogWriter
     {

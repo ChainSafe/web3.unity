@@ -1,5 +1,5 @@
-﻿using ChainSafe.GamingSDK.EVM.Web3.Core;
-using ChainSafe.GamingWeb3;
+﻿using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Core;
 
 namespace Chainsafe.Gaming.Chainlink
 {

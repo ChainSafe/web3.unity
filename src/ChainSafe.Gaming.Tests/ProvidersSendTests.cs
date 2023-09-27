@@ -3,6 +3,7 @@ using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Tests.Node;
 using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Core;
 using Nethereum.Hex.HexTypes;
 using NUnit.Framework;
 using static ChainSafe.Gaming.Tests.Web3Util;

@@ -2,8 +2,7 @@
 using System.Buffers.Text;
 using System.Numerics;
 using System.Threading.Tasks;
-using ChainSafe.GamingSDK.EVM.Web3.Core.Extensions;
-using ChainSafe.GamingWeb3.Environment;
+using ChainSafe.Gaming.Web3.Environment;
 
 namespace LootBoxes
 {
@@ -35,6 +34,8 @@ namespace LootBoxes
             {
                 uri = uri.Replace("{id}", tokenId.ToString());
             }
+            
+            
 
             var response = await httpClient.Get<Erc1155MetaData>(uri);
             return response.EnsureResponse();

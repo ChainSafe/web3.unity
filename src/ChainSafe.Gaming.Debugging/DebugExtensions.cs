@@ -1,5 +1,4 @@
-﻿using ChainSafe.GamingWeb3;
-using ChainSafe.GamingWeb3.Build;
+﻿using ChainSafe.Gaming.Web3.Build;
 
 namespace ChainSafe.Gaming.Debugging
 {

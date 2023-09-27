@@ -29,7 +29,7 @@
     <PackageReference Include="Nethereum.RPC" Version="4.16.0" />
     <PackageReference Include="Nethereum.Signer" Version="4.16.0" />
     <PackageReference Include="Nethereum.Web3" Version="4.16.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="[13.0.1,14)" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
   <!--

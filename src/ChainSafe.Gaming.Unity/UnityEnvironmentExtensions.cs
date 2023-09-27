@@ -4,7 +4,7 @@ using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Environment;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ChainSafe.Gaming.Web3.Unity
+namespace ChainSafe.Gaming.Web3.Core.Unity
 {
     public static class UnityEnvironmentExtensions
     {

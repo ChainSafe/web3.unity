@@ -14,12 +14,17 @@ namespace ChainSafe.Gaming.Tests
 {
     internal static class Web3Util
     {
-        public static ValueTask<ChainSafe.Gaming.Web3.Web3> CreateWeb3(int accountIndex = 0)
+        public static ValueTask<Web3.Web3> CreateWeb3(int accountIndex = 0)
         {
             return CreateWeb3(new JsonRpcWalletConfiguration { AccountIndex = accountIndex });
         }
 
-        private static ValueTask<ChainSafe.Gaming.Web3.Web3> CreateWeb3(
+        public static ValueTask<Web3.Web3> CreateWeb3(Web3Builder.ConfigureServicesDelegate configureDelegate = null, int accountIndex = 0)
+        {
+            return CreateWeb3(new JsonRpcWalletConfiguration { AccountIndex = accountIndex });
+        }
+
+        private static ValueTask<Web3.Web3> CreateWeb3(
             JsonRpcWalletConfiguration jsonRpcWalletConfiguration)
         {
             return new Web3Builder(
@@ -42,7 +47,7 @@ namespace ChainSafe.Gaming.Tests
                 .BuildAsync();
         }
 
-        public static string DeployContracts(ChainSafe.Gaming.Web3.Web3 web3, string bytecode, string abi)
+        public static string DeployContracts(Web3.Web3 web3, string bytecode, string abi)
         {
             var builder = new DeployContractTransactionBuilder();
             var txReq = builder.BuildTransaction(bytecode, abi, null);

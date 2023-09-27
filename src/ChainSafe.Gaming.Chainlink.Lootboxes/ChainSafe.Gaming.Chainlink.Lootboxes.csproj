@@ -7,7 +7,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Chainsafe.Gaming.Chainlink\Chainsafe.Gaming.Chainlink.csproj" />
-      <ProjectReference Include="..\ChainSafe.GamingSDK.EVM\ChainSafe.GamingSDK.EVM.csproj" />
+      <ProjectReference Include="..\ChainSafe.Gaming\ChainSafe.Gaming.csproj" />
     </ItemGroup>
 
 </Project>

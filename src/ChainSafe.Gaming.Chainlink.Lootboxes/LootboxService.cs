@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
-using ChainSafe.GamingSDK.EVM.Web3.Core;
-using ChainSafe.GamingSDK.EVM.Web3.Core.Debug;
-using ChainSafe.GamingWeb3;
+using ChainSafe.Gaming.Evm.Contracts;
+using ChainSafe.Gaming.Evm.Contracts.Extensions;
+using ChainSafe.Gaming.Evm.Providers;
+using ChainSafe.Gaming.Evm.Signers;
+using ChainSafe.Gaming.Evm.Transactions;
+using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.Web3.Core.Debug;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
 using Newtonsoft.Json;
-using Web3Unity.Scripts.Library.Ethers.Contracts;
-using Web3Unity.Scripts.Library.Ethers.Contracts.Extensions;
-using Web3Unity.Scripts.Library.Ethers.Providers;
-using Web3Unity.Scripts.Library.Ethers.Signers;
-using Web3Unity.Scripts.Library.Ethers.Transactions;
+
 
 namespace ChainSafe.Gaming.Chainlink.Lootboxes
 {

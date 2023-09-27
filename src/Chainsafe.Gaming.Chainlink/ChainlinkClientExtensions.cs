@@ -1,4 +1,4 @@
-using ChainSafe.GamingWeb3;
+using ChainSafe.Gaming.Web3;
 
 namespace Chainsafe.Gaming.Chainlink
 {

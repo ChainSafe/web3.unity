@@ -6,11 +6,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ChainSafe.GamingSDK.EVM\ChainSafe.GamingSDK.EVM.csproj" />
+      <ProjectReference Include="..\ChainSafe.Gaming\ChainSafe.Gaming.csproj" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(Unity)' != 'True'">
-      <PackageReference Include="Nethereum.Signer.EIP712" Version="4.14.0" />
+      <PackageReference Include="Nethereum.Signer.EIP712" Version="4.16.0" />
     </ItemGroup>
 
 </Project>
