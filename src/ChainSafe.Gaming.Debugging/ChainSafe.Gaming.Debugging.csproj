@@ -8,9 +8,4 @@
     <ItemGroup>
       <ProjectReference Include="..\ChainSafe.Gaming\ChainSafe.Gaming.csproj" />
     </ItemGroup>
-
-    <ItemGroup Condition="'$(Unity)' != 'True'">
-      <PackageReference Include="Nethereum.Signer.EIP712" Version="4.16.0" />
-    </ItemGroup>
-
 </Project>

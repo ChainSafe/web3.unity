@@ -16,11 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ChainSafe.Gaming\ChainSafe.Gaming.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Nethereum.ABI" Version="4.16.0" />
-  </ItemGroup>
-
+  
   <ItemGroup>
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" />
     <AdditionalFiles Include="../../stylecop.json" />

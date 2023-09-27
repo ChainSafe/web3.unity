@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Chainsafe.Gaming.Chainlink;
 using ChainSafe.Gaming.Chainlink.Lootboxes;
 using ChainSafe.Gaming.Tests;
-using ChainSafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.Web3;
 using NUnit.Framework;
 
 namespace ChainSafe.GamingSDK.EVM.Tests
