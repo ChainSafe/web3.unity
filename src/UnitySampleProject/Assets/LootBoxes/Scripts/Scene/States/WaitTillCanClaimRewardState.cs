@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace LootBoxes.Scene.States
 {
@@ -9,11 +10,11 @@ namespace LootBoxes.Scene.States
         public float pollInterval = 1f;
 
         private CancellationTokenSource cancellationSource;
-        
+
         protected override async void OnLootBoxSceneStateEnter()
         {
             Context.openLootBoxUI.gameObject.SetActive(true);
-            
+
             cancellationSource = new CancellationTokenSource();
             try
             {
@@ -30,7 +31,7 @@ namespace LootBoxes.Scene.States
         protected override void OnLootBoxSceneStateExit()
         {
             Context.openLootBoxUI.gameObject.SetActive(false);
-            
+
             cancellationSource.Cancel();
         }
 
@@ -39,9 +40,20 @@ namespace LootBoxes.Scene.States
             while (!await Context.CanClaimRewards())
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                
-                await SafeDelay.WaitForSeconds(pollInterval);
+
+                await WaitForSeconds(pollInterval);
             }
+        }
+
+        private async Task WaitForSeconds(float seconds)
+        {
+            // Task.Delay doesn't work on WebGL
+#if UNITY_WEBGL && !UNITY_EDITOR
+            var now = Time.time;
+            while (Time.time - now < seconds) await Task.Yield();
+#else
+            await Task.Delay((int)(seconds * 1000));
+#endif
         }
     }
 }

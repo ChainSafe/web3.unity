@@ -28,7 +28,10 @@ namespace LootBoxes
                 return DecodeUri(uri);
             }
 
-            uri = uri.UnpackIfIpfs();
+            if (uri.StartsWith("ipfs://"))
+            {
+                return FetchIpfs(uri);
+            }
             
             if (uri.Contains("{id}"))
             {

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Chainlink.Lootboxes;
-using ChainSafe.GamingSDK.EVM.Web3.Core.Extensions;
+using ChainSafe.Gaming.Evm.Contracts;
+using ChainSafe.Gaming.UnityPackage;
 using LootBoxes.Scene.StageItems;
 using UnityEngine;
 using UnityEngine.Networking;
-using Web3Unity.Scripts.Library.Ethers.Contracts;
 
 namespace LootBoxes.Scene
 {
@@ -57,7 +57,8 @@ namespace LootBoxes.Scene
 
         private static async Task<Texture> DownloadImage(string imageUri)
         {
-            var request = UnityWebRequestTexture.GetTexture(imageUri.UnpackIfIpfs());
+            var request = UnityWebRequestTexture.GetTexture(imageUri.UnpackUriIfIpfs());
+            
             await request.SendWebRequest();
             
             if (request.result != UnityWebRequest.Result.Success)
@@ -69,5 +70,10 @@ namespace LootBoxes.Scene
 
             return texture;
         }
+        
+        
+      
     }
+    
+    
 }

@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Chainlink.Lootboxes;
+using ChainSafe.Gaming.Evm.Contracts;
 using LootBoxes.Scene.StageItems;
 using UnityEngine;
-using Web3Unity.Scripts.Library.Ethers.Contracts;
 
 namespace LootBoxes.Scene
 {

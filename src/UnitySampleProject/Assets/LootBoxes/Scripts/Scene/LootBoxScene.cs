@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Chainlink.Lootboxes;
+using ChainSafe.Gaming.Evm.Contracts;
 using LootBoxes.Scene.StageItems;
 using UnityEngine;
 
