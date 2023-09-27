@@ -11,7 +11,7 @@ namespace LootBoxes.Scene
         public Image image;
         public float Speed = 3f;
         public bool FadeOutInitially = true;
-        
+
         private CancellationTokenSource activeTaskCancelSource = new();
 
         private float Alpha
@@ -62,7 +62,7 @@ namespace LootBoxes.Scene
                 }
 
                 Alpha = Mathf.Lerp(Alpha, alpha, Time.unscaledDeltaTime * Speed * timeScale);
-                
+
                 await Task.Yield();
             }
 

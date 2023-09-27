@@ -18,7 +18,7 @@ namespace LootBoxes.Scene.StageItems
         }
 
         [SerializeField] private List<LootBoxTypeInfo> lootBoxPrefabByTypeIdList;
-        
+
         private Dictionary<uint, LootBoxTypeInfo> _lootBoxPrefabByTypeId;
 
         private Dictionary<uint, LootBoxTypeInfo> TypeInfoByTypeId =>
@@ -30,7 +30,7 @@ namespace LootBoxes.Scene.StageItems
             {
                 throw new LootBoxSceneException($"No {nameof(StageItem)} prefab found for lootbox type {typeId}.");
             }
-            
+
             return TypeInfoByTypeId[typeId];
         }
     }

@@ -9,9 +9,9 @@ namespace LootBoxes.Scene
     {
         private Stage stage;
         private StageCamera camera;
-        
+
         public int FocusedItemIndex { get; private set; }
-        
+
         public StageItem FocusedItem
         {
             get
@@ -25,7 +25,7 @@ namespace LootBoxes.Scene
                 {
                     return null;
                 }
-                
+
                 return stage.StageItems.Skip(FocusedItemIndex).First();
             }
         }
@@ -42,11 +42,11 @@ namespace LootBoxes.Scene
             {
                 throw new ArgumentOutOfRangeException(nameof(index));
             }
-            
+
             FocusedItem?.SetSpotlightActive(false);
-            
+
             FocusedItemIndex = index;
-            
+
             if (!immediately)
             {
                 camera.LookAt(FocusedItemIndex);

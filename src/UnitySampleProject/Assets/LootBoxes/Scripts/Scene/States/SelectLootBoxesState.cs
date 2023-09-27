@@ -18,7 +18,7 @@ namespace LootBoxes.Scene.States
             OnSelectedCountUpdated();
 
             availableLootBoxTypes = Context.LastFetchedLootBoxes.Where(info => info.Amount > 0).ToList();
-            
+
             Context.selectLootBoxesUI.PrevTypeButton.onClick.AddListener(OnPrevTypeClick);
             Context.selectLootBoxesUI.NextTypeButton.onClick.AddListener(OnNextTypeClick);
             Context.selectLootBoxesUI.PrevLootBoxButton.onClick.AddListener(OnPrevLootBoxClick);
@@ -34,7 +34,7 @@ namespace LootBoxes.Scene.States
         protected override void OnLootBoxSceneStateExit()
         {
             Context.selectLootBoxesUI.gameObject.SetActive(false);
-            
+
             Context.selectLootBoxesUI.PrevTypeButton.onClick.RemoveListener(OnPrevTypeClick);
             Context.selectLootBoxesUI.NextTypeButton.onClick.RemoveListener(OnNextTypeClick);
             Context.selectLootBoxesUI.PrevLootBoxButton.onClick.RemoveListener(OnPrevLootBoxClick);
@@ -53,17 +53,17 @@ namespace LootBoxes.Scene.States
             {
                 Context.stageFocus.FocusDelta(-1);
             }
-            
+
             if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
             {
                 Context.stageFocus.FocusDelta(+1);
             }
-            
+
             if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
             {
                 ChangeLootBoxType(-1);
             }
-            
+
             if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
             {
                 ChangeLootBoxType(+1);

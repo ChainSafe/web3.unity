@@ -12,7 +12,7 @@ namespace LootBoxes.Scene
     public class Erc1155NftRewardFactory : MonoBehaviour
     {
         public StageItem NftRewardItemPrefab;
-        
+
         private IContractBuilder contractBuilder;
         private Erc1155MetaDataReader metaDataReader;
 
@@ -37,7 +37,7 @@ namespace LootBoxes.Scene
             var reward = (NftReward)item.Reward;
             var contract = contractBuilder.Build(ABI.ERC_1155, data.ContractAddress);
             var uri = (await contract.Call("uri", new object[] { data.TokenId }))[0].ToString();
-            
+
             Erc1155MetaData metadata;
             try
             {
@@ -51,29 +51,29 @@ namespace LootBoxes.Scene
 
             var image = await DownloadImage(metadata.Image);
             reward.ImageRenderer.material.mainTexture = image;
-            
+
             return item;
         }
 
         private static async Task<Texture> DownloadImage(string imageUri)
         {
             var request = UnityWebRequestTexture.GetTexture(imageUri.UnpackUriIfIpfs());
-            
+
             await request.SendWebRequest();
-            
+
             if (request.result != UnityWebRequest.Result.Success)
             {
                 throw new LootBoxSceneException($"WebRequest Error: {request.error}");
             }
-            
+
             var texture = DownloadHandlerTexture.GetContent(request);
 
             return texture;
         }
-        
-        
-      
+
+
+
     }
-    
-    
+
+
 }

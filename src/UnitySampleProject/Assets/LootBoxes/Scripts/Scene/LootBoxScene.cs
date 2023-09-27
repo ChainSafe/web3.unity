@@ -22,9 +22,9 @@ namespace LootBoxes.Scene
         public PromptClaimRewardsUI promptClaimRewardsUI;
         public ViewRewardsUI viewRewardsUI;
         public EmptyStateUI emptyStateUI;
-        
+
         private ILootboxService lootBoxService;
-        
+
         public LootBoxStageItemFactory LootBoxStageItemFactory { get; private set; }
         public uint ActiveType { get; set; }
         public LootboxRewards LastClaimedRewards { get; set; }
@@ -35,7 +35,7 @@ namespace LootBoxes.Scene
         {
             this.lootBoxService = lootBoxService;
             LootBoxStageItemFactory = new LootBoxStageItemFactory();
-            
+
             stageCamera.Configure(stage);
             stageFocus.Configure(stage, stageCamera);
             rewardSpawner.Configure(contractBuilder, erc1155MetaDataReader);

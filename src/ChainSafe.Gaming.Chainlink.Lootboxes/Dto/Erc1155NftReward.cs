@@ -1,3 +1,7 @@
+// <copyright file="Erc1155NftReward.cs" company="Chainsafe">
+// Copyright (c) Chainsafe. All rights reserved.
+// </copyright>
+
 namespace ChainSafe.Gaming.Chainlink.Lootboxes
 {
     using System.Numerics;

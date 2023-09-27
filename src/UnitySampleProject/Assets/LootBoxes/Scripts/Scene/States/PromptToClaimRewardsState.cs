@@ -11,17 +11,17 @@ namespace LootBoxes.Scene.States
         protected override void OnLootBoxSceneStateEnter()
         {
             Context.promptClaimRewardsUI.gameObject.SetActive(true);
-            
+
             focusedItem = Context.stageFocus.FocusedItem;
             focusedItem.LootBox.PlayReadyToBeClaimed();
-            
+
             focusedItem.LootBox.Clicked += OnLootBoxClicked;
         }
 
         protected override void OnLootBoxSceneStateExit()
         {
             Context.promptClaimRewardsUI.gameObject.SetActive(false);
-            
+
             focusedItem.LootBox.Clicked -= OnLootBoxClicked;
         }
 

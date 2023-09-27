@@ -23,13 +23,13 @@ namespace LootBoxes.Scene
             {
                 return;
             }
-            
+
             // don't update unique material until alpha changes
             if (Mathf.Approximately(Alpha, renderer.material.color.a))
             {
                 return;
             }
-            
+
             var material = renderer.material;
             var color = material.color;
             color.a = Alpha;

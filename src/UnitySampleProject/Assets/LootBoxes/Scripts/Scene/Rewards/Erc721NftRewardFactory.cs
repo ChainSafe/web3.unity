@@ -11,7 +11,7 @@ namespace LootBoxes.Scene
     public class Erc721NftRewardFactory : MonoBehaviour
     {
         public StageItem NftRewardItemPrefab;
-        
+
         private IContractBuilder contractBuilder;
 
         public void Configure(IContractBuilder contractBuilder)
@@ -45,7 +45,7 @@ namespace LootBoxes.Scene
             {
                 Debug.LogError("Image loading for ERC721 is not implemented yet.");
             }
-            
+
             return item;
         }
 

@@ -19,7 +19,7 @@ namespace LootBoxes
     {
         public LootBoxScene lootBoxScene;
         public string ContractAbi;
-        
+
         private Web3 web3;
 
         private class Web3Config : ICompleteProjectConfig
@@ -48,12 +48,12 @@ namespace LootBoxes
                     services.AddSingleton<Erc1155MetaDataReader>();
                 })
                 .BuildAsync();
-            
+
             lootBoxScene.Configure(
-                web3.Chainlink().Lootboxes(), 
+                web3.Chainlink().Lootboxes(),
                 web3.ContractBuilder,
                 web3.ServiceProvider.GetRequiredService<Erc1155MetaDataReader>());
-            
+
             lootBoxScene.Launch();
         }
     }

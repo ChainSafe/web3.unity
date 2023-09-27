@@ -11,7 +11,7 @@ namespace LootBoxes
         public string Name { get; set; }
         public string Image { get; set; }
     }
-    
+
     public class Erc1155MetaDataReader
     {
         private readonly IHttpClient httpClient;
@@ -32,13 +32,13 @@ namespace LootBoxes
             {
                 return FetchIpfs(uri);
             }
-            
+
             if (uri.Contains("{id}"))
             {
                 uri = uri.Replace("{id}", tokenId.ToString());
             }
-            
-            
+
+
 
             var response = await httpClient.Get<Erc1155MetaData>(uri);
             return response.EnsureResponse();
@@ -50,7 +50,7 @@ namespace LootBoxes
              * TODO Handle URI:
              * data:application/json;base64,eyJu...fV19
              */
-            
+
             throw new NotImplementedException();
         }
 

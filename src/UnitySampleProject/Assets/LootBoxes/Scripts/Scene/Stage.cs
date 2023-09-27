@@ -8,7 +8,7 @@ namespace LootBoxes.Scene
     {
         public float radius = 10;
         [SerializeField] private int maxItems = 10;
-        
+
         private List<StageItem> stageItems;
         private int? tempMaxItems;
 
@@ -47,14 +47,14 @@ namespace LootBoxes.Scene
                 itemTransform.rotation = rotation;
             }
         }
-        
+
         public void Clear()
         {
             if (stageItems == null)
             {
                 return;
             }
-            
+
             foreach (var stageItem in stageItems)
             {
                 Destroy(stageItem.gameObject);
