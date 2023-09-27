@@ -1,0 +1,8 @@
+﻿<linker>
+    <assembly fullname="chainsafe.web3-unity">
+        <type fullname="ChainSafe.Gaming.Wallets.WebGLWallet" ignoreIfMissing="1">
+            <method signature="System.Void .ctor()"/>
+            <method signature="System.Void .ctor(Web3Unity.Scripts.Library.Ethers.Providers.IRpcProvider)"/>
+        </type>
+    </assembly>
+</linker>
