@@ -12,18 +12,19 @@ jobs:
       matrix:
         dotnet-version: [ '6.0.x' ]
 
-    steps:
+    steps:      
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          
       - uses: actions/setup-node@v3
         with:
           cache: 'npm'
           node-version: 18
+      - run: cd src/ChainSafe.Gaming.Tests/Resources/vrf-lootbox-contracts/
       - run: npm ci
       - run: npm run compile
       - run: npm run node & npm run hardhat -- devsetup
-      
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
       
       - name: Install dependencies
         run: dotnet restore
