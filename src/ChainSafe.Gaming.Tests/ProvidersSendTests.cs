@@ -1,5 +1,7 @@
-﻿using ChainSafe.Gaming.Evm.Providers;
+﻿using System.Diagnostics;
+using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Transactions;
+using ChainSafe.Gaming.Tests.Node;
 using ChainSafe.Gaming.Web3;
 using Nethereum.Hex.HexTypes;
 using NUnit.Framework;
@@ -15,10 +17,13 @@ namespace ChainSafe.Gaming.Tests
     {
         private Web3 firstAccount;
         private Web3 secondAccount;
+        private Process node;
 
         [OneTimeSetUp]
         public void SetUp()
         {
+            node = Emulator.CreateInstance();
+
             var firstAccountTask = CreateWeb3(0).AsTask();
             firstAccountTask.Wait();
             firstAccount = firstAccountTask.Result;
@@ -31,6 +36,7 @@ namespace ChainSafe.Gaming.Tests
         [OneTimeTearDown]
         public void Cleanup()
         {
+            node?.Kill();
         }
 
         [Test]

@@ -30,4 +30,17 @@
     </None>
   </ItemGroup>
 
+  <PropertyGroup Condition="'$(Lootboxes)' == 'True'">
+    <DefineConstants>Lootboxes</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Test' ">
+    <DefineConstants>TRACE; Lootboxes</DefineConstants>
+  </PropertyGroup>
+
+
 </Project>

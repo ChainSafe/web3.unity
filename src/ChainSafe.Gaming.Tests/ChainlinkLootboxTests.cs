@@ -1,3 +1,4 @@
+#if Lootboxes
 using System.IO;
 using System.Threading.Tasks;
 using Chainsafe.Gaming.Chainlink;
@@ -144,3 +145,4 @@ namespace ChainSafe.Gaming.Evm.Tests
         // }
     }
 }
+#endif

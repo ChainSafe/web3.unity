@@ -23,10 +23,13 @@ namespace ChainSafe.Gaming.Tests
         private string firstWalletAddress;
         private string secondaryWalletAddress;
         private string nft721Address;
+        private Process node;
 
         [OneTimeSetUp]
         public void SetUp()
         {
+            node = Emulator.CreateInstance();
+
             // We shouldn't be relaying on a .Result from ValueTask
             // that is why we need to explicitly wait for it to finish
             var firstAccountTask = Web3Util.CreateWeb3(0).AsTask();
@@ -60,6 +63,7 @@ namespace ChainSafe.Gaming.Tests
         [OneTimeTearDown]
         public void Cleanup()
         {
+            node?.Kill();
         }
 
         [Test]
@@ -204,14 +208,22 @@ namespace ChainSafe.Gaming.Tests
         {
             var contract = firstAccount.ContractBuilder.Build(nft721ABI, firstWalletAddress);
             var result = contract.EstimateGas("ownerOf", new object[] { 1 }).Result;
+#if Lootboxes
             Assert.AreEqual("21205", result.ToString());
+#else
+            Assert.AreEqual("21204", result.ToString());
+#endif
         }
 
         [Test]
         public void GetAccountsTest()
         {
             var accounts = firstAccount.RpcProvider.ListAccounts().Result;
+#if Lootboxes
             Assert.AreEqual(3, accounts?.Length);
+#else
+            Assert.AreEqual(10, accounts?.Length);
+#endif
             foreach (var account in accounts)
             {
                 var accountBalance = firstAccount.RpcProvider.GetBalance(account).Result;
