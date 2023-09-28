@@ -139,6 +139,7 @@ namespace ChainSafe.Gaming.Evm.Providers
                 catch (Web3Exception)
                 {
                     // eth_maxPriorityFeePerGas not supported by the RPC node, skipping..
+                    maxFeePerGas = block.BaseFeePerGas.Value + 1;
                     return;
                 }
 
@@ -146,25 +147,6 @@ namespace ChainSafe.Gaming.Evm.Providers
                 maxPriorityFeePerGas = tip;
                 maxFeePerGas = max;
             }
-        }
-
-        public static async Task<TransactionRequest> ApplyGasFeeStrategy(this IRpcProvider provider, TransactionRequest tx)
-        {
-            if (tx.GasPrice == null && tx.MaxFeePerGas == null)
-            {
-                var feeData = await provider.GetFeeData();
-                if (feeData.MaxFeePerGas == 0)
-                {
-                    tx.GasPrice = new HexBigInteger(feeData.GasPrice);
-                }
-                else
-                {
-                    tx.MaxPriorityFeePerGas = new HexBigInteger(feeData.MaxPriorityFeePerGas);
-                    tx.MaxFeePerGas = new HexBigInteger(feeData.MaxFeePerGas);
-                }
-            }
-
-            return tx;
         }
 
         public static async Task<string> Call(this IRpcProvider provider, TransactionRequest transaction, BlockParameter blockTag = null)

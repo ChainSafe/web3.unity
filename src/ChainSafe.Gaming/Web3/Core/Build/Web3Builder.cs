@@ -54,6 +54,11 @@ namespace ChainSafe.Gaming.Web3.Build
 
         public Web3Builder Configure(ConfigureServicesDelegate configureMethod)
         {
+            if (configureMethod is null)
+            {
+                return this;
+            }
+
             configureMethod(serviceCollection);
             return this;
         }

@@ -124,7 +124,13 @@ namespace ChainSafe.Gaming.Evm.Contracts
             txReq.To ??= address;
             txReq.Data ??= function.GetData(parameters);
 
-            txReq = await provider.ApplyGasFeeStrategy(txReq);
+            var feeData = await provider.GetFeeData();
+            txReq.MaxFeePerGas = feeData.MaxFeePerGas.ToHexBigInteger();
+            if (!feeData.MaxPriorityFeePerGas.IsZero)
+            {
+                txReq.MaxPriorityFeePerGas = feeData.MaxFeePerGas.ToHexBigInteger();
+            }
+
             txReq.GasLimit ??= await provider.EstimateGas(txReq);
 
             var tx = await transactionExecutor.SendTransaction(txReq);
@@ -167,7 +173,12 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
             txReq.To ??= address;
             txReq.Data ??= function.GetData(parameters);
-            txReq = await provider.ApplyGasFeeStrategy(txReq);
+            var feeData = await provider.GetFeeData();
+            txReq.MaxFeePerGas = feeData.MaxFeePerGas.ToHexBigInteger();
+            if (!feeData.MaxPriorityFeePerGas.IsZero)
+            {
+                txReq.MaxPriorityFeePerGas = feeData.MaxFeePerGas.ToHexBigInteger();
+            }
 
             return await provider.EstimateGas(txReq);
         }

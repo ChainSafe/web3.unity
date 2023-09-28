@@ -1,3 +1,6 @@
 [submodule "submodules/AsyncAwaitUtil"]
 	path = submodules/AsyncAwaitUtil
 	url = https://github.com/modesttree/Unity3dAsyncAwaitUtil.git
+[submodule "src/ChainSafe.Gaming.Tests/Resources/vrf-lootbox-contracts"]
+	path = src/ChainSafe.Gaming.Tests/Resources/vrf-lootbox-contracts
+	url = git@github.com:ChainSafe/vrf-lootbox-contracts.git

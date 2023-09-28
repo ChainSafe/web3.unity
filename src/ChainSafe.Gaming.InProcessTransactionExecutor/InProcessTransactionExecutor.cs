@@ -4,7 +4,6 @@ using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Web3;
-using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
@@ -55,16 +54,16 @@ namespace ChainSafe.Gaming.InProcessTransactionExecutor
 
             if (transaction.GasPrice == null && transaction.MaxFeePerGas == null)
             {
-                var feeStrategy = web3.FeeSuggestion.GetSimpleFeeSuggestionStrategy();
-                var feeData = await feeStrategy.SuggestFeeAsync();
-                if (feeData.MaxFeePerGas != null && feeData.MaxPriorityFeePerGas != null)
+                var feeData = await rpcProvider.GetFeeData();
+
+                transaction.MaxFeePerGas = feeData.MaxFeePerGas.ToHexBigInteger();
+                if (feeData.MaxFeePerGas.IsZero)
                 {
-                    transaction.MaxFeePerGas = new HexBigInteger(feeData.MaxFeePerGas.Value);
-                    transaction.MaxPriorityFeePerGas = new HexBigInteger(feeData.MaxPriorityFeePerGas.Value);
+                    transaction.GasPrice = await rpcProvider.GetGasPrice();
                 }
                 else
                 {
-                    transaction.GasPrice = await rpcProvider.GetGasPrice();
+                    transaction.MaxPriorityFeePerGas = feeData.MaxPriorityFeePerGas.ToHexBigInteger();
                 }
             }
 

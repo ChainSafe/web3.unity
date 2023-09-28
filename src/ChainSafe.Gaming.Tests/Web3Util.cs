@@ -19,13 +19,13 @@ namespace ChainSafe.Gaming.Tests
             return CreateWeb3(new JsonRpcWalletConfig { AccountIndex = accountIndex });
         }
 
-        public static ValueTask<Web3.Web3> CreateWeb3(Web3Builder.ConfigureServicesDelegate configureDelegate = null, int accountIndex = 0)
+        public static ValueTask<Web3.Web3> CreateWeb3(Web3Builder.ConfigureServicesDelegate configureDelegate, int accountIndex = 0)
         {
-            return CreateWeb3(new JsonRpcWalletConfig { AccountIndex = accountIndex });
+            return CreateWeb3(new JsonRpcWalletConfig { AccountIndex = accountIndex }, configureDelegate);
         }
 
         private static ValueTask<Web3.Web3> CreateWeb3(
-            JsonRpcWalletConfig jsonRpcWalletConfig)
+            JsonRpcWalletConfig jsonRpcWalletConfig, Web3Builder.ConfigureServicesDelegate configureDelegate = null)
         {
             return new Web3Builder(
                     new ProjectConfig { ProjectId = string.Empty },
@@ -44,6 +44,7 @@ namespace ChainSafe.Gaming.Tests
                     services.AddSingleton(jsonRpcWalletConfig);
                     services.AddSingleton<ISigner, ITransactionExecutor, ILifecycleParticipant, JsonRpcWallet>();
                 })
+                .Configure(configureDelegate)
                 .BuildAsync();
         }
 
