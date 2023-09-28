@@ -1,7 +1,7 @@
+using System.Collections.Generic;
+
 namespace ChainSafe.Gaming.Chainlink.Lootboxes
 {
-    using System.Collections.Generic;
-
     public class LootboxRewards
     {
         public static LootboxRewards Empty =>

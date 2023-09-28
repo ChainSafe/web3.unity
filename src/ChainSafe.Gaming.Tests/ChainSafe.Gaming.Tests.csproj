@@ -28,8 +28,6 @@
     <None Update="Resources\LootboxInterface.abi.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" />
-    <AdditionalFiles Include="../../stylecop.json" />
   </ItemGroup>
 
 </Project>

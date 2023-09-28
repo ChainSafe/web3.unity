@@ -1,22 +1,22 @@
-﻿namespace ChainSafe.Gaming.Chainlink.Lootboxes
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Numerics;
-    using System.Threading.Tasks;
-    using ChainSafe.Gaming.Evm.Contracts;
-    using ChainSafe.Gaming.Evm.Contracts.Extensions;
-    using ChainSafe.Gaming.Evm.Providers;
-    using ChainSafe.Gaming.Evm.Signers;
-    using ChainSafe.Gaming.Evm.Transactions;
-    using ChainSafe.Gaming.Web3;
-    using ChainSafe.Gaming.Web3.Core;
-    using ChainSafe.Gaming.Web3.Core.Debug;
-    using Nethereum.Hex.HexTypes;
-    using Nethereum.RPC.Eth.DTOs;
-    using Newtonsoft.Json;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Contracts;
+using ChainSafe.Gaming.Evm.Contracts.Extensions;
+using ChainSafe.Gaming.Evm.Providers;
+using ChainSafe.Gaming.Evm.Signers;
+using ChainSafe.Gaming.Evm.Transactions;
+using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.Web3.Core.Debug;
+using Nethereum.Hex.HexTypes;
+using Nethereum.RPC.Eth.DTOs;
+using Newtonsoft.Json;
 
+namespace ChainSafe.Gaming.Chainlink.Lootboxes
+{
     public class LootboxService : ILootboxService, ILifecycleParticipant
     {
         public const int GasPerUnit = 100000;

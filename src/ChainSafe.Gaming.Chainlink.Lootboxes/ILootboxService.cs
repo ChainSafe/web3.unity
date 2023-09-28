@@ -1,10 +1,10 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Threading.Tasks;
+
 namespace ChainSafe.Gaming.Chainlink.Lootboxes
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Numerics;
-    using System.Threading.Tasks;
-
     public interface ILootboxService
     {
         /// <summary>
@@ -46,7 +46,7 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
         /// <summary>
         /// TODO.
         /// </summary>
-        /// <returns><placeholder>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         Task OpenLootbox(uint lootboxType, uint lootboxCount = 1);
 
         Task<bool> CanClaimRewards();

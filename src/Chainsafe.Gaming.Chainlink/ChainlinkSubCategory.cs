@@ -1,8 +1,8 @@
-﻿namespace Chainsafe.Gaming.Chainlink
-{
-    using ChainSafe.Gaming.Web3;
-    using ChainSafe.Gaming.Web3.Core;
+﻿using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Core;
 
+namespace Chainsafe.Gaming.Chainlink
+{
     public class ChainlinkSubCategory : IWeb3SubCategory
     {
         private readonly Web3 web3;

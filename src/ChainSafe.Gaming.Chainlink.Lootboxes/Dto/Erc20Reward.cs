@@ -1,7 +1,7 @@
+using System.Numerics;
+
 namespace ChainSafe.Gaming.Chainlink.Lootboxes
 {
-    using System.Numerics;
-
     public class Erc20Reward
     {
         public string ContractAddress { get; set; }
