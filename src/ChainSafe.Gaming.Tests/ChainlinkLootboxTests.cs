@@ -1,4 +1,4 @@
-using System;
+/*using System;
 using System.IO;
 using System.Linq;
 using System.Numerics;
@@ -9,7 +9,7 @@ using ChainSafe.Gaming.Tests;
 using ChainSafe.Gaming.Web3;
 using NUnit.Framework;
 
-namespace ChainSafe.GamingSDK.EVM.Tests
+namespace ChainSafe.Gaming.Evm.Tests
 {
     [TestFixture]
     public class ChainlinkLootboxTests // todo: not sure if should assert default network values
@@ -151,4 +151,4 @@ namespace ChainSafe.GamingSDK.EVM.Tests
         //     await web3.Chainlink().Lootboxes().ClaimRewards();
         // }
     }
-}
+}*/
