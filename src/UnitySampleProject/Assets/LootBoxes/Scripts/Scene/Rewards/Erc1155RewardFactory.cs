@@ -1,25 +1,19 @@
 ﻿using System;
-using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Chainlink.Lootboxes;
+using ChainSafe.Gaming.Evm.Contracts;
+using ChainSafe.Gaming.UnityPackage;
 using LootBoxes.Scene.StageItems;
 using UnityEngine;
-using Web3Unity.Scripts.Library.Ethers.Contracts;
 
 namespace LootBoxes.Scene
 {
     public class Erc1155RewardFactory : MonoBehaviour
     {
         public StageItem CoinRewardItemPrefab;
-        
+
         private IContractBuilder contractBuilder;
         private Erc1155MetaDataReader metaDataReader;
-
-        public void Configure(IContractBuilder contractBuilder, Erc1155MetaDataReader erc1155MetaDataReader)
-        {
-            metaDataReader = erc1155MetaDataReader;
-            this.contractBuilder = contractBuilder;
-        }
 
         private void OnValidate()
         {
@@ -28,6 +22,12 @@ namespace LootBoxes.Scene
                 Debug.LogError($"{nameof(CoinRewardItemPrefab.Reward)} is not {nameof(CoinReward)}");
                 CoinRewardItemPrefab = null;
             }
+        }
+
+        public void Configure(IContractBuilder contractBuilder, Erc1155MetaDataReader erc1155MetaDataReader)
+        {
+            metaDataReader = erc1155MetaDataReader;
+            this.contractBuilder = contractBuilder;
         }
 
         public async Task<StageItem> Create(Erc1155Reward data)
@@ -49,7 +49,7 @@ namespace LootBoxes.Scene
 
             reward.Amount.text = data.Amount.ToString();
             reward.SymbolLabel.text = metadata.Name;
-            
+
             return item;
         }
     }

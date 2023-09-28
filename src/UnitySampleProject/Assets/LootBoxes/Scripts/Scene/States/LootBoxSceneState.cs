@@ -7,7 +7,7 @@ namespace LootBoxes.Scene.States
         private LootBoxScene context;
         private Animator animator;
 
-        protected LootBoxScene Context => 
+        protected LootBoxScene Context =>
             context ??= animator.gameObject.GetComponent<LootBoxScene>();
 
         public sealed override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

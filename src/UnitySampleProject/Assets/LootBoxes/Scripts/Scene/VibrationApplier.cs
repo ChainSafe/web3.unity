@@ -7,11 +7,11 @@ namespace LootBoxes.Scene
     public class VibrationApplier : MonoBehaviour
     {
         public float Speed = 10f;
-        [FormerlySerializedAs("Range")] 
+        [FormerlySerializedAs("Range")]
         public float PositionRange = 0.07f;
         public float RotationRange = 5f;
         public AnimationCurve ScaleByValue = AnimationCurve.Linear(0f, 0f, 1f, 1f);
-        
+
         private new Transform transform;
         private Vector2[] posPerlinSeeds;
         private Vector2[] rotPerlinSeeds;
@@ -25,7 +25,7 @@ namespace LootBoxes.Scene
                 new(Random.Range(-100f, 100f), Random.Range(-100f, 100f)),
                 new(Random.Range(-100f, 100f), Random.Range(-100f, 100f)),
             };
-            
+
             rotPerlinSeeds = new Vector2[]
             {
                 new(Random.Range(-100f, 100f), Random.Range(-100f, 100f)),
@@ -58,7 +58,7 @@ namespace LootBoxes.Scene
                     FetchValue(scaledTime, rotPerlinSeeds[1]),
                     FetchValue(scaledTime, rotPerlinSeeds[2])
                 ) * RotationRange;
-                
+
                 transform.localRotation = Quaternion.Euler(rotationOffset);
             }
         }

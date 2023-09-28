@@ -7,7 +7,7 @@ namespace LootBoxes.Scene
     {
         public Animator animator;
         public ParticleSystem claimedFx;
-        
+
         private bool _selected;
         public event Action<LootBox> Clicked;
 
@@ -26,7 +26,7 @@ namespace LootBoxes.Scene
             animator.SetTrigger("Opening");
             animator.SetBool("Float", true);
         }
-        
+
         public void PlayReadyToBeClaimed()
         {
             animator.SetTrigger("ReadyToBeClaimed");

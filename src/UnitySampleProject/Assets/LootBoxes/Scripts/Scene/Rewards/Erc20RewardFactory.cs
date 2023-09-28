@@ -3,9 +3,10 @@ using System.Globalization;
 using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Chainlink.Lootboxes;
+using ChainSafe.Gaming.Evm.Contracts;
+using ChainSafe.Gaming.UnityPackage;
 using LootBoxes.Scene.StageItems;
 using UnityEngine;
-using Web3Unity.Scripts.Library.Ethers.Contracts;
 
 namespace LootBoxes.Scene
 {
@@ -13,13 +14,8 @@ namespace LootBoxes.Scene
     {
         public StageItem CoinRewardItemPrefab;
         public int AmountDigits = 2;
-        
-        private IContractBuilder contractBuilder;
 
-        public void Configure(IContractBuilder contractBuilder)
-        {
-            this.contractBuilder = contractBuilder;
-        }
+        private IContractBuilder contractBuilder;
 
         private void OnValidate()
         {
@@ -28,6 +24,11 @@ namespace LootBoxes.Scene
                 Debug.LogError($"{nameof(CoinRewardItemPrefab.Reward)} is not {nameof(CoinReward)}");
                 CoinRewardItemPrefab = null;
             }
+        }
+
+        public void Configure(IContractBuilder contractBuilder)
+        {
+            this.contractBuilder = contractBuilder;
         }
 
         public async Task<StageItem> Create(Erc20Reward data)
@@ -39,19 +40,16 @@ namespace LootBoxes.Scene
             var decimals = BigInteger.Parse((await contract.Call("decimals"))[0].ToString());
             var humanizedAmount = HumanizeAmount(data.AmountRaw, decimals);
             var roundedAmount = Math.Round(humanizedAmount, AmountDigits);
-            
+
             reward.SymbolLabel.text = symbol;
             reward.Amount.text = roundedAmount.ToString(CultureInfo.InvariantCulture);
-            
+
             return item;
 
             float HumanizeAmount(BigInteger amountRaw, BigInteger decimals)
             {
-                if (decimals.IsZero)
-                {
-                    return (float)amountRaw;
-                }
-                
+                if (decimals.IsZero) return (float)amountRaw;
+
                 return (float)BigInteger.Divide(amountRaw, decimals);
             }
         }

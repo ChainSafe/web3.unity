@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Chainlink.Lootboxes;
+using ChainSafe.Gaming.Evm.Contracts;
+using ChainSafe.Gaming.UnityPackage;
 using LootBoxes.Scene.StageItems;
 using UnityEngine;
-using Web3Unity.Scripts.Library.Ethers.Contracts;
 
 namespace LootBoxes.Scene
 {
     public class Erc721NftRewardFactory : MonoBehaviour
     {
         public StageItem NftRewardItemPrefab;
-        
+
         private IContractBuilder contractBuilder;
 
         public void Configure(IContractBuilder contractBuilder)
@@ -44,7 +45,7 @@ namespace LootBoxes.Scene
             {
                 Debug.LogError("Image loading for ERC721 is not implemented yet.");
             }
-            
+
             return item;
         }
 

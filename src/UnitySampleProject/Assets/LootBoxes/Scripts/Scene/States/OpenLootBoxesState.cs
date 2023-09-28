@@ -8,16 +8,16 @@ namespace LootBoxes.Scene.States
         protected override async void OnLootBoxSceneStateEnter()
         {
             Context.openLootBoxUI.gameObject.SetActive(true);
-            
+
             // Focus nearest selected item, play animations
             var stageItemToFocusIndex = GetStageItemToFocus();
             Context.stageFocus.Focus(stageItemToFocusIndex);
             PlayAnimations();
 
             // Send "OpenLootBoxes" request
-            var amountToOpen = (uint) Context.stage.StageItems.Count(item => item.LootBox.Selected);
+            var amountToOpen = (uint)Context.stage.StageItems.Count(item => item.LootBox.Selected);
             await Context.OpenLootBoxes(Context.ActiveType, amountToOpen);
-            
+
             Context.animator.SetTrigger("LootBoxesOpenInitiated");
 
             int GetStageItemToFocus()

@@ -32,7 +32,7 @@ namespace LootBoxes.Scene
             {
                 return;
             }
-            
+
             var lerpT = Time.deltaTime * lerpSpeed;
             transform.position = Vector3.Lerp(transform.position, targetPosition, lerpT);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, lerpT);
@@ -51,7 +51,7 @@ namespace LootBoxes.Scene
         public void LookAtImmediately(int stageItemIndex)
         {
             LookAt(stageItemIndex);
-            
+
             transform.position = targetPosition;
             transform.rotation = targetRotation;
         }

@@ -7,7 +7,7 @@ namespace LootBoxes.Scene.States
         protected override void OnLootBoxSceneStateEnter()
         {
             Context.viewRewardsUI.gameObject.SetActive(true);
-            
+
             Context.viewRewardsUI.PrevRewardButton.onClick.AddListener(OnPrevRewardClick);
             Context.viewRewardsUI.NextRewardButton.onClick.AddListener(OnNextRewardClick);
             Context.viewRewardsUI.ContinueButton.onClick.AddListener(OnContinueClick);
@@ -17,7 +17,7 @@ namespace LootBoxes.Scene.States
         {
             Context.stage.ResetTempMaxItems();
             Context.viewRewardsUI.gameObject.SetActive(false);
-            
+
             Context.viewRewardsUI.PrevRewardButton.onClick.RemoveListener(OnPrevRewardClick);
             Context.viewRewardsUI.NextRewardButton.onClick.RemoveListener(OnNextRewardClick);
             Context.viewRewardsUI.ContinueButton.onClick.RemoveListener(OnContinueClick);
@@ -29,7 +29,7 @@ namespace LootBoxes.Scene.States
             {
                 Context.stageFocus.FocusDelta(-1);
             }
-            
+
             if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
             {
                 Context.stageFocus.FocusDelta(+1);

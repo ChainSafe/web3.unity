@@ -17,13 +17,13 @@ namespace LootBoxes.Scene.States
                 LaunchCanClaimRewards();
                 return;
             }
-            
+
             if (await Context.IsOpeningLootBox())
             {
                 LaunchOpening();
                 return;
             }
-            
+
             var lootBoxTypes = await Context.FetchAllLootBoxes();
             Context.LastFetchedLootBoxes = lootBoxTypes;
             if (!lootBoxTypes.Any(info => info.Amount > 0))
@@ -31,7 +31,7 @@ namespace LootBoxes.Scene.States
                 LaunchEmpty();
                 return;
             }
-            
+
             LaunchSelection(lootBoxTypes);
         }
 
