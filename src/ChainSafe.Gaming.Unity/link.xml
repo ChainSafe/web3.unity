@@ -16,13 +16,13 @@
     <!-- Our assemblies -->
     <assembly fullname="ChainSafe.Gaming"/>
     <assembly fullname="ChainSafe.Gaming.Unity"/>
-    <assembly fullname="ChainSafe.Gaming.ChainLink"/>
-    <assembly fullname="ChainSafe.Gaming.ChainLink.Lootboxes"/>
     <assembly fullname="ChainSafe.Gaming.InProcessSigner"/>
     <assembly fullname="ChainSafe.Gaming.InProcessTransactionExecutor"/>
     <assembly fullname="ChainSafe.Gaming.NetCore"/>
     <assembly fullname="ChainSafe.Gaming.WebPageWallet"/>
     <assembly fullname="ChainSafe.Gaming.Gelato"/>
+    <assembly fullname="ChainSafe.Gaming.ChainLink"/>
+    <assembly fullname="ChainSafe.Gaming.ChainLink.Lootboxes"/>
     <!-- Dependencies -->
     <assembly fillname="ADRaffy.ENSNormalize" />
     <assembly fillname="BouncyCastle.Crypto" />
