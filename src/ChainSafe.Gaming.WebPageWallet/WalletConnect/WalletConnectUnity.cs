@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -104,17 +105,26 @@ namespace ChainSafe.Gaming.Wallets.WalletConnect
 
             InvokeSessionApproved(sessionResult);
 
-            string nativeUrl = sessionResult.Peer.Metadata.Redirect.Native.Replace("//", string.Empty);
-
-            string defaultWalletId = Config.SupportedWallets.FirstOrDefault(t =>
-                    t.Value.Mobile.NativeProtocol == nativeUrl || t.Value.Desktop.NativeProtocol == nativeUrl)
-                .Key;
-
-            var defaultWallet = Config.SupportedWallets[defaultWalletId];
-
             if (Config.IsMobilePlatform)
             {
-                defaultWallet.OpenDeeplink(connectData);
+                // this doesn't work for all wallets, hence the try catch
+                try
+                {
+                    string nativeUrl = sessionResult.Peer.Metadata.Redirect.Native.Replace("//", string.Empty);
+
+                    string defaultWalletId = Config.SupportedWallets.FirstOrDefault(t =>
+                            t.Value.Mobile.NativeProtocol == nativeUrl || t.Value.Desktop.NativeProtocol == nativeUrl)
+                        .Key;
+
+                    if (Config.SupportedWallets.TryGetValue(defaultWalletId, out Wallet wallet))
+                    {
+                        wallet.OpenDeeplink(connectData);
+                    }
+                }
+                catch (Exception e)
+                {
+                    WCLogger.Log($"Can't open deepLink for wallet {e}");
+                }
             }
 
             return connectData;
