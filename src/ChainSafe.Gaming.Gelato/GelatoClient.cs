@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Environment;
 using ChainSafe.GamingSdk.Gelato.Dto;
 using ChainSafe.GamingSdk.Gelato.Types;
