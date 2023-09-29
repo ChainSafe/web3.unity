@@ -9,7 +9,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-
+    <CodeAnalysisRuleSet>../../global.ruleset</CodeAnalysisRuleSet>
     <!-- We need to ignore CS0618 because of the extension method on WWW in IEnumeratorAwaitExtensions, the source for which we don't control. -->
     <NoWarn>1701;1702;CS0618</NoWarn>
     <Configurations>Debug;Release;Test</Configurations>
@@ -24,5 +24,5 @@
   <ItemGroup>
     <Reference Include="../../libs/UnityEngine/UnityEngine.dll" />
   </ItemGroup>
-
+  
 </Project>
