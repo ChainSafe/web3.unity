@@ -4,7 +4,6 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <LangVersion>9.0</LangVersion>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-
     <EnableNETAnalyzers>True</EnableNETAnalyzers>
     <CodeAnalysisRuleSet>../../global.ruleset</CodeAnalysisRuleSet>
     <Configurations>Debug;Release;Test</Configurations>
@@ -13,6 +12,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ChainSafe.Gaming.Chainlink.Lootboxes\ChainSafe.Gaming.Chainlink.Lootboxes.csproj" />
+    <ProjectReference Include="..\Chainsafe.Gaming.Chainlink\Chainsafe.Gaming.Chainlink.csproj" />
+    <ProjectReference Include="..\ChainSafe.Gaming.Debugging\ChainSafe.Gaming.Debugging.csproj" />
     <ProjectReference Include="..\ChainSafe.Gaming\ChainSafe.Gaming.csproj" />
     <ProjectReference Include="..\ChainSafe.Gaming.InProcessSigner\ChainSafe.Gaming.InProcessSigner.csproj" />
     <ProjectReference Include="..\ChainSafe.Gaming.InProcessTransactionExecutor\ChainSafe.Gaming.InProcessTransactionExecutor.csproj" />
@@ -36,5 +38,5 @@
       <LogicalName>ChainSafe.Gaming.Unity.xml</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
-
+  
 </Project>

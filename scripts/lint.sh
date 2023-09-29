@@ -9,6 +9,6 @@ dotnet format --verbosity=d $edit --severity=warn ./ChainSafe.Gaming.sln --exclu
 if [ "$edit" == "" ]; then
     echo "Linting Unity Sample Project"
     pushd src/UnitySampleProject
-    dotnet format --verbosity=d $edit --severity=warn ./UnitySampleProject.sln 
+    dotnet format --verbosity=d --severity=warn ./UnitySampleProject.sln 
     popd
 fi

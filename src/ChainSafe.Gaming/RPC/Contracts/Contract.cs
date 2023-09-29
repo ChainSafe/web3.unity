@@ -90,6 +90,21 @@ namespace ChainSafe.Gaming.Evm.Contracts
         /// <returns>The outputs of the method.</returns>
         public async Task<object[]> Send(string method, object[] parameters = null, TransactionRequest overwrite = null)
         {
+            return (await SendWithReceipt(method, parameters, overwrite)).response;
+        }
+
+        /// <summary>
+        /// Sends the transaction.
+        /// </summary>
+        /// <param name="method">The method.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <param name="overwrite">An existing TransactionRequest to use instead of making a new one.</param>
+        /// <returns>The outputs of the method and the transaction receipt.</returns>
+        public async Task<(object[] response, TransactionReceipt receipt)> SendWithReceipt(
+            string method,
+            object[] parameters = null,
+            TransactionRequest overwrite = null)
+        {
             if (string.IsNullOrEmpty(address))
             {
                 throw new Exception("contract address is not set");
@@ -109,14 +124,21 @@ namespace ChainSafe.Gaming.Evm.Contracts
             txReq.To ??= address;
             txReq.Data ??= function.GetData(parameters);
 
-            txReq = await provider.ApplyGasFeeStrategy(txReq);
+            var feeData = await provider.GetFeeData();
+            txReq.MaxFeePerGas = feeData.MaxFeePerGas.ToHexBigInteger();
+            if (!feeData.MaxPriorityFeePerGas.IsZero)
+            {
+                txReq.MaxPriorityFeePerGas = feeData.MaxFeePerGas.ToHexBigInteger();
+            }
+
             txReq.GasLimit ??= await provider.EstimateGas(txReq);
 
             var tx = await transactionExecutor.SendTransaction(txReq);
             var receipt = await provider.WaitForTransactionReceipt(tx.Hash);
 
             var output = function.DecodeOutput(tx.Data);
-            return output.Select(x => x.Result).ToArray();
+            var outputValues = output.Select(x => x.Result).ToArray();
+            return (outputValues, receipt);
         }
 
         /// <summary>
@@ -151,7 +173,12 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
             txReq.To ??= address;
             txReq.Data ??= function.GetData(parameters);
-            txReq = await provider.ApplyGasFeeStrategy(txReq);
+            var feeData = await provider.GetFeeData();
+            txReq.MaxFeePerGas = feeData.MaxFeePerGas.ToHexBigInteger();
+            if (!feeData.MaxPriorityFeePerGas.IsZero)
+            {
+                txReq.MaxPriorityFeePerGas = feeData.MaxFeePerGas.ToHexBigInteger();
+            }
 
             return await provider.EstimateGas(txReq);
         }
