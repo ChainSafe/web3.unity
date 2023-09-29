@@ -16,7 +16,6 @@ using Nethereum.ABI.EIP712;
 using Nethereum.Signer;
 using Nethereum.Util;
 using Newtonsoft.Json;
-using UnityEngine;
 using WalletConnectSharp.Sign.Models;
 using WalletConnectSharp.Sign.Models.Engine;
 using AddressExtensions = ChainSafe.Gaming.Web3.Core.Debug.AddressExtensions;
@@ -151,17 +150,25 @@ namespace ChainSafe.Gaming.Wallets
 
         public async Task<string> SignTypedData<TStructType>(SerializableDomain domain, TStructType message)
         {
-            var pageUrl = BuildUrl();
-            return await OpenPageWaitResponse(pageUrl, ValidateResponse);
+            // Wallet connect
+            SessionStruct session = WalletConnectUnity.Session;
 
-            string BuildUrl()
+            var (address, chainId) = GetCurrentAddress();
+
+            if (string.IsNullOrWhiteSpace(address))
             {
-                return $"{configuration.ServiceUrl}" +
-                       "?action=sign-typed-data" +
-                       "&domain=" + Uri.EscapeDataString(JsonConvert.SerializeObject(domain)) +
-                       "&types=" + Uri.EscapeDataString(JsonConvert.SerializeObject(
-                           MemberDescriptionFactory.GetTypesMemberDescription(typeof(TStructType)))) +
-                       "&message=" + Uri.EscapeDataString(JsonConvert.SerializeObject(message));
+                return null;
+            }
+
+            var request = new EthSignTypedData<TStructType>(address, domain, message);
+
+            string hash =
+                await WalletConnectUnity.SignClient.Request<EthSignTypedData<TStructType>, string>(session.Topic, request, chainId);
+
+            var isValid = ValidateResponse(hash);
+            if (!isValid)
+            {
+                throw new Web3Exception("Incorrect response format extracted from clipboard.");
             }
 
             // TODO: validate with regex
@@ -169,6 +176,8 @@ namespace ChainSafe.Gaming.Wallets
             {
                 return response.StartsWith("0x") && response.Length == 132;
             }
+
+            return hash;
         }
 
         public async Task<TransactionResponse> SendTransaction(TransactionRequest transaction)
