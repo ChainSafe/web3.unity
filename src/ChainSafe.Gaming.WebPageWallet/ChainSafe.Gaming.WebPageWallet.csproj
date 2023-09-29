@@ -17,16 +17,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Nethereum.ABI" Version="4.16.0" />
     <PackageReference Include="WalletConnect.Web3Wallet" Version="2.1.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" />
-    <AdditionalFiles Include="../../stylecop.json" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="../../libs/UnityEngine/UnityEngine.dll" />
   </ItemGroup>
+  
 </Project>

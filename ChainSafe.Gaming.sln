@@ -15,10 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		global.ruleset = global.ruleset
 		README.md = README.md
-		setup.bat = setup.bat
-		setup.sh = setup.sh
-		release-web3-auth.sh = release-web3-auth.sh
-		release-web3-unity.sh = release-web3-unity.sh
+		Modules.md = Modules.md
+		LICENSE = LICENSE
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainSafe.Gaming.Unity.ThirdParty", "src\ChainSafe.Gaming.Unity.ThirdParty\ChainSafe.Gaming.Unity.ThirdParty.csproj", "{9EC71CB4-9401-4E02-AC63-FC13B3D1AA53}"
@@ -30,6 +28,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.InProcessTransactionExecutor", "src\ChainSafe.Gaming.InProcessTransactionExecutor\ChainSafe.Gaming.InProcessTransactionExecutor.csproj", "{457E4582-4CC5-4D42-A0CB-5F48204328FE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.Gelato", "src\ChainSafe.Gaming.Gelato\ChainSafe.Gaming.Gelato.csproj", "{205BA2B5-B8B0-4860-B8D0-1AFA148D882E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.Chainlink.Lootboxes", "src\ChainSafe.Gaming.Chainlink.Lootboxes\ChainSafe.Gaming.Chainlink.Lootboxes.csproj", "{2A1E49E1-219A-4821-B580-CF6E85A5EA20}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chainsafe.Gaming.Chainlink", "src\Chainsafe.Gaming.Chainlink\Chainsafe.Gaming.Chainlink.csproj", "{A8A29975-3146-445E-87F6-7B2447C39760}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.Debugging", "src\ChainSafe.Gaming.Debugging\ChainSafe.Gaming.Debugging.csproj", "{88B2E2F4-96BC-44B1-AE4D-5FBA6B4C399F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,11 +95,31 @@ Global
 		{205BA2B5-B8B0-4860-B8D0-1AFA148D882E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{205BA2B5-B8B0-4860-B8D0-1AFA148D882E}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{205BA2B5-B8B0-4860-B8D0-1AFA148D882E}.Test|Any CPU.Build.0 = Test|Any CPU
+		{2A1E49E1-219A-4821-B580-CF6E85A5EA20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A1E49E1-219A-4821-B580-CF6E85A5EA20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A1E49E1-219A-4821-B580-CF6E85A5EA20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A1E49E1-219A-4821-B580-CF6E85A5EA20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A1E49E1-219A-4821-B580-CF6E85A5EA20}.Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A1E49E1-219A-4821-B580-CF6E85A5EA20}.Test|Any CPU.Build.0 = Debug|Any CPU
+		{A8A29975-3146-445E-87F6-7B2447C39760}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8A29975-3146-445E-87F6-7B2447C39760}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8A29975-3146-445E-87F6-7B2447C39760}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8A29975-3146-445E-87F6-7B2447C39760}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8A29975-3146-445E-87F6-7B2447C39760}.Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8A29975-3146-445E-87F6-7B2447C39760}.Test|Any CPU.Build.0 = Debug|Any CPU
+		{88B2E2F4-96BC-44B1-AE4D-5FBA6B4C399F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88B2E2F4-96BC-44B1-AE4D-5FBA6B4C399F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88B2E2F4-96BC-44B1-AE4D-5FBA6B4C399F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88B2E2F4-96BC-44B1-AE4D-5FBA6B4C399F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88B2E2F4-96BC-44B1-AE4D-5FBA6B4C399F}.Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{88B2E2F4-96BC-44B1-AE4D-5FBA6B4C399F}.Test|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DB0D5856-6403-4C0C-8095-9A328B81C86F}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
 EndGlobal

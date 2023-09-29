@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Samples/web3.unity SDK/2.5.0/Web3.Unity Samples/Scenes/SampleImportNftTexture.unity
     guid: d31091c4b9c13af48af91512a5127882
+  - enabled: 1
+    path: Assets/Samples/web3.unity SDK/2.5.0/LootBoxes/LootBoxes.unity
+    guid: ec1bcdf05dc7d7341b133771363aa188
   m_configObjects: {}
