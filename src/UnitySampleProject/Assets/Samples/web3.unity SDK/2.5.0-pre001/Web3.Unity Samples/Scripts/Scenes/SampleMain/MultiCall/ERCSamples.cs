@@ -19,20 +19,20 @@ public class MultiCallErcSamples
         _web3 = web3;
     }
 
-    public async Task<IMultiCallRequest[]> ErcSamples()
-    {
-        var erc20Contract = _web3.ContractBuilder.Build(ABI.ERC_20, erc20ContractAddress);
-        var erc20BalanceOfCalldata = erc20Contract.Calldata(CommonMethod.BalanceOf, new object[]
-        {
-            erc20Account
-        });
-        
-        //Calldata to MultiCallREquest
-        return await _web3.MultiCall().MultiCallV3(new IMultiCallRequest[]
-        {
-            erc20BalanceOfCalldata
-        });
-    }
+    // public async Task<IMultiCallRequest[]> ErcSamples()
+    // {
+    //     var erc20Contract = _web3.ContractBuilder.Build(ABI.ERC_20, erc20ContractAddress);
+    //     var erc20BalanceOfCalldata = erc20Contract.Calldata(CommonMethod.BalanceOf, new object[]
+    //     {
+    //         erc20Account
+    //     });
+    //     
+    //     //Calldata to MultiCallREquest
+    //     // return await _web3.MultiCall().MultiCallV3(new IMultiCallRequest[]
+    //     // {
+    //     //     erc20BalanceOfCalldata
+    //     // });
+    // }
     
     static class CommonMethod
     {

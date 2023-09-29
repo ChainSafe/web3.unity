@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using UnityEngine;
 
 namespace Samples.Behaviours.MultiCall
 {
@@ -15,12 +14,7 @@ namespace Samples.Behaviours.MultiCall
 
         protected override async Task ExecuteSample()
         {
-            Debug.Log("Starting");
-            var result = await _logic.BlockStateExample();
-            Debug.Log(result.Length.ToString());
-            Debug.Log($"Success: {result[0].Success}");
-            Debug.Log($"Value: {result[0].Value.ToString()}");
-            SampleOutputUtil.PrintResult(result[0].Value.ToString(), nameof(MultiCallSample), nameof(MultiCallSample.BlockStateExample));
+            await _logic.BlockStateExample();
         }
     }
 }

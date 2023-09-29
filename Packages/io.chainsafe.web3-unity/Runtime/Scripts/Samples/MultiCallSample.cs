@@ -14,12 +14,20 @@ public class MultiCallSample
         _web3 = web3;
     }
 
-    public async Task<IMultiCallRequest[]> BlockStateExample()
+    public async Task BlockStateExample()
     {
         var currentDifficulty = _web3.MultiCall().GetCurrentBlockDifficulty();
-        return await _web3.MultiCall().MultiCallV3(new IMultiCallRequest[]
+        var currentBlockGasLimit = _web3.MultiCall().GetCurrentBlockGasLimit();
+        var blockNumber = _web3.MultiCall().GetBlockNumber();
+        await _web3.MultiCall().MultiCallV3(new IMultiCallRequest[]
         {
-            currentDifficulty
+            currentDifficulty,
+            currentBlockGasLimit,
+            blockNumber
         });
+        currentDifficulty.Decode(currentDifficulty.RawOutput);
+        
+        Debug.Log(blockNumber.Output.BlockNumber);
+
     }
 }

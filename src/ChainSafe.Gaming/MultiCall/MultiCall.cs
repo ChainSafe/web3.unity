@@ -1,185 +1,92 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.MultiCall.Dto;
 using ChainSafe.Gaming.Web3;
 using Nethereum.Contracts.QueryHandlers.MultiCall;
+using Nethereum.Util;
 
 namespace ChainSafe.Gaming.MultiCall
 {
     public class MultiCall : IMultiCall
     {
-        private readonly MultiQueryHandler handler;
+        private const int DefaultCallsPerRequest = 3000;
 
-        public MultiCall(IChainConfig chainConfig, MultiCallConfig config)
+        private const string ContractAbi =
+            "[{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"callData\",\"type\":\"bytes\"}],\"internalType\":\"struct Multicall3.Call[]\",\"name\":\"calls\",\"type\":\"tuple[]\"}],\"name\":\"aggregate\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"blockNumber\",\"type\":\"uint256\"},{\"internalType\":\"bytes[]\",\"name\":\"returnData\",\"type\":\"bytes[]\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"allowFailure\",\"type\":\"bool\"},{\"internalType\":\"bytes\",\"name\":\"callData\",\"type\":\"bytes\"}],\"internalType\":\"struct Multicall3.Call3[]\",\"name\":\"calls\",\"type\":\"tuple[]\"}],\"name\":\"aggregate3\",\"outputs\":[{\"components\":[{\"internalType\":\"bool\",\"name\":\"success\",\"type\":\"bool\"},{\"internalType\":\"bytes\",\"name\":\"returnData\",\"type\":\"bytes\"}],\"internalType\":\"struct Multicall3.Result[]\",\"name\":\"returnData\",\"type\":\"tuple[]\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"allowFailure\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"callData\",\"type\":\"bytes\"}],\"internalType\":\"struct Multicall3.Call3Value[]\",\"name\":\"calls\",\"type\":\"tuple[]\"}],\"name\":\"aggregate3Value\",\"outputs\":[{\"components\":[{\"internalType\":\"bool\",\"name\":\"success\",\"type\":\"bool\"},{\"internalType\":\"bytes\",\"name\":\"returnData\",\"type\":\"bytes\"}],\"internalType\":\"struct Multicall3.Result[]\",\"name\":\"returnData\",\"type\":\"tuple[]\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"callData\",\"type\":\"bytes\"}],\"internalType\":\"struct Multicall3.Call[]\",\"name\":\"calls\",\"type\":\"tuple[]\"}],\"name\":\"blockAndAggregate\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"blockNumber\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"blockHash\",\"type\":\"bytes32\"},{\"components\":[{\"internalType\":\"bool\",\"name\":\"success\",\"type\":\"bool\"},{\"internalType\":\"bytes\",\"name\":\"returnData\",\"type\":\"bytes\"}],\"internalType\":\"struct Multicall3.Result[]\",\"name\":\"returnData\",\"type\":\"tuple[]\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getBasefee\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"basefee\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"blockNumber\",\"type\":\"uint256\"}],\"name\":\"getBlockHash\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"blockHash\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getBlockNumber\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"blockNumber\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getChainId\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"chainid\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getCurrentBlockCoinbase\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"coinbase\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getCurrentBlockDifficulty\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"difficulty\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getCurrentBlockGasLimit\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"gaslimit\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getCurrentBlockTimestamp\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"getEthBalance\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"balance\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getLastBlockHash\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"blockHash\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"requireSuccess\",\"type\":\"bool\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"callData\",\"type\":\"bytes\"}],\"internalType\":\"struct Multicall3.Call[]\",\"name\":\"calls\",\"type\":\"tuple[]\"}],\"name\":\"tryAggregate\",\"outputs\":[{\"components\":[{\"internalType\":\"bool\",\"name\":\"success\",\"type\":\"bool\"},{\"internalType\":\"bytes\",\"name\":\"returnData\",\"type\":\"bytes\"}],\"internalType\":\"struct Multicall3.Result[]\",\"name\":\"returnData\",\"type\":\"tuple[]\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"requireSuccess\",\"type\":\"bool\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"callData\",\"type\":\"bytes\"}],\"internalType\":\"struct Multicall3.Call[]\",\"name\":\"calls\",\"type\":\"tuple[]\"}],\"name\":\"tryBlockAndAggregate\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"blockNumber\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"blockHash\",\"type\":\"bytes32\"},{\"components\":[{\"internalType\":\"bool\",\"name\":\"success\",\"type\":\"bool\"},{\"internalType\":\"bytes\",\"name\":\"returnData\",\"type\":\"bytes\"}],\"internalType\":\"struct Multicall3.Result[]\",\"name\":\"returnData\",\"type\":\"tuple[]\"}],\"stateMutability\":\"payable\",\"type\":\"function\"}]";
+
+        private const string DefaultDeploymentAddress = "0xcA11bde05977b3631167028862bE2a173976CA11";
+        private readonly Web3.Web3 web3;
+        private readonly Contract multiCallContract;
+
+        public MultiCall(Web3.Web3 web3, IChainConfig chainConfig, MultiCallConfig config)
         {
-            if (MultiCallDefaults.DeployedNetworks.Contains(chainConfig.ChainId))
+            this.web3 = web3;
+            if (chainConfig.ChainId != null && MultiCallDefaults.DeployedNetworks.Contains(chainConfig.ChainId))
             {
-                handler = new Nethereum.Web3.Web3(chainConfig.Rpc).Eth.GetMultiQueryHandler();
+                multiCallContract = web3.ContractBuilder.Build(ContractAbi, DefaultDeploymentAddress);
             }
             else
             {
-                if (config.CustomNetworks.TryGetValue(chainConfig.ChainId, out var address))
+                if (chainConfig.ChainId != null && config.CustomNetworks.TryGetValue(chainConfig.ChainId, out var address))
                 {
-                    handler = new Nethereum.Web3.Web3(chainConfig.Rpc).Eth.GetMultiQueryHandler(address);
+                    multiCallContract = web3.ContractBuilder.Build(ContractAbi, address);
                 }
             }
         }
 
-        public async Task<IMultiCallRequest[]> MultiCallV3(IMultiCallRequest[] calls)
+        public async Task<List<object[]>> MultiCallAsync(Call3Value[] multiCalls, int pageSize = DefaultCallsPerRequest)
         {
-            await handler.MultiCallAsync(calls.ToArray()).ConfigureAwait(false);
-            return calls;
+             if (multiCalls.Any(x => x.Value > 0))
+             {
+                 var results = new List<object[]>();
+                 foreach (var page in multiCalls.Batch(pageSize))
+                 {
+                     var contractCalls = new List<Call3Value>();
+                     foreach (var multiCall in page)
+                     {
+                         contractCalls.Add(new Call3Value { CallData = multiCall.CallData, Target = multiCall.Target, AllowFailure = multiCall.AllowFailure, Value = multiCall.Value });
+                     }
 
-            // function aggregate3(Call3[] calldata calls) external payable returns (Result[] memory returnData);
-        }
+                     if (contractCalls.Count > 0)
+                     {
+                         var callParams = new object[]
+                         {
+                             contractCalls,
+                         };
+                         var callResults = await multiCallContract.Call(MultiCallCommonMethods.Aggregate3Value, callParams);
 
-        /// <summary>
-        /// Internal state data call.
-        /// </summary>
-        /// <returns>
-        /// Returns a MultiCall request item for getting the transaction base fee.
-        /// </returns>
-        public MultiCallRequest<GetBaseFeeFunction, GetBaseFeeOutputDto> GetBaseFeeCallData()
-        {
-            return new MultiCallRequest<GetBaseFeeFunction, GetBaseFeeOutputDto>(
-                new GetBaseFeeFunction(),
-                handler.ContractAddress);
-        }
+                         results.Add(callResults);
+                     }
+                 }
 
-        /// <summary>
-        /// Internal state data call.
-        /// </summary>
-        /// <returns>
-        /// Returns the block hash for a given block.
-        /// </returns>
-        public MultiCallRequest<GetBlockHashFunction, GetBlockHashOutputDto> GetBlockHash(BigInteger blockNumber)
-        {
-            return new MultiCallRequest<GetBlockHashFunction, GetBlockHashOutputDto>(
-                new GetBlockHashFunction() { BlockNumber = blockNumber },
-                handler.ContractAddress);
+                 return results;
+             }
+             else
+             {
+                 var results = new List<object[]>();
+                 foreach (var page in multiCalls.Batch(pageSize))
+                 {
+                     var contractCalls = new List<Call3>();
+                     foreach (var multiCall in page)
+                     {
+                         contractCalls.Add(new Call3 { CallData = multiCall.CallData, Target = multiCall.Target, AllowFailure = multiCall.AllowFailure });
+                     }
 
-            // function getBlockHash(uint256 blockNumber) external view returns (bytes32 blockHash);
-        }
+                     var aggregateFunction = new Aggregate3Function();
+                     aggregateFunction.Calls = contractCalls;
+                     var callParams = new object[]
+                     {
+                         contractCalls,
+                     };
+                     var callResults = await multiCallContract.Call(MultiCallCommonMethods.Aggregate3, callParams);
+                     results.Add(callResults);
+                 }
 
-        /// <summary>
-        /// Internal state data call.
-        /// </summary>
-        /// <returns>
-        /// Returns the block number.
-        /// </returns>
-        public MultiCallRequest<GetBlockNumberFunction, GetBlockNumberOutputDto> GetBlockNumber()
-        {
-            return new MultiCallRequest<GetBlockNumberFunction, GetBlockNumberOutputDto>(
-                new GetBlockNumberFunction(),
-                handler.ContractAddress);
-
-            // function getBlockNumber() external view returns (uint256 blockNumber);
-        }
-
-        /// <summary>
-        /// Internal state data call.
-        /// </summary>
-        /// <returns>
-        /// Returns the chain ID.
-        /// </returns>
-        public MultiCallRequest<GetChainIdFunction, GetChainIdOutputDto> GetChainId()
-        {
-            return new MultiCallRequest<GetChainIdFunction, GetChainIdOutputDto>(
-                new GetChainIdFunction(),
-                handler.ContractAddress);
-
-            // function getChainId() external view returns (uint256 chainid);
-        }
-
-        /// <summary>
-        /// Internal state data call.
-        /// </summary>
-        /// <returns>
-        /// Returns the current coinbase.
-        /// </returns>
-        public MultiCallRequest<GetCurrentBlockCoinbaseFunction, GetCurrentBlockCoinbaseOutputDto> GetCurrentBlockCoinbase()
-        {
-            return new MultiCallRequest<GetCurrentBlockCoinbaseFunction, GetCurrentBlockCoinbaseOutputDto>(
-                new GetCurrentBlockCoinbaseFunction(),
-                handler.ContractAddress);
-
-            // function getCurrentBlockCoinbase() external view returns (address coinbase);
-        }
-
-        /// <summary>
-        /// Internal state data call.
-        /// </summary>
-        /// <returns>
-        /// Returns the current block difficulty.
-        /// </returns>
-        public MultiCallRequest<GetCurrentBlockDifficultyFunction, GetCurrentBlockDifficultyOutputDto> GetCurrentBlockDifficulty()
-        {
-            return new MultiCallRequest<GetCurrentBlockDifficultyFunction, GetCurrentBlockDifficultyOutputDto>(
-                new GetCurrentBlockDifficultyFunction(),
-                handler.ContractAddress);
-
-            // function getCurrentBlockDifficulty() external view returns (uint256 difficulty);
-        }
-
-        /// <summary>
-        /// Internal state data call.
-        /// </summary>
-        /// <returns>
-        /// Returns the current gas limit.
-        /// </returns>
-        public MultiCallRequest<GetCurrentBlockGasLimitFunction, GetCurrentBlockGasLimitOutputDto> GetCurrentBlockGasLimit()
-        {
-            return new MultiCallRequest<GetCurrentBlockGasLimitFunction, GetCurrentBlockGasLimitOutputDto>(
-                new GetCurrentBlockGasLimitFunction(),
-                handler.ContractAddress);
-
-            // function getCurrentBlockGasLimit() external view returns (uint256 gaslimit);
-        }
-
-        /// <summary>
-        /// Internal state data call.
-        /// </summary>
-        /// <returns>
-        /// Gets the current block timestamp.
-        /// </returns>
-        public MultiCallRequest<GetCurrentBlockTimestampFunction, GetCurrentBlockTimestampOutputDto> GetCurrentBlockTimestamp()
-        {
-            return new MultiCallRequest<GetCurrentBlockTimestampFunction, GetCurrentBlockTimestampOutputDto>(
-                new GetCurrentBlockTimestampFunction(),
-                handler.ContractAddress);
-
-            // function getCurrentBlockTimestamp() external view returns (uint256 timestamp);
-        }
-
-        /// <summary>
-        /// Internal state data call.
-        /// </summary>
-        /// <returns>
-        /// Returns the Eth balance for a given address.
-        /// </returns>
-        public MultiCallRequest<GetEthBalanceFunction, GetEthBalanceOutputDto> GetEthBalance(string address)
-        {
-            return new MultiCallRequest<GetEthBalanceFunction, GetEthBalanceOutputDto>(
-                new GetEthBalanceFunction() { Addr = address },
-                handler.ContractAddress);
-
-            // function getEthBalance(address addr) external view returns (uint256 balance);
-        }
-
-        /// <summary>
-        /// Internal state data call.
-        /// </summary>
-        /// <returns>
-        /// Returns the last block hash.
-        /// </returns>
-        public MultiCallRequest<GetLastBlockHashFunction, GetLastBlockHashOutputDto> GetLastBlockHash()
-        {
-            return new MultiCallRequest<GetLastBlockHashFunction, GetLastBlockHashOutputDto>(
-                new GetLastBlockHashFunction(),
-                handler.ContractAddress);
-
-            // function getLastBlockHash() external view returns (bytes32 blockHash);
+                 return results;
+             }
         }
 
         public ValueTask WillStartAsync()

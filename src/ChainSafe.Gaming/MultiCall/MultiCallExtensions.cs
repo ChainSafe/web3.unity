@@ -1,4 +1,5 @@
-﻿using ChainSafe.Gaming.Evm.Signers;
+﻿using ChainSafe.Gaming.Evm.Contracts;
+using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
@@ -49,6 +50,7 @@ namespace ChainSafe.Gaming.MultiCall
         public static IWeb3ServiceCollection ConfigureMultiCall(this IWeb3ServiceCollection collection, MultiCallConfig configuration)
         {
             collection.Replace(ServiceDescriptor.Singleton(typeof(MultiCallConfig), configuration));
+
             return collection;
         }
     }
