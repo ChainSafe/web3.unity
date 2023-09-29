@@ -1,4 +1,4 @@
-using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Core;
 
 namespace ChainSafe.Gaming.Web3.Core.Debug
 {

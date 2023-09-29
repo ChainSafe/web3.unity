@@ -1,3 +1,4 @@
+using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Environment;
 using Newtonsoft.Json;
 

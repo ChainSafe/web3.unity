@@ -16,21 +16,37 @@
     <!-- Our assemblies -->
     <assembly fullname="ChainSafe.Gaming"/>
     <assembly fullname="ChainSafe.Gaming.Unity"/>
+    <assembly fullname="ChainSafe.Gaming.InProcessSigner"/>
+    <assembly fullname="ChainSafe.Gaming.InProcessTransactionExecutor"/>
+    <assembly fullname="ChainSafe.Gaming.NetCore"/>
     <assembly fullname="ChainSafe.Gaming.WebPageWallet"/>
     <assembly fullname="ChainSafe.Gaming.Gelato"/>
-
+    <assembly fullname="ChainSafe.Gaming.ChainLink"/>
+    <assembly fullname="ChainSafe.Gaming.ChainLink.Lootboxes"/>
     <!-- Dependencies -->
-    <assembly fullname="BouncyCastle.Crypto"/>
-    <assembly fullname="Nethereum.ABI"/>
-    <assembly fullname="Nethereum.Hex"/>
-    <assembly fullname="Nethereum.JsonRpc.Client"/>
-    <assembly fullname="Nethereum.Merkle.Patricia"/>
-    <assembly fullname="Nethereum.Model"/>
-    <assembly fullname="Nethereum.RLP"/>
-    <assembly fullname="Nethereum.RPC"/>
-    <assembly fullname="Nethereum.Signer"/>
-    <assembly fullname="Nethereum.Util"/>
-    <assembly fullname="NBitcoin"/>
+    <assembly fillname="ADRaffy.ENSNormalize" />
+    <assembly fillname="BouncyCastle.Crypto" />
+    <assembly fillname="Microsoft.Extensions.Logging.Abstractions" />
+    <assembly fillname="NBitcoin" />
+    <assembly fillname="Nethereum.ABI" />
+    <assembly fillname="Nethereum.Accounts" />
+    <assembly fillname="Nethereum.BlockchainProcessing" />
+    <assembly fillname="Nethereum.Contracts" />
+    <assembly fillname="Nethereum.Hex" />
+    <assembly fillname="Nethereum.JsonRpc.Client" />
+    <assembly fillname="Nethereum.JsonRpc.IpcClient" />
+    <assembly fillname="Nethereum.JsonRpc.RpcClient" />
+    <assembly fillname="Nethereum.KeyStore" />
+    <assembly fillname="Nethereum.Merkle" />
+    <assembly fillname="Nethereum.Merkle.Patricia" />
+    <assembly fillname="Nethereum.Model" />
+    <assembly fillname="Nethereum.RLP" />
+    <assembly fillname="Nethereum.RPC" />
+    <assembly fillname="Nethereum.Signer" />
+    <assembly fillname="Nethereum.Signer.EIP712" />
+    <assembly fillname="Nethereum.Util" />
+    <assembly fillname="Nethereum.Web3" />
+    <assembly fillname="Newtonsoft.Json" />
     
     <!-- Assemblies from UnityPackages -->
     <assembly fullname="chainsafe.web3-unity"/>

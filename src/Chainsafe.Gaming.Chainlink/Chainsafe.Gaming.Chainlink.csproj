@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <CodeAnalysisRuleSet>../../global.ruleset</CodeAnalysisRuleSet>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ChainSafe.Gaming\ChainSafe.Gaming.csproj" />
+    </ItemGroup>
+
+</Project>

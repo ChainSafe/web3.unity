@@ -14,13 +14,18 @@ namespace ChainSafe.Gaming.Tests
 {
     internal static class Web3Util
     {
-        public static ValueTask<ChainSafe.Gaming.Web3.Web3> CreateWeb3(int accountIndex = 0)
+        public static ValueTask<Web3.Web3> CreateWeb3(int accountIndex = 0)
         {
-            return CreateWeb3(new JsonRpcWalletConfiguration { AccountIndex = accountIndex });
+            return CreateWeb3(new JsonRpcWalletConfig { AccountIndex = accountIndex });
         }
 
-        private static ValueTask<ChainSafe.Gaming.Web3.Web3> CreateWeb3(
-            JsonRpcWalletConfiguration jsonRpcWalletConfiguration)
+        public static ValueTask<Web3.Web3> CreateWeb3(Web3Builder.ConfigureServicesDelegate configureDelegate, int accountIndex = 0)
+        {
+            return CreateWeb3(new JsonRpcWalletConfig { AccountIndex = accountIndex }, configureDelegate);
+        }
+
+        private static ValueTask<Web3.Web3> CreateWeb3(
+            JsonRpcWalletConfig jsonRpcWalletConfig, Web3Builder.ConfigureServicesDelegate configureDelegate = null)
         {
             return new Web3Builder(
                     new ProjectConfig { ProjectId = string.Empty },
@@ -36,13 +41,14 @@ namespace ChainSafe.Gaming.Tests
                     services.UseNetCoreEnvironment();
                     services.UseRpcProvider();
 
-                    services.AddSingleton(jsonRpcWalletConfiguration);
+                    services.AddSingleton(jsonRpcWalletConfig);
                     services.AddSingleton<ISigner, ITransactionExecutor, ILifecycleParticipant, JsonRpcWallet>();
                 })
+                .Configure(configureDelegate)
                 .BuildAsync();
         }
 
-        public static string DeployContracts(ChainSafe.Gaming.Web3.Web3 web3, string bytecode, string abi)
+        public static string DeployContracts(Web3.Web3 web3, string bytecode, string abi)
         {
             var builder = new DeployContractTransactionBuilder();
             var txReq = builder.BuildTransaction(bytecode, abi, null);

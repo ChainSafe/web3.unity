@@ -17,9 +17,4 @@
     <ProjectReference Include="..\ChainSafe.Gaming.InProcessSigner\ChainSafe.Gaming.InProcessSigner.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" />
-    <AdditionalFiles Include="../../stylecop.json" />
-  </ItemGroup>
-
 </Project>

@@ -1,7 +1,7 @@
 @ECHO OFF
 
 echo Building project...
-pushd src/ChainSafe.Gaming.Unity
+pushd ..\src\ChainSafe.Gaming.Unity
 
 del obj /F /Q
 del bin /F /Q

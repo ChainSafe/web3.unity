@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using Nethereum.ABI.EIP712;
 using Nethereum.ABI.FunctionEncoding.Attributes;

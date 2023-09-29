@@ -12,10 +12,11 @@ jobs:
       matrix:
         dotnet-version: [ '6.0.x' ]
 
-    steps:
+    steps:      
       - uses: actions/checkout@v4
         with:
           submodules: recursive
+      
       - name: Install dependencies
         run: dotnet restore
 

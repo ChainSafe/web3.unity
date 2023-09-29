@@ -113,15 +113,7 @@ namespace ChainSafe.Gaming.Evm.Providers
 
             var maxPriorityFeePerGas = BigInteger.Zero;
             var maxFeePerGas = BigInteger.Zero;
-
-            if (block.BaseFeePerGas > BigInteger.Zero)
-            {
-                // Post London Fork
-                var tip = new HexBigInteger(await provider.Perform<string>("eth_maxPriorityFeePerGas"));
-                var max = tip.Value + block.BaseFeePerGas.Value - 1;
-                maxPriorityFeePerGas = tip;
-                maxFeePerGas = max;
-            }
+            await TryFetchMaxFees();
 
             return new FeeData
             {
@@ -130,25 +122,31 @@ namespace ChainSafe.Gaming.Evm.Providers
                 MaxFeePerGas = maxFeePerGas,
                 MaxPriorityFeePerGas = maxPriorityFeePerGas,
             };
-        }
 
-        public static async Task<TransactionRequest> ApplyGasFeeStrategy(this IRpcProvider provider, TransactionRequest tx)
-        {
-            if (tx.GasPrice == null && tx.MaxFeePerGas == null)
+            async Task TryFetchMaxFees()
             {
-                var feeData = await provider.GetFeeData();
-                if (feeData.MaxFeePerGas == 0)
+                if (block.BaseFeePerGas <= BigInteger.Zero)
                 {
-                    tx.GasPrice = new HexBigInteger(feeData.GasPrice);
+                    return;
                 }
-                else
-                {
-                    tx.MaxPriorityFeePerGas = new HexBigInteger(feeData.MaxPriorityFeePerGas);
-                    tx.MaxFeePerGas = new HexBigInteger(feeData.MaxFeePerGas);
-                }
-            }
 
-            return tx;
+                HexBigInteger tip;
+                try
+                {
+                    // Post London Fork
+                    tip = new HexBigInteger(await provider.Perform<string>("eth_maxPriorityFeePerGas"));
+                }
+                catch (Web3Exception)
+                {
+                    // eth_maxPriorityFeePerGas not supported by the RPC node, skipping..
+                    maxFeePerGas = block.BaseFeePerGas.Value + 1;
+                    return;
+                }
+
+                var max = tip.Value + block.BaseFeePerGas.Value - 1;
+                maxPriorityFeePerGas = tip;
+                maxFeePerGas = max;
+            }
         }
 
         public static async Task<string> Call(this IRpcProvider provider, TransactionRequest transaction, BlockParameter blockTag = null)
