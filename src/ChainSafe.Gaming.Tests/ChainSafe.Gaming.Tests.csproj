@@ -12,21 +12,35 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ChainSafe.Gaming.Chainlink.Lootboxes\ChainSafe.Gaming.Chainlink.Lootboxes.csproj" />
+    <ProjectReference Include="..\ChainSafe.Gaming.Debugging\ChainSafe.Gaming.Debugging.csproj" />
     <ProjectReference Include="..\ChainSafe.Gaming.NetCore\ChainSafe.Gaming.NetCore.csproj" />
     <ProjectReference Include="..\ChainSafe.Gaming\ChainSafe.Gaming.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
-    <PackageReference Include="Nethereum.Signer.EIP712" Version="4.16.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="[13.0.1,14)" />
     <PackageReference Include="NUnit" Version="3.13.3" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.4.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" />
-    <AdditionalFiles Include="../../stylecop.json" />
+    <None Update="Resources\LootboxInterface.abi.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
+
+  <PropertyGroup Condition="'$(Lootboxes)' == 'True'">
+    <DefineConstants>Lootboxes</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Test' ">
+    <DefineConstants>TRACE; Lootboxes</DefineConstants>
+  </PropertyGroup>
+
 
 </Project>

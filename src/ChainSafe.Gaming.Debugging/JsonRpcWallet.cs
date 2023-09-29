@@ -15,15 +15,15 @@ namespace ChainSafe.Gaming.Wallets
 {
     public class JsonRpcWallet : ISigner, ITransactionExecutor, ILifecycleParticipant
     {
-        private readonly JsonRpcWalletConfiguration configuration;
+        private readonly JsonRpcWalletConfig config;
         private readonly IRpcProvider provider;
         private string address;
 
-        public JsonRpcWallet(JsonRpcWalletConfiguration configuration, IRpcProvider provider)
+        public JsonRpcWallet(JsonRpcWalletConfig config, IRpcProvider provider)
         {
-            this.configuration = configuration;
+            this.config = config;
             this.provider = provider;
-            address = this.configuration.AddressOverride;
+            address = this.config.AddressOverride;
         }
 
         public async ValueTask WillStartAsync()
@@ -34,19 +34,19 @@ namespace ChainSafe.Gaming.Wallets
             }
         }
 
-        public ValueTask WillStopAsync() => ValueTask.CompletedTask;
+        public ValueTask WillStopAsync() => new ValueTask(Task.CompletedTask);
 
         public Task<string> GetAddress() => Task.FromResult(address);
 
         private async Task<string> QueryAddress()
         {
             var accounts = await provider.Perform<string[]>("eth_accounts");
-            if (accounts.Length <= configuration.AccountIndex)
+            if (accounts.Length <= config.AccountIndex)
             {
-                throw new Web3Exception($"No account with index #{configuration.AccountIndex} available");
+                throw new Web3Exception($"No account with index #{config.AccountIndex} available");
             }
 
-            return accounts[configuration.AccountIndex];
+            return accounts[config.AccountIndex];
         }
 
         public async Task<string> SignMessage(byte[] message)
