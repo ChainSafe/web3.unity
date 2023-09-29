@@ -2,18 +2,25 @@ using System;
 using System.Collections.Generic;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using Nethereum.ABI.EIP712;
+using Nethereum.ABI.FunctionEncoding.Attributes;
 using Newtonsoft.Json;
 
 namespace ChainSafe.Gaming.Wallets.WalletConnect.Methods
 {
     [Serializable]
-    public struct TypedDataRequest<TTypedData>
+    [JsonObject(MemberSerialization.OptIn)]
+    public struct TypedData<TStruct>
     {
-        public TypedDataRequest(Dictionary<string, MemberDescription[]> types, SerializableDomain domain, TTypedData message)
+        public TypedData(SerializableDomain domain, TStruct message)
         {
-            Types = types;
+            Types = MemberDescriptionFactory.GetTypesMemberDescription(typeof(SerializableDomain), typeof(TStruct));
 
-            PrimaryType = typeof(TTypedData).Name;
+            PrimaryType = typeof(TStruct).Name;
+
+            if (StructAttribute.IsStructType(message))
+            {
+                PrimaryType = StructAttribute.GetAttribute(message).Name;
+            }
 
             Domain = domain;
 
@@ -30,6 +37,6 @@ namespace ChainSafe.Gaming.Wallets.WalletConnect.Methods
         public SerializableDomain Domain { get; private set; }
 
         [JsonProperty("message")]
-        public TTypedData Message { get; private set; }
+        public TStruct Message { get; private set; }
     }
 }

@@ -11,13 +11,13 @@ namespace ChainSafe.Gaming.Wallets.WalletConnect.Methods
 {
     [RpcMethod("eth_signTypedData")]
     [RpcRequestOptions(Clock.ONE_MINUTE, 99998)]
-    public class EthSignTypedData<TTypedData> : List<string>
+    public class EthSignTypedData<TStruct> : List<object>
     {
-        public EthSignTypedData(string address, SerializableDomain domain, TTypedData message)
-            : base(new string[]
+        public EthSignTypedData(string address, SerializableDomain domain, TStruct message)
+            : base(new object[]
             {
                 address,
-                JsonConvert.SerializeObject(new TypedDataRequest<TTypedData>(MemberDescriptionFactory.GetTypesMemberDescription(typeof(TTypedData)), domain, message)),
+                new TypedData<TStruct>(domain, message),
             })
         {
         }
