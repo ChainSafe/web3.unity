@@ -3,6 +3,7 @@
 set -e
 
 echo Building project...
+pushd src/ChainSafe.Gaming.Unity
 
 rm -rf obj
 rm -rf bin
