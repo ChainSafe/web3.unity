@@ -3,7 +3,7 @@ using UnityEngine.Scripting;
 using WalletConnectSharp.Common.Utils;
 using WalletConnectSharp.Network.Models;
 
-namespace ChainSafe.Gaming.Wallets.WalletConnect.Methods
+namespace ChainSafe.Gaming.WalletConnect.Methods
 {
     [RpcMethod("personal_sign")]
     [RpcRequestOptions(Clock.ONE_MINUTE, 99998)]

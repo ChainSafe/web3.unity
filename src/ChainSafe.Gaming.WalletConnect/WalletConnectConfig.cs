@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using WalletConnectSharp.Common.Logging;
 using WalletConnectSharp.Core;
 
-namespace ChainSafe.Gaming.Wallets.WalletConnect
+namespace ChainSafe.Gaming.WalletConnect
 {
     public struct WalletConnectConfig
     {
@@ -21,6 +21,6 @@ namespace ChainSafe.Gaming.Wallets.WalletConnect
 
         public bool IsMobilePlatform { get; set; }
 
-        public Dictionary<string, Wallet> SupportedWallets { get; set; }
+        public Dictionary<string, WalletConnectWalletModel> SupportedWallets { get; set; }
     }
 }

@@ -2,9 +2,9 @@ using System;
 using Newtonsoft.Json;
 using WalletConnectSharp.Sign.Models.Engine;
 
-namespace ChainSafe.Gaming.Wallets.WalletConnect
+namespace ChainSafe.Gaming.WalletConnect
 {
-    public abstract class Wallet
+    public abstract class WalletConnectWalletModel
     {
         [JsonProperty("mobile")]
         public WalletLink Mobile { get; private set; }

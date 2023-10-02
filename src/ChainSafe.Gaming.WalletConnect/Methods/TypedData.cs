@@ -5,7 +5,7 @@ using Nethereum.ABI.EIP712;
 using Nethereum.ABI.FunctionEncoding.Attributes;
 using Newtonsoft.Json;
 
-namespace ChainSafe.Gaming.Wallets.WalletConnect.Methods
+namespace ChainSafe.Gaming.WalletConnect.Methods
 {
     [Serializable]
     [JsonObject(MemberSerialization.OptIn)]

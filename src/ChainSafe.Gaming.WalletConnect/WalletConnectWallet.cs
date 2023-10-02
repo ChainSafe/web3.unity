@@ -1,30 +1,39 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
-using ChainSafe.Gaming.Wallets.WalletConnect;
-using ChainSafe.Gaming.Wallets.WalletConnect.Methods;
+using ChainSafe.Gaming.WalletConnect;
+using ChainSafe.Gaming.WalletConnect.Methods;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Debug;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using ChainSafe.Gaming.Web3.Environment;
-using Nethereum.ABI.EIP712;
-using Nethereum.Signer;
-using Nethereum.Util;
-using Newtonsoft.Json;
+using WalletConnectSharp.Common.Logging;
+using WalletConnectSharp.Common.Model.Errors;
+using WalletConnectSharp.Core;
+using WalletConnectSharp.Core.Models;
+using WalletConnectSharp.Network.Models;
+using WalletConnectSharp.Sign;
 using WalletConnectSharp.Sign.Models;
 using WalletConnectSharp.Sign.Models.Engine;
-using AddressExtensions = ChainSafe.Gaming.Web3.Core.Debug.AddressExtensions;
+using WalletConnectSharp.Storage;
 
-namespace ChainSafe.Gaming.Wallets
+namespace ChainSafe.Gaming.WalletConnect
 {
-    public class WebPageWallet : ISigner, ITransactionExecutor, ILifecycleParticipant
+    public class WalletConnectWallet : ISigner, ITransactionExecutor, ILifecycleParticipant
     {
-        public WebPageWallet(IRpcProvider provider, WebPageWalletConfig configuration, IOperatingSystemMediator operatingSystem, IChainConfig chainConfig)
+        private static readonly TimeSpan MinClipboardCheckPeriod = TimeSpan.FromMilliseconds(10);
+
+        private readonly IChainConfig chainConfig;
+        private readonly WebPageWalletConfig configuration;
+        private readonly IOperatingSystemMediator operatingSystem;
+        private readonly IRpcProvider provider;
+
+        public WalletConnectWallet(IRpcProvider provider, WebPageWalletConfig configuration, IOperatingSystemMediator operatingSystem, IChainConfig chainConfig)
         {
             this.provider = provider;
             this.operatingSystem = operatingSystem;
@@ -46,8 +55,16 @@ namespace ChainSafe.Gaming.Wallets
 
         public static string TestResponse { get; set; } = string.Empty;
 
-        // static to keep instance through runtime - related to logout/disconnect
-        public static WalletConnectUnity WalletConnectUnity { get; private set; } = new WalletConnectUnity();
+        // static to not destroy client session on logout/TerminateAsync, just disconnect instead
+        public static WalletConnectSignClient SignClient { get; private set; }
+
+        public WalletConnectCore Core { get; private set; }
+
+        public SessionStruct Session => SignClient.Session.Get(SignClient.Session.Keys[0]);
+
+        public WalletConnectConfig Config { get; private set; }
+
+        public string Address { get; private set; }
 
         private static void InvokeConnected(ConnectedData connectedData)
         {
@@ -58,17 +75,6 @@ namespace ChainSafe.Gaming.Wallets
         {
             OnSessionApproved?.Invoke(session);
         }
-
-#pragma warning disable SA1201
-        private static readonly TimeSpan MinClipboardCheckPeriod = TimeSpan.FromMilliseconds(10);
-#pragma warning restore SA1201
-        private readonly IChainConfig chainConfig;
-
-        private readonly WebPageWalletConfig configuration;
-        private readonly IOperatingSystemMediator operatingSystem;
-        private readonly IRpcProvider provider;
-
-        public string Address { get; private set; }
 
         public async ValueTask WillStartAsync()
         {
@@ -83,16 +89,116 @@ namespace ChainSafe.Gaming.Wallets
             }
 
             // Wallet Connect
-            WalletConnectUnity.OnConnected += InvokeConnected;
-            WalletConnectUnity.OnSessionApproved += InvokeSessionApproved;
-            await WalletConnectUnity.Initialize(configuration.WalletConnectConfig);
+            await Initialize(configuration.WalletConnectConfig);
 
             Address = configuration.SavedUserAddress ?? await GetAccountVerifyUserOwns();
         }
 
+        public async Task Initialize(WalletConnectConfig config)
+        {
+            Config = config;
+
+            if (SignClient != null)
+            {
+                Core = (WalletConnectCore)SignClient.Core;
+            }
+
+            if (Core != null && Core.Initialized)
+            {
+                WCLogger.Log("Core already initialized");
+
+                return;
+            }
+
+            if (Config.Logger != null)
+            {
+                WCLogger.Logger = Config.Logger;
+            }
+
+            Core = new WalletConnectCore(new CoreOptions()
+            {
+                Name = Config.ProjectName,
+                ProjectId = Config.ProjectId,
+                Storage = new InMemoryStorage(),
+                BaseContext = Config.BaseContext,
+            });
+
+            await Core.Start();
+
+            SignClient = await WalletConnectSignClient.Init(new SignClientOptions()
+            {
+                BaseContext = Config.BaseContext,
+                Core = Core,
+                Metadata = Config.Metadata,
+                Name = Config.ProjectName,
+                ProjectId = Config.ProjectId,
+                Storage = Core.Storage,
+            });
+        }
+
+        public async Task<ConnectedData> ConnectClient()
+        {
+            RequiredNamespaces requiredNamespaces = new RequiredNamespaces();
+
+            var methods = new string[]
+            {
+                "eth_sendTransaction", "eth_signTransaction", "eth_sign", "personal_sign", "eth_signTypedData",
+            };
+
+            var events = new string[] { "chainChanged", "accountsChanged" };
+
+            requiredNamespaces.Add(
+                Chain.EvmNamespace,
+                new ProposedNamespace
+                {
+                    Chains = new string[]
+                    {
+                        Config.Chain.FullChainId,
+                    },
+                    Events = events,
+                    Methods = methods,
+                });
+
+            // start connecting
+            ConnectedData connectData = await SignClient.Connect(new ConnectOptions
+            {
+                RequiredNamespaces = requiredNamespaces,
+            });
+
+            InvokeConnected(connectData);
+
+            SessionStruct sessionResult = await connectData.Approval;
+
+            InvokeSessionApproved(sessionResult);
+
+            if (Config.IsMobilePlatform)
+            {
+                // this doesn't work for all wallets, hence the try catch
+                try
+                {
+                    string nativeUrl = sessionResult.Peer.Metadata.Redirect.Native.Replace("//", string.Empty);
+
+                    string defaultWalletId = Config.SupportedWallets.FirstOrDefault(t =>
+                            t.Value.Mobile.NativeProtocol == nativeUrl || t.Value.Desktop.NativeProtocol == nativeUrl)
+                        .Key;
+
+                    if (Config.SupportedWallets.TryGetValue(defaultWalletId, out WalletConnectWalletModel wallet))
+                    {
+                        wallet.OpenDeeplink(connectData);
+                    }
+                }
+                catch (Exception e)
+                {
+                    WCLogger.Log($"Can't open deepLink for wallet {e}");
+                }
+            }
+
+            return connectData;
+        }
+
         public ValueTask WillStopAsync()
         {
-            return new ValueTask(Task.CompletedTask);
+            return new ValueTask(Disconnect());
         }
 
         public Task<string> GetAddress()
@@ -111,7 +217,7 @@ namespace ChainSafe.Gaming.Wallets
             // var pageUrl = BuildUrl();
 
             // Wallet connect
-            SessionStruct session = WalletConnectUnity.Session;
+            SessionStruct session = Session;
 
             var (address, chainId) = GetCurrentAddress();
 
@@ -123,7 +229,7 @@ namespace ChainSafe.Gaming.Wallets
             var request = new EthSignMessage(message, address);
 
             string hash =
-                await WalletConnectUnity.SignClient.Request<EthSignMessage, string>(session.Topic, request, chainId);
+                await SignClient.Request<EthSignMessage, string>(session.Topic, request, chainId);
 
             var isValid = ValidateResponse(hash);
             if (!isValid)
@@ -151,7 +257,7 @@ namespace ChainSafe.Gaming.Wallets
         public async Task<string> SignTypedData<TStructType>(SerializableDomain domain, TStructType message)
         {
             // Wallet connect
-            SessionStruct session = WalletConnectUnity.Session;
+            SessionStruct session = Session;
 
             var (address, chainId) = GetCurrentAddress();
 
@@ -163,7 +269,7 @@ namespace ChainSafe.Gaming.Wallets
             var request = new EthSignTypedData<TStructType>(address, domain, message);
 
             string hash =
-                await WalletConnectUnity.SignClient.Request<EthSignTypedData<TStructType>, string>(session.Topic, request, chainId);
+                await SignClient.Request<EthSignTypedData<TStructType>, string>(session.Topic, request, chainId);
 
             var isValid = ValidateResponse(hash);
             if (!isValid)
@@ -245,7 +351,7 @@ namespace ChainSafe.Gaming.Wallets
 
         private (string, string) GetCurrentAddress()
         {
-            var currentSession = WalletConnectUnity.Session;
+            var currentSession = Session;
 
             var defaultChain = currentSession.Namespaces.Keys.FirstOrDefault();
 
@@ -311,7 +417,7 @@ namespace ChainSafe.Gaming.Wallets
         {
             // sign current time
             var expirationTime = DateTime.Now + configuration.ConnectRequestExpiresAfter;
-            await WalletConnectUnity.ConnectClient();
+            await ConnectClient();
 
             var (address, _) = GetCurrentAddress();
 
@@ -327,58 +433,20 @@ namespace ChainSafe.Gaming.Wallets
             }
 
             return address;
-
-            // string ExtractPublicAddress(string sig, string originalMessage)
-            // {
-            //     try
-            //     {
-            //         var msg = "\x19" + "Ethereum Signed Message:\n" + originalMessage.Length + originalMessage;
-            //         var msgHash = new Sha3Keccack().CalculateHash(Encoding.UTF8.GetBytes(msg));
-            //         var ecdsaSignature = MessageSigner.ExtractEcdsaSignature(sig);
-            //         var key = EthECKey.RecoverFromSignature(ecdsaSignature, msgHash);
-            //         return key.GetPublicAddress();
-            //     }
-            //     catch
-            //     {
-            //         throw new Web3Exception("Invalid signature");
-            //     }
-            // }
         }
 
-        public async Task Disconnect()
+        private async Task Disconnect()
         {
-            configuration.SavedUserAddress = null;
+            try
+            {
+                configuration.SavedUserAddress = null;
 
-            await WalletConnectUnity.Disconnect();
+                await SignClient.Disconnect(Session.Topic, Error.FromErrorType(ErrorType.USER_DISCONNECTED));
+            }
+            catch (Exception e)
+            {
+                WCLogger.LogError($"error disconnecting: {e}");
+            }
         }
-
-        /*
-         Storing this here just to know, how events for analytics were constructed
-
-         Logging event on SendTransaction success
-        var data = new
-        {
-            Client = "Desktop/Mobile",
-            Version = "v2",
-            ProjectID = PlayerPrefs.GetString("ProjectID"),
-            Player = Sha3(PlayerPrefs.GetString("Account") + PlayerPrefs.GetString("ProjectID")),
-            ChainId = _chainId,
-            Address = _to,
-            Value = _value,
-            GasLimit = _gasLimit,
-            GasPrice = _gasPrice,
-            Data = _data
-        };
-
-        Logging.SendGameData(data);
-
-        public static string Sha3(string _message)
-        {
-            var signer = new EthereumMessageSigner();
-            var hash = new Sha3Keccack().CalculateHash(_message).EnsureHexPrefix();
-            // 0x06b3dfaec148fb1bb2b066f10ec285e7c9bf402ab32aa78a5d38e34566810cd2
-            return hash;
-        }
-         */
     }
 }

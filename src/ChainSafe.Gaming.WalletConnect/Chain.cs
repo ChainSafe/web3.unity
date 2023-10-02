@@ -1,4 +1,4 @@
-namespace ChainSafe.Gaming.Wallets.WalletConnect
+namespace ChainSafe.Gaming.WalletConnect
 {
     public class Chain
     {

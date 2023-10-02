@@ -7,7 +7,7 @@ using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Wallets;
-using ChainSafe.Gaming.Wallets.WalletConnect;
+using ChainSafe.Gaming.WalletConnect;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Unity;
@@ -77,21 +77,6 @@ namespace Scenes
 
         #endregion
 
-        [RuntimeInitializeOnLoadMethod]
-        static void DisconnectWallet()
-        {
-            Application.quitting += async delegate
-            {
-                Debug.Log("Disconnecting wallet...");
-
-                //if already connected
-                if (Web3Accessor.Web3 != null && Web3Accessor.Web3.Signer is WebPageWallet wallet)
-                {
-                    await wallet.Disconnect();
-                }
-            };
-        }
-
         private IEnumerator Start()
         {
             Assert.IsNotNull(Web3AuthButtons);
@@ -137,11 +122,11 @@ namespace Scenes
                 .Configure(ConfigureCommonServices)
                 .Configure(services =>
                 {
-                    services.UseWebPageWallet(
+                    services.UseWalletConnectWallet(
                         new WebPageWalletConfig
                         {
                             SavedUserAddress = savedAccount,
-                            WalletConnectConfig = BuildConfig()
+                            WalletConnectConfig = BuildWalletConnectConfig()
                         });
                 });
 
@@ -161,10 +146,10 @@ namespace Scenes
                      */
                     if (useWebPageWallet)
                     {
-                        services.UseWebPageWallet(
+                        services.UseWalletConnectWallet(
                             new WebPageWalletConfig
                             {
-                                WalletConnectConfig = BuildConfig()
+                                WalletConnectConfig = BuildWalletConnectConfig()
                             });
                     }
                     else
@@ -283,9 +268,9 @@ namespace Scenes
 
         #region Wallet Connect
 
-        private Dictionary<string, Wallet> _supportedWallets;
+        private Dictionary<string, WalletConnectWalletModel> _supportedWallets;
 
-        private WalletConnectConfig BuildConfig()
+        private WalletConnectConfig BuildWalletConnectConfig()
         {
             // build chain
             var projectConfig = ProjectConfigUtilities.Load();
@@ -323,8 +308,8 @@ namespace Scenes
                 {
                     var json = webRequest.downloadHandler.text;
 
-                    _supportedWallets = JsonConvert.DeserializeObject<Dictionary<string, UnityWallet>>(json)
-                        .ToDictionary(w => w.Key, w => (Wallet)w.Value);
+                    _supportedWallets = JsonConvert.DeserializeObject<Dictionary<string, UnityWalletConnectWalletModel>>(json)
+                        .ToDictionary(w => w.Key, w => (WalletConnectWalletModel) w.Value);
 
                     Debug.Log($"Fetched {_supportedWallets.Count} Supported Wallets.");
                 }

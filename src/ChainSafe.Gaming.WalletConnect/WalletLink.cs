@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace ChainSafe.Gaming.Wallets.WalletConnect
+namespace ChainSafe.Gaming.WalletConnect
 {
     public struct WalletLink
     {

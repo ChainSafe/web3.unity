@@ -1,12 +1,14 @@
 using System;
-using ChainSafe.Gaming.Wallets.WalletConnect;
+using ChainSafe.Gaming.Evm.Unity;
+using ChainSafe.Gaming.WalletConnect;
+using ChainSafe.Gaming.Wallets;
 using UnityEngine;
 using WalletConnectSharp.Sign.Models.Engine;
 
 namespace Web3Unity.Scripts.WalletConnect
 {
     [Serializable]
-    public class UnityWallet : Wallet
+    public class UnityWalletConnectWalletModel : WalletConnectWalletModel
     {
         public override void OpenDeeplink(ConnectedData data, bool useNative = false)
         {
@@ -38,7 +40,7 @@ namespace Web3Unity.Scripts.WalletConnect
 
         if (string.IsNullOrWhiteSpace(uri)) throw new Exception("Got empty URI when attempting to create WC deeplink");
 #endif
-            MainThreadDispatcher.Instance.Invoke(delegate
+            Dispatcher.Instance().Enqueue(delegate
             {
                 Debug.Log($"Opening URL {uri}");
             });

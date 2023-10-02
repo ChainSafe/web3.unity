@@ -7,7 +7,7 @@ using UnityEngine.Scripting;
 using WalletConnectSharp.Common.Utils;
 using WalletConnectSharp.Network.Models;
 
-namespace ChainSafe.Gaming.Wallets.WalletConnect.Methods
+namespace ChainSafe.Gaming.WalletConnect.Methods
 {
     [RpcMethod("eth_signTypedData")]
     [RpcRequestOptions(Clock.ONE_MINUTE, 99998)]

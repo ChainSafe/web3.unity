@@ -1,12 +1,12 @@
 ﻿using System;
-using ChainSafe.Gaming.Wallets.WalletConnect;
+using ChainSafe.Gaming.WalletConnect;
 
-namespace ChainSafe.Gaming.Wallets
+namespace ChainSafe.Gaming.WalletConnect
 {
     [Serializable]
     public class WebPageWalletConfig
     {
-        public string? SavedUserAddress { get; set; } = null;
+        public string SavedUserAddress { get; set; } = null;
 
         public string ServiceUrl { get; set; } = "https://chainsafe.github.io/game-web3wallet/";
 
@@ -14,7 +14,7 @@ namespace ChainSafe.Gaming.Wallets
 
         public TimeSpan ConnectRequestExpiresAfter { get; set; } = TimeSpan.FromMinutes(1);
 
-        public WebPageWallet.ConnectMessageBuildDelegate ConnectMessageBuilder { get; set; } =
+        public WalletConnectWallet.ConnectMessageBuildDelegate ConnectMessageBuilder { get; set; } =
             time => $"Sign this message to connect your account. This request will expire at {time:hh:mm:ss}.";
 
         public WalletConnectConfig WalletConnectConfig { get; set; }
