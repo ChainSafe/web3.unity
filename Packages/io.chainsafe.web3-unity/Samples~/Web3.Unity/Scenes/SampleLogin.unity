@@ -1395,6 +1395,50 @@ MonoBehaviour:
   _copyToClipboardButton: {fileID: 212403314}
   _backButton: {fileID: 1993078182}
   _container: {fileID: 1278821651}
+--- !u!1 &407712547
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 407712549}
+  - component: {fileID: 407712548}
+  m_Layer: 0
+  m_Name: MainThreadDispatcher
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &407712548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 407712547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -320598466, guid: 6ca4015b3a4624b13bfadd6f7956c0be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &407712549
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 407712547}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &452118933
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2400,7 +2444,6 @@ MonoBehaviour:
       Native: 
       Universal: 
     VerifyUrl: 
-  _chainDropdown: {fileID: 0}
 --- !u!1 &1434038407
 GameObject:
   m_ObjectHideFlags: 0
