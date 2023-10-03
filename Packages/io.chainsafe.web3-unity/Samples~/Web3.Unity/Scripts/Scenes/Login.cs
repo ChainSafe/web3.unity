@@ -308,7 +308,7 @@ namespace Scenes
                 {
                     var json = webRequest.downloadHandler.text;
 
-                    _supportedWallets = JsonConvert.DeserializeObject<Dictionary<string, UnityWalletConnectWalletModel>>(json)
+                    _supportedWallets = JsonConvert.DeserializeObject<Dictionary<string, WalletConnectWalletModel>>(json)
                         .ToDictionary(w => w.Key, w => (WalletConnectWalletModel) w.Value);
 
                     Debug.Log($"Fetched {_supportedWallets.Count} Supported Wallets.");
