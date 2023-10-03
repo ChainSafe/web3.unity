@@ -25,6 +25,13 @@ public class WalletConnectModal : MonoBehaviour
         WalletConnectWallet.OnSessionApproved += SessionApproved;
     }
 
+    private void OnDisable()
+    {
+        WalletConnectWallet.OnConnected -= WalletConnected;
+
+        WalletConnectWallet.OnSessionApproved -= SessionApproved;
+    }
+    
     private void WalletConnected(ConnectedData data)
     {
         Dispatcher.Instance().Enqueue(delegate
@@ -80,12 +87,5 @@ public class WalletConnectModal : MonoBehaviour
     private void Disable()
     {
         _container.gameObject.SetActive(false);
-    }
-
-    private void OnDisable()
-    {
-        WalletConnectWallet.OnConnected -= WalletConnected;
-
-        WalletConnectWallet.OnSessionApproved -= SessionApproved;
     }
 }
