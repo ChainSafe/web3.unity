@@ -8,26 +8,26 @@ namespace ChainSafe.Gaming.WalletConnect
 {
     public class WCLogWriter : ILogger
     {
-        private ILogWriter _logWriter;
+        private readonly ILogWriter logWriter;
 
         public WCLogWriter(ILogWriter logWriter)
         {
-            _logWriter = logWriter;
+            this.logWriter = logWriter;
         }
 
         public void Log(string message)
         {
-            Dispatcher.Instance()?.Enqueue(() => _logWriter.Log(message));
+            Dispatcher.Instance()?.Enqueue(() => logWriter.Log(message));
         }
 
         public void LogError(string message)
         {
-            Dispatcher.Instance()?.Enqueue(() => _logWriter.LogError(message));
+            Dispatcher.Instance()?.Enqueue(() => logWriter.LogError(message));
         }
 
         public void LogError(Exception e)
         {
-            Dispatcher.Instance()?.Enqueue(() => _logWriter.LogError($"{e} {e.Message} {e.StackTrace}"));
+            Dispatcher.Instance()?.Enqueue(() => logWriter.LogError($"{e} {e.Message} {e.StackTrace}"));
         }
     }
 }
