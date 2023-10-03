@@ -1,4 +1,5 @@
-using ChainSafe.Gaming.Wallets;
+using ChainSafe.Gaming.Evm.Unity;
+using ChainSafe.Gaming.WalletConnect;
 using UnityEngine;
 using UnityEngine.UI;
 using WalletConnectSharp.Sign.Models;
@@ -19,14 +20,14 @@ public class WalletConnectModal : MonoBehaviour
     {
         _backButton.onClick.AddListener(Disable);
 
-        WebPageWallet.OnConnected += WalletConnected;
+        WalletConnectWallet.OnConnected += WalletConnected;
 
-        WebPageWallet.OnSessionApproved += SessionApproved;
+        WalletConnectWallet.OnSessionApproved += SessionApproved;
     }
 
     private void WalletConnected(ConnectedData data)
     {
-        MainThreadDispatcher.Instance.Invoke(delegate
+        Dispatcher.Instance().Enqueue(delegate
         {
             // enable display
             _container.gameObject.SetActive(true);
@@ -41,7 +42,7 @@ public class WalletConnectModal : MonoBehaviour
 
     private void SessionApproved(SessionStruct session)
     {
-        MainThreadDispatcher.Instance.Invoke(delegate
+        Dispatcher.Instance().Enqueue(delegate
         {
             Debug.Log($"{session.Topic} Approved");
         });
@@ -83,8 +84,8 @@ public class WalletConnectModal : MonoBehaviour
 
     private void OnDisable()
     {
-        WebPageWallet.OnConnected -= WalletConnected;
+        WalletConnectWallet.OnConnected -= WalletConnected;
 
-        WebPageWallet.OnSessionApproved -= SessionApproved;
+        WalletConnectWallet.OnSessionApproved -= SessionApproved;
     }
 }

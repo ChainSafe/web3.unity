@@ -11,12 +11,6 @@ public class Logout : MonoBehaviour
         // Remove the saved "remember me" data, if any
         PlayerPrefs.DeleteKey(Login.PlayerAccountKey);
 
-        // disconnect wallet
-        if (Web3Accessor.Web3.Signer is WebPageWallet wallet)
-        {
-            await wallet.Disconnect();
-        }
-        
         // Terminate Web3
         await Web3Accessor.Web3.TerminateAsync();
 
@@ -25,5 +19,12 @@ public class Logout : MonoBehaviour
 
         // Go back to the first scene to log in again
         SceneManager.LoadScene(0);
+    }
+
+    private void OnApplicationQuit()
+    {
+        Debug.Log("Disconnecting wallet...");
+        
+        OnLogout();
     }
 }
