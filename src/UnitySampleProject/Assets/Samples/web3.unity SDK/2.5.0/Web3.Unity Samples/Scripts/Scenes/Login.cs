@@ -21,8 +21,6 @@ using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using WalletConnectSharp.Core;
-using Web3Unity.Scripts.WalletConnect;
-
 
 namespace Scenes
 {
@@ -284,9 +282,7 @@ namespace Scenes
                 BaseContext = BaseContext,
                 Chain = chain,
                 Metadata = Metadata, 
-                SupportedWallets = _supportedWallets, 
-                IsMobilePlatform = Application.isMobilePlatform, 
-                Logger = new WCUnityLogger()
+                SupportedWallets = _supportedWallets
             };
         }
         

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using WalletConnectSharp.Common.Logging;
 using WalletConnectSharp.Core;
 
 namespace ChainSafe.Gaming.WalletConnect
@@ -16,10 +15,6 @@ namespace ChainSafe.Gaming.WalletConnect
         public Chain Chain { get; set; }
 
         public Metadata Metadata { get; set; }
-
-        public ILogger Logger { get; set; }
-
-        public bool IsMobilePlatform { get; set; }
 
         public Dictionary<string, WalletConnectWalletModel> SupportedWallets { get; set; }
     }

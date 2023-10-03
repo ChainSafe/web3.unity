@@ -12,6 +12,7 @@ using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Debug;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using ChainSafe.Gaming.Web3.Environment;
+using UnityEngine;
 using WalletConnectSharp.Common.Logging;
 using WalletConnectSharp.Common.Model.Errors;
 using WalletConnectSharp.Core;
@@ -32,13 +33,15 @@ namespace ChainSafe.Gaming.WalletConnect
         private readonly WebPageWalletConfig configuration;
         private readonly IOperatingSystemMediator operatingSystem;
         private readonly IRpcProvider provider;
+        private readonly ILogWriter logWriter;
 
-        public WalletConnectWallet(IRpcProvider provider, WebPageWalletConfig configuration, IOperatingSystemMediator operatingSystem, IChainConfig chainConfig)
+        public WalletConnectWallet(IRpcProvider provider, WebPageWalletConfig configuration, IOperatingSystemMediator operatingSystem, IChainConfig chainConfig, ILogWriter logWriter)
         {
             this.provider = provider;
             this.operatingSystem = operatingSystem;
             this.chainConfig = chainConfig;
             this.configuration = configuration;
+            this.logWriter = logWriter;
         }
 
         public delegate string ConnectMessageBuildDelegate(DateTime expirationTime);
@@ -110,10 +113,7 @@ namespace ChainSafe.Gaming.WalletConnect
                 return;
             }
 
-            if (Config.Logger != null)
-            {
-                WCLogger.Logger = Config.Logger;
-            }
+            WCLogger.Logger = new WCLogWriter(logWriter);
 
             Core = new WalletConnectCore(new CoreOptions()
             {
@@ -171,7 +171,7 @@ namespace ChainSafe.Gaming.WalletConnect
 
             InvokeSessionApproved(sessionResult);
 
-            if (Config.IsMobilePlatform)
+            if (Application.isMobilePlatform)
             {
                 // this doesn't work for all wallets, hence the try catch
                 try

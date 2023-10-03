@@ -13,6 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ChainSafe.Gaming.Unity.ThirdParty\ChainSafe.Gaming.Unity.ThirdParty.csproj" />
     <ProjectReference Include="..\ChainSafe.Gaming\ChainSafe.Gaming.csproj" />
   </ItemGroup>
 
@@ -22,10 +23,6 @@
 
   <ItemGroup>
     <Reference Include="../../libs/UnityEngine/UnityEngine.dll" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="WalletConnect\" />
   </ItemGroup>
   
 </Project>
