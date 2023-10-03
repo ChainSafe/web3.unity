@@ -15,7 +15,7 @@ namespace LootBoxes.Scene.States
             PlayAnimations();
 
             // Send "OpenLootBoxes" request
-            var amountToOpen = (uint)Context.stage.StageItems.Count(item => item.LootBox.Selected);
+            var amountToOpen = (uint)Context.stage.StageItems.Count(item => item.lootbox.Selected);
             await Context.OpenLootBoxes(Context.ActiveType, amountToOpen);
 
             Context.animator.SetTrigger("LootBoxesOpenInitiated");
@@ -25,7 +25,7 @@ namespace LootBoxes.Scene.States
                 // Nearest selected item to the focused one
                 return Context.stage.StageItems
                     .Select((item, index) => (item, index))
-                    .Where(itemAndIndex => itemAndIndex.item.LootBox.Selected)
+                    .Where(itemAndIndex => itemAndIndex.item.lootbox.Selected)
                     .Aggregate((a, b) =>
                     {
                         var focusedItemIndex = Context.stageFocus.FocusedItemIndex;
@@ -39,13 +39,13 @@ namespace LootBoxes.Scene.States
                 var itemsToHide = Context.stage.StageItems.Where(item => item != focusedStageItem);
                 foreach (var itemToHide in itemsToHide)
                 {
-                    itemToHide.LootBox.PlayDisintegrate();
+                    itemToHide.lootbox.PlayDisintegrate();
                 }
 
-                var itemsToOpen = Context.stage.StageItems.Where(item => item.LootBox.Selected);
+                var itemsToOpen = Context.stage.StageItems.Where(item => item.lootbox.Selected);
                 foreach (var itemToOpen in itemsToOpen)
                 {
-                    itemToOpen.LootBox.PlayOpening();
+                    itemToOpen.lootbox.PlayOpening();
                 }
             }
         }

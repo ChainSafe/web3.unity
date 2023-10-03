@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace LootBoxes.Scene.StageItems
 {
     public class StageItem : MonoBehaviour
     {
-        public LootBox LootBox;
+        [FormerlySerializedAs("LootBox")] public Lootbox lootbox;
         public Reward Reward;
         public Light SpotLight;
 

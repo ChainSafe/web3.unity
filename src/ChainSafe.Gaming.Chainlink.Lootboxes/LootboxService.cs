@@ -147,7 +147,26 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
 
         public async Task<uint> OpeningLootboxType()
         {
-            throw new NotImplementedException();
+            var playerAddress = await this.GetCurrentPlayerAddress();
+            var response = await this.contract.Call("getOpenerRequestDetails", new object[] { playerAddress });
+            var opener = (BigInteger)response[0];
+            var unitsToGet = (BigInteger)response[1];
+
+            if (opener != 0 && unitsToGet == 0)
+            {
+                // we can early return here, but, it's not necessary since unitstoget will be 0 regardless and this
+                // call will fulfill every request that's been missing.
+                await this.contract.Send(
+                    "recoverBoxes",
+                    new object[] { playerAddress });
+            }
+
+            if (unitsToGet > uint.MaxValue)
+            {
+                throw new Web3Exception("Internal Error. Units to get is greater than int.MaxValue.");
+            }
+
+            return (uint)unitsToGet;
         }
 
         public async Task OpenLootbox(uint lootboxType, uint lootboxCount = 1)

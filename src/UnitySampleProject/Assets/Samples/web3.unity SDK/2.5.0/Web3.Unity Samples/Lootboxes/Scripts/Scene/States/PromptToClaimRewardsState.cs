@@ -13,16 +13,16 @@ namespace LootBoxes.Scene.States
             Context.promptClaimRewardsUI.gameObject.SetActive(true);
 
             focusedItem = Context.stageFocus.FocusedItem;
-            focusedItem.LootBox.PlayReadyToBeClaimed();
+            focusedItem.lootbox.PlayReadyToBeClaimed();
 
-            focusedItem.LootBox.Clicked += OnLootBoxClicked;
+            focusedItem.lootbox.Clicked += OnLootboxClicked;
         }
 
         protected override void OnLootBoxSceneStateExit()
         {
             Context.promptClaimRewardsUI.gameObject.SetActive(false);
 
-            focusedItem.LootBox.Clicked -= OnLootBoxClicked;
+            focusedItem.lootbox.Clicked -= OnLootboxClicked;
         }
 
         protected override async void OnLootBoxSceneStateUpdate()
@@ -35,13 +35,13 @@ namespace LootBoxes.Scene.States
 
         private async Task ClaimRewards()
         {
-            focusedItem.LootBox.PlayClaimingRewards();
+            focusedItem.lootbox.PlayClaimingRewards();
             Context.LastClaimedRewards = await Context.ClaimRewards();
-            focusedItem.LootBox.PlayDisintegrate();
+            focusedItem.lootbox.PlayDisintegrate();
             Context.animator.SetTrigger("ClaimedRewards");
         }
 
-        private async void OnLootBoxClicked(LootBox lootBox)
+        private async void OnLootboxClicked(Lootbox lootbox)
         {
             await ClaimRewards();
         }

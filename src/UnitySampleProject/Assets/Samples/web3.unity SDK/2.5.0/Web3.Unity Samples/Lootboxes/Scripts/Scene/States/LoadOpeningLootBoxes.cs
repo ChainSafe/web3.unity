@@ -11,7 +11,7 @@ namespace LootBoxes.Scene.States
             var stageItem = Context.LootBoxStageItemFactory.Create(prefab, 0);
             Context.stage.SetItems(new List<StageItem> { stageItem });
             Context.stageFocus.Focus(0, immediately: true);
-            stageItem.LootBox.PlayOpening(); // todo set opening state immediately?
+            stageItem.lootbox.PlayOpening(); // todo set opening state immediately?
             Context.animator.SetTrigger("LootBoxesLoaded");
         }
     }

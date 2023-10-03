@@ -27,7 +27,7 @@ namespace LootBoxes.Scene.States
 
             foreach (var stageItem in Context.stage.StageItems)
             {
-                stageItem.LootBox.Clicked += OnLootBoxClicked;
+                stageItem.lootbox.Clicked += OnLootboxClicked;
             }
         }
 
@@ -43,7 +43,7 @@ namespace LootBoxes.Scene.States
 
             foreach (var stageItem in Context.stage.StageItems)
             {
-                stageItem.LootBox.Clicked -= OnLootBoxClicked;
+                stageItem.lootbox.Clicked -= OnLootboxClicked;
             }
         }
 
@@ -82,7 +82,7 @@ namespace LootBoxes.Scene.States
 
         private void ToggleFocusedSelected()
         {
-            var focusedLootBox = Context.stageFocus.FocusedItem.LootBox;
+            var focusedLootBox = Context.stageFocus.FocusedItem.lootbox;
             focusedLootBox.Selected = !focusedLootBox.Selected;
             OnSelectedCountUpdated();
         }
@@ -107,7 +107,7 @@ namespace LootBoxes.Scene.States
 
         private void OpenSelectedLootBoxes()
         {
-            if (!Context.stage.StageItems.Any(item => item.LootBox.Selected))
+            if (!Context.stage.StageItems.Any(item => item.lootbox.Selected))
             {
                 return;
             }
@@ -140,9 +140,9 @@ namespace LootBoxes.Scene.States
             OpenSelectedLootBoxes();
         }
 
-        private void OnLootBoxClicked(LootBox lootBox)
+        private void OnLootboxClicked(Lootbox lootbox)
         {
-            if (Context.stageFocus.FocusedItem.LootBox != lootBox)
+            if (Context.stageFocus.FocusedItem.lootbox != lootbox)
             {
                 return;
             }
@@ -152,7 +152,7 @@ namespace LootBoxes.Scene.States
 
         private void OnSelectedCountUpdated()
         {
-            var selectedAmount = Context.stage.StageItems.Count(item => item.LootBox.Selected);
+            var selectedAmount = Context.stage.StageItems.Count(item => item.lootbox.Selected);
             Context.selectLootBoxesUI.SelectedAmount.text = selectedAmount.ToString();
             Context.selectLootBoxesUI.OpenSelectedButton.interactable = selectedAmount > 0;
         }

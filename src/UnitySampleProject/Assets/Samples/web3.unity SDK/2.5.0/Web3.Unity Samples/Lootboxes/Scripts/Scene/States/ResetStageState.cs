@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ChainSafe.Gaming.Chainlink.Lootboxes;
+using UnityEngine;
 
 namespace LootBoxes.Scene.States
 {
@@ -48,16 +49,15 @@ namespace LootBoxes.Scene.States
 
         private async void LaunchOpening()
         {
-            // todo implement
-            // Context.ActiveType = await Context.OpeningLootBoxType();
-            Context.ActiveType = 1;
+            //If there is no opening lootbox type, we will default to the first type
+            Context.ActiveType = (uint)Mathf.Max(1, await Context.OpeningLootBoxType());
             Context.animator.SetTrigger("LaunchOpeningLootboxes");
         }
 
         private async void LaunchCanClaimRewards()
         {
-            // Context.ActiveType = await Context.OpeningLootBoxType();
-            Context.ActiveType = 1;
+            //If there is no opening lootbox type, we will default to the first type
+            Context.ActiveType = (uint)Mathf.Max(1, await Context.OpeningLootBoxType());
             Context.animator.SetTrigger("LaunchCanClaimRewards");
         }
     }

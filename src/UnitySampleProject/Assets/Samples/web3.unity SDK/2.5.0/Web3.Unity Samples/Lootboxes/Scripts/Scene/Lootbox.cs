@@ -3,13 +3,13 @@ using UnityEngine;
 
 namespace LootBoxes.Scene
 {
-    public class LootBox : MonoBehaviour
+    public class Lootbox : MonoBehaviour
     {
         public Animator animator;
         public ParticleSystem claimedFx;
 
         private bool _selected;
-        public event Action<LootBox> Clicked;
+        public event Action<Lootbox> Clicked;
 
         public bool Selected
         {
