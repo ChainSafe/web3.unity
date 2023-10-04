@@ -1,6 +1,6 @@
 using System;
 
-namespace ChainSafe.GamingSdk.RampIntegration
+namespace ChainSafe.Gaming.Exchangers
 {
     public class OfframpAssetInfo
     {
