@@ -1508,8 +1508,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 37375166}
   m_HandleRect: {fileID: 37375165}
   m_Direction: 0
-  m_Value: 0
-  m_Size: 0.33819562
+  m_Value: -0.000000045957552
+  m_Size: 0.33761752
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -6495,7 +6495,7 @@ PrefabInstance:
     - target: {fileID: 266788301277215411, guid: fed17eec8cc2ebf4abd403772e93693d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 11500000, guid: 2aa2d37e4ea4c384fb3de4f08b3dfb7b, type: 3}
+      objectReference: {fileID: 11500000, guid: 0980f04b3f990584faeca802436cfe6a, type: 3}
     - target: {fileID: 266788301277215411, guid: fed17eec8cc2ebf4abd403772e93693d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -6794,7 +6794,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1536881597}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2aa2d37e4ea4c384fb3de4f08b3dfb7b, type: 3}
+  m_Script: {fileID: 11500000, guid: 26eb38234124428cb16dbb3f238d9587, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1536881601
