@@ -237,6 +237,15 @@
         "com.unity.nuget.newtonsoft-json": "3.0.2"
       }
     },
+    "io.chainsafe.web3-unity.exchangers": {
+      "version": "file:E:/Projekti/Clients/Chainsafe/web3.unity/Packages/io.chainsafe.web3-unity.exchangers",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "3.0.2",
+        "io.chainsafe.web3-unity": "2.5.0"
+      }
+    },
     "io.chainsafe.web3-unity.web3auth": {
       "version": "file:../../../Packages/io.chainsafe.web3-unity.web3auth",
       "depth": 0,

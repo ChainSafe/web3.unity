@@ -1,6 +1,5 @@
 #nullable enable
 using System;
-using ChainSafe.GamingSdk.ScriptableObjects;
 
 namespace ChainSafe.Gaming.Exchangers
 {
@@ -55,7 +54,7 @@ namespace ChainSafe.Gaming.Exchangers
             Guid id                    
         );
         
-        public static Action<OffRampSaleData> OffRampSaleEvent = null;
+        public static Action<OffRampSaleData>? OffRampSaleEvent = null;
         #endregion
 
         protected RampExchanger(RampData rampData)

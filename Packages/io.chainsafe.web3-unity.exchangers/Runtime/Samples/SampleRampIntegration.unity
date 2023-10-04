@@ -207,7 +207,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1437209538}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: RampIntegrationSample, Samples
         m_MethodName: ButtonClicked
         m_Mode: 1
