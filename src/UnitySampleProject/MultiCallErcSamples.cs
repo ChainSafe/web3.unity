@@ -6,14 +6,14 @@ using Nethereum.Contracts.QueryHandlers.MultiCall;
 using Nethereum.Hex.HexConvertors.Extensions;
 using UnityEngine;
 
-public class MultiCallSample
+public class MultiCallErcSamples
 {
     private const string Erc20ContractAddress = "0x3E0C0447e47d49195fbE329265E330643eB42e6f";
     private const string Erc20Account = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
 
     private readonly Web3 _web3;
 
-    public MultiCallSample(Web3 web3)
+    public MultiCallErcSamples(Web3 web3)
     {
         _web3 = web3;
     }

@@ -2,19 +2,19 @@
 
 namespace Samples.Behaviours.MultiCall
 {
-    public class MultiCallChainState : SampleBehaviour
+    
+    public class MultiCallErc20Behavior : SampleBehaviour
     {
-        private MultiCallSample _logic;
+        private MultiCallSample logic;
 
         protected override void Awake()
         {
             base.Awake();
-            _logic = new MultiCallSample(Web3);
+            logic = new MultiCallSample(Web3);
         }
-
         protected override async Task ExecuteSample()
         {
-            await _logic.BlockStateExample();
+            await logic.ErcSamples();
         }
     }
 }
