@@ -2,14 +2,16 @@
 using System;
 using System.Runtime.InteropServices;
 using AOT;
+using ChainSafe.Gaming.Exchangers;
 using ChainSafe.GamingSdk.ScriptableObjects;
 
-#if UNITY_IOS
-namespace ChainSafe.GamingSdk.RampIntegration
+
+namespace ChainSafe.Gaming.Exchangers
 {
-    public class RampChainsafeIntegrationiOS : RampChainsafeIntegrationBase
+    #if UNITY_IOS
+    public class RampExchangeriOS : RampExchanger
     {
-        public RampChainsafeIntegrationiOS(RampData rampData) : base(rampData)
+        public RampExchangeriOS(RampData rampData) : base(rampData)
         {
             setOnRampPurchase(SetOnRampPurchase);
             setOffRampSale(SetOffRampSale);
@@ -94,6 +96,6 @@ namespace ChainSafe.GamingSdk.RampIntegration
                 _rampData.ContainerNode, _rampData.HostApiKey, _rampData.UseSendCryptoCallbackVersion ? 1 : 0);
         }
     }
+#endif
 }
 
-#endif

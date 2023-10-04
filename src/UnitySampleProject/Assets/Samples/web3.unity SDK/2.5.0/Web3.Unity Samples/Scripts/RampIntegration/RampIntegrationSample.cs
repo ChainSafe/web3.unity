@@ -1,41 +1,46 @@
 using System;
-using ChainSafe.GamingSdk.RampIntegration;
+using ChainSafe.Gaming.Exchangers;
 using ChainSafe.GamingSdk.ScriptableObjects;
 using UnityEngine;
 
-public class RampIntegrationSample : MonoBehaviour
+namespace ChainSafe.Gaming.Exchangers
 {
-    [SerializeField] private RampData rampData;
-    private RampChainsafeIntegrationBase _ramp;
 
-    private void Awake()
+
+    public class RampIntegrationSample : MonoBehaviour
     {
+        [SerializeField] private RampData rampData;
+        private RampExchanger _ramp;
+
+        private void Awake()
+        {
 #if UNITY_IOS
-        _ramp = new RampChainsafeIntegrationiOS(rampData);
+        _ramp = new RampExchangeriOS(rampData);
 #endif
-        RampChainsafeIntegrationBase.OnRampPurchaseEvent += OnRampPurchase;
-        RampChainsafeIntegrationBase.OffRampSaleEvent += OffRampSaleEvent;
-    }
+            RampExchanger.OnRampPurchaseEvent += OnRampPurchase;
+            RampExchanger.OffRampSaleEvent += OffRampSaleEvent;
+        }
 
-    private void OffRampSaleEvent(OffRampSaleData obj)
-    {
-        //Write your stuff you need to happen when offRampSale happens
-    }
+        private void OffRampSaleEvent(OffRampSaleData obj)
+        {
+            //Write your stuff you need to happen when offRampSale happens
+        }
 
-    private void OnRampPurchase(OnRampPurchaseData obj)
-    {
-        //write your stuff you need to happen when OnRampPurchase happens
-        //NOTE: Ramp purchases are not instant. It takes time for the transaction to be confirmed on the blockchain.
-    }
+        private void OnRampPurchase(OnRampPurchaseData obj)
+        {
+            //write your stuff you need to happen when OnRampPurchase happens
+            //NOTE: Ramp purchases are not instant. It takes time for the transaction to be confirmed on the blockchain.
+        }
 
-    private void OnDestroy()
-    {
-        RampChainsafeIntegrationBase.OnRampPurchaseEvent -= OnRampPurchase;
-        RampChainsafeIntegrationBase.OffRampSaleEvent -= OffRampSaleEvent;
-    }
+        private void OnDestroy()
+        {
+            RampExchanger.OnRampPurchaseEvent -= OnRampPurchase;
+            RampExchanger.OffRampSaleEvent -= OffRampSaleEvent;
+        }
 
-    public void ButtonClicked()
-    {
-        _ramp.OpenRamp();
+        public void ButtonClicked()
+        {
+            _ramp.OpenRamp();
+        }
     }
 }
