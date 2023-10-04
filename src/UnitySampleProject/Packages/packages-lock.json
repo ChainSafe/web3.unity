@@ -238,7 +238,7 @@
       }
     },
     "io.chainsafe.web3-unity.exchangers": {
-      "version": "file:E:/Projekti/Clients/Chainsafe/web3.unity/Packages/io.chainsafe.web3-unity.exchangers",
+      "version": "file:../../../Packages/io.chainsafe.web3-unity.exchangers",
       "depth": 0,
       "source": "local",
       "dependencies": {

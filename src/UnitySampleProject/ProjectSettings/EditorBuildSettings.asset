@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Samples/web3.unity SDK/2.5.0/Web3.Unity Samples/Scenes/SampleRampIntegration.unity
+    guid: b06fc354d98524394b09d80397adf264
+  - enabled: 1
     path: Assets/Samples/web3.unity SDK/2.5.0/Web3.Unity Samples/Scenes/SampleLogin.unity
     guid: 1c1af5c5662d105498b2412267dde0df
   - enabled: 1
