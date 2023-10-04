@@ -95,6 +95,9 @@ namespace ChainSafe.Gaming.Evm.Providers
 
         public async Task<T> Perform<T>(string method, params object[] parameters)
         {
+            // parameters should be skipped or be an empty array if there are none
+            parameters ??= Array.Empty<object>();
+
             try
             {
                 var httpClient = environment.HttpClient;

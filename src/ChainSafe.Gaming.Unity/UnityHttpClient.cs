@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using UnityEngine.Assertions;
 using UnityEngine.Networking;
 
-namespace ChainSafe.Gaming.Web3.Unity
+namespace ChainSafe.Gaming.Web3.Core.Unity
 {
     public class UnityHttpClient : IHttpClient
     {

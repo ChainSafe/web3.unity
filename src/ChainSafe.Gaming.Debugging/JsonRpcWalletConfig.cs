@@ -3,7 +3,7 @@
 namespace ChainSafe.Gaming.Wallets
 {
     [Serializable]
-    public class JsonRpcWalletConfiguration
+    public class JsonRpcWalletConfig
     {
         public int AccountIndex { get; set; }
 
