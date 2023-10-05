@@ -8,11 +8,11 @@ using Nethereum.Hex.HexTypes;
 
 namespace ChainSafe.Gaming.Web3.Evm.JsonRpc
 {
-    public class TransactionExecutor : ITransactionExecutor, ILifecycleParticipant
+    public class JsonRpcTransactionExecutor : ITransactionExecutor, ILifecycleParticipant
     {
         private readonly IRpcProvider provider;
 
-        public TransactionExecutor(IRpcProvider provider)
+        public JsonRpcTransactionExecutor(IRpcProvider provider)
         {
             this.provider = provider;
         }

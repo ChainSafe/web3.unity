@@ -16,16 +16,16 @@ namespace ChainSafe.Gaming.Tests
     {
         public static ValueTask<Web3.Web3> CreateWeb3(int accountIndex = 0)
         {
-            return CreateWeb3(new SignerConfig { AccountIndex = accountIndex });
+            return CreateWeb3(new JsonRpcSignerConfig { AccountIndex = accountIndex });
         }
 
         public static ValueTask<Web3.Web3> CreateWeb3(Web3Builder.ConfigureServicesDelegate configureDelegate, int accountIndex = 0)
         {
-            return CreateWeb3(new SignerConfig { AccountIndex = accountIndex }, configureDelegate);
+            return CreateWeb3(new JsonRpcSignerConfig { AccountIndex = accountIndex }, configureDelegate);
         }
 
         private static ValueTask<Web3.Web3> CreateWeb3(
-            SignerConfig jsonRpcSignerConfig, Web3Builder.ConfigureServicesDelegate configureDelegate = null)
+            JsonRpcSignerConfig jsonRpcJsonRpcSignerConfig, Web3Builder.ConfigureServicesDelegate configureDelegate = null)
         {
             return new Web3Builder(
                     new ProjectConfig { ProjectId = string.Empty },
@@ -40,7 +40,7 @@ namespace ChainSafe.Gaming.Tests
                 {
                     services.UseNetCoreEnvironment();
                     services.UseRpcProvider();
-                    services.UseJsonRpcSigner(jsonRpcSignerConfig);
+                    services.UseJsonRpcSigner(jsonRpcJsonRpcSignerConfig);
                 })
                 .Configure(configureDelegate)
                 .BuildAsync();

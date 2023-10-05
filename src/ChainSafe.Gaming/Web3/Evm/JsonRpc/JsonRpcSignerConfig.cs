@@ -3,7 +3,7 @@ using System;
 namespace ChainSafe.Gaming.Web3.Evm.JsonRpc
 {
     [Serializable]
-    public class SignerConfig
+    public class JsonRpcSignerConfig
     {
         public int AccountIndex { get; set; }
 

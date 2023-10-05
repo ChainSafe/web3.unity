@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace ChainSafe.Gaming.Web3.Evm.JsonRpc
 {
-    public static class SignerExtension
+    public static class JsonRpcSignerExtension
     {
         /// <summary>
         /// DEBUG ONLY! Use JsonRpc signer that uses `eth_account` RPC calls
@@ -15,11 +15,11 @@ namespace ChainSafe.Gaming.Web3.Evm.JsonRpc
         /// <param name="collection">Collection of Web3Services.</param>
         /// <param name="config">Configuration of JsonRpcSigner.</param>;
         /// <returns>Updated Collection of Web3Services.</returns>
-        public static IWeb3ServiceCollection UseJsonRpcSigner(this IWeb3ServiceCollection collection, SignerConfig config)
+        public static IWeb3ServiceCollection UseJsonRpcSigner(this IWeb3ServiceCollection collection, JsonRpcSignerConfig config)
         {
             collection.AssertServiceNotBound<ISigner>();
             collection.Replace(ServiceDescriptor.Singleton(config));
-            collection.AddSingleton<ISigner, ILifecycleParticipant, Signer>();
+            collection.AddSingleton<ISigner, ILifecycleParticipant, JsonRpcSigner>();
             return collection;
         }
     }

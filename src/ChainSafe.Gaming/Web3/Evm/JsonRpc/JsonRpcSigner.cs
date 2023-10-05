@@ -9,13 +9,13 @@ using Nethereum.Signer.EIP712;
 
 namespace ChainSafe.Gaming.Web3.Evm.JsonRpc
 {
-    public class Signer : ISigner, ILifecycleParticipant
+    public class JsonRpcSigner : ISigner, ILifecycleParticipant
     {
-        private readonly SignerConfig config;
+        private readonly JsonRpcSignerConfig config;
         private readonly IRpcProvider provider;
         private string address;
 
-        public Signer(SignerConfig config, IRpcProvider provider)
+        public JsonRpcSigner(JsonRpcSignerConfig config, IRpcProvider provider)
         {
             this.config = config;
             this.provider = provider;

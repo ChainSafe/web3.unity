@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Numerics;
-using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3.Build;
+using ChainSafe.Gaming.Web3.Evm.JsonRpc.Providers;
 using ChainSafe.Gaming.Web3.Unity;
 using NUnit.Framework;
 using UnityEngine;

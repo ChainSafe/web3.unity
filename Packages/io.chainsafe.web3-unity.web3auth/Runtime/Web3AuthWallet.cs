@@ -1,16 +1,16 @@
 
 using Nethereum.ABI.EIP712;
 using Nethereum.Signer;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Providers;
+using ChainSafe.Gaming.Web3.Evm;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.InProcessSigner;
-using ChainSafe.Gaming.InProcessTransactionExecutor;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
+using ChainSafe.Gaming.Web3.Evm.JsonRpc;
 using UnityEngine;
 
 using Object = UnityEngine.Object;
@@ -21,7 +21,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
     public class Web3AuthWallet : ISigner, ITransactionExecutor, ILifecycleParticipant
     {
         private InProcessSigner signer;
-        private InProcessTransactionExecutor transactionExecutor;
+        private JsonRpcTransactionExecutor transactionExecutor;
         private TWeb3Auth coreInstance;
 
         private readonly Web3AuthWalletConfig config;
@@ -52,7 +52,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
             var signerConfig = new InProcessSignerConfig { PrivateKey = privateKey };
             signer = new(signerConfig);
 
-            transactionExecutor = new(signer, chainConfig, rpcProvider);
+            transactionExecutor = new(rpcProvider);
 
             void Web3Auth_OnLogin(Web3AuthResponse response) => loginTcs.SetResult(response.privKey);
         }
