@@ -11,6 +11,8 @@ using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Debug;
+using ChainSafe.Gaming.Web3.Environment;
+using Nethereum.ABI.FunctionEncoding;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
 using Newtonsoft.Json;
@@ -28,23 +30,27 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
 
         private Contract contract;
         private Dictionary<string, RewardType> rewardTypeByTokenAddress;
+        private readonly ILogWriter logWriter;
 
         public LootboxService(
             LootboxServiceConfig config,
             IContractBuilder contractBuilder,
-            IRpcProvider rpcProvider)
+            IRpcProvider rpcProvider, 
+            ILogWriter logWriter)
         {
             this.rpcProvider = rpcProvider;
             this.config = config;
             this.contractBuilder = contractBuilder;
+            this.logWriter = logWriter;
         }
 
         public LootboxService(
             LootboxServiceConfig config,
             IContractBuilder contractBuilder,
             IRpcProvider rpcProvider,
-            ISigner signer)
-            : this(config, contractBuilder, rpcProvider)
+            ISigner signer,
+            ILogWriter logWriter)
+            : this(config, contractBuilder, rpcProvider, logWriter)
         {
             this.signer = signer;
         }
@@ -148,11 +154,14 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
         public async Task<uint> OpeningLootboxType()
         {
             var playerAddress = await this.GetCurrentPlayerAddress();
-            var response = await this.contract.Call("getOpenerRequestDetails", new object[] { playerAddress });
-            var opener = (BigInteger)response[0];
-            var unitsToGet = (BigInteger)response[1];
 
-            if (opener != 0 && unitsToGet == 0)
+            // This response is actually very different from all the others since it returns several components
+            var response = (List<ParameterOutput>)(await this.contract.Call("getOpenerRequestDetails", new object[] { playerAddress }))[0];
+
+            var address = (string)response[0].Result;
+            var unitsToGet = (BigInteger)response[1].Result;
+
+            if (!string.IsNullOrEmpty(address) && unitsToGet == 0)
             {
                 // we can early return here, but, it's not necessary since unitstoget will be 0 regardless and this
                 // call will fulfill every request that's been missing.
@@ -161,7 +170,7 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
                     new object[] { playerAddress });
             }
 
-            if (unitsToGet > uint.MaxValue)
+            if(unitsToGet > uint.MaxValue)
             {
                 throw new Web3Exception("Internal Error. Units to get is greater than int.MaxValue.");
             }
