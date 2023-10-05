@@ -18,16 +18,16 @@ public class WalletConnectModal : MonoBehaviour
     {
         _backButton.onClick.AddListener(Disable);
 
-        WalletConnectWallet.OnConnected += WalletConnected;
+        WalletConnectSigner.OnConnected += WalletConnected;
 
-        WalletConnectWallet.OnSessionApproved += SessionApproved;
+        WalletConnectSigner.OnSessionApproved += SessionApproved;
     }
 
     private void OnDisable()
     {
-        WalletConnectWallet.OnConnected -= WalletConnected;
+        WalletConnectSigner.OnConnected -= WalletConnected;
 
-        WalletConnectWallet.OnSessionApproved -= SessionApproved;
+        WalletConnectSigner.OnSessionApproved -= SessionApproved;
     }
     
     private void WalletConnected(ConnectedData data)
@@ -40,7 +40,6 @@ public class WalletConnectModal : MonoBehaviour
             Application.OpenURL(data.Uri);
             
 #elif UNITY_IOS
-            
             //select wallet dropdown
 #endif
         }
