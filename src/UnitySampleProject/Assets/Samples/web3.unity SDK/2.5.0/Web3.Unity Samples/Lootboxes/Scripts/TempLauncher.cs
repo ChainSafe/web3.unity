@@ -44,7 +44,7 @@ namespace LootBoxes
                     services.Debug().UseJsonRpcWallet(new JsonRpcWalletConfig { AccountIndex = 2 });
                     services.UseChainlinkLootboxService(new LootboxServiceConfig
                     {
-                        ContractAddress = "0x46E334e90454aDDF311Cd75D4Ae19e2fA06285Ff",
+                        ContractAddress = "0x1993e2dD323B5dcBd8b52dB7d370bC36D280424B",
                         ContractAbi = ContractAbi
                     });
                     services.AddSingleton<Erc1155MetaDataReader>();
