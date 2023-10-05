@@ -61,7 +61,7 @@ namespace ChainSafe.Gaming.WalletConnect
         {
             WalletLink linkData = Application.isMobilePlatform ? Mobile : Desktop;
 
-            var universalUrl = linkData.UniversalUrl;
+            string universalUrl = linkData.UniversalUrl;
 
             if (string.IsNullOrWhiteSpace(universalUrl))
             {

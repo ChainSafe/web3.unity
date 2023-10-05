@@ -1,10 +1,8 @@
-using ChainSafe.Gaming.Evm.Unity;
 using ChainSafe.Gaming.WalletConnect;
 using UnityEngine;
 using UnityEngine.UI;
 using WalletConnectSharp.Sign.Models;
 using WalletConnectSharp.Sign.Models.Engine;
-using Web3Unity.Scripts;
 using ZXing;
 using ZXing.QrCode;
 
@@ -34,25 +32,32 @@ public class WalletConnectModal : MonoBehaviour
     
     private void WalletConnected(ConnectedData data)
     {
-        Dispatcher.Instance().Enqueue(delegate
+        if (Application.isMobilePlatform)
         {
-            // enable display
-            _container.gameObject.SetActive(true);
+#if UNITY_ANDROID
+            
+            // open wallet
+            Application.OpenURL(data.Uri);
+            
+#elif UNITY_IOS
+            
+            //select wallet dropdown
+#endif
+        }
+            
+        // enable display
+        _container.gameObject.SetActive(true);
 
-            string uri = data.Uri;
+        string uri = data.Uri;
 
-            GenerateQrCode(uri);
+        GenerateQrCode(uri);
 
-            SetClipboard(uri);
-        });
+        SetClipboard(uri);
     }
 
     private void SessionApproved(SessionStruct session)
     {
-        Dispatcher.Instance().Enqueue(delegate
-        {
-            Debug.Log($"{session.Topic} Approved");
-        });
+        Debug.Log($"{session.Topic} Approved");
     }
 
     private void SetClipboard(string uri)

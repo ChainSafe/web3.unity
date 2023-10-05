@@ -15,19 +15,10 @@ namespace ChainSafe.Gaming.WalletConnect
             this.logWriter = logWriter;
         }
 
-        public void Log(string message)
-        {
-            Dispatcher.Instance()?.Enqueue(() => logWriter.Log(message));
-        }
+        public void Log(string message) => logWriter.Log(message);
 
-        public void LogError(string message)
-        {
-            Dispatcher.Instance()?.Enqueue(() => logWriter.LogError(message));
-        }
+        public void LogError(string message) => logWriter.LogError(message);
 
-        public void LogError(Exception e)
-        {
-            Dispatcher.Instance()?.Enqueue(() => logWriter.LogError($"{e} {e.Message} {e.StackTrace}"));
-        }
+        public void LogError(Exception e) => logWriter.LogError($"{e} {e.Message} {e.StackTrace}");
     }
 }

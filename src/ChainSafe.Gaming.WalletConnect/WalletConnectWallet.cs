@@ -17,6 +17,7 @@ using WalletConnectSharp.Common.Logging;
 using WalletConnectSharp.Common.Model.Errors;
 using WalletConnectSharp.Core;
 using WalletConnectSharp.Core.Models;
+using WalletConnectSharp.Core.Models.Relay;
 using WalletConnectSharp.Network.Models;
 using WalletConnectSharp.Sign;
 using WalletConnectSharp.Sign.Models;
@@ -171,25 +172,32 @@ namespace ChainSafe.Gaming.WalletConnect
 
             InvokeSessionApproved(sessionResult);
 
-            if (Application.isMobilePlatform)
+            // get default wallet
+            if (Application.isMobilePlatform && Config.DefaultWallet == null)
             {
-                // this doesn't work for all wallets, hence the try catch
-                try
+                string nativeUrl = sessionResult.Peer.Metadata.Redirect.Native.Replace("//", string.Empty);
+
+                int index = nativeUrl.IndexOf(':');
+
+                if (index != -1)
                 {
-                    string nativeUrl = sessionResult.Peer.Metadata.Redirect.Native.Replace("//", string.Empty);
-
-                    string defaultWalletId = Config.SupportedWallets.FirstOrDefault(t =>
-                            t.Value.Mobile.NativeProtocol == nativeUrl || t.Value.Desktop.NativeProtocol == nativeUrl)
-                        .Key;
-
-                    if (Config.SupportedWallets.TryGetValue(defaultWalletId, out WalletConnectWalletModel wallet))
-                    {
-                        wallet.OpenDeeplink(connectData);
-                    }
+                    nativeUrl = $"{nativeUrl.Substring(0, index)}:";
                 }
-                catch (Exception e)
+
+                Debug.Log($"Wallet Native Url {nativeUrl}");
+
+                var defaultWallet = Config.SupportedWallets.Values.FirstOrDefault(w =>
+                    w.Mobile.NativeProtocol == nativeUrl || w.Desktop.NativeProtocol == nativeUrl);
+
+                if (defaultWallet != null)
                 {
-                    WCLogger.Log($"Can't open deepLink for wallet {e}");
+                    Config.DefaultWallet = defaultWallet;
+
+                    WCLogger.Log("Default Wallet Set");
+                }
+                else
+                {
+                    WCLogger.Log("Default Wallet Not Found in Supported Wallets");
                 }
             }
 
@@ -205,6 +213,33 @@ namespace ChainSafe.Gaming.WalletConnect
         {
             Address.AssertNotNull(nameof(Address));
             return Task.FromResult(Address!);
+        }
+
+        private Task<TR> Request<T, TR>(string topic, T data, string chainId = null, long? expiry = null)
+        {
+            string method = RpcMethodAttribute.MethodForType<T>();
+
+            // if it's a registered method try and open wallet
+            if (Session.Namespaces.Any(n => n.Value.Methods.Contains(method)))
+            {
+                Core.Relayer.Events.ListenForOnce<object>(
+                    RelayerEvents.Publish,
+                    (_, _) =>
+                    {
+                        if (Config.DefaultWallet != null)
+                        {
+                            WCLogger.Log("Opening Default Wallet...");
+
+                            Config.DefaultWallet.OpenWallet();
+                        }
+                        else
+                        {
+                            WCLogger.Log("No Default Wallet to Open");
+                        }
+                    });
+            }
+
+            return SignClient.Request<T, TR>(topic, data, chainId, expiry);
         }
 
         public async Task<string> SignMessage(string message)
@@ -229,7 +264,7 @@ namespace ChainSafe.Gaming.WalletConnect
             var request = new EthSignMessage(message, address);
 
             string hash =
-                await SignClient.Request<EthSignMessage, string>(session.Topic, request, chainId);
+                await Request<EthSignMessage, string>(session.Topic, request, chainId);
 
             var isValid = ValidateResponse(hash);
             if (!isValid)
@@ -269,7 +304,7 @@ namespace ChainSafe.Gaming.WalletConnect
             var request = new EthSignTypedData<TStructType>(address, domain, message);
 
             string hash =
-                await SignClient.Request<EthSignTypedData<TStructType>, string>(session.Topic, request, chainId);
+                await Request<EthSignTypedData<TStructType>, string>(session.Topic, request, chainId);
 
             var isValid = ValidateResponse(hash);
             if (!isValid)
