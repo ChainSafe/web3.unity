@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Providers;
+using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
@@ -11,10 +12,12 @@ namespace ChainSafe.Gaming.Web3.Evm.JsonRpc
     public class JsonRpcTransactionExecutor : ITransactionExecutor, ILifecycleParticipant
     {
         private readonly IRpcProvider provider;
+        private readonly ISigner signer;
 
-        public JsonRpcTransactionExecutor(IRpcProvider provider)
+        public JsonRpcTransactionExecutor(ISigner signer, IRpcProvider provider)
         {
             this.provider = provider;
+            this.signer = signer;
         }
 
         public ValueTask WillStartAsync() => new(Task.CompletedTask);
@@ -38,10 +41,7 @@ namespace ChainSafe.Gaming.Web3.Evm.JsonRpc
 
         private async Task<string> SendUncheckedTransaction(TransactionRequest transaction)
         {
-            if (transaction.From == null)
-            {
-                throw new Web3Exception("Transaction request has no \"from\" address provided");
-            }
+            transaction.From ??= (await signer.GetAddress()).ToLower();
 
             if (transaction.GasLimit == null)
             {

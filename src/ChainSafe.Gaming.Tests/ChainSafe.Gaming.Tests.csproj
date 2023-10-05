@@ -39,7 +39,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Test' ">
-    <DefineConstants>TRACE; Lootboxes</DefineConstants>
+    <DefineConstants>TRACE;</DefineConstants>
   </PropertyGroup>
 
 

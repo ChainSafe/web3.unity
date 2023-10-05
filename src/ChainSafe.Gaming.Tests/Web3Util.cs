@@ -41,6 +41,7 @@ namespace ChainSafe.Gaming.Tests
                     services.UseNetCoreEnvironment();
                     services.UseRpcProvider();
                     services.UseJsonRpcSigner(jsonRpcJsonRpcSignerConfig);
+                    services.UseJsonRpcTransactionExecutor();
                 })
                 .Configure(configureDelegate)
                 .BuildAsync();
