@@ -1,10 +1,10 @@
-namespace ChainSafe.Gaming.WalletConnect
+namespace ChainSafe.Gaming.WalletConnect.Models
 {
-    public class Chain
+    public class ChainModel
     {
         public const string EvmNamespace = "eip155";
 
-        public Chain(string chainNamespace, string chainId, string name)
+        public ChainModel(string chainNamespace, string chainId, string name)
         {
             ChainNamespace = chainNamespace;
 

@@ -8,6 +8,7 @@ using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Wallets;
 using ChainSafe.Gaming.WalletConnect;
+using ChainSafe.Gaming.WalletConnect.Models;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Unity;
@@ -52,6 +53,7 @@ namespace Scenes
         public Toggle RememberMeToggle;
         public ErrorPopup ErrorPopup;
         public List<Web3AuthButtonAndProvider> Web3AuthButtons;
+        public TMP_Dropdown _supportedWalletsDropdown;
 
         private bool useWebPageWallet;
 
@@ -90,6 +92,10 @@ namespace Scenes
             
             // Wallet Connect
             yield return FetchSupportedWallets();
+
+#if UNITY_IOS
+            InitializeWalletSelection();
+#endif
             
 #if UNITY_WEBGL
             ProcessWeb3Auth();
@@ -106,6 +112,19 @@ namespace Scenes
             }
         }
 
+        private void InitializeWalletSelection()
+        {
+            // first element is a no select
+            List<string> supportedWalletsList = new List<string>
+            {
+                "None",    
+            };
+
+            supportedWalletsList.AddRange(_supportedWallets.Values.Select(w => w.Name));
+            
+            _supportedWalletsDropdown.AddOptions(supportedWalletsList);
+        }
+        
         private async void TryAutoLogin()
         {
             if (!useWebPageWallet)
@@ -120,12 +139,7 @@ namespace Scenes
                 .Configure(ConfigureCommonServices)
                 .Configure(services =>
                 {
-                    services.UseWalletConnectWallet(
-                        new WebPageWalletConfig
-                        {
-                            SavedUserAddress = savedAccount,
-                            WalletConnectConfig = BuildWalletConnectConfig()
-                        });
+                    services.UseWalletConnectSigner(BuildWalletConnectConfig());
                 });
 
             await ProcessLogin(web3Builder);
@@ -133,6 +147,17 @@ namespace Scenes
 
         private async void LoginWithExistingAccount()
         {
+            if (_supportedWalletsDropdown.value == 0)
+            {
+                // feedback
+                Debug.LogError("Please select a Wallet first");
+                
+                return;
+            }
+#if UNITY_IOS
+
+#endif
+            
             var web3Builder = new Web3Builder(ProjectConfigUtilities.Load())
                 .Configure(ConfigureCommonServices)
                 .Configure(services =>
@@ -144,11 +169,7 @@ namespace Scenes
                      */
                     if (useWebPageWallet)
                     {
-                        services.UseWalletConnectWallet(
-                            new WebPageWalletConfig
-                            {
-                                WalletConnectConfig = BuildWalletConnectConfig()
-                            });
+                        services.UseWalletConnectSigner(BuildWalletConnectConfig());
                     }
                     else
                     {
@@ -273,7 +294,7 @@ namespace Scenes
             // build chain
             var projectConfig = ProjectConfigUtilities.Load();
 
-            Chain chain = new Chain(Chain.EvmNamespace, projectConfig.ChainId, projectConfig.Network);
+            ChainModel chain = new ChainModel(ChainModel.EvmNamespace, projectConfig.ChainId, projectConfig.Network);
             
             return new WalletConnectConfig
             {

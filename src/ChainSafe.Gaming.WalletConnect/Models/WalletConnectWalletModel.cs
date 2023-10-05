@@ -4,15 +4,21 @@ using UnityEngine;
 using WalletConnectSharp.Common.Logging;
 using WalletConnectSharp.Sign.Models.Engine;
 
-namespace ChainSafe.Gaming.WalletConnect
+namespace ChainSafe.Gaming.WalletConnect.Models
 {
     public class WalletConnectWalletModel
     {
+        [JsonProperty("name")]
+        public string Name { get; private set; }
+
         [JsonProperty("mobile")]
-        public WalletLink Mobile { get; private set; }
+        public WalletLinkModel Mobile { get; private set; }
 
         [JsonProperty("desktop")]
-        public WalletLink Desktop { get; private set; }
+        public WalletLinkModel Desktop { get; private set; }
+
+        [JsonProperty("image_url")]
+        public ImageUrlsModel Images { get; private set; }
 
         public void OpenDeeplink(ConnectedData data, bool useNative = false)
         {
@@ -59,7 +65,7 @@ namespace ChainSafe.Gaming.WalletConnect
 
         public void OpenWallet()
         {
-            WalletLink linkData = Application.isMobilePlatform ? Mobile : Desktop;
+            WalletLinkModel linkData = Application.isMobilePlatform ? Mobile : Desktop;
 
             string universalUrl = linkData.UniversalUrl;
 

@@ -7,18 +7,18 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace ChainSafe.Gaming.WalletConnect
 {
-    public static class WalletConnectWalletExtensions
+    public static class WalletConnectSignerExtensions
     {
-        private static readonly WebPageWalletConfig DefaultConfig = new();
+        private static readonly WalletConnectConfig DefaultConfig = new();
 
         /// <summary>
         /// Binds Web implementation of EVM Provider to Web3.
         /// </summary>
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
-        public static IWeb3ServiceCollection UseWalletConnectWallet(this IWeb3ServiceCollection collection, WebPageWalletConfig configuration)
+        public static IWeb3ServiceCollection UseWalletConnectSigner(this IWeb3ServiceCollection collection, WalletConnectConfig configuration)
         {
-            collection.UseWalletConnectWallet();
-            collection.ConfigureWalletConnectWallet(configuration);
+            collection.UseWalletConnectSigner();
+            collection.ConfigureWalletConnectSigner(configuration);
             return collection;
         }
 
@@ -26,7 +26,7 @@ namespace ChainSafe.Gaming.WalletConnect
         /// Binds Web implementation of EVM Provider to Web3.
         /// </summary>
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
-        public static IWeb3ServiceCollection UseWalletConnectWallet(this IWeb3ServiceCollection collection)
+        public static IWeb3ServiceCollection UseWalletConnectSigner(this IWeb3ServiceCollection collection)
         {
             collection.AssertServiceNotBound<ISigner>();
             collection.AssertServiceNotBound<ITransactionExecutor>();
@@ -35,7 +35,7 @@ namespace ChainSafe.Gaming.WalletConnect
             collection.TryAddSingleton(DefaultConfig);
 
             // wallet
-            collection.AddSingleton<ISigner, ITransactionExecutor, ILifecycleParticipant, WalletConnectWallet>();
+            collection.AddSingleton<ISigner, ILifecycleParticipant, WalletConnectSigner>();
 
             return collection;
         }
@@ -44,9 +44,9 @@ namespace ChainSafe.Gaming.WalletConnect
         /// Configures Web implementation of EVM Provider.
         /// </summary>
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
-        public static IWeb3ServiceCollection ConfigureWalletConnectWallet(this IWeb3ServiceCollection collection, WebPageWalletConfig configuration)
+        public static IWeb3ServiceCollection ConfigureWalletConnectSigner(this IWeb3ServiceCollection collection, WalletConnectConfig configuration)
         {
-            collection.Replace(ServiceDescriptor.Singleton(typeof(WebPageWalletConfig), configuration));
+            collection.Replace(ServiceDescriptor.Singleton(typeof(WalletConnectConfig), configuration));
             return collection;
         }
     }

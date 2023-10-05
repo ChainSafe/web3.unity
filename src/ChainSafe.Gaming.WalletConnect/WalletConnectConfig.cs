@@ -1,18 +1,24 @@
 using System;
 using System.Collections.Generic;
+using ChainSafe.Gaming.WalletConnect.Models;
 using WalletConnectSharp.Core;
 
 namespace ChainSafe.Gaming.WalletConnect
 {
+    [Serializable]
     public class WalletConnectConfig
     {
+        public string SavedUserAddress { get; set; } = null;
+
+        public TimeSpan ConnectRequestExpiresAfter { get; set; } = TimeSpan.FromMinutes(1);
+
         public string ProjectId { get; set; }
 
         public string ProjectName { get; set; }
 
         public string BaseContext { get; set; }
 
-        public Chain Chain { get; set; }
+        public ChainModel Chain { get; set; }
 
         public Metadata Metadata { get; set; }
 

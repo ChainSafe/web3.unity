@@ -21,7 +21,7 @@ public class SampleTestsBase
         yield return new WaitForSeconds(5f);
 
         // set wallet to testing
-        WalletConnectWallet.Testing = true;
+        WalletConnectSigner.Testing = true;
         
         // For whatever reason, in github this won't load
         var projectConfigScriptableObject = ProjectConfigUtilities.Load();
@@ -37,7 +37,7 @@ public class SampleTestsBase
             services.UseGelato("_UzPz_Yk_WTjWMfcl45fLvQNGQ9ISx5ZE8TnwnVKYrE_");
             services.UseRpcProvider();
 
-            services.UseWalletConnectWallet(new WebPageWalletConfig { SavedUserAddress = "0x55ffe9E30347266f02b9BdAe20aD3a86493289ea" });
+            services.UseWalletConnectSigner(new WalletConnectConfig { SavedUserAddress = "0x55ffe9E30347266f02b9BdAe20aD3a86493289ea" });
 
             //add any contracts we would want to use
             services.ConfigureRegisteredContracts(contracts =>
@@ -58,7 +58,7 @@ public class SampleTestsBase
     [UnityTearDown]
     public virtual IEnumerator TearDown()
     {
-        WalletConnectWallet.Testing = false;
+        WalletConnectSigner.Testing = false;
 
         yield return null;
     }
