@@ -11,16 +11,16 @@ public class MultiCallSample
     private const string Erc20ContractAddress = "0x3E0C0447e47d49195fbE329265E330643eB42e6f";
     private const string Erc20Account = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
 
-    private readonly Web3 _web3;
+    private readonly Web3 web3;
 
     public MultiCallSample(Web3 web3)
     {
-        _web3 = web3;
+        this.web3 = web3;
     }
 
     public async Task ErcSamples()
     {
-        var erc20Contract = _web3.ContractBuilder.Build(ABI.ERC_20, Erc20ContractAddress);
+        var erc20Contract = web3.ContractBuilder.Build(ABI.ERC_20, Erc20ContractAddress);
         var erc20BalanceOfCalldata = erc20Contract.Calldata(CommonMethod.BalanceOf, new object[]
         {
             Erc20Account
@@ -37,7 +37,7 @@ public class MultiCallSample
         };
         
         //Calldata to MultiCallRequest
-        var temp = await _web3.MultiCall().MultiCallAsync(calls);
+        var temp = await web3.MultiCall().MultiCallAsync(calls);
         Debug.Log(temp);
     }
 

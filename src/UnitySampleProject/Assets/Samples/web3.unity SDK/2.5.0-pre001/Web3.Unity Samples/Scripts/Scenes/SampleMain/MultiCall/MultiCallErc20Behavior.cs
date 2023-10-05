@@ -1,8 +1,7 @@
 ﻿using System.Threading.Tasks;
 
-namespace Samples.Behaviours.MultiCall
+namespace Samples.Behaviours
 {
-    
     public class MultiCallErc20Behavior : SampleBehaviour
     {
         private MultiCallSample logic;
