@@ -4,17 +4,17 @@ using ChainSafe.Gaming.Web3.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace ChainSafe.Gaming.Evm.JsonRpc
+namespace ChainSafe.Gaming.Web3.Evm.JsonRpc.Providers
 {
-    public static class IpcClientExtensions
+    public static class IpcExtensions
     {
-        private static readonly IpcClientConfig DefaultClientConfig = new();
+        private static readonly IpcConfig DefaultClientConfig = new();
 
         /// <summary>
         /// Binds IPC Client implementation of EVM Provider to Web3.
         /// </summary>
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
-        public static IWeb3ServiceCollection UseIpcProvider(this IWeb3ServiceCollection collection, IpcClientConfig config)
+        public static IWeb3ServiceCollection UseIpcProvider(this IWeb3ServiceCollection collection, IpcConfig config)
         {
             collection.ConfigureIpcProvider(config);
             collection.UseIpcProvider();
@@ -25,7 +25,7 @@ namespace ChainSafe.Gaming.Evm.JsonRpc
         /// Configures IPC Client implementation of EVM Provider.
         /// </summary>
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
-        public static IWeb3ServiceCollection ConfigureIpcProvider(this IWeb3ServiceCollection collection, IpcClientConfig config)
+        public static IWeb3ServiceCollection ConfigureIpcProvider(this IWeb3ServiceCollection collection, IpcConfig config)
         {
             collection.Replace(ServiceDescriptor.Singleton(config));
             return collection;
@@ -39,7 +39,7 @@ namespace ChainSafe.Gaming.Evm.JsonRpc
         {
             collection.AssertServiceNotBound<IRpcProvider>();
             collection.TryAddSingleton(DefaultClientConfig);
-            collection.AddSingleton<IRpcProvider, ILifecycleParticipant, IpcClientProvider>();
+            collection.AddSingleton<IRpcProvider, ILifecycleParticipant, IpcProvider>();
             return collection;
         }
     }

@@ -4,17 +4,17 @@ using ChainSafe.Gaming.Web3.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace ChainSafe.Gaming.Evm.JsonRpc
+namespace ChainSafe.Gaming.Web3.Evm.JsonRpc.Providers
 {
-    public static class RpcClientExtensions
+    public static class RpcExtensions
     {
-        private static readonly RpcClientConfig DefaultClientConfig = new();
+        private static readonly RpcConfig DefaultConfig = new();
 
         /// <summary>
         /// Binds JSON RPC implementation of EVM Provider to Web3.
         /// </summary>
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
-        public static IWeb3ServiceCollection UseRpcProvider(this IWeb3ServiceCollection collection, RpcClientConfig config)
+        public static IWeb3ServiceCollection UseRpcProvider(this IWeb3ServiceCollection collection, RpcConfig config)
         {
             collection.ConfigureRpcProvider(config);
             collection.UseRpcProvider();
@@ -25,7 +25,7 @@ namespace ChainSafe.Gaming.Evm.JsonRpc
         /// Configures JSON RPC implementation of EVM Provider.
         /// </summary>
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
-        public static IWeb3ServiceCollection ConfigureRpcProvider(this IWeb3ServiceCollection collection, RpcClientConfig config)
+        public static IWeb3ServiceCollection ConfigureRpcProvider(this IWeb3ServiceCollection collection, RpcConfig config)
         {
             collection.Replace(ServiceDescriptor.Singleton(config));
             return collection;
@@ -38,8 +38,8 @@ namespace ChainSafe.Gaming.Evm.JsonRpc
         public static IWeb3ServiceCollection UseRpcProvider(this IWeb3ServiceCollection collection)
         {
             collection.AssertServiceNotBound<IRpcProvider>();
-            collection.TryAddSingleton(DefaultClientConfig);
-            collection.AddSingleton<IRpcProvider, ILifecycleParticipant, RpcClientProvider>();
+            collection.TryAddSingleton(DefaultConfig);
+            collection.AddSingleton<IRpcProvider, ILifecycleParticipant, RpcProvider>();
             return collection;
         }
     }

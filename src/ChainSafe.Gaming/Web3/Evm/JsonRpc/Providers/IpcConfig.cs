@@ -1,9 +1,9 @@
 using System;
 
-namespace ChainSafe.Gaming.Evm.Providers
+namespace ChainSafe.Gaming.Web3.Evm.JsonRpc.Providers
 {
     [Serializable]
-    public class IpcClientConfig
+    public class IpcConfig
     {
         /// <summary>
         /// (Optional) Path to the IPC file.

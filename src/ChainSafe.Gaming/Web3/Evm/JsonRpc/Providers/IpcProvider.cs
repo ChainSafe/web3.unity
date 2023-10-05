@@ -1,24 +1,25 @@
 using System;
 using System.Threading.Tasks;
-using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Evm;
+using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Environment;
 using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.Client;
 using NJsonRpc = Nethereum.JsonRpc;
 
-namespace ChainSafe.Gaming.Evm.Providers
+namespace ChainSafe.Gaming.Web3.Evm.JsonRpc.Providers
 {
-    public class IpcClientProvider : IRpcProvider, ILifecycleParticipant
+    public class IpcProvider : IRpcProvider, ILifecycleParticipant
     {
-        private readonly IpcClientConfig config;
+        private readonly IpcConfig config;
         private readonly Web3Environment environment;
         private readonly ChainRegistryProvider chainRegistryProvider;
 
-        private Network.Network network;
+        private Gaming.Evm.Network.Network network;
 
-        public IpcClientProvider(
-            IpcClientConfig config,
+        public IpcProvider(
+            IpcConfig config,
             Web3Environment environment,
             ChainRegistryProvider chainRegistryProvider,
             IChainConfig chainConfig)
@@ -33,7 +34,7 @@ namespace ChainSafe.Gaming.Evm.Providers
             }
         }
 
-        public Network.Network LastKnownNetwork
+        public Gaming.Evm.Network.Network LastKnownNetwork
         {
             get => network;
             protected set => network = value;
@@ -49,7 +50,7 @@ namespace ChainSafe.Gaming.Evm.Providers
 
         public ValueTask WillStopAsync() => new(Task.CompletedTask);
 
-        public async Task<Network.Network> DetectNetwork()
+        public async Task<Gaming.Evm.Network.Network> DetectNetwork()
         {
             // TODO: cache
             var chainIdHexString = await Perform<string>("eth_chainId");
@@ -62,11 +63,11 @@ namespace ChainSafe.Gaming.Evm.Providers
 
             var chain = await chainRegistryProvider.GetChain(chainId);
             return chain != null
-                ? new Network.Network { Name = chain.Name, ChainId = chainId }
-                : new Network.Network { Name = "Unknown", ChainId = chainId };
+                ? new Gaming.Evm.Network.Network { Name = chain.Name, ChainId = chainId }
+                : new Gaming.Evm.Network.Network { Name = "Unknown", ChainId = chainId };
         }
 
-        public async Task<Network.Network> RefreshNetwork()
+        public async Task<Gaming.Evm.Network.Network> RefreshNetwork()
         {
             var currentNetwork = await DetectNetwork();
 

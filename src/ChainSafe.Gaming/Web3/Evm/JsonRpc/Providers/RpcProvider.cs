@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
-using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Evm;
+using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Environment;
@@ -9,19 +10,19 @@ using Nethereum.JsonRpc.Client.RpcMessages;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace ChainSafe.Gaming.Evm.Providers
+namespace ChainSafe.Gaming.Web3.Evm.JsonRpc.Providers
 {
-    public class RpcClientProvider : IRpcProvider, ILifecycleParticipant
+    public class RpcProvider : IRpcProvider, ILifecycleParticipant
     {
-        private readonly RpcClientConfig config;
+        private readonly RpcConfig config;
         private readonly Web3Environment environment;
         private readonly ChainRegistryProvider chainRegistryProvider;
         private readonly IChainConfig chainConfig;
 
-        private Network.Network network;
+        private Gaming.Evm.Network.Network network;
 
-        public RpcClientProvider(
-            RpcClientConfig config,
+        public RpcProvider(
+            RpcConfig config,
             Web3Environment environment,
             ChainRegistryProvider chainRegistryProvider,
             IChainConfig chainConfig)
@@ -37,7 +38,7 @@ namespace ChainSafe.Gaming.Evm.Providers
             }
         }
 
-        public Network.Network LastKnownNetwork
+        public Gaming.Evm.Network.Network LastKnownNetwork
         {
             get => network;
             protected set => network = value;
@@ -50,7 +51,7 @@ namespace ChainSafe.Gaming.Evm.Providers
                 if (ulong.TryParse(chainConfig.ChainId, out var chainId))
                 {
                     var chain = await chainRegistryProvider.GetChain(chainId);
-                    network = new Network.Network()
+                    network = new Gaming.Evm.Network.Network()
                     {
                         ChainId = chainId,
                         Name = chain?.Name,
@@ -63,7 +64,7 @@ namespace ChainSafe.Gaming.Evm.Providers
 
         public ValueTask WillStopAsync() => new(Task.CompletedTask);
 
-        public async Task<Network.Network> DetectNetwork()
+        public async Task<Gaming.Evm.Network.Network> DetectNetwork()
         {
             // TODO: cache
             var chainIdHexString = await Perform<string>("eth_chainId");
@@ -76,11 +77,11 @@ namespace ChainSafe.Gaming.Evm.Providers
 
             var chain = await chainRegistryProvider.GetChain(chainId);
             return chain != null
-                ? new Network.Network { Name = chain.Name, ChainId = chainId }
-                : new Network.Network { Name = "Unknown", ChainId = chainId };
+                ? new Gaming.Evm.Network.Network { Name = chain.Name, ChainId = chainId }
+                : new Gaming.Evm.Network.Network { Name = "Unknown", ChainId = chainId };
         }
 
-        public async Task<Network.Network> RefreshNetwork()
+        public async Task<Gaming.Evm.Network.Network> RefreshNetwork()
         {
             var currentNetwork = await DetectNetwork();
 

@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 
-namespace ChainSafe.Gaming.Wallets
+namespace ChainSafe.Gaming.Web3.Evm.JsonRpc
 {
     [Serializable]
-    public class JsonRpcWalletConfig
+    public class SignerConfig
     {
         public int AccountIndex { get; set; }
 

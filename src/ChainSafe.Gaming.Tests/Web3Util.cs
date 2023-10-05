@@ -1,13 +1,13 @@
 ﻿using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts.Builders;
-using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.NetCore;
-using ChainSafe.Gaming.Wallets;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
+using ChainSafe.Gaming.Web3.Evm.JsonRpc;
+using ChainSafe.Gaming.Web3.Evm.JsonRpc.Providers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ChainSafe.Gaming.Tests
@@ -16,16 +16,16 @@ namespace ChainSafe.Gaming.Tests
     {
         public static ValueTask<Web3.Web3> CreateWeb3(int accountIndex = 0)
         {
-            return CreateWeb3(new JsonRpcWalletConfig { AccountIndex = accountIndex });
+            return CreateWeb3(new SignerConfig { AccountIndex = accountIndex });
         }
 
         public static ValueTask<Web3.Web3> CreateWeb3(Web3Builder.ConfigureServicesDelegate configureDelegate, int accountIndex = 0)
         {
-            return CreateWeb3(new JsonRpcWalletConfig { AccountIndex = accountIndex }, configureDelegate);
+            return CreateWeb3(new SignerConfig { AccountIndex = accountIndex }, configureDelegate);
         }
 
         private static ValueTask<Web3.Web3> CreateWeb3(
-            JsonRpcWalletConfig jsonRpcWalletConfig, Web3Builder.ConfigureServicesDelegate configureDelegate = null)
+            SignerConfig jsonRpcSignerConfig, Web3Builder.ConfigureServicesDelegate configureDelegate = null)
         {
             return new Web3Builder(
                     new ProjectConfig { ProjectId = string.Empty },
@@ -40,9 +40,7 @@ namespace ChainSafe.Gaming.Tests
                 {
                     services.UseNetCoreEnvironment();
                     services.UseRpcProvider();
-
-                    services.AddSingleton(jsonRpcWalletConfig);
-                    services.AddSingleton<ISigner, ITransactionExecutor, ILifecycleParticipant, JsonRpcWallet>();
+                    services.UseJsonRpcSigner(jsonRpcSignerConfig);
                 })
                 .Configure(configureDelegate)
                 .BuildAsync();

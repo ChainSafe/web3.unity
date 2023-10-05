@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace ChainSafe.Gaming.Evm.Providers
+namespace ChainSafe.Gaming.Web3.Evm.JsonRpc.Providers
 {
     [Serializable]
-    public class RpcClientConfig
+    public class RpcConfig
     {
         /// <summary>
         /// (Optional) Url of RPC Node.
