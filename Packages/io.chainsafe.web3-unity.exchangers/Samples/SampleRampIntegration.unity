@@ -207,8 +207,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RampIntegrationSample, Samples
+      - m_Target: {fileID: 1437209538}
+        m_TargetAssemblyTypeName: ChainSafe.Gaming.Exchangers.RampExchangerSample,
+          io.chainsafe.web3-unity.exchangers.runtime
         m_MethodName: ButtonClicked
         m_Mode: 1
         m_Arguments:

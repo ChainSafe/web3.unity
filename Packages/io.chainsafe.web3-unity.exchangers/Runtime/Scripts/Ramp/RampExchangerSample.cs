@@ -9,9 +9,7 @@ namespace ChainSafe.Gaming.Exchangers
 
         private void Awake()
         {
-#if UNITY_IOS
-        _ramp = new RampExchangeriOS(rampData);
-#endif
+            _ramp = RampExchangerFactory.CreateRampExchanger(rampData);
             RampExchanger.OnRampPurchaseEvent += OnRampPurchase;
             RampExchanger.OffRampSaleEvent += OffRampSaleEvent;
         }
