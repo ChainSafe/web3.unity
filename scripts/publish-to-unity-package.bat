@@ -3,8 +3,8 @@
 echo Building project...
 pushd ..\src\ChainSafe.Gaming.Unity
 
-del /S /Q obj
-del /S /Q bin
+del obj /F /Q
+del bin /F /Q
 dotnet publish -c release -f netstandard2.1 /property:Unity=true
 if %errorlevel% neq 0 exit /b %errorlevel%
 
