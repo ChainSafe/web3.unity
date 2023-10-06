@@ -27,15 +27,15 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
         private readonly LootboxServiceConfig config;
         private readonly ISigner signer;
         private readonly IRpcProvider rpcProvider;
+        private readonly ILogWriter logWriter;
 
         private Contract contract;
         private Dictionary<string, RewardType> rewardTypeByTokenAddress;
-        private readonly ILogWriter logWriter;
 
         public LootboxService(
             LootboxServiceConfig config,
             IContractBuilder contractBuilder,
-            IRpcProvider rpcProvider, 
+            IRpcProvider rpcProvider,
             ILogWriter logWriter)
         {
             this.rpcProvider = rpcProvider;
@@ -170,7 +170,7 @@ namespace ChainSafe.Gaming.Chainlink.Lootboxes
                     new object[] { playerAddress });
             }
 
-            if(unitsToGet > uint.MaxValue)
+            if (unitsToGet > uint.MaxValue)
             {
                 throw new Web3Exception("Internal Error. Units to get is greater than int.MaxValue.");
             }
