@@ -26,11 +26,7 @@ using WalletConnectSharp.Storage;
 namespace ChainSafe.Gaming.WalletConnect
 {
     public class WalletConnectSigner : ISigner, ILifecycleParticipant
-
-        // , ITransactionExecutor
     {
-        private static readonly TimeSpan MinClipboardCheckPeriod = TimeSpan.FromMilliseconds(10);
-
         private readonly IChainConfig chainConfig;
         private readonly WalletConnectConfig configuration;
         private readonly IOperatingSystemMediator operatingSystem;
