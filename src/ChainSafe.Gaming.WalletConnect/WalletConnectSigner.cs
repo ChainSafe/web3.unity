@@ -12,7 +12,6 @@ using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Debug;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using ChainSafe.Gaming.Web3.Environment;
-using UnityEngine;
 using WalletConnectSharp.Common.Logging;
 using WalletConnectSharp.Common.Model.Errors;
 using WalletConnectSharp.Core;
@@ -172,12 +171,25 @@ namespace ChainSafe.Gaming.WalletConnect
 
             InvokeConnected(connectData);
 
+            // open deeplink to redirect to wallet for connection
+            if (Config.RedirectToWallet)
+            {
+                if (Config.DefaultWallet != null)
+                {
+                    Config.DefaultWallet.OpenDeeplink(connectData, operatingSystem);
+                }
+                else
+                {
+                    operatingSystem.OpenUrl(connectData.Uri);
+                }
+            }
+
             SessionStruct sessionResult = await connectData.Approval;
 
             InvokeSessionApproved(sessionResult);
 
             // get default wallet
-            if (Application.isMobilePlatform && Config.DefaultWallet == null)
+            if (Config.RedirectToWallet && Config.DefaultWallet == null)
             {
                 string nativeUrl = sessionResult.Peer.Metadata.Redirect.Native.Replace("//", string.Empty);
 
@@ -188,7 +200,7 @@ namespace ChainSafe.Gaming.WalletConnect
                     nativeUrl = $"{nativeUrl.Substring(0, index)}:";
                 }
 
-                Debug.Log($"Wallet Native Url {nativeUrl}");
+                WCLogger.Log($"Wallet Native Url {nativeUrl}");
 
                 var defaultWallet = Config.SupportedWallets.Values.FirstOrDefault(w =>
                     w.Mobile.NativeProtocol == nativeUrl || w.Desktop.NativeProtocol == nativeUrl);
@@ -230,11 +242,12 @@ namespace ChainSafe.Gaming.WalletConnect
                     RelayerEvents.Publish,
                     (_, _) =>
                     {
-                        if (Config.DefaultWallet != null)
+                        // if default wallet exists and redirect is true redirect user to default wallet
+                        if (Config.RedirectToWallet && Config.DefaultWallet != null)
                         {
                             WCLogger.Log("Opening Default Wallet...");
 
-                            Config.DefaultWallet.OpenWallet();
+                            Config.DefaultWallet.OpenWallet(operatingSystem);
                         }
                         else
                         {

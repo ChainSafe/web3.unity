@@ -1,6 +1,6 @@
 using System;
+using ChainSafe.Gaming.Web3.Environment;
 using Newtonsoft.Json;
-using UnityEngine;
 using WalletConnectSharp.Common.Logging;
 using WalletConnectSharp.Sign.Models.Engine;
 
@@ -20,52 +20,61 @@ namespace ChainSafe.Gaming.WalletConnect.Models
         [JsonProperty("image_url")]
         public ImageUrlsModel Images { get; private set; }
 
-        public void OpenDeeplink(ConnectedData data, bool useNative = false)
+        public void OpenDeeplink(ConnectedData data, IOperatingSystemMediator operatingSystemMediator, bool useNative = false)
         {
             string uri = string.Empty;
 
-#if UNITY_ANDROID
-            uri = data.Uri; // Android OS should handle wc: protocol
-#elif UNITY_IOS
-
-            // on iOS, we need to use one of the wallet links
-            WalletLink linkData = Application.isMobilePlatform ? Mobile : Desktop;
-
-            var universalUrl = useNative ? linkData.NativeProtocol : linkData.UniversalUrl;
-
-            uri = data.Uri;
-
-            if (!string.IsNullOrWhiteSpace(universalUrl))
+            if (operatingSystemMediator.IsMobilePlatform)
             {
-                uri = data.Uri;
+                switch (operatingSystemMediator.Platform)
+                {
+                    case Platform.Android:
+                        uri = data.Uri; // Android OS should handle wc: protocol
+                        break;
 
-                if (useNative)
-                {
-                    uri = $"{universalUrl}//{uri}";
-                }
-                else if (universalUrl.EndsWith("/"))
-                {
-                    uri = $"{universalUrl}{uri}";
-                }
-                else
-                {
-                    uri = $"{universalUrl}/{uri}";
+                    case Platform.IOS:
+                        // on iOS, we need to use one of the wallet links
+                        WalletLinkModel linkData = operatingSystemMediator.IsMobilePlatform ? Mobile : Desktop;
+
+                        var universalUrl = useNative ? linkData.NativeProtocol : linkData.UniversalUrl;
+
+                        uri = data.Uri;
+
+                        if (!string.IsNullOrWhiteSpace(universalUrl))
+                        {
+                            uri = data.Uri;
+
+                            if (useNative)
+                            {
+                                uri = $"{universalUrl}//{uri}";
+                            }
+                            else if (universalUrl.EndsWith("/"))
+                            {
+                                uri = $"{universalUrl}{uri}";
+                            }
+                            else
+                            {
+                                uri = $"{universalUrl}/{uri}";
+                            }
+                        }
+
+                        if (string.IsNullOrWhiteSpace(uri))
+                        {
+                            throw new Exception("Got empty URI when attempting to create WC deeplink");
+                        }
+
+                        break;
                 }
             }
 
-            if (string.IsNullOrWhiteSpace(uri))
-            {
-                throw new Exception("Got empty URI when attempting to create WC deeplink");
-            }
-#endif
             WCLogger.Log($"Opening URL {uri}");
 
-            Application.OpenURL(uri);
+            operatingSystemMediator.OpenUrl(uri);
         }
 
-        public void OpenWallet()
+        public void OpenWallet(IOperatingSystemMediator operatingSystemMediator)
         {
-            WalletLinkModel linkData = Application.isMobilePlatform ? Mobile : Desktop;
+            WalletLinkModel linkData = operatingSystemMediator.IsMobilePlatform ? Mobile : Desktop;
 
             string universalUrl = linkData.UniversalUrl;
 
@@ -74,7 +83,7 @@ namespace ChainSafe.Gaming.WalletConnect.Models
                 throw new Exception("Got empty URI when attempting to create WC deeplink");
             }
 
-            Application.OpenURL(universalUrl);
+            operatingSystemMediator.OpenUrl(universalUrl);
         }
     }
 }

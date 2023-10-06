@@ -22,6 +22,8 @@ using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using WalletConnectSharp.Core;
+using WalletConnectSharp.Sign.Models;
+using WalletConnectSharp.Sign.Models.Engine;
 
 namespace Scenes
 {
@@ -53,13 +55,18 @@ namespace Scenes
         public Toggle RememberMeToggle;
         public ErrorPopup ErrorPopup;
         public List<Web3AuthButtonAndProvider> Web3AuthButtons;
-        public TMP_Dropdown _supportedWalletsDropdown;
-
+        
         private bool useWebPageWallet;
 
         #region Wallet Connect
 
         [field: Header("Wallet Connect")]
+
+        [SerializeField] private TMP_Dropdown _supportedWalletsDropdown;
+        
+        [SerializeField] private Toggle _redirectToWalletToggle;
+        
+        [SerializeField] private WalletConnectModal _walletConnectModal;
         
         [field: SerializeField] public string ProjectId { get; private set; }
         
@@ -75,6 +82,8 @@ namespace Scenes
             Url = "https://chainsafe.io/"
         };
 
+        private bool _redirectToWallet;
+        
         #endregion
 
         private IEnumerator Start()
@@ -93,10 +102,12 @@ namespace Scenes
             // Wallet Connect
             yield return FetchSupportedWallets();
 
-#if UNITY_IOS
-            InitializeWalletSelection();
-#endif
-            
+            // enable this on editor to test UI flow and functions
+            if (Application.isMobilePlatform || Application.isEditor)
+            {
+                InitializeMobileOptions();
+            }
+
 #if UNITY_WEBGL
             ProcessWeb3Auth();
 #endif
@@ -110,14 +121,58 @@ namespace Scenes
                 var provider = buttonAndProvider.Provider;
                 button.onClick.AddListener(() => LoginWithWeb3Auth(provider));
             }
+            
+            WalletConnectSigner.OnConnected += WalletConnected;
+
+            WalletConnectSigner.OnSessionApproved += SessionApproved;
         }
 
-        private void InitializeWalletSelection()
+        private void OnDestroy()
         {
+            WalletConnectSigner.OnConnected -= WalletConnected;
+
+            WalletConnectSigner.OnSessionApproved -= SessionApproved;
+        }
+
+        private void WalletConnected(ConnectedData data)
+        {
+            // already redirecting to wallet
+            if (_redirectToWallet)
+            {
+                return;
+            }
+            
+            // display QR and copy to clipboard
+            _walletConnectModal.WalletConnected(data);
+        }
+        
+        private void SessionApproved(SessionStruct session)
+        {
+            Debug.Log($"{session.Topic} Approved");
+        }
+
+        // redirect to mobile wallet and select default wallet on IOS
+        private void InitializeMobileOptions()
+        {
+            _redirectToWalletToggle.gameObject.SetActive(true);
+#if UNITY_IOS
+            InitializeWalletDropdown();
+#endif
+        }
+        
+        // add all supported wallets
+        private void InitializeWalletDropdown()
+        {
+            _redirectToWalletToggle.onValueChanged.AddListener(isOn =>
+            {
+                _supportedWalletsDropdown.gameObject.SetActive(isOn);
+            });
+            
             // first element is a no select
             List<string> supportedWalletsList = new List<string>
             {
-                "None",    
+                // default option/unselected
+                "Select Wallet",    
             };
 
             supportedWalletsList.AddRange(_supportedWallets.Values.Select(w => w.Name));
@@ -147,15 +202,15 @@ namespace Scenes
 
         private async void LoginWithExistingAccount()
         {
-            if (_supportedWalletsDropdown.value == 0)
+#if UNITY_IOS
+            // can't redirect to wallet on IOS if there's no selected wallet
+            if (_redirectToWalletToggle.isOn && _supportedWalletsDropdown.value == 0)
             {
                 // feedback
                 Debug.LogError("Please select a Wallet first");
                 
                 return;
             }
-#if UNITY_IOS
-
 #endif
             
             var web3Builder = new Web3Builder(ProjectConfigUtilities.Load())
@@ -291,20 +346,44 @@ namespace Scenes
 
         private WalletConnectConfig BuildWalletConnectConfig()
         {
+            WalletConnectWalletModel defaultWallet = null;
+            
             // build chain
             var projectConfig = ProjectConfigUtilities.Load();
 
             ChainModel chain = new ChainModel(ChainModel.EvmNamespace, projectConfig.ChainId, projectConfig.Network);
-            
-            return new WalletConnectConfig
+
+            // allow redirection on editor for testing UI flow
+            _redirectToWallet = (Application.isMobilePlatform || Application.isEditor) && _redirectToWalletToggle.isOn;
+
+#if UNITY_IOS
+            // make sure there's a selected wallet on IOS
+            _redirectToWallet = _redirectToWallet && _supportedWalletsDropdown.value != 0;
+
+            if (_redirectToWallet)
             {
-                ProjectId = ProjectId, 
-                ProjectName = ProjectName, 
+                // offset for the first/default/unselected dropdown option 0
+                int selectedWalletIndex = _supportedWalletsDropdown.value - 1;
+
+                defaultWallet = _supportedWallets.Values.ToArray()[selectedWalletIndex];
+            }
+#endif
+            
+            var config = new WalletConnectConfig
+            {
+                ProjectId = ProjectId,
+                ProjectName = ProjectName,
                 BaseContext = BaseContext,
                 Chain = chain,
-                Metadata = Metadata, 
-                SupportedWallets = _supportedWallets
+                Metadata = Metadata,
+                SupportedWallets = _supportedWallets,
+                RedirectToWallet = _redirectToWallet,
+#if UNITY_IOS
+                DefaultWallet = defaultWallet
+#endif
             };
+            
+            return config;
         }
         
         private IEnumerator FetchSupportedWallets()

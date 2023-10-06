@@ -1,7 +1,6 @@
 using System;
 using ChainSafe.Gaming.Evm.Unity;
 using ChainSafe.Gaming.Web3.Environment;
-using UnityEngine;
 using ILogger = WalletConnectSharp.Common.Logging.ILogger;
 
 namespace ChainSafe.Gaming.WalletConnect

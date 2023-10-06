@@ -10,8 +10,6 @@ namespace ChainSafe.Gaming.WalletConnect
     {
         public string SavedUserAddress { get; set; } = null;
 
-        public TimeSpan ConnectRequestExpiresAfter { get; set; } = TimeSpan.FromMinutes(1);
-
         public string ProjectId { get; set; }
 
         public string ProjectName { get; set; }
@@ -21,6 +19,8 @@ namespace ChainSafe.Gaming.WalletConnect
         public ChainModel Chain { get; set; }
 
         public Metadata Metadata { get; set; }
+
+        public bool RedirectToWallet { get; set; }
 
         public WalletConnectWalletModel DefaultWallet { get; set; }
 
