@@ -1,4 +1,6 @@
+using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.WalletConnect;
+using Scenes;
 using UnityEngine;
 using UnityEngine.UI;
 using WalletConnectSharp.Sign.Models;
@@ -13,37 +15,14 @@ public class WalletConnectModal : MonoBehaviour
     [SerializeField] private Button _backButton;
 
     [SerializeField] private Transform _container;
-
+    
     private void Start()
     {
         _backButton.onClick.AddListener(Disable);
-
-        WalletConnectSigner.OnConnected += WalletConnected;
-
-        WalletConnectSigner.OnSessionApproved += SessionApproved;
     }
 
-    private void OnDisable()
+    public void WalletConnected(ConnectedData data)
     {
-        WalletConnectSigner.OnConnected -= WalletConnected;
-
-        WalletConnectSigner.OnSessionApproved -= SessionApproved;
-    }
-    
-    private void WalletConnected(ConnectedData data)
-    {
-        if (Application.isMobilePlatform)
-        {
-#if UNITY_ANDROID
-            
-            // open wallet
-            Application.OpenURL(data.Uri);
-            
-#elif UNITY_IOS
-            //select wallet dropdown
-#endif
-        }
-            
         // enable display
         _container.gameObject.SetActive(true);
 
@@ -52,11 +31,6 @@ public class WalletConnectModal : MonoBehaviour
         GenerateQrCode(uri);
 
         SetClipboard(uri);
-    }
-
-    private void SessionApproved(SessionStruct session)
-    {
-        Debug.Log($"{session.Topic} Approved");
     }
 
     private void SetClipboard(string uri)
