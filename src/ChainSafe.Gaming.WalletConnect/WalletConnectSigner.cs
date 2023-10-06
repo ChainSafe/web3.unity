@@ -1,10 +1,7 @@
 using System;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
-using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.WalletConnect.Methods;
 using ChainSafe.Gaming.WalletConnect.Models;
 using ChainSafe.Gaming.Web3;
@@ -27,17 +24,13 @@ namespace ChainSafe.Gaming.WalletConnect
 {
     public class WalletConnectSigner : ISigner, ILifecycleParticipant
     {
-        private readonly IChainConfig chainConfig;
         private readonly WalletConnectConfig configuration;
         private readonly IOperatingSystemMediator operatingSystem;
-        private readonly IRpcProvider provider;
         private readonly ILogWriter logWriter;
 
-        public WalletConnectSigner(IRpcProvider provider, WalletConnectConfig configuration, IOperatingSystemMediator operatingSystem, IChainConfig chainConfig, ILogWriter logWriter)
+        public WalletConnectSigner(WalletConnectConfig configuration, IOperatingSystemMediator operatingSystem, ILogWriter logWriter)
         {
-            this.provider = provider;
             this.operatingSystem = operatingSystem;
-            this.chainConfig = chainConfig;
             this.configuration = configuration;
             this.logWriter = logWriter;
         }
@@ -94,10 +87,10 @@ namespace ChainSafe.Gaming.WalletConnect
             // Wallet Connect
             await Initialize(configuration);
 
-            Address = configuration.SavedUserAddress ?? await GetAccountVerifyUserOwns();
+            Address = configuration.SavedUserAddress ?? await ConnectToWallet();
         }
 
-        public async Task Initialize(WalletConnectConfig config)
+        private async Task Initialize(WalletConnectConfig config)
         {
             Config = config;
 
@@ -136,7 +129,7 @@ namespace ChainSafe.Gaming.WalletConnect
             });
         }
 
-        public async Task<ConnectedData> ConnectClient()
+        private async Task<ConnectedData> ConnectClient()
         {
             RequiredNamespaces requiredNamespaces = new RequiredNamespaces();
 
@@ -223,12 +216,31 @@ namespace ChainSafe.Gaming.WalletConnect
 
         public Task<string> GetAddress()
         {
+            if (string.IsNullOrEmpty(Address))
+            {
+                var addressParts = GetFullAddress().Split(":");
+
+                Address = addressParts[2];
+            }
+
+            if (!AddressExtensions.IsPublicAddress(Address))
+            {
+                throw new Web3Exception(
+                    $"Public address recovered from signature is not valid. Public address: {Address}");
+            }
+
             Address.AssertNotNull(nameof(Address));
             return Task.FromResult(Address!);
         }
 
-        private Task<TR> Request<T, TR>(string topic, T data, string chainId = null, long? expiry = null)
+        public Task<TR> Request<T, TR>(T data, long? expiry = null)
         {
+            string topic = Session.Topic;
+
+            var addressParts = GetFullAddress().Split(":");
+
+            string chainId = string.Join(':', addressParts.Take(2));
+
             string method = RpcMethodAttribute.MethodForType<T>();
 
             // if it's a registered method try and open wallet
@@ -262,38 +274,19 @@ namespace ChainSafe.Gaming.WalletConnect
                 return TestResponse;
             }
 
-            // var pageUrl = BuildUrl();
-
-            // Wallet connect
-            SessionStruct session = Session;
-
-            var (address, chainId) = GetCurrentAddress();
-
-            if (string.IsNullOrWhiteSpace(address))
-            {
-                return null;
-            }
-
-            var request = new EthSignMessage(message, address);
+            var requestData = new EthSignMessage(message, Address);
 
             string hash =
-                await Request<EthSignMessage, string>(session.Topic, request, chainId);
+                await Request<EthSignMessage, string>(requestData);
 
             var isValid = ValidateResponse(hash);
             if (!isValid)
             {
-                throw new Web3Exception("Incorrect response format extracted from clipboard.");
+                throw new Web3Exception("Incorrect response format from signing.");
             }
 
             // TODO: log event on success
             return hash;
-
-            // string BuildUrl()
-            // {
-            //     return $"{configuration.ServiceUrl}" +
-            //            "?action=sign" +
-            //            $"&message={Uri.EscapeDataString(message)}";
-            // }
 
             // TODO: validate with regex
             bool ValidateResponse(string response)
@@ -304,20 +297,10 @@ namespace ChainSafe.Gaming.WalletConnect
 
         public async Task<string> SignTypedData<TStructType>(SerializableDomain domain, TStructType message)
         {
-            // Wallet connect
-            SessionStruct session = Session;
-
-            var (address, chainId) = GetCurrentAddress();
-
-            if (string.IsNullOrWhiteSpace(address))
-            {
-                return null;
-            }
-
-            var request = new EthSignTypedData<TStructType>(address, domain, message);
+            var requestData = new EthSignTypedData<TStructType>(Address, domain, message);
 
             string hash =
-                await Request<EthSignTypedData<TStructType>, string>(session.Topic, request, chainId);
+                await Request<EthSignTypedData<TStructType>, string>(requestData);
 
             var isValid = ValidateResponse(hash);
             if (!isValid)
@@ -334,145 +317,34 @@ namespace ChainSafe.Gaming.WalletConnect
             return hash;
         }
 
-        // public async Task<TransactionResponse> SendTransaction(TransactionRequest transaction)
-        // {
-        //     var pageUrl = BuildUrl();
-        //     var hash = await OpenPageWaitResponse(pageUrl, ValidateResponse);
-        //
-        //     // TODO: log event on success (see example near end of file)
-        //     return await provider.GetTransaction(hash);
-        //
-        //     string BuildUrl()
-        //     {
-        //         var sb = new StringBuilder()
-        //             .Append(configuration.ServiceUrl)
-        //             .Append("?action=send");
-        //
-        //         if (transaction.ChainId != null)
-        //         {
-        //             sb.Append("&chainId=").Append(transaction.ChainId);
-        //         }
-        //         else
-        //         {
-        //             sb.Append("&chainId=").Append(chainConfig.ChainId);
-        //         }
-        //
-        //         if (transaction.Value != null)
-        //         {
-        //             sb.Append("&value=").Append(transaction.Value);
-        //         }
-        //         else
-        //         {
-        //             sb.Append("&value=").Append(0);
-        //         }
-        //
-        //         AppendStringIfNotNullOrEmtpy("to", transaction.To);
-        //         AppendStringIfNotNullOrEmtpy("data", transaction.Data);
-        //         AppendIfNotNull("gasLimit", transaction.GasLimit);
-        //         AppendIfNotNull("gasPrice", transaction.GasPrice);
-        //
-        //         return sb.ToString();
-        //
-        //         void AppendIfNotNull(string name, object value)
-        //         {
-        //             if (value != null)
-        //             {
-        //                 sb!.Append('&').Append(name).Append('=').Append(value);
-        //             }
-        //         }
-        //
-        //         void AppendStringIfNotNullOrEmtpy(string name, string value)
-        //         {
-        //             if (!string.IsNullOrEmpty(value))
-        //             {
-        //                 sb!.Append('&').Append(name).Append('=').Append(value);
-        //             }
-        //         }
-        //     }
-        //
-        //     // TODO: validate with regex
-        //     bool ValidateResponse(string response)
-        //     {
-        //         return response.StartsWith("0x") && response.Length == 66;
-        //     }
-        // }
-        private (string, string) GetCurrentAddress()
+        /// <summary>
+        /// Connect to wallet
+        /// </summary>
+        /// <returns>address of connected wallet.</returns>
+        private async Task<string> ConnectToWallet()
         {
-            var currentSession = Session;
+            ConnectedData = await ConnectClient();
 
-            var defaultChain = currentSession.Namespaces.Keys.FirstOrDefault();
+            return await GetAddress();
+        }
+
+        private string GetFullAddress()
+        {
+            var defaultChain = Session.Namespaces.Keys.FirstOrDefault();
 
             if (string.IsNullOrWhiteSpace(defaultChain))
             {
-                return (null, null);
+                throw new Web3Exception("can't get full address, default chain not found");
             }
 
-            var defaultNamespace = currentSession.Namespaces[defaultChain];
+            var defaultNamespace = Session.Namespaces[defaultChain];
 
             if (defaultNamespace.Accounts.Length == 0)
             {
-                return (null, null);
+                throw new Web3Exception("can't get full address, no connected accounts");
             }
 
-            var fullAddress = defaultNamespace.Accounts[0];
-            var addressParts = fullAddress.Split(":");
-
-            var address = addressParts[2];
-            var chainId = string.Join(':', addressParts.Take(2));
-
-            return (address, chainId);
-        }
-
-        // TODO: extract hash from deeplink instead of clipboard
-        // private async Task<string> OpenPageWaitResponse(string pageUrl, Func<string, bool> validator)
-        // {
-        //     string response;
-        //
-        //     if (Testing)
-        //     {
-        //         response = TestResponse;
-        //     }
-        //     else
-        //     {
-        //         operatingSystem.OpenUrl(pageUrl);
-        //         operatingSystem.ClipboardContent = string.Empty;
-        //
-        //         var updateDelay = GetUpdatePeriodSafe();
-        //         while (string.IsNullOrEmpty(operatingSystem.ClipboardContent))
-        //         {
-        //             await Task.Delay(updateDelay);
-        //         }
-        //
-        //         response = operatingSystem.ClipboardContent!;
-        //     }
-        //
-        //     var validResponse = validator(response);
-        //     if (!validResponse)
-        //     {
-        //         throw new Web3Exception("Incorrect response format extracted from clipboard.");
-        //     }
-        //
-        //     int GetUpdatePeriodSafe()
-        //     {
-        //         return (int)Math.Max(MinClipboardCheckPeriod.TotalMilliseconds, configuration.ClipboardCheckPeriod.TotalMilliseconds);
-        //     }
-        //
-        //     return response;
-        // }
-        private async Task<string> GetAccountVerifyUserOwns()
-        {
-            // sign current time
-            ConnectedData = await ConnectClient();
-
-            var (address, _) = GetCurrentAddress();
-
-            if (!AddressExtensions.IsPublicAddress(address))
-            {
-                throw new Web3Exception(
-                    $"Public address recovered from signature is not valid. Public address: {address}");
-            }
-
-            return address;
+            return defaultNamespace.Accounts[0];
         }
 
         private async Task Disconnect()

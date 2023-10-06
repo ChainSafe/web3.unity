@@ -6,7 +6,7 @@ using WalletConnectSharp.Network.Models;
 namespace ChainSafe.Gaming.WalletConnect.Methods
 {
     [RpcMethod("personal_sign")]
-    [RpcRequestOptions(Clock.ONE_MINUTE, 99998)]
+    [RpcRequestOptions(Clock.ONE_MINUTE, 99997)]
     public class EthSignMessage : List<string>
     {
         public EthSignMessage(string message, string address)

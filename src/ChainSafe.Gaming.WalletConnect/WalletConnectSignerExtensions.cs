@@ -29,7 +29,6 @@ namespace ChainSafe.Gaming.WalletConnect
         public static IWeb3ServiceCollection UseWalletConnectSigner(this IWeb3ServiceCollection collection)
         {
             collection.AssertServiceNotBound<ISigner>();
-            collection.AssertServiceNotBound<ITransactionExecutor>();
 
             // config
             collection.TryAddSingleton(DefaultConfig);
