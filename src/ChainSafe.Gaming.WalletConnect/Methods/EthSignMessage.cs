@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEngine.Scripting;
 using WalletConnectSharp.Common.Utils;
 using WalletConnectSharp.Network.Models;
 
@@ -14,7 +13,6 @@ namespace ChainSafe.Gaming.WalletConnect.Methods
         {
         }
 
-        [Preserve] // Needed for JSON.NET serialization
         public EthSignMessage()
         {
         }

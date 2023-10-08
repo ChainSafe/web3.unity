@@ -5,13 +5,13 @@ using Nethereum.ABI.EIP712;
 using Nethereum.ABI.FunctionEncoding.Attributes;
 using Newtonsoft.Json;
 
-namespace ChainSafe.Gaming.WalletConnect.Methods
+namespace ChainSafe.Gaming.WalletConnect.Models
 {
     [Serializable]
     [JsonObject(MemberSerialization.OptIn)]
-    public struct TypedData<TStruct>
+    public struct TypedDataModel<TStruct>
     {
-        public TypedData(SerializableDomain domain, TStruct message)
+        public TypedDataModel(SerializableDomain domain, TStruct message)
         {
             Types = MemberDescriptionFactory.GetTypesMemberDescription(typeof(SerializableDomain), typeof(TStruct));
 

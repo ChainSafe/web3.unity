@@ -19,7 +19,10 @@
     <assembly fullname="ChainSafe.Gaming.InProcessSigner"/>
     <assembly fullname="ChainSafe.Gaming.InProcessTransactionExecutor"/>
     <assembly fullname="ChainSafe.Gaming.NetCore"/>
-    <assembly fullname="ChainSafe.Gaming.WalletConnect"/>
+    <assembly fullname="ChainSafe.Gaming.WalletConnect">
+        <!-- preserve all wallet connect method members -->
+        <type fullname="ChainSafe.Gaming.WalletConnect.Methods" preserve="all"/>
+    </assembly>
     <assembly fullname="ChainSafe.Gaming.Gelato"/>
     <assembly fullname="ChainSafe.Gaming.ChainLink"/>
     <assembly fullname="ChainSafe.Gaming.ChainLink.Lootboxes"/>

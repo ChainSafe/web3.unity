@@ -1,9 +1,6 @@
-using System;
 using System.Collections.Generic;
+using ChainSafe.Gaming.WalletConnect.Models;
 using ChainSafe.Gaming.Web3.Core.Evm;
-using Nethereum.ABI.EIP712;
-using Newtonsoft.Json;
-using UnityEngine.Scripting;
 using WalletConnectSharp.Common.Utils;
 using WalletConnectSharp.Network.Models;
 
@@ -17,12 +14,11 @@ namespace ChainSafe.Gaming.WalletConnect.Methods
             : base(new object[]
             {
                 address,
-                new TypedData<TStruct>(domain, message),
+                new TypedDataModel<TStruct>(domain, message),
             })
         {
         }
 
-        [Preserve] // Needed for JSON.NET serialization
         public EthSignTypedData()
         {
         }

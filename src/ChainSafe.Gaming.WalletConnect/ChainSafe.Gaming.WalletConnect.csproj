@@ -20,9 +20,5 @@
   <ItemGroup>
     <PackageReference Include="WalletConnect.Web3Wallet" Version="2.1.0" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="../../libs/UnityEngine/UnityEngine.dll" />
-  </ItemGroup>
   
 </Project>
