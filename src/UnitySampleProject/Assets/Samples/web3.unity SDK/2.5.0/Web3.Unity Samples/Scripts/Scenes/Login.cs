@@ -224,7 +224,7 @@ namespace Scenes
                      */
                     if (useWebPageWallet)
                     {
-                        services.UseWalletConnectSigner(BuildWalletConnectConfig());
+                        services.UseWalletConnectSigner(BuildWalletConnectConfig()).UseWalletConnectTransactionExecutor();
                     }
                     else
                     {

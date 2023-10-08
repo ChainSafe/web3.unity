@@ -55,13 +55,16 @@ namespace ChainSafe.Gaming.UnityPackage
         
         private async void OnApplicationQuit()
         {
-            Debug.Log("Disposing Web3...");
+            if (web3 != null)
+            {
+                Debug.Log("Disposing Web3...");
 
-            // Terminate Web3
-            await web3.TerminateAsync();
+                // Terminate Web3
+                await web3.TerminateAsync();
 
-            // Clear the Web3 instance
-            web3 = null;
+                // Clear the Web3 instance
+                web3 = null;
+            }
         }
     }
 }
