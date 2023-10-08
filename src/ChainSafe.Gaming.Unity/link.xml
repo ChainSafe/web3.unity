@@ -21,7 +21,7 @@
     <assembly fullname="ChainSafe.Gaming.NetCore"/>
     <assembly fullname="ChainSafe.Gaming.WalletConnect">
         <!-- preserve all wallet connect method members -->
-        <type fullname="ChainSafe.Gaming.WalletConnect.Methods" preserve="all"/>
+        <namepsace fullname="ChainSafe.Gaming.WalletConnect.Methods" preserve="all"/>
     </assembly>
     <assembly fullname="ChainSafe.Gaming.Gelato"/>
     <assembly fullname="ChainSafe.Gaming.ChainLink"/>
