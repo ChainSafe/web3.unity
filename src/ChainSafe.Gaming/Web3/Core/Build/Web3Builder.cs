@@ -16,7 +16,7 @@ namespace ChainSafe.Gaming.Web3.Build
     {
         private readonly Web3ServiceCollection serviceCollection;
 
-        public Web3Builder(bool withMultiCall = false)
+        private Web3Builder(bool withMultiCall = false)
         {
             serviceCollection = new Web3ServiceCollection();
             if (withMultiCall)
