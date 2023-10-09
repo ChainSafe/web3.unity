@@ -90,7 +90,7 @@ namespace Scenes
             if (string.IsNullOrEmpty(savedAccount))
                 return;
 
-            var web3Builder = new Web3Builder(ProjectConfigUtilities.Load())
+            var web3Builder = new Web3Builder((ProjectConfigScriptableObject)ProjectConfigUtilities.Load())
                 .Configure(ConfigureCommonServices)
                 .Configure(services =>
                 {

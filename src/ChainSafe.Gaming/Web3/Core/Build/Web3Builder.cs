@@ -16,18 +16,7 @@ namespace ChainSafe.Gaming.Web3.Build
     {
         private readonly Web3ServiceCollection serviceCollection;
 
-        public Web3Builder()
-        {
-            serviceCollection = new Web3ServiceCollection();
-
-            // Bind default services
-            serviceCollection
-                .UseEventPoller()
-                .AddSingleton<ChainRegistryProvider>()
-                .AddSingleton<IContractBuilder, ContractBuilder>();
-        }
-
-        public Web3Builder(bool withMultiCall)
+        public Web3Builder(bool withMultiCall = false)
         {
             serviceCollection = new Web3ServiceCollection();
             if (withMultiCall)
@@ -67,7 +56,7 @@ namespace ChainSafe.Gaming.Web3.Build
             serviceCollection.AddSingleton(chainConfig);
         }
 
-        public Web3Builder(ICompleteProjectConfig projectConfig, bool withMultiCall)
+        public Web3Builder(ICompleteProjectConfig projectConfig, bool withMultiCall = false)
             : this(projectConfig, projectConfig, withMultiCall)
         {
         }
