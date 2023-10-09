@@ -83,6 +83,11 @@ namespace ChainSafe.Gaming.Wallets
             }
         }
 
+        public Task<string> SignTransaction(TransactionRequest transaction)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<string> SignTypedData<TStructType>(SerializableDomain domain, TStructType message)
         {
             var pageUrl = BuildUrl();

@@ -49,8 +49,8 @@ namespace ChainSafe.Gaming.Web3.Evm.JsonRpc
                 transaction.MaxFeePerGas = new HexBigInteger(feeData.MaxFeePerGas);
             }
 
-            var rpcTxParams = transaction.ToRPCParam();
-            return await provider.Perform<string>("eth_sendTransaction", rpcTxParams);
+            var signature = await signer.SignTransaction(transaction);
+            return await provider.Perform<string>("eth_sendRawTransaction", signature);
         }
     }
 }

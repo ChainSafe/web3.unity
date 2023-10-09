@@ -1,10 +1,10 @@
 ﻿using Chainsafe.Gaming.Chainlink;
 using ChainSafe.Gaming.Chainlink.Lootboxes;
 using ChainSafe.Gaming.Debugging;
-using ChainSafe.Gaming.Evm.JsonRpc;
-using ChainSafe.Gaming.Wallets;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
+using ChainSafe.Gaming.Web3.Evm.JsonRpc;
+using ChainSafe.Gaming.Web3.Evm.JsonRpc.Providers;
 using ChainSafe.Gaming.Web3.Unity;
 using LootBoxes.Scene;
 using Microsoft.Extensions.DependencyInjection;
@@ -41,7 +41,8 @@ namespace LootBoxes
                 {
                     services.UseUnityEnvironment();
                     services.UseRpcProvider();
-                    services.Debug().UseJsonRpcWallet(new JsonRpcWalletConfig { AccountIndex = 2 });
+                    services.UseJsonRpcSigner(new JsonRpcSignerConfig { AccountIndex = 2 });
+                    services.UseJsonRpcTransactionExecutor();
                     services.UseChainlinkLootboxService(new LootboxServiceConfig
                     {
                         ContractAddress = "0x46E334e90454aDDF311Cd75D4Ae19e2fA06285Ff",

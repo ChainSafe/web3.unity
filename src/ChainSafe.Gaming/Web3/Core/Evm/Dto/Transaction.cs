@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Nethereum.Hex.HexTypes;
-using Nethereum.RPC.Eth.DTOs;
+using Nethereum.Model;
 using Newtonsoft.Json;
 
 namespace ChainSafe.Gaming.Evm.Transactions
@@ -95,6 +95,6 @@ namespace ChainSafe.Gaming.Evm.Transactions
         ///   Access list.
         /// </summary>
         [JsonProperty(PropertyName = "accessList")]
-        public List<AccessList> AccessList { get; set; }
+        public List<AccessListItem> AccessList { get; set; }
     }
 }

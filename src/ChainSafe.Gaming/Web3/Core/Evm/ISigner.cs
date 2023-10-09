@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Web3.Core.Evm;
 
 namespace ChainSafe.Gaming.Evm.Signers
@@ -8,6 +9,8 @@ namespace ChainSafe.Gaming.Evm.Signers
         Task<string> GetAddress();
 
         Task<string> SignMessage(string message);
+
+        Task<string> SignTransaction(TransactionRequest transaction);
 
         Task<string> SignTypedData<TStructType>(SerializableDomain domain, TStructType message);
 

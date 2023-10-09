@@ -3,7 +3,6 @@ using Nethereum.ABI.EIP712;
 using Nethereum.Signer;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Providers;
-using ChainSafe.Gaming.Web3.Evm;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.InProcessSigner;
@@ -18,7 +17,7 @@ using TWeb3Auth = Web3Auth;
 
 namespace ChainSafe.GamingSdk.Web3Auth
 {
-    public class Web3AuthWallet : ISigner, ITransactionExecutor, ILifecycleParticipant
+    public class Web3AuthWallet : ISigner, ILifecycleParticipant
     {
         private InProcessSigner signer;
         private JsonRpcTransactionExecutor transactionExecutor;
@@ -52,7 +51,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
             var signerConfig = new InProcessSignerConfig { PrivateKey = privateKey };
             signer = new(signerConfig);
 
-            transactionExecutor = new(rpcProvider);
+            transactionExecutor = new(signer, rpcProvider);
 
             void Web3Auth_OnLogin(Web3AuthResponse response) => loginTcs.SetResult(response.privKey);
         }
@@ -74,6 +73,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
         public Task<string> GetAddress() => signer.GetAddress();
 
         public Task<string> SignMessage(string message) => signer.SignMessage(message);
+        public Task<string> SignTransaction(TransactionRequest transaction) => signer.SignTransaction(transaction);
 
         public Task<string> SignTypedData<TStructData>(SerializableDomain domain, TStructData message) => signer.SignTypedData(domain, message);
 

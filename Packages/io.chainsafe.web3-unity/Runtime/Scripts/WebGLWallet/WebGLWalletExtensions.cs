@@ -11,9 +11,7 @@ namespace ChainSafe.Gaming.Wallets
         public static IWeb3ServiceCollection UseWebGLWallet(this IWeb3ServiceCollection collection)
         {
             collection.AssertServiceNotBound<ISigner>();
-            collection.AssertServiceNotBound<ITransactionExecutor>();
-
-            collection.AddSingleton<ISigner, ITransactionExecutor, ILifecycleParticipant, WebGLWallet>();
+            collection.AddSingleton<ISigner, ILifecycleParticipant, WebGLWallet>();
 
             return collection;
         }

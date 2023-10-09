@@ -33,6 +33,26 @@ mergeInto(LibraryManager.library, {
   JS_resetSignTypedMessageResponse: function () {
       window.web3gl.signTypedMessageResponse = "";
   },
+  
+  JS_signTransaction: function (to, value, gasLimit, gasPrice) {
+    window.web3gl.signTransaction(
+      UTF8ToString(to),
+      UTF8ToString(value),
+      UTF8ToString(gasLimit),
+      UTF8ToString(gasPrice)
+    );
+  },
+  
+  JS_getSignTransactionResponse: function () {
+    var bufferSize = lengthBytesUTF8(window.web3gl.signTransactionResponse) + 1;
+    var buffer = _malloc(bufferSize);
+    stringToUTF8(window.web3gl.signTransactionResponse, buffer, bufferSize);
+    return buffer;
+  },
+  
+  JS_resetSignTransactionResponse: function () {
+    window.web3gl.signTransactionResponse = "";
+  },
 
   JS_sendTransaction: function (to, value, gasLimit, gasPrice) {
     window.web3gl.sendTransaction(
@@ -42,7 +62,7 @@ mergeInto(LibraryManager.library, {
         UTF8ToString(gasPrice)
     );
   },
-
+  
   JS_getSendTransactionResponse: function () {
     var bufferSize = lengthBytesUTF8(window.web3gl.sendTransactionResponse) + 1;
     var buffer = _malloc(bufferSize);

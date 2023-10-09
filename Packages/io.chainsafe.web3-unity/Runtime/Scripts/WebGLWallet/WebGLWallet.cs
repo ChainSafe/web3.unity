@@ -17,7 +17,7 @@ namespace ChainSafe.Gaming.Wallets
 {
 #if !UNITY_EDITOR && UNITY_WEBGL
     // todo: check if window.web3gl is bound during initialization
-    public class WebGLWallet : ISigner, ITransactionExecutor, ILifecycleParticipant
+    public class WebGLWallet : ISigner, ILifecycleParticipant
     {
         private readonly IRpcProvider provider;
         [CanBeNull] private string address;
@@ -174,6 +174,17 @@ namespace ChainSafe.Gaming.Wallets
         [DllImport("__Internal")]
         private static extern void JS_resetSendTransactionResponse();
 
+        // SignTransaction (with data)
+        [DllImport("__Internal")]
+        private static extern void JS_signTransactionData(string to, string value, string gasPrice, string gasLimit,
+            string data);
+
+        [DllImport("__Internal")]
+        private static extern string JS_getSignTransactionResponseData();
+
+        [DllImport("__Internal")]
+        private static extern void JS_resetSignTransactionResponseData();
+
         // SendTransaction (with data)
         [DllImport("__Internal")]
         private static extern void JS_sendTransactionData(string to, string value, string gasPrice, string gasLimit,
@@ -187,7 +198,7 @@ namespace ChainSafe.Gaming.Wallets
     }
 #else
     // Stub implementation for other platforms
-    public class WebGLWallet : ISigner, ITransactionExecutor, ILifecycleParticipant
+    public class WebGLWallet : ISigner, ILifecycleParticipant
     {
         public Task<string> GetAddress()
         {
@@ -200,6 +211,11 @@ namespace ChainSafe.Gaming.Wallets
         }
 
         public Task<string> SignMessage(string message)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> SignTransaction(TransactionRequest transaction)
         {
             throw new NotImplementedException();
         }

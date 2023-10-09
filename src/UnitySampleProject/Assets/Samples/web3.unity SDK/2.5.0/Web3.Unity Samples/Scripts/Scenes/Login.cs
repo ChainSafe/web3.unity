@@ -7,6 +7,7 @@ using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Wallets;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
+using ChainSafe.Gaming.Web3.Evm.JsonRpc;
 using ChainSafe.Gaming.Web3.Evm.JsonRpc.Providers;
 using ChainSafe.Gaming.Web3.Unity;
 using ChainSafe.GamingSdk.Gelato;
@@ -122,6 +123,8 @@ namespace Scenes
                     {
                         services.UseWebGLWallet();
                     }
+
+                    services.UseJsonRpcTransactionExecutor();
                 });
 
             await ProcessLogin(web3Builder);
@@ -155,6 +158,7 @@ namespace Scenes
                         LoginParams = new() { loginProvider = provider }
                     };
                     services.UseWeb3AuthWallet(web3AuthConfig);
+                    services.UseJsonRpcTransactionExecutor();
                 });
             await ProcessLogin(web3Builder);
         }

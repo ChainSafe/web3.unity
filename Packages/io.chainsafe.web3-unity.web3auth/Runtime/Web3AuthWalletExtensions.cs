@@ -19,9 +19,7 @@ public static class Web3AuthWalletExtensions
     public static IWeb3ServiceCollection UseWeb3AuthWallet(this IWeb3ServiceCollection collection)
     {
         collection.AssertServiceNotBound<ISigner>();
-        collection.AssertServiceNotBound<ITransactionExecutor>();
-
-        collection.AddSingleton<ISigner, ITransactionExecutor, ILifecycleParticipant, Web3AuthWallet>();
+        collection.AddSingleton<ISigner, ILifecycleParticipant, Web3AuthWallet>();
 
         return collection;
     }

@@ -1,8 +1,11 @@
 using System.Threading.Tasks;
+using System.Transactions;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
+using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
+using NBitcoin;
 using Nethereum.ABI.EIP712;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Signer.EIP712;
@@ -53,6 +56,11 @@ namespace ChainSafe.Gaming.Web3.Evm.JsonRpc
         public async Task<string> SignMessage(string message)
         {
             return await SignMessageImpl(message.ToHexUTF8());
+        }
+
+        public async Task<string> SignTransaction(TransactionRequest tx)
+        {
+            return await provider.Perform<string>("eth_signTransaction", tx.ToRPCParam());
         }
 
         private async Task<string> SignMessageImpl(string hexMessage)
