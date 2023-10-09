@@ -67,8 +67,8 @@ namespace ChainSafe.Gaming.Web3.Build
             serviceCollection.AddSingleton(chainConfig);
         }
 
-        public Web3Builder(ICompleteProjectConfig projectConfig)
-            : this(projectConfig, projectConfig)
+        public Web3Builder(ICompleteProjectConfig projectConfig, bool withMultiCall)
+            : this(projectConfig, projectConfig, withMultiCall)
         {
         }
 
