@@ -31,8 +31,7 @@ namespace ChainSafe.Gaming.MultiCall
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
         public static IWeb3ServiceCollection UseMultiCall(this IWeb3ServiceCollection collection)
         {
-            collection.AssertServiceNotBound<ISigner>();
-            collection.AssertServiceNotBound<ITransactionExecutor>();
+            collection.AssertServiceNotBound<IMultiCall>();
 
             // config
             collection.TryAddSingleton(DefaultConfig);

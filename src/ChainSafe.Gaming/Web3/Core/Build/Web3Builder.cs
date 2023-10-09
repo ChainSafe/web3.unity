@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm;
 using ChainSafe.Gaming.Evm.Contracts;
+using ChainSafe.Gaming.MultiCall;
 using ChainSafe.Gaming.Web3.Environment;
 using ChainSafe.Gaming.Web3.Evm.EventPoller;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,9 +27,31 @@ namespace ChainSafe.Gaming.Web3.Build
                 .AddSingleton<IContractBuilder, ContractBuilder>();
         }
 
+        public Web3Builder(bool withMultiCall)
+        {
+            serviceCollection = new Web3ServiceCollection();
+            if (withMultiCall)
+            {
+                // Bind default services
+                serviceCollection
+                    .UseEventPoller()
+                    .AddSingleton<ChainRegistryProvider>()
+                    .AddSingleton<IContractBuilder, ContractBuilder>()
+                    .AddSingleton<IMultiCall, MultiCall.MultiCall>();
+            }
+            else
+            {
+                // Bind default services
+                serviceCollection
+                    .UseEventPoller()
+                    .AddSingleton<ChainRegistryProvider>()
+                    .AddSingleton<IContractBuilder, ContractBuilder>();
+            }
+        }
+
         // TODO: inline parameterless constructor into this one (therefore remove that overload)
-        public Web3Builder(IProjectConfig projectConfig, IChainConfig chainConfig)
-            : this()
+        public Web3Builder(IProjectConfig projectConfig, IChainConfig chainConfig, bool withMultiCall = false)
+            : this(withMultiCall)
         {
             if (projectConfig == null)
             {
