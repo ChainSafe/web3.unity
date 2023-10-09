@@ -1607,7 +1607,6 @@ MonoBehaviour:
   _copyToClipboardButton: {fileID: 212403314}
   _backButton: {fileID: 1993078182}
   _container: {fileID: 1278821651}
-  _login: {fileID: 0}
 --- !u!1001 &452118933
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1895,8 +1894,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 293.8618, y: -25}
-  m_SizeDelta: {x: 587.7236, y: 50}
+  m_AnchoredPosition: {x: 295, y: -190}
+  m_SizeDelta: {x: 590, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &540464235
 MonoBehaviour:
@@ -2946,8 +2945,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 293.8618, y: -135}
-  m_SizeDelta: {x: 587.7236, y: 50}
+  m_AnchoredPosition: {x: 295, y: -135}
+  m_SizeDelta: {x: 590, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &981405683
 MonoBehaviour:
@@ -5020,7 +5019,7 @@ RectTransform:
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -50, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &2036998555
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -17,17 +17,13 @@ namespace ChainSafe.Gaming.Unity
                     return Platform.Editor;
                 }
 
-                switch (Application.platform)
+                return Application.platform switch
                 {
-                    case RuntimePlatform.IPhonePlayer:
-                        return Platform.IOS;
-                    case RuntimePlatform.Android:
-                        return Platform.Android;
-                    case RuntimePlatform.WebGLPlayer:
-                        return Platform.WebGL;
-                    default:
-                        return Platform.Desktop;
-                }
+                    RuntimePlatform.IPhonePlayer => Platform.IOS,
+                    RuntimePlatform.Android => Platform.Android,
+                    RuntimePlatform.WebGLPlayer => Platform.WebGL,
+                    _ => Platform.Desktop,
+                };
             }
         }
 

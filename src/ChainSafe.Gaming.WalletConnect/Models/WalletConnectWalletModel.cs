@@ -24,47 +24,48 @@ namespace ChainSafe.Gaming.WalletConnect.Models
         {
             string uri = string.Empty;
 
-            if (operatingSystemMediator.IsMobilePlatform)
+            switch (operatingSystemMediator.Platform)
             {
-                switch (operatingSystemMediator.Platform)
-                {
-                    case Platform.Android:
-                        uri = data.Uri; // Android OS should handle wc: protocol
-                        break;
+                case Platform.Android:
+                    uri = data.Uri; // Android OS should handle wc: protocol
+                    break;
 
-                    case Platform.IOS:
-                        // on iOS, we need to use one of the wallet links
-                        WalletLinkModel linkData = operatingSystemMediator.IsMobilePlatform ? Mobile : Desktop;
+                case Platform.IOS:
+                    // on iOS, we need to use one of the wallet links
+                    WalletLinkModel linkData = operatingSystemMediator.IsMobilePlatform ? Mobile : Desktop;
 
-                        var universalUrl = useNative ? linkData.NativeProtocol : linkData.UniversalUrl;
+                    var universalUrl = useNative ? linkData.NativeProtocol : linkData.UniversalUrl;
 
+                    uri = data.Uri;
+
+                    if (!string.IsNullOrWhiteSpace(universalUrl))
+                    {
                         uri = data.Uri;
 
-                        if (!string.IsNullOrWhiteSpace(universalUrl))
+                        if (useNative)
                         {
-                            uri = data.Uri;
-
-                            if (useNative)
-                            {
-                                uri = $"{universalUrl}//{uri}";
-                            }
-                            else if (universalUrl.EndsWith("/"))
-                            {
-                                uri = $"{universalUrl}{uri}";
-                            }
-                            else
-                            {
-                                uri = $"{universalUrl}/{uri}";
-                            }
+                            uri = $"{universalUrl}//{uri}";
                         }
-
-                        if (string.IsNullOrWhiteSpace(uri))
+                        else if (universalUrl.EndsWith("/"))
                         {
-                            throw new Exception("Got empty URI when attempting to create WC deeplink");
+                            uri = $"{universalUrl}{uri}";
                         }
+                        else
+                        {
+                            uri = $"{universalUrl}/{uri}";
+                        }
+                    }
 
-                        break;
-                }
+                    if (string.IsNullOrWhiteSpace(uri))
+                    {
+                        throw new Exception("Got empty URI when attempting to create WC deeplink");
+                    }
+
+                    break;
+
+                default:
+                    WCLogger.LogError($"{operatingSystemMediator.Platform} Platform doesn't support deeplink");
+                    break;
             }
 
             WCLogger.Log($"Opening URL {uri}");
