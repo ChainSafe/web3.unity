@@ -28,6 +28,11 @@ namespace ChainSafe.Gaming.WalletConnect
 
         public async Task<TransactionResponse> SendTransaction(TransactionRequest transaction)
         {
+            if (WalletConnectSigner.Testing)
+            {
+                return await provider.GetTransaction(WalletConnectSigner.TestResponse);
+            }
+
             if (string.IsNullOrEmpty(transaction.From))
             {
                 transaction.From = await signer.GetAddress();

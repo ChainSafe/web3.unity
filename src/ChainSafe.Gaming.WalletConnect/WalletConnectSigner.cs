@@ -318,7 +318,7 @@ namespace ChainSafe.Gaming.WalletConnect
         }
 
         /// <summary>
-        /// Connect to wallet
+        /// Connect to wallet.
         /// </summary>
         /// <returns>address of connected wallet.</returns>
         private async Task<string> ConnectToWallet()

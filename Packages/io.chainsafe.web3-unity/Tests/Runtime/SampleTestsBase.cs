@@ -38,6 +38,7 @@ public class SampleTestsBase
             services.UseRpcProvider();
 
             services.UseWalletConnectSigner(new WalletConnectConfig { SavedUserAddress = "0x55ffe9E30347266f02b9BdAe20aD3a86493289ea" });
+            services.UseWalletConnectTransactionExecutor();
 
             //add any contracts we would want to use
             services.ConfigureRegisteredContracts(contracts =>
