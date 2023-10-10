@@ -16,13 +16,13 @@ namespace ChainSafe.Gaming.WalletConnect.Models
         [JsonProperty("gasPrice", NullValueHandling = NullValueHandling.Ignore)]
         public string GasPrice { get; set; }
 
-        [JsonProperty("value")]
+        [JsonProperty("value", NullValueHandling = NullValueHandling.Ignore)]
         public string Value { get; set; }
 
-        [JsonProperty("data", NullValueHandling = NullValueHandling.Ignore)]
-        public string Data { get; set; } = "0x";
+        [JsonProperty("data")]
+        public string Data { get; set; }
 
-        [JsonProperty(PropertyName = "nonce")]
+        [JsonProperty("nonce", NullValueHandling = NullValueHandling.Ignore)]
         public string Nonce { get; set; }
     }
 }

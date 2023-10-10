@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Signers;
+using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.WalletConnect.Methods;
 using ChainSafe.Gaming.WalletConnect.Models;
 using ChainSafe.Gaming.Web3;
@@ -238,6 +239,37 @@ namespace ChainSafe.Gaming.WalletConnect
             }
 
             return SignClient.Request<T, TR>(topic, data, chainId, expiry);
+        }
+
+        public async Task<string> SignTransaction(TransactionRequest transaction)
+        {
+            if (config.Testing)
+            {
+                return config.TestResponse;
+            }
+
+            if (string.IsNullOrEmpty(transaction.From))
+            {
+                transaction.From = await GetAddress();
+            }
+
+            EthSignTransaction requestData = new EthSignTransaction(new TransactionModel
+            {
+                From = transaction.From,
+                To = transaction.To,
+                Gas = transaction.GasLimit?.HexValue,
+                GasPrice = transaction.GasPrice?.HexValue,
+                Value = transaction.Value?.HexValue,
+                Data = transaction.Data ?? "0x",
+                Nonce = transaction.Nonce?.HexValue,
+            });
+
+            string hash = await Request<EthSignTransaction, string>(requestData);
+
+            // TODO replace validation with regex
+            WCLogger.Log($"Transaction executed with hash {hash}");
+
+            return hash;
         }
 
         public async Task<string> SignMessage(string message)

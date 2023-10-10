@@ -49,7 +49,7 @@ namespace ChainSafe.Gaming.WalletConnect
                 Gas = transaction.GasLimit?.HexValue,
                 GasPrice = transaction.GasPrice?.HexValue,
                 Value = transaction.Value?.HexValue,
-                Data = transaction.Data,
+                Data = transaction.Data ?? "0x",
                 Nonce = transaction.Nonce?.HexValue,
             });
 
