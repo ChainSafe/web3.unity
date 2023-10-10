@@ -12,7 +12,9 @@ using UnityEngine.TestTools;
 
 public class SampleTestsBase
 {
-    protected Web3 Web3Result;
+    protected Web3 web3Result;
+    
+    protected WalletConnectConfig config;
 
     [UnitySetUp]
     public virtual IEnumerator Setup()
@@ -20,9 +22,6 @@ public class SampleTestsBase
         // wait for some time to initialize
         yield return new WaitForSeconds(5f);
 
-        // set wallet to testing
-        WalletConnectSigner.Testing = true;
-        
         // For whatever reason, in github this won't load
         var projectConfigScriptableObject = ProjectConfigUtilities.Load();
         if (projectConfigScriptableObject == null)
@@ -37,7 +36,14 @@ public class SampleTestsBase
             services.UseGelato("_UzPz_Yk_WTjWMfcl45fLvQNGQ9ISx5ZE8TnwnVKYrE_");
             services.UseRpcProvider();
 
-            services.UseWalletConnectSigner(new WalletConnectConfig { SavedUserAddress = "0x55ffe9E30347266f02b9BdAe20aD3a86493289ea" });
+            config = new WalletConnectConfig
+            {
+                SavedUserAddress = "0x55ffe9E30347266f02b9BdAe20aD3a86493289ea",
+                // set wallet to testing
+                Testing = true,
+            };
+            
+            services.UseWalletConnectSigner(config);
             services.UseWalletConnectTransactionExecutor();
 
             //add any contracts we would want to use
@@ -53,13 +59,13 @@ public class SampleTestsBase
         //wait until for async task to finish
         yield return new WaitUntil(() => buildWeb3.IsCompleted);
 
-        Web3Result = buildWeb3.Result;
+        web3Result = buildWeb3.Result;
     }
 
     [UnityTearDown]
     public virtual IEnumerator TearDown()
     {
-        WalletConnectSigner.Testing = false;
+        config.Testing = false;
 
         yield return null;
     }

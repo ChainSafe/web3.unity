@@ -16,21 +16,25 @@ namespace ChainSafe.Gaming.WalletConnect
     {
         private readonly IRpcProvider provider;
 
-        private WalletConnectSigner signer;
+        private readonly WalletConnectSigner signer;
 
-        public WalletConnectTransactionExecutor(ISigner signer, IRpcProvider provider)
+        private readonly WalletConnectConfig config;
+
+        public WalletConnectTransactionExecutor(WalletConnectConfig config, ISigner signer, IRpcProvider provider)
         {
             this.signer = signer as WalletConnectSigner ??
                           throw new Web3Exception($"{nameof(WalletConnectTransactionExecutor)} only supports {nameof(WalletConnectSigner)}");
 
             this.provider = provider;
+
+            this.config = config;
         }
 
         public async Task<TransactionResponse> SendTransaction(TransactionRequest transaction)
         {
-            if (WalletConnectSigner.Testing)
+            if (config.Testing)
             {
-                return await provider.GetTransaction(WalletConnectSigner.TestResponse);
+                return await provider.GetTransaction(config.TestResponse);
             }
 
             if (string.IsNullOrEmpty(transaction.From))

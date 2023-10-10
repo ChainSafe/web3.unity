@@ -24,76 +24,48 @@ namespace ChainSafe.Gaming.WalletConnect
 {
     public class WalletConnectSigner : ISigner, ILifecycleParticipant
     {
-        private readonly WalletConnectConfig configuration;
         private readonly IOperatingSystemMediator operatingSystem;
         private readonly ILogWriter logWriter;
+        private readonly WalletConnectConfig config;
 
-        public WalletConnectSigner(WalletConnectConfig configuration, IOperatingSystemMediator operatingSystem, ILogWriter logWriter)
+        public WalletConnectSigner(WalletConnectConfig config, IOperatingSystemMediator operatingSystem, ILogWriter logWriter)
         {
             this.operatingSystem = operatingSystem;
-            this.configuration = configuration;
+            this.config = config;
             this.logWriter = logWriter;
         }
-
-        public delegate string ConnectMessageBuildDelegate(DateTime expirationTime);
-
-        public delegate void Connected(ConnectedData connectedData);
-
-        public delegate void SessionApproved(SessionStruct session);
-
-        public static event Connected OnConnected;
-
-        public static event SessionApproved OnSessionApproved;
-
-        public static bool Testing { get; set; } = false;
-
-        public static string TestResponse { get; set; } = string.Empty;
 
         // static to not destroy client session on logout/TerminateAsync, just disconnect instead
         public static WalletConnectSignClient SignClient { get; private set; }
 
         public WalletConnectCore Core { get; private set; }
 
-        public SessionStruct Session => SignClient.Session.Get(SignClient.Session.Keys[0]);
-
-        public WalletConnectConfig Config { get; private set; }
+        public SessionStruct Session { get; private set; }
 
         public ConnectedData ConnectedData { get; private set; }
 
         public string Address { get; private set; }
 
-        private static void InvokeConnected(ConnectedData connectedData)
-        {
-            OnConnected?.Invoke(connectedData);
-        }
-
-        private static void InvokeSessionApproved(SessionStruct session)
-        {
-            OnSessionApproved?.Invoke(session);
-        }
-
         public async ValueTask WillStartAsync()
         {
-            configuration.SavedUserAddress?.AssertIsPublicAddress(nameof(configuration.SavedUserAddress));
+            config.SavedUserAddress?.AssertIsPublicAddress(nameof(config.SavedUserAddress));
 
             // if testing just don't initialize wallet connect
-            if (Testing)
+            if (config.Testing)
             {
-                Address = configuration.SavedUserAddress;
+                Address = config.SavedUserAddress;
 
                 return;
             }
 
             // Wallet Connect
-            await Initialize(configuration);
+            await Initialize();
 
-            Address = configuration.SavedUserAddress ?? await ConnectToWallet();
+            Address = config.SavedUserAddress ?? await ConnectToWallet();
         }
 
-        private async Task Initialize(WalletConnectConfig config)
+        private async Task Initialize()
         {
-            Config = config;
-
             if (SignClient != null)
             {
                 Core = (WalletConnectCore)SignClient.Core;
@@ -110,21 +82,21 @@ namespace ChainSafe.Gaming.WalletConnect
 
             Core = new WalletConnectCore(new CoreOptions()
             {
-                Name = Config.ProjectName,
-                ProjectId = Config.ProjectId,
+                Name = config.ProjectName,
+                ProjectId = config.ProjectId,
                 Storage = new InMemoryStorage(),
-                BaseContext = Config.BaseContext,
+                BaseContext = config.BaseContext,
             });
 
             await Core.Start();
 
             SignClient = await WalletConnectSignClient.Init(new SignClientOptions()
             {
-                BaseContext = Config.BaseContext,
+                BaseContext = config.BaseContext,
                 Core = Core,
-                Metadata = Config.Metadata,
-                Name = Config.ProjectName,
-                ProjectId = Config.ProjectId,
+                Metadata = config.Metadata,
+                Name = config.ProjectName,
+                ProjectId = config.ProjectId,
                 Storage = Core.Storage,
             });
         }
@@ -146,7 +118,7 @@ namespace ChainSafe.Gaming.WalletConnect
                 {
                     Chains = new string[]
                     {
-                        Config.Chain.FullChainId,
+                        config.Chain.FullChainId,
                     },
                     Events = events,
                     Methods = methods,
@@ -158,14 +130,14 @@ namespace ChainSafe.Gaming.WalletConnect
                 RequiredNamespaces = requiredNamespaces,
             });
 
-            InvokeConnected(connectData);
+            config.InvokeConnected(connectData);
 
             // open deeplink to redirect to wallet for connection
-            if (Config.RedirectToWallet)
+            if (config.RedirectToWallet)
             {
-                if (Config.DefaultWallet != null)
+                if (config.DefaultWallet != null)
                 {
-                    Config.DefaultWallet.OpenDeeplink(connectData, operatingSystem);
+                    config.DefaultWallet.OpenDeeplink(connectData, operatingSystem);
                 }
                 else
                 {
@@ -173,14 +145,14 @@ namespace ChainSafe.Gaming.WalletConnect
                 }
             }
 
-            SessionStruct sessionResult = await connectData.Approval;
+            Session = await connectData.Approval;
 
-            InvokeSessionApproved(sessionResult);
+            config.InvokeSessionApproved(Session);
 
             // get default wallet
-            if (Config.RedirectToWallet && Config.DefaultWallet == null)
+            if (config.RedirectToWallet && config.DefaultWallet == null)
             {
-                string nativeUrl = sessionResult.Peer.Metadata.Redirect.Native.Replace("//", string.Empty);
+                string nativeUrl = Session.Peer.Metadata.Redirect.Native.Replace("//", string.Empty);
 
                 int index = nativeUrl.IndexOf(':');
 
@@ -191,12 +163,12 @@ namespace ChainSafe.Gaming.WalletConnect
 
                 WCLogger.Log($"Wallet Native Url {nativeUrl}");
 
-                var defaultWallet = Config.SupportedWallets.Values.FirstOrDefault(w =>
+                var defaultWallet = config.SupportedWallets.Values.FirstOrDefault(w =>
                     w.Mobile.NativeProtocol == nativeUrl || w.Desktop.NativeProtocol == nativeUrl);
 
                 if (defaultWallet != null)
                 {
-                    Config.DefaultWallet = defaultWallet;
+                    config.DefaultWallet = defaultWallet;
 
                     WCLogger.Log("Default Wallet Set");
                 }
@@ -230,6 +202,7 @@ namespace ChainSafe.Gaming.WalletConnect
             }
 
             Address.AssertNotNull(nameof(Address));
+
             return Task.FromResult(Address!);
         }
 
@@ -251,11 +224,11 @@ namespace ChainSafe.Gaming.WalletConnect
                     (_, _) =>
                     {
                         // if default wallet exists and redirect is true redirect user to default wallet
-                        if (Config.RedirectToWallet && Config.DefaultWallet != null)
+                        if (config.RedirectToWallet && config.DefaultWallet != null)
                         {
                             WCLogger.Log("Opening Default Wallet...");
 
-                            Config.DefaultWallet.OpenWallet(operatingSystem);
+                            config.DefaultWallet.OpenWallet(operatingSystem);
                         }
                         else
                         {
@@ -269,9 +242,9 @@ namespace ChainSafe.Gaming.WalletConnect
 
         public async Task<string> SignMessage(string message)
         {
-            if (Testing)
+            if (config.Testing)
             {
-                return TestResponse;
+                return config.TestResponse;
             }
 
             var requestData = new EthSignMessage(message, Address);
@@ -317,10 +290,7 @@ namespace ChainSafe.Gaming.WalletConnect
             return hash;
         }
 
-        /// <summary>
-        /// Connect to wallet.
-        /// </summary>
-        /// <returns>address of connected wallet.</returns>
+        // Connect to wallet and return address of connected wallet.
         private async Task<string> ConnectToWallet()
         {
             ConnectedData = await ConnectClient();
@@ -351,7 +321,7 @@ namespace ChainSafe.Gaming.WalletConnect
         {
             try
             {
-                configuration.SavedUserAddress = null;
+                config.SavedUserAddress = null;
 
                 await SignClient.Disconnect(Session.Topic, Error.FromErrorType(ErrorType.USER_DISCONNECTED));
             }
