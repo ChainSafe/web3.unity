@@ -56,12 +56,16 @@ namespace Scenes
         public ErrorPopup ErrorPopup;
         public List<Web3AuthButtonAndProvider> Web3AuthButtons;
         
-        private bool useWebPageWallet;
+        private bool useWalletConnect;
 
         private bool redirectToWallet;
         
+        private Dictionary<string, WalletConnectWalletModel> supportedWallets;
+        
         #region Wallet Connect
 
+        private WalletConnectConfig walletConnectConfig;
+        
         [field: Header("Wallet Connect")]
 
         [SerializeField] private TMP_Dropdown supportedWalletsDropdown;
@@ -94,10 +98,10 @@ namespace Scenes
             Assert.IsNotNull(ExistingWalletButton);
             Assert.IsNotNull(RememberMeToggle);
 
-            useWebPageWallet = Application.platform != RuntimePlatform.WebGLPlayer;
+            useWalletConnect = Application.platform != RuntimePlatform.WebGLPlayer;
 
             // Remember me only works with the WebPageWallet
-            RememberMeToggle.gameObject.SetActive(useWebPageWallet);
+            RememberMeToggle.gameObject.SetActive(useWalletConnect);
             
             // Wallet Connect
             yield return FetchSupportedWallets();
@@ -121,17 +125,16 @@ namespace Scenes
                 var provider = buttonAndProvider.Provider;
                 button.onClick.AddListener(() => LoginWithWeb3Auth(provider));
             }
-            
-            WalletConnectSigner.OnConnected += WalletConnected;
-
-            WalletConnectSigner.OnSessionApproved += SessionApproved;
         }
 
         private void OnDestroy()
         {
-            WalletConnectSigner.OnConnected -= WalletConnected;
+            if (walletConnectConfig != null)
+            {
+                walletConnectConfig.OnConnected -= WalletConnected;
 
-            WalletConnectSigner.OnSessionApproved -= SessionApproved;
+                walletConnectConfig.OnSessionApproved -= SessionApproved;
+            }
         }
 
         private void WalletConnected(ConnectedData data)
@@ -175,14 +178,14 @@ namespace Scenes
                 "Select Wallet",    
             };
 
-            supportedWalletsList.AddRange(_supportedWallets.Values.Select(w => w.Name));
+            supportedWalletsList.AddRange(supportedWallets.Values.Select(w => w.Name));
             
             supportedWalletsDropdown.AddOptions(supportedWalletsList);
         }
         
         private async void TryAutoLogin()
         {
-            if (!useWebPageWallet)
+            if (!useWalletConnect)
                 return;
 
             var savedAccount = PlayerPrefs.GetString(PlayerAccountKey);
@@ -204,7 +207,7 @@ namespace Scenes
         {
 #if UNITY_IOS
             // can't redirect to wallet on IOS if there's no selected wallet
-            if (_redirectToWalletToggle.isOn && _supportedWalletsDropdown.value == 0)
+            if (redirectToWalletToggle.isOn && supportedWalletsDropdown.value == 0)
             {
                 // feedback
                 Debug.LogError("Please select a Wallet first");
@@ -222,7 +225,7 @@ namespace Scenes
                      * inside WebGL, so the choice can be automated here
                      * by looking at the platform we're running on.
                      */
-                    if (useWebPageWallet)
+                    if (useWalletConnect)
                     {
                         services.UseWalletConnectSigner(BuildWalletConnectConfig()).UseWalletConnectTransactionExecutor();
                     }
@@ -234,7 +237,7 @@ namespace Scenes
 
             await ProcessLogin(web3Builder);
 
-            if (useWebPageWallet && RememberMeToggle.isOn)
+            if (useWalletConnect && RememberMeToggle.isOn)
             {
                 PlayerPrefs.SetString(PlayerAccountKey, await Web3Accessor.Web3.Signer.GetAddress());
             }
@@ -342,12 +345,8 @@ namespace Scenes
 
         #region Wallet Connect
 
-        private Dictionary<string, WalletConnectWalletModel> _supportedWallets;
-
         private WalletConnectConfig BuildWalletConnectConfig()
         {
-            WalletConnectWalletModel defaultWallet = null;
-            
             // build chain
             var projectConfig = ProjectConfigUtilities.Load();
 
@@ -357,15 +356,17 @@ namespace Scenes
             redirectToWallet = (Application.isMobilePlatform || Application.isEditor) && redirectToWalletToggle.isOn;
 
 #if UNITY_IOS
+            WalletConnectWalletModel defaultWallet = null;
+            
             // make sure there's a selected wallet on IOS
-            _redirectToWallet = _redirectToWallet && _supportedWalletsDropdown.value != 0;
+            redirectToWallet = redirectToWallet && supportedWalletsDropdown.value != 0;
 
-            if (_redirectToWallet)
+            if (redirectToWallet)
             {
                 // offset for the first/default/unselected dropdown option 0
-                int selectedWalletIndex = _supportedWalletsDropdown.value - 1;
+                int selectedWalletIndex = supportedWalletsDropdown.value - 1;
 
-                defaultWallet = _supportedWallets.Values.ToArray()[selectedWalletIndex];
+                defaultWallet = supportedWallets.Values.ToArray()[selectedWalletIndex];
             }
 #endif
             
@@ -376,12 +377,25 @@ namespace Scenes
                 BaseContext = BaseContext,
                 Chain = chain,
                 Metadata = Metadata,
-                SupportedWallets = _supportedWallets,
+                SupportedWallets = supportedWallets,
                 RedirectToWallet = redirectToWallet,
 #if UNITY_IOS
                 DefaultWallet = defaultWallet
 #endif
             };
+
+            if (walletConnectConfig != null)
+            {
+                walletConnectConfig.OnConnected -= WalletConnected;
+
+                walletConnectConfig.OnSessionApproved -= SessionApproved;
+            }
+            
+            walletConnectConfig = config;
+            
+            walletConnectConfig.OnConnected += WalletConnected;
+
+            walletConnectConfig.OnSessionApproved += SessionApproved;
             
             return config;
         }
@@ -404,10 +418,10 @@ namespace Scenes
                 {
                     var json = webRequest.downloadHandler.text;
 
-                    _supportedWallets = JsonConvert.DeserializeObject<Dictionary<string, WalletConnectWalletModel>>(json)
+                    supportedWallets = JsonConvert.DeserializeObject<Dictionary<string, WalletConnectWalletModel>>(json)
                         .ToDictionary(w => w.Key, w => (WalletConnectWalletModel) w.Value);
 
-                    Debug.Log($"Fetched {_supportedWallets.Count} Supported Wallets.");
+                    Debug.Log($"Fetched {supportedWallets.Count} Supported Wallets.");
                 }
             }
         }
