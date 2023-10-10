@@ -1,8 +1,5 @@
-﻿using ChainSafe.Gaming.Evm.Contracts;
-using ChainSafe.Gaming.Evm.Signers;
-using ChainSafe.Gaming.Web3.Build;
+﻿using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core;
-using ChainSafe.Gaming.Web3.Core.Evm;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -36,9 +33,7 @@ namespace ChainSafe.Gaming.MultiCall
             // config
             collection.TryAddSingleton(DefaultConfig);
 
-            // wallet
             collection.AddSingleton<ILifecycleParticipant, IMultiCall, MultiCall>();
-
             return collection;
         }
 

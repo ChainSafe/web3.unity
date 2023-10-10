@@ -90,7 +90,7 @@ namespace Scenes
             if (string.IsNullOrEmpty(savedAccount))
                 return;
 
-            var web3Builder = new Web3Builder((ProjectConfigScriptableObject)ProjectConfigUtilities.Load())
+            var web3Builder = new Web3Builder(ProjectConfigUtilities.Load())
                 .Configure(ConfigureCommonServices)
                 .Configure(services =>
                 {
@@ -106,7 +106,7 @@ namespace Scenes
 
         private async void LoginWithExistingAccount()
         {
-            var web3Builder = new Web3Builder(ProjectConfigUtilities.Load(), true)
+            var web3Builder = new Web3Builder(ProjectConfigUtilities.Load())
                 .Configure(ConfigureCommonServices)
                 .Configure(services =>
                 {
@@ -215,7 +215,7 @@ namespace Scenes
             services
                 .UseUnityEnvironment()
                 .UseGelato(GelatoApiKey)
-                //.UseMultiCall()
+                .UseMultiCall()
                 .UseRpcProvider();
 
             /* As many contracts as needed may be registered here.

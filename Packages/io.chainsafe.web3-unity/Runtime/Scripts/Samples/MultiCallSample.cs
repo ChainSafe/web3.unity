@@ -1,7 +1,9 @@
 ﻿using System.Threading.Tasks;
+using System.Collections.Generic;
 using ChainSafe.Gaming.MultiCall;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3;
+using Nethereum.ABI.FunctionEncoding;
 using Nethereum.Contracts.QueryHandlers.MultiCall;
 using Nethereum.Hex.HexConvertors.Extensions;
 using UnityEngine;
@@ -37,8 +39,16 @@ public class MultiCallSample
         };
         
         //Calldata to MultiCallRequest
+        // List<object> -> [0] => List<List<ParameterOutput>>
         var temp = await web3.MultiCall().MultiCallAsync(calls);
-        Debug.Log(temp);
+
+        // var decoded = erc20Contract.Decode(temp);
+        List<List<ParameterOutput>> callResult1 = temp[0][0];
+        // Debug.Log($"Result success: {callResult1[0].Result}");
+        // Debug.Log($"Balance success: {callResult1[1].Result}");
+        Debug.Log(callResult1);
+        // Debug.Log(callResult1[0]);
+        // Debug.Log(callResult1[0][1]);
     }
 
     private static class CommonMethod

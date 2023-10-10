@@ -16,31 +16,20 @@ namespace ChainSafe.Gaming.Web3.Build
     {
         private readonly Web3ServiceCollection serviceCollection;
 
-        private Web3Builder(bool withMultiCall = false)
+        public Web3Builder()
         {
             serviceCollection = new Web3ServiceCollection();
-            if (withMultiCall)
-            {
-                // Bind default services
-                serviceCollection
-                    .UseEventPoller()
-                    .AddSingleton<ChainRegistryProvider>()
-                    .AddSingleton<IContractBuilder, ContractBuilder>()
-                    .AddSingleton<IMultiCall, MultiCall.MultiCall>();
-            }
-            else
-            {
-                // Bind default services
-                serviceCollection
-                    .UseEventPoller()
-                    .AddSingleton<ChainRegistryProvider>()
-                    .AddSingleton<IContractBuilder, ContractBuilder>();
-            }
+
+            // Bind default services
+            serviceCollection
+                .UseEventPoller()
+                .AddSingleton<ChainRegistryProvider>()
+                .AddSingleton<IContractBuilder, ContractBuilder>();
         }
 
         // TODO: inline parameterless constructor into this one (therefore remove that overload)
-        public Web3Builder(IProjectConfig projectConfig, IChainConfig chainConfig, bool withMultiCall = false)
-            : this(withMultiCall)
+        public Web3Builder(IProjectConfig projectConfig, IChainConfig chainConfig)
+            : this()
         {
             if (projectConfig == null)
             {
@@ -56,8 +45,8 @@ namespace ChainSafe.Gaming.Web3.Build
             serviceCollection.AddSingleton(chainConfig);
         }
 
-        public Web3Builder(ICompleteProjectConfig projectConfig, bool withMultiCall = false)
-            : this(projectConfig, projectConfig, withMultiCall)
+        public Web3Builder(ICompleteProjectConfig projectConfig)
+            : this(projectConfig, projectConfig)
         {
         }
 

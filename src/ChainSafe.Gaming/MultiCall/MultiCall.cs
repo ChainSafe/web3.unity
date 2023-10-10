@@ -18,7 +18,7 @@ namespace ChainSafe.Gaming.MultiCall
         private const string DefaultDeploymentAddress = "0xcA11bde05977b3631167028862bE2a173976CA11";
         private readonly Contract multiCallContract;
 
-        public MultiCall(ContractBuilder builder, IChainConfig chainConfig, MultiCallConfig config)
+        public MultiCall(IContractBuilder builder, IChainConfig chainConfig, MultiCallConfig config)
         {
             if (chainConfig.ChainId != null && MultiCallDefaults.DeployedNetworks.Contains(chainConfig.ChainId))
             {
