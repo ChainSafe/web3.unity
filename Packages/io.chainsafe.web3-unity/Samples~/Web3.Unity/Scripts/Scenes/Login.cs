@@ -58,15 +58,17 @@ namespace Scenes
         
         private bool useWebPageWallet;
 
+        private bool redirectToWallet;
+        
         #region Wallet Connect
 
         [field: Header("Wallet Connect")]
 
-        [SerializeField] private TMP_Dropdown _supportedWalletsDropdown;
+        [SerializeField] private TMP_Dropdown supportedWalletsDropdown;
         
-        [SerializeField] private Toggle _redirectToWalletToggle;
+        [SerializeField] private Toggle redirectToWalletToggle;
         
-        [SerializeField] private WalletConnectModal _walletConnectModal;
+        [SerializeField] private WalletConnectModal walletConnectModal;
         
         [field: SerializeField] public string ProjectId { get; private set; }
         
@@ -81,8 +83,6 @@ namespace Scenes
             Description = "web3.unity is an open-source gaming SDK written in C# and developed by ChainSafe Gaming. It connects games built in the Unity game engine to the blockchain. The library currently supports games built for web browsers (WebGL), iOS/Android mobile, and desktop. web3.unity is compatible with most EVM-based chains such as Ethereum, Polygon, Moonbeam, Cronos, Nervos, and Binance Smart Chain, letting developers easily choose and switch between them to create the best in-game experience.",
             Url = "https://chainsafe.io/"
         };
-
-        private bool _redirectToWallet;
         
         #endregion
 
@@ -137,13 +137,13 @@ namespace Scenes
         private void WalletConnected(ConnectedData data)
         {
             // already redirecting to wallet
-            if (_redirectToWallet)
+            if (redirectToWallet)
             {
                 return;
             }
             
             // display QR and copy to clipboard
-            _walletConnectModal.WalletConnected(data);
+            walletConnectModal.WalletConnected(data);
         }
         
         private void SessionApproved(SessionStruct session)
@@ -154,7 +154,7 @@ namespace Scenes
         // redirect to mobile wallet and select default wallet on IOS
         private void InitializeMobileOptions()
         {
-            _redirectToWalletToggle.gameObject.SetActive(true);
+            redirectToWalletToggle.gameObject.SetActive(true);
 #if UNITY_IOS
             InitializeWalletDropdown();
 #endif
@@ -163,9 +163,9 @@ namespace Scenes
         // add all supported wallets
         private void InitializeWalletDropdown()
         {
-            _redirectToWalletToggle.onValueChanged.AddListener(isOn =>
+            redirectToWalletToggle.onValueChanged.AddListener(isOn =>
             {
-                _supportedWalletsDropdown.gameObject.SetActive(isOn);
+                supportedWalletsDropdown.gameObject.SetActive(isOn);
             });
             
             // first element is a no select
@@ -177,7 +177,7 @@ namespace Scenes
 
             supportedWalletsList.AddRange(_supportedWallets.Values.Select(w => w.Name));
             
-            _supportedWalletsDropdown.AddOptions(supportedWalletsList);
+            supportedWalletsDropdown.AddOptions(supportedWalletsList);
         }
         
         private async void TryAutoLogin()
@@ -354,7 +354,7 @@ namespace Scenes
             ChainModel chain = new ChainModel(ChainModel.EvmNamespace, projectConfig.ChainId, projectConfig.Network);
 
             // allow redirection on editor for testing UI flow
-            _redirectToWallet = (Application.isMobilePlatform || Application.isEditor) && _redirectToWalletToggle.isOn;
+            redirectToWallet = (Application.isMobilePlatform || Application.isEditor) && redirectToWalletToggle.isOn;
 
 #if UNITY_IOS
             // make sure there's a selected wallet on IOS
@@ -377,7 +377,7 @@ namespace Scenes
                 Chain = chain,
                 Metadata = Metadata,
                 SupportedWallets = _supportedWallets,
-                RedirectToWallet = _redirectToWallet,
+                RedirectToWallet = redirectToWallet,
 #if UNITY_IOS
                 DefaultWallet = defaultWallet
 #endif
