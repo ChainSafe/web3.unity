@@ -1,4 +1,8 @@
 #nullable enable
+using System;
+using System.Runtime.InteropServices;
+using AOT;
+
 namespace ChainSafe.Gaming.Exchangers.Ramp
 {
     #if UNITY_IOS
