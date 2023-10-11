@@ -93,7 +93,28 @@ namespace Ramp
             string status, 
             string updatedAt)
         {
-            Debug.Log($"Buy order posted: {fiatValue} {fiatCurrency} -> {assetName} {cryptoAmount}");
+            Debug.Log(
+                "double appliedFee is " + appliedFee + "\n" +
+            "string? assetAddress is " + assetAddress + "\n" +
+            "int assetDecimals is " + assetDecimals + "\n" +
+            "string assetName is " + assetName + "\n" +
+            "string assetSymbol is " + assetSymbol + "\n" +
+            "string assetType is " + assetType + "\n" +
+            "double assetExchangeRate is " + assetExchangeRate + "\n" +
+            "double baseRampFee is " + baseRampFee + "\n" +
+            "string createdAt is " + createdAt + "\n" +
+            "string cryptoAmount is " + cryptoAmount + "\n" +
+            "string? endTime is " + endTime + "\n" +
+            "string fiatCurrency is " + fiatCurrency + "\n" +
+            "double fiatValue is " + fiatValue + "\n" +
+            "string? finalTxHash is " + finalTxHash + "\n" +
+            "string id is " + id + "\n" +
+            "double networkFee is " + networkFee + "\n" +
+            "string paymentMethodType is " + paymentMethodType + "\n" +
+            "string receiverAddress is " + receiverAddress + "\n" +
+            "string status is " + status + "\n" +
+            "string updatedAt is " + updatedAt
+                );
         }
 
         [MonoPInvokeCallback(typeof(Action))]

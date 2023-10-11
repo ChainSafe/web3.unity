@@ -1,31 +1,20 @@
 var RampLib = {
     $RampLib: {},
 
-    testRamp__deps: ['invokeOnPurchase'],
-    testRamp__deps: ['invokeOnSale'],
     testRamp__deps: ['toCSharpStringBuffer'],
 
-    setOnRampPurchaseCallback: function (tableIndexOffset){
+    // todo namespace is shared between all .jslibs
+    // make all names unique
+    CS_RAMP_setOnRampPurchaseCallback: function (tableIndexOffset){
         RampLib.purchaseCallback = tableIndexOffset;
     },
 
-    invokeOnPurchase: function (appliedFee, assetAddress, assetDecimals, assetName, assetSymbol, assetType, 
-                                assetExchangeRate, baseRampFee, createdAt, cryptoAmount, endTime, fiatCurrency, 
-                                fiatValue, finalTxHash, id, networkFee, paymentMethodType, receiverAddress, status, 
-                                updatedAt) {
-        Module.dynCall_vdiiiiiddiiiidiidiiii(RampLib.purchaseCallback, appliedFee, assetAddress, assetDecimals, 
-            assetName, assetSymbol, assetType, assetExchangeRate, baseRampFee, createdAt, cryptoAmount, endTime, 
-            fiatValue, finalTxHash, id, networkFee, paymentMethodType, receiverAddress, status, updatedAt);
-    },
-
+    // Module.dynCall_v(RampLib.sellCallback);
     setOffRampSaleCallback: function (tableIndexOffset){
         RampLib.sellCallback = tableIndexOffset;
     },
 
-    invokeOnSale: function () {
-        Module.dynCall_v(RampLib.sellCallback);
-    },
-
+    // todo assign ramp instance id
     injectRamp: function () {
         const scriptUrl = "https://cdn.jsdelivr.net/npm/@ramp-network/ramp-instant-sdk@2.5.0/dist/ramp-instant-sdk.umd.js";
         const script = document.createElement("script");
@@ -43,14 +32,16 @@ var RampLib = {
             hostApiKey: apiKeyString,
             url: 'https://app.demo.ramp.network',
         });
-        var invokeOnPurchase = _invokeOnPurchase;
-        console.log('showing ')
         sdkInstance
             .on('PURCHASE_CREATED', (event) => {
                 // todo use event.payload.purchase
                 var purchase = event.payload.purchase;
-                invokeOnPurchase(
-                    _toCSharpStringBuffer(purchase.asset.address), // todo: to C# string
+                
+                // call callback
+                Module.dynCall_vdiiiiiddiiiidiidiiii(
+                    RampLib.purchaseCallback,
+                    purchase.appliedFee,
+                    _toCSharpStringBuffer(purchase.asset.address),
                     purchase.asset.decimals,
                     _toCSharpStringBuffer(purchase.asset.name),
                     _toCSharpStringBuffer(purchase.asset.symbol),
@@ -80,6 +71,7 @@ var RampLib = {
             .show();
     },
     
+    // todo try stringToNewUTF8()
     toCSharpStringBuffer: function(jsString) {
         if (jsString == null){
             return null;
