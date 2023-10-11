@@ -1,4 +1,4 @@
-namespace ChainSafe.Gaming.Exchangers
+namespace ChainSafe.Gaming.Exchangers.Ramp
 {
     public struct OnRampPurchaseData
     {

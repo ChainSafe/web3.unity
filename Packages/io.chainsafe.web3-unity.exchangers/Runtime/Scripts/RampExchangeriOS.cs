@@ -1,11 +1,5 @@
 #nullable enable
-using System;
-using System.Runtime.InteropServices;
-using AOT;
-
-
-
-namespace ChainSafe.Gaming.Exchangers
+namespace ChainSafe.Gaming.Exchangers.Ramp
 {
     #if UNITY_IOS
     public class RampExchangeriOS : RampExchanger

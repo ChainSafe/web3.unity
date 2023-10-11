@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ChainSafe.Gaming.Exchangers
+namespace ChainSafe.Gaming.Exchangers.Ramp
 {
     [CreateAssetMenu(fileName = "Ramp Data", menuName = "Create Ramp Data Container")]
     public class RampData : ScriptableObject

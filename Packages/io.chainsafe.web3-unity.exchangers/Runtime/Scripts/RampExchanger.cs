@@ -1,11 +1,10 @@
 #nullable enable
 using System;
 
-namespace ChainSafe.Gaming.Exchangers
+namespace ChainSafe.Gaming.Exchangers.Ramp
 {
     public abstract class RampExchanger
     {
-        
         protected readonly RampData _rampData;
         
         //It is very difficult to create a struct that matches 1:1 from swift/obj-c to C#,
