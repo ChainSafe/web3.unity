@@ -1,9 +1,5 @@
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Signer.Crypto;
-using Org.BouncyCastle.Asn1.X9;
-using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.Crypto.Generators;
-using Org.BouncyCastle.Crypto.Parameters;
 
 namespace ChainSafe.Gaming.Evm.SigningKey
 {

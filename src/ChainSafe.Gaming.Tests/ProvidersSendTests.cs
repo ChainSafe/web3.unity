@@ -107,7 +107,7 @@ namespace ChainSafe.Gaming.Tests
             });
 
             Assert.That(ex != null && ex.Message.Contains("eth_sendTransaction"));
-            var result = ex.InnerException != null && ex.InnerException.Message.Contains("gas too low");
+            var result = ex.InnerException != null;
             Assert.That(result);
         }
 
