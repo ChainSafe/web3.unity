@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Web3;
+using Nethereum.ABI.FunctionEncoding;
 using Nethereum.Contracts.QueryHandlers.MultiCall;
 using Nethereum.Util;
 
@@ -33,7 +34,7 @@ namespace ChainSafe.Gaming.MultiCall
             }
         }
 
-        public async Task<List<object[]>> MultiCallAsync(Call3Value[] multiCalls, int pageSize = DefaultCallsPerRequest)
+        public async Task<List<Result>> MultiCallAsync(Call3Value[] multiCalls, int pageSize = DefaultCallsPerRequest)
         {
              if (multiCalls.Any(x => x.Value > 0))
              {
@@ -58,7 +59,7 @@ namespace ChainSafe.Gaming.MultiCall
                      }
                  }
 
-                 return results;
+                 return ExtractResults(results);
              }
              else
              {
@@ -81,8 +82,26 @@ namespace ChainSafe.Gaming.MultiCall
                      results.Add(callResults);
                  }
 
-                 return results;
+                 return ExtractResults(results);
              }
+        }
+
+        /// <summary>
+        /// A small function to extract the Result items into an array.
+        /// </summary>
+        /// <param name="results">Returned response from calling the multicall function.</param>
+        /// <returns>A neater, formatted array of results.</returns>
+        private List<Result> ExtractResults(IReadOnlyList<object[]> results)
+        {
+            var extracted = results[0][0] as List<List<ParameterOutput>>;
+            var parsed = new List<Result>();
+
+            if (extracted != null)
+            {
+                parsed.AddRange(from callResult in extracted where callResult[0] != null && callResult[1] != null select new Result { Success = callResult[0].Result as bool? ?? false, ReturnData = callResult[1].Result as byte[], });
+            }
+
+            return parsed;
         }
 
         public ValueTask WillStartAsync()

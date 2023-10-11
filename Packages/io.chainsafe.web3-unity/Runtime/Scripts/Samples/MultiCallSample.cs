@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Numerics;
 using ChainSafe.Gaming.MultiCall;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3;
@@ -27,6 +28,10 @@ public class MultiCallSample
         {
             Erc20Account
         });
+        
+        var erc20TotalSupplyCalldata = erc20Contract.Calldata(CommonMethod.TotalSupply, new object[]
+        {
+        });
 
         var calls = new[]
         {
@@ -36,19 +41,30 @@ public class MultiCallSample
            AllowFailure = true,
            CallData = erc20BalanceOfCalldata.HexToByteArray(),
            },
+           new Call3Value()
+           {
+               Target = Erc20ContractAddress,
+               AllowFailure = true,
+               CallData = erc20TotalSupplyCalldata.HexToByteArray(),
+           }
         };
         
-        //Calldata to MultiCallRequest
-        // List<object> -> [0] => List<List<ParameterOutput>>
-        var temp = await web3.MultiCall().MultiCallAsync(calls);
+        var multicallResultResponse = await web3.MultiCall().MultiCallAsync(calls);
 
-        // var decoded = erc20Contract.Decode(temp);
-        List<List<ParameterOutput>> callResult1 = temp[0][0];
-        // Debug.Log($"Result success: {callResult1[0].Result}");
-        // Debug.Log($"Balance success: {callResult1[1].Result}");
-        Debug.Log(callResult1);
-        // Debug.Log(callResult1[0]);
-        // Debug.Log(callResult1[0][1]);
+        Debug.Log(multicallResultResponse);
+
+        if (multicallResultResponse[0] != null && multicallResultResponse[0].Success)
+        {
+            var decodedBalanceOf = erc20Contract.Decode(CommonMethod.BalanceOf, multicallResultResponse[0].ReturnData.ToHex());
+            Debug.Log($"decodedBalanceOf {((BigInteger)decodedBalanceOf[0]).ToString()}");
+        }
+        
+        if (multicallResultResponse[1] != null && multicallResultResponse[1].Success)
+        {
+            var decodedTotalSupply = erc20Contract.Decode(CommonMethod.TotalSupply, multicallResultResponse[1].ReturnData.ToHex());
+            Debug.Log($"decodedTotalSupply {((BigInteger)decodedTotalSupply[0]).ToString()}");
+        }
+
     }
 
     private static class CommonMethod
