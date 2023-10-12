@@ -3231,9 +3231,9 @@ MonoBehaviour:
     Provider: 3
   - Button: {fileID: 1508551058}
     Provider: 4
-  _supportedWalletsDropdown: {fileID: 540464236}
-  _redirectToWalletToggle: {fileID: 981405684}
-  _walletConnectModal: {fileID: 395689441}
+  supportedWalletsDropdown: {fileID: 540464236}
+  redirectToWalletToggle: {fileID: 981405684}
+  walletConnectModal: {fileID: 395689441}
   <ProjectId>k__BackingField: f4bff60eb260841f46b1c77588cd8acb
   <ProjectName>k__BackingField: Web3.Unity
   <BaseContext>k__BackingField: unity-game
