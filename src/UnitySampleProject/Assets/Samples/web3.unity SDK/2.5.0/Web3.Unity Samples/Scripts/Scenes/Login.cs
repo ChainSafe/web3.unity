@@ -44,7 +44,7 @@ namespace Scenes
 
     public class Login : MonoBehaviour
     {
-        internal const string PlayerAccountKey = "PlayerAccount";
+        internal const string SavedSessionTopicKey = "SavedLoginParams";
 
         [Header("Configuration")]
         public string GelatoApiKey = "";
@@ -115,7 +115,7 @@ namespace Scenes
 #if UNITY_WEBGL
             ProcessWeb3Auth();
 #endif
-            //TryAutoLogin();
+            TryAutoLogin();
 
             ExistingWalletButton.onClick.AddListener(LoginWithExistingAccount);
 
@@ -144,13 +144,19 @@ namespace Scenes
             {
                 return;
             }
-            
-            // display QR and copy to clipboard
-            walletConnectModal.WalletConnected(data);
+
+            // might be null in case of auto login
+            if (!string.IsNullOrEmpty(data.Uri))
+            {
+                // display QR and copy to clipboard
+                walletConnectModal.WalletConnected(data);
+            }
         }
         
         private void SessionApproved(SessionStruct session)
         {
+            PlayerPrefs.SetString(SavedSessionTopicKey, walletConnectConfig.AutoRenewSession ? session.Topic : null);
+            
             Debug.Log($"{session.Topic} Approved");
         }
 
@@ -183,24 +189,17 @@ namespace Scenes
             supportedWalletsDropdown.AddOptions(supportedWalletsList);
         }
         
-        private async void TryAutoLogin()
+        private void TryAutoLogin()
         {
             if (!useWalletConnect)
                 return;
 
-            var savedAccount = PlayerPrefs.GetString(PlayerAccountKey);
-
-            if (string.IsNullOrEmpty(savedAccount))
+            if (string.IsNullOrEmpty(PlayerPrefs.GetString(SavedSessionTopicKey, null)))
                 return;
 
-            var web3Builder = new Web3Builder(ProjectConfigUtilities.Load())
-                .Configure(ConfigureCommonServices)
-                .Configure(services =>
-                {
-                    services.UseWalletConnectSigner(BuildWalletConnectConfig());
-                });
-
-            await ProcessLogin(web3Builder);
+            Debug.Log("Attempting to Auto Login...");
+            
+            LoginWithExistingAccount();
         }
 
         private async void LoginWithExistingAccount()
@@ -236,11 +235,6 @@ namespace Scenes
                 });
 
             await ProcessLogin(web3Builder);
-
-            if (useWalletConnect && RememberMeToggle.isOn)
-            {
-                PlayerPrefs.SetString(PlayerAccountKey, await Web3Accessor.Web3.Signer.GetAddress());
-            }
         }
 
         private async void LoginWithWeb3Auth(Provider provider)
@@ -377,10 +371,13 @@ namespace Scenes
                 BaseContext = BaseContext,
                 Chain = chain,
                 Metadata = Metadata,
+                SavedSessionTopic = PlayerPrefs.GetString(SavedSessionTopicKey, null),
                 SupportedWallets = supportedWallets,
+                StoragePath = Application.persistentDataPath,
                 RedirectToWallet = redirectToWallet,
+                AutoRenewSession = RememberMeToggle.isOn,
 #if UNITY_IOS
-                DefaultWallet = defaultWallet
+                DefaultWallet = defaultWallet,
 #endif
             };
 

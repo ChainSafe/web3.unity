@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Signers;
@@ -12,6 +13,7 @@ using ChainSafe.Gaming.Web3.Core.Evm;
 using ChainSafe.Gaming.Web3.Environment;
 using WalletConnectSharp.Common.Logging;
 using WalletConnectSharp.Common.Model.Errors;
+using WalletConnectSharp.Common.Utils;
 using WalletConnectSharp.Core;
 using WalletConnectSharp.Core.Models;
 using WalletConnectSharp.Core.Models.Relay;
@@ -47,14 +49,16 @@ namespace ChainSafe.Gaming.WalletConnect
 
         public string Address { get; private set; }
 
+        private bool SessionExpired => Session.Expiry != null && Clock.IsExpired((long)Session.Expiry);
+
         public async ValueTask WillStartAsync()
         {
-            config.SavedUserAddress?.AssertIsPublicAddress(nameof(config.SavedUserAddress));
-
             // if testing just don't initialize wallet connect
             if (config.Testing)
             {
-                Address = config.SavedUserAddress;
+                config.TestWalletAddress?.AssertIsPublicAddress(nameof(config.TestWalletAddress));
+
+                Address = config.TestWalletAddress;
 
                 return;
             }
@@ -62,7 +66,7 @@ namespace ChainSafe.Gaming.WalletConnect
             // Wallet Connect
             await Initialize();
 
-            Address = config.SavedUserAddress ?? await ConnectToWallet();
+            Address = await ConnectToWallet();
         }
 
         private async Task Initialize()
@@ -85,7 +89,7 @@ namespace ChainSafe.Gaming.WalletConnect
             {
                 Name = config.ProjectName,
                 ProjectId = config.ProjectId,
-                Storage = new InMemoryStorage(),
+                Storage = BuildStorage(),
                 BaseContext = config.BaseContext,
             });
 
@@ -125,11 +129,26 @@ namespace ChainSafe.Gaming.WalletConnect
                     Methods = methods,
                 });
 
-            // start connecting
-            ConnectedData connectData = await SignClient.Connect(new ConnectOptions
+            var connectOptions = new ConnectOptions
             {
                 RequiredNamespaces = requiredNamespaces,
-            });
+            };
+
+            // if there's a saved session pair and continue with that session/connect automatically
+            bool autoConnect = !string.IsNullOrEmpty(config.SavedSessionTopic);
+
+            if (autoConnect)
+            {
+                string pairingTopic = Core.Pairing.Pairings.FirstOrDefault().Topic;
+
+                if (!string.IsNullOrEmpty(pairingTopic))
+                {
+                    connectOptions.PairingTopic = pairingTopic;
+                }
+            }
+
+            // start connecting
+            ConnectedData connectData = await SignClient.Connect(connectOptions);
 
             config.InvokeConnected(connectData);
 
@@ -146,7 +165,27 @@ namespace ChainSafe.Gaming.WalletConnect
                 }
             }
 
+            if (autoConnect)
+            {
+                SessionStruct? session = SignClient.Find(requiredNamespaces)
+                    ?.FirstOrDefault(s => s.Topic == config.SavedSessionTopic);
+
+                if (session != null)
+                {
+                    connectData.Approval = Task.FromResult(session.Value);
+                }
+                else
+                {
+                    throw new Web3Exception("Auto Connect Failed : no matching Session found");
+                }
+            }
+
             Session = await connectData.Approval;
+
+            if (SessionExpired)
+            {
+                await TryRenewSession();
+            }
 
             config.InvokeSessionApproved(Session);
 
@@ -184,6 +223,7 @@ namespace ChainSafe.Gaming.WalletConnect
 
         public ValueTask WillStopAsync()
         {
+            // disconnect on terminate
             return new ValueTask(Disconnect());
         }
 
@@ -207,8 +247,20 @@ namespace ChainSafe.Gaming.WalletConnect
             return Task.FromResult(Address!);
         }
 
-        public Task<TR> Request<T, TR>(T data, long? expiry = null)
+        public async Task<TR> Request<T, TR>(T data, long? expiry = null)
         {
+            if (SessionExpired)
+            {
+                if (config.AutoRenewSession)
+                {
+                    await TryRenewSession();
+                }
+                else
+                {
+                    throw new Web3Exception($"Failed to perform {typeof(T)} Request, Session expired, Please Reconnect");
+                }
+            }
+
             string topic = Session.Topic;
 
             var addressParts = GetFullAddress().Split(":");
@@ -238,7 +290,21 @@ namespace ChainSafe.Gaming.WalletConnect
                     });
             }
 
-            return SignClient.Request<T, TR>(topic, data, chainId, expiry);
+            return await SignClient.Request<T, TR>(topic, data, chainId, expiry);
+        }
+
+        private async Task TryRenewSession()
+        {
+            try
+            {
+                var acknowledgement = await SignClient.Extend(Session.Topic);
+
+                await acknowledgement.Acknowledged();
+            }
+            catch (Exception e)
+            {
+                throw new Web3Exception($"Auto Renew Session Failed with Exception : {e}");
+            }
         }
 
         public async Task<string> SignTransaction(TransactionRequest transaction)
@@ -349,13 +415,24 @@ namespace ChainSafe.Gaming.WalletConnect
             return defaultNamespace.Accounts[0];
         }
 
+        private FileSystemStorage BuildStorage()
+        {
+            var path = Path.Combine(config.StoragePath, "walletconnect.json");
+
+            WCLogger.Log($"Wallet Connect Storage set to {path}");
+
+            return new FileSystemStorage(path);
+        }
+
         private async Task Disconnect()
         {
+            WCLogger.Log("Disconnecting Wallet Connect session...");
+
             try
             {
-                config.SavedUserAddress = null;
-
                 await SignClient.Disconnect(Session.Topic, Error.FromErrorType(ErrorType.USER_DISCONNECTED));
+
+                await Core.Storage.Clear();
             }
             catch (Exception e)
             {

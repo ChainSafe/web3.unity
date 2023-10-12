@@ -18,11 +18,13 @@ namespace ChainSafe.Gaming.WalletConnect
 
         public event SessionApproved OnSessionApproved;
 
-        public string SavedUserAddress { get; set; } = null;
-
         public string ProjectId { get; set; }
 
         public string ProjectName { get; set; }
+
+        public string SavedSessionTopic { get; set; }
+
+        public string StoragePath { get; set; }
 
         public string BaseContext { get; set; }
 
@@ -32,11 +34,15 @@ namespace ChainSafe.Gaming.WalletConnect
 
         public bool RedirectToWallet { get; set; }
 
+        public bool AutoRenewSession { get; set; }
+
         public WalletConnectWalletModel DefaultWallet { get; set; }
 
         public Dictionary<string, WalletConnectWalletModel> SupportedWallets { get; set; }
 
         public bool Testing { get; set; } = false;
+
+        public string TestWalletAddress { get; set; } = null;
 
         public string TestResponse { get; set; } = string.Empty;
 

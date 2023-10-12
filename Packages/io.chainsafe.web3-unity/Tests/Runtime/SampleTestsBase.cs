@@ -38,9 +38,9 @@ public class SampleTestsBase
 
             config = new WalletConnectConfig
             {
-                SavedUserAddress = "0x55ffe9E30347266f02b9BdAe20aD3a86493289ea",
                 // set wallet to testing
                 Testing = true,
+                TestWalletAddress = "0x55ffe9E30347266f02b9BdAe20aD3a86493289ea",
             };
             
             services.UseWalletConnectSigner(config);
@@ -66,6 +66,8 @@ public class SampleTestsBase
     public virtual IEnumerator TearDown()
     {
         config.Testing = false;
+
+        web3Result.TerminateAsync();
 
         yield return null;
     }
