@@ -44,7 +44,7 @@ namespace Scenes
 
     public class Login : MonoBehaviour
     {
-        internal const string SavedSessionTopicKey = "SavedLoginParams";
+        internal const string SavedWalletConnectConfigKey = "SavedWalletConnectConfig";
 
         [Header("Configuration")]
         public string GelatoApiKey = "";
@@ -65,6 +65,8 @@ namespace Scenes
         #region Wallet Connect
 
         private WalletConnectConfig walletConnectConfig;
+
+        private bool autoLogin;
         
         [field: Header("Wallet Connect")]
 
@@ -115,9 +117,11 @@ namespace Scenes
 #if UNITY_WEBGL
             ProcessWeb3Auth();
 #endif
-            TryAutoLogin();
+            var autoLoginTask = TryAutoLogin();
+            
+            yield return new WaitUntil(() => autoLoginTask.IsCompleted);
 
-            ExistingWalletButton.onClick.AddListener(LoginWithExistingAccount);
+            ExistingWalletButton.onClick.AddListener(OnLoginWithExistingAccount);
 
             foreach (var buttonAndProvider in Web3AuthButtons)
             {
@@ -155,7 +159,19 @@ namespace Scenes
         
         private void SessionApproved(SessionStruct session)
         {
-            PlayerPrefs.SetString(SavedSessionTopicKey, walletConnectConfig.AutoRenewSession ? session.Topic : null);
+            // save/persist session
+            if (walletConnectConfig.KeepSessionAlive)
+            {
+                walletConnectConfig.SavedSessionTopic = session.Topic;
+                
+                PlayerPrefs.SetString(SavedWalletConnectConfigKey, JsonConvert.SerializeObject(walletConnectConfig));
+            }
+
+            else
+            {
+                // reset if any saved config
+                PlayerPrefs.SetString(SavedWalletConnectConfigKey, null);
+            }
             
             Debug.Log($"{session.Topic} Approved");
         }
@@ -189,20 +205,37 @@ namespace Scenes
             supportedWalletsDropdown.AddOptions(supportedWalletsList);
         }
         
-        private void TryAutoLogin()
+        private async Task TryAutoLogin()
         {
             if (!useWalletConnect)
                 return;
 
-            if (string.IsNullOrEmpty(PlayerPrefs.GetString(SavedSessionTopicKey, null)))
+            string savedConfigJson = PlayerPrefs.GetString(SavedWalletConnectConfigKey, null);
+
+            if (string.IsNullOrEmpty(savedConfigJson))
+            {
                 return;
+            }
 
             Debug.Log("Attempting to Auto Login...");
             
-            LoginWithExistingAccount();
+            try
+            {
+                autoLogin = true;
+            
+                walletConnectConfig = JsonConvert.DeserializeObject<WalletConnectConfig>(savedConfigJson);
+                
+                await LoginWithExistingAccount();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Auto Login Failed with Exception {e}");
+
+                autoLogin = false;
+            }
         }
 
-        private async void LoginWithExistingAccount()
+        private async void OnLoginWithExistingAccount()
         {
 #if UNITY_IOS
             // can't redirect to wallet on IOS if there's no selected wallet
@@ -214,7 +247,12 @@ namespace Scenes
                 return;
             }
 #endif
-            
+
+            await LoginWithExistingAccount();
+        }
+        
+        private async Task LoginWithExistingAccount()
+        {
             var web3Builder = new Web3Builder(ProjectConfigUtilities.Load())
                 .Configure(ConfigureCommonServices)
                 .Configure(services =>
@@ -346,24 +384,30 @@ namespace Scenes
 
             ChainModel chain = new ChainModel(ChainModel.EvmNamespace, projectConfig.ChainId, projectConfig.Network);
 
-            // allow redirection on editor for testing UI flow
-            redirectToWallet = (Application.isMobilePlatform || Application.isEditor) && redirectToWalletToggle.isOn;
-
 #if UNITY_IOS
             WalletConnectWalletModel defaultWallet = null;
-            
-            // make sure there's a selected wallet on IOS
-            redirectToWallet = redirectToWallet && supportedWalletsDropdown.value != 0;
-
-            if (redirectToWallet)
-            {
-                // offset for the first/default/unselected dropdown option 0
-                int selectedWalletIndex = supportedWalletsDropdown.value - 1;
-
-                defaultWallet = supportedWallets.Values.ToArray()[selectedWalletIndex];
-            }
 #endif
-            
+
+            // if it's an auto login get these values from saved wallet config
+            if (!autoLogin)
+            {
+                // allow redirection on editor for testing UI flow
+                redirectToWallet = (Application.isMobilePlatform || Application.isEditor) && redirectToWalletToggle.isOn;
+
+#if UNITY_IOS
+                // make sure there's a selected wallet on IOS
+                redirectToWallet = redirectToWallet && supportedWalletsDropdown.value != 0;
+
+                if (redirectToWallet)
+                {
+                    // offset for the first/default/unselected dropdown option 0
+                    int selectedWalletIndex = supportedWalletsDropdown.value - 1;
+
+                    defaultWallet = supportedWallets.Values.ToArray()[selectedWalletIndex];
+                }
+#endif
+            }
+
             var config = new WalletConnectConfig
             {
                 ProjectId = ProjectId,
@@ -371,23 +415,16 @@ namespace Scenes
                 BaseContext = BaseContext,
                 Chain = chain,
                 Metadata = Metadata,
-                SavedSessionTopic = PlayerPrefs.GetString(SavedSessionTopicKey, null),
+                SavedSessionTopic = autoLogin ? walletConnectConfig.SavedSessionTopic : null,
                 SupportedWallets = supportedWallets,
                 StoragePath = Application.persistentDataPath,
-                RedirectToWallet = redirectToWallet,
-                AutoRenewSession = RememberMeToggle.isOn,
+                RedirectToWallet = autoLogin ? walletConnectConfig.RedirectToWallet : redirectToWallet,
+                KeepSessionAlive = autoLogin || RememberMeToggle.isOn,
 #if UNITY_IOS
-                DefaultWallet = defaultWallet,
+                DefaultWallet = autoLogin ? walletConnectConfig.DefaultWallet : defaultWallet,
 #endif
             };
 
-            if (walletConnectConfig != null)
-            {
-                walletConnectConfig.OnConnected -= WalletConnected;
-
-                walletConnectConfig.OnSessionApproved -= SessionApproved;
-            }
-            
             walletConnectConfig = config;
             
             walletConnectConfig.OnConnected += WalletConnected;

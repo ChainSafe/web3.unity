@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using ChainSafe.Gaming.WalletConnect.Models;
+using Newtonsoft.Json;
 using WalletConnectSharp.Core;
 using WalletConnectSharp.Sign.Models;
 using WalletConnectSharp.Sign.Models.Engine;
@@ -8,6 +9,7 @@ using WalletConnectSharp.Sign.Models.Engine;
 namespace ChainSafe.Gaming.WalletConnect
 {
     [Serializable]
+    [JsonObject(MemberSerialization.OptIn)]
     public class WalletConnectConfig
     {
         public delegate void Connected(ConnectedData connectedData);
@@ -22,6 +24,7 @@ namespace ChainSafe.Gaming.WalletConnect
 
         public string ProjectName { get; set; }
 
+        [JsonProperty]
         public string SavedSessionTopic { get; set; }
 
         public string StoragePath { get; set; }
@@ -32,10 +35,13 @@ namespace ChainSafe.Gaming.WalletConnect
 
         public Metadata Metadata { get; set; }
 
+        [JsonProperty]
         public bool RedirectToWallet { get; set; }
 
-        public bool AutoRenewSession { get; set; }
+        [JsonProperty]
+        public bool KeepSessionAlive { get; set; }
 
+        [JsonProperty]
         public WalletConnectWalletModel DefaultWallet { get; set; }
 
         public Dictionary<string, WalletConnectWalletModel> SupportedWallets { get; set; }

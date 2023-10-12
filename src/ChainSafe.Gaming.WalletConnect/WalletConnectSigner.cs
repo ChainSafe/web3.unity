@@ -251,7 +251,7 @@ namespace ChainSafe.Gaming.WalletConnect
         {
             if (SessionExpired)
             {
-                if (config.AutoRenewSession)
+                if (config.KeepSessionAlive)
                 {
                     await TryRenewSession();
                 }
