@@ -12,7 +12,7 @@ public class Logout : MonoBehaviour
     public async void OnLogout()
     {
         // Remove the saved "remember me" data, if any
-        PlayerPrefs.DeleteKey(Login.PlayerAccountKey);
+        PlayerPrefs.DeleteKey(Login.SavedWalletConnectConfigKey);
 
         // Terminate Web3
         await Web3Accessor.Web3.TerminateAsync();
