@@ -7,8 +7,6 @@ using UnityEngine.SceneManagement;
 
 public class Logout : MonoBehaviour
 {
-    private bool _quitting;
-    
     public async void OnLogout()
     {
         // Remove the saved "remember me" data, if any
