@@ -141,7 +141,7 @@ namespace ChainSafe.Gaming.WalletConnect
             {
                 if (config.DefaultWallet != null)
                 {
-                    config.DefaultWallet.OpenDeeplink(ConnectedData, operatingSystem);
+                    config.DefaultWallet.OpenDeeplink(ConnectedData, operatingSystem, Core.Pairing.ParseUri(ConnectedData.Uri)?.SymKey);
                 }
                 else
                 {

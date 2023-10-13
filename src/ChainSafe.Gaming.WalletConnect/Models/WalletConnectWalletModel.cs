@@ -1,3 +1,4 @@
+using System.Web;
 using ChainSafe.Gaming.Web3.Environment;
 using Newtonsoft.Json;
 using WalletConnectSharp.Common.Logging;
@@ -19,23 +20,43 @@ namespace ChainSafe.Gaming.WalletConnect.Models
         [JsonProperty("image_url")]
         public ImageUrlsModel Images { get; private set; }
 
-        public void OpenDeeplink(ConnectedData data, IOperatingSystemMediator operatingSystemMediator, bool useNative = false)
+        public void OpenDeeplink(ConnectedData data, IOperatingSystemMediator operatingSystemMediator, string symKey)
         {
-            string uri = string.Empty;
+            string uri = data.Uri;
+
+            // if storage is persistent sometimes symKey might be embedded in uri incorrectly, wallet connect issue
+            string symKeyInUri = $"symKey={symKey}";
+
+            // remove symKey in Uri if it exists
+            uri = uri.Replace(symKeyInUri, string.Empty);
 
             switch (operatingSystemMediator.Platform)
             {
                 case Platform.Android:
-                    uri = data.Uri; // Android OS should handle wc: protocol
+                    // Android OS should handle wc: protocol
                     break;
 
-                case Platform.IOS:
-                    uri = GetIOSDeeplink(data.Uri, useNative);
+                case Platform.IOS: case Platform.Desktop: case Platform.Editor:
+                    if (string.IsNullOrEmpty(symKey))
+                    {
+                        WCLogger.LogError($"Failed to open {Name} Wallet Deeplink : SymKey NullOrEmpty");
+
+                        return;
+                    }
+
+                    uri = GetDeeplink(data.Uri, operatingSystemMediator.IsMobilePlatform, symKey);
                     break;
 
                 default:
-                    WCLogger.LogError($"{operatingSystemMediator.Platform} Platform doesn't support deeplink");
-                    break;
+                    WCLogger.LogError($"{operatingSystemMediator.Platform} Platform doesn't support {Name} Wallet deeplink");
+                    return;
+            }
+
+            if (string.IsNullOrEmpty(uri))
+            {
+                WCLogger.LogError($"Failed to open {Name} Wallet Deeplink : Uri NullOrEmpty");
+
+                return;
             }
 
             WCLogger.Log($"Opening URL {uri}");
@@ -43,46 +64,74 @@ namespace ChainSafe.Gaming.WalletConnect.Models
             operatingSystemMediator.OpenUrl(uri);
         }
 
-        private string GetIOSDeeplink(string uri, bool useNative)
+        // Deeplink Building
+        private string GetDeeplink(string uri, bool isMobilePlatform, string symKey)
         {
-            string url = useNative ? Mobile.NativeProtocol : Mobile.UniversalUrl;
+            WalletLinkModel linkData = GetLinkData(isMobilePlatform);
 
-            if (!string.IsNullOrWhiteSpace(url))
+            // prefer native protocol
+            return CanUseNativeProtocol(isMobilePlatform) ? BuildNativeDeeplink(linkData.NativeProtocol, uri, symKey) : BuildUniversalDeeplink(linkData.UniversalUrl, uri, symKey);
+        }
+
+        private string BuildNativeDeeplink(string url, string uri, string symKey)
+        {
+            if (url.EndsWith(':'))
             {
-                if (useNative)
-                {
-                    uri = $"{url}//{uri}";
-                }
-                else if (url.EndsWith("/"))
-                {
-                    uri = $"{url}{uri}";
-                }
-                else
-                {
-                    uri = $"{url}/{uri}";
-                }
+                url += "//";
             }
 
-            if (string.IsNullOrEmpty(uri))
+            url += "wc";
+
+            return AddDeeplinkParams(url, uri, symKey);
+        }
+
+        private string BuildUniversalDeeplink(string url, string uri, string symKey)
+        {
+            if (!url.EndsWith('/'))
             {
-                WCLogger.LogError("Failed to open Wallet for IOS: NullOrEmpty URI");
+                url += "/";
             }
 
-            return uri;
+            return AddDeeplinkParams(url, uri, symKey);
+        }
+
+        private string AddDeeplinkParams(string url, string uri, string symKey)
+        {
+            url += $"?uri={HttpUtility.UrlEncode(uri)}";
+
+            url += $"&symKey={HttpUtility.UrlEncode(symKey)}";
+
+            return url;
         }
 
         public void OpenWallet(IOperatingSystemMediator operatingSystemMediator)
         {
-            WalletLinkModel linkData = operatingSystemMediator.IsMobilePlatform ? Mobile : Desktop;
+            bool isMobilePlatform = operatingSystemMediator.IsMobilePlatform;
 
-            string universalUrl = linkData.UniversalUrl;
+            WalletLinkModel linkData = GetLinkData(isMobilePlatform);
 
-            if (string.IsNullOrEmpty(universalUrl))
+            string deeplink = CanUseNativeProtocol(isMobilePlatform) ? linkData.NativeProtocol : linkData.UniversalUrl;
+
+            if (string.IsNullOrEmpty(deeplink))
             {
-                WCLogger.LogError($"Failed to open Wallet : NullOrEmpty Deeplink URI for {operatingSystemMediator.Platform} Platform");
+                WCLogger.LogError($"Failed to open {Name} Wallet : NullOrEmpty Deeplink URI for {operatingSystemMediator.Platform} Platform");
+
+                return;
             }
 
-            operatingSystemMediator.OpenUrl(universalUrl);
+            operatingSystemMediator.OpenUrl(deeplink);
+        }
+
+        private WalletLinkModel GetLinkData(bool isMobilePlatform)
+        {
+            return isMobilePlatform ? Mobile : Desktop;
+        }
+
+        private bool CanUseNativeProtocol(bool isMobilePlatform)
+        {
+            string nativeUrl = GetLinkData(isMobilePlatform).NativeProtocol;
+
+            return !string.IsNullOrWhiteSpace(nativeUrl) && nativeUrl != ":";
         }
     }
 }
