@@ -1,4 +1,3 @@
-using System;
 using ChainSafe.Gaming.Web3.Environment;
 using Newtonsoft.Json;
 using WalletConnectSharp.Common.Logging;
@@ -31,33 +30,7 @@ namespace ChainSafe.Gaming.WalletConnect.Models
                     break;
 
                 case Platform.IOS:
-                    var universalUrl = useNative ? Mobile.NativeProtocol : Mobile.UniversalUrl;
-
-                    uri = data.Uri;
-
-                    if (!string.IsNullOrWhiteSpace(universalUrl))
-                    {
-                        uri = data.Uri;
-
-                        if (useNative)
-                        {
-                            uri = $"{universalUrl}//{uri}";
-                        }
-                        else if (universalUrl.EndsWith("/"))
-                        {
-                            uri = $"{universalUrl}{uri}";
-                        }
-                        else
-                        {
-                            uri = $"{universalUrl}/{uri}";
-                        }
-                    }
-
-                    if (string.IsNullOrWhiteSpace(uri))
-                    {
-                        throw new Exception("Got empty URI when attempting to create WC deeplink");
-                    }
-
+                    uri = GetIOSDeeplink(data.Uri, useNative);
                     break;
 
                 default:
@@ -70,15 +43,43 @@ namespace ChainSafe.Gaming.WalletConnect.Models
             operatingSystemMediator.OpenUrl(uri);
         }
 
+        private string GetIOSDeeplink(string uri, bool useNative)
+        {
+            string url = useNative ? Mobile.NativeProtocol : Mobile.UniversalUrl;
+
+            if (!string.IsNullOrWhiteSpace(url))
+            {
+                if (useNative)
+                {
+                    uri = $"{url}//{uri}";
+                }
+                else if (url.EndsWith("/"))
+                {
+                    uri = $"{url}{uri}";
+                }
+                else
+                {
+                    uri = $"{url}/{uri}";
+                }
+            }
+
+            if (string.IsNullOrEmpty(uri))
+            {
+                WCLogger.LogError("Failed to open Wallet for IOS: NullOrEmpty URI");
+            }
+
+            return uri;
+        }
+
         public void OpenWallet(IOperatingSystemMediator operatingSystemMediator)
         {
             WalletLinkModel linkData = operatingSystemMediator.IsMobilePlatform ? Mobile : Desktop;
 
             string universalUrl = linkData.UniversalUrl;
 
-            if (string.IsNullOrWhiteSpace(universalUrl))
+            if (string.IsNullOrEmpty(universalUrl))
             {
-                throw new Exception("Got empty URI when attempting to create WC deeplink");
+                WCLogger.LogError($"Failed to open Wallet : NullOrEmpty Deeplink URI for {operatingSystemMediator.Platform} Platform");
             }
 
             operatingSystemMediator.OpenUrl(universalUrl);
