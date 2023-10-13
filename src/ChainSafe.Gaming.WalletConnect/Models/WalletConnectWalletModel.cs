@@ -36,7 +36,9 @@ namespace ChainSafe.Gaming.WalletConnect.Models
                     // Android OS should handle wc: protocol
                     break;
 
-                case Platform.IOS: case Platform.Desktop: case Platform.Editor:
+                case Platform.IOS:
+                case Platform.Desktop:
+                case Platform.Editor:
                     if (string.IsNullOrEmpty(symKey))
                     {
                         WCLogger.LogError($"Failed to open {Name} Wallet Deeplink : SymKey NullOrEmpty");
