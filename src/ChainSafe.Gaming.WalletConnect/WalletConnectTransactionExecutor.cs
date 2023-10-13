@@ -14,29 +14,27 @@ namespace ChainSafe.Gaming.WalletConnect
 {
     public class WalletConnectTransactionExecutor : ITransactionExecutor, ILifecycleParticipant
     {
-        private readonly IRpcProvider provider;
+        private readonly IWalletConnectProvider walletConnectProvider;
 
-        private readonly WalletConnectSigner signer;
+        private readonly IRpcProvider rpcProvider;
 
-        private readonly WalletConnectConfig config;
+        private readonly ISigner signer;
 
-        public WalletConnectTransactionExecutor(WalletConnectConfig config, ISigner signer, IRpcProvider provider)
+        public WalletConnectTransactionExecutor(IWalletConnectProvider walletConnectProvider, IRpcProvider rpcProvider, ISigner signer)
         {
-            this.signer = signer as WalletConnectSigner ??
-                          throw new Web3Exception($"{nameof(WalletConnectTransactionExecutor)} only supports {nameof(WalletConnectSigner)}");
+            this.walletConnectProvider = walletConnectProvider;
 
-            this.provider = provider;
+            this.rpcProvider = rpcProvider;
 
-            this.config = config;
+            this.signer = signer;
         }
+
+        public ValueTask WillStartAsync() => new ValueTask(Task.CompletedTask);
+
+        public ValueTask WillStopAsync() => new ValueTask(Task.CompletedTask);
 
         public async Task<TransactionResponse> SendTransaction(TransactionRequest transaction)
         {
-            if (config.Testing)
-            {
-                return await provider.GetTransaction(config.TestResponse);
-            }
-
             if (string.IsNullOrEmpty(transaction.From))
             {
                 transaction.From = await signer.GetAddress();
@@ -53,7 +51,7 @@ namespace ChainSafe.Gaming.WalletConnect
                 Nonce = transaction.Nonce?.HexValue,
             });
 
-            string hash = await signer.Request<EthSendTransaction, string>(requestData);
+            string hash = await walletConnectProvider.Request(requestData);
 
             // TODO replace validation with regex
             if (!hash.StartsWith("0x") || hash.Length != 66)
@@ -63,11 +61,7 @@ namespace ChainSafe.Gaming.WalletConnect
 
             WCLogger.Log($"Transaction executed with hash {hash}");
 
-            return await provider.GetTransaction(hash);
+            return await rpcProvider.GetTransaction(hash);
         }
-
-        public ValueTask WillStartAsync() => new ValueTask(Task.CompletedTask);
-
-        public ValueTask WillStopAsync() => new ValueTask(Task.CompletedTask);
     }
 }

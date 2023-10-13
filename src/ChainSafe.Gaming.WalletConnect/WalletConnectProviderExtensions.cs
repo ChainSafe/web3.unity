@@ -1,25 +1,25 @@
-using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core;
-using ChainSafe.Gaming.Web3.Core.Evm;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace ChainSafe.Gaming.WalletConnect
 {
-    public static class WalletConnectSignerExtensions
+    public static class WalletConnectProviderExtensions
     {
         /// <summary>
         /// Binds Web implementation of EVM Provider to Web3.
         /// </summary>
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
-        public static IWeb3ServiceCollection UseWalletConnectSigner(this IWeb3ServiceCollection collection)
+        public static IWeb3ServiceCollection UseWalletConnectProvider(this IWeb3ServiceCollection collection, WalletConnectConfig config)
         {
-            collection.AssertServiceNotBound<ISigner>();
+            collection.AssertServiceNotBound<IWalletConnectProvider>();
 
             // wallet
-            collection.AddSingleton<ISigner, ILifecycleParticipant, WalletConnectSigner>();
+            collection.AddSingleton<IWalletConnectProvider, ILifecycleParticipant, WalletConnectProvider>();
 
+            // configure provider
+            collection.Replace(ServiceDescriptor.Singleton(typeof(WalletConnectConfig), config));
             return collection;
         }
     }

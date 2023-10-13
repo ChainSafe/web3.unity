@@ -42,8 +42,9 @@ public class SampleTestsBase
                 Testing = true,
                 TestWalletAddress = "0x55ffe9E30347266f02b9BdAe20aD3a86493289ea",
             };
-            
-            services.UseWalletConnectSigner(config);
+
+            services.UseWalletConnectProvider(config);
+            services.UseWalletConnectSigner();
             services.UseWalletConnectTransactionExecutor();
 
             //add any contracts we would want to use
