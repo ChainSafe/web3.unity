@@ -31,10 +31,7 @@ namespace ChainSafe.Gaming.WalletConnect.Models
                     break;
 
                 case Platform.IOS:
-                    // on iOS, we need to use one of the wallet links
-                    WalletLinkModel linkData = operatingSystemMediator.IsMobilePlatform ? Mobile : Desktop;
-
-                    var universalUrl = useNative ? linkData.NativeProtocol : linkData.UniversalUrl;
+                    var universalUrl = useNative ? Mobile.NativeProtocol : Mobile.UniversalUrl;
 
                     uri = data.Uri;
 
