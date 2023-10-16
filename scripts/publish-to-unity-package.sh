@@ -1,6 +1,9 @@
 #! /usr/bin/env sh
 set -e
 
+## if directory exists, we make check and cd here so script can work from both when bash is run from scripts and from repo root
+[ -d "scripts" ] && cd scripts
+
 echo Building project...
 pushd ../src/ChainSafe.Gaming.Unity
 
