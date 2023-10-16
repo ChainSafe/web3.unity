@@ -81,19 +81,16 @@ namespace ChainSafe.Gaming.WalletConnect.Models
             {
                 url += "//";
             }
-
-            url += "wc";
+            else if (url.EndsWith("//"))
+            {
+                url += "wc";
+            }
 
             return AddDeeplinkParams(url, uri, symKey);
         }
 
         private string BuildUniversalDeeplink(string url, string uri, string symKey)
         {
-            if (!url.EndsWith('/'))
-            {
-                url += "/";
-            }
-
             return AddDeeplinkParams(url, uri, symKey);
         }
 
