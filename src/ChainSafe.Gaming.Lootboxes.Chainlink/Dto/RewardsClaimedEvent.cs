@@ -1,4 +1,4 @@
-namespace ChainSafe.Gaming.Chainlink.Lootboxes
+namespace ChainSafe.Gaming.Lootboxes.Chainlink
 {
     using System.Numerics;
     using Nethereum.ABI.FunctionEncoding.Attributes;

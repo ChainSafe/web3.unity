@@ -2,8 +2,8 @@
 using System.Globalization;
 using System.Numerics;
 using System.Threading.Tasks;
-using ChainSafe.Gaming.Chainlink.Lootboxes;
 using ChainSafe.Gaming.Evm.Contracts;
+using ChainSafe.Gaming.Lootboxes.Chainlink;
 using ChainSafe.Gaming.UnityPackage;
 using LootBoxes.Scene.StageItems;
 using UnityEngine;

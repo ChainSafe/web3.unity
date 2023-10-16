@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ChainSafe.Gaming.Chainlink.Lootboxes;
 using ChainSafe.Gaming.Evm.Contracts;
+using ChainSafe.Gaming.Lootboxes.Chainlink;
 using ChainSafe.Gaming.UnityPackage;
 using LootBoxes.Scene.StageItems;
 using UnityEngine;
@@ -14,11 +14,6 @@ namespace LootBoxes.Scene
 
         private IContractBuilder contractBuilder;
 
-        public void Configure(IContractBuilder contractBuilder)
-        {
-            this.contractBuilder = contractBuilder;
-        }
-
         private void OnValidate()
         {
             if (NftRewardItemPrefab && NftRewardItemPrefab.Reward is not NftReward)
@@ -26,6 +21,11 @@ namespace LootBoxes.Scene
                 Debug.LogError($"{nameof(NftRewardItemPrefab.Reward)} is not {nameof(NftReward)}");
                 NftRewardItemPrefab = null;
             }
+        }
+
+        public void Configure(IContractBuilder contractBuilder)
+        {
+            this.contractBuilder = contractBuilder;
         }
 
         public async Task<StageItem> Create(Erc721Reward data)
@@ -51,7 +51,7 @@ namespace LootBoxes.Scene
 
         private Texture DownloadImage()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

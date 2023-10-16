@@ -4,7 +4,7 @@ using ChainSafe.Gaming.Web3.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace ChainSafe.Gaming.Chainlink.Lootboxes
+namespace ChainSafe.Gaming.Lootboxes.Chainlink
 {
     public static class LootboxServiceExtensions
     {

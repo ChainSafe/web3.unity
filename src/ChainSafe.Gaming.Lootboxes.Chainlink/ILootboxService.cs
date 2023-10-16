@@ -3,7 +3,7 @@ using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 
-namespace ChainSafe.Gaming.Chainlink.Lootboxes
+namespace ChainSafe.Gaming.Lootboxes.Chainlink
 {
     public interface ILootboxService
     {

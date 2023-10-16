@@ -1,4 +1,4 @@
-namespace ChainSafe.Gaming.Chainlink.Lootboxes
+namespace ChainSafe.Gaming.Lootboxes.Chainlink
 {
     public class LootboxServiceConfig
     {

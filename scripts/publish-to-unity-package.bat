@@ -25,12 +25,12 @@ if exist ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity.lootboxes (
     del /Q ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity.lootboxes\Runtime\Libraries\*
     mkdir ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity.lootboxes\Runtime\Libraries\
     copy Chainsafe.Gaming.Chainlink.dll ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity.lootboxes\Runtime\Libraries\
-    copy Chainsafe.Gaming.Chainlink.LootBoxes.dll ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity.lootboxes\Runtime\Libraries\
+    copy ChainSafe.Gaming.Lootboxes.Chainlink.dll ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity.lootboxes\Runtime\Libraries\
     
 )
 REM Delete those DLLs so they don't get copied in the next step
 del Chainsafe.Gaming.Chainlink.dll
-del Chainsafe.Gaming.Chainlink.LootBoxes.dll
+del ChainSafe.Gaming.Lootboxes.Chainlink.dll
 
 if not exist ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries (
     mkdir ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries\

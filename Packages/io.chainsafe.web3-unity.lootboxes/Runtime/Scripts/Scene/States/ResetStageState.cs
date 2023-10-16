@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ChainSafe.Gaming.Chainlink.Lootboxes;
+using ChainSafe.Gaming.Lootboxes.Chainlink;
 using UnityEngine;
 
 namespace LootBoxes.Scene.States

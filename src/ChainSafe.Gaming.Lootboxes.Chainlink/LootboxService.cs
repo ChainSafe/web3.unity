@@ -17,7 +17,7 @@ using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
 using Newtonsoft.Json;
 
-namespace ChainSafe.Gaming.Chainlink.Lootboxes
+namespace ChainSafe.Gaming.Lootboxes.Chainlink
 {
     public class LootboxService : ILootboxService, ILifecycleParticipant
     {

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ChainSafe.Gaming.Chainlink.Lootboxes;
-using Unity.VisualScripting;
+using ChainSafe.Gaming.Lootboxes.Chainlink;
 using UnityEngine;
 
 namespace LootBoxes.Scene.States
@@ -25,10 +24,7 @@ namespace LootBoxes.Scene.States
             Context.selectLootBoxesUI.NextLootBoxButton.onClick.AddListener(OnNextLootBoxClick);
             Context.selectLootBoxesUI.OpenSelectedButton.onClick.AddListener(OnOpenSelectedClick);
 
-            foreach (var stageItem in Context.stage.StageItems)
-            {
-                stageItem.lootbox.Clicked += OnLootboxClicked;
-            }
+            foreach (var stageItem in Context.stage.StageItems) stageItem.lootbox.Clicked += OnLootboxClicked;
         }
 
         protected override void OnLootBoxSceneStateExit()
@@ -41,43 +37,22 @@ namespace LootBoxes.Scene.States
             Context.selectLootBoxesUI.NextLootBoxButton.onClick.RemoveListener(OnNextLootBoxClick);
             Context.selectLootBoxesUI.OpenSelectedButton.onClick.RemoveListener(OnOpenSelectedClick);
 
-            foreach (var stageItem in Context.stage.StageItems)
-            {
-                stageItem.lootbox.Clicked -= OnLootboxClicked;
-            }
+            foreach (var stageItem in Context.stage.StageItems) stageItem.lootbox.Clicked -= OnLootboxClicked;
         }
 
         protected override void OnLootBoxSceneStateUpdate()
         {
-            if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
-            {
-                Context.stageFocus.FocusDelta(-1);
-            }
+            if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) Context.stageFocus.FocusDelta(-1);
 
-            if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
-            {
-                Context.stageFocus.FocusDelta(+1);
-            }
+            if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) Context.stageFocus.FocusDelta(+1);
 
-            if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
-            {
-                ChangeLootBoxType(-1);
-            }
+            if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) ChangeLootBoxType(-1);
 
-            if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
-            {
-                ChangeLootBoxType(+1);
-            }
+            if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) ChangeLootBoxType(+1);
 
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                ToggleFocusedSelected();
-            }
+            if (Input.GetKeyDown(KeyCode.Space)) ToggleFocusedSelected();
 
-            if (Input.GetKeyDown(KeyCode.Return))
-            {
-                OpenSelectedLootBoxes();
-            }
+            if (Input.GetKeyDown(KeyCode.Return)) OpenSelectedLootBoxes();
         }
 
         private void ToggleFocusedSelected()
@@ -107,10 +82,7 @@ namespace LootBoxes.Scene.States
 
         private void OpenSelectedLootBoxes()
         {
-            if (!Context.stage.StageItems.Any(item => item.lootbox.Selected))
-            {
-                return;
-            }
+            if (!Context.stage.StageItems.Any(item => item.lootbox.Selected)) return;
 
             Context.animator.SetTrigger("OpenLootboxes");
         }
@@ -142,10 +114,7 @@ namespace LootBoxes.Scene.States
 
         private void OnLootboxClicked(Lootbox lootbox)
         {
-            if (Context.stageFocus.FocusedItem.lootbox != lootbox)
-            {
-                return;
-            }
+            if (Context.stageFocus.FocusedItem.lootbox != lootbox) return;
 
             ToggleFocusedSelected();
         }

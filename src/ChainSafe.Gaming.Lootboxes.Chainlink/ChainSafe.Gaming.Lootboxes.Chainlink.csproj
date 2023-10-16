@@ -4,6 +4,7 @@
         <CodeAnalysisRuleSet>../../global.ruleset</CodeAnalysisRuleSet>
         <TargetFramework>netstandard2.1</TargetFramework>
         <Nullable>enable</Nullable>
+        <RootNamespace>ChainSafe.Gaming.Chainlink.Lootboxes</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

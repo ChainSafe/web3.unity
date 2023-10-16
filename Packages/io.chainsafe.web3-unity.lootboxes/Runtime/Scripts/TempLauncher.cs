@@ -1,7 +1,7 @@
 ﻿using Chainsafe.Gaming.Chainlink;
-using ChainSafe.Gaming.Chainlink.Lootboxes;
 using ChainSafe.Gaming.Debugging;
 using ChainSafe.Gaming.Evm.JsonRpc;
+using ChainSafe.Gaming.Lootboxes.Chainlink;
 using ChainSafe.Gaming.Wallets;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
