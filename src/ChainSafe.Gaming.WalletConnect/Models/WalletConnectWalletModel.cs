@@ -20,15 +20,9 @@ namespace ChainSafe.Gaming.WalletConnect.Models
         [JsonProperty("image_url")]
         public ImageUrlsModel Images { get; private set; }
 
-        public void OpenDeeplink(ConnectedData data, IOperatingSystemMediator operatingSystemMediator, string symKey)
+        public void OpenDeeplink(ConnectedData data, IOperatingSystemMediator operatingSystemMediator)
         {
             string uri = data.Uri;
-
-            // if storage is persistent sometimes symKey might be embedded in uri incorrectly, wallet connect issue
-            string symKeyInUri = $"symKey={symKey}";
-
-            // remove symKey in Uri if it exists
-            uri = uri.Replace(symKeyInUri, string.Empty);
 
             switch (operatingSystemMediator.Platform)
             {
@@ -39,14 +33,7 @@ namespace ChainSafe.Gaming.WalletConnect.Models
                 case Platform.IOS:
                 case Platform.Desktop:
                 case Platform.Editor:
-                    if (string.IsNullOrEmpty(symKey))
-                    {
-                        WCLogger.LogError($"Failed to open {Name} Wallet Deeplink : SymKey NullOrEmpty");
-
-                        return;
-                    }
-
-                    uri = GetDeeplink(data.Uri, operatingSystemMediator.IsMobilePlatform, symKey);
+                    uri = GetDeeplink(data.Uri, operatingSystemMediator.IsMobilePlatform);
                     break;
 
                 default:
@@ -67,15 +54,15 @@ namespace ChainSafe.Gaming.WalletConnect.Models
         }
 
         // Deeplink Building
-        private string GetDeeplink(string uri, bool isMobilePlatform, string symKey)
+        private string GetDeeplink(string uri, bool isMobilePlatform)
         {
             WalletLinkModel linkData = GetLinkData(isMobilePlatform);
 
             // prefer native protocol
-            return CanUseNativeProtocol(isMobilePlatform) ? BuildNativeDeeplink(linkData.NativeProtocol, uri, symKey) : BuildUniversalDeeplink(linkData.UniversalUrl, uri, symKey);
+            return CanUseNativeProtocol(isMobilePlatform) ? BuildNativeDeeplink(linkData.NativeProtocol, uri) : BuildUniversalDeeplink(linkData.UniversalUrl, uri);
         }
 
-        private string BuildNativeDeeplink(string url, string uri, string symKey)
+        private string BuildNativeDeeplink(string url, string uri)
         {
             if (url.EndsWith(':'))
             {
@@ -86,19 +73,17 @@ namespace ChainSafe.Gaming.WalletConnect.Models
                 url += "wc";
             }
 
-            return AddDeeplinkParams(url, uri, symKey);
+            return AddDeeplinkParams(url, uri);
         }
 
-        private string BuildUniversalDeeplink(string url, string uri, string symKey)
+        private string BuildUniversalDeeplink(string url, string uri)
         {
-            return AddDeeplinkParams(url, uri, symKey);
+            return AddDeeplinkParams(url, uri);
         }
 
-        private string AddDeeplinkParams(string url, string uri, string symKey)
+        private string AddDeeplinkParams(string url, string uri)
         {
             url += $"?uri={HttpUtility.UrlEncode(uri)}";
-
-            url += $"&symKey={HttpUtility.UrlEncode(symKey)}";
 
             return url;
         }

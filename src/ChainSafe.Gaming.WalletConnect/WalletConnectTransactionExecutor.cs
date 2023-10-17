@@ -14,19 +14,15 @@ namespace ChainSafe.Gaming.WalletConnect
 {
     public class WalletConnectTransactionExecutor : ITransactionExecutor, ILifecycleParticipant
     {
-        private readonly IWalletConnectProvider walletConnectProvider;
+        private readonly IWalletConnectCustomProvider walletConnectCustomProvider;
 
         private readonly IRpcProvider rpcProvider;
 
-        private readonly ISigner signer;
-
-        public WalletConnectTransactionExecutor(IWalletConnectProvider walletConnectProvider, IRpcProvider rpcProvider, ISigner signer)
+        public WalletConnectTransactionExecutor(IWalletConnectCustomProvider walletConnectCustomProvider, IRpcProvider rpcProvider)
         {
-            this.walletConnectProvider = walletConnectProvider;
+            this.walletConnectCustomProvider = walletConnectCustomProvider;
 
             this.rpcProvider = rpcProvider;
-
-            this.signer = signer;
         }
 
         public ValueTask WillStartAsync() => new ValueTask(Task.CompletedTask);
@@ -35,11 +31,6 @@ namespace ChainSafe.Gaming.WalletConnect
 
         public async Task<TransactionResponse> SendTransaction(TransactionRequest transaction)
         {
-            if (string.IsNullOrEmpty(transaction.From))
-            {
-                transaction.From = await signer.GetAddress();
-            }
-
             EthSendTransaction requestData = new EthSendTransaction(new TransactionModel
             {
                 From = transaction.From,
@@ -51,7 +42,7 @@ namespace ChainSafe.Gaming.WalletConnect
                 Nonce = transaction.Nonce?.HexValue,
             });
 
-            string hash = await walletConnectProvider.Request(requestData);
+            string hash = await walletConnectCustomProvider.Request(requestData);
 
             // TODO replace validation with regex
             if (!hash.StartsWith("0x") || hash.Length != 66)

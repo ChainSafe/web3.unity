@@ -21,13 +21,13 @@ using WalletConnectSharp.Storage;
 
 namespace ChainSafe.Gaming.WalletConnect
 {
-    public class WalletConnectProvider : IWalletConnectProvider, ILifecycleParticipant
+    public class WalletConnectCustomProvider : IWalletConnectCustomProvider, ILifecycleParticipant
     {
         private readonly IOperatingSystemMediator operatingSystem;
         private readonly ILogWriter logWriter;
         private readonly WalletConnectConfig config;
 
-        public WalletConnectProvider(WalletConnectConfig config, IOperatingSystemMediator operatingSystem, ILogWriter logWriter)
+        public WalletConnectCustomProvider(WalletConnectConfig config, IOperatingSystemMediator operatingSystem, ILogWriter logWriter)
         {
             this.operatingSystem = operatingSystem;
             this.config = config;
@@ -123,11 +123,16 @@ namespace ChainSafe.Gaming.WalletConnect
 
             if (autoConnect)
             {
-                string pairingTopic = Core.Pairing.Pairings.FirstOrDefault().Topic;
-
-                if (!string.IsNullOrEmpty(pairingTopic))
+                try
                 {
-                    connectOptions.PairingTopic = pairingTopic;
+                    // try and restore session
+                    Session = SignClient.Find(requiredNamespaces).First(s => s.Topic == config.SavedSessionTopic);
+
+                    connectOptions.PairingTopic = Session.PairingTopic;
+                }
+                catch (Exception)
+                {
+                    throw new Web3Exception($"Failed to restore session topic {config.SavedSessionTopic}");
                 }
             }
 
@@ -139,9 +144,22 @@ namespace ChainSafe.Gaming.WalletConnect
             // open deeplink to redirect to wallet for connection
             if (config.RedirectToWallet)
             {
-                if (config.DefaultWallet != null)
+                if (autoConnect)
                 {
-                    config.DefaultWallet.OpenDeeplink(ConnectedData, operatingSystem, Core.Pairing.ParseUri(ConnectedData.Uri)?.SymKey);
+                    // try and open wallet for session renewal
+                    config.DefaultWallet?.OpenWallet(operatingSystem);
+                }
+                else if (config.DefaultWallet != null)
+                {
+                    try
+                    {
+                        config.DefaultWallet.OpenDeeplink(ConnectedData, operatingSystem);
+                    }
+                    catch (Exception e)
+                    {
+                        throw new Web3Exception(
+                            $"Failed Redirecting to {config.DefaultWallet.Name} Wallet, Failed with Exception : {e}");
+                    }
                 }
                 else
                 {
@@ -151,20 +169,12 @@ namespace ChainSafe.Gaming.WalletConnect
 
             if (autoConnect)
             {
-                SessionStruct? session = SignClient.Find(requiredNamespaces)
-                    ?.FirstOrDefault(s => s.Topic == config.SavedSessionTopic);
-
-                if (session != null)
-                {
-                    ConnectedData.Approval = Task.FromResult(session.Value);
-                }
-                else
-                {
-                    throw new Web3Exception("Auto Connect Failed : no matching Session found");
-                }
+                ConnectedData.Approval = Task.FromResult(Session);
             }
 
             Session = await ConnectedData.Approval;
+
+            WCLogger.Log($"Wallet Connect session {Session.Topic} approved");
 
             if (SessionExpired)
             {
@@ -281,11 +291,19 @@ namespace ChainSafe.Gaming.WalletConnect
 
         private async Task TryRenewSession()
         {
+            WCLogger.Log("Attempting to renew Session...");
+
             try
             {
                 var acknowledgement = await SignClient.Extend(Session.Topic);
 
                 await acknowledgement.Acknowledged();
+
+                // try to open default wallet to approve session renewal
+                if (config.RedirectToWallet)
+                {
+                    config.DefaultWallet?.OpenWallet(operatingSystem);
+                }
             }
             catch (Exception e)
             {

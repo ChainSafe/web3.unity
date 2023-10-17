@@ -27,12 +27,12 @@ namespace ChainSafe.Gaming.WalletConnect
 {
     public class WalletConnectSigner : ISigner, ILifecycleParticipant
     {
-        private readonly IWalletConnectProvider walletConnectProvider;
+        private readonly IWalletConnectCustomProvider walletConnectCustomProvider;
         private readonly WalletConnectConfig config;
 
-        public WalletConnectSigner(IWalletConnectProvider walletConnectProvider, WalletConnectConfig config)
+        public WalletConnectSigner(IWalletConnectCustomProvider walletConnectCustomProvider, WalletConnectConfig config)
         {
-            this.walletConnectProvider = walletConnectProvider;
+            this.walletConnectCustomProvider = walletConnectCustomProvider;
             this.config = config;
         }
 
@@ -51,7 +51,7 @@ namespace ChainSafe.Gaming.WalletConnect
             }
 
             // get address by connecting
-            Address = await walletConnectProvider.Connect();
+            Address = await walletConnectCustomProvider.Connect();
         }
 
         public ValueTask WillStopAsync()
@@ -75,7 +75,7 @@ namespace ChainSafe.Gaming.WalletConnect
             var requestData = new EthSignMessage(message, Address);
 
             string hash =
-                await walletConnectProvider.Request(requestData);
+                await walletConnectCustomProvider.Request(requestData);
 
             var isValid = ValidateResponse(hash);
             if (!isValid)
@@ -98,7 +98,7 @@ namespace ChainSafe.Gaming.WalletConnect
             var requestData = new EthSignTypedData<TStructType>(Address, domain, message);
 
             string hash =
-                await walletConnectProvider.Request(requestData);
+                await walletConnectCustomProvider.Request(requestData);
 
             var isValid = ValidateResponse(hash);
             if (!isValid)
