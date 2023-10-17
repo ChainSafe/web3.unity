@@ -43,7 +43,7 @@ public class SampleTestsBase
                 TestWalletAddress = "0x55ffe9E30347266f02b9BdAe20aD3a86493289ea",
             };
 
-            services.UseWalletConnectProvider(config);
+            services.UseWalletConnect(config);
             services.UseWalletConnectSigner();
             services.UseWalletConnectTransactionExecutor();
 

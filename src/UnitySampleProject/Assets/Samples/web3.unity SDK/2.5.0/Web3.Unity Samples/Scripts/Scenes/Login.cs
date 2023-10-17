@@ -265,7 +265,7 @@ namespace Scenes
                     if (useWalletConnect)
                     {
                         services
-                            .UseWalletConnectProvider(BuildWalletConnectConfig())
+                            .UseWalletConnect(BuildWalletConnectConfig())
                             .UseWalletConnectSigner()
                             .UseWalletConnectTransactionExecutor();
                     }

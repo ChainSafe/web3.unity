@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 
 namespace ChainSafe.Gaming.WalletConnect
 {
-    public interface IWalletConnectProvider
+    public interface IWalletConnectCustomProvider
     {
         /// <summary>
         /// connects using Wallet Connect.
