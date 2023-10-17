@@ -1432,17 +1432,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
   m_PrefabInstance: {fileID: 374887655}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &374887657 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7324590823460843055, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
-  m_PrefabInstance: {fileID: 374887655}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 374887658}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &374887658 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8775736491206355084, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
@@ -1713,17 +1702,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
   m_PrefabInstance: {fileID: 452118933}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &452118935 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7324590823460843055, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
-  m_PrefabInstance: {fileID: 452118933}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 452118936}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &452118936 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8775736491206355084, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
@@ -2925,7 +2903,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &981405682
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2943,10 +2921,10 @@ RectTransform:
   m_Father: {fileID: 2036998554}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 295, y: -135}
-  m_SizeDelta: {x: 590, y: 50}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &981405683
 MonoBehaviour:
@@ -3207,37 +3185,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1334079840}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9473851428864b439d6561c87053272a, type: 3}
+  m_Script: {fileID: 11500000, guid: 96894e49d9863ec4db1d93a5e56f19cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   GelatoApiKey: _UzPz_Yk_WTjWMfcl45fLvQNGQ9ISx5ZE8TnwnVKYrE_
-  Web3AuthSettings:
-    ClientId: BCc0wTmuXureEzgawhUSZOWu4bgWo56sZPrxLiHQCpg5OHcNrfa44esdTS8Dm77VtmaIyjhbthdWfbLhSwf7jtU
-    RedirectUri: torusapp://io.chainsafe.gamingsdk.sdkdemoscene/auth
-    Network: 1
-  ExistingWalletButton: {fileID: 787012150}
-  RememberMeToggle: {fileID: 724612376}
   ErrorPopup: {fileID: 1701305868}
-  Web3AuthButtons:
-  - Button: {fileID: 1996606959}
-    Provider: 0
-  - Button: {fileID: 452118935}
-    Provider: 10
-  - Button: {fileID: 374887657}
-    Provider: 1
-  - Button: {fileID: 2114521194}
-    Provider: 2
-  - Button: {fileID: 1452765489}
-    Provider: 3
-  - Button: {fileID: 1508551058}
-    Provider: 4
   supportedWalletsDropdown: {fileID: 540464236}
   redirectToWalletToggle: {fileID: 981405684}
-  walletConnectModal: {fileID: 395689441}
-  <ProjectId>k__BackingField: f4bff60eb260841f46b1c77588cd8acb
-  <ProjectName>k__BackingField: Web3.Unity
-  <BaseContext>k__BackingField: unity-game
-  <Metadata>k__BackingField:
+  loginButton: {fileID: 787012150}
+  rememberMeToggle: {fileID: 724612376}
+  projectId: f4bff60eb260841f46b1c77588cd8acb
+  projectName: Web3.Unity
+  baseContext: unity-game
+  metadata:
     Name: Web3.Unity
     Description: web3.unity is an open-source gaming SDK written in C# and developed
       by ChainSafe Gaming. It connects games built in the Unity game engine to the
@@ -3252,6 +3212,7 @@ MonoBehaviour:
       Native: 
       Universal: 
     VerifyUrl: 
+  walletConnectModal: {fileID: 395689441}
 --- !u!1 &1434038407
 GameObject:
   m_ObjectHideFlags: 0
@@ -3397,17 +3358,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
   m_PrefabInstance: {fileID: 1452765487}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1452765489 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7324590823460843055, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
-  m_PrefabInstance: {fileID: 1452765487}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1452765490}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1452765490 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8775736491206355084, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
@@ -3577,17 +3527,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
   m_PrefabInstance: {fileID: 1508551056}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1508551058 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7324590823460843055, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
-  m_PrefabInstance: {fileID: 1508551056}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1508551059}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1508551059 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8775736491206355084, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
@@ -4807,17 +4746,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
   m_PrefabInstance: {fileID: 1996606957}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1996606959 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7324590823460843055, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
-  m_PrefabInstance: {fileID: 1996606957}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1996606960}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1996606960 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8775736491206355084, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
@@ -5333,17 +5261,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
   m_PrefabInstance: {fileID: 2114521192}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2114521194 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7324590823460843055, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
-  m_PrefabInstance: {fileID: 2114521192}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2114521195}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2114521195 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8775736491206355084, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}

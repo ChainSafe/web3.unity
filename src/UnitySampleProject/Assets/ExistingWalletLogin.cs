@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.WalletConnect;
 using ChainSafe.Gaming.WalletConnect.Models;
 using ChainSafe.Gaming.Web3.Build;
@@ -12,6 +13,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Networking;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using WalletConnectSharp.Core;
 using WalletConnectSharp.Sign.Models;
@@ -19,11 +21,18 @@ using WalletConnectSharp.Sign.Models.Engine;
 
 public class ExistingWalletLogin : Login
 {
-    internal const string SavedWalletConnectConfigKey = "SavedWalletConnectConfig";
+    private const string SavedWalletConnectConfigKey = "SavedWalletConnectConfig";
+    
+    [Header("UI")]
     
     [SerializeField] private TMP_Dropdown supportedWalletsDropdown;
         
     [SerializeField] private Toggle redirectToWalletToggle;
+    
+    [SerializeField] public Button loginButton;
+    
+    [SerializeField] private Toggle rememberMeToggle;
+
     
     [Header("Wallet Connect")]
 
@@ -41,6 +50,8 @@ public class ExistingWalletLogin : Login
     
     private bool autoLogin;
     
+    private bool redirectToWallet;
+    
     private Dictionary<string, WalletConnectWalletModel> supportedWallets;
     
     private WalletConnectConfig walletConnectConfig;
@@ -57,12 +68,15 @@ public class ExistingWalletLogin : Login
     
     protected override IEnumerator Initialize()
     {
-        Assert.IsNotNull(ExistingWalletButton);
-        Assert.IsNotNull(RememberMeToggle);
+        Assert.IsNotNull(loginButton);
+        Assert.IsNotNull(rememberMeToggle);
 
 #if UNITY_ANDROID
-        
-        isRedirectionWalletAgnostic = true;
+
+        if (!Application.isEditor)
+        {
+            isRedirectionWalletAgnostic = true;
+        }
         
 #endif
 
@@ -75,9 +89,14 @@ public class ExistingWalletLogin : Login
             
         yield return new WaitUntil(() => autoLoginTask.IsCompleted);
 
-        ExistingWalletButton.onClick.AddListener(TryLogin);
+        loginButton.onClick.AddListener(LoginClicked);
     }
 
+    private async void LoginClicked()
+    {
+        await TryLogin();
+    }
+    
     protected override Web3Builder ConfigureWeb3Services(Web3Builder web3Builder)
     {
         return web3Builder.Configure(services =>
@@ -106,7 +125,7 @@ public class ExistingWalletLogin : Login
             
             walletConnectConfig = JsonConvert.DeserializeObject<WalletConnectConfig>(savedConfigJson);
                 
-            await LoginWithExistingAccount();
+            await TryLogin();
         }
         catch (Exception e)
         {
@@ -127,6 +146,52 @@ public class ExistingWalletLogin : Login
         
         redirectToWalletToggle.onValueChanged.AddListener(supportedWalletsDropdown.gameObject.SetActive);
     }
+    
+    private WalletConnectConfig BuildWalletConnectConfig()
+        {
+            // build chain
+            var projectConfig = ProjectConfigUtilities.Load();
+
+            ChainModel chain = new ChainModel(ChainModel.EvmNamespace, projectConfig.ChainId, projectConfig.Network);
+            
+            WalletConnectWalletModel defaultWallet = null;
+
+            // if it's an auto login get these values from saved wallet config
+            if (!autoLogin)
+            {
+                // allow redirection on editor for testing UI flow
+                redirectToWallet = redirectToWalletToggle.isOn;
+
+                // needs wallet selected to redirect
+                if (redirectToWallet && !isRedirectionWalletAgnostic)
+                {
+                    defaultWallet = supportedWallets.Values.ToArray()[supportedWalletsDropdown.value];
+                }
+            }
+
+            var config = new WalletConnectConfig
+            {
+                ProjectId = projectId,
+                ProjectName = projectName,
+                BaseContext = baseContext,
+                Chain = chain,
+                Metadata = metadata,
+                SavedSessionTopic = autoLogin ? walletConnectConfig.SavedSessionTopic : null,
+                SupportedWallets = supportedWallets,
+                StoragePath = Application.persistentDataPath,
+                RedirectToWallet = autoLogin ? walletConnectConfig.RedirectToWallet : redirectToWallet,
+                KeepSessionAlive = autoLogin || rememberMeToggle.isOn,
+                DefaultWallet = autoLogin ? walletConnectConfig.DefaultWallet : defaultWallet,
+            };
+
+            walletConnectConfig = config;
+            
+            walletConnectConfig.OnConnected += WalletConnected;
+
+            walletConnectConfig.OnSessionApproved += SessionApproved;
+            
+            return config;
+        }
     
     private IEnumerator FetchSupportedWallets()
     {

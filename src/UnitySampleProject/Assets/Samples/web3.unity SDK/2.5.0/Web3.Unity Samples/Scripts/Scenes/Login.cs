@@ -1,44 +1,23 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.UnityPackage;
-using ChainSafe.Gaming.Wallets;
-using ChainSafe.Gaming.WalletConnect;
-using ChainSafe.Gaming.WalletConnect.Models;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Unity;
 using ChainSafe.GamingSdk.Gelato;
-using Newtonsoft.Json;
-using TMPro;
 using UnityEngine;
-using UnityEngine.Assertions;
-using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using WalletConnectSharp.Core;
-using WalletConnectSharp.Sign.Models;
-using WalletConnectSharp.Sign.Models.Engine;
 
 namespace Scenes
 {
     public abstract class Login : MonoBehaviour
     {
-        [Header("Configuration")]
         public string GelatoApiKey = "";
 
-        [Header("UI")]
-        public Button ExistingWalletButton;
-        public Toggle RememberMeToggle;
         public ErrorPopup ErrorPopup;
-        
-        private bool useWalletConnect;
-
-        private bool redirectToWallet;
         
         private IEnumerator Start()
         {
@@ -46,19 +25,10 @@ namespace Scenes
         }
 
         protected abstract IEnumerator Initialize();
-
-        // redirect to mobile wallet and select default wallet on IOS
-        private void InitializeMobileOptions()
-        {
-            redirectToWalletToggle.gameObject.SetActive(true);
-#if UNITY_IOS
-            InitializeWalletDropdown();
-#endif
-        }
         
         protected abstract Web3Builder ConfigureWeb3Services(Web3Builder web3Builder);
         
-        protected async void TryLogin()
+        protected async Task TryLogin()
         {
             Web3 web3;
             
@@ -105,68 +75,5 @@ namespace Scenes
                     "0x1d6f31b71e12a1a584ca20853495161c48ba491f"));
 
         }
-
-        #region Wallet Connect
-
-        private WalletConnectConfig BuildWalletConnectConfig()
-        {
-            // build chain
-            var projectConfig = ProjectConfigUtilities.Load();
-
-            ChainModel chain = new ChainModel(ChainModel.EvmNamespace, projectConfig.ChainId, projectConfig.Network);
-
-#if UNITY_IOS
-            WalletConnectWalletModel defaultWallet = null;
-#endif
-
-            // if it's an auto login get these values from saved wallet config
-            if (!autoLogin)
-            {
-                // allow redirection on editor for testing UI flow
-                redirectToWallet = (Application.isMobilePlatform || Application.isEditor) && redirectToWalletToggle.isOn;
-
-#if UNITY_IOS
-                // make sure there's a selected wallet on IOS
-                redirectToWallet = redirectToWallet && supportedWalletsDropdown.value != 0;
-
-                if (redirectToWallet)
-                {
-                    // offset for the first/default/unselected dropdown option 0
-                    int selectedWalletIndex = supportedWalletsDropdown.value - 1;
-
-                    defaultWallet = supportedWallets.Values.ToArray()[selectedWalletIndex];
-                }
-#endif
-            }
-
-            var config = new WalletConnectConfig
-            {
-                ProjectId = ProjectId,
-                ProjectName = ProjectName,
-                BaseContext = BaseContext,
-                Chain = chain,
-                Metadata = Metadata,
-                SavedSessionTopic = autoLogin ? walletConnectConfig.SavedSessionTopic : null,
-                SupportedWallets = supportedWallets,
-                StoragePath = Application.persistentDataPath,
-                RedirectToWallet = autoLogin ? walletConnectConfig.RedirectToWallet : redirectToWallet,
-                KeepSessionAlive = autoLogin || RememberMeToggle.isOn,
-#if UNITY_IOS
-                DefaultWallet = autoLogin ? walletConnectConfig.DefaultWallet : defaultWallet,
-#endif
-            };
-
-            walletConnectConfig = config;
-            
-            walletConnectConfig.OnConnected += WalletConnected;
-
-            walletConnectConfig.OnSessionApproved += SessionApproved;
-            
-            return config;
-        }
-        
-        
-
-        #endregion
     }
 }
