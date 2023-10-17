@@ -6,7 +6,7 @@ namespace ChainSafe.GamingSdk.Gelato.Dto
 {
     public interface IErc2771StructTypes
     {
-        [Parameter("unit25t6", "chainId", 1)]
+        [Parameter("uint256", "chainId", 1)]
         [JsonProperty(PropertyName = "chainId")]
         public BigInteger? ChainId { get; set; }
 

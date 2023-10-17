@@ -6,8 +6,8 @@ namespace ChainSafe.Gaming.Web3.Core.Debug
     {
         public static bool IsPublicAddress(string value)
         {
-            // TODO: more accurate test
-            return value.Length == 42;
+            // TODO: more accurate test/Regex
+            return !string.IsNullOrEmpty(value) && value.Length == 42;
         }
 
         public static string AssertIsPublicAddress(this string value, string variableName)
