@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
-using ChainSafe.Gaming.Wallets;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -58,13 +57,13 @@ public class MiscTests : SampleTestsBase
     {
         yield return base.Setup();
 
-        _sample = new UnsortedSample(Web3Result);
+        _sample = new UnsortedSample(web3Result);
     }
 
     [UnityTest]
     public IEnumerator TestContractSend()
     {
-        WebPageWallet.TestResponse = "0x9de3bb69db4bd93babef923f5da1f53cdb287d9ebab9b4177ba2fb25e6a09225";
+        config.TestResponse = "0x9de3bb69db4bd93babef923f5da1f53cdb287d9ebab9b4177ba2fb25e6a09225";
 
         var sendContract = _sample.ContractSend(ContractSendMethodName, Abi, ContractAddress);
 
@@ -127,7 +126,7 @@ public class MiscTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestGetGasNonce()
     {
-        WebPageWallet.TestResponse = "0x527fcd7356738389d29a96342b5fba92ab1348b744409d5bf4ce0ca2fbc2f25e";
+        config.TestResponse = "0x527fcd7356738389d29a96342b5fba92ab1348b744409d5bf4ce0ca2fbc2f25e";
 
         var getGasNonce = _sample.GetNonce();
 
@@ -140,7 +139,7 @@ public class MiscTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestTransactionStatus()
     {
-        WebPageWallet.TestResponse = "0x1e989dbcc43e078b19ea8ea201af195e74397b494b7acd4afcca67e65e5c3339";
+        config.TestResponse = "0x1e989dbcc43e078b19ea8ea201af195e74397b494b7acd4afcca67e65e5c3339";
 
         var getTransactionStatus = _sample.GetTransactionStatus();
 
@@ -153,7 +152,7 @@ public class MiscTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestMint721()
     {
-        WebPageWallet.TestResponse = "0xa9f953f9845e7d49d778d6fed622d566daf09e8e1c793297c7cab54782e1aae9";
+        config.TestResponse = "0xa9f953f9845e7d49d778d6fed622d566daf09e8e1c793297c7cab54782e1aae9";
 
         var mint721 = _sample.Mint721(Mint721Abi, Mint721Address, MintUri);
 
@@ -179,7 +178,7 @@ public class MiscTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestSendArray()
     {
-        WebPageWallet.TestResponse = "0x6a33280f3b2b907da613b18b09f863cd835f1977a4131001ace5602899fc98c7";
+        config.TestResponse = "0x6a33280f3b2b907da613b18b09f863cd835f1977a4131001ace5602899fc98c7";
 
         var sendArray = _sample.SendArray(SendArrayMethodName, SendArrayAbi, SendArrayAddress, ArrayToSend.ToArray());
 
@@ -193,7 +192,7 @@ public class MiscTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestSendTransaction()
     {
-        WebPageWallet.TestResponse = "0xa60bef1df91bedcd2f3f79e6609716ef245fd1202d66c6e35694b43529bf2e71";
+        config.TestResponse = "0xa60bef1df91bedcd2f3f79e6609716ef245fd1202d66c6e35694b43529bf2e71";
 
         var sendTransaction = _sample.SendTransaction(SendToAddress);
 
@@ -201,7 +200,7 @@ public class MiscTests : SampleTestsBase
 
         Assert.IsTrue(sendTransaction.IsCompletedSuccessfully);
 
-        Assert.AreEqual(sendTransaction.Result, WebPageWallet.TestResponse);
+        Assert.AreEqual(sendTransaction.Result, config.TestResponse);
     }
 
     [UnityTest]
@@ -217,7 +216,7 @@ public class MiscTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestSignMessage()
     {
-        WebPageWallet.TestResponse =
+        config.TestResponse =
             "0x87dfaa646f476ca53ba8b6e8d122839571e52866be0984ec0497617ad3e988b7401c6b816858df27625166cb98a688f99ba92fa593da3c86c78b19c78c1f51cc1c";
 
         var signMessage = _sample.SignMessage("The right man in the wrong place can make all the difference in the world.");
@@ -226,13 +225,13 @@ public class MiscTests : SampleTestsBase
 
         Assert.IsTrue(signMessage.IsCompletedSuccessfully);
 
-        Assert.AreEqual(signMessage.Result, WebPageWallet.TestResponse);
+        Assert.AreEqual(signMessage.Result, config.TestResponse);
     }
 
     [UnityTest]
     public IEnumerator TestSignVerify()
     {
-        WebPageWallet.TestResponse =
+        config.TestResponse =
             "0x5c996d43c2e804a0d0de7f8b07cc660bbae638aa7ea137df6156621abe5e1fbb1727ebb06f7e0067537cb0f942825fa15ead9dea6d74e4d17fa6e69007cb59561c";
 
         var signVerify = _sample.SignVerify("A man chooses, a slave obeys.");
@@ -247,7 +246,7 @@ public class MiscTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestTransferErc20()
     {
-        WebPageWallet.TestResponse = "0xba90b6fb8cbee5fd0ad423cc74bb4a365bb88b260601933aac86b947945c5465";
+        config.TestResponse = "0xba90b6fb8cbee5fd0ad423cc74bb4a365bb88b260601933aac86b947945c5465";
 
         var transferErc20 = _sample.TransferErc20(TransferErc20ContractAddress, SendToAddress, "1000000000000000");
 
@@ -261,7 +260,7 @@ public class MiscTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestTransferErc721()
     {
-        WebPageWallet.TestResponse = "0x0e292ae8c5ab005d87581f32fd791e1b18b0cfa944d6877b41edbdb740ee8586";
+        config.TestResponse = "0x0e292ae8c5ab005d87581f32fd791e1b18b0cfa944d6877b41edbdb740ee8586";
 
         var transferErc721 = _sample.TransferErc721(TransferErc721ContractAddress, SendToAddress, 0);
 
@@ -275,7 +274,7 @@ public class MiscTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestTransferErc1155()
     {
-        WebPageWallet.TestResponse = "0xb018a043ac0affe05159a53daa8656dbbad61c839eaf89622d7813226f222876";
+        config.TestResponse = "0xb018a043ac0affe05159a53daa8656dbbad61c839eaf89622d7813226f222876";
 
         var transferErc1155 = _sample.TransferErc1155(TransferErc1155ContractAddress, 101, 1, SendToAddress);
 
