@@ -29,7 +29,7 @@ namespace ChainSafe.Gaming.Evm
         {
             var httpClient = environment.HttpClient;
             var response = await httpClient.Get<Chains.Chain[]>(FetchUrl);
-            return response.EnsureResponse().ToDictionary(chain => chain.ChainId, chain => chain);
+            return response.AssertSuccess().ToDictionary(chain => chain.ChainId, chain => chain);
         }
     }
 }
