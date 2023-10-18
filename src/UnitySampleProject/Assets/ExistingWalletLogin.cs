@@ -102,7 +102,7 @@ public class ExistingWalletLogin : Login
         return web3Builder.Configure(services =>
         {
             services
-                .UseWalletConnectProvider(BuildWalletConnectConfig())
+                .UseWalletConnect(BuildWalletConnectConfig())
                 .UseWalletConnectSigner()
                 .UseWalletConnectTransactionExecutor();
         });

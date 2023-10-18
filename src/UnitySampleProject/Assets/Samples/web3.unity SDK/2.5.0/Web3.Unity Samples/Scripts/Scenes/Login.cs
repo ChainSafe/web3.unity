@@ -53,7 +53,7 @@ namespace Scenes
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
 
-        protected void ConfigureCommonServices(IWeb3ServiceCollection services)
+        private void ConfigureCommonServices(IWeb3ServiceCollection services)
         {
             services
                 .UseUnityEnvironment()
