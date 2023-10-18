@@ -43,6 +43,7 @@ jobs:
       - name: Publish to Unity Package
         run: |
           rm -f ${{ matrix.publishPath }}/UnityEngine.dll
+          rm -f ${{ matrix.publishPath }}/Microsoft.CSharp.dll
           mkdir -p ${{ matrix.packageLibraryPath }}
           rm -f ${{ matrix.packageLibraryPath }}/*
           cp ${{ matrix.publishPath }}/*.dll ${{ matrix.packageLibraryPath }}/
