@@ -20,7 +20,7 @@ namespace Scripts.EVM.Remote
         /// <summary>
         /// Performs a multicall using the provided parameters.
         /// </summary>
-        /// <returns>A string response.</returns>
+        /// <returns>String encoded response from the MultiCall contract.</returns>
         public static async Task<string> Multicall(Web3 web3, string _chain, string _network, string _contract, string _abi, string _method, string _args, string _multicall = "", string _rpc = "")
         {
             WWWForm form = new WWWForm();
