@@ -40,7 +40,7 @@ namespace ChainSafe.GamingSdk.Gelato.Types
 
         /// <summary>
         ///     Initiates a sponsored relay call. This allows another entity to pay for the transaction fees, making the
-        ///     transaction effectively free for the original sender.
+        ///     transaction effectively free for the original sender. This method does not require the user to sign the request.
         /// </summary>
         /// <param name="request">The details of the sponsored call request.</param>
         /// <returns>An instance of <see cref="RelayResponse" /> containing details about the transaction and its result.</returns>
