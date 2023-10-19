@@ -44,7 +44,7 @@ namespace Scripts.EVM.Remote
         /// <summary>
         /// Creates a mint for an NFT using the provided parameters.
         /// </summary>
-        /// <returns>A response with the mint details.</returns>
+        /// <returns>A response with the mint transaction object.</returns>
         public static async Task<CreateMintModel.Response> CreateMint(Web3 web3, string _chain, string _network, string _account, string _to, string _cid, string _type)
         {
             WWWForm form = new WWWForm();
