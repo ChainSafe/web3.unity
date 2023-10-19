@@ -1,7 +1,9 @@
 @ECHO OFF
 
+SET SCRIPT_DIR=%~dp0
+
 echo Building project...
-pushd ..\src\ChainSafe.Gaming.Unity
+pushd "%SCRIPT_DIR%\..\src\ChainSafe.Gaming.Unity"
 
 del obj /F /Q
 del bin /F /Q
