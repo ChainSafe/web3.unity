@@ -48,7 +48,7 @@ namespace ChainSafe.GamingSdk.Gelato.Types
 
         /// <summary>
         ///     Executes a sponsored relay call conforming to the Erc2771 standard. This allows meta-transactions where the fee can
-        ///     be sponsored by another entity.
+        ///     be sponsored by another entity. This method requires the user to sign the request.
         /// </summary>
         /// <param name="request">The details of the sponsored call request based on the Erc2771 standard.</param>
         /// <returns>An instance of <see cref="RelayResponse" /> containing details about the transaction and its result.</returns>
