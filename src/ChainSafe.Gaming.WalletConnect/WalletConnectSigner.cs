@@ -30,6 +30,7 @@ namespace ChainSafe.Gaming.WalletConnect
         }
 
         /// <summary>
+        /// Implementation of <see cref="ILifecycleParticipant.WillStartAsync"/>.
         /// Lifetime event method, called during initialization.
         /// </summary>
         /// <returns>async awaitable task.</returns>
@@ -50,6 +51,7 @@ namespace ChainSafe.Gaming.WalletConnect
         }
 
         /// <summary>
+        /// Implementation of <see cref="ILifecycleParticipant.WillStopAsync"/>.
         /// Lifetime event method, called during <see cref="Web3.TerminateAsync"/>.
         /// </summary>
         /// <returns>async awaitable task.</returns>
@@ -59,6 +61,7 @@ namespace ChainSafe.Gaming.WalletConnect
         }
 
         /// <summary>
+        /// Implementation of <see cref="ISigner.GetAddress"/>.
         /// Get public address of connected client.
         /// </summary>
         /// <returns>Wallet address of connected client.</returns>
@@ -75,6 +78,7 @@ namespace ChainSafe.Gaming.WalletConnect
         }
 
         /// <summary>
+        /// Implementation of <see cref="ISigner.SignMessage"/>.
         /// Sign message using Wallet Connect.
         /// This prompts user to sign a message on a connected wallet.
         /// </summary>
@@ -105,6 +109,7 @@ namespace ChainSafe.Gaming.WalletConnect
         }
 
         /// <summary>
+        /// Implementation of <see cref="ISigner.SignTypedData{TStructType}"/>.
         /// Sign Typed Data using wallet connect.
         /// </summary>
         /// <param name="domain">A serializable domain separator.</param>

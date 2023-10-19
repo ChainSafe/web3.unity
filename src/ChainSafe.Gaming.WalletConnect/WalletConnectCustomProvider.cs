@@ -67,6 +67,7 @@ namespace ChainSafe.Gaming.WalletConnect
         private bool SessionExpired => Session.Expiry != null && Clock.IsExpired((long)Session.Expiry);
 
         /// <summary>
+        /// Implementation of <see cref="ILifecycleParticipant.WillStartAsync"/>.
         /// Lifetime event method, called during initialization.
         /// </summary>
         /// <returns>async awaitable task.</returns>
@@ -113,6 +114,7 @@ namespace ChainSafe.Gaming.WalletConnect
         }
 
         /// <summary>
+        /// Implementation of <see cref="IWalletConnectCustomProvider.Connect"/>.
         /// Connect <see cref="SignClient"/> to a wallet and create a <see cref="Session"/>.
         /// </summary>
         /// <returns>Address of connected wallet.</returns>
@@ -256,6 +258,7 @@ namespace ChainSafe.Gaming.WalletConnect
         }
 
         /// <summary>
+        /// Implementation of <see cref="ILifecycleParticipant.WillStopAsync"/>.
         /// Lifetime event method, called during <see cref="Web3.TerminateAsync"/>.
         /// </summary>
         /// <returns>async awaitable task.</returns>
@@ -271,6 +274,7 @@ namespace ChainSafe.Gaming.WalletConnect
         }
 
         /// <summary>
+        /// Implementation of <see cref="IWalletConnectCustomProvider.Request{T}"/>.
         /// Make a json RPC request using Wallet Connect.
         /// </summary>
         /// <param name="data">Request data or params. Data class/struct must be decorated with a <see cref="RpcMethodAttribute"/>.</param>
@@ -381,6 +385,7 @@ namespace ChainSafe.Gaming.WalletConnect
         }
 
         /// <summary>
+        /// Implementation of <see cref="IWalletConnectCustomProvider.Disconnect"/>.
         /// Disconnects <see cref="Session"/> if it exists.
         /// </summary>
         /// <returns>Async awaitable task.</returns>

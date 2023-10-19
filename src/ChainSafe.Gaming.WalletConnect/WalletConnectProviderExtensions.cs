@@ -11,7 +11,7 @@ namespace ChainSafe.Gaming.WalletConnect
     public static class WalletConnectProviderExtensions
     {
         /// <summary>
-        /// Binds implementation of <see cref="WalletConnectConfig"/> to Web3 as a service.
+        /// Binds implementation of <see cref="IWalletConnectCustomProvider"/> as <see cref="WalletConnectCustomProvider"/> and <see cref="WalletConnectConfig"/> to Web3 as a service.
         /// </summary>
         /// <param name="collection">Service collection to bind implementations to.</param>
         /// <param name="config">Wallet Connect Configuration.</param>

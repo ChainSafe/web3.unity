@@ -32,18 +32,21 @@ namespace ChainSafe.Gaming.WalletConnect
         }
 
         /// <summary>
+        /// Implementation of <see cref="ILifecycleParticipant.WillStartAsync"/>.
         /// Lifetime event method, called during initialization.
         /// </summary>
         /// <returns>async awaitable task.</returns>
         public ValueTask WillStartAsync() => new ValueTask(Task.CompletedTask);
 
         /// <summary>
+        /// Implementation of <see cref="ILifecycleParticipant.WillStopAsync"/>.
         /// Lifetime event method, called during <see cref="Web3.TerminateAsync"/>.
         /// </summary>
         /// <returns>async awaitable task.</returns>
         public ValueTask WillStopAsync() => new ValueTask(Task.CompletedTask);
 
         /// <summary>
+        /// Implementation of <see cref="ITransactionExecutor.SendTransaction"/>.
         /// Send a transaction using Wallet Connect.
         /// This prompts user to approve a transaction on a connected wallet.
         /// </summary>

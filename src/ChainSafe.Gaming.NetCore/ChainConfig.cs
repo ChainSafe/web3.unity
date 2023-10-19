@@ -3,6 +3,7 @@ using ChainSafe.Gaming.Web3;
 namespace ChainSafe.Gaming.NetCore
 {
     /// <summary>
+    /// Concrete Implementation of <see cref="IChainConfig"/>.
     /// Holds all config files related to chain and network.
     /// </summary>
     public class ChainConfig : IChainConfig
