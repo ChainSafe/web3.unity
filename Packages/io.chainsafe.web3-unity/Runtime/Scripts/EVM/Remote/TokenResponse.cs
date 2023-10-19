@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Scripts.EVM.Token
 {
+    /// <summary>
+    /// Represents a response related to a token within an Ethereum Virtual Machine (EVM) context.
+    /// </summary>
     public class TokenResponse
     {
         public string Contract { get; set; }

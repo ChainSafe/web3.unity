@@ -16,6 +16,11 @@ namespace Scripts.EVM.Remote
         public class Response<T> { public T response; }
         private static readonly string host = "https://api.gaming.chainsafe.io/evm";
         private static readonly string hostVoucher = "https://lazy-minting-voucher-signer.herokuapp.com";
+
+        /// <summary>
+        /// Performs a multicall using the provided parameters.
+        /// </summary>
+        /// <returns>A string response.</returns>
         public static async Task<string> Multicall(Web3 web3, string _chain, string _network, string _contract, string _abi, string _method, string _args, string _multicall = "", string _rpc = "")
         {
             WWWForm form = new WWWForm();
@@ -36,6 +41,10 @@ namespace Scripts.EVM.Remote
                 return data.response;
             }
         }
+        /// <summary>
+        /// Creates a mint for an NFT using the provided parameters.
+        /// </summary>
+        /// <returns>A response with the mint details.</returns>
         public static async Task<CreateMintModel.Response> CreateMint(Web3 web3, string _chain, string _network, string _account, string _to, string _cid, string _type)
         {
             WWWForm form = new WWWForm();
@@ -55,6 +64,10 @@ namespace Scripts.EVM.Remote
             }
         }
 
+        /// <summary>
+        /// Retrieves the NFT collection associated with the specified account.
+        /// </summary>
+        /// <returns>A string containing collection details.</returns>
         public static async Task<string> GetNftCollectionByAcc(Web3 web3, string _account)
         {
             WWWForm form = new WWWForm();
@@ -69,6 +82,10 @@ namespace Scripts.EVM.Remote
             }
         }
 
+        /// <summary>
+        /// Retrieves the NFT collection by slug.
+        /// </summary>
+        /// <returns>A string containing collection details.</returns>
         public static async Task<string> GetNftCollectionBySlug(Web3 web3, string _slug)
         {
             WWWForm form = new WWWForm();
@@ -83,6 +100,10 @@ namespace Scripts.EVM.Remote
             }
         }
 
+        /// <summary>
+        /// Gets the data for a specific NFT.
+        /// </summary>
+        /// <returns>A string containing the NFT data.</returns>
         public static async Task<string> GetNft(Web3 web3, string _account, string _chain, string _network, string _nftContract, string _tokenId)
         {
             WWWForm form = new WWWForm();
@@ -101,6 +122,10 @@ namespace Scripts.EVM.Remote
             }
         }
 
+        /// <summary>
+        /// Retrieves a list of NFTs from the market.
+        /// </summary>
+        /// <returns>A list of response objects with the NFTs details.</returns>
         public static async Task<List<GetNftListModel.Response>> GetNftMarket(Web3 web3, string _chain, string _network)
         {
             WWWForm form = new WWWForm();
@@ -116,6 +141,10 @@ namespace Scripts.EVM.Remote
             }
         }
 
+        /// <summary>
+        /// Retrieves a list of minted NFTs.
+        /// </summary>
+        /// <returns>A list of response objects with the minted NFTs details.</returns>
         public static async Task<List<MintedNFT.Response>> GetMintedNFT(Web3 web3, string _chain, string _network, string _account)
         {
             WWWForm form = new WWWForm();
@@ -132,6 +161,10 @@ namespace Scripts.EVM.Remote
             }
         }
 
+        /// <summary>
+        /// Creates a purchase transaction for an NFT.
+        /// </summary>
+        /// <returns>A response object with the transaction details.</returns>
         public static async Task<BuyNFT.Response> CreatePurchaseNftTransaction(Web3 web3, string _chain, string _network, string _account, string _itemId, string _price, string _tokenType)
         {
             WWWForm form = new WWWForm();
@@ -152,6 +185,10 @@ namespace Scripts.EVM.Remote
             }
         }
 
+        /// <summary>
+        /// Lists an NFT for sale.
+        /// </summary>
+        /// <returns>A response object with the transaction details.</returns>
         public static async Task<ListNFT.Response> CreateListNftTransaction(Web3 web3, string _chain, string _network, string _account, string _tokenId, string _priceHex, string _tokenType)
         {
             WWWForm form = new WWWForm();
@@ -171,6 +208,10 @@ namespace Scripts.EVM.Remote
             }
         }
 
+        /// <summary>
+        /// Cancels an NFT listing.
+        /// </summary>
+        /// <returns>A list of response objects with the NFTs details.</returns>
         public static async Task<List<GetNftListModel.Response>> CreateCancelNftTransaction(Web3 web3, string _chain, string _network, string _account, string _itemId)
         {
             WWWForm form = new WWWForm();
@@ -188,6 +229,10 @@ namespace Scripts.EVM.Remote
             }
         }
 
+        /// <summary>
+        /// Retrieves a 721 voucher.
+        /// </summary>
+        /// <returns>A response object containing the voucher details.</returns>
 
         public static async Task<GetVoucherModel.GetVoucher721Response> Get721Voucher(Web3 web3)
         {
@@ -201,6 +246,10 @@ namespace Scripts.EVM.Remote
             }
         }
 
+        /// <summary>
+        /// Retrieves a 1155 voucher.
+        /// </summary>
+        /// <returns>A response object containing the voucher details.</returns>
         public static async Task<GetVoucherModel.GetVoucher1155Response> Get1155Voucher(Web3 web3)
         {
             string url = hostVoucher + "/voucher1155?receiver=" + await web3.Signer.GetAddress();
@@ -213,6 +262,10 @@ namespace Scripts.EVM.Remote
             }
         }
 
+        /// <summary>
+        /// Creates an approval transaction.
+        /// </summary>
+        /// <returns>A response object with the approval details.</returns>
         public static async Task<CreateApprovalModel.Response> CreateApproveTransaction(Web3 web3, string chain, string network, string account, string tokenType)
         {
             WWWForm form = new WWWForm();
@@ -231,7 +284,10 @@ namespace Scripts.EVM.Remote
             }
         }
 
-
+        /// <summary>
+        /// Retrieves all ERC721 tokens for a given account.
+        /// </summary>
+        /// <returns>An array of response objects with the tokens details.</returns>
         public static async Task<TokenResponse[]> AllErc721(Web3 web3, string chain, string network, string account, string contract = "", int take = 500, int skip = 0)
         {
             WWWForm form = new WWWForm();
@@ -262,6 +318,10 @@ namespace Scripts.EVM.Remote
             }
         }
 
+        /// <summary>
+        /// Retrieves all ERC1155 tokens for a given account.
+        /// </summary>
+        /// <returns>An array of response objects with the tokens details.</returns>
         public static async Task<TokenResponse[]> AllErc1155(Web3 web3, string chain, string network, string account, string contract = "", int take = 500, int skip = 0)
         {
             WWWForm form = new WWWForm();
@@ -290,6 +350,10 @@ namespace Scripts.EVM.Remote
                 throw new Web3Exception("NFTs deserialization failed.", e);
             }
         }
+        /// <summary>
+        /// Creates a redeem transaction for a voucher.
+        /// </summary>
+        /// <returns>A response object with the transaction details.</returns>
         public static async Task<RedeemVoucherTxModel.Response> CreateRedeemTransaction(Web3 web3, string chain, string network, string voucher, string type, string nftAddress, string account)
         {
             WWWForm form = new WWWForm();
