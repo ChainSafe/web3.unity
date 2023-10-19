@@ -38,44 +38,43 @@ namespace ChainSafe.Gaming.Web3
         }
 
         /// <summary>
-        /// Access the <see cref="IRpcProvider"/> component bound to the Web3 instance during the build phase.
+        /// Access the <see cref="IRpcProvider"/> component, which provides RPC communication with the Ethereum network.
         /// </summary>
         public IRpcProvider RpcProvider => AssertComponentAccessible(rpcProvider, nameof(RpcProvider));
 
         /// <summary>
-        /// Access the <see cref="ISigner"/> component bound to the Web3 instance during the build phase.
+        /// Access the <see cref="ISigner"/> component, responsible for signing transactions, messages, and providing the player's public address.
         /// </summary>
         public ISigner Signer => AssertComponentAccessible(signer, nameof(Signer));
 
         /// <summary>
-        /// Access the <see cref="ITransactionExecutor"/> component bound to the Web3 instance during the build phase.
+        /// Access the <see cref="ITransactionExecutor"/> component, used for sending transactions to the blockchain.
         /// </summary>
         public ITransactionExecutor TransactionExecutor => AssertComponentAccessible(transactionExecutor, nameof(TransactionExecutor));
 
         /// <summary>
-        /// Access the event service of the Web3 instance.
+        /// Access the event service of the Web3 instance, allowing you to subscribe to blockchain events.
         /// </summary>
         public IEvmEvents Events => AssertComponentAccessible(events, nameof(Events));
 
         /// <summary>
-        /// Access the <see cref="IContractBuilder"/> factory.
+        /// Access the factory for creating Ethereum smart contract wrappers.
         /// </summary>
         public IContractBuilder ContractBuilder { get; }
 
         /// <summary>
-        /// Access the project configuration object.
+        /// Access the project configuration object, providing access to project-specific settings.
         /// </summary>
         public IProjectConfig ProjectConfig { get; }
 
         /// <summary>
-        /// Access the chain configuration object.
+        /// Access the chain configuration object, providing access to blockchain-specific settings.
         /// </summary>
         public IChainConfig ChainConfig { get; }
 
         /// <summary>
         /// Access the service provider of this Web3 instance.
-        /// Use this to get any service, that was bound to this Web3 instance
-        /// during the build phase.
+        /// Use this to retrieve any service that was bound to this Web3 instance during the build phase.
         /// </summary>
         public IServiceProvider ServiceProvider => serviceProvider;
 
