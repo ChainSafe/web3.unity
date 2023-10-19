@@ -31,7 +31,7 @@ namespace ChainSafe.GamingSdk.Gelato.Types
 
         /// <summary>
         ///     Executes a relay call conforming to the Erc2771 standard with synchronized fee, but with additional options for
-        ///     more flexibility.
+        ///     specifying relaying criteria. This method requires a user to sign the request.
         /// </summary>
         /// <param name="request">The details of the call request based on the Erc2771 standard.</param>
         /// <param name="options">Additional relay request options for customizing the transaction.</param>
