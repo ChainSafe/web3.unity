@@ -5,10 +5,13 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace ChainSafe.Gaming.WalletConnect
 {
+    /// <summary>
+    /// <see cref="WalletConnectCustomProvider"/> extension methods.
+    /// </summary>
     public static class WalletConnectProviderExtensions
     {
         /// <summary>
-        /// Binds Web implementation of EVM Provider to Web3.
+        /// Binds implementation of <see cref="WalletConnectConfig"/> to Web3 as a service.
         /// </summary>
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
         public static IWeb3ServiceCollection UseWalletConnect(this IWeb3ServiceCollection collection, WalletConnectConfig config)

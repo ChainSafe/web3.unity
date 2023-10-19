@@ -21,12 +21,22 @@ using WalletConnectSharp.Storage;
 
 namespace ChainSafe.Gaming.WalletConnect
 {
+    /// <summary>
+    /// This class connects and disconnects to a wallet using WalletConnectSharp.
+    /// It can also be used to make a Json RPC request to an address.
+    /// </summary>
     public class WalletConnectCustomProvider : IWalletConnectCustomProvider, ILifecycleParticipant
     {
         private readonly IOperatingSystemMediator operatingSystem;
         private readonly ILogWriter logWriter;
         private readonly WalletConnectConfig config;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WalletConnectCustomProvider"/> class.
+        /// </summary>
+        /// <param name="config">Wallet connect configuration used to pass values to this provider.</param>
+        /// <param name="operatingSystem">Operating system mediator used for passing platform information and opening a deeplink.</param>
+        /// <param name="logWriter">Log writer used for logging messages to platform.</param>
         public WalletConnectCustomProvider(WalletConnectConfig config, IOperatingSystemMediator operatingSystem, ILogWriter logWriter)
         {
             this.operatingSystem = operatingSystem;
@@ -34,17 +44,33 @@ namespace ChainSafe.Gaming.WalletConnect
             this.logWriter = logWriter;
         }
 
-        // static to not destroy client session on logout/TerminateAsync, just disconnect instead
+        /// <summary>
+        /// Connected client.
+        /// It's static to not destroy client session on logout/TerminateAsync, just disconnect instead.
+        /// </summary>
         public static WalletConnectSignClient SignClient { get; private set; }
 
+        /// <summary>
+        /// Wallet Connect Core.
+        /// </summary>
         public WalletConnectCore Core { get; private set; }
 
+        /// <summary>
+        /// Connected session if any.
+        /// </summary>
         public SessionStruct Session { get; private set; }
 
+        /// <summary>
+        /// ConnectedData used to create a connection/<see cref="Session"/>.
+        /// </summary>
         public ConnectedData ConnectedData { get; private set; }
 
         private bool SessionExpired => Session.Expiry != null && Clock.IsExpired((long)Session.Expiry);
 
+        /// <summary>
+        /// Lifetime event method, called during initialization.
+        /// </summary>
+        /// <returns>async awaitable task.</returns>
         public ValueTask WillStartAsync()
         {
             return new ValueTask(Task.CompletedTask);
@@ -87,7 +113,11 @@ namespace ChainSafe.Gaming.WalletConnect
             });
         }
 
-        // Connect to wallet and return address of connected wallet.
+        /// <summary>
+        /// Connect <see cref="SignClient"/> to a wallet and create a <see cref="Session"/>.
+        /// </summary>
+        /// <returns>Address of connected wallet.</returns>
+        /// <exception cref="Web3Exception">Exception Thrown if connection fails.</exception>
         public async Task<string> Connect()
         {
             await Initialize();
@@ -153,7 +183,7 @@ namespace ChainSafe.Gaming.WalletConnect
                 {
                     try
                     {
-                        config.DefaultWallet.OpenDeeplink(ConnectedData, operatingSystem);
+                        config.DefaultWallet.OpenDeeplink(ConnectedData.Uri, operatingSystem);
                     }
                     catch (Exception e)
                     {
@@ -226,6 +256,10 @@ namespace ChainSafe.Gaming.WalletConnect
             return address;
         }
 
+        /// <summary>
+        /// Lifetime event method, called during <see cref="Web3.TerminateAsync"/>.
+        /// </summary>
+        /// <returns>async awaitable task.</returns>
         public ValueTask WillStopAsync()
         {
             if (!config.KeepSessionAlive)
@@ -237,6 +271,14 @@ namespace ChainSafe.Gaming.WalletConnect
             return new ValueTask(Task.CompletedTask);
         }
 
+        /// <summary>
+        /// Make a json RPC request using Wallet Connect.
+        /// </summary>
+        /// <param name="data">Request data or params. Data class/struct must be decorated with a <see cref="RpcMethodAttribute"/>.</param>
+        /// <param name="expiry">Time for request to expire.</param>
+        /// <typeparam name="T">Request data type or params.</typeparam>
+        /// <returns>Response string hash.</returns>
+        /// <exception cref="Web3Exception">Exception thrown if request fails.</exception>
         public async Task<string> Request<T>(T data, long? expiry = null)
         {
             // if testing skip making request
@@ -339,6 +381,10 @@ namespace ChainSafe.Gaming.WalletConnect
             return new FileSystemStorage(path);
         }
 
+        /// <summary>
+        /// Disconnects <see cref="Session"/> if it exists.
+        /// </summary>
+        /// <returns>Async awaitable task.</returns>
         public async Task Disconnect()
         {
             WCLogger.Log("Disconnecting Wallet Connect session...");
