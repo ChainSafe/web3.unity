@@ -16,6 +16,13 @@
         "blockchain",
         "nft"
     ],
+    "samples": [
+        {
+            "displayName": "Chainlink Lootbox Sample",
+            "description": "Contains Sample scene and some basic interaction with Chainlink Lootboxes.",
+            "path": "Samples~/Lootbox Samples"
+        }
+    ],
     "author": {
         "name": "ChainSafe Gaming",
         "email": "bd@chainsafe.io",
