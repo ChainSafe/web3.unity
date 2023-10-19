@@ -1,10 +1,11 @@
 #! /usr/bin/env sh
+scripts_dir=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 
-# Get the directory of the current script
-SCRIPT_DIR="$(dirname "$0")"
-
+pushd "$scripts_dir"/../
 # clone submodules
 git submodule update --init
+popd
 
 # publish DLLs to unity package
-"$SCRIPT_DIR/publish-to-unity-package.sh"
+source "$scripts_dir"/publish-to-unity-package.sh
+

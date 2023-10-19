@@ -47,7 +47,7 @@ public static class SceneIndexer
         importPath = Path.Combine(importPath, "Scenes");
 
         //scenes already added to build settings
-        if (EditorBuildSettings.scenes.Any(s => s.path.Contains(importPath)))
+        if (EditorBuildSettings.scenes.Any(s => Path.GetFullPath(s.path).Contains(importPath)))
         {
             SessionState.SetBool(ScenesIndexedKey, true);
 

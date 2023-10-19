@@ -1,8 +1,10 @@
 #! /usr/bin/env sh
 set -e
-SCRIPT_DIR="$(dirname "$0")"
+
 echo Building project...
-pushd $SCRIPT_DIR/../src/ChainSafe.Gaming.Unity
+scripts_dir=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
+
+pushd "$scripts_dir"/../src/ChainSafe.Gaming.Unity
 
 rm -rf obj
 rm -rf bin
@@ -30,11 +32,10 @@ fi
 rm Chainsafe.Gaming.Chainlink.dll
 rm Chainsafe.Gaming.LootBoxes.Chainlink.dll
 
+rm Microsoft.CSharp.dll
 rm -rf ../../../../../../Packages/io.chainsafe.web3-unity/Runtime/Libraries
 mkdir -p ../../../../../../Packages/io.chainsafe.web3-unity/Runtime/Libraries
 cp *.dll ../../../../../../Packages/io.chainsafe.web3-unity/Runtime/Libraries
-
 popd
 popd
-
 echo Done
