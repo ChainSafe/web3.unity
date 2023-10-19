@@ -102,7 +102,7 @@ namespace ChainSafe.GamingSdk.Gelato
         /// <summary>
         /// Gets the estimated fee for a specified request.
         /// </summary>
-        /// <param name="request">The request containing details for which the estimated fee is needed.</param>
+        /// <param name="request">The Gelato relay request object which is being sent for cost estimation.</param>
         /// <returns>The estimated fee as a <see cref="HexBigInteger"/>.</returns>
         /// <exception cref="Web3Exception">Thrown when the estimation process encounters any issues or the underlying HTTP call fails.</exception>
         public async Task<HexBigInteger> GetEstimatedFeeRequest(EstimatedFeeRequest request)
