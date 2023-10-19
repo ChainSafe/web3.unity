@@ -55,7 +55,7 @@ namespace ChainSafe.GamingSdk.Gelato.Types
         Task<RelayResponse> SponsoredCallErc2771(SponsoredCallErc2771Request request);
 
         /// <summary>
-        ///     Executes a sponsored relay call conforming to the Erc2771 standard with specific relaying criteria. 
+        ///     Executes a sponsored relay call conforming to the Erc2771 standard with specific relaying criteria.
         ///     This method requires a user to sign the request.
         /// </summary>
         /// <param name="request">The details of the sponsored call request based on the Erc2771 standard.</param>
