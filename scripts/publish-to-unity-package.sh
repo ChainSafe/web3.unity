@@ -1,8 +1,8 @@
 #! /usr/bin/env sh
 set -e
-
+SCRIPT_DIR="$(dirname "$0")"
 echo Building project...
-pushd ../src/ChainSafe.Gaming.Unity
+pushd $SCRIPT_DIR/../src/ChainSafe.Gaming.Unity
 
 rm -rf obj
 rm -rf bin
@@ -23,12 +23,12 @@ if [ -d "../../../../../../Packages/io.chainsafe.web3-unity.lootboxes" ]; then
     rm -rf ../../../../../../Packages/io.chainsafe.web3-unity.lootboxes/Runtime/Libraries
     mkdir -p ../../../../../../Packages/io.chainsafe.web3-unity.lootboxes/Runtime/Libraries
     cp Chainsafe.Gaming.Chainlink.dll ../../../../../../Packages/io.chainsafe.web3-unity.lootboxes/Runtime/Libraries
-    cp Chainsafe.Gaming.Chainlink.LootBoxes.dll ../../../../../../Packages/io.chainsafe.web3-unity.lootboxes/Runtime/Libraries
+    cp Chainsafe.Gaming.LootBoxes.Chainlink.dll ../../../../../../Packages/io.chainsafe.web3-unity.lootboxes/Runtime/Libraries
 fi
 
 # Delete those DLLs so they don't get copied in the next step
 rm Chainsafe.Gaming.Chainlink.dll
-rm Chainsafe.Gaming.Chainlink.LootBoxes.dll
+rm Chainsafe.Gaming.LootBoxes.Chainlink.dll
 
 rm -rf ../../../../../../Packages/io.chainsafe.web3-unity/Runtime/Libraries
 mkdir -p ../../../../../../Packages/io.chainsafe.web3-unity/Runtime/Libraries
