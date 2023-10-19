@@ -1,21 +1,16 @@
 #!/bin/bash
 set -e 
 
-SCRIPT_DIR="$(dirname "$0")"
-
+scripts_dir=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 edit=""
-if [ "$1" == "ci" ]; then 
-    edit="--verify-no-changes"
-    dotnet format --verbosity=d $edit --severity=warn ChainSafe.Gaming.sln --exclude ./submodules
-else
-    pushd "$SCRIPT_DIR/.."
-    dotnet format --verbosity=d $edit --severity=warn ChainSafe.Gaming.sln --exclude /submodules
-fi
+if [ "$1" == "ci" ]; then edit="--verify-no-changes"; fi
+
+dotnet format --verbosity=d $edit --severity=warn "$scripts_dir"/../ChainSafe.Gaming.sln --exclude ./submodules
 
 if [ "$edit" == "" ]; then
     echo "Linting Unity Sample Project"
-    pushd "$SCRIPT_DIR/../src/UnitySampleProject"
-    dotnet format --verbosity=d --severity=warn UnitySampleProject.sln
-    popd
+    
+    pushd "$scripts_dir"/../src/UnitySampleProject
+    dotnet format --verbosity=d --severity=warn ./UnitySampleProject.sln 
     popd
 fi
