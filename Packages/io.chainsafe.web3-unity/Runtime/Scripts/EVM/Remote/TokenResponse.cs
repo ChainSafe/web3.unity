@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Scripts.EVM.Token
 {
     /// <summary>
-    /// Represents a response related to a token within an Ethereum Virtual Machine (EVM) context.
+    /// A response object detailing the details of an on chain token from the targeted network.
     /// </summary>
     public class TokenResponse
     {
