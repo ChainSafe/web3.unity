@@ -10,8 +10,9 @@ namespace ChainSafe.Gaming.WalletConnect
     public static class WalletConnectSignerExtensions
     {
         /// <summary>
-        /// Binds implementation of <see cref="UseWalletConnectSigner"/> to Web3 as a service.
+        /// Binds implementation of <see cref="WalletConnectSigner"/> to Web3 as a service.
         /// </summary>
+        /// <param name="collection">Service collection to bind implementations to.</param>
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
         public static IWeb3ServiceCollection UseWalletConnectSigner(this IWeb3ServiceCollection collection)
         {

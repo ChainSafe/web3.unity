@@ -9,7 +9,7 @@ using ChainSafe.Gaming.Web3.Core.Evm;
 namespace ChainSafe.Gaming.WalletConnect
 {
     /// <summary>
-    /// Signs message and Typed data via Wallet Connect.
+    /// Implementation of <see cref="ISigner"/> for Wallet Connect.
     /// </summary>
     public class WalletConnectSigner : ISigner, ILifecycleParticipant
     {

@@ -11,7 +11,7 @@ using WalletConnectSharp.Common.Logging;
 namespace ChainSafe.Gaming.WalletConnect
 {
     /// <summary>
-    /// Sends Transactions to be approved via Wallet Connect.
+    /// Implementation of <see cref="ITransactionExecutor"/> for Wallet Connect.
     /// </summary>
     public class WalletConnectTransactionExecutor : ITransactionExecutor, ILifecycleParticipant
     {
@@ -73,6 +73,7 @@ namespace ChainSafe.Gaming.WalletConnect
 
             WCLogger.Log($"Transaction executed with hash {hash}");
 
+            // TODO use wallet connect to get receipt if possible.
             return await rpcProvider.GetTransaction(hash);
         }
     }

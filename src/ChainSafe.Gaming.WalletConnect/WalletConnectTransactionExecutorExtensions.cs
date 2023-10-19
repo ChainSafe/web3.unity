@@ -12,6 +12,7 @@ namespace ChainSafe.Gaming.WalletConnect
         /// <summary>
         /// Binds implementation of <see cref="WalletConnectTransactionExecutor"/> to Web3 as a service.
         /// </summary>
+        /// <param name="collection">Service collection to bind implementations to.</param>
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
         public static IWeb3ServiceCollection UseWalletConnectTransactionExecutor(this IWeb3ServiceCollection collection)
         {

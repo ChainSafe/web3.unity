@@ -22,8 +22,7 @@ using WalletConnectSharp.Storage;
 namespace ChainSafe.Gaming.WalletConnect
 {
     /// <summary>
-    /// This class connects and disconnects to a wallet using WalletConnectSharp.
-    /// It can also be used to make a Json RPC request to an address.
+    /// Concrete implementation of <see cref="IWalletConnectCustomProvider"/>.
     /// </summary>
     public class WalletConnectCustomProvider : IWalletConnectCustomProvider, ILifecycleParticipant
     {
