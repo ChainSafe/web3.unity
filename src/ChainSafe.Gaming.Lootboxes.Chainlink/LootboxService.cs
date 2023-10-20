@@ -157,10 +157,9 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
 
             // This response is actually very different from all the others since it returns several components
             var response = (List<ParameterOutput>)(await this.contract.Call("getOpenerRequestDetails", new object[] { playerAddress }))[0];
-
             var address = (string)response[0].Result;
             var unitsToGet = (BigInteger)response[1].Result;
-
+            var lootboxType = ((List<BigInteger>)response[2].Result)[0];
             if (!string.IsNullOrEmpty(address) && unitsToGet == 0)
             {
                 // we can early return here, but, it's not necessary since unitstoget will be 0 regardless and this
@@ -175,7 +174,7 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
                 throw new Web3Exception("Internal Error. Units to get is greater than int.MaxValue.");
             }
 
-            return (uint)unitsToGet;
+            return (uint)lootboxType;
         }
 
         public async Task OpenLootbox(uint lootboxType, uint lootboxCount = 1)
