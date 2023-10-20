@@ -1,7 +1,3 @@
-
-using Nethereum.ABI.EIP712;
-using Nethereum.Signer;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
@@ -11,9 +7,8 @@ using ChainSafe.Gaming.InProcessTransactionExecutor;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
+using Nethereum.Signer;
 using UnityEngine;
-
-using Object = UnityEngine.Object;
 using TWeb3Auth = Web3Auth;
 
 namespace ChainSafe.GamingSdk.Web3Auth
@@ -23,13 +18,13 @@ namespace ChainSafe.GamingSdk.Web3Auth
     /// </summary>
     public class Web3AuthWallet : ISigner, ITransactionExecutor, ILifecycleParticipant
     {
-        private InProcessSigner signer;
-        private InProcessTransactionExecutor transactionExecutor;
-        private TWeb3Auth coreInstance;
+        private readonly IChainConfig chainConfig;
 
         private readonly Web3AuthWalletConfig config;
-        private readonly IChainConfig chainConfig;
         private readonly IRpcProvider rpcProvider;
+        private TWeb3Auth coreInstance;
+        private InProcessSigner signer;
+        private InProcessTransactionExecutor transactionExecutor;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Web3AuthWallet"/> class.
@@ -54,20 +49,20 @@ namespace ChainSafe.GamingSdk.Web3Auth
             TaskCompletionSource<string> loginTcs = new();
             coreInstance.onLogin += Web3Auth_OnLogin;
 
-            if (config.LoginParams != null)
-            {
-                coreInstance.login(config.LoginParams);
-            }
+            if (config.LoginParams != null) coreInstance.login(config.LoginParams);
 
             var privateKeyString = await loginTcs.Task;
 
             var privateKey = new EthECKey(privateKeyString);
             var signerConfig = new InProcessSignerConfig { PrivateKey = privateKey };
-            signer = new(signerConfig);
+            signer = new InProcessSigner(signerConfig);
 
-            transactionExecutor = new(signer, chainConfig, rpcProvider);
+            transactionExecutor = new InProcessTransactionExecutor(signer, chainConfig, rpcProvider);
 
-            void Web3Auth_OnLogin(Web3AuthResponse response) => loginTcs.SetResult(response.privKey);
+            void Web3Auth_OnLogin(Web3AuthResponse response)
+            {
+                loginTcs.SetResult(response.privKey);
+            }
         }
 
         /// <summary>
@@ -85,7 +80,10 @@ namespace ChainSafe.GamingSdk.Web3Auth
             coreInstance.onLogout -= Web3Auth_OnLogout;
             Object.Destroy(coreInstance);
 
-            void Web3Auth_OnLogout() => logoutTcs.SetResult(null);
+            void Web3Auth_OnLogout()
+            {
+                logoutTcs.SetResult(null);
+            }
         }
 
         /// <summary>
