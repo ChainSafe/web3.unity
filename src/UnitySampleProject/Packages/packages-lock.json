@@ -246,6 +246,14 @@
         "io.chainsafe.web3-unity": "2.5.0"
       }
     },
+    "io.chainsafe.web3-unity.lootboxes": {
+      "version": "file:../../../Packages/io.chainsafe.web3-unity.lootboxes",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {
+        "io.chainsafe.web3-unity": "2.5.0"
+      }
+    },
     "com.unity.modules.ai": {
       "version": "1.0.0",
       "depth": 0,

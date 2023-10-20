@@ -29,7 +29,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.InProcessT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.Gelato", "src\ChainSafe.Gaming.Gelato\ChainSafe.Gaming.Gelato.csproj", "{205BA2B5-B8B0-4860-B8D0-1AFA148D882E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.Chainlink.Lootboxes", "src\ChainSafe.Gaming.Chainlink.Lootboxes\ChainSafe.Gaming.Chainlink.Lootboxes.csproj", "{2A1E49E1-219A-4821-B580-CF6E85A5EA20}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.Lootboxes.Chainlink", "src\ChainSafe.Gaming.Lootboxes.Chainlink\ChainSafe.Gaming.Lootboxes.Chainlink.csproj", "{2A1E49E1-219A-4821-B580-CF6E85A5EA20}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chainsafe.Gaming.Chainlink", "src\Chainsafe.Gaming.Chainlink\Chainsafe.Gaming.Chainlink.csproj", "{A8A29975-3146-445E-87F6-7B2447C39760}"
 EndProject
