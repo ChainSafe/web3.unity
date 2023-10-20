@@ -14,7 +14,7 @@ using NWeb3 = Nethereum.Web3.Web3;
 namespace ChainSafe.Gaming.InProcessTransactionExecutor
 {
     /// <summary>
-    /// Implementation of <see cref="ITransactionExecutor"/> using In Process.
+    /// Concrete Implementation of <see cref="ITransactionExecutor"/> using In Process.
     /// </summary>
     public class InProcessTransactionExecutor : ITransactionExecutor
     {
