@@ -22,10 +22,10 @@ rm UnityEngine.dll
 
 # Check if io.chainsafe.web3-unity.lootboxes directory exists
 if [ -d "../../../../../../Packages/io.chainsafe.web3-unity.lootboxes" ]; then
-    rm -rf ../../../../../../Packages/io.chainsafe.web3-unity.lootboxes/Runtime/Libraries
-    mkdir -p ../../../../../../Packages/io.chainsafe.web3-unity.lootboxes/Runtime/Libraries
-    cp Chainsafe.Gaming.Chainlink.dll ../../../../../../Packages/io.chainsafe.web3-unity.lootboxes/Runtime/Libraries
-    cp Chainsafe.Gaming.LootBoxes.Chainlink.dll ../../../../../../Packages/io.chainsafe.web3-unity.lootboxes/Runtime/Libraries
+    rm -rf ../../../../../../Packages/io.chainsafe.web3-unity.lootboxes/Chainlink/Runtime/Libraries
+    mkdir -p ../../../../../../Packages/io.chainsafe.web3-unity.lootboxes/Chainlink/Runtime/Libraries
+    cp Chainsafe.Gaming.Chainlink.dll ../../../../../../Packages/io.chainsafe.web3-unity.lootboxes/Chainlink/Runtime/Libraries
+    cp Chainsafe.Gaming.LootBoxes.Chainlink.dll ../../../../../../Packages/io.chainsafe.web3-unity.lootboxes/Chainlink/Runtime/Libraries
 fi
 
 # Delete those DLLs so they don't get copied in the next step
