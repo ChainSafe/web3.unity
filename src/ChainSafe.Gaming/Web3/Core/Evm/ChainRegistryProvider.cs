@@ -18,7 +18,7 @@ namespace ChainSafe.Gaming.Evm
 
         private Dictionary<ulong, Chains.Chain>? chains;
 
-        internal ChainRegistryProvider(IHttpClient httpClient)
+        public ChainRegistryProvider(IHttpClient httpClient)
         {
             this.httpClient = httpClient;
         }
