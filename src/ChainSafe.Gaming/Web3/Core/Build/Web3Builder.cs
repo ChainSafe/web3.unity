@@ -80,9 +80,7 @@ namespace ChainSafe.Gaming.Web3.Build
             AssertWeb3EnvironmentBound(serviceProvider);
 
             var web3 = new Web3(serviceProvider);
-
-            var initializableWeb3 = (IInitializableWeb3)web3;
-            await initializableWeb3.InitializeAsync();
+            await web3.InitializeAsync();
 
             return web3;
         }

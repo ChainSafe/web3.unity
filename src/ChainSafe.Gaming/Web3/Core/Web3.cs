@@ -14,7 +14,7 @@ namespace ChainSafe.Gaming.Web3
     /// Facade for all Web3-related services.
     /// Use this as an entry point to all SDK features.
     /// </summary>
-    public class Web3 : IAsyncDisposable, IInitializableWeb3
+    public class Web3 : IAsyncDisposable
     {
         private readonly ServiceProvider serviceProvider;
         private readonly IRpcProvider? rpcProvider;
@@ -84,7 +84,7 @@ namespace ChainSafe.Gaming.Web3
             GC.SuppressFinalize(this);
         }
 
-        async ValueTask IInitializableWeb3.InitializeAsync()
+        internal async ValueTask InitializeAsync()
         {
             foreach (var lifecycleParticipant in serviceProvider.GetServices<ILifecycleParticipant>())
             {
