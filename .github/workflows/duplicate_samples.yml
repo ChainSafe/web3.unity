@@ -16,7 +16,6 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-        
       - name: Run duplicate script file
         run: |
         #Duplicate Web3.Unity Samples
