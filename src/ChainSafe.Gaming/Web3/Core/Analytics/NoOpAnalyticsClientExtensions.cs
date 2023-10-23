@@ -10,6 +10,7 @@ namespace ChainSafe.Gaming.Web3.Analytics
         /// <summary>
         /// Disables analytics for the <see cref="Web3"/> instance.
         /// </summary>
+        /// <param name="serviceCollection">The Web3 service collection.</param>
         /// <returns>Service collection to enable fluent syntax.</returns>
         public static IWeb3ServiceCollection DisableAnalytics(this IWeb3ServiceCollection serviceCollection)
         {
@@ -17,6 +18,11 @@ namespace ChainSafe.Gaming.Web3.Analytics
             return serviceCollection;
         }
 
+        /// <summary>
+        /// Returns true if analytics are disabled.
+        /// </summary>
+        /// <param name="serviceCollection">The Web3 service collection.</param>
+        /// <returns>True if analytics are disabled.</returns>
         public static bool AnalyticsDisabled(this IWeb3ServiceCollection serviceCollection)
         {
             return serviceCollection.Any(d =>

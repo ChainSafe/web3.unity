@@ -9,7 +9,8 @@ namespace ChainSafe.Gaming.Web3.Build
         /// <summary>
         /// Assert that service of the specified type was not yet registered.
         /// </summary>
-        /// <typeparam name="T">Type of the service.</typeparam>
+        /// <typeparam name="T">The type of the service.</typeparam>
+        /// <param name="services">The Web3 service collection.</param>
         /// <exception cref="Web3BuildException">Service of the specified type was already bound.</exception>
         public static void AssertServiceNotBound<T>(this IWeb3ServiceCollection services)
         {
@@ -24,8 +25,9 @@ namespace ChainSafe.Gaming.Web3.Build
         /// <summary>
         /// Assert that configuration object of the specified type was not yet registered.
         /// </summary>
-        /// <typeparam name="T">Type of the configuration object.</typeparam>
-        /// <exception cref="Web3BuildException">Configuration object of the specified type was already bound.</exception>
+        /// <typeparam name="T">The type of the configuration object.</typeparam>
+        /// <param name="services">The Web3 service collection.</param>
+        /// <exception cref="Web3BuildException">The configuration object of the specified type was already bound.</exception>
         public static void AssertConfigurationNotBound<T>(this IWeb3ServiceCollection services)
         {
             var assertType = typeof(T);
@@ -39,9 +41,10 @@ namespace ChainSafe.Gaming.Web3.Build
         /// <summary>
         /// Register the specified implementation using 2 contract types.
         /// </summary>
-        /// <typeparam name="TInterface1">First contract type.</typeparam>
-        /// <typeparam name="TInterface2">Second contract type.</typeparam>
-        /// <typeparam name="TImplementation">Implementation type.</typeparam>
+        /// <typeparam name="TInterface1">The first contract type.</typeparam>
+        /// <typeparam name="TInterface2">The second contract type.</typeparam>
+        /// <typeparam name="TImplementation">The implementation type.</typeparam>
+        /// <param name="serviceCollection">The Web3 service collection.</param>
         public static void AddSingleton<TInterface1, TInterface2, TImplementation>(this IWeb3ServiceCollection serviceCollection)
             where TInterface1 : class
             where TInterface2 : class
@@ -62,11 +65,11 @@ namespace ChainSafe.Gaming.Web3.Build
         /// <summary>
         /// Register the specified implementation for 2 contract types using the factory method.
         /// </summary>
-        /// <param name="serviceCollection">Service collection.</param>
-        /// <param name="implementationFactory">Factory method.</param>
-        /// <typeparam name="TInterface1">First contract type.</typeparam>
-        /// <typeparam name="TInterface2">Second contract type.</typeparam>
-        /// <typeparam name="TImplementation">Implementation type.</typeparam>
+        /// <param name="serviceCollection">The Web3 service collection.</param>
+        /// <param name="implementationFactory">The factory method.</param>
+        /// <typeparam name="TInterface1">The first contract type.</typeparam>
+        /// <typeparam name="TInterface2">The second contract type.</typeparam>
+        /// <typeparam name="TImplementation">The implementation type.</typeparam>
         public static void AddSingleton<TInterface1, TInterface2, TImplementation>(this IWeb3ServiceCollection serviceCollection, Func<IServiceProvider, TImplementation> implementationFactory)
             where TInterface1 : class
             where TInterface2 : class
@@ -80,10 +83,11 @@ namespace ChainSafe.Gaming.Web3.Build
         /// <summary>
         /// Register the specified implementation using 3 contract types.
         /// </summary>
-        /// <typeparam name="TInterface1">First contract type.</typeparam>
-        /// <typeparam name="TInterface2">Second contract type.</typeparam>
-        /// <typeparam name="TInterface3">Third contract type.</typeparam>
-        /// <typeparam name="TImplementation">Implementation type.</typeparam>
+        /// <param name="serviceCollection">The Web3 service collection.</param>
+        /// <typeparam name="TInterface1">The first contract type.</typeparam>
+        /// <typeparam name="TInterface2">The second contract type.</typeparam>
+        /// <typeparam name="TInterface3">The third contract type.</typeparam>
+        /// <typeparam name="TImplementation">The implementation type.</typeparam>
         public static void AddSingleton<TInterface1, TInterface2, TInterface3, TImplementation>(this IWeb3ServiceCollection serviceCollection)
             where TInterface1 : class
             where TInterface2 : class
@@ -99,12 +103,12 @@ namespace ChainSafe.Gaming.Web3.Build
         /// <summary>
         /// Register the specified implementation for 3 contract types using the factory method.
         /// </summary>
-        /// <param name="serviceCollection">Service collection.</param>
+        /// <param name="serviceCollection">The Web3 service collection.</param>
         /// <param name="implementationFactory">Factory method.</param>
-        /// <typeparam name="TInterface1">First contract type.</typeparam>
-        /// <typeparam name="TInterface2">Second contract type.</typeparam>
-        /// <typeparam name="TInterface3">Third contract type.</typeparam>
-        /// <typeparam name="TImplementation">Implementation type.</typeparam>
+        /// <typeparam name="TInterface1">The first contract type.</typeparam>
+        /// <typeparam name="TInterface2">The second contract type.</typeparam>
+        /// <typeparam name="TInterface3">The third contract type.</typeparam>
+        /// <typeparam name="TImplementation">The implementation type.</typeparam>
         public static void AddSingleton<TInterface1, TInterface2, TInterface3, TImplementation>(this IWeb3ServiceCollection serviceCollection, Func<IServiceProvider, TImplementation> implementationFactory)
             where TInterface1 : class
             where TInterface2 : class

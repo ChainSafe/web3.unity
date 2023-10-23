@@ -27,23 +27,34 @@ namespace ChainSafe.Gaming.Web3.Build
                 .AddSingleton<IContractBuilder, ContractBuilder>();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Web3Builder"/> class.
+        /// </summary>
+        /// <param name="projectConfig">Project config to use with the resulting Web3 instance.</param>
+        /// <param name="chainConfig">Chain config to use with the resulting Web3 instance.</param>
+        /// <exception cref="ArgumentException">One of the arguments is null.</exception>
         public Web3Builder(IProjectConfig projectConfig, IChainConfig chainConfig)
             : this()
         {
             if (projectConfig == null)
             {
-                throw new Web3Exception($"{nameof(IProjectConfig)} is required for Web3 to work.");
+                throw new ArgumentNullException(nameof(projectConfig), $"{nameof(IProjectConfig)} is required for Web3 to work.");
             }
 
             if (chainConfig == null)
             {
-                throw new Web3Exception($"{nameof(IChainConfig)} is required for Web3 to work.");
+                throw new ArgumentNullException(nameof(chainConfig), $"{nameof(IChainConfig)} is required for Web3 to work.");
             }
 
             serviceCollection.AddSingleton(projectConfig);
             serviceCollection.AddSingleton(chainConfig);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Web3Builder"/> class.
+        /// </summary>
+        /// <param name="projectConfig">Complete project config to use with the resulting Web3 instance.</param>
+        /// <exception cref="ArgumentException">"projectConfig" is null.</exception>
         public Web3Builder(ICompleteProjectConfig projectConfig)
             : this(projectConfig, projectConfig)
         {
