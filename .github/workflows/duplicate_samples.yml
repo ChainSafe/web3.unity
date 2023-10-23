@@ -16,8 +16,7 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.push.head.ref }}
+        
       - name: Run duplicate script file
         run: |
         #Duplicate Web3.Unity Samples
