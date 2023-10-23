@@ -9,9 +9,8 @@ jobs:
     name: Duplicate samples job 👯
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
-        
       - name: Run duplicate script file
         run: |
         #Duplicate Web3.Unity Samples
