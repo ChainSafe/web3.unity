@@ -1,9 +1,5 @@
 name: Duplicate Package Samples Workflow
 
-#on:
-#  pull_request:
-#    branches: [main]
-
 on:
   push:
     branches: [ rob/samples-import-fixes-642 ]
@@ -12,28 +8,27 @@ jobs:
   duplicate:
     name: Duplicate samples job 👯
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-    
-    - name: Run duplicate script file
-      run: |
-      #Duplicate Web3.Unity Samples
-        scripts/duplicate-sample.sh "${GITHUB_WORKSPACE}/src/UnitySampleProject/Assets/Samples/web3.unity SDK/**/Web3.Unity Samples/" "${GITHUB_WORKSPACE}/Packages/io.chainsafe.web3-unity/Samples~/Web3.Unity/"
-      #Duplicate Web3Auth Samples
-        scripts/duplicate-sample.sh "${GITHUB_WORKSPACE}/src/UnitySampleProject/Assets/Samples/web3.unity SDK Web3Auth/**/Web3.Unity Web3Auth Samples/" "${GITHUB_WORKSPACE}/Packages/io.chainsafe.web3-unity.web3auth/Samples~/Web3.Unity Web3Auth/"
-
-    - name: Commit and Push
-      run: |
-        git config user.email $git_email
-        git config user.name "${{ github.actor }}"
-      # add Web3.Unity duplicated changes
-        git add ./Packages/io.chainsafe.web3-unity/Samples~/Web3.Unity/. -f
-      # add Web3Auth duplicated changes
-        git add ./Packages/io.chainsafe.web3-unity.web3auth/Samples~/Web3.Unity Web3Auth/. -f
-      # check if there are any changes before making a commit
-        git diff-index --cached --quiet HEAD || git commit -m "Auto-duplicate Packages Samples"
-        git push
-      env:
-        git_email: "${{ github.actor }}@users.noreply.github.com"
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Run duplicate script file
+        run: |
+        #Duplicate Web3.Unity Samples
+          scripts/duplicate-sample.sh "${GITHUB_WORKSPACE}/src/UnitySampleProject/Assets/Samples/web3.unity SDK/**/Web3.Unity Samples/" "${GITHUB_WORKSPACE}/Packages/io.chainsafe.web3-unity/Samples~/Web3.Unity/"
+        #Duplicate Web3Auth Samples
+          scripts/duplicate-sample.sh "${GITHUB_WORKSPACE}/src/UnitySampleProject/Assets/Samples/web3.unity SDK Web3Auth/**/Web3.Unity Web3Auth Samples/" "${GITHUB_WORKSPACE}/Packages/io.chainsafe.web3-unity.web3auth/Samples~/Web3.Unity Web3Auth/"
+  
+      - name: Commit and Push
+        run: |
+          git config user.email $git_email
+          git config user.name "${{ github.actor }}"
+        # add Web3.Unity duplicated changes
+          git add ./Packages/io.chainsafe.web3-unity/Samples~/Web3.Unity/. -f
+        # add Web3Auth duplicated changes
+          git add ./Packages/io.chainsafe.web3-unity.web3auth/Samples~/Web3.Unity Web3Auth/. -f
+        # check if there are any changes before making a commit
+          git diff-index --cached --quiet HEAD || git commit -m "Auto-duplicate Packages Samples"
+          git push
+        env:
+          git_email: "${{ github.actor }}@users.noreply.github.com"
