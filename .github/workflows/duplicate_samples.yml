@@ -12,6 +12,7 @@ jobs:
     - uses: actions/checkout@v4
     - name: Run duplicate script file
       run: |
+        chmod +x scripts/duplicate-sample.sh
         scripts/duplicate-sample.sh "${GITHUB_WORKSPACE}/src/UnitySampleProject/Assets/Samples/web3.unity SDK/**/Web3.Unity Samples/" "${GITHUB_WORKSPACE}/Packages/io.chainsafe.web3-unity/Samples~/Web3.Unity/"
         scripts/duplicate-sample.sh "${GITHUB_WORKSPACE}/src/UnitySampleProject/Assets/Samples/web3.unity SDK Web3Auth/**/Web3.Unity Web3Auth Samples/" "${GITHUB_WORKSPACE}/Packages/io.chainsafe.web3-unity.web3auth/Samples~/Web3.Unity Web3Auth/"
   
