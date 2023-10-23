@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using Chainsafe.Gaming.Chainlink;
-using ChainSafe.Gaming.Chainlink.Lootboxes;
+using ChainSafe.Gaming.Lootboxes.Chainlink;
 using ChainSafe.Gaming.Tests;
 using NUnit.Framework;
 
