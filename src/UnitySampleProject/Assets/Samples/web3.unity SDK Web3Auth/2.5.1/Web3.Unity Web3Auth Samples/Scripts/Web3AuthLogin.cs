@@ -1,34 +1,25 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using ChainSafe.Gaming.Evm.Contracts;
-using ChainSafe.Gaming.Evm.JsonRpc;
-using ChainSafe.Gaming.UnityPackage;
-using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
-using ChainSafe.Gaming.Web3.Unity;
-using ChainSafe.GamingSdk.Gelato;
 using ChainSafe.GamingSdk.Web3Auth;
 using Scenes;
 using UnityEngine;
-using UnityEngine.Assertions;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Network = Web3Auth.Network;
 
 public class Web3AuthLogin : Login
 {
     [Serializable]
-    public class ProviderAndButtonPair
+    public struct ProviderAndButtonPair
     {
         public Button Button;
         public Provider Provider;
     }
 
     [Serializable]
-    public class Web3AuthSettings
+    public struct Web3AuthSettings
     {
         public string ClientId;
         public string RedirectUri;
@@ -38,7 +29,7 @@ public class Web3AuthLogin : Login
     [SerializeField] private Web3AuthSettings web3AuthSettings;
     [SerializeField] private List<ProviderAndButtonPair> providerAndButtonPairs;
 
-    private bool dontUseProvider;
+    private bool useProvider;
     
     private Provider selectedProvider;
     
@@ -46,13 +37,13 @@ public class Web3AuthLogin : Login
     {
 #if UNITY_WEBGL
         
-        dontUseProvider = true;
+        useProvider = false;
 
         Task loginTask = TryLogin();
 
         yield return new WaitUntil(() => loginTask.IsCompleted);
 #endif
-        
+
         //add listener
         foreach (var pair in providerAndButtonPairs)
         {
@@ -67,6 +58,11 @@ public class Web3AuthLogin : Login
 
     private async void LoginWithWeb3Auth(Provider provider)
     {
+        if (!useProvider)
+        {
+            useProvider = true;
+        }
+
         selectedProvider = provider;
         
         await TryLogin();
@@ -92,13 +88,7 @@ public class Web3AuthLogin : Login
                 }
             };
 
-            if (dontUseProvider)
-            {
-                // reset
-                dontUseProvider = false;
-            }
-
-            else
+            if (useProvider)
             {
                 web3AuthConfig.LoginParams = new LoginParams
                 {

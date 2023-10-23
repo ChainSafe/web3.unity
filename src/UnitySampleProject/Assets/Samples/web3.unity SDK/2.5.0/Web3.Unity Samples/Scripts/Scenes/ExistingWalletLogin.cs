@@ -21,8 +21,6 @@ using WalletConnectSharp.Sign.Models.Engine;
 
 public class ExistingWalletLogin : Login
 {
-    private const string SavedWalletConnectConfigKey = "SavedWalletConnectConfig";
-    
     [Header("UI")]
     
     [SerializeField] private TMP_Dropdown supportedWalletsDropdown;
@@ -110,9 +108,9 @@ public class ExistingWalletLogin : Login
 
     private async Task TryAutoLogin()
     {
-        string savedConfigJson = PlayerPrefs.GetString(SavedWalletConnectConfigKey, null);
-
-        if (string.IsNullOrEmpty(savedConfigJson))
+        walletConnectConfig = PlayerData.Instance.WalletConnectConfig;
+        
+        if (walletConnectConfig == null)
         {
             return;
         }
@@ -122,8 +120,6 @@ public class ExistingWalletLogin : Login
         try
         {
             autoLogin = true;
-            
-            walletConnectConfig = JsonConvert.DeserializeObject<WalletConnectConfig>(savedConfigJson);
                 
             await TryLogin();
         }
@@ -242,13 +238,17 @@ public class ExistingWalletLogin : Login
         {
             walletConnectConfig.SavedSessionTopic = session.Topic;
             
-            PlayerPrefs.SetString(SavedWalletConnectConfigKey, JsonConvert.SerializeObject(walletConnectConfig));
+            PlayerData.Instance.WalletConnectConfig = walletConnectConfig;
+            
+            PlayerData.Save();
         }
 
         else
         {
             // reset if any saved config
-            PlayerPrefs.SetString(SavedWalletConnectConfigKey, null);
+            PlayerData.Instance.WalletConnectConfig = null;
+            
+            PlayerData.Save();
         }
             
         Debug.Log($"{session.Topic} Approved");
