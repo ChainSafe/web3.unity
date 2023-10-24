@@ -1,8 +1,8 @@
 name: Duplicate Package Samples Workflow
 
 on:
-  push:
-    branches: [ rob/samples-import-fixes-642 ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   duplicate:
