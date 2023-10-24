@@ -26,7 +26,6 @@ jobs:
         git config user.email $git_email
         git config user.name "${{ github.actor }}"
         git add Packages/io.chainsafe.web3-unity/Samples~/. -f
-        git add Packages/io.chainsafe.web3-unity.web3auth/Samples~/. -f
         git diff-index --cached --quiet HEAD || git commit -m "Auto-duplicate Packages Samples"
         git push
       env:
