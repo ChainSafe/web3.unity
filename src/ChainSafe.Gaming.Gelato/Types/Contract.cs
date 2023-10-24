@@ -4,8 +4,7 @@ using Newtonsoft.Json;
 namespace ChainSafe.GamingSdk.Gelato.Types
 {
     /// <summary>
-    /// Represents a contract configuration for relay services in the Ethereum ecosystem,
-    /// specifically tailored for the ERC2771 standard and zkSync.
+    /// Represents contract-related information, including endpoints and addresses, used in the context of Ethereum smart contracts.
     /// </summary>
     public class Contract
     {

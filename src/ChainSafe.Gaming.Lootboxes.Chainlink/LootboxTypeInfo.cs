@@ -8,7 +8,7 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
         public uint TypeId { get; set; }
 
         /// <summary>
-        /// Amount of the lootboxes.
+        /// Current Balance of Lootboxes for this Type.
         /// </summary>
         public uint Amount { get; set; }
     }
