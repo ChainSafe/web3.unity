@@ -114,8 +114,6 @@ namespace ChainSafe.GamingSdk.Gelato
             }
         }
 
-
-
         /// <summary>
         /// Gets the estimated fee for a specified request.
         /// </summary>
