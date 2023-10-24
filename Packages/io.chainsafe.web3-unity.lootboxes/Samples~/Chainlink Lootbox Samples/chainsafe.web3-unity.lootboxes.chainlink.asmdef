@@ -1,0 +1,17 @@
+{
+    "name": "chainsafe.web3-unity.lootboxes",
+    "rootNamespace": "",
+    "references": [
+        "GUID:5426c6b788696eb4c88f4198b59839eb",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
