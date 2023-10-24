@@ -12,12 +12,12 @@ jobs:
     - uses: actions/checkout@v4
     - name: Run duplicate script file
       run: |
-        export SOURCE_DIRECTORY="${GITHUB_WORKSPACE}/src/UnitySampleProject/Assets/Samples/web3.unity SDK/$(ls 'src/UnitySampleProject/Assets/Samples/web3.unity SDK' | head -n 1)Web3.Unity Samples/"
+        export SOURCE_DIRECTORY="${GITHUB_WORKSPACE}/src/UnitySampleProject/Assets/Samples/web3.unity SDK/$(ls 'src/UnitySampleProject/Assets/Samples/web3.unity SDK' | head -n 1)/Web3.Unity Samples/"
         export DESTINATION_DIRECTORY="${GITHUB_WORKSPACE}/Packages/io.chainsafe.web3-unity/Samples~/Web3.Unity/"
         rm -rf "$DESTINATION_DIRECTORY"
         cp -r "$SOURCE_DIRECTORY" "$DESTINATION_DIRECTORY"
       env:
-        web3_auth_imported_sample_path: "${{ github.workspace }}/src/UnitySampleProject/Assets/Samples/web3.unity SDK Web3Auth/$(ls 'src/UnitySampleProject/Assets/Samples/web3.unity SDK Web3Auth' | head -n 1)Web3.Unity Web3Auth Samples/"
+        web3_auth_imported_sample_path: "${{ github.workspace }}/src/UnitySampleProject/Assets/Samples/web3.unity SDK Web3Auth/$(ls 'src/UnitySampleProject/Assets/Samples/web3.unity SDK Web3Auth' | head -n 1)/Web3.Unity Web3Auth Samples/"
         web3_auth_importable_sample_path: "${{ github.workspace }}/Packages/io.chainsafe.web3-unity.web3auth/Samples~/Web3.Unity Web3Auth/"
     
     - name: Commit and Push
