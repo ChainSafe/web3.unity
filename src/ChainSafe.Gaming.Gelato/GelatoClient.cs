@@ -48,9 +48,14 @@ namespace ChainSafe.GamingSdk.Gelato
         }
 
         /// <summary>
-        /// Retrieves an array of supported networks from the Gelato Relay service.
+        /// Retrieves an array of supported network names from the Gelato Relay service.
         /// </summary>
-        /// <returns>An array of strings representing the supported networks by the Gelato Relay service.</returns>
+        /// <remarks>
+        /// This method fetches a list of network names that represent the supported blockchain networks by the Gelato Relay service.
+        /// Each string in the returned array corresponds to the name of a supported network, providing information about the networks
+        /// on which Gelato relayers are operational.
+        /// </remarks>
+        /// <returns>An array of strings containing the names of supported networks by the Gelato Relay service.</returns>
         /// <exception cref="Web3Exception">Thrown when the retrieval process encounters any issues or the underlying HTTP call fails.</exception>
         public async Task<string[]> GetSupportedNetworks()
         {
@@ -65,9 +70,14 @@ namespace ChainSafe.GamingSdk.Gelato
         }
 
         /// <summary>
-        /// Retrieves an array of available Gelato oracles.
+        /// Retrieves an array of available Gelato oracles representing functional networks.
         /// </summary>
-        /// <returns>An array of strings representing the available Gelato oracles.</returns>
+        /// <remarks>
+        /// This method fetches a list of Gelato oracles, where each string in the returned array corresponds to a functional network
+        /// where Gelato oracles are operational. The strings can be interpreted as network names, network identifiers, or some other
+        /// network-related information, depending on how Gelato defines and uses these values.
+        /// </remarks>
+        /// <returns>An array of strings containing information about available Gelato oracles and their associated networks.</returns>
         /// <exception cref="Web3Exception">Thrown when the retrieval process encounters any issues or the underlying HTTP call fails.</exception>
         public async Task<string[]> GetGelatoOracles()
         {
@@ -82,10 +92,15 @@ namespace ChainSafe.GamingSdk.Gelato
         }
 
         /// <summary>
-        /// Retrieves an array of available payment tokens for a specified chain.
+        /// Retrieves an array of available payment tokens for a specified blockchain chain.
         /// </summary>
-        /// <param name="chainId">The ID of the chain for which payment tokens are required.</param>
-        /// <returns>An array of strings representing the available payment tokens for the specified chain.</returns>
+        /// <param name="chainId">The unique identifier of the blockchain chain for which payment tokens are required.</param>
+        /// <returns>An array of strings representing the available ERC20 token symbols accepted for payments on the specified blockchain chain.</returns>
+        /// <remarks>
+        /// This method fetches a list of ERC20 token symbols that are accepted for payments on the specified blockchain chain.
+        /// The returned strings represent the symbols (e.g., "ETH" for Ethereum, "USDT" for Tether) of ERC20 tokens that can be used
+        /// for payments and transactions on the specified chain.
+        /// </remarks>
         /// <exception cref="Web3Exception">Thrown when the retrieval process encounters any issues or the underlying HTTP call fails.</exception>
         public async Task<string[]> GetPaymentTokens(string chainId)
         {
@@ -98,6 +113,8 @@ namespace ChainSafe.GamingSdk.Gelato
                 throw new Web3Exception($"GelatoRelaySDK/getPaymentTokens: Failed with error: ${e.Message}");
             }
         }
+
+
 
         /// <summary>
         /// Gets the estimated fee for a specified request.
