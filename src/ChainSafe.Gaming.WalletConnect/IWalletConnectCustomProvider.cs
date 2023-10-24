@@ -8,9 +8,9 @@ namespace ChainSafe.Gaming.WalletConnect
     public interface IWalletConnectCustomProvider
     {
         /// <summary>
-        /// connects using Wallet Connect.
+        /// Connects using Wallet Connect.
         /// </summary>
-        /// <returns>connected address.</returns>
+        /// <returns>Connected address.</returns>
         public Task<string> Connect();
 
         /// <summary>

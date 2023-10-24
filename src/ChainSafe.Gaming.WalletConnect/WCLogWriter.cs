@@ -22,7 +22,7 @@ namespace ChainSafe.Gaming.WalletConnect
         }
 
         /// <summary>
-        /// Log Message .
+        /// Log Message.
         /// </summary>
         /// <param name="message">Message to be logged.</param>
         public void Log(string message) => logWriter.Log(message);

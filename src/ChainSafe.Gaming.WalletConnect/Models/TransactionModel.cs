@@ -20,7 +20,7 @@ namespace ChainSafe.Gaming.WalletConnect.Models
         public string To { get; set; }
 
         /// <summary>
-        /// Gas/Fee for transaction in Hex Value.
+        /// Gas fee for transaction in Hex Value.
         /// </summary>
         [JsonProperty("gas", NullValueHandling = NullValueHandling.Ignore)]
         public string Gas { get; set; }

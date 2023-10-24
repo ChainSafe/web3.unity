@@ -36,7 +36,7 @@ namespace ChainSafe.Gaming.InProcessSigner
         }
 
         /// <summary>
-        /// Bind a <see cref="configuration"/> to <see cref="collection"/>.
+        /// Binds a <see cref="configuration"/> to <see cref="collection"/>.
         /// </summary>
         /// <param name="collection">Service Collection to bind services to.</param>
         /// <param name="configuration">Config used by <see cref="InProcessSigner"/>.</param>

@@ -11,8 +11,9 @@ namespace ChainSafe.Gaming.WalletConnect
     /// <summary>
     /// Used for configuring a wallet connect session.
     /// </summary>
+    /// <remarks>Serialize fields explicitly or only ones with [JsonProperty] attribute used for restoring/renewing a session.</remarks>
     [Serializable]
-    [JsonObject(MemberSerialization.OptIn)] // Serialize fields explicitly or only ones with [JsonProperty] attribute.
+    [JsonObject(MemberSerialization.OptIn)]
     public class WalletConnectConfig
     {
         /// <summary>

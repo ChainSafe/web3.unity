@@ -6,7 +6,7 @@ namespace ChainSafe.Gaming.WalletConnect.Models
     public class ChainModel
     {
         /// <summary>
-        /// default namespace for EVM.
+        /// Default namespace for EVM.
         /// </summary>
         public const string EvmNamespace = "eip155";
 

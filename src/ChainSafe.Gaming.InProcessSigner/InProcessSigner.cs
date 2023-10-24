@@ -11,7 +11,7 @@ using Nethereum.Signer.EIP712;
 namespace ChainSafe.Gaming.InProcessSigner
 {
     /// <summary>
-    /// Concrete Implementation of <see cref="ISigner"/> using In Process.
+    /// Concrete Implementation of <see cref="ISigner"/> that uses a Private Key to sign messages and typed data.
     /// </summary>
     public class InProcessSigner : ISigner
     {
@@ -21,7 +21,7 @@ namespace ChainSafe.Gaming.InProcessSigner
         /// <summary>
         /// Initializes a new instance of the <see cref="InProcessSigner"/> class.
         /// </summary>
-        /// <param name="config">Injected Config for In Process.</param>
+        /// <param name="config">Injected Config for signer containing a private key.</param>
         /// <exception cref="Web3Exception">Throws Exception if initializing instance fails.</exception>
         public InProcessSigner(InProcessSignerConfig config)
         {
