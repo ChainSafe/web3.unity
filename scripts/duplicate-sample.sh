@@ -1,5 +1,4 @@
 #! /usr/bin/env sh
-export SOURCE_DIRECTORY="$1"
-export DESTINATION_DIRECTORY="$2"
-rm -r "$DESTINATION_DIRECTORY"
-cp -r "$SOURCE_DIRECTORY" "$DESTINATION_DIRECTORY"
+rm -r "$2/"
+mkdir -p $2
+cp -r "$1"* $2
