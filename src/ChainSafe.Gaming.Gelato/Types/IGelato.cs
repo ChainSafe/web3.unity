@@ -15,7 +15,7 @@ namespace ChainSafe.GamingSdk.Gelato.Types
     {
         /// <summary>
         ///     Executes a relay call, taking into consideration a synchronized fee. This method provides an abstraction over
-        ///     sending transactions that automatically adjust fees.
+        ///     sending transactions that automatically adjust fees. This relay method does not require a user to sign the request.
         /// </summary>
         /// <param name="request">The details of the call request.</param>
         /// <returns>An instance of <see cref="RelayResponse" /> containing details about the transaction and its result.</returns>

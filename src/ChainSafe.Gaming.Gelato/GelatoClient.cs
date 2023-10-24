@@ -137,7 +137,7 @@ namespace ChainSafe.GamingSdk.Gelato
         /// <summary>
         /// Retrieves the status of a task from the Gelato Relay service.
         /// </summary>
-        /// <param name="taskId">The unique ID of the task for which the status is being fetched.</param>
+        /// <param name="taskId">The unique ID of a task which has been received by the Gelato relayer.</param>
         /// <returns>The current status of the specified task.</returns>
         /// <exception cref="Web3Exception">Thrown when the retrieval process encounters any issues or the underlying HTTP call fails.</exception>
         public async Task<RelayedTask> GetTaskStatus(string taskId)
