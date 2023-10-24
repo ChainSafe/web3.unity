@@ -15,6 +15,10 @@ namespace Scenes
 {
     public abstract class Login : MonoBehaviour
     {
+        public const string MainSceneName = "SampleMain";
+        
+        public static int LoginSceneIndex = 0;
+        
         public string GelatoApiKey = "";
 
         public ErrorPopup ErrorPopup;
@@ -49,8 +53,10 @@ namespace Scenes
             }
             
             Web3Accessor.Set(web3);
+
+            LoginSceneIndex = SceneManager.GetActiveScene().buildIndex;
             
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            SceneManager.LoadScene(MainSceneName);
         }
 
         private void ConfigureCommonServices(IWeb3ServiceCollection services)

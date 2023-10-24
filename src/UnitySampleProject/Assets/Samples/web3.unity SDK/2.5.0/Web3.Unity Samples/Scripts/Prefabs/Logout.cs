@@ -19,6 +19,6 @@ public class Logout : MonoBehaviour
         Web3Accessor.Clear();
 
         // Go back to the first scene to log in again
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(Login.LoginSceneIndex);
     }
 }
