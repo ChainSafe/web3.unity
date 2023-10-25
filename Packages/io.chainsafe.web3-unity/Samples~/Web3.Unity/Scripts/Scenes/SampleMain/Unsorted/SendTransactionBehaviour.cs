@@ -7,7 +7,6 @@ namespace Samples.Behaviours.Unsorted
     public class SendTransactionBehaviour : SampleBehaviour
     {
         public string to = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
-        public HexBigInteger amount = new HexBigInteger(12300000000000000);
 
         private UnsortedSample logic;
 
