@@ -15,7 +15,7 @@ public class WalletConnectModal : MonoBehaviour
     [SerializeField] private Button _backButton;
 
     [SerializeField] private Transform _container;
-    
+
     private void Start()
     {
         _backButton.onClick.AddListener(Disable);
@@ -44,7 +44,8 @@ public class WalletConnectModal : MonoBehaviour
     {
         var writer = new BarcodeWriter
         {
-            Format = BarcodeFormat.QR_CODE, Options = new QrCodeEncodingOptions { Height = height, Width = width }
+            Format = BarcodeFormat.QR_CODE,
+            Options = new QrCodeEncodingOptions { Height = height, Width = width }
         };
         return writer.Write(textForEncoding);
     }
@@ -55,7 +56,7 @@ public class WalletConnectModal : MonoBehaviour
         var color32 = Encode(text, encoded.width, encoded.height);
         encoded.SetPixels32(color32);
         encoded.Apply();
-        
+
         // Convert the texture into a sprite and assign it to our QR code image
         var qrCodeSprite = Sprite.Create(encoded, new Rect(0, 0, encoded.width, encoded.height),
             new Vector2(0.5f, 0.5f), 100f);
