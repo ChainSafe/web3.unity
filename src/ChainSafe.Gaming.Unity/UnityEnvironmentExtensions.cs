@@ -9,6 +9,11 @@ namespace ChainSafe.Gaming.Web3.Unity
 {
     public static class UnityEnvironmentExtensions
     {
+        /// <summary>
+        /// Registers Unity specific services for the Web3 environment.
+        /// </summary>
+        /// <param name="services">Service collection that is already in use.</param>
+        /// <returns>Updated Service collection.</returns>
         public static IWeb3ServiceCollection UseUnityEnvironment(this IWeb3ServiceCollection services)
         {
             services.UseApiAnalytics();

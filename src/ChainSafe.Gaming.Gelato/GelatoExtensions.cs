@@ -7,6 +7,9 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace ChainSafe.GamingSdk.Gelato
 {
+    /// <summary>
+    /// Gelato Extensions that are mostly used in the consuming (i.e. Unity) end.
+    /// </summary>
     public static class GelatoExtensions
     {
         public static IGelato Gelato(this Web3 web3) => web3.ServiceProvider.GetRequiredService<IGelato>();

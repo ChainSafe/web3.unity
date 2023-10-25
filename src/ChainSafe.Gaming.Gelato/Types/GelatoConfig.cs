@@ -2,6 +2,9 @@ using Newtonsoft.Json;
 
 namespace ChainSafe.GamingSdk.Gelato.Types
 {
+    /// <summary>
+    /// Class that represents a basic configuration for Gelato.
+    /// </summary>
     public class GelatoConfig
     {
         /// <summary>

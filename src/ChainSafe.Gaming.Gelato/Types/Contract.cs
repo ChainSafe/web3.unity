@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace ChainSafe.GamingSdk.Gelato.Types
 {
+    /// <summary>
+    /// Represents contract-related information, including endpoints and addresses, used in the context of Ethereum smart contracts.
+    /// </summary>
     public class Contract
     {
         /// <summary>

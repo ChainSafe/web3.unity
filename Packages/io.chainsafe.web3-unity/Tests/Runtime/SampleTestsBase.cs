@@ -13,7 +13,7 @@ using UnityEngine.TestTools;
 public class SampleTestsBase
 {
     protected Web3 web3Result;
-    
+
     protected WalletConnectConfig config;
 
     [UnitySetUp]
