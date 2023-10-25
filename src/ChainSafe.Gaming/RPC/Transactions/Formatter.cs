@@ -6,8 +6,16 @@ using Nethereum.Hex.HexTypes;
 
 namespace ChainSafe.Gaming.Evm.Transactions
 {
+    /// <summary>
+    /// Class to format and parse transactions.
+    /// </summary>
     public class Formatter
     {
+        /// <summary>
+        /// Parses a signed transaction.
+        /// </summary>
+        /// <param name="signedTx">The signed transaction as a string to be parsed.</param>
+        /// <returns>A Transaction object representing the parsed transaction.</returns>
         public Transaction Parse(string signedTx)
         {
             var payload = signedTx.HexToByteArray();
@@ -28,6 +36,11 @@ namespace ChainSafe.Gaming.Evm.Transactions
             throw new Exception($"unsupported transaction type: {payload[0]}");
         }
 
+        /// <summary>
+        /// Parses a payload of a transaction.
+        /// </summary>
+        /// <param name="payload">The byte array of the payload to be parsed.</param>
+        /// <returns>A Transaction object representing the parsed transaction.</returns>
         private Transaction Parse(byte[] payload)
         {
             var decodedList = RLP.RLP.Decode(payload);
@@ -103,6 +116,11 @@ namespace ChainSafe.Gaming.Evm.Transactions
             return tx;
         }
 
+        /// <summary>
+        /// Parses a payload of a transaction according to the EIP-2930 standard.
+        /// </summary>
+        /// <param name="payload">The byte array of the payload to be parsed.</param>
+        /// <returns>A Transaction object representing the parsed EIP-2930 transaction.</returns>
         private Transaction ParseEip2930(byte[] payload)
         {
             var decodedList = RLP.RLP.Decode(payload.Skip(1).ToArray());
