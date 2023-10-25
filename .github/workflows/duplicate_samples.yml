@@ -1,8 +1,8 @@
 name: Duplicate Package Samples Workflow
 
 on:
-  pull_request:
-    branches: [ main ]
+  push:
+    branches: [ rob/samples-import-fixes-642 ]
 
 jobs:
   duplicate:
@@ -12,18 +12,19 @@ jobs:
     - uses: actions/checkout@v4
     - name: Duplicate Web3 Unity Samples
       run: |
-        export SOURCE_DIRECTORY="${GITHUB_WORKSPACE}/src/UnitySampleProject/Assets/Samples/web3.unity SDK/$(ls 'src/UnitySampleProject/Assets/Samples/web3.unity SDK' | head -n 1)/Web3.Unity Samples/"
-        export DESTINATION_DIRECTORY="${GITHUB_WORKSPACE}/Packages/io.chainsafe.web3-unity/Samples~/Web3.Unity/"
-        rm -rf "$DESTINATION_DIRECTORY"
-        mkdir -p "$DESTINATION_DIRECTORY"
-        cp -r "$SOURCE_DIRECTORY" "$DESTINATION_DIRECTORY"
-    - name: Duplicate Web3 Auth Samples
-      run: |
-        export SOURCE_DIRECTORY="${GITHUB_WORKSPACE}/src/UnitySampleProject/Assets/Samples/web3.unity SDK Web3Auth/$(ls 'src/UnitySampleProject/Assets/Samples/web3.unity SDK Web3Auth' | head -n 1)/Web3.Unity Web3Auth Samples/"
-        export DESTINATION_DIRECTORY="${GITHUB_WORKSPACE}/Packages/io.chainsafe.web3-unity.web3auth/Samples~/Web3.Unity Web3Auth/"
-        rm -rf "$DESTINATION_DIRECTORY"
-        mkdir -p "$DESTINATION_DIRECTORY"
-        cp -r "$SOURCE_DIRECTORY" "$DESTINATION_DIRECTORY"
+        for i in 1 2
+        do
+          export SOURCE_DIRECTORY=${importable_sample_path_${i}}
+          export DESTINATION_DIRECTORY=${imported_sample_path_${i}}
+          rm -rf "$DESTINATION_DIRECTORY"
+          mkdir -p "$DESTINATION_DIRECTORY"
+          cp -r "$SOURCE_DIRECTORY" "$DESTINATION_DIRECTORY"
+        done
+      env: 
+        importable_sample_path_1: "${GITHUB_WORKSPACE}/src/UnitySampleProject/Assets/Samples/web3.unity SDK/$(ls 'src/UnitySampleProject/Assets/Samples/web3.unity SDK' | head -n 1)/Web3.Unity Samples/"
+        imported_sample_path_1: "${GITHUB_WORKSPACE}/Packages/io.chainsafe.web3-unity/Samples~/Web3.Unity/"
+        importable_sample_path_2: "${GITHUB_WORKSPACE}/src/UnitySampleProject/Assets/Samples/web3.unity SDK Web3Auth/$(ls 'src/UnitySampleProject/Assets/Samples/web3.unity SDK Web3Auth' | head -n 1)/Web3.Unity Web3Auth Samples/"
+        imported_sample_path_2: "${GITHUB_WORKSPACE}/Packages/io.chainsafe.web3-unity.web3auth/Samples~/Web3.Unity Web3Auth/"
     - name: Commit and Push
       run: |
         git config user.email $git_email
