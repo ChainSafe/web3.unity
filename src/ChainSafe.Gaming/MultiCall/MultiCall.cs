@@ -19,6 +19,12 @@ namespace ChainSafe.Gaming.MultiCall
         private const string DefaultDeploymentAddress = "0xcA11bde05977b3631167028862bE2a173976CA11";
         private readonly Contract multiCallContract;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MultiCall"/> class.
+        /// </summary>
+        /// <param name="builder">An implementation of the contract builder.</param>
+        /// <param name="chainConfig">The blockchain configuration for the associated chain.</param>
+        /// <param name="config">The configuration settings for MultiCall.</param>
         public MultiCall(IContractBuilder builder, IChainConfig chainConfig, MultiCallConfig config)
         {
             if (chainConfig.ChainId != null && MultiCallDefaults.DeployedNetworks.Contains(chainConfig.ChainId))
@@ -34,6 +40,13 @@ namespace ChainSafe.Gaming.MultiCall
             }
         }
 
+        /// <summary>
+        /// Executes a batch of Ethereum function calls using the MultiCall contract asynchronously.
+        /// This utilizes MultiCall V3's implementation and dynamically checks whether to use value calls or not.
+        /// </summary>
+        /// <param name="multiCalls">An array of function calls to execute in a batch.</param>
+        /// <param name="pageSize">The maximum number of calls per batch request.</param>
+        /// <returns>A list of results from executing the batched calls.</returns>
         public async Task<List<Result>> MultiCallAsync(Call3Value[] multiCalls, int pageSize = DefaultCallsPerRequest)
         {
              if (multiCalls.Any(x => x.Value > 0))
@@ -87,10 +100,10 @@ namespace ChainSafe.Gaming.MultiCall
         }
 
         /// <summary>
-        /// A small function to extract the Result items into an array.
+        /// Extracts and formats the results of Multicall function calls into a list of <see cref="Result"/> objects.
         /// </summary>
-        /// <param name="results">Returned response from calling the multicall function.</param>
-        /// <returns>A neater, formatted array of results.</returns>
+        /// <param name="results">The response from calling the Multicall function.</param>
+        /// <returns>A list of <see cref="Result"/> objects with success and return data information.</returns>
         private List<Result> ExtractResults(IReadOnlyList<object[]> results)
         {
             var extracted = results[0][0] as List<List<ParameterOutput>>;
@@ -104,11 +117,19 @@ namespace ChainSafe.Gaming.MultiCall
             return parsed;
         }
 
+        /// <summary>
+        /// Asynchronously initializes the Multicall service. Does nothing in this implementation.
+        /// </summary>
+        /// <returns>A <see cref="ValueTask"/> representing the asynchronous operation.</returns>
         public ValueTask WillStartAsync()
         {
             return default;
         }
 
+        /// <summary>
+        /// Asynchronously cleans up and stops the Multicall service. Does nothing in this implementation.
+        /// </summary>
+        /// <returns>A <see cref="ValueTask"/> representing the asynchronous operation.</returns>
         public ValueTask WillStopAsync() => new(Task.CompletedTask);
     }
 }
