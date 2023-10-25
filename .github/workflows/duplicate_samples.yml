@@ -14,9 +14,10 @@ jobs:
       run: |
         for i in 1 2
         do
-          export SOURCE_DIRECTORY=$importable_sample_path_$i
-          export DESTINATION_DIRECTORY=$imported_sample_path_$i
-          echo "$SOURCE_DIRECTORY"
+          export SOURCE_DIRECTORY="importable_sample_path_$i"
+          SOURCE_DIRECTORY=${!SOURCE_DIRECTORY}
+          export DESTINATION_DIRECTORY="imported_sample_path_$i"
+          DESTINATION_DIRECTORY=${!DESTINATION_DIRECTORY}
           rm -rf "$DESTINATION_DIRECTORY"
           mkdir -p "$DESTINATION_DIRECTORY"
           cp -r "$SOURCE_DIRECTORY" "$DESTINATION_DIRECTORY"
