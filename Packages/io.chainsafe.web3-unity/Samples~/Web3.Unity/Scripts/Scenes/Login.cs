@@ -74,7 +74,7 @@ namespace Scenes
         
         [SerializeField] private Toggle redirectToWalletToggle;
         
-        [SerializeField] private WalletConnectModal walletConnectModal;
+        //[SerializeField] private WalletConnectModal walletConnectModal;
         
         [field: SerializeField] public string ProjectId { get; private set; }
         
@@ -153,7 +153,7 @@ namespace Scenes
             if (!string.IsNullOrEmpty(data.Uri))
             {
                 // display QR and copy to clipboard
-                walletConnectModal.WalletConnected(data);
+                //walletConnectModal.WalletConnected(data);
             }
         }
         
