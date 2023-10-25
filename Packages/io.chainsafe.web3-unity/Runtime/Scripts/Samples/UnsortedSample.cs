@@ -21,18 +21,33 @@ namespace Web3Unity.Scripts.Prefabs
             this.web3 = web3;
         }
 
-        public async Task<object[]> ContractSend(string method, string abi, string contractAddress)
+        public string PrivateKeySign(string _privateKey, string _message)
         {
-            var contract = web3.ContractBuilder.Build(abi, contractAddress);
-            return await contract.Send(method, new object[] { 1 });
+            var signer = new EthereumMessageSigner();
+            var signature = signer.HashAndSign(_message, _privateKey);
+            return signature;
         }
 
-        public async Task<List<List<string>>> GetArray()
+        public string PrivateKeyGetAddress(string _privateKey)
         {
-            var contractAddress = "0x5244d0453A727EDa96299384370359f4A2B5b20a";
-            var abi = "[{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"_addresses\",\"type\":\"address[]\"}],\"name\":\"setStore\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"bought\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getStore\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]";
-            var method = "getStore";
+            EthECKey key = new EthECKey(_privateKey);
+            return key.GetPublicAddress();
+        }
 
+        public async Task<object[]> ContractSend(string method, string abi, string contractAddress, object[] args)
+        {
+            var contract = web3.ContractBuilder.Build(abi, contractAddress);
+            return await contract.Send(method, args);
+        }
+
+        public async Task<object[]> ContractCall(string method, string abi, string contractAddress, object[] args)
+        {
+            var contract = web3.ContractBuilder.Build(abi, contractAddress);
+            return await contract.Call(method, args);
+        }
+
+        public async Task<List<List<string>>> GetArray(string contractAddress, string abi, string method)
+        {
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
             var rawResponse = await contract.Call(method);
             return rawResponse.Select(raw => raw as List<string>).ToList();
