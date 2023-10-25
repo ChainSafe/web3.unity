@@ -5,9 +5,16 @@ using Nethereum.ABI.FunctionEncoding.Attributes;
 
 namespace ChainSafe.Gaming.Evm.Contracts.Builders.FilterInput
 {
+    /// <summary>
+    /// A container for handling Topic filters.
+    /// </summary>
+    /// <typeparam name="T">A class type.</typeparam>
     internal class TopicFilterContainer<T>
         where T : class
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TopicFilterContainer{T}"/> class.
+        /// </summary>
         internal TopicFilterContainer()
         {
             var indexedParameters = PropertiesExtractor
@@ -26,16 +33,37 @@ namespace ChainSafe.Gaming.Evm.Contracts.Builders.FilterInput
             Topics = new[] { Topic1, Topic2, Topic3 };
         }
 
+        /// <summary>
+        /// Gets a boolean value indicating if TopicFilterContainer is empty.
+        /// </summary>
         public bool Empty { get; private set; }
 
+        /// <summary>
+        /// Gets the first TopicFilter object.
+        /// </summary>
         public TopicFilter Topic1 { get; private set; }
 
+        /// <summary>
+        /// Gets the second TopicFilter object.
+        /// </summary>
         public TopicFilter Topic2 { get; private set; }
 
+        /// <summary>
+        /// Gets the third TopicFilter object.
+        /// </summary>
         public TopicFilter Topic3 { get; private set; }
 
+        /// <summary>
+        /// Private set for Topics array.
+        /// </summary>
         private TopicFilter[] Topics { get; set; }
 
+        /// <summary>
+        /// Returns the TopicFilter object associated with the given PropertyInfo.
+        /// </summary>
+        /// <param name="pInfo">The PropertyInfo object to match with a TopicFilter object.</param>
+        /// <returns>The TopicFilter object that matches the provided PropertyInfo.</returns>
+        /// <exception cref="ArgumentException">Throws an exception if a matching TopicFilter can't be found.</exception>
         public TopicFilter GetTopic(PropertyInfo pInfo)
         {
             return

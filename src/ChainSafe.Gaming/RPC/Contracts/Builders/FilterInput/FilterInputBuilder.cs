@@ -22,12 +22,22 @@ namespace ChainSafe.Gaming.Evm.Contracts.Builders.FilterInput
         private readonly EventABI eventAbi;
         private readonly TopicFilterContainer<TEventDto> topics;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FilterInputBuilder{TEventDto}"/> class with the given event DTO type.
+        /// </summary>
         public FilterInputBuilder()
         {
             eventAbi = ABITypedRegistry.GetEvent<TEventDto>();
             topics = new TopicFilterContainer<TEventDto>();
         }
 
+        /// <summary>
+        /// Adds topics to the filter.
+        /// </summary>
+        /// <param name="propertySelector">The property to select.</param>
+        /// <param name="desiredValues">The values of the property to select.</param>
+        /// <returns>A FilterInputBuilder of the modified filter.</returns>
+        /// <typeparam name="TPropertyType">Generic type parameter of the property.</typeparam>
         public FilterInputBuilder<TEventDto> AddTopic<TPropertyType>(
             Expression<Func<TEventDto, TPropertyType>> propertySelector, IEnumerable<TPropertyType> desiredValues)
         {
@@ -39,6 +49,13 @@ namespace ChainSafe.Gaming.Evm.Contracts.Builders.FilterInput
             return this;
         }
 
+        /// <summary>
+        /// Adds a topic to the filter.
+        /// </summary>
+        /// <param name="propertySelector">The property to select.</param>
+        /// <param name="desiredValue">The value of the property to select.</param>
+        /// <returns>A FilterInputBuilder of the modified filter.</returns>
+        /// <typeparam name="TPropertyType">Generic type parameter of the property.</typeparam>
         public FilterInputBuilder<TEventDto> AddTopic<TPropertyType>(
             Expression<Func<TEventDto, TPropertyType>> propertySelector, TPropertyType desiredValue)
         {
@@ -52,16 +69,35 @@ namespace ChainSafe.Gaming.Evm.Contracts.Builders.FilterInput
             return this;
         }
 
+        /// <summary>
+        /// Builds a filter based on a contract address and block range.
+        /// </summary>
+        /// <param name="contractAddress">The contract address.</param>
+        /// <param name="blockRange">The block range.</param>
+        /// <returns>A NewFitlerInput with the specified filter settings.</returns>
         public NewFilterInput Build(string contractAddress, BlockRange? blockRange = null)
         {
             return Build(new[] { contractAddress }, blockRange);
         }
 
+        /// <summary>
+        /// Builds a filter based on a contract address and block parameter values.
+        /// </summary>
+        /// <param name="contractAddress">The contract address.</param>
+        /// <param name="from">The 'from' block parameter.</param>
+        /// <param name="to">The 'to' block parameter.</param>
+        /// <returns>A NewFilterInput with the specified filter settings.</returns>
         public NewFilterInput Build(string contractAddress, BlockParameter from, BlockParameter to)
         {
             return Build(new[] { contractAddress }, from, to);
         }
 
+        /// <summary>
+        /// Builds a filter based on multiple contract addresses and/or a block range.
+        /// </summary>
+        /// <param name="contractAddresses">The array of contract addresses.</param>
+        /// <param name="blockRange">The block range.</param>
+        /// <returns>A NewFilterInput with the specified filter settings.</returns>
         public NewFilterInput Build(string[] contractAddresses = null, BlockRange? blockRange = null)
         {
             BlockParameter from = blockRange == null ? null : new BlockParameter(blockRange.Value.From);
@@ -70,6 +106,13 @@ namespace ChainSafe.Gaming.Evm.Contracts.Builders.FilterInput
             return Build(contractAddresses, from, to);
         }
 
+        /// <summary>
+        /// Builds a filter based on contract addresses and block parameter values.
+        /// </summary>
+        /// <param name="contractAddresses">The array of contract addresses.</param>
+        /// <param name="from">The 'from' block parameter.</param>
+        /// <param name="to">The 'to' block parameter.</param>
+        /// <returns>A NewFilterInput with the specified filter settings.</returns>
         public NewFilterInput Build(string[] contractAddresses, BlockParameter from, BlockParameter to)
         {
             if (topics.Empty)

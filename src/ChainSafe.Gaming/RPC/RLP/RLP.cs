@@ -96,6 +96,11 @@ namespace ChainSafe.Gaming.Evm.RLP
         public static readonly byte[] EmptyByteArray = Array.Empty<byte>();
         public static readonly byte[] ZeroByteArray = { 0 };
 
+        /// <summary>
+        /// Converts a byte array to an integer.
+        /// </summary>
+        /// <param name="bytes">Byte array to be converted.</param>
+        /// <returns>The converted integer.</returns>
         public static int ByteArrayToInt(byte[] bytes)
         {
             if (BitConverter.IsLittleEndian)
@@ -106,6 +111,11 @@ namespace ChainSafe.Gaming.Evm.RLP
             return BitConverter.ToInt32(bytes, 0);
         }
 
+        /// <summary>
+        /// Decodes a given byte array.
+        /// </summary>
+        /// <param name="msgData">Byte array to decode.</param>
+        /// <returns>The decoded RLP element.</returns>
         public static IRLPElement Decode(byte[] msgData)
         {
             var rlpCollection = new RLPCollection();
@@ -113,6 +123,11 @@ namespace ChainSafe.Gaming.Evm.RLP
             return rlpCollection[0];
         }
 
+        /// <summary>
+        /// Decodes a collection from a byte array.
+        /// </summary>
+        /// <param name="msgData">Byte array to decode.</param>
+        /// <returns>The decoded RLP collection.</returns>
         public static IRLPElement DecodeCollection(byte[] msgData)
         {
             var rlpCollection = new RLPCollection();
@@ -121,7 +136,7 @@ namespace ChainSafe.Gaming.Evm.RLP
         }
 
         /// <summary>
-        ///     Decodes a message from a starting point to an end point.
+        /// Decodes a message from a starting point to an end point.
         /// </summary>
         public static void Decode(
             byte[] msgData,

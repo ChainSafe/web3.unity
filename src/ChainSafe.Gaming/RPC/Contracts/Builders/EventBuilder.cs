@@ -8,19 +8,40 @@ using Newtonsoft.Json.Linq;
 
 namespace ChainSafe.Gaming.Evm.Contracts.Builders
 {
+    /// <summary>
+    /// Class that creates and manipulates events on an Ethereum contract.
+    /// This class is obsolete and it's recommended to use the EventABI extensions instead.
+    /// </summary>
     [Obsolete("Use the EventABI extensions instead")]
     public class EventBuilder
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EventBuilder"/> class.
+        /// </summary>
+        /// <param name="contractAddress">The Ethereum contract address.</param>
+        /// <param name="eventAbi">The event ABI of the Ethereum contract.</param>
         public EventBuilder(string contractAddress, EventABI eventAbi)
         {
             ContractAddress = contractAddress;
             EventABI = eventAbi;
         }
 
+        /// <summary>
+        /// Gets or sets the address of the Ethereum contract.
+        /// </summary>
         public string ContractAddress { get; set; }
 
+        /// <summary>
+        /// Gets the EventABI instance related to the Ethereum contract.
+        /// </summary>
         public EventABI EventABI { get; }
 
+        /// <summary>
+        /// Decodes all events for a given type.
+        /// </summary>
+        /// <typeparam name="T">The type of the event.</typeparam>
+        /// <param name="logs">The logs for an event on an Ethereum contract.</param>
+        /// <returns>A list of decoded events.</returns>
         public static List<EventLog<T>> DecodeAllEvents<T>(FilterLog[] logs)
             where T : new()
         {
@@ -72,6 +93,11 @@ namespace ChainSafe.Gaming.Evm.Contracts.Builders
             return EventABI.CreateFilterInput(ContractAddress, filterTopic1, filterTopic2, filterTopic3, fromBlock, toBlock);
         }
 
+        /// <summary>
+        /// Checks if the log is related to the specific event.
+        /// </summary>
+        /// <param name="log">The log to check.</param>
+        /// <returns><c>true</c> if the log is for the event, <c>false</c> otherwise.</returns>
         public bool IsLogForEvent(JToken log)
         {
             return EventABI.IsLogForEvent(log);
@@ -92,12 +118,24 @@ namespace ChainSafe.Gaming.Evm.Contracts.Builders
             return EventABI.GetLogsForEvent(logs);
         }
 
+        /// <summary>
+        /// Decodes all events for a specific event.
+        /// </summary>
+        /// <typeparam name="T">The type of the event.</typeparam>
+        /// <param name="logs">The logs for an event on an Ethereum contract.</param>
+        /// <returns>A list of decoded events.</returns>
         public List<EventLog<T>> DecodeAllEventsForEvent<T>(FilterLog[] logs)
             where T : new()
         {
             return EventABI.DecodeAllEvents<T>(logs);
         }
 
+        /// <summary>
+        /// Decodes all events for a specific event.
+        /// </summary>
+        /// <typeparam name="T">The type of the event.</typeparam>
+        /// <param name="logs">The logs (in JArray format) for an event on an Ethereum contract.</param>
+        /// <returns>A list of decoded events.</returns>
         public List<EventLog<T>> DecodeAllEventsForEvent<T>(JArray logs)
             where T : new()
         {

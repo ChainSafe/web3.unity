@@ -14,26 +14,54 @@ using Newtonsoft.Json.Linq;
 
 namespace ChainSafe.Gaming.Evm.Contracts.Extensions
 {
+    /// <summary>
+    /// Class that provides extension methods to events.
+    /// </summary>
     public static class EventExtensions
     {
+        /// <summary>
+        /// Checks if log is for the given event type.
+        /// </summary>
+        /// <typeparam name="TEventDTO">Event type.</typeparam>
+        /// <param name="log">JSON representation of the log.</param>
+        /// <returns>True if log is for the given event, false otherwise.</returns>
         public static bool IsLogForEvent<TEventDTO>(this JToken log)
         {
             var eventABI = ABITypedRegistry.GetEvent<TEventDTO>();
             return eventABI.IsLogForEvent(log);
         }
 
+        /// <summary>
+        /// Checks if log is for the given event type.
+        /// </summary>
+        /// <typeparam name="TEventDTO">Event type.</typeparam>
+        /// <param name="log">Log to check.</param>
+        /// <returns>True if log is for the given event, false otherwise.</returns>
         public static bool IsLogForEvent<TEventDTO>(this FilterLog log)
         {
             var eventABI = ABITypedRegistry.GetEvent<TEventDTO>();
             return eventABI.IsLogForEvent(log);
         }
 
+        /// <summary>
+        /// Checks if filter input is for the given contract address and event type.
+        /// </summary>
+        /// <typeparam name="TEventDTO">Event type.</typeparam>
+        /// <param name="contractAddress">Contract address.</param>
+        /// <param name="filterInput">Filter input to check.</param>
+        /// <returns>True if filter input is for the given contract address and event, false otherwise.</returns>
         public static bool IsFilterInputForEvent<TEventDTO>(string contractAddress, NewFilterInput filterInput)
         {
             var eventABI = ABITypedRegistry.GetEvent<TEventDTO>();
             return eventABI.IsFilterInputForEvent(contractAddress, filterInput);
         }
 
+        /// <summary>
+        /// Checks if log is for this event ABI.
+        /// </summary>
+        /// <param name="eventABI">Event ABI.</param>
+        /// <param name="log">JSON representation of the log.</param>
+        /// <returns>True if log is for this event ABI, false otherwise.</returns>
         public static bool IsLogForEvent(this EventABI eventABI, JToken log)
         {
             return IsLogForEvent(eventABI, JsonConvert.DeserializeObject<FilterLog>(log.ToString()));
