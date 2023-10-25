@@ -16,9 +16,7 @@ jobs:
         do
           export SOURCE_DIRECTORY=$importable_sample_path_$i
           export DESTINATION_DIRECTORY=$imported_sample_path_$i
-          echo SOURCE_DIRECTORY
-          echo DESTINATION_DIRECTORY
-          echo $($importable_sample_path_$i)
+          echo "$SOURCE_DIRECTORY"
           rm -rf "$DESTINATION_DIRECTORY"
           mkdir -p "$DESTINATION_DIRECTORY"
           cp -r "$SOURCE_DIRECTORY" "$DESTINATION_DIRECTORY"
