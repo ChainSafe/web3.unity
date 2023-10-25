@@ -39,24 +39,57 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
         /// <returns>Price in network's default currency.</returns>
         Task<BigInteger> CalculateOpenPrice(uint lootboxType, uint lootboxCount);
 
+        /// <summary>
+        /// Checks if a lootbox opening operation is currently in progress.
+        /// </summary>
+        /// <returns>True if a lootbox is being opened, otherwise false.</returns>
         Task<bool> IsOpeningLootbox();
 
+        /// <summary>
+        /// Gets the type id of the lootbox that is currently being opened.
+        /// </summary>
+        /// <returns>Type id of the lootbox being opened.</returns>
         Task<uint> OpeningLootboxType();
 
         /// <summary>
-        /// TODO.
+        /// Initiates the process to open a lootbox of a specific type.
         /// </summary>
+        /// <param name="lootboxType">Lootbox type id to open.</param>
+        /// <param name="lootboxCount">Optional parameter indicating the number of lootboxes to open. Default is 1.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         Task OpenLootbox(uint lootboxType, uint lootboxCount = 1);
 
+        /// <summary>
+        /// Checks if the current user can claim rewards.
+        /// </summary>
+        /// <returns>True if rewards can be claimed by the current user, otherwise false.</returns>
         Task<bool> CanClaimRewards();
 
+        /// <summary>
+        /// Checks if a specified user can claim rewards.
+        /// </summary>
+        /// <param name="account">User's public address to check for claimable rewards.</param>
+        /// <returns>True if rewards can be claimed by the specified user, otherwise false.</returns>
         Task<bool> CanClaimRewards(string account);
 
+        /// <summary>
+        /// Initiates the process for the current user to claim their rewards.
+        /// </summary>
+        /// <returns>An instance of <see cref="LootboxRewards"/> containing the details of the claimed rewards.</returns>
         Task<LootboxRewards> ClaimRewards();
 
+        /// <summary>
+        /// Initiates the process for a specified user to claim their rewards.
+        /// </summary>
+        /// <param name="account">User's public address from which rewards are to be claimed.</param>
+        /// <returns>An instance of <see cref="LootboxRewards"/> containing the details of the claimed rewards for the specified user.</returns>
         Task<LootboxRewards> ClaimRewards(string account);
 
+        /// <summary>
+        /// Retrieves a list of all lootboxes along with their balances for the current user.
+        /// This method aggregates data from multiple methods to provide a comprehensive view of available lootboxes.
+        /// </summary>
+        /// <returns>A list of <see cref="LootboxTypeInfo"/> representing each lootbox type and its corresponding balance for the current user.</returns>
         async Task<List<LootboxTypeInfo>> FetchAllLootboxes()
         {
             var typeIds = await this.GetLootboxTypes();
