@@ -1,6 +1,6 @@
 namespace ChainSafe.Gaming.Web3.Analytics
 {
-    public class NoOpAnalyticsClient : IAnalyticsClient
+    internal class NoOpAnalyticsClient : IAnalyticsClient
     {
         public void CaptureEvent(AnalyticsEvent eventData)
         {

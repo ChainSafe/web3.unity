@@ -1,10 +1,9 @@
-using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Environment;
 using Newtonsoft.Json;
 
 namespace ChainSafe.Gaming.Web3.Analytics
 {
-    public class ApiAnalyticsClient : IAnalyticsClient
+    internal class ApiAnalyticsClient : IAnalyticsClient
     {
         private const string LoggingUrl = "https://api.gaming.chainsafe.io/logging/logEvent";
         private const string AnalyticsVersion = "2.5";
