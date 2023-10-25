@@ -104,7 +104,7 @@ namespace ChainSafe.Gaming.Evm.Providers
                 var request = new RpcRequestMessage(Guid.NewGuid().ToString(), method, parameters);
                 var response =
                     (await httpClient.Post<RpcRequestMessage, RpcResponseMessage>(config.RpcNodeUrl, request))
-                    .EnsureResponse();
+                    .AssertSuccess();
 
                 if (response.HasError)
                 {
