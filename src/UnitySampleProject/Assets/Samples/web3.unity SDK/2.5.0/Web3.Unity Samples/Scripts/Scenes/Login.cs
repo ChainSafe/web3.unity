@@ -16,12 +16,12 @@ namespace Scenes
     public abstract class Login : MonoBehaviour
     {
         public const string MainSceneName = "SampleMain";
-        
-        public static int LoginSceneIndex = 0;
-        
-        public string GelatoApiKey = "";
 
-        public ErrorPopup ErrorPopup;
+        public static int LoginSceneIndex { get; private set; }  = 0;
+
+        [SerializeField] private string gelatoApiKey = "";
+
+        [SerializeField] private ErrorPopup errorPopup;
         
         private IEnumerator Start()
         {
@@ -48,7 +48,7 @@ namespace Scenes
             
             catch (Exception)
             {
-                ErrorPopup.ShowError("Login failed, please try again\n(see console for more details)");
+                errorPopup.ShowError("Login failed, please try again\n(see console for more details)");
                 throw;
             }
             
@@ -63,7 +63,7 @@ namespace Scenes
         {
             services
                 .UseUnityEnvironment()
-                .UseGelato(GelatoApiKey)
+                .UseGelato(gelatoApiKey)
                 .UseRpcProvider();
 
             /* As many contracts as needed may be registered here.

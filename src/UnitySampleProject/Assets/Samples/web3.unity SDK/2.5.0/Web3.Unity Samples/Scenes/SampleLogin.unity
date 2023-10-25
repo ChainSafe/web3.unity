@@ -695,7 +695,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20.75
+  m_fontSize: 40
   m_fontSizeBase: 48
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1622,10 +1622,10 @@ RectTransform:
   m_Father: {fileID: 654334440}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 150, y: -80}
-  m_SizeDelta: {x: 300, y: 50}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &724612376
 MonoBehaviour:
@@ -1909,7 +1909,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_AnchorMin.x
@@ -1917,15 +1917,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 300
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1957,11 +1957,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 150
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -25
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2445,10 +2445,10 @@ RectTransform:
   m_Father: {fileID: 654334440}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 150, y: -135}
-  m_SizeDelta: {x: 300, y: 50}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &981405683
 MonoBehaviour:
@@ -2675,8 +2675,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96894e49d9863ec4db1d93a5e56f19cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GelatoApiKey: _UzPz_Yk_WTjWMfcl45fLvQNGQ9ISx5ZE8TnwnVKYrE_
-  ErrorPopup: {fileID: 1701305868}
+  gelatoApiKey: _UzPz_Yk_WTjWMfcl45fLvQNGQ9ISx5ZE8TnwnVKYrE_
+  errorPopup: {fileID: 1701305868}
   supportedWalletsDropdown: {fileID: 540464236}
   redirectToWalletToggle: {fileID: 981405684}
   loginButton: {fileID: 787012150}

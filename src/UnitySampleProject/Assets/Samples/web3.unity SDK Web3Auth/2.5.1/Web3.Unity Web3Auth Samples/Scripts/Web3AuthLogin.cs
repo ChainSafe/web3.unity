@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.GamingSdk.Web3Auth;
 using Scenes;
@@ -9,8 +8,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using Network = Web3Auth.Network;
 
+/// <summary>
+/// Login using Web3Auth.
+/// </summary>
 public class Web3AuthLogin : Login
 {
+    /// <summary>
+    /// Struct used for pairing login buttons to Web3 auth providers.
+    /// Used when adding <see cref="Web3AuthLogin.LoginWithWeb3Auth"/> as listeners to the buttons.
+    /// </summary>
     [Serializable]
     public struct ProviderAndButtonPair
     {
@@ -18,17 +24,14 @@ public class Web3AuthLogin : Login
         public Provider Provider;
     }
 
-    [Serializable]
-    public struct Web3AuthSettings
-    {
-        public string ClientId;
-        public string RedirectUri;
-        public Network Network;
-    }
+    [Header("Web3 Auth")]
+    [SerializeField] private string clientId;
+    [SerializeField] private string redirectUri;
+    [SerializeField] private Network network;
 
-    [SerializeField] private Web3AuthSettings web3AuthSettings;
+    [Header("UI")]
     [SerializeField] private List<ProviderAndButtonPair> providerAndButtonPairs;
-
+    
     private bool useProvider;
     
     private Provider selectedProvider;
@@ -44,15 +47,12 @@ public class Web3AuthLogin : Login
         yield return new WaitUntil(() => loginTask.IsCompleted);
 #endif
 
-        //add listener
-        foreach (var pair in providerAndButtonPairs)
+        // add provider buttons listeners
+        providerAndButtonPairs.ForEach(p => p.Button.onClick.AddListener(delegate
         {
-            pair.Button.onClick.AddListener(() =>
-            {
-                LoginWithWeb3Auth(pair.Provider);
-            });
-        }
-
+            LoginWithWeb3Auth(p.Provider);
+        }));
+        
         yield return null;
     }
 
@@ -76,9 +76,9 @@ public class Web3AuthLogin : Login
             {
                 Web3AuthOptions = new()
                 {
-                    clientId = web3AuthSettings.ClientId,
-                    redirectUrl = new Uri(web3AuthSettings.RedirectUri),
-                    network = web3AuthSettings.Network,
+                    clientId = clientId,
+                    redirectUrl = new Uri(redirectUri),
+                    network = network,
                     whiteLabel = new()
                     {
                         dark = true,

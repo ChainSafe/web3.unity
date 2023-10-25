@@ -995,12 +995,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b6902e441950fa4bb5cefdd2263164a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GelatoApiKey: _UzPz_Yk_WTjWMfcl45fLvQNGQ9ISx5ZE8TnwnVKYrE_
-  ErrorPopup: {fileID: 337558421}
-  web3AuthSettings:
-    ClientId: BCc0wTmuXureEzgawhUSZOWu4bgWo56sZPrxLiHQCpg5OHcNrfa44esdTS8Dm77VtmaIyjhbthdWfbLhSwf7jtU
-    RedirectUri: torusapp://io.chainsafe.gamingsdk.sdkdemoscene/auth
-    Network: 1
+  gelatoApiKey: _UzPz_Yk_WTjWMfcl45fLvQNGQ9ISx5ZE8TnwnVKYrE_
+  errorPopup: {fileID: 337558421}
+  clientId: BCc0wTmuXureEzgawhUSZOWu4bgWo56sZPrxLiHQCpg5OHcNrfa44esdTS8Dm77VtmaIyjhbthdWfbLhSwf7jtU
+  redirectUri: torusapp://io.chainsafe.gamingsdk.sdkdemoscene/auth
+  network: 1
   providerAndButtonPairs:
   - Button: {fileID: 7400892926620024700}
     Provider: 0
@@ -2187,6 +2186,34 @@ PrefabInstance:
     - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7324590823460843055, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7324590823460843055, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7324590823460843055, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1679801100}
+    - target: {fileID: 7324590823460843055, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7324590823460843055, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: set_tag
+      objectReference: {fileID: 0}
+    - target: {fileID: 7324590823460843055, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEngine.Component, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7324590823460843055, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 8775736491206355084, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_Name

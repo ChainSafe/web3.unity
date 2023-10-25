@@ -5,6 +5,10 @@ using ChainSafe.Gaming.WalletConnect;
 using Newtonsoft.Json;
 using UnityEngine;
 
+/// <summary>
+/// Player Data that can be persisted through runtime and sessions in a PlayerData.json file.
+/// </summary>
+/// <remarks>Only serialize(Save and Load) fields and properties with the [JsonProperty] attribute.</remarks>
 [JsonObject(MemberSerialization.OptIn)]
 public class PlayerData
 {
@@ -12,10 +16,16 @@ public class PlayerData
 
     private static string _path = $"{Path.Combine(Application.persistentDataPath, nameof(PlayerData))}.json";
 
+    /// <summary>
+    /// Singleton instance.
+    /// </summary>
     public static PlayerData Instance { get; private set; } = new PlayerData();
 
     private bool FileExists => File.Exists(_path);
 
+    /// <summary>
+    /// Loads Data when runtime starts.
+    /// </summary>
     [RuntimeInitializeOnLoadMethod]
     public static void LoadOnStart()
     {
@@ -54,16 +64,25 @@ public class PlayerData
         }
     }
 
+    /// <summary>
+    /// Save/Persist data in <see cref="Instance"/>.
+    /// </summary>
     public static void Save()
     {
         Instance.SaveData();
     }
     
+    /// <summary>
+    /// Load saved/persisted data into <see cref="Instance"/>
+    /// </summary>
     public static void Load()
     {
         Instance.LoadData();
     }
 
+    /// <summary>
+    /// Clear all data.
+    /// </summary>
     public static void Clear()
     {
         Instance = new PlayerData();
@@ -73,5 +92,8 @@ public class PlayerData
     
     #endregion
 
+    /// <summary>
+    /// Saved Wallet Connect Config used for restoring session (Remember Me) Implementation.
+    /// </summary>
     [JsonProperty] public WalletConnectConfig WalletConnectConfig { get; set; }
 }
