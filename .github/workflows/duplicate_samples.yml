@@ -20,7 +20,7 @@ jobs:
           export DESTINATION_DIRECTORY="importable_sample_directory_$i"
           DESTINATION_DIRECTORY=${!DESTINATION_DIRECTORY}
           
-          SOURCE_PATH="${GITHUB_WORKSPACE}/$SOURCE_PATH/$(ls $SOURCE_PATH | head -n 1)/$DESTINATION_DIRECTORY"
+          SOURCE_PATH="${GITHUB_WORKSPACE}/$SOURCE_PATH/$(ls '$SOURCE_PATH' | head -n 1)/$DESTINATION_DIRECTORY"
         
           export DESTINATION_PATH="imported_sample_path_$i"
           DESTINATION_PATH=${!DESTINATION_PATH}
