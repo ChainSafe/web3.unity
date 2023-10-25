@@ -10,13 +10,13 @@ using Microsoft.Extensions.DependencyInjection;
 namespace ChainSafe.Gaming.Web3.Build
 {
     /// <summary>
-    /// Builder object for Web3. Used to configure set of services.
+    /// Builder object for <see cref="Web3"/>. Used to configure the set of services and other settings.
     /// </summary>
     public class Web3Builder
     {
         private readonly Web3ServiceCollection serviceCollection;
 
-        public Web3Builder()
+        private Web3Builder()
         {
             serviceCollection = new Web3ServiceCollection();
 
@@ -27,31 +27,49 @@ namespace ChainSafe.Gaming.Web3.Build
                 .AddSingleton<IContractBuilder, ContractBuilder>();
         }
 
-        // TODO: inline parameterless constructor into this one (therefore remove that overload)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Web3Builder"/> class.
+        /// </summary>
+        /// <param name="projectConfig">Project config to use with the resulting Web3 instance.</param>
+        /// <param name="chainConfig">Chain config to use with the resulting Web3 instance.</param>
+        /// <exception cref="ArgumentException">One of the arguments is null.</exception>
         public Web3Builder(IProjectConfig projectConfig, IChainConfig chainConfig)
             : this()
         {
             if (projectConfig == null)
             {
-                throw new Web3Exception($"{nameof(IProjectConfig)} is required for Web3 to work.");
+                throw new ArgumentNullException(nameof(projectConfig), $"{nameof(IProjectConfig)} is required for Web3 to work.");
             }
 
             if (chainConfig == null)
             {
-                throw new Web3Exception($"{nameof(IChainConfig)} is required for Web3 to work.");
+                throw new ArgumentNullException(nameof(chainConfig), $"{nameof(IChainConfig)} is required for Web3 to work.");
             }
 
             serviceCollection.AddSingleton(projectConfig);
             serviceCollection.AddSingleton(chainConfig);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Web3Builder"/> class.
+        /// </summary>
+        /// <param name="projectConfig">Complete project config to use with the resulting Web3 instance.</param>
+        /// <exception cref="ArgumentException">"projectConfig" is null.</exception>
         public Web3Builder(ICompleteProjectConfig projectConfig)
             : this(projectConfig, projectConfig)
         {
         }
 
+        /// <summary>
+        /// Delegate used to configure services for <see cref="Web3"/>.
+        /// </summary>
         public delegate void ConfigureServicesDelegate(IWeb3ServiceCollection services);
 
+        /// <summary>
+        /// Configure services for <see cref="Web3"/>.
+        /// </summary>
+        /// <param name="configureMethod">Delegate used to configure services for <see cref="Web3"/>.</param>
+        /// <returns>Builder object to enable fluent syntax.</returns>
         public Web3Builder Configure(ConfigureServicesDelegate configureMethod)
         {
             if (configureMethod is null)
@@ -63,13 +81,16 @@ namespace ChainSafe.Gaming.Web3.Build
             return this;
         }
 
+        /// <summary>
+        /// Build <see cref="Web3"/> object using the settings provided by this Web3Builder object.
+        /// </summary>
+        /// <returns><see cref="Web3"/> object.</returns>
         public async ValueTask<Web3> BuildAsync()
         {
             var serviceProvider = serviceCollection.BuildServiceProvider();
             AssertWeb3EnvironmentBound(serviceProvider);
 
             var web3 = new Web3(serviceProvider);
-
             await web3.InitializeAsync();
 
             return web3;
@@ -86,7 +107,7 @@ namespace ChainSafe.Gaming.Web3.Build
             {
                 var message = $"{nameof(Web3Environment)} is required for Web3 to work." +
                               "Don't forget to bind it when building Web3.";
-                throw new Web3Exception(message, e);
+                throw new Web3BuildException(message, e);
             }
         }
     }

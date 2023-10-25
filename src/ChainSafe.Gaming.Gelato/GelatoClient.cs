@@ -44,7 +44,7 @@ namespace ChainSafe.GamingSdk.Gelato
                 _ => throw new Web3Exception("relayCall option not found")
             };
 
-            return (await httpClient.Post<TRequest, TResponse>(url, request)).EnsureResponse();
+            return (await httpClient.Post<TRequest, TResponse>(url, request)).AssertSuccess();
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace ChainSafe.GamingSdk.Gelato
         {
             try
             {
-                return (await httpClient.Get<SupportedNetworksResponse>($"{config.Url}/relays/v2")).EnsureResponse().Relays;
+                return (await httpClient.Get<SupportedNetworksResponse>($"{config.Url}/relays/v2")).AssertSuccess().Relays;
             }
             catch (Exception e)
             {
@@ -83,7 +83,7 @@ namespace ChainSafe.GamingSdk.Gelato
         {
             try
             {
-                return (await httpClient.Get<OraclesResponse>($"{config.Url}/oracles/")).EnsureResponse().Oracles;
+                return (await httpClient.Get<OraclesResponse>($"{config.Url}/oracles/")).AssertSuccess().Oracles;
             }
             catch (Exception e)
             {
@@ -106,7 +106,7 @@ namespace ChainSafe.GamingSdk.Gelato
         {
             try
             {
-                return (await httpClient.Get<PaymentTokensResponse>($"{config.Url}/oracles/${chainId}/paymentTokens/")).EnsureResponse().PaymentTokens;
+                return (await httpClient.Get<PaymentTokensResponse>($"{config.Url}/oracles/${chainId}/paymentTokens/")).AssertSuccess().PaymentTokens;
             }
             catch (Exception e)
             {
@@ -124,7 +124,7 @@ namespace ChainSafe.GamingSdk.Gelato
         {
             try
             {
-                return (await httpClient.Post<EstimatedFeeRequest, EstimatedFeeResponse>($"{config.Url}/oracles/${request.ChainId}/estimate/", request)).EnsureResponse().EstimatedFee;
+                return (await httpClient.Post<EstimatedFeeRequest, EstimatedFeeResponse>($"{config.Url}/oracles/${request.ChainId}/estimate/", request)).AssertSuccess().EstimatedFee;
             }
             catch (Exception e)
             {
@@ -142,7 +142,7 @@ namespace ChainSafe.GamingSdk.Gelato
         {
             try
             {
-                return (await httpClient.Get<TransactionStatusResponse>($"{config.Url}/tasks/status/{taskId}")).EnsureResponse().Task;
+                return (await httpClient.Get<TransactionStatusResponse>($"{config.Url}/tasks/status/{taskId}")).AssertSuccess().Task;
             }
             catch (Exception e)
             {
