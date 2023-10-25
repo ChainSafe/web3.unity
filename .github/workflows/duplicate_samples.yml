@@ -16,14 +16,18 @@ jobs:
         do
           export SOURCE_DIRECTORY="importable_sample_path_$i"
           SOURCE_DIRECTORY=${!SOURCE_DIRECTORY}
+          SOURCE_DIRECTORY="${GITHUB_WORKSPACE}/$SOURCE_DIRECTORY"
+        
           export DESTINATION_DIRECTORY="imported_sample_path_$i"
           DESTINATION_DIRECTORY=${!DESTINATION_DIRECTORY}
+          DESTINATION_DIRECTORY="${GITHUB_WORKSPACE}/$DESTINATION_DIRECTORY"
+          
           rm -rf "$DESTINATION_DIRECTORY"
           mkdir -p "$DESTINATION_DIRECTORY"
           cp -r "$SOURCE_DIRECTORY" "$DESTINATION_DIRECTORY"
         done
       env: 
-        importable_sample_path_1: "${GITHUB_WORKSPACE}/src/UnitySampleProject/Assets/Samples/web3.unity SDK/$(ls 'src/UnitySampleProject/Assets/Samples/web3.unity SDK' | head -n 1)/Web3.Unity Samples/"
+        importable_sample_path_1: "src/UnitySampleProject/Assets/Samples/web3.unity SDK/$(ls 'src/UnitySampleProject/Assets/Samples/web3.unity SDK' | head -n 1)/Web3.Unity Samples/"
         imported_sample_path_1: "${GITHUB_WORKSPACE}/Packages/io.chainsafe.web3-unity/Samples~/Web3.Unity/"
         importable_sample_path_2: "${GITHUB_WORKSPACE}/src/UnitySampleProject/Assets/Samples/web3.unity SDK Web3Auth/$(ls 'src/UnitySampleProject/Assets/Samples/web3.unity SDK Web3Auth' | head -n 1)/Web3.Unity Web3Auth Samples/"
         imported_sample_path_2: "${GITHUB_WORKSPACE}/Packages/io.chainsafe.web3-unity.web3auth/Samples~/Web3.Unity Web3Auth/"
