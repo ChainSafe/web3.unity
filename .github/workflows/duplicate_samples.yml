@@ -25,7 +25,7 @@ jobs:
           
           SOURCE_PATH="${GITHUB_WORKSPACE}/$SOURCE_PATH/$(ls "$SOURCE_PATH" | head -n 1)/$DESTINATION_DIRECTORY"
         
-          export DESTINATION_PATH=${dirs[2]}
+          export DESTINATION_PATH="${GITHUB_WORKSPACE}/${dirs[2]}"
           
           rm -rf "$DESTINATION_PATH"
           mkdir -p "$DESTINATION_PATH"
@@ -33,7 +33,7 @@ jobs:
         
           echo $(ls "${DESTINATION_PATH}")
         
-          git add "${DESTINATION_PATH}" -f
+          git add . -f
         done
         
         git diff-index --cached --quiet HEAD || git commit -m "Auto-duplicate Packages Samples"
