@@ -35,7 +35,7 @@ jobs:
           
           rm -rf "$DESTINATION_PATH"
           mkdir -p "$DESTINATION_PATH"
-          cp -r "$SOURCE_PATH" "$DESTINATION_PATH"
+          cp -r "$SOURCE_PATH/." "$DESTINATION_PATH"
         
           git add "$DESTINATION_PATH." -f
         done
