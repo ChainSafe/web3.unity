@@ -21,9 +21,7 @@ jobs:
         export DESTINATION_DIRECTORY=
         export DESTINATION_PATH=
         
-        export DUPLICATE_SAMPLE_VARS=${{ env.DUPLICATE_SAMPLE_VARS }}
-        
-        echo $DUPLICATE_SAMPLE_VARS
+        export DUPLICATE_SAMPLE_VARS=${{ vars.DUPLICATE_SAMPLE_VARS }}
         
         for entry in "${DUPLICATE_SAMPLE_VARS[@]}"
         do
