@@ -12,6 +12,9 @@ jobs:
     - uses: actions/checkout@v4
     - name: Duplicate Web3 Unity Samples
       run: |
+        git config user.email $git_email
+        git config user.name "${{ github.actor }}"
+        
         for entry in "${DUPLICATE_SAMPLE_VARS[@]}"
         do
           IFS=':' read -ra dirs <<< "$entry"
@@ -25,13 +28,11 @@ jobs:
           rm -rf "$DESTINATION_PATH"
           mkdir -p "$DESTINATION_PATH"
           cp -r "$SOURCE_PATH" "$DESTINATION_PATH"
+        
+          git add "${DESTINATION_PATH}*" -f
         done
     - name: Commit and Push
       run: |
-        git config user.email $git_email
-        git config user.name "${{ github.actor }}"
-        git add ${GITHUB_WORKSPACE}/Packages/io.chainsafe.web3-unity/Samples~/. -f
-        git add ${GITHUB_WORKSPACE}/Packages/io.chainsafe.web3-unity.web3auth/Samples~/. -f
         git diff-index --cached --quiet HEAD || git commit -m "Auto-duplicate Packages Samples"
         git push
       env:
