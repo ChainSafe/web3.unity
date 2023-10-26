@@ -31,7 +31,9 @@ jobs:
           mkdir -p "$DESTINATION_PATH"
           cp -r "$SOURCE_PATH" "$DESTINATION_PATH"
         
-          git add "${DESTINATION_PATH}" -a -f
+          echo $(ls "${DESTINATION_PATH}")
+        
+          git add "${DESTINATION_PATH}" -f
         done
         
         git diff-index --cached --quiet HEAD || git commit -m "Auto-duplicate Packages Samples"
