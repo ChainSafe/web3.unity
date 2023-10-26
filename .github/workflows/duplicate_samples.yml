@@ -23,6 +23,8 @@ jobs:
         
         export DUPLICATE_SAMPLE_VARS=${{ env.DUPLICATE_SAMPLE_VARS }}
         
+        echo $DUPLICATE_SAMPLE_VARS
+        
         for entry in "${DUPLICATE_SAMPLE_VARS[@]}"
         do
           IFS=':' read -ra dirs <<< "$entry"
@@ -39,8 +41,6 @@ jobs:
         
           git add "$DESTINATION_PATH." -f
         done
-        
-        echo ${{ env.DUPLICATE_SAMPLE_VARS }}
         
         git diff-index --cached --quiet HEAD || git commit -m "Auto-duplicate Packages Samples"
         git push
