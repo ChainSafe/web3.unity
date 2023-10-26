@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Nethereum.Hex.HexTypes;
 using Web3Unity.Scripts.Prefabs;
 
 namespace Samples.Behaviours.Unsorted
