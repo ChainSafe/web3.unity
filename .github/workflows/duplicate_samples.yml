@@ -31,7 +31,7 @@ jobs:
           mkdir -p "$DESTINATION_PATH"
           cp -r "$SOURCE_PATH" "$DESTINATION_PATH"
         
-          git add "${DESTINATION_PATH}*" -f
+          git add "${DESTINATION_PATH}." -f
         done
       env:
         git_email: "${{ github.actor }}@users.noreply.github.com"
