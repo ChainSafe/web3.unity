@@ -16,7 +16,7 @@ public class ContractCall : MonoBehaviour
     private string method = "myTotal";
     private string abi = "[ { \"inputs\": [ { \"internalType\": \"uint8\", \"name\": \"_myArg\", \"type\": \"uint8\" } ], \"name\": \"addTotal\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\" }, { \"inputs\": [], \"name\": \"myTotal\", \"outputs\": [ { \"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\" } ], \"stateMutability\": \"view\", \"type\": \"function\" } ]";
     private string contractAddress = "0x7286Cf0F6E80014ea75Dbc25F545A3be90F4904F";
-    private object[] args = new object[] {};
+    private object[] args = {};
 
     private UnsortedSample logic;
 
