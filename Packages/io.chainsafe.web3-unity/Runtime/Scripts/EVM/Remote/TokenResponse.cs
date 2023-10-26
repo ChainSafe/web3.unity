@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Scripts.EVM.Token
 {
+    /// <summary>
+    /// A response object detailing the details of an on chain token from the targeted network.
+    /// </summary>
     public class TokenResponse
     {
         public string Contract { get; set; }
