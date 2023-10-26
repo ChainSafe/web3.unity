@@ -17,27 +17,30 @@ jobs:
         git config user.email $git_email
         git config user.name "${{ github.actor }}"
         
+        export SOURCE_PATH=
+        export DESTINATION_DIRECTORY=
+        export DESTINATION_PATH=
+        
         for entry in "${DUPLICATE_SAMPLE_VARS[@]}"
         do
           IFS=':' read -ra dirs <<< "$entry"
-          export SOURCE_PATH=${dirs[0]}
-          export DESTINATION_DIRECTORY=${dirs[1]}
+          SOURCE_PATH=${dirs[0]}
+          DESTINATION_DIRECTORY=${dirs[1]}
           
           SOURCE_PATH="${GITHUB_WORKSPACE}/$SOURCE_PATH/$(ls "$SOURCE_PATH" | head -n 1)/$DESTINATION_DIRECTORY"
         
-          export DESTINATION_PATH="${GITHUB_WORKSPACE}/${dirs[2]}"
+          DESTINATION_PATH="${GITHUB_WORKSPACE}/${dirs[2]}"
           
           rm -rf "$DESTINATION_PATH"
           mkdir -p "$DESTINATION_PATH"
           cp -r "$SOURCE_PATH" "$DESTINATION_PATH"
         
-          echo $(ls "${DESTINATION_PATH}")
-        
           git add "$DESTINATION_PATH." -f
         done
         
-        git diff-index --cached --quiet HEAD
-        git commit -m "Auto-duplicate Packages Samples"
+        echo $(ls "${DESTINATION_PATH}")
+        
+        git diff-index --cached --quiet HEAD || git commit -m "Auto-duplicate Packages Samples"
         git push
       env:
         git_email: "${{ github.actor }}@users.noreply.github.com"
