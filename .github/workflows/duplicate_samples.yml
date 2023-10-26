@@ -31,9 +31,9 @@ jobs:
         
           git add "${DESTINATION_PATH}*" -f
         done
+      env:
+        git_email: "${{ github.actor }}@users.noreply.github.com"
     - name: Commit and Push
       run: |
         git diff-index --cached --quiet HEAD || git commit -m "Auto-duplicate Packages Samples"
         git push
-      env:
-        git_email: "${{ github.actor }}@users.noreply.github.com"
