@@ -152,7 +152,7 @@ public class MiscTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestMint721()
     {
-        config.TestResponse = "0xa9f953f9845e7d49d778d6fed622d566daf09e8e1c793297c7cab54782e1aae9";
+        config.TestResponse = "0xd3027fbfd9d5ddb5ea0ef75f5b128581d9268ad67728d150657f915c8910f9f0";
 
         var mint721 = _sample.Mint721(Mint721Abi, Mint721Address, MintUri);
 

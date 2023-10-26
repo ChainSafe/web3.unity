@@ -2,12 +2,15 @@ using System.Threading.Tasks;
 
 namespace ChainSafe.Gaming.WalletConnect
 {
+    /// <summary>
+    /// Connect and disconnect to a wallet via Wallet Connect and make a Json RPC request.
+    /// </summary>
     public interface IWalletConnectCustomProvider
     {
         /// <summary>
-        /// connects using Wallet Connect.
+        /// Connects using Wallet Connect.
         /// </summary>
-        /// <returns>connect address.</returns>
+        /// <returns>Connected address.</returns>
         public Task<string> Connect();
 
         /// <summary>
@@ -22,7 +25,7 @@ namespace ChainSafe.Gaming.WalletConnect
         /// <summary>
         /// Disconnect from a Wallet Connect Session.
         /// </summary>
-        /// <returns>Disconnect Task.</returns>
+        /// <returns>Disconnect async Task.</returns>
         public Task Disconnect();
     }
 }

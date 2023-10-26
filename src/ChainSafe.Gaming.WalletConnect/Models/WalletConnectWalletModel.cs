@@ -6,24 +6,42 @@ using WalletConnectSharp.Sign.Models.Engine;
 
 namespace ChainSafe.Gaming.WalletConnect.Models
 {
+    /// <summary>
+    /// Wallet Connects wallet model used for identifying and redirecting wallets.
+    /// </summary>
     public class WalletConnectWalletModel
     {
+        /// <summary>
+        /// Name of the wallet.
+        /// </summary>
         [JsonProperty("name")]
         public string Name { get; private set; }
 
+        /// <summary>
+        /// <see cref="WalletLinkModel"/> for mobile platforms.
+        /// </summary>
         [JsonProperty("mobile")]
         public WalletLinkModel Mobile { get; private set; }
 
+        /// <summary>
+        /// <see cref="WalletLinkModel"/> for desktop platforms.
+        /// </summary>
         [JsonProperty("desktop")]
         public WalletLinkModel Desktop { get; private set; }
 
+        /// <summary>
+        /// wallet icons urls.
+        /// </summary>
         [JsonProperty("image_url")]
         public ImageUrlsModel Images { get; private set; }
 
-        public void OpenDeeplink(ConnectedData data, IOperatingSystemMediator operatingSystemMediator)
+        /// <summary>
+        /// Open Wallet to connect with using Uri from <see cref="ConnectedData"/>.
+        /// </summary>
+        /// <param name="uri">Uri from <see cref="ConnectedData"/> used for connecting to a wallet.</param>
+        /// <param name="operatingSystemMediator">Operating System for current platform.</param>
+        public void OpenDeeplink(string uri, IOperatingSystemMediator operatingSystemMediator)
         {
-            string uri = data.Uri;
-
             switch (operatingSystemMediator.Platform)
             {
                 case Platform.Android:
@@ -33,7 +51,7 @@ namespace ChainSafe.Gaming.WalletConnect.Models
                 case Platform.IOS:
                 case Platform.Desktop:
                 case Platform.Editor:
-                    uri = GetDeeplink(data.Uri, operatingSystemMediator.IsMobilePlatform);
+                    uri = GetDeeplink(uri, operatingSystemMediator.IsMobilePlatform);
                     break;
 
                 default:
@@ -88,6 +106,10 @@ namespace ChainSafe.Gaming.WalletConnect.Models
             return url;
         }
 
+        /// <summary>
+        /// Opens wallet by using deeplink.
+        /// </summary>
+        /// <param name="operatingSystemMediator">Operating System for current platform.</param>
         public void OpenWallet(IOperatingSystemMediator operatingSystemMediator)
         {
             bool isMobilePlatform = operatingSystemMediator.IsMobilePlatform;
