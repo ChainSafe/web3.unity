@@ -33,7 +33,7 @@ jobs:
         
           echo $(ls "${DESTINATION_PATH}")
         
-          git add "$DESTINATION_PATH/." -f
+          git add "$DESTINATION_PATH." -f
         done
         
         git diff-index --cached --quiet HEAD || git commit -m "Auto-duplicate Packages Samples"
