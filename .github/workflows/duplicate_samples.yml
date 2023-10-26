@@ -36,7 +36,8 @@ jobs:
           git add "$DESTINATION_PATH." -f
         done
         
-        git diff-index --cached --quiet HEAD || git commit -m "Auto-duplicate Packages Samples"
+        git diff-index --cached --quiet HEAD
+        git commit -m "Auto-duplicate Packages Samples"
         git push
       env:
         git_email: "${{ github.actor }}@users.noreply.github.com"
