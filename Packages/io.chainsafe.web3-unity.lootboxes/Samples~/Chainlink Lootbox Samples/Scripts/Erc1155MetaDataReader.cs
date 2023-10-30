@@ -41,7 +41,7 @@ namespace Chainlink.LootBoxes
 
 
             var response = await httpClient.Get<Erc1155MetaData>(uri);
-            return response.EnsureResponse();
+            return response.AssertSuccess();
         }
 
         private Erc1155MetaData DecodeUri(string uri)
