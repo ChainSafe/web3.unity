@@ -150,10 +150,12 @@ namespace ChainSafe.Gaming.WalletConnect.Models
         {
             switch (platform)
             {
-                case Platform.Editor: case Platform.Desktop:
+                case Platform.Editor:
+                case Platform.Desktop:
                     return CanUseNativeProtocol(false) || !string.IsNullOrEmpty(Desktop.UniversalUrl);
 
-                case Platform.Android: case Platform.IOS:
+                case Platform.Android:
+                case Platform.IOS:
                     return CanUseNativeProtocol(true) || !string.IsNullOrEmpty(Mobile.UniversalUrl);
 
                 // currently Wallet Connect doesn't support WebGL.
