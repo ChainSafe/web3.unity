@@ -56,41 +56,42 @@ namespace Scenes
         public Toggle RememberMeToggle;
         public ErrorPopup ErrorPopup;
         public List<Web3AuthButtonAndProvider> Web3AuthButtons;
-        
+
         private bool useWalletConnect;
 
         private bool redirectToWallet;
-        
+
         private Dictionary<string, WalletConnectWalletModel> supportedWallets;
-        
+
         #region Wallet Connect
 
         private WalletConnectConfig walletConnectConfig;
 
         private bool autoLogin;
-        
+
         [field: Header("Wallet Connect")]
 
         [SerializeField] private TMP_Dropdown supportedWalletsDropdown;
-        
+
         [SerializeField] private Toggle redirectToWalletToggle;
-        
+
         [SerializeField] private WalletConnectModal walletConnectModal;
-        
+
         [field: SerializeField] public string ProjectId { get; private set; }
-        
+
         [field: SerializeField] public string ProjectName { get; private set; }
-        
+
         [field: SerializeField] public string BaseContext { get; private set; }
-        
-        [field: SerializeField] public Metadata Metadata { get; private set; } = new Metadata
+
+        [field: SerializeField]
+        public Metadata Metadata { get; private set; } = new Metadata
         {
             Name = "Web3.Unity",
             //from package.json
             Description = "web3.unity is an open-source gaming SDK written in C# and developed by ChainSafe Gaming. It connects games built in the Unity game engine to the blockchain. The library currently supports games built for web browsers (WebGL), iOS/Android mobile, and desktop. web3.unity is compatible with most EVM-based chains such as Ethereum, Polygon, Moonbeam, Cronos, Nervos, and Binance Smart Chain, letting developers easily choose and switch between them to create the best in-game experience.",
             Url = "https://chainsafe.io/"
         };
-        
+
         #endregion
 
         private IEnumerator Start()
@@ -105,7 +106,7 @@ namespace Scenes
 
             // Remember me only works with the WebPageWallet
             RememberMeToggle.gameObject.SetActive(useWalletConnect);
-            
+
             // Wallet Connect
             yield return FetchSupportedWallets();
 
@@ -119,7 +120,7 @@ namespace Scenes
             ProcessWeb3Auth();
 #endif
             var autoLoginTask = TryAutoLogin();
-            
+
             yield return new WaitUntil(() => autoLoginTask.IsCompleted);
 
             ExistingWalletButton.onClick.AddListener(OnLoginWithExistingAccount);
@@ -157,14 +158,14 @@ namespace Scenes
                 walletConnectModal.WalletConnected(data);
             }
         }
-        
+
         private void SessionApproved(SessionStruct session)
         {
             // save/persist session
             if (walletConnectConfig.KeepSessionAlive)
             {
                 walletConnectConfig.SavedSessionTopic = session.Topic;
-                
+
                 PlayerPrefs.SetString(SavedWalletConnectConfigKey, JsonConvert.SerializeObject(walletConnectConfig));
             }
 
@@ -173,7 +174,7 @@ namespace Scenes
                 // reset if any saved config
                 PlayerPrefs.SetString(SavedWalletConnectConfigKey, null);
             }
-            
+
             Debug.Log($"{session.Topic} Approved");
         }
 
@@ -185,7 +186,7 @@ namespace Scenes
             InitializeWalletDropdown();
 #endif
         }
-        
+
         // add all supported wallets
         private void InitializeWalletDropdown()
         {
@@ -193,19 +194,19 @@ namespace Scenes
             {
                 supportedWalletsDropdown.gameObject.SetActive(isOn);
             });
-            
+
             // first element is a no select
             List<string> supportedWalletsList = new List<string>
             {
                 // default option/unselected
-                "Select Wallet",    
+                "Select Wallet",
             };
 
             supportedWalletsList.AddRange(supportedWallets.Values.Select(w => w.Name));
-            
+
             supportedWalletsDropdown.AddOptions(supportedWalletsList);
         }
-        
+
         private async Task TryAutoLogin()
         {
             if (!useWalletConnect)
@@ -219,13 +220,13 @@ namespace Scenes
             }
 
             Debug.Log("Attempting to Auto Login...");
-            
+
             try
             {
                 autoLogin = true;
-            
+
                 walletConnectConfig = JsonConvert.DeserializeObject<WalletConnectConfig>(savedConfigJson);
-                
+
                 await LoginWithExistingAccount();
             }
             catch (Exception e)
@@ -251,7 +252,7 @@ namespace Scenes
 
             await LoginWithExistingAccount();
         }
-        
+
         private async Task LoginWithExistingAccount()
         {
             var web3Builder = new Web3Builder(ProjectConfigUtilities.Load())
@@ -431,14 +432,14 @@ namespace Scenes
             };
 
             walletConnectConfig = config;
-            
+
             walletConnectConfig.OnConnected += WalletConnected;
 
             walletConnectConfig.OnSessionApproved += SessionApproved;
-            
+
             return config;
         }
-        
+
         private IEnumerator FetchSupportedWallets()
         {
             using (UnityWebRequest webRequest = UnityWebRequest.Get("https://registry.walletconnect.org/data/wallets.json"))
@@ -449,16 +450,16 @@ namespace Scenes
                 if (webRequest.result != UnityWebRequest.Result.Success)
                 {
                     Debug.LogError("Error Getting Supported Wallets: " + webRequest.error);
-                
+
                     yield return null;
                 }
-            
+
                 else
                 {
                     var json = webRequest.downloadHandler.text;
 
                     supportedWallets = JsonConvert.DeserializeObject<Dictionary<string, WalletConnectWalletModel>>(json)
-                        .ToDictionary(w => w.Key, w => (WalletConnectWalletModel) w.Value);
+                        .ToDictionary(w => w.Key, w => (WalletConnectWalletModel)w.Value);
 
                     Debug.Log($"Fetched {supportedWallets.Count} Supported Wallets.");
                 }

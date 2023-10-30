@@ -10,6 +10,9 @@ using Wordlist = ChainSafe.Gaming.Evm.HDNode.Wordlists.Wordlist;
 
 namespace ChainSafe.Gaming.Evm.HDNode
 {
+    /// <summary>
+    /// A Hierarchical deterministic (HD) wallet implementation node.
+    /// </summary>
     public class HDNode
     {
         // private const uint HardenedBit = 0x80000000;
@@ -28,6 +31,15 @@ namespace ChainSafe.Gaming.Evm.HDNode
         // private readonly int _depth;
         private readonly ExtKey extKey;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HDNode"/> class.
+        /// Private constructor to enforce that HDNode objects are only created via the static methods.
+        /// Throws an Exception if the constructor was called directly.
+        /// </summary>
+        /// <param name="constructorGuard">An internal sentinel object to ensure the constructor was only called from another HDNode method.</param>
+        /// <param name="key">Extended key.</param>
+        /// <param name="mnemonic">Mnemonic phrase for the HDNode.</param>
+        /// <param name="path">String representing the HD path of the node being created.</param>
         public HDNode(object constructorGuard, ExtKey key, string mnemonic, string path)
         {
             if (constructorGuard != HDNode.ConstructorGuard)
@@ -41,8 +53,19 @@ namespace ChainSafe.Gaming.Evm.HDNode
             extKey = key;
         }
 
+        /// <summary>
+        /// Gets the private key of this HDNode.
+        /// </summary>
+        /// <returns>Returns the private key of this HDNode.</returns>
         public Key PrivateKey => extKey.PrivateKey;
 
+        /// <summary>
+        /// Create a HDNode from mnemonic seed words. Default HD wallet path "m/44'/60'/0'/0".
+        /// </summary>
+        /// <param name="mnemonic">Seed words for wallet.</param>
+        /// <param name="password">Optional password to protect seed.</param>
+        /// <param name="locale">Locale of seed words. Default is English ('en').</param>
+        /// <returns>Returns a HDNode.</returns>
         public static HDNode FromMnemonic(string mnemonic, string password = null, string locale = "en")
         {
             return FromSeed(MnemonicToSeed(mnemonic, password), mnemonic, "m/44'/60'/0'/0", locale);
@@ -64,6 +87,12 @@ namespace ChainSafe.Gaming.Evm.HDNode
             return new Rfc2898DeriveBytes(pass, salt, 1000).GetBytes(64);
         }
 
+        /// <summary>
+        /// Create a HDNode from entropy seed.
+        /// </summary>
+        /// <param name="entropy">Seed entropy.</param>
+        /// <param name="locale">Locale of seed words. Default is English ('en').</param>
+        /// <returns>Returns a mnemonic string.</returns>
         public static string EntropyToMnemonic(byte[] entropy, string locale = "en")
         {
             var wordlist = GetWordlist(locale);
@@ -123,6 +152,11 @@ namespace ChainSafe.Gaming.Evm.HDNode
             };
         }
 
+        /// <summary>
+        /// Derive a new HDNode from the path.
+        /// </summary>
+        /// <param name="path">The path to derive.</param>
+        /// <returns>Returns a new HDNode derived from path.</returns>
         public HDNode DerivePath(string path)
         {
             var keyPath = new KeyPath(path);
