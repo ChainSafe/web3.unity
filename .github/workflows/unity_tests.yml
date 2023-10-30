@@ -1,8 +1,11 @@
 name: Test Unity Package Workflow
 
 on:
-  pull_request:
-    branches: [main]
+  workflow_run:
+    workflows:
+      - "NUnit Tests Workflow"
+    types:
+      - completed
 
 jobs:
   testAllModes:
