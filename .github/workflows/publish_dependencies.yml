@@ -1,0 +1,42 @@
+name: Publish Solution Dependencies
+
+on:
+  workflow_run:
+    workflows:
+      - Duplicate Packages Sample Workflow
+    types:
+      - completed
+
+jobs:
+  publish:
+    name: Publish Dependency DLLs️
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - name: update submodules
+        # clone submodules
+        run: |
+          git submodule update --init
+        shell: bash
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+      - name: Restore Solution Dependencies
+        run: dotnet restore /property:Unity=true
+      - name: Publish Solution DLLs
+        run: |
+          ${GITHUB_WORKSPACE}/scripts/publish-to-unity-package.sh
+      - name: Commit and Push
+        run: |
+          git config user.email $git_email
+          git config user.name "${{ github.actor }}"
+          git add ${GITHUB_WORKSPACE}/Packages/io.chainsafe.web3-unity/Runtime/Libraries/. -f
+          git add ${GITHUB_WORKSPACE}/Packages/io.chainsafe.web3-unity.lootboxes/Chainlink/Runtime/Libraries/. -f
+          git diff-index --cached --quiet HEAD || git commit -m "Published Solution Dependencies to Package Libraries as DLLs"
+          git push
+        env:
+          git_email: "${{ github.actor }}@users.noreply.github.com"

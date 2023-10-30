@@ -8,7 +8,7 @@ pushd "$scripts_dir"/../src/ChainSafe.Gaming.Unity
 
 rm -rf obj
 rm -rf bin
-dotnet publish -c debug -f netstandard2.1 /property:Unity=true
+dotnet publish --no-restore ChainSafe.Gaming.Unity.csproj -c Release /property:Unity=true
 
 echo Restoring non-Unity packages...
 

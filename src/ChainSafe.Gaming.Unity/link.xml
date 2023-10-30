@@ -49,7 +49,6 @@
     <assembly fullname="Nethereum.Signer.EIP712" />
     <assembly fullname="Nethereum.Util" />
     <assembly fullname="Nethereum.Web3" />
-    <assembly fullname="Newtonsoft.Json" />
     
     <!-- Assemblies from UnityPackages -->
     <assembly fullname="chainsafe.web3-unity"/>
