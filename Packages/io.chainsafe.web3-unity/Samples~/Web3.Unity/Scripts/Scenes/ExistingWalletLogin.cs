@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Unity;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.WalletConnect;
 using ChainSafe.Gaming.WalletConnect.Models;
@@ -214,9 +215,13 @@ public class ExistingWalletLogin : Login
             {
                 var json = webRequest.downloadHandler.text;
 
-                supportedWallets = JsonConvert.DeserializeObject<Dictionary<string, WalletConnectWalletModel>>(json)
-                    .ToDictionary(w => w.Key, w => (WalletConnectWalletModel)w.Value);
+                supportedWallets = JsonConvert.DeserializeObject<Dictionary<string, WalletConnectWalletModel>>(json);
 
+                // make sure supported wallet is also supported on platform
+                supportedWallets = supportedWallets
+                    .Where(w => w.Value.IsAvailableForPlatform(UnityOperatingSystemMediator.GetCurrentPlatform()))
+                    .ToDictionary(p => p.Key, p => p.Value);
+                
                 Debug.Log($"Fetched {supportedWallets.Count} Supported Wallets.");
             }
         }
