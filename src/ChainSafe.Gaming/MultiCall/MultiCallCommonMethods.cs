@@ -6,7 +6,7 @@
         public const string Aggregate3 = "aggregate3";
         public const string Aggregate3Value = "aggregate3Value";
         public const string BlockAndAggregate = "blockAndAggregate";
-        public const string GetBasefee = "getBasefee";
+        public const string GetBaseFee = "getBasefee";
         public const string GetBlockHash = "getBlockHash";
         public const string GetBlockNumber = "getBlockNumber";
         public const string GetChainId = "getChainId";
