@@ -8,12 +8,18 @@ using NUnit.Framework;
 
 namespace ChainSafe.Gaming.Evm.Tests
 {
+    /// <summary>
+    /// Test fixture for testing the Chainlink Lootbox functionality.
+    /// </summary>
     [TestFixture]
     public class ChainlinkLootboxTests // todo: not sure if should assert default network values
     {
         private Web3.Web3 web3;
 
         // todo add automatic emulator boot up
+        /// <summary>
+        /// Sets up the Web3 instance and other necessary configurations for testing Chainlink Lootboxes.
+        /// </summary>
         [OneTimeSetUp]
         public void Setup()
         {
@@ -35,11 +41,17 @@ namespace ChainSafe.Gaming.Evm.Tests
             web3 = web3BuildTask.Result;
         }
 
+        /// <summary>
+        /// Tears down the test fixture after all tests are executed.
+        /// </summary>
         [OneTimeTearDown]
         public void TearDown()
         {
         }
 
+        /// <summary>
+        /// Tests the retrieval of lootbox types from the Chainlink Lootbox service.
+        /// </summary>
         [Test]
         public async Task GetLootboxTypesTest()
         {
@@ -102,6 +114,10 @@ namespace ChainSafe.Gaming.Evm.Tests
         //                             $"{nameof(ILootboxService.CanClaimRewards)} to become true.");
         //     }
         // }
+
+        /// <summary>
+        /// Test method to verify that 'OpenInProgress' is true when a lootbox is being opened.
+        /// </summary>
         [Test]
         public async Task OpenInProgressIsTrueWhenOpeningTest()
         {
@@ -111,6 +127,9 @@ namespace ChainSafe.Gaming.Evm.Tests
             Assert.IsTrue(openInProgress);
         }
 
+        /// <summary>
+        /// Test method to verify that 'OpenInProgress' is false when no lootbox is being opened.
+        /// </summary>
         [Test]
         public async Task OpenInProgressIsFalseWhenNotOpeningTest()
         {

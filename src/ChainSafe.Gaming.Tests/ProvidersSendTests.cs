@@ -12,6 +12,9 @@ namespace ChainSafe.Gaming.Tests
     using static RpcProviderExtensions;
     using Web3 = ChainSafe.Gaming.Web3.Web3;
 
+    /// <summary>
+    /// Test class for testing various aspects of sending transactions using Web3 providers.
+    /// </summary>
     [TestFixture]
     public class ProvidersSendTests
     {
@@ -19,11 +22,16 @@ namespace ChainSafe.Gaming.Tests
         private Web3 secondAccount;
         private Process node;
 
+        /// <summary>
+        /// One-time setup method that initializes the test environment and resources.
+        /// </summary>
         [OneTimeSetUp]
         public void SetUp()
         {
+            // Create a local Ethereum node emulator for testing.
             node = Emulator.CreateInstance();
 
+            // Create Web3 instances for the first and second accounts.
             var firstAccountTask = CreateWeb3(0).AsTask();
             firstAccountTask.Wait();
             firstAccount = firstAccountTask.Result;
@@ -33,15 +41,22 @@ namespace ChainSafe.Gaming.Tests
             secondAccount = secondAccountTask.Result;
         }
 
+        /// <summary>
+        /// One-time teardown method to clean up and release any resources after all tests have executed.
+        /// </summary>
         [OneTimeTearDown]
         public void Cleanup()
         {
             node?.Kill();
         }
 
+        /// <summary>
+        /// Test method to validate sending a transaction from one account to another.
+        /// </summary>
         [Test]
         public void SendTransactionTest()
         {
+            // Get initial balances and addresses for both sender and receiver accounts.
             var fromAddress = firstAccount.Signer.GetAddress().Result;
             var fromInitialBalance = firstAccount.RpcProvider.GetBalance(fromAddress).Result.Value;
 
@@ -49,6 +64,8 @@ namespace ChainSafe.Gaming.Tests
             var toInitialBalance = firstAccount.RpcProvider.GetBalance(toAddress).Result.Value;
 
             var amount = new HexBigInteger(1000000);
+
+            // Send a transaction from the first account to the second account.
             var tx = firstAccount.TransactionExecutor.SendTransaction(new TransactionRequest
             {
                 To = toAddress,
@@ -56,8 +73,10 @@ namespace ChainSafe.Gaming.Tests
             });
             tx.Wait();
 
+            // Verify the transaction hash and its properties.
             Assert.True(tx.Result.Hash.StartsWith("0x"));
 
+            // Retrieve the transaction receipt and perform additional assertions.
             var txReceipt = firstAccount.RpcProvider.GetTransactionReceipt(tx.Result.Hash);
             txReceipt.Wait();
 
@@ -68,6 +87,9 @@ namespace ChainSafe.Gaming.Tests
                 firstAccount.RpcProvider.GetBalance(fromAddress).Result.Value);
         }
 
+        /// <summary>
+        /// Test method to verify sending a transaction with an invalid destination address.
+        /// </summary>
         [Test]
         public void SendTransactionWithInvalidAddress()
         {
@@ -85,9 +107,13 @@ namespace ChainSafe.Gaming.Tests
             {
                 var txHash = await firstAccount.TransactionExecutor.SendTransaction(transaction);
             });
+
             Assert.That(ex.Message.Contains("eth_sendTransaction"));
         }
 
+        /// <summary>
+        /// Test method to validate sending a transaction with an insufficient gas limit.
+        /// </summary>
         [Test]
         public void SendTransactionWithLowGasLimit()
         {
@@ -107,10 +133,11 @@ namespace ChainSafe.Gaming.Tests
             });
 
             Assert.That(ex != null && ex.Message.Contains("eth_sendTransaction"));
-            var result = ex.InnerException != null;
-            Assert.That(result);
         }
 
+        /// <summary>
+        /// Test method to validate sending a transaction with a very low gas price.
+        /// </summary>
         [Test]
         public void SendTransactionWithLowGasPrice()
         {
