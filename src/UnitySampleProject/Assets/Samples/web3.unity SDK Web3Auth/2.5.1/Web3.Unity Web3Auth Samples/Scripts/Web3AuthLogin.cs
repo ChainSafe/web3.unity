@@ -39,13 +39,18 @@ public class Web3AuthLogin : Login
     
     protected override IEnumerator Initialize()
     {
-#if UNITY_WEBGL
-        
-        useProvider = false;
+#if UNITY_WEBGL && !UNITY_EDITOR
+        Uri uri = new Uri(Application.absoluteURL);
 
-        Task loginTask = TryLogin();
+        // make sure this load isn't redirected from Web3Auth a login
+        if (!string.IsNullOrEmpty(uri.Fragment))
+        {
+            useProvider = false;
 
-        yield return new WaitUntil(() => loginTask.IsCompleted);
+            Task loginTask = TryLogin();
+            
+            yield return new WaitUntil(() => loginTask.IsCompleted);
+        }
 #endif
 
         // add provider buttons listeners
