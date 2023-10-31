@@ -12,6 +12,8 @@ public class MiscTests : SampleTestsBase
 
     private const string ContractSendMethodName = "addTotal";
 
+    private const int IncreaseAmount = 1;
+
     private const string Abi = "[ { \"inputs\": [ { \"internalType\": \"uint8\", \"name\": \"_myArg\", \"type\": \"uint8\" } ], \"name\": \"addTotal\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\" }, { \"inputs\": [], \"name\": \"myTotal\", \"outputs\": [ { \"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\" } ], \"stateMutability\": \"view\", \"type\": \"function\" } ]";
 
     private const string ContractAddress = "0x7286Cf0F6E80014ea75Dbc25F545A3be90F4904F";
@@ -67,7 +69,7 @@ public class MiscTests : SampleTestsBase
         
         object[] args =
         {
-            1
+            IncreaseAmount
         };
         
         var sendContract = _sample.ContractSend(ContractSendMethodName, Abi, ContractAddress, args);
