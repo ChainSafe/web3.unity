@@ -12,6 +12,8 @@ public class MiscTests : SampleTestsBase
 
     private const string ContractSendMethodName = "addTotal";
 
+    private const int IncreaseAmount = 1;
+
     private const string Abi = "[ { \"inputs\": [ { \"internalType\": \"uint8\", \"name\": \"_myArg\", \"type\": \"uint8\" } ], \"name\": \"addTotal\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\" }, { \"inputs\": [], \"name\": \"myTotal\", \"outputs\": [ { \"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\" } ], \"stateMutability\": \"view\", \"type\": \"function\" } ]";
 
     private const string ContractAddress = "0x7286Cf0F6E80014ea75Dbc25F545A3be90F4904F";
@@ -64,8 +66,13 @@ public class MiscTests : SampleTestsBase
     public IEnumerator TestContractSend()
     {
         config.TestResponse = "0x9de3bb69db4bd93babef923f5da1f53cdb287d9ebab9b4177ba2fb25e6a09225";
-
-        var sendContract = _sample.ContractSend(ContractSendMethodName, Abi, ContractAddress);
+        
+        object[] args =
+        {
+            IncreaseAmount
+        };
+        
+        var sendContract = _sample.ContractSend(ContractSendMethodName, Abi, ContractAddress, args);
 
         yield return new WaitUntil(() => sendContract.IsCompleted);
 
@@ -77,7 +84,10 @@ public class MiscTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestGetArray()
     {
-        var getArray = _sample.GetArray();
+        string contractAddress = "0x5244d0453A727EDa96299384370359f4A2B5b20a";
+        string abi = "[{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"_addresses\",\"type\":\"address[]\"}],\"name\":\"setStore\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"bought\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getStore\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]";
+        string method = "getStore";
+        var getArray = _sample.GetArray(contractAddress, abi, method);
 
         yield return new WaitUntil(() => getArray.IsCompleted);
 
@@ -104,7 +114,7 @@ public class MiscTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestGetGasLimit()
     {
-        var getGasLimit = _sample.GetGasLimit(Abi, ContractAddress);
+        var getGasLimit = _sample.GetGasLimit(Abi, ContractAddress, "addTotal");
 
         yield return new WaitUntil(() => getGasLimit.IsCompleted);
 
@@ -166,7 +176,7 @@ public class MiscTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestUseRegisteredContract()
     {
-        var useRegisteredContract = _sample.UseRegisteredContract();
+        var useRegisteredContract = _sample.UseRegisteredContract("shiba", "balanceOf");
 
         yield return new WaitUntil(() => useRegisteredContract.IsCompleted);
 
