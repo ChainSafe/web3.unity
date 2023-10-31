@@ -5,6 +5,8 @@ namespace Samples.Behaviours.Unsorted
 {
     public class RegisteredContractBehaviour : SampleBehaviour
     {
+        public string contractName = "shiba";
+        public string method = "balanceOf";
         private UnsortedSample logic;
 
         protected override void Awake()
@@ -15,7 +17,7 @@ namespace Samples.Behaviours.Unsorted
 
         protected override async Task ExecuteSample()
         {
-            var balance = await logic.UseRegisteredContract();
+            var balance = await logic.UseRegisteredContract(contractName, method);
 
             SampleOutputUtil.PrintResult(balance.ToString(), nameof(UnsortedSample), nameof(UnsortedSample.UseRegisteredContract));
         }
