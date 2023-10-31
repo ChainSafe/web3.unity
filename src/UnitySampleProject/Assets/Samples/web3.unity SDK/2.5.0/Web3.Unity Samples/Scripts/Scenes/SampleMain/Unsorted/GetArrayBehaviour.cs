@@ -7,6 +7,9 @@ namespace Samples.Behaviours.Unsorted
 {
     public class GetArrayBehaviour : SampleBehaviour
     {
+        public string contractAddress = "0x5244d0453A727EDa96299384370359f4A2B5b20a";
+        public string abi = "[{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"_addresses\",\"type\":\"address[]\"}],\"name\":\"setStore\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"bought\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getStore\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]";
+        public string method = "getStore";
         private UnsortedSample logic;
 
         protected override void Awake()
@@ -17,7 +20,7 @@ namespace Samples.Behaviours.Unsorted
 
         protected override async Task ExecuteSample()
         {
-            var response = await logic.GetArray();
+            var response = await logic.GetArray(contractAddress, abi, method);
 
             var responseString = string.Join(",\n", response.Select((list, i) => $"#{i} {string.Join((string)", ", (IEnumerable<string>)list)}"));
             SampleOutputUtil.PrintResult(responseString, nameof(UnsortedSample), nameof(UnsortedSample.GetArray));
