@@ -1,3 +1,5 @@
+
+
 SET SCRIPT_DIR=%~dp0
 
 echo Building project...
@@ -14,7 +16,6 @@ echo Restoring non-Unity packages...
 echo Moving files to Unity package...
 
 pushd bin\release\netstandard2.1\publish
-
 del Newtonsoft.Json.dll
 del UnityEngine.dll
 
@@ -30,29 +31,11 @@ if exist "..\..\..\..\..\..\Packages\io.chainsafe.web3-unity.lootboxes" (
 
 del Chainsafe.Gaming.Chainlink.dll
 del Chainsafe.Gaming.LootBoxes.Chainlink.dll
+
 del Microsoft.CSharp.dll
-
-if exist "..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries" (
-    if exist "..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries\BouncyCastle.Crypto.dll" (
-        echo Backing up BouncyCastle.Crypto.dll to parent directory...
-        copy "..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries\BouncyCastle.Crypto.dll" "..\..\..\..\..\..\Packages\io.chainsafe.web3-unity"
-        del BouncyCastle.Crypto.dll
-    )
-    del ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries\* /F /Q
-) else (
-    if not exist "..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries" (
-        mkdir "..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries"
-    )
-)
-
-copy *.dll "..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries"
-
-if exist "..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\BouncyCastle.Crypto.dll" (
-    echo Restoring BouncyCastle.Crypto.dll...
-    copy /Y "..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\BouncyCastle.Crypto.dll" "..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries"
-    del "..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\BouncyCastle.Crypto.dll"
-)
-
+if not exist ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries mkdir ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries\
+del ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries\* /F /Q
+copy *.dll ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries
 popd
 popd
 
