@@ -49,54 +49,54 @@ namespace ChainSafe.Gaming.MultiCall
         /// <returns>A list of results from executing the batched calls.</returns>
         public async Task<List<Result>> MultiCallAsync(Call3Value[] multiCalls, int pageSize = DefaultCallsPerRequest)
         {
-             if (multiCalls.Any(x => x.Value > 0))
-             {
-                 var results = new List<object[]>();
-                 foreach (var page in multiCalls.Batch(pageSize))
-                 {
-                     var contractCalls = new List<Call3Value>();
-                     foreach (var multiCall in page)
-                     {
-                         contractCalls.Add(new Call3Value { CallData = multiCall.CallData, Target = multiCall.Target, AllowFailure = multiCall.AllowFailure, Value = multiCall.Value });
-                     }
+            if (multiCalls.Any(x => x.Value > 0))
+            {
+                var results = new List<object[]>();
+                foreach (var page in multiCalls.Batch(pageSize))
+                {
+                    var contractCalls = new List<Call3Value>();
+                    foreach (var multiCall in page)
+                    {
+                        contractCalls.Add(new Call3Value { CallData = multiCall.CallData, Target = multiCall.Target, AllowFailure = multiCall.AllowFailure, Value = multiCall.Value });
+                    }
 
-                     if (contractCalls.Count > 0)
-                     {
-                         var callParams = new object[]
-                         {
+                    if (contractCalls.Count > 0)
+                    {
+                        var callParams = new object[]
+                        {
                              contractCalls,
-                         };
-                         var callResults = await multiCallContract.Call(MultiCallCommonMethods.Aggregate3Value, callParams);
+                        };
+                        var callResults = await multiCallContract.Call(MultiCallCommonMethods.Aggregate3Value, callParams);
 
-                         results.Add(callResults);
-                     }
-                 }
+                        results.Add(callResults);
+                    }
+                }
 
-                 return ExtractResults(results);
-             }
-             else
-             {
-                 var results = new List<object[]>();
-                 foreach (var page in multiCalls.Batch(pageSize))
-                 {
-                     var contractCalls = new List<Call3>();
-                     foreach (var multiCall in page)
-                     {
-                         contractCalls.Add(new Call3 { CallData = multiCall.CallData, Target = multiCall.Target, AllowFailure = multiCall.AllowFailure });
-                     }
+                return ExtractResults(results);
+            }
+            else
+            {
+                var results = new List<object[]>();
+                foreach (var page in multiCalls.Batch(pageSize))
+                {
+                    var contractCalls = new List<Call3>();
+                    foreach (var multiCall in page)
+                    {
+                        contractCalls.Add(new Call3 { CallData = multiCall.CallData, Target = multiCall.Target, AllowFailure = multiCall.AllowFailure });
+                    }
 
-                     var aggregateFunction = new Aggregate3Function();
-                     aggregateFunction.Calls = contractCalls;
-                     var callParams = new object[]
-                     {
+                    var aggregateFunction = new Aggregate3Function();
+                    aggregateFunction.Calls = contractCalls;
+                    var callParams = new object[]
+                    {
                          contractCalls,
-                     };
-                     var callResults = await multiCallContract.Call(MultiCallCommonMethods.Aggregate3, callParams);
-                     results.Add(callResults);
-                 }
+                    };
+                    var callResults = await multiCallContract.Call(MultiCallCommonMethods.Aggregate3, callParams);
+                    results.Add(callResults);
+                }
 
-                 return ExtractResults(results);
-             }
+                return ExtractResults(results);
+            }
         }
 
         /// <summary>
