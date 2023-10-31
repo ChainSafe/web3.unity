@@ -36,6 +36,8 @@ rm Microsoft.CSharp.dll
 rm -rf ../../../../../../Packages/io.chainsafe.web3-unity/Runtime/Libraries
 mkdir -p ../../../../../../Packages/io.chainsafe.web3-unity/Runtime/Libraries
 cp *.dll ../../../../../../Packages/io.chainsafe.web3-unity/Runtime/Libraries
+# Copy the old version that works with web3auth to the libraries folder
+cp -f "$scripts_dir"/../libs/Nethereum-UnityAOT/BouncyCastle.Crypto.dll "../../../../../../Packages/io.chainsafe.web3-unity/Runtime/Libraries"
 popd
 popd
 echo Done
