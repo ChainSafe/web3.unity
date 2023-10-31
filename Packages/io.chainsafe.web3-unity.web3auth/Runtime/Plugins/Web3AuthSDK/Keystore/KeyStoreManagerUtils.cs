@@ -30,7 +30,7 @@ public class KeyStoreManagerUtils
         try
         {
             var domain = SecNamedCurves.GetByName("secp256k1");
-            var parameters = new ECDomainParameters(domain.Curve, domain.G, domain.H);
+            var parameters = new ECDomainParameters(domain.Curve, domain.G, domain.N);
 
             var key = new ECPrivateKeyParameters(new BigInteger(sessionId, 16), parameters);
             var q = new ECPublicKeyParameters("EC", domain.G.Multiply(key.D), parameters).Q;
