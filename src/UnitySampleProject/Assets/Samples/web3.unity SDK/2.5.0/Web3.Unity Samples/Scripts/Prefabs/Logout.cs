@@ -10,8 +10,8 @@ public class Logout : MonoBehaviour
     public async void OnLogout()
     {
         // Remove the saved "remember me" data, if any
-        PlayerPrefs.DeleteKey(Login.SavedWalletConnectConfigKey);
-
+        PlayerData.Clear();
+        
         // Terminate Web3
         await Web3Accessor.Web3.TerminateAsync();
 
@@ -19,6 +19,6 @@ public class Logout : MonoBehaviour
         Web3Accessor.Clear();
 
         // Go back to the first scene to log in again
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(Login.LoginSceneIndex);
     }
 }

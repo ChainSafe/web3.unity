@@ -8,23 +8,26 @@ namespace ChainSafe.Gaming.Unity
     {
         public bool IsMobilePlatform => Application.isMobilePlatform;
 
-        public Platform Platform
-        {
-            get
-            {
-                if (Application.isEditor)
-                {
-                    return Platform.Editor;
-                }
+        public Platform Platform => GetCurrentPlatform();
 
-                return Application.platform switch
-                {
-                    RuntimePlatform.IPhonePlayer => Platform.IOS,
-                    RuntimePlatform.Android => Platform.Android,
-                    RuntimePlatform.WebGLPlayer => Platform.WebGL,
-                    _ => Platform.Desktop,
-                };
+        /// <summary>
+        /// Get current platform from <see cref="Application.platform"/> for Unity.
+        /// </summary>
+        /// <returns>Current Runtime Platform.</returns>
+        public static Platform GetCurrentPlatform()
+        {
+            if (Application.isEditor)
+            {
+                return Platform.Editor;
             }
+
+            return Application.platform switch
+            {
+                RuntimePlatform.IPhonePlayer => Platform.IOS,
+                RuntimePlatform.Android => Platform.Android,
+                RuntimePlatform.WebGLPlayer => Platform.WebGL,
+                _ => Platform.Desktop,
+            };
         }
 
         public void OpenUrl(string url) => Application.OpenURL(url);

@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Providers;
+using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.WalletConnect.Methods;
 using ChainSafe.Gaming.WalletConnect.Models;
@@ -19,16 +20,20 @@ namespace ChainSafe.Gaming.WalletConnect
 
         private readonly IRpcProvider rpcProvider;
 
+        private readonly ISigner signer;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="WalletConnectTransactionExecutor"/> class.
         /// </summary>
         /// <param name="walletConnectCustomProvider">Wallet Connect Provider that connects wallet and makes jsom RPC requests via Wallet Connect.</param>
         /// <param name="rpcProvider">Provider for getting transaction receipt.</param>
-        public WalletConnectTransactionExecutor(IWalletConnectCustomProvider walletConnectCustomProvider, IRpcProvider rpcProvider)
+        public WalletConnectTransactionExecutor(IWalletConnectCustomProvider walletConnectCustomProvider, IRpcProvider rpcProvider, ISigner signer)
         {
             this.walletConnectCustomProvider = walletConnectCustomProvider;
 
             this.rpcProvider = rpcProvider;
+
+            this.signer = signer;
         }
 
         /// <summary>
@@ -55,6 +60,11 @@ namespace ChainSafe.Gaming.WalletConnect
         /// <exception cref="Web3Exception">Throws Exception if executing transaction fails.</exception>
         public async Task<TransactionResponse> SendTransaction(TransactionRequest transaction)
         {
+            if (string.IsNullOrEmpty(transaction.From))
+            {
+                transaction.From = await signer.GetAddress();
+            }
+
             EthSendTransaction requestData = new EthSendTransaction(new TransactionModel
             {
                 From = transaction.From,

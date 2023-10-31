@@ -20,7 +20,8 @@ namespace ChainSafe.Gaming.UnityPackage
                     // Instead, we refuse to create an instance if the editor is
                     // currently running in any other scene and load the first scene
                     // instead.
-                    if (SceneManager.GetActiveScene().buildIndex != 0)
+                    //TODO replace indexes with Login.LoginSceneIndex
+                    if (SceneManager.GetActiveScene().buildIndex > 1)
                     {
                         SceneManager.LoadScene(0);
                         // Throw exception to prevent rest of code from running
