@@ -1,7 +1,7 @@
-#! /usr/bin/env sh
+#!/usr/bin/env sh
 set -e
 
-echo Building project...
+echo "Building project..."
 scripts_dir=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 
 pushd "$scripts_dir"/../src/ChainSafe.Gaming.Unity
@@ -10,11 +10,10 @@ rm -rf obj
 rm -rf bin
 dotnet publish -c release -f netstandard2.1 /property:Unity=true
 
-echo Restoring non-Unity packages...
-
+echo "Restoring non-Unity packages..."
 dotnet restore
 
-echo Moving files to Unity package...
+echo "Moving files to Unity package..."
 
 pushd bin/release/netstandard2.1/publish
 rm Newtonsoft.Json.dll
@@ -33,9 +32,21 @@ rm Chainsafe.Gaming.Chainlink.dll
 rm Chainsafe.Gaming.LootBoxes.Chainlink.dll
 
 rm Microsoft.CSharp.dll
+
+# Check if BouncyCastle.Crypto.dll exists in the target directory and back it up if it does
+if [ -e ../../../../../../Packages/io.chainsafe.web3-unity/Runtime/Libraries/BouncyCastle.Crypto.dll ]; then
+    cp ../../../../../../Packages/io.chainsafe.web3-unity/Runtime/Libraries/BouncyCastle.Crypto.dll ../../../../../../Packages/io.chainsafe.web3-unity/
+fi
+
 rm -rf ../../../../../../Packages/io.chainsafe.web3-unity/Runtime/Libraries
 mkdir -p ../../../../../../Packages/io.chainsafe.web3-unity/Runtime/Libraries
 cp *.dll ../../../../../../Packages/io.chainsafe.web3-unity/Runtime/Libraries
+
+# Restore the backed-up BouncyCastle.Crypto.dll if it exists
+if [ -e ../../../../../../Packages/io.chainsafe.web3-unity/BouncyCastle.Crypto.dll ]; then
+    mv ../../../../../../Packages/io.chainsafe.web3-unity/BouncyCastle.Crypto.dll ../../../../../../Packages/io.chainsafe.web3-unity/Runtime/Libraries
+fi
+
 popd
 popd
-echo Done
+echo "Done"
