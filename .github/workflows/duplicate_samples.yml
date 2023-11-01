@@ -1,0 +1,46 @@
+name: Duplicate Package Samples Workflow
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  duplicate:
+    name: Duplicate samples job 👯
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.pull_request.head.ref }}
+    - name: Duplicate Web3 Unity Samples
+      run: |
+        git config user.email $git_email
+        git config user.name "${{ github.actor }}"
+        
+        export SOURCE_PATH=
+        export DESTINATION_DIRECTORY=
+        export DESTINATION_PATH=
+        
+        export DUPLICATE_SAMPLE_VARS=${{ vars.DUPLICATE_SAMPLE_VARS }}
+        
+        for entry in "${DUPLICATE_SAMPLE_VARS[@]}"
+        do
+          IFS=':' read -ra dirs <<< "$entry"
+          SOURCE_PATH=${dirs[0]}
+          DESTINATION_DIRECTORY=${dirs[1]}
+          
+          SOURCE_PATH="${GITHUB_WORKSPACE}/$SOURCE_PATH/$(ls "$SOURCE_PATH" | head -n 1)/$DESTINATION_DIRECTORY"
+        
+          DESTINATION_PATH="${GITHUB_WORKSPACE}/${dirs[2]}"
+          
+          rm -rf "$DESTINATION_PATH"
+          mkdir -p "$DESTINATION_PATH"
+          cp -r "$SOURCE_PATH/." "$DESTINATION_PATH"
+        
+          git add "$DESTINATION_PATH." -f
+        done
+        
+        git diff-index --cached --quiet HEAD || git commit -m "Auto-duplicate Packages Samples"
+        git push
+      env:
+        git_email: "${{ github.actor }}@users.noreply.github.com"
