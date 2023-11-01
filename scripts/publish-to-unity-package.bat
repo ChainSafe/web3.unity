@@ -8,7 +8,7 @@ pushd "%SCRIPT_DIR%\..\src\ChainSafe.Gaming.Unity"
 del obj /F /Q
 del bin /F /Q
 dotnet restore
-dotnet publish --no-restore ChainSafe.Gaming.Unity.csproj -c Release /property:Unity=true
+dotnet publish -c release -f netstandard2.1 /property:Unity=true
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 echo Restoring non-Unity packages...
