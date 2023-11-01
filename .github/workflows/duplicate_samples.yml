@@ -1,8 +1,8 @@
 name: Duplicate Packages Samples Workflow
 
 on:
-  push:
-    branches: [ rob/automated-ci-678 ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   duplicate:
