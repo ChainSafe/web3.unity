@@ -35,10 +35,6 @@ jobs:
           
           echo -e "DLLs Generated\n$(ls "$PUBLISH_PATH")"
           
-          rm -f $PUBLISH_PATH/Newtonsoft.Json.dll
-          rm -f $PUBLISH_PATH/UnityEngine.dll
-          rm -f $PUBLISH_PATH/Microsoft.CSharp.dll
-          
           export PACKAGE_DEPENDENCIES=${{ vars.PACKAGE_DEPENDENCIES }}
           
           for entry in "${PACKAGE_DEPENDENCIES[@]}"
@@ -55,6 +51,8 @@ jobs:
             do
               cp "$PUBLISH_PATH/$dependency.dll" "$PACKAGE_LIB_PATH"
             done
+          
+            echo -e "DLLs Copied to Path $PACKAGE_LIB_PATH\n$(ls "$PACKAGE_LIB_PATH")"
           
             git add "$PACKAGE_LIB_PATH." -f
           done
