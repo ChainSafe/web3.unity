@@ -49,7 +49,7 @@ jobs:
             
             for dependency in "${dependencies[@]}"
             do
-              mv "$PUBLISH_PATH/$dependency.dll" "$PACKAGE_LIB_PATH" || echo -e "....DLLs Left\n$(ls "$PUBLISH_PATH")"
+              cp "$PUBLISH_PATH/$dependency.dll" "$PACKAGE_LIB_PATH"
             done
           
             git add "$PACKAGE_LIB_PATH." -f
