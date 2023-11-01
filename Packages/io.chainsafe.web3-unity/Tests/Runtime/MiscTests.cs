@@ -12,6 +12,8 @@ public class MiscTests : SampleTestsBase
 
     private const string ContractSendMethodName = "addTotal";
 
+    private const int IncreaseAmount = 1;
+
     private const string Abi = "[ { \"inputs\": [ { \"internalType\": \"uint8\", \"name\": \"_myArg\", \"type\": \"uint8\" } ], \"name\": \"addTotal\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\" }, { \"inputs\": [], \"name\": \"myTotal\", \"outputs\": [ { \"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\" } ], \"stateMutability\": \"view\", \"type\": \"function\" } ]";
 
     private const string ContractAddress = "0x7286Cf0F6E80014ea75Dbc25F545A3be90F4904F";
@@ -64,11 +66,18 @@ public class MiscTests : SampleTestsBase
     public IEnumerator TestContractSend()
     {
         config.TestResponse = "0x9de3bb69db4bd93babef923f5da1f53cdb287d9ebab9b4177ba2fb25e6a09225";
-
-        var sendContract = _sample.ContractSend(ContractSendMethodName, Abi, ContractAddress);
+        
+        object[] args =
+        {
+            IncreaseAmount
+        };
+        
+        var sendContract = _sample.ContractSend(ContractSendMethodName, Abi, ContractAddress, args);
 
         yield return new WaitUntil(() => sendContract.IsCompleted);
 
+        if (sendContract.Exception != null) throw sendContract.Exception;
+        
         Assert.IsTrue(sendContract.IsCompletedSuccessfully);
 
         Assert.AreEqual(sendContract.Result, string.Empty);
@@ -77,7 +86,10 @@ public class MiscTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestGetArray()
     {
-        var getArray = _sample.GetArray();
+        string contractAddress = "0x5244d0453A727EDa96299384370359f4A2B5b20a";
+        string abi = "[{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"_addresses\",\"type\":\"address[]\"}],\"name\":\"setStore\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"bought\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getStore\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]";
+        string method = "getStore";
+        var getArray = _sample.GetArray(contractAddress, abi, method);
 
         yield return new WaitUntil(() => getArray.IsCompleted);
 
@@ -97,6 +109,8 @@ public class MiscTests : SampleTestsBase
 
         yield return new WaitUntil(() => getBlockNumber.IsCompleted);
 
+        if (getBlockNumber.Exception != null) throw getBlockNumber.Exception;
+        
         //just assert successful completion because result is always changing
         Assert.IsTrue(getBlockNumber.IsCompletedSuccessfully);
     }
@@ -104,10 +118,12 @@ public class MiscTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestGetGasLimit()
     {
-        var getGasLimit = _sample.GetGasLimit(Abi, ContractAddress);
+        var getGasLimit = _sample.GetGasLimit(Abi, ContractAddress, "addTotal");
 
         yield return new WaitUntil(() => getGasLimit.IsCompleted);
 
+        if (getGasLimit.Exception != null) throw getGasLimit.Exception;
+        
         //just assert successful completion because result is always changing
         Assert.IsTrue(getGasLimit.IsCompletedSuccessfully);
     }
@@ -119,6 +135,8 @@ public class MiscTests : SampleTestsBase
 
         yield return new WaitUntil(() => getGasPrice.IsCompleted);
 
+        if (getGasPrice.Exception != null) throw getGasPrice.Exception;
+        
         //just assert successful completion because result is always changing
         Assert.IsTrue(getGasPrice.IsCompletedSuccessfully);
     }
@@ -132,6 +150,8 @@ public class MiscTests : SampleTestsBase
 
         yield return new WaitUntil(() => getGasNonce.IsCompleted);
 
+        if (getGasNonce.Exception != null) throw getGasNonce.Exception;
+        
         //just assert successful completion because result is always changing
         Assert.IsTrue(getGasNonce.IsCompletedSuccessfully);
     }
@@ -145,6 +165,8 @@ public class MiscTests : SampleTestsBase
 
         yield return new WaitUntil(() => getTransactionStatus.IsCompleted);
 
+        if (getTransactionStatus.Exception != null) throw getTransactionStatus.Exception;
+        
         //just assert successful completion because result is always changing
         Assert.IsTrue(getTransactionStatus.IsCompletedSuccessfully);
     }
@@ -158,6 +180,8 @@ public class MiscTests : SampleTestsBase
 
         yield return new WaitUntil(() => mint721.IsCompleted);
 
+        if (mint721.Exception != null) throw mint721.Exception;
+        
         Assert.IsTrue(mint721.IsCompletedSuccessfully);
 
         Assert.AreEqual(mint721.Result, string.Empty);
@@ -166,10 +190,12 @@ public class MiscTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestUseRegisteredContract()
     {
-        var useRegisteredContract = _sample.UseRegisteredContract();
+        var useRegisteredContract = _sample.UseRegisteredContract("shiba", "balanceOf");
 
         yield return new WaitUntil(() => useRegisteredContract.IsCompleted);
 
+        if (useRegisteredContract.Exception != null) throw useRegisteredContract.Exception;
+        
         Assert.IsTrue(useRegisteredContract.IsCompletedSuccessfully);
 
         Assert.AreEqual(useRegisteredContract.Result, new BigInteger(0));
@@ -184,6 +210,8 @@ public class MiscTests : SampleTestsBase
 
         yield return new WaitUntil(() => sendArray.IsCompleted);
 
+        if (sendArray.Exception != null) throw sendArray.Exception;
+        
         Assert.IsTrue(sendArray.IsCompletedSuccessfully);
 
         Assert.AreEqual(sendArray.Result, string.Empty);
@@ -198,6 +226,8 @@ public class MiscTests : SampleTestsBase
 
         yield return new WaitUntil(() => sendTransaction.IsCompleted);
 
+        if (sendTransaction.Exception != null) throw sendTransaction.Exception;
+        
         Assert.IsTrue(sendTransaction.IsCompletedSuccessfully);
 
         Assert.AreEqual(sendTransaction.Result, config.TestResponse);
@@ -223,6 +253,8 @@ public class MiscTests : SampleTestsBase
 
         yield return new WaitUntil(() => signMessage.IsCompleted);
 
+        if (signMessage.Exception != null) throw signMessage.Exception;
+        
         Assert.IsTrue(signMessage.IsCompletedSuccessfully);
 
         Assert.AreEqual(signMessage.Result, config.TestResponse);
@@ -238,6 +270,8 @@ public class MiscTests : SampleTestsBase
 
         yield return new WaitUntil(() => signVerify.IsCompleted);
 
+        if (signVerify.Exception != null) throw signVerify.Exception;
+        
         Assert.IsTrue(signVerify.IsCompletedSuccessfully);
 
         Assert.AreEqual(signVerify.Result, true);
@@ -252,6 +286,8 @@ public class MiscTests : SampleTestsBase
 
         yield return new WaitUntil(() => transferErc20.IsCompleted);
 
+        if (transferErc20.Exception != null) throw transferErc20.Exception;
+        
         Assert.IsTrue(transferErc20.IsCompletedSuccessfully);
 
         Assert.AreEqual(transferErc20.Result, new object[] { false });
@@ -266,6 +302,8 @@ public class MiscTests : SampleTestsBase
 
         yield return new WaitUntil(() => transferErc721.IsCompleted);
 
+        if (transferErc721.Exception != null) throw transferErc721.Exception;
+        
         Assert.IsTrue(transferErc721.IsCompletedSuccessfully);
 
         Assert.AreEqual(transferErc721.Result, string.Empty);
@@ -280,6 +318,8 @@ public class MiscTests : SampleTestsBase
 
         yield return new WaitUntil(() => transferErc1155.IsCompleted);
 
+        if (transferErc1155.Exception != null) throw transferErc1155.Exception;
+        
         yield return new WaitUntil(() => transferErc1155.IsCompletedSuccessfully);
 
         Assert.AreEqual(transferErc1155.Result, string.Empty);

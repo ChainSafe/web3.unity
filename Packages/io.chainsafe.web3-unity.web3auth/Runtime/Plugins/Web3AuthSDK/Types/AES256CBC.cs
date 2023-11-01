@@ -59,7 +59,7 @@ public class AES256CBC
     public BigInteger ecdh(string privateKeyHex, string ephemPublicKeyHex)
     {
         var domain = SecNamedCurves.GetByName("secp256k1");
-        var parameters = new ECDomainParameters(domain.Curve, domain.G, domain.H);
+        var parameters = new ECDomainParameters(domain.Curve, domain.G, domain.N);
 
         ECPrivateKeyParameters privKey = new ECPrivateKeyParameters(new BigInteger(privateKeyHex, 16), parameters);
 
