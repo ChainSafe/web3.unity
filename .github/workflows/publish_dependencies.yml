@@ -49,8 +49,10 @@ jobs:
             
             for dependency in "${dependencies[@]}"
             do
-              cp "$PUBLISH_PATH/$dependency.dll" "$PACKAGE_LIB_PATH"
+              mv "$PUBLISH_PATH/$dependency.dll" "$PACKAGE_LIB_PATH"
             done
+          
+            echo -e "DLLs Generated\n$(ls "$PUBLISH_PATH")"
           
             echo -e "DLLs Copied to Path $PACKAGE_LIB_PATH\n$(ls "$PACKAGE_LIB_PATH")"
           
