@@ -99,6 +99,15 @@ namespace Web3Unity.Scripts.Prefabs
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
             return await contract.Send(method, new object[] { destination, uri });
         }
+        
+        public async Task<object[]> Mint1155(string abi, string contractAddress, int id, int amount)
+        {
+            byte[] dataObject = { };
+            const string method = "mint";
+            var destination = await web3.Signer.GetAddress();
+            var contract = web3.ContractBuilder.Build(abi, contractAddress);
+            return await contract.Send(method, new object[] { destination, id, amount, dataObject });
+        }
 
         // ProviderEvent skipped
 
