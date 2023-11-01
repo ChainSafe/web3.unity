@@ -35,6 +35,8 @@ jobs:
           
           dotnet publish src/ChainSafe.Gaming.Unity/ChainSafe.Gaming.Unity.csproj -c Release /property:Unity=true
           
+          echo "DLLs Generated $(ls "$PUBLISH_PATH")"
+          
           rm -f $PUBLISH_PATH/Newtonsoft.Json.dll
           rm -f $PUBLISH_PATH/UnityEngine.dll
           rm -f $PUBLISH_PATH/Microsoft.CSharp.dll
