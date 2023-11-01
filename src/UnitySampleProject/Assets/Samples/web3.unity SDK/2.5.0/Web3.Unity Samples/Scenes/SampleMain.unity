@@ -517,7 +517,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf68998fa7d94376b37c4c4bf3169006, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SceneName: SampleImportNftTexture
 --- !u!114 &177765172
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1104,7 +1103,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_RootOrder
-      value: 12
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1509,7 +1508,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 37375165}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.24156472
+  m_Size: 0.37209302
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1569,7 +1568,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_RootOrder
-      value: 17
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1707,7 +1706,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1820,6 +1819,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dd3f050e68a453080456231b09e7726, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  contractName: shiba
+  method: balanceOf
 --- !u!114 &413551945
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1925,7 +1926,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_RootOrder
-      value: 13
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_AnchorMax.x
@@ -2435,6 +2436,7 @@ MonoBehaviour:
     "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type":
     "function" } ]'
   contractAddress: 0x7286Cf0F6E80014ea75Dbc25F545A3be90F4904F
+  method: addTotal
 --- !u!114 &526139427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4093,7 +4095,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_RootOrder
-      value: 11
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_AnchorMax.x
@@ -5059,7 +5061,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_AnchorMax.x
@@ -5548,7 +5550,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_RootOrder
-      value: 16
+      value: 17
       objectReference: {fileID: 0}
     - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_AnchorMax.x
@@ -5662,8 +5664,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toAccount: 0xdD4c825203f97984e7867F11eeCc813A036089D1
-  contractAddress: 0xe793e17Ec93bEc809C5Ac6dd0d8b383446E65B78
-  tokenId: 101
+  contractAddress: 0xA0a53f1Cabf7D723Ab2087400681039917D1B6D4
+  tokenId: 1
   amount: 1
 --- !u!114 &1402512899
 MonoBehaviour:
@@ -6155,6 +6157,7 @@ MonoBehaviour:
     "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type":
     "function" } ]'
   contractAddress: 0x7286Cf0F6E80014ea75Dbc25F545A3be90F4904F
+  increaseAmount: 1
 --- !u!114 &1432457969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6590,7 +6593,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_RootOrder
-      value: 15
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_AnchorMax.x
@@ -6770,6 +6773,223 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1785669379
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1432457965}
+    m_Modifications:
+    - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8775736491206355084, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_Name
+      value: Button - NONAME (18)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8781309615174179339, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_text
+      value: Mint1155
+      objectReference: {fileID: 0}
+    - target: {fileID: 8781309615174179339, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+      propertyPath: m_fontSize
+      value: 17.9
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+--- !u!1 &1785669380 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8775736491206355084, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+  m_PrefabInstance: {fileID: 1785669379}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1785669381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1785669380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 598582d58c484447b98e18147c4c2c52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  abi: '[ { "inputs": [], "stateMutability": "nonpayable", "type": "constructor"
+    }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address",
+    "name": "account", "type": "address" }, { "indexed": true, "internalType": "address",
+    "name": "operator", "type": "address" }, { "indexed": false, "internalType":
+    "bool", "name": "approved", "type": "bool" } ], "name": "ApprovalForAll", "type":
+    "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType":
+    "address", "name": "operator", "type": "address" }, { "indexed": true, "internalType":
+    "address", "name": "from", "type": "address" }, { "indexed": true, "internalType":
+    "address", "name": "to", "type": "address" }, { "indexed": false, "internalType":
+    "uint256[]", "name": "ids", "type": "uint256[]" }, { "indexed": false, "internalType":
+    "uint256[]", "name": "values", "type": "uint256[]" } ], "name": "TransferBatch",
+    "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType":
+    "address", "name": "operator", "type": "address" }, { "indexed": true, "internalType":
+    "address", "name": "from", "type": "address" }, { "indexed": true, "internalType":
+    "address", "name": "to", "type": "address" }, { "indexed": false, "internalType":
+    "uint256", "name": "id", "type": "uint256" }, { "indexed": false, "internalType":
+    "uint256", "name": "value", "type": "uint256" } ], "name": "TransferSingle",
+    "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": false, "internalType":
+    "string", "name": "value", "type": "string" }, { "indexed": true, "internalType":
+    "uint256", "name": "id", "type": "uint256" } ], "name": "URI", "type": "event"
+    }, { "inputs": [ { "internalType": "address", "name": "account", "type": "address"
+    }, { "internalType": "uint256", "name": "id", "type": "uint256" } ], "name":
+    "balanceOf", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256"
+    } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType":
+    "address[]", "name": "accounts", "type": "address[]" }, { "internalType": "uint256[]",
+    "name": "ids", "type": "uint256[]" } ], "name": "balanceOfBatch", "outputs":
+    [ { "internalType": "uint256[]", "name": "", "type": "uint256[]" } ], "stateMutability":
+    "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name":
+    "account", "type": "address" }, { "internalType": "address", "name": "operator",
+    "type": "address" } ], "name": "isApprovedForAll", "outputs": [ { "internalType":
+    "bool", "name": "", "type": "bool" } ], "stateMutability": "view", "type": "function"
+    }, { "inputs": [ { "internalType": "address", "name": "account", "type": "address"
+    }, { "internalType": "uint256", "name": "id", "type": "uint256" }, { "internalType":
+    "uint256", "name": "amount", "type": "uint256" }, { "internalType": "bytes",
+    "name": "data", "type": "bytes" } ], "name": "mint", "outputs": [], "stateMutability":
+    "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address",
+    "name": "to", "type": "address" }, { "internalType": "uint256[]", "name": "ids",
+    "type": "uint256[]" }, { "internalType": "uint256[]", "name": "amounts", "type":
+    "uint256[]" }, { "internalType": "bytes", "name": "data", "type": "bytes" } ],
+    "name": "mintBatch", "outputs": [], "stateMutability": "nonpayable", "type":
+    "function" }, { "inputs": [ { "internalType": "address", "name": "from", "type":
+    "address" }, { "internalType": "address", "name": "to", "type": "address" },
+    { "internalType": "uint256[]", "name": "ids", "type": "uint256[]" }, { "internalType":
+    "uint256[]", "name": "amounts", "type": "uint256[]" }, { "internalType": "bytes",
+    "name": "data", "type": "bytes" } ], "name": "safeBatchTransferFrom", "outputs":
+    [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType":
+    "address", "name": "from", "type": "address" }, { "internalType": "address",
+    "name": "to", "type": "address" }, { "internalType": "uint256", "name": "id",
+    "type": "uint256" }, { "internalType": "uint256", "name": "amount", "type": "uint256"
+    }, { "internalType": "bytes", "name": "data", "type": "bytes" } ], "name": "safeTransferFrom",
+    "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs":
+    [ { "internalType": "address", "name": "operator", "type": "address" }, { "internalType":
+    "bool", "name": "approved", "type": "bool" } ], "name": "setApprovalForAll",
+    "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs":
+    [ { "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" } ], "name":
+    "supportsInterface", "outputs": [ { "internalType": "bool", "name": "", "type":
+    "bool" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ {
+    "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "uri",
+    "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability":
+    "view", "type": "function" } ]'
+  contractAddress: 0xA0a53f1Cabf7D723Ab2087400681039917D1B6D4
+  id: 1
+  amount: 1
+--- !u!114 &1785669382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1785669380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: 50
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!1001 &1800123346
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7561,7 +7781,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_RootOrder
-      value: 14
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_AnchorMax.x
@@ -7827,6 +8047,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17d36fbb9ea946aeb9d00a094e35ddcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  contractAddress: 0x5244d0453A727EDa96299384370359f4A2B5b20a
+  abi: '[{"inputs":[{"internalType":"address[]","name":"_addresses","type":"address[]"}],"name":"setStore","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"bought","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getStore","outputs":[{"internalType":"address[]","name":"","type":"address[]"}],"stateMutability":"view","type":"function"}]'
+  method: getStore
 --- !u!114 &2092108894
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7864,7 +8087,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_AnchorMax.x
