@@ -1,3 +1,4 @@
+using System;
 using System.Web;
 using ChainSafe.Gaming.Web3.Environment;
 using Newtonsoft.Json;
@@ -138,6 +139,30 @@ namespace ChainSafe.Gaming.WalletConnect.Models
             string nativeUrl = GetLinkData(isMobilePlatform).NativeProtocol;
 
             return !string.IsNullOrWhiteSpace(nativeUrl) && nativeUrl != ":";
+        }
+
+        /// <summary>
+        /// Is a wallet available for <see cref="Platform"/>.
+        /// </summary>
+        /// <param name="platform">Platform to wallet app availability.</param>
+        /// <returns>True if wallet is available for <see cref="Platform"/>.</returns>
+        public bool IsAvailableForPlatform(Platform platform)
+        {
+            switch (platform)
+            {
+                case Platform.Editor:
+                case Platform.Desktop:
+                    return CanUseNativeProtocol(false) || !string.IsNullOrEmpty(Desktop.UniversalUrl);
+
+                case Platform.Android:
+                case Platform.IOS:
+                    return CanUseNativeProtocol(true) || !string.IsNullOrEmpty(Mobile.UniversalUrl);
+
+                // currently Wallet Connect doesn't support WebGL.
+                default:
+                    WCLogger.Log($"Unsupported Platform {platform}");
+                    return false;
+            }
         }
     }
 }
