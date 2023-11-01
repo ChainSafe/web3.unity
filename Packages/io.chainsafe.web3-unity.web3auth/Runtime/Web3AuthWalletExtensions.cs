@@ -47,7 +47,7 @@ public static class Web3AuthWalletExtensions
     /// <returns>The modified IWeb3ServiceCollection with the Web3AuthWallet configuration replaced.</returns>
     public static IWeb3ServiceCollection ConfigureWeb3AuthWallet(this IWeb3ServiceCollection collection, Web3AuthWalletConfig configuration)
     {
-        collection.Replace(ServiceDescriptor.Singleton(typeof(Web3AuthWalletConfig), configuration);
+        collection.Replace(ServiceDescriptor.Singleton(typeof(Web3AuthWalletConfig), configuration));
         return collection;
     }
 }
