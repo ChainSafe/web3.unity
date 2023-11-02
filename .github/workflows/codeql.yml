@@ -1,8 +1,10 @@
 name: CodeQL Workflow
 
 on:
-  pull_request:
-    branches: [main]
+  workflow_run:
+    workflows: [ "Test Unity Package Workflow" ]
+    types:
+      - completed
 
 jobs:
   analyze:

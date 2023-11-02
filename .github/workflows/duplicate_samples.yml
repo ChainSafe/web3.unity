@@ -1,4 +1,4 @@
-name: Duplicate Package Samples Workflow
+name: Duplicate Packages Samples Workflow
 
 on:
   pull_request:
