@@ -2,8 +2,7 @@ name: CodeQL Workflow
 
 on:
   workflow_run:
-    workflows:
-      - "Test Unity Package Workflow"
+    workflows: [ "Test Unity Package Workflow" ]
     types:
       - completed
 

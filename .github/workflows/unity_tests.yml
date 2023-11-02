@@ -1,11 +1,8 @@
 name: Test Unity Package Workflow
 
 on:
-  workflow_run:
-    workflows:
-      - "NUnit Tests Workflow"
-    types:
-      - completed
+  push:
+    branches: [ "rob/automated-ci-678" ]
 
 jobs:
   testAllModes:
@@ -16,10 +13,6 @@ jobs:
       matrix:
         projectPath:
         - Packages/io.chainsafe.web3-unity
-        publishPath:
-        - ${GITHUB_WORKSPACE}/src/ChainSafe.Gaming.Unity/bin/Release/netstandard2.1/publish
-        packageLibraryPath:
-        - ${GITHUB_WORKSPACE}/Packages/io.chainsafe.web3-unity/Runtime/Libraries
         testMode:
           - PlayMode
           - EditMode
@@ -27,6 +20,9 @@ jobs:
       - uses: actions/checkout@v4
         with:
           lfs: true
+      - name: Pre Test
+        run: |
+        shell: bash
       - uses: game-ci/unity-test-runner@v3
         id: tests
         env:
