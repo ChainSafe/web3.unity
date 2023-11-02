@@ -1,0 +1,64 @@
+name: Publish Solution Dependencies
+
+on:
+  workflow_run:
+    workflows: [ "Duplicate Packages Samples Workflow" ]
+    types:
+      - completed
+
+jobs:
+  publish:
+    name: Publish Dependency DLLs️
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          lfs: true
+      - name: update submodules
+        # clone submodules
+        run: |
+          git submodule update --init
+        shell: bash
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+      - name: Publish Solution DLLs
+        run: |
+          dotnet publish src/ChainSafe.Gaming.Unity/ChainSafe.Gaming.Unity.csproj -c Release /property:Unity=true
+      - name: Move DLLs to Unity Packages then Commit and Push
+        run: |
+          
+          git config user.email $git_email
+          git config user.name "${{ github.actor }}"
+          
+          export PUBLISH_PATH="${GITHUB_WORKSPACE}/${{ vars.PUBLISH_PATH }}"
+          
+          echo -e "DLLs Generated\n$(ls "$PUBLISH_PATH")"
+          
+          export PACKAGE_DEPENDENCIES=${{ vars.PACKAGE_DEPENDENCIES }}
+          
+          for entry in "${PACKAGE_DEPENDENCIES[@]}"
+          do
+            IFS=':' read -ra dirs <<< "$entry"
+            export PACKAGE_LIB_PATH="${GITHUB_WORKSPACE}/${dirs[0]}"
+            
+            rm -rf "$PACKAGE_LIB_PATH"
+            mkdir -p "$PACKAGE_LIB_PATH"
+            
+            IFS=';' read -ra dependencies <<< "${dirs[1]}"
+            
+            for dependency in "${dependencies[@]}"
+            do
+              cp "$PUBLISH_PATH/$dependency.dll" "$PACKAGE_LIB_PATH"
+            done
+          
+            git add "$PACKAGE_LIB_PATH." -f
+          done
+          
+          git diff-index --cached --quiet HEAD || git commit -m "Published Solution Dependencies to Package Libraries as DLLs"
+          git push
+        env:
+          git_email: "${{ github.actor }}@users.noreply.github.com"
