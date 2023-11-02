@@ -5,7 +5,6 @@ using ChainSafe.GamingSdk.Gelato;
 using ChainSafe.GamingSdk.Gelato.Dto;
 using UnityEngine;
 
-
 public class GelatoSample
 {
     private readonly Web3 _web3;
