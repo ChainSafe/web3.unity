@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Chainlink.LootBoxes.Scene.StageItems
+namespace LootBoxes.Chainlink.Scene.StageItems
 {
     [CreateAssetMenu(menuName = Menues.Root + "LootBoxPrefabSet", fileName = "LootBoxPrefabSet", order = 0)]
     public class LootBoxesFrontEndDataSet : ScriptableObject

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Chainlink.LootBoxes.Scene
+namespace LootBoxes.Chainlink.Scene
 {
     public class Lootbox : MonoBehaviour
     {

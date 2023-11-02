@@ -1,6 +1,6 @@
 ﻿using TMPro;
 
-namespace Chainlink.LootBoxes.Scene
+namespace LootBoxes.Chainlink.Scene
 {
     public class CoinReward : Reward
     {

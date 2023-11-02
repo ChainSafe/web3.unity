@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace Chainlink.LootBoxes.Scene
+namespace LootBoxes.Chainlink.Scene
 {
     public class ViewRewardsUI : MonoBehaviour
     {
