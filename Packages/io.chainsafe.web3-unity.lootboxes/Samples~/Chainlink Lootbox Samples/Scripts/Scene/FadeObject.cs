@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Chainlink.LootBoxes.Scene
+namespace LootBoxes.Chainlink.Scene
 {
     [RequireComponent(typeof(Renderer))]
     [ExecuteInEditMode]

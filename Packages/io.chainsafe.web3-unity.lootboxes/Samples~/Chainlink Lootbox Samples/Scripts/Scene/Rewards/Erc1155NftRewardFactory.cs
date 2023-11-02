@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Chainlink.LootBoxes.Scene.StageItems;
+using LootBoxes.Chainlink.Scene.StageItems;
 using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Lootboxes.Chainlink;
 using ChainSafe.Gaming.UnityPackage;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace Chainlink.LootBoxes.Scene
+namespace LootBoxes.Chainlink.Scene
 {
     public class Erc1155NftRewardFactory : MonoBehaviour
     {

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Chainlink.LootBoxes.Scene.States
+namespace LootBoxes.Chainlink.Scene.States
 {
     public abstract class LootBoxSceneState : StateMachineBehaviour
     {

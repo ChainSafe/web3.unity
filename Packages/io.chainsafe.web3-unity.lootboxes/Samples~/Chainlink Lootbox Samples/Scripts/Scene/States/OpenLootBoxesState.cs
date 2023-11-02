@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-namespace Chainlink.LootBoxes.Scene.States
+namespace LootBoxes.Chainlink.Scene.States
 {
     public class OpenLootBoxesState : LootBoxSceneState
     {

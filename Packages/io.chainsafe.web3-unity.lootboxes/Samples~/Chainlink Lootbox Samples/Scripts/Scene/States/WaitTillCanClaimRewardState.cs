@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Chainlink.LootBoxes.Scene.States
+namespace LootBoxes.Chainlink.Scene.States
 {
     public class WaitTillCanClaimRewardState : LootBoxSceneState
     {
