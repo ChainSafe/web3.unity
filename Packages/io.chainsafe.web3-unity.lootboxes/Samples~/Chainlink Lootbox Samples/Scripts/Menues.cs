@@ -1,4 +1,4 @@
-﻿namespace Chainlink.LootBoxes
+﻿namespace LootBoxes.Chainlink
 {
     public static class Menues
     {

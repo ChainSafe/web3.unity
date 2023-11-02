@@ -1,4 +1,4 @@
-﻿using Chainlink.LootBoxes.Scene;
+﻿using LootBoxes.Chainlink.Scene;
 using Chainsafe.Gaming.Chainlink;
 using ChainSafe.Gaming.Debugging;
 using ChainSafe.Gaming.Evm.JsonRpc;
@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using UnityEngine;
 
 
-namespace Chainlink.LootBoxes
+namespace LootBoxes.Chainlink
 {
     /// <summary>
     /// Initializes Web3 using local RPC node and node's user
