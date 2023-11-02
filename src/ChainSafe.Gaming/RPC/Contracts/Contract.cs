@@ -89,11 +89,23 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
             var result = await provider.Call(txReq);
 
-            var output = function.DecodeOutput(result);
-            var array = new object[output.Count];
-            for (var i = 0; i < output.Count; i++)
+            return Decode(method, result);
+        }
+
+        /// <summary>
+        /// Decodes a result.
+        /// </summary>
+        /// <param name="method">The method.</param>
+        /// <param name="output">The raw output data from an executed function call.</param>
+        /// <returns>The decoded outputs of a provided method.</returns>
+        public object[] Decode(string method, string output)
+        {
+            var function = contractBuilder.GetFunctionBuilder(method);
+            var decodedOutput = function.DecodeOutput(output);
+            var array = new object[decodedOutput.Count];
+            for (var i = 0; i < decodedOutput.Count; i++)
             {
-                array[i] = output[i].Result;
+                array[i] = decodedOutput[i].Result;
             }
 
             return array;
