@@ -1,10 +1,8 @@
 name: Publish Solution Dependencies
 
 on:
-  workflow_run:
-    workflows: [ "Duplicate Packages Samples Workflow" ]
-    types:
-      - completed
+  push:
+    branches: [ "rob/automated-ci-678" ]
 
 jobs:
   publish:
