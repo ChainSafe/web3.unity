@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Chainlink.LootBoxes.Scene.StageItems;
+using LootBoxes.Chainlink.Scene.StageItems;
 using UnityEngine;
 
-namespace Chainlink.LootBoxes.Scene.States
+namespace LootBoxes.Chainlink.Scene.States
 {
     public class LoadLootBoxesState : LootBoxSceneState
     {
