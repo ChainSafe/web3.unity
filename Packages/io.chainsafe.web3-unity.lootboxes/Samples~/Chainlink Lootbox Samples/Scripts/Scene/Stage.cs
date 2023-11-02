@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using Chainlink.LootBoxes.Scene.StageItems;
+using LootBoxes.Chainlink.Scene.StageItems;
 using UnityEngine;
 
-namespace Chainlink.LootBoxes.Scene
+namespace LootBoxes.Chainlink.Scene
 {
     public class Stage : MonoBehaviour
     {
