@@ -1,8 +1,10 @@
 name: NUnit Tests Workflow
 
 on:
-  pull_request:
-    branches: [main]
+  workflow_run:
+    workflows: [ "Publish Solution Dependencies" ]
+    types:
+      - completed
 
 jobs:
   check:
