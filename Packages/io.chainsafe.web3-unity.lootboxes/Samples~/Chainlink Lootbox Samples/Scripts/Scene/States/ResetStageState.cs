@@ -3,7 +3,7 @@ using System.Linq;
 using ChainSafe.Gaming.Lootboxes.Chainlink;
 using UnityEngine;
 
-namespace Chainlink.LootBoxes.Scene.States
+namespace LootBoxes.Chainlink.Scene.States
 {
     public class ResetStageState : LootBoxSceneState
     {

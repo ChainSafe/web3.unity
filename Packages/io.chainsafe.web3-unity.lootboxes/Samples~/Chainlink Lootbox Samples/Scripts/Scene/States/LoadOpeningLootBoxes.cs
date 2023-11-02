@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Chainlink.LootBoxes.Scene.StageItems;
+using LootBoxes.Chainlink.Scene.StageItems;
 
-namespace Chainlink.LootBoxes.Scene.States
+namespace LootBoxes.Chainlink.Scene.States
 {
     public class LoadOpeningLootBoxes : LootBoxSceneState
     {

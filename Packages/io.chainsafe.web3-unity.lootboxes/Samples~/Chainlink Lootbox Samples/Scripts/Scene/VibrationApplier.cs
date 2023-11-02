@@ -2,7 +2,7 @@
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
-namespace Chainlink.LootBoxes.Scene
+namespace LootBoxes.Chainlink.Scene
 {
     public class VibrationApplier : MonoBehaviour
     {

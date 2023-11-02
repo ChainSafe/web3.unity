@@ -1,4 +1,4 @@
-﻿namespace Chainlink.LootBoxes.Scene.States
+﻿namespace LootBoxes.Chainlink.Scene.States
 {
     public class LoadRewardsState : LootBoxSceneState
     {

@@ -4,7 +4,7 @@ using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Web3.Environment;
 
-namespace Chainlink.LootBoxes
+namespace LootBoxes.Chainlink
 {
     public class Erc1155MetaData
     {

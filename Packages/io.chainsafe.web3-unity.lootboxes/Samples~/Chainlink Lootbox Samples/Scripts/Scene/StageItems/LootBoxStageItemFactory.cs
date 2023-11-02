@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Chainlink.LootBoxes.Scene.StageItems
+namespace LootBoxes.Chainlink.Scene.StageItems
 {
     public class LootBoxStageItemFactory
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Chainlink.LootBoxes.Scene
+namespace LootBoxes.Chainlink.Scene
 {
     public class LootBoxSceneException : Exception
     {
