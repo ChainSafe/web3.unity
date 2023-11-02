@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Chainlink.LootBoxes.Scene.StageItems
+namespace LootBoxes.Chainlink.Scene.StageItems
 {
     public class StageItem : MonoBehaviour
     {
