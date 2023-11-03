@@ -8,10 +8,16 @@ jobs:
   duplicate_samples:
     name: Duplicate Samples
     uses: ChainSafe/web3.unity/.github/workflows/duplicate_samples.yml@main
+    secrets: inherit
+    with:
+      github_token: ${{ secrets.CI_PAT }}
   publish_dependencies:
     name: Publish Dependencies
     uses: ChainSafe/web3.unity/.github/workflows/publish_dependencies.yml@main
     needs: [duplicate_samples]
+    secrets: inherit
+    with:
+      github_token: ${{ secrets.CI_PAT }}
   web3_tests:
     name: Web3 Tests
     uses: ChainSafe/web3.unity/.github/workflows/test.yaml@main
