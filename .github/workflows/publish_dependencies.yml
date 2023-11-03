@@ -3,6 +3,8 @@ name: Publish Solution Dependencies
 on:
   workflow_call:
 
+permissions: write-all
+
 jobs:
   publish:
     name: Publish Dependency DLLs️
@@ -11,8 +13,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          token: ${{ secrets.CI_PAT }}
-          persist-credentials: false
           ref: ${{ github.event.pull_request.head.ref }}
           lfs: true
       - name: update submodules
