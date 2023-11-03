@@ -16,7 +16,7 @@ dotnet restore
 
 echo Moving files to Unity package...
 
-pushd bin/release/netstandard2.1/publish
+pushd bin/debug/netstandard2.1/publish
 rm Newtonsoft.Json.dll
 rm UnityEngine.dll
 

@@ -15,7 +15,7 @@ echo Restoring non-Unity packages...
 
 echo Moving files to Unity package...
 
-pushd bin\release\netstandard2.1\publish
+pushd bin\debug\netstandard2.1\publish
 del Newtonsoft.Json.dll
 del UnityEngine.dll
 
