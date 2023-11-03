@@ -1,10 +1,7 @@
 name: NUnit Tests Workflow
 
 on:
-  workflow_run:
-    workflows: [ "Publish Solution Dependencies" ]
-    types:
-      - completed
+  workflow_call:
 
 jobs:
   check:

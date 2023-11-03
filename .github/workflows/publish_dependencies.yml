@@ -1,10 +1,7 @@
 name: Publish Solution Dependencies
 
 on:
-  workflow_run:
-    workflows: [ "Duplicate Packages Samples Workflow" ]
-    types:
-      - completed
+  workflow_call:
 
 jobs:
   publish:
