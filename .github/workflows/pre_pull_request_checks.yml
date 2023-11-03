@@ -1,0 +1,27 @@
+name: Merge Checks
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  duplicate_samples:
+    name: Duplicate Samples
+    uses: ChainSafe/web3.unity/.github/workflows/duplicate_samples.yml@main
+  publish_dependencies:
+    name: Publish Dependencies
+    uses: ChainSafe/web3.unity/.github/workflows/publish_dependencies.yml@main
+    needs: [duplicate_samples]
+  web3_tests:
+    name: Web3 Tests
+    uses: ChainSafe/web3.unity/.github/workflows/test.yaml@main
+    needs: [publish_dependencies]
+  unity_tests:
+    name: Unity Tests
+    uses: ChainSafe/web3.unity/.github/workflows/unity_tests.yml@main
+    needs: [web3_tests]
+    secrets: inherit
+  analyze_code:
+    name: Analyze Code
+    uses: ChainSafe/web3.unity/.github/workflows/codeql.yml@main
+    needs: [unity_tests]
