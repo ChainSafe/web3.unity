@@ -1,10 +1,7 @@
 name: Test Unity Package Workflow
 
 on:
-  workflow_run:
-    workflows: [ "NUnit Tests Workflow" ]
-    types:
-      - completed
+  workflow_call:
 
 jobs:
   testAllModes:
