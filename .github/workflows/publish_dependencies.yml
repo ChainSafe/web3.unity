@@ -57,10 +57,8 @@ jobs:
             git add "$PACKAGE_LIB_PATH." -f
           done
           
-          git remote set-url origin https://robGG1997:$github_token@github.com/ChainSafe/web3.unity.git
-          
           git diff-index --cached --quiet HEAD || git commit -m "Published Solution Dependencies to Package Libraries as DLLs"
-          git push
+          git push https://$github_token@github.com/${{ github.repository }}.git
         env:
           git_email: "${{ github.actor }}@users.noreply.github.com"
           github_token: ${{ secrets.CI_PAT }}
