@@ -9,6 +9,9 @@ using Nethereum.Hex.HexTypes;
 
 namespace ChainSafe.Gaming.Evm.Contracts
 {
+    /// <summary>
+    /// Representation of a contract.
+    /// </summary>
     public class Contract
     {
         private readonly string abi;
@@ -18,6 +21,14 @@ namespace ChainSafe.Gaming.Evm.Contracts
         private readonly Builders.ContractBuilder contractBuilder;
         private readonly ITransactionExecutor transactionExecutor;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Contract"/> class.
+        /// </summary>
+        /// <param name="abi">The abi.</param>
+        /// <param name="address">The contract address.</param>
+        /// <param name="provider">The RPC provider.</param>
+        /// <param name="signer">The signer.</param>
+        /// <param name="transactionExecutor">Transaction executor.</param>
         internal Contract(string abi, string address, IRpcProvider provider = null, ISigner signer = null, ITransactionExecutor transactionExecutor = null)
         {
             if (string.IsNullOrEmpty(abi))
@@ -50,6 +61,13 @@ namespace ChainSafe.Gaming.Evm.Contracts
             return new Contract(abi, address, provider, signer, transactionExecutor);
         }
 
+        /// <summary>
+        /// Call the contract method.
+        /// </summary>
+        /// <param name="method">The method to call.</param>
+        /// <param name="parameters">The parameters for the method.</param>
+        /// <param name="overwrite">To overwrite a transaction request.</param>
+        /// <returns>The result of calling the method.</returns>
         public async Task<object[]> Call(string method, object[] parameters = null, TransactionRequest overwrite = null)
         {
             if (string.IsNullOrEmpty(address))
@@ -71,11 +89,23 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
             var result = await provider.Call(txReq);
 
-            var output = function.DecodeOutput(result);
-            var array = new object[output.Count];
-            for (var i = 0; i < output.Count; i++)
+            return Decode(method, result);
+        }
+
+        /// <summary>
+        /// Decodes a result.
+        /// </summary>
+        /// <param name="method">The method.</param>
+        /// <param name="output">The raw output data from an executed function call.</param>
+        /// <returns>The decoded outputs of a provided method.</returns>
+        public object[] Decode(string method, string output)
+        {
+            var function = contractBuilder.GetFunctionBuilder(method);
+            var decodedOutput = function.DecodeOutput(output);
+            var array = new object[decodedOutput.Count];
+            for (var i = 0; i < decodedOutput.Count; i++)
             {
-                array[i] = output[i].Result;
+                array[i] = decodedOutput[i].Result;
             }
 
             return array;

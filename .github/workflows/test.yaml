@@ -1,8 +1,7 @@
 name: NUnit Tests Workflow
 
 on:
-  pull_request:
-    branches: [main]
+  workflow_call:
 
 jobs:
   check:

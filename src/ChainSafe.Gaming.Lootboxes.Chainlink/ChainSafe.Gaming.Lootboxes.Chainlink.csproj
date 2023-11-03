@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <CodeAnalysisRuleSet>../../global.ruleset</CodeAnalysisRuleSet>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <Nullable>enable</Nullable>
+        <RootNamespace>ChainSafe.Gaming.LootBoxes.Chainlink</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Chainsafe.Gaming.Chainlink\Chainsafe.Gaming.Chainlink.csproj" />
+        <ProjectReference Include="..\ChainSafe.Gaming\ChainSafe.Gaming.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>9.0</LangVersion>
+    <PackageId>ChainSafe.Gaming.WalletConnect</PackageId>
+    <EnableNETAnalyzers>True</EnableNETAnalyzers>
+    <CodeAnalysisRuleSet>../../global.ruleset</CodeAnalysisRuleSet>
+    <RootNamespace>ChainSafe.Gaming.MetaMaskBrowserWallet</RootNamespace>
+    <Configurations>Debug;Release;Test</Configurations>
+    <Platforms>AnyCPU</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ChainSafe.Gaming.Unity.ThirdParty\ChainSafe.Gaming.Unity.ThirdParty.csproj" />
+    <ProjectReference Include="..\ChainSafe.Gaming\ChainSafe.Gaming.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="WalletConnect.Web3Wallet" Version="2.1.1" />
+  </ItemGroup>
+  
+</Project>

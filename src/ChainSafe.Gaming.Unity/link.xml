@@ -19,10 +19,10 @@
     <assembly fullname="ChainSafe.Gaming.InProcessSigner"/>
     <assembly fullname="ChainSafe.Gaming.InProcessTransactionExecutor"/>
     <assembly fullname="ChainSafe.Gaming.NetCore"/>
-    <assembly fullname="ChainSafe.Gaming.WebPageWallet"/>
+    <assembly fullname="ChainSafe.Gaming.WalletConnect" preserve="all"/>
     <assembly fullname="ChainSafe.Gaming.Gelato"/>
     <assembly fullname="ChainSafe.Gaming.ChainLink"/>
-    <assembly fullname="ChainSafe.Gaming.ChainLink.Lootboxes"/>
+    <assembly fullname="ChainSafe.Gaming.LootBoxes.Chainlink"/>
     <!-- Dependencies -->
     <assembly fullname="ADRaffy.ENSNormalize" />
     <assembly fullname="BouncyCastle.Crypto" />
