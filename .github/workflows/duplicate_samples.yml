@@ -10,6 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
+        token: ${{ secrets.CI_PAT }}
         ref: ${{ github.event.pull_request.head.ref }}
     - name: Duplicate Web3 Unity Samples
       run: |

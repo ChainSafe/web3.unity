@@ -10,8 +10,9 @@ jobs:
     uses: ChainSafe/web3.unity/.github/workflows/duplicate_samples.yml@main
   publish_dependencies:
     name: Publish Dependencies
-    uses: ChainSafe/web3.unity/.github/workflows/publish_dependencies.yml@main
+    uses: ChainSafe/web3.unity/.github/workflows/publish_dependencies.yml@rob/pr-ci-test
     needs: [duplicate_samples]
+    secrets: inherit
   web3_tests:
     name: Web3 Tests
     uses: ChainSafe/web3.unity/.github/workflows/test.yaml@main
