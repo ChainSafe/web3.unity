@@ -10,7 +10,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        token: ${{ secrets.CI_PAT }}
         ref: ${{ github.event.pull_request.head.ref }}
     - name: Duplicate Web3 Unity Samples
       run: |
@@ -41,6 +40,9 @@ jobs:
         done
         
         git diff-index --cached --quiet HEAD || git commit -m "Auto-duplicate Packages Samples"
-        git push
       env:
         git_email: "${{ github.actor }}@users.noreply.github.com"
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+          github_token: ${{ secrets.CI_PAT }}
