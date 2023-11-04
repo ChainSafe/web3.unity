@@ -1,21 +1,17 @@
 name: Merge Checks
 
 on:
-  push:
-    branches: [ rob/pr-ci-test ]
-
-permissions: write-all
+  pull_request:
+    branches: [ main ]
 
 jobs:
   duplicate_samples:
     name: Duplicate Samples
     uses: ChainSafe/web3.unity/.github/workflows/duplicate_samples.yml@main
-    secrets: inherit
   publish_dependencies:
     name: Publish Dependencies
     uses: ChainSafe/web3.unity/.github/workflows/publish_dependencies.yml@main
     needs: [duplicate_samples]
-    secrets: inherit
   web3_tests:
     name: Web3 Tests
     uses: ChainSafe/web3.unity/.github/workflows/test.yaml@main
