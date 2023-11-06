@@ -5,11 +5,12 @@ on:
     branches: [ main ]
     types:
       - labeled
+      - ready_for_review
 
 jobs:
   web3_tests:
     name: Web3 Tests
-    if: ${{ github.event.label.name == 'ready-to-merge' }}
+    if: ${{ github.event.action == 'ready_for_review' || github.event.label.name == 'ready-to-merge'}}
     uses: ChainSafe/web3.unity/.github/workflows/test.yaml@main
   unity_tests:
     name: Unity Tests
