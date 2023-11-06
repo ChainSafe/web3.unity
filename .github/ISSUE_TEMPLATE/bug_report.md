@@ -10,31 +10,38 @@ assignees: ''
 **Describe the bug**
 A clear and concise description of what the bug is.
 
-**To Reproduce**
+**Steps**
 Steps to reproduce the behavior:
-1. Add the LoginWallet scene
-2. Add the prefab '...'
-3. Click on '...' inside the prefab '...'
-4. Add/Modify '....' in '...' C# script
-5. See error
+1. Use the scene [SampleLogin or SampleLogin - Web3Auth]
+2. Login with [Web3Auth or Remote wallet]
+3. Add/Modify '...' in '...' C# script
+4. Interact with [button name] in SampleMain scene
 
 **Expected behavior**
 A clear and concise description of what you expected to happen.
 
-**Screenshots**
-If applicable, add screenshots or videos to help explain your problem.
+**Console errors**
+Please include any console errors, warnings, or log messages related to this bug. If possible, provide a full error message and stack trace.
+
+**Screenshots/Video**
+If applicable, add screenshots or screen recordings that help visualize the issue.
+
+**Reproducible Code Snippet (if applicable):**
+If the issue is related to a specific piece of code, provide the relevant code snippet here.
+
+```csharp```
+// Your code snippet here
 
 **Desktop (please complete the following information):**
- - Chainsafe SDK version: [e.g. 1.0.6]
- - Unity Platform: [Windows, Mac, Linux or WebGL ]
- - Unity version [e.g. 2022] (Optional)
- - OS [e.g. Mac, Windows, Linux]
+ - Chainsafe SDK version: [e.g., 2.5.0]
+ - Unity Version: [e.g., 2022.1]
+ - Operating System: [e.g., Windows 10]
 
 **Mobile (please complete the following information):**
- - Chainsafe SDK version: [e.g. 1.0.6]
- - Platform: [Android or iOS]
- - Type: [Real device or Emulator/Simulator]
- - OS version [e.g. 11.6] (Optional)
+ - Chainsafe SDK version: [e.g., 1.0.6]
+ - Platform: [e.g., Android/iOS]
+ - Device Type: [e.g., Real device or Emulator/Simulator]
+ - OS Version: [e.g., Android 11]
 
 **Additional context**
-Add any other context about the problem here.
+Please add any other relevant context or information about the problem. This could include device specifications, project configuration, or any other details that might be helpful in diagnosing the issue.
