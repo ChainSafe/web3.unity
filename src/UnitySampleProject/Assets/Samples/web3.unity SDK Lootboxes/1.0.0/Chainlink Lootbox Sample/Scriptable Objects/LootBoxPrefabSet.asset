@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b00190a30054c5593c194ae914efb3b, type: 3}
+  m_Name: LootBoxPrefabSet
+  m_EditorClassIdentifier: 
+  lootBoxPrefabByTypeIdList:
+  - TypeId: 1
+    Name: Common
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    StageItemPrefab: {fileID: 3353174814749227321, guid: d79c7fd2bf75f3a4ca3c804a7d6f5229, type: 3}
+  - TypeId: 2
+    Name: Uncommon
+    Color: {r: 0.7372549, g: 0.7372549, b: 0.7372549, a: 1}
+    StageItemPrefab: {fileID: 8644500519639415978, guid: 262d85678d40acd4abe0c4f2652417e2, type: 3}
+  - TypeId: 3
+    Name: Rare
+    Color: {r: 0.64705884, g: 0.6627451, b: 1, a: 1}
+    StageItemPrefab: {fileID: 2235828722582720694, guid: df9a74ef089ae9e4688b205f0ab5e14a, type: 3}
+  - TypeId: 4
+    Name: Epic
+    Color: {r: 0.9843137, g: 0.64705884, b: 1, a: 1}
+    StageItemPrefab: {fileID: 3701413965112560799, guid: 0645e56d8e098d84ca9519b6b06314b2, type: 3}
+  - TypeId: 5
+    Name: Legendary
+    Color: {r: 1, g: 0.9019608, b: 0.31764707, a: 1}
+    StageItemPrefab: {fileID: 4656321191403441010, guid: 78cd90642ead45f458621adaa1d4e2c3, type: 3}
