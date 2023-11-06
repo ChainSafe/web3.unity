@@ -1,7 +1,9 @@
 name: Publish Solution Dependencies
 
 on:
-  workflow_call:
+  pull_request:
+    branches:
+      - main
 
 jobs:
   publish:
