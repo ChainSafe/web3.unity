@@ -36,6 +36,7 @@ rm Microsoft.CSharp.dll
 rm -rf ../../../../../../Packages/io.chainsafe.web3-unity/Runtime/Libraries
 mkdir -p ../../../../../../Packages/io.chainsafe.web3-unity/Runtime/Libraries
 cp *.dll ../../../../../../Packages/io.chainsafe.web3-unity/Runtime/Libraries
+cp *.pdb ../../../../../../Packages/io.chainsafe.web3-unity/Runtime/Libraries
 popd
 popd
 echo Done
