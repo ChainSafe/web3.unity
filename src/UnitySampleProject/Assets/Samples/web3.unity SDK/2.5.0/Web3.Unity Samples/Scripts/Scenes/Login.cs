@@ -43,7 +43,7 @@ namespace Scenes
             
                 web3Builder = ConfigureWeb3Services(web3Builder);
                 
-                web3 = await web3Builder.BuildAsync();
+                web3 = await web3Builder.LaunchAsync();
             }
             
             catch (Exception)

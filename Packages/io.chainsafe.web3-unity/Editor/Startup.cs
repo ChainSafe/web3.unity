@@ -28,24 +28,6 @@ namespace ChainSafe.GamingSdk.Editor
                     return;
                 }
 
-                var performSync = WebGLTemplateSync.CheckSyncStatus() switch
-                {
-                    WebGLTemplateSyncStatus.UpToDate => false,
-
-                    WebGLTemplateSyncStatus.DoesntExist =>
-                        EditorUtility.DisplayDialog("web3.unity", "Do you wish to install the web3.unity WebGL templates into your project?", "Yes", "No"),
-
-                    WebGLTemplateSyncStatus.OutOfDate =>
-                        EditorUtility.DisplayDialog("web3.unity", "The web3.unity WebGL templates in your project are out of date, would you like to update now?", "Yes", "No"),
-
-                    _ => false,
-                };
-
-                if (performSync)
-                {
-                    WebGLTemplateSync.Syncronize();
-                }
-
                 ValidateProjectID();
             };
         }
