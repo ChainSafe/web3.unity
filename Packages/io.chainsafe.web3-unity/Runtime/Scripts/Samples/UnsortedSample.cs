@@ -91,24 +91,6 @@ namespace Web3Unity.Scripts.Prefabs
             return await web3.RpcProvider.WaitForTransactionReceipt(transactionResponse.Hash);
         }
 
-        // todo weird one, needs explanation on how to interpret the response
-        public async Task<object[]> Mint721(string abi, string contractAddress, string uri)
-        {
-            const string method = "safeMint";
-            var destination = await web3.Signer.GetAddress();
-            var contract = web3.ContractBuilder.Build(abi, contractAddress);
-            return await contract.Send(method, new object[] { destination, uri });
-        }
-        
-        public async Task<object[]> Mint1155(string abi, string contractAddress, int id, int amount)
-        {
-            byte[] dataObject = { };
-            const string method = "mint";
-            var destination = await web3.Signer.GetAddress();
-            var contract = web3.ContractBuilder.Build(abi, contractAddress);
-            return await contract.Send(method, new object[] { destination, id, amount, dataObject });
-        }
-
         // ProviderEvent skipped
 
         public async Task<BigInteger> UseRegisteredContract(string contractName, string method)
@@ -164,62 +146,6 @@ namespace Web3Unity.Scripts.Prefabs
             var key = EthECKey.RecoverFromSignature(signature, msgHash);
 
             return key.GetPublicAddress() == playerAccount;
-        }
-
-        // todo danger - possible money loss
-        // todo not sure what is output
-        public async Task<object[]> TransferErc20(string contractAddress, string toAccount, string amount)
-        {
-            var abi = ABI.ERC_20;
-            var method = EthMethod.Transfer;
-            var contract = web3.ContractBuilder.Build(abi, contractAddress);
-
-            var response = await contract.Send(method, new object[]
-            {
-                toAccount,
-                amount
-            });
-
-            return response;
-        }
-
-        // todo not sure what is output
-        public async Task<object[]> TransferErc721(string contractAddress, string toAccount, int tokenId)
-        {
-            var abi = ABI.ERC_721;
-            var method = EthMethod.SafeTransferFrom;
-            var account = await web3.Signer.GetAddress();
-            var contract = web3.ContractBuilder.Build(abi, contractAddress);
-
-            var response = await contract.Send(method, new object[]
-            {
-                account,
-                toAccount,
-                tokenId.ToString()
-            });
-
-            return response;
-        }
-
-        // todo not sure what is output
-        public async Task<object[]> TransferErc1155(string contractAddress, int tokenId, int amount, string toAccount)
-        {
-            var account = await web3.Signer.GetAddress();
-            var abi = ABI.ERC_1155;
-            var method = EthMethod.SafeTransferFrom;
-            byte[] dataObject = { };
-
-            var contract = web3.ContractBuilder.Build(abi, contractAddress);
-            var response = await contract.Send(method, new object[]
-            {
-                account,
-                toAccount,
-                tokenId,
-                amount,
-                dataObject
-            });
-
-            return response;
         }
     }
 }

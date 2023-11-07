@@ -4,6 +4,7 @@ using System.Net;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3;
 using Newtonsoft.Json;
 using Scripts.EVM.Remote;
@@ -20,38 +21,17 @@ namespace Web3Unity.Scripts.Prefabs
 
     public class Erc1155Sample
     {
-        private readonly Web3 web3;
+        private Erc1155 erc1155;
 
         public Erc1155Sample(Web3 web3)
         {
-            this.web3 = web3;
+            erc1155 = new Erc1155(web3);
         }
-
-        public async Task<BigInteger> BalanceOf(string contract, string account, string tokenId)
-        {
-            return await Erc1155.BalanceOf(web3, contract, account, tokenId);
-        }
-
-        public async Task<List<BigInteger>> BalanceOfBatch(string contract, string[] accounts, string[] tokenIds)
-        {
-            return await Erc1155.BalanceOfBatch(web3, contract, accounts, tokenIds);
-        }
-
-        public async Task<string> Uri(string contract, string tokenId)
-        {
-            return await Erc1155.URI(web3, contract, tokenId);
-        }
-
-        public async Task<TokenResponse[]> All(string chain, string network, string account, string contract, int take, int skip)
-        {
-            return await CSServer.AllErc1155(web3, chain, network, account, contract, take, skip);
-        }
-
-        // todo move this out to a service
+        
         public async Task<Texture2D> ImportNftTexture(string contractAddress, string tokenId)
         {
             // fetch URI from blockchain
-            var uri = await Erc1155.URI(web3, contractAddress, tokenId);
+            var uri = await erc1155.Uri(contractAddress, tokenId);
 
             // fetch metaData from URI
             var metaData = await DownloadMetaData();

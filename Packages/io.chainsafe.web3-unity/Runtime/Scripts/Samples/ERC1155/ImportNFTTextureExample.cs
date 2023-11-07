@@ -6,18 +6,28 @@ namespace ChainSafe.Gaming.UnityPackage
 {
     public class ImportNFTTextureExample : MonoBehaviour
     {
+        // Response class
         public class Response
         {
             public string image;
         }
-
+        
+        // Fields
+        private Erc1155 erc1155;
+    
+        // Initializes the protocol class
+        public void Awake()
+        {
+            erc1155 = new Erc1155(Web3Accessor.Web3);
+        }
+        
         async void Start()
         {
             string contract = "0x0288B4F1389ED7b3d3f9C7B73d4408235c0CBbc6";
             string tokenId = "0";
 
             // fetch uri from chain
-            string uri = await Erc1155.URI(Web3Accessor.Web3, contract, tokenId);
+            string uri = await erc1155.Uri(contract, tokenId);
             print("uri: " + uri);
 
             // fetch json from uri

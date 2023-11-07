@@ -1,7 +1,15 @@
 using System.Collections.Generic;
+using System.Net;
 using System.Numerics;
+using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Web3;
+using Newtonsoft.Json;
+using Scripts.EVM.Remote;
+using UnityEngine;
+using UnityEngine.Networking;
+using Web3Unity.Scripts.Prefabs;
+using EthMethod = ChainSafe.Gaming.UnityPackage.EthMethod;
 
 namespace Scripts.EVM.Token
 {
@@ -9,16 +17,27 @@ namespace Scripts.EVM.Token
     public class Erc1155
     {
         private static readonly string Abi = ABI.Erc1155;
+        private Web3 web3;
+
+        public Erc1155(Web3 web3)
+        {
+            this.web3 = web3 ?? throw new Web3Exception(
+                "Web3 instance is null. Please ensure that the instance is properly retrieved trough the constructor");
+        }
+        
+        public async Task<TokenResponse[]> All(string chain, string network, string account, string contract, int take, int skip)
+        {
+            return await CSServer.AllErc1155(web3, chain, network, account, contract, take, skip);
+        }
 
         /// <summary>
         /// Balance of ERC1155 Token
         /// </summary>
-        /// <param name="web3"></param>
         /// <param name="contractAddress"></param>
         /// <param name="account"></param>
         /// <param name="tokenId"></param>
         /// <returns></returns>
-        public static async Task<BigInteger> BalanceOf(Web3 web3, string contractAddress, string account, string tokenId)
+        public async Task<BigInteger> BalanceOf(string contractAddress, string account, string tokenId)
         {
             var contract = web3.ContractBuilder.Build(Abi, contractAddress);
             var contractData = await contract.Call(CommonMethod.BalanceOf, new object[]
@@ -32,12 +51,11 @@ namespace Scripts.EVM.Token
         /// <summary>
         /// Balance of Batch ERC1155
         /// </summary>
-        /// <param name="web3"></param>
         /// <param name="contractAddress"></param>
         /// <param name="accounts"></param>
         /// <param name="tokenIds"></param>
         /// <returns></returns>
-        public static async Task<List<BigInteger>> BalanceOfBatch(Web3 web3, string contractAddress, string[] accounts, string[] tokenIds)
+        public async Task<List<BigInteger>> BalanceOfBatch(string contractAddress, string[] accounts, string[] tokenIds)
         {
             var contract = web3.ContractBuilder.Build(Abi, contractAddress);
             var contractData = await contract.Call(CommonMethod.BalanceOfBatch, new object[]
@@ -51,11 +69,10 @@ namespace Scripts.EVM.Token
         /// <summary>
         /// Token URI of ERC1155 Token
         /// </summary>
-        /// <param name="web3"></param>
         /// <param name="contractAddress"></param>
         /// <param name="tokenId"></param>
         /// <returns></returns>
-        public static async Task<string> URI(Web3 web3, string contractAddress, string tokenId)
+        public async Task<string> Uri(string contractAddress, string tokenId)
         {
             const string ipfsPath = "https://ipfs.io/ipfs/";
             var contract = web3.ContractBuilder.Build(Abi, contractAddress);
@@ -71,5 +88,31 @@ namespace Scripts.EVM.Token
             return contractData[0].ToString();
         }
 
+        public async Task<object[]> MintErc1155(string abi, string contractAddress, int id, int amount)
+        {
+            byte[] dataObject = { };
+            const string method = "mint";
+            var destination = await web3.Signer.GetAddress();
+            var contract = web3.ContractBuilder.Build(abi, contractAddress);
+            return await contract.Send(method, new object[] { destination, id, amount, dataObject });
+        }
+        
+        public async Task<object[]> TransferErc1155(string contractAddress, int tokenId, int amount, string toAccount)
+        {
+            var account = await web3.Signer.GetAddress();
+            var abi = ABI.Erc1155;
+            var method = EthMethod.SafeTransferFrom;
+            byte[] dataObject = { };
+            var contract = web3.ContractBuilder.Build(abi, contractAddress);
+            var response = await contract.Send(method, new object[]
+            {
+                account,
+                toAccount,
+                tokenId,
+                amount,
+                dataObject
+            });
+            return response;
+        }
     }
 }
