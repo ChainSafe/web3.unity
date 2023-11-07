@@ -56,15 +56,7 @@ namespace Scenes
 
             LoginSceneIndex = SceneManager.GetActiveScene().buildIndex;
             
-            // Checks if the user has removed the main scene from the build settings, allows for other packages like loot boxes to be tested with the login scene
-            if (SceneManager.GetSceneByBuildIndex(1).name != MainSceneName)
-            {
-                SceneManager.LoadScene(1);
-            }
-            else
-            {
-                SceneManager.LoadScene(MainSceneName);
-            }
+            SceneManager.LoadScene(MainSceneName);
         }
 
         private void ConfigureCommonServices(IWeb3ServiceCollection services)
