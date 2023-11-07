@@ -5,6 +5,7 @@ using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Unity;
 using NUnit.Framework;
+using Scripts.EVM.Token;
 using UnityEngine;
 using UnityEngine.TestTools;
 
@@ -12,7 +13,7 @@ public class Erc20Tests
 {
     private const string Account = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
     private const string ContractAddress = "0x3E0C0447e47d49195fbE329265E330643eB42e6f";
-    private Erc20Sample _logic;
+    private Erc20 _logic;
 
     [UnitySetUp]
     public IEnumerator Setup()
@@ -39,14 +40,12 @@ public class Erc20Tests
 
         //wait until for async task to finish
         yield return new WaitUntil(() => buildWeb3.IsCompleted);
-
-        _logic = new Erc20Sample(buildWeb3.Result);
     }
 
     [UnityTest]
     public IEnumerator TestBalanceOf()
     {
-        var getBalanceOf = _logic.BalanceOf(ContractAddress, Account);
+        var getBalanceOf = Erc20.BalanceOf(ContractAddress, Account);
         yield return new WaitUntil(() => getBalanceOf.IsCompleted);
 
         Assert.AreEqual(new BigInteger(new byte[]
@@ -58,7 +57,7 @@ public class Erc20Tests
     [UnityTest]
     public IEnumerator TestDecimals()
     {
-        var getDecimals = _logic.Decimals(ContractAddress);
+        var getDecimals = Erc20.Decimals(ContractAddress);
         yield return new WaitUntil(() => getDecimals.IsCompleted);
 
         Assert.AreEqual(new BigInteger(18), getDecimals.Result);
@@ -67,7 +66,7 @@ public class Erc20Tests
     [UnityTest]
     public IEnumerator TestName()
     {
-        var getName = _logic.Name(ContractAddress);
+        var getName = Erc20.Name(ContractAddress);
         yield return new WaitUntil(() => getName.IsCompleted);
 
         Assert.AreEqual("ChainToken", getName.Result);
@@ -76,7 +75,7 @@ public class Erc20Tests
     [UnityTest]
     public IEnumerator TestNativeBalanceOf()
     {
-        var getNativeBalanceOf = _logic.NativeBalanceOf(Account);
+        var getNativeBalanceOf = Erc20.NativeBalanceOf(Account);
 
         yield return new WaitUntil(() => getNativeBalanceOf.IsCompleted);
 
@@ -90,7 +89,7 @@ public class Erc20Tests
     [UnityTest]
     public IEnumerator TestSymbol()
     {
-        var getSymbol = _logic.Symbol(ContractAddress);
+        var getSymbol = Erc20.Symbol(ContractAddress);
 
         yield return new WaitUntil(() => getSymbol.IsCompleted);
 
@@ -100,7 +99,7 @@ public class Erc20Tests
     [UnityTest]
     public IEnumerator TestTotalSupply()
     {
-        var getTotalSupply = _logic.TotalSupply(ContractAddress);
+        var getTotalSupply = Erc20.TotalSupply(ContractAddress);
 
         yield return new WaitUntil(() => getTotalSupply.IsCompleted);
 
