@@ -3,19 +3,15 @@ name: Merge Checks
 on:
   pull_request:
     branches: [ main ]
+    types:
+      - labeled
+      - ready_for_review
 
 jobs:
-  duplicate_samples:
-    name: Duplicate Samples
-    uses: ChainSafe/web3.unity/.github/workflows/duplicate_samples.yml@main
-  publish_dependencies:
-    name: Publish Dependencies
-    uses: ChainSafe/web3.unity/.github/workflows/publish_dependencies.yml@main
-    needs: [duplicate_samples]
   web3_tests:
     name: Web3 Tests
+    if: ${{ github.event.action == 'ready_for_review' || github.event.label.name == 'ready-to-merge'}}
     uses: ChainSafe/web3.unity/.github/workflows/test.yaml@main
-    needs: [publish_dependencies]
   unity_tests:
     name: Unity Tests
     uses: ChainSafe/web3.unity/.github/workflows/unity_tests.yml@main
