@@ -105,5 +105,25 @@ namespace Scripts.EVM.Token
             var totalSupply = await contract.Call(CommonMethod.TotalSupply);
             return BigInteger.Parse(totalSupply[0].ToString());
         }
+
+        /// <summary>
+        /// Transfers ERC20 Tokens
+        /// </summary>
+        /// <param name="contractAddress"></param>
+        /// <param name="toAccount"></param>
+        /// <param name="amount"></param>
+        /// <returns></returns>
+        public async Task<object[]> TransferErc20(string contractAddress, string toAccount, string amount)
+        {
+            var abi = ABI.Erc20;
+            var method = EthMethod.Transfer;
+            var contract = web3.ContractBuilder.Build(abi, contractAddress);
+            var response = await contract.Send(method, new object[]
+            {
+                toAccount,
+                amount
+            });
+            return response;
+        }
     }
 }

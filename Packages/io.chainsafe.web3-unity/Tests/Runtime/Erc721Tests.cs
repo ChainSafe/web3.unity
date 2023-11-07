@@ -7,6 +7,7 @@ using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Unity;
 using NUnit.Framework;
+using Scripts.EVM.Token;
 using UnityEngine;
 using UnityEngine.TestTools;
 using Web3Unity.Scripts.Prefabs;
@@ -32,7 +33,7 @@ public class Erc721Tests
 
     private const string uriContractAddress = "0x06dc21f89f01409e7ed0e4c80eae1430962ae52c";
     private const string uriTokenId = "0x01559ae4021a565d5cc4740f1cefa95de8c1fb193949ecd32c337b03047da501";
-    private Erc721Sample _logic;
+    private Erc721 erc721;
 
     private const string NftTextureContractAddress = "0x0288B4F1389ED7b3d3f9C7B73d4408235c0CBbc6";
 
@@ -72,13 +73,13 @@ public class Erc721Tests
         //wait until for async task to finish
         yield return new WaitUntil(() => buildWeb3.IsCompleted);
 
-        _logic = new Erc721Sample(buildWeb3.Result);
+        erc721 = new Erc721(buildWeb3.Result);
     }
 
     [UnityTest]
     public IEnumerator TestBalanceOf()
     {
-        var getBalanceOf = _logic.BalanceOf(balanceOfContractAddress, balanceOfAccount);
+        var getBalanceOf = erc721.BalanceOf(balanceOfContractAddress, balanceOfAccount);
         yield return new WaitUntil(() => getBalanceOf.IsCompleted);
 
         Assert.AreEqual(2, getBalanceOf.Result);
@@ -87,7 +88,7 @@ public class Erc721Tests
     [UnityTest]
     public IEnumerator TestOwnerOf()
     {
-        var getOwnerOf = _logic.OwnerOf(ownerOfContractAddress, ownerOfTokenId);
+        var getOwnerOf = erc721.OwnerOf(ownerOfContractAddress, ownerOfTokenId);
         yield return new WaitUntil(() => getOwnerOf.IsCompleted);
 
         Assert.AreEqual(ownerOfExpected, getOwnerOf.Result);
@@ -96,7 +97,7 @@ public class Erc721Tests
     [UnityTest]
     public IEnumerator TestOwnerOfBatch()
     {
-        var getOwnerOfBatch = _logic.OwnerOfBatch(ownerOfBatchContractAddress, ownerOfBatchTokenIds, multicall);
+        var getOwnerOfBatch = erc721.OwnerOfBatch(ownerOfBatchContractAddress, ownerOfBatchTokenIds, multicall);
         yield return new WaitUntil(() => getOwnerOfBatch.IsCompleted);
 
         CollectionAssert.AreEqual(ownerOfBatchExpected, getOwnerOfBatch.Result);
@@ -108,7 +109,7 @@ public class Erc721Tests
     [UnityTest]
     public IEnumerator TestUri()
     {
-        var uri = _logic.Uri(uriContractAddress, uriTokenId);
+        var uri = erc721.Uri(uriContractAddress, uriTokenId);
         yield return new WaitUntil(() => uri.IsCompleted);
         Assert.AreEqual(ExpectedUriResult, uri.Result);
     }

@@ -87,4 +87,17 @@ public class Erc20Calls : MonoBehaviour
         var result = await erc20.TotalSupply(contractAddress);
         SampleOutputUtil.PrintResult(result.ToString(), nameof(Erc20), nameof(Erc20.TotalSupply));
     }
+    
+    /// <summary>
+    /// Transfers an ERC20 Token
+    /// </summary>
+    public async void TransferErc20()
+    {
+        string contractAddress = "0xc778417e063141139fce010982780140aa0cd5ab";
+        string toAccount = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
+        string amount = "1000000000000000"; // todo to double representing one unit of currency
+        var response = await erc20.TransferErc20(contractAddress, toAccount, amount);
+        var output = SampleOutputUtil.BuildOutputValue(response);
+        SampleOutputUtil.PrintResult(output, nameof(Erc20), nameof(Erc20.TransferErc20));
+    }
 }
