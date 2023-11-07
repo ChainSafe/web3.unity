@@ -10,7 +10,6 @@ namespace Scripts.EVM.Token
     {
         private static readonly string Abi = ABI.Erc20;
         private Web3 web3;
-        private bool isWeb3Initialized;
 
         public Erc20(Web3 web3)
         {
@@ -21,7 +20,6 @@ namespace Scripts.EVM.Token
         /// <summary>
         /// Balance Of ERC20 Address
         /// </summary>
-        /// <param name="web3"></param>
         /// <param name="contractAddress"></param>
         /// <param name="account"></param>
         /// <returns></returns>
@@ -63,7 +61,6 @@ namespace Scripts.EVM.Token
         /// <summary>
         /// Name of ERC20 Token
         /// </summary>
-        /// <param name="web3"></param>
         /// <param name="contractAddress"></param>
         /// <returns></returns>
         public async Task<string> Name(string contractAddress)
@@ -76,7 +73,6 @@ namespace Scripts.EVM.Token
         /// <summary>
         /// Symbol of ERC20 Token
         /// </summary>
-        /// <param name="web3"></param>
         /// <param name="contractAddress"></param>
         /// <returns></returns>
         public async Task<string> Symbol(string contractAddress)
@@ -89,7 +85,6 @@ namespace Scripts.EVM.Token
         /// <summary>
         /// Decimals of ERC20 Token
         /// </summary>
-        /// <param name="web3"></param>
         /// <param name="contractAddress"></param>
         /// <returns></returns>
         public async Task<BigInteger> Decimals(string contractAddress)
@@ -102,7 +97,6 @@ namespace Scripts.EVM.Token
         /// <summary>
         /// Total Supply of ERC20 Token
         /// </summary>
-        /// <param name="web3"></param>
         /// <param name="contractAddress"></param>
         /// <returns></returns>
         public async Task<BigInteger> TotalSupply(string contractAddress)
