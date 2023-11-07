@@ -49,7 +49,7 @@ namespace LootBoxes.Chainlink
                     });
                     services.AddSingleton<Erc1155MetaDataReader>();
                 })
-                .BuildAsync();
+                .LaunchAsync();
 
             lootBoxScene.Configure(
                 web3.Chainlink().Lootboxes(),

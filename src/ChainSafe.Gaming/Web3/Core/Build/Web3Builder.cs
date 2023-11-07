@@ -84,7 +84,7 @@ namespace ChainSafe.Gaming.Web3.Build
         /// Build <see cref="Web3"/> object using the settings provided by this Web3Builder object.
         /// </summary>
         /// <returns><see cref="Web3"/> object.</returns>
-        public async ValueTask<Web3> BuildAsync()
+        public async ValueTask<Web3> LaunchAsync()
         {
             var serviceProvider = serviceCollection.BuildServiceProvider();
             AssertWeb3EnvironmentBound(serviceProvider);
