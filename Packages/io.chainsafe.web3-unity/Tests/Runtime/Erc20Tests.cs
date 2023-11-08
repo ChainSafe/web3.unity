@@ -10,7 +10,7 @@ using Scripts.EVM.Token;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-public class Erc20Tests : SampleTestsBase
+public class Erc20Tests
 {
     // Fields
     #region Contract Calls
@@ -27,10 +27,11 @@ public class Erc20Tests : SampleTestsBase
 
     #endregion
     
+    private WalletConnectConfig config;
     private Erc20 erc20;
 
     [UnitySetUp]
-    public override IEnumerator Setup()
+    public IEnumerator Setup()
     {
         //wait for some time to initialize
         yield return new WaitForSeconds(5f);

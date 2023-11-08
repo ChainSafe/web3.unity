@@ -13,7 +13,7 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using Web3Unity.Scripts.Prefabs;
 
-public class Erc721Tests : SampleTestsBase
+public class Erc721Tests
 {
     // Fields
     #region Balances
@@ -63,6 +63,7 @@ public class Erc721Tests : SampleTestsBase
 
     #endregion
     
+    private WalletConnectConfig config;
     private Erc721 erc721;
 
     private const string NftTextureContractAddress = "0x0288B4F1389ED7b3d3f9C7B73d4408235c0CBbc6";
@@ -79,7 +80,7 @@ public class Erc721Tests : SampleTestsBase
     #endregion
 
     [UnitySetUp]
-    public override IEnumerator Setup()
+    public IEnumerator Setup()
     {
         //wait for some time to initialize
         yield return new WaitForSeconds(5f);

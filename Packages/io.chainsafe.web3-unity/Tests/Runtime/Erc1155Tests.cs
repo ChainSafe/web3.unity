@@ -11,7 +11,7 @@ using Scripts.EVM.Token;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-public class Erc1155Tests : SampleTestsBase
+public class Erc1155Tests
 {
     // Fields
     #region Balances
@@ -43,6 +43,8 @@ public class Erc1155Tests : SampleTestsBase
     private const string NftTextureContractAddress = "0x0288B4F1389ED7b3d3f9C7B73d4408235c0CBbc6";
 
     #endregion
+
+    private WalletConnectConfig config;
     private Erc1155 erc1155;
 
     #region Indexer Test Parameters
@@ -57,7 +59,7 @@ public class Erc1155Tests : SampleTestsBase
     #endregion
 
     [UnitySetUp]
-    public override IEnumerator Setup()
+    public IEnumerator Setup()
     {
         //wait for some time to initialize
         yield return new WaitForSeconds(5f);
