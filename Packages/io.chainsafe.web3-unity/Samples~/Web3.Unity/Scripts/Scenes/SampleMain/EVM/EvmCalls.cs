@@ -204,23 +204,20 @@ public class EvmCalls : MonoBehaviour
     
     public void PrivateKeySignTransaction()
     {
-        var signatureVerified = Evm.PrivateKeySignTransaction(privateKey, transactionHash, chainId);
-        var output = Convert.ToBoolean(signatureVerified) ? "Verified" : "Failed to verify";
-        SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.PrivateKeySignTransaction));
+        var result = Evm.PrivateKeySignTransaction(privateKey, transactionHash, chainId);
+        SampleOutputUtil.PrintResult(result, nameof(Evm), nameof(Evm.PrivateKeySignTransaction));
     }
     
     public void PrivateKeySignMessage()
     {
-        var signatureVerified = Evm.PrivateKeySignMessage(privateKey, messagePrivateKey);
-        var output = Convert.ToBoolean(signatureVerified) ? "Verified" : "Failed to verify";
-        SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.PrivateKeySignMessage));
+        var result = Evm.PrivateKeySignMessage(privateKey, messagePrivateKey);
+        SampleOutputUtil.PrintResult(result, nameof(Evm), nameof(Evm.PrivateKeySignMessage));
     }
     
     public void PrivateKeyGetAddress()
     {
-        var signatureVerified = Evm.PrivateKeyGetAddress(privateKey);
-        var output = Convert.ToBoolean(signatureVerified) ? "Verified" : "Failed to verify";
-        SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.PrivateKeyGetAddress));
+        var result = Evm.PrivateKeyGetAddress(privateKey);
+        SampleOutputUtil.PrintResult(result, nameof(Evm), nameof(Evm.PrivateKeyGetAddress));
     }
     
     public async void IPFSUpload()
