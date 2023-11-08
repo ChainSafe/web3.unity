@@ -37,11 +37,25 @@ namespace Scripts.EVM.Token
         /// <returns></returns>
         public static async Task<string> OwnerOf(Web3 web3, string contractAddress, string tokenId)
         {
+            return await OwnerOf(web3, contractAddress, new object[] { tokenId, });
+        }
+        
+        /// <summary>
+        /// Owner Of ERC721 Token
+        /// </summary>
+        /// <param name="web3"></param>
+        /// <param name="contractAddress"></param>
+        /// <param name="tokenId"></param>
+        /// <returns></returns>
+        public static async Task<string> OwnerOf(Web3 web3, string contractAddress, int tokenId)
+        {
+            return await OwnerOf(web3, contractAddress, new object[] { tokenId, });
+        }
+        
+        private static async Task<string> OwnerOf(Web3 web3, string contractAddress, object[] parameters)
+        {
             var method = CommonMethod.OwnerOf;
             var contract = web3.ContractBuilder.Build(_abi, contractAddress);
-
-            object[] parameters = tokenId.StartsWith("0x") ? 
-                new object[] { tokenId, } : new object[] { int.Parse(tokenId), };
 
             var contractData = await contract.Call(method, parameters);
             return contractData[0].ToString();
