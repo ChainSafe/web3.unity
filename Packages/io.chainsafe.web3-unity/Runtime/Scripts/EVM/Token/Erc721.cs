@@ -8,25 +8,34 @@ using UnityEngine;
 
 namespace Scripts.EVM.Token
 {
-    // todo convert this into a service
     public class Erc721
     {
         private static string _abi = ABI.Erc721;
-        private Web3 web3;
-
-        public Erc721(Web3 web3)
+        
+        /// <summary>
+        /// Fetches all 721 Nfts from an account
+        /// </summary>
+        /// <param name="web3"></param>
+        /// <param name="chain"></param>
+        /// <param name="network"></param>
+        /// <param name="account"></param>
+        /// <param name="contract"></param>
+        /// <param name="take"></param>
+        /// <param name="skip"></param>
+        /// <returns></returns>
+        public static async Task<TokenResponse[]> AllErc721(Web3 web3, string chain, string network, string account, string contract, int take, int skip)
         {
-            this.web3 = web3 ?? throw new Web3Exception(
-                "Web3 instance is null. Please ensure that the instance is properly retrieved trough the constructor");
+            return await CSServer.AllErc721(web3, chain, network, account, contract, take, skip);
         }
         
         /// <summary>
         /// Balance Of ERC721 Token
         /// </summary>
+        /// <param name="web3"></param>
         /// <param name="contractAddress"></param>
         /// <param name="account"></param>
         /// <returns></returns>
-        public async Task<int> BalanceOf(string contractAddress, string account)
+        public static async Task<int> BalanceOf(Web3 web3, string contractAddress, string account)
         {
             var contract = web3.ContractBuilder.Build(_abi, contractAddress);
             var contractData = await contract.Call(CommonMethod.BalanceOf, new object[]
@@ -35,19 +44,15 @@ namespace Scripts.EVM.Token
             });
             return int.Parse(contractData[0].ToString());
         }
-        
-        public async Task<TokenResponse[]> All(string chain, string network, string account, string contract, int take, int skip)
-        {
-            return await CSServer.AllErc721(web3, chain, network, account, contract, take, skip);
-        }
 
         /// <summary>
         /// Owner Of ERC721 Token
         /// </summary>
+        /// <param name="web3"></param>
         /// <param name="contractAddress"></param>
         /// <param name="tokenId"></param>
         /// <returns></returns>
-        public async Task<string> OwnerOf(string contractAddress, string tokenId)
+        public static async Task<string> OwnerOf(Web3 web3, string contractAddress, string tokenId)
         {
             var method = CommonMethod.OwnerOf;
             var contract = web3.ContractBuilder.Build(_abi, contractAddress);
@@ -61,11 +66,13 @@ namespace Scripts.EVM.Token
         /// <summary>
         /// Owner Of Batch ERC721 Token
         /// </summary>
+        /// <param name="web3"></param>
         /// <param name="contractAddress"></param>
         /// <param name="tokenIds"></param>
         /// <param name="multicall"></param>
         /// <returns></returns>
-        public async Task<List<string>> OwnerOfBatch(
+        public static async Task<List<string>> OwnerOfBatch(
+            Web3 web3,
             string contractAddress,
             string[] tokenIds,
             string multicall = "")
@@ -105,10 +112,11 @@ namespace Scripts.EVM.Token
         /// <summary>
         /// Token URI Of ERC721 Token
         /// </summary>
+        /// <param name="web3"></param>
         /// <param name="contractAddress"></param>
         /// <param name="tokenId"></param>
         /// <returns></returns>
-        public async Task<string> Uri(string contractAddress, string tokenId)
+        public static async Task<string> Uri(Web3 web3, string contractAddress, string tokenId)
         {
             const string ipfsPath = "https://ipfs.io/ipfs/";
             var contract = web3.ContractBuilder.Build(_abi, contractAddress);
@@ -128,19 +136,28 @@ namespace Scripts.EVM.Token
         /// <summary>
         /// Mints ERC721 token
         /// </summary>
+        /// <param name="web3"></param>
         /// <param name="abi"></param>
         /// <param name="contractAddress"></param>
         /// <param name="uri"></param>
         /// <returns></returns>
-        public async Task<object[]> MintErc721(string abi, string contractAddress, string uri)
+        public static async Task<object[]> MintErc721(Web3 web3, string abi, string contractAddress, string uri)
         {
             const string method = "safeMint";
             var destination = await web3.Signer.GetAddress();
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
             return await contract.Send(method, new object[] { destination, uri });
         }
-
-        public async Task<object[]> TransferErc721(string contractAddress, string toAccount, int tokenId)
+        
+        /// <summary>
+        /// Transfers ERC721 token
+        /// </summary>
+        /// <param name="web3"></param>
+        /// <param name="contractAddress"></param>
+        /// <param name="toAccount"></param>
+        /// <param name="tokenId"></param>
+        /// <returns></returns>
+        public static async Task<object[]> TransferErc721(Web3 web3, string contractAddress, string toAccount, int tokenId)
         {
             var abi = ABI.Erc721;
             var method = EthMethod.SafeTransferFrom;

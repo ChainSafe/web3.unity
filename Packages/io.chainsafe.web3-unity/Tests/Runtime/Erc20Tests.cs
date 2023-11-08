@@ -3,6 +3,7 @@ using System.Numerics;
 using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.WalletConnect;
+using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Unity;
 using NUnit.Framework;
@@ -26,9 +27,9 @@ public class Erc20Tests
     private const string SendToAddress = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
 
     #endregion
-    
+
+    private Web3 web3;
     private WalletConnectConfig config;
-    private Erc20 erc20;
 
     [UnitySetUp]
     public IEnumerator Setup()
@@ -62,13 +63,13 @@ public class Erc20Tests
         //wait until for async task to finish
         yield return new WaitUntil(() => buildWeb3.IsCompleted);
 
-        erc20 = new Erc20(buildWeb3.Result);
+        web3 = buildWeb3.Result;
     }
 
     [UnityTest]
     public IEnumerator TestBalanceOf()
     {
-        var getBalanceOf = erc20.BalanceOf(ContractAddress, Account);
+        var getBalanceOf = Erc20.BalanceOf(web3, ContractAddress, Account);
         yield return new WaitUntil(() => getBalanceOf.IsCompleted);
 
         Assert.AreEqual(new BigInteger(new byte[]
@@ -80,7 +81,7 @@ public class Erc20Tests
     [UnityTest]
     public IEnumerator TestDecimals()
     {
-        var getDecimals = erc20.Decimals(ContractAddress);
+        var getDecimals = Erc20.Decimals(web3, ContractAddress);
         yield return new WaitUntil(() => getDecimals.IsCompleted);
 
         Assert.AreEqual(new BigInteger(18), getDecimals.Result);
@@ -89,7 +90,7 @@ public class Erc20Tests
     [UnityTest]
     public IEnumerator TestName()
     {
-        var getName = erc20.Name(ContractAddress);
+        var getName = Erc20.Name(web3, ContractAddress);
         yield return new WaitUntil(() => getName.IsCompleted);
 
         Assert.AreEqual("ChainToken", getName.Result);
@@ -98,7 +99,7 @@ public class Erc20Tests
     [UnityTest]
     public IEnumerator TestNativeBalanceOf()
     {
-        var getNativeBalanceOf = erc20.NativeBalanceOf(Account);
+        var getNativeBalanceOf = Erc20.NativeBalanceOf(web3, Account);
 
         yield return new WaitUntil(() => getNativeBalanceOf.IsCompleted);
 
@@ -112,7 +113,7 @@ public class Erc20Tests
     [UnityTest]
     public IEnumerator TestSymbol()
     {
-        var getSymbol = erc20.Symbol(ContractAddress);
+        var getSymbol = Erc20.Symbol(web3, ContractAddress);
 
         yield return new WaitUntil(() => getSymbol.IsCompleted);
 
@@ -122,7 +123,7 @@ public class Erc20Tests
     [UnityTest]
     public IEnumerator TestTotalSupply()
     {
-        var getTotalSupply = erc20.TotalSupply(ContractAddress);
+        var getTotalSupply = Erc20.TotalSupply(web3, ContractAddress);
 
         yield return new WaitUntil(() => getTotalSupply.IsCompleted);
 
@@ -137,7 +138,7 @@ public class Erc20Tests
     {
         config.TestResponse = "0xba90b6fb8cbee5fd0ad423cc74bb4a365bb88b260601933aac86b947945c5465";
 
-        var transferErc20 = erc20.TransferErc20(TransferErc20ContractAddress, SendToAddress, "1000000000000000");
+        var transferErc20 = Erc20.TransferErc20(web3, TransferErc20ContractAddress, SendToAddress, "1000000000000000");
 
         yield return new WaitUntil(() => transferErc20.IsCompleted);
 

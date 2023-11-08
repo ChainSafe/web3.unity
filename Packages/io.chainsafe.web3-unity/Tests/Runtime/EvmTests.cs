@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using NUnit.Framework;
@@ -6,7 +6,7 @@ using Scripts.EVM.Token;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-public class MiscTests : SampleTestsBase
+public class EvmTests : SampleTestsBase
 {
     #region ContractCalls
 

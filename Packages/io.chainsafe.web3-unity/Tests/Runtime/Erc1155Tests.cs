@@ -4,6 +4,7 @@ using System.Numerics;
 using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.WalletConnect;
+using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Unity;
 using NUnit.Framework;
@@ -45,7 +46,7 @@ public class Erc1155Tests
     #endregion
 
     private WalletConnectConfig config;
-    private Erc1155 erc1155;
+    private Web3 web3;
 
     #region Indexer Test Parameters
 
@@ -89,13 +90,13 @@ public class Erc1155Tests
         //wait until for async task to finish
         yield return new WaitUntil(() => buildWeb3.IsCompleted);
 
-        erc1155 = new Erc1155(buildWeb3.Result);
+        web3 = buildWeb3.Result;
     }
 
     [UnityTest]
     public IEnumerator TestBalanceOf()
     {
-        var getBalanceOf = erc1155.BalanceOf(ContractAddress, _accounts[0], _tokenIds[0]);
+        var getBalanceOf = Erc1155.BalanceOf(web3, ContractAddress, _accounts[0], _tokenIds[0]);
         yield return new WaitUntil(() => getBalanceOf.IsCompleted);
 
         Assert.AreEqual(new BigInteger(2), getBalanceOf.Result);
@@ -104,7 +105,7 @@ public class Erc1155Tests
     [UnityTest]
     public IEnumerator TestBalanceOfBatch()
     {
-        var getBalanceOf = erc1155.BalanceOfBatch(ContractAddress, _accounts, _tokenIds);
+        var getBalanceOf = Erc1155.BalanceOfBatch(web3, ContractAddress, _accounts, _tokenIds);
         yield return new WaitUntil(() => getBalanceOf.IsCompleted);
         CollectionAssert.AreEqual(new List<BigInteger> { 2, 0 }, getBalanceOf.Result);
     }
@@ -115,7 +116,7 @@ public class Erc1155Tests
     [UnityTest]
     public IEnumerator TestUri()
     {
-        var uri = erc1155.Uri(ContractAddress, _tokenIds[0]);
+        var uri = Erc1155.Uri(web3, ContractAddress, _tokenIds[0]);
         yield return new WaitUntil(() => uri.IsCompleted);
         Assert.AreEqual(ExpectedUriResult, uri.Result);
     }
@@ -139,7 +140,7 @@ public class Erc1155Tests
     {
         config.TestResponse = "0xd3027fbfd9d5ddb5ea0ef75f5b128581d9268ad67728d150657f915c8910f9f0";
 
-        var mint1155 = erc1155.MintErc1155(Mint1155Abi, Mint1155Address, Mint1155Id, Mint1155Amount);
+        var mint1155 = Erc1155.MintErc1155(web3, Mint1155Abi, Mint1155Address, Mint1155Id, Mint1155Amount);
 
         yield return new WaitUntil(() => mint1155.IsCompleted);
 
@@ -155,7 +156,7 @@ public class Erc1155Tests
     {
         config.TestResponse = "0xb018a043ac0affe05159a53daa8656dbbad61c839eaf89622d7813226f222876";
 
-        var transferErc1155 = erc1155.TransferErc1155(TransferErc1155ContractAddress, 101, 1, SendToAddress);
+        var transferErc1155 = Erc1155.TransferErc1155(web3, TransferErc1155ContractAddress, 101, 1, SendToAddress);
 
         yield return new WaitUntil(() => transferErc1155.IsCompleted);
 
@@ -227,7 +228,7 @@ public class Erc1155Tests
         };
 
         #endregion
-        var texture = erc1155.ImportNftTexture1155(NftTextureContractAddress, "0");
+        var texture = Erc1155.ImportNftTexture1155(web3, NftTextureContractAddress, "0");
         yield return new WaitUntil(() => texture.IsCompleted);
         CollectionAssert.AreEqual(bytesOfTheTexture, texture.Result.EncodeToJPG(1));
     }

@@ -70,22 +70,14 @@ public class Erc721Calls : MonoBehaviour
 
     #endregion
     
-    private Erc721 erc721;
-    
-    // Initializes the protocol class
-    public void Awake()
-    {
-        erc721 = new Erc721(Web3Accessor.Web3);
-    }
-    
     /// <summary>
     /// All ERC 721 tokens belonging to an address
     /// </summary>
     public async void AllErc721()
     {
-        var allNfts = await erc721.All(chainAllErc, networkAllErc, accountAllErc, contractAllErc, takeAllErc, skipAllErc);
+        var allNfts = await Erc721.AllErc721(Web3Accessor.Web3, chainAllErc, networkAllErc, accountAllErc, contractAllErc, takeAllErc, skipAllErc);
         var output = string.Join(",\n", allNfts.Select(nft => $"{nft.TokenId} - {nft.Uri}"));
-        SampleOutputUtil.PrintResult(output, nameof(Erc721), nameof(Erc721.All));
+        SampleOutputUtil.PrintResult(output, nameof(Erc721), nameof(Erc721.AllErc721));
     }
     
     /// <summary>
@@ -93,7 +85,7 @@ public class Erc721Calls : MonoBehaviour
     /// </summary>
     public async void BalanceOf()
     {
-        var balance = await erc721.BalanceOf(contractBalanceOf, accountBalanceOf);
+        var balance = await Erc721.BalanceOf(Web3Accessor.Web3, contractBalanceOf, accountBalanceOf);
         SampleOutputUtil.PrintResult(balance.ToString(), nameof(Erc721), nameof(Erc721.BalanceOf));
     }
     
@@ -102,7 +94,7 @@ public class Erc721Calls : MonoBehaviour
     /// </summary>
     public async void OwnerOf()
     {
-        var owner = await erc721.OwnerOf(contractOwnerOf, tokenIdOwnerOf);
+        var owner = await Erc721.OwnerOf(Web3Accessor.Web3, contractOwnerOf, tokenIdOwnerOf);
         SampleOutputUtil.PrintResult(owner, nameof(Erc721), nameof(Erc721.OwnerOf));
     }
     
@@ -111,7 +103,7 @@ public class Erc721Calls : MonoBehaviour
     /// </summary>
     public async void OwnerOfBatch()
     {
-        var owners = await erc721.OwnerOfBatch(contractOwnerOfBatch, tokenIdsOwnerOfBatch.ToArray(), multicallOwnerOfBatch);
+        var owners = await Erc721.OwnerOfBatch(Web3Accessor.Web3, contractOwnerOfBatch, tokenIdsOwnerOfBatch.ToArray(), multicallOwnerOfBatch);
         var ownersString = $"{owners.Count} owner(s):\n" + string.Join(",\n", owners);
         SampleOutputUtil.PrintResult(ownersString, nameof(Erc721), nameof(Erc721.OwnerOfBatch));
     }
@@ -121,7 +113,7 @@ public class Erc721Calls : MonoBehaviour
     /// </summary>
     public async void Uri()
     {
-        var uri = await erc721.Uri(contractUri, tokenIdUri);
+        var uri = await Erc721.Uri(Web3Accessor.Web3, contractUri, tokenIdUri);
         SampleOutputUtil.PrintResult(uri, nameof(Erc721), nameof(Erc721.Uri));
     }
     
@@ -130,7 +122,7 @@ public class Erc721Calls : MonoBehaviour
     /// </summary>
     public async void MintErc721()
     {
-        var response = await erc721.MintErc721(abiMint, contractMint, uriMint);
+        var response = await Erc721.MintErc721(Web3Accessor.Web3, abiMint, contractMint, uriMint);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Erc721), nameof(Erc721.MintErc721));
     }
@@ -140,7 +132,7 @@ public class Erc721Calls : MonoBehaviour
     /// </summary>
     public async void TransferErc721()
     {
-        var response = await erc721.TransferErc721(contractTransfer, toAccountTransfer, tokenIdTransfer);
+        var response = await Erc721.TransferErc721(Web3Accessor.Web3, contractTransfer, toAccountTransfer, tokenIdTransfer);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Erc721), nameof(Erc721.TransferErc721));
     }
