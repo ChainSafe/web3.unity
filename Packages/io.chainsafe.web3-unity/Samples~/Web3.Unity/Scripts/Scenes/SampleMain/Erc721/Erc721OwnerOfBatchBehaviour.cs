@@ -9,7 +9,7 @@ namespace Samples.Behaviours.Erc721
     public class Erc721OwnerOfBatchBehaviour : SampleBehaviour
     {
         public string contractAddress = "0x47381c5c948254e6e0E324F1AA54b7B24104D92D";
-        public List<string> tokenIds = new() { "33", "29" };
+        public string[] tokenIds = { "33", "29" };
 
         [Header("Optional")]
         // optional: multicall contract https://github.com/makerdao/multicall
@@ -25,7 +25,7 @@ namespace Samples.Behaviours.Erc721
 
         protected override async Task ExecuteSample()
         {
-            var owners = await logic.OwnerOfBatch(contractAddress, tokenIds.ToArray(), multicall);
+            var owners = await logic.OwnerOfBatch(contractAddress, tokenIds, multicall);
             var ownersString = $"{owners.Count} owner(s):\n" + string.Join(",\n", owners);
             SampleOutputUtil.PrintResult(ownersString, nameof(Erc721Sample), nameof(Erc721Sample.OwnerOfBatch));
         }
