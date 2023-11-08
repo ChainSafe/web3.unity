@@ -7,8 +7,8 @@ using Web3Unity.Scripts.Prefabs;
 
 public class EvmCalls : MonoBehaviour
 {
-    // Fields
-
+    #region Fields
+    
     #region IPFS
 
     public string apiKey = "YOUR_CHAINSAFE_STORE_API_KEY";
@@ -71,6 +71,8 @@ public class EvmCalls : MonoBehaviour
 
     #endregion
     
+    #endregion
+    
     private Evm evm;
     
     // Initializes the protocol class
@@ -89,7 +91,6 @@ public class EvmCalls : MonoBehaviour
             Path = path,
             Filename = filename
         });
-
         SampleOutputUtil.PrintResult(cid, nameof(IpfsSample), nameof(IpfsSample.Upload));
     }
 
