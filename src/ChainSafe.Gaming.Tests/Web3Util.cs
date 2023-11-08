@@ -65,7 +65,7 @@ namespace ChainSafe.Gaming.Tests
                     services.AddSingleton<ISigner, ITransactionExecutor, ILifecycleParticipant, JsonRpcWallet>();
                 })
                 .Configure(configureDelegate)
-                .BuildAsync();
+                .LaunchAsync();
         }
 
         /// <summary>
