@@ -1,8 +1,8 @@
-using System.Collections.Generic;
 using System.Linq;
 using ChainSafe.Gaming.UnityPackage;
 using Scripts.EVM.Token;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// ERC1155 calls used in the sample scene
@@ -10,6 +10,7 @@ using UnityEngine;
 public class Erc1155Calls : MonoBehaviour
 {
     // Fields
+    public RawImage renderer;
     private Erc1155 erc1155;
     
     // Initializes the protocol class
@@ -96,5 +97,16 @@ public class Erc1155Calls : MonoBehaviour
         var response = await erc1155.TransferErc1155(contractAddress, tokenId, amount, toAccount);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Erc1155), nameof(Erc1155.TransferErc1155));
+    }
+    
+    /// <summary>
+    /// Imports an NFTs texture via URI data
+    /// </summary>
+    public async void ImportNftTexture1155()
+    {
+        string contract = "0x0288B4F1389ED7b3d3f9C7B73d4408235c0CBbc6";
+        string tokenId = "0";
+        var textureRequest = await erc1155.ImportNftTexture1155(contract, tokenId);
+        renderer.GetComponent<Renderer>().material.mainTexture = textureRequest;
     }
 }

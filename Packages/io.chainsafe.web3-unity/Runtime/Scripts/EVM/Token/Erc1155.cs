@@ -114,5 +114,47 @@ namespace Scripts.EVM.Token
             });
             return response;
         }
+        
+        /// <summary>
+        /// Imports an NFT texture via Uri data
+        /// </summary>
+        /// <param name="contract"></param>
+        /// <param name="tokenId"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<Texture2D> ImportNftTexture1155(string contract, string tokenId)
+        {
+            // fetch uri from chain
+            string uri = await Uri(contract, tokenId);
+            // fetch json from uri
+            UnityWebRequest webRequest = UnityWebRequest.Get(uri);
+            await webRequest.SendWebRequest();
+            if (webRequest.result != UnityWebRequest.Result.Success)
+            {
+                throw new System.Exception(webRequest.error);
+            }
+            // Deserialize the data into the response class
+            Response data =
+                JsonUtility.FromJson<Response>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
+            // parse json to get image uri
+            string imageUri = data.image;
+            Debug.Log("imageUri: " + imageUri);
+            if (imageUri.StartsWith("ipfs://"))
+            {
+                imageUri = imageUri.Replace("ipfs://", "https://ipfs.io/ipfs/");
+            }
+            Debug.Log("Revised URI: " + imageUri);
+            // fetch image and display in game
+            UnityWebRequest textureRequest = UnityWebRequestTexture.GetTexture(imageUri);
+            await textureRequest.SendWebRequest();
+            var response = ((DownloadHandlerTexture)textureRequest.downloadHandler).texture;
+            return response;
+        }
+    
+        // Response class for the texture call above
+        public class Response
+        {
+            public string image;
+        }
     }
 }

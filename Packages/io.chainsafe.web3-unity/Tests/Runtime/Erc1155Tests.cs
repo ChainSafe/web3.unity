@@ -1,25 +1,49 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.WalletConnect;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Unity;
 using NUnit.Framework;
+using Scripts.EVM.Token;
 using UnityEngine;
 using UnityEngine.TestTools;
-using Web3Unity.Scripts.Prefabs;
 
-public class Erc1155Tests
+public class Erc1155Tests : SampleTestsBase
 {
+    // Fields
+    #region Balances
 
     private readonly string[] _accounts = new[] { "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2", "0xE51995Cdb3b1c109E0e6E67ab5aB31CDdBB83E4a" };
     private const string ContractAddress = "0x2c1867bc3026178a47a677513746dcc6822a137a";
     private readonly string[] _tokenIds = { "0x01559ae4021aee70424836ca173b6a4e647287d15cee8ac42d8c2d8d128927e5", "0x01559ae4021aee70424836ca173b6a4e647287d15cee8ac42d8c2d8d128927e5" };
-    private Erc1155Sample _logic;
+
+    #endregion
+    
+    #region Mint
+
+    private const string Mint1155Abi = "[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"approved\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"approved\",\"type\":\"bool\"}],\"name\":\"ApprovalForAll\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"burn\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"grantRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"renounceRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"revokeRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"previousAdminRole\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"newAdminRole\",\"type\":\"bytes32\"}],\"name\":\"RoleAdminChanged\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"RoleGranted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"RoleRevoked\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"uri\",\"type\":\"string\"}],\"name\":\"safeMint\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"safeTransferFrom\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"safeTransferFrom\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"approved\",\"type\":\"bool\"}],\"name\":\"setApprovalForAll\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"DEFAULT_ADMIN_ROLE\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"getApproved\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"}],\"name\":\"getRoleAdmin\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"hasRole\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"}],\"name\":\"isApprovedForAll\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"MINTER_ROLE\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"ownerOf\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes4\",\"name\":\"interfaceId\",\"type\":\"bytes4\"}],\"name\":\"supportsInterface\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"tokenURI\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]";
+    private const string Mint1155Address = "0x0B102638532be8A1b3d0ed1fcE6eC603Bec37848";
+    private const int Mint1155Id = 1;
+    private const int Mint1155Amount = 1;
+
+    #endregion
+    
+    # region Transfer
+    
+    private const string TransferErc1155ContractAddress = "0xe793e17Ec93bEc809C5Ac6dd0d8b383446E65B78";
+    private const string SendToAddress = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
+    
+    #endregion
+
+    #region Texture
 
     private const string NftTextureContractAddress = "0x0288B4F1389ED7b3d3f9C7B73d4408235c0CBbc6";
+
+    #endregion
+    private Erc1155 erc1155;
 
     #region Indexer Test Parameters
 
@@ -32,12 +56,8 @@ public class Erc1155Tests
 
     #endregion
 
-
-
-
-
     [UnitySetUp]
-    public IEnumerator Setup()
+    public override IEnumerator Setup()
     {
         //wait for some time to initialize
         yield return new WaitForSeconds(5f);
@@ -49,12 +69,17 @@ public class Erc1155Tests
             projectConfigScriptableObject = ProjectConfigUtilities.Load("3dc3e125-71c4-4511-a367-e981a6a94371", "5",
                 "Ethereum", "Goerli", "Geth", "https://goerli.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f");
         }
-
-
+        
         var web3Builder = new Web3Builder(projectConfigScriptableObject).Configure(services =>
         {
             services.UseUnityEnvironment();
             services.UseRpcProvider();
+            config = new WalletConnectConfig
+            {
+                // set wallet to testing
+                Testing = true,
+                TestWalletAddress = "0x55ffe9E30347266f02b9BdAe20aD3a86493289ea",
+            };
         });
 
         var buildWeb3 = web3Builder.BuildAsync();
@@ -62,13 +87,13 @@ public class Erc1155Tests
         //wait until for async task to finish
         yield return new WaitUntil(() => buildWeb3.IsCompleted);
 
-        _logic = new Erc1155Sample(buildWeb3.Result);
+        erc1155 = new Erc1155(buildWeb3.Result);
     }
 
     [UnityTest]
     public IEnumerator TestBalanceOf()
     {
-        var getBalanceOf = _logic.BalanceOf(ContractAddress, _accounts[0], _tokenIds[0]);
+        var getBalanceOf = erc1155.BalanceOf(ContractAddress, _accounts[0], _tokenIds[0]);
         yield return new WaitUntil(() => getBalanceOf.IsCompleted);
 
         Assert.AreEqual(new BigInteger(2), getBalanceOf.Result);
@@ -77,7 +102,7 @@ public class Erc1155Tests
     [UnityTest]
     public IEnumerator TestBalanceOfBatch()
     {
-        var getBalanceOf = _logic.BalanceOfBatch(ContractAddress, _accounts, _tokenIds);
+        var getBalanceOf = erc1155.BalanceOfBatch(ContractAddress, _accounts, _tokenIds);
         yield return new WaitUntil(() => getBalanceOf.IsCompleted);
         CollectionAssert.AreEqual(new List<BigInteger> { 2, 0 }, getBalanceOf.Result);
     }
@@ -88,7 +113,7 @@ public class Erc1155Tests
     [UnityTest]
     public IEnumerator TestUri()
     {
-        var uri = _logic.Uri(ContractAddress, _tokenIds[0]);
+        var uri = erc1155.Uri(ContractAddress, _tokenIds[0]);
         yield return new WaitUntil(() => uri.IsCompleted);
         Assert.AreEqual(ExpectedUriResult, uri.Result);
     }
@@ -106,6 +131,38 @@ public class Erc1155Tests
         Debug.Log(output);#1#
         
     }*/
+    
+    [UnityTest]
+    public IEnumerator TestMint1155()
+    {
+        config.TestResponse = "0xd3027fbfd9d5ddb5ea0ef75f5b128581d9268ad67728d150657f915c8910f9f0";
+
+        var mint1155 = erc1155.MintErc1155(Mint1155Abi, Mint1155Address, Mint1155Id, Mint1155Amount);
+
+        yield return new WaitUntil(() => mint1155.IsCompleted);
+
+        if (mint1155.Exception != null) throw mint1155.Exception;
+        
+        Assert.IsTrue(mint1155.IsCompletedSuccessfully);
+
+        Assert.AreEqual(mint1155.Result, string.Empty);
+    }
+    
+    [UnityTest]
+    public IEnumerator TestTransferErc1155()
+    {
+        config.TestResponse = "0xb018a043ac0affe05159a53daa8656dbbad61c839eaf89622d7813226f222876";
+
+        var transferErc1155 = erc1155.TransferErc1155(TransferErc1155ContractAddress, 101, 1, SendToAddress);
+
+        yield return new WaitUntil(() => transferErc1155.IsCompleted);
+
+        if (transferErc1155.Exception != null) throw transferErc1155.Exception;
+        
+        yield return new WaitUntil(() => transferErc1155.IsCompletedSuccessfully);
+
+        Assert.AreEqual(transferErc1155.Result, string.Empty);
+    }
 
     [UnityTest]
     public IEnumerator TestImportNFTTexture()
@@ -168,7 +225,7 @@ public class Erc1155Tests
         };
 
         #endregion
-        var texture = _logic.ImportNftTexture(NftTextureContractAddress, "0");
+        var texture = erc1155.ImportNftTexture1155(NftTextureContractAddress, "0");
         yield return new WaitUntil(() => texture.IsCompleted);
         CollectionAssert.AreEqual(bytesOfTheTexture, texture.Result.EncodeToJPG(1));
     }
