@@ -47,18 +47,12 @@ public class Erc20Calls : MonoBehaviour
     
     private Erc20 erc20;
     
-    // Initializes the protocol class
-    public void Awake()
-    {
-        erc20 = new Erc20(Web3Accessor.Web3);
-    }
-    
     /// <summary>
     /// Balance Of ERC20 Address
     /// </summary>
     public async void BalanceOf()
     {
-        var balance = await erc20.BalanceOf(contractBalanceOf, accountBalanceOf);
+        var balance = await Erc20.BalanceOf(Web3Accessor.Web3, contractBalanceOf, accountBalanceOf);
         SampleOutputUtil.PrintResult(balance.ToString(), nameof(Erc20), nameof(Erc20.BalanceOf));
     }
     
@@ -67,7 +61,7 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void CustomTokenBalanceOf()
     {
-        var result = await erc20.CustomTokenBalance(AbiCustomBalanceOf, contractCustomBalanceOf);
+        var result = await Erc20.CustomTokenBalance(Web3Accessor.Web3, AbiCustomBalanceOf, contractCustomBalanceOf);
         SampleOutputUtil.PrintResult(result, nameof(Erc20), nameof(Erc20.CustomTokenBalance));
     }
     
@@ -76,7 +70,7 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void NativeBalanceOf()
     {
-        var result = await erc20.NativeBalanceOf(accountNativeBalanceOf);
+        var result = await Erc20.NativeBalanceOf(Web3Accessor.Web3, accountNativeBalanceOf);
         SampleOutputUtil.PrintResult(result.ToString(), nameof(Erc20), nameof(Erc20.NativeBalanceOf));
     }
     
@@ -85,7 +79,7 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void Name()
     {
-        var result = await erc20.Name(contractToken);
+        var result = await Erc20.Name(Web3Accessor.Web3, contractToken);
         SampleOutputUtil.PrintResult(result, nameof(Erc20), nameof(Erc20.Name));
     }
     
@@ -94,7 +88,7 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void Symbol()
     {
-        var result = await erc20.Symbol(contractToken);
+        var result = await Erc20.Symbol(Web3Accessor.Web3, contractToken);
         SampleOutputUtil.PrintResult(result, nameof(Erc20), nameof(Erc20.Symbol));
     }
     
@@ -103,7 +97,7 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void Decimals()
     {
-        var decimals = await erc20.Decimals(contractToken);
+        var decimals = await Erc20.Decimals(Web3Accessor.Web3, contractToken);
         SampleOutputUtil.PrintResult(decimals.ToString(), nameof(Erc20), nameof(Erc20.Decimals));
     }
     
@@ -112,7 +106,7 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void TotalSupply()
     {
-        var result = await erc20.TotalSupply(contractToken);
+        var result = await Erc20.TotalSupply(Web3Accessor.Web3, contractToken);
         SampleOutputUtil.PrintResult(result.ToString(), nameof(Erc20), nameof(Erc20.TotalSupply));
     }
     
@@ -121,7 +115,7 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void TransferErc20()
     {
-        var response = await erc20.TransferErc20(contractTransfer, toAccountTransfer, amountTransfer);
+        var response = await Erc20.TransferErc20(Web3Accessor.Web3, contractTransfer, toAccountTransfer, amountTransfer);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Erc20), nameof(Erc20.TransferErc20));
     }
