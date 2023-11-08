@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Transactions;
 using ChainSafe.Gaming.UnityPackage;
 using Scripts.EVM.Token;
 using UnityEngine;
@@ -11,20 +13,20 @@ public class EvmCalls : MonoBehaviour
     
     #region IPFS
 
-    public string apiKey = "YOUR_CHAINSAFE_STORE_API_KEY";
-    public string data = "YOUR_DATA";
-    public string bucketId = "BUCKET_ID";
-    public string path = "/PATH";
-    public string filename = "FILENAME.EXT";
+    private string apiKey = "YOUR_CHAINSAFE_STORE_API_KEY";
+    private string data = "YOUR_DATA";
+    private string bucketId = "BUCKET_ID";
+    private string path = "/PATH";
+    private string filename = "FILENAME.EXT";
 
     #endregion
     
     # region Contract Send
         
-    public string methodSend = "addTotal";
-    public string abiSend = "[ { \"inputs\": [ { \"internalType\": \"uint8\", \"name\": \"_myArg\", \"type\": \"uint8\" } ], \"name\": \"addTotal\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\" }, { \"inputs\": [], \"name\": \"myTotal\", \"outputs\": [ { \"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\" } ], \"stateMutability\": \"view\", \"type\": \"function\" } ]";
-    public string contractAddressSend = "0x7286Cf0F6E80014ea75Dbc25F545A3be90F4904F";
-    public int increaseAmountSend = 1;
+    private string methodSend = "addTotal";
+    private string abiSend = "[ { \"inputs\": [ { \"internalType\": \"uint8\", \"name\": \"_myArg\", \"type\": \"uint8\" } ], \"name\": \"addTotal\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\" }, { \"inputs\": [], \"name\": \"myTotal\", \"outputs\": [ { \"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\" } ], \"stateMutability\": \"view\", \"type\": \"function\" } ]";
+    private string contractAddressSend = "0x7286Cf0F6E80014ea75Dbc25F545A3be90F4904F";
+    private int increaseAmountSend = 1;
         
     #endregion
 
@@ -38,11 +40,11 @@ public class EvmCalls : MonoBehaviour
 
     #region Get Send Array
 
-    public string contractAddressArray = "0x5244d0453A727EDa96299384370359f4A2B5b20a";
-    public string abiArray = "[{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"_addresses\",\"type\":\"address[]\"}],\"name\":\"setStore\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"bought\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getStore\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]";
-    public string methodArrayGet = "getStore";
-    public string methodArraySend = "getStore";
-    string[] stringArraySend =
+    private string contractAddressArray = "0x5244d0453A727EDa96299384370359f4A2B5b20a";
+    private string abiArray = "[{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"_addresses\",\"type\":\"address[]\"}],\"name\":\"setStore\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"bought\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getStore\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]";
+    private string methodArrayGet = "getStore";
+    private string methodArraySend = "getStore";
+    private string[] stringArraySend =
     {
         "0xFb3aECf08940785D4fB3Ad87cDC6e1Ceb20e9aac",
         "0x92d4040e4f3591e60644aaa483821d1bd87001e3"
@@ -52,22 +54,31 @@ public class EvmCalls : MonoBehaviour
 
     #region Sign Verify Sha3
     
-    public string messageSign = "The right man in the wrong place can make all the difference in the world.";
-    public string messageSignVerify = "A man chooses, a slave obeys.";
-    public string messageSha = "It’s dangerous to go alone, take this!";
+    private string messageSign = "The right man in the wrong place can make all the difference in the world.";
+    private string messageSignVerify = "A man chooses, a slave obeys.";
+    private string messageSha = "It’s dangerous to go alone, take this!";
 
     #endregion
 
     #region Send Transaction
 
-    public string to = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
+    private string to = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
 
     #endregion
 
     #region Registered Contract
 
-    public string registeredContractName = "shiba";
-    public string registeredContractmethod = "balanceOf";
+    private string registeredContractName = "shiba";
+    private string registeredContractmethod = "balanceOf";
+
+    #endregion
+
+    #region Private Key
+
+    private string privateKey = "0x78dae1a22c7507a4ed30c06172e7614eb168d3546c13856340771e63ad3c0081";
+    private string messagePrivateKey = "This is a test message";
+    private string transactionHash = "0x123456789";
+    private string chainId ="5";
 
     #endregion
     
@@ -122,7 +133,7 @@ public class EvmCalls : MonoBehaviour
     
     public async void SendArray()
     {
-        var response = await evm.SendArray(methodArrayGet, abiArray, contractAddressArray, stringArraySend);
+        var response = await evm.SendArray(methodArraySend, abiArray, contractAddressArray, stringArraySend);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.SendArray));
     }
@@ -190,5 +201,26 @@ public class EvmCalls : MonoBehaviour
         var signatureVerified = await evm.SignVerify(messageSignVerify);
         var output = signatureVerified ? "Verified" : "Failed to verify";
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.SignVerify));
+    }
+    
+    public void PrivateKeySignTransaction()
+    {
+        var signatureVerified = Evm.PrivateKeySignTransaction(privateKey, transactionHash, chainId);
+        var output = Convert.ToBoolean(signatureVerified) ? "Verified" : "Failed to verify";
+        SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.PrivateKeySignTransaction));
+    }
+    
+    public void PrivateKeySignMessage()
+    {
+        var signatureVerified = Evm.PrivateKeySignMessage(privateKey, messagePrivateKey);
+        var output = Convert.ToBoolean(signatureVerified) ? "Verified" : "Failed to verify";
+        SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.PrivateKeySignMessage));
+    }
+    
+    public void PrivateKeyGetAddress()
+    {
+        var signatureVerified = Evm.PrivateKeyGetAddress(privateKey);
+        var output = Convert.ToBoolean(signatureVerified) ? "Verified" : "Failed to verify";
+        SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.PrivateKeyGetAddress));
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -7,6 +8,7 @@ using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3;
+using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
 using Nethereum.Signer;
 using Nethereum.Util;
@@ -24,21 +26,6 @@ namespace Scripts.EVM.Token
             this.web3 = web3 ?? throw new Web3Exception(
                 "Web3 instance is null. Please ensure that the instance is properly retrieved trough the constructor");
         }
-        
-        // MOVE LATER
-        public string PrivateKeySign(string privateKey, string message)
-        {
-            var signer = new EthereumMessageSigner();
-            var signature = signer.HashAndSign(message, privateKey);
-            return signature;
-        }
-
-        public string PrivateKeyGetAddress(string privateKey)
-        {
-            EthECKey key = new EthECKey(privateKey);
-            return key.GetPublicAddress();
-        }
-        // END MOVE
         
         public async Task<object[]> ContractSend(string method, string abi, string contractAddress, object[] args)
         {
@@ -152,6 +139,50 @@ namespace Scripts.EVM.Token
             var key = EthECKey.RecoverFromSignature(signature, msgHash);
 
             return key.GetPublicAddress() == playerAccount;
+        }
+
+		public static string PrivateKeySignTransaction(string _privateKey, string _transaction, string _chainId)
+        {
+            int MATIC_MAIN = 137;
+            int MATIC_MUMBAI = 80001;
+            int HARMONY_MAINNET = 1666600000;
+            int HARMONY_TESTNET = 1666700000;
+            int CRONOS_MAINNET = 25;
+            int CRONOS_TESTNET = 338;
+            int FTM_MAINNET = 250;
+            int FTM_TESTNET = 0xfa2;
+            int AVA_MAINNET = 43114;
+            int AVA_TESTNET = 43113;
+            int CHAIN_ID = Convert.ToInt32(_chainId);
+            string signature;
+            EthECKey key = new EthECKey(_privateKey);
+            // convert transaction
+            byte[] hashByteArr = HexByteConvertorExtensions.HexToByteArray(_transaction);
+            // parse chain id
+            BigInteger chainId = BigInteger.Parse(_chainId);
+            // sign transaction
+            if ((CHAIN_ID == MATIC_MAIN) || (CHAIN_ID == MATIC_MUMBAI) || (CHAIN_ID == HARMONY_MAINNET) ||
+                (CHAIN_ID == HARMONY_TESTNET) || (CHAIN_ID == CRONOS_MAINNET) || (CHAIN_ID == CRONOS_TESTNET) || (CHAIN_ID == FTM_MAINNET) || (CHAIN_ID == FTM_TESTNET) || (CHAIN_ID == AVA_MAINNET) || (CHAIN_ID == AVA_TESTNET))
+            {
+                signature = EthECDSASignature.CreateStringSignature(key.SignAndCalculateYParityV(hashByteArr));
+                return signature;
+
+            }
+            signature = EthECDSASignature.CreateStringSignature(key.SignAndCalculateV(hashByteArr, chainId));
+            return signature;
+        }
+
+        public static string PrivateKeyGetAddress(string _privateKey)
+        {
+            EthECKey key = new EthECKey(_privateKey);
+            return key.GetPublicAddress();
+        }
+
+        public static string PrivateKeySignMessage(string _privateKey, string _message)
+        {
+            var signer = new EthereumMessageSigner();
+            string signature = signer.HashAndSign(_message, _privateKey);
+            return signature;
         }
         
         // IPFS upload
