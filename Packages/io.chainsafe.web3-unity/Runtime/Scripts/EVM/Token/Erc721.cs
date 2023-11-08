@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Web3;
 using Newtonsoft.Json;
@@ -47,7 +48,7 @@ namespace Scripts.EVM.Token
         /// <param name="contractAddress"></param>
         /// <param name="tokenId"></param>
         /// <returns></returns>
-        public static async Task<string> OwnerOf(Web3 web3, string contractAddress, int tokenId)
+        public static async Task<string> OwnerOf(Web3 web3, string contractAddress, BigInteger tokenId)
         {
             return await OwnerOf(web3, contractAddress, new object[] { tokenId, });
         }

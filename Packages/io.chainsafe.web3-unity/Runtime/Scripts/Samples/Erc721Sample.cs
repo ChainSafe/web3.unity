@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Web3;
 using Scripts.EVM.Remote;
@@ -26,7 +27,7 @@ namespace Web3Unity.Scripts.Prefabs
             return await Erc721.OwnerOf(web3, contractAddress, tokenId);
         }
         
-        public async Task<string> OwnerOf(string contractAddress, int tokenId)
+        public async Task<string> OwnerOf(string contractAddress, BigInteger tokenId)
         {
             return await Erc721.OwnerOf(web3, contractAddress, tokenId);
         }
