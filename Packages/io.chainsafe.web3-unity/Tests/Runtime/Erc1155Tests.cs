@@ -84,7 +84,7 @@ public class Erc1155Tests
             };
         });
 
-        var buildWeb3 = web3Builder.BuildAsync();
+        var buildWeb3 = web3Builder.LaunchAsync();
 
         //wait until for async task to finish
         yield return new WaitUntil(() => buildWeb3.IsCompleted);
