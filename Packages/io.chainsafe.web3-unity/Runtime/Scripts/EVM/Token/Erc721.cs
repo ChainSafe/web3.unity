@@ -80,9 +80,10 @@ namespace Scripts.EVM.Token
             var obj = new object[tokenIds.Length][];
             for (var i = 0; i < tokenIds.Length; i++)
             {
-                string tokenId = tokenIds[i];
-                
-                obj[i] = tokenId.StartsWith("0x") ? new object[] { tokenId } : new object[] { int.Parse(tokenId) };
+                obj[i] = new object[]
+                {
+                    tokenIds[i]
+                };
             }
             var args = JsonConvert.SerializeObject(obj);
             var response = await Remote.CSServer.Multicall(web3, web3.ChainConfig.ChainId, web3.ChainConfig.Network,
