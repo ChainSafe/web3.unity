@@ -79,10 +79,15 @@ crashlytics-build.properties
 !*.meta
 
 # Ignore the build artifacts from our libraries
-# /io.chainsafe.web3-unity/Runtime/Libraries/*.dll
-# /io.chainsafe.web3-unity/Runtime/Libraries/*.dll.meta
+/io.chainsafe.web3-unity/Runtime/Libraries/*.dll
+/io.chainsafe.web3-unity/Runtime/Libraries/*.dll.meta
 /io.chainsafe.web3-unity/Runtime/Libraries/*.pdb
 /io.chainsafe.web3-unity/Runtime/Libraries/*.pdb.meta
+
+/io.chainsafe.web3-unity.lootboxes/Chainlink/Runtime/Libraries/*.dll
+/io.chainsafe.web3-unity.lootboxes/Chainlink/Runtime/Libraries/*.dll.meta
+/io.chainsafe.web3-unity.lootboxes/Chainlink/Runtime/Libraries/*.pdb
+/io.chainsafe.web3-unity.lootboxes/Chainlink/Runtime/Libraries/*.pdb.meta
 
 # Since the folder is called 'Debug', it's being ignored, so negate that
 !/io.chainsafe.web3-unity.web3auth/Runtime/Plugins/Web3AuthSDK/Debug
