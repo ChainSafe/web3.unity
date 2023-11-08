@@ -28,7 +28,7 @@ namespace Samples.Behaviours
             if (Web3.ChainConfig.ChainId != DefaultChainId)
             {
                 // log error not exception to not break flow
-                Debug.LogError($"Samples are configured for Chain Id {DefaultChainId}, Please Change Chain Id in Windows > {nameof(ChainSafeServerSettings)} to {DefaultChainId}");
+                Debug.LogError($"Samples are configured for Chain Id {DefaultChainId}, Please Change Chain Id in Window > ChainSafe SDK > Server Settings to {DefaultChainId}");
             }
             
             try
