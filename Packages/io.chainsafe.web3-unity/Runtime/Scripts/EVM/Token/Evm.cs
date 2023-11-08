@@ -5,22 +5,27 @@ using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Transactions;
+using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3;
 using Nethereum.Hex.HexTypes;
 using Nethereum.Signer;
 using Nethereum.Util;
+using Web3Unity.Scripts.Library.IPFS;
+using Web3Unity.Scripts.Prefabs;
 
-namespace Web3Unity.Scripts.Prefabs
+namespace Scripts.EVM.Token
 {
-    public class UnsortedSample
+    public class Evm
     {
         private Web3 web3;
 
-        public UnsortedSample(Web3 web3)
+        public Evm(Web3 web3)
         {
-            this.web3 = web3;
+            this.web3 = web3 ?? throw new Web3Exception(
+                "Web3 instance is null. Please ensure that the instance is properly retrieved trough the constructor");
         }
-
+        
+        // MOVE LATER
         public string PrivateKeySign(string privateKey, string message)
         {
             var signer = new EthereumMessageSigner();
@@ -33,13 +38,14 @@ namespace Web3Unity.Scripts.Prefabs
             EthECKey key = new EthECKey(privateKey);
             return key.GetPublicAddress();
         }
-
+        // END MOVE
+        
         public async Task<object[]> ContractSend(string method, string abi, string contractAddress, object[] args)
         {
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
             return await contract.Send(method, args);
         }
-
+        
         public async Task<object[]> ContractCall(string method, string abi, string contractAddress, object[] args)
         {
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
@@ -146,6 +152,15 @@ namespace Web3Unity.Scripts.Prefabs
             var key = EthECKey.RecoverFromSignature(signature, msgHash);
 
             return key.GetPublicAddress() == playerAccount;
+        }
+        
+        // IPFS upload
+        public static async Task<string> Upload(IpfsUploadRequest request)
+        {
+            var rawData = System.Text.Encoding.UTF8.GetBytes(request.Data);
+            var ipfs = new Ipfs(request.ApiKey);
+            var cid = await ipfs.Upload(request.BucketId, request.Path, request.Filename, rawData, "application/octet-stream");
+            return cid;
         }
     }
 }

@@ -10,7 +10,7 @@ using UnityEngine.UI;
 public class Erc1155Calls : MonoBehaviour
 {
     // Fields
-    public RawImage renderer;
+    public RawImage rawImage;
     private Erc1155 erc1155;
     
     // Initializes the protocol class
@@ -107,6 +107,6 @@ public class Erc1155Calls : MonoBehaviour
         string contract = "0x0288B4F1389ED7b3d3f9C7B73d4408235c0CBbc6";
         string tokenId = "0";
         var textureRequest = await erc1155.ImportNftTexture1155(contract, tokenId);
-        renderer.GetComponent<Renderer>().material.mainTexture = textureRequest;
+        rawImage.GetComponent<Renderer>().material.mainTexture = textureRequest;
     }
 }

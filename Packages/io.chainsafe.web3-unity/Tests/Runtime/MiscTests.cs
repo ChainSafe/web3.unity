@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using NUnit.Framework;
+using Scripts.EVM.Token;
 using UnityEngine;
 using UnityEngine.TestTools;
-using Web3Unity.Scripts.Prefabs;
 
 public class MiscTests : SampleTestsBase
 {
@@ -42,14 +42,14 @@ public class MiscTests : SampleTestsBase
 
     #endregion
 
-    private UnsortedSample _sample;
+    private Evm evm;
     
     [UnitySetUp]
     public override IEnumerator Setup()
     {
         yield return base.Setup();
 
-        _sample = new UnsortedSample(web3Result);
+        evm = new Evm(web3Result);
     }
 
     [UnityTest]
@@ -62,7 +62,7 @@ public class MiscTests : SampleTestsBase
             IncreaseAmount
         };
         
-        var sendContract = _sample.ContractSend(ContractSendMethodName, Abi, ContractAddress, args);
+        var sendContract = evm.ContractSend(ContractSendMethodName, Abi, ContractAddress, args);
 
         yield return new WaitUntil(() => sendContract.IsCompleted);
 
@@ -79,7 +79,7 @@ public class MiscTests : SampleTestsBase
         string contractAddress = "0x5244d0453A727EDa96299384370359f4A2B5b20a";
         string abi = "[{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"_addresses\",\"type\":\"address[]\"}],\"name\":\"setStore\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"bought\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getStore\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]";
         string method = "getStore";
-        var getArray = _sample.GetArray(contractAddress, abi, method);
+        var getArray = evm.GetArray(contractAddress, abi, method);
 
         yield return new WaitUntil(() => getArray.IsCompleted);
 
@@ -95,7 +95,7 @@ public class MiscTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestGetBlockNumber()
     {
-        var getBlockNumber = _sample.GetBlockNumber();
+        var getBlockNumber = evm.GetBlockNumber();
 
         yield return new WaitUntil(() => getBlockNumber.IsCompleted);
 
@@ -108,7 +108,7 @@ public class MiscTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestGetGasLimit()
     {
-        var getGasLimit = _sample.GetGasLimit(Abi, ContractAddress, "addTotal");
+        var getGasLimit = evm.GetGasLimit(Abi, ContractAddress, "addTotal");
 
         yield return new WaitUntil(() => getGasLimit.IsCompleted);
 
@@ -121,7 +121,7 @@ public class MiscTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestGetGasPrice()
     {
-        var getGasPrice = _sample.GetGasPrice();
+        var getGasPrice = evm.GetGasPrice();
 
         yield return new WaitUntil(() => getGasPrice.IsCompleted);
 
@@ -136,7 +136,7 @@ public class MiscTests : SampleTestsBase
     {
         config.TestResponse = "0x527fcd7356738389d29a96342b5fba92ab1348b744409d5bf4ce0ca2fbc2f25e";
 
-        var getGasNonce = _sample.GetNonce();
+        var getGasNonce = evm.GetNonce();
 
         yield return new WaitUntil(() => getGasNonce.IsCompleted);
 
@@ -151,7 +151,7 @@ public class MiscTests : SampleTestsBase
     {
         config.TestResponse = "0x1e989dbcc43e078b19ea8ea201af195e74397b494b7acd4afcca67e65e5c3339";
 
-        var getTransactionStatus = _sample.GetTransactionStatus();
+        var getTransactionStatus = evm.GetTransactionStatus();
 
         yield return new WaitUntil(() => getTransactionStatus.IsCompleted);
 
@@ -164,7 +164,7 @@ public class MiscTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestUseRegisteredContract()
     {
-        var useRegisteredContract = _sample.UseRegisteredContract("shiba", "balanceOf");
+        var useRegisteredContract = evm.UseRegisteredContract("shiba", "balanceOf");
 
         yield return new WaitUntil(() => useRegisteredContract.IsCompleted);
 
@@ -180,7 +180,7 @@ public class MiscTests : SampleTestsBase
     {
         config.TestResponse = "0x6a33280f3b2b907da613b18b09f863cd835f1977a4131001ace5602899fc98c7";
 
-        var sendArray = _sample.SendArray(SendArrayMethodName, SendArrayAbi, SendArrayAddress, ArrayToSend.ToArray());
+        var sendArray = evm.SendArray(SendArrayMethodName, SendArrayAbi, SendArrayAddress, ArrayToSend.ToArray());
 
         yield return new WaitUntil(() => sendArray.IsCompleted);
 
@@ -196,7 +196,7 @@ public class MiscTests : SampleTestsBase
     {
         config.TestResponse = "0xa60bef1df91bedcd2f3f79e6609716ef245fd1202d66c6e35694b43529bf2e71";
 
-        var sendTransaction = _sample.SendTransaction(SendToAddress);
+        var sendTransaction = evm.SendTransaction(SendToAddress);
 
         yield return new WaitUntil(() => sendTransaction.IsCompleted);
 
@@ -210,7 +210,7 @@ public class MiscTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestSha3()
     {
-        var sha3 = _sample.Sha3("It’s dangerous to go alone, take this!");
+        var sha3 = evm.Sha3("It’s dangerous to go alone, take this!");
 
         Assert.AreEqual(sha3, "45760485edafabcbb28570e7da5ddda4639abb4794de9af6de1d6669cbf220fc");
 
@@ -223,7 +223,7 @@ public class MiscTests : SampleTestsBase
         config.TestResponse =
             "0x87dfaa646f476ca53ba8b6e8d122839571e52866be0984ec0497617ad3e988b7401c6b816858df27625166cb98a688f99ba92fa593da3c86c78b19c78c1f51cc1c";
 
-        var signMessage = _sample.SignMessage("The right man in the wrong place can make all the difference in the world.");
+        var signMessage = evm.SignMessage("The right man in the wrong place can make all the difference in the world.");
 
         yield return new WaitUntil(() => signMessage.IsCompleted);
 
@@ -240,7 +240,7 @@ public class MiscTests : SampleTestsBase
         config.TestResponse =
             "0x5c996d43c2e804a0d0de7f8b07cc660bbae638aa7ea137df6156621abe5e1fbb1727ebb06f7e0067537cb0f942825fa15ead9dea6d74e4d17fa6e69007cb59561c";
 
-        var signVerify = _sample.SignVerify("A man chooses, a slave obeys.");
+        var signVerify = evm.SignVerify("A man chooses, a slave obeys.");
 
         yield return new WaitUntil(() => signVerify.IsCompleted);
 

@@ -22,7 +22,6 @@ public static class SceneIndexer
         {
             "SampleLogin.Unity",
             $"{Login.MainSceneName}.Unity",
-            "SampleImportNftTexture.Unity",
         });
     }
 
