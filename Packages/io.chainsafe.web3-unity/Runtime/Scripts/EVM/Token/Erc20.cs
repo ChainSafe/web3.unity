@@ -10,7 +10,7 @@ namespace Scripts.EVM.Token
     {
         private static readonly string Abi = ABI.Erc20;
         private Web3 web3;
-
+        
         public Erc20(Web3 web3)
         {
             this.web3 = web3 ?? throw new Web3Exception(
@@ -41,7 +41,7 @@ namespace Scripts.EVM.Token
         /// <returns></returns>
         public async Task<string> CustomTokenBalance(string contractAbi, string contractAddress)
         {
-            var contract = Web3Accessor.Web3.ContractBuilder.Build(contractAbi, contractAddress);
+            var contract = web3.ContractBuilder.Build(contractAbi, contractAddress);
             var address = web3.Signer.GetAddress();
             var response = await contract.Call("balanceOf", new object[] { address });
             var tokenBalance = response[0].ToString();
