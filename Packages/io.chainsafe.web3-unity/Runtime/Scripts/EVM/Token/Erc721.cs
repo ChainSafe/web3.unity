@@ -39,10 +39,11 @@ namespace Scripts.EVM.Token
         {
             var method = CommonMethod.OwnerOf;
             var contract = web3.ContractBuilder.Build(_abi, contractAddress);
-            var contractData = await contract.Call(method, new object[]
-            {
-                tokenId
-            });
+
+            object[] parameters = tokenId.StartsWith("0x") ? 
+                new object[] { tokenId, } : new object[] { int.Parse(tokenId), };
+
+            var contractData = await contract.Call(method, parameters);
             return contractData[0].ToString();
         }
 
@@ -62,12 +63,13 @@ namespace Scripts.EVM.Token
         {
             var method = CommonMethod.OwnerOf;
             // build array of args
-            var obj = new string[tokenIds.Length][];
+            var obj = new object[tokenIds.Length][];
             for (var i = 0; i < tokenIds.Length; i++)
-                obj[i] = new[]
-                {
-                    tokenIds[i]
-                };
+            {
+                string tokenId = tokenIds[i];
+                
+                obj[i] = tokenId.StartsWith("0x") ? new object[] { tokenId } : new object[] { int.Parse(tokenId) };
+            }
             var args = JsonConvert.SerializeObject(obj);
             var response = await Remote.CSServer.Multicall(web3, web3.ChainConfig.ChainId, web3.ChainConfig.Network,
                 contractAddress, _abi, method, args, multicall, web3.ChainConfig.Rpc);
