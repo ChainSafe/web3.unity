@@ -185,7 +185,8 @@ public class ExistingWalletLogin : Login
             // try and get saved value
             SavedSessionTopic = walletConnectConfig?.SavedSessionTopic,
             SupportedWallets = supportedWallets,
-            StoragePath = Application.persistentDataPath,
+            // save file closer to assets when in editor, more accessible
+            StoragePath = Application.isEditor ? Application.dataPath : Application.persistentDataPath,
             RedirectToWallet = redirectToWallet,
             KeepSessionAlive = autoLogin || rememberMeToggle.isOn,
             DefaultWallet = defaultWallet,
