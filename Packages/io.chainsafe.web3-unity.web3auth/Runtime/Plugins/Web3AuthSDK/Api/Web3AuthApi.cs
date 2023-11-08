@@ -50,4 +50,24 @@ public class Web3AuthApi
         else
             callback(null);
     }
+
+    public IEnumerator createSession(LogoutApiRequest logoutApiRequest, Action<JObject> callback)
+        {
+            WWWForm data = new WWWForm();
+            data.AddField("key", logoutApiRequest.key);
+            data.AddField("data", logoutApiRequest.data);
+            data.AddField("signature", logoutApiRequest.signature);
+            data.AddField("timeout", logoutApiRequest.timeout.ToString());
+
+            var request = UnityWebRequest.Post($"{baseAddress}/store/set", data);
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                string result = request.downloadHandler.text;
+                callback(Newtonsoft.Json.JsonConvert.DeserializeObject<JObject>(result));
+            }
+            else
+                callback(null);
+        }
 }
