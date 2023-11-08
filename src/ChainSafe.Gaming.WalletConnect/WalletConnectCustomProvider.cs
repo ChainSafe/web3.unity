@@ -379,6 +379,13 @@ namespace ChainSafe.Gaming.WalletConnect
         {
             var path = Path.Combine(config.StoragePath, "walletconnect.json");
 
+            // If we're not restoring a session and save WC file exists remove it.
+            // This is done to mitigate for a WC error that happens intermittently where generated Uri doesn't connect wallet.
+            if (string.IsNullOrEmpty(config.SavedSessionTopic) && File.Exists(path))
+            {
+                File.Delete(path);
+            }
+
             WCLogger.Log($"Wallet Connect Storage set to {path}");
 
             return new FileSystemStorage(path);

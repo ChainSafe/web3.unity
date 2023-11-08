@@ -9,6 +9,9 @@ using System.IO;
 using System.Text;
 using ChainSafe.Gaming.UnityPackage;
 
+/// <summary>
+/// Allows the developer to alter chain configuration via GUI
+/// </summary>
 public class ChainSafeServerSettings : EditorWindow
 {
     private const string ProjectIdPrompt = "Please enter your project ID";
@@ -27,7 +30,7 @@ public class ChainSafeServerSettings : EditorWindow
 
     Texture2D logo = null;
 
-    // checks if data is already entered
+    // Checks if data is already entered
     void Awake()
     {
         var projectConfig = ProjectConfigUtilities.Load();
@@ -41,14 +44,14 @@ public class ChainSafeServerSettings : EditorWindow
     }
 
     // Initializes window
-    [MenuItem("Window/ChainSafeServerSettings")]
+    [MenuItem("Window/ChainSafe SDK/Server Settings")]
     public static void ShowWindow()
     {
-        // show existing window instance. If one doesn't exist, make one.
+        // Show existing window instance. If one doesn't exist, make one.
         GetWindow(typeof(ChainSafeServerSettings));
     }
 
-    // called when menu is opened, loads Chainsafe Logo
+    // Called when menu is opened, loads Chainsafe Logo
     void OnEnable()
     {
         if (!logo)
@@ -57,36 +60,36 @@ public class ChainSafeServerSettings : EditorWindow
         }
     }
 
-    // displayed content
+    // Displayed content
     void OnGUI()
     {
-        // image
+        // Image
         EditorGUILayout.BeginVertical("box");
         GUILayout.Label(logo, GUILayout.MaxWidth(250f), GUILayout.MaxHeight(250f));
         EditorGUILayout.EndVertical();
-        // text
+        // Text
         GUILayout.Label("Welcome To The ChainSafe SDK!", EditorStyles.boldLabel);
         GUILayout.Label("Here you can enter all the information needed to get your game started on the blockchain!", EditorStyles.label);
-        // inputs
+        // Inputs
         projectID = EditorGUILayout.TextField("Project ID", projectID);
         chainID = EditorGUILayout.TextField("Chain ID", chainID);
         chain = EditorGUILayout.TextField("Chain", chain);
         network = EditorGUILayout.TextField("Network", network);
         symbol = EditorGUILayout.TextField("Symbol", symbol);
         rpc = EditorGUILayout.TextField("RPC", rpc);
-        // buttons
+        // Buttons
 
-        // register
+        // Register
         if (GUILayout.Button("Need To Register?"))
         {
             Application.OpenURL("https://dashboard.gaming.chainsafe.io/");
         }
-        // docs
+        // Docs
         if (GUILayout.Button("Check Out Our Docs!"))
         {
             Application.OpenURL("https://docs.gaming.chainsafe.io/");
         }
-        // save button
+        // Save button
         if (GUILayout.Button("Save Settings"))
         {
             Debug.Log("Saving Settings!");
@@ -98,16 +101,9 @@ public class ChainSafeServerSettings : EditorWindow
             projectConfig.Symbol = symbol;
             projectConfig.Rpc = rpc;
             ProjectConfigUtilities.Save(projectConfig);
-
-            // TODO: this should happen *before* the asset is saved.
             ValidateProjectID(projectID);
         }
         GUILayout.Label("Reminder: Your ProjectID Must Be Valid To Save & Build With Our SDK. You Can Register For One On Our Website At Dashboard.Gaming.Chainsafe.io", EditorStyles.label);
-
-        if (GUILayout.Button("Synchronize WebGL templates"))
-        {
-            WebGLTemplateSync.Syncronize();
-        }
     }
 
     static async void ValidateProjectID(string projectID)
