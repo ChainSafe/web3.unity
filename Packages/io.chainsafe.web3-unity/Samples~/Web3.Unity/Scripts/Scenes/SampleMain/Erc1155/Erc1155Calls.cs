@@ -145,6 +145,6 @@ public class Erc1155Calls : MonoBehaviour
     public async void ImportNftTexture1155()
     {
         var textureRequest = await erc1155.ImportNftTexture1155(contractTexture, tokenIdTexture);
-        rawImage.GetComponent<Renderer>().material.mainTexture = textureRequest;
+        rawImage.texture = textureRequest;
     }
 }
