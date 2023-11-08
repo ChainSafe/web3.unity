@@ -77,10 +77,10 @@ namespace Scripts.EVM.Token
         {
             var method = CommonMethod.OwnerOf;
             // build array of args
-            var obj = new object[tokenIds.Length][];
+            var obj = new string[tokenIds.Length][];
             for (var i = 0; i < tokenIds.Length; i++)
             {
-                obj[i] = new object[]
+                obj[i] = new[]
                 {
                     tokenIds[i]
                 };
