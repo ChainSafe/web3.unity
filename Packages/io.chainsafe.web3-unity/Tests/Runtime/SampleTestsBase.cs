@@ -55,7 +55,7 @@ public class SampleTestsBase
                     "0x1d6f31b71e12a1a584ca20853495161c48ba491f"));
         });
 
-        var buildWeb3 = web3Builder.BuildAsync();
+        var buildWeb3 = web3Builder.LaunchAsync();
 
         //wait until for async task to finish
         yield return new WaitUntil(() => buildWeb3.IsCompleted);
