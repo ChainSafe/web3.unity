@@ -1,4 +1,5 @@
-﻿using ChainSafe.Gaming.UnityPackage;
+﻿using System.Numerics;
+using ChainSafe.Gaming.UnityPackage;
 using Scripts.EVM.Token;
 using UnityEngine;
 
@@ -32,6 +33,14 @@ public class Erc20Calls : MonoBehaviour
     #region Token Info
 
     private string contractToken = "0x3E0C0447e47d49195fbE329265E330643eB42e6f";
+
+    #endregion
+    
+    #region Mint
+    
+    private const string contractMint = "0x714d32fA722461A2c8F0b4EB98ff5cFF8F908Df2";
+    private const string toAccountMint = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
+    private BigInteger amountMint = 1000000000000000000;
 
     #endregion
     
@@ -111,7 +120,18 @@ public class Erc20Calls : MonoBehaviour
     }
     
     /// <summary>
-    /// Transfers an ERC20 Token
+    /// Mints ERC20 Tokens to an address
+    /// </summary>
+    public async void MintErc20()
+    {
+        string toAccount = await Web3Accessor.Web3.Signer.GetAddress();
+        var response = await Erc20.MintErc20(Web3Accessor.Web3, contractMint, toAccount, amountMint);
+        var output = SampleOutputUtil.BuildOutputValue(response);
+        SampleOutputUtil.PrintResult(output, nameof(Erc20), nameof(Erc20.MintErc20));
+    }
+    
+    /// <summary>
+    /// Transfers ERC20 Tokens to an address
     /// </summary>
     public async void TransferErc20()
     {
