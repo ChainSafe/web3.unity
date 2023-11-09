@@ -19,50 +19,42 @@ namespace Scripts.EVM.Token
 {
     public class Evm
     {
-        private Web3 web3;
-
-        public Evm(Web3 web3)
-        {
-            this.web3 = web3 ?? throw new Web3Exception(
-                "Web3 instance is null. Please ensure that the instance is properly retrieved trough the constructor");
-        }
-        
-        public async Task<object[]> ContractSend(string method, string abi, string contractAddress, object[] args)
+        public static async Task<object[]> ContractSend(Web3 web3, string method, string abi, string contractAddress, object[] args)
         {
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
             return await contract.Send(method, args);
         }
         
-        public async Task<object[]> ContractCall(string method, string abi, string contractAddress, object[] args)
+        public static async Task<object[]> ContractCall(Web3 web3, string method, string abi, string contractAddress, object[] args)
         {
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
             return await contract.Call(method, args);
         }
 
-        public async Task<List<List<string>>> GetArray(string contractAddress, string abi, string method)
+        public static async Task<List<List<string>>> GetArray(Web3 web3, string contractAddress, string abi, string method)
         {
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
             var rawResponse = await contract.Call(method);
             return rawResponse.Select(raw => raw as List<string>).ToList();
         }
 
-        public async Task<HexBigInteger> GetBlockNumber()
+        public static async Task<HexBigInteger> GetBlockNumber(Web3 web3)
         {
             return await web3.RpcProvider.GetBlockNumber();
         }
 
-        public async Task<HexBigInteger> GetGasLimit(string contractAbi, string contractAddress, string method)
+        public static async Task<HexBigInteger> GetGasLimit(Web3 web3, string contractAbi, string contractAddress, string method)
         {
             var contract = web3.ContractBuilder.Build(contractAbi, contractAddress);
             return await contract.EstimateGas(method, new object[] { });
         }
 
-        public async Task<HexBigInteger> GetGasPrice()
+        public static async Task<HexBigInteger> GetGasPrice(Web3 web3)
         {
             return await web3.RpcProvider.GetGasPrice();
         }
 
-        public async Task<HexBigInteger> GetNonce()
+        public static async Task<HexBigInteger> GetNonce(Web3 web3)
         {
             var transactionRequest = new TransactionRequest
             {
@@ -73,7 +65,7 @@ namespace Scripts.EVM.Token
             return transactionResponse.Nonce;
         }
 
-        public async Task<TransactionReceipt> GetTransactionStatus()
+        public static async Task<TransactionReceipt> GetTransactionStatus(Web3 web3)
         {
             var transactionRequest = new TransactionRequest
             {
@@ -86,7 +78,7 @@ namespace Scripts.EVM.Token
 
         // ProviderEvent skipped
 
-        public async Task<BigInteger> UseRegisteredContract(string contractName, string method)
+        public static async Task<BigInteger> UseRegisteredContract(Web3 web3, string contractName, string method)
         {
             var account = await web3.Signer.GetAddress();
             var contract = web3.ContractBuilder.Build(contractName);
@@ -96,7 +88,7 @@ namespace Scripts.EVM.Token
         }
 
         // todo we shouldn't build contract inside this method, but rather put this logic into the contract or some service
-        public async Task<object[]> SendArray(string method, string abi, string contractAddress, string[] stringArray)
+        public static async Task<object[]> SendArray(Web3 web3, string method, string abi, string contractAddress, string[] stringArray)
         {
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
             return await contract.Send(method, new object[] { stringArray });
@@ -104,7 +96,7 @@ namespace Scripts.EVM.Token
 
         // todo danger - possible money loss 
         // todo rework input
-        public async Task<string> SendTransaction(string to)
+        public static async Task<string> SendTransaction(Web3 web3, string to)
         {
             var txRequest = new TransactionRequest
             {
@@ -117,18 +109,18 @@ namespace Scripts.EVM.Token
         }
 
         // todo extract in a separate service
-        public string Sha3(string message)
+        public static string Sha3(string message)
         {
             return new Sha3Keccack().CalculateHash(message);
         }
 
-        public async Task<string> SignMessage(string message)
+        public static async Task<string> SignMessage(Web3 web3, string message)
         {
             return await web3.Signer.SignMessage(message);
         }
 
         // todo extract in a separate service
-        public async Task<bool> SignVerify(string message)
+        public static async Task<bool> SignVerify(Web3 web3, string message)
         {
             var playerAccount = await web3.Signer.GetAddress();
             var signatureString = await web3.Signer.SignMessage(message);

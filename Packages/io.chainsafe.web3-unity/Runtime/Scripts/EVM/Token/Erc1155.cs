@@ -1,15 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Numerics;
-using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Web3;
-using Newtonsoft.Json;
 using Scripts.EVM.Remote;
 using UnityEngine;
 using UnityEngine.Networking;
-using Web3Unity.Scripts.Prefabs;
 using EthMethod = ChainSafe.Gaming.UnityPackage.EthMethod;
 
 namespace Scripts.EVM.Token

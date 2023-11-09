@@ -105,6 +105,21 @@ namespace Scripts.EVM.Token
             var totalSupply = await contract.Call(CommonMethod.TotalSupply);
             return BigInteger.Parse(totalSupply[0].ToString());
         }
+        
+        /// <summary>
+        /// Mints ERC20 Tokens
+        /// </summary>
+        /// <param name="web3"></param>
+        /// <param name="toAddress"></param>
+        /// <param name="amount"></param>
+        /// <returns></returns>
+        public static async Task<object[]> MintErc20(Web3 web3, string contractAddress, string toAccount, BigInteger amount)
+        {
+            const string method = "mint";
+            var destination = await web3.Signer.GetAddress();
+            var contract = web3.ContractBuilder.Build(Abi, contractAddress);
+            return await contract.Send(method, new object[] { toAccount, amount });
+        }
 
         /// <summary>
         /// Transfers ERC20 Tokens

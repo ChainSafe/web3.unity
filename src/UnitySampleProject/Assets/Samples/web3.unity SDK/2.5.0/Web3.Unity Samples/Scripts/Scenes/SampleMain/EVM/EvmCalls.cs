@@ -5,6 +5,7 @@ using System.Numerics;
 using System.Transactions;
 using ChainSafe.Gaming.MultiCall;
 using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.Web3;
 using Nethereum.Contracts.QueryHandlers.MultiCall;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Scripts.EVM.Token;
@@ -96,18 +97,12 @@ public class EvmCalls : MonoBehaviour
     
     #endregion
     
-    private Evm evm;
-    
-    // Initializes the protocol class
-    public void Awake()
-    {
-        evm = new Evm(Web3Accessor.Web3);
-    }
+    private Web3 web3;
 
     public async void ContractCall()
     {
         object[] args = {};
-        var response = await evm.ContractCall(methodCall, abiCall, contractAddressCall, args);
+        var response = await Evm.ContractCall(web3, methodCall, abiCall, contractAddressCall, args);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.ContractCall));
     }
@@ -118,52 +113,52 @@ public class EvmCalls : MonoBehaviour
         {
             increaseAmountSend
         };
-        var response = await evm.ContractSend(methodSend, abiSend, contractAddressSend, args);
+        var response = await Evm.ContractSend(web3, methodSend, abiSend, contractAddressSend, args);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.ContractSend));
     }
 
     public async void GetArray()
     {
-        var response = await evm.GetArray(contractAddressArray, abiArray, methodArrayGet);
+        var response = await Evm.GetArray(web3, contractAddressArray, abiArray, methodArrayGet);
         var responseString = string.Join(",\n", response.Select((list, i) => $"#{i} {string.Join((string)", ", (IEnumerable<string>)list)}"));
         SampleOutputUtil.PrintResult(responseString, nameof(Evm), nameof(Evm.GetArray));
     }
     
     public async void SendArray()
     {
-        var response = await evm.SendArray(methodArraySend, abiArray, contractAddressArray, stringArraySend);
+        var response = await Evm.SendArray(web3, methodArraySend, abiArray, contractAddressArray, stringArraySend);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.SendArray));
     }
     
     public async void GetBlockNumber()
     {
-        var blockNumber = await evm.GetBlockNumber();
+        var blockNumber = await Evm.GetBlockNumber(web3);
         SampleOutputUtil.PrintResult(blockNumber.ToString(), nameof(Evm), nameof(Evm.GetBlockNumber));
     }
     
     public async void GetGasLimit()
     {
-        var gasLimit = await evm.GetGasLimit(abiSend, contractAddressSend, methodSend);
+        var gasLimit = await Evm.GetGasLimit(web3, abiSend, contractAddressSend, methodSend);
         SampleOutputUtil.PrintResult(gasLimit.ToString(), nameof(Evm), nameof(Evm.GetGasLimit));
     }
     
     public async void GetGasPrice()
     {
-        var gasPrice = await evm.GetGasPrice();
+        var gasPrice = await Evm.GetGasPrice(web3);
         SampleOutputUtil.PrintResult(gasPrice.ToString(), nameof(Evm), nameof(Evm.GetGasPrice));
     }
     
     public async void GetNonce()
     {
-        var nonce = await evm.GetNonce();
+        var nonce = await Evm.GetNonce(web3);
         SampleOutputUtil.PrintResult(nonce.ToString(), nameof(Evm), nameof(Evm.GetNonce));
     }
     
     public async void GetTransactionStatus()
     {
-        var receipt = await evm.GetTransactionStatus();
+        var receipt = await Evm.GetTransactionStatus(web3);
         var output = $"Confirmations: {receipt.Confirmations}," +
                      $" Block Number: {receipt.BlockNumber}," +
                      $" Status {receipt.Status}";
@@ -173,31 +168,31 @@ public class EvmCalls : MonoBehaviour
     
     public async void RegisterContract()
     {
-        var balance = await evm.UseRegisteredContract(registeredContractName, registeredContractmethod);
+        var balance = await Evm.UseRegisteredContract(web3, registeredContractName, registeredContractmethod);
         SampleOutputUtil.PrintResult(balance.ToString(), nameof(Evm), nameof(Evm.UseRegisteredContract));
     }
     
     public async void SendTransaction()
     {
-        var transactionHash = await evm.SendTransaction(to);
+        var transactionHash = await Evm.SendTransaction(web3, to);
         SampleOutputUtil.PrintResult(transactionHash, nameof(Evm), nameof(Evm.SendTransaction));
     }
     
     public void Sha3()
     {
-        var hash = evm.Sha3(messageSha);
+        var hash = Evm.Sha3(messageSha);
         SampleOutputUtil.PrintResult(hash, nameof(Evm), nameof(Evm.Sha3));
     }
     
     public async void SignMessage()
     {
-        var signedMessage = await evm.SignMessage(messageSign);
+        var signedMessage = await Evm.SignMessage(web3, messageSign);
         SampleOutputUtil.PrintResult(signedMessage, nameof(Evm), nameof(Evm.SignMessage));
     }
     
     public async void SignVerify()
     {
-        var signatureVerified = await evm.SignVerify(messageSignVerify);
+        var signatureVerified = await Evm.SignVerify(web3, messageSignVerify);
         var output = signatureVerified ? "Verified" : "Failed to verify";
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.SignVerify));
     }
