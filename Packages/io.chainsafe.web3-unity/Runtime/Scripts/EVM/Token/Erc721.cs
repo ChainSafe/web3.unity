@@ -173,7 +173,7 @@ namespace Scripts.EVM.Token
         /// <param name="toAccount"></param>
         /// <param name="tokenId"></param>
         /// <returns></returns>
-        public static async Task<object[]> TransferErc721(Web3 web3, string contractAddress, string toAccount, int tokenId)
+        public static async Task<object[]> TransferErc721(Web3 web3, string contractAddress, string toAccount, BigInteger tokenId)
         {
             var abi = ABI.Erc721;
             var method = EthMethod.SafeTransferFrom;

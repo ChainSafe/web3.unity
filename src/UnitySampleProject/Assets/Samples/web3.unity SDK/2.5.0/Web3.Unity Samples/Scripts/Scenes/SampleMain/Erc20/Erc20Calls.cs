@@ -2,6 +2,7 @@
 using ChainSafe.Gaming.UnityPackage;
 using Scripts.EVM.Token;
 using UnityEngine;
+using ABI = Scripts.EVM.Token.ABI;
 
 /// <summary>
 /// ERC20 calls used in the sample scene
@@ -19,9 +20,7 @@ public class Erc20Calls : MonoBehaviour
     
     #region Custom Balance Of
 
-    private string contractCustomBalanceOf = "0x714d32fA722461A2c8F0b4EB98ff5cFF8F908Df2";
-    private string AbiCustomBalanceOf = "[ { \"inputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"constructor\" }, { \"inputs\": [ { \"internalType\": \"address\", \"name\": \"spender\", \"type\": \"address\" }, { \"internalType\": \"uint256\", \"name\": \"allowance\", \"type\": \"uint256\" }, { \"internalType\": \"uint256\", \"name\": \"needed\", \"type\": \"uint256\" } ], \"name\": \"ERC20InsufficientAllowance\", \"type\": \"error\" }, { \"inputs\": [ { \"internalType\": \"address\", \"name\": \"sender\", \"type\": \"address\" }, { \"internalType\": \"uint256\", \"name\": \"balance\", \"type\": \"uint256\" }, { \"internalType\": \"uint256\", \"name\": \"needed\", \"type\": \"uint256\" } ], \"name\": \"ERC20InsufficientBalance\", \"type\": \"error\" }, { \"inputs\": [ { \"internalType\": \"address\", \"name\": \"approver\", \"type\": \"address\" } ], \"name\": \"ERC20InvalidApprover\", \"type\": \"error\" }, { \"inputs\": [ { \"internalType\": \"address\", \"name\": \"receiver\", \"type\": \"address\" } ], \"name\": \"ERC20InvalidReceiver\", \"type\": \"error\" }, { \"inputs\": [ { \"internalType\": \"address\", \"name\": \"sender\", \"type\": \"address\" } ], \"name\": \"ERC20InvalidSender\", \"type\": \"error\" }, { \"inputs\": [ { \"internalType\": \"address\", \"name\": \"spender\", \"type\": \"address\" } ], \"name\": \"ERC20InvalidSpender\", \"type\": \"error\" }, { \"anonymous\": false, \"inputs\": [ { \"indexed\": true, \"internalType\": \"address\", \"name\": \"owner\", \"type\": \"address\" }, { \"indexed\": true, \"internalType\": \"address\", \"name\": \"spender\", \"type\": \"address\" }, { \"indexed\": false, \"internalType\": \"uint256\", \"name\": \"value\", \"type\": \"uint256\" } ], \"name\": \"Approval\", \"type\": \"event\" }, { \"anonymous\": false, \"inputs\": [ { \"indexed\": true, \"internalType\": \"address\", \"name\": \"from\", \"type\": \"address\" }, { \"indexed\": true, \"internalType\": \"address\", \"name\": \"to\", \"type\": \"address\" }, { \"indexed\": false, \"internalType\": \"uint256\", \"name\": \"value\", \"type\": \"uint256\" } ], \"name\": \"Transfer\", \"type\": \"event\" }, { \"inputs\": [ { \"internalType\": \"address\", \"name\": \"owner\", \"type\": \"address\" }, { \"internalType\": \"address\", \"name\": \"spender\", \"type\": \"address\" } ], \"name\": \"allowance\", \"outputs\": [ { \"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\" } ], \"stateMutability\": \"view\", \"type\": \"function\" }, { \"inputs\": [ { \"internalType\": \"address\", \"name\": \"spender\", \"type\": \"address\" }, { \"internalType\": \"uint256\", \"name\": \"value\", \"type\": \"uint256\" } ], \"name\": \"approve\", \"outputs\": [ { \"internalType\": \"bool\", \"name\": \"\", \"type\": \"bool\" } ], \"stateMutability\": \"nonpayable\", \"type\": \"function\" }, { \"inputs\": [ { \"internalType\": \"address\", \"name\": \"account\", \"type\": \"address\" } ], \"name\": \"balanceOf\", \"outputs\": [ { \"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\" } ], \"stateMutability\": \"view\", \"type\": \"function\" }, { \"inputs\": [], \"name\": \"decimals\", \"outputs\": [ { \"internalType\": \"uint8\", \"name\": \"\", \"type\": \"uint8\" } ], \"stateMutability\": \"view\", \"type\": \"function\" }, { \"inputs\": [ { \"internalType\": \"address\", \"name\": \"to\", \"type\": \"address\" }, { \"internalType\": \"uint256\", \"name\": \"amount\", \"type\": \"uint256\" } ], \"name\": \"mint\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\" }, { \"inputs\": [], \"name\": \"name\", \"outputs\": [ { \"internalType\": \"string\", \"name\": \"\", \"type\": \"string\" } ], \"stateMutability\": \"view\", \"type\": \"function\" }, { \"inputs\": [], \"name\": \"symbol\", \"outputs\": [ { \"internalType\": \"string\", \"name\": \"\", \"type\": \"string\" } ], \"stateMutability\": \"view\", \"type\": \"function\" }, { \"inputs\": [], \"name\": \"totalSupply\", \"outputs\": [ { \"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\" } ], \"stateMutability\": \"view\", \"type\": \"function\" }, { \"inputs\": [ { \"internalType\": \"address\", \"name\": \"to\", \"type\": \"address\" }, { \"internalType\": \"uint256\", \"name\": \"value\", \"type\": \"uint256\" } ], \"name\": \"transfer\", \"outputs\": [ { \"internalType\": \"bool\", \"name\": \"\", \"type\": \"bool\" } ], \"stateMutability\": \"nonpayable\", \"type\": \"function\" }, { \"inputs\": [ { \"internalType\": \"address\", \"name\": \"from\", \"type\": \"address\" }, { \"internalType\": \"address\", \"name\": \"to\", \"type\": \"address\" }, { \"internalType\": \"uint256\", \"name\": \"value\", \"type\": \"uint256\" } ], \"name\": \"transferFrom\", \"outputs\": [ { \"internalType\": \"bool\", \"name\": \"\", \"type\": \"bool\" } ], \"stateMutability\": \"nonpayable\", \"type\": \"function\" } ]";
-    
+    private string contractToken = "0x714d32fA722461A2c8F0b4EB98ff5cFF8F908Df2";
     #endregion
     
     #region Native Balance Of
@@ -30,25 +29,17 @@ public class Erc20Calls : MonoBehaviour
 
     #endregion
     
-    #region Token Info
-
-    private string contractToken = "0x714d32fA722461A2c8F0b4EB98ff5cFF8F908Df2";
-
-    #endregion
-    
     #region Mint
     
-    private const string contractMint = "0x714d32fA722461A2c8F0b4EB98ff5cFF8F908Df2";
-    private const string toAccountMint = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
     private BigInteger amountMint = 1000000000000000000;
 
     #endregion
     
     #region Transfer
 
+    private const string toAccount = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
     private string contractTransfer = "0xc778417e063141139fce010982780140aa0cd5ab";
-    private string toAccountTransfer = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
-    private string amountTransfer = "1000000000000000"; // todo to double representing one unit of currency
+    private BigInteger amountTransfer = 1000000000000000;
 
     #endregion
     
@@ -59,8 +50,10 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void BalanceOf()
     {
+        SampleFeedback.Instance?.Activate();
         var balance = await Erc20.BalanceOf(Web3Accessor.Web3, contractBalanceOf, accountBalanceOf);
         SampleOutputUtil.PrintResult(balance.ToString(), nameof(Erc20), nameof(Erc20.BalanceOf));
+        SampleFeedback.Instance?.Deactivate();
     }
     
     /// <summary>
@@ -68,7 +61,7 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void CustomTokenBalanceOf()
     {
-        var result = await Erc20.CustomTokenBalance(Web3Accessor.Web3, AbiCustomBalanceOf, contractCustomBalanceOf);
+        var result = await Erc20.CustomTokenBalance(Web3Accessor.Web3, ABI.CustomBalanceOf, contractToken);
         SampleOutputUtil.PrintResult(result.ToString(), nameof(Erc20), nameof(Erc20.CustomTokenBalance));
     }
     
@@ -123,7 +116,7 @@ public class Erc20Calls : MonoBehaviour
     public async void MintErc20()
     {
         string toAccount = await Web3Accessor.Web3.Signer.GetAddress();
-        var response = await Erc20.MintErc20(Web3Accessor.Web3, contractMint, toAccount, amountMint);
+        var response = await Erc20.MintErc20(Web3Accessor.Web3, contractToken, toAccount, amountMint);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Erc20), nameof(Erc20.MintErc20));
     }
@@ -133,7 +126,7 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void TransferErc20()
     {
-        var response = await Erc20.TransferErc20(Web3Accessor.Web3, contractTransfer, toAccountTransfer, amountTransfer);
+        var response = await Erc20.TransferErc20(Web3Accessor.Web3, contractTransfer, toAccount, amountTransfer);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Erc20), nameof(Erc20.TransferErc20));
     }

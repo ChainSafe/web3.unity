@@ -365,7 +365,7 @@ public class EvmTests : SampleTestsBase
     {
         config.TestResponse = "0xba90b6fb8cbee5fd0ad423cc74bb4a365bb88b260601933aac86b947945c5465";
 
-        var transferErc20 = Erc20.TransferErc20(web3, TransferErc20ContractAddress, SendToAddress, "1000000000000000");
+        var transferErc20 = Erc20.TransferErc20(web3, TransferErc20ContractAddress, SendToAddress, 1000000000000000);
 
         yield return new WaitUntil(() => transferErc20.IsCompleted);
 

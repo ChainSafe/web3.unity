@@ -128,7 +128,7 @@ namespace Scripts.EVM.Token
         /// <param name="toAccount"></param>
         /// <param name="amount"></param>
         /// <returns></returns>
-        public static async Task<object[]> TransferErc20(Web3 web3, string contractAddress, string toAccount, string amount)
+        public static async Task<object[]> TransferErc20(Web3 web3, string contractAddress, string toAccount, BigInteger amount)
         {
             var abi = ABI.Erc20;
             var method = EthMethod.Transfer;

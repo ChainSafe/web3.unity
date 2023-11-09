@@ -121,7 +121,7 @@ namespace Scripts.EVM.Token
         /// <param name="id"></param>
         /// <param name="amount"></param>
         /// <returns></returns>
-        public static async Task<object[]> MintErc1155(Web3 web3, string abi, string contractAddress, int id, int amount)
+        public static async Task<object[]> MintErc1155(Web3 web3, string abi, string contractAddress, BigInteger id, BigInteger amount)
         {
             byte[] dataObject = { };
             const string method = "mint";
@@ -139,7 +139,7 @@ namespace Scripts.EVM.Token
         /// <param name="amount"></param>
         /// <param name="toAccount"></param>
         /// <returns></returns>
-        public static async Task<object[]> TransferErc1155(Web3 web3, string contractAddress, int tokenId, int amount, string toAccount)
+        public static async Task<object[]> TransferErc1155(Web3 web3, string contractAddress, BigInteger tokenId, BigInteger amount, string toAccount)
         {
             var account = await web3.Signer.GetAddress();
             var abi = ABI.Erc1155;
