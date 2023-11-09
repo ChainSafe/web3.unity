@@ -1,24 +1,15 @@
-using System.Threading.Tasks;
+using ChainSafe.Gaming.UnityPackage;
+using UnityEngine;
 
-namespace Samples.Behaviours.Gelato
+public class GelatoDisableContent : MonoBehaviour
 {
-    public class GelatoDisableContent : SampleBehaviour
+    private GelatoSample gelato;
+
+    private void Awake()
     {
-        private GelatoSample logic;
-
-        protected override void Awake()
-        {
-            base.Awake();
-            logic = new GelatoSample(Web3);
-            ExecuteSample();
-        }
-
-        protected override Task ExecuteSample()
-        {
-            if (!logic.GetGelatoDisabled()) return Task.CompletedTask;
-            print("Gelato functionality disabled as your chain isn't supported");
-            gameObject.SetActive(false);
-            return Task.CompletedTask;
-        }
+        gelato = new GelatoSample(Web3Accessor.Web3);
+        if (!gelato.GetGelatoDisabled()) return;
+        Debug.Log("Gelato functionality disabled as your chain isn't supported");
+        gameObject.SetActive(false);
     }
 }
