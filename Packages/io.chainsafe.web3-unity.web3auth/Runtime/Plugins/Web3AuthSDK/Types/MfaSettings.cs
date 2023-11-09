@@ -1,40 +1,16 @@
 public class MfaSettings
 {
-    private MfaSetting deviceShareFactor;
-    private MfaSetting backUpShareFactor;
-    private MfaSetting socialBackupFactor;
-    private MfaSetting passwordFactor;
-
-    public MfaSetting DeviceShareFactor
-    {
-        get { return deviceShareFactor; }
-        set { deviceShareFactor = value; }
-    }
-
-    public MfaSetting BackUpShareFactor
-    {
-        get { return backUpShareFactor; }
-        set { backUpShareFactor = value; }
-    }
-
-    public MfaSetting SocialBackupFactor
-    {
-        get { return socialBackupFactor; }
-        set { socialBackupFactor = value; }
-    }
-
-    public MfaSetting PasswordFactor
-    {
-        get { return passwordFactor; }
-        set { passwordFactor = value; }
-    }
+    public MfaSetting? deviceShareFactor { get; set; }
+    public MfaSetting? backUpShareFactor { get; set; }
+    public MfaSetting? socialBackupFactor { get; set; }
+    public MfaSetting? passwordFactor { get; set; }
 
     // Constructors
     public MfaSettings(
-        MfaSetting deviceShareFactor = null,
-        MfaSetting backUpShareFactor = null,
-        MfaSetting socialBackupFactor = null,
-        MfaSetting passwordFactor = null)
+        MfaSetting? deviceShareFactor,
+        MfaSetting? backUpShareFactor,
+        MfaSetting? socialBackupFactor,
+        MfaSetting? passwordFactor)
     {
         this.deviceShareFactor = deviceShareFactor;
         this.backUpShareFactor = backUpShareFactor;
