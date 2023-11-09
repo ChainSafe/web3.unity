@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Numerics;
+using System.Threading.Tasks;
 using ChainSafe.Gaming.UnityPackage;
 using Web3Unity.Scripts.Prefabs;
 
@@ -20,7 +21,8 @@ namespace Samples.Behaviours.Erc1155
 
         protected override async Task ExecuteSample()
         {
-            var balance = await logic.BalanceOf(contractAddress, account, tokenId);
+            var balance = tokenId.StartsWith("0x") ? 
+                await logic.BalanceOf(contractAddress, account, tokenId) : await logic.BalanceOf(contractAddress, account, BigInteger.Parse(tokenId));
             SampleOutputUtil.PrintResult(balance.ToString(), nameof(Erc1155Sample), nameof(Erc1155Sample.BalanceOf));
         }
     }
