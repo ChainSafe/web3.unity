@@ -1,17 +1,14 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using System.Transactions;
 using ChainSafe.Gaming.MultiCall;
 using ChainSafe.Gaming.UnityPackage;
-using ChainSafe.Gaming.Web3;
 using Nethereum.Contracts.QueryHandlers.MultiCall;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Scripts.EVM.Token;
 using UnityEngine;
 using Web3Unity.Scripts.Prefabs;
-using ABI = ChainSafe.Gaming.UnityPackage.ABI;
+using ABI = Scripts.EVM.Token.ABI;
 
 public class EvmCalls : MonoBehaviour
 {
@@ -30,7 +27,6 @@ public class EvmCalls : MonoBehaviour
     # region Contract Send
         
     private string methodSend = "addTotal";
-    private string abiSend = "[ { \"inputs\": [ { \"internalType\": \"uint8\", \"name\": \"_myArg\", \"type\": \"uint8\" } ], \"name\": \"addTotal\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\" }, { \"inputs\": [], \"name\": \"myTotal\", \"outputs\": [ { \"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\" } ], \"stateMutability\": \"view\", \"type\": \"function\" } ]";
     private string contractAddressSend = "0x7286Cf0F6E80014ea75Dbc25F545A3be90F4904F";
     private int increaseAmountSend = 1;
         
@@ -39,7 +35,6 @@ public class EvmCalls : MonoBehaviour
     #region Contract Call
 
     private string methodCall = "myTotal";
-    private string abiCall = "[ { \"inputs\": [ { \"internalType\": \"uint8\", \"name\": \"_myArg\", \"type\": \"uint8\" } ], \"name\": \"addTotal\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\" }, { \"inputs\": [], \"name\": \"myTotal\", \"outputs\": [ { \"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\" } ], \"stateMutability\": \"view\", \"type\": \"function\" } ]";
     private string contractAddressCall = "0xC71d13c40B4fE7e2c557eBAa12A0400dd4Df76C9";
 
     #endregion
@@ -47,7 +42,6 @@ public class EvmCalls : MonoBehaviour
     #region Get Send Array
 
     private string contractAddressArray = "0x5244d0453A727EDa96299384370359f4A2B5b20a";
-    private string abiArray = "[{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"_addresses\",\"type\":\"address[]\"}],\"name\":\"setStore\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"bought\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getStore\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]";
     private string methodArrayGet = "getStore";
     private string methodArraySend = "setStore";
     private string[] stringArraySend =
@@ -100,7 +94,7 @@ public class EvmCalls : MonoBehaviour
     public async void ContractCall()
     {
         object[] args = {};
-        var response = await Evm.ContractCall(Web3Accessor.Web3, methodCall, abiCall, contractAddressCall, args);
+        var response = await Evm.ContractCall(Web3Accessor.Web3, methodCall, ABI.AddTotal, contractAddressCall, args);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.ContractCall));
     }
@@ -111,21 +105,21 @@ public class EvmCalls : MonoBehaviour
         {
             increaseAmountSend
         };
-        var response = await Evm.ContractSend(Web3Accessor.Web3, methodSend, abiSend, contractAddressSend, args);
+        var response = await Evm.ContractSend(Web3Accessor.Web3, methodSend, ABI.AddTotal, contractAddressSend, args);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.ContractSend));
     }
 
     public async void GetArray()
     {
-        var response = await Evm.GetArray(Web3Accessor.Web3, contractAddressArray, abiArray, methodArrayGet);
+        var response = await Evm.GetArray(Web3Accessor.Web3, contractAddressArray, ABI.AddTotal, methodArrayGet);
         var responseString = string.Join(",\n", response.Select((list, i) => $"#{i} {string.Join((string)", ", (IEnumerable<string>)list)}"));
         SampleOutputUtil.PrintResult(responseString, nameof(Evm), nameof(Evm.GetArray));
     }
     
     public async void SendArray()
     {
-        var response = await Evm.SendArray(Web3Accessor.Web3, methodArraySend, abiArray, contractAddressArray, stringArraySend);
+        var response = await Evm.SendArray(Web3Accessor.Web3, methodArraySend, ABI.AddTotal, contractAddressArray, stringArraySend);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.SendArray));
     }
@@ -138,7 +132,7 @@ public class EvmCalls : MonoBehaviour
     
     public async void GetGasLimit()
     {
-        var gasLimit = await Evm.GetGasLimit(Web3Accessor.Web3, abiSend, contractAddressSend, methodSend);
+        var gasLimit = await Evm.GetGasLimit(Web3Accessor.Web3, ABI.AddTotal, contractAddressSend, methodSend);
         SampleOutputUtil.PrintResult(gasLimit.ToString(), nameof(Evm), nameof(Evm.GetGasLimit));
     }
     
@@ -228,7 +222,7 @@ public class EvmCalls : MonoBehaviour
     
     public async void MultiCall()
     {
-        var erc20Contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.ERC_20, Erc20ContractAddress);
+        var erc20Contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.Erc20, Erc20ContractAddress);
         var erc20BalanceOfCalldata = erc20Contract.Calldata(CommonMethod.BalanceOf, new object[]
         {
             Erc20Account
