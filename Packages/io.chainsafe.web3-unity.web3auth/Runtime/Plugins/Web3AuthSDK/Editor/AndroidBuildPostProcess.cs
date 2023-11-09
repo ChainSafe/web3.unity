@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if UNITY_EDITOR && UNITY_ANDROID
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
@@ -53,3 +54,4 @@ public class AndroidBuildPostProcess : IPostGenerateGradleAndroidProject
         return doc.DocumentElement;
     }
 }
+#endif

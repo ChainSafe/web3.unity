@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Callbacks;
@@ -42,3 +43,4 @@ public class BuildPostProcess
 #endif
     }
 }
+#endif
