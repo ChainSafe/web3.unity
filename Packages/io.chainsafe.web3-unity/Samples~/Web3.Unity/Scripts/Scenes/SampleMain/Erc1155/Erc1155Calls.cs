@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Numerics;
 using ChainSafe.Gaming.UnityPackage;
 using Scripts.EVM.Token;
 using UnityEngine;
@@ -89,7 +90,9 @@ public class Erc1155Calls : MonoBehaviour
     /// </summary>
     public async void BalanceOf()
     {
-        var balance = await Erc1155.BalanceOf(Web3Accessor.Web3, contractBalanceOf, accountBalanceOf, tokenIdBalanceOf);
+        var balance = tokenIdBalanceOf.StartsWith("0x") ? 
+            await Erc1155.BalanceOf(Web3Accessor.Web3, contractBalanceOf, accountBalanceOf, tokenIdBalanceOf)
+            : await Erc1155.BalanceOf(Web3Accessor.Web3, contractBalanceOf, accountBalanceOf, BigInteger.Parse(tokenIdBalanceOf));
         SampleOutputUtil.PrintResult(balance.ToString(), nameof(Erc1155), nameof(Erc1155.BalanceOf));
     }
     
