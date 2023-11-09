@@ -7,7 +7,7 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/Samples/web3.unity SDK Web3Auth/2.5.1/Web3.Unity Web3Auth Samples/Scenes/SampleLogin
-      - Web3Auth.Unity
+      - Web3Auth.unity
     guid: a8a8b501e594874448546e904e2437c5
   - enabled: 1
     path: Assets/Samples/web3.unity SDK/2.5.0/Web3.Unity Samples/Scenes/SampleLogin.unity
@@ -15,7 +15,4 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Samples/web3.unity SDK/2.5.0/Web3.Unity Samples/Scenes/SampleMain.unity
     guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 1
-    path: Assets/Samples/web3.unity SDK/2.5.0/Web3.Unity Samples/Scenes/SampleImportNftTexture.unity
-    guid: d31091c4b9c13af48af91512a5127882
   m_configObjects: {}
