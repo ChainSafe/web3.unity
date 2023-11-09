@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Numerics;
+using System.Threading.Tasks;
 using ChainSafe.Gaming.UnityPackage;
 using Web3Unity.Scripts.Prefabs;
 
@@ -19,7 +20,9 @@ namespace Samples.Behaviours.Erc721
 
         protected override async Task ExecuteSample()
         {
-            var owner = await logic.OwnerOf(contractAddress, tokenId);
+            // check if tokenId is int or hex string
+            var owner = tokenId.StartsWith("0x") ? 
+                await logic.OwnerOf(contractAddress, tokenId) : await logic.OwnerOf(contractAddress, BigInteger.Parse(tokenId));
             SampleOutputUtil.PrintResult(owner, nameof(Erc721Sample), nameof(Erc721Sample.OwnerOf));
         }
     }

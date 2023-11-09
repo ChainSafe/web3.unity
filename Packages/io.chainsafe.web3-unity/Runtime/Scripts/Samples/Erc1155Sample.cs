@@ -31,6 +31,11 @@ namespace Web3Unity.Scripts.Prefabs
         {
             return await Erc1155.BalanceOf(web3, contract, account, tokenId);
         }
+        
+        public async Task<BigInteger> BalanceOf(string contract, string account, BigInteger tokenId)
+        {
+            return await Erc1155.BalanceOf(web3, contract, account, tokenId);
+        }
 
         public async Task<List<BigInteger>> BalanceOfBatch(string contract, string[] accounts, string[] tokenIds)
         {

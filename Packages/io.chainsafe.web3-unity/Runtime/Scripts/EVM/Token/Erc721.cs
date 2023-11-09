@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Web3;
 using Newtonsoft.Json;
@@ -37,12 +38,27 @@ namespace Scripts.EVM.Token
         /// <returns></returns>
         public static async Task<string> OwnerOf(Web3 web3, string contractAddress, string tokenId)
         {
+            return await OwnerOf(web3, contractAddress, new object[] { tokenId, });
+        }
+        
+        /// <summary>
+        /// Owner Of ERC721 Token
+        /// </summary>
+        /// <param name="web3"></param>
+        /// <param name="contractAddress"></param>
+        /// <param name="tokenId"></param>
+        /// <returns></returns>
+        public static async Task<string> OwnerOf(Web3 web3, string contractAddress, BigInteger tokenId)
+        {
+            return await OwnerOf(web3, contractAddress, new object[] { tokenId, });
+        }
+        
+        private static async Task<string> OwnerOf(Web3 web3, string contractAddress, object[] parameters)
+        {
             var method = CommonMethod.OwnerOf;
             var contract = web3.ContractBuilder.Build(_abi, contractAddress);
-            var contractData = await contract.Call(method, new object[]
-            {
-                tokenId
-            });
+
+            var contractData = await contract.Call(method, parameters);
             return contractData[0].ToString();
         }
 
@@ -64,10 +80,12 @@ namespace Scripts.EVM.Token
             // build array of args
             var obj = new string[tokenIds.Length][];
             for (var i = 0; i < tokenIds.Length; i++)
+            {
                 obj[i] = new[]
                 {
                     tokenIds[i]
                 };
+            }
             var args = JsonConvert.SerializeObject(obj);
             var response = await Remote.CSServer.Multicall(web3, web3.ChainConfig.ChainId, web3.ChainConfig.Network,
                 contractAddress, _abi, method, args, multicall, web3.ChainConfig.Rpc);
