@@ -20,12 +20,34 @@ namespace Scripts.EVM.Token
         /// <returns></returns>
         public static async Task<BigInteger> BalanceOf(Web3 web3, string contractAddress, string account, string tokenId)
         {
-            var contract = web3.ContractBuilder.Build(Abi, contractAddress);
-            var contractData = await contract.Call(CommonMethod.BalanceOf, new object[]
+            return await BalanceOf(web3, contractAddress, account, new object[]
             {
                 account,
                 tokenId
             });
+        }
+        
+        /// <summary>
+        /// Balance of ERC1155 Token
+        /// </summary>
+        /// <param name="web3"></param>
+        /// <param name="contractAddress"></param>
+        /// <param name="account"></param>
+        /// <param name="tokenId"></param>
+        /// <returns></returns>
+        public static async Task<BigInteger> BalanceOf(Web3 web3, string contractAddress, string account, BigInteger tokenId)
+        {
+            return await BalanceOf(web3, contractAddress, account, new object[]
+            {
+                account,
+                tokenId
+            });
+        }
+        
+        private static async Task<BigInteger> BalanceOf(Web3 web3, string contractAddress, string account, object[] parameters)
+        {
+            var contract = web3.ContractBuilder.Build(Abi, contractAddress);
+            var contractData = await contract.Call(CommonMethod.BalanceOf, parameters);
             return BigInteger.Parse(contractData[0].ToString());
         }
 
