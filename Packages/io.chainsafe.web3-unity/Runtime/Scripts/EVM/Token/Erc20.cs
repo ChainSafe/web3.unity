@@ -1,14 +1,15 @@
 using System.Numerics;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Providers;
+using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3;
 
 namespace Scripts.EVM.Token
 {
-    // todo convert this into a service
-    public class Erc20
+    public static class Erc20
     {
-
         private static readonly string Abi = ABI.Erc20;
+
         /// <summary>
         /// Balance Of ERC20 Address
         /// </summary>
@@ -24,6 +25,32 @@ namespace Scripts.EVM.Token
                 account
             });
             return BigInteger.Parse(contractData[0].ToString());
+        }
+        
+        /// <summary>
+        /// Custom ERC20 token balance of an address
+        /// </summary>
+        /// <param name="web3"></param>
+        /// <param name="contractAbi"></param>
+        /// <param name="contractAddress"></param>
+        /// <returns></returns>
+        public static async Task<BigInteger> CustomTokenBalance(Web3 web3, string contractAbi, string contractAddress)
+        {
+            var contract = web3.ContractBuilder.Build(contractAbi, contractAddress);
+            string address = await web3.Signer.GetAddress();
+            var contractData = await contract.Call(CommonMethod.BalanceOf, new object[] { address });
+            return BigInteger.Parse(contractData[0].ToString());
+        }
+        
+		/// <summary>
+        /// Native ERC20 balance of an Address
+        /// </summary>
+        /// <param name="web3"></param>
+        /// <param name="account"></param>
+        /// <returns></returns>
+        public static async Task<BigInteger> NativeBalanceOf(Web3 web3, string account)
+        {
+            return await web3.RpcProvider.GetBalance(account);
         }
 
         /// <summary>
@@ -76,6 +103,42 @@ namespace Scripts.EVM.Token
             var contract = web3.ContractBuilder.Build(Abi, contractAddress);
             var totalSupply = await contract.Call(CommonMethod.TotalSupply);
             return BigInteger.Parse(totalSupply[0].ToString());
+        }
+        
+        /// <summary>
+        /// Mints ERC20 Tokens
+        /// </summary>
+        /// <param name="web3"></param>
+        /// <param name="toAddress"></param>
+        /// <param name="amount"></param>
+        /// <returns></returns>
+        public static async Task<object[]> MintErc20(Web3 web3, string contractAddress, string toAccount, BigInteger amount)
+        {
+            const string method = "mint";
+            var destination = await web3.Signer.GetAddress();
+            var contract = web3.ContractBuilder.Build(Abi, contractAddress);
+            return await contract.Send(method, new object[] { toAccount, amount });
+        }
+
+        /// <summary>
+        /// Transfers ERC20 Tokens
+        /// </summary>
+        /// <param name="web3"></param>
+        /// <param name="contractAddress"></param>
+        /// <param name="toAccount"></param>
+        /// <param name="amount"></param>
+        /// <returns></returns>
+        public static async Task<object[]> TransferErc20(Web3 web3, string contractAddress, string toAccount, BigInteger amount)
+        {
+            var abi = ABI.Erc20;
+            var method = EthMethod.Transfer;
+            var contract = web3.ContractBuilder.Build(abi, contractAddress);
+            var response = await contract.Send(method, new object[]
+            {
+                toAccount,
+                amount
+            });
+            return response;
         }
     }
 }

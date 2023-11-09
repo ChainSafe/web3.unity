@@ -1,59 +1,29 @@
-﻿using System;
-using System.Threading.Tasks;
-using ChainSafe.Gaming.UnityPackage;
-using ChainSafe.Gaming.Web3;
+﻿using ChainSafe.Gaming.UnityPackage;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Samples.Behaviours
 {
     [RequireComponent(typeof(Button))]
-    public abstract class SampleBehaviour : MonoBehaviour
+    public class SampleBehaviour : MonoBehaviour
     {
-        public const string DefaultChainId = "5";
-        
-        protected Web3 Web3 => Web3Accessor.Web3;
+        private const string DefaultChainId = "5";
 
-        protected virtual void Awake()
+        public async void Execute()
         {
-            var button = GetComponent<Button>();
-            button.onClick.AddListener(Execute);
-        }
-
-        private async void Execute()
-        {
+            // Activates the loading pop up to stop duplicate calls
             SampleFeedback.Instance?.Activate();
 
             // check if we're on default sample chain
-            if (Web3.ChainConfig.ChainId != DefaultChainId)
+            if (Web3Accessor.Web3.ChainConfig.ChainId != DefaultChainId)
             {
                 // log error not exception to not break flow
                 Debug.LogError($"Samples are configured for Chain Id {DefaultChainId}, Please Change Chain Id in Window > ChainSafe SDK > Server Settings to {DefaultChainId}");
             }
             
-            try
-            {
-                await Task.Yield();
-
-                try
-                {
-                    await Task.WhenAll(ExecuteSample());
-                }
-
-                catch (Exception e)
-                {
-                    Debug.LogError(e);
-
-                    SampleFeedback.Instance?.ShowMessage($"{e.Message} : check console for more detail", Color.red, 5f);
-                }
-            }
-
-            finally
-            {
-                SampleFeedback.Instance?.Deactivate();
-            }
+            // Deactivates the loading pop up after a few seconds
+            await new WaitForSeconds(2);
+            SampleFeedback.Instance?.Deactivate();
         }
-
-        protected abstract Task ExecuteSample();
     }
 }
