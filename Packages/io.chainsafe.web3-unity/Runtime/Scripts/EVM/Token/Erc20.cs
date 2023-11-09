@@ -34,13 +34,12 @@ namespace Scripts.EVM.Token
         /// <param name="contractAbi"></param>
         /// <param name="contractAddress"></param>
         /// <returns></returns>
-        public static async Task<string> CustomTokenBalance(Web3 web3, string contractAbi, string contractAddress)
+        public static async Task<BigInteger> CustomTokenBalance(Web3 web3, string contractAbi, string contractAddress)
         {
             var contract = web3.ContractBuilder.Build(contractAbi, contractAddress);
-            var address = web3.Signer.GetAddress();
-            var response = await contract.Call("balanceOf", new object[] { address });
-            var tokenBalance = response[0].ToString();
-            return tokenBalance;
+            string address = await web3.Signer.GetAddress();
+            var contractData = await contract.Call(CommonMethod.BalanceOf, new object[] { address });
+            return BigInteger.Parse(contractData[0].ToString());
         }
         
 		/// <summary>
