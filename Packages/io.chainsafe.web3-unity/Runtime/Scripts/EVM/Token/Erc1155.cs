@@ -63,7 +63,6 @@ namespace Scripts.EVM.Token
                 tokenId
             });
         }
-
         private static async Task<BigInteger> BalanceOf(Web3 web3, string contractAddress, string account, object[] parameters)
         {
             var contract = web3.ContractBuilder.Build(Abi, contractAddress);
