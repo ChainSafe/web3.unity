@@ -10,7 +10,7 @@ using EthMethod = ChainSafe.Gaming.UnityPackage.EthMethod;
 
 namespace Scripts.EVM.Token
 {
-    public class Erc1155
+    public static class Erc1155
     {
         private static readonly string Abi = ABI.Erc1155;
         

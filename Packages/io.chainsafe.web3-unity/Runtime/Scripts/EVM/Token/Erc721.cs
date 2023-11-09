@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Scripts.EVM.Token
 {
-    public class Erc721
+    public static class Erc721
     {
         private static string _abi = ABI.Erc721;
         

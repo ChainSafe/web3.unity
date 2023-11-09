@@ -6,7 +6,7 @@ using ChainSafe.Gaming.Web3;
 
 namespace Scripts.EVM.Token
 {
-    public class Erc20
+    public static class Erc20
     {
         private static readonly string Abi = ABI.Erc20;
 

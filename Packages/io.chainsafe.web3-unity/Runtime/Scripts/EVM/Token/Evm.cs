@@ -17,7 +17,7 @@ using Web3Unity.Scripts.Prefabs;
 
 namespace Scripts.EVM.Token
 {
-    public class Evm
+    public static class Evm
     {
         public static async Task<object[]> ContractSend(Web3 web3, string method, string abi, string contractAddress, object[] args)
         {
