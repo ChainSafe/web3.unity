@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using ChainSafe.Gaming.UnityPackage;
 using Scripts.EVM.Token;
 using UnityEngine;
@@ -38,7 +39,7 @@ public class Erc721Calls : MonoBehaviour
     
     #region Owner Of Batch
 
-    private List<string> tokenIdsOwnerOfBatch = new() { "33", "29" };
+    private string[] tokenIdsOwnerOfBatch = { "33", "29" };
     private string contractOwnerOfBatch = "0x47381c5c948254e6e0E324F1AA54b7B24104D92D";
     // optional: multicall contract https://github.com/makerdao/multicall
     private string multicallOwnerOfBatch = "0x77dca2c955b15e9de4dbbcf1246b4b85b651e50e";
@@ -94,7 +95,9 @@ public class Erc721Calls : MonoBehaviour
     /// </summary>
     public async void OwnerOf()
     {
-        var owner = await Erc721.OwnerOf(Web3Accessor.Web3, contractOwnerOf, tokenIdOwnerOf);
+        var owner = tokenIdOwnerOf.StartsWith("0x") ? 
+            await Erc721.OwnerOf(Web3Accessor.Web3, contractOwnerOf, tokenIdOwnerOf) 
+            : await Erc721.OwnerOf(Web3Accessor.Web3, contractOwnerOf, BigInteger.Parse(tokenIdOwnerOf));
         SampleOutputUtil.PrintResult(owner, nameof(Erc721), nameof(Erc721.OwnerOf));
     }
     
@@ -103,7 +106,7 @@ public class Erc721Calls : MonoBehaviour
     /// </summary>
     public async void OwnerOfBatch()
     {
-        var owners = await Erc721.OwnerOfBatch(Web3Accessor.Web3, contractOwnerOfBatch, tokenIdsOwnerOfBatch.ToArray(), multicallOwnerOfBatch);
+        var owners = await Erc721.OwnerOfBatch(Web3Accessor.Web3, contractOwnerOfBatch, tokenIdsOwnerOfBatch, multicallOwnerOfBatch);
         var ownersString = $"{owners.Count} owner(s):\n" + string.Join(",\n", owners);
         SampleOutputUtil.PrintResult(ownersString, nameof(Erc721), nameof(Erc721.OwnerOfBatch));
     }
