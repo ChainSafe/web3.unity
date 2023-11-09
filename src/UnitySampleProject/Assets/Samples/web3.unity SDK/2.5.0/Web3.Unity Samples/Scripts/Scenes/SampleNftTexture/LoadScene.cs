@@ -7,7 +7,7 @@ namespace Scenes.SampleNftTexture
     {
         public void Load()
         {
-            SceneManager.LoadScene(Login.LoginSceneIndex);
+            SceneManager.LoadScene("SampleImportNftTexture");
         }
     }
 }
