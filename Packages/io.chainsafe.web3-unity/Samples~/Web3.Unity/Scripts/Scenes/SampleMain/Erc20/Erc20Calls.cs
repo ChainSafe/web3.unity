@@ -54,8 +54,6 @@ public class Erc20Calls : MonoBehaviour
     
     #endregion
     
-    private Erc20 erc20;
-    
     /// <summary>
     /// Balance Of ERC20 Address
     /// </summary>
