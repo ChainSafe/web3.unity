@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Transactions;
-using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
@@ -107,8 +106,7 @@ namespace Scripts.EVM.Token
             var response = await web3.TransactionExecutor.SendTransaction(txRequest);
             return response.Hash;
         }
-
-        // todo extract in a separate service
+        
         public static string Sha3(string message)
         {
             return new Sha3Keccack().CalculateHash(message);
@@ -118,8 +116,7 @@ namespace Scripts.EVM.Token
         {
             return await web3.Signer.SignMessage(message);
         }
-
-        // todo extract in a separate service
+        
         public static async Task<bool> SignVerify(Web3 web3, string message)
         {
             var playerAccount = await web3.Signer.GetAddress();

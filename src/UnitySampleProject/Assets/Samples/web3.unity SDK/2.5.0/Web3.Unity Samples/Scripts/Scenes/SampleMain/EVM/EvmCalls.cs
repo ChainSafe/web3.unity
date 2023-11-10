@@ -90,7 +90,8 @@ public class EvmCalls : MonoBehaviour
 
     public async void ContractCall()
     {
-        object[] args = {};
+        var account = Web3Accessor.Web3.Signer.GetAddress();
+        object[] args = { account };
         var response = await Evm.ContractCall(Web3Accessor.Web3, methodCall, ABI.ArrayAndTotal, Contracts.ArrayAndTotal, args);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.ContractCall));

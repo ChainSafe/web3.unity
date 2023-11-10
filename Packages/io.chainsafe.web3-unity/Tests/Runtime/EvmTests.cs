@@ -11,9 +11,9 @@ using UnityEngine.TestTools;
 public class EvmTests : SampleTestsBase
 {
     #region ContractCalls
-
+    
     private const string ContractSendMethodName = "addTotal";
-
+    private const string ContractCallMethodName = "myTotal";
     private const int IncreaseAmount = 1;
 
     #endregion
@@ -69,12 +69,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestContractSend()
     {
-        config.TestResponse = "0x9de3bb69db4bd93babef923f5da1f53cdb287d9ebab9b4177ba2fb25e6a09225";
-        
-        object[] args =
-        {
-            IncreaseAmount
-        };
+        object[] args = { IncreaseAmount };
         
         var sendContract = Evm.ContractSend(web3, ContractSendMethodName, ABI.ArrayAndTotal, Contracts.ArrayAndTotal, args);
 
@@ -83,6 +78,7 @@ public class EvmTests : SampleTestsBase
         if (sendContract.Exception != null) throw sendContract.Exception;
         
         Assert.IsTrue(sendContract.IsCompletedSuccessfully);
+        Debug.Log("TX" + sendContract.Result);
 
         Assert.AreEqual(sendContract.Result, string.Empty);
     }
@@ -90,9 +86,9 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestContractCall()
     {
-        object[] args = { };
+        object[] args = { config.TestWalletAddress };
         
-        var callContract = Evm.ContractCall(web3, ContractSendMethodName, ABI.ArrayAndTotal, Contracts.ArrayAndTotal, args);
+        var callContract = Evm.ContractCall(web3, ContractCallMethodName, ABI.ArrayAndTotal, Contracts.ArrayAndTotal, args);
 
         yield return new WaitUntil(() => callContract.IsCompleted);
 
@@ -100,7 +96,7 @@ public class EvmTests : SampleTestsBase
         
         Assert.IsTrue(callContract.IsCompletedSuccessfully);
 
-        Assert.AreEqual(callContract.Result, 1);
+        Assert.AreEqual(callContract.Result[0].ToString(), "1");
     }
     
     [UnityTest]
@@ -262,9 +258,6 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestSignVerify()
     {
-        config.TestResponse =
-            "0x5c996d43c2e804a0d0de7f8b07cc660bbae638aa7ea137df6156621abe5e1fbb1727ebb06f7e0067537cb0f942825fa15ead9dea6d74e4d17fa6e69007cb59561c";
-
         var signVerify = Evm.SignVerify(web3, "A man chooses, a slave obeys.");
 
         yield return new WaitUntil(() => signVerify.IsCompleted);

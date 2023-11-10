@@ -68,6 +68,7 @@ namespace Scripts.EVM.Token
         {
             return await OwnerOf(web3, contractAddress, new object[] { tokenId, });
         }
+        
         private static async Task<string> OwnerOf(Web3 web3, string contractAddress, object[] parameters)
         {
             var method = CommonMethod.OwnerOf;

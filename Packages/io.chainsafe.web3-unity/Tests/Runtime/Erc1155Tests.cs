@@ -19,7 +19,7 @@ public class Erc1155Tests
 
     private readonly string[] _accounts = new[] { "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2", "0xE51995Cdb3b1c109E0e6E67ab5aB31CDdBB83E4a" };
     private const string ContractAddress = "0x2c1867bc3026178a47a677513746dcc6822a137a";
-    private readonly string[] _tokenIds = { "0x01559ae4021aee70424836ca173b6a4e647287d15cee8ac42d8c2d8d128927e5", "0x01559ae4021aee70424836ca173b6a4e647287d15cee8ac42d8c2d8d128927e5" };
+    private readonly string[] _tokenIds = { "1", "2" };
 
     #endregion
 
@@ -77,7 +77,7 @@ public class Erc1155Tests
         var getBalanceOf = Erc1155.BalanceOf(web3, ContractAddress, _accounts[0], _tokenIds[0]);
         yield return new WaitUntil(() => getBalanceOf.IsCompleted);
 
-        Assert.AreEqual(new BigInteger(0), getBalanceOf.Result);
+        Assert.AreEqual(new BigInteger(2), getBalanceOf.Result);
     }
 
     [UnityTest]
@@ -85,7 +85,7 @@ public class Erc1155Tests
     {
         var getBalanceOf = Erc1155.BalanceOfBatch(web3, ContractAddress, _accounts, _tokenIds);
         yield return new WaitUntil(() => getBalanceOf.IsCompleted);
-        CollectionAssert.AreEqual(new List<BigInteger> { 2, 1 }, getBalanceOf.Result);
+        CollectionAssert.AreEqual(new List<BigInteger> { 1, 1 }, getBalanceOf.Result);
     }
 
     private const string ExpectedUriResult =

@@ -3,8 +3,8 @@
     public static class Contracts
     {
         public const string Erc20 = "0xe1E7C57b5E6fCBBeeaC16b8F21c99A5D6da2f655";
-        public const string Erc721 = "0x1963fBFa8727167198b4Db338044B90D36017F37";
-        public const string Erc1155 = "0x44a38dc4A733bD9cFe7df25098c5FfD44538B7a6";
-        public const string ArrayAndTotal = "0xA0a53f1Cabf7D723Ab2087400681039917D1B6D4";
+        public const string Erc721 = "0xF7B58448FEFdC634ccFE1624Dc9356C55b8d126c";
+        public const string Erc1155 = "0x1BBf689262aAEA4FbA14B236E0C3e2269C23A346";
+        public const string ArrayAndTotal = "0x80ab8A0e5F309960C7f4a0b2E29dcf0a38c7c47A";
     }
 }

@@ -18,19 +18,17 @@ public class Erc721Tests
 {
     // Fields
     #region Balances
-
-    private const string balanceOfContractAddress = "0x9123541E259125657F03D7AD2A7D1a8Ec79375BA";
-    private const string balanceOfAccount = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
+    
+    private const string balanceOfAccount = "0xD5c8010ef6dff4c83B19C511221A7F8d1e5cFF44";
 
     #endregion
 
     #region OwnerOf
 
     private const string ownerOfContractAddress = "0x06dc21f89f01409e7ed0e4c80eae1430962ae52c";
-    private const string ownerOfTokenId = "0x01559ae4021a565d5cc4740f1cefa95de8c1fb193949ecd32c337b03047da501";
-    private const string ownerOfExpected = "0x7Ea535884Ba8342bE7aDbef0Fa6822E629162375";
-    private const string ownerOfBatchContractAddress = "0x47381c5c948254e6e0E324F1AA54b7B24104D92D";
-    private string[] ownerOfBatchTokenIds = { "33", "29" };
+    private BigInteger ownerOfTokenId = 1;
+    private BigInteger ownerOfExpected = 1;
+    private string[] ownerOfBatchTokenIds = { "1", "2" };
     public string multicall = "0x77dca2c955b15e9de4dbbcf1246b4b85b651e50e";
     private string[] ownerOfBatchExpected = { "0x5e8caec3a556cbb8a3cb689560ea811bdddc8d90", "0x80cc9a67ead304bbb3b6cfca804773ef51da872c" };
 
@@ -97,16 +95,16 @@ public class Erc721Tests
     [UnityTest]
     public IEnumerator TestBalanceOf()
     {
-        var getBalanceOf = Erc721.BalanceOf(web3, balanceOfContractAddress, balanceOfAccount);
+        var getBalanceOf = Erc721.BalanceOf(web3, Contracts.Erc721, balanceOfAccount);
         yield return new WaitUntil(() => getBalanceOf.IsCompleted);
 
-        Assert.AreEqual(2, getBalanceOf.Result);
+        Assert.AreEqual("1", getBalanceOf.Result.ToString());
     }
 
     [UnityTest]
     public IEnumerator TestOwnerOf()
     {
-        var getOwnerOf = Erc721.OwnerOf(web3, ownerOfContractAddress, ownerOfTokenId);
+        var getOwnerOf = Erc721.OwnerOf(web3, Contracts.Erc721, ownerOfTokenId);
         yield return new WaitUntil(() => getOwnerOf.IsCompleted);
 
         Assert.AreEqual(ownerOfExpected, getOwnerOf.Result);
@@ -115,7 +113,7 @@ public class Erc721Tests
     [UnityTest]
     public IEnumerator TestOwnerOfBatch()
     {
-        var getOwnerOfBatch = Erc721.OwnerOfBatch(web3, ownerOfBatchContractAddress, ownerOfBatchTokenIds, multicall);
+        var getOwnerOfBatch = Erc721.OwnerOfBatch(web3, Contracts.Erc721, ownerOfBatchTokenIds, multicall);
         yield return new WaitUntil(() => getOwnerOfBatch.IsCompleted);
 
         CollectionAssert.AreEqual(ownerOfBatchExpected, getOwnerOfBatch.Result);
