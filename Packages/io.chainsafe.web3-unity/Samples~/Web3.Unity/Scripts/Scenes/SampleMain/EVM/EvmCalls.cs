@@ -27,7 +27,6 @@ public class EvmCalls : MonoBehaviour
     # region Contract Send
         
     private string methodSend = "addTotal";
-    private string contractAddressArrayTotal = "0x99D78CF4A4839D5EBe63b190Dd7F18ad7BF6D00D";
     private int increaseAmountSend = 1;
         
     #endregion
@@ -82,8 +81,7 @@ public class EvmCalls : MonoBehaviour
     #endregion
 
     #region Multi Call
-
-    private string Erc20ContractAddress = "0xe1E7C57b5E6fCBBeeaC16b8F21c99A5D6da2f655";
+    
     private string Erc20Account = "0xD5c8010ef6dff4c83B19C511221A7F8d1e5cFF44";
 
     #endregion
@@ -93,7 +91,7 @@ public class EvmCalls : MonoBehaviour
     public async void ContractCall()
     {
         object[] args = {};
-        var response = await Evm.ContractCall(Web3Accessor.Web3, methodCall, ABI.ArrayAndTotal, contractAddressArrayTotal, args);
+        var response = await Evm.ContractCall(Web3Accessor.Web3, methodCall, ABI.ArrayAndTotal, Contracts.ArrayAndTotal, args);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.ContractCall));
     }
@@ -104,21 +102,21 @@ public class EvmCalls : MonoBehaviour
         {
             increaseAmountSend
         };
-        var response = await Evm.ContractSend(Web3Accessor.Web3, methodSend, ABI.ArrayAndTotal, contractAddressArrayTotal, args);
+        var response = await Evm.ContractSend(Web3Accessor.Web3, methodSend, ABI.ArrayAndTotal, Contracts.ArrayAndTotal, args);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.ContractSend));
     }
 
     public async void GetArray()
     {
-        var response = await Evm.GetArray(Web3Accessor.Web3, contractAddressArrayTotal, ABI.ArrayAndTotal, methodArrayGet);
+        var response = await Evm.GetArray(Web3Accessor.Web3, Contracts.ArrayAndTotal, ABI.ArrayAndTotal, methodArrayGet);
         var responseString = string.Join(",\n", response.Select((list, i) => $"#{i} {string.Join((string)", ", (IEnumerable<string>)list)}"));
         SampleOutputUtil.PrintResult(responseString, nameof(Evm), nameof(Evm.GetArray));
     }
     
     public async void SendArray()
     {
-        var response = await Evm.SendArray(Web3Accessor.Web3, methodArraySend, ABI.ArrayAndTotal, contractAddressArrayTotal, stringArraySend);
+        var response = await Evm.SendArray(Web3Accessor.Web3, methodArraySend, ABI.ArrayAndTotal, Contracts.ArrayAndTotal, stringArraySend);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.SendArray));
     }
@@ -131,7 +129,7 @@ public class EvmCalls : MonoBehaviour
     
     public async void GetGasLimit()
     {
-        var gasLimit = await Evm.GetGasLimit(Web3Accessor.Web3, ABI.ArrayAndTotal, contractAddressArrayTotal, methodSend);
+        var gasLimit = await Evm.GetGasLimit(Web3Accessor.Web3, ABI.ArrayAndTotal, Contracts.ArrayAndTotal, methodSend);
         SampleOutputUtil.PrintResult(gasLimit.ToString(), nameof(Evm), nameof(Evm.GetGasLimit));
     }
     
@@ -221,7 +219,7 @@ public class EvmCalls : MonoBehaviour
     
     public async void MultiCall()
     {
-        var erc20Contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.Erc20, Erc20ContractAddress);
+        var erc20Contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.Erc20, Contracts.Erc20);
         var erc20BalanceOfCalldata = erc20Contract.Calldata(CommonMethod.BalanceOf, new object[]
         {
             Erc20Account
@@ -235,13 +233,13 @@ public class EvmCalls : MonoBehaviour
         {
             new Call3Value()
             {
-                Target = Erc20ContractAddress,
+                Target = Contracts.Erc20,
                 AllowFailure = true,
                 CallData = erc20BalanceOfCalldata.HexToByteArray(),
             },
             new Call3Value()
             {
-                Target = Erc20ContractAddress,
+                Target = Contracts.Erc20,
                 AllowFailure = true,
                 CallData = erc20TotalSupplyCalldata.HexToByteArray(),
             }
