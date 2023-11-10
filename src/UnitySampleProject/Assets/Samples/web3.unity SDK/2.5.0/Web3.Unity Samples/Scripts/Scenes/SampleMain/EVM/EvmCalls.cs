@@ -43,8 +43,8 @@ public class EvmCalls : MonoBehaviour
     private string methodArraySend = "setStore";
     private string[] stringArraySend =
     {
-        "0",
-        "1"
+        "0xFb3aECf08940785D4fB3Ad87cDC6e1Ceb20e9aac",
+        "0x92d4040e4f3591e60644aaa483821d1bd87001e3"
     };
 
     #endregion
@@ -64,9 +64,10 @@ public class EvmCalls : MonoBehaviour
     #endregion
 
     #region Registered Contract
-
-    private string registeredContractName = "shiba";
+    
+    private string registeredContractName = "CsTestErc20";
     private string registeredContractmethod = "balanceOf";
+    
 
     #endregion
 
