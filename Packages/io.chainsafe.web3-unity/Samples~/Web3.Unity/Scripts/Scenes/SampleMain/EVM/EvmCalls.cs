@@ -43,9 +43,8 @@ public class EvmCalls : MonoBehaviour
     private string methodArraySend = "setStore";
     private string[] stringArraySend =
     {
-        "1",
-        "22",
-        "TestString"
+        "0",
+        "1"
     };
 
     #endregion
