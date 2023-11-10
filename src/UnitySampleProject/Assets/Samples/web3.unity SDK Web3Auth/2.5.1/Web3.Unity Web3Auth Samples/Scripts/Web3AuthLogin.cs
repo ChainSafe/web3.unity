@@ -87,9 +87,9 @@ public class Web3AuthLogin : Login
                     network = network,
                     whiteLabel = new()
                     {
-                        dark = true,
-                        defaultLanguage = "en",
-                        name = "ChainSafe Gaming SDK",
+                        mode = Web3Auth.ThemeModes.dark,
+                        defaultLanguage = Web3Auth.Language.en,
+                        appName = "ChainSafe Gaming SDK",
                     }
                 }
             };

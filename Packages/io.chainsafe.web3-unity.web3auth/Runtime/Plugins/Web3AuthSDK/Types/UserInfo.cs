@@ -11,4 +11,5 @@
     public string idToken { get; set; }
     public string oAuthIdToken { get; set; }
     public string oAuthAccessToken { get; set; }
+    public bool isMfaEnabled { get; set; }
 }

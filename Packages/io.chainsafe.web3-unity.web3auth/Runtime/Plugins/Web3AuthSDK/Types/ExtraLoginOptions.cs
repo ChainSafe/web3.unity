@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 
-public class ExtraLoginOptions
-{
+public class ExtraLoginOptions {
     public Dictionary<string, string> additionalParams { get; set; }
     public string domain { get; set; }
     public string client_id { get; set; }
