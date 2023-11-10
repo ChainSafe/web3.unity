@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using ChainSafe.Gaming.Web3;
 using NUnit.Framework;
 using Scripts.EVM.Token;
@@ -23,8 +24,8 @@ public class EvmTests : SampleTestsBase
     private const string SendArrayMethodName = "setStore";
     private static readonly List<string> ArrayToSend = new List<string>()
     {
-        "0xFb3aECf08940785D4fB3Ad87cDC6e1Ceb20e9aac",
-        "0x92d4040e4f3591e60644aaa483821d1bd87001e3"
+        "0",
+        "1"
     };
 
     #endregion
@@ -87,10 +88,24 @@ public class EvmTests : SampleTestsBase
     }
     
     [UnityTest]
+    public IEnumerator TestContractCall()
+    {
+        object[] args = { };
+        
+        var callContract = Evm.ContractCall(web3, ContractSendMethodName, ABI.ArrayAndTotal, Contracts.ArrayAndTotal, args);
+
+        yield return new WaitUntil(() => callContract.IsCompleted);
+
+        if (callContract.Exception != null) throw callContract.Exception;
+        
+        Assert.IsTrue(callContract.IsCompletedSuccessfully);
+
+        Assert.AreEqual(callContract.Result, 1);
+    }
+    
+    [UnityTest]
     public IEnumerator TestSendArray()
     {
-        config.TestResponse = "0x6a33280f3b2b907da613b18b09f863cd835f1977a4131001ace5602899fc98c7";
-
         var sendArray = Evm.SendArray(web3, SendArrayMethodName, ABI.ArrayAndTotal, Contracts.ArrayAndTotal, ArrayToSend.ToArray());
 
         yield return new WaitUntil(() => sendArray.IsCompleted);
@@ -111,7 +126,6 @@ public class EvmTests : SampleTestsBase
 
         //convert toLower to make comparing easier
         var result = getArray.Result.ConvertAll(a => a.ConvertAll(b => b.ToLower()));
-        Debug.Log(result);
 
         Assert.AreEqual(result, new List<List<string>>
         {
