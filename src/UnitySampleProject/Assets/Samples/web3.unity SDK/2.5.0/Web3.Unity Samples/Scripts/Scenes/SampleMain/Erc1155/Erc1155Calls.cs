@@ -25,8 +25,7 @@ public class Erc1155Calls : MonoBehaviour
     #endregion
 
     #region Balance Of
-
-    private string tokenContract = "0x44a38dc4A733bD9cFe7df25098c5FfD44538B7a6";
+    
     private string accountBalanceOf = "0xD5c8010ef6dff4c83B19C511221A7F8d1e5cFF44";
     private string tokenIdBalanceOf = "1";
 
@@ -87,8 +86,8 @@ public class Erc1155Calls : MonoBehaviour
     public async void BalanceOf()
     {
         var balance = tokenIdBalanceOf.StartsWith("0x") ? 
-            await Erc1155.BalanceOf(Web3Accessor.Web3, tokenContract, accountBalanceOf, tokenIdBalanceOf)
-            : await Erc1155.BalanceOf(Web3Accessor.Web3, tokenContract, accountBalanceOf, BigInteger.Parse(tokenIdBalanceOf));
+            await Erc1155.BalanceOf(Web3Accessor.Web3, Contracts.Erc721, accountBalanceOf, tokenIdBalanceOf)
+            : await Erc1155.BalanceOf(Web3Accessor.Web3, Contracts.Erc721, accountBalanceOf, BigInteger.Parse(tokenIdBalanceOf));
         SampleOutputUtil.PrintResult(balance.ToString(), nameof(Erc1155), nameof(Erc1155.BalanceOf));
     }
     
@@ -107,7 +106,7 @@ public class Erc1155Calls : MonoBehaviour
     /// </summary>
     public async void Uri()
     {
-        var uri = await Erc1155.Uri(Web3Accessor.Web3, tokenContract, tokenIdUri);
+        var uri = await Erc1155.Uri(Web3Accessor.Web3, Contracts.Erc1155, tokenIdUri);
         SampleOutputUtil.PrintResult(uri, nameof(Erc1155), nameof(Erc1155.Uri));
     }
     
@@ -116,7 +115,7 @@ public class Erc1155Calls : MonoBehaviour
     /// </summary>
     public async void MintErc1155()
     {
-        var response = await Erc1155.MintErc1155(Web3Accessor.Web3, ABI.Mint1155, tokenContract, idMint, amountMint);
+        var response = await Erc1155.MintErc1155(Web3Accessor.Web3, ABI.Erc1155, Contracts.Erc1155, idMint, amountMint);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Erc1155), nameof(Erc1155.MintErc1155));
     }
@@ -126,7 +125,7 @@ public class Erc1155Calls : MonoBehaviour
     /// </summary>
     public async void TransferErc1155()
     {
-        var response = await Erc1155.TransferErc1155(Web3Accessor.Web3, tokenContract, tokenIdTransfer, amountTransfer, toAccountTransfer);
+        var response = await Erc1155.TransferErc1155(Web3Accessor.Web3, Contracts.Erc1155, tokenIdTransfer, amountTransfer, toAccountTransfer);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Erc1155), nameof(Erc1155.TransferErc1155));
     }
@@ -136,7 +135,7 @@ public class Erc1155Calls : MonoBehaviour
     /// </summary>
     public async void ImportNftTexture1155()
     {
-        var textureRequest = await Erc1155.ImportNftTexture1155(Web3Accessor.Web3, tokenContract, tokenIdTexture);
+        var textureRequest = await Erc1155.ImportNftTexture1155(Web3Accessor.Web3, Contracts.Erc1155, tokenIdTexture);
         rawImage.texture = textureRequest;
     }
 }

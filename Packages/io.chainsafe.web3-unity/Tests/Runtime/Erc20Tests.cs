@@ -16,8 +16,7 @@ public class Erc20Tests
     // Fields
     #region Contract Calls
     
-    private const string Account = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
-    private const string ContractAddress = "0x3E0C0447e47d49195fbE329265E330643eB42e6f";
+    private const string Account = "0xD5c8010ef6dff4c83B19C511221A7F8d1e5cFF44";
 
     #endregion
 
@@ -35,7 +34,7 @@ public class Erc20Tests
         if (projectConfigScriptableObject == null)
         {
             projectConfigScriptableObject = ProjectConfigUtilities.Load("3dc3e125-71c4-4511-a367-e981a6a94371", "5",
-                "Ethereum", "Goerli", "Geth", "https://goerli.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f");
+                "Ethereum", "Sepolia", "Seth", "https://sepolia.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f");
         }
 
 
@@ -56,19 +55,19 @@ public class Erc20Tests
     [UnityTest]
     public IEnumerator TestBalanceOf()
     {
-        var getBalanceOf = Erc20.BalanceOf(web3, ContractAddress, Account);
+        var getBalanceOf = Erc20.BalanceOf(web3, Contracts.Erc20, Account);
         yield return new WaitUntil(() => getBalanceOf.IsCompleted);
 
         Assert.AreEqual(new BigInteger(new byte[]
         {
-            0, 0, 0, 64, 234, 237, 116, 70, 208, 156, 44, 159, 12
+            0
         }), getBalanceOf.Result);
     }
 
     [UnityTest]
     public IEnumerator TestDecimals()
     {
-        var getDecimals = Erc20.Decimals(web3, ContractAddress);
+        var getDecimals = Erc20.Decimals(web3, Contracts.Erc20);
         yield return new WaitUntil(() => getDecimals.IsCompleted);
 
         Assert.AreEqual(new BigInteger(18), getDecimals.Result);
@@ -77,7 +76,7 @@ public class Erc20Tests
     [UnityTest]
     public IEnumerator TestName()
     {
-        var getName = Erc20.Name(web3, ContractAddress);
+        var getName = Erc20.Name(web3, Contracts.Erc20);
         yield return new WaitUntil(() => getName.IsCompleted);
 
         Assert.AreEqual("ChainToken", getName.Result);
@@ -100,7 +99,7 @@ public class Erc20Tests
     [UnityTest]
     public IEnumerator TestSymbol()
     {
-        var getSymbol = Erc20.Symbol(web3, ContractAddress);
+        var getSymbol = Erc20.Symbol(web3, Contracts.Erc20);
 
         yield return new WaitUntil(() => getSymbol.IsCompleted);
 
@@ -110,7 +109,7 @@ public class Erc20Tests
     [UnityTest]
     public IEnumerator TestTotalSupply()
     {
-        var getTotalSupply = Erc20.TotalSupply(web3, ContractAddress);
+        var getTotalSupply = Erc20.TotalSupply(web3, Contracts.Erc20);
 
         yield return new WaitUntil(() => getTotalSupply.IsCompleted);
 
