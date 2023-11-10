@@ -1,7 +1,6 @@
 using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Providers;
-using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3;
 
 namespace Scripts.EVM.Token
@@ -131,7 +130,7 @@ namespace Scripts.EVM.Token
         public static async Task<object[]> TransferErc20(Web3 web3, string contractAddress, string toAccount, BigInteger amount)
         {
             var abi = ABI.Erc20;
-            var method = EthMethod.Transfer;
+            var method = CommonMethod.Transfer;
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
             var response = await contract.Send(method, new object[]
             {

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
-using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3;
 using Newtonsoft.Json;
 using Scripts.EVM.Remote;
@@ -176,7 +175,7 @@ namespace Scripts.EVM.Token
         public static async Task<object[]> TransferErc721(Web3 web3, string contractAddress, string toAccount, BigInteger tokenId)
         {
             var abi = ABI.Erc721;
-            var method = EthMethod.SafeTransferFrom;
+            var method = CommonMethod.SafeTransferFrom;
             var account = await web3.Signer.GetAddress();
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
 

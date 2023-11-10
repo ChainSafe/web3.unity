@@ -6,7 +6,6 @@ using ChainSafe.Gaming.Web3;
 using Scripts.EVM.Remote;
 using UnityEngine;
 using UnityEngine.Networking;
-using EthMethod = ChainSafe.Gaming.UnityPackage.EthMethod;
 
 namespace Scripts.EVM.Token
 {
@@ -143,7 +142,7 @@ namespace Scripts.EVM.Token
         {
             var account = await web3.Signer.GetAddress();
             var abi = ABI.Erc1155;
-            var method = EthMethod.SafeTransferFrom;
+            var method = CommonMethod.SafeTransferFrom;
             byte[] dataObject = { };
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
             var response = await contract.Send(method, new object[]
