@@ -78,8 +78,7 @@ namespace Scenes
              * to see how it's used later on.
              */
             services.ConfigureRegisteredContracts(contracts =>
-                contracts.RegisterContract(
-                    "CsTestErc20", ABI.Erc20, Contracts.Erc20));
+                contracts.RegisterContract("CsTestErc20", ABI.Erc20, Contracts.Erc20));
 
         }
     }
