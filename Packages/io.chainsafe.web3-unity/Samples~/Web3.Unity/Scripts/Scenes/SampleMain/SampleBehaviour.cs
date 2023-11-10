@@ -7,7 +7,7 @@ namespace Samples.Behaviours
     [RequireComponent(typeof(Button))]
     public class SampleBehaviour : MonoBehaviour
     {
-        private const string DefaultChainId = "5";
+        private const string DefaultChainId = "11155111";
 
         public async void Execute()
         {
