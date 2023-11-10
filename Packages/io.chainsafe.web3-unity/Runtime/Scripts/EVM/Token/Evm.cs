@@ -31,7 +31,7 @@ namespace Scripts.EVM.Token
             return await contract.Call(method, args);
         }
 
-        public static async Task<List<List<string>>> GetArray(Web3 web3, string contractAddress, string abi, string method)
+        public static async Task<List<List<string>>> GetArray(Web3 web3, string method, string abi, string contractAddress)
         {
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
             var rawResponse = await contract.Call(method);

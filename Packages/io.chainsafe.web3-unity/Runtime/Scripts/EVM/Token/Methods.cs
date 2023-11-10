@@ -13,5 +13,7 @@ namespace Scripts.EVM.Token
         public const string BalanceOfBatch = "balanceOfBatch";
         public const string Transfer = "transfer";
         public const string SafeTransferFrom = "safeTransferFrom";
+        public const string SafeMint = "safeMint";
+        public const string Mint = "mint";
     }
 }

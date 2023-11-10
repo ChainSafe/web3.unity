@@ -123,7 +123,7 @@ namespace Scripts.EVM.Token
         public static async Task<object[]> MintErc1155(Web3 web3, string abi, string contractAddress, BigInteger id, BigInteger amount)
         {
             byte[] dataObject = { };
-            const string method = "mint";
+            const string method = CommonMethod.Mint;
             var destination = await web3.Signer.GetAddress();
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
             return await contract.Send(method, new object[] { destination, id, amount, dataObject });

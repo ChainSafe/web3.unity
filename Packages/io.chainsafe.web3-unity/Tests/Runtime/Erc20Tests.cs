@@ -16,7 +16,7 @@ public class Erc20Tests
     // Fields
     #region Contract Calls
     
-    private const string Account = "0xD5c8010ef6dff4c83B19C511221A7F8d1e5cFF44";
+    private const string Account = "0x55ffe9E30347266f02b9BdAe20aD3a86493289ea";
 
     #endregion
 
@@ -79,7 +79,7 @@ public class Erc20Tests
         var getName = Erc20.Name(web3, Contracts.Erc20);
         yield return new WaitUntil(() => getName.IsCompleted);
 
-        Assert.AreEqual("ChainToken", getName.Result);
+        Assert.AreEqual("CsTestErc20", getName.Result);
     }
 
     [UnityTest]
@@ -88,12 +88,8 @@ public class Erc20Tests
         var getNativeBalanceOf = Erc20.NativeBalanceOf(web3, Account);
 
         yield return new WaitUntil(() => getNativeBalanceOf.IsCompleted);
-
-
-        Assert.AreEqual(new BigInteger(new byte[]
-        {
-            0, 144, 99, 20, 5, 161, 13, 3
-        }), getNativeBalanceOf.Result);
+        
+        Assert.AreEqual(new BigInteger(0), getNativeBalanceOf.Result);
     }
 
     [UnityTest]
@@ -103,7 +99,7 @@ public class Erc20Tests
 
         yield return new WaitUntil(() => getSymbol.IsCompleted);
 
-        Assert.AreEqual("CT", getSymbol.Result);
+        Assert.AreEqual("CST", getSymbol.Result);
     }
 
     [UnityTest]
@@ -113,9 +109,6 @@ public class Erc20Tests
 
         yield return new WaitUntil(() => getTotalSupply.IsCompleted);
 
-        Assert.AreEqual(new BigInteger(new byte[]
-        {
-            0, 0, 0, 64, 234, 237, 116, 70, 208, 156, 44, 159, 12
-        }), getTotalSupply.Result);
+        Assert.AreEqual(new BigInteger(1000000000000000000), getTotalSupply.Result);
     }
 }

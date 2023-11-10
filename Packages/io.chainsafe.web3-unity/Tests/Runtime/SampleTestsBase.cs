@@ -40,7 +40,7 @@ public class SampleTestsBase
             {
                 // set wallet to testing
                 Testing = true,
-                TestWalletAddress = "0x55ffe9E30347266f02b9BdAe20aD3a86493289ea",
+                TestWalletAddress = "0xD5c8010ef6dff4c83B19C511221A7F8d1e5cFF44",
             };
 
             services.UseWalletConnect(config);

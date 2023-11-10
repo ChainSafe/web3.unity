@@ -158,7 +158,7 @@ namespace Scripts.EVM.Token
         /// <returns></returns>
         public static async Task<object[]> MintErc721(Web3 web3, string abi, string contractAddress, string uri)
         {
-            const string method = "safeMint";
+            const string method = CommonMethod.SafeMint;
             var destination = await web3.Signer.GetAddress();
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
             return await contract.Send(method, new object[] { destination, uri });
