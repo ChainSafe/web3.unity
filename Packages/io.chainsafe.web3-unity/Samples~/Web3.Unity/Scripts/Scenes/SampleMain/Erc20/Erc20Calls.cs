@@ -20,7 +20,8 @@ public class Erc20Calls : MonoBehaviour
     
     #region Custom Balance Of
 
-    private string contractToken = "0x714d32fA722461A2c8F0b4EB98ff5cFF8F908Df2";
+    private string contractToken = "0xe1E7C57b5E6fCBBeeaC16b8F21c99A5D6da2f655";
+    
     #endregion
     
     #region Native Balance Of
@@ -50,10 +51,8 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void BalanceOf()
     {
-        SampleFeedback.Instance?.Activate();
         var balance = await Erc20.BalanceOf(Web3Accessor.Web3, contractBalanceOf, accountBalanceOf);
         SampleOutputUtil.PrintResult(balance.ToString(), nameof(Erc20), nameof(Erc20.BalanceOf));
-        SampleFeedback.Instance?.Deactivate();
     }
     
     /// <summary>
@@ -61,7 +60,7 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void CustomTokenBalanceOf()
     {
-        var result = await Erc20.CustomTokenBalance(Web3Accessor.Web3, ABI.CustomBalanceOf, contractToken);
+        var result = await Erc20.CustomTokenBalance(Web3Accessor.Web3, ABI.Erc20, contractToken);
         SampleOutputUtil.PrintResult(result.ToString(), nameof(Erc20), nameof(Erc20.CustomTokenBalance));
     }
     

@@ -27,7 +27,7 @@ public class EvmCalls : MonoBehaviour
     # region Contract Send
         
     private string methodSend = "addTotal";
-    private string contractAddressSend = "0x7286Cf0F6E80014ea75Dbc25F545A3be90F4904F";
+    private string contractAddressArrayTotal = "0x99D78CF4A4839D5EBe63b190Dd7F18ad7BF6D00D";
     private int increaseAmountSend = 1;
         
     #endregion
@@ -35,19 +35,18 @@ public class EvmCalls : MonoBehaviour
     #region Contract Call
 
     private string methodCall = "myTotal";
-    private string contractAddressCall = "0xC71d13c40B4fE7e2c557eBAa12A0400dd4Df76C9";
 
     #endregion
 
     #region Get Send Array
-
-    private string contractAddressArray = "0x5244d0453A727EDa96299384370359f4A2B5b20a";
+    
     private string methodArrayGet = "getStore";
     private string methodArraySend = "setStore";
     private string[] stringArraySend =
     {
-        "0xFb3aECf08940785D4fB3Ad87cDC6e1Ceb20e9aac",
-        "0x92d4040e4f3591e60644aaa483821d1bd87001e3"
+        "1",
+        "22",
+        "TestString"
     };
 
     #endregion
@@ -84,8 +83,8 @@ public class EvmCalls : MonoBehaviour
 
     #region Multi Call
 
-    private string Erc20ContractAddress = "0x3E0C0447e47d49195fbE329265E330643eB42e6f";
-    private string Erc20Account = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
+    private string Erc20ContractAddress = "0xe1E7C57b5E6fCBBeeaC16b8F21c99A5D6da2f655";
+    private string Erc20Account = "0xD5c8010ef6dff4c83B19C511221A7F8d1e5cFF44";
 
     #endregion
     
@@ -94,7 +93,7 @@ public class EvmCalls : MonoBehaviour
     public async void ContractCall()
     {
         object[] args = {};
-        var response = await Evm.ContractCall(Web3Accessor.Web3, methodCall, ABI.AddTotal, contractAddressCall, args);
+        var response = await Evm.ContractCall(Web3Accessor.Web3, methodCall, ABI.ArrayAndTotal, contractAddressArrayTotal, args);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.ContractCall));
     }
@@ -105,21 +104,21 @@ public class EvmCalls : MonoBehaviour
         {
             increaseAmountSend
         };
-        var response = await Evm.ContractSend(Web3Accessor.Web3, methodSend, ABI.AddTotal, contractAddressSend, args);
+        var response = await Evm.ContractSend(Web3Accessor.Web3, methodSend, ABI.ArrayAndTotal, contractAddressArrayTotal, args);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.ContractSend));
     }
 
     public async void GetArray()
     {
-        var response = await Evm.GetArray(Web3Accessor.Web3, contractAddressArray, ABI.AddTotal, methodArrayGet);
+        var response = await Evm.GetArray(Web3Accessor.Web3, contractAddressArrayTotal, ABI.ArrayAndTotal, methodArrayGet);
         var responseString = string.Join(",\n", response.Select((list, i) => $"#{i} {string.Join((string)", ", (IEnumerable<string>)list)}"));
         SampleOutputUtil.PrintResult(responseString, nameof(Evm), nameof(Evm.GetArray));
     }
     
     public async void SendArray()
     {
-        var response = await Evm.SendArray(Web3Accessor.Web3, methodArraySend, ABI.AddTotal, contractAddressArray, stringArraySend);
+        var response = await Evm.SendArray(Web3Accessor.Web3, methodArraySend, ABI.ArrayAndTotal, contractAddressArrayTotal, stringArraySend);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.SendArray));
     }
@@ -132,7 +131,7 @@ public class EvmCalls : MonoBehaviour
     
     public async void GetGasLimit()
     {
-        var gasLimit = await Evm.GetGasLimit(Web3Accessor.Web3, ABI.AddTotal, contractAddressSend, methodSend);
+        var gasLimit = await Evm.GetGasLimit(Web3Accessor.Web3, ABI.ArrayAndTotal, contractAddressArrayTotal, methodSend);
         SampleOutputUtil.PrintResult(gasLimit.ToString(), nameof(Evm), nameof(Evm.GetGasLimit));
     }
     
