@@ -73,7 +73,7 @@ public class Erc721Tests
         var projectConfigScriptableObject = ProjectConfigUtilities.Load();
         if (projectConfigScriptableObject == null)
         {
-            projectConfigScriptableObject = ProjectConfigUtilities.Load("3dc3e125-71c4-4511-a367-e981a6a94371", "5",
+            projectConfigScriptableObject = ProjectConfigUtilities.Load("3dc3e125-71c4-4511-a367-e981a6a94371", "11155111",
                 "Ethereum", "Sepolia", "Seth", "https://sepolia.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f");
         }
     
@@ -120,7 +120,7 @@ public class Erc721Tests
     }
 
     private const string ExpectedUriResult =
-        "https://ipfs.io/ipfs/f01559ae4021a565d5cc4740f1cefa95de8c1fb193949ecd32c337b03047da501";
+        "https://ipfs.chainsafe.io/ipfs/QmfUHuFj3YL2JMZkyXNtGRV8e9aLJgQ6gcSrqbfjWFvbqQ";
 
     [UnityTest]
     public IEnumerator TestUri()

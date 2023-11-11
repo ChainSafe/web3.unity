@@ -201,7 +201,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestUseRegisteredContract()
     {
-        var useRegisteredContract = Evm.UseRegisteredContract(web3, "shiba", "balanceOf");
+        var useRegisteredContract = Evm.UseRegisteredContract(web3, "CsTestErc20", "balanceOf");
 
         yield return new WaitUntil(() => useRegisteredContract.IsCompleted);
 
@@ -209,7 +209,7 @@ public class EvmTests : SampleTestsBase
         
         Assert.IsTrue(useRegisteredContract.IsCompletedSuccessfully);
 
-        Assert.AreEqual(useRegisteredContract.Result, new BigInteger(0));
+        Assert.AreEqual(useRegisteredContract.Result, new BigInteger(1000000000000000000));
     }
 
     [UnityTest]
@@ -290,7 +290,7 @@ public class EvmTests : SampleTestsBase
     {
         config.TestResponse = "0xd3027fbfd9d5ddb5ea0ef75f5b128581d9268ad67728d150657f915c8910f9f0";
 
-        var mint721 = Erc721.MintErc721(web3, ABI.Erc721, Contracts.Erc721, Mint721Uri);
+        var mint721 = Erc721.MintErc721(web3, ABI.Erc721, Contracts.Erc721);
 
         yield return new WaitUntil(() => mint721.IsCompleted);
 

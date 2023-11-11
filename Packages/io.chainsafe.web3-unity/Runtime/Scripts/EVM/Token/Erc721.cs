@@ -150,19 +150,35 @@ namespace Scripts.EVM.Token
         }
         
         /// <summary>
-        /// Mints ERC721 token
+        /// Mints ERC721 token without URI
         /// </summary>
         /// <param name="web3"></param>
         /// <param name="abi"></param>
         /// <param name="contractAddress"></param>
         /// <param name="uri"></param>
         /// <returns></returns>
-        public static async Task<object[]> MintErc721(Web3 web3, string abi, string contractAddress, string uri)
+        public static async Task<object[]> MintErc721(Web3 web3, string abi, string contractAddress)
         {
             const string method = CommonMethod.SafeMint;
             var destination = await web3.Signer.GetAddress();
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
-            return await contract.Send(method, new object[] { destination, uri });
+            return await contract.Send(method, new object[] { destination });
+        }
+
+		/// <summary>
+        /// Mints ERC721 token with URI
+        /// </summary>
+        /// <param name="web3"></param>
+        /// <param name="abi"></param>
+        /// <param name="contractAddress"></param>
+        /// <param name="uri"></param>
+        /// <returns></returns>
+        public static async Task<object[]> MintErc721(Web3 web3, string abi, string contractAddress, string Uri)
+        {
+            const string method = CommonMethod.SafeMint;
+            var destination = await web3.Signer.GetAddress();
+            var contract = web3.ContractBuilder.Build(abi, contractAddress);
+            return await contract.Send(method, new object[] { destination, Uri });
         }
         
         /// <summary>

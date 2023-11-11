@@ -52,7 +52,7 @@ public class Erc1155Tests
         var projectConfigScriptableObject = ProjectConfigUtilities.Load();
         if (projectConfigScriptableObject == null)
         {
-            projectConfigScriptableObject = ProjectConfigUtilities.Load("3dc3e125-71c4-4511-a367-e981a6a94371", "5",
+            projectConfigScriptableObject = ProjectConfigUtilities.Load("3dc3e125-71c4-4511-a367-e981a6a94371", "11155111",
                 "Ethereum", "Sepolia", "Seth", "https://sepolia.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f");
         }
     
@@ -77,7 +77,7 @@ public class Erc1155Tests
         var getBalanceOf = Erc1155.BalanceOf(web3, ContractAddress, _accounts[0], _tokenIds[0]);
         yield return new WaitUntil(() => getBalanceOf.IsCompleted);
 
-        Assert.AreEqual(new BigInteger(2), getBalanceOf.Result);
+        Assert.AreEqual("0", getBalanceOf.Result.ToString());
     }
 
     [UnityTest]
@@ -85,11 +85,11 @@ public class Erc1155Tests
     {
         var getBalanceOf = Erc1155.BalanceOfBatch(web3, ContractAddress, _accounts, _tokenIds);
         yield return new WaitUntil(() => getBalanceOf.IsCompleted);
-        CollectionAssert.AreEqual(new List<BigInteger> { 1, 1 }, getBalanceOf.Result);
+        CollectionAssert.AreEqual(new List<BigInteger> { 0, 0 }, getBalanceOf.Result);
     }
 
     private const string ExpectedUriResult =
-        "https://ipfs.io/ipfs/f01559ae4021aee70424836ca173b6a4e647287d15cee8ac42d8c2d8d128927e5";
+        "https://ipfs.chainsafe.io/ipfs/QmfUHuFj3YL2JMZkyXNtGRV8e9aLJgQ6gcSrqbfjWFvbqQ";
 
     [UnityTest]
     public IEnumerator TestUri()
