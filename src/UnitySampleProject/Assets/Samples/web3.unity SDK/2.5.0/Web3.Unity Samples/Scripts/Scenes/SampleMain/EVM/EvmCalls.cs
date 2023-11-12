@@ -85,6 +85,9 @@ public class EvmCalls : MonoBehaviour
     
     #endregion
 
+    /// <summary>
+    /// Calls values from a contract
+    /// </summary>
     public async void ContractCall()
     {
         object[] args = {};
@@ -92,7 +95,10 @@ public class EvmCalls : MonoBehaviour
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.ContractCall));
     }
-
+    
+    /// <summary>
+    /// Sends values to a contract
+    /// </summary>
     public async void ContractSend()
     {
         object[] args =
@@ -103,7 +109,10 @@ public class EvmCalls : MonoBehaviour
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.ContractSend));
     }
-
+    
+    /// <summary>
+    /// Gets array values from a contract
+    /// </summary>
     public async void GetArray()
     {
         var response = await Evm.GetArray(Web3Accessor.Web3, Contracts.ArrayTotal, ABI.ArrayTotal, methodArrayGet);
@@ -111,6 +120,9 @@ public class EvmCalls : MonoBehaviour
         SampleOutputUtil.PrintResult(responseString, nameof(Evm), nameof(Evm.GetArray));
     }
     
+    /// <summary>
+    /// Sends array values to a contract
+    /// </summary>
     public async void SendArray()
     {
         var response = await Evm.SendArray(Web3Accessor.Web3, methodArraySend, ABI.ArrayTotal, Contracts.ArrayTotal, stringArraySend);
@@ -118,30 +130,45 @@ public class EvmCalls : MonoBehaviour
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.SendArray));
     }
     
+    /// <summary>
+    /// Gets the current block number
+    /// </summary>
     public async void GetBlockNumber()
     {
         var blockNumber = await Evm.GetBlockNumber(Web3Accessor.Web3);
         SampleOutputUtil.PrintResult(blockNumber.ToString(), nameof(Evm), nameof(Evm.GetBlockNumber));
     }
     
+    /// <summary>
+    /// Gets the gas limit for a specific function
+    /// </summary>
     public async void GetGasLimit()
     {
         var gasLimit = await Evm.GetGasLimit(Web3Accessor.Web3, ABI.ArrayTotal, Contracts.ArrayTotal, methodSend);
         SampleOutputUtil.PrintResult(gasLimit.ToString(), nameof(Evm), nameof(Evm.GetGasLimit));
     }
     
+    /// <summary>
+    /// Gets the current gas price
+    /// </summary>
     public async void GetGasPrice()
     {
         var gasPrice = await Evm.GetGasPrice(Web3Accessor.Web3);
         SampleOutputUtil.PrintResult(gasPrice.ToString(), nameof(Evm), nameof(Evm.GetGasPrice));
     }
     
+    /// <summary>
+    /// Gets an accounts nonce
+    /// </summary>
     public async void GetNonce()
     {
         var nonce = await Evm.GetNonce(Web3Accessor.Web3);
         SampleOutputUtil.PrintResult(nonce.ToString(), nameof(Evm), nameof(Evm.GetNonce));
     }
     
+    /// <summary>
+    /// Gets a specific transaction's status
+    /// </summary>
     public async void GetTransactionStatus()
     {
         var receipt = await Evm.GetTransactionStatus(Web3Accessor.Web3);
@@ -152,30 +179,45 @@ public class EvmCalls : MonoBehaviour
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.GetTransactionStatus));
     }
     
-    public async void RegisterContract()
+    /// <summary>
+    /// Uses a registered contract
+    /// </summary>
+    public async void RegisteredContract()
     {
         var balance = await Evm.UseRegisteredContract(Web3Accessor.Web3, registeredContractName, EthMethod.BalanceOf);
         SampleOutputUtil.PrintResult(balance.ToString(), nameof(Evm), nameof(Evm.UseRegisteredContract));
     }
     
+    /// <summary>
+    /// Sends a transaction
+    /// </summary>
     public async void SendTransaction()
     {
         var transactionHash = await Evm.SendTransaction(Web3Accessor.Web3, toAddress);
         SampleOutputUtil.PrintResult(transactionHash, nameof(Evm), nameof(Evm.SendTransaction));
     }
     
+    /// <summary>
+    /// Encrypts a message with SHA3
+    /// </summary>
     public void Sha3()
     {
         var hash = Evm.Sha3(messageSha);
         SampleOutputUtil.PrintResult(hash, nameof(Evm), nameof(Evm.Sha3));
     }
     
+    /// <summary>
+    /// Signs a message, the result is specific to each user
+    /// </summary>
     public async void SignMessage()
     {
         var signedMessage = await Evm.SignMessage(Web3Accessor.Web3, messageSign);
         SampleOutputUtil.PrintResult(signedMessage, nameof(Evm), nameof(Evm.SignMessage));
     }
     
+    /// <summary>
+    /// Signs a message and verifs account ownership
+    /// </summary>
     public async void SignVerify()
     {
         var signatureVerified = await Evm.SignVerify(Web3Accessor.Web3, messageSignVerify);
@@ -183,24 +225,36 @@ public class EvmCalls : MonoBehaviour
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.SignVerify));
     }
     
+    /// <summary>
+    /// Signs a transaction via ECDSA
+    /// </summary>
     public void EcdsaSignTransaction()
     {
         var result = Evm.EcdsaSignTransaction(ecdsaKey, transactionHash, chainId);
         SampleOutputUtil.PrintResult(result, nameof(Evm), nameof(Evm.EcdsaSignTransaction));
     }
     
+    /// <summary>
+    /// Signs a message via ECDSA
+    /// </summary>
     public void EcdsaSignMessage()
     {
         var result = Evm.EcdsaSignMessage(ecdsaKey, ecdsaMessage);
         SampleOutputUtil.PrintResult(result, nameof(Evm), nameof(Evm.EcdsaSignMessage));
     }
     
+    /// <summary>
+    /// Gets an addres via ECDSA key
+    /// </summary>
     public void EcdsaGetAddress()
     {
         var result = Evm.EcdsaGetAddress(ecdsaKey);
         SampleOutputUtil.PrintResult(result, nameof(Evm), nameof(Evm.EcdsaGetAddress));
     }
     
+    /// <summary>
+    /// Uploads to IPFS
+    /// </summary>
     public async void IPFSUpload()
     {
         var cid = await Evm.Upload(new IpfsUploadRequest
@@ -214,6 +268,9 @@ public class EvmCalls : MonoBehaviour
         SampleOutputUtil.PrintResult(cid, nameof(IpfsSample), nameof(IpfsSample.Upload));
     }
     
+    /// <summary>
+    /// Makes multiple calls
+    /// </summary>
     public async void MultiCall()
     {
         var erc20Contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.Erc20, Contracts.Erc20);
