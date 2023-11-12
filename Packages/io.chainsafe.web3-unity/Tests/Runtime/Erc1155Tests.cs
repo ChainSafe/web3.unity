@@ -17,8 +17,8 @@ public class Erc1155Tests
     // Fields
     #region Balances
 
-    private readonly string[] _accounts = new[] { "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2", "0xE51995Cdb3b1c109E0e6E67ab5aB31CDdBB83E4a" };
-    private readonly string[] _tokenIds = { "1", "2" };
+    private static string[] _accounts = { "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2", "0xE51995Cdb3b1c109E0e6E67ab5aB31CDdBB83E4a" };
+    private static string[] _tokenIds = { "1", "2" };
 
     #endregion
     

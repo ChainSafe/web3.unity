@@ -27,23 +27,24 @@ public class Erc721Tests
 
     private const string ownerOfTokenId = "2";
     private const string ownerOfExpected = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
-    private string[] ownerOfBatchTokenIds = { "1", "2" };
-	private string multicall = "";
-    //private string multicall = "0x77dca2c955b15e9de4dbbcf1246b4b85b651e50e";
-    private string[] ownerOfBatchExpected = { "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2", "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2" };
+    private static string[] ownerOfBatchTokenIds = { "1", "2" };
+	private const string multicall = "";
+    //private const string multicall = "0x77dca2c955b15e9de4dbbcf1246b4b85b651e50e";
+    private static string[] ownerOfBatchExpected = { "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2", "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2" };
 
     #endregion
 
     #region Uri
-    
+
     private const string uriTokenId = "1";
+    private const string ExpectedUriResult =
+        "https://ipfs.chainsafe.io/ipfs/QmfUHuFj3YL2JMZkyXNtGRV8e9aLJgQ6gcSrqbfjWFvbqQ";
+    private const string NftTextureContractAddress = "0x0288B4F1389ED7b3d3f9C7B73d4408235c0CBbc6";
 
     #endregion
     
     private WalletConnectConfig config;
     private Web3 web3;
-
-    private const string NftTextureContractAddress = "0x0288B4F1389ED7b3d3f9C7B73d4408235c0CBbc6";
 
     #region Indexer Test Parameters
 
@@ -111,9 +112,6 @@ public class Erc721Tests
 
         CollectionAssert.AreEqual(ownerOfBatchExpected, getOwnerOfBatch.Result);
     }
-
-    private const string ExpectedUriResult =
-        "https://ipfs.chainsafe.io/ipfs/QmfUHuFj3YL2JMZkyXNtGRV8e9aLJgQ6gcSrqbfjWFvbqQ";
 
     [UnityTest]
     public IEnumerator TestUri()
