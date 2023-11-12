@@ -11,20 +11,8 @@ public class Erc20Calls : MonoBehaviour
     #region Fields
 
     #region Balance Of
-
-    private string contractBalanceOf = "0x5213E57f38238C46560a0f1686CCaFf54263cE44";
+    
     private string accountBalanceOf = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
-
-    #endregion
-    
-    #region Custom Balance Of
-
-    private string contractToken = "0x5213E57f38238C46560a0f1686CCaFf54263cE44";
-    #endregion
-    
-    #region Native Balance Of
-
-    private string accountNativeBalanceOf = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
 
     #endregion
     
@@ -37,7 +25,6 @@ public class Erc20Calls : MonoBehaviour
     #region Transfer
 
     private const string toAccount = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
-    private string contractTransfer = "0x5213E57f38238C46560a0f1686CCaFf54263cE44";
     private BigInteger amountTransfer = 1000000000000000;
 
     #endregion
@@ -50,7 +37,7 @@ public class Erc20Calls : MonoBehaviour
     public async void BalanceOf()
     {
         SampleFeedback.Instance?.Activate();
-        var balance = await Erc20.BalanceOf(Web3Accessor.Web3, contractBalanceOf, accountBalanceOf);
+        var balance = await Erc20.BalanceOf(Web3Accessor.Web3, Contracts.Erc20, accountBalanceOf);
         SampleOutputUtil.PrintResult(balance.ToString(), nameof(Erc20), nameof(Erc20.BalanceOf));
         SampleFeedback.Instance?.Deactivate();
     }
@@ -60,7 +47,7 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void CustomTokenBalanceOf()
     {
-        var result = await Erc20.CustomTokenBalance(Web3Accessor.Web3, ABI.CustomBalanceOf, contractToken);
+        var result = await Erc20.CustomTokenBalance(Web3Accessor.Web3, ABI.CustomBalanceOf, Contracts.Erc20);
         SampleOutputUtil.PrintResult(result.ToString(), nameof(Erc20), nameof(Erc20.CustomTokenBalance));
     }
     
@@ -69,7 +56,7 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void NativeBalanceOf()
     {
-        var result = await Erc20.NativeBalanceOf(Web3Accessor.Web3, accountNativeBalanceOf);
+        var result = await Erc20.NativeBalanceOf(Web3Accessor.Web3, accountBalanceOf);
         SampleOutputUtil.PrintResult(result.ToString(), nameof(Erc20), nameof(Erc20.NativeBalanceOf));
     }
     
@@ -78,7 +65,7 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void Name()
     {
-        var result = await Erc20.Name(Web3Accessor.Web3, contractToken);
+        var result = await Erc20.Name(Web3Accessor.Web3, Contracts.Erc20);
         SampleOutputUtil.PrintResult(result, nameof(Erc20), nameof(Erc20.Name));
     }
     
@@ -87,7 +74,7 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void Symbol()
     {
-        var result = await Erc20.Symbol(Web3Accessor.Web3, contractToken);
+        var result = await Erc20.Symbol(Web3Accessor.Web3, Contracts.Erc20);
         SampleOutputUtil.PrintResult(result, nameof(Erc20), nameof(Erc20.Symbol));
     }
     
@@ -96,7 +83,7 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void Decimals()
     {
-        var decimals = await Erc20.Decimals(Web3Accessor.Web3, contractToken);
+        var decimals = await Erc20.Decimals(Web3Accessor.Web3, Contracts.Erc20);
         SampleOutputUtil.PrintResult(decimals.ToString(), nameof(Erc20), nameof(Erc20.Decimals));
     }
     
@@ -105,7 +92,7 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void TotalSupply()
     {
-        var result = await Erc20.TotalSupply(Web3Accessor.Web3, contractToken);
+        var result = await Erc20.TotalSupply(Web3Accessor.Web3, Contracts.Erc20);
         SampleOutputUtil.PrintResult(result.ToString(), nameof(Erc20), nameof(Erc20.TotalSupply));
     }
     
@@ -115,7 +102,7 @@ public class Erc20Calls : MonoBehaviour
     public async void MintErc20()
     {
         string toAccount = await Web3Accessor.Web3.Signer.GetAddress();
-        var response = await Erc20.MintErc20(Web3Accessor.Web3, contractToken, toAccount, amountMint);
+        var response = await Erc20.MintErc20(Web3Accessor.Web3, Contracts.Erc20, toAccount, amountMint);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Erc20), nameof(Erc20.MintErc20));
     }
@@ -125,7 +112,7 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void TransferErc20()
     {
-        var response = await Erc20.TransferErc20(Web3Accessor.Web3, contractTransfer, toAccount, amountTransfer);
+        var response = await Erc20.TransferErc20(Web3Accessor.Web3, Contracts.Erc20, toAccount, amountTransfer);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Erc20), nameof(Erc20.TransferErc20));
     }

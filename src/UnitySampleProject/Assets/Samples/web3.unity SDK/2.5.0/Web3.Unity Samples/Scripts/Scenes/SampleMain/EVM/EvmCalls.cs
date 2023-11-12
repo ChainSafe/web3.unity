@@ -26,7 +26,6 @@ public class EvmCalls : MonoBehaviour
     # region Contract Send
         
     private string methodSend = "addTotal";
-    private string contractAddressSend = "0x5213E57f38238C46560a0f1686CCaFf54263cE44";
     private int increaseAmountSend = 1;
         
     #endregion
@@ -34,13 +33,11 @@ public class EvmCalls : MonoBehaviour
     #region Contract Call
 
     private string methodCall = "myTotal";
-    private string contractAddressCall = "0x5213E57f38238C46560a0f1686CCaFf54263cE44";
 
     #endregion
 
     #region Get Send Array
-
-    private string contractAddressArray = "0x5244d0453A727EDa96299384370359f4A2B5b20a";
+    
     private string methodArrayGet = "getStore";
     private string methodArraySend = "setStore";
     private string[] stringArraySend =
@@ -61,14 +58,13 @@ public class EvmCalls : MonoBehaviour
 
     #region Send Transaction
 
-    private string to = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
+    private string toAddress = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
 
     #endregion
 
     #region Registered Contract
 
     private string registeredContractName = "CsTestErc20";
-    private string registeredContractmethod = "balanceOf";
 
     #endregion
 
@@ -77,13 +73,12 @@ public class EvmCalls : MonoBehaviour
     private string privateKey = "0x78dae1a22c7507a4ed30c06172e7614eb168d3546c13856340771e63ad3c0081";
     private string messagePrivateKey = "This is a test message";
     private string transactionHash = "0x123456789";
-    private string chainId ="5";
+    private string chainId ="11155111";
 
     #endregion
 
     #region Multi Call
-
-    private string Erc20ContractAddress = "0x3E0C0447e47d49195fbE329265E330643eB42e6f";
+    
     private string Erc20Account = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
 
     #endregion
@@ -93,7 +88,7 @@ public class EvmCalls : MonoBehaviour
     public async void ContractCall()
     {
         object[] args = {};
-        var response = await Evm.ContractCall(Web3Accessor.Web3, methodCall, ABI.ArrayTotal, contractAddressCall, args);
+        var response = await Evm.ContractCall(Web3Accessor.Web3, methodCall, ABI.ArrayTotal, Contracts.ArrayTotal, args);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.ContractCall));
     }
@@ -104,21 +99,21 @@ public class EvmCalls : MonoBehaviour
         {
             increaseAmountSend
         };
-        var response = await Evm.ContractSend(Web3Accessor.Web3, methodSend, ABI.ArrayTotal, contractAddressSend, args);
+        var response = await Evm.ContractSend(Web3Accessor.Web3, methodSend, ABI.ArrayTotal, Contracts.ArrayTotal, args);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.ContractSend));
     }
 
     public async void GetArray()
     {
-        var response = await Evm.GetArray(Web3Accessor.Web3, contractAddressArray, ABI.ArrayTotal, methodArrayGet);
+        var response = await Evm.GetArray(Web3Accessor.Web3, Contracts.ArrayTotal, ABI.ArrayTotal, methodArrayGet);
         var responseString = string.Join(",\n", response.Select((list, i) => $"#{i} {string.Join((string)", ", (IEnumerable<string>)list)}"));
         SampleOutputUtil.PrintResult(responseString, nameof(Evm), nameof(Evm.GetArray));
     }
     
     public async void SendArray()
     {
-        var response = await Evm.SendArray(Web3Accessor.Web3, methodArraySend, ABI.ArrayTotal, contractAddressArray, stringArraySend);
+        var response = await Evm.SendArray(Web3Accessor.Web3, methodArraySend, ABI.ArrayTotal, Contracts.ArrayTotal, stringArraySend);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.SendArray));
     }
@@ -131,7 +126,7 @@ public class EvmCalls : MonoBehaviour
     
     public async void GetGasLimit()
     {
-        var gasLimit = await Evm.GetGasLimit(Web3Accessor.Web3, ABI.ArrayTotal, contractAddressSend, methodSend);
+        var gasLimit = await Evm.GetGasLimit(Web3Accessor.Web3, ABI.ArrayTotal, Contracts.ArrayTotal, methodSend);
         SampleOutputUtil.PrintResult(gasLimit.ToString(), nameof(Evm), nameof(Evm.GetGasLimit));
     }
     
@@ -159,13 +154,13 @@ public class EvmCalls : MonoBehaviour
     
     public async void RegisterContract()
     {
-        var balance = await Evm.UseRegisteredContract(Web3Accessor.Web3, registeredContractName, registeredContractmethod);
+        var balance = await Evm.UseRegisteredContract(Web3Accessor.Web3, registeredContractName, EthMethod.BalanceOf);
         SampleOutputUtil.PrintResult(balance.ToString(), nameof(Evm), nameof(Evm.UseRegisteredContract));
     }
     
     public async void SendTransaction()
     {
-        var transactionHash = await Evm.SendTransaction(Web3Accessor.Web3, to);
+        var transactionHash = await Evm.SendTransaction(Web3Accessor.Web3, toAddress);
         SampleOutputUtil.PrintResult(transactionHash, nameof(Evm), nameof(Evm.SendTransaction));
     }
     
@@ -221,7 +216,7 @@ public class EvmCalls : MonoBehaviour
     
     public async void MultiCall()
     {
-        var erc20Contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.Erc20, Erc20ContractAddress);
+        var erc20Contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.Erc20, Contracts.Erc20);
         var erc20BalanceOfCalldata = erc20Contract.Calldata(EthMethod.BalanceOf, new object[]
         {
             Erc20Account
@@ -235,13 +230,13 @@ public class EvmCalls : MonoBehaviour
         {
             new Call3Value()
             {
-                Target = Erc20ContractAddress,
+                Target = Contracts.Erc20,
                 AllowFailure = true,
                 CallData = erc20BalanceOfCalldata.HexToByteArray(),
             },
             new Call3Value()
             {
-                Target = Erc20ContractAddress,
+                Target = Contracts.Erc20,
                 AllowFailure = true,
                 CallData = erc20TotalSupplyCalldata.HexToByteArray(),
             }

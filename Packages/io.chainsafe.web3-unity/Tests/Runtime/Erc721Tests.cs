@@ -28,8 +28,7 @@ public class Erc721Tests
     private const string ownerOfTokenId = "2";
     private const string ownerOfExpected = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
     private static string[] ownerOfBatchTokenIds = { "1", "2" };
-	private const string multicall = "";
-    //private const string multicall = "0x77dca2c955b15e9de4dbbcf1246b4b85b651e50e";
+    private const string multicall = "0x77dca2c955b15e9de4dbbcf1246b4b85b651e50e";
     private static string[] ownerOfBatchExpected = { "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2", "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2" };
 
     #endregion
