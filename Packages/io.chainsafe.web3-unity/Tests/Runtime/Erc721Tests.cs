@@ -21,6 +21,7 @@ public class Erc721Tests
     #region Balances
 
     private const string balanceOfAccount = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
+    private static BigInteger balanceOfExpected = 1;
 
     #endregion
 
@@ -95,7 +96,7 @@ public class Erc721Tests
     {
         var getBalanceOf = Erc721.BalanceOf(web3, Contracts.Erc721, balanceOfAccount);
         yield return new WaitUntil(() => getBalanceOf.IsCompleted);
-        Assert.AreEqual(3, getBalanceOf.Result);
+        Assert.AreEqual(balanceOfExpected, getBalanceOf.Result);
     }
 
     [UnityTest]
