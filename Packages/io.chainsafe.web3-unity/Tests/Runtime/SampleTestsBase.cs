@@ -20,17 +20,18 @@ public class SampleTestsBase
     [UnitySetUp]
     public virtual IEnumerator Setup()
     {
-        // wait for some time to initialize
+        // Wait for some time to initialize
         yield return new WaitForSeconds(5f);
 
-        // For whatever reason, in github this won't load
+        // Set project config, fallback is for github as it doesn't load
         var projectConfigScriptableObject = ProjectConfigUtilities.Load();
         if (projectConfigScriptableObject == null)
         {
             projectConfigScriptableObject = ProjectConfigUtilities.Load("3dc3e125-71c4-4511-a367-e981a6a94371", "11155111",
                     "Ethereum", "Sepolia", "Seth", "https://sepolia.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f");
         }
-
+        
+        // Create web3builder & assign services
         var web3Builder = new Web3Builder(projectConfigScriptableObject).Configure(services =>
         {
             services.UseUnityEnvironment();
@@ -39,7 +40,7 @@ public class SampleTestsBase
 
             config = new WalletConnectConfig
             {
-                // set wallet to testing
+                // Set wallet to testing
                 Testing = true,
                 TestWalletAddress = "0xD5c8010ef6dff4c83B19C511221A7F8d1e5cFF44",
             };
@@ -48,16 +49,17 @@ public class SampleTestsBase
             services.UseWalletConnectSigner();
             services.UseWalletConnectTransactionExecutor();
 
-            //add any contracts we would want to use
+            // Add any contracts we would want to use
             services.ConfigureRegisteredContracts(contracts =>
                 contracts.RegisterContract("CsTestErc20", ABI.Erc20, Contracts.Erc20));
         });
 
         var buildWeb3 = web3Builder.LaunchAsync();
 
-        //wait until for async task to finish
+        // Wait until for async task to finish
         yield return new WaitUntil(() => buildWeb3.IsCompleted);
 
+        // Assign result to web3
         web3Result = buildWeb3.Result;
     }
 

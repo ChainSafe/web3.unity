@@ -9,6 +9,8 @@ using UnityEngine.TestTools;
 
 public class EvmTests : SampleTestsBase
 {
+    #region Fields
+    
     #region ContractCalls
 
     private const string ContractSendMethod = "addTotal";
@@ -71,6 +73,8 @@ public class EvmTests : SampleTestsBase
 
     #endregion
 
+    #endregion
+    
     private Web3 web3;
     
     [UnitySetUp]

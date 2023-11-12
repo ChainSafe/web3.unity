@@ -14,13 +14,16 @@ using UnityEngine.TestTools;
 
 public class Erc20Tests
 {
-    // Fields
+    #region Fields
+    
     #region Contract Calls
     
     private const string Account = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
     // Mint ERC20 function adjusts the total supply so we have a duplicate contract that doesn't change for the test to pass
     private const string TotalSupplyAddress = "0xd1A103234d1D65E0E817A523d679B114cf86521A";
 
+    #endregion
+    
     #endregion
 
     private Web3 web3;
@@ -29,17 +32,18 @@ public class Erc20Tests
     [UnitySetUp]
     public IEnumerator Setup()
     {
-        //wait for some time to initialize
+        // Wait for some time to initialize
         yield return new WaitForSeconds(5f);
 
-        //For whatever reason, in github this won't load
+        // Set project config, fallback is for github as it doesn't load
         var projectConfigScriptableObject = ProjectConfigUtilities.Load();
         if (projectConfigScriptableObject == null)
         {
             projectConfigScriptableObject = ProjectConfigUtilities.Load("3dc3e125-71c4-4511-a367-e981a6a94371", "11155111",
                 "Ethereum", "Sepolia", "Seth", "https://sepolia.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f");
         }
-
+        
+        // Create web3builder & assign services
         var web3Builder = new Web3Builder(projectConfigScriptableObject).Configure(services =>
         {
             services.UseUnityEnvironment();
@@ -48,9 +52,10 @@ public class Erc20Tests
 
         var buildWeb3 = web3Builder.LaunchAsync();
 
-        //wait until for async task to finish
+        // Wait until for async task to finish
         yield return new WaitUntil(() => buildWeb3.IsCompleted);
-
+        
+        // Assign result to web3
         web3 = buildWeb3.Result;
     }
 
