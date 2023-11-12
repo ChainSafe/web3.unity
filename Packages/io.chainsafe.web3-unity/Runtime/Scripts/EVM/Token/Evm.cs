@@ -132,7 +132,7 @@ namespace Scripts.EVM.Token
             return key.GetPublicAddress() == playerAccount;
         }
 
-		public static string PrivateKeySignTransaction(string _privateKey, string _transaction, string _chainId)
+		public static string EcdsaSignTransaction(string _privateKey, string _transaction, string _chainId)
         {
             int MATIC_MAIN = 137;
             int MATIC_MUMBAI = 80001;
@@ -163,13 +163,13 @@ namespace Scripts.EVM.Token
             return signature;
         }
 
-        public static string PrivateKeyGetAddress(string _privateKey)
+        public static string EcdsaGetAddress(string _privateKey)
         {
             EthECKey key = new EthECKey(_privateKey);
             return key.GetPublicAddress();
         }
 
-        public static string PrivateKeySignMessage(string _privateKey, string _message)
+        public static string EcdsaSignMessage(string _privateKey, string _message)
         {
             var signer = new EthereumMessageSigner();
             string signature = signer.HashAndSign(_message, _privateKey);

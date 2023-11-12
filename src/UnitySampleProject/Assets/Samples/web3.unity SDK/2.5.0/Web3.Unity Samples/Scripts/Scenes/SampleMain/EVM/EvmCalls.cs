@@ -68,10 +68,10 @@ public class EvmCalls : MonoBehaviour
 
     #endregion
 
-    #region Private Key
+    #region ECDSA
 
-    private string privateKey = "0x78dae1a22c7507a4ed30c06172e7614eb168d3546c13856340771e63ad3c0081";
-    private string messagePrivateKey = "This is a test message";
+    private string ecdsaKey = "0x78dae1a22c7507a4ed30c06172e7614eb168d3546c13856340771e63ad3c0081";
+    private string ecdsaMessage = "This is a test message";
     private string transactionHash = "0x123456789";
     private string chainId ="11155111";
 
@@ -183,22 +183,22 @@ public class EvmCalls : MonoBehaviour
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.SignVerify));
     }
     
-    public void PrivateKeySignTransaction()
+    public void EcdsaSignTransaction()
     {
-        var result = Evm.PrivateKeySignTransaction(privateKey, transactionHash, chainId);
-        SampleOutputUtil.PrintResult(result, nameof(Evm), nameof(Evm.PrivateKeySignTransaction));
+        var result = Evm.EcdsaSignTransaction(ecdsaKey, transactionHash, chainId);
+        SampleOutputUtil.PrintResult(result, nameof(Evm), nameof(Evm.EcdsaSignTransaction));
     }
     
-    public void PrivateKeySignMessage()
+    public void EcdsaSignMessage()
     {
-        var result = Evm.PrivateKeySignMessage(privateKey, messagePrivateKey);
-        SampleOutputUtil.PrintResult(result, nameof(Evm), nameof(Evm.PrivateKeySignMessage));
+        var result = Evm.EcdsaSignMessage(ecdsaKey, ecdsaMessage);
+        SampleOutputUtil.PrintResult(result, nameof(Evm), nameof(Evm.EcdsaSignMessage));
     }
     
-    public void PrivateKeyGetAddress()
+    public void EcdsaGetAddress()
     {
-        var result = Evm.PrivateKeyGetAddress(privateKey);
-        SampleOutputUtil.PrintResult(result, nameof(Evm), nameof(Evm.PrivateKeyGetAddress));
+        var result = Evm.EcdsaGetAddress(ecdsaKey);
+        SampleOutputUtil.PrintResult(result, nameof(Evm), nameof(Evm.EcdsaGetAddress));
     }
     
     public async void IPFSUpload()

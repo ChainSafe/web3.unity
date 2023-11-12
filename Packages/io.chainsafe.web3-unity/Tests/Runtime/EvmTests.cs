@@ -61,6 +61,15 @@ public class EvmTests : SampleTestsBase
     private const string SendToAddress = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
 
     #endregion
+    
+    #region ECDSA
+
+    private string ecdsaKey = "0x78dae1a22c7507a4ed30c06172e7614eb168d3546c13856340771e63ad3c0081";
+    private string ecdsaMessage = "This is a test message";
+    private string transactionHash = "0x123456789";
+    private string chainId ="11155111";
+
+    #endregion
 
     private Web3 web3;
     
@@ -116,7 +125,7 @@ public class EvmTests : SampleTestsBase
 
         yield return new WaitUntil(() => getArray.IsCompleted);
 
-        //convert toLower to make comparing easier
+        // convert toLower to make comparing easier
         var result = getArray.Result.ConvertAll(a => a.ConvertAll(b => b.ToLower()));
 
         Assert.AreEqual(result, new List<List<string>>
@@ -150,7 +159,7 @@ public class EvmTests : SampleTestsBase
 
         if (getBlockNumber.Exception != null) throw getBlockNumber.Exception;
         
-        //just assert successful completion because result is always changing
+        // just assert successful completion because result is always changing
         Assert.IsTrue(getBlockNumber.IsCompletedSuccessfully);
     }
 
@@ -163,7 +172,7 @@ public class EvmTests : SampleTestsBase
 
         if (getGasLimit.Exception != null) throw getGasLimit.Exception;
         
-        //just assert successful completion because result is always changing
+        // just assert successful completion because result is always changing
         Assert.IsTrue(getGasLimit.IsCompletedSuccessfully);
     }
 
@@ -176,7 +185,7 @@ public class EvmTests : SampleTestsBase
 
         if (getGasPrice.Exception != null) throw getGasPrice.Exception;
         
-        //just assert successful completion because result is always changing
+        // just assert successful completion because result is always changing
         Assert.IsTrue(getGasPrice.IsCompletedSuccessfully);
     }
 
@@ -192,7 +201,7 @@ public class EvmTests : SampleTestsBase
         if (getGasNonce.Exception != null) throw getGasNonce.Exception;
         
         Debug.Log(getGasNonce.Result);
-        //just assert successful completion because result is always changing
+        // just assert successful completion because result is always changing
         Assert.IsTrue(getGasNonce.IsCompletedSuccessfully);
     }
 
@@ -207,14 +216,14 @@ public class EvmTests : SampleTestsBase
 
         if (getTransactionStatus.Exception != null) throw getTransactionStatus.Exception;
         Debug.Log(getTransactionStatus.Result);
-        //just assert successful completion because result is always changing
+        // just assert successful completion because result is always changing
         Assert.IsTrue(getTransactionStatus.IsCompletedSuccessfully);
     }
 
     [UnityTest]
     public IEnumerator TestUseRegisteredContract()
     {
-        var useRegisteredContract = Evm.UseRegisteredContract(web3, Contracts.Erc20, EthMethod.BalanceOf);
+        var useRegisteredContract = Evm.UseRegisteredContract(web3, "CsTestErc20", EthMethod.BalanceOf);
 
         yield return new WaitUntil(() => useRegisteredContract.IsCompleted);
 
@@ -222,7 +231,7 @@ public class EvmTests : SampleTestsBase
         
         Assert.IsTrue(useRegisteredContract.IsCompletedSuccessfully);
 
-        Assert.AreEqual(new BigInteger(0), useRegisteredContract.Result);
+        Assert.AreEqual(new BigInteger(1000000000000999999), useRegisteredContract.Result);
     }
 
     [UnityTest]
@@ -286,15 +295,37 @@ public class EvmTests : SampleTestsBase
     }
     
     [UnityTest]
+    public IEnumerator TestECDSASignTx()
+    {
+        var signTxECDSA = Evm.EcdsaSignTransaction(ecdsaKey, transactionHash, chainId);
+        Assert.AreEqual("0xf8cd1c5dfa0706767c7ec81b91bed9a05b65b9c5b47769206a594377c5969a9a47fe21f7328b5865815f97b7ddd09bd7b899879aac6ed7c01eda5380975a54dc01546d72", signTxECDSA);
+        return null;
+    }
+    
+    [UnityTest]
+    public IEnumerator TestECDSASign()
+    {
+        var signECDSA = Evm.EcdsaSignMessage(ecdsaKey, ecdsaMessage);
+        Assert.AreEqual("0x90bd386a185bdc5cbb13b9bba442e35036ac8e92792e74e385abbf7d9546be8720879c2075bf59124d9114b4d432173a4d6c4b118d278c3ffb51a140a625c66c1b", signECDSA);
+        return null;
+    }
+    
+    [UnityTest]
+    public IEnumerator TestECDSAAddress()
+    {
+        var address = Evm.EcdsaGetAddress(ecdsaKey);
+        Assert.AreEqual("0x428066dd8A212104Bc9240dCe3cdeA3D3A0f7979", address);
+        return null;
+    }
+    
+    [UnityTest]
     public IEnumerator TestCustomBalanceOfErc20()
     {
         var getCustomBalanceOf = Erc20.CustomTokenBalance(web3, ABI.CustomBalanceOf, Contracts.Erc20);
+        
         yield return new WaitUntil(() => getCustomBalanceOf.IsCompleted);
-        Assert.AreEqual(new BigInteger(999999), getCustomBalanceOf.Result);
-        //Assert.AreEqual(new BigInteger(new byte[]
-        //{
-        //    0, 144, 99, 20, 5, 161, 13, 3
-        //}), getNativeBalanceOf.Result);
+        
+        Assert.AreEqual(new BigInteger(1000000000000999999), getCustomBalanceOf.Result);
     }
     
     [UnityTest]
