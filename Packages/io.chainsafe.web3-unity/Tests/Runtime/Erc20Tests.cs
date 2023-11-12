@@ -27,7 +27,6 @@ public class Erc20Tests
     #endregion
 
     private Web3 web3;
-    private WalletConnectConfig config;
 
     [UnitySetUp]
     public IEnumerator Setup()

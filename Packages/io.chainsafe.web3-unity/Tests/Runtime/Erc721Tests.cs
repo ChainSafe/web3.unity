@@ -46,7 +46,6 @@ public class Erc721Tests
     
     #endregion
     
-    private WalletConnectConfig config;
     private Web3 web3;
 
     #region Indexer Test Parameters
