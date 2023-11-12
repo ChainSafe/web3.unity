@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
-using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3;
 using Newtonsoft.Json;
 using Scripts.EVM.Remote;
@@ -39,7 +38,7 @@ namespace Scripts.EVM.Token
         public static async Task<int> BalanceOf(Web3 web3, string contractAddress, string account)
         {
             var contract = web3.ContractBuilder.Build(_abi, contractAddress);
-            var contractData = await contract.Call(CommonMethod.BalanceOf, new object[]
+            var contractData = await contract.Call(EthMethod.BalanceOf, new object[]
             {
                 account
             });
@@ -71,7 +70,7 @@ namespace Scripts.EVM.Token
         }
         private static async Task<string> OwnerOf(Web3 web3, string contractAddress, object[] parameters)
         {
-            var method = CommonMethod.OwnerOf;
+            var method = EthMethod.OwnerOf;
             var contract = web3.ContractBuilder.Build(_abi, contractAddress);
             var contractData = await contract.Call(method, parameters);
             return contractData[0].ToString();
@@ -91,7 +90,7 @@ namespace Scripts.EVM.Token
             string[] tokenIds,
             string multicall = "")
         {
-            var method = CommonMethod.OwnerOf;
+            var method = EthMethod.OwnerOf;
             // build array of args
             var obj = new string[tokenIds.Length][];
             for (var i = 0; i < tokenIds.Length; i++)
@@ -142,7 +141,7 @@ namespace Scripts.EVM.Token
                 return ipfsPath + convertUri;
             }
 
-            var contractData = await contract.Call(CommonMethod.TokenUri, new object[]
+            var contractData = await contract.Call(EthMethod.TokenUri, new object[]
             {
                 tokenId
             });
@@ -159,7 +158,7 @@ namespace Scripts.EVM.Token
         /// <returns></returns>
         public static async Task<object[]> MintErc721(Web3 web3, string abi, string contractAddress, string uri)
         {
-            const string method = "safeMint";
+            const string method = EthMethod.SafeMint;
             var destination = await web3.Signer.GetAddress();
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
             return await contract.Send(method, new object[] { destination, uri });

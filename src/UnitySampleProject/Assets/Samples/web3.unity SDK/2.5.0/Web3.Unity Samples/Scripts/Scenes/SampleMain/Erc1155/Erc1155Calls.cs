@@ -4,7 +4,6 @@ using ChainSafe.Gaming.UnityPackage;
 using Scripts.EVM.Token;
 using UnityEngine;
 using UnityEngine.UI;
-using ABI = Scripts.EVM.Token.ABI;
 
 /// <summary>
 /// ERC1155 calls used in the sample scene
@@ -120,7 +119,7 @@ public class Erc1155Calls : MonoBehaviour
     /// </summary>
     public async void MintErc1155()
     {
-        var response = await Erc1155.MintErc1155(Web3Accessor.Web3, ABI.Mint1155, contractMint, idMint, amountMint);
+        var response = await Erc1155.MintErc1155(Web3Accessor.Web3, Scripts.EVM.Token.ABI.Mint1155, contractMint, idMint, amountMint);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Erc1155), nameof(Erc1155.MintErc1155));
     }

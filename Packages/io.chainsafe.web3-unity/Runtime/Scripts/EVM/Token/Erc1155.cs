@@ -6,14 +6,12 @@ using ChainSafe.Gaming.Web3;
 using Scripts.EVM.Remote;
 using UnityEngine;
 using UnityEngine.Networking;
-using EthMethod = ChainSafe.Gaming.UnityPackage.EthMethod;
+using Web3Unity.Scripts.Prefabs;
 
 namespace Scripts.EVM.Token
 {
     public static class Erc1155
     {
-        private static readonly string Abi = ABI.Erc1155;
-        
         /// <summary>
         /// Fetches all 1155 Nfts from an account
         /// </summary>
@@ -65,8 +63,8 @@ namespace Scripts.EVM.Token
         }
         private static async Task<BigInteger> BalanceOf(Web3 web3, string contractAddress, string account, object[] parameters)
         {
-            var contract = web3.ContractBuilder.Build(Abi, contractAddress);
-            var contractData = await contract.Call(CommonMethod.BalanceOf, parameters);
+            var contract = web3.ContractBuilder.Build(ABI.Erc1155, contractAddress);
+            var contractData = await contract.Call(EthMethod.BalanceOf, parameters);
             return BigInteger.Parse(contractData[0].ToString());
         }
 
@@ -80,8 +78,8 @@ namespace Scripts.EVM.Token
         /// <returns></returns>
         public static async Task<List<BigInteger>> BalanceOfBatch(Web3 web3, string contractAddress, string[] accounts, string[] tokenIds)
         {
-            var contract = web3.ContractBuilder.Build(Abi, contractAddress);
-            var contractData = await contract.Call(CommonMethod.BalanceOfBatch, new object[]
+            var contract = web3.ContractBuilder.Build(ABI.Erc1155, contractAddress);
+            var contractData = await contract.Call(EthMethod.BalanceOfBatch, new object[]
             {
                 accounts,
                 tokenIds
@@ -99,13 +97,13 @@ namespace Scripts.EVM.Token
         public static async Task<string> Uri(Web3 web3, string contractAddress, string tokenId)
         {
             const string ipfsPath = "https://ipfs.io/ipfs/";
-            var contract = web3.ContractBuilder.Build(Abi, contractAddress);
+            var contract = web3.ContractBuilder.Build(ABI.Erc1155, contractAddress);
             if (tokenId.StartsWith("0x"))
             {
                 string convertUri = tokenId.Replace("0x", "f");
                 return ipfsPath + convertUri;
             }
-            var contractData = await contract.Call(CommonMethod.Uri, new object[]
+            var contractData = await contract.Call(EthMethod.Uri, new object[]
             {
                 tokenId
             });
@@ -124,7 +122,7 @@ namespace Scripts.EVM.Token
         public static async Task<object[]> MintErc1155(Web3 web3, string abi, string contractAddress, BigInteger id, BigInteger amount)
         {
             byte[] dataObject = { };
-            const string method = "mint";
+            const string method = EthMethod.Mint;
             var destination = await web3.Signer.GetAddress();
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
             return await contract.Send(method, new object[] { destination, id, amount, dataObject });

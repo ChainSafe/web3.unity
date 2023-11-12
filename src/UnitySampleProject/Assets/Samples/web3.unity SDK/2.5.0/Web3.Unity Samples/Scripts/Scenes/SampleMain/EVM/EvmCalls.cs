@@ -8,7 +8,6 @@ using Nethereum.Hex.HexConvertors.Extensions;
 using Scripts.EVM.Token;
 using UnityEngine;
 using Web3Unity.Scripts.Prefabs;
-using ABI = Scripts.EVM.Token.ABI;
 
 public class EvmCalls : MonoBehaviour
 {
@@ -223,12 +222,12 @@ public class EvmCalls : MonoBehaviour
     public async void MultiCall()
     {
         var erc20Contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.Erc20, Erc20ContractAddress);
-        var erc20BalanceOfCalldata = erc20Contract.Calldata(CommonMethod.BalanceOf, new object[]
+        var erc20BalanceOfCalldata = erc20Contract.Calldata(EthMethod.BalanceOf, new object[]
         {
             Erc20Account
         });
         
-        var erc20TotalSupplyCalldata = erc20Contract.Calldata(CommonMethod.TotalSupply, new object[]
+        var erc20TotalSupplyCalldata = erc20Contract.Calldata(EthMethod.TotalSupply, new object[]
         {
         });
 
@@ -254,13 +253,13 @@ public class EvmCalls : MonoBehaviour
 
         if (multicallResultResponse[0] != null && multicallResultResponse[0].Success)
         {
-            var decodedBalanceOf = erc20Contract.Decode(CommonMethod.BalanceOf, multicallResultResponse[0].ReturnData.ToHex());
+            var decodedBalanceOf = erc20Contract.Decode(EthMethod.BalanceOf, multicallResultResponse[0].ReturnData.ToHex());
             Debug.Log($"decodedBalanceOf {((BigInteger)decodedBalanceOf[0]).ToString()}");
         }
         
         if (multicallResultResponse[1] != null && multicallResultResponse[1].Success)
         {
-            var decodedTotalSupply = erc20Contract.Decode(CommonMethod.TotalSupply, multicallResultResponse[1].ReturnData.ToHex());
+            var decodedTotalSupply = erc20Contract.Decode(EthMethod.TotalSupply, multicallResultResponse[1].ReturnData.ToHex());
             Debug.Log($"decodedTotalSupply {((BigInteger)decodedTotalSupply[0]).ToString()}");
         }
     }

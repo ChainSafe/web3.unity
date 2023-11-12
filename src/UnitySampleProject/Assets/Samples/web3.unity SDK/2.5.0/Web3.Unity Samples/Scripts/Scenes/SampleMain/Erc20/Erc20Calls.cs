@@ -2,7 +2,6 @@
 using ChainSafe.Gaming.UnityPackage;
 using Scripts.EVM.Token;
 using UnityEngine;
-using ABI = Scripts.EVM.Token.ABI;
 
 /// <summary>
 /// ERC20 calls used in the sample scene
