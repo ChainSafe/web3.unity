@@ -18,14 +18,14 @@ public class Erc1155Tests
     #region Balances
 
     private readonly string[] _accounts = new[] { "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2", "0xE51995Cdb3b1c109E0e6E67ab5aB31CDdBB83E4a" };
-    private const string ContractAddress = "0x2c1867bc3026178a47a677513746dcc6822a137a";
-    private readonly string[] _tokenIds = { "0x01559ae4021aee70424836ca173b6a4e647287d15cee8ac42d8c2d8d128927e5", "0x01559ae4021aee70424836ca173b6a4e647287d15cee8ac42d8c2d8d128927e5" };
+    private const string ContractAddress = "0xbc7d7B826d3f9EEfCfBbA4cDC2fE8B8741114085";
+    private readonly string[] _tokenIds = { "1", "2" };
 
     #endregion
 
     #region Texture
 
-    private const string NftTextureContractAddress = "0x0288B4F1389ED7b3d3f9C7B73d4408235c0CBbc6";
+    private const string NftTextureContractAddress = "0xbc7d7B826d3f9EEfCfBbA4cDC2fE8B8741114085";
 
     #endregion
     
@@ -52,8 +52,8 @@ public class Erc1155Tests
         var projectConfigScriptableObject = ProjectConfigUtilities.Load();
         if (projectConfigScriptableObject == null)
         {
-            projectConfigScriptableObject = ProjectConfigUtilities.Load("3dc3e125-71c4-4511-a367-e981a6a94371", "5",
-                "Ethereum", "Goerli", "Geth", "https://goerli.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f");
+            projectConfigScriptableObject = ProjectConfigUtilities.Load("3dc3e125-71c4-4511-a367-e981a6a94371", "11155111",
+            	"Ethereum", "Sepolia", "Seth", "https://sepolia.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f");
         }
     
         var web3Builder = new Web3Builder(projectConfigScriptableObject)
@@ -89,7 +89,7 @@ public class Erc1155Tests
     }
 
     private const string ExpectedUriResult =
-        "https://ipfs.io/ipfs/f01559ae4021aee70424836ca173b6a4e647287d15cee8ac42d8c2d8d128927e5";
+        "https://ipfs.chainsafe.io/ipfs/QmfUHuFj3YL2JMZkyXNtGRV8e9aLJgQ6gcSrqbfjWFvbqQ";
 
     [UnityTest]
     public IEnumerator TestUri()
@@ -174,7 +174,7 @@ public class Erc1155Tests
         };
 
         #endregion
-        var texture = Erc1155.ImportNftTexture1155(web3, NftTextureContractAddress, "0");
+        var texture = Erc1155.ImportNftTexture1155(web3, NftTextureContractAddress, "1");
         yield return new WaitUntil(() => texture.IsCompleted);
         CollectionAssert.AreEqual(bytesOfTheTexture, texture.Result.EncodeToJPG(1));
     }

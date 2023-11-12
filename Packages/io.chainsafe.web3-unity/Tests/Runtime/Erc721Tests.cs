@@ -17,22 +17,24 @@ using Web3Unity.Scripts.Prefabs;
 public class Erc721Tests
 {
     // Fields
+	//public const string Erc721 = "0xF7B58448FEFdC634ccFE1624Dc9356C55b8d126c";
     #region Balances
 
-    private const string balanceOfContractAddress = "0x9123541E259125657F03D7AD2A7D1a8Ec79375BA";
+    private const string balanceOfContractAddress = "0xE83EE42471Ad261Cf3b9221006925d8F1FC01ee9";
     private const string balanceOfAccount = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
 
     #endregion
 
     #region OwnerOf
 
-    private const string ownerOfContractAddress = "0x06dc21f89f01409e7ed0e4c80eae1430962ae52c";
-    private const string ownerOfTokenId = "0x01559ae4021a565d5cc4740f1cefa95de8c1fb193949ecd32c337b03047da501";
-    private const string ownerOfExpected = "0x7Ea535884Ba8342bE7aDbef0Fa6822E629162375";
-    private const string ownerOfBatchContractAddress = "0x47381c5c948254e6e0E324F1AA54b7B24104D92D";
-    private string[] ownerOfBatchTokenIds = { "33", "29" };
-    public string multicall = "0x77dca2c955b15e9de4dbbcf1246b4b85b651e50e";
-    private string[] ownerOfBatchExpected = { "0x5e8caec3a556cbb8a3cb689560ea811bdddc8d90", "0x80cc9a67ead304bbb3b6cfca804773ef51da872c" };
+    private const string ownerOfContractAddress = "0xE83EE42471Ad261Cf3b9221006925d8F1FC01ee9";
+    private const string ownerOfTokenId = "2";
+    private const string ownerOfExpected = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
+    private const string ownerOfBatchContractAddress = "0xE83EE42471Ad261Cf3b9221006925d8F1FC01ee9";
+    private string[] ownerOfBatchTokenIds = { "1", "2" };
+	public string multicall = "";
+    //public string multicall = "0x77dca2c955b15e9de4dbbcf1246b4b85b651e50e";
+    private string[] ownerOfBatchExpected = { "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2", "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2" };
 
     #endregion
     
@@ -44,8 +46,8 @@ public class Erc721Tests
 
     #region Uri
     
-    private const string uriContractAddress = "0x06dc21f89f01409e7ed0e4c80eae1430962ae52c";
-    private const string uriTokenId = "0x01559ae4021a565d5cc4740f1cefa95de8c1fb193949ecd32c337b03047da501";
+    private const string uriContractAddress = "0xE83EE42471Ad261Cf3b9221006925d8F1FC01ee9";
+    private const string uriTokenId = "1";
 
     #endregion
     
@@ -75,8 +77,8 @@ public class Erc721Tests
         var projectConfigScriptableObject = ProjectConfigUtilities.Load();
         if (projectConfigScriptableObject == null)
         {
-            projectConfigScriptableObject = ProjectConfigUtilities.Load("3dc3e125-71c4-4511-a367-e981a6a94371", "5",
-                "Ethereum", "Goerli", "Geth", "https://goerli.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f");
+            projectConfigScriptableObject = ProjectConfigUtilities.Load("3dc3e125-71c4-4511-a367-e981a6a94371", "11155111",
+                "Ethereum", "Sepolia", "Seth", "https://sepolia.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f");
         }
     
         var web3Builder = new Web3Builder(projectConfigScriptableObject)
@@ -100,7 +102,7 @@ public class Erc721Tests
         var getBalanceOf = Erc721.BalanceOf(web3, balanceOfContractAddress, balanceOfAccount);
         yield return new WaitUntil(() => getBalanceOf.IsCompleted);
 
-        Assert.AreEqual(2, getBalanceOf.Result);
+        Assert.AreEqual(3, getBalanceOf.Result);
     }
 
     [UnityTest]
@@ -122,7 +124,7 @@ public class Erc721Tests
     }
 
     private const string ExpectedUriResult =
-        "https://ipfs.io/ipfs/f01559ae4021a565d5cc4740f1cefa95de8c1fb193949ecd32c337b03047da501";
+        "https://ipfs.chainsafe.io/ipfs/QmfUHuFj3YL2JMZkyXNtGRV8e9aLJgQ6gcSrqbfjWFvbqQ";
 
     [UnityTest]
     public IEnumerator TestUri()

@@ -17,7 +17,9 @@ public class Erc20Tests
     #region Contract Calls
     
     private const string Account = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
-    private const string ContractAddress = "0x3E0C0447e47d49195fbE329265E330643eB42e6f";
+    private const string ContractAddress = "0x5213E57f38238C46560a0f1686CCaFf54263cE44";
+    // Mint ERC20 function adjusts the total supply so we have a duplicate here that doesn't change for the test to pass
+    private const string TotalSupplyAddress = "0xd1A103234d1D65E0E817A523d679B114cf86521A";
 
     #endregion
 
@@ -34,10 +36,9 @@ public class Erc20Tests
         var projectConfigScriptableObject = ProjectConfigUtilities.Load();
         if (projectConfigScriptableObject == null)
         {
-            projectConfigScriptableObject = ProjectConfigUtilities.Load("3dc3e125-71c4-4511-a367-e981a6a94371", "5",
-                "Ethereum", "Goerli", "Geth", "https://goerli.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f");
+            projectConfigScriptableObject = ProjectConfigUtilities.Load("3dc3e125-71c4-4511-a367-e981a6a94371", "11155111",
+                "Ethereum", "Sepolia", "Seth", "https://sepolia.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f");
         }
-
 
         var web3Builder = new Web3Builder(projectConfigScriptableObject).Configure(services =>
         {
@@ -57,12 +58,12 @@ public class Erc20Tests
     public IEnumerator TestBalanceOf()
     {
         var getBalanceOf = Erc20.BalanceOf(web3, ContractAddress, Account);
-        yield return new WaitUntil(() => getBalanceOf.IsCompleted);
-
-        Assert.AreEqual(new BigInteger(new byte[]
-        {
-            0, 0, 0, 64, 234, 237, 116, 70, 208, 156, 44, 159, 12
-        }), getBalanceOf.Result);
+		yield return new WaitUntil(() => getBalanceOf.IsCompleted);
+		Assert.AreEqual(new BigInteger(1000000000000000000), getBalanceOf.Result);
+        //Assert.AreEqual(new BigInteger(new byte[]
+        //{
+        //    0, 0, 0, 64, 234, 237, 116, 70, 208, 156, 44, 159, 12
+        //}), getBalanceOf.Result);
     }
 
     [UnityTest]
@@ -70,7 +71,6 @@ public class Erc20Tests
     {
         var getDecimals = Erc20.Decimals(web3, ContractAddress);
         yield return new WaitUntil(() => getDecimals.IsCompleted);
-
         Assert.AreEqual(new BigInteger(18), getDecimals.Result);
     }
 
@@ -79,44 +79,38 @@ public class Erc20Tests
     {
         var getName = Erc20.Name(web3, ContractAddress);
         yield return new WaitUntil(() => getName.IsCompleted);
-
-        Assert.AreEqual("ChainToken", getName.Result);
+        Assert.AreEqual("CsTestErc20", getName.Result);
     }
 
     [UnityTest]
     public IEnumerator TestNativeBalanceOf()
     {
         var getNativeBalanceOf = Erc20.NativeBalanceOf(web3, Account);
-
-        yield return new WaitUntil(() => getNativeBalanceOf.IsCompleted);
-
-
-        Assert.AreEqual(new BigInteger(new byte[]
-        {
-            0, 144, 99, 20, 5, 161, 13, 3
-        }), getNativeBalanceOf.Result);
+		yield return new WaitUntil(() => getNativeBalanceOf.IsCompleted);
+		Assert.AreEqual(new BigInteger(500000000000000000), getNativeBalanceOf.Result);
+        //Assert.AreEqual(new BigInteger(new byte[]
+        //{
+        //    0, 144, 99, 20, 5, 161, 13, 3
+        //}), getNativeBalanceOf.Result);
     }
 
     [UnityTest]
     public IEnumerator TestSymbol()
     {
         var getSymbol = Erc20.Symbol(web3, ContractAddress);
-
         yield return new WaitUntil(() => getSymbol.IsCompleted);
-
-        Assert.AreEqual("CT", getSymbol.Result);
+        Assert.AreEqual("CST", getSymbol.Result);
     }
 
     [UnityTest]
     public IEnumerator TestTotalSupply()
     {
-        var getTotalSupply = Erc20.TotalSupply(web3, ContractAddress);
-
+        var getTotalSupply = Erc20.TotalSupply(web3, TotalSupplyAddress);
         yield return new WaitUntil(() => getTotalSupply.IsCompleted);
-
-        Assert.AreEqual(new BigInteger(new byte[]
-        {
-            0, 0, 0, 64, 234, 237, 116, 70, 208, 156, 44, 159, 12
-        }), getTotalSupply.Result);
+		Assert.AreEqual(new BigInteger(1000000000000000000), getTotalSupply.Result);
+        //Assert.AreEqual(new BigInteger(new byte[]
+        //{
+        //    0, 0, 0, 64, 234, 237, 116, 70, 208, 156, 44, 159, 12
+        //}), getTotalSupply.Result);
     }
 }

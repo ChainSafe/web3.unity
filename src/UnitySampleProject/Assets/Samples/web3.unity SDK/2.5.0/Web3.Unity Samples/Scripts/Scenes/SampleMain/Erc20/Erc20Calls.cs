@@ -13,19 +13,19 @@ public class Erc20Calls : MonoBehaviour
 
     #region Balance Of
 
-    private string contractBalanceOf = "0x3E0C0447e47d49195fbE329265E330643eB42e6f";
+    private string contractBalanceOf = "0x5213E57f38238C46560a0f1686CCaFf54263cE44";
     private string accountBalanceOf = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
 
     #endregion
     
     #region Custom Balance Of
 
-    private string contractToken = "0x714d32fA722461A2c8F0b4EB98ff5cFF8F908Df2";
+    private string contractToken = "0x5213E57f38238C46560a0f1686CCaFf54263cE44";
     #endregion
     
     #region Native Balance Of
 
-    private string accountNativeBalanceOf = "0xaBed4239E4855E120fDA34aDBEABDd2911626BA1";
+    private string accountNativeBalanceOf = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
 
     #endregion
     
@@ -38,7 +38,7 @@ public class Erc20Calls : MonoBehaviour
     #region Transfer
 
     private const string toAccount = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
-    private string contractTransfer = "0xc778417e063141139fce010982780140aa0cd5ab";
+    private string contractTransfer = "0x5213E57f38238C46560a0f1686CCaFf54263cE44";
     private BigInteger amountTransfer = 1000000000000000;
 
     #endregion

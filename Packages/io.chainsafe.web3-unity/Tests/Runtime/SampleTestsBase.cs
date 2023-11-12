@@ -26,8 +26,8 @@ public class SampleTestsBase
         var projectConfigScriptableObject = ProjectConfigUtilities.Load();
         if (projectConfigScriptableObject == null)
         {
-            projectConfigScriptableObject = ProjectConfigUtilities.Load("3dc3e125-71c4-4511-a367-e981a6a94371", "5",
-                "Ethereum", "Goerli", "Geth", "https://goerli.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f");
+            projectConfigScriptableObject = ProjectConfigUtilities.Load("3dc3e125-71c4-4511-a367-e981a6a94371", "11155111",
+                    "Ethereum", "Sepolia", "Seth", "https://sepolia.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f");
         }
 
         var web3Builder = new Web3Builder(projectConfigScriptableObject).Configure(services =>
@@ -40,7 +40,7 @@ public class SampleTestsBase
             {
                 // set wallet to testing
                 Testing = true,
-                TestWalletAddress = "0x55ffe9E30347266f02b9BdAe20aD3a86493289ea",
+                TestWalletAddress = "0xD5c8010ef6dff4c83B19C511221A7F8d1e5cFF44",
             };
 
             services.UseWalletConnect(config);

@@ -27,7 +27,7 @@ public class EvmCalls : MonoBehaviour
     # region Contract Send
         
     private string methodSend = "addTotal";
-    private string contractAddressSend = "0x7286Cf0F6E80014ea75Dbc25F545A3be90F4904F";
+    private string contractAddressSend = "0x5213E57f38238C46560a0f1686CCaFf54263cE44";
     private int increaseAmountSend = 1;
         
     #endregion

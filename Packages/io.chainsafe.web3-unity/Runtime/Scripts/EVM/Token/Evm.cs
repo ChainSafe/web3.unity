@@ -12,6 +12,7 @@ using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
 using Nethereum.Signer;
 using Nethereum.Util;
+using UnityEngine;
 using Web3Unity.Scripts.Library.IPFS;
 using Web3Unity.Scripts.Prefabs;
 
@@ -124,12 +125,10 @@ namespace Scripts.EVM.Token
         {
             var playerAccount = await web3.Signer.GetAddress();
             var signatureString = await web3.Signer.SignMessage(message);
-
             var msg = "\x19" + "Ethereum Signed Message:\n" + message.Length + message;
             var msgHash = new Sha3Keccack().CalculateHash(Encoding.UTF8.GetBytes(msg));
             var signature = MessageSigner.ExtractEcdsaSignature(signatureString);
             var key = EthECKey.RecoverFromSignature(signature, msgHash);
-
             return key.GetPublicAddress() == playerAccount;
         }
 
