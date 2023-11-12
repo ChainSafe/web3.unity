@@ -35,7 +35,7 @@ public class EvmCalls : MonoBehaviour
     #region Contract Call
 
     private string methodCall = "myTotal";
-    private string contractAddressCall = "0xC71d13c40B4fE7e2c557eBAa12A0400dd4Df76C9";
+    private string contractAddressCall = "0x5213E57f38238C46560a0f1686CCaFf54263cE44";
 
     #endregion
 

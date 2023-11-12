@@ -13,6 +13,8 @@ public class EvmTests : SampleTestsBase
 
     private const string ContractSendMethod = "addTotal";
     private const int IncreaseAmount = 1;
+    private const string ContractCallMethod = "myTotal";
+    private const string CallAmount = "1";
 	private const string Abi = "[ { \"inputs\": [ { \"internalType\": \"uint256\", \"name\": \"_myArg\", \"type\": \"uint256\" } ], \"name\": \"addTotal\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\" }, { \"inputs\": [ { \"internalType\": \"string[]\", \"name\": \"addresses\", \"type\": \"string[]\" } ], \"name\": \"setStore\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\" }, { \"inputs\": [], \"name\": \"getStore\", \"outputs\": [ { \"internalType\": \"string[]\", \"name\": \"\", \"type\": \"string[]\" } ], \"stateMutability\": \"view\", \"type\": \"function\" }, { \"inputs\": [ { \"internalType\": \"address\", \"name\": \"\", \"type\": \"address\" } ], \"name\": \"myTotal\", \"outputs\": [ { \"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\" } ], \"stateMutability\": \"view\", \"type\": \"function\" } ]";
     private const string ContractAddress = "0xCb0FdD2837a61d7c39ce0fbF56403Db601CAeFd4";
 
@@ -82,6 +84,22 @@ public class EvmTests : SampleTestsBase
         yield return base.Setup();
 
         web3 = web3Result;
+    }
+    
+    [UnityTest]
+    public IEnumerator TestContractCall()
+    {
+        object[] args = { config.TestWalletAddress };
+        
+        var callContract = Evm.ContractCall(web3, ContractCallMethod, Abi, ContractAddress, args);
+
+        yield return new WaitUntil(() => callContract.IsCompleted);
+
+        if (callContract.Exception != null) throw callContract.Exception;
+        
+        Assert.IsTrue(callContract.IsCompletedSuccessfully);
+
+        Assert.AreEqual(CallAmount, callContract.Result[0].ToString());
     }
 
     [UnityTest]
