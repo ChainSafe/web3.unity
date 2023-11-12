@@ -95,7 +95,6 @@ public class Erc721Tests
     {
         var getBalanceOf = Erc721.BalanceOf(web3, Contracts.Erc721, balanceOfAccount);
         yield return new WaitUntil(() => getBalanceOf.IsCompleted);
-
         Assert.AreEqual(3, getBalanceOf.Result);
     }
 
@@ -104,16 +103,14 @@ public class Erc721Tests
     {
         var getOwnerOf = Erc721.OwnerOf(web3, Contracts.Erc721, ownerOfTokenId);
         yield return new WaitUntil(() => getOwnerOf.IsCompleted);
-
         Assert.AreEqual(ownerOfExpected, getOwnerOf.Result);
     }
-
+    
     [UnityTest]
     public IEnumerator TestOwnerOfBatch()
     {
         var getOwnerOfBatch = Erc721.OwnerOfBatch(web3, Contracts.Erc721, ownerOfBatchTokenIds, multicall);
         yield return new WaitUntil(() => getOwnerOfBatch.IsCompleted);
-
         CollectionAssert.AreEqual(ownerOfBatchExpected, getOwnerOfBatch.Result);
     }
 

@@ -63,12 +63,8 @@ public class Erc20Tests
     public IEnumerator TestBalanceOf()
     {
         var getBalanceOf = Erc20.BalanceOf(web3, Contracts.Erc20, Account);
-		yield return new WaitUntil(() => getBalanceOf.IsCompleted);
-		Assert.AreEqual(new BigInteger(1000000000000000000), getBalanceOf.Result);
-        //Assert.AreEqual(new BigInteger(new byte[]
-        //{
-        //    0, 0, 0, 64, 234, 237, 116, 70, 208, 156, 44, 159, 12
-        //}), getBalanceOf.Result);
+        yield return new WaitUntil(() => getBalanceOf.IsCompleted);
+        Assert.AreEqual(new BigInteger(1000000000000000000), getBalanceOf.Result);
     }
     
     [UnityTest]
@@ -77,10 +73,6 @@ public class Erc20Tests
         var getNativeBalanceOf = Erc20.NativeBalanceOf(web3, Account);
         yield return new WaitUntil(() => getNativeBalanceOf.IsCompleted);
         Assert.AreEqual(new BigInteger(500000000000000000), getNativeBalanceOf.Result);
-        //Assert.AreEqual(new BigInteger(new byte[]
-        //{
-        //    0, 144, 99, 20, 5, 161, 13, 3
-        //}), getNativeBalanceOf.Result);
     }
 
     [UnityTest]
@@ -113,9 +105,5 @@ public class Erc20Tests
         var getTotalSupply = Erc20.TotalSupply(web3, TotalSupplyAddress);
         yield return new WaitUntil(() => getTotalSupply.IsCompleted);
 		Assert.AreEqual(new BigInteger(1000000000000000000), getTotalSupply.Result);
-        //Assert.AreEqual(new BigInteger(new byte[]
-        //{
-        //    0, 0, 0, 64, 234, 237, 116, 70, 208, 156, 44, 159, 12
-        //}), getTotalSupply.Result);
     }
 }

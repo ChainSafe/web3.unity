@@ -67,9 +67,7 @@ public class SampleTestsBase
     public virtual IEnumerator TearDown()
     {
         config.Testing = false;
-
         web3Result.TerminateAsync();
-
         yield return null;
     }
 }

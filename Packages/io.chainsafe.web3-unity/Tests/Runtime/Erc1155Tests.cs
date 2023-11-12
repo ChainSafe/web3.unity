@@ -74,7 +74,6 @@ public class Erc1155Tests
     {
         var getBalanceOf = Erc1155.BalanceOf(web3, Contracts.Erc1155, _accounts[0], _tokenIds[0]);
         yield return new WaitUntil(() => getBalanceOf.IsCompleted);
-
         Assert.AreEqual(new BigInteger(2), getBalanceOf.Result);
     }
 
