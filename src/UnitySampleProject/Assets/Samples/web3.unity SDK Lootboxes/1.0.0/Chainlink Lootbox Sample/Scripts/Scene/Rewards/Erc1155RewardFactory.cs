@@ -34,7 +34,7 @@ namespace LootBoxes.Chainlink.Scene
         {
             var item = Instantiate(CoinRewardItemPrefab);
             var reward = (CoinReward)item.Reward;
-            var contract = contractBuilder.Build(ABI.Erc1155, data.ContractAddress);
+            var contract = contractBuilder.Build(ABI.ERC1155, data.ContractAddress);
             var uri = (await contract.Call("uri", new object[] { data.TokenId }))[0].ToString();
             Erc1155MetaData metadata;
             try

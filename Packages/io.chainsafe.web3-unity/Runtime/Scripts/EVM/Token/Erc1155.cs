@@ -63,7 +63,7 @@ namespace Scripts.EVM.Token
         }
         private static async Task<BigInteger> BalanceOf(Web3 web3, string contractAddress, string account, object[] parameters)
         {
-            var contract = web3.ContractBuilder.Build(ABI.Erc1155, contractAddress);
+            var contract = web3.ContractBuilder.Build(ABI.ERC1155, contractAddress);
             var contractData = await contract.Call(EthMethod.BalanceOf, parameters);
             return BigInteger.Parse(contractData[0].ToString());
         }
@@ -78,7 +78,7 @@ namespace Scripts.EVM.Token
         /// <returns></returns>
         public static async Task<List<BigInteger>> BalanceOfBatch(Web3 web3, string contractAddress, string[] accounts, string[] tokenIds)
         {
-            var contract = web3.ContractBuilder.Build(ABI.Erc1155, contractAddress);
+            var contract = web3.ContractBuilder.Build(ABI.ERC1155, contractAddress);
             var contractData = await contract.Call(EthMethod.BalanceOfBatch, new object[]
             {
                 accounts,
@@ -97,7 +97,7 @@ namespace Scripts.EVM.Token
         public static async Task<string> Uri(Web3 web3, string contractAddress, string tokenId)
         {
             const string ipfsPath = "https://ipfs.io/ipfs/";
-            var contract = web3.ContractBuilder.Build(ABI.Erc1155, contractAddress);
+            var contract = web3.ContractBuilder.Build(ABI.ERC1155, contractAddress);
             if (tokenId.StartsWith("0x"))
             {
                 string convertUri = tokenId.Replace("0x", "f");
@@ -140,7 +140,7 @@ namespace Scripts.EVM.Token
         public static async Task<object[]> TransferErc1155(Web3 web3, string contractAddress, BigInteger tokenId, BigInteger amount, string toAccount)
         {
             var account = await web3.Signer.GetAddress();
-            var abi = ABI.Erc1155;
+            var abi = ABI.ERC1155;
             var method = EthMethod.SafeTransferFrom;
             byte[] dataObject = { };
             var contract = web3.ContractBuilder.Build(abi, contractAddress);

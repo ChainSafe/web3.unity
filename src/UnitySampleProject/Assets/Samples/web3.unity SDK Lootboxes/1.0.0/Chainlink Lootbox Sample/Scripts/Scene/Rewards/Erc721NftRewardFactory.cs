@@ -33,7 +33,7 @@ namespace LootBoxes.Chainlink.Scene
         {
             var item = Instantiate(NftRewardItemPrefab);
             var reward = (NftReward)item.Reward;
-            var contract = contractBuilder.Build(ABI.Erc721, data.ContractAddress);
+            var contract = contractBuilder.Build(ABI.ERC721, data.ContractAddress);
             var uri = (await contract.Call("tokenURI", new object[] { data.TokenId.ToString() }))[0].ToString();
             Debug.Log(uri);
 

@@ -10,7 +10,7 @@ namespace Scripts.EVM.Token
 {
     public static class Erc721
     {
-        private static string _abi = ABI.Erc721;
+        private static string _abi = ABI.ERC721;
         
         /// <summary>
         /// Fetches all 721 Nfts from an account
@@ -174,7 +174,7 @@ namespace Scripts.EVM.Token
         /// <returns></returns>
         public static async Task<object[]> TransferErc721(Web3 web3, string contractAddress, string toAccount, BigInteger tokenId)
         {
-            var abi = ABI.Erc721;
+            var abi = ABI.ERC721;
             var method = EthMethod.SafeTransferFrom;
             var account = await web3.Signer.GetAddress();
             var contract = web3.ContractBuilder.Build(abi, contractAddress);

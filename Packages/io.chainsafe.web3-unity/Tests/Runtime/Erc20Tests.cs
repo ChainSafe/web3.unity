@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Numerics;
+using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.WalletConnect;
@@ -65,6 +66,18 @@ public class Erc20Tests
         //    0, 0, 0, 64, 234, 237, 116, 70, 208, 156, 44, 159, 12
         //}), getBalanceOf.Result);
     }
+    
+    [UnityTest]
+    public IEnumerator TestNativeBalanceOf()
+    {
+        var getNativeBalanceOf = Erc20.NativeBalanceOf(web3, Account);
+        yield return new WaitUntil(() => getNativeBalanceOf.IsCompleted);
+        Assert.AreEqual(new BigInteger(500000000000000000), getNativeBalanceOf.Result);
+        //Assert.AreEqual(new BigInteger(new byte[]
+        //{
+        //    0, 144, 99, 20, 5, 161, 13, 3
+        //}), getNativeBalanceOf.Result);
+    }
 
     [UnityTest]
     public IEnumerator TestDecimals()
@@ -80,18 +93,6 @@ public class Erc20Tests
         var getName = Erc20.Name(web3, ContractAddress);
         yield return new WaitUntil(() => getName.IsCompleted);
         Assert.AreEqual("CsTestErc20", getName.Result);
-    }
-
-    [UnityTest]
-    public IEnumerator TestNativeBalanceOf()
-    {
-        var getNativeBalanceOf = Erc20.NativeBalanceOf(web3, Account);
-		yield return new WaitUntil(() => getNativeBalanceOf.IsCompleted);
-		Assert.AreEqual(new BigInteger(500000000000000000), getNativeBalanceOf.Result);
-        //Assert.AreEqual(new BigInteger(new byte[]
-        //{
-        //    0, 144, 99, 20, 5, 161, 13, 3
-        //}), getNativeBalanceOf.Result);
     }
 
     [UnityTest]

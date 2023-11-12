@@ -300,6 +300,18 @@ public class EvmTests : SampleTestsBase
     }
     
     [UnityTest]
+    public IEnumerator TestCustomBalanceOfErc20()
+    {
+        var getCustomBalanceOf = Erc20.CustomTokenBalance(web3, ABI.CUSTOMBALANCEOF, Contracts.ERC20);
+        yield return new WaitUntil(() => getCustomBalanceOf.IsCompleted);
+        Assert.AreEqual(new BigInteger(999999), getCustomBalanceOf.Result);
+        //Assert.AreEqual(new BigInteger(new byte[]
+        //{
+        //    0, 144, 99, 20, 5, 161, 13, 3
+        //}), getNativeBalanceOf.Result);
+    }
+    
+    [UnityTest]
     public IEnumerator TestMintErc20()
     {
         config.TestResponse = "0xbcff4755f1736b8ddfedb6d88fa6fbea5630fcc7e2f4b6e88da6ad19eb1fcaa6";
