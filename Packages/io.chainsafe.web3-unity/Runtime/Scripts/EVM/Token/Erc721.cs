@@ -10,8 +10,6 @@ namespace Scripts.EVM.Token
 {
     public static class Erc721
     {
-        private static string _abi = ABI.Erc721;
-        
         /// <summary>
         /// Fetches all 721 Nfts from an account
         /// </summary>
@@ -37,7 +35,7 @@ namespace Scripts.EVM.Token
         /// <returns></returns>
         public static async Task<int> BalanceOf(Web3 web3, string contractAddress, string account)
         {
-            var contract = web3.ContractBuilder.Build(_abi, contractAddress);
+            var contract = web3.ContractBuilder.Build(ABI.Erc721, contractAddress);
             var contractData = await contract.Call(EthMethod.BalanceOf, new object[]
             {
                 account
@@ -71,7 +69,7 @@ namespace Scripts.EVM.Token
         private static async Task<string> OwnerOf(Web3 web3, string contractAddress, object[] parameters)
         {
             var method = EthMethod.OwnerOf;
-            var contract = web3.ContractBuilder.Build(_abi, contractAddress);
+            var contract = web3.ContractBuilder.Build(ABI.Erc721, contractAddress);
             var contractData = await contract.Call(method, parameters);
             return contractData[0].ToString();
         }
@@ -102,7 +100,7 @@ namespace Scripts.EVM.Token
 			}
             var args = JsonConvert.SerializeObject(obj);
             var response = await Remote.CSServer.Multicall(web3, web3.ChainConfig.ChainId, web3.ChainConfig.Network,
-                contractAddress, _abi, method, args, multicall, web3.ChainConfig.Rpc);
+                contractAddress, ABI.Erc721, method, args, multicall, web3.ChainConfig.Rpc);
             try
             {
                 var responses = JsonConvert.DeserializeObject<string[]>(response);
@@ -134,7 +132,7 @@ namespace Scripts.EVM.Token
         public static async Task<string> Uri(Web3 web3, string contractAddress, string tokenId)
         {
             const string ipfsPath = "https://ipfs.io/ipfs/";
-            var contract = web3.ContractBuilder.Build(_abi, contractAddress);
+            var contract = web3.ContractBuilder.Build(ABI.Erc721, contractAddress);
             if (tokenId.StartsWith("0x"))
             {
                 var convertUri = tokenId.Replace("0x", "f");
