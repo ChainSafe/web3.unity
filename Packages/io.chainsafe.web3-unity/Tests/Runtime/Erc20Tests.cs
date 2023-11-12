@@ -18,8 +18,7 @@ public class Erc20Tests
     #region Contract Calls
     
     private const string Account = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
-    private const string ContractAddress = "0x5213E57f38238C46560a0f1686CCaFf54263cE44";
-    // Mint ERC20 function adjusts the total supply so we have a duplicate here that doesn't change for the test to pass
+    // Mint ERC20 function adjusts the total supply so we have a duplicate contract that doesn't change for the test to pass
     private const string TotalSupplyAddress = "0xd1A103234d1D65E0E817A523d679B114cf86521A";
 
     #endregion
@@ -58,7 +57,7 @@ public class Erc20Tests
     [UnityTest]
     public IEnumerator TestBalanceOf()
     {
-        var getBalanceOf = Erc20.BalanceOf(web3, ContractAddress, Account);
+        var getBalanceOf = Erc20.BalanceOf(web3, Contracts.Erc20, Account);
 		yield return new WaitUntil(() => getBalanceOf.IsCompleted);
 		Assert.AreEqual(new BigInteger(1000000000000000000), getBalanceOf.Result);
         //Assert.AreEqual(new BigInteger(new byte[]
@@ -82,7 +81,7 @@ public class Erc20Tests
     [UnityTest]
     public IEnumerator TestDecimals()
     {
-        var getDecimals = Erc20.Decimals(web3, ContractAddress);
+        var getDecimals = Erc20.Decimals(web3, Contracts.Erc20);
         yield return new WaitUntil(() => getDecimals.IsCompleted);
         Assert.AreEqual(new BigInteger(18), getDecimals.Result);
     }
@@ -90,7 +89,7 @@ public class Erc20Tests
     [UnityTest]
     public IEnumerator TestName()
     {
-        var getName = Erc20.Name(web3, ContractAddress);
+        var getName = Erc20.Name(web3, Contracts.Erc20);
         yield return new WaitUntil(() => getName.IsCompleted);
         Assert.AreEqual("CsTestErc20", getName.Result);
     }
@@ -98,7 +97,7 @@ public class Erc20Tests
     [UnityTest]
     public IEnumerator TestSymbol()
     {
-        var getSymbol = Erc20.Symbol(web3, ContractAddress);
+        var getSymbol = Erc20.Symbol(web3, Contracts.Erc20);
         yield return new WaitUntil(() => getSymbol.IsCompleted);
         Assert.AreEqual("CST", getSymbol.Result);
     }

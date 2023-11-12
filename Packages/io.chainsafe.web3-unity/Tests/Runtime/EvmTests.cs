@@ -15,15 +15,11 @@ public class EvmTests : SampleTestsBase
     private const int IncreaseAmount = 1;
     private const string ContractCallMethod = "myTotal";
     private const string CallAmount = "1";
-	private const string Abi = "[ { \"inputs\": [ { \"internalType\": \"uint256\", \"name\": \"_myArg\", \"type\": \"uint256\" } ], \"name\": \"addTotal\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\" }, { \"inputs\": [ { \"internalType\": \"string[]\", \"name\": \"addresses\", \"type\": \"string[]\" } ], \"name\": \"setStore\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\" }, { \"inputs\": [], \"name\": \"getStore\", \"outputs\": [ { \"internalType\": \"string[]\", \"name\": \"\", \"type\": \"string[]\" } ], \"stateMutability\": \"view\", \"type\": \"function\" }, { \"inputs\": [ { \"internalType\": \"address\", \"name\": \"\", \"type\": \"address\" } ], \"name\": \"myTotal\", \"outputs\": [ { \"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\" } ], \"stateMutability\": \"view\", \"type\": \"function\" } ]";
-    private const string ContractAddress = "0xCb0FdD2837a61d7c39ce0fbF56403Db601CAeFd4";
 
     #endregion
 
     #region Array
 
-	private const string ArrayAbi = "[ { \"inputs\": [ { \"internalType\": \"uint256\", \"name\": \"_myArg\", \"type\": \"uint256\" } ], \"name\": \"addTotal\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\" }, { \"inputs\": [ { \"internalType\": \"string[]\", \"name\": \"addresses\", \"type\": \"string[]\" } ], \"name\": \"setStore\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\" }, { \"inputs\": [], \"name\": \"getStore\", \"outputs\": [ { \"internalType\": \"string[]\", \"name\": \"\", \"type\": \"string[]\" } ], \"stateMutability\": \"view\", \"type\": \"function\" }, { \"inputs\": [ { \"internalType\": \"address\", \"name\": \"\", \"type\": \"address\" } ], \"name\": \"myTotal\", \"outputs\": [ { \"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\" } ], \"stateMutability\": \"view\", \"type\": \"function\" } ]";
-    private const string ArrayAddress = "0xCb0FdD2837a61d7c39ce0fbF56403Db601CAeFd4";
 	private const string GetArrayMethod = "getStore";
     private const string SendArrayMethod = "setStore";
 
@@ -37,24 +33,18 @@ public class EvmTests : SampleTestsBase
 
     #region MintErc20
     
-    private const string Mint20Contract = "0x5213E57f38238C46560a0f1686CCaFf54263cE44";
-    private const string Mint20ToAccount = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
     private const int Mint20Amount = 1;
 
     #endregion
     
     #region Mint721
 
-    private const string Mint721Abi = "[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"approved\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"approved\",\"type\":\"bool\"}],\"name\":\"ApprovalForAll\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"burn\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"grantRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"renounceRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"revokeRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"previousAdminRole\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"newAdminRole\",\"type\":\"bytes32\"}],\"name\":\"RoleAdminChanged\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"RoleGranted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"RoleRevoked\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"uri\",\"type\":\"string\"}],\"name\":\"safeMint\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"safeTransferFrom\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"safeTransferFrom\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"approved\",\"type\":\"bool\"}],\"name\":\"setApprovalForAll\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"DEFAULT_ADMIN_ROLE\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"getApproved\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"}],\"name\":\"getRoleAdmin\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"hasRole\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"}],\"name\":\"isApprovedForAll\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"MINTER_ROLE\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"ownerOf\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes4\",\"name\":\"interfaceId\",\"type\":\"bytes4\"}],\"name\":\"supportsInterface\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"tokenURI\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]";
-    private const string Mint721Contract = "0xE83EE42471Ad261Cf3b9221006925d8F1FC01ee9";
     private const string Mint721Uri = "QmfUHuFj3YL2JMZkyXNtGRV8e9aLJgQ6gcSrqbfjWFvbqQ";
 
     #endregion
     
     #region Mint1155
     
-    private string Mint1155Abi = "[ { \"inputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"constructor\" }, { \"anonymous\": false, \"inputs\": [ { \"indexed\": true, \"internalType\": \"address\", \"name\": \"account\", \"type\": \"address\" }, { \"indexed\": true, \"internalType\": \"address\", \"name\": \"operator\", \"type\": \"address\" }, { \"indexed\": false, \"internalType\": \"bool\", \"name\": \"approved\", \"type\": \"bool\" } ], \"name\": \"ApprovalForAll\", \"type\": \"event\" }, { \"anonymous\": false, \"inputs\": [ { \"indexed\": true, \"internalType\": \"address\", \"name\": \"operator\", \"type\": \"address\" }, { \"indexed\": true, \"internalType\": \"address\", \"name\": \"from\", \"type\": \"address\" }, { \"indexed\": true, \"internalType\": \"address\", \"name\": \"to\", \"type\": \"address\" }, { \"indexed\": false, \"internalType\": \"uint256[]\", \"name\": \"ids\", \"type\": \"uint256[]\" }, { \"indexed\": false, \"internalType\": \"uint256[]\", \"name\": \"values\", \"type\": \"uint256[]\" } ], \"name\": \"TransferBatch\", \"type\": \"event\" }, { \"anonymous\": false, \"inputs\": [ { \"indexed\": true, \"internalType\": \"address\", \"name\": \"operator\", \"type\": \"address\" }, { \"indexed\": true, \"internalType\": \"address\", \"name\": \"from\", \"type\": \"address\" }, { \"indexed\": true, \"internalType\": \"address\", \"name\": \"to\", \"type\": \"address\" }, { \"indexed\": false, \"internalType\": \"uint256\", \"name\": \"id\", \"type\": \"uint256\" }, { \"indexed\": false, \"internalType\": \"uint256\", \"name\": \"value\", \"type\": \"uint256\" } ], \"name\": \"TransferSingle\", \"type\": \"event\" }, { \"anonymous\": false, \"inputs\": [ { \"indexed\": false, \"internalType\": \"string\", \"name\": \"value\", \"type\": \"string\" }, { \"indexed\": true, \"internalType\": \"uint256\", \"name\": \"id\", \"type\": \"uint256\" } ], \"name\": \"URI\", \"type\": \"event\" }, { \"inputs\": [ { \"internalType\": \"address\", \"name\": \"account\", \"type\": \"address\" }, { \"internalType\": \"uint256\", \"name\": \"id\", \"type\": \"uint256\" } ], \"name\": \"balanceOf\", \"outputs\": [ { \"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\" } ], \"stateMutability\": \"view\", \"type\": \"function\" }, { \"inputs\": [ { \"internalType\": \"address[]\", \"name\": \"accounts\", \"type\": \"address[]\" }, { \"internalType\": \"uint256[]\", \"name\": \"ids\", \"type\": \"uint256[]\" } ], \"name\": \"balanceOfBatch\", \"outputs\": [ { \"internalType\": \"uint256[]\", \"name\": \"\", \"type\": \"uint256[]\" } ], \"stateMutability\": \"view\", \"type\": \"function\" }, { \"inputs\": [ { \"internalType\": \"address\", \"name\": \"account\", \"type\": \"address\" }, { \"internalType\": \"address\", \"name\": \"operator\", \"type\": \"address\" } ], \"name\": \"isApprovedForAll\", \"outputs\": [ { \"internalType\": \"bool\", \"name\": \"\", \"type\": \"bool\" } ], \"stateMutability\": \"view\", \"type\": \"function\" }, { \"inputs\": [ { \"internalType\": \"address\", \"name\": \"account\", \"type\": \"address\" }, { \"internalType\": \"uint256\", \"name\": \"id\", \"type\": \"uint256\" }, { \"internalType\": \"uint256\", \"name\": \"amount\", \"type\": \"uint256\" }, { \"internalType\": \"bytes\", \"name\": \"data\", \"type\": \"bytes\" } ], \"name\": \"mint\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\" }, { \"inputs\": [ { \"internalType\": \"address\", \"name\": \"to\", \"type\": \"address\" }, { \"internalType\": \"uint256[]\", \"name\": \"ids\", \"type\": \"uint256[]\" }, { \"internalType\": \"uint256[]\", \"name\": \"amounts\", \"type\": \"uint256[]\" }, { \"internalType\": \"bytes\", \"name\": \"data\", \"type\": \"bytes\" } ], \"name\": \"mintBatch\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\" }, { \"inputs\": [ { \"internalType\": \"address\", \"name\": \"from\", \"type\": \"address\" }, { \"internalType\": \"address\", \"name\": \"to\", \"type\": \"address\" }, { \"internalType\": \"uint256[]\", \"name\": \"ids\", \"type\": \"uint256[]\" }, { \"internalType\": \"uint256[]\", \"name\": \"amounts\", \"type\": \"uint256[]\" }, { \"internalType\": \"bytes\", \"name\": \"data\", \"type\": \"bytes\" } ], \"name\": \"safeBatchTransferFrom\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\" }, { \"inputs\": [ { \"internalType\": \"address\", \"name\": \"from\", \"type\": \"address\" }, { \"internalType\": \"address\", \"name\": \"to\", \"type\": \"address\" }, { \"internalType\": \"uint256\", \"name\": \"id\", \"type\": \"uint256\" }, { \"internalType\": \"uint256\", \"name\": \"amount\", \"type\": \"uint256\" }, { \"internalType\": \"bytes\", \"name\": \"data\", \"type\": \"bytes\" } ], \"name\": \"safeTransferFrom\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\" }, { \"inputs\": [ { \"internalType\": \"address\", \"name\": \"operator\", \"type\": \"address\" }, { \"internalType\": \"bool\", \"name\": \"approved\", \"type\": \"bool\" } ], \"name\": \"setApprovalForAll\", \"outputs\": [], \"stateMutability\": \"nonpayable\", \"type\": \"function\" }, { \"inputs\": [ { \"internalType\": \"bytes4\", \"name\": \"interfaceId\", \"type\": \"bytes4\" } ], \"name\": \"supportsInterface\", \"outputs\": [ { \"internalType\": \"bool\", \"name\": \"\", \"type\": \"bool\" } ], \"stateMutability\": \"view\", \"type\": \"function\" }, { \"inputs\": [ { \"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\" } ], \"name\": \"uri\", \"outputs\": [ { \"internalType\": \"string\", \"name\": \"\", \"type\": \"string\" } ], \"stateMutability\": \"view\", \"type\": \"function\" } ]";
-    private string Mint1155Contract = "0xbc7d7B826d3f9EEfCfBbA4cDC2fE8B8741114085";
     private const int Mint1155Id = 1;
     private const int Mint1155Amount = 1;
 
@@ -62,13 +52,9 @@ public class EvmTests : SampleTestsBase
     
     #region Transfer
     
-    private const string TransferErc20ContractAddress = "0x5213E57f38238C46560a0f1686CCaFf54263cE44";
     private BigInteger TransferErc20Amount = 1;
     
-    private const string TransferErc721ContractAddress = "0xE83EE42471Ad261Cf3b9221006925d8F1FC01ee9";
     private const int Transfer721Id = 5;
-    
-    private const string TransferErc1155ContractAddress = "0xbc7d7B826d3f9EEfCfBbA4cDC2fE8B8741114085";
     private const int Transfer1155Id = 1;
     private const int Transfer1155Amount = 1;
     
@@ -91,7 +77,7 @@ public class EvmTests : SampleTestsBase
     {
         object[] args = { config.TestWalletAddress };
         
-        var callContract = Evm.ContractCall(web3, ContractCallMethod, Abi, ContractAddress, args);
+        var callContract = Evm.ContractCall(web3, ContractCallMethod, ABI.ArrayTotal, Contracts.ArrayTotal, args);
 
         yield return new WaitUntil(() => callContract.IsCompleted);
 
@@ -112,7 +98,7 @@ public class EvmTests : SampleTestsBase
             IncreaseAmount
         };
         
-        var sendContract = Evm.ContractSend(web3, ContractSendMethod, Abi, ContractAddress, args);
+        var sendContract = Evm.ContractSend(web3, ContractSendMethod, ABI.ArrayTotal, Contracts.ArrayTotal, args);
 
         yield return new WaitUntil(() => sendContract.IsCompleted);
 
@@ -126,7 +112,7 @@ public class EvmTests : SampleTestsBase
 	[UnityTest]
     public IEnumerator TestGetArray()
     {
-        var getArray = Evm.GetArray(web3, ArrayAddress, ArrayAbi, GetArrayMethod);
+        var getArray = Evm.GetArray(web3, Contracts.ArrayTotal, ABI.ArrayTotal, GetArrayMethod);
 
         yield return new WaitUntil(() => getArray.IsCompleted);
 
@@ -144,7 +130,7 @@ public class EvmTests : SampleTestsBase
     {
         config.TestResponse = "0x3446b949c3d214fba7e61c9cf127eac6cd0b2983564cf76be618099879b6f1e1";
             
-        var sendArray = Evm.SendArray(web3, SendArrayMethod, ArrayAbi, ArrayAddress, ArrayToSend.ToArray());
+        var sendArray = Evm.SendArray(web3, SendArrayMethod, ABI.ArrayTotal, Contracts.ArrayTotal, ArrayToSend.ToArray());
 
         yield return new WaitUntil(() => sendArray.IsCompleted);
 
@@ -171,7 +157,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestGetGasLimit()
     {
-        var getGasLimit = Evm.GetGasLimit(web3, Abi, ContractAddress, "addTotal");
+        var getGasLimit = Evm.GetGasLimit(web3, ABI.ArrayTotal, Contracts.ArrayTotal, ContractSendMethod);
 
         yield return new WaitUntil(() => getGasLimit.IsCompleted);
 
@@ -228,7 +214,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestUseRegisteredContract()
     {
-        var useRegisteredContract = Evm.UseRegisteredContract(web3, "shiba", "balanceOf");
+        var useRegisteredContract = Evm.UseRegisteredContract(web3, Contracts.Erc20, EthMethod.BalanceOf);
 
         yield return new WaitUntil(() => useRegisteredContract.IsCompleted);
 
@@ -302,7 +288,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestCustomBalanceOfErc20()
     {
-        var getCustomBalanceOf = Erc20.CustomTokenBalance(web3, ABI.CUSTOMBALANCEOF, Contracts.ERC20);
+        var getCustomBalanceOf = Erc20.CustomTokenBalance(web3, ABI.CustomBalanceOf, Contracts.Erc20);
         yield return new WaitUntil(() => getCustomBalanceOf.IsCompleted);
         Assert.AreEqual(new BigInteger(999999), getCustomBalanceOf.Result);
         //Assert.AreEqual(new BigInteger(new byte[]
@@ -316,7 +302,7 @@ public class EvmTests : SampleTestsBase
     {
         config.TestResponse = "0xbcff4755f1736b8ddfedb6d88fa6fbea5630fcc7e2f4b6e88da6ad19eb1fcaa6";
 
-        var mint20 = Erc20.MintErc20(web3, Mint20Contract, Mint20ToAccount, Mint20Amount);
+        var mint20 = Erc20.MintErc20(web3, Contracts.Erc20, SendToAddress, Mint20Amount);
 
         yield return new WaitUntil(() => mint20.IsCompleted);
 
@@ -334,7 +320,7 @@ public class EvmTests : SampleTestsBase
     {
         config.TestResponse = "0xe4ff82c87784590c747ee8528506168f8a3165c8e6980f77e388f9a521f9d6bc";
 
-        var mint721 = Erc721.MintErc721(web3, Mint721Abi, Mint721Contract, Mint721Uri);
+        var mint721 = Erc721.MintErc721(web3, ABI.Erc721, Contracts.Erc721, Mint721Uri);
 
         yield return new WaitUntil(() => mint721.IsCompleted);
 
@@ -352,7 +338,7 @@ public class EvmTests : SampleTestsBase
     {
         config.TestResponse = "0xae4160283393f81033e5ff17b2f2732b27e7db21fd3a0eba064dffc01688861c";
 
-        var mint1155 = Erc1155.MintErc1155(web3, Mint1155Abi, Mint1155Contract, Mint1155Id, Mint1155Amount);
+        var mint1155 = Erc1155.MintErc1155(web3, ABI.Erc1155, Contracts.Erc1155, Mint1155Id, Mint1155Amount);
 
         yield return new WaitUntil(() => mint1155.IsCompleted);
 
@@ -370,7 +356,7 @@ public class EvmTests : SampleTestsBase
     {
         config.TestResponse = "0x5d00d99c01cd8cc42e1ecc0f7597ab4a9875a3a28ceea3b61fc29607b6c49293";
 
-        var transferErc20 = Erc20.TransferErc20(web3, TransferErc20ContractAddress, SendToAddress, TransferErc20Amount);
+        var transferErc20 = Erc20.TransferErc20(web3, Contracts.Erc20, SendToAddress, TransferErc20Amount);
 
         yield return new WaitUntil(() => transferErc20.IsCompleted);
 
@@ -388,7 +374,7 @@ public class EvmTests : SampleTestsBase
     {
         config.TestResponse = "0xee15948660ad815b376131f5cccae4ce0578fb6bd96d4c4f5c3fa7bae172a5bb";
 
-        var transferErc721 = Erc721.TransferErc721(web3, TransferErc721ContractAddress, SendToAddress, Transfer721Id);
+        var transferErc721 = Erc721.TransferErc721(web3, Contracts.Erc721, SendToAddress, Transfer721Id);
 
         yield return new WaitUntil(() => transferErc721.IsCompleted);
 
@@ -406,7 +392,7 @@ public class EvmTests : SampleTestsBase
     {
         config.TestResponse = "0x95ad5385b189a7f3059412db5e720a7beeef4a20b48a87f4974b8d9ff9bfb56d";
 
-        var transferErc1155 = Erc1155.TransferErc1155(web3, TransferErc1155ContractAddress, Transfer1155Id, Transfer1155Amount, SendToAddress);
+        var transferErc1155 = Erc1155.TransferErc1155(web3, Contracts.Erc1155, Transfer1155Id, Transfer1155Amount, SendToAddress);
 
         yield return new WaitUntil(() => transferErc1155.IsCompleted);
 

@@ -123,7 +123,7 @@ public class Erc721Calls : MonoBehaviour
     /// </summary>
     public async void MintErc721()
     {
-        var response = await Erc721.MintErc721(Web3Accessor.Web3, ABI.ERC721, contractMint, uriMint);
+        var response = await Erc721.MintErc721(Web3Accessor.Web3, ABI.Erc721, contractMint, uriMint);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Erc721), nameof(Erc721.MintErc721));
     }

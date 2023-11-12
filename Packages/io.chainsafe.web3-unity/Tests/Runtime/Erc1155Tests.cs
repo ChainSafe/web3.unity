@@ -18,14 +18,7 @@ public class Erc1155Tests
     #region Balances
 
     private readonly string[] _accounts = new[] { "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2", "0xE51995Cdb3b1c109E0e6E67ab5aB31CDdBB83E4a" };
-    private const string ContractAddress = "0xbc7d7B826d3f9EEfCfBbA4cDC2fE8B8741114085";
     private readonly string[] _tokenIds = { "1", "2" };
-
-    #endregion
-
-    #region Texture
-
-    private const string NftTextureContractAddress = "0xbc7d7B826d3f9EEfCfBbA4cDC2fE8B8741114085";
 
     #endregion
     
@@ -74,7 +67,7 @@ public class Erc1155Tests
     [UnityTest]
     public IEnumerator TestBalanceOf()
     {
-        var getBalanceOf = Erc1155.BalanceOf(web3, ContractAddress, _accounts[0], _tokenIds[0]);
+        var getBalanceOf = Erc1155.BalanceOf(web3, Contracts.Erc1155, _accounts[0], _tokenIds[0]);
         yield return new WaitUntil(() => getBalanceOf.IsCompleted);
 
         Assert.AreEqual(new BigInteger(2), getBalanceOf.Result);
@@ -83,7 +76,7 @@ public class Erc1155Tests
     [UnityTest]
     public IEnumerator TestBalanceOfBatch()
     {
-        var getBalanceOf = Erc1155.BalanceOfBatch(web3, ContractAddress, _accounts, _tokenIds);
+        var getBalanceOf = Erc1155.BalanceOfBatch(web3, Contracts.Erc1155, _accounts, _tokenIds);
         yield return new WaitUntil(() => getBalanceOf.IsCompleted);
         CollectionAssert.AreEqual(new List<BigInteger> { 2, 0 }, getBalanceOf.Result);
     }
@@ -94,7 +87,7 @@ public class Erc1155Tests
     [UnityTest]
     public IEnumerator TestUri()
     {
-        var uri = Erc1155.Uri(web3, ContractAddress, _tokenIds[0]);
+        var uri = Erc1155.Uri(web3, Contracts.Erc1155, _tokenIds[0]);
         yield return new WaitUntil(() => uri.IsCompleted);
         Assert.AreEqual(ExpectedUriResult, uri.Result);
     }
@@ -174,7 +167,7 @@ public class Erc1155Tests
         };
 
         #endregion
-        var texture = Erc1155.ImportNftTexture1155(web3, NftTextureContractAddress, "1");
+        var texture = Erc1155.ImportNftTexture1155(web3, Contracts.Erc1155, "1");
         yield return new WaitUntil(() => texture.IsCompleted);
         CollectionAssert.AreEqual(bytesOfTheTexture, texture.Result.EncodeToJPG(1));
     }

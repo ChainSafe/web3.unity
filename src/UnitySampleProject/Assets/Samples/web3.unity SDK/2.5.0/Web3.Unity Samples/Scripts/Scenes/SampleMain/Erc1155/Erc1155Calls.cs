@@ -119,7 +119,7 @@ public class Erc1155Calls : MonoBehaviour
     /// </summary>
     public async void MintErc1155()
     {
-        var response = await Erc1155.MintErc1155(Web3Accessor.Web3, ABI.ERC1155, contractMint, idMint, amountMint);
+        var response = await Erc1155.MintErc1155(Web3Accessor.Web3, ABI.Erc1155, contractMint, idMint, amountMint);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Erc1155), nameof(Erc1155.MintErc1155));
     }

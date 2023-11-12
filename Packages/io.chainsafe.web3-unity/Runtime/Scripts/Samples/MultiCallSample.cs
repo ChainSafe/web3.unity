@@ -24,7 +24,7 @@ public class MultiCallSample
 
     public async Task ErcSamples()
     {
-        var erc20Contract = web3.ContractBuilder.Build(ABI.ERC20, Erc20ContractAddress);
+        var erc20Contract = web3.ContractBuilder.Build(ABI.Erc20, Erc20ContractAddress);
         var erc20BalanceOfCalldata = erc20Contract.Calldata(CommonMethod.BalanceOf, new object[]
         {
             Erc20Account

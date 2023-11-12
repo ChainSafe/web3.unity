@@ -67,7 +67,7 @@ public class EvmCalls : MonoBehaviour
 
     #region Registered Contract
 
-    private string registeredContractName = "shiba";
+    private string registeredContractName = "CsTestErc20";
     private string registeredContractmethod = "balanceOf";
 
     #endregion
@@ -93,7 +93,7 @@ public class EvmCalls : MonoBehaviour
     public async void ContractCall()
     {
         object[] args = {};
-        var response = await Evm.ContractCall(Web3Accessor.Web3, methodCall, ABI.ARRAYTOTAL, contractAddressCall, args);
+        var response = await Evm.ContractCall(Web3Accessor.Web3, methodCall, ABI.ArrayTotal, contractAddressCall, args);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.ContractCall));
     }
@@ -104,21 +104,21 @@ public class EvmCalls : MonoBehaviour
         {
             increaseAmountSend
         };
-        var response = await Evm.ContractSend(Web3Accessor.Web3, methodSend, ABI.ARRAYTOTAL, contractAddressSend, args);
+        var response = await Evm.ContractSend(Web3Accessor.Web3, methodSend, ABI.ArrayTotal, contractAddressSend, args);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.ContractSend));
     }
 
     public async void GetArray()
     {
-        var response = await Evm.GetArray(Web3Accessor.Web3, contractAddressArray, ABI.ARRAYTOTAL, methodArrayGet);
+        var response = await Evm.GetArray(Web3Accessor.Web3, contractAddressArray, ABI.ArrayTotal, methodArrayGet);
         var responseString = string.Join(",\n", response.Select((list, i) => $"#{i} {string.Join((string)", ", (IEnumerable<string>)list)}"));
         SampleOutputUtil.PrintResult(responseString, nameof(Evm), nameof(Evm.GetArray));
     }
     
     public async void SendArray()
     {
-        var response = await Evm.SendArray(Web3Accessor.Web3, methodArraySend, ABI.ARRAYTOTAL, contractAddressArray, stringArraySend);
+        var response = await Evm.SendArray(Web3Accessor.Web3, methodArraySend, ABI.ArrayTotal, contractAddressArray, stringArraySend);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.SendArray));
     }
@@ -131,7 +131,7 @@ public class EvmCalls : MonoBehaviour
     
     public async void GetGasLimit()
     {
-        var gasLimit = await Evm.GetGasLimit(Web3Accessor.Web3, ABI.ARRAYTOTAL, contractAddressSend, methodSend);
+        var gasLimit = await Evm.GetGasLimit(Web3Accessor.Web3, ABI.ArrayTotal, contractAddressSend, methodSend);
         SampleOutputUtil.PrintResult(gasLimit.ToString(), nameof(Evm), nameof(Evm.GetGasLimit));
     }
     
@@ -221,7 +221,7 @@ public class EvmCalls : MonoBehaviour
     
     public async void MultiCall()
     {
-        var erc20Contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.ERC20, Erc20ContractAddress);
+        var erc20Contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.Erc20, Erc20ContractAddress);
         var erc20BalanceOfCalldata = erc20Contract.Calldata(EthMethod.BalanceOf, new object[]
         {
             Erc20Account
