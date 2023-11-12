@@ -3,7 +3,6 @@ using System.Numerics;
 using ChainSafe.Gaming.UnityPackage;
 using Scripts.EVM.Token;
 using UnityEngine;
-using ABI = Scripts.EVM.Token.ABI;
 
 /// <summary>
 /// ERC721 calls used in the sample scene
@@ -24,39 +23,34 @@ public class Erc721Calls : MonoBehaviour
     #endregion
 
     #region Balance Of
-
-    private string contractBalanceOf = "0x9123541E259125657F03D7AD2A7D1a8Ec79375BA";
+    
     private string accountBalanceOf = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
 
     #endregion
 
     #region Owner Of
-
-    private string contractOwnerOf = "0x06dc21f89f01409e7ed0e4c80eae1430962ae52c";
-    private string tokenIdOwnerOf = "0x01559ae4021a565d5cc4740f1cefa95de8c1fb193949ecd32c337b03047da501";
+    
+    private string tokenIdOwnerOf = "1";
 
     #endregion
     
     #region Owner Of Batch
 
-    private string[] tokenIdsOwnerOfBatch = { "33", "29" };
-    private string contractOwnerOfBatch = "0x47381c5c948254e6e0E324F1AA54b7B24104D92D";
+    private string[] tokenIdsOwnerOfBatch = { "1", "2" };
     // optional: multicall contract https://github.com/makerdao/multicall
     private string multicallOwnerOfBatch = "0x77dca2c955b15e9de4dbbcf1246b4b85b651e50e";
 
     #endregion
 
     #region Uri
-
-    private string contractUri = "0x06dc21f89f01409e7ed0e4c80eae1430962ae52c";
+    
     private string tokenIdUri = "0x01559ae4021a565d5cc4740f1cefa95de8c1fb193949ecd32c337b03047da501";
 
     #endregion
     
     #region Mint
-
-    private string contractMint = "0x0B102638532be8A1b3d0ed1fcE6eC603Bec37848";
-    private string uriMint = "ipfs://QmNn5EaGR26kU7aAMH7LhkNsAGcmcyJgun3Wia4MftVicW/1.json";
+    
+    private string uriMint = "1";
 
     #endregion
     
@@ -85,7 +79,7 @@ public class Erc721Calls : MonoBehaviour
     /// </summary>
     public async void BalanceOf()
     {
-        var balance = await Erc721.BalanceOf(Web3Accessor.Web3, contractBalanceOf, accountBalanceOf);
+        var balance = await Erc721.BalanceOf(Web3Accessor.Web3, Contracts.Erc721, accountBalanceOf);
         SampleOutputUtil.PrintResult(balance.ToString(), nameof(Erc721), nameof(Erc721.BalanceOf));
     }
     
@@ -95,8 +89,8 @@ public class Erc721Calls : MonoBehaviour
     public async void OwnerOf()
     {
         var owner = tokenIdOwnerOf.StartsWith("0x") ? 
-            await Erc721.OwnerOf(Web3Accessor.Web3, contractOwnerOf, tokenIdOwnerOf) 
-            : await Erc721.OwnerOf(Web3Accessor.Web3, contractOwnerOf, BigInteger.Parse(tokenIdOwnerOf));
+            await Erc721.OwnerOf(Web3Accessor.Web3, Contracts.Erc721, tokenIdOwnerOf) 
+            : await Erc721.OwnerOf(Web3Accessor.Web3, Contracts.Erc721, BigInteger.Parse(tokenIdOwnerOf));
         SampleOutputUtil.PrintResult(owner, nameof(Erc721), nameof(Erc721.OwnerOf));
     }
     
@@ -105,7 +99,7 @@ public class Erc721Calls : MonoBehaviour
     /// </summary>
     public async void OwnerOfBatch()
     {
-        var owners = await Erc721.OwnerOfBatch(Web3Accessor.Web3, contractOwnerOfBatch, tokenIdsOwnerOfBatch, multicallOwnerOfBatch);
+        var owners = await Erc721.OwnerOfBatch(Web3Accessor.Web3, Contracts.Erc721, tokenIdsOwnerOfBatch, multicallOwnerOfBatch);
         var ownersString = $"{owners.Count} owner(s):\n" + string.Join(",\n", owners);
         SampleOutputUtil.PrintResult(ownersString, nameof(Erc721), nameof(Erc721.OwnerOfBatch));
     }
@@ -115,7 +109,7 @@ public class Erc721Calls : MonoBehaviour
     /// </summary>
     public async void Uri()
     {
-        var uri = await Erc721.Uri(Web3Accessor.Web3, contractUri, tokenIdUri);
+        var uri = await Erc721.Uri(Web3Accessor.Web3, Contracts.Erc721, tokenIdUri);
         SampleOutputUtil.PrintResult(uri, nameof(Erc721), nameof(Erc721.Uri));
     }
     
@@ -124,7 +118,7 @@ public class Erc721Calls : MonoBehaviour
     /// </summary>
     public async void MintErc721()
     {
-        var response = await Erc721.MintErc721(Web3Accessor.Web3, ABI.Mint721, contractMint, uriMint);
+        var response = await Erc721.MintErc721(Web3Accessor.Web3, ABI.Erc721, Contracts.Erc721, uriMint);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Erc721), nameof(Erc721.MintErc721));
     }
