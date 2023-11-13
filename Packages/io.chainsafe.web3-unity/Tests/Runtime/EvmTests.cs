@@ -147,7 +147,11 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestGetGasLimit()
     {
-        var getGasLimit = Evm.GetGasLimit(web3, ABI.Erc20, Contracts.ArrayTotal, ContractSendMethod);
+        object[] args =
+        {
+           IncreaseAmount
+        };
+        var getGasLimit = Evm.GetGasLimit(web3, ABI.ArrayTotal, Contracts.ArrayTotal, ContractSendMethod, args);
         yield return new WaitUntil(() => getGasLimit.IsCompleted);
         if (getGasLimit.Exception != null) throw getGasLimit.Exception;
         // Just assert successful completion because result is always changing

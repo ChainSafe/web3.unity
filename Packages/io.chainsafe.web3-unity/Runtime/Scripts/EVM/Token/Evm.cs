@@ -44,10 +44,10 @@ namespace Scripts.EVM.Token
             return await web3.RpcProvider.GetBlockNumber();
         }
 
-        public static async Task<HexBigInteger> GetGasLimit(Web3 web3, string contractAbi, string contractAddress, string method)
+        public static async Task<HexBigInteger> GetGasLimit(Web3 web3, string contractAbi, string contractAddress, string method, object[] args)
         {
             var contract = web3.ContractBuilder.Build(contractAbi, contractAddress);
-            return await contract.EstimateGas(method, new object[] { });
+            return await contract.EstimateGas(method, args);
         }
 
         public static async Task<HexBigInteger> GetGasPrice(Web3 web3)
