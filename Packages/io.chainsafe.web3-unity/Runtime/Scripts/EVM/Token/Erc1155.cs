@@ -6,7 +6,6 @@ using ChainSafe.Gaming.Web3;
 using Scripts.EVM.Remote;
 using UnityEngine;
 using UnityEngine.Networking;
-using Web3Unity.Scripts.Prefabs;
 
 namespace Scripts.EVM.Token
 {

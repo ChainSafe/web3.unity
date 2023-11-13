@@ -56,7 +56,7 @@ public class EvmTests : SampleTestsBase
     
     private BigInteger TransferErc20Amount = 1;
     
-    private const int Transfer721Id = 1;
+    private const int Transfer721Id = 8;
     private const int Transfer1155Id = 1;
     private const int Transfer1155Amount = 1;
     
@@ -98,7 +98,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestContractSend()
     {
-        config.TestResponse = "0x3f32788de980b1570256a805c7ef193e48da263954d4c106bd7b9514d460753e";
+        config.TestResponse = "0x21ce11a3d68add16601b310a9662d1dd354f3fb91469ea42070f00863db2657c";
         object[] args =
         {
             IncreaseAmount
@@ -197,7 +197,7 @@ public class EvmTests : SampleTestsBase
         yield return new WaitUntil(() => useRegisteredContract.IsCompleted);
         if (useRegisteredContract.Exception != null) throw useRegisteredContract.Exception;
         Assert.IsTrue(useRegisteredContract.IsCompletedSuccessfully);
-        Assert.AreEqual(new BigInteger(1000000000000999999), useRegisteredContract.Result);
+        Assert.AreEqual(new BigInteger(1000000000000000000), useRegisteredContract.Result);
     }
 
     [UnityTest]
@@ -272,13 +272,13 @@ public class EvmTests : SampleTestsBase
     {
         var getCustomBalanceOf = Erc20.CustomTokenBalance(web3, ABI.Erc20, Contracts.Erc20);
         yield return new WaitUntil(() => getCustomBalanceOf.IsCompleted);
-        Assert.AreEqual(new BigInteger(1000000000000999999), getCustomBalanceOf.Result);
+        Assert.AreEqual(new BigInteger(1000000000000000000), getCustomBalanceOf.Result);
     }
     
     [UnityTest]
     public IEnumerator TestMintErc20()
     {
-        config.TestResponse = "0xbcff4755f1736b8ddfedb6d88fa6fbea5630fcc7e2f4b6e88da6ad19eb1fcaa6";
+        config.TestResponse = "0xf6133ad76359ffaf67853a5eb138a94ed11f29d350b907420a92c685c6df5303";
         var mint20 = Erc20.MintErc20(web3, Contracts.Erc20, SendToAddress, Mint20Amount);
         yield return new WaitUntil(() => mint20.IsCompleted);
         if (mint20.Exception != null) throw mint20.Exception;
@@ -289,7 +289,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestMintErc721()
     {
-        config.TestResponse = "0xe4ff82c87784590c747ee8528506168f8a3165c8e6980f77e388f9a521f9d6bc";
+        config.TestResponse = "0x09f1c615d638ae0b3a8c4a5555b46170c42dba214f04412400f3ff639657a223";
         var mint721 = Erc721.MintErc721(web3, ABI.Erc721, Contracts.Erc721, Mint721Uri);
         yield return new WaitUntil(() => mint721.IsCompleted);
         if (mint721.Exception != null) throw mint721.Exception;
@@ -300,7 +300,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestMintErc1155()
     {
-        config.TestResponse = "0xae4160283393f81033e5ff17b2f2732b27e7db21fd3a0eba064dffc01688861c";
+        config.TestResponse = "0xa04294541b934b48ada4073b07ba01492d8ad676aa2db6f93249cec0820a1dca";
         var mint1155 = Erc1155.MintErc1155(web3, ABI.Erc1155, Contracts.Erc1155, Mint1155Id, Mint1155Amount);
         yield return new WaitUntil(() => mint1155.IsCompleted);
         if (mint1155.Exception != null) throw mint1155.Exception;
@@ -311,7 +311,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestTransferErc20()
     {
-        config.TestResponse = "0x5d00d99c01cd8cc42e1ecc0f7597ab4a9875a3a28ceea3b61fc29607b6c49293";
+        config.TestResponse = "0x6d75e92ec3e214a392955f3bdc1db3c606059e4f0d7b323a70d9741dd374a9c0";
         var transferErc20 = Erc20.TransferErc20(web3, Contracts.Erc20, SendToAddress, TransferErc20Amount);
         yield return new WaitUntil(() => transferErc20.IsCompleted);
         if (transferErc20.Exception != null) throw transferErc20.Exception;
@@ -322,7 +322,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestTransferErc721()
     {
-        config.TestResponse = "0xee15948660ad815b376131f5cccae4ce0578fb6bd96d4c4f5c3fa7bae172a5bb";
+        config.TestResponse = "0x5c02df6b55bbc5f958d3a5e4b21f0db20cd2284fabe1f7278f7984d3e05de81d";
         var transferErc721 = Erc721.TransferErc721(web3, Contracts.Erc721, SendToAddress, Transfer721Id);
         yield return new WaitUntil(() => transferErc721.IsCompleted);
         if (transferErc721.Exception != null) throw transferErc721.Exception;
@@ -333,7 +333,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestTransferErc1155()
     {
-        config.TestResponse = "0x95ad5385b189a7f3059412db5e720a7beeef4a20b48a87f4974b8d9ff9bfb56d";
+        config.TestResponse = "0x5de8fb6c522d4ba85f09961f03bbdc1ee8d9c283ddd1dea0f3ccdfa27cc189af";
         var transferErc1155 = Erc1155.TransferErc1155(web3, Contracts.Erc1155, Transfer1155Id, Transfer1155Amount, SendToAddress);
         yield return new WaitUntil(() => transferErc1155.IsCompleted);
         if (transferErc1155.Exception != null) throw transferErc1155.Exception;

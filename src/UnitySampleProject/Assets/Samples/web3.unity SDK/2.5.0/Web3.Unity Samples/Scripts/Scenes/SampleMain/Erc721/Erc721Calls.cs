@@ -117,6 +117,7 @@ public class Erc721Calls : MonoBehaviour
     public async void MintErc721()
     {
         var response = await Erc721.MintErc721(Web3Accessor.Web3, ABI.Erc721, Contracts.Erc721, uriMint);
+        Debug.Log(response);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Erc721), nameof(Erc721.MintErc721));
     }
@@ -127,6 +128,7 @@ public class Erc721Calls : MonoBehaviour
     public async void TransferErc721()
     {
         var response = await Erc721.TransferErc721(Web3Accessor.Web3, contractTransfer, toAccountTransfer, tokenIdTransfer);
+        Debug.Log(response);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Erc721), nameof(Erc721.TransferErc721));
     }
