@@ -322,6 +322,4 @@ public class EvmCalls : MonoBehaviour
             Debug.Log($"decodedTotalSupply {((BigInteger)decodedTotalSupply[0]).ToString()}");
         }
     }
-    
-  
 }
