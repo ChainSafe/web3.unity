@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ChainSafe.Gaming.WalletConnect.Models;
 using Newtonsoft.Json;
 using WalletConnectSharp.Core;
+using WalletConnectSharp.Network.Interfaces;
 using WalletConnectSharp.Sign.Models;
 using WalletConnectSharp.Sign.Models.Engine;
 
@@ -64,6 +65,8 @@ namespace ChainSafe.Gaming.WalletConnect
         /// For example "unity-game" is used in a Unity Made Game.
         /// </summary>
         public string BaseContext { get; set; }
+
+        public IConnectionBuilder ConnectionBuilder { get; set; }
 
         /// <summary>
         /// Chain of wallet to connect to, eg - Goerli.

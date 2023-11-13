@@ -37,6 +37,8 @@ public class ExistingWalletLogin : Login
     [SerializeField] public Button loginButton;
 
     [SerializeField] private Toggle rememberMeToggle;
+    
+    [SerializeField] private WalletConnectWebSocketBuilder builder;
 
     [Header("Wallet Connect")] [SerializeField]
     private string projectId;
@@ -185,6 +187,7 @@ public class ExistingWalletLogin : Login
             ProjectId = projectId,
             ProjectName = projectName,
             BaseContext = baseContext,
+            ConnectionBuilder = builder,
             Chain = chain,
             Metadata = metadata,
             // try and get saved value
