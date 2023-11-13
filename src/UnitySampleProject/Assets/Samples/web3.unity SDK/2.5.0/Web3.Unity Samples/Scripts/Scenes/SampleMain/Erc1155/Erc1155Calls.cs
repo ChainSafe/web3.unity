@@ -13,13 +13,8 @@ public class Erc1155Calls : MonoBehaviour
     #region Fields
     
     #region All Erc
-
-    private string chainAllErc = "ethereum";
-    private string networkAllErc = "goerli";
+    
     private string accountAllErc = "0xfaecAE4464591F8f2025ba8ACF58087953E613b1";
-    private string contractAllErc = "";
-    private int takeAllErc = 1000;
-    private int skipAllErc = 0;
 
     #endregion
 
@@ -73,7 +68,7 @@ public class Erc1155Calls : MonoBehaviour
     /// </summary>
     public async void AllErc1155()
     {
-        var allNfts = await Erc1155.AllErc1155(Web3Accessor.Web3, chainAllErc, networkAllErc, accountAllErc, contractAllErc, takeAllErc, skipAllErc);
+        var allNfts = await Erc1155.AllErc1155(Web3Accessor.Web3, accountAllErc);
         var output = string.Join(",\n", allNfts.Select(nft => $"{nft.TokenId} - {nft.Uri}"));
         SampleOutputUtil.PrintResult(output, nameof(Erc1155), nameof(Erc1155.AllErc1155));
     }

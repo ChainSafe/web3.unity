@@ -15,6 +15,7 @@ namespace Scripts.EVM.Remote
     {
         public class Response<T> { public T response; }
         private static readonly string host = "https://api.gaming.chainsafe.io/evm";
+        private static readonly string nftHost = " https://api.gaming.chainsafe.io/v1/nft/networks/";
         
         /// <summary>
         /// Creates a mint transaction for an NFT (Non-Fungible Token) on a specified blockchain network.
@@ -274,25 +275,15 @@ namespace Scripts.EVM.Remote
         /// Retrieves all ERC721 tokens owned by a given account on a specific blockchain and network.
         /// </summary>
         /// <param name="web3">The Web3 instance used for the request.</param>
-        /// <param name="chain">The blockchain chain identifier (e.g., Ethereum).</param>
-        /// <param name="network">The network identifier (e.g., Mainnet, Ropsten).</param>
         /// <param name="account">The account address for which to retrieve ERC721 tokens.</param>
-        /// <param name="contract">[Optional] The address of the ERC721 contract (if filtering by contract is required).</param>
-        /// <param name="take">[Optional] The maximum number of tokens to retrieve (default: 500).</param>
-        /// <param name="skip">[Optional] The number of tokens to skip in the query (default: 0).</param>
         /// <returns>An array of response objects containing details of the ERC721 tokens.</returns>
-        public static async Task<TokenResponse[]> AllErc721(Web3 web3, string chain, string network, string account, string contract = "", int take = 500, int skip = 0)
+        public static async Task<TokenResponse[]> AllErc721(Web3 web3, string account)
         {
             WWWForm form = new WWWForm();
             form.AddField("projectId", web3.ProjectConfig.ProjectId);
-            form.AddField("chain", chain);
-            form.AddField("network", network);
             form.AddField("account", account);
-            form.AddField("contract", contract);
-            form.AddField("first", take);
-            form.AddField("skip", skip);
 
-            string url = host + "/all721";
+            string url = $"{nftHost}{web3.ChainConfig.ChainId}/{account}/tokens";
             string rawNfts;
             using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
             {
@@ -315,24 +306,14 @@ namespace Scripts.EVM.Remote
         /// Retrieves all ERC1155 tokens owned by a given account on a specific blockchain and network.
         /// </summary>
         /// <param name="web3">The Web3 instance used for the request.</param>
-        /// <param name="chain">The blockchain chain identifier (e.g., Ethereum).</param>
-        /// <param name="network">The network identifier (e.g., Mainnet, Ropsten).</param>
         /// <param name="account">The account address for which to retrieve ERC1155 tokens.</param>
-        /// <param name="contract">[Optional] The address of the ERC1155 contract (if filtering by contract is required).</param>
-        /// <param name="take">[Optional] The maximum number of tokens to retrieve (default: 500).</param>
-        /// <param name="skip">[Optional] The number of tokens to skip in the query (default: 0).</param>
         /// <returns>An array of response objects containing details of the ERC1155 tokens.</returns>
-        public static async Task<TokenResponse[]> AllErc1155(Web3 web3, string chain, string network, string account, string contract = "", int take = 500, int skip = 0)
+        public static async Task<TokenResponse[]> AllErc1155(Web3 web3, string account)
         {
             WWWForm form = new WWWForm();
             form.AddField("projectId", web3.ProjectConfig.ProjectId);
-            form.AddField("chain", chain);
-            form.AddField("network", network);
             form.AddField("account", account);
-            form.AddField("contract", contract);
-            form.AddField("first", take);
-            form.AddField("skip", skip);
-            string url = host + "/all1155";
+            string url = $"{nftHost}{web3.ChainConfig.ChainId}/{account}/tokens";
             string rawNfts;
             using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
             {

@@ -15,16 +15,11 @@ namespace Scripts.EVM.Token
         /// Fetches all 721 Nfts from an account
         /// </summary>
         /// <param name="web3"></param>
-        /// <param name="chain"></param>
-        /// <param name="network"></param>
         /// <param name="account"></param>
-        /// <param name="contract"></param>
-        /// <param name="take"></param>
-        /// <param name="skip"></param>
         /// <returns></returns>
-        public static async Task<TokenResponse[]> AllErc721(Web3 web3, string chain, string network, string account, string contract, int take, int skip)
+        public static async Task<TokenResponse[]> AllErc721(Web3 web3, string account)
         {
-            return await CSServer.AllErc721(web3, chain, network, account, contract, take, skip);
+            return await CSServer.AllErc721(web3, account);
         }
         
         /// <summary>
