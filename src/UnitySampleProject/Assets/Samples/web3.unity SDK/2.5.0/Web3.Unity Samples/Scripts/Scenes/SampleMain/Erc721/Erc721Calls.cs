@@ -37,8 +37,6 @@ public class Erc721Calls : MonoBehaviour
     #region Owner Of Batch
 
     private string[] tokenIdsOwnerOfBatch = { "1", "2" };
-    // optional: multicall contract https://github.com/makerdao/multicall
-    private string multicallOwnerOfBatch = "0x77dca2c955b15e9de4dbbcf1246b4b85b651e50e";
 
     #endregion
 
@@ -99,7 +97,7 @@ public class Erc721Calls : MonoBehaviour
     /// </summary>
     public async void OwnerOfBatch()
     {
-        var owners = await Erc721.OwnerOfBatch(Web3Accessor.Web3, Contracts.Erc721, tokenIdsOwnerOfBatch, multicallOwnerOfBatch);
+        var owners = await Erc721.OwnerOfBatch(Web3Accessor.Web3, Contracts.Erc721, tokenIdsOwnerOfBatch);
         var ownersString = $"{owners.Count} owner(s):\n" + string.Join(",\n", owners);
         SampleOutputUtil.PrintResult(ownersString, nameof(Erc721), nameof(Erc721.OwnerOfBatch));
     }

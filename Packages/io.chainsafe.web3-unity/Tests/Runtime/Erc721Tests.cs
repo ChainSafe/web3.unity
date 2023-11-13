@@ -30,7 +30,6 @@ public class Erc721Tests
     private const string ownerOfTokenId = "2";
     private const string ownerOfExpected = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
     private static string[] ownerOfBatchTokenIds = { "4", "6" };
-    private const string multicall = "0x77dca2c955b15e9de4dbbcf1246b4b85b651e50e";
     private static string[] ownerOfBatchExpected = { "0xdD4c825203f97984e7867F11eeCc813A036089D1", "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2" };
 
     #endregion
@@ -109,7 +108,7 @@ public class Erc721Tests
     [UnityTest]
     public IEnumerator TestOwnerOfBatch()
     {
-        var getOwnerOfBatch = Erc721.OwnerOfBatch(web3, Contracts.Erc721, ownerOfBatchTokenIds, multicall);
+        var getOwnerOfBatch = Erc721.OwnerOfBatch(web3, Contracts.Erc721, ownerOfBatchTokenIds);
         yield return new WaitUntil(() => getOwnerOfBatch.IsCompleted);
         CollectionAssert.AreEqual(ownerOfBatchExpected, getOwnerOfBatch.Result);
     }
