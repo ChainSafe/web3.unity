@@ -95,6 +95,7 @@ public class EvmCalls : MonoBehaviour
             await Web3Accessor.Web3.Signer.GetAddress()
         };
         var response = await Evm.ContractCall(Web3Accessor.Web3, methodCall, ABI.ArrayTotal, Contracts.ArrayTotal, args);
+        Debug.Log(response);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.ContractCall));
     }
@@ -109,6 +110,7 @@ public class EvmCalls : MonoBehaviour
             increaseAmountSend
         };
         var response = await Evm.ContractSend(Web3Accessor.Web3, methodSend, ABI.ArrayTotal, Contracts.ArrayTotal, args);
+        Debug.Log(response);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.ContractSend));
     }
