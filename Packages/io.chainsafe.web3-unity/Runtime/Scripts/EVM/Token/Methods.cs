@@ -1,6 +1,6 @@
 namespace Scripts.EVM.Token
 {
-    static class CommonMethod
+    public static class CommonMethod
     {
         public const string BalanceOf = "balanceOf";
         public const string Name = "name";
