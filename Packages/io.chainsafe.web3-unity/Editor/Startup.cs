@@ -27,7 +27,15 @@ namespace ChainSafe.GamingSdk.Editor
                     // Don't want these checks to happen when starting play mode
                     return;
                 }
-
+                
+                // Checks project ID
+                ValidateProjectID();
+                
+                // Only checks the templates and prompts for update if we're in webgl
+                #if !UNITY_WEBGL
+                    return;
+                #endif
+                
                 var performSync = WebGLTemplateSync.CheckSyncStatus() switch
                 {
                     WebGLTemplateSyncStatus.UpToDate => false,
@@ -42,8 +50,6 @@ namespace ChainSafe.GamingSdk.Editor
                 {
                     WebGLTemplateSync.Syncronize();
                 }
-
-                ValidateProjectID();
             };
         }
 
