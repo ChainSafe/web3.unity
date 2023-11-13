@@ -81,7 +81,7 @@ public class Erc1155Tests
     {
         var getBalanceOf = Erc1155.BalanceOfBatch(web3, Contracts.Erc1155, _accounts, _tokenIds);
         yield return new WaitUntil(() => getBalanceOf.IsCompleted);
-        CollectionAssert.AreEqual(new List<BigInteger> { 2, 0 }, getBalanceOf.Result);
+        CollectionAssert.AreEqual(new List<BigInteger> { 2, 3 }, getBalanceOf.Result);
     }
 
     private const string ExpectedUriResult =
