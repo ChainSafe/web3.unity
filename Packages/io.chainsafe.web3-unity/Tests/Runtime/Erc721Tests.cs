@@ -1,10 +1,7 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
 using ChainSafe.Gaming.Evm.JsonRpc;
+using ChainSafe.Gaming.MultiCall;
 using ChainSafe.Gaming.UnityPackage;
-using ChainSafe.Gaming.WalletConnect;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Unity;
@@ -12,7 +9,6 @@ using NUnit.Framework;
 using Scripts.EVM.Token;
 using UnityEngine;
 using UnityEngine.TestTools;
-using Web3Unity.Scripts.Prefabs;
 
 public class Erc721Tests
 {
@@ -30,7 +26,7 @@ public class Erc721Tests
     private const string ownerOfTokenId = "2";
     private const string ownerOfExpected = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
     private static string[] ownerOfBatchTokenIds = { "4", "6" };
-    private static string[] ownerOfBatchExpected = { "0xdD4c825203f97984e7867F11eeCc813A036089D1", "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2" };
+    private static string[] ownerOfBatchExpected = { "0xdD4c825203f97984e7867F11eeCc813A036089D1", "0xD5c8010ef6dff4c83B19C511221A7F8d1e5cFF44" };
 
     #endregion
 
@@ -78,6 +74,7 @@ public class Erc721Tests
         {
             services.UseUnityEnvironment();
             services.UseRpcProvider();
+            services.UseMultiCall();
         });
     
         var buildWeb3 = web3Builder.LaunchAsync();

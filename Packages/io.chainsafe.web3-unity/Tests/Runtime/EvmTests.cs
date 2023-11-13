@@ -56,7 +56,7 @@ public class EvmTests : SampleTestsBase
     
     private BigInteger TransferErc20Amount = 1;
     
-    private const int Transfer721Id = 5;
+    private const int Transfer721Id = 1;
     private const int Transfer1155Id = 1;
     private const int Transfer1155Amount = 1;
     
@@ -122,7 +122,7 @@ public class EvmTests : SampleTestsBase
             ArrayToSend.ConvertAll(a => a.ToLower())
         });
     }
-
+    
     [UnityTest]
     public IEnumerator TestSendArray()
     {
@@ -270,7 +270,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestCustomBalanceOfErc20()
     {
-        var getCustomBalanceOf = Erc20.CustomTokenBalance(web3, ABI.CustomBalanceOf, Contracts.Erc20);
+        var getCustomBalanceOf = Erc20.CustomTokenBalance(web3, ABI.Erc20, Contracts.Erc20);
         yield return new WaitUntil(() => getCustomBalanceOf.IsCompleted);
         Assert.AreEqual(new BigInteger(1000000000000999999), getCustomBalanceOf.Result);
     }

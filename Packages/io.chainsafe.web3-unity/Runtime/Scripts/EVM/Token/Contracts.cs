@@ -2,9 +2,9 @@
 {
     public class Contracts
     {
-        public const string Erc20 = "0x5213E57f38238C46560a0f1686CCaFf54263cE44";
-        public const string Erc721 = "0xE83EE42471Ad261Cf3b9221006925d8F1FC01ee9";
-        public const string Erc1155 = "0xbc7d7B826d3f9EEfCfBbA4cDC2fE8B8741114085";
-        public const string ArrayTotal = "0xCb0FdD2837a61d7c39ce0fbF56403Db601CAeFd4";
+        public const string Erc20 = "0x095C8d0C13bc12Fa389dCf00FD484E9cB53F58b5";
+        public const string Erc721 = "0x1B21fa9a1E46D688A2d3ae5DE6A34Ab346D94890";
+        public const string Erc1155 = "0x709F74bdA95B61de64758dF58c0791a751d74328";
+        public const string ArrayTotal = "0xef99A5cD19db80be2e2FAd89938bf2d09C7c728b";
     }
 }

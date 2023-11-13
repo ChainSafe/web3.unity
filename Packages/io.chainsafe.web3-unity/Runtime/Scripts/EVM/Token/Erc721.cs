@@ -2,13 +2,10 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.MultiCall;
-using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3;
 using Nethereum.Contracts.QueryHandlers.MultiCall;
 using Nethereum.Hex.HexConvertors.Extensions;
-using Newtonsoft.Json;
 using Scripts.EVM.Remote;
-using UnityEngine;
 
 namespace Scripts.EVM.Token
 {
@@ -79,7 +76,7 @@ namespace Scripts.EVM.Token
         }
         
         /// <summary>
-        /// Returns the owners of multiple token ids at once
+        /// Returns owners of batch
         /// </summary>
         public static async Task<List<string>> OwnerOfBatch(
             Web3 web3,
@@ -103,15 +100,14 @@ namespace Scripts.EVM.Token
                 calls.Add(call3Value); 
             };
         
-            var multiCallResultResponse = await Web3Accessor.Web3.MultiCall().MultiCallAsync(calls.ToArray());
+            var multiCallResultResponse = await web3.MultiCall().MultiCallAsync(calls.ToArray());
             var owners = new List<string>();
             for (int i = 0; i < multiCallResultResponse.Count; i++)
             {
                 if (multiCallResultResponse[i] != null && multiCallResultResponse[i].Success)
                 {
                     var owner = erc721Contract.Decode(EthMethod.OwnerOf, multiCallResultResponse[i].ReturnData.ToHex());
-                    Debug.Log(owner.ToString());
-                    owners.Add(owner.ToString());
+                    owners.Add(owner[0].ToString());
                 }
             }
             return owners;
