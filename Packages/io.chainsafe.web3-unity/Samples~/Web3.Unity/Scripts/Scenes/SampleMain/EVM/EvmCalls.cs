@@ -90,7 +90,10 @@ public class EvmCalls : MonoBehaviour
     /// </summary>
     public async void ContractCall()
     {
-        object[] args = {};
+        object[] args =
+        {
+            await Web3Accessor.Web3.Signer.GetAddress()
+        };
         var response = await Evm.ContractCall(Web3Accessor.Web3, methodCall, ABI.ArrayTotal, Contracts.ArrayTotal, args);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.ContractCall));
@@ -144,7 +147,11 @@ public class EvmCalls : MonoBehaviour
     /// </summary>
     public async void GetGasLimit()
     {
-        var gasLimit = await Evm.GetGasLimit(Web3Accessor.Web3, ABI.ArrayTotal, Contracts.ArrayTotal, methodSend);
+        object[] args =
+        {
+            increaseAmountSend
+        };
+        var gasLimit = await Evm.GetGasLimit(Web3Accessor.Web3, ABI.ArrayTotal, Contracts.ArrayTotal, methodSend, args);
         SampleOutputUtil.PrintResult(gasLimit.ToString(), nameof(Evm), nameof(Evm.GetGasLimit));
     }
     
