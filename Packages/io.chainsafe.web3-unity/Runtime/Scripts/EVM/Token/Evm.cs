@@ -12,6 +12,7 @@ using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
 using Nethereum.Signer;
 using Nethereum.Util;
+using UnityEngine;
 using Web3Unity.Scripts.Library.IPFS;
 using Web3Unity.Scripts.Prefabs;
 
@@ -43,10 +44,10 @@ namespace Scripts.EVM.Token
             return await web3.RpcProvider.GetBlockNumber();
         }
 
-        public static async Task<HexBigInteger> GetGasLimit(Web3 web3, string contractAbi, string contractAddress, string method)
+        public static async Task<HexBigInteger> GetGasLimit(Web3 web3, string contractAbi, string contractAddress, string method, object[] args)
         {
             var contract = web3.ContractBuilder.Build(contractAbi, contractAddress);
-            return await contract.EstimateGas(method, new object[] { });
+            return await contract.EstimateGas(method, args);
         }
 
         public static async Task<HexBigInteger> GetGasPrice(Web3 web3)
@@ -124,16 +125,14 @@ namespace Scripts.EVM.Token
         {
             var playerAccount = await web3.Signer.GetAddress();
             var signatureString = await web3.Signer.SignMessage(message);
-
             var msg = "\x19" + "Ethereum Signed Message:\n" + message.Length + message;
             var msgHash = new Sha3Keccack().CalculateHash(Encoding.UTF8.GetBytes(msg));
             var signature = MessageSigner.ExtractEcdsaSignature(signatureString);
             var key = EthECKey.RecoverFromSignature(signature, msgHash);
-
             return key.GetPublicAddress() == playerAccount;
         }
 
-		public static string PrivateKeySignTransaction(string _privateKey, string _transaction, string _chainId)
+		public static string EcdsaSignTransaction(string _privateKey, string _transaction, string _chainId)
         {
             int MATIC_MAIN = 137;
             int MATIC_MUMBAI = 80001;
@@ -164,13 +163,13 @@ namespace Scripts.EVM.Token
             return signature;
         }
 
-        public static string PrivateKeyGetAddress(string _privateKey)
+        public static string EcdsaGetAddress(string _privateKey)
         {
             EthECKey key = new EthECKey(_privateKey);
             return key.GetPublicAddress();
         }
 
-        public static string PrivateKeySignMessage(string _privateKey, string _message)
+        public static string EcdsaSignMessage(string _privateKey, string _message)
         {
             var signer = new EthereumMessageSigner();
             string signature = signer.HashAndSign(_message, _privateKey);

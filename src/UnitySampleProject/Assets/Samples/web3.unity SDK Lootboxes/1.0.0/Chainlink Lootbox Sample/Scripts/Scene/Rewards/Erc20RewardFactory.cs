@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using LootBoxes.Chainlink.Scene.StageItems;
 using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Lootboxes.Chainlink;
-using ChainSafe.Gaming.UnityPackage;
+using Scripts.EVM.Token;
 using UnityEngine;
 
 namespace LootBoxes.Chainlink.Scene
@@ -35,7 +35,7 @@ namespace LootBoxes.Chainlink.Scene
         {
             var item = Instantiate(CoinRewardItemPrefab);
             var reward = (CoinReward)item.Reward;
-            var contract = contractBuilder.Build(ABI.ERC_20, data.ContractAddress);
+            var contract = contractBuilder.Build(ABI.Erc20, data.ContractAddress);
             var symbol = (await contract.Call("symbol"))[0].ToString();
             var decimals = BigInteger.Parse((await contract.Call("decimals"))[0].ToString());
             var humanizedAmount = HumanizeAmount(data.AmountRaw, decimals);
