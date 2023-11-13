@@ -14,7 +14,7 @@ public class EvmTests : SampleTestsBase
     #region ContractCalls
 
     private const string ContractSendMethod = "addTotal";
-    private const int IncreaseAmount = 1;
+    private const int IncreaseAmount = 2;
     private const string ContractCallMethod = "myTotal";
     private const string CallAmount = "1";
 
@@ -56,7 +56,7 @@ public class EvmTests : SampleTestsBase
     
     private BigInteger TransferErc20Amount = 1;
     
-    private const int Transfer721Id = 8;
+    private const int Transfer721Id = 5;
     private const int Transfer1155Id = 1;
     private const int Transfer1155Amount = 1;
     
@@ -98,7 +98,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestContractSend()
     {
-        config.TestResponse = "0x21ce11a3d68add16601b310a9662d1dd354f3fb91469ea42070f00863db2657c";
+        config.TestResponse = "0x324080652dfe1463f0fcbde18961a6e7eee87f2231133523e96dc52ce8239d3f";
         object[] args =
         {
             IncreaseAmount
@@ -197,7 +197,7 @@ public class EvmTests : SampleTestsBase
         yield return new WaitUntil(() => useRegisteredContract.IsCompleted);
         if (useRegisteredContract.Exception != null) throw useRegisteredContract.Exception;
         Assert.IsTrue(useRegisteredContract.IsCompletedSuccessfully);
-        Assert.AreEqual(new BigInteger(1000000000000000000), useRegisteredContract.Result);
+        Assert.AreEqual(new BigInteger(999999999999999), useRegisteredContract.Result);
     }
 
     [UnityTest]
@@ -272,7 +272,7 @@ public class EvmTests : SampleTestsBase
     {
         var getCustomBalanceOf = Erc20.CustomTokenBalance(web3, ABI.Erc20, Contracts.Erc20);
         yield return new WaitUntil(() => getCustomBalanceOf.IsCompleted);
-        Assert.AreEqual(new BigInteger(1000000000000000000), getCustomBalanceOf.Result);
+        Assert.AreEqual(new BigInteger(999999999999999), getCustomBalanceOf.Result);
     }
     
     [UnityTest]
@@ -311,7 +311,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestTransferErc20()
     {
-        config.TestResponse = "0x6d75e92ec3e214a392955f3bdc1db3c606059e4f0d7b323a70d9741dd374a9c0";
+        config.TestResponse = "0x87d8826e895247b4106596040c5133a18ecbf76077c5433091a5f18c355a120b";
         var transferErc20 = Erc20.TransferErc20(web3, Contracts.Erc20, SendToAddress, TransferErc20Amount);
         yield return new WaitUntil(() => transferErc20.IsCompleted);
         if (transferErc20.Exception != null) throw transferErc20.Exception;

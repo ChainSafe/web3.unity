@@ -25,8 +25,8 @@ public class Erc721Tests
 
     private const string ownerOfTokenId = "2";
     private const string ownerOfExpected = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
-    private static string[] ownerOfBatchTokenIds = { "4", "6" };
-    private static string[] ownerOfBatchExpected = { "0xdD4c825203f97984e7867F11eeCc813A036089D1", "0xD5c8010ef6dff4c83B19C511221A7F8d1e5cFF44" };
+    private static string[] ownerOfBatchTokenIds = { "4", "5" };
+    private static string[] ownerOfBatchExpected = { "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2", "0xD5c8010ef6dff4c83B19C511221A7F8d1e5cFF44" };
 
     #endregion
 

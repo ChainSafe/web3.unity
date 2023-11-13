@@ -110,7 +110,6 @@ public class EvmCalls : MonoBehaviour
             increaseAmountSend
         };
         var response = await Evm.ContractSend(Web3Accessor.Web3, methodSend, ABI.ArrayTotal, Contracts.ArrayTotal, args);
-        Debug.Log(response);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.ContractSend));
     }
