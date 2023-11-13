@@ -47,7 +47,7 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void CustomTokenBalanceOf()
     {
-        var result = await Erc20.CustomTokenBalance(Web3Accessor.Web3, ABI.CustomBalanceOf, Contracts.Erc20);
+        var result = await Erc20.CustomTokenBalance(Web3Accessor.Web3, ABI.Erc20, Contracts.Erc20);
         SampleOutputUtil.PrintResult(result.ToString(), nameof(Erc20), nameof(Erc20.CustomTokenBalance));
     }
     
