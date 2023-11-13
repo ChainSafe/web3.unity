@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using LootBoxes.Chainlink.Scene.StageItems;
 using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Lootboxes.Chainlink;
-using ChainSafe.Gaming.UnityPackage;
+using Scripts.EVM.Token;
 using UnityEngine;
 
 namespace LootBoxes.Chainlink.Scene
@@ -34,7 +34,7 @@ namespace LootBoxes.Chainlink.Scene
         {
             var item = Instantiate(CoinRewardItemPrefab);
             var reward = (CoinReward)item.Reward;
-            var contract = contractBuilder.Build(ABI.ERC_1155, data.ContractAddress);
+            var contract = contractBuilder.Build(ABI.Erc1155, data.ContractAddress);
             var uri = (await contract.Call("uri", new object[] { data.TokenId }))[0].ToString();
             Erc1155MetaData metadata;
             try

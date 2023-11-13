@@ -9,50 +9,6 @@ namespace ChainSafe.Gaming.Evm.Network
 {
     public class Chains
     {
-        private static Dictionary<ulong, Chain> cached = new Dictionary<ulong, Chain>();
-
-        // TODO: duplicates ChainProvider, remove, update usages
-        public static async Task<Dictionary<ulong, Chain>> GetChains(Web3Environment environment)
-        {
-            if (cached.Count > 0)
-            {
-                return cached;
-            }
-
-            var response = await environment.HttpClient.Get<Chain[]>("https://chainid.network/chains.json");
-
-            if (!response.IsSuccess)
-            {
-                CaptureError(response.Error, environment);
-                throw new HttpRequestException(response.Error);
-            }
-
-            var chains = response.Response;
-
-            if (chains == null)
-            {
-                CaptureError("failed to deserialize chains", environment);
-                throw new Exception("failed to deserialize chains");
-            }
-
-            foreach (var chain in chains)
-            {
-                cached[chain.ChainId] = chain;
-            }
-
-            return cached;
-        }
-
-        private static void CaptureError(string error, Web3Environment environment)
-        {
-            var properties = new Dictionary<string, object>
-            {
-                { "error", error },
-            };
-
-            // TODO: log error using new event format
-        }
-
         public class Chain
         {
             [JsonProperty(PropertyName = "name")]

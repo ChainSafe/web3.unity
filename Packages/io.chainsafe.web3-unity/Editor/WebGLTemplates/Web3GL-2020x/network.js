@@ -16,9 +16,9 @@
 
 window.networks = [
   {
-    id: 5,
-    label: "Ethereum Goerli",
-    token: "goETH",
-    rpcUrl: `https://goerli.infura.io/v3/634371d724e34613bfc66e595b853cf0`,
+    id: 11155111,
+    label: "Ethereum Sepolia",
+    token: "Seth",
+    rpcUrl: `https://sepolia.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f`,
   }
 ]

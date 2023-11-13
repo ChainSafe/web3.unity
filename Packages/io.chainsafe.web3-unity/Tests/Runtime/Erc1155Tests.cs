@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Numerics;
 using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.UnityPackage;
-using ChainSafe.Gaming.WalletConnect;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Unity;
@@ -14,19 +13,15 @@ using UnityEngine.TestTools;
 
 public class Erc1155Tests
 {
-    // Fields
+    #region Fields
+    
     #region Balances
 
-    private readonly string[] _accounts = new[] { "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2", "0xE51995Cdb3b1c109E0e6E67ab5aB31CDdBB83E4a" };
-    private const string ContractAddress = "0x2c1867bc3026178a47a677513746dcc6822a137a";
-    private readonly string[] _tokenIds = { "0x01559ae4021aee70424836ca173b6a4e647287d15cee8ac42d8c2d8d128927e5", "0x01559ae4021aee70424836ca173b6a4e647287d15cee8ac42d8c2d8d128927e5" };
+    private static string[] _accounts = { "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2", "0xE51995Cdb3b1c109E0e6E67ab5aB31CDdBB83E4a" };
+    private static string[] _tokenIds = { "1", "2" };
 
     #endregion
-
-    #region Texture
-
-    private const string NftTextureContractAddress = "0x0288B4F1389ED7b3d3f9C7B73d4408235c0CBbc6";
-
+    
     #endregion
     
     private Web3 web3;
@@ -45,17 +40,18 @@ public class Erc1155Tests
     [UnitySetUp]
     public IEnumerator Setup()
     {
-        //wait for some time to initialize
+        // Wait for some time to initialize
         yield return new WaitForSeconds(5f);
     
-        //For whatever reason, in github this won't load
+        // Set project config, fallback is for github as it doesn't load
         var projectConfigScriptableObject = ProjectConfigUtilities.Load();
         if (projectConfigScriptableObject == null)
         {
-            projectConfigScriptableObject = ProjectConfigUtilities.Load("3dc3e125-71c4-4511-a367-e981a6a94371", "5",
-                "Ethereum", "Goerli", "Geth", "https://goerli.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f");
+            projectConfigScriptableObject = ProjectConfigUtilities.Load("3dc3e125-71c4-4511-a367-e981a6a94371", "11155111",
+            	"Ethereum", "Sepolia", "Seth", "https://sepolia.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f");
         }
-    
+        
+        // Create web3builder & assign services
         var web3Builder = new Web3Builder(projectConfigScriptableObject)
             .Configure(services =>
             {
@@ -65,36 +61,36 @@ public class Erc1155Tests
     
         var buildWeb3 = web3Builder.LaunchAsync();
     
-        //wait until for async task to finish
+        // Wait until for async task to finish
         yield return new WaitUntil(() => buildWeb3.IsCompleted);
-    
+        
+        // Assign result to web3
         web3 = buildWeb3.Result;
     }
 
     [UnityTest]
     public IEnumerator TestBalanceOf()
     {
-        var getBalanceOf = Erc1155.BalanceOf(web3, ContractAddress, _accounts[0], _tokenIds[0]);
+        var getBalanceOf = Erc1155.BalanceOf(web3, Contracts.Erc1155, _accounts[0], _tokenIds[0]);
         yield return new WaitUntil(() => getBalanceOf.IsCompleted);
-
         Assert.AreEqual(new BigInteger(2), getBalanceOf.Result);
     }
 
     [UnityTest]
     public IEnumerator TestBalanceOfBatch()
     {
-        var getBalanceOf = Erc1155.BalanceOfBatch(web3, ContractAddress, _accounts, _tokenIds);
+        var getBalanceOf = Erc1155.BalanceOfBatch(web3, Contracts.Erc1155, _accounts, _tokenIds);
         yield return new WaitUntil(() => getBalanceOf.IsCompleted);
-        CollectionAssert.AreEqual(new List<BigInteger> { 2, 0 }, getBalanceOf.Result);
+        CollectionAssert.AreEqual(new List<BigInteger> { 2, 3 }, getBalanceOf.Result);
     }
 
     private const string ExpectedUriResult =
-        "https://ipfs.io/ipfs/f01559ae4021aee70424836ca173b6a4e647287d15cee8ac42d8c2d8d128927e5";
+        "https://ipfs.chainsafe.io/ipfs/QmfUHuFj3YL2JMZkyXNtGRV8e9aLJgQ6gcSrqbfjWFvbqQ";
 
     [UnityTest]
     public IEnumerator TestUri()
     {
-        var uri = Erc1155.Uri(web3, ContractAddress, _tokenIds[0]);
+        var uri = Erc1155.Uri(web3, Contracts.Erc1155, _tokenIds[0]);
         yield return new WaitUntil(() => uri.IsCompleted);
         Assert.AreEqual(ExpectedUriResult, uri.Result);
     }
@@ -174,7 +170,7 @@ public class Erc1155Tests
         };
 
         #endregion
-        var texture = Erc1155.ImportNftTexture1155(web3, NftTextureContractAddress, "0");
+        var texture = Erc1155.ImportNftTexture1155(web3, Contracts.Erc1155, "1");
         yield return new WaitUntil(() => texture.IsCompleted);
         CollectionAssert.AreEqual(bytesOfTheTexture, texture.Result.EncodeToJPG(1));
     }

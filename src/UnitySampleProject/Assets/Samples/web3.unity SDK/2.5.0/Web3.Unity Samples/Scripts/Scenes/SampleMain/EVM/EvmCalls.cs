@@ -8,7 +8,6 @@ using Nethereum.Hex.HexConvertors.Extensions;
 using Scripts.EVM.Token;
 using UnityEngine;
 using Web3Unity.Scripts.Prefabs;
-using ABI = Scripts.EVM.Token.ABI;
 
 public class EvmCalls : MonoBehaviour
 {
@@ -27,7 +26,6 @@ public class EvmCalls : MonoBehaviour
     # region Contract Send
         
     private string methodSend = "addTotal";
-    private string contractAddressSend = "0x7286Cf0F6E80014ea75Dbc25F545A3be90F4904F";
     private int increaseAmountSend = 1;
         
     #endregion
@@ -35,13 +33,11 @@ public class EvmCalls : MonoBehaviour
     #region Contract Call
 
     private string methodCall = "myTotal";
-    private string contractAddressCall = "0xC71d13c40B4fE7e2c557eBAa12A0400dd4Df76C9";
 
     #endregion
 
     #region Get Send Array
-
-    private string contractAddressArray = "0x5244d0453A727EDa96299384370359f4A2B5b20a";
+    
     private string methodArrayGet = "getStore";
     private string methodArraySend = "setStore";
     private string[] stringArraySend =
@@ -62,92 +58,125 @@ public class EvmCalls : MonoBehaviour
 
     #region Send Transaction
 
-    private string to = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
+    private string toAddress = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
 
     #endregion
 
     #region Registered Contract
 
-    private string registeredContractName = "shiba";
-    private string registeredContractmethod = "balanceOf";
+    private string registeredContractName = "CsTestErc20";
 
     #endregion
 
-    #region Private Key
+    #region ECDSA
 
-    private string privateKey = "0x78dae1a22c7507a4ed30c06172e7614eb168d3546c13856340771e63ad3c0081";
-    private string messagePrivateKey = "This is a test message";
+    private string ecdsaKey = "0x78dae1a22c7507a4ed30c06172e7614eb168d3546c13856340771e63ad3c0081";
+    private string ecdsaMessage = "This is a test message";
     private string transactionHash = "0x123456789";
-    private string chainId ="5";
+    private string chainId ="11155111";
 
     #endregion
 
     #region Multi Call
-
-    private string Erc20ContractAddress = "0x3E0C0447e47d49195fbE329265E330643eB42e6f";
+    
     private string Erc20Account = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
 
     #endregion
     
     #endregion
 
+    /// <summary>
+    /// Calls values from a contract
+    /// </summary>
     public async void ContractCall()
     {
-        object[] args = {};
-        var response = await Evm.ContractCall(Web3Accessor.Web3, methodCall, ABI.AddTotal, contractAddressCall, args);
+        object[] args =
+        {
+            await Web3Accessor.Web3.Signer.GetAddress()
+        };
+        var response = await Evm.ContractCall(Web3Accessor.Web3, methodCall, ABI.ArrayTotal, Contracts.ArrayTotal, args);
+        Debug.Log(response);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.ContractCall));
     }
-
+    
+    /// <summary>
+    /// Sends values to a contract
+    /// </summary>
     public async void ContractSend()
     {
         object[] args =
         {
             increaseAmountSend
         };
-        var response = await Evm.ContractSend(Web3Accessor.Web3, methodSend, ABI.AddTotal, contractAddressSend, args);
+        var response = await Evm.ContractSend(Web3Accessor.Web3, methodSend, ABI.ArrayTotal, Contracts.ArrayTotal, args);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.ContractSend));
     }
-
+    
+    /// <summary>
+    /// Gets array values from a contract
+    /// </summary>
     public async void GetArray()
     {
-        var response = await Evm.GetArray(Web3Accessor.Web3, contractAddressArray, ABI.AddTotal, methodArrayGet);
+        var response = await Evm.GetArray(Web3Accessor.Web3, Contracts.ArrayTotal, ABI.ArrayTotal, methodArrayGet);
         var responseString = string.Join(",\n", response.Select((list, i) => $"#{i} {string.Join((string)", ", (IEnumerable<string>)list)}"));
         SampleOutputUtil.PrintResult(responseString, nameof(Evm), nameof(Evm.GetArray));
     }
     
+    /// <summary>
+    /// Sends array values to a contract
+    /// </summary>
     public async void SendArray()
     {
-        var response = await Evm.SendArray(Web3Accessor.Web3, methodArraySend, ABI.AddTotal, contractAddressArray, stringArraySend);
+        var response = await Evm.SendArray(Web3Accessor.Web3, methodArraySend, ABI.ArrayTotal, Contracts.ArrayTotal, stringArraySend);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.SendArray));
     }
     
+    /// <summary>
+    /// Gets the current block number
+    /// </summary>
     public async void GetBlockNumber()
     {
         var blockNumber = await Evm.GetBlockNumber(Web3Accessor.Web3);
         SampleOutputUtil.PrintResult(blockNumber.ToString(), nameof(Evm), nameof(Evm.GetBlockNumber));
     }
     
+    /// <summary>
+    /// Gets the gas limit for a specific function
+    /// </summary>
     public async void GetGasLimit()
     {
-        var gasLimit = await Evm.GetGasLimit(Web3Accessor.Web3, ABI.AddTotal, contractAddressSend, methodSend);
+        object[] args =
+        {
+            increaseAmountSend
+        };
+        var gasLimit = await Evm.GetGasLimit(Web3Accessor.Web3, ABI.ArrayTotal, Contracts.ArrayTotal, methodSend, args);
         SampleOutputUtil.PrintResult(gasLimit.ToString(), nameof(Evm), nameof(Evm.GetGasLimit));
     }
     
+    /// <summary>
+    /// Gets the current gas price
+    /// </summary>
     public async void GetGasPrice()
     {
         var gasPrice = await Evm.GetGasPrice(Web3Accessor.Web3);
         SampleOutputUtil.PrintResult(gasPrice.ToString(), nameof(Evm), nameof(Evm.GetGasPrice));
     }
     
+    /// <summary>
+    /// Gets an accounts nonce
+    /// </summary>
     public async void GetNonce()
     {
         var nonce = await Evm.GetNonce(Web3Accessor.Web3);
         SampleOutputUtil.PrintResult(nonce.ToString(), nameof(Evm), nameof(Evm.GetNonce));
     }
     
+    /// <summary>
+    /// Gets a specific transaction's status
+    /// </summary>
     public async void GetTransactionStatus()
     {
         var receipt = await Evm.GetTransactionStatus(Web3Accessor.Web3);
@@ -158,30 +187,45 @@ public class EvmCalls : MonoBehaviour
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.GetTransactionStatus));
     }
     
-    public async void RegisterContract()
+    /// <summary>
+    /// Uses a registered contract
+    /// </summary>
+    public async void RegisteredContract()
     {
-        var balance = await Evm.UseRegisteredContract(Web3Accessor.Web3, registeredContractName, registeredContractmethod);
+        var balance = await Evm.UseRegisteredContract(Web3Accessor.Web3, registeredContractName, EthMethod.BalanceOf);
         SampleOutputUtil.PrintResult(balance.ToString(), nameof(Evm), nameof(Evm.UseRegisteredContract));
     }
     
+    /// <summary>
+    /// Sends a transaction
+    /// </summary>
     public async void SendTransaction()
     {
-        var transactionHash = await Evm.SendTransaction(Web3Accessor.Web3, to);
+        var transactionHash = await Evm.SendTransaction(Web3Accessor.Web3, toAddress);
         SampleOutputUtil.PrintResult(transactionHash, nameof(Evm), nameof(Evm.SendTransaction));
     }
     
+    /// <summary>
+    /// Encrypts a message with SHA3
+    /// </summary>
     public void Sha3()
     {
         var hash = Evm.Sha3(messageSha);
         SampleOutputUtil.PrintResult(hash, nameof(Evm), nameof(Evm.Sha3));
     }
     
+    /// <summary>
+    /// Signs a message, the result is specific to each user
+    /// </summary>
     public async void SignMessage()
     {
         var signedMessage = await Evm.SignMessage(Web3Accessor.Web3, messageSign);
         SampleOutputUtil.PrintResult(signedMessage, nameof(Evm), nameof(Evm.SignMessage));
     }
     
+    /// <summary>
+    /// Signs a message and verifs account ownership
+    /// </summary>
     public async void SignVerify()
     {
         var signatureVerified = await Evm.SignVerify(Web3Accessor.Web3, messageSignVerify);
@@ -189,24 +233,36 @@ public class EvmCalls : MonoBehaviour
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.SignVerify));
     }
     
-    public void PrivateKeySignTransaction()
+    /// <summary>
+    /// Signs a transaction via ECDSA
+    /// </summary>
+    public void EcdsaSignTransaction()
     {
-        var result = Evm.PrivateKeySignTransaction(privateKey, transactionHash, chainId);
-        SampleOutputUtil.PrintResult(result, nameof(Evm), nameof(Evm.PrivateKeySignTransaction));
+        var result = Evm.EcdsaSignTransaction(ecdsaKey, transactionHash, chainId);
+        SampleOutputUtil.PrintResult(result, nameof(Evm), nameof(Evm.EcdsaSignTransaction));
     }
     
-    public void PrivateKeySignMessage()
+    /// <summary>
+    /// Signs a message via ECDSA
+    /// </summary>
+    public void EcdsaSignMessage()
     {
-        var result = Evm.PrivateKeySignMessage(privateKey, messagePrivateKey);
-        SampleOutputUtil.PrintResult(result, nameof(Evm), nameof(Evm.PrivateKeySignMessage));
+        var result = Evm.EcdsaSignMessage(ecdsaKey, ecdsaMessage);
+        SampleOutputUtil.PrintResult(result, nameof(Evm), nameof(Evm.EcdsaSignMessage));
     }
     
-    public void PrivateKeyGetAddress()
+    /// <summary>
+    /// Gets an addres via ECDSA key
+    /// </summary>
+    public void EcdsaGetAddress()
     {
-        var result = Evm.PrivateKeyGetAddress(privateKey);
-        SampleOutputUtil.PrintResult(result, nameof(Evm), nameof(Evm.PrivateKeyGetAddress));
+        var result = Evm.EcdsaGetAddress(ecdsaKey);
+        SampleOutputUtil.PrintResult(result, nameof(Evm), nameof(Evm.EcdsaGetAddress));
     }
     
+    /// <summary>
+    /// Uploads to IPFS
+    /// </summary>
     public async void IPFSUpload()
     {
         var cid = await Evm.Upload(new IpfsUploadRequest
@@ -220,15 +276,18 @@ public class EvmCalls : MonoBehaviour
         SampleOutputUtil.PrintResult(cid, nameof(IpfsSample), nameof(IpfsSample.Upload));
     }
     
+    /// <summary>
+    /// Makes multiple calls
+    /// </summary>
     public async void MultiCall()
     {
-        var erc20Contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.Erc20, Erc20ContractAddress);
-        var erc20BalanceOfCalldata = erc20Contract.Calldata(CommonMethod.BalanceOf, new object[]
+        var erc20Contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.Erc20, Contracts.Erc20);
+        var erc20BalanceOfCalldata = erc20Contract.Calldata(EthMethod.BalanceOf, new object[]
         {
             Erc20Account
         });
         
-        var erc20TotalSupplyCalldata = erc20Contract.Calldata(CommonMethod.TotalSupply, new object[]
+        var erc20TotalSupplyCalldata = erc20Contract.Calldata(EthMethod.TotalSupply, new object[]
         {
         });
 
@@ -236,13 +295,13 @@ public class EvmCalls : MonoBehaviour
         {
             new Call3Value()
             {
-                Target = Erc20ContractAddress,
+                Target = Contracts.Erc20,
                 AllowFailure = true,
                 CallData = erc20BalanceOfCalldata.HexToByteArray(),
             },
             new Call3Value()
             {
-                Target = Erc20ContractAddress,
+                Target = Contracts.Erc20,
                 AllowFailure = true,
                 CallData = erc20TotalSupplyCalldata.HexToByteArray(),
             }
@@ -254,16 +313,14 @@ public class EvmCalls : MonoBehaviour
 
         if (multicallResultResponse[0] != null && multicallResultResponse[0].Success)
         {
-            var decodedBalanceOf = erc20Contract.Decode(CommonMethod.BalanceOf, multicallResultResponse[0].ReturnData.ToHex());
+            var decodedBalanceOf = erc20Contract.Decode(EthMethod.BalanceOf, multicallResultResponse[0].ReturnData.ToHex());
             Debug.Log($"decodedBalanceOf {((BigInteger)decodedBalanceOf[0]).ToString()}");
         }
         
         if (multicallResultResponse[1] != null && multicallResultResponse[1].Success)
         {
-            var decodedTotalSupply = erc20Contract.Decode(CommonMethod.TotalSupply, multicallResultResponse[1].ReturnData.ToHex());
+            var decodedTotalSupply = erc20Contract.Decode(EthMethod.TotalSupply, multicallResultResponse[1].ReturnData.ToHex());
             Debug.Log($"decodedTotalSupply {((BigInteger)decodedTotalSupply[0]).ToString()}");
         }
     }
-    
-  
 }

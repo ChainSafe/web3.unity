@@ -1,15 +1,12 @@
 using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Providers;
-using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3;
 
 namespace Scripts.EVM.Token
 {
     public static class Erc20
     {
-        private static readonly string Abi = ABI.Erc20;
-
         /// <summary>
         /// Balance Of ERC20 Address
         /// </summary>
@@ -19,8 +16,8 @@ namespace Scripts.EVM.Token
         /// <returns></returns>
         public static async Task<BigInteger> BalanceOf(Web3 web3, string contractAddress, string account)
         {
-            var contract = web3.ContractBuilder.Build(Abi, contractAddress);
-            var contractData = await contract.Call(CommonMethod.BalanceOf, new object[]
+            var contract = web3.ContractBuilder.Build(ABI.Erc20, contractAddress);
+            var contractData = await contract.Call(EthMethod.BalanceOf, new object[]
             {
                 account
             });
@@ -38,7 +35,7 @@ namespace Scripts.EVM.Token
         {
             var contract = web3.ContractBuilder.Build(contractAbi, contractAddress);
             string address = await web3.Signer.GetAddress();
-            var contractData = await contract.Call(CommonMethod.BalanceOf, new object[] { address });
+            var contractData = await contract.Call(EthMethod.BalanceOf, new object[] { address });
             return BigInteger.Parse(contractData[0].ToString());
         }
         
@@ -61,8 +58,8 @@ namespace Scripts.EVM.Token
         /// <returns></returns>
         public static async Task<string> Name(Web3 web3, string contractAddress)
         {
-            var contract = web3.ContractBuilder.Build(Abi, contractAddress);
-            var name = await contract.Call(CommonMethod.Name);
+            var contract = web3.ContractBuilder.Build(ABI.Erc20, contractAddress);
+            var name = await contract.Call(EthMethod.Name);
             return name[0].ToString();
         }
 
@@ -74,8 +71,8 @@ namespace Scripts.EVM.Token
         /// <returns></returns>
         public static async Task<string> Symbol(Web3 web3, string contractAddress)
         {
-            var contract = web3.ContractBuilder.Build(Abi, contractAddress);
-            var symbol = await contract.Call(CommonMethod.Symbol);
+            var contract = web3.ContractBuilder.Build(ABI.Erc20, contractAddress);
+            var symbol = await contract.Call(EthMethod.Symbol);
             return symbol[0].ToString();
         }
 
@@ -87,8 +84,8 @@ namespace Scripts.EVM.Token
         /// <returns></returns>
         public static async Task<BigInteger> Decimals(Web3 web3, string contractAddress)
         {
-            var contract = web3.ContractBuilder.Build(Abi, contractAddress);
-            var decimals = await contract.Call(CommonMethod.Decimals);
+            var contract = web3.ContractBuilder.Build(ABI.Erc20, contractAddress);
+            var decimals = await contract.Call(EthMethod.Decimals);
             return BigInteger.Parse(decimals[0].ToString());
         }
 
@@ -100,8 +97,8 @@ namespace Scripts.EVM.Token
         /// <returns></returns>
         public static async Task<BigInteger> TotalSupply(Web3 web3, string contractAddress)
         {
-            var contract = web3.ContractBuilder.Build(Abi, contractAddress);
-            var totalSupply = await contract.Call(CommonMethod.TotalSupply);
+            var contract = web3.ContractBuilder.Build(ABI.Erc20, contractAddress);
+            var totalSupply = await contract.Call(EthMethod.TotalSupply);
             return BigInteger.Parse(totalSupply[0].ToString());
         }
         
@@ -114,9 +111,9 @@ namespace Scripts.EVM.Token
         /// <returns></returns>
         public static async Task<object[]> MintErc20(Web3 web3, string contractAddress, string toAccount, BigInteger amount)
         {
-            const string method = "mint";
+            const string method = EthMethod.Mint;
             var destination = await web3.Signer.GetAddress();
-            var contract = web3.ContractBuilder.Build(Abi, contractAddress);
+            var contract = web3.ContractBuilder.Build(ABI.Erc20, contractAddress);
             return await contract.Send(method, new object[] { toAccount, amount });
         }
 
@@ -128,11 +125,11 @@ namespace Scripts.EVM.Token
         /// <param name="toAccount"></param>
         /// <param name="amount"></param>
         /// <returns></returns>
+        /// <returns></returns>
         public static async Task<object[]> TransferErc20(Web3 web3, string contractAddress, string toAccount, BigInteger amount)
         {
-            var abi = ABI.Erc20;
             var method = EthMethod.Transfer;
-            var contract = web3.ContractBuilder.Build(abi, contractAddress);
+            var contract = web3.ContractBuilder.Build(ABI.Erc20, contractAddress);
             var response = await contract.Send(method, new object[]
             {
                 toAccount,
