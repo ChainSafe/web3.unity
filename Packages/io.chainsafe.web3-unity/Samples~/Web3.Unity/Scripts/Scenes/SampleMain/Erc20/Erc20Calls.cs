@@ -103,7 +103,6 @@ public class Erc20Calls : MonoBehaviour
     {
         string toAccount = await Web3Accessor.Web3.Signer.GetAddress();
         var response = await Erc20.MintErc20(Web3Accessor.Web3, Contracts.Erc20, toAccount, amountMint);
-        Debug.Log(response);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Erc20), nameof(Erc20.MintErc20));
     }
@@ -114,7 +113,6 @@ public class Erc20Calls : MonoBehaviour
     public async void TransferErc20()
     {
         var response = await Erc20.TransferErc20(Web3Accessor.Web3, Contracts.Erc20, toAccount, amountTransfer);
-        Debug.Log(response);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Erc20), nameof(Erc20.TransferErc20));
     }
