@@ -7,6 +7,7 @@ using ChainSafe.Gaming.Web3;
 using Nethereum.ABI.FunctionEncoding;
 using Nethereum.Contracts.QueryHandlers.MultiCall;
 using Nethereum.Hex.HexConvertors.Extensions;
+using Scripts.EVM.Token;
 using UnityEngine;
 
 public class MultiCallSample
@@ -23,7 +24,7 @@ public class MultiCallSample
 
     public async Task ErcSamples()
     {
-        var erc20Contract = web3.ContractBuilder.Build(ABI.ERC_20, Erc20ContractAddress);
+        var erc20Contract = web3.ContractBuilder.Build(ABI.Erc20, Erc20ContractAddress);
         var erc20BalanceOfCalldata = erc20Contract.Calldata(CommonMethod.BalanceOf, new object[]
         {
             Erc20Account
