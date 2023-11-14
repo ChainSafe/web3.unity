@@ -4,12 +4,18 @@ using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Math;
 using Org.BouncyCastle.Security;
 using System.Security.Cryptography;
+using System.IO;
+using System;
+using System.Text;
 
 public class AES256CBC
 {
     private static string TRANSFORMATION = "AES/CBC/PKCS7PADDING";
     private byte[] AES_ENCRYPTION_KEY;
     private byte[] ENCRYPTION_IV;
+
+    private byte[] MAC_KEY;
+    private byte[] ENCRYPTION_EPHEM_KEY;
 
     public AES256CBC(string privateKeyHex, string ephemPublicKeyHex, string encryptionIvHex)
     {
@@ -24,12 +30,16 @@ public class AES256CBC
             System.Array.Copy(hash, encKeyBytes, 32);
 
             AES_ENCRYPTION_KEY = encKeyBytes;
-            ENCRYPTION_IV = toByteArray(encryptionIvHex);
 
+            MAC_KEY = new byte[hash.Length - 32];
+            System.Array.Copy(hash, 32, MAC_KEY, 0, MAC_KEY.Length);
+
+            ENCRYPTION_IV = toByteArray(encryptionIvHex);
+            ENCRYPTION_EPHEM_KEY = toByteArray(ephemPublicKeyHex);
         }
     }
 
-    public string encrypt(byte[] src)
+    public byte[] encrypt(byte[] src)
     {
         var key = ParameterUtilities.CreateKeyParameter("AES", AES_ENCRYPTION_KEY);
         var parametersWithIv = new ParametersWithIV(key, ENCRYPTION_IV);
@@ -37,22 +47,22 @@ public class AES256CBC
         var cipher = CipherUtilities.GetCipher(TRANSFORMATION);
         cipher.Init(true, parametersWithIv);
 
-        return System.Text.Encoding.UTF8.GetString(
-            cipher.DoFinal(src)
-        );
+        return cipher.DoFinal(src);
     }
 
-    public string decrypt(byte[] src)
+    public byte[] decrypt(byte[] src, string mac)
     {
+        if (!hmacSha256Verify(MAC_KEY, getCombinedData(src), mac))
+        {
+            throw new SystemException("Bad MAC error during decrypt");
+        }
         var key = ParameterUtilities.CreateKeyParameter("AES", AES_ENCRYPTION_KEY);
         var parametersWithIv = new ParametersWithIV(key, ENCRYPTION_IV);
 
         var cipher = CipherUtilities.GetCipher(TRANSFORMATION);
         cipher.Init(false, parametersWithIv);
 
-        return System.Text.Encoding.UTF8.GetString(
-            cipher.DoFinal(src)
-        );
+        return cipher.DoFinal(src);
     }
 
 
@@ -96,5 +106,36 @@ public class AES256CBC
             b = newArray;
         }
         return b;
+    }
+
+    public byte[] getCombinedData(byte[] cipherTextBytes)
+    {
+        using (MemoryStream outputStream = new MemoryStream())
+        {
+            outputStream.Write(ENCRYPTION_IV, 0, ENCRYPTION_IV.Length);
+            outputStream.Write(ENCRYPTION_EPHEM_KEY, 0, ENCRYPTION_EPHEM_KEY.Length);
+            outputStream.Write(cipherTextBytes, 0, cipherTextBytes.Length);
+            return outputStream.ToArray();
+        }
+    }
+
+    public byte[] getMac(byte[] cipherTextBytes)
+    {
+        return hmacSha256Sign(MAC_KEY, getCombinedData(cipherTextBytes));
+    }
+
+    public byte[] hmacSha256Sign(byte[] key, byte[] data)
+    {
+        using (HMACSHA256 hmac = new HMACSHA256(key))
+        {
+            return hmac.ComputeHash(data);
+        }
+    }
+
+    public bool hmacSha256Verify(byte[] key, byte[] data, string sig)
+    {
+        byte[] expectedSig = hmacSha256Sign(key, data);
+        string expectedSigHex = BitConverter.ToString(expectedSig).Replace("-", "").ToLower();
+        return expectedSigHex.Equals(sig);
     }
 }

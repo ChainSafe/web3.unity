@@ -2,7 +2,7 @@
 
 public class UserCancelledException : Exception
 {
-    public UserCancelledException() : base("User cancelled.") { }
+    public UserCancelledException(): base("User cancelled.") { }
 }
 
 public class UnKnownException : Exception
