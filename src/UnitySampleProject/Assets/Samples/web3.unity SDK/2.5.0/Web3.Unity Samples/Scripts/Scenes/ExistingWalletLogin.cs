@@ -88,7 +88,7 @@ public class ExistingWalletLogin : Login
         builder = webSocketBuilderObj.GetComponent<WalletConnectWebSocketBuilder>();
         
         // keep web socket during scene unload
-        DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(webSocketBuilderObj);
 #endif
 
 #if UNITY_ANDROID
