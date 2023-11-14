@@ -333,7 +333,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestTransferErc1155()
     {
-        config.TestResponse = "0x5de8fb6c522d4ba85f09961f03bbdc1ee8d9c283ddd1dea0f3ccdfa27cc189af";
+        config.TestResponse = "0x390b47d378e9a6de830e2cc6d624de0920efc44d7b40fb61f75d983545c987fc";
         var transferErc1155 = Erc1155.TransferErc1155(web3, Contracts.Erc1155, Transfer1155Id, Transfer1155Amount, SendToAddress);
         yield return new WaitUntil(() => transferErc1155.IsCompleted);
         if (transferErc1155.Exception != null) throw transferErc1155.Exception;
