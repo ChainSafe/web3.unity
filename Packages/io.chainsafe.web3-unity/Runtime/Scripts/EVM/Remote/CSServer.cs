@@ -15,41 +15,7 @@ namespace Scripts.EVM.Remote
     {
         public class Response<T> { public T response; }
         private static readonly string host = "https://api.gaming.chainsafe.io/evm";
-        private static readonly string hostVoucher = "https://lazy-minting-voucher-signer.herokuapp.com";
-
-        /// <summary>
-        /// Calls a contract method using the Multicall service.
-        /// </summary>
-        /// <param name="web3">The Web3 instance used for the call.</param>
-        /// <param name="_chain">The blockchain chain identifier (e.g., Ethereum).</param>
-        /// <param name="_network">The network identifier (e.g., Mainnet, Ropsten).</param>
-        /// <param name="_contract">The address of the contract to call.</param>
-        /// <param name="_abi">The JSON ABI (Application Binary Interface) of the contract.</param>
-        /// <param name="_method">The name of the contract method to call.</param>
-        /// <param name="_args">The arguments to pass to the contract method (in JSON format).</param>
-        /// <param name="_multicall">[Optional] The Multicall specific parameters, if any.</param>
-        /// <param name="_rpc">[Optional] The RPC (Remote Procedure Call) configuration, if needed.</param>
-        /// <returns>String encoded response from the MultiCall contract.</returns>
-        public static async Task<string> Multicall(Web3 web3, string _chain, string _network, string _contract, string _abi, string _method, string _args, string _multicall = "", string _rpc = "")
-        {
-            WWWForm form = new WWWForm();
-            form.AddField("projectId", web3.ProjectConfig.ProjectId);
-            form.AddField("chain", _chain);
-            form.AddField("network", _network);
-            form.AddField("contract", _contract);
-            form.AddField("abi", _abi);
-            form.AddField("method", _method);
-            form.AddField("args", _args);
-            form.AddField("multicall", _multicall);
-            form.AddField("rpc", _rpc);
-            string url = host + "/multicall";
-            using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
-            {
-                await webRequest.SendWebRequest();
-                Response<string> data = JsonUtility.FromJson<Response<string>>(Encoding.UTF8.GetString(webRequest.downloadHandler.data));
-                return data.response;
-            }
-        }
+        private static readonly string nftHost = " https://api.gaming.chainsafe.io/v1/nft/networks/";
         
         /// <summary>
         /// Creates a mint transaction for an NFT (Non-Fungible Token) on a specified blockchain network.
@@ -279,40 +245,6 @@ namespace Scripts.EVM.Remote
         }
 
         /// <summary>
-        /// Retrieves a 721 voucher.
-        /// </summary>
-        /// <param name="web3">The Web3 instance</param>
-        /// <returns>A response object containing the voucher details.</returns>
-        public static async Task<GetVoucherModel.GetVoucher721Response> Get721Voucher(Web3 web3)
-        {
-            string url = hostVoucher + "/voucher721?receiver=" + await web3.Signer.GetAddress();
-
-            using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
-            {
-                await webRequest.SendWebRequest();
-                GetVoucherModel.GetVoucher721Response root721 = JsonConvert.DeserializeObject<GetVoucherModel.GetVoucher721Response>(webRequest.downloadHandler.text);
-                return root721;
-            }
-        }
-
-        /// <summary>
-        /// Retrieves a 1155 voucher.
-        /// </summary>
-        /// <param name="web3">The Web3 instance</param>
-        /// <returns>A response object containing the voucher details.</returns>
-        public static async Task<GetVoucherModel.GetVoucher1155Response> Get1155Voucher(Web3 web3)
-        {
-            string url = hostVoucher + "/voucher1155?receiver=" + await web3.Signer.GetAddress();
-
-            using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
-            {
-                await webRequest.SendWebRequest();
-                GetVoucherModel.GetVoucher1155Response root1155 = JsonConvert.DeserializeObject<GetVoucherModel.GetVoucher1155Response>(webRequest.downloadHandler.text);
-                return root1155;
-            }
-        }
-
-        /// <summary>
         /// Creates an approval transaction for a specific token type.
         /// </summary>
         /// <param name="web3">The Web3 instance used for the transaction.</param>
@@ -343,25 +275,15 @@ namespace Scripts.EVM.Remote
         /// Retrieves all ERC721 tokens owned by a given account on a specific blockchain and network.
         /// </summary>
         /// <param name="web3">The Web3 instance used for the request.</param>
-        /// <param name="chain">The blockchain chain identifier (e.g., Ethereum).</param>
-        /// <param name="network">The network identifier (e.g., Mainnet, Ropsten).</param>
         /// <param name="account">The account address for which to retrieve ERC721 tokens.</param>
-        /// <param name="contract">[Optional] The address of the ERC721 contract (if filtering by contract is required).</param>
-        /// <param name="take">[Optional] The maximum number of tokens to retrieve (default: 500).</param>
-        /// <param name="skip">[Optional] The number of tokens to skip in the query (default: 0).</param>
         /// <returns>An array of response objects containing details of the ERC721 tokens.</returns>
-        public static async Task<TokenResponse[]> AllErc721(Web3 web3, string chain, string network, string account, string contract = "", int take = 500, int skip = 0)
+        public static async Task<TokenResponse[]> AllErc721(Web3 web3, string account)
         {
             WWWForm form = new WWWForm();
             form.AddField("projectId", web3.ProjectConfig.ProjectId);
-            form.AddField("chain", chain);
-            form.AddField("network", network);
             form.AddField("account", account);
-            form.AddField("contract", contract);
-            form.AddField("first", take);
-            form.AddField("skip", skip);
 
-            string url = host + "/all721";
+            string url = $"{nftHost}{web3.ChainConfig.ChainId}/{account}/tokens";
             string rawNfts;
             using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
             {
@@ -384,24 +306,14 @@ namespace Scripts.EVM.Remote
         /// Retrieves all ERC1155 tokens owned by a given account on a specific blockchain and network.
         /// </summary>
         /// <param name="web3">The Web3 instance used for the request.</param>
-        /// <param name="chain">The blockchain chain identifier (e.g., Ethereum).</param>
-        /// <param name="network">The network identifier (e.g., Mainnet, Ropsten).</param>
         /// <param name="account">The account address for which to retrieve ERC1155 tokens.</param>
-        /// <param name="contract">[Optional] The address of the ERC1155 contract (if filtering by contract is required).</param>
-        /// <param name="take">[Optional] The maximum number of tokens to retrieve (default: 500).</param>
-        /// <param name="skip">[Optional] The number of tokens to skip in the query (default: 0).</param>
         /// <returns>An array of response objects containing details of the ERC1155 tokens.</returns>
-        public static async Task<TokenResponse[]> AllErc1155(Web3 web3, string chain, string network, string account, string contract = "", int take = 500, int skip = 0)
+        public static async Task<TokenResponse[]> AllErc1155(Web3 web3, string account)
         {
             WWWForm form = new WWWForm();
             form.AddField("projectId", web3.ProjectConfig.ProjectId);
-            form.AddField("chain", chain);
-            form.AddField("network", network);
             form.AddField("account", account);
-            form.AddField("contract", contract);
-            form.AddField("first", take);
-            form.AddField("skip", skip);
-            string url = host + "/all1155";
+            string url = $"{nftHost}{web3.ChainConfig.ChainId}/{account}/tokens";
             string rawNfts;
             using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
             {
@@ -417,36 +329,6 @@ namespace Scripts.EVM.Remote
             catch (JsonException e)
             {
                 throw new Web3Exception("NFTs deserialization failed.", e);
-            }
-        }
-        
-        /// <summary>
-        /// Creates a redeem transaction for a voucher, allowing the redemption of an NFT.
-        /// </summary>
-        /// <param name="web3">The Web3 instance used for the transaction.</param>
-        /// <param name="chain">The blockchain chain identifier (e.g., Ethereum).</param>
-        /// <param name="network">The network identifier (e.g., Mainnet, Ropsten).</param>
-        /// <param name="voucher">The voucher to be redeemed.</param>
-        /// <param name="type">The type or category of the voucher.</param>
-        /// <param name="nftAddress">The address of the NFT contract associated with the voucher.</param>
-        /// <param name="account">The account address initiating the redemption transaction.</param>
-        /// <returns>A response object containing information about the redemption transaction.</returns>
-        public static async Task<RedeemVoucherTxModel.Response> CreateRedeemTransaction(Web3 web3, string chain, string network, string voucher, string type, string nftAddress, string account)
-        {
-            WWWForm form = new WWWForm();
-            form.AddField("projectId", web3.ProjectConfig.ProjectId);
-            form.AddField("chain", chain);
-            form.AddField("network", network);
-            form.AddField("voucher", voucher);
-            form.AddField("type", type);
-            form.AddField("nftAdrress", nftAddress);
-            form.AddField("account", account);
-            string url = host + "/createRedeemTransaction";
-            using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
-            {
-                await webRequest.SendWebRequest();
-                RedeemVoucherTxModel.Root data = JsonConvert.DeserializeObject<RedeemVoucherTxModel.Root>(Encoding.UTF8.GetString(webRequest.downloadHandler.data));
-                return data.response;
             }
         }
     }
