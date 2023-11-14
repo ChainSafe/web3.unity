@@ -39,7 +39,7 @@ public class ExistingWalletLogin : Login
 
 #if !UNITY_2022_1_OR_NEWER
     // Use a custom connection builder due to an issue fixed in version 2022 and above https://blog.unity.com/engine-platform/il2cpp-full-generic-sharing-in-unity-2022-1-beta.
-    private WalletConnectWebSocketBuilder builder;
+    private WalletConnectWebSocketBuilder connectionBuilder;
 #endif
 
     [Header("Wallet Connect")] [SerializeField]
@@ -81,14 +81,20 @@ public class ExistingWalletLogin : Login
         Assert.IsNotNull(rememberMeToggle);
 
 #if !UNITY_2022_1_OR_NEWER
-        // Initialize custom web socket.
-        GameObject webSocketBuilderObj =
-            new GameObject(nameof(WalletConnectWebSocketBuilder), typeof(WalletConnectWebSocketBuilder));
 
-        builder = webSocketBuilderObj.GetComponent<WalletConnectWebSocketBuilder>();
+        connectionBuilder = FindObjectOfType<WalletConnectWebSocketBuilder>();
         
-        // keep web socket during scene unload
-        DontDestroyOnLoad(webSocketBuilderObj);
+        // Initialize custom web socket if it's not already.
+        if (connectionBuilder == null)
+        {
+            GameObject webSocketBuilderObj =
+                new GameObject(nameof(WalletConnectWebSocketBuilder), typeof(WalletConnectWebSocketBuilder));
+
+            connectionBuilder = webSocketBuilderObj.GetComponent<WalletConnectWebSocketBuilder>();
+        
+            // keep web socket during scene unload
+            DontDestroyOnLoad(webSocketBuilderObj);
+        }
 #endif
 
 #if UNITY_ANDROID
@@ -202,7 +208,7 @@ public class ExistingWalletLogin : Login
             BaseContext = baseContext,
 #if !UNITY_2022_1_OR_NEWER
             // Assign custom connection builder/web socket.
-            ConnectionBuilder = builder,
+            ConnectionBuilder = connectionBuilder,
 #endif
             Chain = chain,
             Metadata = metadata,
