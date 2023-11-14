@@ -9,5 +9,19 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
 
         public bool Purchased => PurchaseData != null;
         public bool Sold => SellData != null;
+
+        public override string ToString()
+        {
+            if (Purchased)
+            {
+                return $"Successful purchase! {PurchaseData.ToString()}";
+            }
+            else if (Sold)
+            {
+                return $"Successful sale! {SellData}";
+            }
+
+            return "Error :(";
+        }
     }
 }

@@ -22,13 +22,18 @@ var RampLib = {
                                   userEmailAddress, selectedCountryCode, defaultAsset, url,
                                   webhookStatusUrl, hostApiKey, enableBuy, enableSell, offrampWebHookV3Url,
                                   useSendCryptoCallback) {
-        const enabledFlows = enableBuy && enableSell ? ['ONRAMP', 'OFFRAMP'] 
+        const enabledFlows = enableBuy && enableSell ? ['ONRAMP', 'OFFRAMP']
             : enableBuy ? ['ONRAMP']
                 : ['OFFRAMP'];
+        const swapAssets = UTF8ToString(swapAsset).split(",");
+        const offrampAssets = UTF8ToString(offrampAsset).split(",");
+        swapAssets.forEach(function(str) { // todo remove
+            console.log(str);
+        });
         const sdkInstance = new rampInstantSdk.RampInstantSDK({
             hostApiKey: UTF8ToString(hostApiKey),
-            swapAsset: UTF8ToString(swapAsset),
-            offrampAsset: UTF8ToString(offrampAsset),
+            swapAsset: swapAssets,
+            offrampAsset: offrampAssets,
             swapAmount: swapAmount,
             fiatCurrency: UTF8ToString(fiatCurrency),
             fiatValue: fiatValue,
@@ -46,53 +51,66 @@ var RampLib = {
         });
         sdkInstance
             .on('PURCHASE_CREATED', (event) => {
-                const purchase = event.payload.purchase;
-                // call callback
-                Module.dynCall_vidiiiiiddiiiidiidiiii(RampLib.purchaseCallback,
-                    requestId,
-                    purchase.appliedFee,
-                    stringToNewUTF8(purchase.asset.address),
-                    purchase.asset.decimals,
-                    stringToNewUTF8(purchase.asset.name),
-                    stringToNewUTF8(purchase.asset.symbol),
-                    stringToNewUTF8(purchase.asset.type),
-                    purchase.assetExchangeRate,
-                    purchase.baseRampFee,
-                    stringToNewUTF8(purchase.createdAt),
-                    stringToNewUTF8(purchase.cryptoAmount),
-                    stringToNewUTF8(purchase.endTime),
-                    // skipped escrowAddress
-                    // skipped escrowDetailsHash
-                    stringToNewUTF8(purchase.fiatCurrency),
-                    purchase.fiatValue,
-                    stringToNewUTF8(purchase.finalTxHash),
-                    stringToNewUTF8(purchase.id),
-                    purchase.networkFee,
-                    stringToNewUTF8(purchase.paymentMethodType),
-                    stringToNewUTF8(purchase.receiverAddress),
-                    stringToNewUTF8(purchase.status),
-                    stringToNewUTF8(purchase.updatedAt)
+                const transactionData = event.payload.purchase;
+                if (transactionData instanceof rampInstantSdk.RampPurchase)
+                {
+                    console.log("purchase"); // todo remove
+
+                    const purchase = event.payload.purchase;
+                    Module.dynCall_vidiiiiiddiiiidiidiiii(RampLib.purchaseCallback,
+                        requestId,
+                        purchase.appliedFee,
+                        stringToNewUTF8(purchase.asset.address),
+                        purchase.asset.decimals,
+                        stringToNewUTF8(purchase.asset.name),
+                        stringToNewUTF8(purchase.asset.symbol),
+                        stringToNewUTF8(purchase.asset.type),
+                        purchase.assetExchangeRate,
+                        purchase.baseRampFee,
+                        stringToNewUTF8(purchase.createdAt),
+                        stringToNewUTF8(purchase.cryptoAmount),
+                        stringToNewUTF8(purchase.endTime),
+                        // skipped escrowAddress
+                        // skipped escrowDetailsHash
+                        stringToNewUTF8(purchase.fiatCurrency),
+                        purchase.fiatValue,
+                        stringToNewUTF8(purchase.finalTxHash),
+                        stringToNewUTF8(purchase.id),
+                        purchase.networkFee,
+                        stringToNewUTF8(purchase.paymentMethodType),
+                        stringToNewUTF8(purchase.receiverAddress),
+                        stringToNewUTF8(purchase.status),
+                        stringToNewUTF8(purchase.updatedAt)
+                    )
+                }
+                else if (transactionData instanceof rampInstantSdk.RampSale)
+                {
+                    console.log("sale"); // todo remove
+
+                    const sale = event.payload.purchase;
+                    Module.dynCall_viiiiiiiiidi(RampLib.sellCallback,
+                        requestId,
+                        stringToNewUTF8(sale.createdAt),
+                        stringToNewUTF8(sale.crypto.amount),
+                        stringToNewUTF8(sale.crypto.assetInfo.address),
+                        stringToNewUTF8(sale.crypto.assetInfo.chain),
+                        stringToNewUTF8(sale.crypto.assetInfo.decimals),
+                        stringToNewUTF8(sale.crypto.assetInfo.name),
+                        stringToNewUTF8(sale.crypto.assetInfo.symbol),
+                        stringToNewUTF8(sale.crypto.assetInfo.type),
+                        sale.fiat.amount,
+                        stringToNewUTF8(sale.fiat.currencySymbol),
                     );
-            })
-            .on('OFFRAMP_SALE_CREATED', (event) => {
-                const sale = event.payload.sale;
-                Module.dynCall_viiiiiiiiidi(RampLib.sellCallback,
-                    requestId,
-                    stringToNewUTF8(sale.createdAt),
-                    stringToNewUTF8(sale.crypto.amount),
-                    stringToNewUTF8(sale.crypto.assetInfo.address),
-                    stringToNewUTF8(sale.crypto.assetInfo.chain),
-                    stringToNewUTF8(sale.crypto.assetInfo.decimals),
-                    stringToNewUTF8(sale.crypto.assetInfo.name),
-                    stringToNewUTF8(sale.crypto.assetInfo.symbol),
-                    stringToNewUTF8(sale.crypto.assetInfo.type),
-                    sale.fiat.amount,
-                    stringToNewUTF8(sale.fiat.currencySymbol),
-                    );
+                }
+                else
+                {
+                    throw new Error("event.payload.purchase is neither RampPurchase nor RampSale")
+                }
             })
             .show();
     },
     
+    // todo remove
     // todo use this if stringToNewUTF8() doesn't work
     // toCSharpStringBuffer: function(jsString) {
     //     if (jsString == null){

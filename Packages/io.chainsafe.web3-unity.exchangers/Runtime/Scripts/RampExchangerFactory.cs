@@ -1,4 +1,6 @@
 using ChainSafe.Gaming.Evm.Signers;
+using ChainSafe.Gaming.Web3;
+using UnityEngine;
 
 namespace ChainSafe.Gaming.Exchangers.Ramp
 {
@@ -7,11 +9,14 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
         public static IRampExchanger CreateRampExchanger(IRampExchangerConfig config, ISigner signer)
         {
             #if UNITY_IOS
-            return new RampExchangeriOS(); // todo provide with config and signer
-            #elif UNITY_WEBGL
+            return new RampExchangeriOS(config, signer);
+            #elif UNITY_WEBGL && !UNITY_EDITOR
             return new RampExchangerWebGL(config, signer);
             #endif
-            return null;
+            throw new Web3Exception(
+                $"No {nameof(IRampExchanger)} implementation found for " +
+                $"{Application.platform} (editor:{Application.isEditor})."
+                );
         }
     }
 }
