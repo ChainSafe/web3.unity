@@ -66,6 +66,10 @@ namespace ChainSafe.Gaming.WalletConnect
         /// </summary>
         public string BaseContext { get; set; }
 
+        /// <summary>
+        /// Custom Connection Builder.
+        /// This can be useful if the default web socket implementation is unreachable.
+        /// </summary>
         public IConnectionBuilder ConnectionBuilder { get; set; }
 
         /// <summary>
