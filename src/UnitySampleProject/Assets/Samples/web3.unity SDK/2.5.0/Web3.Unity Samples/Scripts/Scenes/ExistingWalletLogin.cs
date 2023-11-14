@@ -15,7 +15,6 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Networking;
 using UnityEngine.Scripting;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using WalletConnectSharp.Core;
 using WalletConnectSharp.Core.Controllers;
@@ -37,8 +36,11 @@ public class ExistingWalletLogin : Login
     [SerializeField] public Button loginButton;
 
     [SerializeField] private Toggle rememberMeToggle;
-    
-    [SerializeField] private WalletConnectWebSocketBuilder builder;
+
+#if !UNITY_2022_1_OR_NEWER
+    // Use a custom connection builder due to an issue fixed in version 2022 and above https://blog.unity.com/engine-platform/il2cpp-full-generic-sharing-in-unity-2022-1-beta.
+    private WalletConnectWebSocketBuilder builder;
+#endif
 
     [Header("Wallet Connect")] [SerializeField]
     private string projectId;
@@ -77,6 +79,17 @@ public class ExistingWalletLogin : Login
     {
         Assert.IsNotNull(loginButton);
         Assert.IsNotNull(rememberMeToggle);
+
+#if !UNITY_2022_1_OR_NEWER
+        // Initialize custom web socket.
+        GameObject webSocketBuilderObj =
+            new GameObject(nameof(WalletConnectWebSocketBuilder), typeof(WalletConnectWebSocketBuilder));
+
+        builder = webSocketBuilderObj.GetComponent<WalletConnectWebSocketBuilder>();
+        
+        // keep web socket during scene unload
+        DontDestroyOnLoad(gameObject);
+#endif
 
 #if UNITY_ANDROID
 
@@ -187,7 +200,10 @@ public class ExistingWalletLogin : Login
             ProjectId = projectId,
             ProjectName = projectName,
             BaseContext = baseContext,
+#if !UNITY_2022_1_OR_NEWER
+            // Assign custom connection builder/web socket.
             ConnectionBuilder = builder,
+#endif
             Chain = chain,
             Metadata = metadata,
             // try and get saved value
