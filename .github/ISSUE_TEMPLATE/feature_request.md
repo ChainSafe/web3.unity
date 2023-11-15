@@ -20,5 +20,5 @@
 (OPTIONAL) [Add any other context, files, images (screenshots/videos), diagrams, or documents about the feature request here.]
 
 **Final Steps**
-* Give it one of these labels: `Type: Feature` `Type: Enhancement`
+* Give it one of these labels `Type: Feature` `Type: Enhancement`
 * Share it with the team
