@@ -43,7 +43,7 @@ namespace ChainSafe.Gaming.Wallets
             var accounts = await provider.Perform<string[]>("eth_accounts");
             if (accounts.Length <= config.AccountIndex)
             {
-                throw new Web3Exception($"No account with index #{config.AccountIndex} available");
+                throw new WalletException($"No account with index #{config.AccountIndex} available");
             }
 
             return accounts[config.AccountIndex];

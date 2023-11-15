@@ -1,6 +1,7 @@
-using System.Linq;
+using System.Collections.Generic;
 using System.Numerics;
 using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.UnityPackage.Model;
 using Scripts.EVM.Token;
 using UnityEngine;
 
@@ -56,16 +57,6 @@ public class Erc721Calls : MonoBehaviour
     #endregion
 
     #endregion
-    
-    /// <summary>
-    /// All ERC 721 tokens belonging to an address
-    /// </summary>
-    public async void AllErc721()
-    {
-        var allNfts = await Erc721.AllErc721(Web3Accessor.Web3, accountAllErc);
-        var output = string.Join(",\n", allNfts.Select(nft => $"{nft.TokenId} - {nft.Uri}"));
-        SampleOutputUtil.PrintResult(output, nameof(Erc721), nameof(Erc721.AllErc721));
-    }
     
     /// <summary>
     /// Balance Of ERC721 Address

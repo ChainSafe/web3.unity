@@ -15,7 +15,7 @@ namespace Scripts.EVM.Remote
     {
         public class Response<T> { public T response; }
         private static readonly string host = "https://api.gaming.chainsafe.io/evm";
-        private static readonly string nftHost = " https://api.gaming.chainsafe.io/v1/nft/networks/";
+        private static readonly string nftHost = "https://api.gaming.chainsafe.io/v1/nft/networks/";
         
         /// <summary>
         /// Creates a mint transaction for an NFT (Non-Fungible Token) on a specified blockchain network.
@@ -268,67 +268,6 @@ namespace Scripts.EVM.Remote
                 await webRequest.SendWebRequest();
                 CreateApprovalModel.Root data = JsonUtility.FromJson<CreateApprovalModel.Root>(Encoding.UTF8.GetString(webRequest.downloadHandler.data));
                 return data.response;
-            }
-        }
-
-        /// <summary>
-        /// Retrieves all ERC721 tokens owned by a given account on a specific blockchain and network.
-        /// </summary>
-        /// <param name="web3">The Web3 instance used for the request.</param>
-        /// <param name="account">The account address for which to retrieve ERC721 tokens.</param>
-        /// <returns>An array of response objects containing details of the ERC721 tokens.</returns>
-        public static async Task<TokenResponse[]> AllErc721(Web3 web3, string account)
-        {
-            WWWForm form = new WWWForm();
-            form.AddField("projectId", web3.ProjectConfig.ProjectId);
-            form.AddField("account", account);
-
-            string url = $"{nftHost}{web3.ChainConfig.ChainId}/{account}/tokens";
-            string rawNfts;
-            using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
-            {
-                await webRequest.SendWebRequest();
-                Response<string> data = JsonUtility.FromJson<Response<string>>(Encoding.UTF8.GetString(webRequest.downloadHandler.data));
-                rawNfts = data.response;
-            }
-
-            try
-            {
-                return JsonConvert.DeserializeObject<TokenResponse[]>(rawNfts);
-            }
-            catch (JsonException e)
-            {
-                throw new Web3Exception("NFTs deserialization failed.", e);
-            }
-        }
-
-        /// <summary>
-        /// Retrieves all ERC1155 tokens owned by a given account on a specific blockchain and network.
-        /// </summary>
-        /// <param name="web3">The Web3 instance used for the request.</param>
-        /// <param name="account">The account address for which to retrieve ERC1155 tokens.</param>
-        /// <returns>An array of response objects containing details of the ERC1155 tokens.</returns>
-        public static async Task<TokenResponse[]> AllErc1155(Web3 web3, string account)
-        {
-            WWWForm form = new WWWForm();
-            form.AddField("projectId", web3.ProjectConfig.ProjectId);
-            form.AddField("account", account);
-            string url = $"{nftHost}{web3.ChainConfig.ChainId}/{account}/tokens";
-            string rawNfts;
-            using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
-            {
-                await webRequest.SendWebRequest();
-                Response<string> data = JsonUtility.FromJson<Response<string>>(Encoding.UTF8.GetString(webRequest.downloadHandler.data));
-                rawNfts = data.response;
-            }
-
-            try
-            {
-                return JsonConvert.DeserializeObject<TokenResponse[]>(rawNfts);
-            }
-            catch (JsonException e)
-            {
-                throw new Web3Exception("NFTs deserialization failed.", e);
             }
         }
     }

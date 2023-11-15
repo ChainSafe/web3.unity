@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.UnityPackage.Model;
 using ChainSafe.Gaming.Web3;
 using Scripts.EVM.Remote;
 using UnityEngine;
@@ -11,17 +12,6 @@ namespace Scripts.EVM.Token
 {
     public static class Erc1155
     {
-        /// <summary>
-        /// Fetches all 1155 Nfts from an account
-        /// </summary>
-        /// <param name="web3"></param>
-        /// <param name="account"></param>
-        /// <returns></returns>
-        public static async Task<TokenResponse[]> AllErc1155(Web3 web3, string account)
-        {
-            return await CSServer.AllErc1155(web3, account);
-        }
-
         /// <summary>
         /// Balance of ERC1155 Token (string parameter)
         /// </summary>
