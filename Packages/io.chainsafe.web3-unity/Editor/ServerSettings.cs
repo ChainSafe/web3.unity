@@ -77,6 +77,10 @@ public class ChainSafeServerSettings : EditorWindow
         network = EditorGUILayout.TextField("Network", network);
         symbol = EditorGUILayout.TextField("Symbol", symbol);
         rpc = EditorGUILayout.TextField("RPC", rpc);
+        
+        // Webgl template check, will only fire if the server settings are opened in webgl and the templates are out of date
+        WebGLTemplateCheck();
+        
         // Buttons
 
         // Register
@@ -203,5 +207,26 @@ public class ChainSafeServerSettings : EditorWindow
     {
         [JsonProperty("response")]
         public bool Response { get; set; }
+    }
+    
+    static void WebGLTemplateCheck()
+    { 
+        // Only checks the templates and prompts for update if we're in webgl
+        #if UNITY_WEBGL
+        var performSync = WebGLTemplateSync.CheckSyncStatus() switch
+        {
+            WebGLTemplateSyncStatus.UpToDate => false,
+            WebGLTemplateSyncStatus.DoesntExist =>
+                EditorUtility.DisplayDialog("web3.unity", "Do you wish to install the web3.unity WebGL templates into your project?", "Yes", "No"),
+            WebGLTemplateSyncStatus.OutOfDate =>
+                EditorUtility.DisplayDialog("web3.unity", "The web3.unity WebGL templates in your project are out of date, would you like to update now?", "Yes", "No"),
+            _ => false,
+        };
+        
+        if (performSync)
+        {
+            WebGLTemplateSync.Syncronize();
+        }
+        #endif
     }
 }
