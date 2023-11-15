@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.MultiCall;
+using ChainSafe.Gaming.UnityPackage.Model;
 using ChainSafe.Gaming.Web3;
 using Nethereum.Contracts.QueryHandlers.MultiCall;
 using Nethereum.Hex.HexConvertors.Extensions;
@@ -11,17 +12,6 @@ namespace Scripts.EVM.Token
 {
     public static class Erc721
     {
-        /// <summary>
-        /// Fetches all 721 Nfts from an account
-        /// </summary>
-        /// <param name="web3"></param>
-        /// <param name="account"></param>
-        /// <returns></returns>
-        public static async Task<TokenResponse[]> AllErc721(Web3 web3, string account)
-        {
-            return await CSServer.AllErc721(web3, account);
-        }
-        
         /// <summary>
         /// Balance Of ERC721 Token
         /// </summary>
