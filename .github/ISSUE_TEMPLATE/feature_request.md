@@ -1,3 +1,11 @@
+---
+name: Tracking issue
+about: Use this template for tracking new features.
+title:
+labels:
+assignees:
+---
+
 **Summary**
 [Short description of the feature]
 
