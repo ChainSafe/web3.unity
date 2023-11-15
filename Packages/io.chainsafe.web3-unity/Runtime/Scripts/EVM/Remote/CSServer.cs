@@ -270,24 +270,6 @@ namespace Scripts.EVM.Remote
                 return data.response;
             }
         }
-
-        /// <summary>
-        /// Retrieves all ERC721/1155 tokens owned by a given account on a specific blockchain and network.
-        /// </summary>
-        /// <param name="web3">The Web3 instance used for the request.</param>
-        /// <param name="account">The account address for which to retrieve ERC721 tokens.</param>
-        /// <returns>An array of response objects containing details of the ERC721 tokens.</returns>
-        public static async Task<AllNftModel.Root> AllErc(Web3 web3, string account)
-        {
-            //string url = $"{nftHost}{web3.ChainConfig.ChainId}/accounts/{account}/tokens";
-            string url = $"{nftHost}{web3.ChainConfig.ChainId}/accounts/{account}/tokens";
-            using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
-            {
-                await webRequest.SendWebRequest();
-                AllNftModel.Root data = JsonConvert.DeserializeObject<AllNftModel.Root>(Encoding.UTF8.GetString(webRequest.downloadHandler.data));
-                return data;
-            }
-        }
     }
 }
 

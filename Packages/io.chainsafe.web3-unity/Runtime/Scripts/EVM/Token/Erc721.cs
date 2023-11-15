@@ -13,17 +13,6 @@ namespace Scripts.EVM.Token
     public static class Erc721
     {
         /// <summary>
-        /// Fetches all 721 Nfts from an account
-        /// </summary>
-        /// <param name="web3"></param>
-        /// <param name="account"></param>
-        /// <returns></returns>
-        public static async Task<AllNftModel.Root> AllErc(Web3 web3, string account)
-        {
-            return await CSServer.AllErc(web3, account);
-        }
-        
-        /// <summary>
         /// Balance Of ERC721 Token
         /// </summary>
         /// <param name="web3"></param>

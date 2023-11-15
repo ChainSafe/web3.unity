@@ -59,22 +59,6 @@ public class Erc721Calls : MonoBehaviour
     #endregion
     
     /// <summary>
-    /// All ERC tokens belonging to an address
-    /// </summary>
-    public async void AllErc()
-    {
-        var allNfts = await Erc721.AllErc(Web3Accessor.Web3, accountAllErc);
-        List<AllNftModel.Token> nft1155 = new List<AllNftModel.Token>();
-        foreach (var nft in allNfts.tokens)
-        {
-            if (nft.token_type != "ERC721") return;
-            nft1155.Add(nft);
-        }
-        var nftString = string.Join(", ", nft1155);
-        SampleOutputUtil.PrintResult(nftString, nameof(Erc721), nameof(Erc721.AllErc));
-    }
-    
-    /// <summary>
     /// Balance Of ERC721 Address
     /// </summary>
     public async void BalanceOf()

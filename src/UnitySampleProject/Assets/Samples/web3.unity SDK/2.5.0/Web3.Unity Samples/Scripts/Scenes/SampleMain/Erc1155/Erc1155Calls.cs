@@ -66,22 +66,6 @@ public class Erc1155Calls : MonoBehaviour
     public RawImage rawImage;
 
     /// <summary>
-    /// All ERC tokens belonging to an address
-    /// </summary>
-    public async void AllErc()
-    {
-        var allNfts = await Erc721.AllErc(Web3Accessor.Web3, accountAllErc);
-        List<AllNftModel.Token> nft1155 = new List<AllNftModel.Token>();
-        foreach (var nft in allNfts.tokens)
-        {
-            if (nft.token_type != "ERC1155") return;
-            nft1155.Add(nft);
-        }
-        var nftString = string.Join(", ", nft1155);
-        SampleOutputUtil.PrintResult(nftString, nameof(Erc721), nameof(Erc721.AllErc));
-    }
-
-    /// <summary>
     /// Balance Of ERC1155 Address
     /// </summary>
     public async void BalanceOf()
