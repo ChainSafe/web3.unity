@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.MultiCall;
+using ChainSafe.Gaming.UnityPackage.Model;
 using ChainSafe.Gaming.Web3;
 using Nethereum.Contracts.QueryHandlers.MultiCall;
 using Nethereum.Hex.HexConvertors.Extensions;
@@ -17,9 +18,9 @@ namespace Scripts.EVM.Token
         /// <param name="web3"></param>
         /// <param name="account"></param>
         /// <returns></returns>
-        public static async Task<TokenResponse[]> AllErc721(Web3 web3, string account)
+        public static async Task<AllNftModel.Root> AllErc(Web3 web3, string account)
         {
-            return await CSServer.AllErc721(web3, account);
+            return await CSServer.AllErc(web3, account);
         }
         
         /// <summary>

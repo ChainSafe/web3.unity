@@ -2333,7 +2333,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 37375165}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.2672342
+  m_Size: 0.23536332
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3030,7 +3030,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7324590823460843055, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: AllErc721
+      value: AllErc
       objectReference: {fileID: 0}
     - target: {fileID: 7324590823460843055, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
@@ -8997,7 +8997,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7324590823460843055, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: AllErc1155
+      value: AllErc
       objectReference: {fileID: 0}
     - target: {fileID: 7324590823460843055, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName

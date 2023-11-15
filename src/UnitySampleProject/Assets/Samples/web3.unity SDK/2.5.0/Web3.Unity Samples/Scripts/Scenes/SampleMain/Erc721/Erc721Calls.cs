@@ -1,9 +1,7 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Model;
-using Newtonsoft.Json;
 using Scripts.EVM.Token;
 using UnityEngine;
 
@@ -61,14 +59,19 @@ public class Erc721Calls : MonoBehaviour
     #endregion
     
     /// <summary>
-    /// All ERC 721 tokens belonging to an address
+    /// All ERC tokens belonging to an address
     /// </summary>
-    public async void AllErc721()
+    public async void AllErc()
     {
-        var allNfts = await Erc721.AllErc721(Web3Accessor.Web3, accountAllErc);
-        List<AllNftModel.AllNfts> list = new List<AllNftModel.AllNfts>();
-        list = JsonConvert.DeserializeObject<List<AllNftModel.AllNfts>>(allNfts.ToString());
-        SampleOutputUtil.PrintResult(list.ToString(), nameof(Erc721), nameof(Erc721.AllErc721));
+        var allNfts = await Erc721.AllErc(Web3Accessor.Web3, accountAllErc);
+        List<AllNftModel.Token> nft1155 = new List<AllNftModel.Token>();
+        foreach (var nft in allNfts.tokens)
+        {
+            if (nft.token_type != "ERC721") return;
+            nft1155.Add(nft);
+        }
+        var nftString = string.Join(", ", nft1155);
+        SampleOutputUtil.PrintResult(nftString, nameof(Erc721), nameof(Erc721.AllErc));
     }
     
     /// <summary>

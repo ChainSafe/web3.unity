@@ -30,26 +30,6 @@ namespace ChainSafe.GamingSdk.Editor
                 
                 // Checks project ID
                 ValidateProjectID();
-                
-                // Only checks the templates and prompts for update if we're in webgl
-                #if !UNITY_WEBGL
-                    return;
-                #endif
-                
-                var performSync = WebGLTemplateSync.CheckSyncStatus() switch
-                {
-                    WebGLTemplateSyncStatus.UpToDate => false,
-                    WebGLTemplateSyncStatus.DoesntExist =>
-                        EditorUtility.DisplayDialog("web3.unity", "Do you wish to install the web3.unity WebGL templates into your project?", "Yes", "No"),
-                    WebGLTemplateSyncStatus.OutOfDate =>
-                        EditorUtility.DisplayDialog("web3.unity", "The web3.unity WebGL templates in your project are out of date, would you like to update now?", "Yes", "No"),
-                    _ => false,
-                };
-                
-                if (performSync)
-                {
-                    WebGLTemplateSync.Syncronize();
-                }
             };
         }
 
