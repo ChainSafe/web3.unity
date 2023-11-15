@@ -1,12 +1,3 @@
----
-name: Feature request
-about: Suggest an idea for this project
-title: ''
-labels: 'Type: Feature'
-assignees: ''
-
----
-
 **Summary**
 [Short description of the feature]
 
@@ -16,8 +7,18 @@ assignees: ''
 **Motivation**
 [Why is this feature of general interest?]
 
+**Acceptance Criteria**
+[List specific criteria for this issue to be considered complete. These should be concrete and measurable.]
+
 **Blockers**
 (OPTIONAL) [Do you see any blocker that needs to be done before implementing this feature?]
 
-**Additional context**
-(OPTIONAL) [Add any other context or screenshots/videos about the feature request here.]
+**Dependencies**
+(OPTIONAL) [Do you know about dependencies that directly affect this issue?]
+
+**Additional Context**
+(OPTIONAL) [Add any other context, files, images (screenshots/videos), diagrams, or documents about the feature request here.]
+
+**Final Steps**
+* Give it one of these labels: `Type: Feature` `Type: Enhancement`
+* Share it with the team
