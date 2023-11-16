@@ -13,12 +13,6 @@ using UnityEngine.UI;
 public class Erc1155Calls : MonoBehaviour
 {
     #region Fields
-    
-    #region All Erc
-    
-    private string accountAllErc = "0xfaecAE4464591F8f2025ba8ACF58087953E613b1";
-
-    #endregion
 
     #region Balance Of
     
