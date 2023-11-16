@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.UnityPackage.Model;
 using Scripts.EVM.Token;
 using UnityEngine;
 using UnityEngine.UI;
@@ -62,17 +64,7 @@ public class Erc1155Calls : MonoBehaviour
     #endregion
     
     public RawImage rawImage;
-    
-    /// <summary>
-    /// All ERC 1155 tokens belonging to an address
-    /// </summary>
-    public async void AllErc1155()
-    {
-        var allNfts = await Erc1155.AllErc1155(Web3Accessor.Web3, accountAllErc);
-        var output = string.Join(",\n", allNfts.Select(nft => $"{nft.TokenId} - {nft.Uri}"));
-        SampleOutputUtil.PrintResult(output, nameof(Erc1155), nameof(Erc1155.AllErc1155));
-    }
-    
+
     /// <summary>
     /// Balance Of ERC1155 Address
     /// </summary>
