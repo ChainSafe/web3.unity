@@ -113,7 +113,9 @@ public class ChainSafeServerSettings : EditorWindow
         {
             if (await ValidateProjectIDAsync(projectID))
             {
+                #if UNITY_WEBGL
                 WriteNetworkFile();
+                #endif
             }
         }
         catch (Exception e)
