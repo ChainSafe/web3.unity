@@ -52,7 +52,7 @@ namespace ChainSafe.Gaming.WalletConnect.Models
                 case Platform.IOS:
                 case Platform.Desktop:
                 case Platform.Editor:
-                    uri = GetDeeplink(uri, operatingSystemMediator.IsMobilePlatform);
+                    uri = GetDeeplink(uri, operatingSystemMediator);
                     break;
 
                 default:
@@ -73,9 +73,17 @@ namespace ChainSafe.Gaming.WalletConnect.Models
         }
 
         // Deeplink Building
-        private string GetDeeplink(string uri, bool isMobilePlatform)
+        private string GetDeeplink(string uri, IOperatingSystemMediator operatingSystemMediator)
         {
+            bool isMobilePlatform = operatingSystemMediator.IsMobilePlatform;
+
             WalletLinkModel linkData = GetLinkData(isMobilePlatform);
+
+            if (operatingSystemMediator.Platform == Platform.IOS)
+            {
+                // prefer universal url
+                return CanUseUniversalProtocol(isMobilePlatform) ? BuildNativeDeeplink(linkData.NativeProtocol, uri) : BuildUniversalDeeplink(linkData.UniversalUrl, uri);
+            }
 
             // prefer native protocol
             return CanUseNativeProtocol(isMobilePlatform) ? BuildNativeDeeplink(linkData.NativeProtocol, uri) : BuildUniversalDeeplink(linkData.UniversalUrl, uri);
@@ -102,7 +110,7 @@ namespace ChainSafe.Gaming.WalletConnect.Models
 
         private string AddDeeplinkParams(string url, string uri)
         {
-            url += $"?uri={uri}";
+            url += $"?uri={HttpUtility.UrlEncode(uri)}";
 
             return url;
         }
@@ -139,6 +147,13 @@ namespace ChainSafe.Gaming.WalletConnect.Models
             string nativeUrl = GetLinkData(isMobilePlatform).NativeProtocol;
 
             return !string.IsNullOrWhiteSpace(nativeUrl) && nativeUrl != ":";
+        }
+
+        private bool CanUseUniversalProtocol(bool isMobilePlatform)
+        {
+            string universalUrl = GetLinkData(isMobilePlatform).UniversalUrl;
+
+            return !string.IsNullOrWhiteSpace(universalUrl);
         }
 
         /// <summary>
