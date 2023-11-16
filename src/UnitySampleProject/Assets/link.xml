@@ -1,4 +1,13 @@
 <linker>
     <assembly fullname="chainsafe.web3-unity.web3auth" preserve="all">
     </assembly>
+    <assembly fullname="WalletConnectSharp.Network">
+        <!-- disables stripping for the entire type -->
+        <type fullname="WalletConnectSharp.Network.Models.JsonRpcPayload" preserve="all" />
+        <type fullname="WalletConnectSharp.Network.Models.JsonRpcError" preserve="all" />
+    </assembly>
+    <assembly fullname="WalletConnectSharp.Core">
+        <type fullname="WalletConnectSharp.Core.Models.Subscriber.JsonRpcSubscriptionParams" preserve="all" />
+        <type fullname="WalletConnectSharp.Core.Models.Subscriber.MessageData" preserve="all" />
+    </assembly>
 </linker>

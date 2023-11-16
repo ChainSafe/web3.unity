@@ -14,11 +14,15 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Networking;
-using UnityEngine.Serialization;
+using UnityEngine.Scripting;
 using UnityEngine.UI;
 using WalletConnectSharp.Core;
+using WalletConnectSharp.Core.Controllers;
+using WalletConnectSharp.Events;
+using WalletConnectSharp.Events.Model;
 using WalletConnectSharp.Sign.Models;
 using WalletConnectSharp.Sign.Models.Engine;
+using WalletConnectSharp.Sign.Models.Engine.Methods;
 
 /// <summary>
 /// Login using an existing wallet using Wallet Connect.
@@ -32,6 +36,11 @@ public class ExistingWalletLogin : Login
     [SerializeField] public Button loginButton;
 
     [SerializeField] private Toggle rememberMeToggle;
+
+#if !UNITY_2022_1_OR_NEWER
+    // Use a custom connection builder due to an issue fixed in version 2022 and above https://blog.unity.com/engine-platform/il2cpp-full-generic-sharing-in-unity-2022-1-beta.
+    private WalletConnectWebSocketBuilder connectionBuilder;
+#endif
 
     [Header("Wallet Connect")] [SerializeField]
     private string projectId;
@@ -70,6 +79,23 @@ public class ExistingWalletLogin : Login
     {
         Assert.IsNotNull(loginButton);
         Assert.IsNotNull(rememberMeToggle);
+
+#if !UNITY_2022_1_OR_NEWER
+
+        connectionBuilder = FindObjectOfType<WalletConnectWebSocketBuilder>();
+        
+        // Initialize custom web socket if it's not already.
+        if (connectionBuilder == null)
+        {
+            GameObject webSocketBuilderObj =
+                new GameObject(nameof(WalletConnectWebSocketBuilder), typeof(WalletConnectWebSocketBuilder));
+
+            connectionBuilder = webSocketBuilderObj.GetComponent<WalletConnectWebSocketBuilder>();
+        
+            // keep web socket during scene unload
+            DontDestroyOnLoad(webSocketBuilderObj);
+        }
+#endif
 
 #if UNITY_ANDROID
 
@@ -180,6 +206,10 @@ public class ExistingWalletLogin : Login
             ProjectId = projectId,
             ProjectName = projectName,
             BaseContext = baseContext,
+#if !UNITY_2022_1_OR_NEWER
+            // Assign custom connection builder/web socket.
+            ConnectionBuilder = connectionBuilder,
+#endif
             Chain = chain,
             Metadata = metadata,
             // try and get saved value
@@ -266,4 +296,22 @@ public class ExistingWalletLogin : Login
 
         Debug.Log($"{session.Topic} Approved");
     }
+    
+#if !UNITY_MONO
+    [Preserve]
+    void SetupAOT()
+    {
+        // Reference all required models
+        // This is required so AOT code is generated for these generic functions
+        var historyFactory = new JsonRpcHistoryFactory(null);
+        Debug.Log(historyFactory.JsonRpcHistoryOfType<SessionPropose, SessionProposeResponse>().GetType().FullName);
+        Debug.Log(historyFactory.JsonRpcHistoryOfType<SessionSettle, Boolean>().GetType().FullName);
+        Debug.Log(historyFactory.JsonRpcHistoryOfType<SessionUpdate, Boolean>().GetType().FullName);
+        Debug.Log(historyFactory.JsonRpcHistoryOfType<SessionExtend, Boolean>().GetType().FullName);
+        Debug.Log(historyFactory.JsonRpcHistoryOfType<SessionDelete, Boolean>().GetType().FullName);
+        Debug.Log(historyFactory.JsonRpcHistoryOfType<SessionPing, Boolean>().GetType().FullName);
+        EventManager<string, GenericEvent<string>>.InstanceOf(null).PropagateEvent(null, null);
+        throw new InvalidOperationException("This method is only for AOT code generation.");
+    }
+#endif
 }
