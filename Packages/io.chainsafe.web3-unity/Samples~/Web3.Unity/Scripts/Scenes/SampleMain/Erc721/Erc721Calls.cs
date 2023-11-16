@@ -44,9 +44,9 @@ public class Erc721Calls : MonoBehaviour
     
     #region Transfer
 
-    private string contractTransfer = "0x4f75BB7bdd6f7A0fD32f1b3A94dfF409F5a3F1CC";
+    private string contractTransfer = "0x358AA13c52544ECCEF6B0ADD0f801012ADAD5eE3";
     private string toAccountTransfer = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
-    private int tokenIdTransfer = 1;
+    private int tokenIdTransfer = 0;
 
     #endregion
 
