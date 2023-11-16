@@ -378,6 +378,10 @@ namespace ChainSafe.Gaming.WalletConnect
                 File.Delete(path);
             }
 
+            GC.Collect();
+
+            GC.WaitForPendingFinalizers();
+
             WCLogger.Log($"Wallet Connect Storage set to {path}");
 
             return new FileSystemStorage(path);
