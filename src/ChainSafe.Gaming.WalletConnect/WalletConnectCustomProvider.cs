@@ -188,7 +188,7 @@ namespace ChainSafe.Gaming.WalletConnect
                     }
                     catch (Exception e)
                     {
-                        throw new Web3Exception(
+                        throw new WalletException(
                             $"Failed Redirecting to {config.DefaultWallet.Name} Wallet, Failed with Exception : {e}");
                     }
                 }
