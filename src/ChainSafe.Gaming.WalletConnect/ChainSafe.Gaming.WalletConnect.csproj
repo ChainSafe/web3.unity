@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="WalletConnect.Web3Wallet" Version="2.1.1" />
+    <PackageReference Include="WalletConnect.Web3Wallet" Version="2.1.6" />
   </ItemGroup>
   
 </Project>
