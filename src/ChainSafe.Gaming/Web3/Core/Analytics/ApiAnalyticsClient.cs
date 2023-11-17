@@ -24,7 +24,7 @@ namespace ChainSafe.Gaming.Web3.Analytics
             eventData.ProjectId ??= projectConfig.ProjectId;
             eventData.ChainId ??= chainConfig.ChainId;
             eventData.Network ??= chainConfig.Network;
-            eventData.Version ??= AnalyticsVersion;
+            eventData.Version = AnalyticsVersion;
 
             await httpClient.PostRaw(LoggingUrl, JsonConvert.SerializeObject(eventData), "application/json");
         }
