@@ -13,12 +13,6 @@ using UnityEngine.UI;
 public class Erc1155Calls : MonoBehaviour
 {
     #region Fields
-    
-    #region All Erc
-    
-    private string accountAllErc = "0xfaecAE4464591F8f2025ba8ACF58087953E613b1";
-
-    #endregion
 
     #region Balance Of
     
@@ -42,28 +36,28 @@ public class Erc1155Calls : MonoBehaviour
     
     #region Mint
     
-    private int idMint = 1;
-    private int amountMint = 1;
+    private BigInteger idMint = 1;
+    private BigInteger amountMint = 1;
 
     #endregion
     
     #region Transfer
 
     private string toAccountTransfer = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
-    private int tokenIdTransfer = 1;
-    private int amountTransfer = 1;
+    private BigInteger tokenIdTransfer = 1;
+    private BigInteger amountTransfer = 1;
 
     #endregion
 
     #region Texture
     
     private string tokenIdTexture = "0";
+    public RawImage rawImage;
 
     #endregion
     
     #endregion
     
-    public RawImage rawImage;
 
     /// <summary>
     /// Balance Of ERC1155 Address

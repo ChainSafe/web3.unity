@@ -36,10 +36,8 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void BalanceOf()
     {
-        SampleFeedback.Instance?.Activate();
         var balance = await Erc20.BalanceOf(Web3Accessor.Web3, Contracts.Erc20, accountBalanceOf);
         SampleOutputUtil.PrintResult(balance.ToString(), nameof(Erc20), nameof(Erc20.BalanceOf));
-        SampleFeedback.Instance?.Deactivate();
     }
     
     /// <summary>
