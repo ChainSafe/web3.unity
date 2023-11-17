@@ -12,7 +12,7 @@ using WalletConnectSharp.Common.Model.Errors;
 using WalletConnectSharp.Common.Utils;
 using WalletConnectSharp.Core;
 using WalletConnectSharp.Core.Models;
-using WalletConnectSharp.Core.Models.Relay;
+using WalletConnectSharp.Core.Models.Publisher;
 using WalletConnectSharp.Network.Models;
 using WalletConnectSharp.Sign;
 using WalletConnectSharp.Sign.Models;
@@ -45,9 +45,8 @@ namespace ChainSafe.Gaming.WalletConnect
 
         /// <summary>
         /// Connected client.
-        /// It's static to not destroy client session on logout/TerminateAsync, just disconnect instead.
         /// </summary>
-        public static WalletConnectSignClient SignClient { get; private set; }
+        public WalletConnectSignClient SignClient { get; private set; }
 
         /// <summary>
         /// Wallet Connect Core.
@@ -78,18 +77,6 @@ namespace ChainSafe.Gaming.WalletConnect
 
         private async Task Initialize()
         {
-            if (SignClient != null)
-            {
-                Core = (WalletConnectCore)SignClient.Core;
-            }
-
-            if (Core != null && Core.Initialized)
-            {
-                WCLogger.Log("Core already initialized");
-
-                return;
-            }
-
             WCLogger.Logger = new WCLogWriter(logWriter);
 
             Core = new WalletConnectCore(new CoreOptions()
@@ -314,11 +301,15 @@ namespace ChainSafe.Gaming.WalletConnect
             // if it's a registered method try and open wallet
             if (Session.Namespaces.Any(n => n.Value.Methods.Contains(method)))
             {
-                Core.Relayer.Events.ListenForOnce<object>(
-                    RelayerEvents.Publish,
-                    (_, _) =>
+                // if default wallet exists and redirect is true redirect user to default wallet
+                EventUtils.ListenOnce<PublishParams>(
+                    (sender, args) =>
                     {
-                        // if default wallet exists and redirect is true redirect user to default wallet
+                        if (args.Topic != topic)
+                        {
+                            return;
+                        }
+
                         if (config.RedirectToWallet && config.DefaultWallet != null)
                         {
                             WCLogger.Log("Opening Default Wallet...");
@@ -329,7 +320,8 @@ namespace ChainSafe.Gaming.WalletConnect
                         {
                             WCLogger.Log("No Default Wallet to Open");
                         }
-                    });
+                    }, handler => Core.Relayer.Publisher.OnPublishedMessage += handler,
+                    handler => Core.Relayer.Publisher.OnPublishedMessage -= handler);
             }
 
             return await SignClient.Request<T, string>(topic, data, chainId, expiry);
@@ -387,6 +379,10 @@ namespace ChainSafe.Gaming.WalletConnect
                 File.Delete(path);
             }
 
+            GC.Collect();
+
+            GC.WaitForPendingFinalizers();
+
             WCLogger.Log($"Wallet Connect Storage set to {path}");
 
             return new FileSystemStorage(path);
@@ -403,9 +399,19 @@ namespace ChainSafe.Gaming.WalletConnect
 
             try
             {
-                await SignClient.Disconnect(Session.Topic, Error.FromErrorType(ErrorType.USER_DISCONNECTED));
+                if (SignClient != null)
+                {
+                    await SignClient.Disconnect(Session.Topic, Error.FromErrorType(ErrorType.USER_DISCONNECTED));
+                }
 
-                await Core.Storage.Clear();
+                if (Core != null)
+                {
+                    await Core.Storage.Clear();
+                }
+
+                SignClient?.Dispose();
+
+                Core?.Dispose();
             }
             catch (Exception e)
             {
