@@ -12,12 +12,6 @@ public class Erc721Calls : MonoBehaviour
 {
     #region Fields
 
-    #region All Erc
-    
-    private string accountAllErc = "0xfaecAE4464591F8f2025ba8ACF58087953E613b1";
-
-    #endregion
-
     #region Balance Of
     
     private string accountBalanceOf = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
