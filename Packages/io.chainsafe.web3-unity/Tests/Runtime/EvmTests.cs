@@ -322,7 +322,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestTransferErc721()
     {
-        config.TestResponse = "0x5c02df6b55bbc5f958d3a5e4b21f0db20cd2284fabe1f7278f7984d3e05de81d";
+        config.TestResponse = "0xba034c4150f2a5fd50926551a8e95028d51dcc91e3c3b566bbd316968bc29375";
         var transferErc721 = Erc721.TransferErc721(web3, Contracts.Erc721, SendToAddress, Transfer721Id);
         yield return new WaitUntil(() => transferErc721.IsCompleted);
         if (transferErc721.Exception != null) throw transferErc721.Exception;

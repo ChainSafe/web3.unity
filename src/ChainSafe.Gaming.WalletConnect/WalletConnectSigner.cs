@@ -46,6 +46,9 @@ namespace ChainSafe.Gaming.WalletConnect
                 return;
             }
 
+            // Try to Disconnect before reinitializing/connecting if there's an existing connection.
+            await walletConnectCustomProvider.Disconnect();
+
             // get address by connecting
             address = await walletConnectCustomProvider.Connect();
         }

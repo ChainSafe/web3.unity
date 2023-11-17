@@ -12,7 +12,7 @@ namespace ChainSafe.Gaming.WalletConnect
     /// We need this because of Unity's IL2CPP build code stripping and reachability issue.
     /// For version 2022 and above this issue has been fixed by Unity as stated here https://blog.unity.com/engine-platform/il2cpp-full-generic-sharing-in-unity-2022-1-beta so this custom implementation isn't needed.
     /// </summary>
-    public class WalletConnectWebSocketBuilder : MonoBehaviour, IConnectionBuilder
+    public class NativeWebSocketConnectionBuilder : MonoBehaviour, IConnectionBuilder
     {
         /// <summary>
         /// Create WebSocket connection for Wallet Connect.
@@ -21,20 +21,7 @@ namespace ChainSafe.Gaming.WalletConnect
         /// <returns>Created connection.</returns>
         public Task<IJsonRpcConnection> CreateConnection(string url)
         {
-            TaskCompletionSource<IJsonRpcConnection> taskCompletionSource =
-                new TaskCompletionSource<IJsonRpcConnection>();
-            
-            Dispatcher.Instance().Enqueue(() =>
-            {
-                Debug.Log("Building websocket with URL " + url);
-                var websocket = gameObject.AddComponent<WalletConnectWebSocket>();
-                websocket.Url = url;
-            
-                taskCompletionSource.TrySetResult(websocket);
-            });
-
-            
-            return taskCompletionSource.Task;
+            return Task.FromResult<IJsonRpcConnection>(new WebSocketConnection(url));
         }
     }
 }

@@ -29,17 +29,23 @@ namespace ChainSafe.Gaming.Evm.Unity
     /// </summary>
     public class Dispatcher : MonoBehaviour
     {
-        private static readonly Queue<Action> _executionQueue = new Queue<Action>();
+        private static readonly Queue<Action> ExecutionQueue = new Queue<Action>();
+
+        public event Action<bool> OnApplicationPaused;
+
+        public event Action OnTick;
 
         public void Update()
         {
-            lock (_executionQueue)
+            lock (ExecutionQueue)
             {
-                while (_executionQueue.Count > 0)
+                while (ExecutionQueue.Count > 0)
                 {
-                    _executionQueue.Dequeue().Invoke();
+                    ExecutionQueue.Dequeue().Invoke();
                 }
             }
+
+            OnTick?.Invoke();
         }
 
         /// <summary>
@@ -48,9 +54,9 @@ namespace ChainSafe.Gaming.Evm.Unity
         /// <param name="action">IEnumerator function that will be executed from the main thread.</param>
         public void Enqueue(IEnumerator action)
         {
-            lock (_executionQueue)
+            lock (ExecutionQueue)
             {
-                _executionQueue.Enqueue(() => { StartCoroutine(action); });
+                ExecutionQueue.Enqueue(() => { StartCoroutine(action); });
             }
         }
 
@@ -174,6 +180,11 @@ namespace ChainSafe.Gaming.Evm.Unity
             _instance = gameObject.AddComponent<Dispatcher>();
 
             return _instance;
+        }
+
+        private void OnApplicationPause(bool pauseStatus)
+        {
+            OnApplicationPaused?.Invoke(pauseStatus);
         }
 
         void OnDestroy()
