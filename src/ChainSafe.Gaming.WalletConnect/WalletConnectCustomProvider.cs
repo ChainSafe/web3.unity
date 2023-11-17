@@ -85,6 +85,7 @@ namespace ChainSafe.Gaming.WalletConnect
                 ProjectId = config.ProjectId,
                 Storage = BuildStorage(),
                 BaseContext = config.BaseContext,
+                ConnectionBuilder = config.ConnectionBuilder,
             });
 
             await Core.Start();
