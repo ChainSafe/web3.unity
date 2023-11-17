@@ -6,7 +6,6 @@ namespace ChainSafe.Gaming.Web3.Analytics
     internal class ApiAnalyticsClient : IAnalyticsClient
     {
         private const string LoggingUrl = "https://api.gaming.chainsafe.io/logging/logEvent";
-        private const string AnalyticsVersion = "2.5.1";
 
         private readonly IProjectConfig projectConfig;
         private readonly IChainConfig chainConfig;
@@ -18,6 +17,8 @@ namespace ChainSafe.Gaming.Web3.Analytics
             this.chainConfig = chainConfig;
             this.projectConfig = projectConfig;
         }
+
+        public string AnalyticsVersion => "2.5.1";
 
         public async void CaptureEvent(AnalyticsEvent eventData)
         {

@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Environment;
 using ChainSafe.GamingSdk.Gelato.Dto;
@@ -17,11 +18,15 @@ namespace ChainSafe.GamingSdk.Gelato
         public const int DefaultDeadlineGap = 86_400; // 24H
         private readonly IHttpClient httpClient;
         private readonly GelatoConfig config;
+        private readonly Web3Environment environment;
+        private readonly ICompleteProjectConfig chainConfig;
 
-        public GelatoClient(IHttpClient httpClient, GelatoConfig config)
+        public GelatoClient(IHttpClient httpClient, GelatoConfig config, Web3Environment environment, ICompleteProjectConfig chainConfig)
         {
             this.httpClient = httpClient;
             this.config = config;
+            this.environment = environment;
+            this.chainConfig = chainConfig;
         }
 
         /// <summary>
@@ -43,6 +48,13 @@ namespace ChainSafe.GamingSdk.Gelato
                 RelayCall.SponsoredCallErc2771 => $"{config.Url}/relays/v2/sponsored-call-erc2771",
                 _ => throw new Web3Exception("relayCall option not found")
             };
+            environment.AnalyticsClient.CaptureEvent(new AnalyticsEvent()
+            {
+                ChainId = chainConfig.ChainId,
+                Network = chainConfig.Network,
+                Rpc = relayCall.ToString(),
+                ProjectId = chainConfig.ProjectId,
+            });
 
             return (await httpClient.Post<TRequest, TResponse>(url, request)).AssertSuccess();
         }

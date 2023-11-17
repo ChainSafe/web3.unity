@@ -20,21 +20,21 @@ namespace ChainSafe.GamingSdk.Gelato
         private readonly IContractBuilder contractBuilder;
         private readonly ISigner signer;
         private readonly GelatoConfig config;
-        private readonly IChainConfig chainConfig;
+        private readonly ICompleteProjectConfig chainConfig;
         private bool gelatoDisabled;
 
-        public Gelato(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, ISigner signer, IContractBuilder contractBuilder)
+        public Gelato(IHttpClient httpClient, ICompleteProjectConfig chainConfig, GelatoConfig config, ISigner signer, IContractBuilder contractBuilder, Web3Environment environment)
         {
-            gelatoClient = new GelatoClient(httpClient, config);
+            gelatoClient = new GelatoClient(httpClient, config, environment, chainConfig);
             this.signer = signer;
             this.config = config;
             this.chainConfig = chainConfig;
             this.contractBuilder = contractBuilder;
         }
 
-        public Gelato(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, IContractBuilder contractBuilder)
+        public Gelato(IHttpClient httpClient, ICompleteProjectConfig chainConfig, GelatoConfig config, IContractBuilder contractBuilder, Web3Environment environment)
         {
-            gelatoClient = new GelatoClient(httpClient, config);
+            gelatoClient = new GelatoClient(httpClient, config, environment, chainConfig);
             this.config = config;
             this.chainConfig = chainConfig;
             this.contractBuilder = contractBuilder;
