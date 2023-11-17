@@ -29,11 +29,11 @@ namespace ChainSafe.Gaming.Evm.Unity
     /// </summary>
     public class Dispatcher : MonoBehaviour
     {
-        public event Action<bool> OnApplicationPaused;
-        
-        public event Action OnTick; 
-
         private static readonly Queue<Action> ExecutionQueue = new Queue<Action>();
+
+        public event Action<bool> OnApplicationPaused;
+
+        public event Action OnTick;
 
         public void Update()
         {
@@ -44,7 +44,7 @@ namespace ChainSafe.Gaming.Evm.Unity
                     ExecutionQueue.Dequeue().Invoke();
                 }
             }
-            
+
             OnTick?.Invoke();
         }
 
