@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using ChainSafe.Gaming.Web3.Environment;
@@ -20,21 +21,21 @@ namespace ChainSafe.GamingSdk.Gelato
         private readonly IContractBuilder contractBuilder;
         private readonly ISigner signer;
         private readonly GelatoConfig config;
-        private readonly ICompleteProjectConfig chainConfig;
+        private readonly IChainConfig chainConfig;
         private bool gelatoDisabled;
 
-        public Gelato(IHttpClient httpClient, ICompleteProjectConfig chainConfig, GelatoConfig config, ISigner signer, IContractBuilder contractBuilder, Web3Environment environment)
+        public Gelato(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, ISigner signer, IContractBuilder contractBuilder, IAnalyticsClient analyticsClient, IProjectConfig projectConfig)
         {
-            gelatoClient = new GelatoClient(httpClient, config, environment, chainConfig);
+            gelatoClient = new GelatoClient(httpClient, config, analyticsClient, chainConfig, projectConfig);
             this.signer = signer;
             this.config = config;
             this.chainConfig = chainConfig;
             this.contractBuilder = contractBuilder;
         }
 
-        public Gelato(IHttpClient httpClient, ICompleteProjectConfig chainConfig, GelatoConfig config, IContractBuilder contractBuilder, Web3Environment environment)
+        public Gelato(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, IContractBuilder contractBuilder, IAnalyticsClient analyticsClient, IProjectConfig projectConfig)
         {
-            gelatoClient = new GelatoClient(httpClient, config, environment, chainConfig);
+            gelatoClient = new GelatoClient(httpClient, config, analyticsClient, chainConfig, projectConfig);
             this.config = config;
             this.chainConfig = chainConfig;
             this.contractBuilder = contractBuilder;
