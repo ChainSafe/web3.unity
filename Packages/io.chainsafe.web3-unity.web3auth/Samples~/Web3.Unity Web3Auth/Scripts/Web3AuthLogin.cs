@@ -70,7 +70,10 @@ public class Web3AuthLogin : Login
         {
             useProvider = true;
         }
-
+        
+        selectedProvider = provider;
+        
+        await TryLogin();
         IAnalyticsClient client = (IAnalyticsClient)Web3Accessor.Web3.ServiceProvider.GetService(typeof(IAnalyticsClient));
         client.CaptureEvent(new AnalyticsEvent()
         {
@@ -80,9 +83,6 @@ public class Web3AuthLogin : Login
             Rpc = "Web3AuthLogin",
             Version = client.AnalyticsVersion,
         });
-        selectedProvider = provider;
-        
-        await TryLogin();
     }
     
     protected override Web3Builder ConfigureWeb3Services(Web3Builder web3Builder)
