@@ -98,8 +98,7 @@ namespace ChainSafe.Gaming.WalletConnect.Models
 
         private string AddDeeplinkParams(string url, string uri)
         {
-            // url += $"wc?uri={HttpUtility.UrlEncode(uri)}";
-            url += $"wc?uri={uri}";
+            url += $"wc?uri={HttpUtility.UrlEncode(uri)}";
 
             return url;
         }
