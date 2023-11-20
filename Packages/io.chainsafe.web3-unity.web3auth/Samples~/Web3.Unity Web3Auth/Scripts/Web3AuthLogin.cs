@@ -34,11 +34,11 @@ public class Web3AuthLogin : Login
 
     [Header("UI")]
     [SerializeField] private List<ProviderAndButtonPair> providerAndButtonPairs;
-    
+
     private bool useProvider;
-    
+
     private Provider selectedProvider;
-    
+
     protected override IEnumerator Initialize()
     {
 #if UNITY_WEBGL && !UNITY_EDITOR
@@ -60,7 +60,7 @@ public class Web3AuthLogin : Login
         {
             LoginWithWeb3Auth(p.Provider);
         }));
-        
+
         yield return null;
     }
 
@@ -70,21 +70,21 @@ public class Web3AuthLogin : Login
         {
             useProvider = true;
         }
-        
         selectedProvider = provider;
-        
+
         await TryLogin();
         IAnalyticsClient client = (IAnalyticsClient)Web3Accessor.Web3.ServiceProvider.GetService(typeof(IAnalyticsClient));
         client.CaptureEvent(new AnalyticsEvent()
         {
             ChainId = Web3Accessor.Web3.ChainConfig.ChainId,
-            Network =   Web3Accessor.Web3.ChainConfig.Network,
+            Network = Web3Accessor.Web3.ChainConfig.Network,
             ProjectId = Web3Accessor.Web3.ProjectConfig.ProjectId,
-            Rpc = "Web3AuthLogin",
+            EventName = "Web3AuthLogin",
             Version = client.AnalyticsVersion,
+            PackageName = "io.chainsafe.web3-unity.web3auth",
         });
     }
-    
+
     protected override Web3Builder ConfigureWeb3Services(Web3Builder web3Builder)
     {
         return web3Builder.Configure(services =>
