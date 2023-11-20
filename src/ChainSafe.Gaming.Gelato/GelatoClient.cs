@@ -54,7 +54,7 @@ namespace ChainSafe.GamingSdk.Gelato
             {
                 ChainId = chainConfig.ChainId,
                 Network = chainConfig.Network,
-                Rpc = relayCall.ToString(),
+                EventName = relayCall.ToString(),
                 ProjectId = projectConfig.ProjectId,
             });
 
