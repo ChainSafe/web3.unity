@@ -43,6 +43,39 @@ namespace ChainSafe.Gaming.WalletConnect.Models
         /// <param name="operatingSystemMediator">Operating System for current platform.</param>
         public void OpenDeeplink(string uri, IOperatingSystemMediator operatingSystemMediator)
         {
+            if (operatingSystemMediator.Platform == Platform.IOS)
+            {
+                // on iOS, we need to use one of the wallet links
+                WalletLinkModel linkData = operatingSystemMediator.IsMobilePlatform ? Mobile : Desktop;
+
+                bool useUniversalUrl = string.IsNullOrWhiteSpace(linkData.UniversalUrl);
+
+                var universalUrl = useUniversalUrl ? linkData.UniversalUrl : linkData.NativeProtocol;
+
+                if (!string.IsNullOrWhiteSpace(universalUrl))
+                {
+                    if (!useUniversalUrl)
+                    {
+                        uri = universalUrl + "//" + uri;
+                    }
+                    else if (universalUrl.EndsWith("/"))
+                    {
+                        uri = universalUrl + uri;
+                    }
+                    else
+                    {
+                        uri = universalUrl + "/" + uri;
+                    }
+                }
+
+                if (string.IsNullOrWhiteSpace(uri))
+                {
+                    throw new Exception("Got empty URI when attempting to create WC deeplink");
+                }
+
+                return;
+            }
+
             switch (operatingSystemMediator.Platform)
             {
                 case Platform.Android:
@@ -52,7 +85,7 @@ namespace ChainSafe.Gaming.WalletConnect.Models
                 case Platform.IOS:
                 case Platform.Desktop:
                 case Platform.Editor:
-                    uri = GetDeeplink(uri, operatingSystemMediator);
+                    uri = GetDeeplink(uri, operatingSystemMediator.IsMobilePlatform);
                     break;
 
                 default:
@@ -73,17 +106,9 @@ namespace ChainSafe.Gaming.WalletConnect.Models
         }
 
         // Deeplink Building
-        private string GetDeeplink(string uri, IOperatingSystemMediator operatingSystemMediator)
+        private string GetDeeplink(string uri, bool isMobilePlatform)
         {
-            bool isMobilePlatform = operatingSystemMediator.IsMobilePlatform;
-
             WalletLinkModel linkData = GetLinkData(isMobilePlatform);
-
-            if (operatingSystemMediator.Platform == Platform.IOS)
-            {
-                // prefer universal url
-                return CanUseUniversalProtocol(isMobilePlatform) ? BuildNativeDeeplink(linkData.NativeProtocol, uri) : BuildUniversalDeeplink(linkData.UniversalUrl, uri);
-            }
 
             // prefer native protocol
             return CanUseNativeProtocol(isMobilePlatform) ? BuildNativeDeeplink(linkData.NativeProtocol, uri) : BuildUniversalDeeplink(linkData.UniversalUrl, uri);
@@ -147,13 +172,6 @@ namespace ChainSafe.Gaming.WalletConnect.Models
             string nativeUrl = GetLinkData(isMobilePlatform).NativeProtocol;
 
             return !string.IsNullOrWhiteSpace(nativeUrl) && nativeUrl != ":";
-        }
-
-        private bool CanUseUniversalProtocol(bool isMobilePlatform)
-        {
-            string universalUrl = GetLinkData(isMobilePlatform).UniversalUrl;
-
-            return !string.IsNullOrWhiteSpace(universalUrl);
         }
 
         /// <summary>
