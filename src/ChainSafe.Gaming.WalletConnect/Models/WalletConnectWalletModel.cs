@@ -43,39 +43,6 @@ namespace ChainSafe.Gaming.WalletConnect.Models
         /// <param name="operatingSystemMediator">Operating System for current platform.</param>
         public void OpenDeeplink(string uri, IOperatingSystemMediator operatingSystemMediator)
         {
-            if (operatingSystemMediator.Platform == Platform.IOS)
-            {
-                // on iOS, we need to use one of the wallet links
-                WalletLinkModel linkData = operatingSystemMediator.IsMobilePlatform ? Mobile : Desktop;
-
-                bool useUniversalUrl = string.IsNullOrWhiteSpace(linkData.UniversalUrl);
-
-                var universalUrl = useUniversalUrl ? linkData.UniversalUrl : linkData.NativeProtocol;
-
-                if (!string.IsNullOrWhiteSpace(universalUrl))
-                {
-                    if (!useUniversalUrl)
-                    {
-                        uri = universalUrl + "//" + uri;
-                    }
-                    else if (universalUrl.EndsWith("/"))
-                    {
-                        uri = universalUrl + uri;
-                    }
-                    else
-                    {
-                        uri = universalUrl + "/" + uri;
-                    }
-                }
-
-                if (string.IsNullOrWhiteSpace(uri))
-                {
-                    throw new Exception("Got empty URI when attempting to create WC deeplink");
-                }
-
-                return;
-            }
-
             switch (operatingSystemMediator.Platform)
             {
                 case Platform.Android:
@@ -120,10 +87,6 @@ namespace ChainSafe.Gaming.WalletConnect.Models
             {
                 url += "//";
             }
-            else if (url.EndsWith("//"))
-            {
-                url += "wc";
-            }
 
             return AddDeeplinkParams(url, uri);
         }
@@ -135,7 +98,8 @@ namespace ChainSafe.Gaming.WalletConnect.Models
 
         private string AddDeeplinkParams(string url, string uri)
         {
-            url += $"?uri={HttpUtility.UrlEncode(uri)}";
+            // url += $"wc?uri={HttpUtility.UrlEncode(uri)}";
+            url += $"wc?uri={uri}";
 
             return url;
         }
