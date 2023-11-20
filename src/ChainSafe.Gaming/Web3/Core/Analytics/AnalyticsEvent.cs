@@ -24,5 +24,8 @@ namespace ChainSafe.Gaming.Web3.Analytics
 
         [JsonProperty(PropertyName = "eventName", NullValueHandling = NullValueHandling.Ignore)]
         public string EventName { get; set; }
+
+        [JsonProperty(PropertyName = "packageName", NullValueHandling = NullValueHandling.Ignore)]
+        public string PackageName { get; set; }
     }
 }

@@ -80,8 +80,9 @@ public class Web3AuthLogin : Login
             ChainId = Web3Accessor.Web3.ChainConfig.ChainId,
             Network =   Web3Accessor.Web3.ChainConfig.Network,
             ProjectId = Web3Accessor.Web3.ProjectConfig.ProjectId,
-            Rpc = "Web3AuthLogin",
+            EventName = "Web3AuthLogin",
             Version = client.AnalyticsVersion,
+            PackageName = "io.chainsafe.web3-unity.web3auth",
         });
     }
     

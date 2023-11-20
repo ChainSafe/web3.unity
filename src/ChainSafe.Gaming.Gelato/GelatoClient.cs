@@ -56,6 +56,7 @@ namespace ChainSafe.GamingSdk.Gelato
                 Network = chainConfig.Network,
                 EventName = relayCall.ToString(),
                 ProjectId = projectConfig.ProjectId,
+                PackageName = "io.chainsafe.web3-unity",
             });
 
             return (await httpClient.Post<TRequest, TResponse>(url, request)).AssertSuccess();
