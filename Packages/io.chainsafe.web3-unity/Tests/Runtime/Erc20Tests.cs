@@ -13,15 +13,15 @@ using UnityEngine.TestTools;
 public class Erc20Tests
 {
     #region Fields
-    
+
     #region Contract Calls
-    
+
     private const string Account = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
     // Mint ERC20 function adjusts the total supply so we have a duplicate contract that doesn't change for the test to pass
     private const string TotalSupplyAddress = "0xd1A103234d1D65E0E817A523d679B114cf86521A";
 
     #endregion
-    
+
     #endregion
 
     private Web3 web3;
@@ -39,7 +39,7 @@ public class Erc20Tests
             projectConfigScriptableObject = ProjectConfigUtilities.Load("3dc3e125-71c4-4511-a367-e981a6a94371", "11155111",
                 "Ethereum", "Sepolia", "Seth", "https://sepolia.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f");
         }
-        
+
         // Create web3builder & assign services
         var web3Builder = new Web3Builder(projectConfigScriptableObject).Configure(services =>
         {
@@ -51,7 +51,7 @@ public class Erc20Tests
 
         // Wait until for async task to finish
         yield return new WaitUntil(() => buildWeb3.IsCompleted);
-        
+
         // Assign result to web3
         web3 = buildWeb3.Result;
     }
@@ -63,7 +63,7 @@ public class Erc20Tests
         yield return new WaitUntil(() => getBalanceOf.IsCompleted);
         Assert.AreEqual(new BigInteger(1000000000000000000), getBalanceOf.Result);
     }
-    
+
     [UnityTest]
     public IEnumerator TestNativeBalanceOf()
     {
@@ -101,6 +101,6 @@ public class Erc20Tests
     {
         var getTotalSupply = Erc20.TotalSupply(web3, TotalSupplyAddress);
         yield return new WaitUntil(() => getTotalSupply.IsCompleted);
-		Assert.AreEqual(new BigInteger(1000000000000000000), getTotalSupply.Result);
+        Assert.AreEqual(new BigInteger(1000000000000000000), getTotalSupply.Result);
     }
 }

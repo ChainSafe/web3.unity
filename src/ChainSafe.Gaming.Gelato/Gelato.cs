@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using ChainSafe.Gaming.Web3.Environment;
@@ -23,18 +24,18 @@ namespace ChainSafe.GamingSdk.Gelato
         private readonly IChainConfig chainConfig;
         private bool gelatoDisabled;
 
-        public Gelato(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, ISigner signer, IContractBuilder contractBuilder)
+        public Gelato(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, ISigner signer, IContractBuilder contractBuilder, IAnalyticsClient analyticsClient, IProjectConfig projectConfig)
         {
-            gelatoClient = new GelatoClient(httpClient, config);
+            gelatoClient = new GelatoClient(httpClient, config, analyticsClient, chainConfig, projectConfig);
             this.signer = signer;
             this.config = config;
             this.chainConfig = chainConfig;
             this.contractBuilder = contractBuilder;
         }
 
-        public Gelato(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, IContractBuilder contractBuilder)
+        public Gelato(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, IContractBuilder contractBuilder, IAnalyticsClient analyticsClient, IProjectConfig projectConfig)
         {
-            gelatoClient = new GelatoClient(httpClient, config);
+            gelatoClient = new GelatoClient(httpClient, config, analyticsClient, chainConfig, projectConfig);
             this.config = config;
             this.chainConfig = chainConfig;
             this.contractBuilder = contractBuilder;

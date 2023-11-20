@@ -25,7 +25,7 @@ namespace Scripts.EVM.Token
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
             return await contract.Send(method, args);
         }
-        
+
         public static async Task<object[]> ContractCall(Web3 web3, string method, string abi, string contractAddress, object[] args)
         {
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
@@ -132,7 +132,7 @@ namespace Scripts.EVM.Token
             return key.GetPublicAddress() == playerAccount;
         }
 
-		public static string EcdsaSignTransaction(string _privateKey, string _transaction, string _chainId)
+        public static string EcdsaSignTransaction(string _privateKey, string _transaction, string _chainId)
         {
             int MATIC_MAIN = 137;
             int MATIC_MUMBAI = 80001;
@@ -175,7 +175,7 @@ namespace Scripts.EVM.Token
             string signature = signer.HashAndSign(_message, _privateKey);
             return signature;
         }
-        
+
         // IPFS upload
         public static async Task<string> Upload(IpfsUploadRequest request)
         {
