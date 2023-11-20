@@ -13,7 +13,7 @@ using UnityEngine.TestTools;
 public class Erc721Tests
 {
     #region Fields
-    
+
     #region Balances
 
     private const string balanceOfAccount = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
@@ -38,9 +38,9 @@ public class Erc721Tests
     private const string NftTextureContractAddress = "0x0288B4F1389ED7b3d3f9C7B73d4408235c0CBbc6";
 
     #endregion
-    
+
     #endregion
-    
+
     private Web3 web3;
 
     #region Indexer Test Parameters
@@ -59,7 +59,7 @@ public class Erc721Tests
     {
         // Wait for some time to initialize
         yield return new WaitForSeconds(5f);
-    
+
         // Set project config, fallback is for github as it doesn't load
         var projectConfigScriptableObject = ProjectConfigUtilities.Load();
         if (projectConfigScriptableObject == null)
@@ -67,7 +67,7 @@ public class Erc721Tests
             projectConfigScriptableObject = ProjectConfigUtilities.Load("3dc3e125-71c4-4511-a367-e981a6a94371", "11155111",
                 "Ethereum", "Sepolia", "Seth", "https://sepolia.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f");
         }
-        
+
         // Create web3builder & assign services
         var web3Builder = new Web3Builder(projectConfigScriptableObject)
                 .Configure(services =>
@@ -76,12 +76,12 @@ public class Erc721Tests
             services.UseRpcProvider();
             services.UseMultiCall();
         });
-    
+
         var buildWeb3 = web3Builder.LaunchAsync();
-    
+
         // Wait until for async task to finish
         yield return new WaitUntil(() => buildWeb3.IsCompleted);
-        
+
         // Assign result to web3
         web3 = buildWeb3.Result;
     }
@@ -101,7 +101,7 @@ public class Erc721Tests
         yield return new WaitUntil(() => getOwnerOf.IsCompleted);
         Assert.AreEqual(ownerOfExpected, getOwnerOf.Result);
     }
-    
+
     [UnityTest]
     public IEnumerator TestOwnerOfBatch()
     {

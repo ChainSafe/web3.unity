@@ -29,7 +29,7 @@ public class MultiCallSample
         {
             Erc20Account
         });
-        
+
         var erc20TotalSupplyCalldata = erc20Contract.Calldata(CommonMethod.TotalSupply, new object[]
         {
         });
@@ -49,7 +49,7 @@ public class MultiCallSample
                CallData = erc20TotalSupplyCalldata.HexToByteArray(),
            }
         };
-        
+
         var multicallResultResponse = await web3.MultiCall().MultiCallAsync(calls);
 
         Debug.Log(multicallResultResponse);
@@ -59,7 +59,7 @@ public class MultiCallSample
             var decodedBalanceOf = erc20Contract.Decode(CommonMethod.BalanceOf, multicallResultResponse[0].ReturnData.ToHex());
             Debug.Log($"decodedBalanceOf {((BigInteger)decodedBalanceOf[0]).ToString()}");
         }
-        
+
         if (multicallResultResponse[1] != null && multicallResultResponse[1].Success)
         {
             var decodedTotalSupply = erc20Contract.Decode(CommonMethod.TotalSupply, multicallResultResponse[1].ReturnData.ToHex());

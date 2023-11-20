@@ -29,7 +29,7 @@ using WalletConnectSharp.Sign.Models.Engine.Methods;
 /// </summary>
 public class ExistingWalletLogin : Login
 {
-    [Header("UI")] [SerializeField] private TMP_Dropdown supportedWalletsDropdown;
+    [Header("UI")][SerializeField] private TMP_Dropdown supportedWalletsDropdown;
 
     [SerializeField] private Toggle redirectToWalletToggle;
 
@@ -42,7 +42,8 @@ public class ExistingWalletLogin : Login
     private NativeWebSocketConnectionBuilder connectionBuilder;
 #endif
 
-    [Header("Wallet Connect")] [SerializeField]
+    [Header("Wallet Connect")]
+    [SerializeField]
     private string projectId;
 
     [SerializeField] public string projectName;
@@ -83,7 +84,7 @@ public class ExistingWalletLogin : Login
 #if !UNITY_2022_1_OR_NEWER
 
         connectionBuilder = FindObjectOfType<NativeWebSocketConnectionBuilder>();
-        
+
         // Initialize custom web socket if it's not already.
         if (connectionBuilder == null)
         {
@@ -91,7 +92,7 @@ public class ExistingWalletLogin : Login
                 new GameObject(nameof(NativeWebSocketConnectionBuilder), typeof(NativeWebSocketConnectionBuilder));
 
             connectionBuilder = webSocketBuilderObj.GetComponent<NativeWebSocketConnectionBuilder>();
-        
+
             // keep web socket during scene unload
             DontDestroyOnLoad(webSocketBuilderObj);
         }
@@ -131,7 +132,7 @@ public class ExistingWalletLogin : Login
         {
             // Build config to use.
             BuildWalletConnectConfig();
-            
+
             // Use wallet connect providers
             services.UseWalletConnect(walletConnectConfig)
                 .UseWalletConnectSigner()
@@ -189,14 +190,14 @@ public class ExistingWalletLogin : Login
         WalletConnectWalletModel defaultWallet = null;
 
         // allow redirection on editor for testing UI flow
-        redirectToWallet = autoLogin ? 
+        redirectToWallet = autoLogin ?
             // if it's an auto login get value from saved wallet config
             walletConnectConfig.RedirectToWallet : redirectToWalletToggle.isOn;
 
         // needs wallet selected to redirect
         if (redirectToWallet && !isRedirectionWalletAgnostic)
         {
-            defaultWallet = autoLogin ? 
+            defaultWallet = autoLogin ?
                 // if it's an auto login get value from saved wallet config
                 walletConnectConfig.DefaultWallet : supportedWallets.Values.ToArray()[supportedWalletsDropdown.value];
         }
@@ -221,7 +222,7 @@ public class ExistingWalletLogin : Login
             KeepSessionAlive = autoLogin || rememberMeToggle.isOn,
             DefaultWallet = defaultWallet,
         };
-        
+
         //subscribe to WC events
         walletConnectConfig.OnConnected += WalletConnected;
 
@@ -252,7 +253,7 @@ public class ExistingWalletLogin : Login
                 supportedWallets = supportedWallets
                     .Where(w => w.Value.IsAvailableForPlatform(UnityOperatingSystemMediator.GetCurrentPlatform()))
                     .ToDictionary(p => p.Key, p => p.Value);
-                
+
                 Debug.Log($"Fetched {supportedWallets.Count} Supported Wallets.");
             }
         }
@@ -296,7 +297,7 @@ public class ExistingWalletLogin : Login
 
         Debug.Log($"{session.Topic} Approved");
     }
-    
+
 #if !UNITY_MONO
     [Preserve]
     void SetupAOT()

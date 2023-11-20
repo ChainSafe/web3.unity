@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 #nullable enable
-public class WhiteLabelData {
+public class WhiteLabelData
+{
     public string? appName { get; set; }
     public string? logoLight { get; set; }
     public string? logoDark { get; set; }
