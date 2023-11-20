@@ -15,7 +15,7 @@ namespace Scripts.EVM.Remote
     {
         public class Response<T> { public T response; }
         private static readonly string host = "https://api.gaming.chainsafe.io/evm";
-        
+
         /// <summary>
         /// Creates a mint transaction for an NFT (Non-Fungible Token) on a specified blockchain network.
         /// </summary>

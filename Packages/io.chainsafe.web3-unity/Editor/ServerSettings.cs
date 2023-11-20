@@ -77,7 +77,7 @@ public class ChainSafeServerSettings : EditorWindow
         network = EditorGUILayout.TextField("Network", network);
         symbol = EditorGUILayout.TextField("Symbol", symbol);
         rpc = EditorGUILayout.TextField("RPC", rpc);
-        
+
         // Buttons
 
         // Register
@@ -113,9 +113,9 @@ public class ChainSafeServerSettings : EditorWindow
         {
             if (await ValidateProjectIDAsync(projectID))
             {
-                #if UNITY_WEBGL
+#if UNITY_WEBGL
                 WriteNetworkFile();
-                #endif
+#endif
             }
         }
         catch (Exception e)
