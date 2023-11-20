@@ -21,7 +21,7 @@ namespace Samples.Behaviours
                 // Log error not exception to not break flow
                 Debug.LogError($"Samples are configured for Chain Id {DefaultChainId}, Please Change Chain Id in Window > ChainSafe SDK > Server Settings to {DefaultChainId}");
             }
-            
+
             // Deactivates the loading pop up after a few seconds
             await new WaitForSeconds(2);
             SampleFeedback.Instance?.Deactivate();

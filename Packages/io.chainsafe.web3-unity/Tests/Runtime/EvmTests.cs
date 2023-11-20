@@ -10,7 +10,7 @@ using UnityEngine.TestTools;
 public class EvmTests : SampleTestsBase
 {
     #region Fields
-    
+
     #region ContractCalls
 
     private const string ContractSendMethod = "addTotal";
@@ -22,7 +22,7 @@ public class EvmTests : SampleTestsBase
 
     #region Array
 
-	private const string GetArrayMethod = "getStore";
+    private const string GetArrayMethod = "getStore";
     private const string SendArrayMethod = "setStore";
 
     private static List<string> ArrayToSend = new List<string>()
@@ -34,56 +34,56 @@ public class EvmTests : SampleTestsBase
     #endregion
 
     #region MintErc20
-    
+
     private const int Mint20Amount = 1;
 
     #endregion
-    
+
     #region Mint721
 
     private const string Mint721Uri = "QmfUHuFj3YL2JMZkyXNtGRV8e9aLJgQ6gcSrqbfjWFvbqQ";
 
     #endregion
-    
+
     #region Mint1155
-    
+
     private const int Mint1155Id = 1;
     private const int Mint1155Amount = 1;
 
     #endregion
-    
+
     #region Transfer
-    
+
     private BigInteger TransferErc20Amount = 1;
-    
+
     private const int Transfer721Id = 5;
     private const int Transfer1155Id = 1;
     private const int Transfer1155Amount = 1;
-    
+
     private const string SendToAddress = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
 
     #endregion
-    
+
     #region ECDSA
 
     private string ecdsaKey = "0x78dae1a22c7507a4ed30c06172e7614eb168d3546c13856340771e63ad3c0081";
     private string ecdsaMessage = "This is a test message";
     private string transactionHash = "0x123456789";
-    private string chainId ="11155111";
+    private string chainId = "11155111";
 
     #endregion
 
     #endregion
-    
+
     private Web3 web3;
-    
+
     [UnitySetUp]
     public override IEnumerator Setup()
     {
         yield return base.Setup();
         web3 = web3Result;
     }
-    
+
     [UnityTest]
     public IEnumerator TestContractCall()
     {
@@ -110,7 +110,7 @@ public class EvmTests : SampleTestsBase
         Assert.AreEqual(string.Empty, sendContract.Result);
     }
 
-	[UnityTest]
+    [UnityTest]
     public IEnumerator TestGetArray()
     {
         var getArray = Evm.GetArray(web3, Contracts.ArrayTotal, ABI.ArrayTotal, GetArrayMethod);
@@ -122,7 +122,7 @@ public class EvmTests : SampleTestsBase
             ArrayToSend.ConvertAll(a => a.ToLower())
         });
     }
-    
+
     [UnityTest]
     public IEnumerator TestSendArray()
     {
@@ -224,7 +224,7 @@ public class EvmTests : SampleTestsBase
     {
         config.TestResponse =
             "0xda2880dde86b7d870ac9ddfa690010bed8a679350415f8e9cce02d87bac91651081c40455538bce7a18792e3f2ea56457183e8dba8568f3a92785ab0d743ce0b1b";
-        var signMessage = Evm.SignMessage(web3,"The right man in the wrong place can make all the difference in the world.");
+        var signMessage = Evm.SignMessage(web3, "The right man in the wrong place can make all the difference in the world.");
         yield return new WaitUntil(() => signMessage.IsCompleted);
         if (signMessage.Exception != null) throw signMessage.Exception;
         Assert.IsTrue(signMessage.IsCompletedSuccessfully);
@@ -242,7 +242,7 @@ public class EvmTests : SampleTestsBase
         Assert.IsTrue(signVerify.IsCompletedSuccessfully);
         Assert.AreEqual(true, signVerify.Result);
     }
-    
+
     [UnityTest]
     public IEnumerator TestECDSASignTx()
     {
@@ -250,7 +250,7 @@ public class EvmTests : SampleTestsBase
         Assert.AreEqual("0xf8cd1c5dfa0706767c7ec81b91bed9a05b65b9c5b47769206a594377c5969a9a47fe21f7328b5865815f97b7ddd09bd7b899879aac6ed7c01eda5380975a54dc01546d72", signTxECDSA);
         return null;
     }
-    
+
     [UnityTest]
     public IEnumerator TestECDSASign()
     {
@@ -258,7 +258,7 @@ public class EvmTests : SampleTestsBase
         Assert.AreEqual("0x90bd386a185bdc5cbb13b9bba442e35036ac8e92792e74e385abbf7d9546be8720879c2075bf59124d9114b4d432173a4d6c4b118d278c3ffb51a140a625c66c1b", signECDSA);
         return null;
     }
-    
+
     [UnityTest]
     public IEnumerator TestECDSAAddress()
     {
@@ -266,7 +266,7 @@ public class EvmTests : SampleTestsBase
         Assert.AreEqual("0x428066dd8A212104Bc9240dCe3cdeA3D3A0f7979", address);
         return null;
     }
-    
+
     [UnityTest]
     public IEnumerator TestCustomBalanceOfErc20()
     {
@@ -274,7 +274,7 @@ public class EvmTests : SampleTestsBase
         yield return new WaitUntil(() => getCustomBalanceOf.IsCompleted);
         Assert.AreEqual(new BigInteger(999999999999999), getCustomBalanceOf.Result);
     }
-    
+
     [UnityTest]
     public IEnumerator TestMintErc20()
     {
@@ -285,7 +285,7 @@ public class EvmTests : SampleTestsBase
         Assert.IsTrue(mint20.IsCompletedSuccessfully);
         Assert.AreEqual(string.Empty, mint20.Result);
     }
-    
+
     [UnityTest]
     public IEnumerator TestMintErc721()
     {
@@ -296,7 +296,7 @@ public class EvmTests : SampleTestsBase
         Assert.IsTrue(mint721.IsCompletedSuccessfully);
         Assert.AreEqual(string.Empty, mint721.Result);
     }
-    
+
     [UnityTest]
     public IEnumerator TestMintErc1155()
     {
@@ -307,7 +307,7 @@ public class EvmTests : SampleTestsBase
         Assert.IsTrue(mint1155.IsCompletedSuccessfully);
         Assert.AreEqual(string.Empty, mint1155.Result);
     }
-    
+
     [UnityTest]
     public IEnumerator TestTransferErc20()
     {
@@ -318,7 +318,7 @@ public class EvmTests : SampleTestsBase
         Assert.IsTrue(transferErc20.IsCompletedSuccessfully);
         Assert.AreEqual(new object[] { false }, transferErc20.Result);
     }
-    
+
     [UnityTest]
     public IEnumerator TestTransferErc721()
     {
@@ -329,7 +329,7 @@ public class EvmTests : SampleTestsBase
         Assert.IsTrue(transferErc721.IsCompletedSuccessfully);
         Assert.AreEqual(string.Empty, transferErc721.Result);
     }
-    
+
     [UnityTest]
     public IEnumerator TestTransferErc1155()
     {

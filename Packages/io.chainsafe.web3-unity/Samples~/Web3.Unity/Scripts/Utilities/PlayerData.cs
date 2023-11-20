@@ -21,7 +21,7 @@ public class PlayerData
             // save closer to assets when in editor
             // more accessible
             string directory = Application.isEditor ? Application.dataPath : Application.persistentDataPath;
-            
+
             return $"{System.IO.Path.Combine(directory, nameof(PlayerData))}.json";
         }
     }
@@ -41,13 +41,13 @@ public class PlayerData
     {
         Instance.LoadData();
     }
-    
+
     private void LoadData()
     {
         if (!FileExists)
         {
             SaveData();
-            
+
             return;
         }
 
@@ -57,7 +57,7 @@ public class PlayerData
             string rawJson = sr.ReadToEnd();
 
             Instance = JsonConvert.DeserializeObject<PlayerData>(rawJson);
-            
+
             Debug.Log($"{nameof(PlayerData)} loaded from path {Path}.");
         }
     }
@@ -69,7 +69,7 @@ public class PlayerData
         using (StreamWriter sw = new StreamWriter(fs))
         {
             sw.WriteLine(JsonConvert.SerializeObject(Instance));
-            
+
             Debug.Log($"{nameof(PlayerData)} saved at path {Path}.");
         }
     }
@@ -81,7 +81,7 @@ public class PlayerData
     {
         Instance.SaveData();
     }
-    
+
     /// <summary>
     /// Load saved/persisted data into <see cref="Instance"/>
     /// </summary>
@@ -96,10 +96,10 @@ public class PlayerData
     public static void Clear()
     {
         Instance = new PlayerData();
-        
+
         Save();
     }
-    
+
     #endregion
 
     /// <summary>

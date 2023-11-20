@@ -5,13 +5,13 @@ public class GelatoCalls : MonoBehaviour
 {
     // Fields
     private GelatoSample gelato;
-    
+
     // Initializes the protocol class
     public void Awake()
     {
         gelato = new GelatoSample(Web3Accessor.Web3);
     }
-    
+
     /// <summary>
     /// Gelato with sync fee
     /// </summary>
@@ -23,7 +23,7 @@ public class GelatoCalls : MonoBehaviour
             $"Transaction hash: {result.Status.TransactionHash}",
             nameof(GelatoSample), nameof(GelatoSample.CallWithSyncFee));
     }
-    
+
     /// <summary>
     /// Gelato2771 with sync fee
     /// </summary>
@@ -35,7 +35,7 @@ public class GelatoCalls : MonoBehaviour
             $"Transaction hash: {result.Status.TransactionHash}",
             nameof(GelatoSample), nameof(GelatoSample.CallWithSyncFeeErc2771));
     }
-    
+
     /// <summary>
     /// Gelato sponsor call
     /// </summary>
@@ -47,7 +47,7 @@ public class GelatoCalls : MonoBehaviour
             $"Transaction hash: {result.Status.TransactionHash}",
             nameof(GelatoSample), nameof(GelatoSample.SponsorCall));
     }
-    
+
     /// <summary>
     /// Gelato2771 sponsor call
     /// </summary>

@@ -28,8 +28,8 @@ namespace Scripts.EVM.Token
             });
             return int.Parse(contractData[0].ToString());
         }
-		
-		/// <summary>
+
+        /// <summary>
         /// Owner Of ERC721 Token (string parameter)
         /// </summary>
         /// <param name="web3"></param>
@@ -40,8 +40,8 @@ namespace Scripts.EVM.Token
         {
             return await OwnerOf(web3, contractAddress, new object[] { tokenId, });
         }
-		
-		/// <summary>
+
+        /// <summary>
         /// Owner Of ERC721 Token (biginteger parameter)
         /// </summary>
         /// <param name="web3"></param>
@@ -59,7 +59,7 @@ namespace Scripts.EVM.Token
             var contractData = await contract.Call(method, parameters);
             return contractData[0].ToString();
         }
-        
+
         /// <summary>
         /// Returns owners of batch
         /// </summary>
@@ -82,9 +82,9 @@ namespace Scripts.EVM.Token
                     AllowFailure = true,
                     CallData = callData.HexToByteArray()
                 };
-                calls.Add(call3Value); 
+                calls.Add(call3Value);
             };
-        
+
             var multiCallResultResponse = await web3.MultiCall().MultiCallAsync(calls.ToArray());
             var owners = new List<string>();
             for (int i = 0; i < multiCallResultResponse.Count; i++)
@@ -121,7 +121,7 @@ namespace Scripts.EVM.Token
             });
             return contractData[0].ToString();
         }
-        
+
         /// <summary>
         /// Mints ERC721 token
         /// </summary>
@@ -137,7 +137,7 @@ namespace Scripts.EVM.Token
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
             return await contract.Send(method, new object[] { destination, uri });
         }
-        
+
         /// <summary>
         /// Transfers ERC721 token
         /// </summary>

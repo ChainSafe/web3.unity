@@ -418,7 +418,7 @@ namespace NativeWebSocket
                 this.headers = headers;
             }
 
-            subprotocols = new List<string> {subprotocol};
+            subprotocols = new List<string> { subprotocol };
 
             string protocol = uri.Scheme;
             if (!protocol.Equals("ws") && !protocol.Equals("wss"))
@@ -464,7 +464,8 @@ namespace NativeWebSocket
                     m_Socket.Options.SetRequestHeader(header.Key, header.Value);
                 }
 
-                foreach (string subprotocol in subprotocols) {
+                foreach (string subprotocol in subprotocols)
+                {
                     m_Socket.Options.AddSubProtocol(subprotocol);
                 }
 
@@ -665,7 +666,7 @@ namespace NativeWebSocket
                         {
                             lock (IncomingMessageLock)
                             {
-                              m_MessageList.Add(ms.ToArray());
+                                m_MessageList.Add(ms.ToArray());
                             }
 
                             //using (var reader = new StreamReader(ms, Encoding.UTF8))
@@ -678,7 +679,7 @@ namespace NativeWebSocket
                         {
                             lock (IncomingMessageLock)
                             {
-                              m_MessageList.Add(ms.ToArray());
+                                m_MessageList.Add(ms.ToArray());
                             }
                         }
                         else if (result.MessageType == WebSocketMessageType.Close)

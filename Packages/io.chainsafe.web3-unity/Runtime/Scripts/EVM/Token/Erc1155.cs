@@ -93,7 +93,7 @@ namespace Scripts.EVM.Token
             });
             return contractData[0].ToString();
         }
-        
+
         /// <summary>
         /// Mints ERC721 token
         /// </summary>
@@ -111,7 +111,7 @@ namespace Scripts.EVM.Token
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
             return await contract.Send(method, new object[] { destination, id, amount, dataObject });
         }
-        
+
         /// <summary>
         /// Transfers ERC721 token
         /// </summary>
@@ -138,7 +138,7 @@ namespace Scripts.EVM.Token
             });
             return response;
         }
-        
+
         /// <summary>
         /// Imports an NFT texture via Uri data
         /// </summary>
@@ -175,7 +175,7 @@ namespace Scripts.EVM.Token
             var response = ((DownloadHandlerTexture)textureRequest.downloadHandler).texture;
             return response;
         }
-    
+
         // Response class for the texture call above
         public class Response
         {

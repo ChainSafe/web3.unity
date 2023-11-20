@@ -23,7 +23,7 @@ namespace Scripts.EVM.Token
             });
             return BigInteger.Parse(contractData[0].ToString());
         }
-        
+
         /// <summary>
         /// Custom ERC20 token balance of an address
         /// </summary>
@@ -38,8 +38,8 @@ namespace Scripts.EVM.Token
             var contractData = await contract.Call(EthMethod.BalanceOf, new object[] { address });
             return BigInteger.Parse(contractData[0].ToString());
         }
-        
-		/// <summary>
+
+        /// <summary>
         /// Native ERC20 balance of an Address
         /// </summary>
         /// <param name="web3"></param>
@@ -101,7 +101,7 @@ namespace Scripts.EVM.Token
             var totalSupply = await contract.Call(EthMethod.TotalSupply);
             return BigInteger.Parse(totalSupply[0].ToString());
         }
-        
+
         /// <summary>
         /// Mints ERC20 Tokens
         /// </summary>

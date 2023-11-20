@@ -14,16 +14,16 @@ using UnityEngine.TestTools;
 public class Erc1155Tests
 {
     #region Fields
-    
+
     #region Balances
 
     private static string[] _accounts = { "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2", "0xE51995Cdb3b1c109E0e6E67ab5aB31CDdBB83E4a" };
     private static string[] _tokenIds = { "1", "2" };
 
     #endregion
-    
+
     #endregion
-    
+
     private Web3 web3;
 
     #region Indexer Test Parameters
@@ -36,21 +36,21 @@ public class Erc1155Tests
     private const int IndexerSkip = 0;
 
     #endregion
-    
+
     [UnitySetUp]
     public IEnumerator Setup()
     {
         // Wait for some time to initialize
         yield return new WaitForSeconds(5f);
-    
+
         // Set project config, fallback is for github as it doesn't load
         var projectConfigScriptableObject = ProjectConfigUtilities.Load();
         if (projectConfigScriptableObject == null)
         {
             projectConfigScriptableObject = ProjectConfigUtilities.Load("3dc3e125-71c4-4511-a367-e981a6a94371", "11155111",
-            	"Ethereum", "Sepolia", "Seth", "https://sepolia.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f");
+                "Ethereum", "Sepolia", "Seth", "https://sepolia.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f");
         }
-        
+
         // Create web3builder & assign services
         var web3Builder = new Web3Builder(projectConfigScriptableObject)
             .Configure(services =>
@@ -58,12 +58,12 @@ public class Erc1155Tests
                 services.UseUnityEnvironment();
                 services.UseRpcProvider();
             });
-    
+
         var buildWeb3 = web3Builder.LaunchAsync();
-    
+
         // Wait until for async task to finish
         yield return new WaitUntil(() => buildWeb3.IsCompleted);
-        
+
         // Assign result to web3
         web3 = buildWeb3.Result;
     }

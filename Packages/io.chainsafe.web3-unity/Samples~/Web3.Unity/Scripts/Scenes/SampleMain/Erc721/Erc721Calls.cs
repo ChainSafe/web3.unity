@@ -13,17 +13,17 @@ public class Erc721Calls : MonoBehaviour
     #region Fields
 
     #region Balance Of
-    
+
     private string accountBalanceOf = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
 
     #endregion
 
     #region Owner Of
-    
+
     private string tokenIdOwnerOf = "1";
 
     #endregion
-    
+
     #region Owner Of Batch
 
     private string[] tokenIdsOwnerOfBatch = { "4", "6" };
@@ -31,17 +31,17 @@ public class Erc721Calls : MonoBehaviour
     #endregion
 
     #region Uri
-    
+
     private string tokenIdUri = "0x01559ae4021a565d5cc4740f1cefa95de8c1fb193949ecd32c337b03047da501";
 
     #endregion
-    
+
     #region Mint
-    
+
     private string uriMint = "1";
 
     #endregion
-    
+
     #region Transfer
 
     private string contractTransfer = "0x358AA13c52544ECCEF6B0ADD0f801012ADAD5eE3";
@@ -51,7 +51,7 @@ public class Erc721Calls : MonoBehaviour
     #endregion
 
     #endregion
-    
+
     /// <summary>
     /// Balance Of ERC721 Address
     /// </summary>
@@ -60,18 +60,18 @@ public class Erc721Calls : MonoBehaviour
         var balance = await Erc721.BalanceOf(Web3Accessor.Web3, Contracts.Erc721, accountBalanceOf);
         SampleOutputUtil.PrintResult(balance.ToString(), nameof(Erc721), nameof(Erc721.BalanceOf));
     }
-    
+
     /// <summary>
     /// Owner Of ERC721 tokens
     /// </summary>
     public async void OwnerOf()
     {
-        var owner = tokenIdOwnerOf.StartsWith("0x") ? 
-            await Erc721.OwnerOf(Web3Accessor.Web3, Contracts.Erc721, tokenIdOwnerOf) 
+        var owner = tokenIdOwnerOf.StartsWith("0x") ?
+            await Erc721.OwnerOf(Web3Accessor.Web3, Contracts.Erc721, tokenIdOwnerOf)
             : await Erc721.OwnerOf(Web3Accessor.Web3, Contracts.Erc721, BigInteger.Parse(tokenIdOwnerOf));
         SampleOutputUtil.PrintResult(owner, nameof(Erc721), nameof(Erc721.OwnerOf));
     }
-    
+
     /// <summary>
     /// Owner Of batch ERC721
     /// </summary>
@@ -81,7 +81,7 @@ public class Erc721Calls : MonoBehaviour
         var ownersString = $"{owners.Count} owner(s):\n" + string.Join(",\n", owners);
         SampleOutputUtil.PrintResult(ownersString, nameof(Erc721), nameof(Erc721.OwnerOfBatch));
     }
-    
+
     /// <summary>
     /// Uri Of ERC721 Address
     /// </summary>
@@ -90,7 +90,7 @@ public class Erc721Calls : MonoBehaviour
         var uri = await Erc721.Uri(Web3Accessor.Web3, Contracts.Erc721, tokenIdUri);
         SampleOutputUtil.PrintResult(uri, nameof(Erc721), nameof(Erc721.Uri));
     }
-    
+
     /// <summary>
     /// Mint ERC1155 tokens
     /// </summary>
@@ -100,7 +100,7 @@ public class Erc721Calls : MonoBehaviour
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Erc721), nameof(Erc721.MintErc721));
     }
-    
+
     /// <summary>
     /// Transfer ERC1155 tokens
     /// </summary>

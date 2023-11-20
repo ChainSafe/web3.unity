@@ -46,12 +46,12 @@ public static class SceneIndexer
 
         // convert and add importPath to scenes path
         EditorBuildSettingsScene[] editorBuildSettingsScenes = Array.ConvertAll(scenes, s => new EditorBuildSettingsScene(Path.Combine(importPath, s), true));
-        
+
         EditorBuildSettings.scenes = editorBuildSettingsScenes.Concat(EditorBuildSettings.scenes).ToArray();
-        
+
         SessionState.SetBool(sessionKey, true);
     }
-    
+
     private static PackageInfo GetPackage(string name)
     {
         var listRequest = Client.List();
@@ -69,7 +69,7 @@ public static class SceneIndexer
         {
             throw new Exception($"Installed Package {name} not found");
         }
-        
+
         return package;
     }
 

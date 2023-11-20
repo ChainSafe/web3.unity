@@ -19,45 +19,45 @@ namespace Scenes
     {
         public const string MainSceneName = "SampleMain";
 
-        public static int LoginSceneIndex { get; private set; }  = 0;
+        public static int LoginSceneIndex { get; private set; } = 0;
 
         [SerializeField] private string gelatoApiKey = "";
 
         [SerializeField] private ErrorPopup errorPopup;
-        
+
         private IEnumerator Start()
         {
             yield return Initialize();
         }
 
         protected abstract IEnumerator Initialize();
-        
+
         protected abstract Web3Builder ConfigureWeb3Services(Web3Builder web3Builder);
-        
+
         protected async Task TryLogin()
         {
             Web3 web3;
-            
+
             try
             {
                 Web3Builder web3Builder = new Web3Builder(ProjectConfigUtilities.Load())
                     .Configure(ConfigureCommonServices);
-            
+
                 web3Builder = ConfigureWeb3Services(web3Builder);
-                
+
                 web3 = await web3Builder.LaunchAsync();
             }
-            
+
             catch (Exception)
             {
                 errorPopup.ShowError("Login failed, please try again\n(see console for more details)");
                 throw;
             }
-            
+
             Web3Accessor.Set(web3);
 
             LoginSceneIndex = SceneManager.GetActiveScene().buildIndex;
-            
+
             SceneManager.LoadScene(MainSceneName);
         }
 

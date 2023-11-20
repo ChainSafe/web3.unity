@@ -1,4 +1,5 @@
-﻿public class LoginConfigItem {
+﻿public class LoginConfigItem
+{
     public string verifier { get; set; }
     public TypeOfLogin typeOfLogin { get; set; }
     public string name { get; set; }
