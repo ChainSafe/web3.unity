@@ -5,6 +5,8 @@
     /// </summary>
     public interface IAnalyticsClient
     {
+        public string AnalyticsVersion { get; }
+
         /// <summary>
         /// Captures an analytics event.
         /// </summary>
