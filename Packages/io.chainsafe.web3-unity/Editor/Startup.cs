@@ -27,8 +27,8 @@ namespace ChainSafe.GamingSdk.Editor
                     // Don't want these checks to happen when starting play mode
                     return;
                 }
-                
-                #if UNITY_WEBGL
+
+#if UNITY_WEBGL
                 var performSync = WebGLTemplateSync.CheckSyncStatus() switch
                 {
                     WebGLTemplateSyncStatus.UpToDate => false,
@@ -38,13 +38,13 @@ namespace ChainSafe.GamingSdk.Editor
                         EditorUtility.DisplayDialog("web3.unity", "The web3.unity WebGL templates in your project are out of date, would you like to update now?", "Yes", "No"),
                     _ => false,
                 };
-        
+
                 if (performSync)
                 {
                     WebGLTemplateSync.Syncronize();
                 }
-                #endif
-                
+#endif
+
                 // Checks project ID
                 ValidateProjectID();
             };
