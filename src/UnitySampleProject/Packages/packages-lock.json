@@ -237,21 +237,21 @@
         "com.unity.nuget.newtonsoft-json": "3.0.2"
       }
     },
-    "io.chainsafe.web3-unity.web3auth": {
-      "version": "file:../../../Packages/io.chainsafe.web3-unity.web3auth",
-      "depth": 0,
-      "source": "local",
-      "dependencies": {
-        "com.unity.nuget.newtonsoft-json": "3.0.2",
-        "io.chainsafe.web3-unity": "2.5.0"
-      }
-    },
     "io.chainsafe.web3-unity.lootboxes": {
       "version": "file:../../../Packages/io.chainsafe.web3-unity.lootboxes",
       "depth": 0,
       "source": "local",
       "dependencies": {
         "io.chainsafe.web3-unity": "2.5.0"
+      }
+    },
+    "io.chainsafe.web3-unity.web3auth": {
+      "version": "file:../../../Packages/io.chainsafe.web3-unity.web3auth",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "3.0.2",
+        "io.chainsafe.web3-unity": "2.5.2"
       }
     },
     "com.unity.modules.ai": {
