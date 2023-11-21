@@ -132,6 +132,7 @@ namespace ChainSafe.Gaming.Evm.Providers
                     {
                         Params = parameters,
                     },
+                    PackageName = "io.chainsafe.web3-unity",
                 });
             }
         }
