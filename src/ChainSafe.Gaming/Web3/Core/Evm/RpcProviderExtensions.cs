@@ -8,7 +8,6 @@ using ChainSafe.Gaming.Web3;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
-using Org.BouncyCastle.Utilities.Encoders;
 using Block = ChainSafe.Gaming.Evm.Blocks.Block;
 using BlockWithTransactions = ChainSafe.Gaming.Evm.Blocks.BlockWithTransactions;
 using Transaction = ChainSafe.Gaming.Evm.Transactions.Transaction;
