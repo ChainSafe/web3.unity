@@ -9,6 +9,7 @@ jobs:
     name: Duplicate Samples
     uses: ChainSafe/web3.unity/.github/workflows/duplicate_samples.yml@main
   publish_dependencies:
+    if: false
     name: Publish Dependencies
     uses: ChainSafe/web3.unity/.github/workflows/publish_dependencies.yml@main
     needs: [duplicate_samples]
