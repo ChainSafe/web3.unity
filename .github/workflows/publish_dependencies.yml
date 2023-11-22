@@ -52,7 +52,7 @@ jobs:
             for dependency in "${dependencies[@]}"
             do
               cp "$PUBLISH_PATH/$dependency.dll" "$PACKAGE_LIB_PATH"
-              printf "${DLL_META_FILE_TEMPLATE/"[[assetGuid]]"/"$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 32 | head -n 1)"}" >| "$PACKAGE_LIB_PATH/$dependency.dll.meta"
+              echo -e "${DLL_META_FILE_TEMPLATE/"[[assetGuid]]"/"$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 32 | head -n 1)"}" > "$PACKAGE_LIB_PATH$dependency.dll.meta"
             done
           
             git add "$PACKAGE_LIB_PATH." -f
