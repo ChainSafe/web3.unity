@@ -10,5 +10,5 @@ jobs:
     uses: ChainSafe/web3.unity/.github/workflows/duplicate_samples.yml@main
   publish_dependencies:
     name: Publish Dependencies
-    uses: ChainSafe/web3.unity/.github/workflows/publish_dependencies.yml@rob/generate-dll-meta-files-750
+    uses: ChainSafe/web3.unity/.github/workflows/publish_dependencies.yml@main
     needs: [duplicate_samples]
