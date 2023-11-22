@@ -45,7 +45,7 @@ jobs:
             export PACKAGE_LIB_PATH="${GITHUB_WORKSPACE}/${dirs[0]}"
             
             if [ -d "$PACKAGE_LIB_PATH" ]; then
-              rm "$PACKAGE_LIB_PATH/*.dll"
+              rm "$PACKAGE_LIB_PATH*.dll"
             else
               mkdir -p "$PACKAGE_LIB_PATH"
             fi
