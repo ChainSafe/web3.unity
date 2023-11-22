@@ -37,7 +37,7 @@ jobs:
           
           export PACKAGE_DEPENDENCIES=${{ vars.PACKAGE_DEPENDENCIES }}
           
-          DLL_META_FILE_TEMPLATE=${{ vars.DLL_META_FILE_TEMPLATE }}
+          export DLL_META_FILE_TEMPLATE="${{ vars.DLL_META_FILE_TEMPLATE }}"
           
           for entry in "${PACKAGE_DEPENDENCIES[@]}"
           do
