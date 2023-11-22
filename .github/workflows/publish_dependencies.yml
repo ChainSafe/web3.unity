@@ -53,7 +53,9 @@ jobs:
             do
               cp "$PUBLISH_PATH/$dependency.dll" "$PACKAGE_LIB_PATH"
               touch "$PACKAGE_LIB_PATH$dependency.dll.meta"
-              echo -e "${DLL_META_FILE_TEMPLATE/"[[assetGuid]]"/"$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 32 | head -n 1)"}" > "$PACKAGE_LIB_PATH$dependency.dll.meta"
+              echo "Created $PACKAGE_LIB_PATH$dependency.dll.meta"
+              echo "$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 32 | head -n 1)"
+              echo -e "${DLL_META_FILE_TEMPLATE/"[[assetGuid]]"/"$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 32 | head -n 1)"}" >> "$PACKAGE_LIB_PATH$dependency.dll.meta"
             done
           
             git add "$PACKAGE_LIB_PATH." -f
