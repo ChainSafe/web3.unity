@@ -7,6 +7,7 @@ using ChainSafe.Gaming.Web3;
 using Nethereum.ABI.FunctionEncoding;
 using Nethereum.Contracts.QueryHandlers.MultiCall;
 using Nethereum.Hex.HexConvertors.Extensions;
+using Scripts.EVM.Token;
 using UnityEngine;
 
 public class MultiCallSample
@@ -23,12 +24,12 @@ public class MultiCallSample
 
     public async Task ErcSamples()
     {
-        var erc20Contract = web3.ContractBuilder.Build(ABI.ERC_20, Erc20ContractAddress);
+        var erc20Contract = web3.ContractBuilder.Build(ABI.Erc20, Erc20ContractAddress);
         var erc20BalanceOfCalldata = erc20Contract.Calldata(CommonMethod.BalanceOf, new object[]
         {
             Erc20Account
         });
-        
+
         var erc20TotalSupplyCalldata = erc20Contract.Calldata(CommonMethod.TotalSupply, new object[]
         {
         });
@@ -48,7 +49,7 @@ public class MultiCallSample
                CallData = erc20TotalSupplyCalldata.HexToByteArray(),
            }
         };
-        
+
         var multicallResultResponse = await web3.MultiCall().MultiCallAsync(calls);
 
         Debug.Log(multicallResultResponse);
@@ -58,7 +59,7 @@ public class MultiCallSample
             var decodedBalanceOf = erc20Contract.Decode(CommonMethod.BalanceOf, multicallResultResponse[0].ReturnData.ToHex());
             Debug.Log($"decodedBalanceOf {((BigInteger)decodedBalanceOf[0]).ToString()}");
         }
-        
+
         if (multicallResultResponse[1] != null && multicallResultResponse[1].Success)
         {
             var decodedTotalSupply = erc20Contract.Decode(CommonMethod.TotalSupply, multicallResultResponse[1].ReturnData.ToHex());
