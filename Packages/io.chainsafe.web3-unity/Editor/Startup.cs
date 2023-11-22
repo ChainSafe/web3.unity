@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEditor;
 using System;
 using ChainSafe.Gaming.UnityPackage;
-using PlasticPipe.PlasticProtocol.Messages;
 
 namespace ChainSafe.GamingSdk.Editor
 {
