@@ -29,4 +29,15 @@ assignees:
 
 **Final Steps**
 * Give it one of these labels `Type: Feature` `Type: Enhancement`
-* Share it with the team
+* Add your estimation
+
+**Estimations**
+
+| Story Point | Amount of effort | Amount of time | Task Complexity | Task Risk or Uncerntainty |
+|----------|----------|----------|----------|----------|
+| 1 | Minimum efort | A few minutes | Little complexity | None |
+| 2 | Minimum effort | A few hours | Little complexity | None |
+| 3 | Mild efort | A day | Low complexity | Low |
+| 5 | Moderate efort | A few days | Mediium complexity | Moderate |
+| 8 | Severe efort | A week | Medium complexity | Moderate |
+| 13 | Maximum effort | A few month | High complexity | High |
