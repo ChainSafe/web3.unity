@@ -37,19 +37,27 @@ jobs:
           
           export PACKAGE_DEPENDENCIES=${{ vars.PACKAGE_DEPENDENCIES }}
           
+          export DLL_META_FILE_TEMPLATE="${{ vars.DLL_META_FILE_TEMPLATE }}"
+          
           for entry in "${PACKAGE_DEPENDENCIES[@]}"
           do
             IFS=':' read -ra dirs <<< "$entry"
             export PACKAGE_LIB_PATH="${GITHUB_WORKSPACE}/${dirs[0]}"
             
-            rm -rf "$PACKAGE_LIB_PATH"
-            mkdir -p "$PACKAGE_LIB_PATH"
+            if [ -d "$PACKAGE_LIB_PATH" ]; then
+              rm "$PACKAGE_LIB_PATH"*.dll
+            else
+              mkdir -p "$PACKAGE_LIB_PATH"
+            fi
             
             IFS=';' read -ra dependencies <<< "${dirs[1]}"
             
             for dependency in "${dependencies[@]}"
             do
               cp "$PUBLISH_PATH/$dependency.dll" "$PACKAGE_LIB_PATH"
+              if ! [ -f "$PACKAGE_LIB_PATH$dependency.dll.meta" ]; then
+                echo -e "${DLL_META_FILE_TEMPLATE/"[[assetGuid]]"/"$(uuidgen | tr -d '-')"}" >> "$PACKAGE_LIB_PATH$dependency.dll.meta"
+              fi
             done
           
             git add "$PACKAGE_LIB_PATH." -f
