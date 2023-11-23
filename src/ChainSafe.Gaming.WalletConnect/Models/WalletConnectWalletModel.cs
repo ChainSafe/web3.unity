@@ -87,10 +87,6 @@ namespace ChainSafe.Gaming.WalletConnect.Models
             {
                 url += "//";
             }
-            else if (url.EndsWith("//"))
-            {
-                url += "wc";
-            }
 
             return AddDeeplinkParams(url, uri);
         }
@@ -102,7 +98,7 @@ namespace ChainSafe.Gaming.WalletConnect.Models
 
         private string AddDeeplinkParams(string url, string uri)
         {
-            url += $"?uri={HttpUtility.UrlEncode(uri)}";
+            url += $"wc?uri={HttpUtility.UrlEncode(uri)}";
 
             return url;
         }
