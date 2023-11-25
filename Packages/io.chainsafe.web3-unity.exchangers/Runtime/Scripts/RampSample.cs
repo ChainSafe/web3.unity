@@ -54,9 +54,11 @@ public class RampSample : MonoBehaviour
             new RampBuyWidgetSettings
             {
                 // For more info on widget settings check https://docs.ramp.network/configuration
-                SwapAsset = "ETH_DAI,ETH_ETH,ETH_USDC",
-                DefaultAsset = "ETH",
-                FiatCurrency = "UAH",
+                //Since this is only a demo, SEPOLIA_ETH is used as a fake token. For production environment,
+                //you should use real tokens like ETH, DAI, USDC, etc.
+                SwapAsset = "SEPOLIA_ETH",
+                DefaultAsset = "SEPOLIA_ETH",
+                FiatCurrency = "EUR",
                 FiatValue = 100,
             });
         
@@ -70,7 +72,7 @@ public class RampSample : MonoBehaviour
             new RampSellWidgetSettings
             {
                 // For more info on widget settings check https://docs.ramp.network/configuration 
-                OfframpAsset = "ETH_ETH"
+                OfframpAsset = "SEPOLIA_ETH"
             });
         
         Debug.Log($"OffRamp success! Response: {saleData}");
@@ -83,14 +85,14 @@ public class RampSample : MonoBehaviour
             new RampBuyOrSellWidgetSettings
             {
                 // For more info on widget settings check https://docs.ramp.network/configuration 
-                SwapAsset = "ETH_DAI,ETH_ETH",
-                OfframpAsset = "ETH_ETH,ETH_USDC",
-                DefaultAsset = "ETH_ETH",
-                FiatCurrency = "CAD",
+                SwapAsset = "SEPOLIA_ETH",
+                OfframpAsset = "SEPOLIA_ETH",
+                DefaultAsset = "SEPOLIA_ETH",
+                FiatCurrency = "EUR",
                 FiatValue = 100,
                 UserEmailAddress = "test@test.com",
                 SwapAmount = 5,
-                SelectedCountryCode = "CA"
+                SelectedCountryCode = "RS"
             });
         
         Debug.Log(rampTransactionData.ToString());
