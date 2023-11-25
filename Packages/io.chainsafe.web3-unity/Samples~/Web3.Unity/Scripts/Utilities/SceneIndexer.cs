@@ -36,6 +36,9 @@ public static class SceneIndexer
 
         string importPath = GetImportPath(package);
 
+        //Clear out scenes that do not exist
+        EditorBuildSettings.scenes = EditorBuildSettings.scenes.Where(s => !string.IsNullOrEmpty(s.path)).ToArray();
+        
         //scenes already added to build settings
         if (EditorBuildSettings.scenes.Any(s => Path.GetFullPath(s.path).Contains(importPath)))
         {
