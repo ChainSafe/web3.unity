@@ -17,7 +17,7 @@ namespace Scenes
 {
     public abstract class Login : MonoBehaviour
     {
-        public const string MainSceneName = "SampleMain";
+        public const string MainSceneName = "SampleMainRampExchanger";
 
         public static int LoginSceneIndex { get; private set; } = 0;
 

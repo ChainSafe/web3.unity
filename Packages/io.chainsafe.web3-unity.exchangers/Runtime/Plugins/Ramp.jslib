@@ -49,11 +49,7 @@ var RampLib = {
         });
         sdkInstance
             .on('PURCHASE_CREATED', (event) => {
-                const transactionData = event.payload.purchase;
-            
-                   
-                    
-
+                    const transactionData = event.payload.purchase;
                     const purchase = event.payload.purchase;
                     
                     Module.dynCall_vidiiiiiddiiiidiidiiii(RampLib.purchaseCallback,

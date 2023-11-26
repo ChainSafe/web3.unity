@@ -2,6 +2,7 @@
 using ChainSafe.Gaming.Web3.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using UnityEngine;
 
 namespace ChainSafe.Gaming.Exchangers.Ramp
 {
