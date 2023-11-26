@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Web3.Core;
 
@@ -8,6 +9,9 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
     {
         private readonly IRampExchangerConfig config;
         private readonly ISigner signer;
+
+        public static Action<OnRampPurchaseData> OnRampPurchase;
+        public static Action<OffRampSaleData> OffRampSale;
         
         private IRampExchanger platformImplementation;
 

@@ -155,7 +155,9 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
                 FinalTxHash = finalTxHash,
                 PaymentMethodType = paymentMethodType
             };
-            
+
+            RampExchangerUniversal.OnRampPurchase?.Invoke(purchaseData);
+
             if (purchaseTaskMap.ContainsKey(requestId))
             {
                 var tcs = purchaseTaskMap[requestId];
@@ -202,6 +204,9 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
                     CurrencySymbol = fiatCurrencySymbol
                 }
             };
+
+            RampExchangerUniversal.OffRampSale?.Invoke(saleData);
+
             
             if (sellTaskMap.ContainsKey(requestId))
             {
