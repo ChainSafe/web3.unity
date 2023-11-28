@@ -17,7 +17,7 @@ namespace Scenes
 {
     public abstract class Login : MonoBehaviour
     {
-        [SerializeField] public string sceneToLoad;
+        public string sceneToLoad { get; private set; }
 
         public static int LoginSceneIndex { get; private set; } = 0;
 
@@ -65,7 +65,7 @@ namespace Scenes
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Debug.LogError(e);
                 throw;
             }
         }
