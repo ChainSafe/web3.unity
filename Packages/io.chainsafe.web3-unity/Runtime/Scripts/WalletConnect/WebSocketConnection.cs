@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Unity;
+using NativeWebSocket;
 using Newtonsoft.Json;
 using UnityEngine;
 using WalletConnectSharp.Common;
@@ -14,7 +15,6 @@ using WalletConnectSharp.Events.Model;
 using WalletConnectSharp.Network;
 using WalletConnectSharp.Network.Models;
 using WalletConnectSharp.Network.Websocket;
-using NativeWebSocket;
 
 namespace ChainSafe.Gaming.WalletConnect
 {
