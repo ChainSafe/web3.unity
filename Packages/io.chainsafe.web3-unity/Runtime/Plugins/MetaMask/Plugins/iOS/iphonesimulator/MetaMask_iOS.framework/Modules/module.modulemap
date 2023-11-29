@@ -1,0 +1,11 @@
+framework module MetaMask_iOS {
+  umbrella header "MetaMask_iOS.h"
+  export *
+
+  module * { export * }
+}
+
+module MetaMask_iOS.Swift {
+  header "MetaMask_iOS-Swift.h"
+  requires objc
+}

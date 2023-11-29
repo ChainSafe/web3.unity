@@ -1,0 +1,96 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &565171663956538073
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 565171663956538075}
+  - component: {fileID: 565171663956538074}
+  - component: {fileID: 8848943428709072873}
+  m_Layer: 0
+  m_Name: MetaMaskUnity
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &565171663956538075
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 565171663956538073}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &565171663956538074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 565171663956538073}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 523533b4558dd4b4094acf159d13a23d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  config: {fileID: 11400000, guid: 6cbb8289bcfbdba43817188b3b4f15e0, type: 2}
+  initializeOnStart: 1
+  _transport: {fileID: 11400000, guid: 2794b8de755b55048bc6f0544321e072, type: 2}
+  clearSessionData: 0
+--- !u!114 &8848943428709072873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 565171663956538073}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8d71131c319421d9620f5fbcf63ed20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MetaMaskConnected:
+    m_PersistentCalls:
+      m_Calls: []
+  MetaMaskWalletReady:
+    m_PersistentCalls:
+      m_Calls: []
+  MetaMaskWalletPaused:
+    m_PersistentCalls:
+      m_Calls: []
+  MetamaskConnecting:
+    m_PersistentCalls:
+      m_Calls: []
+  MetaMaskWalletDisconnected:
+    m_PersistentCalls:
+      m_Calls: []
+  MetaMaskWalletAccountChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  MetaMaskChainIdChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  MetaMaskWalletAuthorized:
+    m_PersistentCalls:
+      m_Calls: []
+  MetaMaskWalletUnauthorized:
+    m_PersistentCalls:
+      m_Calls: []
+  MetaMaskWalletEthereumRequestResult:
+    m_PersistentCalls:
+      m_Calls: []
+  MetaMaskWalletRequestFailed:
+    m_PersistentCalls:
+      m_Calls: []

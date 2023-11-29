@@ -1,0 +1,36 @@
+# Third-Party Notices
+
+## Appendix
+### 1. Bouncy Castle MIT License
+##### url: https://www.bouncycastle.org/licence.html
+
+### 2. Ecies GO MIT License
+##### url: https://github.com/ecies/go
+
+### 3. Ecies JS MIT License
+##### url: https://github.com/ecies/js
+
+### 4. Native Web Socket Apache 2.0
+##### url: https://github.com/endel/NativeWebSocket
+
+### 5. Socket.io Unity MIT License
+##### url: https://github.com/itisnajim/SocketIOUnity
+
+### 6. Zxing Unity Apache 2.0 License
+##### url: https://github.com/micjahn/ZXing.Net
+
+### 7. Text Mesh Pro Unity Companion License
+##### url: https://docs.unity3d.com/Packages/com.unity.textmeshpro@1.5/license/LICENSE.html
+
+### 8. Ok Http License
+##### url: https://raw.githubusercontent.com/square/okhttp/master/LICENSE.txt
+
+### 9. Starscream License
+##### url: https://raw.githubusercontent.com/daltoniam/Starscream/master/LICENSE
+
+### 10. Socket IO Javascript MIT License
+##### url: https://raw.githubusercontent.com/socketio/socket.io-client/main/LICENSE
+
+We are always thankful and continue to support the open-source community and the amazing work that they do
+which enables us to all grow and share together, in the individual license folders you will find the various
+licenses which have been included from the source for your convenience

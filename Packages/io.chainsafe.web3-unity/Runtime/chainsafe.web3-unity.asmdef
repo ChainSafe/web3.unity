@@ -1,7 +1,9 @@
 {
     "name": "chainsafe.web3-unity",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "GUID:5cdabfc361535f04fa6470ecc48ce3cc"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
