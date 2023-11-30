@@ -1,24 +1,22 @@
-﻿using JetBrains.Annotations;
-
-namespace ChainSafe.Gaming.Exchangers.Ramp
+﻿namespace ChainSafe.Gaming.Exchangers.Ramp
 {
     public class RampTransactionData
     {
         public OnRampPurchaseData? PurchaseData { get; set; }
-        [CanBeNull] public OffRampSaleData SellData { get; set; }
+        public OffRampSaleData? SaleData { get; set; }
 
-        public bool Purchased => PurchaseData != null;
-        public bool Sold => SellData != null;
+        public bool IsPurchase => PurchaseData != null;
+        public bool IsSale => SaleData != null;
 
         public override string ToString()
         {
-            if (Purchased)
+            if (IsPurchase)
             {
-                return $"Successful purchase! {PurchaseData.ToString()}";
+                return $"On-Ramp: ({PurchaseData!.Value.Status}): {PurchaseData.ToString()}";
             }
-            else if (Sold)
+            else if (IsSale)
             {
-                return $"Successful sale! {SellData}";
+                return $"Off-Ramp: {SaleData}";
             }
 
             return "Error :(";

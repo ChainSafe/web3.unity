@@ -4,7 +4,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
 {
     // todo use constant instead of "ChainSafe/"
     [CreateAssetMenu(menuName = "ChainSafe/Ramp Exchanger Config", fileName = "RampExchangerConfig", order = 0)]
-    public class RampExchangerConfigScriptableObject : ScriptableObject, IRampExchangerConfig
+    public class RampExchangerConfigSO : ScriptableObject, IRampExchangerConfig
     {
         [field: SerializeField] public string HostApiKey { get; private set; }
         [field: SerializeField] public string HostLogoUrl { get; private set; }

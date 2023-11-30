@@ -2,7 +2,55 @@ using System;
 
 namespace ChainSafe.Gaming.Exchangers.Ramp
 {
-    public class OfframpAssetInfo
+    public struct OffRampSaleData
+    {
+        public string CreatedAt { get; set; }
+        public CryptoOffRamp Crypto { get; set; }
+        public FiatOffRamp Fiat { get; set; }
+        public Guid Id { get; set; }
+
+        public override string ToString()
+        {
+            return
+                $"{nameof(CreatedAt)}: {CreatedAt}, {nameof(Crypto)}: {Crypto}, {nameof(Fiat)}: {Fiat}, {nameof(Id)}: {Id}";
+        }
+
+        public struct CryptoOffRamp
+        {
+            public CryptoOffRamp(string amount, OfframpAssetInfo assetInfo)
+            {
+                Amount = amount;
+                AssetInfo = assetInfo;
+            }
+
+            public string Amount { get; set; }
+            public OfframpAssetInfo AssetInfo { get; set; }
+
+            public override string ToString()
+            {
+                return $"{nameof(Amount)}: {Amount}, {nameof(AssetInfo)}: {AssetInfo}";
+            }
+        }
+
+        public struct FiatOffRamp
+        {
+            public FiatOffRamp(double amount, string currencySymbol)
+            {
+                Amount = amount;
+                CurrencySymbol = currencySymbol;
+            }
+
+            public double Amount { get; set; } // Using decimal for currency values in C#
+            public string CurrencySymbol { get; set; }
+
+            public override string ToString()
+            {
+                return $"{nameof(Amount)}: {Amount}, {nameof(CurrencySymbol)}: {CurrencySymbol}";
+            }
+        }
+    }
+
+    public struct OfframpAssetInfo
     {
         public OfframpAssetInfo(string address, string chain, int decimals, string name, string symbol, string type)
         {
@@ -12,10 +60,6 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
             Name = name;
             Symbol = symbol;
             Type = type;
-        }
-
-        public OfframpAssetInfo()
-        {
         }
 
         public string Address { get; set; }
@@ -31,62 +75,6 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
         {
             return
                 $"{nameof(Address)}: {Address}, {nameof(Chain)}: {Chain}, {nameof(Decimals)}: {Decimals}, {nameof(Name)}: {Name}, {nameof(Symbol)}: {Symbol}, {nameof(Type)}: {Type}";
-        }
-    }
-
-    public class OffRampSaleData
-    {
-        public string CreatedAt { get; set; }
-        public CryptoOffRamp Crypto { get; set; }
-        public FiatOffRamp Fiat { get; set; }
-        public Guid Id { get; set; }
-
-        public override string ToString()
-        {
-            return
-                $"{nameof(CreatedAt)}: {CreatedAt}, {nameof(Crypto)}: {Crypto}, {nameof(Fiat)}: {Fiat}, {nameof(Id)}: {Id}";
-        }
-
-        public class CryptoOffRamp
-        {
-            public CryptoOffRamp(string amount, OfframpAssetInfo assetInfo)
-            {
-                Amount = amount;
-                AssetInfo = assetInfo;
-            }
-
-            public CryptoOffRamp()
-            {
-            }
-
-            public string Amount { get; set; }
-            public OfframpAssetInfo AssetInfo { get; set; }
-
-            public override string ToString()
-            {
-                return $"{nameof(Amount)}: {Amount}, {nameof(AssetInfo)}: {AssetInfo}";
-            }
-        }
-
-        public class FiatOffRamp
-        {
-            public FiatOffRamp(double amount, string currencySymbol)
-            {
-                Amount = amount;
-                CurrencySymbol = currencySymbol;
-            }
-
-            public FiatOffRamp()
-            {
-            }
-
-            public double Amount { get; set; } // Using decimal for currency values in C#
-            public string CurrencySymbol { get; set; }
-
-            public override string ToString()
-            {
-                return $"{nameof(Amount)}: {Amount}, {nameof(CurrencySymbol)}: {CurrencySymbol}";
-            }
         }
     }
 }

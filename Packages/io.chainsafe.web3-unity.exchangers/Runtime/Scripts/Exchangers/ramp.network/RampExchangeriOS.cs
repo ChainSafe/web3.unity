@@ -18,6 +18,9 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
         private static readonly Dictionary<int, TaskCompletionSource<OffRampSaleData>> sellTaskMap = new();
         private static readonly Dictionary<int, TaskCompletionSource<RampTransactionData>> purchaseOrSellTaskMap = new();
 
+        public event Action<OnRampPurchaseData>? OnRampPurchaseCreated;
+        public event Action<OffRampSaleData>? OffRampSaleCreated;
+
         private readonly IRampExchangerConfig config;
         private readonly ISigner signer;
 
@@ -46,8 +49,10 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
             
             var tcs = new TaskCompletionSource<OnRampPurchaseData>();
             purchaseTaskMap.Add(requestId, tcs);
-            
-            return await tcs.Task;
+
+            var purchaseData = await tcs.Task;
+            OnRampPurchaseCreated?.Invoke(purchaseData);
+            return purchaseData;
         }
 
         public async Task<OffRampSaleData> SellCrypto(RampSellWidgetSettings settings)
@@ -65,8 +70,10 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
 
             var tcs = new TaskCompletionSource<OffRampSaleData>();
             sellTaskMap.Add(requestId, tcs);
-            
-            return await tcs.Task;
+
+            var saleData = await tcs.Task;
+            OffRampSaleCreated?.Invoke(saleData);
+            return saleData;
         }
 
         public async Task<RampTransactionData> BuyOrSellCrypto(RampBuyOrSellWidgetSettings settings)
@@ -86,7 +93,18 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
 
             var tcs = new TaskCompletionSource<RampTransactionData>();
             purchaseOrSellTaskMap.Add(requestId, tcs);
-            return await tcs.Task;
+            
+            var transactionData = await tcs.Task;
+            if (transactionData.IsPurchase)
+            {
+                OnRampPurchaseCreated?.Invoke(transactionData.PurchaseData!.Value);
+            }
+            else
+            {
+                OffRampSaleCreated?.Invoke(transactionData.SaleData!.Value);
+            }
+            
+            return transactionData;
         }
 
         #region iOS interop
@@ -142,7 +160,6 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
                 FinalTxHash = finalTxHash,
                 PaymentMethodType = paymentMethodType
             };
-            RampExchangerUniversal.OnRampPurchase?.Invoke(purchaseData);
             
             if (purchaseTaskMap.ContainsKey(requestId))
             {
@@ -200,8 +217,6 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
                 }
             };
             
-            RampExchangerUniversal.OffRampSale?.Invoke(saleData);
-            
             if (sellTaskMap.ContainsKey(requestId))
             {
                 var tcs = sellTaskMap[requestId];
@@ -214,7 +229,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
             {
                 var tcs = purchaseOrSellTaskMap[requestId];
                 purchaseOrSellTaskMap.Remove(requestId);
-                tcs.SetResult(new RampTransactionData { SellData = saleData });
+                tcs.SetResult(new RampTransactionData { SaleData = saleData });
                 return;
             }
             

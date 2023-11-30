@@ -10,9 +10,9 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
         private readonly IRampExchangerConfig config;
         private readonly ISigner signer;
 
-        public static Action<OnRampPurchaseData> OnRampPurchase;
-        public static Action<OffRampSaleData> OffRampSale;
-        
+        public event Action<OnRampPurchaseData> OnRampPurchaseCreated;
+        public event Action<OffRampSaleData> OffRampSaleCreated;
+
         private IRampExchanger platformImplementation;
 
         public RampExchangerUniversal(IRampExchangerConfig config, ISigner signer)
@@ -24,11 +24,15 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
         public ValueTask WillStartAsync()
         {
             platformImplementation = RampExchangerFactory.CreateRampExchanger(config, signer);
+            platformImplementation.OnRampPurchaseCreated += InvokeOnRampPurchaseCreated;
+            platformImplementation.OffRampSaleCreated += InvokeOffRampSaleCreated;
             return new ValueTask(Task.CompletedTask);
         }
 
         public ValueTask WillStopAsync()
         {
+            platformImplementation.OnRampPurchaseCreated -= InvokeOnRampPurchaseCreated;
+            platformImplementation.OffRampSaleCreated -= InvokeOffRampSaleCreated;
             platformImplementation = null;
             return new ValueTask(Task.CompletedTask);
         }
@@ -41,5 +45,11 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
         
         public Task<RampTransactionData> BuyOrSellCrypto(RampBuyOrSellWidgetSettings settings)
             => platformImplementation.BuyOrSellCrypto(settings);
+
+        private void InvokeOnRampPurchaseCreated(OnRampPurchaseData obj)
+            => OnRampPurchaseCreated?.Invoke(obj);
+
+        private void InvokeOffRampSaleCreated(OffRampSaleData obj)
+            => OffRampSaleCreated?.Invoke(obj);
     }
 }

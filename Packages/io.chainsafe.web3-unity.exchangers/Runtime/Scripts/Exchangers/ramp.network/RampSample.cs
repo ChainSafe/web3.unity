@@ -13,6 +13,7 @@ using UnityEngine.UI;
 // TODO move me to samples
 public class RampSample : MonoBehaviour
 {
+    public RampExchangerConfigSO Config;
     public Button OnRampButton;
     public Button OffRampButton;
     public Button OnRampOffRampButton;
@@ -21,17 +22,30 @@ public class RampSample : MonoBehaviour
     
     private async void Awake()
     {
+        // todo figure out how to handle login when other packages' samples were not loaded
+        web3 = await new Web3Builder(ProjectConfigUtilities.Load())
+            .Configure(services =>
+            {
+                services.UseUnityEnvironment();
+                services.UseRpcProvider();
+                services.UseWebGLWallet(); // todo use WalletConnect for other platforms (for all platforms probably)
+                services.UseRampExchanger(Config);
+            }).LaunchAsync();
         
         // Subscribe to buttons
         OnRampButton.onClick.AddListener(OnRampPressed);
         OffRampButton.onClick.AddListener(OffRampPressed);
         OnRampOffRampButton.onClick.AddListener(OnRampOffRampPressed);
-        web3 = Web3Accessor.Web3;
+        
+        // Subscribe to Ramp events
+        web3.RampExchanger().OnRampPurchaseCreated += data 
+            => Debug.Log($"On-Ramp purchase created {data.CryptoAmount} {data.Asset.Name}");
+        web3.RampExchanger().OffRampSaleCreated += data
+            => Debug.Log($"Off-Ramp sale created {data.Fiat.Amount:C} {data.Fiat.CurrencySymbol}");
     }
 
     private async void OnRampPressed()
     {
-        Debug.Log("OnRampPressed");
         // Show "Buy Crypto" widget
         var purchaseData = await web3.RampExchanger().BuyCrypto(
             new RampBuyWidgetSettings
@@ -48,7 +62,7 @@ public class RampSample : MonoBehaviour
                 SelectedCountryCode = "RS"
             });
         
-        Debug.Log($"OnRamp success! Response: {purchaseData}");
+        Debug.Log($"Purchase request: {purchaseData}");
     }
 
     private async void OffRampPressed()
@@ -57,8 +71,7 @@ public class RampSample : MonoBehaviour
         var saleData = await web3.RampExchanger().SellCrypto(
             new RampSellWidgetSettings
             {
-                // For more info on widget settings check https://docs.ramp.network/configuration 
-                // For more info on widget settings check https://docs.ramp.network/configuration 
+                // For more info on widget settings check https://docs.ramp.network/configuration
                 OfframpAsset = "SEPOLIA_ETH",
                 DefaultAsset = "SEPOLIA_ETH",
                 FiatCurrency = "EUR",
@@ -68,7 +81,7 @@ public class RampSample : MonoBehaviour
                 SelectedCountryCode = "RS"            
             });
         
-        Debug.Log($"OffRamp success! Response: {saleData}");
+        Debug.Log($"OffRamp: {saleData}");
     }
 
     private async void OnRampOffRampPressed()
