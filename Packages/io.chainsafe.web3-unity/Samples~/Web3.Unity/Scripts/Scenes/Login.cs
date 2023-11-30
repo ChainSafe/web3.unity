@@ -17,7 +17,7 @@ namespace Scenes
 {
     public abstract class Login : MonoBehaviour
     {
-        public string sceneToLoad { get; private set; }
+        [field:SerializeField] public string sceneToLoad { get; private set; }
 
         public static int LoginSceneIndex { get; private set; } = 0;
 
@@ -59,15 +59,7 @@ namespace Scenes
             LoginSceneIndex = SceneManager.GetActiveScene().buildIndex;
 
             // Attempt scene transition based on the login object sceneToLoad value
-            try
-            {
-                SceneManager.LoadScene(sceneToLoad);
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e);
-                throw;
-            }
+            SceneManager.LoadScene(sceneToLoad);
         }
 
         private void ConfigureCommonServices(IWeb3ServiceCollection services)
