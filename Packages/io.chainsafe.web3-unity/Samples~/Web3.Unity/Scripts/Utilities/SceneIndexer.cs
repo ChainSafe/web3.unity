@@ -21,7 +21,7 @@ public static class SceneIndexer
         TryAddEditorBuildSettingsScenes(PackageName, ScenesIndexedKey, new string[]
         {
             "SampleLogin.Unity",
-            "SampleMain.Unity",
+            "SampleMain.Unity"
         });
     }
 
