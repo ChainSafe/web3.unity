@@ -1,7 +1,7 @@
 {
     "name": "io.chainsafe.web3-unity.exchangers",
     "version": "1.0.0",
-    "displayName": "web3.unity SDK Fiat On/Off Ramp Exchangers",
+    "displayName": "web3.unity SDK Ramp Exchangers",
     "description": "This package contains different Fiat On/Off Ramp exchangers which you can use with our Gaming SDK",
     "license": "LGPL-3.0-only",
     "licensesUrl": "https://github.com/ChainSafe/web3.unity/blob/main/LICENSE",
