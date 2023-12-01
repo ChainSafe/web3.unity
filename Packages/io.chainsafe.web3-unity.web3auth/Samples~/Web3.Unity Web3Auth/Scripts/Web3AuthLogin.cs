@@ -32,7 +32,6 @@ public class Web3AuthLogin : Login
     [SerializeField] private string clientId;
     [SerializeField] private string redirectUri;
     [SerializeField] private Network network;
-    [SerializeField] private RampExchangerConfigScriptableObject RampConfig;
     [Header("UI")]
     [SerializeField] private List<ProviderAndButtonPair> providerAndButtonPairs;
 
@@ -114,7 +113,7 @@ public class Web3AuthLogin : Login
                 };
             }
 
-            services.UseWeb3AuthWallet(web3AuthConfig).UseRampExchanger(RampConfig);
+            services.UseWeb3AuthWallet(web3AuthConfig);
         });
     }
 }
