@@ -253,8 +253,8 @@
         "com.unity.nuget.newtonsoft-json": "3.0.2"
       }
     },
-    "io.chainsafe.web3-unity.exchangers": {
-      "version": "file:../../../Packages/io.chainsafe.web3-unity.exchangers",
+    "io.chainsafe.web3-unity.ramp": {
+      "version": "file:../../../Packages/io.chainsafe.web3-unity.ramp",
       "depth": 0,
       "source": "local",
       "dependencies": {
