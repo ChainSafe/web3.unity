@@ -27,7 +27,7 @@ namespace ChainSafe.Gaming.MetaMask.Unity
                 metaMaskController = controllerObj.GetComponent<MetaMaskController>();
             }
 
-            metaMaskController.Initialize();
+            metaMaskController.Initialize(logWriter);
         }
 
         public async ValueTask WillStartAsync()
