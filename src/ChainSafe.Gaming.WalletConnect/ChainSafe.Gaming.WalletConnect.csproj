@@ -6,13 +6,12 @@
     <PackageId>ChainSafe.Gaming.WalletConnect</PackageId>
     <EnableNETAnalyzers>True</EnableNETAnalyzers>
     <CodeAnalysisRuleSet>../../global.ruleset</CodeAnalysisRuleSet>
-    <RootNamespace>ChainSafe.Gaming.MetaMaskBrowserWallet</RootNamespace>
+    <RootNamespace>ChainSafe.Gaming.WalletConnect</RootNamespace>
     <Configurations>Debug;Release;Test</Configurations>
     <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ChainSafe.Gaming.Unity.ThirdParty\ChainSafe.Gaming.Unity.ThirdParty.csproj" />
     <ProjectReference Include="..\ChainSafe.Gaming\ChainSafe.Gaming.csproj" />
   </ItemGroup>
 
