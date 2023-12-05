@@ -6,7 +6,7 @@ namespace ChainSafe.Gaming.MetaMask
     {
         public Task<string> Connect();
 
-        public Task<string> Request<T>(T data, long? expiry = null);
+        public Task<T> Request<T>(string method, params object[] parameters);
 
         public Task Disconnect();
     }

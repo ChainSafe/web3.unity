@@ -1,7 +1,13 @@
+using System;
+using System.Collections;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Environment;
 using Nethereum.Hex.HexTypes;
+using Nethereum.JsonRpc.Client;
 using Nethereum.Unity.Metamask;
+using Nethereum.Unity.Rpc;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace ChainSafe.Gaming.MetaMask.Unity
@@ -12,9 +18,15 @@ namespace ChainSafe.Gaming.MetaMask.Unity
 
         private ILogWriter logger;
 
+        private string connectedAddress;
+
         public delegate void AccountConnected(string address);
 
+        public delegate void RequestCallback(string result);
+
         public event AccountConnected OnAccountConnected;
+
+        public event RequestCallback OnRequestCallback;
 
         public void Initialize(ILogWriter logWriter)
         {
@@ -31,9 +43,15 @@ namespace ChainSafe.Gaming.MetaMask.Unity
 
             void Connected(string address)
             {
-                if (!taskCompletionSource.TrySetResult(address))
+                connectedAddress = address;
+
+                if (!taskCompletionSource.TrySetResult(connectedAddress))
                 {
                     logger.LogError("Error setting connected account address.");
+                }
+                else
+                {
+                    logger.Log($"MetaMask successfully connected to address {connectedAddress}");
                 }
             }
 
@@ -54,6 +72,65 @@ namespace ChainSafe.Gaming.MetaMask.Unity
             return taskCompletionSource.Task;
         }
 
+        private IEnumerator Request<T>(RpcRequest data)
+        {
+            var rpcRequest = new UnityRpcRequest<T>(GetRpcRequestFactory());
+
+            yield return rpcRequest.SendRequest(data);
+
+            if (rpcRequest.Exception != null)
+            {
+                logger.LogError($"MetaMask Exception while making {data.Method} request {rpcRequest.Exception.Message}");
+
+                // Even if request fails we still need to callback so request task completion source result can be set.
+                InvokeRequestCallback(string.Empty);
+
+                throw rpcRequest.Exception;
+            }
+
+            string serializedResult = JsonConvert.SerializeObject(rpcRequest.Result);
+
+            logger.Log($"Successful {data.Method} JsonRPC response with result {serializedResult}");
+
+            InvokeRequestCallback(serializedResult);
+        }
+
+        public Task<T> Request<T>(string method, params object[] parameters)
+        {
+            var taskCompletionSource = new TaskCompletionSource<T>();
+
+            OnRequestCallback += RequestCallback;
+
+            void RequestCallback(string result)
+            {
+                if (string.IsNullOrEmpty(result))
+                {
+                    taskCompletionSource.SetException(new Web3Exception("No response received."));
+
+                    return;
+                }
+
+                taskCompletionSource.SetResult(JsonConvert.DeserializeObject<T>(result));
+            }
+
+            StartCoroutine(Request<T>(new RpcRequest(Configuration.DefaultRequestId, method, parameters)));
+
+            return taskCompletionSource.Task;
+        }
+
+        public IUnityRpcRequestClientFactory GetRpcRequestFactory()
+        {
+            if (MetamaskWebglInterop.IsMetamaskAvailable())
+            {
+                return new MetamaskWebglCoroutineRequestRpcClientFactory(connectedAddress);
+            }
+            else
+            {
+                DisplayError("Metamask is not available, please install it.");
+                return null;
+            }
+        }
+
         public void EthereumEnabled(string address)
         {
             logger.Log("Ethereum Enabled.");
@@ -72,6 +149,11 @@ namespace ChainSafe.Gaming.MetaMask.Unity
         private void InvokeAccountConnected(string address)
         {
             OnAccountConnected?.Invoke(address);
+        }
+
+        private void InvokeRequestCallback(string hash)
+        {
+            OnRequestCallback?.Invoke(hash);
         }
 
         public void NewAccountSelected(string address)

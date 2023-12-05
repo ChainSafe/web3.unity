@@ -26,7 +26,7 @@ public class MetaMaskLogin : Login
     {
         return web3Builder.Configure(services =>
         {
-            services.UseMetaMask();
+            services.UseMetaMask().UseMetaMaskSigner().UseMetaMaskTransactionExecutor();
         });
     }
 }

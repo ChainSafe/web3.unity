@@ -2,9 +2,8 @@ using System;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Environment;
-using Nethereum.Hex.HexTypes;
-using Nethereum.Unity.Metamask;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace ChainSafe.Gaming.MetaMask.Unity
 {
@@ -18,7 +17,14 @@ namespace ChainSafe.Gaming.MetaMask.Unity
         {
             this.logWriter = logWriter;
 
-            metaMaskController = UnityEngine.Object.FindObjectOfType<MetaMaskController>();
+            if (Application.isEditor || Application.platform != RuntimePlatform.WebGLPlayer)
+            {
+                this.logWriter.LogError("You need to build to WebGL platform to run Nethereum.Metamask.Unity");
+
+                return;
+            }
+
+            metaMaskController = Object.FindObjectOfType<MetaMaskController>();
 
             if (metaMaskController == null)
             {
@@ -27,14 +33,14 @@ namespace ChainSafe.Gaming.MetaMask.Unity
                 metaMaskController = controllerObj.GetComponent<MetaMaskController>();
             }
 
+            Object.DontDestroyOnLoad(metaMaskController.gameObject);
+
             metaMaskController.Initialize(logWriter);
         }
 
-        public async ValueTask WillStartAsync()
+        public ValueTask WillStartAsync()
         {
-            string address = await Connect();
-
-            logWriter.Log($"Connected to MetaMask account {address}");
+            return new ValueTask(Task.CompletedTask);
         }
 
         public async Task<string> Connect()
@@ -42,9 +48,9 @@ namespace ChainSafe.Gaming.MetaMask.Unity
             return await metaMaskController.Connect();
         }
 
-        public Task<string> Request<T>(T data, long? expiry = null)
+        public async Task<T> Request<T>(string method, params object[] parameters)
         {
-            throw new NotImplementedException();
+            return await metaMaskController.Request<T>(method, parameters);
         }
 
         public Task Disconnect()
