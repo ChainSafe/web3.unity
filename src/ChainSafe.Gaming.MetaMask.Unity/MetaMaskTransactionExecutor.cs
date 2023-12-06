@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
@@ -7,7 +6,6 @@ using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using ChainSafe.Gaming.Web3.Environment;
 using Nethereum.RPC.Eth.DTOs;
-using Newtonsoft.Json;
 
 namespace ChainSafe.Gaming.MetaMask.Unity
 {
@@ -35,11 +33,19 @@ namespace ChainSafe.Gaming.MetaMask.Unity
                 transaction.From = await signer.GetAddress();
             }
 
-            // Convert TransactionRequest into TransactionInput.
-            // Since both types are serializable by Json.Net we can serialize one type and deserialize it into the other.
-            string transactionJson = JsonConvert.SerializeObject(transaction);
-
-            TransactionInput transactionInput = JsonConvert.DeserializeObject<TransactionInput>(transactionJson);
+            TransactionInput transactionInput = new TransactionInput
+            {
+                From = transaction.From,
+                To = transaction.To,
+                Gas = transaction.GasLimit,
+                GasPrice = transaction.GasPrice,
+                MaxFeePerGas = transaction.MaxFeePerGas,
+                MaxPriorityFeePerGas = transaction.MaxPriorityFeePerGas,
+                Value = transaction.Value,
+                Data = transaction.Data ?? "0x",
+                Nonce = transaction.Nonce,
+                AccessList = transaction.AccessList,
+            };
 
             string hash = await metaMaskProvider.Request<string>("eth_sendTransaction", transactionInput);
 
