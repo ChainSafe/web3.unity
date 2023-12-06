@@ -33,14 +33,14 @@ namespace ChainSafe.Gaming.MetaMask.Unity
                 transaction.From = await signer.GetAddress();
             }
 
+            logWriter.Log($"fee stuff {transaction.MaxFeePerGas} {transaction.MaxPriorityFeePerGas}");
+
             TransactionInput transactionInput = new TransactionInput
             {
                 From = transaction.From,
                 To = transaction.To,
                 Gas = transaction.GasLimit,
                 GasPrice = transaction.GasPrice,
-                MaxFeePerGas = transaction.MaxFeePerGas,
-                MaxPriorityFeePerGas = transaction.MaxPriorityFeePerGas,
                 Value = transaction.Value,
                 Data = transaction.Data ?? "0x",
                 Nonce = transaction.Nonce,

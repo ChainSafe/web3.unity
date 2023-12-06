@@ -22,7 +22,7 @@ namespace ChainSafe.Gaming.MetaMask.Unity
 
         public delegate void AccountConnected(string address);
 
-        public delegate void RequestCallback(string result);
+        public delegate void RequestCallback(string requestGuid, string result);
 
         public event AccountConnected OnAccountConnected;
 
@@ -72,7 +72,7 @@ namespace ChainSafe.Gaming.MetaMask.Unity
             return taskCompletionSource.Task;
         }
 
-        private IEnumerator Request<T>(RpcRequest data)
+        private IEnumerator Request<T>(string requestGuid, RpcRequest data)
         {
             var rpcRequest = new UnityRpcRequest<T>(GetRpcRequestFactory());
 
@@ -83,7 +83,7 @@ namespace ChainSafe.Gaming.MetaMask.Unity
                 logger.LogError($"MetaMask Exception while making {data.Method} request {rpcRequest.Exception.Message}");
 
                 // Even if request fails we still need to callback so request task completion source result can be set.
-                InvokeRequestCallback(string.Empty);
+                InvokeRequestCallback(requestGuid, string.Empty);
 
                 throw rpcRequest.Exception;
             }
@@ -92,17 +92,24 @@ namespace ChainSafe.Gaming.MetaMask.Unity
 
             logger.Log($"Successful {data.Method} JsonRPC response with result {serializedResult}");
 
-            InvokeRequestCallback(serializedResult);
+            InvokeRequestCallback(requestGuid, serializedResult);
         }
 
         public Task<T> Request<T>(string method, params object[] parameters)
         {
+            string requestGuid = Guid.NewGuid().ToString();
+
             var taskCompletionSource = new TaskCompletionSource<T>();
 
             OnRequestCallback += RequestCallback;
 
-            void RequestCallback(string result)
+            void RequestCallback(string guid, string result)
             {
+                if (guid != requestGuid)
+                {
+                    return;
+                }
+
                 if (string.IsNullOrEmpty(result))
                 {
                     taskCompletionSource.SetException(new Web3Exception("No response received."));
@@ -113,7 +120,7 @@ namespace ChainSafe.Gaming.MetaMask.Unity
                 taskCompletionSource.SetResult(JsonConvert.DeserializeObject<T>(result));
             }
 
-            StartCoroutine(Request<T>(new RpcRequest(Configuration.DefaultRequestId, method, parameters)));
+            StartCoroutine(Request<T>(requestGuid, new RpcRequest(Configuration.DefaultRequestId, method, parameters)));
 
             return taskCompletionSource.Task;
         }
@@ -151,9 +158,9 @@ namespace ChainSafe.Gaming.MetaMask.Unity
             OnAccountConnected?.Invoke(address);
         }
 
-        private void InvokeRequestCallback(string hash)
+        private void InvokeRequestCallback(string requestGuid, string result)
         {
-            OnRequestCallback?.Invoke(hash);
+            OnRequestCallback?.Invoke(requestGuid, result);
         }
 
         public void NewAccountSelected(string address)
