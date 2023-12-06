@@ -9,6 +9,9 @@ using Nethereum.RPC.Eth.DTOs;
 
 namespace ChainSafe.Gaming.MetaMask.Unity
 {
+    /// <summary>
+    /// Implementation of <see cref="ITransactionExecutor"/> for Metamask.
+    /// </summary>
     public class MetaMaskTransactionExecutor : ITransactionExecutor, ILifecycleParticipant
     {
         private readonly ILogWriter logWriter;
@@ -17,6 +20,12 @@ namespace ChainSafe.Gaming.MetaMask.Unity
 
         private readonly ISigner signer;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MetaMaskTransactionExecutor"/> class.
+        /// </summary>
+        /// <param name="logWriter">Log Writer used for logging messages and errors.</param>
+        /// <param name="metaMaskProvider">Metamask provider that connects to Metamask and makes JsonRPC requests.</param>
+        /// <param name="signer">Signer for fetching address.</param>
         public MetaMaskTransactionExecutor(ILogWriter logWriter, IMetaMaskProvider metaMaskProvider, ISigner signer)
         {
             this.logWriter = logWriter;
@@ -26,6 +35,14 @@ namespace ChainSafe.Gaming.MetaMask.Unity
             this.signer = signer;
         }
 
+        /// <summary>
+        /// Implementation of <see cref="ITransactionExecutor.SendTransaction"/>.
+        /// Send a transaction using Metamask.
+        /// This prompts user to approve a transaction on Metamask.
+        /// </summary>
+        /// <param name="transaction">Transaction to send.</param>
+        /// <returns>Hash response of a successfully executed transaction.</returns>
+        /// <exception cref="Web3Exception">Throws Exception if executing transaction fails.</exception>
         public async Task<TransactionResponse> SendTransaction(TransactionRequest transaction)
         {
             if (string.IsNullOrEmpty(transaction.From))
@@ -60,8 +77,18 @@ namespace ChainSafe.Gaming.MetaMask.Unity
             return await metaMaskProvider.Request<TransactionResponse>("eth_getTransactionByHash", hash);
         }
 
+        /// <summary>
+        /// Implementation of <see cref="ILifecycleParticipant.WillStartAsync"/>.
+        /// Lifetime event method, called during initialization.
+        /// </summary>
+        /// <returns>async awaitable task.</returns>
         public ValueTask WillStartAsync() => new ValueTask(Task.CompletedTask);
 
+        /// <summary>
+        /// Implementation of <see cref="ILifecycleParticipant.WillStopAsync"/>.
+        /// Lifetime event method, called during <see cref="Web3.TerminateAsync"/>.
+        /// </summary>
+        /// <returns>async awaitable task.</returns>
         public ValueTask WillStopAsync() => new ValueTask(Task.CompletedTask);
     }
 }

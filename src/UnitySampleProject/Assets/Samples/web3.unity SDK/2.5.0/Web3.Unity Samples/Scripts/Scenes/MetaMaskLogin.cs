@@ -1,11 +1,14 @@
 using System.Collections;
-using System.Collections.Generic;
 using ChainSafe.Gaming.MetaMask.Unity;
 using ChainSafe.Gaming.Web3.Build;
 using Scenes;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Login using MetaMask.
+/// Only works for UnityWebGL build (not in editor).
+/// </summary>
 public class MetaMaskLogin : Login
 {
     [SerializeField] private Button loginButton;

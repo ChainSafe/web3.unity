@@ -7,12 +7,19 @@ using Object = UnityEngine.Object;
 
 namespace ChainSafe.Gaming.MetaMask.Unity
 {
+    /// <summary>
+    /// Concrete implementation of <see cref="IMetaMaskProvider"/>.
+    /// </summary>
     public class MetaMaskProvider : IMetaMaskProvider, ILifecycleParticipant
     {
         private readonly ILogWriter logWriter;
 
         private readonly MetaMaskController metaMaskController;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MetaMaskProvider"/> class.
+        /// </summary>
+        /// <param name="logWriter">Common Logger used for logging messages and errors.</param>
         public MetaMaskProvider(ILogWriter logWriter)
         {
             this.logWriter = logWriter;
@@ -24,6 +31,7 @@ namespace ChainSafe.Gaming.MetaMask.Unity
                 return;
             }
 
+            // Initialize Unity controller.
             metaMaskController = Object.FindObjectOfType<MetaMaskController>();
 
             if (metaMaskController == null)
@@ -35,32 +43,57 @@ namespace ChainSafe.Gaming.MetaMask.Unity
 
             Object.DontDestroyOnLoad(metaMaskController.gameObject);
 
-            metaMaskController.Initialize(logWriter);
+            metaMaskController.Initialize(this.logWriter);
         }
 
-        public ValueTask WillStartAsync()
-        {
-            return new ValueTask(Task.CompletedTask);
-        }
+        /// <summary>
+        /// Implementation of <see cref="ILifecycleParticipant.WillStartAsync"/>.
+        /// Lifetime event method, called during initialization.
+        /// </summary>
+        /// <returns>async awaitable task.</returns>
+        public ValueTask WillStartAsync() => new ValueTask(Task.CompletedTask);
 
+        /// <summary>
+        /// Implementation of <see cref="IMetaMaskProvider.Connect"/>.
+        /// Called to connect to MetaMask.
+        /// </summary>
+        /// <returns>Connected account.</returns>
         public async Task<string> Connect()
         {
+            logWriter.Log("Connecting from Metamask...");
+
             return await metaMaskController.Connect();
         }
 
+        /// <summary>
+        /// Make JsonRPC requests using MetaMask.
+        /// </summary>
+        /// <param name="method">JsonRPC method name.</param>
+        /// <param name="parameters">JsonRPC request parameters.</param>
+        /// <typeparam name="T">Type of response result.</typeparam>
+        /// <returns>Response result.</returns>
         public async Task<T> Request<T>(string method, params object[] parameters)
         {
             return await metaMaskController.Request<T>(method, parameters);
         }
 
+        /// <summary>
+        /// Disconnect from MetaMask.
+        /// </summary>
+        /// <returns>Awaitable disconnect task.</returns>
         public Task Disconnect()
         {
-            throw new NotImplementedException();
+            logWriter.Log("Disconnecting from Metamask...");
+
+            // Currently no API available from Nethereum.Unity.Metamask for disconnecting.
+            return Task.CompletedTask;
         }
 
-        public ValueTask WillStopAsync()
-        {
-            return new ValueTask(Task.CompletedTask);
-        }
+        /// <summary>
+        /// Implementation of <see cref="ILifecycleParticipant.WillStopAsync"/>.
+        /// Lifetime event method, called during Web3.TerminateAsync.
+        /// </summary>
+        /// <returns>async awaitable task.</returns>
+        public ValueTask WillStopAsync() => new ValueTask(Task.CompletedTask);
     }
 }

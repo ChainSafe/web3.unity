@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Web3;
@@ -7,61 +6,86 @@ using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.Client;
 using Nethereum.Unity.Metamask;
 using Nethereum.Unity.Rpc;
-using Newtonsoft.Json;
 using UnityEngine;
 
 namespace ChainSafe.Gaming.MetaMask.Unity
 {
+    /// <summary>
+    /// Controller script for connecting to MetaMask and making awaitable JsonRPC requests.
+    /// </summary>
     public class MetaMaskController : MonoBehaviour
     {
         private bool isInitialized;
 
+        /// Use this instead of <see cref="Debug"/>.
         private ILogWriter logger;
 
-        private string connectedAddress;
-
+        /// <summary>
+        /// Delegate for when MetaMask account is connected.
+        /// </summary>
         public delegate void AccountConnected(string address);
 
-        public delegate void RequestCallback(string requestGuid, string result);
+        /// <summary>
+        /// Delegate for when MetaMask JsonRPC request gets a callback.
+        /// </summary>
+        /// <typeparam name="T">Type for the response's result.</typeparam>
+        public delegate void ResponseCallback<T>(T result);
 
+        /// <summary>
+        /// Event invoked when MetaMask account is connected.
+        /// </summary>
         public event AccountConnected OnAccountConnected;
 
-        public event RequestCallback OnRequestCallback;
+        /// <summary>
+        /// Address of successfully connected account.
+        /// </summary>
+        public string ConnectedAddress { get; private set; }
 
+        /// <summary>
+        /// Initialize script with references.
+        /// </summary>
+        /// <param name="logWriter">Use to write logs. Use this instead of <see cref="Debug"/>.</param>
         public void Initialize(ILogWriter logWriter)
         {
             logger = logWriter;
         }
 
+        /// <summary>
+        /// Awaitable method that Connects to MetaMask.
+        /// </summary>
+        /// <returns>Connected account address.</returns>
         public Task<string> Connect()
         {
             var taskCompletionSource = new TaskCompletionSource<string>();
 
+            // Unsubscribe in case we're already subscribed from a previous login.
             OnAccountConnected -= Connected;
 
             OnAccountConnected += Connected;
 
+            // Callback for when we successfully connect.
             void Connected(string address)
             {
-                connectedAddress = address;
+                ConnectedAddress = address;
 
-                if (!taskCompletionSource.TrySetResult(connectedAddress))
+                if (!taskCompletionSource.TrySetResult(ConnectedAddress))
                 {
                     logger.LogError("Error setting connected account address.");
                 }
                 else
                 {
-                    logger.Log($"MetaMask successfully connected to address {connectedAddress}");
+                    logger.Log($"MetaMask successfully connected to address {ConnectedAddress}");
                 }
             }
 
+            // Connect to MetaMask.
             if (MetamaskWebglInterop.IsMetamaskAvailable())
             {
                 MetamaskWebglInterop.EnableEthereum(gameObject.name, nameof(EthereumEnabled), nameof(DisplayError));
             }
             else
             {
-                DisplayError("Metamask is not available, please install it.");
+                logger.LogError("Metamask is not available, please install it first.");
 
                 // Unsubscribe to event.
                 OnAccountConnected -= Connected;
@@ -72,9 +96,33 @@ namespace ChainSafe.Gaming.MetaMask.Unity
             return taskCompletionSource.Task;
         }
 
-        private IEnumerator Request<T>(string requestGuid, RpcRequest data)
+        /// <summary>
+        /// Awaitable Request method for making JsonRPC requests using MetaMask.
+        /// </summary>
+        /// <param name="method">JsonPRC method name.</param>
+        /// <param name="parameters">JsonRPC parameters.</param>
+        /// <typeparam name="T">Type for returned value on response.</typeparam>
+        /// <returns>Response result with type <see cref="T"/>.</returns>
+        public Task<T> Request<T>(string method, params object[] parameters)
         {
-            var rpcRequest = new UnityRpcRequest<T>(GetRpcRequestFactory());
+            var taskCompletionSource = new TaskCompletionSource<T>();
+
+            void ResponseCallback(T result)
+            {
+                if (!taskCompletionSource.TrySetResult(result))
+                {
+                    taskCompletionSource.SetException(new Web3Exception("Error setting response result."));
+                }
+            }
+
+            StartCoroutine(Request<T>(new RpcRequest(Configuration.DefaultRequestId, method, parameters), ResponseCallback));
+
+            return taskCompletionSource.Task;
+        }
+
+        private IEnumerator Request<T>(RpcRequest data, ResponseCallback<T> onResponse)
+        {
+            var rpcRequest = new UnityRpcRequest<T>(new MetamaskWebglCoroutineRequestRpcClientFactory(ConnectedAddress));
 
             yield return rpcRequest.SendRequest(data);
 
@@ -83,68 +131,30 @@ namespace ChainSafe.Gaming.MetaMask.Unity
                 logger.LogError($"MetaMask Exception while making {data.Method} request {rpcRequest.Exception.Message}");
 
                 // Even if request fails we still need to callback so request task completion source result can be set.
-                InvokeRequestCallback(requestGuid, string.Empty);
+                onResponse?.Invoke(default);
 
                 throw rpcRequest.Exception;
             }
 
-            string serializedResult = JsonConvert.SerializeObject(rpcRequest.Result);
+            logger.Log($"Successful {data.Method} JsonRPC response with result {rpcRequest.Result}");
 
-            logger.Log($"Successful {data.Method} JsonRPC response with result {serializedResult}");
-
-            InvokeRequestCallback(requestGuid, serializedResult);
+            onResponse?.Invoke(rpcRequest.Result);
         }
 
-        public Task<T> Request<T>(string method, params object[] parameters)
-        {
-            string requestGuid = Guid.NewGuid().ToString();
-
-            var taskCompletionSource = new TaskCompletionSource<T>();
-
-            OnRequestCallback += RequestCallback;
-
-            void RequestCallback(string guid, string result)
-            {
-                if (guid != requestGuid)
-                {
-                    return;
-                }
-
-                if (string.IsNullOrEmpty(result))
-                {
-                    taskCompletionSource.SetException(new Web3Exception("No response received."));
-
-                    return;
-                }
-
-                taskCompletionSource.SetResult(JsonConvert.DeserializeObject<T>(result));
-            }
-
-            StartCoroutine(Request<T>(requestGuid, new RpcRequest(Configuration.DefaultRequestId, method, parameters)));
-
-            return taskCompletionSource.Task;
-        }
-
-        public IUnityRpcRequestClientFactory GetRpcRequestFactory()
-        {
-            if (MetamaskWebglInterop.IsMetamaskAvailable())
-            {
-                return new MetamaskWebglCoroutineRequestRpcClientFactory(connectedAddress);
-            }
-            else
-            {
-                DisplayError("Metamask is not available, please install it.");
-                return null;
-            }
-        }
-
+        /// <summary>
+        /// Callback when MetaMask successfully connects to an account.
+        /// </summary>
+        /// <param name="address">Connected Address.</param>
         public void EthereumEnabled(string address)
         {
             logger.Log("Ethereum Enabled.");
 
             if (!isInitialized)
             {
+                // Subscribe to callbacks.
                 MetamaskWebglInterop.EthereumInit(gameObject.name, nameof(NewAccountSelected), nameof(ChainChanged));
+
+                // Get and log ChainId.
                 MetamaskWebglInterop.GetChainId(gameObject.name, nameof(ChainChanged), nameof(DisplayError));
 
                 isInitialized = true;
@@ -158,22 +168,28 @@ namespace ChainSafe.Gaming.MetaMask.Unity
             OnAccountConnected?.Invoke(address);
         }
 
-        private void InvokeRequestCallback(string requestGuid, string result)
-        {
-            OnRequestCallback?.Invoke(requestGuid, result);
-        }
-
+        /// <summary>
+        /// Callback when a new account is selected by user.
+        /// </summary>
+        /// <param name="address">New selected account address.</param>
         public void NewAccountSelected(string address)
         {
-            logger.Log("New Account Selected.");
+            logger.Log($"New Account with address {address} Selected.");
+
+            ConnectedAddress = address;
         }
 
+        /// <summary>
+        /// Callback when chain is changed on Network.
+        /// </summary>
+        /// <param name="chainId">New chain.</param>
         public void ChainChanged(string chainId)
         {
             logger.Log($"Selected Chain Id {new HexBigInteger(chainId).Value}.");
         }
 
-        public void DisplayError(string message)
+        // Callback for displaying an error if operation fails.
+        private void DisplayError(string message)
         {
             logger.LogError(message);
         }
