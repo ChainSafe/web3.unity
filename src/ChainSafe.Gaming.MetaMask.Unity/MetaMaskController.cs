@@ -70,7 +70,7 @@ namespace ChainSafe.Gaming.MetaMask.Unity
 
                 if (!taskCompletionSource.TrySetResult(ConnectedAddress))
                 {
-                    logger.LogError("Error setting connected account address.");
+                    taskCompletionSource.SetException(new Web3Exception("Error setting connected account address."));
                 }
                 else
                 {
