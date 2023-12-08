@@ -4,6 +4,7 @@ using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.InProcessSigner;
 using ChainSafe.Gaming.InProcessTransactionExecutor;
+using ChainSafe.Gaming.InProcessTransactionExecutor.Unity;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
@@ -57,7 +58,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
             var signerConfig = new InProcessSignerConfig { PrivateKey = privateKey };
             signer = new InProcessSigner(signerConfig);
 
-            transactionExecutor = new InProcessTransactionExecutor(signer, chainConfig, rpcProvider);
+            transactionExecutor = new InProcessTransactionExecutor(signer, chainConfig, rpcProvider, new RpcClientWrapper(chainConfig));
 
             void Web3Auth_OnLogin(Web3AuthResponse response)
             {
