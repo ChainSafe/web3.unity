@@ -123,7 +123,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
 
             var instance = gameObject.GetComponent<TWeb3Auth>();
             instance.Awake();
-            instance.setOptions(config.Web3AuthOptions);
+            instance.setOptions(config.Web3AuthOptions, config.RememberMe);
 
             return instance;
         }
