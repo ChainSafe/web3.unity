@@ -56,6 +56,9 @@ public class Web3Auth : MonoBehaviour
     private Web3Auth.Network network;
 
     private static readonly Queue<Action> _executionQueue = new Queue<Action>();
+    
+    private bool rememberMe;
+
 
     public void Awake()
     {
@@ -89,7 +92,7 @@ public class Web3Auth : MonoBehaviour
         authorizeSession("");
     }
 
-    public void setOptions(Web3AuthOptions web3AuthOptions)
+    public void setOptions(Web3AuthOptions web3AuthOptions, bool rememberMe = false)
     {
         JsonSerializerSettings settings = new JsonSerializerSettings
         {
@@ -98,6 +101,7 @@ public class Web3Auth : MonoBehaviour
         };
 
         this.web3AuthOptions = web3AuthOptions;
+        this.rememberMe = rememberMe;
 
         if (this.web3AuthOptions.redirectUrl != null)
             this.initParams["redirectUrl"] = this.web3AuthOptions.redirectUrl;
@@ -337,9 +341,10 @@ public class Web3Auth : MonoBehaviour
                 loginParams.dappShare = share;
             }
         }
-
+        
         request("start", loginParams);
     }
+
 
     public void logout(Dictionary<string, object> extraParams)
     {
@@ -540,6 +545,14 @@ public class Web3Auth : MonoBehaviour
             }
         ));
         return await createSessionResponse.Task;
+    }
+
+
+    private void OnDestroy()
+    {
+        if(rememberMe) return;
+        Debug.LogError("Destroying session ID");
+        KeyStoreManagerUtils.deletePreferencesData(KeyStoreManagerUtils.SESSION_ID);
     }
 
     public string getPrivKey()
