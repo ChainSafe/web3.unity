@@ -67,7 +67,7 @@ public class Web3AuthLogin : Login
             useProvider = false;
             rememberMe = true;
             Task loginTask = TryLogin();
-            Debug.Log("remembered me, logging in");
+            Debug.Log("Restoring existing Web3Auth session (Remember Me");
             yield return new WaitUntil(() => loginTask.IsCompleted);
         }
 #endif
