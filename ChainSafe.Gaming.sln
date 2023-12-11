@@ -39,8 +39,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.MetaMask",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.MetaMask.Unity", "src\ChainSafe.Gaming.MetaMask.Unity\ChainSafe.Gaming.MetaMask.Unity.csproj", "{AF45F008-6ABC-4F37-82BF-4814B7F15B30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.InProcessTransactionExecutor.Unity", "src\ChainSafe.Gaming.InProcessTransactionExecutor.Unity\ChainSafe.Gaming.InProcessTransactionExecutor.Unity.csproj", "{6D7CE8E6-90B1-4FBC-AB76-D7F3DB9E7469}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -131,12 +129,6 @@ Global
 		{AF45F008-6ABC-4F37-82BF-4814B7F15B30}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AF45F008-6ABC-4F37-82BF-4814B7F15B30}.Test|Any CPU.ActiveCfg = Debug|Any CPU
 		{AF45F008-6ABC-4F37-82BF-4814B7F15B30}.Test|Any CPU.Build.0 = Debug|Any CPU
-		{6D7CE8E6-90B1-4FBC-AB76-D7F3DB9E7469}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6D7CE8E6-90B1-4FBC-AB76-D7F3DB9E7469}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6D7CE8E6-90B1-4FBC-AB76-D7F3DB9E7469}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6D7CE8E6-90B1-4FBC-AB76-D7F3DB9E7469}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6D7CE8E6-90B1-4FBC-AB76-D7F3DB9E7469}.Test|Any CPU.ActiveCfg = Debug|Any CPU
-		{6D7CE8E6-90B1-4FBC-AB76-D7F3DB9E7469}.Test|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
