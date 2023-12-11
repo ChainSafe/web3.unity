@@ -39,6 +39,13 @@ public class Web3AuthLogin : Login
 
     private Provider selectedProvider;
 
+    private bool rememberMe;
+
+    public void SetRememberMe(bool rememberMe)
+    {
+        this.rememberMe = rememberMe;
+    }
+
     protected override IEnumerator Initialize()
     {
 #if UNITY_WEBGL && !UNITY_EDITOR
@@ -52,16 +59,25 @@ public class Web3AuthLogin : Login
             Task loginTask = TryLogin();
             
             yield return new WaitUntil(() => loginTask.IsCompleted);
+           
+        }
+#else
+        if (!string.IsNullOrEmpty(KeyStoreManagerUtils.getPreferencesData(KeyStoreManagerUtils.SESSION_ID)))
+        {
+            useProvider = false;
+            rememberMe = true;
+            Task loginTask = TryLogin();
+            Debug.Log("Restoring existing Web3Auth session (Remember Me");
+            yield return new WaitUntil(() => loginTask.IsCompleted);
         }
 #endif
-
-        // add provider buttons listeners
-        providerAndButtonPairs.ForEach(p => p.Button.onClick.AddListener(delegate
-        {
-            LoginWithWeb3Auth(p.Provider);
-        }));
+        
+            // add provider buttons listeners
+        providerAndButtonPairs.ForEach(p =>
+            p.Button.onClick.AddListener(delegate { LoginWithWeb3Auth(p.Provider); }));
 
         yield return null;
+        
     }
 
     private async void LoginWithWeb3Auth(Provider provider)
@@ -102,17 +118,18 @@ public class Web3AuthLogin : Login
                         defaultLanguage = Web3Auth.Language.en,
                         appName = "ChainSafe Gaming SDK",
                     }
-                }
+                },
+                RememberMe = rememberMe
             };
 
             if (useProvider)
             {
-                web3AuthConfig.LoginParams = new LoginParams
+                web3AuthConfig.LoginParams = new LoginParams()
                 {
                     loginProvider = selectedProvider
-                };
+                };   
             }
-
+            
             services.UseWeb3AuthWallet(web3AuthConfig);
         });
     }
