@@ -27,6 +27,7 @@ namespace ChainSafe.Gaming.WalletConnect
         /// </summary>
         /// <param name="walletConnectCustomProvider">Wallet Connect Provider that connects wallet and makes jsom RPC requests via Wallet Connect.</param>
         /// <param name="rpcProvider">Provider for getting transaction receipt.</param>
+        /// <param name="signer">Signer for fetching address.</param>
         public WalletConnectTransactionExecutor(IWalletConnectCustomProvider walletConnectCustomProvider, IRpcProvider rpcProvider, ISigner signer)
         {
             this.walletConnectCustomProvider = walletConnectCustomProvider;
