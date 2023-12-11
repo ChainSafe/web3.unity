@@ -155,7 +155,7 @@ namespace ChainSafe.Gaming.MetaMask.Unity
                 MetamaskWebglInterop.EthereumInit(gameObject.name, nameof(NewAccountSelected), nameof(ChainChanged));
 
                 // Get and log ChainId.
-                MetamaskWebglInterop.GetChainId(gameObject.name, nameof(ChainChanged), nameof(DisplayError));
+                MetamaskWebglInterop.GetChainId(gameObject.name, nameof(ChainSelected), nameof(DisplayError));
 
                 isInitialized = true;
             }
@@ -174,9 +174,7 @@ namespace ChainSafe.Gaming.MetaMask.Unity
         /// <param name="address">New selected account address.</param>
         public void NewAccountSelected(string address)
         {
-            logger.Log($"New Account with address {address} Selected.");
-
-            ConnectedAddress = address;
+            throw new Web3Exception($"{nameof(ChainSafe)} SDK doesn't support account switching during a single session.");
         }
 
         /// <summary>
@@ -184,6 +182,15 @@ namespace ChainSafe.Gaming.MetaMask.Unity
         /// </summary>
         /// <param name="chainId">New chain.</param>
         public void ChainChanged(string chainId)
+        {
+            throw new Web3Exception($"{nameof(ChainSafe)} SDK doesn't support chain switching during a single session.");
+        }
+
+        /// <summary>
+        /// Callback for GetChain.
+        /// </summary>
+        /// <param name="chainId">New chain.</param>
+        public void ChainSelected(string chainId)
         {
             logger.Log($"Selected Chain Id {new HexBigInteger(chainId).Value}.");
         }

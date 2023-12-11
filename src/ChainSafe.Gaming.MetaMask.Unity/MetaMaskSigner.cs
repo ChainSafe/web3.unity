@@ -32,7 +32,7 @@ namespace ChainSafe.Gaming.MetaMask.Unity
         /// <summary>
         /// Signer's public key/address.
         /// </summary>
-        public string Address { get; private set; }
+        private string Address { get; set; }
 
         /// <summary>
         /// Implementation of <see cref="ILifecycleParticipant.WillStartAsync"/>.
@@ -42,8 +42,6 @@ namespace ChainSafe.Gaming.MetaMask.Unity
         public async ValueTask WillStartAsync()
         {
             Address = await metaMaskProvider.Connect();
-
-            logWriter.Log($"Connected to MetaMask account {Address}");
         }
 
         /// <summary>
