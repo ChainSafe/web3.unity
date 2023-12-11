@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <LangVersion>9.0</LangVersion>
+        <PackageId>ChainSafe.Gaming.MetaMask.Unity</PackageId>
+        <EnableNETAnalyzers>True</EnableNETAnalyzers>
+        <CodeAnalysisRuleSet>../../global.ruleset</CodeAnalysisRuleSet>
+        <Configurations>Debug;Release;Test</Configurations>
+        <Platforms>AnyCPU</Platforms>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="../ChainSafe.Gaming.MetaMask/ChainSafe.Gaming.MetaMask.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="../../libs/Nethereum-UnityAOT/Nethereum.Unity.dll" />
+        <Reference Include="../../libs/Nethereum-UnityAOT/Nethereum.Unity.Metamask.dll" />
+        <Reference Include="../../libs/UnityEngine/UnityEngine.dll" />
+    </ItemGroup>
+
+</Project>
