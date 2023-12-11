@@ -128,15 +128,13 @@ namespace ChainSafe.Gaming.MetaMask.Unity
 
             if (rpcRequest.Exception != null)
             {
-                logger.LogError($"MetaMask Exception while making {data.Method} request {rpcRequest.Exception.Message}");
+                logger.LogError($"MetaMask Exception while making {data.Method} Json RPC request {rpcRequest.Exception.Message}");
 
                 // Even if request fails we still need to callback so request task completion source result can be set.
                 onResponse?.Invoke(default);
 
                 throw rpcRequest.Exception;
             }
-
-            logger.Log($"Successful {data.Method} JsonRPC response with result {rpcRequest.Result}");
 
             onResponse?.Invoke(rpcRequest.Result);
         }
@@ -147,15 +145,13 @@ namespace ChainSafe.Gaming.MetaMask.Unity
         /// <param name="address">Connected Address.</param>
         public void EthereumEnabled(string address)
         {
-            logger.Log("Ethereum Enabled.");
-
             if (!isInitialized)
             {
                 // Subscribe to callbacks.
                 MetamaskWebglInterop.EthereumInit(gameObject.name, nameof(NewAccountSelected), nameof(ChainChanged));
 
                 // Get and log ChainId.
-                MetamaskWebglInterop.GetChainId(gameObject.name, nameof(ChainChanged), nameof(DisplayError));
+                MetamaskWebglInterop.GetChainId(gameObject.name, nameof(ChainSelected), nameof(DisplayError));
 
                 isInitialized = true;
             }
@@ -174,9 +170,7 @@ namespace ChainSafe.Gaming.MetaMask.Unity
         /// <param name="address">New selected account address.</param>
         public void NewAccountSelected(string address)
         {
-            logger.Log($"New Account with address {address} Selected.");
-
-            ConnectedAddress = address;
+            throw new Web3Exception($"{nameof(ChainSafe)} SDK doesn't support account switching during a single session.");
         }
 
         /// <summary>
@@ -184,6 +178,15 @@ namespace ChainSafe.Gaming.MetaMask.Unity
         /// </summary>
         /// <param name="chainId">New chain.</param>
         public void ChainChanged(string chainId)
+        {
+            throw new Web3Exception($"{nameof(ChainSafe)} SDK doesn't support chain switching during a single session.");
+        }
+
+        /// <summary>
+        /// Callback for GetChain.
+        /// </summary>
+        /// <param name="chainId">New chain.</param>
+        public void ChainSelected(string chainId)
         {
             logger.Log($"Selected Chain Id {new HexBigInteger(chainId).Value}.");
         }
