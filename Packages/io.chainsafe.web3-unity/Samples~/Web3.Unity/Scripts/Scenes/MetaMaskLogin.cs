@@ -1,4 +1,5 @@
 using System.Collections;
+using ChainSafe.Gaming.MetaMask;
 using ChainSafe.Gaming.MetaMask.Unity;
 using ChainSafe.Gaming.Web3.Build;
 using Scenes;
