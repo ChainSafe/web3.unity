@@ -21,11 +21,5 @@ namespace ChainSafe.Gaming.MetaMask
         /// <typeparam name="T">Type of response's result.</typeparam>
         /// <returns>Response's result.</returns>
         public Task<T> Request<T>(string method, params object[] parameters);
-
-        /// <summary>
-        /// Disconnect from Metamask.
-        /// </summary>
-        /// <returns>Disconnect async Task.</returns>
-        public Task Disconnect();
     }
 }

@@ -7,7 +7,7 @@ using ChainSafe.Gaming.Web3.Core.Evm;
 using ChainSafe.Gaming.Web3.Environment;
 using Nethereum.RPC.Eth.DTOs;
 
-namespace ChainSafe.Gaming.MetaMask.Unity
+namespace ChainSafe.Gaming.MetaMask
 {
     /// <summary>
     /// Implementation of <see cref="ITransactionExecutor"/> for Metamask.
@@ -49,8 +49,6 @@ namespace ChainSafe.Gaming.MetaMask.Unity
             {
                 transaction.From = await signer.GetAddress();
             }
-
-            logWriter.Log($"fee stuff {transaction.MaxFeePerGas} {transaction.MaxPriorityFeePerGas}");
 
             TransactionInput transactionInput = new TransactionInput
             {

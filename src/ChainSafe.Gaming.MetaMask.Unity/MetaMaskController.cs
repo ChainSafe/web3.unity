@@ -128,15 +128,13 @@ namespace ChainSafe.Gaming.MetaMask.Unity
 
             if (rpcRequest.Exception != null)
             {
-                logger.LogError($"MetaMask Exception while making {data.Method} request {rpcRequest.Exception.Message}");
+                logger.LogError($"MetaMask Exception while making {data.Method} Json RPC request {rpcRequest.Exception.Message}");
 
                 // Even if request fails we still need to callback so request task completion source result can be set.
                 onResponse?.Invoke(default);
 
                 throw rpcRequest.Exception;
             }
-
-            logger.Log($"Successful {data.Method} JsonRPC response with result {rpcRequest.Result}");
 
             onResponse?.Invoke(rpcRequest.Result);
         }
@@ -147,8 +145,6 @@ namespace ChainSafe.Gaming.MetaMask.Unity
         /// <param name="address">Connected Address.</param>
         public void EthereumEnabled(string address)
         {
-            logger.Log("Ethereum Enabled.");
-
             if (!isInitialized)
             {
                 // Subscribe to callbacks.

@@ -78,18 +78,6 @@ namespace ChainSafe.Gaming.MetaMask.Unity
         }
 
         /// <summary>
-        /// Disconnect from MetaMask.
-        /// </summary>
-        /// <returns>Awaitable disconnect task.</returns>
-        public Task Disconnect()
-        {
-            logWriter.Log("Disconnecting from Metamask...");
-
-            // Currently no API available from Nethereum.Unity.Metamask for disconnecting.
-            return Task.CompletedTask;
-        }
-
-        /// <summary>
         /// Implementation of <see cref="ILifecycleParticipant.WillStopAsync"/>.
         /// Lifetime event method, called during Web3.TerminateAsync.
         /// </summary>

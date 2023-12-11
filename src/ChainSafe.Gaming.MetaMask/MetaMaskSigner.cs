@@ -1,14 +1,10 @@
-using System;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using ChainSafe.Gaming.Web3.Environment;
-using Nethereum.RPC.AccountSigning;
-using Nethereum.Unity.Rpc;
-using Newtonsoft.Json;
 
-namespace ChainSafe.Gaming.MetaMask.Unity
+namespace ChainSafe.Gaming.MetaMask
 {
     /// <summary>
     /// Implementation of <see cref="ISigner"/> for Metamask.
@@ -16,7 +12,6 @@ namespace ChainSafe.Gaming.MetaMask.Unity
     public class MetaMaskSigner : ISigner, ILifecycleParticipant
     {
         private readonly IMetaMaskProvider metaMaskProvider;
-        private readonly ILogWriter logWriter;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MetaMaskSigner"/> class.
@@ -26,7 +21,6 @@ namespace ChainSafe.Gaming.MetaMask.Unity
         public MetaMaskSigner(IMetaMaskProvider metaMaskProvider, ILogWriter logWriter)
         {
             this.metaMaskProvider = metaMaskProvider;
-            this.logWriter = logWriter;
         }
 
         /// <summary>
