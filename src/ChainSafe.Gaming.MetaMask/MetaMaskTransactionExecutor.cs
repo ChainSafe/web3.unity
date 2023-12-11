@@ -2,7 +2,6 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Web3;
-using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using ChainSafe.Gaming.Web3.Environment;
 using Nethereum.RPC.Eth.DTOs;
@@ -12,7 +11,7 @@ namespace ChainSafe.Gaming.MetaMask
     /// <summary>
     /// Implementation of <see cref="ITransactionExecutor"/> for Metamask.
     /// </summary>
-    public class MetaMaskTransactionExecutor : ITransactionExecutor, ILifecycleParticipant
+    public class MetaMaskTransactionExecutor : ITransactionExecutor
     {
         private readonly ILogWriter logWriter;
 
@@ -74,19 +73,5 @@ namespace ChainSafe.Gaming.MetaMask
 
             return await metaMaskProvider.Request<TransactionResponse>("eth_getTransactionByHash", hash);
         }
-
-        /// <summary>
-        /// Implementation of <see cref="ILifecycleParticipant.WillStartAsync"/>.
-        /// Lifetime event method, called during initialization.
-        /// </summary>
-        /// <returns>async awaitable task.</returns>
-        public ValueTask WillStartAsync() => new ValueTask(Task.CompletedTask);
-
-        /// <summary>
-        /// Implementation of <see cref="ILifecycleParticipant.WillStopAsync"/>.
-        /// Lifetime event method, called during <see cref="Web3.TerminateAsync"/>.
-        /// </summary>
-        /// <returns>async awaitable task.</returns>
-        public ValueTask WillStopAsync() => new ValueTask(Task.CompletedTask);
     }
 }

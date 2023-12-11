@@ -2,8 +2,9 @@ using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace ChainSafe.Gaming.MetaMask.Unity
+namespace ChainSafe.Gaming.MetaMask
 {
     /// <summary>
     /// <see cref="MetaMaskSigner"/> and <see cref="MetaMaskTransactionExecutor"/> extension methods.
@@ -35,7 +36,7 @@ namespace ChainSafe.Gaming.MetaMask.Unity
             collection.AssertServiceNotBound<ITransactionExecutor>();
 
             // wallet
-            collection.AddSingleton<ITransactionExecutor, ILifecycleParticipant, MetaMaskTransactionExecutor>();
+            collection.AddSingleton<ITransactionExecutor, MetaMaskTransactionExecutor>();
 
             return collection;
         }

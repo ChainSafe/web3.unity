@@ -1,6 +1,4 @@
-using System;
 using System.Threading.Tasks;
-using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Environment;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -10,7 +8,7 @@ namespace ChainSafe.Gaming.MetaMask.Unity
     /// <summary>
     /// Concrete implementation of <see cref="IMetaMaskProvider"/>.
     /// </summary>
-    public class MetaMaskProvider : IMetaMaskProvider, ILifecycleParticipant
+    public class MetaMaskProvider : IMetaMaskProvider
     {
         private readonly ILogWriter logWriter;
 
@@ -47,13 +45,6 @@ namespace ChainSafe.Gaming.MetaMask.Unity
         }
 
         /// <summary>
-        /// Implementation of <see cref="ILifecycleParticipant.WillStartAsync"/>.
-        /// Lifetime event method, called during initialization.
-        /// </summary>
-        /// <returns>async awaitable task.</returns>
-        public ValueTask WillStartAsync() => new ValueTask(Task.CompletedTask);
-
-        /// <summary>
         /// Implementation of <see cref="IMetaMaskProvider.Connect"/>.
         /// Called to connect to MetaMask.
         /// </summary>
@@ -76,12 +67,5 @@ namespace ChainSafe.Gaming.MetaMask.Unity
         {
             return await metaMaskController.Request<T>(method, parameters);
         }
-
-        /// <summary>
-        /// Implementation of <see cref="ILifecycleParticipant.WillStopAsync"/>.
-        /// Lifetime event method, called during Web3.TerminateAsync.
-        /// </summary>
-        /// <returns>async awaitable task.</returns>
-        public ValueTask WillStopAsync() => new ValueTask(Task.CompletedTask);
     }
 }
