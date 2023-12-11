@@ -5,22 +5,22 @@ using Nethereum.ABI.EIP712;
 using Nethereum.ABI.FunctionEncoding.Attributes;
 using Newtonsoft.Json;
 
-namespace ChainSafe.Gaming.WalletConnect.Models
+namespace ChainSafe.Gaming.Web3.Core.Evm
 {
     /// <summary>
-    /// Typed data model for signing typed data using Wallet Connect JsonRPC, see https://docs.walletconnect.com/advanced/rpc-reference/ethereum-rpc#eth_signtypeddata.
+    /// Typed data model for signing typed data using JsonRPC.
     /// </summary>
     /// <typeparam name="TStruct">Type of Data to be signed.</typeparam>
     [Serializable]
     [JsonObject(MemberSerialization.OptIn)]
-    public struct TypedDataModel<TStruct>
+    public struct SerializableTypedData<TStruct>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="TypedDataModel{TStruct}"/> struct.
+        /// Initializes a new instance of the <see cref="SerializableTypedData{TStruct}"/> struct.
         /// </summary>
         /// <param name="domain">Domain for Typed Data that's serializable by json.net.</param>
         /// <param name="message">Typed data to be signed.</param>
-        public TypedDataModel(SerializableDomain domain, TStruct message)
+        public SerializableTypedData(SerializableDomain domain, TStruct message)
         {
             Types = MemberDescriptionFactory.GetTypesMemberDescription(typeof(SerializableDomain), typeof(TStruct));
 
@@ -37,13 +37,13 @@ namespace ChainSafe.Gaming.WalletConnect.Models
         }
 
         /// <summary>
-        /// Member types for Wallet Connect used in json RPC params.
+        /// Member types used in json RPC params.
         /// </summary>
         [JsonProperty("types")]
         public Dictionary<string, MemberDescription[]> Types { get; private set; }
 
         /// <summary>
-        /// Primary type used for Wallet Connect in json RPC params.
+        /// Primary type used in json RPC params.
         /// </summary>
         [JsonProperty("primaryType")]
         public string PrimaryType { get; private set; }
