@@ -45,6 +45,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
         /// <returns>A <see cref="ValueTask"/> representing the asynchronous operation.</returns>
         public async ValueTask WillStartAsync()
         {
+            
             coreInstance = CreateCoreInstance();
             TaskCompletionSource<string> loginTcs = new();
             coreInstance.onLogin += Web3Auth_OnLogin;
@@ -78,7 +79,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
             await logoutTcs.Task;
 
             coreInstance.onLogout -= Web3Auth_OnLogout;
-            Object.Destroy(coreInstance);
+            Object.Destroy(coreInstance.gameObject);
 
             void Web3Auth_OnLogout()
             {
@@ -117,8 +118,8 @@ namespace ChainSafe.GamingSdk.Web3Auth
 
         private TWeb3Auth CreateCoreInstance()
         {
+            Debug.Log("Creating Core Instance");
             var gameObject = new GameObject("Web3Auth", typeof(TWeb3Auth));
-            gameObject.hideFlags = HideFlags.HideInHierarchy;
             Object.DontDestroyOnLoad(gameObject);
 
             var instance = gameObject.GetComponent<TWeb3Auth>();
