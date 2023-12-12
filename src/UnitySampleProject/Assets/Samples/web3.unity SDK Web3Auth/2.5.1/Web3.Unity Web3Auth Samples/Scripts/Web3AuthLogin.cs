@@ -48,6 +48,12 @@ public class Web3AuthLogin : Login
 
     protected override IEnumerator Initialize()
     {
+        //Always first add listeners.
+        providerAndButtonPairs.ForEach(p =>
+            p.Button.onClick.AddListener(delegate { LoginWithWeb3Auth(p.Provider); }));
+
+        yield return null;
+        
 #if UNITY_WEBGL && !UNITY_EDITOR
         Uri uri = new Uri(Application.absoluteURL);
 
@@ -73,10 +79,7 @@ public class Web3AuthLogin : Login
 #endif
         
             // add provider buttons listeners
-        providerAndButtonPairs.ForEach(p =>
-            p.Button.onClick.AddListener(delegate { LoginWithWeb3Auth(p.Provider); }));
 
-        yield return null;
         
     }
 

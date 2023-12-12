@@ -6,6 +6,16 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Samples/web3.unity SDK Web3Auth/2.5.2/Web3.Unity Web3Auth Samples/Scenes/SampleLogin
+      - Web3Auth.Unity
+    guid: 00000000000000000000000000000000
+  - enabled: 1
+    path: Assets/Samples/web3.unity SDK/2.5.4/Web3.Unity Samples/Scenes/SampleLogin.Unity
+    guid: 00000000000000000000000000000000
+  - enabled: 1
+    path: Assets/Samples/web3.unity SDK/2.5.4/Web3.Unity Samples/Scenes/SampleMain.Unity
+    guid: 00000000000000000000000000000000
+  - enabled: 1
     path: Assets/Samples/web3.unity SDK Web3Auth/2.5.1/Web3.Unity Web3Auth Samples/Scenes/SampleLogin
       - Web3Auth.unity
     guid: a8a8b501e594874448546e904e2437c5
