@@ -127,13 +127,21 @@ public class PlayerData
     [MenuItem("Tools/Open Persistent Data Path")]
     public static void OpenPersistentDataPath()
     {
-        ProcessStartInfo startInfo = new ProcessStartInfo
+        switch (Application.platform)
         {
-            Arguments = Application.persistentDataPath,
-            FileName = "explorer.exe",
-        };
-            
-        Process.Start(startInfo);
+            case RuntimePlatform.WindowsEditor:
+                Process.Start(Application.persistentDataPath);
+                break;
+            case RuntimePlatform.LinuxEditor:
+                Process.Start("xdg-open", Application.persistentDataPath);
+                break;
+            case RuntimePlatform.OSXEditor:
+                Process.Start("open", Application.persistentDataPath);
+                break;
+            default:
+                Debug.LogError($"Can't open on {Application.platform} Platform.");
+                break;
+        }
     }
 #endif
 }
