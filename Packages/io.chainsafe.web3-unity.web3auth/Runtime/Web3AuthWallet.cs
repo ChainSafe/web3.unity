@@ -63,6 +63,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
 
             void Web3Auth_OnLogin(Web3AuthResponse response)
             {
+                coreInstance.onLogin -= Web3Auth_OnLogin;
                 loginTcs.SetResult(response.privKey);
             }
         }
