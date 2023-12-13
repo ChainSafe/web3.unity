@@ -8,6 +8,7 @@ using ChainSafe.GamingSdk.Editor;
 using System.IO;
 using System.Text;
 using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.Web3.Analytics;
 
 /// <summary>
 /// Allows the developer to alter chain configuration via GUI
@@ -106,6 +107,7 @@ public class ChainSafeServerSettings : EditorWindow
         }
         GUILayout.Label("Reminder: Your ProjectID Must Be Valid To Save & Build With Our SDK. You Can Register For One On Our Website At Dashboard.Gaming.Chainsafe.io", EditorStyles.label);
     }
+    
 
     static async void ValidateProjectID(string projectID)
     {
@@ -116,6 +118,18 @@ public class ChainSafeServerSettings : EditorWindow
 #if UNITY_WEBGL
                 WriteNetworkFile();
 #endif
+                var project = ProjectConfigUtilities.Load();
+                CountlyAnalytics.Instance.CaptureEvent(new AnalyticsEvent()
+                {
+                    ChainId = project.ChainId,
+                    EventName = "Project ID Validated",
+                    Network = project.Network,
+                    PackageName = $"com.chainsafe.web3-unity",
+                    Rpc = project.Rpc,
+                    ProjectId = projectID,
+                    Version = CountlyAnalytics.Instance.AnalyticsVersion,
+                });
+                
             }
         }
         catch (Exception e)

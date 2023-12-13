@@ -1,9 +1,10 @@
-﻿using ChainSafe.Gaming.Unity;
+using ChainSafe.Gaming.Unity;
 using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core.Unity;
 using ChainSafe.Gaming.Web3.Environment;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace ChainSafe.Gaming.Web3.Unity
 {
@@ -16,7 +17,7 @@ namespace ChainSafe.Gaming.Web3.Unity
         /// <returns>Updated Service collection.</returns>
         public static IWeb3ServiceCollection UseUnityEnvironment(this IWeb3ServiceCollection services)
         {
-            services.UseApiAnalytics();
+            services.Replace(ServiceDescriptor.Singleton<IAnalyticsClient, CountlyAnalytics>());
             services.AddSingleton<Web3Environment>();
             services.AddSingleton<IMainThreadRunner, UnityDispatcherAdapter>();
             services.AddSingleton<IHttpClient, UnityHttpClient>();
