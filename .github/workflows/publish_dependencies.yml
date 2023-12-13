@@ -35,7 +35,7 @@ jobs:
           
           echo -e "DLLs Generated\n$(ls "$PUBLISH_PATH")"
           
-          export PACKAGE_DEPENDENCIES=${{ vars.PACKAGE_DEPENDENCIES }}
+          export PACKAGE_DEPENDENCIES=($(<${GITHUB_WORKSPACE}/.github/data/published_dependencies.txt))
           
           export DLL_META_FILE_TEMPLATE="${{ vars.DLL_META_FILE_TEMPLATE }}"
           
@@ -54,7 +54,7 @@ jobs:
             
             for dependency in "${dependencies[@]}"
             do
-              cp "$PUBLISH_PATH/$dependency.dll" "$PACKAGE_LIB_PATH"
+              cp "$PUBLISH_PATH/$dependency.dll" $PACKAGE_LIB_PATH
               if ! [ -f "$PACKAGE_LIB_PATH$dependency.dll.meta" ]; then
                 echo -e "${DLL_META_FILE_TEMPLATE/"[[assetGuid]]"/"$(uuidgen | tr -d '-')"}" >> "$PACKAGE_LIB_PATH$dependency.dll.meta"
               fi
