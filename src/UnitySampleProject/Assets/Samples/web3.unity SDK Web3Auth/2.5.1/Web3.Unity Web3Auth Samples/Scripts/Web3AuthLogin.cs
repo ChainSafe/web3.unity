@@ -90,7 +90,9 @@ public class Web3AuthLogin : Login
             useProvider = true;
         }
         selectedProvider = provider;
-
+    
+        //For webgl, we can't know what provider someone logged in with in TryLogin, because
+        //the page restarts, so as a quick fix doing it here.
         #if UNITY_WEBGL && !UNITY_EDITOR
         LogAnalytics(provider);
         #endif
