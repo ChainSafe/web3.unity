@@ -1,9 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using ChainSafe.Gaming.WalletConnect;
 using Newtonsoft.Json;
+#if UNITY_EDITOR
+using System.Diagnostics;
+using UnityEditor;
+#endif
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 /// <summary>
 /// Player Data that can be persisted through runtime and sessions in a PlayerData.json file.
@@ -14,17 +17,7 @@ public class PlayerData
 {
     #region Save & Load
 
-    private string Path
-    {
-        get
-        {
-            // save closer to assets when in editor
-            // more accessible
-            string directory = Application.isEditor ? Application.dataPath : Application.persistentDataPath;
-
-            return $"{System.IO.Path.Combine(directory, nameof(PlayerData))}.json";
-        }
-    }
+    private string Path => $"{System.IO.Path.Combine(Application.persistentDataPath, nameof(PlayerData))}.json";
 
     /// <summary>
     /// Singleton instance.
@@ -98,6 +91,8 @@ public class PlayerData
         Instance = new PlayerData();
 
         Save();
+        
+        Debug.Log($"{nameof(PlayerData)} cleared.");
     }
 
     #endregion
@@ -106,4 +101,47 @@ public class PlayerData
     /// Saved Wallet Connect Config used for restoring session (Remember Me) Implementation.
     /// </summary>
     [JsonProperty] public WalletConnectConfig WalletConnectConfig { get; set; }
+
+#if UNITY_EDITOR
+    [MenuItem("Tools/Player Data/Remove")]
+    public static void RemovePlayerData()
+    {
+        if (File.Exists(Instance.Path))
+        {
+            File.Delete(Instance.Path);
+        }
+        else
+        {
+            Debug.LogError($"{nameof(PlayerData)} not found at {Instance.Path}.");
+        }
+        
+        Debug.Log($"{nameof(PlayerData)} Removed.");
+    }
+    
+    [MenuItem("Tools/Player Data/Clear")]
+    public static void ClearPlayerData()
+    {
+        Clear();
+    }
+    
+    [MenuItem("Tools/Open Persistent Data Path")]
+    public static void OpenPersistentDataPath()
+    {
+        switch (Application.platform)
+        {
+            case RuntimePlatform.WindowsEditor:
+                Process.Start(Application.persistentDataPath);
+                break;
+            case RuntimePlatform.LinuxEditor:
+                Process.Start("xdg-open", Application.persistentDataPath);
+                break;
+            case RuntimePlatform.OSXEditor:
+                Process.Start("open", Application.persistentDataPath);
+                break;
+            default:
+                Debug.LogError($"Can't open on {Application.platform} Platform.");
+                break;
+        }
+    }
+#endif
 }

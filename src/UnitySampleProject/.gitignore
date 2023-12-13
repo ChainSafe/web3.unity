@@ -80,13 +80,6 @@ crashlytics-build.properties
 /Assets/WebGLTemplates
 /Assets/WebGLTemplates.meta
 
-# Ignore generated data files
-/Assets/PayerData.json
-/Assets/PayerData.json.meta
-
-/Assets/walletconnect.json
-/Assets/walletconnect.json.meta
-
 # Ignore the project config since it can always be rebuilt
 /Assets/Resources.meta
 /Assets/Resources/ProjectConfigData.asset
