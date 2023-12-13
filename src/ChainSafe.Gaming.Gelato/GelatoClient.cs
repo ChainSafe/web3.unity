@@ -29,6 +29,14 @@ namespace ChainSafe.GamingSdk.Gelato
             this.analyticsClient = analyticsClient;
             this.chainConfig = chainConfig;
             this.projectConfig = projectConfig;
+            analyticsClient.CaptureEvent(new AnalyticsEvent()
+            {
+                ChainId = chainConfig.ChainId,
+                Network = chainConfig.Network,
+                EventName = $"Gelato initialized",
+                ProjectId = projectConfig.ProjectId,
+                PackageName = "io.chainsafe.web3-unity",
+            });
         }
 
         /// <summary>

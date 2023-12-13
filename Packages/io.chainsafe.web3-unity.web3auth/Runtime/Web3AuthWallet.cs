@@ -6,6 +6,7 @@ using ChainSafe.Gaming.InProcessSigner;
 using ChainSafe.Gaming.InProcessTransactionExecutor;
 using ChainSafe.Gaming.InProcessTransactionExecutor.Unity;
 using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using Nethereum.Signer;
@@ -26,6 +27,8 @@ namespace ChainSafe.GamingSdk.Web3Auth
         private TWeb3Auth coreInstance;
         private InProcessSigner signer;
         private InProcessTransactionExecutor transactionExecutor;
+        private readonly IAnalyticsClient analyticsClient;
+        private readonly IProjectConfig projectConfig;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Web3AuthWallet"/> class.
@@ -33,11 +36,13 @@ namespace ChainSafe.GamingSdk.Web3Auth
         /// <param name="config">The configuration for the Web3Auth wallet.</param>
         /// <param name="chainConfig">The configuration for the target blockchain.</param>
         /// <param name="rpcProvider">The RPC provider for blockchain interaction.</param>
-        public Web3AuthWallet(Web3AuthWalletConfig config, IChainConfig chainConfig, IRpcProvider rpcProvider)
+        public Web3AuthWallet(Web3AuthWalletConfig config, IChainConfig chainConfig, IProjectConfig projectConfig, IRpcProvider rpcProvider, IAnalyticsClient analyticsClient)
         {
             this.config = config;
             this.chainConfig = chainConfig;
             this.rpcProvider = rpcProvider;
+            this.analyticsClient = analyticsClient;
+            this.projectConfig = projectConfig;
         }
 
         /// <summary>
@@ -47,6 +52,14 @@ namespace ChainSafe.GamingSdk.Web3Auth
         public async ValueTask WillStartAsync()
         {
             
+            analyticsClient.CaptureEvent(new AnalyticsEvent()
+            {
+                ChainId = chainConfig.ChainId,
+                Network = chainConfig.Network,
+                EventName = $"Web3Auth Initialized",
+                ProjectId = projectConfig.ProjectId,
+                PackageName = "io.chainsafe.web3-unity",
+            });
             coreInstance = CreateCoreInstance();
             TaskCompletionSource<string> loginTcs = new();
             coreInstance.onLogin += Web3Auth_OnLogin;

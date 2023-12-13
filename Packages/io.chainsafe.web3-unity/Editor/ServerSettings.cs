@@ -124,7 +124,7 @@ public class ChainSafeServerSettings : EditorWindow
                     ChainId = project.ChainId,
                     EventName = "Project ID Validated",
                     Network = project.Network,
-                    PackageName = $"com.chainsafe.web3-unity",
+                    PackageName = $"io.chainsafe.web3-unity",
                     Rpc = project.Rpc,
                     ProjectId = projectID,
                     Version = CountlyAnalytics.Instance.AnalyticsVersion,
