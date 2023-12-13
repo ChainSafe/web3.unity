@@ -1,5 +1,5 @@
 using System.Collections;
-#if UNITY_WEBGL
+#if UNITY_WEBGL && !UNITY_EDITOR
 using ChainSafe.Gaming.MetaMask;
 using ChainSafe.Gaming.MetaMask.Unity;
 #endif
