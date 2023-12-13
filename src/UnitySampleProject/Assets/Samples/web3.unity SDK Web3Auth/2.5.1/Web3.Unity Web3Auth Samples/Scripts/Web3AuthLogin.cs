@@ -91,7 +91,18 @@ public class Web3AuthLogin : Login
         }
         selectedProvider = provider;
 
+        #if UNITY_WEBGL && !UNITY_EDITOR
+        LogAnalytics(provider);
+        #endif
+        
         await TryLogin();
+        #if !UNITY_WEBGL || UNITY_EDITOR
+        LogAnalytics(provider);
+        #endif
+    }
+
+    private void LogAnalytics(Provider provider)
+    {
         IAnalyticsClient client = (IAnalyticsClient)Web3Accessor.Web3.ServiceProvider.GetService(typeof(IAnalyticsClient));
         client.CaptureEvent(new AnalyticsEvent()
         {
