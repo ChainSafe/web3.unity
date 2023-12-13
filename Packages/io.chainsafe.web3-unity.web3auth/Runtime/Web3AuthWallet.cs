@@ -58,7 +58,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
                 Network = chainConfig.Network,
                 EventName = $"Web3Auth Initialized",
                 ProjectId = projectConfig.ProjectId,
-                PackageName = "io.chainsafe.web3-unity",
+                PackageName = "io.chainsafe.web3-unity.web3auth",
             });
             coreInstance = CreateCoreInstance();
             TaskCompletionSource<string> loginTcs = new();

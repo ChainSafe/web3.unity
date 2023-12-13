@@ -18,7 +18,7 @@ namespace ChainSafe.Gaming.Web3.Analytics
             this.projectConfig = projectConfig;
         }
 
-        public string AnalyticsVersion => "2.5.4";
+        public string AnalyticsVersion => "2.5.5";
 
         public async void CaptureEvent(AnalyticsEvent eventData)
         {
