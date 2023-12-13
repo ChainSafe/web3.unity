@@ -9,8 +9,7 @@ public class CountlyAnalytics : IAnalyticsClient
     private const string AppKey = "9fad27b7383f5151a316505ca3245287fc44ba50";
     private const string ServerUrl = "https://trial-chainsafe.count.ly";
 
-    #if UNITY_EDITOR
-    //This is only used for editor analytics. 
+    
     private static CountlyAnalytics _instance;
 
     public static CountlyAnalytics Instance
@@ -21,7 +20,7 @@ public class CountlyAnalytics : IAnalyticsClient
             return _instance;
         }
     }
-    #endif
+ 
 
 
     public async void CaptureEvent(AnalyticsEvent eventData)
@@ -39,13 +38,11 @@ public class CountlyAnalytics : IAnalyticsClient
 
     public string AnalyticsVersion => "2.5.5";
 
-    //Have to initialize Countly as soon as possible 
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    private static void OnBeforeSceneLoaded()
+    public CountlyAnalytics()
     {
         InitializeCountly();
     }
-
+    
     public static void InitializeCountly()
     {
         if (!Countly.Instance.IsSDKInitialized)
@@ -58,9 +55,7 @@ public class CountlyAnalytics : IAnalyticsClient
 
             Countly.Instance.Init(config);
             Debug.Log("Countly initialized");
-            #if UNITY_EDITOR
             _instance = new CountlyAnalytics();
-            #endif
         }
     }
 }
