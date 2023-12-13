@@ -129,7 +129,7 @@ public class ChainSafeServerSettings : EditorWindow
                     ProjectId = projectID,
                     Version = CountlyAnalytics.Instance.AnalyticsVersion,
                 });
-                
+
             }
         }
         catch (Exception e)

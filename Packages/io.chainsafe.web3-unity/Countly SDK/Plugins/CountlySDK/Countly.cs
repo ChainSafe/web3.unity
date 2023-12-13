@@ -62,13 +62,16 @@ namespace Plugins.CountlySDK
                     }
                     else
                         _instance = obj;
-                    
-                    DontDestroyOnLoad(_instance.gameObject);
+
+                    if (Application.isPlaying)
+                    {
+                      DontDestroyOnLoad(_instance.gameObject);  
+                    }
                 }
 
                 return _instance;
-
             }
+            set => _instance = value;
         }
 
         /// <summary>
