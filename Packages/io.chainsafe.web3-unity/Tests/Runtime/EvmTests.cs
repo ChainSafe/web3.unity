@@ -171,7 +171,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestGetGasNonce()
     {
-        config.TestResponse = "0xaba88d9a1977c8d78ddfb3d973798eb061bd495189d7cbfa832f895896417cd1";
+        config.TestResponse = "0x04b6d6b467d4d07dd0d20c49516afedd1c4a17d4f13bc89b6e6c520890cea832";
         var getGasNonce = Evm.GetNonce(web3);
         yield return new WaitUntil(() => getGasNonce.IsCompleted);
         if (getGasNonce.Exception != null) throw getGasNonce.Exception;
