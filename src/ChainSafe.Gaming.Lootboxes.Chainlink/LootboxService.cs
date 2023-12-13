@@ -79,6 +79,7 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
                 PackageName = "io.chainsafe.web3-unity.lootboxes",
                 Version = analyticsClient.AnalyticsVersion,
             });
+
             // todo check if contract is correct
             this.contract = this.contractBuilder.Build(contractAbi, contractAddress);
 
