@@ -95,15 +95,7 @@ public class StringListSearchProvider : ScriptableObject, ISearchWindowProvider
     {
         onSetIndexCallback?.Invoke((string)SearchTreeEntry.userData);
         ChainSafeServerSettings instance = EditorWindow.GetWindow<ChainSafeServerSettings>();
-        if (instance != null)
-        {
-            instance.UpdateServerMenuInfo();
-        }
-        else
-        {
-            // Throw an exception when instance is null
-            throw new NullReferenceException("ChainSafeServerSettings instance is null. Cannot update server menu info.");
-        }
+        instance.UpdateServerMenuInfo();
         return true;
     }
     
