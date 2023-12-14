@@ -48,7 +48,6 @@ public class ChainSafeServerSettings : EditorWindow
     private List<ChainInfo.Root> chainList;
     private int selectedChainIndex;
     private int selectedRpcIndex;
-    private string customRpc;
 
     #endregion
 
@@ -167,9 +166,9 @@ public class ChainSafeServerSettings : EditorWindow
             SearchWindow.Open(new SearchWindowContext(GUIUtility.GUIToScreenPoint(Event.current.mousePosition)), searchProvider);
         }
         EditorGUILayout.EndHorizontal();
-        EditorGUILayout.TextField("Network: ",network);
-        EditorGUILayout.TextField("Chain ID: ",chainID);
-        EditorGUILayout.TextField("Symbol: ",symbol);
+        network = EditorGUILayout.TextField("Network: ",network);
+        chainID = EditorGUILayout.TextField("Chain ID: ",chainID);
+        symbol = EditorGUILayout.TextField("Symbol: ",symbol);
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.PrefixLabel("Select RPC");
         // Remove "https://" so the user doesn't have to click through 2 levels for the rpc options
@@ -189,7 +188,7 @@ public class ChainSafeServerSettings : EditorWindow
         }
         EditorGUILayout.EndHorizontal();
         // Allows for a custom rpc
-        customRpc = EditorGUILayout.TextField("RPC: ", rpc);
+        rpc = EditorGUILayout.TextField("RPC: ", rpc);
         GUILayout.Label("If you're using a custom RPC it will override the selection above", EditorStyles.boldLabel);
         
         // Buttons
