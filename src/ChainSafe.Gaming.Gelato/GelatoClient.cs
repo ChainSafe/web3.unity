@@ -29,14 +29,6 @@ namespace ChainSafe.GamingSdk.Gelato
             this.analyticsClient = analyticsClient;
             this.chainConfig = chainConfig;
             this.projectConfig = projectConfig;
-            analyticsClient.CaptureEvent(new AnalyticsEvent()
-            {
-                ChainId = chainConfig.ChainId,
-                Network = chainConfig.Network,
-                EventName = $"Gelato initialized",
-                ProjectId = projectConfig.ProjectId,
-                PackageName = "io.chainsafe.web3-unity",
-            });
         }
 
         /// <summary>
@@ -58,7 +50,7 @@ namespace ChainSafe.GamingSdk.Gelato
                 RelayCall.SponsoredCallErc2771 => $"{config.Url}/relays/v2/sponsored-call-erc2771",
                 _ => throw new Web3Exception("relayCall option not found")
             };
-            analyticsClient.CaptureEvent(new AnalyticsEvent()
+            await analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
                 ChainId = chainConfig.ChainId,
                 Network = chainConfig.Network,

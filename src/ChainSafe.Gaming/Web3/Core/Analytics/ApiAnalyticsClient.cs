@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using ChainSafe.Gaming.Web3.Environment;
 using Newtonsoft.Json;
 
@@ -20,7 +21,7 @@ namespace ChainSafe.Gaming.Web3.Analytics
 
         public string AnalyticsVersion => "2.5.5";
 
-        public async void CaptureEvent(AnalyticsEvent eventData)
+        public async Task CaptureEvent(AnalyticsEvent eventData)
         {
             eventData.ProjectId ??= projectConfig.ProjectId;
             eventData.ChainId ??= chainConfig.ChainId;

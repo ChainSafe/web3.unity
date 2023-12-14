@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using ChainSafe.Gaming.Web3.Analytics;
 using Plugins.CountlySDK;
 using Plugins.CountlySDK.Models;
@@ -10,20 +11,7 @@ public class CountlyAnalytics : IAnalyticsClient
     private const string ServerUrl = "https://trial-chainsafe.count.ly";
 
     
-    private static CountlyAnalytics _instance;
-
-    public static CountlyAnalytics Instance
-    {
-        get
-        {
-            if (_instance == null) InitializeCountly();
-            return _instance;
-        }
-    }
- 
-
-
-    public async void CaptureEvent(AnalyticsEvent eventData)
+    public async Task CaptureEvent(AnalyticsEvent eventData)
     {
         await Countly.Instance.Events.RecordEventAsync(eventData.EventName, new Dictionary<string, object>()
         {
@@ -33,7 +21,6 @@ public class CountlyAnalytics : IAnalyticsClient
             { "rpc ", eventData.Rpc},
             { "version", AnalyticsVersion},
         } );
-        Debug.Log($"Event captured {eventData.EventName}");
     }
 
     public string AnalyticsVersion => "2.5.5";
@@ -43,7 +30,7 @@ public class CountlyAnalytics : IAnalyticsClient
         InitializeCountly();
     }
     
-    public static void InitializeCountly()
+    private void InitializeCountly()
     {
         if (!Countly.Instance.IsSDKInitialized)
         {
@@ -55,7 +42,6 @@ public class CountlyAnalytics : IAnalyticsClient
 
             Countly.Instance.Init(config);
             Debug.Log("Countly initialized");
-            _instance = new CountlyAnalytics();
         }
     }
 }

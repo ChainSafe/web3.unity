@@ -119,7 +119,7 @@ public class ChainSafeServerSettings : EditorWindow
                 WriteNetworkFile();
 #endif
                 var project = ProjectConfigUtilities.Load();
-                CountlyAnalytics.Instance.CaptureEvent(new AnalyticsEvent()
+                /*CountlyAnalytics.Instance.CaptureEvent(new AnalyticsEvent()
                 {
                     ChainId = project.ChainId,
                     EventName = "Project ID Validated",
@@ -128,7 +128,7 @@ public class ChainSafeServerSettings : EditorWindow
                     Rpc = project.Rpc,
                     ProjectId = projectID,
                     Version = CountlyAnalytics.Instance.AnalyticsVersion,
-                });
+                });*/
 
             }
         }

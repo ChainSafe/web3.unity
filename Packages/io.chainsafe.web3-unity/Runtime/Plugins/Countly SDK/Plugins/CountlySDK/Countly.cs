@@ -52,21 +52,17 @@ namespace Plugins.CountlySDK
         public static Countly Instance
         {
             get {
-                if (_instance == null)
-                {
-                    var obj = FindObjectOfType<Countly>();
-                    if (obj == null)
-                    {
-                        GameObject gameObject = new GameObject("_countly");
-                        _instance = gameObject.AddComponent<Countly>();
-                    }
-                    else
-                        _instance = obj;
-                    
-                    if(Application.isPlaying)
-                        DontDestroyOnLoad(_instance.gameObject);
+                if (_instance == null) {
+
+                    GameObject gameObject = new GameObject("_countly");
+                    _instance = gameObject.AddComponent<Countly>();
                 }
+
                 return _instance;
+
+            }
+            internal set {
+                _instance = value;
             }
         }
 
@@ -136,7 +132,22 @@ namespace Plugins.CountlySDK
 
         private bool _logSubscribed;
         private PushCountlyService _push;
-        
+
+
+        /// <summary>
+        /// Initialize SDK at the start of your app
+        /// </summary>
+        private void Awake()
+        {
+            DontDestroyOnLoad(gameObject);
+            Instance = this;
+
+            //Auth and Config will not be null in case initializing through countly prefab
+            if (Auth != null && Config != null) {
+                Init(new CountlyConfiguration(Auth, Config));
+            }
+
+        }
 
         public void Init(CountlyConfiguration configuration)
         {
