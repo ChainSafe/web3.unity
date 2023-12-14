@@ -85,12 +85,14 @@ public class ChainSafeServerSettings : EditorWindow
         // Check if the selectedChainIndex is valid
         if (selectedChainIndex >= 0 && selectedChainIndex < chainList.Count)
         {
+            // Set chain values
             network = chainList[selectedChainIndex].chain;
             chainID = chainList[selectedChainIndex].chainId.ToString();
             symbol = chainList[selectedChainIndex].nativeCurrency.symbol;
             // Ensure that the selectedRpcIndex is within bounds
             selectedRpcIndex = Mathf.Clamp(selectedRpcIndex, 0, chainList[selectedChainIndex].rpc.Count - 1);
-            rpc = customRpc.IsNullOrEmpty() ? chainList[selectedChainIndex].rpc[selectedRpcIndex] : customRpc;
+            // Set the rpc
+            rpc = chainList[selectedChainIndex].rpc[selectedRpcIndex];
         }
         else
         {
@@ -150,6 +152,8 @@ public class ChainSafeServerSettings : EditorWindow
         // Inputs
         projectID = EditorGUILayout.TextField("Project ID", projectID);
         // Search menu
+        // Null check to stop the recursive loop before the web request has completed
+        if (chainList == null) return;
         // Set string array from chainList to pass into the menu
         string[] chainOptions = chainList.Select(x => x.name).ToArray();
         // Display the dynamically updating Popup
@@ -185,7 +189,8 @@ public class ChainSafeServerSettings : EditorWindow
         }
         EditorGUILayout.EndHorizontal();
         // Allows for a custom rpc
-        customRpc = EditorGUILayout.TextField("Custom RPC: ", "");
+        customRpc = EditorGUILayout.TextField("RPC: ", rpc);
+        GUILayout.Label("If you're using a custom RPC it will override the selection above", EditorStyles.boldLabel);
         
         // Buttons
         // Register
