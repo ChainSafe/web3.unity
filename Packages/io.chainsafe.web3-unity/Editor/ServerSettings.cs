@@ -43,7 +43,7 @@ public class ChainSafeServerSettings : EditorWindow
     // Search window
     private StringListSearchProvider searchProvider;
     private ISearchWindowProvider _searchWindowProviderImplementation;
-    public static UnityEvent onDropDownChange;
+    public  UnityEvent onDropDownChange;
     private int previousNetworkDropdownIndex;
     private List<ChainInfo.Root> chainList;
     private int selectedChainIndex;
@@ -77,7 +77,7 @@ public class ChainSafeServerSettings : EditorWindow
     /// <summary>
     /// Updates the values in the server settings area when an item is selected
     /// </summary>
-    private void UpdateServerMenuInfo()
+    public void UpdateServerMenuInfo()
     {
         // Get the selected chain index
         selectedChainIndex = Array.FindIndex(chainList.ToArray(), x => x.name == chain);
@@ -163,9 +163,9 @@ public class ChainSafeServerSettings : EditorWindow
             SearchWindow.Open(new SearchWindowContext(GUIUtility.GUIToScreenPoint(Event.current.mousePosition)), searchProvider);
         }
         EditorGUILayout.EndHorizontal();
-        EditorGUILayout.LabelField("Network: ",network);
-        EditorGUILayout.LabelField("Chain ID: ",chainID);
-        EditorGUILayout.LabelField("Symbol: ",symbol);
+        EditorGUILayout.TextField("Network: ",network);
+        EditorGUILayout.TextField("Chain ID: ",chainID);
+        EditorGUILayout.TextField("Symbol: ",symbol);
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.PrefixLabel("Select RPC");
         // Remove "https://" so the user doesn't have to click through 2 levels for the rpc options
