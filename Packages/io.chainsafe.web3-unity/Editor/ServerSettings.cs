@@ -23,11 +23,6 @@ public class ChainSafeServerSettings : EditorWindow
     
     // Default values
     private const string ProjectIdPrompt = "Please enter your project ID";
-    private const string ChainIdDefault = "11155111";
-    private const string ChainDefault = "Ethereum";
-    private const string NetworkDefault = "Sepolia";
-    private const string SymbolDefault = "Seth";
-    private const string RpcDefault = "https://rpc.sepolia.org";
     
     // Chain values
     private string projectID;
@@ -61,11 +56,11 @@ public class ChainSafeServerSettings : EditorWindow
         // Get saved settings or revert to default
         var projectConfig = ProjectConfigUtilities.Load();
         projectID = string.IsNullOrEmpty(projectConfig?.ProjectId) ? ProjectIdPrompt : projectConfig.ProjectId;
-        chainID = string.IsNullOrEmpty(projectConfig?.ChainId) ? ChainIdDefault : projectConfig.ChainId;
-        chain = string.IsNullOrEmpty(projectConfig?.Chain) ? ChainDefault : projectConfig.Chain;
-        network = string.IsNullOrEmpty(projectConfig?.Network) ? NetworkDefault : projectConfig.Network;
-        symbol = string.IsNullOrEmpty(projectConfig?.Symbol) ? SymbolDefault : projectConfig.Symbol;
-        rpc = string.IsNullOrEmpty(projectConfig?.Rpc) ? RpcDefault : projectConfig.Rpc;
+        chainID = projectConfig.ChainId;
+        chain = projectConfig.Chain;
+        network = projectConfig.Network;
+        symbol = projectConfig.Symbol;
+        rpc = projectConfig.Rpc;
         // Search menu
         onDropDownChange = new UnityEvent();
         onDropDownChange.AddListener(UpdateServerMenuInfo);
