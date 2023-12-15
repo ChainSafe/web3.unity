@@ -23,17 +23,19 @@ dir /b "%PUBLISH_PATH%"
 setlocal enabledelayedexpansion
 set "PACKAGE_DEPENDENCIES_FILE=%SCRIPT_DIR%\data\published_dependencies.txt"
 
-for /f "tokens=1,* delims=:" %%a in (%PACKAGE_DEPENDENCIES_FILE%) do (
-    set "PACKAGE_LIB_PATH=%SCRIPT_DIR%\..\%%a"
+for /f "usebackq tokens=*" %%a in (%PACKAGE_DEPENDENCIES_FILE%) do (
+    for /f "tokens=1,* delims=:" %%b in ('echo %%a') do (
+        set "PACKAGE_LIB_PATH=%SCRIPT_DIR%\..\%%b"
     
-    if exist "!PACKAGE_LIB_PATH!" (
-        del /q "!PACKAGE_LIB_PATH!\*.dll"
-    ) else (
-        mkdir "!PACKAGE_LIB_PATH!"
-    )
+        if exist "!PACKAGE_LIB_PATH!" (
+            del /q "!PACKAGE_LIB_PATH!\*.dll"
+        ) else (
+            mkdir "!PACKAGE_LIB_PATH!"
+        )
     
-    for %%d in (%%b) do (
-        copy "%PUBLISH_PATH%\%%d.dll" "!PACKAGE_LIB_PATH!"
+        for %%d in (%%c) do (
+            copy "%PUBLISH_PATH%\%%d.dll" "!PACKAGE_LIB_PATH!"
+        )
     )
 )
 

@@ -22,6 +22,9 @@ echo -e "DLLs Generated\n$(ls "$PUBLISH_PATH")"
 
 export PACKAGE_DEPENDENCIES=($(<$scripts_dir/data/published_dependencies.txt))
 
+PACKAGE_DEPENDENCIES="${PACKAGE_DEPENDENCIES//$'\n'/ }"
+PACKAGE_DEPENDENCIES="${PACKAGE_DEPENDENCIES//$'\r'/}"
+
 for entry in "${PACKAGE_DEPENDENCIES[@]}"
 do
   IFS=':' read -ra dirs <<< "$entry"
