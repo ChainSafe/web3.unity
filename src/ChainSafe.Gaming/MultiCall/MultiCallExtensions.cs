@@ -16,25 +16,12 @@ namespace ChainSafe.Gaming.MultiCall
         /// Binds implementation of MultiCall to Web3.
         /// </summary>
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
-        public static IWeb3ServiceCollection UseMultiCall(this IWeb3ServiceCollection collection, MultiCallConfig configuration)
-        {
-            collection.UseMultiCall();
-            collection.ConfigureMultiCall(configuration);
-            return collection;
-        }
-
-        /// <summary>
-        /// Binds implementation of MultiCall to Web3.
-        /// </summary>
-        /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
-        public static IWeb3ServiceCollection UseMultiCall(this IWeb3ServiceCollection collection)
+        public static IWeb3ServiceCollection UseMultiCall(this IWeb3ServiceCollection collection, MultiCallConfig configuration = null)
         {
             collection.AssertServiceNotBound<IMultiCall>();
 
-            // config
-            collection.TryAddSingleton(DefaultConfig);
+            collection.TryAddSingleton(configuration ?? DefaultConfig);
 
-            collection.AddSingleton<ILifecycleParticipant, IMultiCall, MultiCall>();
             return collection;
         }
 
