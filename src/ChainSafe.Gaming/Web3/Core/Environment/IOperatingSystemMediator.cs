@@ -15,6 +15,8 @@
 
         public Platform Platform { get; }
 
+        public string ApplicationDataPath { get; }
+
         public void OpenUrl(string url);
     }
 }

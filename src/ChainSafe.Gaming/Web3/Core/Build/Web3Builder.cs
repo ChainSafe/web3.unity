@@ -97,7 +97,6 @@ namespace ChainSafe.Gaming.Web3.Build
 
         private static void AssertWeb3EnvironmentBound(IServiceProvider serviceProvider)
         {
-            // TODO: test what happens when of environment components is not bound
             try
             {
                 serviceProvider.GetRequiredService<Web3Environment>();
@@ -105,7 +104,7 @@ namespace ChainSafe.Gaming.Web3.Build
             catch (InvalidOperationException e)
             {
                 var message = $"{nameof(Web3Environment)} is required for Web3 to work." +
-                              "Don't forget to bind it when building Web3.";
+                              "Don't forget to bind it when configuring your Web3 instance.";
                 throw new Web3BuildException(message, e);
             }
         }

@@ -7,7 +7,8 @@
     "licensesUrl": "https://github.com/ChainSafe/web3.unity/blob/main/LICENSE",
     "documentationUrl": "https://docs.gaming.chainsafe.io/",
     "dependencies": {
-        "com.unity.nuget.newtonsoft-json": "3.0.2"
+        "com.unity.nuget.newtonsoft-json": "3.0.2",
+        "com.unity.textmeshpro": "3.0.6"
     },
     "keywords": [
         "web3",

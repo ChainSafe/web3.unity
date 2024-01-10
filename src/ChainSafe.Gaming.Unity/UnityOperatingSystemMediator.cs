@@ -10,6 +10,8 @@ namespace ChainSafe.Gaming.Unity
 
         public Platform Platform => GetCurrentPlatform();
 
+        public string ApplicationDataPath => Application.persistentDataPath;
+
         /// <summary>
         /// Get current platform from <see cref="Application.platform"/> for Unity.
         /// </summary>

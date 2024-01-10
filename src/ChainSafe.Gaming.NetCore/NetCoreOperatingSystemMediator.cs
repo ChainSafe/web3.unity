@@ -19,6 +19,8 @@ namespace ChainSafe.Gaming.NetCore
         /// <exception cref="System.NotImplementedException">Not Implemented.</exception>
         public Platform Platform => throw new System.NotImplementedException();
 
+        public string ApplicationDataPath => throw new System.NotImplementedException();
+
         /// <summary>
         /// Open a Url using Http for .NetCore environment.
         /// </summary>

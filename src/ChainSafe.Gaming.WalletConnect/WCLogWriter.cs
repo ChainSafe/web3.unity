@@ -1,5 +1,4 @@
 using System;
-using ChainSafe.Gaming.Evm.Unity;
 using ChainSafe.Gaming.Web3.Environment;
 using ILogger = WalletConnectSharp.Common.Logging.ILogger;
 
@@ -25,18 +24,18 @@ namespace ChainSafe.Gaming.WalletConnect
         /// Log Message.
         /// </summary>
         /// <param name="message">Message to be logged.</param>
-        public void Log(string message) => logWriter.Log(message);
+        public void Log(string message) => logWriter.Log($"WalletConnect SDK: {message}");
 
         /// <summary>
         /// Log Error.
         /// </summary>
         /// <param name="message">Error message to be logged.</param>
-        public void LogError(string message) => logWriter.LogError(message);
+        public void LogError(string message) => logWriter.LogError($"WalletConnect SDK: {message}");
 
         /// <summary>
         /// Log Exception as Error.
         /// </summary>
         /// <param name="e">Exception to be logged.</param>
-        public void LogError(Exception e) => logWriter.LogError($"{e} {e.Message} {e.StackTrace}");
+        public void LogError(Exception e) => logWriter.LogError($"WalletConnect SDK: {e} {e.Message} {e.StackTrace}");
     }
 }
