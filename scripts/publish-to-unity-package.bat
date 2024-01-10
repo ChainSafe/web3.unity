@@ -11,32 +11,34 @@ dotnet restore
 dotnet publish -c release -f netstandard2.1 /property:Unity=true
 if %errorlevel% neq 0 exit /b %errorlevel%
 
-echo Restoring non-Unity packages...
+echo Moving files to Unity package...
 
 echo Moving files to Unity package...
 
-pushd bin\release\netstandard2.1\publish
-del Newtonsoft.Json.dll
-del UnityEngine.dll
+set "PUBLISH_PATH=bin\Release\netstandard2.1\publish"
 
-if exist "..\..\..\..\..\..\Packages\io.chainsafe.web3-unity.lootboxes" (
-    echo Directory exists, performing actions...
-    rmdir /s /q "..\..\..\..\..\..\Packages\io.chainsafe.web3-unity.lootboxes\Chainlink\Runtime\Libraries"
-    mkdir "..\..\..\..\..\..\Packages\io.chainsafe.web3-unity.lootboxes\Chainlink\Runtime\Libraries"
-    copy Chainsafe.Gaming.Chainlink.dll "..\..\..\..\..\..\Packages\io.chainsafe.web3-unity.lootboxes\Chainlink\Runtime\Libraries"
-    copy Chainsafe.Gaming.LootBoxes.Chainlink.dll "..\..\..\..\..\..\Packages\io.chainsafe.web3-unity.lootboxes\Chainlink\Runtime\Libraries"
-) else (
-    echo Directory does not exist, skipping actions.
+echo DLLs Generated
+dir /b "%PUBLISH_PATH%"
+
+setlocal enabledelayedexpansion
+set "PACKAGE_DEPENDENCIES_FILE=%SCRIPT_DIR%\data\published_dependencies.txt"
+
+for /f "usebackq tokens=*" %%a in (%PACKAGE_DEPENDENCIES_FILE%) do (
+    for /f "tokens=1,* delims=:" %%b in ('echo %%a') do (
+        set "PACKAGE_LIB_PATH=%SCRIPT_DIR%\..\%%b"
+    
+        if exist "!PACKAGE_LIB_PATH!" (
+            del /q "!PACKAGE_LIB_PATH!\*.dll"
+        ) else (
+            mkdir "!PACKAGE_LIB_PATH!"
+        )
+    
+        for %%d in (%%c) do (
+            copy "%PUBLISH_PATH%\%%d.dll" "!PACKAGE_LIB_PATH!"
+        )
+    )
 )
 
-del Chainsafe.Gaming.Chainlink.dll
-del Chainsafe.Gaming.LootBoxes.Chainlink.dll
-
-del Microsoft.CSharp.dll
-if not exist ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries mkdir ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries\
-del ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries\* /F /Q
-copy *.dll ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries
-popd
 popd
 
 echo Done

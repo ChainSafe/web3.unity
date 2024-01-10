@@ -16,26 +16,35 @@ dotnet restore
 
 echo Moving files to Unity package...
 
-pushd bin/release/netstandard2.1/publish
-rm Newtonsoft.Json.dll
-rm UnityEngine.dll
+export PUBLISH_PATH="bin/Release/netstandard2.1/publish"
 
-# Check if io.chainsafe.web3-unity.lootboxes directory exists
-if [ -d "../../../../../../Packages/io.chainsafe.web3-unity.lootboxes" ]; then
-    rm -rf ../../../../../../Packages/io.chainsafe.web3-unity.lootboxes/Chainlink/Runtime/Libraries
-    mkdir -p ../../../../../../Packages/io.chainsafe.web3-unity.lootboxes/Chainlink/Runtime/Libraries
-    cp Chainsafe.Gaming.Chainlink.dll ../../../../../../Packages/io.chainsafe.web3-unity.lootboxes/Chainlink/Runtime/Libraries
-    cp Chainsafe.Gaming.LootBoxes.Chainlink.dll ../../../../../../Packages/io.chainsafe.web3-unity.lootboxes/Chainlink/Runtime/Libraries
-fi
+echo -e "DLLs Generated\n$(ls "$PUBLISH_PATH")"
 
-# Delete those DLLs so they don't get copied in the next step
-rm Chainsafe.Gaming.Chainlink.dll
-rm Chainsafe.Gaming.LootBoxes.Chainlink.dll
+export PACKAGE_DEPENDENCIES=($(<$scripts_dir/data/published_dependencies.txt))
 
-rm Microsoft.CSharp.dll
-rm -rf ../../../../../../Packages/io.chainsafe.web3-unity/Runtime/Libraries
-mkdir -p ../../../../../../Packages/io.chainsafe.web3-unity/Runtime/Libraries
-cp *.dll ../../../../../../Packages/io.chainsafe.web3-unity/Runtime/Libraries
+PACKAGE_DEPENDENCIES="${PACKAGE_DEPENDENCIES//$'\n'/ }"
+PACKAGE_DEPENDENCIES="${PACKAGE_DEPENDENCIES//$'\r'/}"
+
+for entry in "${PACKAGE_DEPENDENCIES[@]}"
+do
+  IFS=':' read -ra dirs <<< "$entry"
+  
+  export PACKAGE_LIB_PATH=$scripts_dir/../${dirs[0]}
+  
+  if [ -d "$PACKAGE_LIB_PATH" ]; then
+    rm -f "$PACKAGE_LIB_PATH"*.dll
+  else
+    mkdir -p "$PACKAGE_LIB_PATH"
+  fi
+  
+  IFS=';' read -ra dependencies <<< "${dirs[1]}"
+  
+  for dependency in "${dependencies[@]}"
+  do
+    cp "$PUBLISH_PATH/$dependency.dll" $PACKAGE_LIB_PATH
+  done
+done
+
 popd
-popd
+
 echo Done
