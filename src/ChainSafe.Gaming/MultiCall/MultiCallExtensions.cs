@@ -22,6 +22,7 @@ namespace ChainSafe.Gaming.MultiCall
 
             collection.TryAddSingleton(configuration ?? DefaultConfig);
 
+            collection.AddSingleton<ILifecycleParticipant, IMultiCall, MultiCall>();
             return collection;
         }
 
