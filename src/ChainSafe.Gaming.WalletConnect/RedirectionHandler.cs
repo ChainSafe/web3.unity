@@ -112,16 +112,12 @@ namespace ChainSafe.Gaming.WalletConnect
             {
                 var universalUrl = linkData.UniversalUrl;
 
-                var pathUrl = universalUrl.Contains('?')
-                    ? universalUrl[.. universalUrl.IndexOf('?')]
-                    : universalUrl;
-
-                if (!pathUrl.EndsWith('/'))
+                if (!universalUrl.EndsWith('/'))
                 {
-                    pathUrl += '/';
+                    universalUrl += '/';
                 }
 
-                return pathUrl;
+                return universalUrl;
             }
         }
 
