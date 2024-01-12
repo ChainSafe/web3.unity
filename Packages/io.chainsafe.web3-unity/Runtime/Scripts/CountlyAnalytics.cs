@@ -33,6 +33,8 @@ public class CountlyAnalytics : IAnalyticsClient
 
     public CountlyAnalytics(IChainConfig chainConfig, IProjectConfig projectConfig)
     {
+        if(!Application.isEditor && Application.platform == RuntimePlatform.WebGLPlayer) return;
+
         if (!Countly.Instance.IsSDKInitialized)
         {
             var config = new CountlyConfiguration
