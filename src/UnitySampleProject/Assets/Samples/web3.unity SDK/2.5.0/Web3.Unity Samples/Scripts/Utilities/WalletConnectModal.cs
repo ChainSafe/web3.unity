@@ -1,3 +1,4 @@
+using System;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.WalletConnect;
 using Scenes;
@@ -42,12 +43,14 @@ public class WalletConnectModal : MonoBehaviour
 
     private static Color32[] Encode(string textForEncoding, int width, int height)
     {
-        var writer = new BarcodeWriter
-        {
-            Format = BarcodeFormat.QR_CODE,
-            Options = new QrCodeEncodingOptions { Height = height, Width = width }
-        };
-        return writer.Write(textForEncoding);
+        // var writer = new BarcodeWriter
+        // {
+        //     Format = BarcodeFormat.QR_CODE,
+        //     Options = new QrCodeEncodingOptions { Height = height, Width = width }
+        // };
+        // return writer.Write(textForEncoding);
+
+        throw new NotImplementedException();
     }
 
     private void GenerateQrCode(string text)
