@@ -31,12 +31,7 @@ public class CountlyAnalytics : IAnalyticsClient
     public IChainConfig ChainConfig { get; }
     public IProjectConfig ProjectConfig { get; }
 
-    public CountlyAnalytics()
-    {
-        InitializeCountly();
-    }
-    
-    private void InitializeCountly()
+    public CountlyAnalytics(IChainConfig chainConfig, IProjectConfig projectConfig)
     {
         if (!Countly.Instance.IsSDKInitialized)
         {
@@ -49,5 +44,9 @@ public class CountlyAnalytics : IAnalyticsClient
             Countly.Instance.Init(config);
             Debug.Log("Countly initialized");
         }
+
+        ChainConfig = chainConfig;
+        ProjectConfig = projectConfig;
     }
+    
 }
