@@ -9,6 +9,10 @@ namespace ChainSafe.Gaming.Web3.Analytics
     {
         public string AnalyticsVersion { get; }
 
+        IChainConfig ChainConfig { get; }
+
+        IProjectConfig ProjectConfig { get; }
+
         /// <summary>
         /// Captures an analytics event.
         /// </summary>

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Analytics;
 using Plugins.CountlySDK;
 using Plugins.CountlySDK.Models;
@@ -13,6 +14,9 @@ public class CountlyAnalytics : IAnalyticsClient
     
     public async Task CaptureEvent(AnalyticsEvent eventData)
     {
+        //We can't use countly on webGL.
+        if(!Application.isEditor && Application.platform == RuntimePlatform.WebGLPlayer) return;
+        
         await Countly.Instance.Events.RecordEventAsync(eventData.EventName, new Dictionary<string, object>()
         {
             { "chain", eventData.ChainId},
@@ -24,6 +28,8 @@ public class CountlyAnalytics : IAnalyticsClient
     }
 
     public string AnalyticsVersion => "2.5.5";
+    public IChainConfig ChainConfig { get; }
+    public IProjectConfig ProjectConfig { get; }
 
     public CountlyAnalytics()
     {

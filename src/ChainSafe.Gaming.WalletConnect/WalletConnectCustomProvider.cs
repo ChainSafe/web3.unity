@@ -31,8 +31,6 @@ namespace ChainSafe.Gaming.WalletConnect
         private readonly ILogWriter logWriter;
         private readonly WalletConnectConfig config;
         private readonly IAnalyticsClient analyticsClient;
-        private readonly IChainConfig chainConfig;
-        private readonly IProjectConfig projectConfig;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WalletConnectCustomProvider"/> class.
@@ -40,14 +38,12 @@ namespace ChainSafe.Gaming.WalletConnect
         /// <param name="config">Wallet connect configuration used to pass values to this provider.</param>
         /// <param name="operatingSystem">Operating system mediator used for passing platform information and opening a deeplink.</param>
         /// <param name="logWriter">Log writer used for logging messages to platform.</param>
-        public WalletConnectCustomProvider(WalletConnectConfig config, IOperatingSystemMediator operatingSystem, ILogWriter logWriter, IAnalyticsClient analyticsClient, IChainConfig chainConfig, IProjectConfig projectConfig)
+        public WalletConnectCustomProvider(WalletConnectConfig config, IOperatingSystemMediator operatingSystem, ILogWriter logWriter, IAnalyticsClient analyticsClient)
         {
             this.operatingSystem = operatingSystem;
             this.config = config;
             this.logWriter = logWriter;
-            this.chainConfig = chainConfig;
             this.analyticsClient = analyticsClient;
-            this.projectConfig = projectConfig;
         }
 
         /// <summary>
@@ -81,10 +77,10 @@ namespace ChainSafe.Gaming.WalletConnect
         {
             return new ValueTask(analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
-                ProjectId = projectConfig.ProjectId,
-                Network = chainConfig.Network,
-                ChainId = chainConfig.ChainId,
-                Rpc = chainConfig.Rpc,
+                ProjectId = analyticsClient.ProjectConfig.ProjectId,
+                Network = analyticsClient.ChainConfig.Network,
+                ChainId = analyticsClient.ChainConfig.ChainId,
+                Rpc = analyticsClient.ChainConfig.Rpc,
                 EventName = "Wallet Connect Initialized",
                 PackageName = "io.chainsafe.web3-unity",
                 Version = analyticsClient.AnalyticsVersion,
