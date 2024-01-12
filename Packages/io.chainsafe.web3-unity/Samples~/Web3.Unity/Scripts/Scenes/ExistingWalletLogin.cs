@@ -62,7 +62,7 @@ public class ExistingWalletLogin : Login
 
     private bool redirectToWallet;
 
-    private Dictionary<string, WalletConnectWalletModel> supportedWallets;
+    private Dictionary<string, WalletConnectWalletModel> supportedWallets = new Dictionary<string, WalletConnectWalletModel>();
 
     private WalletConnectConfig walletConnectConfig;
 
