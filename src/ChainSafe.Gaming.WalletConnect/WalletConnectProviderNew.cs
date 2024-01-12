@@ -130,7 +130,7 @@ namespace ChainSafe.Gaming.WalletConnect
 
             localData.SessionTopic = session.PairingTopic;
 
-            var connectedLocally = !string.IsNullOrEmpty(session.Peer.Metadata.Redirect.Native); // todo this probably doesn't work
+            var connectedLocally = session.Peer.Metadata.Redirect == null;
             if (connectedLocally)
             {
                 var sessionLocalWallet = GetSessionLocalWallet();
@@ -164,7 +164,7 @@ namespace ChainSafe.Gaming.WalletConnect
             return address;
         }
 
-        public async ValueTask Disconnect()
+        public async Task Disconnect()
         {
             if (!connected)
             {
@@ -318,18 +318,25 @@ namespace ChainSafe.Gaming.WalletConnect
 
         private WalletConnectWalletModel GetSessionLocalWallet()
         {
-            var nativeUrl = session.Peer.Metadata.Redirect.Native.Replace("//", string.Empty);
-            var dividerIndex = nativeUrl.IndexOf(':');
-            if (dividerIndex != -1)
-            {
-                nativeUrl = $"{nativeUrl[..dividerIndex]}:";
-            }
+            var nativeUrl = RemoveSlash(session.Peer.Metadata.Url);
+            // var dividerIndex = nativeUrl.IndexOf(':');
+            // if (dividerIndex != -1)
+            // {
+            //     nativeUrl = $"{nativeUrl[..dividerIndex]}:";
+            // }
 
             var sessionWallet = walletRegistry
                 .EnumerateSupportedWallets(osMediator.Platform)
-                .FirstOrDefault(w => w.Mobile.NativeProtocol == nativeUrl || w.Desktop.NativeProtocol == nativeUrl);
+                .FirstOrDefault(w => RemoveSlash(w.Homepage) == nativeUrl);
 
             return sessionWallet;
+
+            string RemoveSlash(string s)
+            {
+                return s.EndsWith('/') 
+                    ? s[..s.LastIndexOf('/')]
+                    : s;
+            }
         }
 
         private void TryRedirectToWallet()

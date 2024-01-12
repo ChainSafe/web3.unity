@@ -8,7 +8,8 @@ namespace ChainSafe.Gaming.WalletConnect
 
         Task<string> Connect();
 
-        ValueTask Disconnect();
+        Task Disconnect();
+
         Task<string> Request<T>(T data, long? expiry = null);
     }
 }

@@ -25,9 +25,9 @@ namespace ChainSafe.Gaming.WalletConnect
         }
 
         // todo Rework Web3Accessor to manage Web3's state and to ensure Web3.Terminate() is always called.
-        ValueTask ILifecycleParticipant.WillStopAsync()
+        async ValueTask ILifecycleParticipant.WillStopAsync()
         {
-            return provider.Disconnect();
+            await provider.Disconnect();
         }
 
         public Task<string> GetAddress() => Task.FromResult(address);

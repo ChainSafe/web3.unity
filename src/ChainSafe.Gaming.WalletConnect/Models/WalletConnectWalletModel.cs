@@ -1,4 +1,3 @@
-using System;
 using System.Web;
 using ChainSafe.Gaming.Web3.Environment;
 using Newtonsoft.Json;
@@ -12,11 +11,17 @@ namespace ChainSafe.Gaming.WalletConnect.Models
     /// </summary>
     public class WalletConnectWalletModel
     {
+        [JsonProperty("id")]
+        public string Id { get; private set; }
+
         /// <summary>
         /// Name of the wallet.
         /// </summary>
         [JsonProperty("name")]
         public string Name { get; private set; }
+
+        [JsonProperty("homepage")]
+        public string Homepage { get; private set; }
 
         /// <summary>
         /// <see cref="WalletLinkModel"/> for mobile platforms.
@@ -46,6 +51,7 @@ namespace ChainSafe.Gaming.WalletConnect.Models
             switch (operatingSystemMediator.Platform)
             {
                 case Platform.Android:
+                    // todo throw error
                     // Android OS should handle wc: protocol
                     break;
 
