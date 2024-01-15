@@ -137,7 +137,7 @@ namespace ChainSafe.Gaming.WalletConnect
                 RequiredNamespaces = requiredNamespaces,
             };
 
-            // if there's a saved session pair and continue with that session/connect automatically
+            // if there's a saved session pair, continue with that session/connect automatically
             bool autoConnect = !string.IsNullOrEmpty(config.SavedSessionTopic);
 
             if (autoConnect)
@@ -227,6 +227,7 @@ namespace ChainSafe.Gaming.WalletConnect
                 }
                 else
                 {
+                    // not registered in wallet connect registry
                     WCLogger.Log("Default Wallet Not Found in Supported Wallets");
                 }
             }
@@ -270,7 +271,7 @@ namespace ChainSafe.Gaming.WalletConnect
         /// <typeparam name="T">Request data type or params.</typeparam>
         /// <returns>Response string hash.</returns>
         /// <exception cref="Web3Exception">Exception thrown if request fails.</exception>
-        public async Task<string> Request<T>(T data, long? expiry = null)
+        public async Task<string> Request<T>(T data, long? expiry = null) // todo add constraint
         {
             // if testing skip making request
             if (config.Testing)
@@ -322,6 +323,10 @@ namespace ChainSafe.Gaming.WalletConnect
                         }
                     }, handler => Core.Relayer.Publisher.OnPublishedMessage += handler,
                     handler => Core.Relayer.Publisher.OnPublishedMessage -= handler);
+            }
+            else
+            {
+                // todo throw an exception here
             }
 
             return await SignClient.Request<T, string>(topic, data, chainId, expiry);
