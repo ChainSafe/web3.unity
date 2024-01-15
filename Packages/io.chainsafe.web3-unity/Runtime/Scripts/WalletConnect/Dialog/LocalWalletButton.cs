@@ -27,7 +27,18 @@ namespace ChainSafe.Gaming.WalletConnect.Dialog
             // Icon
             IconStub.gameObject.SetActive(true);
             Icon.gameObject.SetActive(false);
+
+            if (data.Images == null || string.IsNullOrEmpty(data.Images.SmallUrl))
+            {
+                return;
+            }
+            
             var icon = await DownloadIcon(data.Images.SmallUrl);
+            if (icon == null)
+            {
+                return;
+            }
+            
             Icon.sprite = icon;
             Icon.gameObject.SetActive(true);
             IconStub.gameObject.SetActive(false);
@@ -35,14 +46,21 @@ namespace ChainSafe.Gaming.WalletConnect.Dialog
 
         private static async Task<Sprite> DownloadIcon(string url)
         {
-            var iconRequest = UnityWebRequest.Get(url);
-            var downloadHandler = new DownloadHandlerTexture();
-            iconRequest.downloadHandler = downloadHandler;
-            await iconRequest.SendWebRequest();
-            var iconTexture = downloadHandler.texture;
-            var sprite = Sprite.Create(iconTexture, new Rect(0f, 0f, iconTexture.width, iconTexture.height),
-                Vector2.zero);
-            return sprite;
+            try
+            {
+                var iconRequest = UnityWebRequest.Get(url);
+                var downloadHandler = new DownloadHandlerTexture();
+                iconRequest.downloadHandler = downloadHandler;
+                await iconRequest.SendWebRequest();
+                var iconTexture = downloadHandler.texture;
+                var sprite = Sprite.Create(iconTexture, new Rect(0f, 0f, iconTexture.width, iconTexture.height),
+                    Vector2.zero);
+                return sprite;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }
