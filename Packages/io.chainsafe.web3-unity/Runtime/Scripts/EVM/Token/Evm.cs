@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.UnityPackage;
@@ -28,7 +29,7 @@ namespace Scripts.EVM.Token
 
         public static async Task<object[]> ContractCall(Web3 web3, string method, string abi, string contractAddress, object[] args)
         {
-            var contract = web3.ContractBuilder.Build(abi, contractAddress);
+            Contract contract = web3.ContractBuilder.Build(abi, contractAddress);
             return await contract.Call(method, args);
         }
 
