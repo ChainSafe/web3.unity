@@ -57,8 +57,6 @@ public class Web3AuthLogin : Login
 #if UNITY_WEBGL && !UNITY_EDITOR
         Uri uri = new Uri(Application.absoluteURL);
 
-        yield return new WaitForSeconds(0.2f);
-
         // make sure this load isn't redirected from Web3Auth a login
         if (!string.IsNullOrEmpty(uri.Fragment))
         {
@@ -95,9 +93,7 @@ public class Web3AuthLogin : Login
         
         
         await TryLogin();
-        #if !UNITY_WEBGL || UNITY_EDITOR
         LogAnalytics(provider);
-        #endif
     }
 
     private void LogAnalytics(Provider provider)
