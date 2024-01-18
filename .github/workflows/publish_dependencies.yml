@@ -35,7 +35,10 @@ jobs:
           
           echo -e "DLLs Generated\n$(ls "$PUBLISH_PATH")"
           
-          export PACKAGE_DEPENDENCIES=($(<${GITHUB_WORKSPACE}/.github/data/published_dependencies.txt))
+          export PACKAGE_DEPENDENCIES=($(<${GITHUB_WORKSPACE}/scripts/data/published_dependencies.txt))
+          
+          PACKAGE_DEPENDENCIES="${PACKAGE_DEPENDENCIES//$'\n'/ }"
+          PACKAGE_DEPENDENCIES="${PACKAGE_DEPENDENCIES//$'\r'/}"
           
           export DLL_META_FILE_TEMPLATE="${{ vars.DLL_META_FILE_TEMPLATE }}"
           
