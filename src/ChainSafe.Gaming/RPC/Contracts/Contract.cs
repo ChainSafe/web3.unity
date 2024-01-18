@@ -85,6 +85,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
             var function = contractBuilder.GetFunctionBuilder(method);
             var txReq = overwrite ?? new TransactionRequest();
             txReq.To ??= address;
+            txReq.From ??= await signer.GetAddress();
             txReq.Data ??= function.GetData(parameters);
 
             var result = await provider.Call(txReq);
