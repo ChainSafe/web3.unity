@@ -3,9 +3,9 @@ using UnityEngine;
 
 namespace ChainSafe.Gaming.WalletConnect.Dialog
 {
-    public abstract class ConnectionDialog : MonoBehaviour, IConnectionDialog
+    public abstract class ConnectionDialog : MonoBehaviour, IConnectionHandler
     {
-        public abstract Task ShowAndConnectUserWallet(ConnectionDialogConfig config);
-        public abstract void CloseDialog();
+        public abstract Task ConnectUserWallet(ConnectionDialogConfig config);
+        public abstract void Terminate();
     }
 }

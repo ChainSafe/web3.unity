@@ -67,7 +67,9 @@ namespace ChainSafe.Gaming.WalletConnect
 
             WCLogger.Logger = new WCLogWriter(logWriter);
 
-            localData = await storage.LoadLocalData() ?? new LocalData();
+            localData = !config.ForceNewSession
+                ? await storage.LoadLocalData() ?? new LocalData()
+                : new LocalData();
 
             core = new WalletConnectCore(new CoreOptions
             {
@@ -117,51 +119,57 @@ namespace ChainSafe.Gaming.WalletConnect
         {
             if (connected)
             {
-                throw new Web3Exception(
+                throw new WalletConnectException(
                     $"Tried connecting {nameof(WalletConnectProviderNew)}, but it's already been connected.");
             }
 
-            var connectOptions = new ConnectOptions { RequiredNamespaces = requiredNamespaces };
-            var sessionStored = !string.IsNullOrEmpty(localData.SessionTopic);
-
-            session = !sessionStored
-                ? await ConnectNewSession(connectOptions)
-                : await ConnectStoredSession(connectOptions);
-
-            localData.SessionTopic = session.PairingTopic;
-
-            var connectedLocally = session.Peer.Metadata.Redirect == null;
-            if (connectedLocally)
+            try
             {
-                var sessionLocalWallet = GetSessionLocalWallet();
-                localData.ConnectedLocalWalletName = sessionLocalWallet.Name;
-                WCLogger.Log($"\"{sessionLocalWallet.Name}\" set as locally connected wallet for current session.");
+                var sessionStored = !string.IsNullOrEmpty(localData.SessionTopic);
+
+                session = !sessionStored
+                    ? await ConnectSession()
+                    : await RestoreSession();
+
+                localData.SessionTopic = session.Topic;
+
+                var connectedLocally = session.Peer.Metadata.Redirect == null; // todo check if this works
+                if (connectedLocally)
+                {
+                    var sessionLocalWallet = GetSessionLocalWallet();
+                    localData.ConnectedLocalWalletName = sessionLocalWallet.Name;
+                    WCLogger.Log($"\"{sessionLocalWallet.Name}\" set as locally connected wallet for the current session.");
+                }
+                else
+                {
+                    localData.ConnectedLocalWalletName = null;
+                    WCLogger.Log("Remote wallet connected.");
+                }
+
+                if (config.RememberSession)
+                {
+                    await storage.SaveLocalData(localData);
+                }
+                else
+                {
+                    storage.ClearLocalData();
+                }
+
+                var address = GetPlayerAddress();
+
+                if (!AddressExtensions.IsPublicAddress(address))
+                {
+                    throw new Web3Exception("Public address provided by WalletConnect is not valid.");
+                }
+
+                connected = true;
+
+                return address;
             }
-            else
+            catch (Exception e)
             {
-                localData.ConnectedLocalWalletName = null;
+                throw new WalletConnectException("Error occured during WalletConnect connection process.", e);
             }
-
-            if (config.RememberSession)
-            {
-                await storage.SaveLocalData(localData);
-            }
-            else
-            {
-                // Clear stored data
-                storage.ClearLocalData();
-            }
-
-            var address = GetPlayerAddress();
-
-            if (!AddressExtensions.IsPublicAddress(address))
-            {
-                throw new Web3Exception("Public address provided by WalletConnect is not valid.");
-            }
-
-            connected = true;
-
-            return address;
         }
 
         public async Task Disconnect()
@@ -194,32 +202,40 @@ namespace ChainSafe.Gaming.WalletConnect
             }
         }
 
-        private async Task<SessionStruct> ConnectNewSession(ConnectOptions connectOptions)
+        private async Task<SessionStruct> ConnectSession()
         {
+            var connectOptions = new ConnectOptions { RequiredNamespaces = requiredNamespaces };
             var connectedData = await signClient.Connect(connectOptions);
-            var connectionDialog = await config.ConnectionDialogProvider.ProvideDialog();
+            var connectionHandler = await config.ConnectionHandlerProvider.ProvideHandler();
 
             try
             {
-                var osManageWalletSelection = OsManageWalletSelection;
-                var dialogTask = connectionDialog.ShowAndConnectUserWallet(new ConnectionDialogConfig
+                var dialogTask = connectionHandler.ConnectUserWallet(new ConnectionDialogConfig
                 {
                     ConnectRemoteWalletUri = connectedData.Uri,
-                    DelegateLocalWalletSelectionToOs = osManageWalletSelection,
-                    LocalWalletOptions = !osManageWalletSelection
-                        ? walletRegistry.EnumerateSupportedWallets(osMediator.Platform).ToList() // todo notify devs that some wallets don't work on Desktop
-                        : null,
+                    DelegateLocalWalletSelectionToOs = OsManageWalletSelection,
                     WalletLocationOptions = config.WalletLocationOptions,
-                    RedirectToWallet = walletName => redirection.RedirectConnection(connectedData.Uri, walletName),
-                    RedirectOsManaged = () => redirection.RedirectConnectionOsManaged(connectedData.Uri),
+
+                    LocalWalletOptions = !OsManageWalletSelection
+                        ? walletRegistry.EnumerateSupportedWallets(osMediator.Platform)
+                            .ToList() // todo notify devs that some wallets don't work on Desktop
+                        : null,
+
+                    RedirectToWallet = !OsManageWalletSelection
+                        ? walletName => redirection.RedirectConnection(connectedData.Uri, walletName)
+                        : null,
+
+                    RedirectOsManaged = OsManageWalletSelection
+                        ? () => redirection.RedirectConnectionOsManaged(connectedData.Uri)
+                        : null,
                 });
 
-                // awaiting dialog task to catch exceptions, actually awaiting only for approval
+                // awaiting handler task to catch exceptions, actually awaiting only for approval
                 await Task.WhenAny(dialogTask, connectedData.Approval);
             }
             finally
             {
-                connectionDialog.CloseDialog();
+                connectionHandler.Terminate();
             }
 
             var newSession = await connectedData.Approval;
@@ -229,15 +245,9 @@ namespace ChainSafe.Gaming.WalletConnect
             return newSession;
         }
 
-        private async Task<SessionStruct> ConnectStoredSession(ConnectOptions connectOptions)
+        private async Task<SessionStruct> RestoreSession()
         {
             var storedSession = signClient.Find(requiredNamespaces).First(s => s.Topic == localData.SessionTopic);
-            connectOptions.PairingTopic = storedSession.PairingTopic;
-            await signClient.Connect(connectOptions); // connect using existing session
-
-            // var connectedData = await signClient.Connect(connectOptions);
-            // OpenLocalWalletIfRegistered(); // todo do we need to approve anything in wallet in this case?
-            // await connectedData.Approval;
 
             if (SessionExpired(storedSession))
             {
@@ -259,7 +269,7 @@ namespace ChainSafe.Gaming.WalletConnect
             }
             catch (Exception e)
             {
-                throw new Web3Exception("Auto-renew session failed.", e);
+                throw new WalletConnectException("Auto-renew session failed.", e);
             }
 
             WCLogger.Log("Renewed session successfully.");
@@ -275,7 +285,7 @@ namespace ChainSafe.Gaming.WalletConnect
                 }
                 else
                 {
-                    throw new Web3Exception(
+                    throw new WalletConnectException(
                         $"Failed to perform {typeof(T)} request - session expired. Please reconnect.");
                 }
             }
@@ -285,7 +295,7 @@ namespace ChainSafe.Gaming.WalletConnect
 
             if (!methodRegistered)
             {
-                throw new Web3Exception(
+                throw new WalletConnectException(
                     "The method provided is not supported. " +
                     $"If you add a new method you have to update {nameof(WalletConnectProviderNew)} code to reflect those changes. " +
                     "Contact ChainSafe if you think a specific method should be included in the SDK.");
@@ -333,7 +343,7 @@ namespace ChainSafe.Gaming.WalletConnect
 
             string RemoveSlash(string s)
             {
-                return s.EndsWith('/') 
+                return s.EndsWith('/')
                     ? s[..s.LastIndexOf('/')]
                     : s;
             }

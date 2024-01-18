@@ -27,7 +27,7 @@ namespace ChainSafe.Gaming.WalletConnect
         }
 
         // Redirect for connection using the pre-selected wallet
-        public void RedirectConnection(string connectionUri, string walletName) // todo check what happens when calling on Android
+        public void RedirectConnection(string connectionUri, string walletName)
         {
             var walletData = walletRegistry.GetWallet(walletName);
             var deeplink = BuildConnectionDeeplink(walletData, connectionUri);
@@ -100,7 +100,7 @@ namespace ChainSafe.Gaming.WalletConnect
 
                 if (!nativeUrl.Contains(':'))
                 {
-                    throw new Web3Exception(
+                    throw new WalletConnectException(
                         $"Native protocol deeplink for {walletData.Name} had incorrect format: no \":\" symbol.");
                 }
 

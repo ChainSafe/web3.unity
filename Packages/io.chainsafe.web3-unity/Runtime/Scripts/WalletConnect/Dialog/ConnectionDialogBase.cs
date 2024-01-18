@@ -35,7 +35,7 @@ namespace ChainSafe.Gaming.WalletConnect.Dialog
         protected abstract void CreateQrCodeElement(QrCodeBuilder builder);
         protected abstract void ClearDynamicElements();
 
-        public override Task ShowAndConnectUserWallet(ConnectionDialogConfig config)
+        public override Task ConnectUserWallet(ConnectionDialogConfig config)
         {
             this.config = config;
         
@@ -81,7 +81,7 @@ namespace ChainSafe.Gaming.WalletConnect.Dialog
             return tcs.Task;
         }
 
-        public override void CloseDialog()
+        public override void Terminate()
         {
             if (!visible)
             {
@@ -96,7 +96,14 @@ namespace ChainSafe.Gaming.WalletConnect.Dialog
 
         protected void OpenLocalWalletOsManaged()
         {
-            config.RedirectOsManaged();
+            try
+            {
+                config.RedirectOsManaged();
+            }
+            catch (Exception e)
+            {
+                OnException(e);
+            }
         }
 
         protected void OnException(Exception e)

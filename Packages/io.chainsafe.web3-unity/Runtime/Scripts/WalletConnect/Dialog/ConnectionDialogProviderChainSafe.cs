@@ -10,15 +10,15 @@ namespace ChainSafe.Gaming.WalletConnect.Dialog
     
         private ConnectionDialog loadedDialog;
         
-        public override Task<IConnectionDialog> ProvideDialog()
+        public override Task<IConnectionHandler> ProvideHandler()
         {
             if (loadedDialog != null)
             {
-                return Task.FromResult((IConnectionDialog)loadedDialog);
+                return Task.FromResult((IConnectionHandler)loadedDialog);
             }
 
             loadedDialog = Instantiate(DialogPrefab);
-            return Task.FromResult((IConnectionDialog)loadedDialog);
+            return Task.FromResult((IConnectionHandler)loadedDialog);
         }
     }
 }

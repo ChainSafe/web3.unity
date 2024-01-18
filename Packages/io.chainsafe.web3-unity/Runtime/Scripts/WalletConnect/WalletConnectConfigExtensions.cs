@@ -9,5 +9,11 @@ namespace ChainSafe.Gaming.WalletConnect
             config.RememberSession = rememberSession;
             return config;
         }
+        
+        public static WalletConnectConfigSO WithForceNewSession(this WalletConnectConfigSO config, bool forceNewSession)
+        {
+            config.ForceNewSession = forceNewSession;
+            return config;
+        }
     }
 }

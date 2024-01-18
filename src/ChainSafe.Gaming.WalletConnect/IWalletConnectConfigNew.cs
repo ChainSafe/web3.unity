@@ -9,6 +9,8 @@ namespace ChainSafe.Gaming.WalletConnect
     {
         public bool RememberSession { get; }
 
+        public bool ForceNewSession { get; } // todo remove?
+
         bool AutoRenewSession { get; }
 
         string ProjectName { get; }
@@ -29,7 +31,7 @@ namespace ChainSafe.Gaming.WalletConnect
 
         WalletLocationOptions WalletLocationOptions { get; }
 
-        IConnectionDialogProvider ConnectionDialogProvider { get; }
+        IConnectionHandlerProvider ConnectionHandlerProvider { get; }
 
         string? OverrideRegistryUri { get; }
     }
