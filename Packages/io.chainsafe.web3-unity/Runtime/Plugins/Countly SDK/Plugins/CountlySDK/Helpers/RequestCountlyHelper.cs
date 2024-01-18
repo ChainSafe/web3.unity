@@ -133,12 +133,20 @@ namespace Plugins.CountlySDK.Helpers
         /// <returns></returns>
         internal async Task<CountlyResponse> GetAsync(string uri, string data)
         {
-
             Log.Verbose("[RequestCountlyHelper] GetAsync request: " + uri + " params: " + data);
 
             CountlyResponse countlyResponse = new CountlyResponse();
             string query = AddChecksum(data);
             string url = uri + query;
+
+#if !UNITY_EDITOR && UNITY_WEBGL
+    using (UnityWebRequest webRequest = UnityWebRequest.Get(url)) {
+        await webRequest.SendWebRequest();
+        countlyResponse.Data = webRequest.downloadHandler.text;
+        countlyResponse.StatusCode = (int)webRequest.responseCode;
+        countlyResponse.IsSuccess = webRequest.isDone && !webRequest.isHttpError && !webRequest.isNetworkError;
+    }
+#else
             try {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
                 using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync()) {
@@ -152,30 +160,37 @@ namespace Plugins.CountlySDK.Helpers
                         countlyResponse.Data = res;
                         countlyResponse.StatusCode = code;
                         countlyResponse.IsSuccess = body.ContainsKey("result");
-
                     }
-
                 }
             } catch (WebException ex) {
-                countlyResponse.ErrorMessage = ex.Message;
-                if (ex.Response != null) {
-                    HttpWebResponse response = (HttpWebResponse)ex.Response;
-                    int code = (int)response.StatusCode;
-                    using (Stream stream = ex.Response.GetResponseStream())
-                    using (StreamReader reader = new StreamReader(stream)) {
-                        string res = await reader.ReadToEndAsync();
-                        countlyResponse.StatusCode = code;
-                        countlyResponse.IsSuccess = false;
-                        countlyResponse.Data = res;
-                    }
-                }
-
+                countlyResponse =  await HandleWebException(ex, countlyResponse);
             }
+#endif
 
             Log.Verbose("[RequestCountlyHelper] GetAsync request: " + url + " params: " + query + " response: " + countlyResponse.ToString());
 
             return countlyResponse;
         }
+
+        
+        private async Task<CountlyResponse> HandleWebException(WebException ex,  CountlyResponse countlyResponse)
+        {
+            countlyResponse.ErrorMessage = ex.Message;
+            if (ex.Response != null) {
+                HttpWebResponse response = (HttpWebResponse)ex.Response;
+                int code = (int)response.StatusCode;
+                using (Stream stream = ex.Response.GetResponseStream())
+                using (StreamReader reader = new StreamReader(stream)) {
+                    string res = await reader.ReadToEndAsync();
+                    countlyResponse.StatusCode = code;
+                    countlyResponse.IsSuccess = false;
+                    countlyResponse.Data = res;
+                }
+            }
+
+            return countlyResponse;
+        }
+
 
         /// <summary>
         ///     Makes an Asynchronous POST request to the Countly server.
@@ -189,6 +204,14 @@ namespace Plugins.CountlySDK.Helpers
         {
             CountlyResponse countlyResponse = new CountlyResponse();
 
+#if !UNITY_EDITOR && UNITY_WEBGL
+    using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, data)) {
+        await webRequest.SendWebRequest();
+        countlyResponse.Data = webRequest.downloadHandler.text;
+        countlyResponse.StatusCode = (int)webRequest.responseCode;
+        countlyResponse.IsSuccess = webRequest.isDone && !webRequest.isHttpError && !webRequest.isNetworkError;
+    }
+#else
             try {
                 string query = AddChecksum(data);
                 byte[] dataBytes = Encoding.ASCII.GetBytes(query);
@@ -197,7 +220,6 @@ namespace Plugins.CountlySDK.Helpers
                 request.ContentLength = dataBytes.Length;
                 request.ContentType = "application/x-www-form-urlencoded";
                 request.Method = "POST";
-
 
                 using (Stream requestBody = request.GetRequestStream()) {
                     await requestBody.WriteAsync(dataBytes, 0, dataBytes.Length);
@@ -217,25 +239,15 @@ namespace Plugins.CountlySDK.Helpers
                     }
                 }
             } catch (WebException ex) {
-                countlyResponse.ErrorMessage = ex.Message;
-                if (ex.Response != null) {
-                    HttpWebResponse response = (HttpWebResponse)ex.Response;
-                    int code = (int)response.StatusCode;
-                    using (Stream stream = ex.Response.GetResponseStream())
-                    using (StreamReader reader = new StreamReader(stream)) {
-                        string res = await reader.ReadToEndAsync();
-                        countlyResponse.StatusCode = code;
-                        countlyResponse.IsSuccess = false;
-                        countlyResponse.Data = res;
-                    }
-                }
-
+                countlyResponse =  await HandleWebException(ex, countlyResponse);
             }
+#endif
 
             Log.Verbose("[RequestCountlyHelper] PostAsync request: " + uri + " body: " + data + " response: " + countlyResponse.ToString());
 
             return countlyResponse;
         }
+
 
     }
 }

@@ -14,9 +14,7 @@ public class CountlyAnalytics : IAnalyticsClient
     
     public async Task CaptureEvent(AnalyticsEvent eventData)
     {
-        //We can't use countly on webGL.
-        if(!Application.isEditor && Application.platform == RuntimePlatform.WebGLPlayer) return;
-        
+        if(Application.platform == RuntimePlatform.WebGLPlayer) return;
         await Countly.Instance.Events.RecordEventAsync(eventData.EventName, new Dictionary<string, object>()
         {
             { "chain", eventData.ChainId},

@@ -9,7 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using ChainSafe.Gaming.UnityPackage;
-using ChainSafe.Gaming.Web3.Analytics;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine.Events;
 using ChainInfo = ChainSafe.Gaming.UnityPackage.Model;
 

@@ -251,7 +251,7 @@
       "source": "local",
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.0.2",
-        "io.chainsafe.web3-unity": "2.5.2"
+        "io.chainsafe.web3-unity": "2.5.5"
       }
     },
     "com.unity.modules.ai": {
