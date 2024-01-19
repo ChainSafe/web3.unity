@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.WalletConnect.Connection;
 using ChainSafe.Gaming.WalletConnect.Models;
 using UnityEngine;
 
@@ -11,10 +12,10 @@ namespace ChainSafe.Gaming.WalletConnect.Dialog
     {
         protected class WalletOptionConfig
         {
-            public WalletConnectWalletModel Data { get; }
+            public WalletModel Data { get; }
             public Action OnClick { get; }
 
-            public WalletOptionConfig(WalletConnectWalletModel data, Action onClick)
+            public WalletOptionConfig(WalletModel data, Action onClick)
             {
                 Data = data;
                 OnClick = onClick;
@@ -23,7 +24,7 @@ namespace ChainSafe.Gaming.WalletConnect.Dialog
 
         private TaskCompletionSource<bool> tcs;
         private bool visible;
-        private ConnectionDialogConfig config;
+        private ConnectionHandlerConfig config;
 
         protected abstract void PlayShowDialog();
         protected abstract void PlayHideDialog();
@@ -35,7 +36,7 @@ namespace ChainSafe.Gaming.WalletConnect.Dialog
         protected abstract void CreateQrCodeElement(QrCodeBuilder builder);
         protected abstract void ClearDynamicElements();
 
-        public override Task ConnectUserWallet(ConnectionDialogConfig config)
+        public override Task ConnectUserWallet(ConnectionHandlerConfig config)
         {
             this.config = config;
         

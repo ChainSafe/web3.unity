@@ -1,7 +1,10 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.WalletConnect.Connection;
 using ChainSafe.Gaming.WalletConnect.Models;
+using ChainSafe.Gaming.WalletConnect.Storage;
+using ChainSafe.Gaming.WalletConnect.Wallets;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Debug;
@@ -19,11 +22,10 @@ using WalletConnectSharp.Sign.Models.Engine;
 
 namespace ChainSafe.Gaming.WalletConnect
 {
-    // todo testing?
-    public class WalletConnectProviderNew : ILifecycleParticipant, IWalletConnectProviderNew
+    public class WalletConnectProvider : ILifecycleParticipant, IWalletConnectProvider, ILoginHelper
     {
         private readonly ILogWriter logWriter;
-        private readonly IWalletConnectConfigNew config;
+        private readonly IWalletConnectConfig config;
         private readonly IDataStorage storage;
         private readonly IChainConfig chainConfig;
         private readonly IOperatingSystemMediator osMediator;
@@ -37,8 +39,8 @@ namespace ChainSafe.Gaming.WalletConnect
         private SessionStruct session;
         private bool connected;
 
-        public WalletConnectProviderNew(
-            IWalletConnectConfigNew config,
+        public WalletConnectProvider(
+            IWalletConnectConfig config,
             IDataStorage storage,
             ILogWriter logWriter,
             IChainConfig chainConfig,
@@ -55,7 +57,7 @@ namespace ChainSafe.Gaming.WalletConnect
             this.logWriter = logWriter;
         }
 
-        public bool CanAutoLogin => localData.SessionTopic != null;
+        public bool StoredSessionAvailable => localData.SessionTopic != null;
 
         private bool OsManageWalletSelection => osMediator.Platform == Platform.Android;
 
@@ -63,7 +65,7 @@ namespace ChainSafe.Gaming.WalletConnect
 
         async ValueTask ILifecycleParticipant.WillStartAsync()
         {
-            // todo assert required config fields
+            ValidateConfig();
 
             WCLogger.Logger = new WCLogWriter(logWriter);
 
@@ -113,14 +115,31 @@ namespace ChainSafe.Gaming.WalletConnect
             };
         }
 
-        async ValueTask ILifecycleParticipant.WillStopAsync() => new ValueTask(Task.CompletedTask);
+        private void ValidateConfig()
+        {
+            if (string.IsNullOrWhiteSpace(config.ProjectId))
+            {
+                throw new WalletConnectException("ProjectId  was not set.");
+            }
+
+            if (string.IsNullOrWhiteSpace(config.StoragePath))
+            {
+                throw new WalletConnectException("Storage folder path was not set.");
+            }
+        }
+
+        async ValueTask ILifecycleParticipant.WillStopAsync()
+        {
+            signClient?.Dispose();
+            core?.Dispose();
+        }
 
         public async Task<string> Connect()
         {
             if (connected)
             {
                 throw new WalletConnectException(
-                    $"Tried connecting {nameof(WalletConnectProviderNew)}, but it's already been connected.");
+                    $"Tried connecting {nameof(WalletConnectProvider)}, but it's already been connected.");
             }
 
             try
@@ -133,7 +152,7 @@ namespace ChainSafe.Gaming.WalletConnect
 
                 localData.SessionTopic = session.Topic;
 
-                var connectedLocally = session.Peer.Metadata.Redirect == null; // todo check if this works
+                var connectedLocally = session.Peer.Metadata.Redirect == null;
                 if (connectedLocally)
                 {
                     var sessionLocalWallet = GetSessionLocalWallet();
@@ -172,7 +191,7 @@ namespace ChainSafe.Gaming.WalletConnect
             }
         }
 
-        public async Task Disconnect()
+        public async Task Disconnect() // todo call on log out
         {
             if (!connected)
             {
@@ -183,18 +202,9 @@ namespace ChainSafe.Gaming.WalletConnect
 
             try
             {
-                if (signClient != null)
-                {
-                    await signClient.Disconnect(session.Topic, Error.FromErrorType(ErrorType.USER_DISCONNECTED));
-                }
-
-                if (core != null)
-                {
-                    await core.Storage.Clear();
-                }
-
-                signClient?.Dispose();
-                core?.Dispose();
+                storage.ClearLocalData();
+                await signClient.Disconnect(session.Topic, Error.FromErrorType(ErrorType.USER_DISCONNECTED));
+                await core.Storage.Clear();
             }
             catch (Exception e)
             {
@@ -204,13 +214,18 @@ namespace ChainSafe.Gaming.WalletConnect
 
         private async Task<SessionStruct> ConnectSession()
         {
+            if (config.ConnectionHandlerProvider == null)
+            {
+                throw new WalletConnectException($"Can not connect to a new session. No {nameof(IConnectionHandlerProvider)} was set in config.");
+            }
+
             var connectOptions = new ConnectOptions { RequiredNamespaces = requiredNamespaces };
             var connectedData = await signClient.Connect(connectOptions);
             var connectionHandler = await config.ConnectionHandlerProvider.ProvideHandler();
 
             try
             {
-                var dialogTask = connectionHandler.ConnectUserWallet(new ConnectionDialogConfig
+                var dialogTask = connectionHandler.ConnectUserWallet(new ConnectionHandlerConfig
                 {
                     ConnectRemoteWalletUri = connectedData.Uri,
                     DelegateLocalWalletSelectionToOs = OsManageWalletSelection,
@@ -297,7 +312,7 @@ namespace ChainSafe.Gaming.WalletConnect
             {
                 throw new WalletConnectException(
                     "The method provided is not supported. " +
-                    $"If you add a new method you have to update {nameof(WalletConnectProviderNew)} code to reflect those changes. " +
+                    $"If you add a new method you have to update {nameof(WalletConnectProvider)} code to reflect those changes. " +
                     "Contact ChainSafe if you think a specific method should be included in the SDK.");
             }
 
@@ -326,7 +341,7 @@ namespace ChainSafe.Gaming.WalletConnect
             }
         }
 
-        private WalletConnectWalletModel GetSessionLocalWallet()
+        private WalletModel GetSessionLocalWallet()
         {
             var nativeUrl = RemoveSlash(session.Peer.Metadata.Url);
             // var dividerIndex = nativeUrl.IndexOf(':');

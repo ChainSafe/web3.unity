@@ -15,7 +15,7 @@ namespace ChainSafe.Gaming.WalletConnect.Dialog
         public TMP_Text Text;
         public Button Button;
 
-        public async void Set(WalletConnectWalletModel data, Action onClick)
+        public async void Set(WalletModel data, Action onClick)
         {
             // Text
             Text.text = data.Name;

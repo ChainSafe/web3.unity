@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.WalletConnect.Connection;
 using ChainSafe.Gaming.WalletConnect.Dialog;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -9,7 +10,7 @@ using WalletConnectSharp.Network.Interfaces;
 namespace ChainSafe.Gaming.WalletConnect
 {
     [CreateAssetMenu(menuName = "ChainSafe/WalletConnect/WalletConnect Config", fileName = "WalletConnectConfig", order = 0)]
-    public class WalletConnectConfigSO : ScriptableObject, IWalletConnectConfigNew
+    public class WalletConnectConfigSO : ScriptableObject, IWalletConnectConfig
     {
         [field: SerializeField] public bool AutoRenewSession { get; set; } = true;
         [field: SerializeField] public string ProjectName { get; set; }

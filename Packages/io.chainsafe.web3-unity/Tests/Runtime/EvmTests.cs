@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Numerics;
 using ChainSafe.Gaming.Web3;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using NUnit.Framework;
 using Scripts.EVM.Token;
+using Tests.Runtime;
 using UnityEngine;
 using UnityEngine.TestTools;
 
@@ -75,19 +78,12 @@ public class EvmTests : SampleTestsBase
 
     #endregion
 
-    private Web3 web3;
-
-    [UnitySetUp]
-    public override IEnumerator Setup()
-    {
-        yield return base.Setup();
-        web3 = web3Result;
-    }
-
     [UnityTest]
     public IEnumerator TestContractCall()
     {
-        object[] args = { config.TestWalletAddress };
+        yield return base.BuildWeb3();
+        var address = web3.Signer.GetAddress().Result;
+        object[] args = { address };
         var callContract = Evm.ContractCall(web3, ContractCallMethod, ABI.ArrayTotal, Contracts.ArrayTotal, args);
         yield return new WaitUntil(() => callContract.IsCompleted);
         if (callContract.Exception != null) throw callContract.Exception;
@@ -98,7 +94,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestContractSend()
     {
-        config.TestResponse = "0x324080652dfe1463f0fcbde18961a6e7eee87f2231133523e96dc52ce8239d3f";
+        yield return BuildWeb3WithStubConfig("0x324080652dfe1463f0fcbde18961a6e7eee87f2231133523e96dc52ce8239d3f");
         object[] args =
         {
             IncreaseAmount
@@ -113,6 +109,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestGetArray()
     {
+        yield return BuildWeb3();
         var getArray = Evm.GetArray(web3, Contracts.ArrayTotal, ABI.ArrayTotal, GetArrayMethod);
         yield return new WaitUntil(() => getArray.IsCompleted);
         // Convert toLower to make comparing easier
@@ -126,7 +123,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestSendArray()
     {
-        config.TestResponse = "0x3446b949c3d214fba7e61c9cf127eac6cd0b2983564cf76be618099879b6f1e1";
+        yield return BuildWeb3WithStubConfig("0x3446b949c3d214fba7e61c9cf127eac6cd0b2983564cf76be618099879b6f1e1");
         var sendArray = Evm.SendArray(web3, SendArrayMethod, ABI.ArrayTotal, Contracts.ArrayTotal, ArrayToSend.ToArray());
         yield return new WaitUntil(() => sendArray.IsCompleted);
         if (sendArray.Exception != null) throw sendArray.Exception;
@@ -137,6 +134,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestGetBlockNumber()
     {
+        yield return BuildWeb3();
         var getBlockNumber = Evm.GetBlockNumber(web3);
         yield return new WaitUntil(() => getBlockNumber.IsCompleted);
         if (getBlockNumber.Exception != null) throw getBlockNumber.Exception;
@@ -147,6 +145,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestGetGasLimit()
     {
+        yield return BuildWeb3();
         object[] args =
         {
            IncreaseAmount
@@ -161,6 +160,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestGetGasPrice()
     {
+        yield return BuildWeb3();
         var getGasPrice = Evm.GetGasPrice(web3);
         yield return new WaitUntil(() => getGasPrice.IsCompleted);
         if (getGasPrice.Exception != null) throw getGasPrice.Exception;
@@ -171,7 +171,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestGetGasNonce()
     {
-        config.TestResponse = "0xaba88d9a1977c8d78ddfb3d973798eb061bd495189d7cbfa832f895896417cd1";
+        yield return BuildWeb3WithStubConfig("0xaba88d9a1977c8d78ddfb3d973798eb061bd495189d7cbfa832f895896417cd1");
         var getGasNonce = Evm.GetNonce(web3);
         yield return new WaitUntil(() => getGasNonce.IsCompleted);
         if (getGasNonce.Exception != null) throw getGasNonce.Exception;
@@ -182,7 +182,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestTransactionStatus()
     {
-        config.TestResponse = "0xaba88d9a1977c8d78ddfb3d973798eb061bd495189d7cbfa832f895896417cd1";
+        yield return BuildWeb3WithStubConfig("0xaba88d9a1977c8d78ddfb3d973798eb061bd495189d7cbfa832f895896417cd1");
         var getTransactionStatus = Evm.GetTransactionStatus(web3);
         yield return new WaitUntil(() => getTransactionStatus.IsCompleted);
         if (getTransactionStatus.Exception != null) throw getTransactionStatus.Exception;
@@ -193,6 +193,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestUseRegisteredContract()
     {
+        yield return BuildWeb3();
         var useRegisteredContract = Evm.UseRegisteredContract(web3, "CsTestErc20", EthMethod.BalanceOf);
         yield return new WaitUntil(() => useRegisteredContract.IsCompleted);
         if (useRegisteredContract.Exception != null) throw useRegisteredContract.Exception;
@@ -203,17 +204,19 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestSendTransaction()
     {
-        config.TestResponse = "0x3446b949c3d214fba7e61c9cf127eac6cd0b2983564cf76be618099879b6f1e1";
+        const string testResponse = "0x3446b949c3d214fba7e61c9cf127eac6cd0b2983564cf76be618099879b6f1e1";
+        yield return BuildWeb3WithStubConfig(testResponse);
         var sendTransaction = Evm.SendTransaction(web3, SendToAddress);
         yield return new WaitUntil(() => sendTransaction.IsCompleted);
         if (sendTransaction.Exception != null) throw sendTransaction.Exception;
         Assert.IsTrue(sendTransaction.IsCompletedSuccessfully);
-        Assert.AreEqual(config.TestResponse, sendTransaction.Result);
+        Assert.AreEqual(testResponse, sendTransaction.Result);
     }
 
     [UnityTest]
     public IEnumerator TestSha3()
     {
+        yield return BuildWeb3();
         var sha3 = Evm.Sha3("It’s dangerous to go alone, take this!");
         Assert.AreEqual("45760485edafabcbb28570e7da5ddda4639abb4794de9af6de1d6669cbf220fc", sha3);
         yield return null;
@@ -222,20 +225,20 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestSignMessage()
     {
-        config.TestResponse =
-            "0xda2880dde86b7d870ac9ddfa690010bed8a679350415f8e9cce02d87bac91651081c40455538bce7a18792e3f2ea56457183e8dba8568f3a92785ab0d743ce0b1b";
+        const string testResponse = "0xda2880dde86b7d870ac9ddfa690010bed8a679350415f8e9cce02d87bac91651081c40455538bce7a18792e3f2ea56457183e8dba8568f3a92785ab0d743ce0b1b";
+        yield return BuildWeb3WithStubConfig(testResponse);
         var signMessage = Evm.SignMessage(web3, "The right man in the wrong place can make all the difference in the world.");
         yield return new WaitUntil(() => signMessage.IsCompleted);
         if (signMessage.Exception != null) throw signMessage.Exception;
         Assert.IsTrue(signMessage.IsCompletedSuccessfully);
-        Assert.AreEqual(config.TestResponse, signMessage.Result);
+        Assert.AreEqual(testResponse, signMessage.Result);
     }
 
     [UnityTest]
     public IEnumerator TestSignVerify()
     {
-        config.TestResponse =
-            "0xda2880dde86b7d870ac9ddfa690010bed8a679350415f8e9cce02d87bac91651081c40455538bce7a18792e3f2ea56457183e8dba8568f3a92785ab0d743ce0b1b";
+        yield return BuildWeb3WithStubConfig(
+            "0xda2880dde86b7d870ac9ddfa690010bed8a679350415f8e9cce02d87bac91651081c40455538bce7a18792e3f2ea56457183e8dba8568f3a92785ab0d743ce0b1b");
         var signVerify = Evm.SignVerify(web3, "A man chooses, a slave obeys.");
         yield return new WaitUntil(() => signVerify.IsCompleted);
         if (signVerify.Exception != null) throw signVerify.Exception;
@@ -246,30 +249,31 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestECDSASignTx()
     {
+        yield return BuildWeb3();
         var signTxECDSA = Evm.EcdsaSignTransaction(ecdsaKey, transactionHash, chainId);
         Assert.AreEqual("0xf8cd1c5dfa0706767c7ec81b91bed9a05b65b9c5b47769206a594377c5969a9a47fe21f7328b5865815f97b7ddd09bd7b899879aac6ed7c01eda5380975a54dc01546d72", signTxECDSA);
-        return null;
     }
 
     [UnityTest]
     public IEnumerator TestECDSASign()
     {
+        yield return BuildWeb3();
         var signECDSA = Evm.EcdsaSignMessage(ecdsaKey, ecdsaMessage);
         Assert.AreEqual("0x90bd386a185bdc5cbb13b9bba442e35036ac8e92792e74e385abbf7d9546be8720879c2075bf59124d9114b4d432173a4d6c4b118d278c3ffb51a140a625c66c1b", signECDSA);
-        return null;
     }
 
     [UnityTest]
     public IEnumerator TestECDSAAddress()
     {
+        yield return BuildWeb3();
         var address = Evm.EcdsaGetAddress(ecdsaKey);
         Assert.AreEqual("0x428066dd8A212104Bc9240dCe3cdeA3D3A0f7979", address);
-        return null;
     }
 
     [UnityTest]
     public IEnumerator TestCustomBalanceOfErc20()
     {
+        yield return BuildWeb3();
         var getCustomBalanceOf = Erc20.CustomTokenBalance(web3, ABI.Erc20, Contracts.Erc20);
         yield return new WaitUntil(() => getCustomBalanceOf.IsCompleted);
         Assert.AreEqual(new BigInteger(999999999999999), getCustomBalanceOf.Result);
@@ -278,7 +282,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestMintErc20()
     {
-        config.TestResponse = "0xf6133ad76359ffaf67853a5eb138a94ed11f29d350b907420a92c685c6df5303";
+        yield return BuildWeb3WithStubConfig("0xf6133ad76359ffaf67853a5eb138a94ed11f29d350b907420a92c685c6df5303");
         var mint20 = Erc20.MintErc20(web3, Contracts.Erc20, SendToAddress, Mint20Amount);
         yield return new WaitUntil(() => mint20.IsCompleted);
         if (mint20.Exception != null) throw mint20.Exception;
@@ -289,7 +293,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestMintErc721()
     {
-        config.TestResponse = "0x09f1c615d638ae0b3a8c4a5555b46170c42dba214f04412400f3ff639657a223";
+        yield return BuildWeb3WithStubConfig("0x09f1c615d638ae0b3a8c4a5555b46170c42dba214f04412400f3ff639657a223");
         var mint721 = Erc721.MintErc721(web3, ABI.Erc721, Contracts.Erc721, Mint721Uri);
         yield return new WaitUntil(() => mint721.IsCompleted);
         if (mint721.Exception != null) throw mint721.Exception;
@@ -300,7 +304,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestMintErc1155()
     {
-        config.TestResponse = "0xa04294541b934b48ada4073b07ba01492d8ad676aa2db6f93249cec0820a1dca";
+        yield return BuildWeb3WithStubConfig("0xa04294541b934b48ada4073b07ba01492d8ad676aa2db6f93249cec0820a1dca");
         var mint1155 = Erc1155.MintErc1155(web3, ABI.Erc1155, Contracts.Erc1155, Mint1155Id, Mint1155Amount);
         yield return new WaitUntil(() => mint1155.IsCompleted);
         if (mint1155.Exception != null) throw mint1155.Exception;
@@ -311,7 +315,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestTransferErc20()
     {
-        config.TestResponse = "0x87d8826e895247b4106596040c5133a18ecbf76077c5433091a5f18c355a120b";
+        yield return BuildWeb3WithStubConfig("0x87d8826e895247b4106596040c5133a18ecbf76077c5433091a5f18c355a120b");
         var transferErc20 = Erc20.TransferErc20(web3, Contracts.Erc20, SendToAddress, TransferErc20Amount);
         yield return new WaitUntil(() => transferErc20.IsCompleted);
         if (transferErc20.Exception != null) throw transferErc20.Exception;
@@ -322,7 +326,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestTransferErc721()
     {
-        config.TestResponse = "0xba034c4150f2a5fd50926551a8e95028d51dcc91e3c3b566bbd316968bc29375";
+        yield return BuildWeb3WithStubConfig("0xba034c4150f2a5fd50926551a8e95028d51dcc91e3c3b566bbd316968bc29375");
         var transferErc721 = Erc721.TransferErc721(web3, Contracts.Erc721, SendToAddress, Transfer721Id);
         yield return new WaitUntil(() => transferErc721.IsCompleted);
         if (transferErc721.Exception != null) throw transferErc721.Exception;
@@ -333,11 +337,20 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestTransferErc1155()
     {
-        config.TestResponse = "0x390b47d378e9a6de830e2cc6d624de0920efc44d7b40fb61f75d983545c987fc";
+        yield return BuildWeb3WithStubConfig("0x390b47d378e9a6de830e2cc6d624de0920efc44d7b40fb61f75d983545c987fc");
         var transferErc1155 = Erc1155.TransferErc1155(web3, Contracts.Erc1155, Transfer1155Id, Transfer1155Amount, SendToAddress);
         yield return new WaitUntil(() => transferErc1155.IsCompleted);
         if (transferErc1155.Exception != null) throw transferErc1155.Exception;
         yield return new WaitUntil(() => transferErc1155.IsCompletedSuccessfully);
         Assert.AreEqual(string.Empty, transferErc1155.Result);
+    }
+
+    private IEnumerator BuildWeb3WithStubConfig(string testResponse)
+    {
+        yield return base.BuildWeb3(services =>
+        {
+            services.Replace(ServiceDescriptor.Singleton(new StubWalletConnectProviderConfig
+                { StubResponse = testResponse }));
+        });
     }
 }

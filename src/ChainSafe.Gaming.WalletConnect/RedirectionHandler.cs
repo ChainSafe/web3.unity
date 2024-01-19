@@ -1,5 +1,6 @@
 using System.Web;
 using ChainSafe.Gaming.WalletConnect.Models;
+using ChainSafe.Gaming.WalletConnect.Wallets;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Environment;
 
@@ -48,13 +49,13 @@ namespace ChainSafe.Gaming.WalletConnect
         }
 
         // Redirect to the pre-selected wallet
-        public void Redirect(WalletConnectWalletModel walletData)
+        public void Redirect(WalletModel walletData)
         {
             var deepLink = GetRedirectionDeeplink(walletData);
             osMediator.OpenUrl(deepLink);
         }
 
-        public string GetRedirectionDeeplink(WalletConnectWalletModel walletData)
+        public string GetRedirectionDeeplink(WalletModel walletData)
         {
             var linkData = GetPlatformLinkData(walletData);
             var deeplink = GetPlatformDeeplink();
@@ -73,12 +74,12 @@ namespace ChainSafe.Gaming.WalletConnect
             }
         }
 
-        public string BuildConnectionDeeplink(WalletConnectWalletModel walletData, string connectionUri)
+        public string BuildConnectionDeeplink(WalletModel walletData, string connectionUri)
         {
             var linkData = GetPlatformLinkData(walletData);
             var platformUrl = BuildPlatformUrl();
 
-            var finalUrl = $"{platformUrl}wc?uri={HttpUtility.UrlEncode(connectionUri)}";
+            var finalUrl = $"{platformUrl}wc?uri={HttpUtility.UrlEncode(connectionUri)}"; // use System.Uri.EscapeDataString(uri) if this doesn't work
 
             return finalUrl;
 
@@ -121,7 +122,7 @@ namespace ChainSafe.Gaming.WalletConnect
             }
         }
 
-        private WalletLinkModel GetPlatformLinkData(WalletConnectWalletModel walletData)
+        private WalletLinkModel GetPlatformLinkData(WalletModel walletData)
         {
             return osMediator.IsMobilePlatform ? walletData.Mobile : walletData.Desktop;
         }

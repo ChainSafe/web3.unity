@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using WalletConnectSharp.Storage;
 
-namespace ChainSafe.Gaming.WalletConnect
+namespace ChainSafe.Gaming.WalletConnect.Storage
 {
     public interface IDataStorage
     {

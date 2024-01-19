@@ -8,13 +8,13 @@ using WalletConnectSharp.Common.Logging;
 
 namespace ChainSafe.Gaming.WalletConnect
 {
-    public class WalletConnectSignerNew : ISigner, ILifecycleParticipant
+    public class WalletConnectSigner : ISigner, ILifecycleParticipant
     {
-        private readonly IWalletConnectProviderNew provider;
+        private readonly IWalletConnectProvider provider;
 
         private string address;
 
-        public WalletConnectSignerNew(IWalletConnectProviderNew provider)
+        public WalletConnectSigner(IWalletConnectProvider provider)
         {
             this.provider = provider;
         }
@@ -25,10 +25,7 @@ namespace ChainSafe.Gaming.WalletConnect
         }
 
         // todo Rework Web3Accessor to manage Web3's state and to ensure Web3.Terminate() is always called.
-        async ValueTask ILifecycleParticipant.WillStopAsync()
-        {
-            await provider.Disconnect();
-        }
+        ValueTask ILifecycleParticipant.WillStopAsync() => new(Task.CompletedTask);
 
         public Task<string> GetAddress() => Task.FromResult(address);
 

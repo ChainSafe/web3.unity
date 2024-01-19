@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using ChainSafe.Gaming.WalletConnect.Wallets;
+using UnityEditor;
 using UnityEngine;
 
 namespace ChainSafe.Gaming.WalletConnect.Editor

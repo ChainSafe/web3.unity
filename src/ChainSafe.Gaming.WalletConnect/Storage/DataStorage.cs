@@ -6,18 +6,18 @@ using Newtonsoft.Json;
 using WalletConnectSharp.Common.Logging;
 using WalletConnectSharp.Storage;
 
-namespace ChainSafe.Gaming.WalletConnect
+namespace ChainSafe.Gaming.WalletConnect.Storage
 {
     public class DataStorage : IDataStorage
     {
         private const string StorageFileName = "walletconnect-storage.json";
         private const string LocalDataFileName = "walletconnect-local.json";
 
-        private readonly IWalletConnectConfigNew config;
+        private readonly IWalletConnectConfig config;
         private readonly IOperatingSystemMediator osMediator;
         private readonly ILogWriter logWriter;
 
-        public DataStorage(IWalletConnectConfigNew config, IOperatingSystemMediator osMediator, ILogWriter logWriter)
+        public DataStorage(IWalletConnectConfig config, IOperatingSystemMediator osMediator, ILogWriter logWriter)
         {
             this.logWriter = logWriter;
             this.osMediator = osMediator;

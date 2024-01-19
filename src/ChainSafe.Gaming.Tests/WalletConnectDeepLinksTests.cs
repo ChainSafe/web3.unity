@@ -9,6 +9,7 @@ using ChainSafe.Gaming.NetCore;
 using ChainSafe.Gaming.Tests.Core;
 using ChainSafe.Gaming.WalletConnect;
 using ChainSafe.Gaming.WalletConnect.Models;
+using ChainSafe.Gaming.WalletConnect.Wallets;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Environment;
@@ -85,7 +86,7 @@ namespace ChainSafe.Gaming.Tests
                 {
                     services.UseStubWeb3Environment(operatingSystemMediator: new StubOperatingSystemMediator() { Platform = platform }, httpClient: new NetCoreHttpClient());
                     services.AddSingleton<IRpcProvider, StubRpcProvider>();
-                    services.AddSingleton<IWalletConnectConfigNew>(new WalletConnectConfigNew());
+                    services.AddSingleton<IWalletConnectConfig>(new WalletConnectConfig());
                     services.AddSingleton<IWalletRegistry, ILifecycleParticipant, WalletRegistry>();
                     services.AddSingleton<RedirectionHandler>();
                 })
@@ -97,7 +98,7 @@ namespace ChainSafe.Gaming.Tests
                 .ToList();
             TestContext.Out.WriteLine($"Testing {supportedWallets.Count} wallets..");
 
-            var brokenWallets = new List<(WalletConnectWalletModel wallet, FailureReason reson)>();
+            var brokenWallets = new List<(WalletModel wallet, FailureReason reson)>();
             foreach (var walletData in supportedWallets)
             {
                 var deepLink = web3.WalletConnect().RedirectionHandler()
@@ -135,7 +136,7 @@ namespace ChainSafe.Gaming.Tests
             Assert.IsEmpty(brokenWallets, $"{brokenWallets.Count} links are broken:\n{string.Join(",\n", brokenWallets.Select(BuildBrokenWalletString))}");
             return;
 
-            string BuildBrokenWalletString((WalletConnectWalletModel wallet, FailureReason reason) brokenWallet)
+            string BuildBrokenWalletString((WalletModel wallet, FailureReason reason) brokenWallet)
             {
                 var name = brokenWallet.wallet.Name;
                 var reason = brokenWallet.reason;

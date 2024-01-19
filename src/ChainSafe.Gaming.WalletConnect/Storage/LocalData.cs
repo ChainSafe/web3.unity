@@ -1,6 +1,4 @@
-using ChainSafe.Gaming.WalletConnect.Models;
-
-namespace ChainSafe.Gaming.WalletConnect
+namespace ChainSafe.Gaming.WalletConnect.Storage
 {
     public class LocalData
     {

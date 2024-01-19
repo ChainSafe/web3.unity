@@ -7,18 +7,18 @@ using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Unity;
 using ChainSafe.GamingSdk.Gelato;
+using Microsoft.Extensions.DependencyInjection;
 using Scripts.EVM.Token;
+using Tests.Runtime;
 using UnityEngine;
 using UnityEngine.TestTools;
 
 public class SampleTestsBase
 {
-    protected Web3 web3Result;
-
-    protected WalletConnectConfig config;
+    protected Web3 web3;
 
     [UnitySetUp]
-    public virtual IEnumerator Setup()
+    public virtual IEnumerator BuildWeb3(Web3Builder.ConfigureServicesDelegate customConfiguration = null)
     {
         // Wait for some time to initialize
         yield return new WaitForSeconds(5f);
@@ -38,14 +38,8 @@ public class SampleTestsBase
             services.UseGelato("_UzPz_Yk_WTjWMfcl45fLvQNGQ9ISx5ZE8TnwnVKYrE_");
             services.UseRpcProvider();
 
-            config = new WalletConnectConfig
-            {
-                // Set wallet to testing
-                Testing = true,
-                TestWalletAddress = "0xD5c8010ef6dff4c83B19C511221A7F8d1e5cFF44",
-            };
-
-            services.UseWalletConnect(config);
+            services.AddSingleton(new StubWalletConnectProviderConfig()); // can be replaced
+            services.AddSingleton<IWalletConnectProvider, StubWalletConnectProvider>();
             services.UseWalletConnectSigner();
             services.UseWalletConnectTransactionExecutor();
 
@@ -54,20 +48,24 @@ public class SampleTestsBase
                 contracts.RegisterContract("CsTestErc20", ABI.Erc20, Contracts.Erc20));
         });
 
+        if (customConfiguration != null)
+        {
+            web3Builder.Configure(customConfiguration);
+        }
+
         var buildWeb3 = web3Builder.LaunchAsync();
 
         // Wait until for async task to finish
         yield return new WaitUntil(() => buildWeb3.IsCompleted);
 
         // Assign result to web3
-        web3Result = buildWeb3.Result;
+        web3 = buildWeb3.Result;
     }
 
     [UnityTearDown]
     public virtual IEnumerator TearDown()
     {
-        config.Testing = false;
-        web3Result.TerminateAsync();
+        web3.TerminateAsync();
         yield return null;
     }
 }

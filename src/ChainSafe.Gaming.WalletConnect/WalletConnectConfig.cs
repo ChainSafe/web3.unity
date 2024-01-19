@@ -1,11 +1,12 @@
 #nullable enable
 using System.Collections.Generic;
+using ChainSafe.Gaming.WalletConnect.Connection;
 using WalletConnectSharp.Core;
 using WalletConnectSharp.Network.Interfaces;
 
 namespace ChainSafe.Gaming.WalletConnect
 {
-    public class WalletConnectConfigNew : IWalletConnectConfigNew
+    public class WalletConnectConfig : IWalletConnectConfig
     {
         public bool RememberSession { get; set; }
 

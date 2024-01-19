@@ -13,10 +13,10 @@ namespace ChainSafe.Gaming.WalletConnect
     public class WalletConnectTransactionExecutorNew : ITransactionExecutor
     {
         private readonly IRpcProvider rpcProvider;
-        private readonly IWalletConnectProviderNew provider;
+        private readonly IWalletConnectProvider provider;
         private readonly ISigner signer;
 
-        public WalletConnectTransactionExecutorNew(IWalletConnectProviderNew provider, IRpcProvider rpcProvider, ISigner signer)
+        public WalletConnectTransactionExecutorNew(IWalletConnectProvider provider, IRpcProvider rpcProvider, ISigner signer)
         {
             this.rpcProvider = rpcProvider;
             this.provider = provider;

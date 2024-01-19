@@ -2,10 +2,8 @@ using System.Threading.Tasks;
 
 namespace ChainSafe.Gaming.WalletConnect
 {
-    public interface IWalletConnectProviderNew
+    public interface IWalletConnectProvider
     {
-        bool CanAutoLogin { get; } // todo move to separate interface
-
         Task<string> Connect();
 
         Task Disconnect();

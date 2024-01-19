@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using ChainSafe.Gaming.WalletConnect.Models;
 
-namespace ChainSafe.Gaming.WalletConnect
+namespace ChainSafe.Gaming.WalletConnect.Connection
 {
-    public class ConnectionDialogConfig
+    public class ConnectionHandlerConfig
     {
         public WalletLocationOptions WalletLocationOptions { get; set; }
 
-        public List<WalletConnectWalletModel> LocalWalletOptions { get; set; }
+        public List<WalletModel> LocalWalletOptions { get; set; }
 
         public OpenLocalWalletDelegate RedirectToWallet { get; set; }
 
