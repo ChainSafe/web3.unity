@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "com.tools.webglthreadingpatcher": "https://github.com/VolodymyrBS/WebGLThreadingPatcher.git",
     "com.unity.collab-proxy": "2.0.7",
     "com.unity.feature.2d": "1.0.0",
     "com.unity.ide.rider": "3.0.25",

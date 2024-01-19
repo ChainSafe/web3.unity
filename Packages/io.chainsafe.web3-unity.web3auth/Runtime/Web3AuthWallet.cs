@@ -4,6 +4,7 @@ using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.InProcessSigner;
 using ChainSafe.Gaming.InProcessTransactionExecutor;
+using ChainSafe.Gaming.InProcessTransactionExecutor.Unity;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
@@ -45,6 +46,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
         /// <returns>A <see cref="ValueTask"/> representing the asynchronous operation.</returns>
         public async ValueTask WillStartAsync()
         {
+            
             coreInstance = CreateCoreInstance();
             TaskCompletionSource<string> loginTcs = new();
             coreInstance.onLogin += Web3Auth_OnLogin;
@@ -57,10 +59,11 @@ namespace ChainSafe.GamingSdk.Web3Auth
             var signerConfig = new InProcessSignerConfig { PrivateKey = privateKey };
             signer = new InProcessSigner(signerConfig);
 
-            transactionExecutor = new InProcessTransactionExecutor(signer, chainConfig, rpcProvider);
+            transactionExecutor = new InProcessTransactionExecutor(signer, chainConfig, rpcProvider, new RpcClientWrapper(chainConfig));
 
             void Web3Auth_OnLogin(Web3AuthResponse response)
             {
+                coreInstance.onLogin -= Web3Auth_OnLogin;
                 loginTcs.SetResult(response.privKey);
             }
         }
@@ -78,7 +81,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
             await logoutTcs.Task;
 
             coreInstance.onLogout -= Web3Auth_OnLogout;
-            Object.Destroy(coreInstance);
+            Object.Destroy(coreInstance.gameObject);
 
             void Web3Auth_OnLogout()
             {
@@ -117,13 +120,13 @@ namespace ChainSafe.GamingSdk.Web3Auth
 
         private TWeb3Auth CreateCoreInstance()
         {
+            Debug.Log("Creating Core Instance");
             var gameObject = new GameObject("Web3Auth", typeof(TWeb3Auth));
-            gameObject.hideFlags = HideFlags.HideInHierarchy;
             Object.DontDestroyOnLoad(gameObject);
 
             var instance = gameObject.GetComponent<TWeb3Auth>();
             instance.Awake();
-            instance.setOptions(config.Web3AuthOptions);
+            instance.setOptions(config.Web3AuthOptions, config.RememberMe);
 
             return instance;
         }

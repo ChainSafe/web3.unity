@@ -1,4 +1,5 @@
-﻿using ChainSafe.Gaming.Web3.Build;
+﻿using System.Collections.Generic;
+using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -7,7 +8,7 @@ namespace ChainSafe.Gaming.MultiCall
 {
     public static class MultiCallExtensions
     {
-        private static readonly MultiCallConfig DefaultConfig = new MultiCallConfig(null);
+        private static readonly MultiCallConfig DefaultConfig = new MultiCallConfig(new Dictionary<string, string>());
 
         public static IMultiCall MultiCall(this Web3.Web3 web3) => web3.ServiceProvider.GetRequiredService<IMultiCall>();
 
@@ -15,23 +16,11 @@ namespace ChainSafe.Gaming.MultiCall
         /// Binds implementation of MultiCall to Web3.
         /// </summary>
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
-        public static IWeb3ServiceCollection UseMultiCall(this IWeb3ServiceCollection collection, MultiCallConfig configuration)
-        {
-            collection.UseMultiCall();
-            collection.ConfigureMultiCall(configuration);
-            return collection;
-        }
-
-        /// <summary>
-        /// Binds implementation of MultiCall to Web3.
-        /// </summary>
-        /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
-        public static IWeb3ServiceCollection UseMultiCall(this IWeb3ServiceCollection collection)
+        public static IWeb3ServiceCollection UseMultiCall(this IWeb3ServiceCollection collection, MultiCallConfig configuration = null)
         {
             collection.AssertServiceNotBound<IMultiCall>();
 
-            // config
-            collection.TryAddSingleton(DefaultConfig);
+            collection.TryAddSingleton(configuration ?? DefaultConfig);
 
             collection.AddSingleton<ILifecycleParticipant, IMultiCall, MultiCall>();
             return collection;
