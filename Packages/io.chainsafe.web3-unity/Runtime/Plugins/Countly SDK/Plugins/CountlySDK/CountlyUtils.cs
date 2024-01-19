@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Security.Cryptography;
 using Plugins.CountlySDK.Enums;
 using Plugins.CountlySDK.Helpers;
 using Plugins.CountlySDK.Models;
@@ -11,9 +13,7 @@ namespace Plugins.CountlySDK
     public class CountlyUtils
     {
         private readonly Countly _countly;
-
         internal string ServerInputUrl { get; private set; }
-
         internal string ServerOutputUrl { get; private set; }
 
         public CountlyUtils(Countly countly)
@@ -26,7 +26,17 @@ namespace Plugins.CountlySDK
 
         public static string GetUniqueDeviceId()
         {
-            return "CLY_" + UnityEngine.SystemInfo.deviceUniqueIdentifier;
+            string uniqueID = SystemInfo.deviceUniqueIdentifier;
+            if(uniqueID.Length > 5) {
+                return "CLY_" + uniqueID;
+            } else {
+                return "CLY_" + SafeRandomVal();
+            }
+        }
+
+        public static string GetAppVersion()
+        {
+            return Application.version;
         }
 
         /// <summary>
@@ -44,7 +54,7 @@ namespace Plugins.CountlySDK
                 {"t", Type()},
                 {"sdk_name", Constants.SdkName},
                 {"sdk_version", Constants.SdkVersion},
-                {"av", CountlyMetricModel.GetAppVersion()}
+                {"av", GetAppVersion()}
             };
 
             // Add time-based metrics to the base parameters dictionary
@@ -53,6 +63,7 @@ namespace Plugins.CountlySDK
             }
             return baseParams;
         }
+
         /// <summary>
         /// Retrieves the set of parameters, "app_key" and "device_id,", required to be sent along with a remote configuration request.
         /// </summary>
@@ -131,6 +142,109 @@ namespace Plugins.CountlySDK
         }
 
         /// <summary>
+        /// Removes dictionary keys exceeding a specified count
+        /// </summary>
+        /// <param name="segmentation"></param>
+        /// <param name="maxCount"></param>
+        /// <param name="prefix"></param>
+        /// <param name="logger"></param>
+        public void TruncateSegmentationValues(Dictionary<string, object>? segmentation, int maxCount, string prefix, CountlyLogHelper logger)
+        {
+            if (segmentation == null) {
+                return;
+            }
+
+            List<string> keysToRemove = segmentation.Keys.Skip(maxCount).ToList();
+
+            foreach (string key in keysToRemove) {
+                logger.Warning($"{prefix}, Value exceeded the maximum segmentation count key:[{key}]");
+                segmentation.Remove(key);
+            }
+        }
+
+        /// <summary>
+        /// Removes specific reserved keys from a dictionary of segmentation values
+        /// </summary>
+        /// <param name="segmentation"></param>
+        /// <param name="reservedKeys"></param>
+        /// <param name="messagePrefix"></param>
+        /// <param name="logger"></param>
+        public void RemoveReservedKeysFromSegmentation(Dictionary<string, object>? segmentation, string[] reservedKeys, string messagePrefix, CountlyLogHelper logger)
+        {
+            if (segmentation == null) {
+                return;
+            }
+
+            foreach (string rKey in reservedKeys) {
+                if (segmentation.ContainsKey(rKey)) {
+                    logger.Warning($"{messagePrefix} provided segmentation contains protected key [{rKey}]");
+                    segmentation.Remove(rKey);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Returns the current timestamp in seconds using the Unix time format
+        /// </summary>
+        public int CurrentTimestampSeconds()
+        {
+            return (int)(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+        }
+
+        /// <summary>
+        /// Creates a crypto-safe SHA-256 hashed random value.
+        /// </summary>
+        /// <returns>Randomly generated string</returns>
+        public static string SafeRandomVal()
+        {
+            long timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            using (RandomNumberGenerator random = new RNGCryptoServiceProvider()) {
+                byte[] value = new byte[6];
+                random.GetBytes(value);
+                string b64Value = Convert.ToBase64String(value);
+                return b64Value + timestamp;
+            }
+        }
+
+        /// <summary>
+        /// Removes unsupported data types from provided Dictionary
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="logger"></param>
+        /// <returns>Returns true if any entry had been removed</returns>
+        public bool RemoveUnsupportedDataTypes(Dictionary<string, object>? data, CountlyLogHelper? logger)
+        {
+            if (data == null) {
+                return false;
+            }
+
+            List<string> keysToRemove = new List<string>();
+            bool removed = false;
+
+            foreach (var entry in data) {
+                string key = entry.Key;
+                object value = entry.Value;
+
+                if (string.IsNullOrEmpty(key) || !(value is string || value is int || value is double || value is bool || value is float)) {
+                    // found unsupported data type or null key or value, add key to removal list
+                    keysToRemove.Add(key);
+                    removed = true;
+                }
+            }
+
+            // Remove the keys marked for removal
+            foreach (string key in keysToRemove) {
+                data.Remove(key);
+            }
+
+            if (removed & logger != null) {
+                logger.Warning("[Utils] Unsupported data types were removed from provided segmentation");
+            }
+
+            return removed;
+        }
+
+        /// <summary>
         /// Returns the device ID type of the current device ID.<br/>   
         /// 0 - developer provided<br/>
         /// 1 - SDK generated<br/>
@@ -149,7 +263,6 @@ namespace Plugins.CountlySDK
                 default:
                     break;
             }
-
             return type;
         }
     }

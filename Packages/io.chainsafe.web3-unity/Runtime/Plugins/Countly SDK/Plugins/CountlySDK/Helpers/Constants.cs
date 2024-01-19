@@ -5,7 +5,7 @@ namespace Plugins.CountlySDK.Helpers
 {
     internal class Constants
     {
-        public const string SdkVersion = "23.06.1";
+        public const string SdkVersion = "23.12.0";
 
 #if UNITY_EDITOR
         public const string SdkName = "csharp-unity-editor";
@@ -50,16 +50,6 @@ namespace Plugins.CountlySDK.Helpers
         public const string ImageUrlKey = "c.m";
         public const string ActionButtonKey = "c.b";
         public const string SoundDataKey = "sound";
-
-        #endregion
-
-        #region Unity System
-        public static void ProcessPlatform()
-        {
-            string platform = Application.platform.ToString().ToLower();
-            UnityPlatform = (Application.platform == RuntimePlatform.IPhonePlayer) ? "iOS" : platform;
-        }
-        public static string UnityPlatform { get; internal set; }
 
         #endregion
     }

@@ -86,6 +86,8 @@ namespace Plugins.CountlySDK.Services
                 CountlyExceptionDetailModel model = ExceptionDetailModel(message, ManipulateStackTrace(stackTrace), nonfatal, segmentation);
                 _ = SendCrashReportInternal(model);
             }
+
+            await Task.CompletedTask;
         }
         /// <summary>
         /// Public method that sends crash details to the server. Set param "nonfatal" to true for Custom Logged errors
@@ -117,6 +119,8 @@ namespace Plugins.CountlySDK.Services
                     _ = SendCrashReportInternal(model);
                 }
             }
+
+            await Task.CompletedTask;
         }
         internal async Task SendCrashReportInternal(CountlyExceptionDetailModel model)
         {
@@ -171,7 +175,7 @@ namespace Plugins.CountlySDK.Services
         internal CountlyExceptionDetailModel ExceptionDetailModel(string message, string stackTrace, bool nonfatal, IDictionary<string, object> segments)
         {
             return new CountlyExceptionDetailModel {
-                OS = Constants.UnityPlatform,
+                OS = _configuration.metricHelper.OS,
                 OSVersion = SystemInfo.operatingSystem,
                 Device = SystemInfo.deviceName,
                 Resolution = Screen.currentResolution.ToString(),

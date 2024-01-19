@@ -14,7 +14,6 @@ public class CountlyAnalytics : IAnalyticsClient
     
     public async Task CaptureEvent(AnalyticsEvent eventData)
     {
-        if(Application.platform == RuntimePlatform.WebGLPlayer) return;
         await Countly.Instance.Events.RecordEventAsync(eventData.EventName, new Dictionary<string, object>()
         {
             { "chain", eventData.ChainId},
@@ -31,19 +30,8 @@ public class CountlyAnalytics : IAnalyticsClient
 
     public CountlyAnalytics(IChainConfig chainConfig, IProjectConfig projectConfig)
     {
-        if(!Application.isEditor && Application.platform == RuntimePlatform.WebGLPlayer) return;
-
-        if (!Countly.Instance.IsSDKInitialized)
-        {
-            var config = new CountlyConfiguration
-            {
-                AppKey = AppKey,
-                ServerUrl = ServerUrl,
-            };
-
-            Countly.Instance.Init(config);
-            Debug.Log("Countly initialized");
-        }
+        Countly.Instance.Init(new CountlyConfiguration(AppKey, ServerUrl).EnableLogging());
+        Debug.Log("Countly initialized");
 
         ChainConfig = chainConfig;
         ProjectConfig = projectConfig;

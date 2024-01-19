@@ -93,7 +93,7 @@ namespace Plugins.CountlySDK.Services
                 {
                     { "token_session", 1 },
                     { "test_mode", (int)mode.Value },
-                    { $"{Constants.UnityPlatform}_token", token },
+                    { $"{_configuration.metricHelper.OS}_token", token },
                 };
 
             _requestCountlyHelper.AddToRequestQueue(requestParams);

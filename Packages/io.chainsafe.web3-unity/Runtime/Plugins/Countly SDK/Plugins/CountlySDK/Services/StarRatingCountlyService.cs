@@ -62,6 +62,8 @@ namespace Plugins.CountlySDK.Services
                 CountlyEventModel eventModel = new CountlyEventModel(CountlyEventModel.StarRatingEvent, segment.ToDictionary(), null, null, null);
                 _ = _eventCountlyService.RecordEventAsync(eventModel);
             }
+
+            await Task.CompletedTask;
         }
 
 

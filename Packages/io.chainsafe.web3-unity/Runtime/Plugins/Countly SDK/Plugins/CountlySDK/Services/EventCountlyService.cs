@@ -268,6 +268,8 @@ namespace Plugins.CountlySDK.Services
 
                 _ = RecordEventInternal(key, segmentation, count, sum, duration);
             }
+
+            await Task.CompletedTask;
         }
 
         #region override Methods

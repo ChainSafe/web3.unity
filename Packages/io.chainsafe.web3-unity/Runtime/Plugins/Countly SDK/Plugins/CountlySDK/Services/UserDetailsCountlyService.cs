@@ -96,6 +96,8 @@ namespace Plugins.CountlySDK.Services
                 _requestCountlyHelper.AddToRequestQueue(requestParams);
                 _ = _requestCountlyHelper.ProcessQueue();
             }
+
+            await Task.CompletedTask;
         }
         /// <summary>
         /// Sets information about user with custom properties.
@@ -139,6 +141,7 @@ namespace Plugins.CountlySDK.Services
                 CustomDataProperties = new Dictionary<string, object> { };
                 AddCustomDetailToRequestQueue(CustomDataProperties);
             }
+            await Task.CompletedTask;
         }
 
 

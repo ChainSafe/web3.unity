@@ -125,6 +125,8 @@ namespace Plugins.CountlySDK.Services
 
                 _ = SendRequestWithEmptyLocation();
             }
+
+            await Task.CompletedTask;
         }
 
         /// <summary>
@@ -166,6 +168,8 @@ namespace Plugins.CountlySDK.Services
                     _ = SendIndependantLocationRequest();
                 }
             }
+
+            await Task.CompletedTask;
         }
 
         /// <summary>

@@ -122,6 +122,7 @@ namespace Plugins.CountlySDK
         /// <returns>ViewCountlyService</returns>
         public ViewCountlyService Views { get; private set; }
 
+        public MetricHelper MetricHelper { get; private set; }
         internal SessionCountlyService Session { get; set; }
 
         /// <summary>
@@ -160,6 +161,8 @@ namespace Plugins.CountlySDK
             _logHelper = new CountlyLogHelper(Configuration);
 
             _logHelper.Info("[Init] Initializing Countly [SdkName: " + Constants.SdkName + " SdkVersion: " + Constants.SdkVersion + "]");
+
+            configuration.metricHelper = new MetricHelper(configuration.overridenMetrics);
 
             if (configuration.Parent != null) {
                 transform.parent = configuration.Parent.transform;
@@ -267,7 +270,14 @@ namespace Plugins.CountlySDK
                 _logHelper.Info("[Init] provided 'maxStackTraceLineLength' override:[" + configuration.MaxStackTraceLineLength + "]");
             }
 
-            Constants.ProcessPlatform();
+            if(configuration.SafeEventIDGenerator == null) {
+                configuration.SafeEventIDGenerator = new SafeIDGenerator();
+            }
+
+            if(configuration.SafeViewIDGenerator == null) {
+                configuration.SafeViewIDGenerator = new SafeIDGenerator();
+            }
+
             FirstLaunchAppHelper.Process();
 
             RequestBuilder requestBuilder = new RequestBuilder();
@@ -293,7 +303,7 @@ namespace Plugins.CountlySDK
             NonViewEventRepository nonViewEventRepo, Dao<ConfigEntity> configDao)
         {
             CountlyUtils countlyUtils = new CountlyUtils(this);
-            RequestHelper = new RequestCountlyHelper(Configuration, _logHelper, countlyUtils, requestBuilder, requestRepo);
+            RequestHelper = new RequestCountlyHelper(Configuration, _logHelper, countlyUtils, requestBuilder, requestRepo, this);
 
             Consents = new ConsentCountlyService(Configuration, _logHelper, Consents, RequestHelper);
             Events = new EventCountlyService(Configuration, _logHelper, RequestHelper, nonViewEventRepo, Consents);

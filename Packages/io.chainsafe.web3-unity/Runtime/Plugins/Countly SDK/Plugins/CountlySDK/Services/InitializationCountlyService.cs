@@ -24,6 +24,8 @@ namespace Plugins.CountlySDK.Services
                 _ = _consentService.SendConsentChanges();
                 _ = _sessionService.StartSessionService();
             }
+
+            await Task.CompletedTask;
         }
     }
 }

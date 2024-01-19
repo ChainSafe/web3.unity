@@ -136,6 +136,8 @@ namespace Plugins.CountlySDK.Services
 
                 _ = _requestCountlyHelper.ProcessQueue();
             }
+
+            await Task.CompletedTask;
         }
 
         /// <summary>
@@ -168,6 +170,8 @@ namespace Plugins.CountlySDK.Services
                 _ = _requestCountlyHelper.ProcessQueue();
                 NotifyListeners(true);
             }
+
+            await Task.CompletedTask;
         }
 
         /// <summary>
