@@ -17,12 +17,12 @@ namespace ChainSafe.Gaming.Web3.Unity
         /// <returns>Updated Service collection.</returns>
         public static IWeb3ServiceCollection UseUnityEnvironment(this IWeb3ServiceCollection services)
         {
-            services.Replace(ServiceDescriptor.Singleton<IAnalyticsClient, CountlyAnalytics>());
             services.AddSingleton<Web3Environment>();
             services.AddSingleton<IMainThreadRunner, UnityDispatcherAdapter>();
             services.AddSingleton<IHttpClient, UnityHttpClient>();
             services.AddSingleton<ILogWriter, UnityLogWriter>();
             services.AddSingleton<IOperatingSystemMediator, UnityOperatingSystemMediator>();
+            services.AddSingleton<IAnalyticsClient, CountlyAnalytics>();
             return services;
         }
     }

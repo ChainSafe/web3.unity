@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 
 namespace ChainSafe.Gaming.Web3.Analytics
 {
-    internal class NoOpAnalyticsClient : IAnalyticsClient
+    public class NoOpAnalyticsClient : IAnalyticsClient
     {
         public NoOpAnalyticsClient(IChainConfig chainConfig, IProjectConfig projectConfig)
         {
