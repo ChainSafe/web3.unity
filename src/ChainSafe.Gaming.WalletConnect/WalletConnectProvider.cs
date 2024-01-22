@@ -225,9 +225,10 @@ namespace ChainSafe.Gaming.WalletConnect
             var connectedData = await signClient.Connect(connectOptions);
             var connectionHandler = await config.ConnectionHandlerProvider.ProvideHandler();
 
+            Task dialogTask;
             try
             {
-                var dialogTask = connectionHandler.ConnectUserWallet(new ConnectionHandlerConfig
+                dialogTask = connectionHandler.ConnectUserWallet(new ConnectionHandlerConfig
                 {
                     ConnectRemoteWalletUri = connectedData.Uri,
                     DelegateLocalWalletSelectionToOs = OsManageWalletSelection,
@@ -248,11 +249,23 @@ namespace ChainSafe.Gaming.WalletConnect
                 });
 
                 // awaiting handler task to catch exceptions, actually awaiting only for approval
-                await Task.WhenAny(dialogTask, connectedData.Approval);
+                var combinedTasks = await Task.WhenAny(dialogTask, connectedData.Approval);
+
+                if (combinedTasks.IsFaulted)
+                {
+                    await combinedTasks; // this will throw the exception
+                }
             }
             finally
             {
-                connectionHandler.Terminate();
+                try
+                {
+                    connectionHandler.Terminate();
+                }
+                catch
+                {
+                    // ignored
+                }
             }
 
             var newSession = await connectedData.Approval;
