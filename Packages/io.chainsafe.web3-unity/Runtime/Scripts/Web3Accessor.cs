@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -52,6 +53,15 @@ namespace ChainSafe.Gaming.UnityPackage
             Instance.web3 = web3;
         }
 
-        public static void Clear() => Instance.web3 = null;
+        public static async Task TerminateAndClear()
+        {
+            if (!Instance)
+            {
+                Debug.LogError("Instance was not set.");
+            }
+
+            await Instance.web3.TerminateAsync();
+            Instance.web3 = null;
+        }
     }
 }
