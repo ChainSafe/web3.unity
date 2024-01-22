@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using ChainSafe.Gaming.WalletConnect.Connection;
 using ChainSafe.Gaming.WalletConnect.Dialog;
-using JetBrains.Annotations;
 using UnityEngine;
 using WalletConnectSharp.Core;
 using WalletConnectSharp.Network.Interfaces;
@@ -21,14 +19,14 @@ namespace ChainSafe.Gaming.WalletConnect
         [field: SerializeField] public string OverrideRegistryUri { get; set; }
         [SerializeField] private List<string> enabledWallets;
         [SerializeField] private List<string> disabledWallets;
-        [SerializeField] private ConnectionDialogProviderSO connectionDialogProvider;
+        [SerializeField] private ConnectionHandlerProviderSO connectionHandlerProvider;
         [field: SerializeField] public WalletLocationOptions WalletLocationOptions { get; set; }
         
         public bool RememberSession { get; set; }
         public bool ForceNewSession { get; set; }
         public IList<string> EnabledWallets => enabledWallets;
         public IList<string> DisabledWallets => disabledWallets;
-        public IConnectionHandlerProvider ConnectionHandlerProvider => connectionDialogProvider;
+        public IConnectionHandlerProvider ConnectionHandlerProvider => connectionHandlerProvider;
 
         private IConnectionBuilder connectionBuilder;
 

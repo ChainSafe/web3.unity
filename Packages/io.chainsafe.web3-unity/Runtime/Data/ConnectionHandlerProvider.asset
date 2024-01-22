@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 60f1f8f8f783442db1fe4b3ee1a68abf, type: 3}
-  m_Name: ConnectionDialogProvider
+  m_Name: ConnectionHandlerProvider
   m_EditorClassIdentifier: 
   HandlerPrefab: {fileID: 5250797134093199901, guid: 0c7c312ad6c521f4b8346ed8e9d7c664, type: 3}

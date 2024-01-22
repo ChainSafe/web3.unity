@@ -1,16 +1,15 @@
 ﻿using System.Threading.Tasks;
 using ChainSafe.Gaming.WalletConnect.Connection;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace ChainSafe.Gaming.WalletConnect.Dialog
 {
     /// <summary>
-    /// Simple version of connection dialog provider.
+    /// Simple version of connection handler provider.
     /// Lacking Pool functionality and loading from Addressables.
     /// </summary>
-    [CreateAssetMenu(menuName = "ChainSafe/WalletConnect/Connection Dialog Provider", fileName = "ConnectionDialogProvider", order = 0)]
-    public class ConnectionHandlerProviderChainSafe : ConnectionDialogProviderSO
+    [CreateAssetMenu(menuName = "ChainSafe/WalletConnect/Connection Handler Provider", fileName = "ConnectionHandlerProvider", order = 0)]
+    public class ConnectionHandlerProviderChainSafe : ConnectionHandlerProviderSO
     {
         [SerializeField] private ConnectionHandlerBehaviour HandlerPrefab;
     

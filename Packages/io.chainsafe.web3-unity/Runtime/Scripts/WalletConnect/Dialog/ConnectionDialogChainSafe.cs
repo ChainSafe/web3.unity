@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -71,6 +72,11 @@ namespace ChainSafe.Gaming.WalletConnect.Dialog
 
                 loadedLocalWalletButtons = null;
             }
+        }
+
+        public void Close()
+        {
+            OnException(new Exception("User closed the connection dialog."));
         }
     }
 }
