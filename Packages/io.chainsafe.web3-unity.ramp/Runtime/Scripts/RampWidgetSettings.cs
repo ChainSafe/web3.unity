@@ -1,6 +1,6 @@
 ﻿namespace ChainSafe.Gaming.Exchangers.Ramp
 {
-    public class RampWidgetSettings
+    public abstract class RampWidgetSettings
     {
         public int SwapAmount { get; set; }
         public string DefaultAsset { get; set; }
