@@ -34,7 +34,7 @@ namespace ChainSafe.Gaming.WalletConnect.Storage
 
             try
             {
-                var json = await File.ReadAllTextAsync(path); // todo use sync for WebGL?
+                var json = await File.ReadAllTextAsync(path);
                 return JsonConvert.DeserializeObject<LocalData>(json);
             }
             catch
@@ -49,7 +49,7 @@ namespace ChainSafe.Gaming.WalletConnect.Storage
         {
             var path = BuildLocalDataPath();
             var json = JsonConvert.SerializeObject(localData);
-            await File.WriteAllTextAsync(path, json); // todo use sync for WebGL?
+            await File.WriteAllTextAsync(path, json);
         }
 
         public void ClearLocalData()
