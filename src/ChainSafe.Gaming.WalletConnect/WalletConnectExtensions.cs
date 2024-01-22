@@ -5,6 +5,7 @@ using ChainSafe.Gaming.WalletConnect.Wallets;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
+using ChainSafe.Gaming.Web3.Core.Logout;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -45,7 +46,7 @@ namespace ChainSafe.Gaming.WalletConnect
             EnsureProviderBoundFirst(services);
             services.AssertServiceNotBound<ISigner>();
 
-            services.AddSingleton<ISigner, ILifecycleParticipant, WalletConnectSigner>();
+            services.AddSingleton<ISigner, ILifecycleParticipant, ILogoutHandler, WalletConnectSigner>();
 
             return services;
         }

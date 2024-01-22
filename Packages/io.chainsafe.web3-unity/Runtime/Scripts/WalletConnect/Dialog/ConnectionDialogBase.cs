@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace ChainSafe.Gaming.WalletConnect.Dialog
 {
-    public abstract class ConnectionDialogBase : ConnectionDialog
+    public abstract class ConnectionDialogBase : ConnectionHandlerBehaviour
     {
         protected class WalletOptionConfig
         {

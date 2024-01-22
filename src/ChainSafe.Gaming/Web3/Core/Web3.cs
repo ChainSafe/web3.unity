@@ -6,6 +6,7 @@ using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
+using ChainSafe.Gaming.Web3.Core.Logout;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ChainSafe.Gaming.Web3
@@ -35,7 +36,18 @@ namespace ChainSafe.Gaming.Web3
             ContractBuilder = serviceProvider.GetRequiredService<IContractBuilder>();
             ProjectConfig = serviceProvider.GetRequiredService<IProjectConfig>();
             ChainConfig = serviceProvider.GetRequiredService<IChainConfig>();
+            LogoutManager = this.serviceProvider.GetRequiredService<ILogoutManager>();
         }
+
+        /// <summary>
+        /// Access the project configuration object, providing access to project-specific settings.
+        /// </summary>
+        public IProjectConfig ProjectConfig { get; }
+
+        /// <summary>
+        /// Access the chain configuration object, providing access to blockchain-specific settings.
+        /// </summary>
+        public IChainConfig ChainConfig { get; }
 
         /// <summary>
         /// Access the <see cref="IRpcProvider"/> component, which provides RPC communication with the Ethereum network.
@@ -63,14 +75,9 @@ namespace ChainSafe.Gaming.Web3
         public IContractBuilder ContractBuilder { get; }
 
         /// <summary>
-        /// Access the project configuration object, providing access to project-specific settings.
+        /// Access the Logout Manager to notify all handlers that the user wishes to log out.
         /// </summary>
-        public IProjectConfig ProjectConfig { get; }
-
-        /// <summary>
-        /// Access the chain configuration object, providing access to blockchain-specific settings.
-        /// </summary>
-        public IChainConfig ChainConfig { get; }
+        public ILogoutManager LogoutManager { get; }
 
         /// <summary>
         /// Access the service provider of this Web3 instance.

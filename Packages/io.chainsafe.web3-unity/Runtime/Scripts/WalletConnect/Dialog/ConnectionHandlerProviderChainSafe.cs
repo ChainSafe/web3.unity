@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using ChainSafe.Gaming.WalletConnect.Connection;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace ChainSafe.Gaming.WalletConnect.Dialog
 {
@@ -9,21 +10,21 @@ namespace ChainSafe.Gaming.WalletConnect.Dialog
     /// Lacking Pool functionality and loading from Addressables.
     /// </summary>
     [CreateAssetMenu(menuName = "ChainSafe/WalletConnect/Connection Dialog Provider", fileName = "ConnectionDialogProvider", order = 0)]
-    public class ConnectionDialogProviderChainSafe : ConnectionDialogProviderSO
+    public class ConnectionHandlerProviderChainSafe : ConnectionDialogProviderSO
     {
-        [SerializeField] private ConnectionDialog DialogPrefab;
+        [SerializeField] private ConnectionHandlerBehaviour HandlerPrefab;
     
-        private ConnectionDialog loadedDialog;
+        private ConnectionHandlerBehaviour loadedHandler;
         
         public override Task<IConnectionHandler> ProvideHandler()
         {
-            if (loadedDialog != null)
+            if (loadedHandler != null)
             {
-                return Task.FromResult((IConnectionHandler)loadedDialog);
+                return Task.FromResult((IConnectionHandler)loadedHandler);
             }
 
-            loadedDialog = Instantiate(DialogPrefab);
-            return Task.FromResult((IConnectionHandler)loadedDialog);
+            loadedHandler = Instantiate(HandlerPrefab);
+            return Task.FromResult((IConnectionHandler)loadedHandler);
         }
     }
 }

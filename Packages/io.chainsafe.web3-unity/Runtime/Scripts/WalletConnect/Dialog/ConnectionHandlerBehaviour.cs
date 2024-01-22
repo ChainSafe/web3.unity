@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ChainSafe.Gaming.WalletConnect.Dialog
 {
-    public abstract class ConnectionDialog : MonoBehaviour, IConnectionHandler
+    public abstract class ConnectionHandlerBehaviour : MonoBehaviour, IConnectionHandler
     {
         public abstract Task ConnectUserWallet(ConnectionHandlerConfig config);
         public abstract void Terminate();

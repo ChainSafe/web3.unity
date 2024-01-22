@@ -1,11 +1,8 @@
-using System.Linq;
-using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.WalletConnect;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
-using ChainSafe.Gaming.Web3.Environment;
 using ChainSafe.Gaming.Web3.Unity;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,15 +10,25 @@ using UnityEngine.UI;
 
 public class WalletConnectLoginSample : MonoBehaviour
 {
-    [SerializeField] private WalletConnectConfigSO WalletConnectConfig;
+    [SerializeField] private WalletConnectConfigSO walletConnectConfig;
     [SerializeField] private Toggle rememberSessionToggle;
     [SerializeField] private string NextSceneName;
+    [SerializeField] private bool AutoLoginPreviousSession = true;
 
     private bool loginInProgress;
+    private bool storedSessionAvailable;
 
-    private void Awake()
+    private async void Awake()
     {
-        // todo add auto login
+        var loginHelper = await new Web3Builder(ProjectConfigUtilities.Load())
+            .BuildLoginHelper(walletConnectConfig);
+        
+        storedSessionAvailable = loginHelper.StoredSessionAvailable;
+        
+        if (AutoLoginPreviousSession && storedSessionAvailable) // auto-login
+        {
+            Login();
+        }
     }
 
     public async void Login()
@@ -40,14 +47,15 @@ public class WalletConnectLoginSample : MonoBehaviour
                     services.UseUnityEnvironment();
                     services.UseRpcProvider();
 
-                    var rememberSession = rememberSessionToggle.isOn;
-                    services.UseWalletConnectNew(WalletConnectConfig.WithRememberSession(rememberSession))
-                        .UseWalletConnectSignerNew()
-                        .UseWalletConnectTransactionExecutorNew();
+                    var rememberSession = rememberSessionToggle.isOn || storedSessionAvailable;
+
+                    services.UseWalletConnect(walletConnectConfig.WithRememberSession(rememberSession))
+                        .UseWalletConnectSigner()
+                        .UseWalletConnectTransactionExecutor();
                 })
                 .LaunchAsync();
 
-            Web3Accessor.Set(web3);
+            Web3Accessor.Set(web3); // store web3 in singleton
         }
         catch (Web3Exception exception)
         {

@@ -10,7 +10,7 @@ namespace ChainSafe.Gaming.WalletConnect
     {
         public bool RememberSession { get; }
 
-        public bool ForceNewSession { get; } // todo remove?
+        public bool ForceNewSession { get; }
 
         bool AutoRenewSession { get; }
 

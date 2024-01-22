@@ -119,7 +119,7 @@ namespace ChainSafe.Gaming.WalletConnect
         {
             if (string.IsNullOrWhiteSpace(config.ProjectId))
             {
-                throw new WalletConnectException("ProjectId  was not set.");
+                throw new WalletConnectException("ProjectId was not set.");
             }
 
             if (string.IsNullOrWhiteSpace(config.StoragePath))
@@ -191,7 +191,7 @@ namespace ChainSafe.Gaming.WalletConnect
             }
         }
 
-        public async Task Disconnect() // todo call on log out
+        public async Task Disconnect()
         {
             if (!connected)
             {
@@ -203,8 +203,10 @@ namespace ChainSafe.Gaming.WalletConnect
             try
             {
                 storage.ClearLocalData();
+                localData = new LocalData();
                 await signClient.Disconnect(session.Topic, Error.FromErrorType(ErrorType.USER_DISCONNECTED));
                 await core.Storage.Clear();
+                connected = false;
             }
             catch (Exception e)
             {
@@ -279,7 +281,7 @@ namespace ChainSafe.Gaming.WalletConnect
             try
             {
                 var acknowledgement = await signClient.Extend(session.Topic);
-                TryRedirectToWallet(); // todo swapped this with 'await acknowledgement.Acknowledged()', test if it works in build
+                TryRedirectToWallet();
                 await acknowledgement.Acknowledged();
             }
             catch (Exception e)
@@ -292,6 +294,11 @@ namespace ChainSafe.Gaming.WalletConnect
 
         public async Task<string> Request<T>(T data, long? expiry = null)
         {
+            if (!connected)
+            {
+                throw new WalletConnectException("Can't send requests. No session is connected at the moment.");
+            }
+
             if (SessionExpired(session))
             {
                 if (config.AutoRenewSession)
