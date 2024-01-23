@@ -30,7 +30,7 @@ namespace ChainSafe.Gaming.WalletConnect
 
         public IList<string>? DisabledWallets { get; set; }
 
-        public WalletLocationOption WalletLocationOptions { get; set; }
+        public WalletLocationOption WalletLocationOption { get; set; }
 
         public IConnectionHandlerProvider ConnectionHandlerProvider { get; set; }
 

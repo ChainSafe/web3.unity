@@ -235,7 +235,7 @@ namespace ChainSafe.Gaming.WalletConnect
                 {
                     ConnectRemoteWalletUri = connectedData.Uri,
                     DelegateLocalWalletSelectionToOs = OsManageWalletSelection,
-                    WalletLocationOption = config.WalletLocationOptions,
+                    WalletLocationOption = config.WalletLocationOption,
 
                     LocalWalletOptions = !OsManageWalletSelection
                         ? walletRegistry.EnumerateSupportedWallets(osMediator.Platform)

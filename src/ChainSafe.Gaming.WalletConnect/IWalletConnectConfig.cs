@@ -80,7 +80,7 @@ namespace ChainSafe.Gaming.WalletConnect
         /// <summary>
         /// Use this to set Local, Remote or Both wallet connection options for the user.
         /// </summary>
-        WalletLocationOption WalletLocationOptions { get; }
+        WalletLocationOption WalletLocationOption { get; }
 
         /// <summary>
         /// Provider of the connection handling strategy.

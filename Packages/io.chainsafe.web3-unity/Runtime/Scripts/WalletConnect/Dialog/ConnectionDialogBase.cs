@@ -49,8 +49,8 @@ namespace ChainSafe.Gaming.WalletConnect.Dialog
         
             ResetDialog();
 
-            var localEnabled = config.WalletLocationOptions.LocalEnabled();
-            var remoteEnabled = config.WalletLocationOptions.RemoteEnabled();
+            var localEnabled = config.WalletLocationOption.LocalEnabled();
+            var remoteEnabled = config.WalletLocationOption.RemoteEnabled();
 
             if (localEnabled)
             {
