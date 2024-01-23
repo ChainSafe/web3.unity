@@ -9,9 +9,6 @@ public class Logout : MonoBehaviour
 {
     public async void OnLogout()
     {
-        // Remove the saved "remember me" data, if any
-        PlayerData.Clear();
-
         // Logout user
         await Web3Accessor.Web3.LogoutManager.Logout();
 
