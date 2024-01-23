@@ -4,25 +4,31 @@ namespace ChainSafe.Gaming.WalletConnect
 {
     public static class WalletLocationOptionsExtensions
     {
-        public static bool LocalEnabled(this WalletLocationOptions options)
+        /// <summary>
+        /// Returns true if local wallets option enabled.
+        /// </summary>
+        public static bool LocalEnabled(this WalletLocationOption option)
         {
-            return options switch
+            return option switch
             {
-                WalletLocationOptions.LocalAndRemote => true,
-                WalletLocationOptions.OnlyLocal => true,
-                WalletLocationOptions.OnlyRemote => false,
-                _ => throw new ArgumentOutOfRangeException(nameof(options))
+                WalletLocationOption.LocalAndRemote => true,
+                WalletLocationOption.OnlyLocal => true,
+                WalletLocationOption.OnlyRemote => false,
+                _ => throw new ArgumentOutOfRangeException(nameof(option))
             };
         }
 
-        public static bool RemoteEnabled(this WalletLocationOptions options)
+        /// <summary>
+        /// Returns true if remote wallets option enabled.
+        /// </summary>
+        public static bool RemoteEnabled(this WalletLocationOption option)
         {
-            return options switch
+            return option switch
             {
-                WalletLocationOptions.LocalAndRemote => true,
-                WalletLocationOptions.OnlyLocal => false,
-                WalletLocationOptions.OnlyRemote => true,
-                _ => throw new ArgumentOutOfRangeException(nameof(options))
+                WalletLocationOption.LocalAndRemote => true,
+                WalletLocationOption.OnlyLocal => false,
+                WalletLocationOption.OnlyRemote => true,
+                _ => throw new ArgumentOutOfRangeException(nameof(option))
             };
         }
     }

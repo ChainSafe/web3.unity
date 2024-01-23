@@ -5,7 +5,7 @@ using ILogger = WalletConnectSharp.Common.Logging.ILogger;
 namespace ChainSafe.Gaming.WalletConnect
 {
     /// <summary>
-    /// Writes Wallet Connect logs to platform.
+    /// Writes Wallet Connect logs to the <see cref="ILogWriter"/>.
     /// </summary>
     public class WCLogWriter : ILogger
     {

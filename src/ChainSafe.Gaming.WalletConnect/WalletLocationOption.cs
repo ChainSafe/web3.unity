@@ -1,6 +1,9 @@
 namespace ChainSafe.Gaming.WalletConnect
 {
-    public enum WalletLocationOptions
+    /// <summary>
+    /// Wallet location options.
+    /// </summary>
+    public enum WalletLocationOption
     {
         LocalAndRemote,
         OnlyLocal,

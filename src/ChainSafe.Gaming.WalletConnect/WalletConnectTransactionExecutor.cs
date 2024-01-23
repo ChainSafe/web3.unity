@@ -10,13 +10,16 @@ using WalletConnectSharp.Common.Logging;
 
 namespace ChainSafe.Gaming.WalletConnect
 {
-    public class WalletConnectTransactionExecutorNew : ITransactionExecutor
+    /// <summary>
+    /// WalletConnect implementation of <see cref="ITransactionExecutor"/>.
+    /// </summary>
+    public class WalletConnectTransactionExecutor : ITransactionExecutor
     {
         private readonly IRpcProvider rpcProvider;
         private readonly IWalletConnectProvider provider;
         private readonly ISigner signer;
 
-        public WalletConnectTransactionExecutorNew(IWalletConnectProvider provider, IRpcProvider rpcProvider, ISigner signer)
+        public WalletConnectTransactionExecutor(IWalletConnectProvider provider, IRpcProvider rpcProvider, ISigner signer)
         {
             this.rpcProvider = rpcProvider;
             this.provider = provider;

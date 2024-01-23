@@ -22,6 +22,9 @@ using WalletConnectSharp.Sign.Models.Engine;
 
 namespace ChainSafe.Gaming.WalletConnect
 {
+    /// <summary>
+    /// Default implementation of <see cref="IWalletConnectProvider"/>.
+    /// </summary>
     public class WalletConnectProvider : ILifecycleParticipant, IWalletConnectProvider, ILoginHelper
     {
         private readonly ILogWriter logWriter;
@@ -232,7 +235,7 @@ namespace ChainSafe.Gaming.WalletConnect
                 {
                     ConnectRemoteWalletUri = connectedData.Uri,
                     DelegateLocalWalletSelectionToOs = OsManageWalletSelection,
-                    WalletLocationOptions = config.WalletLocationOptions,
+                    WalletLocationOption = config.WalletLocationOptions,
 
                     LocalWalletOptions = !OsManageWalletSelection
                         ? walletRegistry.EnumerateSupportedWallets(osMediator.Platform)

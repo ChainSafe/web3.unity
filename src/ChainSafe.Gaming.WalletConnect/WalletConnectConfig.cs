@@ -26,11 +26,11 @@ namespace ChainSafe.Gaming.WalletConnect
 
         public string StoragePath { get; set; }
 
-        public IList<string>? EnabledWallets { get; set; } // todo note in comments that some supported wallets are wierd and it's better to decide on which wallets you want to use or don't want to use 
+        public IList<string>? EnabledWallets { get; set; } // todo note in comments that some supported wallets are wierd and it's better to decide on which wallets you want to use or don't want to use
 
         public IList<string>? DisabledWallets { get; set; }
 
-        public WalletLocationOptions WalletLocationOptions { get; set; }
+        public WalletLocationOption WalletLocationOptions { get; set; }
 
         public IConnectionHandlerProvider ConnectionHandlerProvider { get; set; }
 

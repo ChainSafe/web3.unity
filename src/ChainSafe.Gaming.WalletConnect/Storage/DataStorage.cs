@@ -8,6 +8,9 @@ using WalletConnectSharp.Storage;
 
 namespace ChainSafe.Gaming.WalletConnect.Storage
 {
+    /// <summary>
+    /// Default implementation of the component responsible for storage of WalletConnect-related data.
+    /// </summary>
     public class DataStorage : IDataStorage
     {
         private const string StorageFileName = "walletconnect-storage.json";

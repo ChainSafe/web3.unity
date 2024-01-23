@@ -6,6 +6,9 @@ using ChainSafe.Gaming.Web3.Environment;
 
 namespace ChainSafe.Gaming.WalletConnect
 {
+    /// <summary>
+    /// Component responsible for redirection of a user to a wallet app.
+    /// </summary>
     public class RedirectionHandler
     {
         private readonly IWalletRegistry walletRegistry;
@@ -27,7 +30,11 @@ namespace ChainSafe.Gaming.WalletConnect
             return !string.IsNullOrWhiteSpace(linkData.UniversalUrl);
         }
 
-        // Redirect for connection using the pre-selected wallet
+        /// <summary>
+        /// Redirect for connection using the pre-selected wallet.
+        /// </summary>
+        /// <param name="connectionUri">The connection URI provided by WalletConnect.</param>
+        /// <param name="walletName">The name of the wallet to redirect user to.</param>
         public void RedirectConnection(string connectionUri, string walletName)
         {
             var walletData = walletRegistry.GetWallet(walletName);
@@ -35,26 +42,40 @@ namespace ChainSafe.Gaming.WalletConnect
             osMediator.OpenUrl(deeplink);
         }
 
-        // Delegate redirection for connection to the OS
+        /// <summary>
+        /// Delegate redirection for connection to the OS.
+        /// </summary>
+        /// <param name="connectionUri">The connection URI provided by WalletConnect.</param>
         public void RedirectConnectionOsManaged(string connectionUri)
         {
             osMediator.OpenUrl(connectionUri);
         }
 
-        // Redirect to the pre-selected wallet
+        /// <summary>
+        /// Redirect to the pre-selected wallet using the wallet name.
+        /// </summary>
+        /// <param name="connectionUri">The connection URI provided by WalletConnect.</param>
         public void Redirect(string walletName)
         {
             var walletData = walletRegistry.GetWallet(walletName);
             Redirect(walletData);
         }
 
-        // Redirect to the pre-selected wallet
+        /// <summary>
+        /// Redirect to the pre-selected wallet.
+        /// </summary>
+        /// <param name="connectionUri">The connection URI provided by WalletConnect.</param>
         public void Redirect(WalletModel walletData)
         {
             var deepLink = GetRedirectionDeeplink(walletData);
             osMediator.OpenUrl(deepLink);
         }
 
+        /// <summary>
+        /// Used to get a redirection deeplink for the <see cref="WalletModel"/>.
+        /// </summary>
+        /// <param name="walletData">Data of the wallet that we want to redirect to.</param>
+        /// <returns>Deeplink for redirection.</returns>
         public string GetRedirectionDeeplink(WalletModel walletData)
         {
             var linkData = GetPlatformLinkData(walletData);
@@ -74,6 +95,13 @@ namespace ChainSafe.Gaming.WalletConnect
             }
         }
 
+        /// <summary>
+        /// Used to get a connection deeplink for the particular wallet.
+        /// </summary>
+        /// <param name="walletData">Data of the wallet that we want to connect.</param>
+        /// <param name="connectionUri">The connection URI provided by WalletConnect.</param>
+        /// <returns>Deeplink for connection.</returns>
+        /// <exception cref="WalletConnectException">Invalid format of deeplink registered for the provided wallet.</exception>
         public string BuildConnectionDeeplink(WalletModel walletData, string connectionUri)
         {
             var linkData = GetPlatformLinkData(walletData);

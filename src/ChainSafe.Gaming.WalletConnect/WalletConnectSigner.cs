@@ -9,6 +9,9 @@ using WalletConnectSharp.Common.Logging;
 
 namespace ChainSafe.Gaming.WalletConnect
 {
+    /// <summary>
+    /// WalletConnect implementation of <see cref="ISigner"/>.
+    /// </summary>
     public class WalletConnectSigner : ISigner, ILifecycleParticipant, ILogoutHandler
     {
         private readonly IWalletConnectProvider provider;
