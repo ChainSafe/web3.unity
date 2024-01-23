@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using ChainSafe.Gaming.WalletConnect.Models;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using WalletConnectSharp.Common.Utils;
 using WalletConnectSharp.Network.Models;
@@ -24,7 +23,7 @@ namespace ChainSafe.Gaming.WalletConnect.Methods
             : base(new object[]
             {
                 address,
-                new TypedDataModel<TStruct>(domain, message),
+                new SerializableTypedData<TStruct>(domain, message),
             })
         {
         }

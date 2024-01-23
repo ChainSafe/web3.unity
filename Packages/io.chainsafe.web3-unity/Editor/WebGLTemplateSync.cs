@@ -66,13 +66,13 @@ namespace ChainSafe.GamingSdk.Editor
                 var templatesFolder = new DirectoryInfo(Path.Combine(pluginPath, "Editor/WebGLTemplates"));
 
                 CopyFolder(templatesFolder, assetsTemplatesDirectory);
-                // Update template values to chain config
-                ChainSafeServerSettings.WriteNetworkFile();
             }
             finally
             {
                 AssetDatabase.AllowAutoRefresh();
                 AssetDatabase.Refresh();
+                // Update template values to chain config
+                ChainSafeServerSettings.WriteNetworkFile();
             }
         }
 

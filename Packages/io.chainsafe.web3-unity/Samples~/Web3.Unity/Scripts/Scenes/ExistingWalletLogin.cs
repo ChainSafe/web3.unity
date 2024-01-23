@@ -62,7 +62,7 @@ public class ExistingWalletLogin : Login
 
     private bool redirectToWallet;
 
-    private Dictionary<string, WalletConnectWalletModel> supportedWallets;
+    private Dictionary<string, WalletConnectWalletModel> supportedWallets = new Dictionary<string, WalletConnectWalletModel>();
 
     private WalletConnectConfig walletConnectConfig;
 
@@ -216,8 +216,7 @@ public class ExistingWalletLogin : Login
             // try and get saved value
             SavedSessionTopic = walletConnectConfig?.SavedSessionTopic,
             SupportedWallets = supportedWallets,
-            // save file closer to assets when in editor, more accessible
-            StoragePath = Application.isEditor ? Application.dataPath : Application.persistentDataPath,
+            StoragePath = Application.persistentDataPath,
             RedirectToWallet = redirectToWallet,
             KeepSessionAlive = autoLogin || rememberMeToggle.isOn,
             DefaultWallet = defaultWallet,
@@ -231,7 +230,7 @@ public class ExistingWalletLogin : Login
 
     private IEnumerator FetchSupportedWallets()
     {
-        using (UnityWebRequest webRequest = UnityWebRequest.Get("https://registry.walletconnect.org/data/wallets.json"))
+        using (UnityWebRequest webRequest = UnityWebRequest.Get("https://registry.walletconnect.com/data/wallets.json"))
         {
             // Request and wait for the desired page.
             yield return webRequest.SendWebRequest();

@@ -35,6 +35,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chainsafe.Gaming.Chainlink"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.Debugging", "src\ChainSafe.Gaming.Debugging\ChainSafe.Gaming.Debugging.csproj", "{88B2E2F4-96BC-44B1-AE4D-5FBA6B4C399F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.MetaMask", "src\ChainSafe.Gaming.MetaMask\ChainSafe.Gaming.MetaMask.csproj", "{0631D9F5-2942-4ECE-A0B5-7C3AF54E87AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.MetaMask.Unity", "src\ChainSafe.Gaming.MetaMask.Unity\ChainSafe.Gaming.MetaMask.Unity.csproj", "{AF45F008-6ABC-4F37-82BF-4814B7F15B30}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -113,6 +117,18 @@ Global
 		{88B2E2F4-96BC-44B1-AE4D-5FBA6B4C399F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{88B2E2F4-96BC-44B1-AE4D-5FBA6B4C399F}.Test|Any CPU.ActiveCfg = Debug|Any CPU
 		{88B2E2F4-96BC-44B1-AE4D-5FBA6B4C399F}.Test|Any CPU.Build.0 = Debug|Any CPU
+		{0631D9F5-2942-4ECE-A0B5-7C3AF54E87AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0631D9F5-2942-4ECE-A0B5-7C3AF54E87AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0631D9F5-2942-4ECE-A0B5-7C3AF54E87AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0631D9F5-2942-4ECE-A0B5-7C3AF54E87AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0631D9F5-2942-4ECE-A0B5-7C3AF54E87AA}.Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{0631D9F5-2942-4ECE-A0B5-7C3AF54E87AA}.Test|Any CPU.Build.0 = Debug|Any CPU
+		{AF45F008-6ABC-4F37-82BF-4814B7F15B30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF45F008-6ABC-4F37-82BF-4814B7F15B30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF45F008-6ABC-4F37-82BF-4814B7F15B30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF45F008-6ABC-4F37-82BF-4814B7F15B30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF45F008-6ABC-4F37-82BF-4814B7F15B30}.Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF45F008-6ABC-4F37-82BF-4814B7F15B30}.Test|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
