@@ -12,13 +12,13 @@ public class Logout : MonoBehaviour
         // Remove the saved "remember me" data, if any
         PlayerData.Clear();
 
-        // Terminate Web3
-        await Web3Accessor.Web3.TerminateAsync();
+        // Logout user
+        await Web3Accessor.Web3.LogoutManager.Logout();
 
-        // Clear the Web3 instance
-        Web3Accessor.Clear();
+        // Terminate Web3
+        await Web3Accessor.TerminateAndClear();
 
         // Go back to the first scene to log in again
-        SceneManager.LoadScene(Login.LoginSceneIndex);
+        SceneManager.LoadScene(0);
     }
 }
