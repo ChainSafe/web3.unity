@@ -7,6 +7,7 @@ namespace ChainSafe.Gaming.WalletConnect
         /// <summary>
         /// Returns true if local wallets option enabled.
         /// </summary>
+        /// <returns>True if local option enabled.</returns>
         public static bool LocalEnabled(this WalletLocationOption option)
         {
             return option switch
@@ -21,6 +22,7 @@ namespace ChainSafe.Gaming.WalletConnect
         /// <summary>
         /// Returns true if remote wallets option enabled.
         /// </summary>
+        /// <returns>True if remote option enabled.</returns>
         public static bool RemoteEnabled(this WalletLocationOption option)
         {
             return option switch

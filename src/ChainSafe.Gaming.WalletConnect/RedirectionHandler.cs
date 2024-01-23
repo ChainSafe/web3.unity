@@ -54,7 +54,6 @@ namespace ChainSafe.Gaming.WalletConnect
         /// <summary>
         /// Redirect to the pre-selected wallet using the wallet name.
         /// </summary>
-        /// <param name="connectionUri">The connection URI provided by WalletConnect.</param>
         public void Redirect(string walletName)
         {
             var walletData = walletRegistry.GetWallet(walletName);
@@ -64,7 +63,6 @@ namespace ChainSafe.Gaming.WalletConnect
         /// <summary>
         /// Redirect to the pre-selected wallet.
         /// </summary>
-        /// <param name="connectionUri">The connection URI provided by WalletConnect.</param>
         public void Redirect(WalletModel walletData)
         {
             var deepLink = GetRedirectionDeeplink(walletData);

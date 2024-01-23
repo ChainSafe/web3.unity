@@ -367,11 +367,6 @@ namespace ChainSafe.Gaming.WalletConnect
         private WalletModel GetSessionLocalWallet()
         {
             var nativeUrl = RemoveSlash(session.Peer.Metadata.Url);
-            // var dividerIndex = nativeUrl.IndexOf(':');
-            // if (dividerIndex != -1)
-            // {
-            //     nativeUrl = $"{nativeUrl[..dividerIndex]}:";
-            // }
 
             var sessionWallet = walletRegistry
                 .EnumerateSupportedWallets(osMediator.Platform)

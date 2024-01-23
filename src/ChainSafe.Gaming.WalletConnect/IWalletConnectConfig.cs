@@ -12,7 +12,7 @@ namespace ChainSafe.Gaming.WalletConnect
     public interface IWalletConnectConfig
     {
         /// <summary>
-        /// Should we store this session on a disk for the next time?
+        /// Set to true if you want to store this session on a disk for the next time.
         /// </summary>
         public bool RememberSession { get; }
 

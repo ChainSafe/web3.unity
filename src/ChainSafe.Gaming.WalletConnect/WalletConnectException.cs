@@ -8,11 +8,13 @@ namespace ChainSafe.Gaming.WalletConnect
     /// </summary>
     public class WalletConnectException : Web3Exception
     {
-        public WalletConnectException(string message) : base(message)
+        public WalletConnectException(string message)
+            : base(message)
         {
         }
 
-        public WalletConnectException(string message, Exception innerException) : base(message, innerException)
+        public WalletConnectException(string message, Exception innerException)
+            : base(message, innerException)
         {
         }
     }
