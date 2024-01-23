@@ -13,7 +13,7 @@ namespace ChainSafe.Gaming.WalletConnect
         [field: SerializeField] public bool AutoRenewSession { get; set; } = true;
         [field: SerializeField] public string ProjectName { get; set; }
         [field: SerializeField] public string ProjectId { get; set; }
-        [field: SerializeField] public string BaseContext { get; set; }
+        [field: SerializeField] public string BaseContext { get; set; } = "unity-game";
         [field: SerializeField] public Metadata Metadata { get; set; }
         [field: SerializeField] public string StoragePath { get; set; } = "wallet-connect/";
         [field: SerializeField] public string OverrideRegistryUri { get; set; }
