@@ -27,6 +27,7 @@ public class WalletConnectLoginSample : MonoBehaviour
         
         if (AutoLoginPreviousSession && storedSessionAvailable) // auto-login
         {
+            Debug.Log("Proceeding with auto-login.");
             Login();
         }
     }
