@@ -4,6 +4,7 @@ using ChainSafe.Gaming.WalletConnect;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Unity;
+using ChainSafe.GamingSdk.Gelato;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -11,6 +12,7 @@ using UnityEngine.UI;
 public class WalletConnectLoginSample : MonoBehaviour
 {
     [SerializeField] private WalletConnectConfigSO walletConnectConfig;
+    [SerializeField] private string GelatoApiKey;
     [SerializeField] private Toggle rememberSessionToggle;
     [SerializeField] private string NextSceneName;
     [SerializeField] private bool AutoLoginPreviousSession = true;
@@ -53,6 +55,8 @@ public class WalletConnectLoginSample : MonoBehaviour
                     services.UseWalletConnect(walletConnectConfig.WithRememberSession(rememberSession))
                         .UseWalletConnectSigner()
                         .UseWalletConnectTransactionExecutor();
+
+                    services.UseGelato(GelatoApiKey);
                 })
                 .LaunchAsync();
 
