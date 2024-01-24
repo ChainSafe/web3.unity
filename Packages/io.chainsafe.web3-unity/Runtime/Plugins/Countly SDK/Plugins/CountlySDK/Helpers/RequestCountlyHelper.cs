@@ -97,7 +97,7 @@ namespace Plugins.CountlySDK.Helpers
             bool shouldPost = _config.EnablePost || model.RequestData.Length > 2000;
 
 #if UNITY_WEBGL
-            return await StartProcessRequestRoutine(shouldPost, _countlyUtils.ServerInputUrl, model.RequestData);
+            return await StartProcessRequestRoutine(_countlyUtils.ServerInputUrl, model.RequestData);
 #else
             if (shouldPost) {
                 return await Task.Run(() => PostAsync(_countlyUtils.ServerInputUrl, model.RequestData));
@@ -158,8 +158,7 @@ namespace Plugins.CountlySDK.Helpers
 
                         countlyResponse.Data = res;
                         countlyResponse.StatusCode = code;
-                        countlyResponse.IsSuccess = body.ContainsKey("result");
-
+                        countlyResponse.IsSuccess = IsSuccess(countlyResponse);
                     }
 
                 }
@@ -172,8 +171,8 @@ namespace Plugins.CountlySDK.Helpers
                     using (StreamReader reader = new StreamReader(stream)) {
                         string res = await reader.ReadToEndAsync();
                         countlyResponse.StatusCode = code;
-                        countlyResponse.IsSuccess = false;
                         countlyResponse.Data = res;
+                        countlyResponse.IsSuccess = IsSuccess(countlyResponse);
                     }
                 }
 
@@ -220,7 +219,7 @@ namespace Plugins.CountlySDK.Helpers
 
                         countlyResponse.Data = res;
                         countlyResponse.StatusCode = code;
-                        countlyResponse.IsSuccess = body.ContainsKey("result");
+                        countlyResponse.IsSuccess = IsSuccess(countlyResponse);
                     }
                 }
             } catch (WebException ex) {
@@ -232,8 +231,8 @@ namespace Plugins.CountlySDK.Helpers
                     using (StreamReader reader = new StreamReader(stream)) {
                         string res = await reader.ReadToEndAsync();
                         countlyResponse.StatusCode = code;
-                        countlyResponse.IsSuccess = false;
                         countlyResponse.Data = res;
+                        countlyResponse.IsSuccess = IsSuccess(countlyResponse);
                     }
                 }
 
@@ -251,11 +250,11 @@ namespace Plugins.CountlySDK.Helpers
         /// <param name="uri"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        private Task<CountlyResponse> StartProcessRequestRoutine(bool shouldPost, string uri, string data)
+        private Task<CountlyResponse> StartProcessRequestRoutine(string uri, string data)
         {
             TaskCompletionSource<CountlyResponse> tcs = new TaskCompletionSource<CountlyResponse>();
 
-            _monoBehaviour.StartCoroutine(ProcessRequestCoroutine(shouldPost, uri, data, (response) => {
+            _monoBehaviour.StartCoroutine(ProcessRequestCoroutine(uri, data, (response) => {
                 tcs.SetResult(response);
             }));
 
@@ -270,7 +269,7 @@ namespace Plugins.CountlySDK.Helpers
         /// <param name="data"></param>
         /// <param name="callback"></param>
         /// <returns></returns>
-        private IEnumerator ProcessRequestCoroutine(bool shouldPost, string uri, string data, Action<CountlyResponse> callback)
+        private IEnumerator ProcessRequestCoroutine(string uri, string data, Action<CountlyResponse> callback)
         {
             CountlyResponse countlyResponse = new CountlyResponse();
 
@@ -279,50 +278,41 @@ namespace Plugins.CountlySDK.Helpers
 
             using (UnityWebRequest webRequest = UnityWebRequest.Put(url, data)) {
 
-                if (shouldPost) {
-                    webRequest.method = UnityWebRequest.kHttpVerbPOST;
-                } else {
-                    webRequest.method = UnityWebRequest.kHttpVerbGET;
-                }
-                
+                webRequest.method = UnityWebRequest.kHttpVerbPOST;
+
                 yield return webRequest.SendWebRequest();
 
-                string[] pages = url.Split('/');
+                string[] pages = url.Split('?');
                 int page = pages.Length - 1;
                 int code = (int)webRequest.responseCode;
 
-                switch (webRequest.result) {
-                    case UnityWebRequest.Result.ConnectionError:
-                    case UnityWebRequest.Result.DataProcessingError:
-                        Log.Verbose("[RequestCountlyHelper] ProcessRequestCoroutine request: " + uri + " body: " + pages[page] + ": Error: " + webRequest.error);
-                        countlyResponse.ErrorMessage = webRequest.error;
-                        countlyResponse.StatusCode = code;
-                        countlyResponse.IsSuccess = false;
-                        break;
-                    case UnityWebRequest.Result.ProtocolError:
-                        Log.Verbose("[RequestCountlyHelper] ProcessRequestCoroutine request: " + uri + " body: " + pages[page] + ": HTTP Error: " + webRequest.error);
-                        countlyResponse.ErrorMessage = webRequest.error;
-                        countlyResponse.StatusCode = code;
-                        countlyResponse.IsSuccess = false;
-                        break;
-                    case UnityWebRequest.Result.Success:
-                        countlyResponse.Data = webRequest.downloadHandler.text;
-                        countlyResponse.StatusCode = code;
-                        countlyResponse.IsSuccess = true;
+                countlyResponse.Data = webRequest.downloadHandler.text;
+                countlyResponse.ErrorMessage = webRequest.error;
+                countlyResponse.StatusCode = code;
+                countlyResponse.IsSuccess = IsSuccess(countlyResponse);
 
-                        Log.Debug("[RequestCountlyHelper] ProcessRequestCoroutine request: " + uri + " body: " + pages[page] + ":\nReceived: " + webRequest.downloadHandler.text);
-                        break;
-                    default:
-                        Log.Warning("[RequestCountlyHelper] ProcessRequestCoroutine request: " + uri + " body: " + pages[page] + ": Unexpected result: " + webRequest.result);
-                        countlyResponse.ErrorMessage = "Unexpected result: " + webRequest.result;
-                        countlyResponse.StatusCode = code;
-                        countlyResponse.IsSuccess = false;
-                        break;
-                }
+                Log.Debug($"[RequestCountlyHelper] ProcessRequestCoroutine request url: [{uri}] body: [{pages[page]}] response: [{countlyResponse}]");
             }
 
             callback?.Invoke(countlyResponse);
         }
 
+        private bool IsSuccess(CountlyResponse countlyResponse)
+        {
+            if (countlyResponse.StatusCode >= 200 && countlyResponse.StatusCode < 300) {
+                try {
+                    JObject json = JObject.Parse(countlyResponse.Data);
+
+                    if (json.ContainsKey("result")) {
+                        return true;
+                    }
+                } catch(JsonException) {
+                    Log.Debug("[RequestCountlyHelper] IsSuccess : Returned request is not a JSON object");
+                    return false;
+                } 
+            }
+
+            return false;
+        }
     }
 }
