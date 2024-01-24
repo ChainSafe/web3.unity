@@ -68,7 +68,8 @@ namespace ChainSafe.Gaming.WalletConnect.Storage
 
         public FileSystemStorage BuildStorage(bool sessionStored)
         {
-            var path = Path.Combine(osMediator.ApplicationDataPath, config.StoragePath, StorageFileName);
+            var absStoragePath = BuildStoragePath(osMediator.ApplicationDataPath, config.StoragePath);
+            var path = Path.Combine(absStoragePath, StorageFileName);
 
             // If we're not restoring a session and save WC file exists remove it.
             // This is done to mitigate for a WC error that happens intermittently where generated Uri doesn't connect wallet.
@@ -86,7 +87,13 @@ namespace ChainSafe.Gaming.WalletConnect.Storage
 
         private string BuildLocalDataPath()
         {
-            return Path.Combine(osMediator.ApplicationDataPath, config.StoragePath, LocalDataFileName);
+            var absStoragePath = BuildStoragePath(osMediator.ApplicationDataPath, config.StoragePath);
+            return Path.Combine(absStoragePath, LocalDataFileName);
+        }
+
+        public static string BuildStoragePath(string appDataPath, string storageRelativePath)
+        {
+            return Path.Combine(appDataPath, storageRelativePath);
         }
     }
 }
