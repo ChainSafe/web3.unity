@@ -9,7 +9,7 @@ using UnityEngine;
 public class CountlyAnalytics : IAnalyticsClient
 {
     private const string AppKey = "9fad27b7383f5151a316505ca3245287fc44ba50";
-    private const string ServerUrl = "https://chainsafe-40aca7b26551e.flex.countly.com/";
+    private const string ServerUrl = "https://trial-chainsafe.count.ly";
 
     
     public async Task CaptureEvent(AnalyticsEvent eventData)
