@@ -1,10 +1,13 @@
+using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.JsonRpc;
+using ChainSafe.Gaming.MultiCall;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.WalletConnect;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Unity;
 using ChainSafe.GamingSdk.Gelato;
+using Scripts.EVM.Token;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -57,6 +60,18 @@ public class WalletConnectLoginSample : MonoBehaviour
                         .UseWalletConnectTransactionExecutor();
 
                     services.UseGelato(GelatoApiKey);
+                    services.UseMultiCall();
+
+                    /* As many contracts as needed may be registered here.
+                     * It is better to register all contracts the application
+                     * will be interacting with at configuration time if they
+                     * are known in advance. We're just registering CsTestErc20
+                     * here to show how it's done. You can look at the
+                     * `Scripts/Prefabs/Wallet/RegisteredContract` script
+                     * to see how it's used later on.
+                     */
+                    services.ConfigureRegisteredContracts(contracts =>
+                        contracts.RegisterContract("CsTestErc20", ABI.Erc20, Contracts.Erc20));
                 })
                 .LaunchAsync();
 
