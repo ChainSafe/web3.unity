@@ -1250,6 +1250,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walletConnectConfig: {fileID: 11400000, guid: f9e153ae0e842ea4cadd8bdb2212cc2d, type: 2}
+  GelatoApiKey: _UzPz_Yk_WTjWMfcl45fLvQNGQ9ISx5ZE8TnwnVKYrE_
   rememberSessionToggle: {fileID: 724612376}
   NextSceneName: SampleMain
   AutoLoginPreviousSession: 1
