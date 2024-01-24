@@ -73,7 +73,7 @@ namespace Scenes
             /* As many contracts as needed may be registered here.
              * It is better to register all contracts the application
              * will be interacting with at configuration time if they
-             * are known in advance. We're just registering shiba
+             * are known in advance. We're just registering CsTestErc20
              * here to show how it's done. You can look at the
              * `Scripts/Prefabs/Wallet/RegisteredContract` script
              * to see how it's used later on.
