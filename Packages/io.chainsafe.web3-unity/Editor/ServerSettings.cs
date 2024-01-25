@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using ChainSafe.Gaming.UnityPackage;
+using Microsoft.IdentityModel.Tokens;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.Events;
 using ChainInfo = ChainSafe.Gaming.UnityPackage.Model;
@@ -231,18 +232,6 @@ public class ChainSafeServerSettings : EditorWindow
 #if UNITY_WEBGL
                 WriteNetworkFile();
 #endif
-                var project = ProjectConfigUtilities.Load();
-                /*CountlyAnalytics.Instance.CaptureEvent(new AnalyticsEvent()
-                {
-                    ChainId = project.ChainId,
-                    EventName = "Project ID Validated",
-                    Network = project.Network,
-                    PackageName = $"io.chainsafe.web3-unity",
-                    Rpc = project.Rpc,
-                    ProjectId = projectID,
-                    Version = CountlyAnalytics.Instance.AnalyticsVersion,
-                });*/
-
             }
         }
         catch (Exception e)
