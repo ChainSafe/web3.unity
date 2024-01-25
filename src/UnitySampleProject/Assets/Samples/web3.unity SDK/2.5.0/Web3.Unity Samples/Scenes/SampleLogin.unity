@@ -2678,6 +2678,7 @@ MonoBehaviour:
   <SceneToLoad>k__BackingField: SampleMain
   gelatoApiKey: 7MFQqyGS1Iui_e_MgmFW1BfbFeJ06g8nnL2oUTlIJug_
   errorPopup: {fileID: 1701305868}
+  rampConfig: {fileID: 11400000, guid: d1f58846e4fc71d4e90f287a86f328f9, type: 2}
   supportedWalletsDropdown: {fileID: 540464236}
   redirectToWalletToggle: {fileID: 981405684}
   loginButton: {fileID: 787012150}

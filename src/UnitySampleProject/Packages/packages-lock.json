@@ -1,5 +1,14 @@
 {
   "dependencies": {
+    "com.tools.webglthreadingpatcher": {
+      "version": "https://github.com/VolodymyrBS/WebGLThreadingPatcher.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "nuget.mono-cecil": "0.1.6-preview"
+      },
+      "hash": "c2f3628a028373afc8c66e443f7ce21bcb613a47"
+    },
     "com.unity.2d.animation": {
       "version": "7.0.10",
       "depth": 1,
@@ -145,6 +154,13 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.unity.nuget.mono-cecil": {
+      "version": "1.10.1",
+      "depth": 2,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "com.unity.nuget.newtonsoft-json": {
       "version": "3.1.0",
       "depth": 0,
@@ -245,6 +261,15 @@
         "io.chainsafe.web3-unity": "2.5.0"
       }
     },
+    "io.chainsafe.web3-unity.ramp": {
+      "version": "file:../../../Packages/io.chainsafe.web3-unity.ramp",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "3.0.2",
+        "io.chainsafe.web3-unity": "2.5.0"
+      }
+    },
     "io.chainsafe.web3-unity.web3auth": {
       "version": "file:../../../Packages/io.chainsafe.web3-unity.web3auth",
       "depth": 0,
@@ -252,6 +277,14 @@
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.0.2",
         "io.chainsafe.web3-unity": "2.5.5"
+      }
+    },
+    "nuget.mono-cecil": {
+      "version": "1.0.0",
+      "depth": 1,
+      "source": "builtin",
+      "dependencies": {
+        "com.unity.nuget.mono-cecil": "1.10.1"
       }
     },
     "com.unity.modules.ai": {

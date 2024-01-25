@@ -50,14 +50,14 @@ public class KeyStoreManagerUtils
 
     static KeyStoreManagerUtils()
     {
-#if !UNITY_IOS
+#if !UNITY_IOS || UNITY_EDITOR
         SecurePlayerPrefs.Init();
 #endif
     }
 
     public static void savePreferenceData(string key, string value)
     {
-#if UNITY_IOS
+#if UNITY_IOS && !UNITY_EDITOR
         web3auth_keystore_set(key, value);
 #else
         SecurePlayerPrefs.SetString(key, value);
@@ -66,7 +66,7 @@ public class KeyStoreManagerUtils
 
     public static string getPreferencesData(string key)
     {
-#if UNITY_IOS
+#if UNITY_IOS && !UNITY_EDITOR
         return web3auth_keystore_get(key);
 #else
         return SecurePlayerPrefs.GetString(key);
@@ -74,7 +74,7 @@ public class KeyStoreManagerUtils
     }
     public static void deletePreferencesData(string key)
     {
-#if UNITY_IOS
+#if UNITY_IOS && !UNITY_EDITOR
         web3auth_keystore_delete(key);
 #else
         SecurePlayerPrefs.DeleteKey(key);
