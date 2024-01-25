@@ -1,4 +1,6 @@
-﻿namespace ChainSafe.Gaming.Web3.Analytics
+﻿using System.Threading.Tasks;
+
+namespace ChainSafe.Gaming.Web3.Analytics
 {
     /// <summary>
     /// Interface for the Analytics Client.
@@ -6,6 +8,10 @@
     public interface IAnalyticsClient
     {
         public string AnalyticsVersion { get; }
+
+        IChainConfig ChainConfig { get; }
+
+        IProjectConfig ProjectConfig { get; }
 
         /// <summary>
         /// Captures an analytics event.

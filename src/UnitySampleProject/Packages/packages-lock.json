@@ -279,14 +279,6 @@
         "io.chainsafe.web3-unity": "2.5.5"
       }
     },
-    "nuget.mono-cecil": {
-      "version": "1.0.0",
-      "depth": 1,
-      "source": "builtin",
-      "dependencies": {
-        "com.unity.nuget.mono-cecil": "1.10.1"
-      }
-    },
     "com.unity.modules.ai": {
       "version": "1.0.0",
       "depth": 0,
