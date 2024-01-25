@@ -69,7 +69,8 @@ namespace Scenes
                 .UseUnityEnvironment()
                 .UseGelato(gelatoApiKey)
                 .UseMultiCall()
-                .UseRpcProvider();
+                .UseRpcProvider()
+				.UseRampExchangers();
 
             /* As many contracts as needed may be registered here.
              * It is better to register all contracts the application

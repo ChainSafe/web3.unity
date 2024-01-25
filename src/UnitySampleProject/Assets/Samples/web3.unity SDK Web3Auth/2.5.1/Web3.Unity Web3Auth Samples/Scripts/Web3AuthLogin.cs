@@ -35,10 +35,7 @@ public class Web3AuthLogin : Login
     [SerializeField] private Network network;
     [Header("UI")]
     [SerializeField] private List<ProviderAndButtonPair> providerAndButtonPairs;
-
-    [Header("Ramp")] 
-    [SerializeField] private RampExchangerConfigSO rampConfig;
-
+    
     private bool useProvider;
 
     private Provider selectedProvider;
@@ -112,12 +109,6 @@ public class Web3AuthLogin : Login
             Version = client.AnalyticsVersion,
             PackageName = "io.chainsafe.web3-unity.web3auth",
         });
-
-        Web3 web3 = Web3Accessor.Web3;
-        web3.RampExchanger().OnRampPurchaseCreated += data 
-            => Debug.Log($"On-Ramp purchase created {data.CryptoAmount} {data.Asset.Name}");
-        web3.RampExchanger().OffRampSaleCreated += data
-            => Debug.Log($"Off-Ramp sale created {data.Fiat.Amount:C} {data.Fiat.CurrencySymbol}");
     }
 
     protected override Web3Builder ConfigureWeb3Services(Web3Builder web3Builder)
@@ -149,9 +140,7 @@ public class Web3AuthLogin : Login
                 };   
             }
             
-            services.UseWeb3AuthWallet(web3AuthConfig);
-            services.UseRampExchanger(rampConfig);
-            
+            services.UseWeb3AuthWallet(web3AuthConfig);            
         });
     }
 }
