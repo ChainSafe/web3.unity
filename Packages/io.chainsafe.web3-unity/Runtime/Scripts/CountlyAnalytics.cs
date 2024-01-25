@@ -30,7 +30,7 @@ public class CountlyAnalytics : IAnalyticsClient
 
     public CountlyAnalytics(IChainConfig chainConfig, IProjectConfig projectConfig)
     {
-        Countly.Instance.Init(new CountlyConfiguration(AppKey, ServerUrl).EnableLogging());
+        Countly.Instance.Init(new CountlyConfiguration(AppKey, ServerUrl));
         Debug.Log("Countly initialized");
 
         ChainConfig = chainConfig;
