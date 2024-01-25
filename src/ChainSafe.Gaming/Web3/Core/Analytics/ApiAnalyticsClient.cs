@@ -23,7 +23,7 @@ namespace ChainSafe.Gaming.Web3.Analytics
 
         public string AnalyticsVersion => "2.5.5";
 
-        public async Task CaptureEvent(AnalyticsEvent eventData)
+        public async void CaptureEvent(AnalyticsEvent eventData)
         {
             eventData.ProjectId ??= ProjectConfig.ProjectId;
             eventData.ChainId ??= ChainConfig.ChainId;

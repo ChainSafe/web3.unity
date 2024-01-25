@@ -50,7 +50,7 @@ namespace ChainSafe.GamingSdk.Gelato
                 RelayCall.SponsoredCallErc2771 => $"{config.Url}/relays/v2/sponsored-call-erc2771",
                 _ => throw new Web3Exception("relayCall option not found")
             };
-            await analyticsClient.CaptureEvent(new AnalyticsEvent()
+            analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
                 ChainId = chainConfig.ChainId,
                 Network = chainConfig.Network,

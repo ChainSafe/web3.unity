@@ -12,7 +12,7 @@ public class CountlyAnalytics : IAnalyticsClient
     private const string ServerUrl = "https://chainsafe-40aca7b26551e.flex.countly.com";
 
     
-    public async Task CaptureEvent(AnalyticsEvent eventData)
+    public async void CaptureEvent(AnalyticsEvent eventData)
     {
         await Countly.Instance.Events.RecordEventAsync(eventData.EventName, new Dictionary<string, object>()
         {

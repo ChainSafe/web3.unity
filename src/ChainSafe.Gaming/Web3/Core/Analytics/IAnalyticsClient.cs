@@ -17,7 +17,6 @@ namespace ChainSafe.Gaming.Web3.Analytics
         /// Captures an analytics event.
         /// </summary>
         /// <param name="eventData">The analytics event data.</param>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        Task CaptureEvent(AnalyticsEvent eventData);
+        void CaptureEvent(AnalyticsEvent eventData);
     }
 }

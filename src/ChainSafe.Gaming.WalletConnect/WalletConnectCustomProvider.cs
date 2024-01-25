@@ -75,7 +75,7 @@ namespace ChainSafe.Gaming.WalletConnect
         /// <returns>async awaitable task.</returns>
         public ValueTask WillStartAsync()
         {
-            return new ValueTask(analyticsClient.CaptureEvent(new AnalyticsEvent()
+            analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
                 ProjectId = analyticsClient.ProjectConfig.ProjectId,
                 Network = analyticsClient.ChainConfig.Network,
@@ -84,7 +84,9 @@ namespace ChainSafe.Gaming.WalletConnect
                 EventName = "Wallet Connect Initialized",
                 PackageName = "io.chainsafe.web3-unity",
                 Version = analyticsClient.AnalyticsVersion,
-            }));
+            });
+
+            return new ValueTask(Task.CompletedTask);
         }
 
         private async Task Initialize()

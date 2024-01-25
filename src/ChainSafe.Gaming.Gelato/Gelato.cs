@@ -55,7 +55,7 @@ namespace ChainSafe.GamingSdk.Gelato
                 return;
             }
 
-            await analyticsClient.CaptureEvent(new AnalyticsEvent()
+            analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
                 ChainId = chainConfig.ChainId,
                 Network = chainConfig.Network,

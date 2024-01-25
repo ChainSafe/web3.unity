@@ -69,7 +69,7 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
             var contractAbi = this.config.ContractAbi.AssertNotNull(nameof(this.config.ContractAbi));
             var contractAddress = this.config.ContractAddress.AssertNotNull(nameof(this.config.ContractAddress));
 
-            await analyticsClient.CaptureEvent(new AnalyticsEvent()
+            analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
                 ProjectId = projectConfig.ProjectId,
                 Network = chainConfig.Network,

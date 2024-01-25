@@ -16,9 +16,8 @@ namespace ChainSafe.Gaming.Web3.Analytics
 
         public IProjectConfig ProjectConfig { get; }
 
-        public Task CaptureEvent(AnalyticsEvent eventData)
+        public void CaptureEvent(AnalyticsEvent eventData)
         {
-            return Task.CompletedTask;
         }
     }
 }

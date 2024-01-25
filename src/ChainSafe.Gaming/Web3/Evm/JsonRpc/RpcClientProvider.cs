@@ -123,7 +123,7 @@ namespace ChainSafe.Gaming.Evm.Providers
             }
             finally
             {
-                await environment.AnalyticsClient.CaptureEvent(new AnalyticsEvent()
+                environment.AnalyticsClient.CaptureEvent(new AnalyticsEvent()
                 {
                     Rpc = method,
                     Network = network?.Name,

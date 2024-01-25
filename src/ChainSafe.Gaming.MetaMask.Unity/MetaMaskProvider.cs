@@ -61,7 +61,7 @@ namespace ChainSafe.Gaming.MetaMask.Unity
         {
             logWriter.Log("Connecting from Metamask...");
 
-            await analyticsClient.CaptureEvent(new AnalyticsEvent()
+            analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
                 ProjectId = projectConfig.ProjectId,
                 Network = chainConfig.Network,
