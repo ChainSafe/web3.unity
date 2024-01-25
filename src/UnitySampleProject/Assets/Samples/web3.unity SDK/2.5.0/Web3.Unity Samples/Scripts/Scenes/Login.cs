@@ -50,6 +50,7 @@ namespace Scenes
 
             catch (Exception)
             {
+                
                 errorPopup.ShowError("Login failed, please try again\n(see console for more details)");
                 throw;
             }

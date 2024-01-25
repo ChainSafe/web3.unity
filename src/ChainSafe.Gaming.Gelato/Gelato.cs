@@ -22,6 +22,9 @@ namespace ChainSafe.GamingSdk.Gelato
         private readonly ISigner signer;
         private readonly GelatoConfig config;
         private readonly IChainConfig chainConfig;
+        private readonly IAnalyticsClient analyticsClient;
+        private readonly IProjectConfig projectConfig;
+
         private bool gelatoDisabled;
 
         public Gelato(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, ISigner signer, IContractBuilder contractBuilder, IAnalyticsClient analyticsClient, IProjectConfig projectConfig)
@@ -31,14 +34,17 @@ namespace ChainSafe.GamingSdk.Gelato
             this.config = config;
             this.chainConfig = chainConfig;
             this.contractBuilder = contractBuilder;
+            this.analyticsClient = analyticsClient;
+            this.projectConfig = projectConfig;
         }
 
-        public Gelato(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, IContractBuilder contractBuilder, IAnalyticsClient analyticsClient, IProjectConfig projectConfig)
+        public Gelato(IHttpClient httpClient, IChainConfig chainConfig, IProjectConfig projectConfig, GelatoConfig config, IContractBuilder contractBuilder, IAnalyticsClient analyticsClient)
         {
             gelatoClient = new GelatoClient(httpClient, config, analyticsClient, chainConfig, projectConfig);
             this.config = config;
             this.chainConfig = chainConfig;
             this.contractBuilder = contractBuilder;
+            this.projectConfig = projectConfig;
         }
 
         public async ValueTask WillStartAsync()
@@ -46,7 +52,17 @@ namespace ChainSafe.GamingSdk.Gelato
             if (!await IsNetworkSupported(chainConfig.ChainId))
             {
                 gelatoDisabled = true;
+                return;
             }
+
+            analyticsClient.CaptureEvent(new AnalyticsEvent()
+            {
+                ChainId = chainConfig.ChainId,
+                Network = chainConfig.Network,
+                EventName = $"Gelato initialized",
+                ProjectId = projectConfig.ProjectId,
+                PackageName = "io.chainsafe.web3-unity",
+            });
         }
 
         public bool GetGelatoDisabled() => gelatoDisabled;
