@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Exchangers.Ramp;
 using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.GamingSdk.Web3Auth;
@@ -31,10 +33,9 @@ public class Web3AuthLogin : Login
     [SerializeField] private string clientId;
     [SerializeField] private string redirectUri;
     [SerializeField] private Network network;
-
     [Header("UI")]
     [SerializeField] private List<ProviderAndButtonPair> providerAndButtonPairs;
-
+    
     private bool useProvider;
 
     private Provider selectedProvider;
@@ -139,7 +140,7 @@ public class Web3AuthLogin : Login
                 };   
             }
             
-            services.UseWeb3AuthWallet(web3AuthConfig);
+            services.UseWeb3AuthWallet(web3AuthConfig);            
         });
     }
 }

@@ -12,6 +12,7 @@
     "com.unity.ugui": "1.0.0",
     "com.unity.visualscripting": "1.8.0",
     "io.chainsafe.web3-unity": "file:../../../Packages/io.chainsafe.web3-unity",
+    "io.chainsafe.web3-unity.ramp": "file:../../../Packages/io.chainsafe.web3-unity.ramp",
     "io.chainsafe.web3-unity.lootboxes": "file:../../../Packages/io.chainsafe.web3-unity.lootboxes",
     "io.chainsafe.web3-unity.web3auth": "file:../../../Packages/io.chainsafe.web3-unity.web3auth",
     "com.unity.modules.ai": "1.0.0",
@@ -44,9 +45,7 @@
     "com.unity.modules.video": "1.0.0",
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
-    "com.unity.modules.xr": "1.0.0"
-  },
-  "testables": [
-    "io.chainsafe.web3-unity"
-  ]
+    "com.unity.modules.xr": "1.0.0",
+    "com.tools.webglthreadingpatcher": "https://github.com/VolodymyrBS/WebGLThreadingPatcher.git"
+  }
 }

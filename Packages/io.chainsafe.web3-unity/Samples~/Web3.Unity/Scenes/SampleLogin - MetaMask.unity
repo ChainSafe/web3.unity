@@ -300,6 +300,7 @@ MonoBehaviour:
   <SceneToLoad>k__BackingField: SampleMain
   gelatoApiKey: 7MFQqyGS1Iui_e_MgmFW1BfbFeJ06g8nnL2oUTlIJug_
   errorPopup: {fileID: 314965761}
+  rampConfig: {fileID: 11400000, guid: d1f58846e4fc71d4e90f287a86f328f9, type: 2}
   loginButton: {fileID: 2048731599}
 --- !u!1 &740974330
 GameObject:
