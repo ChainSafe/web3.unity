@@ -52,4 +52,5 @@
     
     <!-- Assemblies from UnityPackages -->
     <assembly fullname="chainsafe.web3-unity"/>
+    <assembly fullname="io.chainsafe.web3-unity.exchangers.runtime"/>
 </linker>

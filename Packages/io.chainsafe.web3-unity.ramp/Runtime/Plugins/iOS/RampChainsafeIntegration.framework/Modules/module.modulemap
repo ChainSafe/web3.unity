@@ -1,0 +1,4 @@
+framework module RampChainsafeIntegration {
+  header "RampChainsafeIntegration-Swift.h"
+  requires objc
+}

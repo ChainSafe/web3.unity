@@ -36,9 +36,9 @@ public static class SceneIndexer
 
         string importPath = GetImportPath(package);
 
-        //Scenes can be deleted. Remove empty scenes from build settings before adding new ones.
+        //Clear out scenes that do not exist
         EditorBuildSettings.scenes = EditorBuildSettings.scenes.Where(s => !string.IsNullOrEmpty(s.path)).ToArray();
-
+        
         //scenes already added to build settings
         if (EditorBuildSettings.scenes.Any(s => Path.GetFullPath(s.path).Contains(importPath)))
         {

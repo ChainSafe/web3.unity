@@ -1396,9 +1396,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b6902e441950fa4bb5cefdd2263164a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <SceneToLoad>k__BackingField: SampleMain
+  <SceneToLoad>k__BackingField: SampleRampIntegration
   gelatoApiKey: 7MFQqyGS1Iui_e_MgmFW1BfbFeJ06g8nnL2oUTlIJug_
   errorPopup: {fileID: 337558421}
+  rampConfig: {fileID: 11400000, guid: d1f58846e4fc71d4e90f287a86f328f9, type: 2}
   clientId: BCc0wTmuXureEzgawhUSZOWu4bgWo56sZPrxLiHQCpg5OHcNrfa44esdTS8Dm77VtmaIyjhbthdWfbLhSwf7jtU
   redirectUri: torusapp://io.chainsafe.gamingsdk.sdkdemoscene/auth
   network: 1

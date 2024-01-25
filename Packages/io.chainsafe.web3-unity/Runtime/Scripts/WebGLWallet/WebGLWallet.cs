@@ -189,6 +189,17 @@ namespace ChainSafe.Gaming.Wallets
     // Stub implementation for other platforms
     public class WebGLWallet : ISigner, ITransactionExecutor, ILifecycleParticipant
     {
+        public ValueTask WillStartAsync()
+        {
+            throw new Web3Exception(
+                $"{nameof(WebGLWallet)} can only be used on {RuntimePlatform.WebGLPlayer} platform");
+        }
+
+        public ValueTask WillStopAsync()
+        {
+            throw new NotImplementedException();
+        }
+        
         public Task<string> GetAddress()
         {
             throw new NotImplementedException();
@@ -205,17 +216,6 @@ namespace ChainSafe.Gaming.Wallets
         }
 
         public Task<string> SignTypedData<TStructType>(SerializableDomain domain, TStructType message)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ValueTask WillStartAsync()
-        {
-            throw new Web3Exception(
-                $"{nameof(WebGLWallet)} can only be used on {RuntimePlatform.WebGLPlayer} platform");
-        }
-
-        public ValueTask WillStopAsync()
         {
             throw new NotImplementedException();
         }
