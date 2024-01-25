@@ -10,7 +10,7 @@ using Scripts.EVM.Token;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-public class Erc20Tests
+public class Erc20Tests : SampleTestsBase
 {
     #region Fields
 
@@ -24,42 +24,10 @@ public class Erc20Tests
 
     #endregion
 
-    private Web3 web3;
-
-    [UnitySetUp]
-    public IEnumerator Setup()
-    {
-        // Wait for some time to initialize
-        yield return new WaitForSeconds(5f);
-
-        // Set project config, fallback is for github as it doesn't load
-        var projectConfigScriptableObject = ProjectConfigUtilities.Load();
-        if (projectConfigScriptableObject == null)
-        {
-            projectConfigScriptableObject = ProjectConfigUtilities.Load("3dc3e125-71c4-4511-a367-e981a6a94371", "11155111",
-                "Ethereum", "Sepolia", "Seth", "https://sepolia.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f");
-        }
-
-        // Create web3builder & assign services
-        var web3Builder = new Web3Builder(projectConfigScriptableObject).Configure(services =>
-        {
-            services.UseUnityEnvironment();
-            services.UseRpcProvider();
-        });
-
-        var buildWeb3 = web3Builder.LaunchAsync();
-
-        // Wait until for async task to finish
-        yield return new WaitUntil(() => buildWeb3.IsCompleted);
-
-        // Assign result to web3
-        web3 = buildWeb3.Result;
-    }
-
     [UnityTest]
     public IEnumerator TestBalanceOf()
     {
-        var getBalanceOf = Erc20.BalanceOf(web3, Contracts.Erc20, Account);
+        var getBalanceOf = Erc20.BalanceOf(web3Result, Contracts.Erc20, Account);
         yield return new WaitUntil(() => getBalanceOf.IsCompleted);
         Assert.AreEqual(new BigInteger(1000000000000000000), getBalanceOf.Result);
     }
@@ -67,7 +35,7 @@ public class Erc20Tests
     [UnityTest]
     public IEnumerator TestNativeBalanceOf()
     {
-        var getNativeBalanceOf = Erc20.NativeBalanceOf(web3, Account);
+        var getNativeBalanceOf = Erc20.NativeBalanceOf(web3Result, Account);
         yield return new WaitUntil(() => getNativeBalanceOf.IsCompleted);
         Assert.AreEqual(new BigInteger(500000000000000000), getNativeBalanceOf.Result);
     }
@@ -75,7 +43,7 @@ public class Erc20Tests
     [UnityTest]
     public IEnumerator TestDecimals()
     {
-        var getDecimals = Erc20.Decimals(web3, Contracts.Erc20);
+        var getDecimals = Erc20.Decimals(web3Result, Contracts.Erc20);
         yield return new WaitUntil(() => getDecimals.IsCompleted);
         Assert.AreEqual(new BigInteger(18), getDecimals.Result);
     }
@@ -83,7 +51,7 @@ public class Erc20Tests
     [UnityTest]
     public IEnumerator TestName()
     {
-        var getName = Erc20.Name(web3, Contracts.Erc20);
+        var getName = Erc20.Name(web3Result, Contracts.Erc20);
         yield return new WaitUntil(() => getName.IsCompleted);
         Assert.AreEqual("CsTestErc20", getName.Result);
     }
@@ -91,7 +59,7 @@ public class Erc20Tests
     [UnityTest]
     public IEnumerator TestSymbol()
     {
-        var getSymbol = Erc20.Symbol(web3, Contracts.Erc20);
+        var getSymbol = Erc20.Symbol(web3Result, Contracts.Erc20);
         yield return new WaitUntil(() => getSymbol.IsCompleted);
         Assert.AreEqual("CST", getSymbol.Result);
     }
@@ -99,7 +67,7 @@ public class Erc20Tests
     [UnityTest]
     public IEnumerator TestTotalSupply()
     {
-        var getTotalSupply = Erc20.TotalSupply(web3, TotalSupplyAddress);
+        var getTotalSupply = Erc20.TotalSupply(web3Result, TotalSupplyAddress);
         yield return new WaitUntil(() => getTotalSupply.IsCompleted);
         Assert.AreEqual(new BigInteger(1000000000000000000), getTotalSupply.Result);
     }
