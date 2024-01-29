@@ -6,6 +6,7 @@ using ChainSafe.Gaming.InProcessSigner;
 using ChainSafe.Gaming.InProcessTransactionExecutor;
 using ChainSafe.Gaming.InProcessTransactionExecutor.Unity;
 using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using Nethereum.Signer;
@@ -19,13 +20,13 @@ namespace ChainSafe.GamingSdk.Web3Auth
     /// </summary>
     public class Web3AuthWallet : ISigner, ITransactionExecutor, ILifecycleParticipant
     {
-        private readonly IChainConfig chainConfig;
 
         private readonly Web3AuthWalletConfig config;
         private readonly IRpcProvider rpcProvider;
         private TWeb3Auth coreInstance;
         private InProcessSigner signer;
         private InProcessTransactionExecutor transactionExecutor;
+        private readonly IAnalyticsClient analyticsClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Web3AuthWallet"/> class.
@@ -33,11 +34,11 @@ namespace ChainSafe.GamingSdk.Web3Auth
         /// <param name="config">The configuration for the Web3Auth wallet.</param>
         /// <param name="chainConfig">The configuration for the target blockchain.</param>
         /// <param name="rpcProvider">The RPC provider for blockchain interaction.</param>
-        public Web3AuthWallet(Web3AuthWalletConfig config, IChainConfig chainConfig, IRpcProvider rpcProvider)
+        public Web3AuthWallet(Web3AuthWalletConfig config, IRpcProvider rpcProvider, IAnalyticsClient analyticsClient)
         {
             this.config = config;
-            this.chainConfig = chainConfig;
             this.rpcProvider = rpcProvider;
+            this.analyticsClient = analyticsClient;
         }
 
         /// <summary>
@@ -47,6 +48,14 @@ namespace ChainSafe.GamingSdk.Web3Auth
         public async ValueTask WillStartAsync()
         {
             
+            analyticsClient.CaptureEvent(new AnalyticsEvent()
+            {
+                ChainId = analyticsClient.ChainConfig.ChainId,
+                Network = analyticsClient.ChainConfig.Network,
+                EventName = $"Web3Auth Initialized",
+                ProjectId = analyticsClient.ProjectConfig.ProjectId,
+                PackageName = "io.chainsafe.web3-unity.web3auth",
+            });
             coreInstance = CreateCoreInstance();
             TaskCompletionSource<string> loginTcs = new();
             coreInstance.onLogin += Web3Auth_OnLogin;
@@ -59,7 +68,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
             var signerConfig = new InProcessSignerConfig { PrivateKey = privateKey };
             signer = new InProcessSigner(signerConfig);
 
-            transactionExecutor = new InProcessTransactionExecutor(signer, chainConfig, rpcProvider, new RpcClientWrapper(chainConfig));
+            transactionExecutor = new InProcessTransactionExecutor(signer, analyticsClient.ChainConfig, rpcProvider, new RpcClientWrapper(analyticsClient.ChainConfig));
 
             void Web3Auth_OnLogin(Web3AuthResponse response)
             {
