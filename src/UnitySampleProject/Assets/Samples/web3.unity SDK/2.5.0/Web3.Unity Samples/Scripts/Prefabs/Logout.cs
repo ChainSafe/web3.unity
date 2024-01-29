@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Wallets;
+using ChainSafe.Gaming.UnityPackage.Common;
 using Scenes;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -19,6 +20,6 @@ public class Logout : MonoBehaviour
         Web3Accessor.Clear();
 
         // Go back to the first scene to log in again
-        SceneManager.LoadScene(Login.LoginSceneIndex);
+        await SceneManager.LoadSceneAsync(LoadSceneOnLogin.LoginSceneBuildIndex);
     }
 }

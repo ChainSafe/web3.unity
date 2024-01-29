@@ -3,6 +3,7 @@ using Chainsafe.Gaming.Chainlink;
 using ChainSafe.Gaming.Debugging;
 using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.Lootboxes.Chainlink;
+using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Wallets;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
@@ -36,8 +37,7 @@ namespace LootBoxes.Chainlink
 
         private async void Awake()
         {
-            web3 = await new Web3Builder(new Web3Config())
-                .Configure(services =>
+            web3 = Web3Accessor.TryWeb3 ?? await new Web3Builder(new Web3Config()).Configure(services =>
                 {
                     services.UseUnityEnvironment();
                     services.UseRpcProvider();

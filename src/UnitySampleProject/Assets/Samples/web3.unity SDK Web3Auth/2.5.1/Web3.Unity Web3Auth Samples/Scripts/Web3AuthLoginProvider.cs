@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Exchangers.Ramp;
 using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.UnityPackage.Common;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Build;
@@ -16,11 +17,11 @@ using Network = Web3Auth.Network;
 /// <summary>
 /// Login using Web3Auth.
 /// </summary>
-public class Web3AuthLogin : Login
+public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
 {
     /// <summary>
     /// Struct used for pairing login buttons to Web3 auth providers.
-    /// Used when adding <see cref="Web3AuthLogin.LoginWithWeb3Auth"/> as listeners to the buttons.
+    /// Used when adding <see cref="Web3AuthLoginProvider.LoginWithWeb3Auth"/> as listeners to the buttons.
     /// </summary>
     [Serializable]
     public struct ProviderAndButtonPair
@@ -35,7 +36,7 @@ public class Web3AuthLogin : Login
     [SerializeField] private Network network;
     [Header("UI")]
     [SerializeField] private List<ProviderAndButtonPair> providerAndButtonPairs;
-    
+
     private bool useProvider;
 
     private Provider selectedProvider;
@@ -47,13 +48,13 @@ public class Web3AuthLogin : Login
         this.rememberMe = rememberMe;
     }
 
-    protected override IEnumerator Initialize()
+    protected override async void Initialize()
     {
+        base.Initialize();
+        
         //Always first add listeners.
         providerAndButtonPairs.ForEach(p =>
             p.Button.onClick.AddListener(delegate { LoginWithWeb3Auth(p.Provider); }));
-
-        yield return null;
         
 #if UNITY_WEBGL && !UNITY_EDITOR
         Uri uri = new Uri(Application.absoluteURL);
@@ -63,9 +64,7 @@ public class Web3AuthLogin : Login
         {
             useProvider = false;
 
-            Task loginTask = TryLogin();
-            
-            yield return new WaitUntil(() => loginTask.IsCompleted);
+            await TryLogin();
            
         }
 #else
@@ -73,15 +72,10 @@ public class Web3AuthLogin : Login
         {
             useProvider = false;
             rememberMe = true;
-            Task loginTask = TryLogin();
+            await TryLogin();
             Debug.Log("Restoring existing Web3Auth session (Remember Me");
-            yield return new WaitUntil(() => loginTask.IsCompleted);
         }
 #endif
-        
-            // add provider buttons listeners
-
-        
     }
 
     private async void LoginWithWeb3Auth(Provider provider)
@@ -91,8 +85,7 @@ public class Web3AuthLogin : Login
             useProvider = true;
         }
         selectedProvider = provider;
-        
-        
+
         await TryLogin();
         LogAnalytics(provider);
     }
@@ -111,7 +104,7 @@ public class Web3AuthLogin : Login
         });
     }
 
-    protected override Web3Builder ConfigureWeb3Services(Web3Builder web3Builder)
+    public Web3Builder ConfigureServices(Web3Builder web3Builder)
     {
         return web3Builder.Configure(services =>
         {
@@ -140,7 +133,7 @@ public class Web3AuthLogin : Login
                 };   
             }
             
-            services.UseWeb3AuthWallet(web3AuthConfig);            
+            services.UseWeb3AuthWallet(web3AuthConfig);
         });
     }
 }

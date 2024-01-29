@@ -13,7 +13,8 @@ EditorBuildSettings:
     path: Assets/Samples/web3.unity SDK Ramp/1.0.0/Web3.Unity Ramp Samples/SampleRampIntegration.unity
     guid: 9583b7671e7df46028765b84323c9bf7
   - enabled: 1
-    path: Assets/Samples/web3.unity SDK/2.5.0/Web3.Unity Samples/Scenes/SampleLogin.unity
+    path: Assets/Samples/web3.unity SDK/2.5.0/Web3.Unity Samples/Scenes/SampleLogin
+      - WalletConnect.unity
     guid: 1c1af5c5662d105498b2412267dde0df
   - enabled: 1
     path: Assets/Samples/web3.unity SDK Web3Auth/2.5.1/Web3.Unity Web3Auth Samples/Scenes/SampleLogin
