@@ -1,6 +1,7 @@
 using System.Collections;
 using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.JsonRpc;
+using ChainSafe.Gaming.MultiCall;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.WalletConnect;
 using ChainSafe.Gaming.Web3;
@@ -36,6 +37,7 @@ public class SampleTestsBase
         {
             services.UseUnityEnvironment();
             services.UseGelato("_UzPz_Yk_WTjWMfcl45fLvQNGQ9ISx5ZE8TnwnVKYrE_");
+            services.UseMultiCall();
             services.UseRpcProvider();
 
             config = new WalletConnectConfig

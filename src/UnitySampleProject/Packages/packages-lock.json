@@ -1,7 +1,16 @@
 {
   "dependencies": {
+    "com.tools.webglthreadingpatcher": {
+      "version": "https://github.com/VolodymyrBS/WebGLThreadingPatcher.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "nuget.mono-cecil": "0.1.6-preview"
+      },
+      "hash": "c2f3628a028373afc8c66e443f7ce21bcb613a47"
+    },
     "com.unity.2d.animation": {
-      "version": "7.0.10",
+      "version": "7.0.9",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -39,12 +48,12 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.2d.psdimporter": {
-      "version": "6.0.7",
+      "version": "6.0.6",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.unity.2d.animation": "7.0.9",
-        "com.unity.2d.common": "6.0.6",
+        "com.unity.2d.animation": "7.0.8",
+        "com.unity.2d.common": "6.0.5",
         "com.unity.2d.sprite": "1.0.0"
       },
       "url": "https://packages.unity.com"
@@ -56,12 +65,12 @@
       "dependencies": {}
     },
     "com.unity.2d.spriteshape": {
-      "version": "7.0.7",
+      "version": "7.0.6",
       "depth": 1,
       "source": "registry",
       "dependencies": {
         "com.unity.mathematics": "1.1.0",
-        "com.unity.2d.common": "6.0.6",
+        "com.unity.2d.common": "6.0.4",
         "com.unity.2d.path": "5.0.2",
         "com.unity.modules.physics2d": "1.0.0"
       },
@@ -74,7 +83,7 @@
       "dependencies": {}
     },
     "com.unity.2d.tilemap.extras": {
-      "version": "2.2.5",
+      "version": "2.2.3",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -113,13 +122,13 @@
       "depth": 0,
       "source": "builtin",
       "dependencies": {
-        "com.unity.2d.animation": "7.0.10",
+        "com.unity.2d.animation": "7.0.9",
         "com.unity.2d.pixel-perfect": "5.0.3",
-        "com.unity.2d.psdimporter": "6.0.7",
+        "com.unity.2d.psdimporter": "6.0.6",
         "com.unity.2d.sprite": "1.0.0",
-        "com.unity.2d.spriteshape": "7.0.7",
+        "com.unity.2d.spriteshape": "7.0.6",
         "com.unity.2d.tilemap": "1.0.0",
-        "com.unity.2d.tilemap.extras": "2.2.5"
+        "com.unity.2d.tilemap.extras": "2.2.3"
       }
     },
     "com.unity.ide.rider": {
@@ -140,6 +149,13 @@
     },
     "com.unity.mathematics": {
       "version": "1.2.6",
+      "depth": 2,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.nuget.mono-cecil": {
+      "version": "1.10.1",
       "depth": 2,
       "source": "registry",
       "dependencies": {},
@@ -245,13 +261,30 @@
         "io.chainsafe.web3-unity": "2.5.0"
       }
     },
+    "io.chainsafe.web3-unity.ramp": {
+      "version": "file:../../../Packages/io.chainsafe.web3-unity.ramp",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "3.0.2",
+        "io.chainsafe.web3-unity": "2.5.0"
+      }
+    },
     "io.chainsafe.web3-unity.web3auth": {
       "version": "file:../../../Packages/io.chainsafe.web3-unity.web3auth",
       "depth": 0,
       "source": "local",
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.0.2",
-        "io.chainsafe.web3-unity": "2.5.2"
+        "io.chainsafe.web3-unity": "2.5.5"
+      }
+    },
+    "nuget.mono-cecil": {
+      "version": "1.0.0",
+      "depth": 1,
+      "source": "builtin",
+      "dependencies": {
+        "com.unity.nuget.mono-cecil": "1.10.1"
       }
     },
     "com.unity.modules.ai": {
