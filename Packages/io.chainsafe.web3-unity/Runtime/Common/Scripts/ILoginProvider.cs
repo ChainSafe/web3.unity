@@ -37,22 +37,11 @@ namespace ChainSafe.Gaming.UnityPackage.Common
         {
             Web3.Web3 web3;
 
-            try
-            {
-                Web3Builder web3Builder = new Web3Builder(ProjectConfigUtilities.Load())
-                    .Configure(ConfigureCommonServices);
+            Web3Builder web3Builder = new Web3Builder(ProjectConfigUtilities.Load()).Configure(ConfigureCommonServices);
 
-                web3Builder = ConfigureWeb3Services(web3Builder);
+            web3Builder = ConfigureWeb3Services(web3Builder);
 
-                web3 = await web3Builder.LaunchAsync();
-            }
-
-            catch (Exception e)
-            {
-                Debug.LogError($"Login failed, please try again\n{e.Message} (see console for more details)");
-                
-                throw;
-            }
+            web3 = await web3Builder.LaunchAsync();
 
             Web3Accessor.Set(web3);
             

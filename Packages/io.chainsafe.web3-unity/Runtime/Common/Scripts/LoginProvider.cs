@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using ChainSafe.Gaming.UnityPackage.Common;
 using UnityEngine;
 
@@ -28,7 +29,16 @@ namespace Scenes
 
         public async Task TryLogin()
         {
-            await (this as ILoginProvider).Login();
+            try
+            {
+                await (this as ILoginProvider).Login();
+            }
+            catch (Exception e)
+            {
+                errorPopup.ShowError($"Login failed, please try again\n{e.Message} (see console for more details)");
+
+                throw;
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace Scenes
+namespace ChainSafe.Gaming.UnityPackage.Common
 {
     public class ErrorPopup : MonoBehaviour
     {
