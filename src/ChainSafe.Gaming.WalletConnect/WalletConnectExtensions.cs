@@ -31,10 +31,10 @@ namespace ChainSafe.Gaming.WalletConnect
         {
             services.AssertServiceNotBound<IWalletConnectProvider>();
 
-            services.AddSingleton<IDataStorage, DataStorage>();
+            services.AddSingleton<DataStorage>();
             services.AddSingleton<IWalletRegistry, ILifecycleParticipant, WalletRegistry>();
             services.AddSingleton<RedirectionHandler>();
-            services.AddSingleton<IWalletConnectProvider, ILoginHelper, ILifecycleParticipant, WalletConnectProvider>();
+            services.AddSingleton<IWalletConnectProvider, IConnectionHelper, ILifecycleParticipant, WalletConnectProvider>();
 
             return services;
         }
@@ -110,12 +110,12 @@ namespace ChainSafe.Gaming.WalletConnect
         }
 
         /// <summary>
-        /// Access the <see cref="ILoginHelper"/> service.
+        /// Access the <see cref="IConnectionHelper"/> service.
         /// </summary>
-        /// <returns>The <see cref="ILoginHelper"/> service.</returns>
-        public static ILoginHelper LoginHelper(this WalletConnectSubCategory walletConnect)
+        /// <returns>The <see cref="IConnectionHelper"/> service.</returns>
+        public static IConnectionHelper ConnectionHelper(this WalletConnectSubCategory walletConnect)
         {
-            return ((IWeb3SubCategory)walletConnect).Web3.ServiceProvider.GetRequiredService<ILoginHelper>();
+            return ((IWeb3SubCategory)walletConnect).Web3.ServiceProvider.GetRequiredService<IConnectionHelper>();
         }
 
         /// <summary>

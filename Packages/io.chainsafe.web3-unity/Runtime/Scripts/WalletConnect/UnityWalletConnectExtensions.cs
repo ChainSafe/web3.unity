@@ -7,10 +7,10 @@ namespace ChainSafe.Gaming.WalletConnect
 {
     public static class UnityWalletConnectExtensions
     {
-        public static async ValueTask<ILoginHelper> BuildLoginHelper(this Web3Builder builder, IWalletConnectConfig config)
+        public static async ValueTask<IConnectionHelper> BuildConnectionHelper(this Web3Builder builder, IWalletConnectConfig config)
         {
-            var web3 = await builder.LaunchLightweightWeb3(config);
-            return web3.WalletConnect().LoginHelper();
+            var lightWeb3 = await builder.LaunchLightweightWeb3(config); // todo refactor samples as this should be terminated after use
+            return lightWeb3.WalletConnect().ConnectionHelper();
         }
 
         private static ValueTask<Web3.Web3> LaunchLightweightWeb3(this Web3Builder builder, IWalletConnectConfig config)

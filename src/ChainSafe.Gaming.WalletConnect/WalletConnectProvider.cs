@@ -25,11 +25,11 @@ namespace ChainSafe.Gaming.WalletConnect
     /// <summary>
     /// Default implementation of <see cref="IWalletConnectProvider"/>.
     /// </summary>
-    public class WalletConnectProvider : ILifecycleParticipant, IWalletConnectProvider, ILoginHelper
+    public class WalletConnectProvider : ILifecycleParticipant, IWalletConnectProvider, IConnectionHelper
     {
         private readonly ILogWriter logWriter;
         private readonly IWalletConnectConfig config;
-        private readonly IDataStorage storage;
+        private readonly DataStorage storage;
         private readonly IChainConfig chainConfig;
         private readonly IOperatingSystemMediator osMediator;
         private readonly IWalletRegistry walletRegistry;
@@ -44,7 +44,7 @@ namespace ChainSafe.Gaming.WalletConnect
 
         public WalletConnectProvider(
             IWalletConnectConfig config,
-            IDataStorage storage,
+            DataStorage storage,
             ILogWriter logWriter,
             IChainConfig chainConfig,
             IOperatingSystemMediator osMediator,

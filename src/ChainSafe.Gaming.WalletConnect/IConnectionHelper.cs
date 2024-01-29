@@ -3,7 +3,7 @@ namespace ChainSafe.Gaming.WalletConnect
     /// <summary>
     /// Helper class for the WalletConnect login procedure.
     /// </summary>
-    public interface ILoginHelper
+    public interface IConnectionHelper
     {
         /// <summary>
         /// True if there is a stored session that can be restored.

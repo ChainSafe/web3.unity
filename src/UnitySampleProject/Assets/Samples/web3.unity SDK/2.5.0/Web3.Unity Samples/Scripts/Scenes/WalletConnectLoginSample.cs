@@ -25,10 +25,10 @@ public class WalletConnectLoginSample : MonoBehaviour
 
     private async void Awake()
     {
-        var loginHelper = await new Web3Builder(ProjectConfigUtilities.Load())
-            .BuildLoginHelper(walletConnectConfig);
+        var connectionHelper = await new Web3Builder(ProjectConfigUtilities.Load()) // build lightweight web3 
+            .BuildConnectionHelper(walletConnectConfig);
         
-        storedSessionAvailable = loginHelper.StoredSessionAvailable;
+        storedSessionAvailable = connectionHelper.StoredSessionAvailable;
         
         if (AutoLoginPreviousSession && storedSessionAvailable) // auto-login
         {
@@ -66,9 +66,7 @@ public class WalletConnectLoginSample : MonoBehaviour
                      * It is better to register all contracts the application
                      * will be interacting with at configuration time if they
                      * are known in advance. We're just registering CsTestErc20
-                     * here to show how it's done. You can look at the
-                     * `Scripts/Prefabs/Wallet/RegisteredContract` script
-                     * to see how it's used later on.
+                     * here to show how it's done.
                      */
                     services.ConfigureRegisteredContracts(contracts =>
                         contracts.RegisterContract("CsTestErc20", ABI.Erc20, Contracts.Erc20));

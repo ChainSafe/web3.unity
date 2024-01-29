@@ -11,7 +11,7 @@ namespace ChainSafe.Gaming.WalletConnect.Storage
     /// <summary>
     /// Default implementation of the component responsible for storage of WalletConnect-related data.
     /// </summary>
-    public class DataStorage : IDataStorage
+    public class DataStorage
     {
         private const string StorageFileName = "walletconnect-storage.json";
         private const string LocalDataFileName = "walletconnect-local.json";
@@ -27,6 +27,10 @@ namespace ChainSafe.Gaming.WalletConnect.Storage
             this.config = config;
         }
 
+        /// <summary>
+        /// Loads local data for the WalletConnect integration.
+        /// </summary>
+        /// <returns>Local data for the WalletConnect integration.</returns>
         public async Task<LocalData> LoadLocalData()
         {
             var path = BuildLocalDataPath();
@@ -48,6 +52,11 @@ namespace ChainSafe.Gaming.WalletConnect.Storage
             }
         }
 
+        /// <summary>
+        /// Saves local data for the WalletConnect integration.
+        /// </summary>
+        /// <param name="localData">The data.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public async Task SaveLocalData(LocalData localData)
         {
             var path = BuildLocalDataPath();
@@ -55,6 +64,9 @@ namespace ChainSafe.Gaming.WalletConnect.Storage
             await File.WriteAllTextAsync(path, json);
         }
 
+        /// <summary>
+        /// Clears local data for the WalletConnect integration  from the disk.
+        /// </summary>
         public void ClearLocalData()
         {
             var path = BuildLocalDataPath();
@@ -66,6 +78,11 @@ namespace ChainSafe.Gaming.WalletConnect.Storage
             File.Delete(path);
         }
 
+        /// <summary>
+        /// Builds storage for WalletConnectCSharp.
+        /// </summary>
+        /// <param name="sessionStored">True if the session was already stored.</param>
+        /// <returns>Storage object used by WalletConnectCSharp.</returns>
         public FileSystemStorage BuildStorage(bool sessionStored)
         {
             var absStoragePath = BuildStoragePath(osMediator.ApplicationDataPath, config.StoragePath);
