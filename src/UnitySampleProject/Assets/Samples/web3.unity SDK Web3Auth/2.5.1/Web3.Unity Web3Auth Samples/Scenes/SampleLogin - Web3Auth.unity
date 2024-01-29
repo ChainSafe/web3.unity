@@ -476,7 +476,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 337558421}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Scenes.ErrorPopup, Assembly-CSharp
         m_MethodName: Close
         m_Mode: 1
@@ -574,7 +574,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 337558419}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c001d0d5433b4215b8abba94194881bd, type: 3}
+  m_Script: {fileID: 11500000, guid: 9df78976caa7771429cfe2b9b96e1491, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   MessageLabel: {fileID: 804898217}
@@ -1184,7 +1184,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 337558421}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Scenes.ErrorPopup, Assembly-CSharp
         m_MethodName: Close
         m_Mode: 1
@@ -1362,6 +1362,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1679801099}
   - component: {fileID: 1679801100}
+  - component: {fileID: 1679801101}
   m_Layer: 0
   m_Name: Logic - Login - Web3Auth
   m_TagString: Untagged
@@ -1396,10 +1397,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b6902e441950fa4bb5cefdd2263164a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <SceneToLoad>k__BackingField: SampleRampIntegration
   gelatoApiKey: 7MFQqyGS1Iui_e_MgmFW1BfbFeJ06g8nnL2oUTlIJug_
   errorPopup: {fileID: 337558421}
-  rampConfig: {fileID: 11400000, guid: d1f58846e4fc71d4e90f287a86f328f9, type: 2}
   clientId: BCc0wTmuXureEzgawhUSZOWu4bgWo56sZPrxLiHQCpg5OHcNrfa44esdTS8Dm77VtmaIyjhbthdWfbLhSwf7jtU
   redirectUri: torusapp://io.chainsafe.gamingsdk.sdkdemoscene/auth
   network: 1
@@ -1416,6 +1415,19 @@ MonoBehaviour:
     Provider: 3
   - Button: {fileID: 7400892925769233044}
     Provider: 4
+--- !u!114 &1679801101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1679801098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d2237df0314604419146b916b88d158, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneToLoad: SampleMain
 --- !u!1 &1799608969
 GameObject:
   m_ObjectHideFlags: 0
