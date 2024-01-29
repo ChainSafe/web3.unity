@@ -19,6 +19,8 @@ public class MetaMaskLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     
     protected override void Initialize()
     {
+        base.Initialize();
+        
         loginButton.onClick.AddListener(LoginClicked);
     }
 

@@ -49,6 +49,8 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
 
     protected override async void Initialize()
     {
+        base.Initialize();
+        
         //Always first add listeners.
         providerAndButtonPairs.ForEach(p =>
             p.Button.onClick.AddListener(delegate { LoginWithWeb3Auth(p.Provider); }));

@@ -79,6 +79,8 @@ public class WalletConnectLoginProvider : LoginProvider, IWeb3BuilderServiceAdap
 
     protected override async void Initialize()
     {
+        base.Initialize();
+        
         Assert.IsNotNull(loginButton);
         Assert.IsNotNull(rememberMeToggle);
 

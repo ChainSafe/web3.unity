@@ -21,6 +21,9 @@ namespace ChainSafe.Gaming.UnityPackage.Common
     /// </summary>
     public interface ILoginProvider
     {
+        /// <summary>
+        /// Gelato API key from Gelato's Web Dashboard.
+        /// </summary>
         public string GelatoApiKey { get; }
 
         /// <summary>
@@ -28,6 +31,9 @@ namespace ChainSafe.Gaming.UnityPackage.Common
         /// </summary>
         public IWeb3BuilderServiceAdapter[] Web3BuilderServiceAdapters { get; }
         
+        /// <summary>
+        /// All Web3 initialized handlers called when Web3 instance is initialized.
+        /// </summary>
         public IWeb3InitializedHandler[] Web3InitializedHandlers { get; }
 
         /// <summary>

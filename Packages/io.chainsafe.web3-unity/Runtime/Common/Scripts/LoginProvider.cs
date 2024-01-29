@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace Scenes
 {
+    /// <summary>
+    /// A concrete implementation of <see cref="ILoginProvider"/>.
+    /// </summary>
     public abstract class LoginProvider : MonoBehaviour, ILoginProvider
     {
         [SerializeField] private string gelatoApiKey = "";
@@ -20,6 +23,9 @@ namespace Scenes
             Initialize();
         }
 
+        /// <summary>
+        /// Initializes Login providers.
+        /// </summary>
         protected virtual void Initialize()
         {
             Web3BuilderServiceAdapters = GetComponents<IWeb3BuilderServiceAdapter>();
@@ -27,6 +33,9 @@ namespace Scenes
             Web3InitializedHandlers = GetComponents<IWeb3InitializedHandler>();
         }
 
+        /// <summary>
+        /// Try to Login and displays error and throws exception on a failed attempt.
+        /// </summary>
         public async Task TryLogin()
         {
             try

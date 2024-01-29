@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace LootBoxes.Chainlink
 {
+    /// <summary>
+    /// Configures Lootboxes services to work with a <see cref="ILoginProvider"/>.
+    /// </summary>
     public class LootboxesServicesAdapter : MonoBehaviour, IWeb3BuilderServiceAdapter
     {
         // the default values are setup for sepolia.
