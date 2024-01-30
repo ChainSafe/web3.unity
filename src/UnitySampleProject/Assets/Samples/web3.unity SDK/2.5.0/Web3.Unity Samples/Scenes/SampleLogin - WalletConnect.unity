@@ -2641,6 +2641,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1334079841}
   - component: {fileID: 1334079842}
+  - component: {fileID: 1334079843}
   m_Layer: 0
   m_Name: Logic - Login
   m_TagString: Untagged
@@ -2675,7 +2676,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96894e49d9863ec4db1d93a5e56f19cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <SceneToLoad>k__BackingField: SampleMain
   gelatoApiKey: 7MFQqyGS1Iui_e_MgmFW1BfbFeJ06g8nnL2oUTlIJug_
   errorPopup: {fileID: 1701305868}
   rampConfig: {fileID: 11400000, guid: d1f58846e4fc71d4e90f287a86f328f9, type: 2}
@@ -2702,6 +2702,19 @@ MonoBehaviour:
       Universal: 
     VerifyUrl: 
   walletConnectModal: {fileID: 395689441}
+--- !u!114 &1334079843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1334079840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d2237df0314604419146b916b88d158, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneToLoad: SampleMain
 --- !u!1 &1491563361
 GameObject:
   m_ObjectHideFlags: 0
@@ -3193,7 +3206,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1701305866}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c001d0d5433b4215b8abba94194881bd, type: 3}
+  m_Script: {fileID: 11500000, guid: 9df78976caa7771429cfe2b9b96e1491, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   MessageLabel: {fileID: 786896302}
