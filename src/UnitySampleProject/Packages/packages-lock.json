@@ -258,7 +258,7 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "io.chainsafe.web3-unity": "2.5.0"
+        "io.chainsafe.web3-unity": "2.5.5"
       }
     },
     "io.chainsafe.web3-unity.ramp": {
