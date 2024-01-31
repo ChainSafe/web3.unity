@@ -242,19 +242,9 @@ public class WalletConnectLoginProvider : LoginProvider, IWeb3BuilderServiceAdap
 
                 yield return null;
             }
-
             else
             {
-                var json = webRequest.downloadHandler.text;
-
-                supportedWallets = JsonConvert.DeserializeObject<Dictionary<string, WalletConnectWalletModel>>(json);
-
-                // make sure supported wallet is also supported on platform
-                supportedWallets = supportedWallets
-                    .Where(w => w.Value.IsAvailableForPlatform(UnityOperatingSystemMediator.GetCurrentPlatform()))
-                    .ToDictionary(p => p.Key, p => p.Value);
-
-                Debug.Log($"Fetched {supportedWallets.Count} Supported Wallets.");
+                Debug.Log($"Fetched Supported Wallets.");
             }
         }
     }
