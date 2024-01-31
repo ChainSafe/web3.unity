@@ -231,7 +231,7 @@ public class WalletConnectLoginProvider : LoginProvider, IWeb3BuilderServiceAdap
 
     private IEnumerator FetchSupportedWallets()
     {
-        using (UnityWebRequest webRequest = UnityWebRequest.Get($"https://explorer-api.walletconnect.com/v3/wallets?projectId={projectId}"))
+        using (UnityWebRequest webRequest = UnityWebRequest.Get("https://explorer-api.walletconnect.com/v3/wallets?projectId=f4bff60eb260841f46b1c77588cd8acb"))
         {
             // Request and wait for the desired page.
             yield return webRequest.SendWebRequest();
