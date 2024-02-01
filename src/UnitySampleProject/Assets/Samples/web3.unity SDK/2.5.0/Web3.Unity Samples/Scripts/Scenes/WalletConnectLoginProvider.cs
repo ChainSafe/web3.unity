@@ -10,6 +10,7 @@ using ChainSafe.Gaming.WalletConnect;
 using ChainSafe.Gaming.WalletConnect.Models;
 using ChainSafe.Gaming.Web3.Build;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Scenes;
 using TMPro;
 using UnityEngine;
@@ -244,7 +245,19 @@ public class WalletConnectLoginProvider : LoginProvider, IWeb3BuilderServiceAdap
             }
             else
             {
-                Debug.Log($"Fetched Supported Wallets.");
+                var json = webRequest.downloadHandler.text;
+                
+                JObject jObject = JObject.Parse(json);
+                
+    
+                supportedWallets = JsonConvert.DeserializeObject<Dictionary<string, WalletConnectWalletModel>>(jObject["listings"].ToString());
+
+                // make sure supported wallet is also supported on platform
+                supportedWallets = supportedWallets
+                    .Where(w => w.Value.IsAvailableForPlatform(UnityOperatingSystemMediator.GetCurrentPlatform()))
+                    .ToDictionary(p => p.Key, p => p.Value);
+
+                Debug.Log($"Fetched {supportedWallets.Count} Supported Wallets.");
             }
         }
     }
