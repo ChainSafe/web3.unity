@@ -26,6 +26,16 @@ namespace Scripts.EVM.Token
             return await contract.Send(method, args);
         }
 
+		public static async Task<object[]> ContractSend(Web3 web3, string method, string abi, string contractAddress, object[] args, HexBigInteger value)
+        {
+            var contract = web3.ContractBuilder.Build(abi, contractAddress);
+            TransactionRequest overwrite = new TransactionRequest
+            {
+                Value = value
+            };
+            return await contract.Send(method, args, overwrite);
+        }
+
         public static async Task<object[]> ContractCall(Web3 web3, string method, string abi, string contractAddress, object[] args)
         {
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
