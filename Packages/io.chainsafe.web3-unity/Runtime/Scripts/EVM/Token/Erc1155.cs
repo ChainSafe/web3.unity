@@ -109,7 +109,14 @@ namespace Scripts.EVM.Token
             const string method = EthMethod.Mint;
             var destination = await web3.Signer.GetAddress();
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
-            return await contract.Send(method, new object[] { destination, id, amount, dataObject });
+            var response = await contract.Send(method, new object[]
+            {
+                destination,
+                id,
+                amount,
+                dataObject
+            });
+            return response;
         }
 
         /// <summary>

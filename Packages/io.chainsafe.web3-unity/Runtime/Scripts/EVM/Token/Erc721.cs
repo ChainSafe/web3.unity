@@ -7,6 +7,7 @@ using ChainSafe.Gaming.Web3;
 using Nethereum.Contracts.QueryHandlers.MultiCall;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Scripts.EVM.Remote;
+using WalletConnectSharp.Sign.Models;
 
 namespace Scripts.EVM.Token
 {
@@ -135,7 +136,12 @@ namespace Scripts.EVM.Token
             const string method = EthMethod.SafeMint;
             var destination = await web3.Signer.GetAddress();
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
-            return await contract.Send(method, new object[] { destination, uri });
+            var response =  await contract.Send(method, new object[]
+            {
+                destination,
+                uri
+            });
+            return response;
         }
 
         /// <summary>

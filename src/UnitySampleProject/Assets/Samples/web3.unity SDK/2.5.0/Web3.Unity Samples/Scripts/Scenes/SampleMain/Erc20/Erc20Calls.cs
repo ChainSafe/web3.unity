@@ -99,7 +99,6 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void MintErc20()
     {
-        string toAccount = await Web3Accessor.Web3.Signer.GetAddress();
         var response = await Erc20.MintErc20(Web3Accessor.Web3, Contracts.Erc20, toAccount, amountMint);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Erc20), nameof(Erc20.MintErc20));
