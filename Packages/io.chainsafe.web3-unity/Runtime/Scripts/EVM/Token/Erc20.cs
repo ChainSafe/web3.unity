@@ -112,10 +112,10 @@ namespace Scripts.EVM.Token
         public static async Task<object[]> MintErc20(Web3 web3, string contractAddress, string toAccount, BigInteger amount)
         {
             const string method = EthMethod.Mint;
-            var destination = await web3.Signer.GetAddress();
             var contract = web3.ContractBuilder.Build(ABI.Erc20, contractAddress);
             var response = await contract.Send(method, new object[]
-            {   toAccount,
+            {
+                toAccount,
                 amount
             });
             return response;
