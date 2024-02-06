@@ -1,4 +1,5 @@
 using System.Collections;
+using ChainSafe.Gaming.UnityPackage.Common;
 #if UNITY_WEBGL && !UNITY_EDITOR
 using ChainSafe.Gaming.MetaMask;
 using ChainSafe.Gaming.MetaMask.Unity;
@@ -12,15 +13,15 @@ using UnityEngine.UI;
 /// Login using MetaMask.
 /// Only works for UnityWebGL build (not in editor).
 /// </summary>
-public class MetaMaskLogin : Login
+public class MetaMaskLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
 {
     [SerializeField] private Button loginButton;
     
-    protected override IEnumerator Initialize()
+    protected override void Initialize()
     {
-        loginButton.onClick.AddListener(LoginClicked);
+        base.Initialize();
         
-        yield return null;
+        loginButton.onClick.AddListener(LoginClicked);
     }
 
     private async void LoginClicked()
@@ -28,7 +29,7 @@ public class MetaMaskLogin : Login
         await TryLogin();
     }
     
-    protected override Web3Builder ConfigureWeb3Services(Web3Builder web3Builder)
+    public Web3Builder ConfigureServices(Web3Builder web3Builder)
     {
         return web3Builder.Configure(services =>
         {

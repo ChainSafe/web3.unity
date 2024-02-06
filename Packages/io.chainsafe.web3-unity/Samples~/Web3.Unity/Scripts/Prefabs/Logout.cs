@@ -16,6 +16,6 @@ public class Logout : MonoBehaviour
         await Web3Accessor.TerminateAndClear();
 
         // Go back to the first scene to log in again
-        SceneManager.LoadScene(0);
+        await SceneManager.LoadSceneAsync(LoadSceneOnLogin.LoginSceneBuildIndex);
     }
 }

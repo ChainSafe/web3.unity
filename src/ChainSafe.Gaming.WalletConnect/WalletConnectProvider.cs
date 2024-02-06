@@ -205,6 +205,7 @@ namespace ChainSafe.Gaming.WalletConnect
             }
             catch (Exception e)
             {
+                storage.ClearLocalData();
                 throw new WalletConnectException("Error occured during WalletConnect connection process.", e);
             }
         }
