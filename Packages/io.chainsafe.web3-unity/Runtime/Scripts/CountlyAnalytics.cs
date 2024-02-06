@@ -14,6 +14,7 @@ public class CountlyAnalytics : IAnalyticsClient
     
     public async void CaptureEvent(AnalyticsEvent eventData)
     {
+        Debug.Log($"Capturing event: {eventData.EventName}");
         await Countly.Instance.Events.RecordEventAsync(eventData.EventName, new Dictionary<string, object>()
         {
             { "chain", eventData.ChainId},
