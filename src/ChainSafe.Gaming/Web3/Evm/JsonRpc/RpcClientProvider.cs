@@ -17,6 +17,8 @@ namespace ChainSafe.Gaming.Evm.Providers
         private readonly Web3Environment environment;
         private readonly ChainRegistryProvider chainRegistryProvider;
         private readonly IChainConfig chainConfig;
+        private readonly IAnalyticsClient analyticsClient;
+        private readonly IProjectConfig projectConfig;
 
         private Network.Network network;
 
@@ -24,18 +26,28 @@ namespace ChainSafe.Gaming.Evm.Providers
             RpcClientConfig config,
             Web3Environment environment,
             ChainRegistryProvider chainRegistryProvider,
-            IChainConfig chainConfig)
+            IChainConfig chainConfig,
+            IAnalyticsClient analyticsClient,
+            IProjectConfig projectConfig)
         {
             this.chainRegistryProvider = chainRegistryProvider;
             this.environment = environment;
             this.config = config;
             this.chainConfig = chainConfig;
+            this.analyticsClient = analyticsClient;
+            this.projectConfig = projectConfig;
 
             if (string.IsNullOrEmpty(this.config.RpcNodeUrl))
             {
                 this.config.RpcNodeUrl = chainConfig.Rpc;
             }
         }
+
+        public IAnalyticsClient AnalyticsClient => analyticsClient;
+
+        public IProjectConfig ProjectConfig => projectConfig;
+
+        public IChainConfig ChainConfig => chainConfig;
 
         public Network.Network LastKnownNetwork
         {
@@ -120,21 +132,6 @@ namespace ChainSafe.Gaming.Evm.Providers
             catch (Exception ex)
             {
                 throw new Web3Exception($"{method}: bad result from RPC endpoint", ex);
-            }
-            finally
-            {
-                environment.AnalyticsClient.CaptureEvent(new AnalyticsEvent()
-                {
-                    Rpc = method,
-                    Network = network?.Name,
-                    ChainId = network?.ChainId.ToString(),
-                    EventName = $"Rpc Client Perform {method}",
-                    GameData = new AnalyticsGameData()
-                    {
-                        Params = parameters,
-                    },
-                    PackageName = "io.chainsafe.web3-unity",
-                });
             }
         }
     }

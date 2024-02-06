@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
+using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using Nethereum.Hex.HexTypes;
 
@@ -29,7 +30,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
         /// <param name="provider">The RPC provider.</param>
         /// <param name="signer">The signer.</param>
         /// <param name="transactionExecutor">Transaction executor.</param>
-        internal Contract(string abi, string address, IRpcProvider provider = null, ISigner signer = null, ITransactionExecutor transactionExecutor = null)
+        internal Contract(string abi, string address, IRpcProvider provider, ISigner signer = null, ITransactionExecutor transactionExecutor = null)
         {
             if (string.IsNullOrEmpty(abi))
             {
@@ -89,6 +90,18 @@ namespace ChainSafe.Gaming.Evm.Contracts
             txReq.Data ??= function.GetData(parameters);
 
             var result = await provider.Call(txReq);
+            if (provider is RpcClientProvider rpcProvider)
+            {
+                rpcProvider.AnalyticsClient?.CaptureEvent(new AnalyticsEvent()
+                {
+                    ChainId = rpcProvider.ChainConfig.ChainId,
+                    EventName = method,
+                    Network = rpcProvider.LastKnownNetwork.Name,
+                    Version = rpcProvider.AnalyticsClient.AnalyticsVersion,
+                    PackageName = "io.chainsafe.web3.unity",
+                    ProjectId = rpcProvider.ProjectConfig.ProjectId,
+                });
+            }
 
             return Decode(method, result);
         }
@@ -169,6 +182,20 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
             var output = function.DecodeOutput(tx.Data);
             var outputValues = output.Select(x => x.Result).ToArray();
+
+            if (provider is RpcClientProvider rpcProvider)
+            {
+                rpcProvider.AnalyticsClient?.CaptureEvent(new AnalyticsEvent()
+                {
+                    ChainId = rpcProvider.ChainConfig.ChainId,
+                    EventName = method,
+                    Network = rpcProvider.LastKnownNetwork.Name,
+                    Version = rpcProvider.AnalyticsClient.AnalyticsVersion,
+                    PackageName = "io.chainsafe.web3.unity",
+                    ProjectId = rpcProvider.ProjectConfig.ProjectId,
+                });
+            }
+
             return (outputValues, receipt);
         }
 
@@ -250,6 +277,20 @@ namespace ChainSafe.Gaming.Evm.Contracts
             var dataObject = GameLogger.Log("", "", dataWebGL);
 #endif
             var function = contractBuilder.GetFunctionBuilder(method);
+
+            if (provider is RpcClientProvider rpcProvider)
+            {
+                rpcProvider.AnalyticsClient?.CaptureEvent(new AnalyticsEvent()
+                {
+                    ChainId = rpcProvider.ChainConfig.ChainId,
+                    EventName = method,
+                    Network = rpcProvider.LastKnownNetwork.Name,
+                    Version = rpcProvider.AnalyticsClient.AnalyticsVersion,
+                    PackageName = "io.chainsafe.web3.unity",
+                    ProjectId = rpcProvider.ProjectConfig.ProjectId,
+                });
+            }
+
             return function.GetData(parameters);
         }
     }
