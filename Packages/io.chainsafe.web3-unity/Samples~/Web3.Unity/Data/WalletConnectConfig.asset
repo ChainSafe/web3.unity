@@ -36,4 +36,4 @@ MonoBehaviour:
   enabledWallets: []
   disabledWallets: []
   connectionHandlerProvider: {fileID: 11400000, guid: cdc198015a446e54794e5921e5aa81ef, type: 2}
-  <WalletLocationOptions>k__BackingField: 0
+  <WalletLocationOption>k__BackingField: 0
