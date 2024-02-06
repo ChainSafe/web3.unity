@@ -133,6 +133,21 @@ namespace ChainSafe.Gaming.Evm.Providers
             {
                 throw new Web3Exception($"{method}: bad result from RPC endpoint", ex);
             }
+            finally
+            {
+                environment.AnalyticsClient.CaptureEvent(new AnalyticsEvent()
+                {
+                    Rpc = method,
+                    Network = network?.Name,
+                    ChainId = network?.ChainId.ToString(),
+                    EventName = $"{method}",
+                    GameData = new AnalyticsGameData()
+                    {
+                        Params = parameters,
+                    },
+                    PackageName = "io.chainsafe.web3-unity",
+                });
+            }
         }
     }
 }
