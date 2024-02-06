@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">notifications</string>
+    <string name="countly_hannel_name">General Notifications</string>
+    <string name="countly_channel_description">News and Announcements</string>
+</resources>

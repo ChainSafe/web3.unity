@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Exchangers.Ramp;
 using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.GamingSdk.Web3Auth;
@@ -31,10 +33,9 @@ public class Web3AuthLogin : Login
     [SerializeField] private string clientId;
     [SerializeField] private string redirectUri;
     [SerializeField] private Network network;
-
     [Header("UI")]
     [SerializeField] private List<ProviderAndButtonPair> providerAndButtonPairs;
-
+    
     private bool useProvider;
 
     private Provider selectedProvider;
@@ -90,15 +91,21 @@ public class Web3AuthLogin : Login
             useProvider = true;
         }
         selectedProvider = provider;
-
+        
+        
         await TryLogin();
+        LogAnalytics(provider);
+    }
+
+    private void LogAnalytics(Provider provider)
+    {
         IAnalyticsClient client = (IAnalyticsClient)Web3Accessor.Web3.ServiceProvider.GetService(typeof(IAnalyticsClient));
         client.CaptureEvent(new AnalyticsEvent()
         {
             ChainId = Web3Accessor.Web3.ChainConfig.ChainId,
             Network = Web3Accessor.Web3.ChainConfig.Network,
             ProjectId = Web3Accessor.Web3.ProjectConfig.ProjectId,
-            EventName = "Web3AuthLogin",
+            EventName = $"Login provider {provider}",
             Version = client.AnalyticsVersion,
             PackageName = "io.chainsafe.web3-unity.web3auth",
         });
@@ -133,7 +140,7 @@ public class Web3AuthLogin : Login
                 };   
             }
             
-            services.UseWeb3AuthWallet(web3AuthConfig);
+            services.UseWeb3AuthWallet(web3AuthConfig);            
         });
     }
 }

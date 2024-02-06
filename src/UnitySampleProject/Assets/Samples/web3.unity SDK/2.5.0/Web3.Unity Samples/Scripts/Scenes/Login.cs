@@ -3,6 +3,7 @@ using System.Collections;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.JsonRpc;
+using ChainSafe.Gaming.Exchangers.Ramp;
 using ChainSafe.Gaming.MultiCall;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3;
@@ -24,6 +25,8 @@ namespace Scenes
         [SerializeField] private string gelatoApiKey = "";
 
         [SerializeField] private ErrorPopup errorPopup;
+
+        [SerializeField] private RampExchangerConfigSO rampConfig;
 
         private IEnumerator Start()
         {
@@ -50,12 +53,23 @@ namespace Scenes
 
             catch (Exception)
             {
+                
                 errorPopup.ShowError("Login failed, please try again\n(see console for more details)");
                 throw;
             }
 
             Web3Accessor.Set(web3);
 
+            //TODO: REMOVE THIS
+            if (rampConfig != null)
+            {
+                
+                Web3Accessor.Web3.RampExchanger().OnRampPurchaseCreated += data 
+                    => Debug.Log($"On-Ramp purchase created {data.CryptoAmount} {data.Asset.Name}");
+                Web3Accessor.Web3.RampExchanger().OffRampSaleCreated += data
+                    => Debug.Log($"Off-Ramp sale created {data.Fiat.Amount:C} {data.Fiat.CurrencySymbol}");
+            }
+            
             LoginSceneIndex = SceneManager.GetActiveScene().buildIndex;
 
             // Attempt scene transition based on the login object sceneToLoad value
@@ -70,6 +84,11 @@ namespace Scenes
                 .UseMultiCall()
                 .UseRpcProvider();
 
+            if (rampConfig != null)
+                services.UseRampExchanger(rampConfig);
+            else
+                Debug.LogWarning("Ramp config not provided");
+            
             /* As many contracts as needed may be registered here.
              * It is better to register all contracts the application
              * will be interacting with at configuration time if they

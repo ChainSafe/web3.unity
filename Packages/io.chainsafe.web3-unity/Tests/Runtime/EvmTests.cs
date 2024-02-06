@@ -94,7 +94,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestContractSend()
     {
-        yield return BuildWeb3WithStubConfig("0x324080652dfe1463f0fcbde18961a6e7eee87f2231133523e96dc52ce8239d3f");
+        yield return BuildWeb3WithStubConfig("0x910f89945e46576ebd63419853c7d10d41a50590c59b7c55bd591bf41d43601e");
         object[] args =
         {
             IncreaseAmount

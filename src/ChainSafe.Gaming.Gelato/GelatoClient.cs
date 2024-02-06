@@ -54,7 +54,7 @@ namespace ChainSafe.GamingSdk.Gelato
             {
                 ChainId = chainConfig.ChainId,
                 Network = chainConfig.Network,
-                EventName = relayCall.ToString(),
+                EventName = $"{relayCall}",
                 ProjectId = projectConfig.ProjectId,
                 PackageName = "io.chainsafe.web3-unity",
             });
