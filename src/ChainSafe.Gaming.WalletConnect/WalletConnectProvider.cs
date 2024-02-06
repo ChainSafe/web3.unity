@@ -6,6 +6,7 @@ using ChainSafe.Gaming.WalletConnect.Models;
 using ChainSafe.Gaming.WalletConnect.Storage;
 using ChainSafe.Gaming.WalletConnect.Wallets;
 using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Debug;
 using ChainSafe.Gaming.Web3.Environment;
@@ -41,6 +42,7 @@ namespace ChainSafe.Gaming.WalletConnect
         private LocalData localData;
         private SessionStruct session;
         private bool connected;
+        private IAnalyticsClient analyticsClient;
 
         public WalletConnectProvider(
             IWalletConnectConfig config,
@@ -49,8 +51,10 @@ namespace ChainSafe.Gaming.WalletConnect
             IChainConfig chainConfig,
             IOperatingSystemMediator osMediator,
             IWalletRegistry walletRegistry,
-            RedirectionHandler redirection)
+            RedirectionHandler redirection,
+            IAnalyticsClient analyticsClient)
         {
+            this.analyticsClient = analyticsClient;
             this.redirection = redirection;
             this.walletRegistry = walletRegistry;
             this.osMediator = osMediator;
@@ -68,6 +72,17 @@ namespace ChainSafe.Gaming.WalletConnect
 
         async ValueTask ILifecycleParticipant.WillStartAsync()
         {
+            analyticsClient.CaptureEvent(new AnalyticsEvent()
+            {
+                ProjectId = analyticsClient.ProjectConfig.ProjectId,
+                Network = analyticsClient.ChainConfig.Network,
+                ChainId = analyticsClient.ChainConfig.ChainId,
+                Rpc = analyticsClient.ChainConfig.Rpc,
+                EventName = "Wallet Connect Initialized",
+                PackageName = "io.chainsafe.web3-unity",
+                Version = analyticsClient.AnalyticsVersion,
+            });
+
             ValidateConfig();
 
             WCLogger.Logger = new WCLogWriter(logWriter);
