@@ -13,7 +13,8 @@ namespace ChainSafe.Gaming.WalletConnect.Wallets
     /// </summary>
     public class WalletRegistry : ILifecycleParticipant, IWalletRegistry
     {
-        public const string DefaultRegistryUri = "https://registry.walletconnect.com/data/wallets.json";
+        public static string BuildRegistryUri(string projectId) =>
+            $"https://explorer-api.walletconnect.com/v3/wallets?projectId={projectId}";
 
         private readonly IHttpClient httpClient;
         private readonly IWalletConnectConfig config;
@@ -30,10 +31,10 @@ namespace ChainSafe.Gaming.WalletConnect.Wallets
         {
             var registryUri = !string.IsNullOrWhiteSpace(config.OverrideRegistryUri)
                 ? config.OverrideRegistryUri
-                : DefaultRegistryUri;
+                : BuildRegistryUri(config.ProjectId);
 
-            var response = await httpClient.Get<Dictionary<string, WalletModel>>(registryUri);
-            var allWallets = response.AssertSuccess();
+            var response = await httpClient.Get<WalletRegistryResponse>(registryUri);
+            var allWallets = response.AssertSuccess().Listings;
 
             if (config.EnabledWallets != null && config.EnabledWallets.Any())
             {

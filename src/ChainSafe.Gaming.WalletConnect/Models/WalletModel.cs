@@ -3,10 +3,13 @@ using Newtonsoft.Json;
 namespace ChainSafe.Gaming.WalletConnect.Models
 {
     /// <summary>
-    /// Wallet Connects wallet model used for identifying and redirecting wallets.
+    /// WalletConnect wallet model used for identifying and redirecting wallets.
     /// </summary>
     public class WalletModel
     {
+        /// <summary>
+        /// Id of the wallet.
+        /// </summary>
         [JsonProperty("id")]
         public string Id { get; private set; }
 
@@ -16,6 +19,15 @@ namespace ChainSafe.Gaming.WalletConnect.Models
         [JsonProperty("name")]
         public string Name { get; private set; }
 
+        /// <summary>
+        /// Description of the wallet.
+        /// </summary>
+        [JsonProperty("description")]
+        public string Description { get; private set; }
+
+        /// <summary>
+        /// Homepage of the wallet.
+        /// </summary>
         [JsonProperty("homepage")]
         public string Homepage { get; private set; }
 

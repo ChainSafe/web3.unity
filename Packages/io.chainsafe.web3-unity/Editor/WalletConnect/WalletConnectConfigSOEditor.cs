@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using ChainSafe.Gaming.WalletConnect.Storage;
+using ChainSafe.Gaming.WalletConnect.Wallets;
 using UnityEditor;
 using UnityEngine;
 
@@ -16,11 +17,30 @@ namespace ChainSafe.Gaming.WalletConnect.Editor
             
             using (new EditorGUILayout.HorizontalScope())
             {
+                if (GUILayout.Button("List Wallet Providers", GUILayout.ExpandWidth(false)))
+                {
+                    ListWalletProviders();
+                }
+                
                 if (GUILayout.Button("Clear cache", GUILayout.ExpandWidth(false)))
                 {
                     DeleteStorage();
                 }
             }
+        }
+
+        private void ListWalletProviders()
+        {
+            var config = (WalletConnectConfigSO)target;
+
+            if (string.IsNullOrWhiteSpace(config.ProjectId))
+            {
+                Debug.LogError("Project Id required.");
+                return;
+            }
+
+            var uri = WalletRegistry.BuildRegistryUri(config.ProjectId);
+            Application.OpenURL(uri);
         }
 
         private void DeleteStorage()
