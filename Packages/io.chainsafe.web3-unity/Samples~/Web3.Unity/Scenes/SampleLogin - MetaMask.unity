@@ -264,6 +264,7 @@ GameObject:
   - component: {fileID: 433476714}
   - component: {fileID: 433476715}
   - component: {fileID: 433476716}
+  - component: {fileID: 433476717}
   m_Layer: 0
   m_Name: MetaMaskLogin
   m_TagString: Untagged
@@ -300,7 +301,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gelatoApiKey: 7MFQqyGS1Iui_e_MgmFW1BfbFeJ06g8nnL2oUTlIJug_
   errorPopup: {fileID: 314965761}
-  rampConfig: {fileID: 11400000, guid: d1f58846e4fc71d4e90f287a86f328f9, type: 2}
   loginButton: {fileID: 2048731599}
 --- !u!114 &433476716
 MonoBehaviour:
@@ -315,6 +315,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneToLoad: SampleMain
+--- !u!114 &433476717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 433476712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4bbed5530529ea46a1f41b407499dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rampConfig: {fileID: 11400000, guid: d1f58846e4fc71d4e90f287a86f328f9, type: 2}
 --- !u!1 &740974330
 GameObject:
   m_ObjectHideFlags: 0

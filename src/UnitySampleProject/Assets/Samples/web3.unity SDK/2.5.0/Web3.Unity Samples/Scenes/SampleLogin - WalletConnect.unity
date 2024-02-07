@@ -2642,6 +2642,7 @@ GameObject:
   - component: {fileID: 1334079841}
   - component: {fileID: 1334079842}
   - component: {fileID: 1334079843}
+  - component: {fileID: 1334079844}
   m_Layer: 0
   m_Name: Logic - Login
   m_TagString: Untagged
@@ -2714,6 +2715,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneToLoad: SampleMain
+--- !u!114 &1334079844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1334079840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4bbed5530529ea46a1f41b407499dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rampConfig: {fileID: 11400000, guid: d1f58846e4fc71d4e90f287a86f328f9, type: 2}
 --- !u!1 &1491563361
 GameObject:
   m_ObjectHideFlags: 0
