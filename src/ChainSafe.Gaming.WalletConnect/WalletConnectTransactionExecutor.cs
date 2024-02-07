@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
@@ -79,8 +80,8 @@ namespace ChainSafe.Gaming.WalletConnect
 
             string hash = await walletConnectCustomProvider.Request(requestData);
 
-            // TODO replace validation with regex
-            if (!hash.StartsWith("0x") || hash.Length != 66)
+            string hashPattern = @"^0x[a-fA-F0-9]{64}$";
+            if (!Regex.IsMatch(hash, hashPattern))
             {
                 throw new Web3Exception($"incorrect txn response format {hash}");
             }
