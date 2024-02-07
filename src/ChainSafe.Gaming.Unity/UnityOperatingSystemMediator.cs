@@ -1,5 +1,4 @@
-﻿using System;
-using ChainSafe.Gaming.Web3.Environment;
+﻿using ChainSafe.Gaming.Web3.Environment;
 using UnityEngine;
 
 namespace ChainSafe.Gaming.Unity
@@ -7,6 +6,8 @@ namespace ChainSafe.Gaming.Unity
     public class UnityOperatingSystemMediator : IOperatingSystemMediator
     {
         public bool IsMobilePlatform => Application.isMobilePlatform;
+
+        public bool IsEditor => Application.isEditor;
 
         public Platform Platform
         {
@@ -27,7 +28,7 @@ namespace ChainSafe.Gaming.Unity
             }
         }
 
-        public string ApplicationDataPath => Application.persistentDataPath;
+        public string AppPersistentDataPath => Application.persistentDataPath;
 
         public void OpenUrl(string url) => Application.OpenURL(url);
     }

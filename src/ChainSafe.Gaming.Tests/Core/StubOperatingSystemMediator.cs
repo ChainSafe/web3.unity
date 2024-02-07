@@ -7,20 +7,22 @@ namespace ChainSafe.Gaming.Tests.Core
         public StubOperatingSystemMediator()
         {
             Platform = Platform.Desktop;
-            ApplicationDataPath = "data/";
+            AppPersistentDataPath = "data/";
         }
 
         public StubOperatingSystemMediator(Platform platform, string applicationDataPath)
         {
             Platform = platform;
-            ApplicationDataPath = applicationDataPath;
+            AppPersistentDataPath = applicationDataPath;
         }
 
         public bool IsMobilePlatform => Platform is Platform.Android or Platform.IOS;
 
+        public bool IsEditor => false;
+
         public Platform Platform { get; set; }
 
-        public string ApplicationDataPath { get; set; }
+        public string AppPersistentDataPath { get; set; }
 
         public void OpenUrl(string url)
         {

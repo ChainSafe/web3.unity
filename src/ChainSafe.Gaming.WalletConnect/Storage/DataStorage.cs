@@ -85,7 +85,7 @@ namespace ChainSafe.Gaming.WalletConnect.Storage
         /// <returns>Storage object used by WalletConnectCSharp.</returns>
         public FileSystemStorage BuildStorage(bool sessionStored)
         {
-            var absStoragePath = BuildStoragePath(osMediator.ApplicationDataPath, config.StoragePath);
+            var absStoragePath = BuildStoragePath(osMediator.AppPersistentDataPath, config.StoragePath);
             var path = Path.Combine(absStoragePath, StorageFileName);
 
             // If we're not restoring a session and save WC file exists remove it.
@@ -104,7 +104,7 @@ namespace ChainSafe.Gaming.WalletConnect.Storage
 
         private string BuildLocalDataPath()
         {
-            var absStoragePath = BuildStoragePath(osMediator.ApplicationDataPath, config.StoragePath);
+            var absStoragePath = BuildStoragePath(osMediator.AppPersistentDataPath, config.StoragePath);
             return Path.Combine(absStoragePath, LocalDataFileName);
         }
 

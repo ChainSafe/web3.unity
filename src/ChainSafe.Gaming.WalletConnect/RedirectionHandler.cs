@@ -13,9 +13,11 @@ namespace ChainSafe.Gaming.WalletConnect
     {
         private readonly IWalletRegistry walletRegistry;
         private readonly IOperatingSystemMediator osMediator;
+        private readonly ILogWriter logWriter;
 
-        public RedirectionHandler(IWalletRegistry walletRegistry, IOperatingSystemMediator osMediator)
+        public RedirectionHandler(IWalletRegistry walletRegistry, IOperatingSystemMediator osMediator, ILogWriter logWriter)
         {
+            this.logWriter = logWriter;
             this.osMediator = osMediator;
             this.walletRegistry = walletRegistry;
         }
@@ -39,6 +41,15 @@ namespace ChainSafe.Gaming.WalletConnect
         {
             var walletData = walletRegistry.GetWallet(walletName);
             var deeplink = BuildConnectionDeeplink(walletData, connectionUri);
+
+            logWriter.Log($"Generated deep link: {deeplink}");
+
+            if (osMediator.IsMobilePlatform && osMediator.IsEditor)
+            {
+                logWriter.Log("Can't open mobile deeplink in editor. Ignoring..");
+                return;
+            }
+
             osMediator.OpenUrl(deeplink);
         }
 
@@ -48,6 +59,14 @@ namespace ChainSafe.Gaming.WalletConnect
         /// <param name="connectionUri">The connection URI provided by WalletConnect.</param>
         public void RedirectConnectionOsManaged(string connectionUri)
         {
+            logWriter.Log($"Connection URI: {connectionUri}");
+
+            if (osMediator.IsMobilePlatform && osMediator.IsEditor)
+            {
+                logWriter.Log($"Can't open mobile connection URI in editor. Ignoring..");
+                return;
+            }
+
             osMediator.OpenUrl(connectionUri);
         }
 
@@ -102,6 +121,11 @@ namespace ChainSafe.Gaming.WalletConnect
         /// <exception cref="WalletConnectException">Invalid format of deeplink registered for the provided wallet.</exception>
         public string BuildConnectionDeeplink(WalletModel walletData, string connectionUri)
         {
+            if (string.IsNullOrWhiteSpace(connectionUri))
+            {
+                throw new WalletConnectException("Can not build a connection deep link. The connection URI is empty.");
+            }
+
             var linkData = GetPlatformLinkData(walletData);
             var platformUrl = BuildPlatformUrl();
 
