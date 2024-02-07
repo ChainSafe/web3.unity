@@ -9,7 +9,7 @@ using WalletConnectSharp.Common.Logging;
 namespace ChainSafe.Gaming.WalletConnect.Wallets
 {
     /// <summary>
-    /// Default implementation for the registry of the wallets supported by WalletConnect.
+    /// The registry of the wallets supported by WalletConnect.
     /// </summary>
     public class WalletRegistry : ILifecycleParticipant, IWalletRegistry
     {

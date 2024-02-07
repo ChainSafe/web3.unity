@@ -22,6 +22,7 @@ namespace ChainSafe.Gaming.Web3
         private readonly ISigner? signer;
         private readonly ITransactionExecutor? transactionExecutor;
         private readonly IEvmEvents? events;
+        private readonly ILogoutManager logoutManager;
 
         private bool initialized;
         private bool terminated;
@@ -36,7 +37,7 @@ namespace ChainSafe.Gaming.Web3
             ContractBuilder = serviceProvider.GetRequiredService<IContractBuilder>();
             ProjectConfig = serviceProvider.GetRequiredService<IProjectConfig>();
             ChainConfig = serviceProvider.GetRequiredService<IChainConfig>();
-            LogoutManager = this.serviceProvider.GetRequiredService<ILogoutManager>();
+            logoutManager = this.serviceProvider.GetRequiredService<ILogoutManager>();
         }
 
         /// <summary>
@@ -75,11 +76,6 @@ namespace ChainSafe.Gaming.Web3
         public IContractBuilder ContractBuilder { get; }
 
         /// <summary>
-        /// Access the Logout Manager to notify all handlers that the user wishes to log out.
-        /// </summary>
-        public ILogoutManager LogoutManager { get; }
-
-        /// <summary>
         /// Access the service provider of this Web3 instance.
         /// Use this to retrieve any service that was bound to this Web3 instance during the build phase.
         /// </summary>
@@ -106,11 +102,16 @@ namespace ChainSafe.Gaming.Web3
         /// </summary>
         /// <exception cref="Web3Exception">Web3 was already terminated.</exception>
         /// <returns>Task handle for the asynchronous process.</returns>
-        public async ValueTask TerminateAsync()
+        public async ValueTask TerminateAsync(bool logout = false)
         {
             if (terminated)
             {
                 throw new Web3Exception("Web3 was already terminated.");
+            }
+
+            if (logout)
+            {
+                await logoutManager.Logout();
             }
 
             if (initialized)

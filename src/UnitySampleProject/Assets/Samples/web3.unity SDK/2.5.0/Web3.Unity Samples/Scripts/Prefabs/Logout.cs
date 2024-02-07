@@ -10,11 +10,8 @@ public class Logout : MonoBehaviour
 {
     public async void OnLogout()
     {
-        // Logout user
-        await Web3Accessor.Web3.LogoutManager.Logout();
-
-        // Terminate Web3
-        await Web3Accessor.TerminateAndClear();
+        // Logout & Terminate Web3
+        await Web3Accessor.TerminateAndClear(logout: true);
 
         // Go back to the first scene to log in again
         await SceneManager.LoadSceneAsync(LoadSceneOnLogin.LoginSceneBuildIndex);

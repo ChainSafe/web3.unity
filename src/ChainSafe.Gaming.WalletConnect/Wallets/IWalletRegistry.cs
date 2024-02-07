@@ -10,17 +10,17 @@ namespace ChainSafe.Gaming.WalletConnect.Wallets
     public interface IWalletRegistry
     {
         /// <summary>
-        /// Enumerates through all wallets supported on the specified platform.
-        /// </summary>
-        /// <param name="platform">The platform.</param>
-        /// <returns>Sequence of <see cref="WalletModel"/> that the platform supports.</returns>
-        IEnumerable<WalletModel> EnumerateSupportedWallets(Platform platform);
-
-        /// <summary>
         /// Return model for the wallet by it's name.
         /// </summary>
         /// <param name="name">The name of the wallet.</param>
         /// <returns>Wallet model.</returns>
         WalletModel GetWallet(string name);
+
+        /// <summary>
+        /// Enumerates through all wallets supported on the specified platform.
+        /// </summary>
+        /// <param name="platform">The platform.</param>
+        /// <returns>Sequence of <see cref="WalletModel"/> that the platform supports.</returns>
+        IEnumerable<WalletModel> EnumerateSupportedWallets(Platform platform);
     }
 }

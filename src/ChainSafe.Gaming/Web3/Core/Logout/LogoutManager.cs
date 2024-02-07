@@ -5,7 +5,6 @@ using ChainSafe.Gaming.Web3.Environment;
 
 namespace ChainSafe.Gaming.Web3.Core.Logout
 {
-    // todo this is a very basic implementation
     public class LogoutManager : ILogoutManager
     {
         private readonly IEnumerable<ILogoutHandler> handlers;
@@ -30,6 +29,8 @@ namespace ChainSafe.Gaming.Web3.Core.Logout
                 logWriter.Log("No logout handlers bound. Skipping the logout procedure.");
                 return;
             }
+
+            logWriter.Log("Logging out..");
 
             foreach (var handler in handlers)
             {
