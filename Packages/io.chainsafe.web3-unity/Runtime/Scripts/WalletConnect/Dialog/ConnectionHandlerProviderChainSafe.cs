@@ -11,7 +11,7 @@ namespace ChainSafe.Gaming.WalletConnect.Dialog
     [CreateAssetMenu(menuName = "ChainSafe/WalletConnect/Connection Handler Provider", fileName = "ConnectionHandlerProvider", order = 0)]
     public class ConnectionHandlerProviderChainSafe : ConnectionHandlerProviderSO
     {
-        [SerializeField] private ConnectionHandlerBehaviour HandlerPrefab;
+        [SerializeField] private ConnectionHandlerBehaviour handlerPrefab;
     
         private ConnectionHandlerBehaviour loadedHandler;
         
@@ -22,7 +22,7 @@ namespace ChainSafe.Gaming.WalletConnect.Dialog
                 return Task.FromResult((IConnectionHandler)loadedHandler);
             }
 
-            loadedHandler = Instantiate(HandlerPrefab);
+            loadedHandler = Instantiate(handlerPrefab);
             return Task.FromResult((IConnectionHandler)loadedHandler);
         }
     }

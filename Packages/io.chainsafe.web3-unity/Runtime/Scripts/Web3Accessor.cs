@@ -39,14 +39,14 @@ namespace ChainSafe.Gaming.UnityPackage
             Instance.web3 = web3;
         }
 
-        public static async Task TerminateAndClear()
+        public static async Task TerminateAndClear(bool logout = false)
         {
             if (!Instance)
             {
                 Debug.LogError("Instance was not set.");
             }
 
-            await Instance.web3.TerminateAsync();
+            await Instance.web3.TerminateAsync(logout);
             Instance.web3 = null;
         }
     }
