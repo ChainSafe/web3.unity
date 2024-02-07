@@ -19,7 +19,7 @@ namespace Tests.Runtime
 
         public Task Disconnect()
         {
-            throw new System.NotImplementedException();
+            // empty
         }
 
         public Task<string> Request<T>(T data, long? expiry = null)
