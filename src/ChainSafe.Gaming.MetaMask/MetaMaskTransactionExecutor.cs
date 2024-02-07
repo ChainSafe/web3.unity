@@ -1,10 +1,12 @@
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using ChainSafe.Gaming.Web3.Environment;
 using Nethereum.RPC.Eth.DTOs;
+
 
 namespace ChainSafe.Gaming.MetaMask
 {

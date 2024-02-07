@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
