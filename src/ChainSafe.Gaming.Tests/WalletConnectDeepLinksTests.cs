@@ -23,7 +23,7 @@ namespace ChainSafe.Gaming.Tests
     {
         private static readonly List<string> KnownBrokenWalletsAndroid = new() // todo note in the documentation
         {
-            "FILWallet", "Snowball", "LocalTrade Wallet", "Keeper", "Plena-App",
+            "FILWallet", "Snowball", "LocalTrade Wallet", "Keeper", "Plena-App", "D'CENT Wallet",
         };
 
         private static readonly List<string> KnownBrokenWalletsIos = new() // todo note in the documentation
@@ -34,13 +34,13 @@ namespace ChainSafe.Gaming.Tests
             "Bee Wallet", "SimpleHold", "Flow Wallet", "HUMBL WALLET", "Stickey Wallet", "Catecoin Wallet", "Konio",
             "Ronin Wallet", "f(x)Wallet", "pockie", "BeanBag", "New Money", "Concordium", "Ape Wallet",
             "Trustee Wallet", "HERE Wallet", "Plena-App", "AZCoiner", "GateWallet", "Puzzle Wallet", "Armana Portal",
-            "Cogni ",
+            "Cogni ", "Feral File", "CoinStats", "paycool",
         };
 
         private static readonly List<string> KnownBrokenWalletsDesktop = new() // todo note in the documentation
         {
             "Internet Money Wallet", "Flooz", "RiceWallet", "Okto", "DMToken", "campux.digital", "Dippi", "LichtBit",
-            "MELDapp", "Numo Wallet", "Hoo!Wallet", "37x",
+            "MELDapp", "Numo Wallet", "Hoo!Wallet", "37x", "SmartRush", "DexTrade",
         };
 
         private HttpClient httpClient;
@@ -86,7 +86,7 @@ namespace ChainSafe.Gaming.Tests
                 {
                     services.UseStubWeb3Environment(operatingSystemMediator: new StubOperatingSystemMediator() { Platform = platform }, httpClient: new NetCoreHttpClient());
                     services.AddSingleton<IRpcProvider, StubRpcProvider>();
-                    services.AddSingleton<IWalletConnectConfig>(new WalletConnectConfig());
+                    services.AddSingleton<IWalletConnectConfig>(new WalletConnectConfig { ProjectId = "f4bff60eb260841f46b1c77588cd8acb" });
                     services.AddSingleton<IWalletRegistry, ILifecycleParticipant, WalletRegistry>();
                     services.AddSingleton<RedirectionHandler>();
                 })
