@@ -18,8 +18,7 @@ public class SampleTestsBase
 {
     protected Web3 web3;
 
-    [UnitySetUp]
-    public virtual IEnumerator BuildWeb3(Web3Builder.ConfigureServicesDelegate customConfiguration = null)
+    public IEnumerator BuildWeb3(Web3Builder.ConfigureServicesDelegate customConfiguration = null)
     {
         // Wait for some time to initialize
         yield return new WaitForSeconds(5f);
