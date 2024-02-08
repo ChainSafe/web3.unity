@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
@@ -47,7 +48,7 @@ namespace ChainSafe.Gaming.WalletConnect
             var hash = await provider.Request(requestData);
             if (!ValidateResponseHash(hash))
             {
-                throw new Web3Exception("Incorrect transaction response format.");
+                throw new Web3Exception($"Incorrect transaction response format: \"{hash}\".");
             }
 
             WCLogger.Log($"Transaction executed successfully. Hash: {hash}.");
@@ -56,7 +57,8 @@ namespace ChainSafe.Gaming.WalletConnect
 
             bool ValidateResponseHash(string hash)
             {
-                return !hash.StartsWith("0x") || hash.Length != 66;
+                string hashPattern = @"^0x[a-fA-F0-9]{64}$";
+                return !Regex.IsMatch(hash, hashPattern);
             }
         }
     }
