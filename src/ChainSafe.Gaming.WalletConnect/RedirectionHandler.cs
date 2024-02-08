@@ -1,7 +1,6 @@
 using System.Web;
 using ChainSafe.Gaming.WalletConnect.Models;
 using ChainSafe.Gaming.WalletConnect.Wallets;
-using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Environment;
 
 namespace ChainSafe.Gaming.WalletConnect
@@ -155,7 +154,7 @@ namespace ChainSafe.Gaming.WalletConnect
                         $"Native protocol deeplink for {walletData.Name} had incorrect format: no \":\" symbol.");
                 }
 
-                var pureProtocol = nativeUrl[.. (nativeUrl.IndexOf(':') + 1)];
+                var pureProtocol = nativeUrl[..(nativeUrl.IndexOf(':') + 1)];
                 return $"{pureProtocol}//";
             }
 
