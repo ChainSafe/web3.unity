@@ -47,5 +47,8 @@
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0",
     "com.tools.webglthreadingpatcher": "https://github.com/VolodymyrBS/WebGLThreadingPatcher.git"
-  }
+  },
+  "testables": [
+    "io.chainsafe.web3-unity"
+  ]
 }
