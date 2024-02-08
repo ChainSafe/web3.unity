@@ -4,6 +4,7 @@ using System.Linq;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Core.Evm;
 
 namespace ChainSafe.Gaming.Evm.Contracts
@@ -14,28 +15,29 @@ namespace ChainSafe.Gaming.Evm.Contracts
         private readonly IRpcProvider rpcProvider;
         private readonly ISigner signer;
         private readonly ITransactionExecutor transactionExecutor;
+        private readonly IAnalyticsClient analyticsClient; // Added analytics client
 
-        public ContractBuilder(IRpcProvider rpcProvider)
-            : this(new(), rpcProvider, null)
+        public ContractBuilder(IRpcProvider rpcProvider, IAnalyticsClient analyticsClient)
+            : this(new(), rpcProvider, null, null, analyticsClient)
         {
         }
 
-        public ContractBuilder(IRpcProvider rpcProvider, ISigner signer)
-            : this(new(), rpcProvider, signer)
+        public ContractBuilder(IRpcProvider rpcProvider, ISigner signer, IAnalyticsClient analyticsClient)
+            : this(new(), rpcProvider, signer, null, analyticsClient)
         {
         }
 
-        public ContractBuilder(ContractBuilderConfig config, IRpcProvider rpcProvider, ISigner signer)
-            : this(config, rpcProvider, signer, null)
+        public ContractBuilder(ContractBuilderConfig config, IRpcProvider rpcProvider, ISigner signer, IAnalyticsClient analyticsClient)
+            : this(config, rpcProvider, signer, null, analyticsClient)
         {
         }
 
-        public ContractBuilder(IRpcProvider rpcProvider, ISigner signer, ITransactionExecutor transactionExecutor)
-            : this(new(), rpcProvider, signer, transactionExecutor)
+        public ContractBuilder(IRpcProvider rpcProvider, ISigner signer, ITransactionExecutor transactionExecutor, IAnalyticsClient analyticsClient)
+            : this(new(), rpcProvider, signer, transactionExecutor, analyticsClient)
         {
         }
 
-        public ContractBuilder(ContractBuilderConfig config, IRpcProvider rpcProvider, ISigner signer, ITransactionExecutor transactionExecutor)
+        public ContractBuilder(ContractBuilderConfig config, IRpcProvider rpcProvider, ISigner signer, ITransactionExecutor transactionExecutor, IAnalyticsClient analyticsClient)
         {
             try
             {
@@ -49,6 +51,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
             this.rpcProvider = rpcProvider;
             this.signer = signer;
             this.transactionExecutor = transactionExecutor;
+            this.analyticsClient = analyticsClient; // Initialize analytics client
         }
 
         public Contract Build(string name)
@@ -58,10 +61,10 @@ namespace ChainSafe.Gaming.Evm.Contracts
                 throw new Web3Exception($"Contract with name '{name}' was not registered.");
             }
 
-            return new(data.Abi, data.Address, rpcProvider, signer, transactionExecutor);
+            return new Contract(data.Abi, data.Address, rpcProvider, signer, transactionExecutor, analyticsClient); // Pass analytics client to Contract
         }
 
         public Contract Build(string abi, string address) =>
-            new(abi, address, rpcProvider, signer, transactionExecutor);
+            new Contract(abi, address, rpcProvider, signer, transactionExecutor, analyticsClient); // Pass analytics client to Contract
     }
 }
