@@ -1,4 +1,3 @@
-using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Common;
 using ChainSafe.Gaming.WalletConnect;
 using ChainSafe.Gaming.Web3.Build;
@@ -7,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Login using an existing wallet using Wallet Connect.
+/// Login using an existing wallet with WalletConnect.
 /// </summary>
 public class WalletConnectLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
 {
@@ -22,11 +21,11 @@ public class WalletConnectLoginProvider : LoginProvider, IWeb3BuilderServiceAdap
     protected override async void Initialize()
     {
         base.Initialize();
-        
-        var connectionHelper = await new Web3Builder(ProjectConfigUtilities.Load()) // build lightweight web3 
-            .BuildConnectionHelper(walletConnectConfig);
-        
-        storedSessionAvailable = connectionHelper.StoredSessionAvailable;
+
+        await using (var lightWeb3 = await WalletConnectWeb3.BuildLightweightWeb3(walletConnectConfig))
+        {
+            storedSessionAvailable = lightWeb3.WalletConnect().ConnectionHelper().StoredSessionAvailable;
+        }
         
         if (autoLoginPreviousSession && storedSessionAvailable) // auto-login
         {
