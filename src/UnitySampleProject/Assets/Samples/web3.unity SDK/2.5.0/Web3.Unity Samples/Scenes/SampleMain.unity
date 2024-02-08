@@ -2333,7 +2333,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 37375165}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.08296224
+  m_Size: 0.38509905
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4768,7 +4768,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea0121760e62b10498829475cd3a2c64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RampConfig: {fileID: 11400000, guid: d1f58846e4fc71d4e90f287a86f328f9, type: 2}
   OnRampButton: {fileID: 1876911317}
   OffRampButton: {fileID: 491434544}
   OnRampOffRampButton: {fileID: 1930047999}
@@ -5519,18 +5518,6 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!114 &1019211779
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 98914093}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f404484bf3c7d4246a08e60ab1cd69b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1019211780
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5575,6 +5562,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1019211781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 98914093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b044657e16866a4dbee5eccdd4a15b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serviceType: 1
 --- !u!1001 &1031869231
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6246,6 +6246,19 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &1106330808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1106330806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b044657e16866a4dbee5eccdd4a15b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serviceType: 2
 --- !u!1 &1170271242
 GameObject:
   m_ObjectHideFlags: 0
@@ -12651,6 +12664,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1588444497385416147}
   - component: {fileID: 6144093799673516555}
+  - component: {fileID: 6144093799673516556}
   m_Layer: 5
   m_Name: Category - Ramp
   m_TagString: Untagged
@@ -12678,6 +12692,19 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &6144093799673516556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6144093799673516554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b044657e16866a4dbee5eccdd4a15b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serviceType: 0
 --- !u!114 &6168855185573729325
 MonoBehaviour:
   m_ObjectHideFlags: 0
