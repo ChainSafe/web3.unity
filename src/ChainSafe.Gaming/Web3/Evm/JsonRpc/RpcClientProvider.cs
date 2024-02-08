@@ -128,7 +128,7 @@ namespace ChainSafe.Gaming.Evm.Providers
                     Rpc = method,
                     Network = network?.Name,
                     ChainId = network?.ChainId.ToString(),
-                    EventName = $"Rpc Client Perform {method}",
+                    EventName = $"{method}",
                     GameData = new AnalyticsGameData()
                     {
                         Params = parameters,
