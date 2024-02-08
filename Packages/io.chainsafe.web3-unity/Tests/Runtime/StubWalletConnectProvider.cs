@@ -20,6 +20,7 @@ namespace Tests.Runtime
         public Task Disconnect()
         {
             // empty
+            return Task.CompletedTask;
         }
 
         public Task<string> Request<T>(T data, long? expiry = null)
