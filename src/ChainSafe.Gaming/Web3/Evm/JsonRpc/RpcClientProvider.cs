@@ -17,8 +17,6 @@ namespace ChainSafe.Gaming.Evm.Providers
         private readonly Web3Environment environment;
         private readonly ChainRegistryProvider chainRegistryProvider;
         private readonly IChainConfig chainConfig;
-        private readonly IAnalyticsClient analyticsClient;
-        private readonly IProjectConfig projectConfig;
 
         private Network.Network network;
 
@@ -26,28 +24,18 @@ namespace ChainSafe.Gaming.Evm.Providers
             RpcClientConfig config,
             Web3Environment environment,
             ChainRegistryProvider chainRegistryProvider,
-            IChainConfig chainConfig,
-            IAnalyticsClient analyticsClient,
-            IProjectConfig projectConfig)
+            IChainConfig chainConfig)
         {
             this.chainRegistryProvider = chainRegistryProvider;
             this.environment = environment;
             this.config = config;
             this.chainConfig = chainConfig;
-            this.analyticsClient = analyticsClient;
-            this.projectConfig = projectConfig;
 
             if (string.IsNullOrEmpty(this.config.RpcNodeUrl))
             {
                 this.config.RpcNodeUrl = chainConfig.Rpc;
             }
         }
-
-        public IAnalyticsClient AnalyticsClient => analyticsClient;
-
-        public IProjectConfig ProjectConfig => projectConfig;
-
-        public IChainConfig ChainConfig => chainConfig;
 
         public Network.Network LastKnownNetwork
         {

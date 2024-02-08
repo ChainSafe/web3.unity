@@ -21,6 +21,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
         private readonly ISigner signer;
         private readonly Builders.ContractBuilder contractBuilder;
         private readonly ITransactionExecutor transactionExecutor;
+        private readonly IAnalyticsClient analyticsClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Contract"/> class.
@@ -30,7 +31,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
         /// <param name="provider">The RPC provider.</param>
         /// <param name="signer">The signer.</param>
         /// <param name="transactionExecutor">Transaction executor.</param>
-        internal Contract(string abi, string address, IRpcProvider provider, ISigner signer = null, ITransactionExecutor transactionExecutor = null)
+        internal Contract(string abi, string address, IRpcProvider provider, ISigner signer = null, ITransactionExecutor transactionExecutor = null, IAnalyticsClient analyticsClient = null)
         {
             if (string.IsNullOrEmpty(abi))
             {
@@ -42,6 +43,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
             this.provider = provider;
             this.signer = signer;
             this.transactionExecutor = transactionExecutor;
+            this.analyticsClient = analyticsClient;
             contractBuilder = new Builders.ContractBuilder(abi, address);
         }
 
@@ -90,18 +92,15 @@ namespace ChainSafe.Gaming.Evm.Contracts
             txReq.Data ??= function.GetData(parameters);
 
             var result = await provider.Call(txReq);
-            if (provider is RpcClientProvider rpcProvider)
+            analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
-                rpcProvider.AnalyticsClient?.CaptureEvent(new AnalyticsEvent()
-                {
-                    ChainId = rpcProvider.ChainConfig.ChainId,
-                    EventName = method,
-                    Network = rpcProvider.LastKnownNetwork.Name,
-                    Version = rpcProvider.AnalyticsClient.AnalyticsVersion,
-                    PackageName = "io.chainsafe.web3.unity",
-                    ProjectId = rpcProvider.ProjectConfig.ProjectId,
-                });
-            }
+                ChainId = analyticsClient.ChainConfig.ChainId,
+                EventName = method,
+                Network = analyticsClient.ChainConfig.Network,
+                Version = analyticsClient.AnalyticsVersion,
+                PackageName = "io.chainsafe.web3.unity",
+                ProjectId = analyticsClient.ProjectConfig.ProjectId,
+            });
 
             return Decode(method, result);
         }
@@ -183,18 +182,15 @@ namespace ChainSafe.Gaming.Evm.Contracts
             var output = function.DecodeOutput(tx.Data);
             var outputValues = output.Select(x => x.Result).ToArray();
 
-            if (provider is RpcClientProvider rpcProvider)
+            analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
-                rpcProvider.AnalyticsClient?.CaptureEvent(new AnalyticsEvent()
-                {
-                    ChainId = rpcProvider.ChainConfig.ChainId,
-                    EventName = method,
-                    Network = rpcProvider.LastKnownNetwork.Name,
-                    Version = rpcProvider.AnalyticsClient.AnalyticsVersion,
-                    PackageName = "io.chainsafe.web3.unity",
-                    ProjectId = rpcProvider.ProjectConfig.ProjectId,
-                });
-            }
+                ChainId = analyticsClient.ChainConfig.ChainId,
+                EventName = method,
+                Network = analyticsClient.ChainConfig.Network,
+                Version = analyticsClient.AnalyticsVersion,
+                PackageName = "io.chainsafe.web3.unity",
+                ProjectId = analyticsClient.ProjectConfig.ProjectId,
+            });
 
             return (outputValues, receipt);
         }
@@ -278,18 +274,15 @@ namespace ChainSafe.Gaming.Evm.Contracts
 #endif
             var function = contractBuilder.GetFunctionBuilder(method);
 
-            if (provider is RpcClientProvider rpcProvider)
+            analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
-                rpcProvider.AnalyticsClient?.CaptureEvent(new AnalyticsEvent()
-                {
-                    ChainId = rpcProvider.ChainConfig.ChainId,
-                    EventName = method,
-                    Network = rpcProvider.LastKnownNetwork.Name,
-                    Version = rpcProvider.AnalyticsClient.AnalyticsVersion,
-                    PackageName = "io.chainsafe.web3.unity",
-                    ProjectId = rpcProvider.ProjectConfig.ProjectId,
-                });
-            }
+                ChainId = analyticsClient.ChainConfig.ChainId,
+                EventName = method,
+                Network = analyticsClient.ChainConfig.Network,
+                Version = analyticsClient.AnalyticsVersion,
+                PackageName = "io.chainsafe.web3.unity",
+                ProjectId = analyticsClient.ProjectConfig.ProjectId,
+            });
 
             return function.GetData(parameters);
         }
