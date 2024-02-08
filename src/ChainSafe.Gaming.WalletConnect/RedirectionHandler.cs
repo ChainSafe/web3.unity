@@ -154,7 +154,8 @@ namespace ChainSafe.Gaming.WalletConnect
                         $"Native protocol deeplink for {walletData.Name} had incorrect format: no \":\" symbol.");
                 }
 
-                var pureProtocol = nativeUrl[..(nativeUrl.IndexOf(':') + 1)];
+                var pureProtocolStringLength = nativeUrl.IndexOf(':') + 1;
+                var pureProtocol = nativeUrl[..pureProtocolStringLength];
                 return $"{pureProtocol}//";
             }
 
