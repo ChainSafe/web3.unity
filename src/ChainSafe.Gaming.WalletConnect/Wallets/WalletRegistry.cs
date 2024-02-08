@@ -13,9 +13,6 @@ namespace ChainSafe.Gaming.WalletConnect.Wallets
     /// </summary>
     public class WalletRegistry : ILifecycleParticipant, IWalletRegistry
     {
-        public static string BuildRegistryUri(string projectId) =>
-            $"https://explorer-api.walletconnect.com/v3/wallets?projectId={projectId}";
-
         private readonly IHttpClient httpClient;
         private readonly IWalletConnectConfig config;
 
@@ -26,6 +23,9 @@ namespace ChainSafe.Gaming.WalletConnect.Wallets
             this.config = config;
             this.httpClient = httpClient;
         }
+
+        public static string BuildRegistryUri(string projectId) =>
+            $"https://explorer-api.walletconnect.com/v3/wallets?projectId={projectId}";
 
         async ValueTask ILifecycleParticipant.WillStartAsync()
         {
