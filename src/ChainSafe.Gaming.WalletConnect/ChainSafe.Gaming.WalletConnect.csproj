@@ -6,7 +6,6 @@
     <PackageId>ChainSafe.Gaming.WalletConnect</PackageId>
     <EnableNETAnalyzers>True</EnableNETAnalyzers>
     <CodeAnalysisRuleSet>../../global.ruleset</CodeAnalysisRuleSet>
-    <RootNamespace>ChainSafe.Gaming.WalletConnect</RootNamespace>
     <Configurations>Debug;Release;Test</Configurations>
     <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
@@ -16,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
     <PackageReference Include="WalletConnect.Events" Version="2.1.2" />
     <PackageReference Include="WalletConnect.Web3Wallet" Version="2.1.6" />
   </ItemGroup>

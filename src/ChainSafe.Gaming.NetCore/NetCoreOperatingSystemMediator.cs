@@ -7,17 +7,13 @@ namespace ChainSafe.Gaming.NetCore
     /// </summary>
     public class NetCoreOperatingSystemMediator : IOperatingSystemMediator
     {
-        /// <summary>
-        /// Is platform on Mobile or not.
-        /// </summary>
-        /// <exception cref="System.NotImplementedException">Not Implemented.</exception>
         public bool IsMobilePlatform => throw new System.NotImplementedException();
 
-        /// <summary>
-        /// Current Platform enum.
-        /// </summary>
-        /// <exception cref="System.NotImplementedException">Not Implemented.</exception>
+        public bool IsEditor => throw new System.NotImplementedException();
+
         public Platform Platform => throw new System.NotImplementedException();
+
+        public string AppPersistentDataPath => throw new System.NotImplementedException();
 
         /// <summary>
         /// Open a Url using Http for .NetCore environment.

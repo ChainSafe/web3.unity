@@ -27,7 +27,7 @@
     <assembly fullname="ChainSafe.Gaming.LootBoxes.Chainlink"/>
     <!-- Dependencies -->
     <assembly fullname="ADRaffy.ENSNormalize" />
-    <assembly fullname="BouncyCastle.Crypto" />
+    <assembly fullname="BouncyCastle.Crypto" preserve="all"/>
     <assembly fullname="Microsoft.Extensions.Logging.Abstractions" />
     <assembly fullname="NBitcoin" />
     <assembly fullname="Nethereum.ABI" />
