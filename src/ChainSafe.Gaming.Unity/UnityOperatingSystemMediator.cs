@@ -1,5 +1,4 @@
-﻿using System;
-using ChainSafe.Gaming.Web3.Environment;
+﻿using ChainSafe.Gaming.Web3.Environment;
 using UnityEngine;
 
 namespace ChainSafe.Gaming.Unity
@@ -8,27 +7,28 @@ namespace ChainSafe.Gaming.Unity
     {
         public bool IsMobilePlatform => Application.isMobilePlatform;
 
-        public Platform Platform => GetCurrentPlatform();
+        public bool IsEditor => Application.isEditor;
 
-        /// <summary>
-        /// Get current platform from <see cref="Application.platform"/> for Unity.
-        /// </summary>
-        /// <returns>Current Runtime Platform.</returns>
-        public static Platform GetCurrentPlatform()
+        public Platform Platform
         {
-            if (Application.isEditor)
+            get
             {
-                return Platform.Editor;
-            }
+                if (Application.isEditor)
+                {
+                    return Platform.Editor;
+                }
 
-            return Application.platform switch
-            {
-                RuntimePlatform.IPhonePlayer => Platform.IOS,
-                RuntimePlatform.Android => Platform.Android,
-                RuntimePlatform.WebGLPlayer => Platform.WebGL,
-                _ => Platform.Desktop,
-            };
+                return Application.platform switch
+                {
+                    RuntimePlatform.IPhonePlayer => Platform.IOS,
+                    RuntimePlatform.Android => Platform.Android,
+                    RuntimePlatform.WebGLPlayer => Platform.WebGL,
+                    _ => Platform.Desktop,
+                };
+            }
         }
+
+        public string AppPersistentDataPath => Application.persistentDataPath;
 
         public void OpenUrl(string url) => Application.OpenURL(url);
     }
