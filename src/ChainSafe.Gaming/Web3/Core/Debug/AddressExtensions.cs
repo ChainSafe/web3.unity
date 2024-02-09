@@ -24,7 +24,7 @@ namespace ChainSafe.Gaming.Web3.Core.Debug
         {
             if (!IsPublicAddress(value))
             {
-                throw new Web3AssertionException($"\"{variableName}\" is not public address");
+                throw new Web3AssertionException($"\"{variableName}\" is not a public address.");
             }
 
             return value;
