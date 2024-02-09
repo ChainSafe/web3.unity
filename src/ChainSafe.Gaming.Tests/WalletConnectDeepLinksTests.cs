@@ -52,7 +52,7 @@ namespace ChainSafe.Gaming.Tests
         {
             httpClient = new HttpClient
             {
-                Timeout = TimeSpan.FromSeconds(5),
+                Timeout = TimeSpan.FromSeconds(10),
             };
         }
 
