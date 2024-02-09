@@ -59,7 +59,7 @@ namespace ChainSafe.Gaming.WalletConnect.Wallets
 
         ValueTask ILifecycleParticipant.WillStopAsync() => new(Task.CompletedTask);
 
-        public WalletModel GetWallet(string name)
+        public WalletModel GetWallet(string name) // todo refactor this class to use walletId for identification
         {
             return enabledWallets.Find(w => w.Name == name);
         }

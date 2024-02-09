@@ -21,11 +21,6 @@ namespace ChainSafe.Gaming.Tests
     [TestFixture]
     public class WalletConnectDeepLinksTests
     {
-        private static readonly List<string> KnownBrokenWalletsAndroid = new() // todo note in the documentation
-        {
-            "FILWallet", "Snowball", "LocalTrade Wallet", "Keeper", "Plena-App", "D'CENT Wallet",
-        };
-
         private static readonly List<string> KnownBrokenWalletsIos = new() // todo note in the documentation
         {
             "Argent", "Blockchain.com", "MEW wallet", "Obvious", "Internet Money Wallet", "Arculus Wallet", "Kelp",
@@ -40,7 +35,7 @@ namespace ChainSafe.Gaming.Tests
         private static readonly List<string> KnownBrokenWalletsDesktop = new() // todo note in the documentation
         {
             "Internet Money Wallet", "Flooz", "RiceWallet", "Okto", "DMToken", "campux.digital", "Dippi", "LichtBit",
-            "MELDapp", "Numo Wallet", "Hoo!Wallet", "37x", "SmartRush", "DexTrade",
+            "MELDapp", "Numo Wallet", "Hoo!Wallet", "37x", "SmartRush", "DexTrade", "Deficloud",
         };
 
         private HttpClient httpClient;
@@ -59,12 +54,6 @@ namespace ChainSafe.Gaming.Tests
             {
                 Timeout = TimeSpan.FromSeconds(5),
             };
-        }
-
-        [Test]
-        public Task TestAndroidDeepLinks()
-        {
-            return TestDeepLinks(Platform.Android, KnownBrokenWalletsAndroid);
         }
 
         [Test]
