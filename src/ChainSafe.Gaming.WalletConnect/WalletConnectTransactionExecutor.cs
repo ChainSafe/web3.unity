@@ -58,7 +58,7 @@ namespace ChainSafe.Gaming.WalletConnect
             bool ValidateResponseHash(string hash)
             {
                 string hashPattern = @"^0x[a-fA-F0-9]{64}$";
-                return !Regex.IsMatch(hash, hashPattern);
+                return Regex.IsMatch(hash, hashPattern);
             }
         }
     }

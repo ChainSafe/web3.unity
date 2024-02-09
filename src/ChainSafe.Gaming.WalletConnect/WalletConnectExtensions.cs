@@ -124,12 +124,12 @@ namespace ChainSafe.Gaming.WalletConnect
         /// </summary>
         private static void EnsureProviderBoundFirst(IWeb3ServiceCollection services)
         {
-            if (services.Any(descriptor => descriptor.ServiceType == typeof(WalletConnectProvider)))
+            if (services.Any(descriptor => descriptor.ServiceType == typeof(IWalletConnectProvider)))
             {
                 return;
             }
 
-            throw new Web3BuildException($"You should bind {nameof(WalletConnectProvider)} first.");
+            throw new Web3BuildException($"You should bind {nameof(IWalletConnectProvider)} first.");
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.MultiCall;
@@ -18,17 +19,36 @@ public class SampleTestsBase
 {
     protected Web3 web3;
 
-    public IEnumerator BuildWeb3(Web3Builder.ConfigureServicesDelegate customConfiguration = null)
+    [UnitySetUp]
+    public IEnumerator SetUp()
     {
-        // Wait for some time to initialize
-        yield return new WaitForSeconds(5f);
+        // Initiate web3 build
+        var buildWeb3 = BuildTestWeb3();
 
+        // Wait until for async task to finish
+        yield return new WaitUntil(() => buildWeb3.IsCompleted);
+
+        // Assign result to web3
+        web3 = buildWeb3.Result;
+    }
+
+    [UnityTearDown]
+    public virtual IEnumerator TearDown()
+    {
+        var terminateWeb3Task = web3.TerminateAsync();
+
+        // Wait until for async task to finish
+        yield return new WaitUntil(() => terminateWeb3Task.IsCompleted);
+    }
+
+    internal static ValueTask<Web3> BuildTestWeb3(Web3Builder.ConfigureServicesDelegate customConfiguration = null)
+    {
         // Set project config, fallback is for github as it doesn't load
         var projectConfigScriptableObject = ProjectConfigUtilities.Load();
         if (projectConfigScriptableObject == null)
         {
             projectConfigScriptableObject = ProjectConfigUtilities.Load("3dc3e125-71c4-4511-a367-e981a6a94371", "11155111",
-                    "Ethereum", "Sepolia", "Seth", "https://sepolia.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f");
+                "Ethereum", "Sepolia", "Seth", "https://sepolia.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f");
         }
 
         // Create web3builder & assign services
@@ -55,18 +75,6 @@ public class SampleTestsBase
         }
 
         var buildWeb3 = web3Builder.LaunchAsync();
-
-        // Wait until for async task to finish
-        yield return new WaitUntil(() => buildWeb3.IsCompleted);
-
-        // Assign result to web3
-        web3 = buildWeb3.Result;
-    }
-
-    [UnityTearDown]
-    public virtual IEnumerator TearDown()
-    {
-        web3.TerminateAsync();
-        yield return null;
+        return buildWeb3;
     }
 }
