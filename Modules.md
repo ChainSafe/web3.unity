@@ -6,7 +6,7 @@ The philosophy here is to keep interconnected code as loosely coupled as possibl
 # SDK Configuration
 
 Every component of the SDK is swappable because it follows the rules 
-established by its interface. So we can have `Web3AuthSigner`, `MetaMaskSigner` & `JsonRpcSinger` all available to a
+established by its interface. So we can have `Web3AuthSigner`, `MetaMaskSigner` & `JsonRpcSigner` all available to a
 user to configure his application however he wants.
 
 All configuration happens during the construction of Web3 object.
@@ -25,8 +25,8 @@ var balance = await web3.Provider.GetBalance();
 
 # Module integration
 
-`services.UseJsonRpcProvider()` is an extension method. When you add a
-new module you have to provide the extension methods that register components provided by the module.
+`services.UseJsonRpcProvider()` is an extension method. Adding a new module requires providing extension methods to
+register its components.
 
 It looks like this:
 ```csharp
@@ -42,8 +42,8 @@ public static IWeb3ServiceCollection UseJsonRpcProvider(this IWeb3ServiceCollect
 }
 ```
 
-Each module should ideally be a separate project referencing Core library. For now JsonRpc module is a part of Core project,
-but don't let that stop you from creating your own project for a new module.
+Each module should ideally be a separate project referencing Core library. Currently, the JsonRpc module resides within
+the Core project, but feel free to create your own project for a new module.
 
 # Dependency injection
 
@@ -84,7 +84,7 @@ public static IWeb3ServiceCollection ConfigureJsonRpcProvider(this IWeb3ServiceC
     return serviceCollection;
 }
 ```
-This is one more extension method you have to provide with your module if it supports configuration.
+You need to provide this extension method with your module if it supports configuration.
 
 Yet in most cases user won't need a separate `Configure` method. That's why we should create `UseJsonRpcProvider` method
 that handles both service and configuration binding:
@@ -166,15 +166,16 @@ But for now there are 3 classes:
 * `ProviderMigration`
 * `SignerMigration`
 
-Most of code is compatible by default, but for Provider and Singer we have to use 
-this for object instantiation:
+Most of code is compatible by default, but For Provider and Signer, we need to use the following for object
+instantiation:
 ```csharp
 var provider = ProviderMigration.NewJsonRpcProvider("http://127.0.0.1:7545");
 var signer = SignerMigration.NewJsonRpcSigner(provider);
 ```
-_Migration might not be the best word for describing this process. Ping me (@oleksandrchainsafe) if you have better ideas._
+_Migration might not be the best word for describing this process. Ping me (@oleksandrchainsafe) if you have better
+ideas._
 
-# Usefull links
+# Useful links
 
 * [Dependency Injection Framework](https://learn.microsoft.com/en-us/dotnet/core/extensions/dependency-injection)
 * [Design Patterns by Gang of Four](https://ru.wikipedia.org/wiki/Design_Patterns)
