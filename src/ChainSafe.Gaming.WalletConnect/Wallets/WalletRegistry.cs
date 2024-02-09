@@ -11,7 +11,7 @@ namespace ChainSafe.Gaming.WalletConnect.Wallets
     /// <summary>
     /// The registry of the wallets supported by WalletConnect.
     /// </summary>
-    public class WalletRegistry : ILifecycleParticipant, IWalletRegistry
+    public class WalletRegistry : ILifecycleParticipant, IWalletRegistry // todo provide pre-downloaded registry with option to update
     {
         private readonly IHttpClient httpClient;
         private readonly IWalletConnectConfig config;

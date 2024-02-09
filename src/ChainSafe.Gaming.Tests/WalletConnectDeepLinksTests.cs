@@ -29,7 +29,7 @@ namespace ChainSafe.Gaming.Tests
             "Bee Wallet", "SimpleHold", "Flow Wallet", "HUMBL WALLET", "Stickey Wallet", "Catecoin Wallet", "Konio",
             "Ronin Wallet", "f(x)Wallet", "pockie", "BeanBag", "New Money", "Concordium", "Ape Wallet",
             "Trustee Wallet", "HERE Wallet", "Plena-App", "AZCoiner", "GateWallet", "Puzzle Wallet", "Armana Portal",
-            "Cogni ", "Feral File", "CoinStats", "paycool",
+            "Cogni ", "Feral File", "CoinStats", "paycool", "D'CENT Wallet",
         };
 
         private static readonly List<string> KnownBrokenWalletsDesktop = new() // todo note in the documentation
