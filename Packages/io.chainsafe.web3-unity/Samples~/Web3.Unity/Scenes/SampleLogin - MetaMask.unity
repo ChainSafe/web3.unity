@@ -264,8 +264,9 @@ GameObject:
   - component: {fileID: 433476714}
   - component: {fileID: 433476715}
   - component: {fileID: 433476716}
+  - component: {fileID: 433476717}
   m_Layer: 0
-  m_Name: MetaMaskLogin
+  m_Name: Login Logic - MetaMask
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -300,7 +301,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gelatoApiKey: 7MFQqyGS1Iui_e_MgmFW1BfbFeJ06g8nnL2oUTlIJug_
   errorPopup: {fileID: 314965761}
-  rampConfig: {fileID: 11400000, guid: d1f58846e4fc71d4e90f287a86f328f9, type: 2}
   loginButton: {fileID: 2048731599}
 --- !u!114 &433476716
 MonoBehaviour:
@@ -315,6 +315,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneToLoad: SampleMain
+--- !u!114 &433476717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 433476712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4bbed5530529ea46a1f41b407499dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rampConfig: {fileID: 11400000, guid: d1f58846e4fc71d4e90f287a86f328f9, type: 2}
 --- !u!1 &740974330
 GameObject:
   m_ObjectHideFlags: 0
@@ -1362,7 +1375,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Login to continue
+  m_text: MetaMask Login
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1405,7 +1418,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 0
+  m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
@@ -1574,11 +1587,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8781309615174179339, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_text
-      value: Continue with MetaMask
+      value: Login with MetaMask
       objectReference: {fileID: 0}
     - target: {fileID: 8781309615174179339, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_fontSize
-      value: 17.9
+      value: 18.85
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
