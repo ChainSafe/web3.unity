@@ -22,7 +22,7 @@ namespace ChainSafe.Gaming.SygmaClient
         private readonly IAnalyticsClient analyticsClient;
         private readonly IProjectConfig projectConfig;
 
-        public SygmaClient(IHttpClient httpClient, IChainConfig sourceChainConfig, IChainConfig destinationChainConfig,  ISigner signer, IContractBuilder contractBuilder, IAnalyticsClient analyticsClient, IProjectConfig projectConfig)
+        public SygmaClient(IHttpClient httpClient, IChainConfig sourceChainConfig, IChainConfig destinationChainConfig, ISigner signer, IContractBuilder contractBuilder, IAnalyticsClient analyticsClient, IProjectConfig projectConfig)
         {
             this.contractBuilder = contractBuilder;
             this.signer = signer;
