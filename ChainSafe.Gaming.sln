@@ -39,7 +39,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.MetaMask",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.MetaMask.Unity", "src\ChainSafe.Gaming.MetaMask.Unity\ChainSafe.Gaming.MetaMask.Unity.csproj", "{AF45F008-6ABC-4F37-82BF-4814B7F15B30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.SygmaSDK", "src\ChainSafe.Gaming.SygmaSDK\ChainSafe.Gaming.SygmaSDK.csproj", "{6D329479-C391-4BF9-B6FC-FFA3AD3A12D7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.SygmaClient", "src\ChainSafe.Gaming.SygmaClient\ChainSafe.Gaming.SygmaClient.csproj", "{6D329479-C391-4BF9-B6FC-FFA3AD3A12D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
