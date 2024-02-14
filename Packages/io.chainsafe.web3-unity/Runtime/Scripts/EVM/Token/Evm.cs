@@ -33,11 +33,11 @@ namespace Scripts.EVM.Token
             return await contract.Call(method, args);
         }
 
-        public static async Task<List<List<string>>> GetArray(Web3 web3, string contractAddress, string abi, string method)
+        public static async Task<List<List<T>>> GetArray<T>(Web3 web3, string contractAddress, string abi, string method, object[] args = null)
         {
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
-            var rawResponse = await contract.Call(method);
-            return rawResponse.Select(raw => raw as List<string>).ToList();
+            var rawResponse = args != null ? await contract.Call(method, args) : await contract.Call(method);
+            return rawResponse.Select(raw => raw as List<T>).ToList();
         }
 
         public static async Task<HexBigInteger> GetBlockNumber(Web3 web3)
@@ -90,10 +90,11 @@ namespace Scripts.EVM.Token
         }
 
         // todo we shouldn't build contract inside this method, but rather put this logic into the contract or some service
-        public static async Task<object[]> SendArray(Web3 web3, string method, string abi, string contractAddress, string[] stringArray)
+        public static async Task<object[]> SendArray<T>(Web3 web3, string method, string abi, string contractAddress, T[] array)
         {
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
-            return await contract.Send(method, new object[] { stringArray });
+            object[] objArray = array.Cast<object>().ToArray();
+            return await contract.Send(method, new object[] { objArray });
         }
 
         // todo danger - possible money loss 
