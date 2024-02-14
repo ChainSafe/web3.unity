@@ -8,7 +8,7 @@ namespace ChainSafe.Gaming.SygmaClient.Types
 {
     public interface ISygmaClient
     {
-        public bool Initialize();
+        public bool Initialize(Environment environment);
 
         public Task<Transfer<T>> CreateTransfer<T>(string sourceAddress, uint destinationChainId, string destinationAddress, string assetResourceId, HexBigInteger amount)
             where T : TransferType;

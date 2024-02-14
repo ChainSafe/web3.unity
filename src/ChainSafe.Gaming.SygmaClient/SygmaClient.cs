@@ -32,7 +32,7 @@ namespace ChainSafe.Gaming.SygmaClient
             this.projectConfig = projectConfig;
         }
 
-        public bool Initialize()
+        public bool Initialize(Environment environment)
         {
             throw new System.NotImplementedException();
         }
