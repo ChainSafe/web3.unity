@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <LangVersion>9.0</LangVersion>
+        <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+        <EnableNETAnalyzers>True</EnableNETAnalyzers>
+        <CodeAnalysisRuleSet>../../global.ruleset</CodeAnalysisRuleSet>
+        <Configurations>Debug;Release;Test</Configurations>
+        <Platforms>AnyCPU</Platforms>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\ChainSafe.Gaming\ChainSafe.Gaming.csproj" />
+    </ItemGroup>
+
+</Project>
