@@ -17,13 +17,13 @@ namespace ChainSafe.Gaming.WalletConnect
     public class WalletConnectTransactionExecutor : ITransactionExecutor
     {
         private readonly IRpcProvider rpcProvider;
-        private readonly IWalletConnectProvider provider;
+        private readonly IWalletConnectClient client;
         private readonly ISigner signer;
 
-        public WalletConnectTransactionExecutor(IWalletConnectProvider provider, IRpcProvider rpcProvider, ISigner signer)
+        public WalletConnectTransactionExecutor(IWalletConnectClient client, IRpcProvider rpcProvider, ISigner signer)
         {
             this.rpcProvider = rpcProvider;
-            this.provider = provider;
+            this.client = client;
             this.signer = signer;
         }
 
@@ -45,7 +45,7 @@ namespace ChainSafe.Gaming.WalletConnect
                 Nonce = transaction.Nonce?.HexValue,
             });
 
-            var hash = await provider.Request(requestData);
+            var hash = await client.Request(requestData);
             if (!ValidateResponseHash(hash))
             {
                 throw new Web3Exception($"Incorrect transaction response format: \"{hash}\".");

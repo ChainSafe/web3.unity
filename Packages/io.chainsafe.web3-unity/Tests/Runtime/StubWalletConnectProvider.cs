@@ -3,7 +3,7 @@ using ChainSafe.Gaming.WalletConnect;
 
 namespace Tests.Runtime
 {
-    public class StubWalletConnectProvider : IWalletConnectProvider
+    public class StubWalletConnectProvider : IWalletConnectClient
     {
         private readonly StubWalletConnectProviderConfig config;
 

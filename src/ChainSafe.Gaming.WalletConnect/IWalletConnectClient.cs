@@ -5,7 +5,7 @@ namespace ChainSafe.Gaming.WalletConnect
     /// <summary>
     /// Interface that represents the provider for the WalletConnect features.
     /// </summary>
-    public interface IWalletConnectProvider
+    public interface IWalletConnectClient
     {
         /// <summary>
         /// Connect WalletConnect session.

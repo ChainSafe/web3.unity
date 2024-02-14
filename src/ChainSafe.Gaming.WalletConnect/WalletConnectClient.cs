@@ -24,9 +24,9 @@ using WalletConnectSharp.Sign.Models.Engine;
 namespace ChainSafe.Gaming.WalletConnect
 {
     /// <summary>
-    /// Default implementation of <see cref="IWalletConnectProvider"/>.
+    /// Default implementation of <see cref="IWalletConnectClient"/>.
     /// </summary>
-    public class WalletConnectProvider : ILifecycleParticipant, IWalletConnectProvider, IConnectionHelper
+    public class WalletConnectClient : ILifecycleParticipant, IWalletConnectClient, IConnectionHelper
     {
         private readonly ILogWriter logWriter;
         private readonly IWalletConnectConfig config;
@@ -44,7 +44,7 @@ namespace ChainSafe.Gaming.WalletConnect
         private bool connected;
         private IAnalyticsClient analyticsClient;
 
-        public WalletConnectProvider(
+        public WalletConnectClient(
             IWalletConnectConfig config,
             DataStorage storage,
             ILogWriter logWriter,
@@ -157,7 +157,7 @@ namespace ChainSafe.Gaming.WalletConnect
             if (connected)
             {
                 throw new WalletConnectException(
-                    $"Tried connecting {nameof(WalletConnectProvider)}, but it's already been connected.");
+                    $"Tried connecting {nameof(WalletConnectClient)}, but it's already been connected.");
             }
 
             try
@@ -351,7 +351,7 @@ namespace ChainSafe.Gaming.WalletConnect
             {
                 throw new WalletConnectException(
                     "The method provided is not supported. " +
-                    $"If you add a new method you have to update {nameof(WalletConnectProvider)} code to reflect those changes. " +
+                    $"If you add a new method you have to update {nameof(WalletConnectClient)} code to reflect those changes. " +
                     "Contact ChainSafe if you think a specific method should be included in the SDK.");
             }
 
