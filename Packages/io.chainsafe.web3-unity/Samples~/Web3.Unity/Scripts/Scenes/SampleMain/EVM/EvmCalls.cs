@@ -119,7 +119,7 @@ public class EvmCalls : MonoBehaviour
     /// </summary>
     public async void GetArray()
     {
-        var response = await Evm.GetArray(Web3Accessor.Web3, Contracts.ArrayTotal, ABI.ArrayTotal, methodArrayGet);
+        var response = await Evm.GetArray<string>(Web3Accessor.Web3, Contracts.ArrayTotal, ABI.ArrayTotal, methodArrayGet);
         var responseString = string.Join(",\n", response.Select((list, i) => $"#{i} {string.Join((string)", ", (IEnumerable<string>)list)}"));
         SampleOutputUtil.PrintResult(responseString, nameof(Evm), nameof(Evm.GetArray));
     }

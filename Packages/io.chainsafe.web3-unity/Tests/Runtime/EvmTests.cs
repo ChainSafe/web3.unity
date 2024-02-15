@@ -60,7 +60,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestGetArray()
     {
-        var getArray = Evm.GetArray(web3, Contracts.ArrayTotal, ABI.ArrayTotal, GetArrayMethod);
+        var getArray = Evm.GetArray<string>(web3, Contracts.ArrayTotal, ABI.ArrayTotal, GetArrayMethod);
         yield return new WaitUntil(() => getArray.IsCompleted);
         // Convert toLower to make comparing easier
         var result = getArray.Result.ConvertAll(a => a.ConvertAll(b => b.ToLower()));
