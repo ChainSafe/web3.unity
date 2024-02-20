@@ -1,3 +1,4 @@
+using ChainSafe.Gaming.SygmaClient.Dto;
 using Nethereum.Hex.HexTypes;
 
 namespace ChainSafe.Gaming.SygmaClient.Types
