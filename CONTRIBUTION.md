@@ -7,6 +7,14 @@ Welcome to the web3.unity project! We appreciate your interest in contributing t
 1. **Fork the Repository**: Start by forking the [web3.unity repository](https://github.com/ChainSafe/web3.unity) on GitHub.
 2. **Clone the Fork**: Next, clone your forked repository to your local machine.
 
+### Forking The Repository
+
+If you're unfamiliar with Forking, here is a quick guide how to fork our repo:
+
+
+1. Go to the [web3.unity repository](https://github.com/ChainSafe/web3.unity) on GitHub.
+2. Click the "Fork" button in the top-right corner of the page.
+3. Select your GitHub account as the destination to fork the repository.
 
 ## Setting Up the Development Environment
 
@@ -79,15 +87,7 @@ If you come across any bugs, have suggestions, or want to request new features, 
 We encourage collaboration and discussion among contributors. Join our community on Discord to connect with fellow developers, ask questions, and share ideas. Additionally, we have various communication channels, both synchronous and asynchronous, to coordinate project-related discussions.
 
 
-## Dealing with Forks
 
-When contributing to web3.unity, it's advisable to fork the main repository and make your changes in your forked repository. This allows you to work independently on your changes and submit a pull request when you're ready.
-
-To fork the web3.unity repository:
-
-1. Go to the [web3.unity repository](https://github.com/ChainSafe/web3.unity) on GitHub.
-2. Click the "Fork" button in the top-right corner of the page.
-3. Select your GitHub account as the destination to fork the repository.
 
 ## Proposing New Changes
 
