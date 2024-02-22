@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
+using System.Text;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Model;
 using Scripts.EVM.Token;
@@ -26,7 +28,7 @@ public class Erc721Calls : MonoBehaviour
 
     #region Owner Of Batch
 
-    private string[] tokenIdsOwnerOfBatch = { "4", "6" };
+    private string[] tokenIdsOwnerOfBatch = { "4","50" , "6"};
 
     #endregion
 
@@ -78,8 +80,17 @@ public class Erc721Calls : MonoBehaviour
     public async void OwnerOfBatch()
     {
         var owners = await Erc721.OwnerOfBatch(Web3Accessor.Web3, Contracts.Erc721, tokenIdsOwnerOfBatch);
-        var ownersString = $"{owners.Count} owner(s):\n" + string.Join(",\n", owners);
-        SampleOutputUtil.PrintResult(ownersString, nameof(Erc721), nameof(Erc721.OwnerOfBatch));
+        StringBuilder ownersString = new StringBuilder();
+        var dict = owners.GroupBy(x => x.Owner).ToDictionary(x => x.Key, x => x.Select(x => x.TokenId).ToList());
+        foreach (var owner in dict)
+        {
+            ownersString.AppendLine($"Owner: {owner.Key} owns the following token(s):");
+            foreach (var tokenId in owner.Value)
+            {
+                ownersString.AppendLine("\t" + tokenId);
+            }
+        }
+        SampleOutputUtil.PrintResult(ownersString.ToString(), nameof(Erc721), nameof(Erc721.OwnerOfBatch));
     }
 
     /// <summary>
