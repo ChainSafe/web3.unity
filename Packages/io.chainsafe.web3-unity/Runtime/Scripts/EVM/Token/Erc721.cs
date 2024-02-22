@@ -2,13 +2,9 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.MultiCall;
-using ChainSafe.Gaming.UnityPackage.Model;
 using ChainSafe.Gaming.Web3;
 using Nethereum.Contracts.QueryHandlers.MultiCall;
 using Nethereum.Hex.HexConvertors.Extensions;
-using Scripts.EVM.Remote;
-using UnityEngine;
-using WalletConnectSharp.Sign.Models;
 
 namespace Scripts.EVM.Token
 {
@@ -57,7 +53,6 @@ namespace Scripts.EVM.Token
         private static async Task<string> OwnerOf(Web3 web3, string contractAddress, object[] parameters)
         {
             var method = EthMethod.OwnerOf;
-            Debug.LogError(parameters[0]);
             var contract = web3.ContractBuilder.Build(ABI.Erc721, contractAddress);
             var contractData = await contract.Call(method, parameters);
             return contractData[0].ToString();
@@ -79,7 +74,6 @@ namespace Scripts.EVM.Token
                 {
                     tokenIds[i].StartsWith("0x") ? tokenIds[i] :  BigInteger.Parse(tokenIds[i])
                 });
-                Debug.LogError(tokenIds[i]);
                 var call3Value = new Call3Value()
                 {
                     Target = Contracts.Erc721,
