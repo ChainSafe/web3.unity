@@ -2,12 +2,9 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.MultiCall;
-using ChainSafe.Gaming.UnityPackage.Model;
 using ChainSafe.Gaming.Web3;
 using Nethereum.Contracts.QueryHandlers.MultiCall;
 using Nethereum.Hex.HexConvertors.Extensions;
-using Scripts.EVM.Remote;
-using WalletConnectSharp.Sign.Models;
 
 namespace Scripts.EVM.Token
 {
@@ -75,7 +72,7 @@ namespace Scripts.EVM.Token
             {
                 var callData = erc721Contract.Calldata(EthMethod.OwnerOf, new object[]
                 {
-                    tokenIds[i]
+                    tokenIds[i].StartsWith("0x") ? tokenIds[i] :  BigInteger.Parse(tokenIds[i])
                 });
                 var call3Value = new Call3Value()
                 {
