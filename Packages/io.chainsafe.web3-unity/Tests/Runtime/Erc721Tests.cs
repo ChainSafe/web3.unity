@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Linq;
 using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.MultiCall;
 using ChainSafe.Gaming.UnityPackage;
@@ -62,7 +63,7 @@ public class Erc721Tests : SampleTestsBase
     {
         var getOwnerOfBatch = Erc721.OwnerOfBatch(web3, Contracts.Erc721, ownerOfBatchTokenIds);
         yield return new WaitUntil(() => getOwnerOfBatch.IsCompleted);
-        CollectionAssert.AreEqual(ownerOfBatchExpected, getOwnerOfBatch.Result);
+        CollectionAssert.AreEqual(ownerOfBatchExpected, getOwnerOfBatch.Result.Select(x => x.Owner));
     }
 
     [UnityTest]
