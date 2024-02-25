@@ -136,7 +136,7 @@ namespace Scripts.EVM.Token
             const string method = EthMethod.SafeMint;
             var destination = await web3.Signer.GetAddress();
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
-            var response =  await contract.Send(method, new object[]
+            var response = await contract.Send(method, new object[]
             {
                 destination,
                 uri

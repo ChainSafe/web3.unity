@@ -199,7 +199,7 @@ namespace ChainSafe.Gaming.Wallets
         {
             throw new NotImplementedException();
         }
-        
+
         public Task<string> GetAddress()
         {
             throw new NotImplementedException();

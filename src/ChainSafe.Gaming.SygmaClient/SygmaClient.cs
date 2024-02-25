@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
+using ChainSafe.Gaming.SygmaClient.Contracts;
 using ChainSafe.Gaming.SygmaClient.Dto;
 using ChainSafe.Gaming.SygmaClient.Types;
 using ChainSafe.Gaming.Web3;
@@ -23,8 +24,7 @@ namespace ChainSafe.Gaming.SygmaClient
         private readonly IChainConfig destinationChainConfig;
         private readonly IAnalyticsClient analyticsClient;
         private readonly IProjectConfig projectConfig;
-
-        private Config clientConfiguration;
+        private readonly Config clientConfiguration;
 
         public SygmaClient(IHttpClient httpClient, IChainConfig sourceChainConfig, IChainConfig destinationChainConfig, ISigner signer, IContractBuilder contractBuilder, IAnalyticsClient analyticsClient, IProjectConfig projectConfig)
         {
@@ -34,8 +34,7 @@ namespace ChainSafe.Gaming.SygmaClient
             this.destinationChainConfig = destinationChainConfig;
             this.analyticsClient = analyticsClient;
             this.projectConfig = projectConfig;
-
-            clientConfiguration = new Config(httpClient, uint.Parse(sourceChainConfig.ChainId));
+            this.clientConfiguration = new Config(httpClient, uint.Parse(sourceChainConfig.ChainId));
         }
 
         public ValueTask WillStartAsync()
@@ -50,8 +49,7 @@ namespace ChainSafe.Gaming.SygmaClient
 
         public bool Initialize(Environment environment)
         {
-            clientConfiguration.Fetch(environment);
-
+            this.clientConfiguration.Fetch(environment);
             return true;
         }
 
@@ -61,71 +59,17 @@ namespace ChainSafe.Gaming.SygmaClient
             throw new System.NotImplementedException();
         }
 
-        public Task<EvmFee> Fee<T>(Transfer<T> transfer)
+        public async Task<EvmFee> Fee<T>(Transfer<T> transfer)
             where T : TransferType
         {
-            var domainConfig = clientConfiguration.SourceDomainConfig();
-            /*
-             * const domainConfig = this.config.getSourceDomainConfig() as EthereumConfig;
-               const feeRouter = FeeHandlerRouter__factory.connect(domainConfig.feeRouter, this.provider);
-               const feeHandlerAddress = await feeRouter._domainResourceIDToFeeHandlerAddress(
-                 transfer.to.id,
-                 transfer.resource.resourceId,
-               );
-               const feeHandlerConfig = domainConfig.feeHandlers.find(
-                 feeHandler => feeHandler.address == feeHandlerAddress,
-               )!;
-
-               switch (feeHandlerConfig.type) {
-                 case FeeHandlerType.BASIC: {
-                   return await calculateBasicfee({
-                     basicFeeHandlerAddress: feeHandlerAddress,
-                     provider: this.provider,
-                     fromDomainID: transfer.from.id,
-                     toDomainID: transfer.to.id,
-                     resourceID: transfer.resource.resourceId,
-                     sender: transfer.sender,
-                   });
-                 }
-                 case FeeHandlerType.DYNAMIC: {
-                   const fungibleTransfer = transfer as Transfer<Fungible>;
-                   return await calculateDynamicFee({
-                     provider: this.provider,
-                     sender: transfer.sender,
-                     fromDomainID: Number(transfer.from.id),
-                     toDomainID: Number(transfer.to.id),
-                     resourceID: transfer.resource.resourceId,
-                     tokenAmount: fungibleTransfer.details.amount,
-                     feeOracleBaseUrl: getFeeOracleBaseURL(this.environment),
-                     feeHandlerAddress: feeHandlerAddress,
-                     depositData: createERCDepositData(
-                       fungibleTransfer.details.amount,
-                       fungibleTransfer.details.recipient,
-                       fungibleTransfer.details.parachainId,
-                     ),
-                   });
-                 }
-                 case FeeHandlerType.PERCENTAGE: {
-                   const fungibleTransfer = transfer as Transfer<Fungible>;
-                   return await getPercentageFee({
-                     precentageFeeHandlerAddress: feeHandlerAddress,
-                     provider: this.provider,
-                     sender: transfer.sender,
-                     fromDomainID: Number(transfer.from.id),
-                     toDomainID: Number(transfer.to.id),
-                     resourceID: transfer.resource.resourceId,
-                     depositData: createERCDepositData(
-                       fungibleTransfer.details.amount,
-                       fungibleTransfer.details.recipient,
-                       fungibleTransfer.details.parachainId,
-                     ),
-                   });
-                 }
-                 default:
-                   throw new Error(`Unsupported fee handler type`);
-               }
-             */
-            throw new System.NotImplementedException();
+            var feeData = await this.GetFeeInformation(transfer);
+            switch (feeData.Type)
+            {
+                case FeeHandlerType.Basic:
+                    return await this.CalculateBasicFee(transfer, feeData);
+                default:
+                    throw new Exception("Unsupported fee handler type");
+            }
         }
 
         public Task<List<Transaction>> BuildApprovals<T>(Transfer<T> transfer, EvmFee fee)
@@ -143,6 +87,28 @@ namespace ChainSafe.Gaming.SygmaClient
         public Task<TransferStatus> TransferStatusData(Environment environment, string transactionHash)
         {
             throw new System.NotImplementedException();
+        }
+
+        private async Task<EvmFee> CalculateBasicFee<T>(Transfer<T> transfer, EvmFee feeData)
+            where T : TransferType
+        {
+            var basicFeeHandler = new BasicFeeHandler(this.contractBuilder, feeData.HandlerAddress);
+            return await basicFeeHandler.CalculateBasicFee(transfer.Sender, transfer.From.Id, transfer.To.Id, transfer.Resource.ResourceId);
+        }
+
+        private async Task<EvmFee> GetFeeInformation<T>(Transfer<T> transfer)
+            where T : TransferType
+        {
+            var domainConfig = this.clientConfiguration.SourceDomainConfig();
+            var feeRouter = new FeeHandlerRouter(this.contractBuilder, domainConfig.FeeRouter);
+            var feeHandlerAddress = await feeRouter.DomainResourceIDToFeeHandlerAddress(transfer.To.Id, transfer.Resource.ResourceId);
+            var feeHandlerConfig = domainConfig.FeeHandlers.Find(feeHandler => feeHandler.Address.Equals(feeHandlerAddress, StringComparison.OrdinalIgnoreCase));
+            if (feeHandlerConfig == null)
+            {
+                throw new Exception("Fee handler not found");
+            }
+
+            return await Task.FromResult(new EvmFee(feeHandlerAddress, feeHandlerConfig.Type));
         }
     }
 }
