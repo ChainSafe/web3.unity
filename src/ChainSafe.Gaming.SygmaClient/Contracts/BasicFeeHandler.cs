@@ -15,7 +15,7 @@ namespace ChainSafe.Gaming.SygmaClient.Contracts
 
         public BasicFeeHandler(IContractBuilder cb, string address)
         {
-            var contractAbi = File.ReadAllText("Abi/FeeHandlerRouter.json");
+            var contractAbi = File.ReadAllText("Abi/BasicFeeHandler.json");
             this.address = address;
             contract = cb.Build(contractAbi, address);
         }
