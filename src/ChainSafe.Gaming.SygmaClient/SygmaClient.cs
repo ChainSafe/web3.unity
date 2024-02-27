@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
+using ChainSafe.Gaming.SygmaClient.Contracts;
 using ChainSafe.Gaming.SygmaClient.Dto;
 using ChainSafe.Gaming.SygmaClient.Types;
 using ChainSafe.Gaming.Web3;
@@ -10,6 +12,7 @@ using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Environment;
 using Nethereum.Hex.HexTypes;
+using Environment = ChainSafe.Gaming.SygmaClient.Types.Environment;
 
 namespace ChainSafe.Gaming.SygmaClient
 {
@@ -21,6 +24,7 @@ namespace ChainSafe.Gaming.SygmaClient
         private readonly IChainConfig destinationChainConfig;
         private readonly IAnalyticsClient analyticsClient;
         private readonly IProjectConfig projectConfig;
+        private readonly Config clientConfiguration;
 
         public SygmaClient(IHttpClient httpClient, IChainConfig sourceChainConfig, IChainConfig destinationChainConfig, ISigner signer, IContractBuilder contractBuilder, IAnalyticsClient analyticsClient, IProjectConfig projectConfig)
         {
@@ -30,11 +34,23 @@ namespace ChainSafe.Gaming.SygmaClient
             this.destinationChainConfig = destinationChainConfig;
             this.analyticsClient = analyticsClient;
             this.projectConfig = projectConfig;
+            this.clientConfiguration = new Config(httpClient, uint.Parse(sourceChainConfig.ChainId));
+        }
+
+        public ValueTask WillStartAsync()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ValueTask WillStopAsync()
+        {
+            throw new System.NotImplementedException();
         }
 
         public bool Initialize(Environment environment)
         {
-            throw new System.NotImplementedException();
+            this.clientConfiguration.Fetch(environment);
+            return true;
         }
 
         public Task<Transfer<T>> CreateTransfer<T>(string sourceAddress, uint destinationChainId, string destinationAddress, string assetResourceId, HexBigInteger amount)
@@ -43,10 +59,17 @@ namespace ChainSafe.Gaming.SygmaClient
             throw new System.NotImplementedException();
         }
 
-        public Task<EvmFee> Fee<T>(Transfer<T> transfer)
+        public async Task<EvmFee> Fee<T>(Transfer<T> transfer)
             where T : TransferType
         {
-            throw new System.NotImplementedException();
+            var feeData = await this.GetFeeInformation(transfer);
+            switch (feeData.Type)
+            {
+                case FeeHandlerType.Basic:
+                    return await this.CalculateBasicFee(transfer, feeData);
+                default:
+                    throw new Exception("Unsupported fee handler type");
+            }
         }
 
         public Task<List<Transaction>> BuildApprovals<T>(Transfer<T> transfer, EvmFee fee)
@@ -66,14 +89,26 @@ namespace ChainSafe.Gaming.SygmaClient
             throw new System.NotImplementedException();
         }
 
-        public ValueTask WillStartAsync()
+        private async Task<EvmFee> CalculateBasicFee<T>(Transfer<T> transfer, EvmFee feeData)
+            where T : TransferType
         {
-            throw new System.NotImplementedException();
+            var basicFeeHandler = new BasicFeeHandler(this.contractBuilder, feeData.HandlerAddress);
+            return await basicFeeHandler.CalculateBasicFee(transfer.Sender, transfer.From.Id, transfer.To.Id, transfer.Resource.ResourceId);
         }
 
-        public ValueTask WillStopAsync()
+        private async Task<EvmFee> GetFeeInformation<T>(Transfer<T> transfer)
+            where T : TransferType
         {
-            throw new System.NotImplementedException();
+            var domainConfig = this.clientConfiguration.SourceDomainConfig();
+            var feeRouter = new FeeHandlerRouter(this.contractBuilder, domainConfig.FeeRouter);
+            var feeHandlerAddress = await feeRouter.DomainResourceIDToFeeHandlerAddress(transfer.To.Id, transfer.Resource.ResourceId);
+            var feeHandlerConfig = domainConfig.FeeHandlers.Find(feeHandler => feeHandler.Address.Equals(feeHandlerAddress, StringComparison.OrdinalIgnoreCase));
+            if (feeHandlerConfig == null)
+            {
+                throw new Exception("Fee handler not found");
+            }
+
+            return await Task.FromResult(new EvmFee(feeHandlerAddress, feeHandlerConfig.Type));
         }
     }
 }

@@ -1,11 +1,7 @@
+using ChainSafe.Gaming.SygmaClient.Dto;
+
 namespace ChainSafe.Gaming.SygmaClient.Types
 {
-    public enum Network
-    {
-        Evm,
-        Substrate,
-    }
-
     public enum Environment
     {
         Local,
