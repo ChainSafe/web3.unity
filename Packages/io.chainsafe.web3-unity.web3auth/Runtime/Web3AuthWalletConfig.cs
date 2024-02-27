@@ -17,7 +17,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
         /// may include authentication credentials or other required data.
         /// </summary>
         public LoginParams LoginParams { get; set; }
-        
+
         public bool RememberMe { get; set; }
     }
 }

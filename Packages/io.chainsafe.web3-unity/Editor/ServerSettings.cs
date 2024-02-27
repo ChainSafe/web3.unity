@@ -20,7 +20,7 @@ using ChainInfo = ChainSafe.Gaming.UnityPackage.Model;
 public class ChainSafeServerSettings : EditorWindow
 {
     #region Fields
-    
+
     // Default values
     private const string ProjectIdPrompt = "Please enter your project ID";
     private const string ChainIdDefault = "11155111";
@@ -28,7 +28,7 @@ public class ChainSafeServerSettings : EditorWindow
     private const string NetworkDefault = "Sepolia";
     private const string SymbolDefault = "Seth";
     private const string RpcDefault = "https://rpc.sepolia.org";
-    
+
     // Chain values
     private string projectID;
     private string chainID;
@@ -39,11 +39,11 @@ public class ChainSafeServerSettings : EditorWindow
     private string newRpc;
 
     Texture2D logo = null;
-    
+
     // Search window
     private StringListSearchProvider searchProvider;
     private ISearchWindowProvider _searchWindowProviderImplementation;
-    public  UnityEvent onDropDownChange;
+    public UnityEvent onDropDownChange;
     private int previousNetworkDropdownIndex;
     private List<ChainInfo.Root> chainList;
     private int selectedChainIndex;
@@ -52,7 +52,7 @@ public class ChainSafeServerSettings : EditorWindow
     #endregion
 
     #region Methods
-    
+
     /// <summary>
     /// Checks if data is already entered, sets default values if not
     /// </summary>
@@ -72,7 +72,7 @@ public class ChainSafeServerSettings : EditorWindow
         // Fetch supported chains
         FetchSupportedChains();
     }
-    
+
     /// <summary>
     /// Updates the values in the server settings area when an item is selected
     /// </summary>
@@ -162,13 +162,13 @@ public class ChainSafeServerSettings : EditorWindow
         if (GUILayout.Button(chain, EditorStyles.popup))
         {
             searchProvider = CreateInstance<StringListSearchProvider>();
-            searchProvider.Initialize(chainOptions, x => { chain = x;});
+            searchProvider.Initialize(chainOptions, x => { chain = x; });
             SearchWindow.Open(new SearchWindowContext(GUIUtility.GUIToScreenPoint(Event.current.mousePosition)), searchProvider);
         }
         EditorGUILayout.EndHorizontal();
-        network = EditorGUILayout.TextField("Network: ",network);
-        chainID = EditorGUILayout.TextField("Chain ID: ",chainID);
-        symbol = EditorGUILayout.TextField("Symbol: ",symbol);
+        network = EditorGUILayout.TextField("Network: ", network);
+        chainID = EditorGUILayout.TextField("Chain ID: ", chainID);
+        symbol = EditorGUILayout.TextField("Symbol: ", symbol);
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.PrefixLabel("Select RPC");
         // Remove "https://" so the user doesn't have to click through 2 levels for the rpc options
@@ -190,7 +190,7 @@ public class ChainSafeServerSettings : EditorWindow
         // Allows for a custom rpc
         rpc = EditorGUILayout.TextField("RPC: ", rpc);
         GUILayout.Label("If you're using a custom RPC it will override the selection above", EditorStyles.boldLabel);
-        
+
         // Buttons
         // Register
         if (GUILayout.Button("Need To Register?"))
@@ -218,7 +218,7 @@ public class ChainSafeServerSettings : EditorWindow
         }
         GUILayout.Label("Reminder: Your ProjectID Must Be Valid To Save & Build With Our SDK. You Can Register For One On Our Website At Dashboard.Gaming.Chainsafe.io", EditorStyles.label);
     }
-    
+
     /// <summary>
     /// Validates the project ID via ChainSafe's backend & writes values to the network js file, static so it can be called externally
     /// </summary>
@@ -240,7 +240,7 @@ public class ChainSafeServerSettings : EditorWindow
             Debug.LogException(e);
         }
     }
-    
+
     /// <summary>
     /// Validates the project ID via ChainSafe's backend
     /// </summary>
@@ -272,7 +272,7 @@ public class ChainSafeServerSettings : EditorWindow
         Debug.LogError(dbgProjectIDMessage);
         return false;
     }
-    
+
     /// <summary>
     /// Writes values to the network js file
     /// </summary>
@@ -329,6 +329,6 @@ public class ChainSafeServerSettings : EditorWindow
         [JsonProperty("response")]
         public bool Response { get; set; }
     }
-    
+
     #endregion
 }

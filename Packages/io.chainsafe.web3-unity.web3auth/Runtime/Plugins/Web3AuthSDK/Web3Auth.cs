@@ -56,7 +56,7 @@ public class Web3Auth : MonoBehaviour
     private Web3Auth.Network network;
 
     private static readonly Queue<Action> _executionQueue = new Queue<Action>();
-    
+
     private bool rememberMe;
 
 
@@ -341,7 +341,7 @@ public class Web3Auth : MonoBehaviour
                 loginParams.dappShare = share;
             }
         }
-        
+
         request("start", loginParams);
     }
 
@@ -550,7 +550,7 @@ public class Web3Auth : MonoBehaviour
 
     private void OnDestroy()
     {
-        if(rememberMe) return;
+        if (rememberMe) return;
         Debug.LogError("Destroying session ID");
         KeyStoreManagerUtils.deletePreferencesData(KeyStoreManagerUtils.SESSION_ID);
     }

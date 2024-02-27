@@ -28,7 +28,7 @@ public class Erc721Calls : MonoBehaviour
 
     #region Owner Of Batch
 
-    private string[] tokenIdsOwnerOfBatch = { "4","50" , "6"};
+    private string[] tokenIdsOwnerOfBatch = { "4", "50", "6" };
 
     #endregion
 

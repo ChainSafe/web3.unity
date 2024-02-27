@@ -1,33 +1,53 @@
-﻿using ChainSafe.Gaming.SygmaClient.Types;
+﻿using System.Collections.Generic;
+using ChainSafe.Gaming.SygmaClient.Dto;
+using ChainSafe.Gaming.SygmaClient.Types;
+using ChainSafe.Gaming.Web3.Environment;
 
 namespace ChainSafe.Gaming.SygmaClient
 {
     public class Config
     {
-        public Config(uint chainId, Environment environment)
+        private IHttpClient httpClient;
+
+        private uint chainId;
+
+        private Environment environment;
+
+        public Config(IHttpClient http, uint chain)
         {
-            ChainId = chainId;
-            /*
-            if (environment === Environment.LOCAL) {
-                this.environment = localConfig;
-                return;
-            }
-            */
-            var configUrl = string.Empty;
-            switch (environment)
-            {
-                case Environment.Devnet:
-                    configUrl = ConfigUrl.Devnet;
-                    break;
-                case Environment.Testnet:
-                    configUrl = ConfigUrl.Testnet;
-                    break;
-                default:
-                    configUrl = ConfigUrl.Mainnet;
-                    break;
-            }
+            chainId = chain;
+            httpClient = http;
         }
 
-        private uint ChainId { get; }
+        public RawConfig EnvironmentConfig { get; set; }
+
+        public async void Fetch(Environment env)
+        {
+            if (chainId == 0)
+            {
+                return;
+            }
+
+            environment = env;
+            if (environment == Environment.Local)
+            {
+                EnvironmentConfig = LocalConfig.Fetch();
+                return;
+            }
+
+            var configUrl = environment switch
+            {
+                Environment.Devnet => ConfigUrl.Devnet,
+                Environment.Testnet => ConfigUrl.Testnet,
+                _ => ConfigUrl.Mainnet
+            };
+
+            EnvironmentConfig = (await httpClient.Get<RawConfig>(configUrl)).AssertSuccess();
+        }
+
+        public EvmConfig SourceDomainConfig()
+        {
+            return EnvironmentConfig.Domains.Find(cfg => cfg.ChainId == chainId);
+        }
     }
 }
