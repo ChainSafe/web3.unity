@@ -91,7 +91,7 @@ namespace Scripts.EVM.Token
                 if (multiCallResultResponse[i] != null && multiCallResultResponse[i].Success)
                 {
                     var owner = erc721Contract.Decode(EthMethod.OwnerOf, multiCallResultResponse[i].ReturnData.ToHex());
-                    owners.Add(new OwnerOfBatchModel(){ TokenId = tokenIds[i], Owner = owner[0].ToString() });
+                    owners.Add(new OwnerOfBatchModel() { TokenId = tokenIds[i], Owner = owner[0].ToString() });
                 }
             }
             return owners;
@@ -134,7 +134,7 @@ namespace Scripts.EVM.Token
             const string method = EthMethod.SafeMint;
             var destination = await web3.Signer.GetAddress();
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
-            var response =  await contract.Send(method, new object[]
+            var response = await contract.Send(method, new object[]
             {
                 destination,
                 uri
