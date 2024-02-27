@@ -27,23 +27,28 @@ namespace Plugins.CountlySDK.Services
         private string ManipulateStackTrace(string stackTrace)
         {
             string result = null;
-            if (!string.IsNullOrEmpty(stackTrace)) {
+            if (!string.IsNullOrEmpty(stackTrace))
+            {
                 string[] lines = stackTrace.Split('\n');
 
                 int limit = lines.Length;
 
-                if (limit > _configuration.MaxStackTraceLinesPerThread) {
+                if (limit > _configuration.MaxStackTraceLinesPerThread)
+                {
                     limit = _configuration.MaxStackTraceLinesPerThread;
                 }
 
-                for (int i = 0; i < limit; ++i) {
+                for (int i = 0; i < limit; ++i)
+                {
                     string line = lines[i];
 
-                    if (line.Length > _configuration.MaxStackTraceLineLength) {
+                    if (line.Length > _configuration.MaxStackTraceLineLength)
+                    {
                         line = line.Substring(0, _configuration.MaxStackTraceLineLength);
                     }
 
-                    if (i + 1 != limit) {
+                    if (i + 1 != limit)
+                    {
                         line += '\n';
                     }
 
@@ -68,14 +73,17 @@ namespace Plugins.CountlySDK.Services
         public async Task SendCrashReportAsync(string message, string stackTrace, LogType type,
             IDictionary<string, object> segments = null, bool nonfatal = true)
         {
-            lock (LockObj) {
+            lock (LockObj)
+            {
                 Log.Info("[CrashReportsCountlyService] SendCrashReportAsync : message = " + message + ", stackTrace = " + stackTrace);
 
-                if (!_consentService.CheckConsentInternal(Consents.Crashes)) {
+                if (!_consentService.CheckConsentInternal(Consents.Crashes))
+                {
                     return;
                 }
 
-                if (string.IsNullOrEmpty(message) || string.IsNullOrWhiteSpace(message)) {
+                if (string.IsNullOrEmpty(message) || string.IsNullOrWhiteSpace(message))
+                {
                     Log.Warning("[CrashReportsCountlyService] SendCrashReportAsync : The parameter 'message' can't be null or empty");
                     return;
                 }
@@ -99,15 +107,19 @@ namespace Plugins.CountlySDK.Services
         /// <returns></returns>
         public async Task SendCrashReportAsync(string message, string stackTrace, IDictionary<string, object> segments = null, bool nonfatal = true)
         {
-            if (_configuration.EnableAutomaticCrashReporting) {
-                lock (LockObj) {
+            if (_configuration.EnableAutomaticCrashReporting)
+            {
+                lock (LockObj)
+                {
                     Log.Info("[CrashReportsCountlyService] SendCrashReportAsync : message = " + message + ", stackTrace = " + stackTrace);
 
-                    if (!_consentService.CheckConsentInternal(Consents.Crashes)) {
+                    if (!_consentService.CheckConsentInternal(Consents.Crashes))
+                    {
                         return;
                     }
 
-                    if (string.IsNullOrEmpty(message) || string.IsNullOrWhiteSpace(message)) {
+                    if (string.IsNullOrEmpty(message) || string.IsNullOrWhiteSpace(message))
+                    {
                         Log.Warning("[CrashReportsCountlyService] SendCrashReportAsync : The parameter 'message' can't be null or empty");
                         return;
                     }
@@ -147,17 +159,20 @@ namespace Plugins.CountlySDK.Services
         {
             Log.Info("[CrashReportsCountlyService] AddBreadcrumbs : " + value);
 
-            if (!_consentService.CheckConsentInternal(Consents.Crashes)) {
+            if (!_consentService.CheckConsentInternal(Consents.Crashes))
+            {
                 return;
             }
 
-            if (_configuration.EnableTestMode) {
+            if (_configuration.EnableTestMode)
+            {
                 return;
             }
 
             string validBreadcrumb = value.Length > _configuration.MaxValueSize ? value.Substring(0, _configuration.MaxValueSize) : value;
 
-            if (_crashBreadcrumbs.Count == _configuration.TotalBreadcrumbsAllowed) {
+            if (_crashBreadcrumbs.Count == _configuration.TotalBreadcrumbsAllowed)
+            {
                 _crashBreadcrumbs.Dequeue();
             }
 
@@ -174,7 +189,8 @@ namespace Plugins.CountlySDK.Services
         /// <returns>CountlyExceptionDetailModel</returns>
         internal CountlyExceptionDetailModel ExceptionDetailModel(string message, string stackTrace, bool nonfatal, IDictionary<string, object> segments)
         {
-            return new CountlyExceptionDetailModel {
+            return new CountlyExceptionDetailModel
+            {
                 OS = _configuration.metricHelper.OS,
                 OSVersion = SystemInfo.operatingSystem,
                 Device = SystemInfo.deviceName,
