@@ -6,7 +6,7 @@ namespace ChainSafe.Gaming.UnityPackage.Model
     {
         public string symbol { get; set; }
     }
-    
+
     public struct Root
     {
         public string name { get; set; }

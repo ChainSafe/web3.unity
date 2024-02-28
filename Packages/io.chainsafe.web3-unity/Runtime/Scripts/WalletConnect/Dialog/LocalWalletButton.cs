@@ -19,11 +19,11 @@ namespace ChainSafe.Gaming.WalletConnect.Dialog
         {
             // Text
             Text.text = data.Name;
-            
+
             // Click
             Button.onClick.RemoveAllListeners();
             Button.onClick.AddListener(() => onClick());
-            
+
             // Icon
             IconStub.gameObject.SetActive(true);
             Icon.gameObject.SetActive(false);
@@ -32,13 +32,13 @@ namespace ChainSafe.Gaming.WalletConnect.Dialog
             {
                 return;
             }
-            
+
             var icon = await DownloadIcon(data.Images.SmallUrl);
             if (icon == null)
             {
                 return;
             }
-            
+
             Icon.sprite = icon;
             Icon.gameObject.SetActive(true);
             IconStub.gameObject.SetActive(false);

@@ -16,17 +16,17 @@ public enum ServiceType
 public class DisableGameObjectIfServiceNotActive : MonoBehaviour
 {
     [SerializeField] private ServiceType serviceType;
-    private readonly Dictionary<ServiceType, Type> _typesDictionary = new ()
+    private readonly Dictionary<ServiceType, Type> _typesDictionary = new()
     {
         {ServiceType.Ramp, typeof(IRampExchanger)},
         {ServiceType.Gelato, typeof(IGelato)},
         {ServiceType.Multicall, typeof(IMultiCall)}
     };
-    
+
     private void Awake()
     {
         gameObject.SetActive(Web3Accessor.Web3.ServiceProvider.GetService(_typesDictionary[serviceType]) != null);
     }
 
-    
+
 }
