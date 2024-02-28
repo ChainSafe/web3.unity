@@ -103,13 +103,21 @@ namespace ChainSafe.Gaming.SygmaClient
             }
         }
 
-        public Task<List<Transaction>> BuildApprovals<T>(Transfer<T> transfer, EvmFee fee)
+        public async Task<TransactionRequest> BuildApprovals<T>(Transfer<T> transfer, EvmFee fee, string tokenAddress)
             where T : TransferType
         {
-            throw new System.NotImplementedException();
+            var bridge = new Bridge(this.contractBuilder, clientConfiguration.SourceDomainConfig().Bridge);
+            var handlerAddress = await bridge.DomainResourceIDToHandlerAddress(transfer.Resource.ResourceId);
+            switch (transfer.Resource.Type)
+            {
+                case ResourceType.NonFungible:
+                    return await new Erc721Approvals(contractBuilder, tokenAddress).ApprovalTransactionRequest(transfer, handlerAddress);
+                default:
+                    throw new NotImplementedException("This type is not implemented yet");
+            }
         }
 
-        public Task<Transaction> BuildTransferTransaction<T>(Transfer<T> transfer, EvmFee fee)
+        public Task<TransactionRequest> BuildTransferTransaction<T>(Transfer<T> transfer, EvmFee fee)
             where T : TransferType
         {
             throw new System.NotImplementedException();
