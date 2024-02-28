@@ -21,10 +21,10 @@ namespace ChainSafe.Gaming.SygmaClient.Types
         public Task<EvmFee> Fee<T>(Transfer<T> transfer)
             where T : TransferType;
 
-        public Task<List<Transaction>> BuildApprovals<T>(Transfer<T> transfer, EvmFee fee)
+        public Task<TransactionRequest> BuildApprovals<T>(Transfer<T> transfer, EvmFee fee, string tokenAddress)
             where T : TransferType;
 
-        public Task<Transaction> BuildTransferTransaction<T>(Transfer<T> transfer, EvmFee fee)
+        public Task<TransactionRequest> BuildTransferTransaction<T>(Transfer<T> transfer, EvmFee fee)
             where T : TransferType;
 
         public Task<TransferStatus> TransferStatusData(Environment environment, string transactionHash);
