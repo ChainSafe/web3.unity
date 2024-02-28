@@ -39,14 +39,14 @@ namespace ChainSafe.Gaming.WalletConnect.Dialog
         public override Task ConnectUserWallet(ConnectionHandlerConfig config)
         {
             this.config = config;
-        
+
             if (visible)
             {
                 throw new Exception("Tried showing dialog, but it's already visible. This shouldn't happen.");
             }
-        
+
             visible = true;
-        
+
             ResetDialog();
 
             var localEnabled = config.WalletLocationOption.LocalEnabled();
@@ -75,9 +75,9 @@ namespace ChainSafe.Gaming.WalletConnect.Dialog
                 SetQrCodeElementVisible(true);
                 CreateQrCodeElement(new QrCodeBuilder(config.ConnectRemoteWalletUri));
             }
-        
+
             PlayShowDialog();
-        
+
             tcs = new TaskCompletionSource<bool>();
             return tcs.Task;
         }
@@ -91,7 +91,7 @@ namespace ChainSafe.Gaming.WalletConnect.Dialog
             }
 
             visible = false;
-        
+
             PlayHideDialog();
         }
 

@@ -25,7 +25,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
         /// The event provides data about the initiated off-ramp sale. Note that the transaction is not completed at this stage.
         /// </remarks>
         event Action<OffRampSaleData> OffRampSaleCreated;
-        
+
         /// <summary>
         /// Displays a widget to initiate the purchase of cryptocurrency.
         /// After the player fills out all required information in the widget, the transaction is initiated and this method returns transaction details.

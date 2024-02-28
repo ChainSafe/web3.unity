@@ -53,11 +53,11 @@ namespace ChainSafe.Gaming.WalletConnect.Dialog
         protected override void CreateQrCodeElement(QrCodeBuilder builder)
         {
             qrCodeImage.texture = builder.GenerateQrCode(new QrCodeEncodingOptions
-                {
-                    Width = qrCodeSize.x,
-                    Height = qrCodeSize.y,
-                    Margin = qrCodePadding
-                }
+            {
+                Width = qrCodeSize.x,
+                Height = qrCodeSize.y,
+                Margin = qrCodePadding
+            }
             );
         }
 

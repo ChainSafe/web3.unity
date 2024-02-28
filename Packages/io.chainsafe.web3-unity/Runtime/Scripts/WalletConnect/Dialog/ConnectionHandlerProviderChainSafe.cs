@@ -12,9 +12,9 @@ namespace ChainSafe.Gaming.WalletConnect.Dialog
     public class ConnectionHandlerProviderChainSafe : ConnectionHandlerProviderSO
     {
         [SerializeField] private ConnectionHandlerBehaviour handlerPrefab;
-    
+
         private ConnectionHandlerBehaviour loadedHandler;
-        
+
         public override Task<IConnectionHandler> ProvideHandler()
         {
             if (loadedHandler != null)
