@@ -85,11 +85,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
             parameters ??= Array.Empty<object>();
 
-            var function = contractBuilder.GetFunctionBuilder(method);
-            var txReq = overwrite ?? new TransactionRequest();
-            txReq.To ??= address;
-            txReq.From ??= signer == null ? null : await signer.GetAddress();
-            txReq.Data ??= function.GetData(parameters);
+            var txReq = await PrepareTransactionRequest(method, parameters, overwrite);
 
             var result = await provider.Call(txReq);
             analyticsClient.CaptureEvent(new AnalyticsEvent()
@@ -162,7 +158,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
             var function = contractBuilder.GetFunctionBuilder(method);
 
-            var txReq = await PrepareTransactionRequest(method, parameters);
+            var txReq = await PrepareTransactionRequest(method, parameters, overwrite);
 
             var tx = await transactionExecutor.SendTransaction(txReq);
             var receipt = await provider.WaitForTransactionReceipt(tx.Hash);
@@ -205,24 +201,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
                 throw new Exception("provider or signer is not set");
             }
 
-            var function = contractBuilder.GetFunctionBuilder(method);
-            var txReq = overwrite ?? new TransactionRequest();
-
-            if (signer != null)
-            {
-                txReq.From ??= await signer.GetAddress();
-            }
-
-            txReq.To ??= address;
-            txReq.Data ??= function.GetData(parameters);
-            var feeData = await provider.GetFeeData();
-            txReq.MaxFeePerGas = feeData.MaxFeePerGas.ToHexBigInteger();
-            if (!feeData.MaxPriorityFeePerGas.IsZero)
-            {
-                txReq.MaxPriorityFeePerGas = feeData.MaxFeePerGas.ToHexBigInteger();
-            }
-
-            return await provider.EstimateGas(txReq);
+            return await provider.EstimateGas(await PrepareTransactionRequest(method, parameters, overwrite));
         }
 
         /// <summary>
@@ -275,12 +254,12 @@ namespace ChainSafe.Gaming.Evm.Contracts
             return function.GetData(parameters);
         }
 
-        public async Task<TransactionRequest> PrepareTransactionRequest(string method, object[] parameters)
+        public async Task<TransactionRequest> PrepareTransactionRequest(string method, object[] parameters, TransactionRequest overwrite = null)
         {
             parameters ??= Array.Empty<object>();
 
             var function = contractBuilder.GetFunctionBuilder(method);
-            var txReq = new TransactionRequest();
+            var txReq = overwrite ?? new TransactionRequest();
 
             txReq.From ??= signer == null ? null : await signer.GetAddress();
             txReq.To ??= address;
