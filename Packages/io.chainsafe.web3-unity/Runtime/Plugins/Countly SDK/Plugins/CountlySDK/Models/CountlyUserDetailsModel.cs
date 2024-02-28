@@ -53,7 +53,8 @@ namespace Plugins.CountlySDK.Models
             PictureUrl = pictureUrl;
             Gender = gender;
             BirthYear = birthYear;
-            if (customData != null) {
+            if (customData != null)
+            {
                 Custom = customData as Dictionary<string, object>;
             }
         }

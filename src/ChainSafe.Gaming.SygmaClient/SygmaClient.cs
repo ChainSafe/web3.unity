@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
+using ChainSafe.Gaming.Evm.Utils;
 using ChainSafe.Gaming.SygmaClient.Contracts;
 using ChainSafe.Gaming.SygmaClient.Dto;
 using ChainSafe.Gaming.SygmaClient.Types;
@@ -53,10 +54,40 @@ namespace ChainSafe.Gaming.SygmaClient
             return true;
         }
 
-        public Task<Transfer<T>> CreateTransfer<T>(string sourceAddress, uint destinationChainId, string destinationAddress, string assetResourceId, HexBigInteger amount)
+        public async Task<Transfer<NonFungible>> CreateNonFungibleTransfer(
+            string sourceAddress,
+            uint destinationChainId,
+            string destinationAddress,
+            string resourceId,
+            string tokenId,
+            string destinationProviderUrl = "")
+        {
+            var transfer = await this.CreateTransfer<NonFungible>(
+                sourceAddress,
+                destinationChainId,
+                destinationAddress,
+                resourceId,
+                destinationProviderUrl);
+
+            transfer.Details = new NonFungible(sourceAddress, tokenId);
+            return transfer;
+        }
+
+        private Task<Transfer<T>> CreateTransfer<T>(
+            string sourceAddress,
+            uint destinationChainId,
+            string destinationAddress,
+            string resourceId,
+            string destinationProviderUrl = "")
             where T : TransferType
         {
-            throw new System.NotImplementedException();
+            var transferParams = this.BaseTransferParams(destinationChainId, resourceId);
+            var transfer = new Transfer<T>(transferParams.DestinationDomain, transferParams.SourceDomain, sourceAddress)
+            {
+                Resource = transferParams.Resource,
+            };
+
+            return Task.FromResult(transfer);
         }
 
         public async Task<EvmFee> Fee<T>(Transfer<T> transfer)
@@ -109,6 +140,35 @@ namespace ChainSafe.Gaming.SygmaClient
             }
 
             return await Task.FromResult(new EvmFee(feeHandlerAddress, feeHandlerConfig.Type));
+        }
+
+        private BaseTransferParams BaseTransferParams(uint destinationChainId, string resourceId)
+        {
+            var sourceDomain = this.clientConfiguration.SourceDomainConfig();
+            if (sourceDomain == null)
+            {
+                throw new Exception("Config for the provided source domain is not setup");
+            }
+
+            var destinationDomain = this.clientConfiguration.EnvironmentConfig.Domains.Find(
+                cfg => cfg.ChainId == destinationChainId);
+            if (destinationDomain == null)
+            {
+                throw new Exception("Config for the provided destination domain is not setup");
+            }
+
+            var resource = sourceDomain.Resources.Find(r => r.ResourceId.Equals(resourceId, StringComparison.OrdinalIgnoreCase));
+            if (resource == null)
+            {
+                throw new Exception("Config for the provided resource is not setup");
+            }
+
+            return new BaseTransferParams
+            {
+                SourceDomain = sourceDomain,
+                DestinationDomain = destinationDomain,
+                Resource = resource,
+            };
         }
     }
 }

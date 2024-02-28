@@ -13,7 +13,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp.Sample
         public Button OnRampButton;
         public Button OffRampButton;
         public Button OnRampOffRampButton;
-        
+
         private void Awake()
         {
             // Subscribe to buttons
@@ -39,7 +39,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp.Sample
                     SwapAmount = 5,
                     SelectedCountryCode = "RS"
                 });
-        
+
             Debug.Log($"Purchase request: {purchaseData}");
         }
 
@@ -56,9 +56,9 @@ namespace ChainSafe.Gaming.Exchangers.Ramp.Sample
                     FiatValue = 100,
                     UserEmailAddress = "test@test.com",
                     SwapAmount = 5,
-                    SelectedCountryCode = "RS"            
+                    SelectedCountryCode = "RS"
                 });
-        
+
             Debug.Log($"OffRamp: {saleData}");
         }
 
@@ -78,7 +78,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp.Sample
                     SwapAmount = 5,
                     SelectedCountryCode = "RS"
                 });
-        
+
             Debug.Log(rampTransactionData.ToString());
         }
     }

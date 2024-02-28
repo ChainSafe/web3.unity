@@ -11,7 +11,7 @@ public class CountlyAnalytics : IAnalyticsClient
     private const string AppKey = "4d2f30cecf1b7e2b8cd909103c1fac971872aa3f";
     private const string ServerUrl = "https://chainsafe-40aca7b26551e.flex.countly.com";
 
-    
+
     public async void CaptureEvent(AnalyticsEvent eventData)
     {
         await Countly.Instance.Events.RecordEventAsync(eventData.EventName, new Dictionary<string, object>()
@@ -21,7 +21,7 @@ public class CountlyAnalytics : IAnalyticsClient
             { "project-id", eventData.ProjectId},
             { "rpc ", eventData.Rpc},
             { "version", AnalyticsVersion},
-        } );
+        });
     }
 
     public string AnalyticsVersion => "2.5.5";
@@ -36,5 +36,5 @@ public class CountlyAnalytics : IAnalyticsClient
         ChainConfig = chainConfig;
         ProjectConfig = projectConfig;
     }
-    
+
 }

@@ -14,20 +14,8 @@ namespace ChainSafe.Gaming.SygmaClient.Dto
         Substrate,
     }
 
-    public class BaseConfig
+    public class BaseConfig : Domain
     {
-        [JsonProperty(PropertyName = "id")]
-        public uint Id { get; set; }
-
-        [JsonProperty(PropertyName = "chainId")]
-        public uint ChainId { get; set; }
-
-        [JsonProperty(PropertyName = "name")]
-        public string Name { get; set; }
-
-        [JsonProperty(PropertyName = "network")]
-        public Network Type { get; set; }
-
         [JsonProperty(PropertyName = "bridge")]
         public string Bridge { get; set; }
 

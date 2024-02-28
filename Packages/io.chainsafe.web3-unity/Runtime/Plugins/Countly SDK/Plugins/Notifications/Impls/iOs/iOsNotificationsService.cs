@@ -49,7 +49,8 @@ namespace Notifications.Impls.iOs
             string mesageId = _bridge.MessageId;
             string identifier = _bridge.ButtonIndex;
 
-            if (_bridge.MessageId != null) {
+            if (_bridge.MessageId != null)
+            {
                 IDictionary<string, object> segment = new Dictionary<string, object>()
                 {
                     {"b", mesageId},
@@ -66,7 +67,8 @@ namespace Notifications.Impls.iOs
             _bridge.MessageId = null;
             _bridge.ButtonIndex = null;
 
-            return new CountlyResponse {
+            return new CountlyResponse
+            {
                 IsSuccess = true,
             };
         }

@@ -12,7 +12,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
         {
             return web3.ServiceProvider.GetRequiredService<IRampExchanger>();
         }
-        
+
         public static IWeb3ServiceCollection UseRampExchanger(this IWeb3ServiceCollection services,
             IRampExchangerConfig config)
         {

@@ -36,7 +36,7 @@ public class EvmCustomResponseTests
         "0xFb3aECf08940785D4fB3Ad87cDC6e1Ceb20e9aac",
         "0x92d4040e4f3591e60644aaa483821d1bd87001e3"
     };
-    
+
     private Web3 web3;
 
     [UnityTearDown]
@@ -131,8 +131,8 @@ public class EvmCustomResponseTests
         Assert.IsTrue(signVerify.IsCompletedSuccessfully);
         Assert.AreEqual(true, signVerify.Result);
     }
-    
-        [UnityTest]
+
+    [UnityTest]
     public IEnumerator TestMintErc20()
     {
         yield return BuildWeb3WithTestResponse("0xf6133ad76359ffaf67853a5eb138a94ed11f29d350b907420a92c685c6df5303");
@@ -203,7 +203,7 @@ public class EvmCustomResponseTests
         var buildWeb3Task = SampleTestsBase.BuildTestWeb3(services =>
         {
             services.Replace(ServiceDescriptor.Singleton(new StubWalletConnectProviderConfig
-                { StubResponse = testResponse }));
+            { StubResponse = testResponse }));
         });
 
         // Wait until for async task to finish

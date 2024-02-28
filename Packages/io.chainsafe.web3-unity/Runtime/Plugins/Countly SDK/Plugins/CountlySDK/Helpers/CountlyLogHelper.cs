@@ -11,7 +11,8 @@ public class CountlyLogHelper
 
     internal void Info(string message)
     {
-        if (_configuration.EnableConsoleLogging) {
+        if (_configuration.EnableConsoleLogging)
+        {
             UnityEngine.Debug.Log("[Info]" + TAG + message);
         }
 
@@ -19,7 +20,8 @@ public class CountlyLogHelper
 
     internal void Debug(string message)
     {
-        if (_configuration.EnableConsoleLogging) {
+        if (_configuration.EnableConsoleLogging)
+        {
             UnityEngine.Debug.Log("[Debug]" + TAG + message);
         }
 
@@ -27,7 +29,8 @@ public class CountlyLogHelper
 
     internal void Verbose(string message)
     {
-        if (_configuration.EnableConsoleLogging) {
+        if (_configuration.EnableConsoleLogging)
+        {
             UnityEngine.Debug.Log("[Verbose]" + TAG + message);
         }
 
@@ -35,14 +38,16 @@ public class CountlyLogHelper
 
     internal void Error(string message)
     {
-        if (_configuration.EnableConsoleLogging) {
+        if (_configuration.EnableConsoleLogging)
+        {
             UnityEngine.Debug.LogError("[Error]" + TAG + message);
         }
     }
 
     internal void Warning(string message)
     {
-        if (_configuration.EnableConsoleLogging) {
+        if (_configuration.EnableConsoleLogging)
+        {
             UnityEngine.Debug.LogWarning("[Warning]" + TAG + message);
         }
     }

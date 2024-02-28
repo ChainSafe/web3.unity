@@ -14,14 +14,14 @@ namespace ChainSafe.Gaming.WalletConnect.Editor
             base.OnInspectorGUI();
 
             GUILayout.Space(10);
-            
+
             using (new EditorGUILayout.HorizontalScope())
             {
                 if (GUILayout.Button("List Wallet Providers", GUILayout.ExpandWidth(false)))
                 {
                     ListWalletProviders();
                 }
-                
+
                 if (GUILayout.Button("Clear cache", GUILayout.ExpandWidth(false)))
                 {
                     DeleteStorage();
@@ -52,7 +52,7 @@ namespace ChainSafe.Gaming.WalletConnect.Editor
                 Debug.LogError("StoragePath is empty.");
                 return;
             }
-                    
+
             var storageFolderPath =
                 DataStorage.BuildStoragePath(Application.persistentDataPath, config.StoragePath);
 
@@ -61,9 +61,9 @@ namespace ChainSafe.Gaming.WalletConnect.Editor
                 Debug.Log("WalletConnect cache is already cleared.");
                 return;
             }
-                    
+
             Directory.Delete(storageFolderPath, true);
-            
+
             Debug.Log("WalletConnect cache cleared.");
         }
     }

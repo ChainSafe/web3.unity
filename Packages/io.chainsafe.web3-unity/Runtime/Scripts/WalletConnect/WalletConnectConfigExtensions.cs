@@ -15,7 +15,7 @@ namespace ChainSafe.Gaming.WalletConnect
             config.RememberSession = rememberSession;
             return config;
         }
-        
+
         /// <summary>
         /// Sets <see cref="WalletConnectConfigSO.ForceNewSession"/> property of this config object.
         /// </summary>

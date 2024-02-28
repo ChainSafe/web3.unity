@@ -26,13 +26,13 @@ public class WalletConnectLoginProvider : LoginProvider, IWeb3BuilderServiceAdap
         {
             storedSessionAvailable = lightWeb3.WalletConnect().ConnectionHelper().StoredSessionAvailable;
         }
-        
+
         if (autoLoginPreviousSession && storedSessionAvailable) // auto-login
         {
             Debug.Log("Proceeding with auto-login.");
             await TryLogin();
         }
-        
+
         loginButton.onClick.AddListener(OnLoginClicked);
     }
 

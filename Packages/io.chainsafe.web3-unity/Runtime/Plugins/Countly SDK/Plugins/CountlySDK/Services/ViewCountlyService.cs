@@ -28,18 +28,22 @@ namespace Plugins.CountlySDK.Services
         /// <returns></returns>
         public async Task RecordOpenViewAsync(string name, IDictionary<string, object> segmentation = null)
         {
-            lock (LockObj) {
+            lock (LockObj)
+            {
                 Log.Info("[ViewCountlyService] RecordOpenViewAsync : name = " + name);
 
-                if (!_consentService.CheckConsentInternal(Consents.Views)) {
+                if (!_consentService.CheckConsentInternal(Consents.Views))
+                {
                     return;
                 }
 
-                if (string.IsNullOrEmpty(name)) {
+                if (string.IsNullOrEmpty(name))
+                {
                     return;
                 }
 
-                if (name.Length > _configuration.MaxKeyLength) {
+                if (name.Length > _configuration.MaxKeyLength)
+                {
                     Log.Verbose("[ViewCountlyService] RecordOpenViewAsync : Max allowed key length is " + _configuration.MaxKeyLength);
                     name = name.Substring(0, _configuration.MaxKeyLength);
                 }
@@ -52,18 +56,23 @@ namespace Plugins.CountlySDK.Services
                     {"start", _isFirstView ? 1 : 0}
                 };
 
-                if (segmentation != null) {
+                if (segmentation != null)
+                {
                     segmentation = RemoveSegmentInvalidDataTypes(segmentation);
                     segmentation = FixSegmentKeysAndValues(segmentation);
 
-                    foreach (KeyValuePair<string, object> item in openViewSegment) {
+                    foreach (KeyValuePair<string, object> item in openViewSegment)
+                    {
                         segmentation[item.Key] = item.Value;
                     }
-                } else {
+                }
+                else
+                {
                     segmentation = openViewSegment;
                 }
 
-                if (!_viewToLastViewStartTime.ContainsKey(name)) {
+                if (!_viewToLastViewStartTime.ContainsKey(name))
+                {
                     _viewToLastViewStartTime.Add(name, DateTime.UtcNow);
                 }
 
@@ -84,24 +93,29 @@ namespace Plugins.CountlySDK.Services
         //TODO: this performs in a non standard way. It should only be possible to close started views.
         public async Task RecordCloseViewAsync(string name)
         {
-            lock (LockObj) {
+            lock (LockObj)
+            {
                 Log.Info("[ViewCountlyService] RecordCloseViewAsync : name = " + name);
 
-                if (!_consentService.CheckConsentInternal(Consents.Views)) {
+                if (!_consentService.CheckConsentInternal(Consents.Views))
+                {
                     return;
                 }
 
-                if (string.IsNullOrEmpty(name)) {
+                if (string.IsNullOrEmpty(name))
+                {
                     return;
                 }
 
-                if (name.Length > _configuration.MaxKeyLength) {
+                if (name.Length > _configuration.MaxKeyLength)
+                {
                     Log.Verbose("[ViewCountlyService] RecordCloseViewAsync : Max allowed key length is " + _configuration.MaxKeyLength);
                     name = name.Substring(0, _configuration.MaxKeyLength);
                 }
 
                 double? duration = null;
-                if (_viewToLastViewStartTime.ContainsKey(name)) {
+                if (_viewToLastViewStartTime.ContainsKey(name))
+                {
                     DateTime lastViewStartTime = _viewToLastViewStartTime[name];
                     duration = (DateTime.UtcNow - lastViewStartTime).TotalSeconds;
 
@@ -131,10 +145,12 @@ namespace Plugins.CountlySDK.Services
         /// <returns></returns>
         public async Task ReportActionAsync(string type, int x, int y, int width, int height)
         {
-            lock (LockObj) {
+            lock (LockObj)
+            {
                 Log.Info("[ViewCountlyService] ReportActionAsync : type = " + type + ", x = " + x + ", y = " + y + ", width = " + width + ", height = " + height);
 
-                if (!_consentService.CheckConsentInternal(Consents.Views)) {
+                if (!_consentService.CheckConsentInternal(Consents.Views))
+                {
                     return;
                 }
 
@@ -155,7 +171,8 @@ namespace Plugins.CountlySDK.Services
         #region override Methods
         internal override void DeviceIdChanged(string deviceId, bool merged)
         {
-            if (!merged) {
+            if (!merged)
+            {
                 _isFirstView = true;
             }
         }

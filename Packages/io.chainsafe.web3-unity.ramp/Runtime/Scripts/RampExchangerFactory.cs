@@ -8,11 +8,11 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
     {
         public static IRampExchanger CreateRampExchanger(IRampExchangerConfig config, ISigner signer)
         {
-            #if UNITY_IOS
+#if UNITY_IOS
             return new RampExchangeriOS(config, signer);
-            #elif UNITY_WEBGL && !UNITY_EDITOR
+#elif UNITY_WEBGL && !UNITY_EDITOR
             return new RampExchangerWebGL(config, signer);
-            #endif
+#endif
             throw new Web3Exception(
                 $"No {nameof(IRampExchanger)} implementation found for " +
                 $"{Application.platform} (editor:{Application.isEditor})."

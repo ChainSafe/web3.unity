@@ -28,19 +28,24 @@ namespace Plugins.CountlySDK.Persistance.Dao
 
             string ql = _stringBuilder.Append("from ").Append(Table).Append(" where EventId==?").ToString();
 
-            try {
+            try
+            {
                 System.Collections.Generic.List<SegmentEntity> entities = Auto.Select<SegmentEntity>(ql, eventId);
-                if (entities.Count > 1) {
+                if (entities.Count > 1)
+                {
                     throw new ArgumentException("Only one or zero segment can be assigned to entity with id " + eventId + ". "
                                                 + entities.Count + " segments found.");
                 }
 
-                if (entities.Count == 0) {
+                if (entities.Count == 0)
+                {
                     return null;
                 }
 
                 return entities[0];
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Log.Debug("[SegmentDao] GetByEventId: Couldn't complete db operation, [" + ex.Message + "]");
                 return null;
             }

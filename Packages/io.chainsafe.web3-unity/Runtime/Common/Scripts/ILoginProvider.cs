@@ -30,7 +30,7 @@ namespace ChainSafe.Gaming.UnityPackage.Common
         /// All service providers used for configuring <see cref="Web3"/> instance services.
         /// </summary>
         public IWeb3BuilderServiceAdapter[] Web3BuilderServiceAdapters { get; }
-        
+
         /// <summary>
         /// All Web3 initialized handlers called when Web3 instance is initialized.
         /// </summary>
@@ -50,7 +50,7 @@ namespace ChainSafe.Gaming.UnityPackage.Common
             web3 = await web3Builder.LaunchAsync();
 
             Web3Accessor.Set(web3);
-            
+
             OnWeb3Initialized();
         }
 
@@ -61,7 +61,7 @@ namespace ChainSafe.Gaming.UnityPackage.Common
                 web3InitializedHandler.OnWeb3Initialized();
             }
         }
-        
+
         /// <summary>
         /// Configure services to inject based on the type of Login/Provider you want to use.
         /// </summary>
@@ -76,7 +76,7 @@ namespace ChainSafe.Gaming.UnityPackage.Common
 
             return web3Builder;
         }
-        
+
         private void ConfigureCommonServices(IWeb3ServiceCollection services)
         {
             services

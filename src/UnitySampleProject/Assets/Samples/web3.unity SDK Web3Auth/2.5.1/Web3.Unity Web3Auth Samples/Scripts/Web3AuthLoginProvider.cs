@@ -51,11 +51,11 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     protected override async void Initialize()
     {
         base.Initialize();
-        
+
         //Always first add listeners.
         providerAndButtonPairs.ForEach(p =>
             p.Button.onClick.AddListener(delegate { LoginWithWeb3Auth(p.Provider); }));
-        
+
 #if UNITY_WEBGL && !UNITY_EDITOR
         Uri uri = new Uri(Application.absoluteURL);
 
@@ -130,9 +130,9 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
                 web3AuthConfig.LoginParams = new LoginParams()
                 {
                     loginProvider = selectedProvider
-                };   
+                };
             }
-            
+
             services.UseWeb3AuthWallet(web3AuthConfig);
         });
     }

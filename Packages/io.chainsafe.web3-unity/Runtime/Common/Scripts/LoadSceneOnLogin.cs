@@ -13,13 +13,13 @@ namespace ChainSafe.Gaming.UnityPackage.Common
         /// Login scene cached/saved for Logout since we can have more than one Login scene.
         /// </summary>
         public static int LoginSceneBuildIndex { get; private set; }
-    
+
         [SerializeField] private string sceneToLoad;
-    
+
         public void OnWeb3Initialized()
         {
             LoginSceneBuildIndex = SceneManager.GetActiveScene().buildIndex;
-        
+
             SceneManager.LoadSceneAsync(sceneToLoad);
         }
     }

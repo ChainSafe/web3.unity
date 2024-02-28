@@ -20,11 +20,14 @@ namespace Plugins.CountlySDK.Helpers
         /// </summary>
         public static void Process()
         {
-            if (!PlayerPrefs.HasKey(Constants.FirstAppLaunch)) {
+            if (!PlayerPrefs.HasKey(Constants.FirstAppLaunch))
+            {
                 PlayerPrefs.SetInt(Constants.FirstAppLaunch, 1);
                 PlayerPrefs.Save();
                 _firstLaunchApp = true;
-            } else {
+            }
+            else
+            {
                 PlayerPrefs.SetInt(Constants.FirstAppLaunch, 0);
                 PlayerPrefs.Save();
                 _firstLaunchApp = false;
@@ -39,8 +42,10 @@ namespace Plugins.CountlySDK.Helpers
         /// </returns>
         public static bool IsFirstLaunchApp
         {
-            get {
-                if (!_firstLaunchApp.HasValue) {
+            get
+            {
+                if (!_firstLaunchApp.HasValue)
+                {
                     Debug.LogWarning("[FirstLaunchAppHelper] IsFirstLaunchApp : Process should be called when session begins");
                     Process();
                 }

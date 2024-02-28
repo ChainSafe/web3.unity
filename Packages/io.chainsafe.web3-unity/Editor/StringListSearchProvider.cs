@@ -11,14 +11,14 @@ using UnityEngine;
 public class StringListSearchProvider : ScriptableObject, ISearchWindowProvider
 {
     #region Fields
-    
+
     private string[] listItems;
     private Action<string> onSetIndexCallback;
-    
+
     #endregion
 
     #region Methods
-    
+
     /// <summary>
     /// Initializes list items and sets the callback for when items are selected
     /// </summary>
@@ -29,7 +29,7 @@ public class StringListSearchProvider : ScriptableObject, ISearchWindowProvider
         listItems = list;
         onSetIndexCallback = callback;
     }
-    
+
     /// <summary>
     /// Creates, formats and sorts the search list tree
     /// </summary>
@@ -84,7 +84,7 @@ public class StringListSearchProvider : ScriptableObject, ISearchWindowProvider
         }
         return searchList;
     }
-    
+
     /// <summary>
     /// Fires when an item is selected, also invokes the onDropDownChange event from Chainsafe server settings to save data
     /// </summary>
@@ -98,6 +98,6 @@ public class StringListSearchProvider : ScriptableObject, ISearchWindowProvider
         instance.UpdateServerMenuInfo();
         return true;
     }
-    
+
     #endregion
 }

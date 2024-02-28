@@ -107,7 +107,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
             return transactionData;
         }
 
-        #region iOS interop
+#region iOS interop
 
         [MonoPInvokeCallback(typeof(OnRampPurchaseCallback))]
         public static void SetOnRampPurchase(
@@ -250,7 +250,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
             string offrampWebHookV3Url,
             bool useSendCryptoCallbackVersion);
 
-        #endregion
+#endregion
         
         private delegate void OnRampPurchaseCallback(
             int requestId,

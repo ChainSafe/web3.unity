@@ -23,7 +23,8 @@ internal class RequestBuilder
     {
         //Metrics added to each request
         IDictionary<string, object> requestData = baseParams;
-        foreach (KeyValuePair<string, object> item in queryParams) {
+        foreach (KeyValuePair<string, object> item in queryParams)
+        {
             requestData.Add(item.Key, item.Value);
         }
 
@@ -44,8 +45,10 @@ internal class RequestBuilder
         StringBuilder requestStringBuilder = new StringBuilder();
 
         //Query params supplied for creating request
-        foreach (KeyValuePair<string, object> item in queryParams) {
-            if (!string.IsNullOrEmpty(item.Key) && item.Value != null) {
+        foreach (KeyValuePair<string, object> item in queryParams)
+        {
+            if (!string.IsNullOrEmpty(item.Key) && item.Value != null)
+            {
                 requestStringBuilder.AppendFormat(requestStringBuilder.Length == 0 ? "{0}={1}" : "&{0}={1}", item.Key,
                     Convert.ToString(item.Value));
             }

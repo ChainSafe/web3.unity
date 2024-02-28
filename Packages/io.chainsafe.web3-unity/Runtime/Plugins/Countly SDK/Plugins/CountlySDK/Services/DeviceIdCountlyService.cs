@@ -51,7 +51,8 @@ namespace Plugins.CountlySDK.Services
             //User provided DeviceID
             //Generate Random DeviceID
             string storedDeviceId = PlayerPrefs.GetString(Constants.DeviceIDKey);
-            if (!_countlyUtils.IsNullEmptyOrWhitespace(storedDeviceId)) {
+            if (!_countlyUtils.IsNullEmptyOrWhitespace(storedDeviceId))
+            {
                 //SDK already has a device id
 
                 //assign locally stored device id
@@ -61,30 +62,44 @@ namespace Plugins.CountlySDK.Services
                 int storedDIDType = PlayerPrefs.GetInt(Constants.DeviceIDTypeKey, DEVICE_TYPE_FALLBACK_VALUE);
 
                 //checking if we valid device id type
-                if (storedDIDType == (int)DeviceIdType.SDKGenerated || storedDIDType == (int)DeviceIdType.DeveloperProvided) {
+                if (storedDIDType == (int)DeviceIdType.SDKGenerated || storedDIDType == (int)DeviceIdType.DeveloperProvided)
+                {
                     //SDK has a valid device id type in storage. SDK will be using it.
                     DeviceIdType = (DeviceIdType)storedDIDType;
-                } else {
-                    if (storedDIDType == DEVICE_TYPE_FALLBACK_VALUE) {
+                }
+                else
+                {
+                    if (storedDIDType == DEVICE_TYPE_FALLBACK_VALUE)
+                    {
                         Log.Error("[DeviceIdCountlyService] InitDeviceId: SDK doesn't have device ID type stored. There should have been one.");
-                    } else {
+                    }
+                    else
+                    {
                         Log.Error("[DeviceIdCountlyService] InitDeviceId: The stored device id type wasn't valid ['" + storedDeviceId + "']. SDK will assign a new type");
                     }
 
-                    if (_countlyUtils.IsNullEmptyOrWhitespace(deviceId)) {
+                    if (_countlyUtils.IsNullEmptyOrWhitespace(deviceId))
+                    {
                         UpdateDeviceIdAndDeviceIdType(DeviceId, DeviceIdType.SDKGenerated);
 
-                    } else {
+                    }
+                    else
+                    {
                         UpdateDeviceIdAndDeviceIdType(DeviceId, DeviceIdType.DeveloperProvided);
                     }
                 }
-            } else {
+            }
+            else
+            {
                 //SDK doesn't have a device id stored locally
 
                 //checking if developer provided device id is null or empty.
-                if (_countlyUtils.IsNullEmptyOrWhitespace(deviceId)) {
+                if (_countlyUtils.IsNullEmptyOrWhitespace(deviceId))
+                {
                     UpdateDeviceIdAndDeviceIdType(CountlyUtils.GetUniqueDeviceId(), DeviceIdType.SDKGenerated);
-                } else {
+                }
+                else
+                {
                     UpdateDeviceIdAndDeviceIdType(deviceId, DeviceIdType.DeveloperProvided);
                 }
             }
@@ -99,11 +114,13 @@ namespace Plugins.CountlySDK.Services
         /// <param name="deviceId">new device id</param>
         public async Task ChangeDeviceIdWithoutMerge(string deviceId)
         {
-            lock (LockObj) {
+            lock (LockObj)
+            {
                 Log.Info("[DeviceIdCountlyService] ChangeDeviceIdWithoutMerge: deviceId = " + deviceId);
 
                 //Ignore call if new and old device id are same
-                if (DeviceId == deviceId) {
+                if (DeviceId == deviceId)
+                {
                     return;
                 }
 
@@ -115,20 +132,23 @@ namespace Plugins.CountlySDK.Services
 
                 //Ends current session
                 //Do not dispose timer object
-                if (!_configuration.IsAutomaticSessionTrackingDisabled) {
+                if (!_configuration.IsAutomaticSessionTrackingDisabled)
+                {
                     _ = _sessionCountlyService.EndSessionAsync();
                 }
 
                 //Update device id
                 UpdateDeviceIdAndDeviceIdType(deviceId, DeviceIdType.DeveloperProvided);
 
-                if (_consentService.RequiresConsent) {
+                if (_consentService.RequiresConsent)
+                {
                     _consentService.SetConsentInternal(_consentService.CountlyConsents.Keys.ToArray(), false, sendRequest: false, ConsentChangedAction.DeviceIDChangedNotMerged);
                 }
 
                 //Begin new session with new device id
                 //Do not initiate timer again, it is already initiated
-                if (!_configuration.IsAutomaticSessionTrackingDisabled) {
+                if (!_configuration.IsAutomaticSessionTrackingDisabled)
+                {
                     _ = _sessionCountlyService.BeginSessionAsync();
                 }
 
@@ -148,11 +168,13 @@ namespace Plugins.CountlySDK.Services
         /// <param name="deviceId">new device id</param>
         public async Task ChangeDeviceIdWithMerge(string deviceId)
         {
-            lock (LockObj) {
+            lock (LockObj)
+            {
                 Log.Info("[DeviceIdCountlyService] ChangeDeviceIdWithMerge: deviceId = " + deviceId);
 
                 //Ignore call if new and old device id are same
-                if (DeviceId == deviceId) {
+                if (DeviceId == deviceId)
+                {
                     return;
                 }
 
@@ -198,11 +220,13 @@ namespace Plugins.CountlySDK.Services
         /// <param name="merged">If passed "true" if will perform a device ID merge server side of the old and new device ID. This will merge their data</param>
         private void NotifyListeners(bool merged)
         {
-            if (Listeners == null) {
+            if (Listeners == null)
+            {
                 return;
             }
 
-            foreach (AbstractBaseService listener in Listeners) {
+            foreach (AbstractBaseService listener in Listeners)
+            {
                 listener.DeviceIdChanged(DeviceId, merged);
             }
         }

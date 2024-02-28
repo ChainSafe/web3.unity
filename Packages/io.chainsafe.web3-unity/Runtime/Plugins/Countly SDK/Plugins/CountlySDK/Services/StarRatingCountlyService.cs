@@ -30,30 +30,36 @@ namespace Plugins.CountlySDK.Services
         /// <returns></returns>
         public async Task ReportStarRatingAsync(string platform, string appVersion, int rating)
         {
-            lock (LockObj) {
+            lock (LockObj)
+            {
                 Log.Info("[StarRatingCountlyService] ReportStarRatingAsync");
 
-                if (!_consentService.CheckConsentInternal(Consents.StarRating)) {
+                if (!_consentService.CheckConsentInternal(Consents.StarRating))
+                {
                     return;
                 }
 
-                if (string.IsNullOrEmpty(platform) || string.IsNullOrWhiteSpace(platform)) {
+                if (string.IsNullOrEmpty(platform) || string.IsNullOrWhiteSpace(platform))
+                {
                     Log.Warning("[StarRatingCountlyService] ReportStarRatingAsync : The platform name'" + platform + "'isn't valid.");
                     return;
                 }
 
-                if (string.IsNullOrEmpty(appVersion) || string.IsNullOrWhiteSpace(appVersion)) {
+                if (string.IsNullOrEmpty(appVersion) || string.IsNullOrWhiteSpace(appVersion))
+                {
                     Log.Warning("[StarRatingCountlyService] ReportStarRatingAsync : The appVersion '" + appVersion + "'isn't valid.");
                     return;
                 }
 
-                if (rating < 1 || rating > 5) {
+                if (rating < 1 || rating > 5)
+                {
                     Log.Warning("[StarRatingCountlyService] ReportStarRatingAsync : The rating value'" + rating + "'isn't valid.");
                     return;
                 }
 
                 StarRatingSegment segment =
-                    new StarRatingSegment {
+                    new StarRatingSegment
+                    {
                         Platform = platform,
                         AppVersion = appVersion,
                         Rating = rating,

@@ -29,7 +29,7 @@ namespace Scenes
         protected virtual void Initialize()
         {
             Web3BuilderServiceAdapters = GetComponents<IWeb3BuilderServiceAdapter>();
-            
+
             Web3InitializedHandlers = GetComponents<IWeb3InitializedHandler>();
         }
 

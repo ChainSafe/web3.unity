@@ -21,7 +21,7 @@ namespace ChainSafe.Gaming.WalletConnect
         [SerializeField] private List<string> disabledWallets;
         [SerializeField] private ConnectionHandlerProviderSO connectionHandlerProvider;
         [field: SerializeField] public WalletLocationOption WalletLocationOption { get; set; }
-        
+
         public bool RememberSession { get; set; }
         public bool ForceNewSession { get; set; }
         public IList<string> EnabledWallets => enabledWallets;
@@ -40,14 +40,14 @@ namespace ChainSafe.Gaming.WalletConnect
                 {
                     return connectionBuilder;
                 }
-            
+
                 connectionBuilder = FindObjectOfType<NativeWebSocketConnectionBuilder>();
 
                 if (connectionBuilder != null)
                 {
                     return connectionBuilder;
                 }
-            
+
                 // Initialize custom web socket if it's not already.
                 var webSocketBuilderObj =
                     new GameObject(nameof(NativeWebSocketConnectionBuilder), typeof(NativeWebSocketConnectionBuilder))

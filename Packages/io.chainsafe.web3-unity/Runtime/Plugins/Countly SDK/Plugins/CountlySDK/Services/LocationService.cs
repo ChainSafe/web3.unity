@@ -20,23 +20,28 @@ namespace Plugins.CountlySDK.Services
         internal LocationService(CountlyConfiguration configuration, CountlyLogHelper logHelper, RequestCountlyHelper requestCountlyHelper, ConsentCountlyService consentService) : base(configuration, logHelper, consentService)
         {
             Log.Debug("[LocationService] Initializing.");
-            if (configuration.IsLocationDisabled) {
+            if (configuration.IsLocationDisabled)
+            {
                 Log.Debug("[LocationService] Disabling location");
             }
 
-            if (configuration.CountryCode != null || configuration.City != null || configuration.Location != null || configuration.IPAddress != null) {
+            if (configuration.CountryCode != null || configuration.City != null || configuration.Location != null || configuration.IPAddress != null)
+            {
                 Log.Debug("[LocationService] location: countryCode = [" + configuration.CountryCode + "], city = [" + configuration.City + "], gpsCoordinates = [" + configuration.Location + ",] ipAddress = [" + configuration.IPAddress + "]");
             }
 
             _requestCountlyHelper = requestCountlyHelper;
             IsLocationDisabled = configuration.IsLocationDisabled;
 
-            if (IsLocationDisabled || !_consentService.CheckConsentInternal(Consents.Location)) {
+            if (IsLocationDisabled || !_consentService.CheckConsentInternal(Consents.Location))
+            {
                 City = null;
                 Location = null;
                 IPAddress = null;
                 CountryCode = null;
-            } else {
+            }
+            else
+            {
                 City = configuration.City;
                 Location = configuration.Location;
                 IPAddress = configuration.IPAddress;
@@ -65,7 +70,8 @@ namespace Plugins.CountlySDK.Services
         {
             Log.Debug("[LocationService] SendIndependantLocationRequest");
 
-            if (!_consentService.CheckConsentInternal(Consents.Location)) {
+            if (!_consentService.CheckConsentInternal(Consents.Location))
+            {
                 return;
             }
 
@@ -76,23 +82,28 @@ namespace Plugins.CountlySDK.Services
              * Empty country code, city and IP address can not be sent.
              */
 
-            if (!string.IsNullOrEmpty(IPAddress)) {
+            if (!string.IsNullOrEmpty(IPAddress))
+            {
                 requestParams.Add("ip_address", IPAddress);
             }
 
-            if (!string.IsNullOrEmpty(CountryCode)) {
+            if (!string.IsNullOrEmpty(CountryCode))
+            {
                 requestParams.Add("country_code", CountryCode);
             }
 
-            if (!string.IsNullOrEmpty(City)) {
+            if (!string.IsNullOrEmpty(City))
+            {
                 requestParams.Add("city", City);
             }
 
-            if (!string.IsNullOrEmpty(Location)) {
+            if (!string.IsNullOrEmpty(Location))
+            {
                 requestParams.Add("location", Location);
             }
 
-            if (requestParams.Count > 0) {
+            if (requestParams.Count > 0)
+            {
                 _requestCountlyHelper.AddToRequestQueue(requestParams);
                 await _requestCountlyHelper.ProcessQueue();
             }
@@ -105,10 +116,12 @@ namespace Plugins.CountlySDK.Services
         /// </summary>
         public async void DisableLocation()
         {
-            lock (LockObj) {
+            lock (LockObj)
+            {
                 Log.Info("[LocationService] DisableLocation");
 
-                if (!_consentService.CheckConsentInternal(Consents.Location)) {
+                if (!_consentService.CheckConsentInternal(Consents.Location))
+                {
                     return;
                 }
 
@@ -139,10 +152,12 @@ namespace Plugins.CountlySDK.Services
         /// <returns></returns>
         public async void SetLocation(string countryCode, string city, string gpsCoordinates, string ipAddress)
         {
-            lock (LockObj) {
+            lock (LockObj)
+            {
                 Log.Info("[LocationService] SetLocation : countryCode = " + countryCode + ", city = " + city + ", gpsCoordinates = " + gpsCoordinates + ", ipAddress = " + ipAddress);
 
-                if (!_consentService.CheckConsentInternal(Consents.Location)) {
+                if (!_consentService.CheckConsentInternal(Consents.Location))
+                {
                     return;
                 }
 
@@ -150,7 +165,8 @@ namespace Plugins.CountlySDK.Services
                  * a warning should be printed that they should be set together.
                  */
                 if ((!string.IsNullOrEmpty(CountryCode) && string.IsNullOrEmpty(City))
-                    || (!string.IsNullOrEmpty(City) && string.IsNullOrEmpty(CountryCode))) {
+                    || (!string.IsNullOrEmpty(City) && string.IsNullOrEmpty(CountryCode)))
+                {
                     Log.Warning("[LocationService] In \"SetLocation\" both country code and city should be set together");
                 }
 
@@ -163,7 +179,8 @@ namespace Plugins.CountlySDK.Services
                  * If location consent is given and location gets re-enabled (previously was disabled), 
                  * we send that set location information in a separate request and save it in the internal location cache.
                  */
-                if (countryCode != null || city != null || gpsCoordinates != null || ipAddress != null) {
+                if (countryCode != null || city != null || gpsCoordinates != null || ipAddress != null)
+                {
                     IsLocationDisabled = false;
                     _ = SendIndependantLocationRequest();
                 }
@@ -188,7 +205,8 @@ namespace Plugins.CountlySDK.Services
         #region override Methods
         internal override void ConsentChanged(List<Consents> updatedConsents, bool newConsentValue, ConsentChangedAction action)
         {
-            if (action != ConsentChangedAction.DeviceIDChangedNotMerged && updatedConsents.Contains(Consents.Location) && !newConsentValue) {
+            if (action != ConsentChangedAction.DeviceIDChangedNotMerged && updatedConsents.Contains(Consents.Location) && !newConsentValue)
+            {
                 OnLocationConsentRemoved();
             }
 

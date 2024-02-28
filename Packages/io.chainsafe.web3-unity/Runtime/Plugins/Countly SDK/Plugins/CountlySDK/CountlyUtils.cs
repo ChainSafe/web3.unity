@@ -27,9 +27,12 @@ namespace Plugins.CountlySDK
         public static string GetUniqueDeviceId()
         {
             string uniqueID = SystemInfo.deviceUniqueIdentifier;
-            if(uniqueID.Length > 5) {
+            if (uniqueID.Length > 5)
+            {
                 return "CLY_" + uniqueID;
-            } else {
+            }
+            else
+            {
                 return "CLY_" + SafeRandomVal();
             }
         }
@@ -58,7 +61,8 @@ namespace Plugins.CountlySDK
             };
 
             // Add time-based metrics to the base parameters dictionary
-            foreach (KeyValuePair<string, object> item in TimeMetricModel.GetTimeMetricModel()) {
+            foreach (KeyValuePair<string, object> item in TimeMetricModel.GetTimeMetricModel())
+            {
                 baseParams.Add(item.Key, item.Value);
             }
             return baseParams;
@@ -103,7 +107,8 @@ namespace Plugins.CountlySDK
         public bool IsPictureValid(string pictureUrl)
         {
             // Check if the provided url contains additional query parameters. Indicated by "?" 
-            if (!string.IsNullOrEmpty(pictureUrl) && pictureUrl.Contains("?")) {
+            if (!string.IsNullOrEmpty(pictureUrl) && pictureUrl.Contains("?"))
+            {
                 // Remove the query string portion to isolate the file extension.
                 pictureUrl = pictureUrl.Split(new[] { '?' }, StringSplitOptions.RemoveEmptyEntries)[0];
             }
@@ -126,7 +131,8 @@ namespace Plugins.CountlySDK
         /// </returns>
         public string GetStringFromBytes(byte[] bytes)
         {
-            if (bytes == null) {
+            if (bytes == null)
+            {
                 // Always return a value as a fallback
                 return "";
             }
@@ -134,7 +140,8 @@ namespace Plugins.CountlySDK
             StringBuilder hex = new StringBuilder(bytes.Length * 2);
 
             // Iterate through each byte and convert to hexadecimal
-            foreach (byte b in bytes) {
+            foreach (byte b in bytes)
+            {
                 hex.AppendFormat("{0:x2}", b);
             }
 
@@ -150,13 +157,15 @@ namespace Plugins.CountlySDK
         /// <param name="logger"></param>
         public void TruncateSegmentationValues(Dictionary<string, object>? segmentation, int maxCount, string prefix, CountlyLogHelper logger)
         {
-            if (segmentation == null) {
+            if (segmentation == null)
+            {
                 return;
             }
 
             List<string> keysToRemove = segmentation.Keys.Skip(maxCount).ToList();
 
-            foreach (string key in keysToRemove) {
+            foreach (string key in keysToRemove)
+            {
                 logger.Warning($"{prefix}, Value exceeded the maximum segmentation count key:[{key}]");
                 segmentation.Remove(key);
             }
@@ -171,12 +180,15 @@ namespace Plugins.CountlySDK
         /// <param name="logger"></param>
         public void RemoveReservedKeysFromSegmentation(Dictionary<string, object>? segmentation, string[] reservedKeys, string messagePrefix, CountlyLogHelper logger)
         {
-            if (segmentation == null) {
+            if (segmentation == null)
+            {
                 return;
             }
 
-            foreach (string rKey in reservedKeys) {
-                if (segmentation.ContainsKey(rKey)) {
+            foreach (string rKey in reservedKeys)
+            {
+                if (segmentation.ContainsKey(rKey))
+                {
                     logger.Warning($"{messagePrefix} provided segmentation contains protected key [{rKey}]");
                     segmentation.Remove(rKey);
                 }
@@ -198,7 +210,8 @@ namespace Plugins.CountlySDK
         public static string SafeRandomVal()
         {
             long timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-            using (RandomNumberGenerator random = new RNGCryptoServiceProvider()) {
+            using (RandomNumberGenerator random = new RNGCryptoServiceProvider())
+            {
                 byte[] value = new byte[6];
                 random.GetBytes(value);
                 string b64Value = Convert.ToBase64String(value);
@@ -214,18 +227,21 @@ namespace Plugins.CountlySDK
         /// <returns>Returns true if any entry had been removed</returns>
         public bool RemoveUnsupportedDataTypes(Dictionary<string, object>? data, CountlyLogHelper? logger)
         {
-            if (data == null) {
+            if (data == null)
+            {
                 return false;
             }
 
             List<string> keysToRemove = new List<string>();
             bool removed = false;
 
-            foreach (var entry in data) {
+            foreach (var entry in data)
+            {
                 string key = entry.Key;
                 object value = entry.Value;
 
-                if (string.IsNullOrEmpty(key) || !(value is string || value is int || value is double || value is bool || value is float)) {
+                if (string.IsNullOrEmpty(key) || !(value is string || value is int || value is double || value is bool || value is float))
+                {
                     // found unsupported data type or null key or value, add key to removal list
                     keysToRemove.Add(key);
                     removed = true;
@@ -233,11 +249,13 @@ namespace Plugins.CountlySDK
             }
 
             // Remove the keys marked for removal
-            foreach (string key in keysToRemove) {
+            foreach (string key in keysToRemove)
+            {
                 data.Remove(key);
             }
 
-            if (removed & logger != null) {
+            if (removed & logger != null)
+            {
                 logger.Warning("[Utils] Unsupported data types were removed from provided segmentation");
             }
 
@@ -253,7 +271,8 @@ namespace Plugins.CountlySDK
         {
             int type = 0;
 
-            switch (_countly.Device.DeviceIdType) {
+            switch (_countly.Device.DeviceIdType)
+            {
                 case DeviceIdType.DeveloperProvided:
                     type = 0;
                     break;
