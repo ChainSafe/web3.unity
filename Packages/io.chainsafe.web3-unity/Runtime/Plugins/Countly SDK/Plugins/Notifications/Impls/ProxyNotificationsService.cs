@@ -24,7 +24,8 @@ namespace Notifications.Impls
 
             _countlyGameObject = countlyGameObject;
 
-            if (config.NotificationMode == TestMode.None) {
+            if (config.NotificationMode == TestMode.None)
+            {
                 return;
             }
 
@@ -34,7 +35,8 @@ namespace Notifications.Impls
             _service = new Notifications.Impls.iOs.IOsNotificationsService(_countlyGameObject, config, logHelper, startCoroutine, eventCountlyService);
 #endif
             IsInitializedWithoutError = true;
-            if (_service != null && !_service.IsInitializedWithoutError) {
+            if (_service != null && !_service.IsInitializedWithoutError)
+            {
                 _service = null;
                 IsInitializedWithoutError = false;
             }
@@ -44,7 +46,8 @@ namespace Notifications.Impls
         {
             _logHelper.Verbose("[ProxyNotificationsService] GetToken");
 
-            if (_service != null) {
+            if (_service != null)
+            {
                 _service.GetToken(result);
             }
 
@@ -54,7 +57,8 @@ namespace Notifications.Impls
         {
             _logHelper.Verbose("[ProxyNotificationsService] OnNotificationClicked");
 
-            if (_service != null) {
+            if (_service != null)
+            {
                 _service.OnNotificationClicked(result);
             }
         }
@@ -64,7 +68,8 @@ namespace Notifications.Impls
         {
             _logHelper.Verbose("[ProxyNotificationsService] OnNotificationReceived");
 
-            if (_service != null) {
+            if (_service != null)
+            {
                 _service.OnNotificationReceived(result);
             }
         }
@@ -73,11 +78,13 @@ namespace Notifications.Impls
         {
             _logHelper.Verbose("[ProxyNotificationsService] ReportPushActionAsync");
 
-            if (_service != null) {
+            if (_service != null)
+            {
                 return await _service.ReportPushActionAsync();
             }
 
-            return new CountlyResponse {
+            return new CountlyResponse
+            {
                 IsSuccess = true,
             };
         }

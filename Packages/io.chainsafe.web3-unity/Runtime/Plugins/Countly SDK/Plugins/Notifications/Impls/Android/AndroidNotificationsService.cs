@@ -38,11 +38,14 @@ namespace Notifications.Impls.Android
             _bridge = gameObject.AddComponent<AndroidBridge>();
             _bridge.Log = Log;
 
-            try {
+            try
+            {
                 AndroidJavaClass countlyPushPlugin = new AndroidJavaClass(CountlyPushPluginPackageName);
                 countlyPushPlugin.CallStatic("setEnableLog", config.EnableConsoleLogging);
                 IsInitializedWithoutError = true;
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Log.Error("[AndroidNotificationsService] Exception in initializing service: " + ex.Message);
                 IsInitializedWithoutError = false;
             }
@@ -83,7 +86,8 @@ namespace Notifications.Impls.Android
             AndroidJavaClass store = new AndroidJavaClass(StorePackageName);
 
             bool isInitialized = store.CallStatic<bool>("isInitialized");
-            if (!isInitialized) {
+            if (!isInitialized)
+            {
                 AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
                 AndroidJavaObject activity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
                 AndroidJavaObject applicationContext = activity.Call<AndroidJavaObject>("getApplicationContext");
@@ -92,8 +96,10 @@ namespace Notifications.Impls.Android
             }
 
             string data = store.CallStatic<string>("getMessagesData");
-            if (string.IsNullOrEmpty(data)) {
-                return new CountlyResponse {
+            if (string.IsNullOrEmpty(data))
+            {
+                return new CountlyResponse
+                {
                     IsSuccess = false,
                     ErrorMessage = "Key is required."
                 };
@@ -101,8 +107,10 @@ namespace Notifications.Impls.Android
 
             JArray jArray = JArray.Parse(data);
 
-            if (jArray != null) {
-                foreach (JObject item in jArray) {
+            if (jArray != null)
+            {
+                foreach (JObject item in jArray)
+                {
                     string mesageId = item.GetValue("messageId").ToString();
                     string identifier = item.GetValue("action_index").ToString();
                     Dictionary<string, object> segment = new Dictionary<string, object>()
@@ -123,7 +131,8 @@ namespace Notifications.Impls.Android
 
             }
 
-            return new CountlyResponse {
+            return new CountlyResponse
+            {
                 IsSuccess = true,
             };
         }

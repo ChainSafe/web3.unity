@@ -43,7 +43,8 @@ public class IOSBridge : MonoBehaviour
     {
         Log.Debug("[IOSBridge] OnDidRegisterForRemoteNotificationsWithDeviceToken Token: " + deviceToken);
 
-        if (deviceToken != null && deviceToken.Length != 0) {
+        if (deviceToken != null && deviceToken.Length != 0)
+        {
             _onTokenResult?.Invoke(deviceToken);
         }
     }
