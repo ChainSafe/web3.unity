@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.Signers;
@@ -12,6 +13,7 @@ using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Environment;
+using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
 using Environment = ChainSafe.Gaming.SygmaClient.Types.Environment;
 
@@ -120,7 +122,66 @@ namespace ChainSafe.Gaming.SygmaClient
         public Task<TransactionRequest> BuildTransferTransaction<T>(Transfer<T> transfer, EvmFee fee)
             where T : TransferType
         {
-            throw new System.NotImplementedException();
+            switch (transfer.Resource.Type)
+            {
+                case ResourceType.NonFungible:
+                    var nonFungible = transfer as Transfer<NonFungible>;
+                    return Erc721Transfer(
+                        nonFungible!.Details.TokenId,
+                        nonFungible.Details.Recipient,
+                        nonFungible.To.Id.ToString(),
+                        transfer.Resource.ResourceId,
+                        fee);
+                default:
+                    throw new NotImplementedException($"This type {transfer.Resource.Type} is not implemented yet");
+            }
+        }
+
+        private async Task<TransactionRequest> Erc721Transfer(string tokenId, string recipientAddress, string domainId, string resourceId, EvmFee feeData)
+        {
+            var sourceDomainConfig = clientConfiguration.SourceDomainConfig();
+            var depositData = CreateDepositData(tokenId, recipientAddress);
+            var bridge = new Bridge(contractBuilder, sourceDomainConfig.Bridge);
+
+            var tx = await bridge.Contract.PrepareTransactionRequest(
+                "deposit",
+#pragma warning disable SA1118
+                new object[]
+                {
+                domainId,
+                resourceId,
+                depositData,
+                feeData.FeeData ?? "0x0",
+                });
+#pragma warning restore SA1118
+            return tx;
+        }
+
+        // In sygmas SDK we also have Substrate, (check helpers.ts -> CreateERCDepositData)
+        // We don't need paraChainID just yet since we are only working with Ethereum
+        private string CreateDepositData(string tokenId, string recipient)
+        {
+            List<byte> list = new List<byte>();
+            list.AddRange(BigInteger.Parse(tokenId).ToByteArray());
+            list.AddRange(HexStringToByteArray(recipient));
+            return list.ToArray().ToHex(true);
+        }
+
+        private byte[] HexStringToByteArray(string hex)
+        {
+            if (hex.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
+            {
+                hex = hex[2..]; // Remove the 0x prefix if present
+            }
+
+            int numberChars = hex.Length;
+            byte[] bytes = new byte[numberChars / 2];
+            for (int i = 0; i < numberChars; i += 2)
+            {
+                bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
+            }
+
+            return bytes;
         }
 
         public Task<TransferStatus> TransferStatusData(Environment environment, string transactionHash)

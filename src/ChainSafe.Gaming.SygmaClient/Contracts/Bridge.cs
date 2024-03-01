@@ -15,6 +15,8 @@ namespace ChainSafe.Gaming.SygmaClient.Dto
             contract = contractBuilder.Build(contractAbi, address);
         }
 
+        public Contract Contract => contract;
+
         public Task<string> DomainResourceIDToHandlerAddress(string resourceID)
         {
             var result = this.contract.Call(MethodDomainResourceIDToHandlerAddress, new object[] { resourceID });
