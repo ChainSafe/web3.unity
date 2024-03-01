@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
@@ -163,25 +164,15 @@ namespace ChainSafe.Gaming.SygmaClient
         {
             List<byte> list = new List<byte>();
             list.AddRange(BigInteger.Parse(tokenId).ToByteArray());
-            list.AddRange(HexStringToByteArray(recipient));
+            list.AddRange(StringToByteEnumerable(recipient));
             return list.ToArray().ToHex(true);
         }
 
-        private byte[] HexStringToByteArray(string hex)
+        private IEnumerable<byte> StringToByteEnumerable(string hex)
         {
-            if (hex.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
-            {
-                hex = hex[2..]; // Remove the 0x prefix if present
-            }
-
-            int numberChars = hex.Length;
-            byte[] bytes = new byte[numberChars / 2];
-            for (int i = 0; i < numberChars; i += 2)
-            {
-                bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
-            }
-
-            return bytes;
+            return Enumerable.Range(0, hex.Length)
+                .Where(x => x % 2 == 0)
+                .Select(x => Convert.ToByte(hex.Substring(x, 2), 16));
         }
 
         public Task<TransferStatus> TransferStatusData(Environment environment, string transactionHash)
