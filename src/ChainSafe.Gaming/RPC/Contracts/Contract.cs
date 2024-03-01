@@ -85,7 +85,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
             parameters ??= Array.Empty<object>();
 
-            var txReq = await PrepareTransactionRequest(method, parameters, overwrite);
+            var txReq = await PrepareTransactionRequestNoGasInfo(method, parameters, overwrite);
 
             var result = await provider.Call(txReq);
             analyticsClient.CaptureEvent(new AnalyticsEvent()
@@ -273,6 +273,20 @@ namespace ChainSafe.Gaming.Evm.Contracts
             }
 
             txReq.GasLimit ??= await provider.EstimateGas(txReq);
+
+            return txReq;
+        }
+
+        public async Task<TransactionRequest> PrepareTransactionRequestNoGasInfo(string method, object[] parameters, TransactionRequest overwrite = null)
+        {
+            parameters ??= Array.Empty<object>();
+
+            var function = contractBuilder.GetFunctionBuilder(method);
+            var txReq = overwrite ?? new TransactionRequest();
+
+            txReq.From ??= signer == null ? null : await signer.GetAddress();
+            txReq.To ??= address;
+            txReq.Data ??= function.GetData(parameters);
 
             return txReq;
         }
