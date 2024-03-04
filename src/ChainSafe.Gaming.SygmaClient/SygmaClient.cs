@@ -1,5 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Numerics;
+using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.Signers;
@@ -12,7 +16,10 @@ using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Environment;
+using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Environment = ChainSafe.Gaming.SygmaClient.Types.Environment;
 
 namespace ChainSafe.Gaming.SygmaClient
@@ -26,8 +33,10 @@ namespace ChainSafe.Gaming.SygmaClient
         private readonly IAnalyticsClient analyticsClient;
         private readonly IProjectConfig projectConfig;
         private readonly Config clientConfiguration;
+        private readonly IHttpClient httpClient;
+        private readonly ILogWriter logWriter;
 
-        public SygmaClient(IHttpClient httpClient, IChainConfig sourceChainConfig, IChainConfig destinationChainConfig, ISigner signer, IContractBuilder contractBuilder, IAnalyticsClient analyticsClient, IProjectConfig projectConfig)
+        public SygmaClient(ILogWriter logWriter, IHttpClient httpClient, IChainConfig sourceChainConfig, IChainConfig destinationChainConfig, ISigner signer, IContractBuilder contractBuilder, IAnalyticsClient analyticsClient, IProjectConfig projectConfig)
         {
             this.contractBuilder = contractBuilder;
             this.signer = signer;
@@ -35,17 +44,19 @@ namespace ChainSafe.Gaming.SygmaClient
             this.destinationChainConfig = destinationChainConfig;
             this.analyticsClient = analyticsClient;
             this.projectConfig = projectConfig;
-            this.clientConfiguration = new Config(httpClient, uint.Parse(sourceChainConfig.ChainId));
+            clientConfiguration = new Config(httpClient, uint.Parse(sourceChainConfig.ChainId));
+            this.httpClient = httpClient;
+            this.logWriter = logWriter;
         }
 
         public ValueTask WillStartAsync()
         {
-            throw new System.NotImplementedException();
+            return default;
         }
 
         public ValueTask WillStopAsync()
         {
-            throw new System.NotImplementedException();
+            return default;
         }
 
         public bool Initialize(Environment environment)
@@ -120,12 +131,102 @@ namespace ChainSafe.Gaming.SygmaClient
         public Task<TransactionRequest> BuildTransferTransaction<T>(Transfer<T> transfer, EvmFee fee)
             where T : TransferType
         {
-            throw new System.NotImplementedException();
+            switch (transfer.Resource.Type)
+            {
+                case ResourceType.NonFungible:
+                    var nonFungible = transfer as Transfer<NonFungible>;
+                    return Erc721Transfer(
+                        nonFungible!.Details.TokenId,
+                        nonFungible.Details.Recipient,
+                        nonFungible.To.Id.ToString(),
+                        transfer.Resource.ResourceId,
+                        fee);
+                default:
+                    throw new NotImplementedException($"This type {transfer.Resource.Type} is not implemented yet");
+            }
         }
 
-        public Task<TransferStatus> TransferStatusData(Environment environment, string transactionHash)
+        private async Task<TransactionRequest> Erc721Transfer(string tokenId, string recipientAddress, string domainId, string resourceId, EvmFee feeData)
         {
-            throw new System.NotImplementedException();
+            var sourceDomainConfig = clientConfiguration.SourceDomainConfig();
+            var depositData = CreateDepositData(tokenId, recipientAddress);
+            var bridge = new Bridge(contractBuilder, sourceDomainConfig.Bridge);
+
+            var tx = await bridge.Contract.PrepareTransactionRequest(
+                "deposit",
+#pragma warning disable SA1118
+                new object[]
+                {
+                domainId,
+                resourceId,
+                depositData,
+                feeData.FeeData ?? "0x0",
+                });
+#pragma warning restore SA1118
+            return tx;
+        }
+
+        // In sygmas SDK we also have Substrate, (check helpers.ts -> CreateERCDepositData)
+        // We don't need paraChainID just yet since we are only working with Ethereum
+        private string CreateDepositData(string tokenId, string recipient)
+        {
+            // Convert tokenId to a BigInteger and ensure it is a positive value.
+            BigInteger tokenBigInt = BigInteger.Parse(tokenId);
+
+            // Ensure the tokenId is represented in a 32-byte array, left-padded with zeros.
+            byte[] tokenIdBytes = tokenBigInt.ToByteArray().Reverse().ToArray(); // Reverse to ensure little-endian to big-endian conversion if necessary.
+            if (tokenIdBytes.Length < 32)
+            {
+                tokenIdBytes = tokenIdBytes.Concat(new byte[32 - tokenIdBytes.Length]).ToArray(); // Left-pad with zeros if necessary.
+            }
+            else if (tokenIdBytes.Length > 32)
+            {
+                throw new ArgumentException("Token ID is too large.");
+            }
+
+            // Convert recipient string to byte array.
+            byte[] recipientBytes = Encoding.UTF8.GetBytes(recipient);
+
+            // Encode the length of the recipient byte array as a 32-byte array.
+            BigInteger recipientLengthBigInt = new BigInteger(recipientBytes.Length);
+            byte[] recipientLengthBytes = recipientLengthBigInt.ToByteArray().Reverse().ToArray();
+            if (recipientLengthBytes.Length < 32)
+            {
+                recipientLengthBytes = recipientLengthBytes.Concat(new byte[32 - recipientLengthBytes.Length]).ToArray();
+            }
+
+            // Concatenate the tokenIdBytes, recipientLengthBytes, and recipientBytes.
+            List<byte> data = new List<byte>();
+            data.AddRange(tokenIdBytes);
+            data.AddRange(recipientLengthBytes);
+            data.AddRange(recipientBytes);
+
+            // Convert the resulting byte array to a hexadecimal string, ensuring it is prefixed with "0x".
+            return "0x" + BitConverter.ToString(data.ToArray()).Replace("-", string.Empty).ToLower();
+        }
+
+        public async Task<TransferStatus> TransferStatusData(Environment environment, string transactionHash)
+        {
+            var url = environment switch
+            {
+                Environment.Testnet => $"{IndexerUrl.Testnet}/api/transfers/txHash/{transactionHash}",
+                Environment.Mainnet => $"{IndexerUrl.Mainnet}/api/transfers/txHash/{transactionHash}",
+                _ => throw new InvalidOperationException($"Invalid environment {environment}")
+            };
+
+            var response = await httpClient.GetRaw(url);
+            if (!response.IsSuccess)
+            {
+                throw new InvalidOperationException($"Didn't get successful response from the client");
+            }
+
+            JArray jArray;
+            using (var reader = new JsonTextReader(new StringReader(response.Response)))
+            {
+                jArray = await JArray.LoadAsync(reader);
+            }
+
+            return Enum.Parse<TransferStatus>(jArray[0]["status"].ToString(), true);
         }
 
         private async Task<EvmFee> CalculateBasicFee<T>(Transfer<T> transfer, EvmFee feeData)
