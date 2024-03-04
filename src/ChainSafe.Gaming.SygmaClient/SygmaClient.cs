@@ -17,6 +17,7 @@ using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Environment;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
+using Newtonsoft.Json.Linq;
 using Environment = ChainSafe.Gaming.SygmaClient.Types.Environment;
 
 namespace ChainSafe.Gaming.SygmaClient
@@ -30,6 +31,7 @@ namespace ChainSafe.Gaming.SygmaClient
         private readonly IAnalyticsClient analyticsClient;
         private readonly IProjectConfig projectConfig;
         private readonly Config clientConfiguration;
+        private readonly IHttpClient httpClient;
 
         public SygmaClient(IHttpClient httpClient, IChainConfig sourceChainConfig, IChainConfig destinationChainConfig, ISigner signer, IContractBuilder contractBuilder, IAnalyticsClient analyticsClient, IProjectConfig projectConfig)
         {
@@ -39,7 +41,8 @@ namespace ChainSafe.Gaming.SygmaClient
             this.destinationChainConfig = destinationChainConfig;
             this.analyticsClient = analyticsClient;
             this.projectConfig = projectConfig;
-            this.clientConfiguration = new Config(httpClient, uint.Parse(sourceChainConfig.ChainId));
+            clientConfiguration = new Config(httpClient, uint.Parse(sourceChainConfig.ChainId));
+            this.httpClient = httpClient;
         }
 
         public ValueTask WillStartAsync()
@@ -198,16 +201,23 @@ namespace ChainSafe.Gaming.SygmaClient
             return "0x" + BitConverter.ToString(data.ToArray()).Replace("-", string.Empty).ToLower();
         }
 
-        private IEnumerable<byte> StringToByteEnumerable(string hex)
-        {
-            return Enumerable.Range(0, hex.Length)
-                .Where(x => x % 2 == 0)
-                .Select(x => Convert.ToByte(hex.Substring(x, 2), 16));
-        }
-
         public Task<TransferStatus> TransferStatusData(Environment environment, string transactionHash)
         {
-            throw new System.NotImplementedException();
+            var url = environment switch
+            {
+                Environment.Testnet => $"{IndexerUrl.Testnet}/api/transfers/txHash/{transactionHash}",
+                Environment.Mainnet => $"{IndexerUrl.Mainnet}/api/transfers/txHash/{transactionHash}",
+                _ => throw new InvalidOperationException($"Invalid environment {environment}")
+            };
+
+            var response = httpClient.GetRaw(url);
+            if (!response.Result.IsSuccess)
+            {
+                throw new InvalidOperationException($"Didn't get successful response from the client");
+            }
+
+            var json = JObject.Parse(response.Result.Response);
+            return Task.FromResult(Enum.Parse<TransferStatus>(json.GetValue("status").ToString()));
         }
 
         private async Task<EvmFee> CalculateBasicFee<T>(Transfer<T> transfer, EvmFee feeData)
