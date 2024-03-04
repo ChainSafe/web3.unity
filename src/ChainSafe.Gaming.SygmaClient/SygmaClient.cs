@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -17,6 +18,7 @@ using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Environment;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Environment = ChainSafe.Gaming.SygmaClient.Types.Environment;
 
@@ -32,8 +34,9 @@ namespace ChainSafe.Gaming.SygmaClient
         private readonly IProjectConfig projectConfig;
         private readonly Config clientConfiguration;
         private readonly IHttpClient httpClient;
+        private readonly ILogWriter logWriter;
 
-        public SygmaClient(IHttpClient httpClient, IChainConfig sourceChainConfig, IChainConfig destinationChainConfig, ISigner signer, IContractBuilder contractBuilder, IAnalyticsClient analyticsClient, IProjectConfig projectConfig)
+        public SygmaClient(ILogWriter logWriter, IHttpClient httpClient, IChainConfig sourceChainConfig, IChainConfig destinationChainConfig, ISigner signer, IContractBuilder contractBuilder, IAnalyticsClient analyticsClient, IProjectConfig projectConfig)
         {
             this.contractBuilder = contractBuilder;
             this.signer = signer;
@@ -43,16 +46,17 @@ namespace ChainSafe.Gaming.SygmaClient
             this.projectConfig = projectConfig;
             clientConfiguration = new Config(httpClient, uint.Parse(sourceChainConfig.ChainId));
             this.httpClient = httpClient;
+            this.logWriter = logWriter;
         }
 
         public ValueTask WillStartAsync()
         {
-            throw new System.NotImplementedException();
+            return default;
         }
 
         public ValueTask WillStopAsync()
         {
-            throw new System.NotImplementedException();
+            return default;
         }
 
         public bool Initialize(Environment environment)
@@ -216,8 +220,13 @@ namespace ChainSafe.Gaming.SygmaClient
                 throw new InvalidOperationException($"Didn't get successful response from the client");
             }
 
-            var json = JObject.Parse(response.Response);
-            return Enum.Parse<TransferStatus>(json.GetValue("status").ToString());
+            JArray jArray;
+            using (var reader = new JsonTextReader(new StringReader(response.Response)))
+            {
+                jArray = await JArray.LoadAsync(reader);
+            }
+
+            return Enum.Parse<TransferStatus>(jArray[0]["status"].ToString(), true);
         }
 
         private async Task<EvmFee> CalculateBasicFee<T>(Transfer<T> transfer, EvmFee feeData)
