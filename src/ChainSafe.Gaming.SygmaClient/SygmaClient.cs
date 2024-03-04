@@ -201,7 +201,7 @@ namespace ChainSafe.Gaming.SygmaClient
             return "0x" + BitConverter.ToString(data.ToArray()).Replace("-", string.Empty).ToLower();
         }
 
-        public Task<TransferStatus> TransferStatusData(Environment environment, string transactionHash)
+        public async Task<TransferStatus> TransferStatusData(Environment environment, string transactionHash)
         {
             var url = environment switch
             {
@@ -210,14 +210,14 @@ namespace ChainSafe.Gaming.SygmaClient
                 _ => throw new InvalidOperationException($"Invalid environment {environment}")
             };
 
-            var response = httpClient.GetRaw(url);
-            if (!response.Result.IsSuccess)
+            var response = await httpClient.GetRaw(url);
+            if (!response.IsSuccess)
             {
                 throw new InvalidOperationException($"Didn't get successful response from the client");
             }
 
-            var json = JObject.Parse(response.Result.Response);
-            return Task.FromResult(Enum.Parse<TransferStatus>(json.GetValue("status").ToString()));
+            var json = JObject.Parse(response.Response);
+            return Enum.Parse<TransferStatus>(json.GetValue("status").ToString());
         }
 
         private async Task<EvmFee> CalculateBasicFee<T>(Transfer<T> transfer, EvmFee feeData)
