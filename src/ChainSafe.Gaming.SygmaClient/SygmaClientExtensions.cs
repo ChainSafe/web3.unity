@@ -2,7 +2,6 @@
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core;
 using Microsoft.Extensions.DependencyInjection;
-using Nethereum.Web3;
 
 namespace ChainSafe.Gaming.SygmaClient
 {
