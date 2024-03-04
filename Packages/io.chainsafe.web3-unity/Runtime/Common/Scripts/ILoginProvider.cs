@@ -50,8 +50,6 @@ namespace ChainSafe.Gaming.UnityPackage.Common
             web3Builder = ConfigureWeb3Services(web3Builder);
 
             web3 = await web3Builder.LaunchAsync();
-
-            Debug.Log(await web3.SygmaClient().TransferStatusData(Environment.Testnet, "0xc94cc6955148ef3934c5a57eb51daf6d5b9bb7bec0f0e8296b6d90fc5bbeb13e"));
             
             Web3Accessor.Set(web3);
 
