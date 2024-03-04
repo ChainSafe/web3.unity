@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.Signers;
@@ -162,10 +163,39 @@ namespace ChainSafe.Gaming.SygmaClient
         // We don't need paraChainID just yet since we are only working with Ethereum
         private string CreateDepositData(string tokenId, string recipient)
         {
-            List<byte> list = new List<byte>();
-            list.AddRange(BigInteger.Parse(tokenId).ToByteArray());
-            list.AddRange(StringToByteEnumerable(recipient));
-            return list.ToArray().ToHex(true);
+            // Convert tokenId to a BigInteger and ensure it is a positive value.
+            BigInteger tokenBigInt = BigInteger.Parse(tokenId);
+
+            // Ensure the tokenId is represented in a 32-byte array, left-padded with zeros.
+            byte[] tokenIdBytes = tokenBigInt.ToByteArray().Reverse().ToArray(); // Reverse to ensure little-endian to big-endian conversion if necessary.
+            if (tokenIdBytes.Length < 32)
+            {
+                tokenIdBytes = tokenIdBytes.Concat(new byte[32 - tokenIdBytes.Length]).ToArray(); // Left-pad with zeros if necessary.
+            }
+            else if (tokenIdBytes.Length > 32)
+            {
+                throw new ArgumentException("Token ID is too large.");
+            }
+
+            // Convert recipient string to byte array.
+            byte[] recipientBytes = Encoding.UTF8.GetBytes(recipient);
+
+            // Encode the length of the recipient byte array as a 32-byte array.
+            BigInteger recipientLengthBigInt = new BigInteger(recipientBytes.Length);
+            byte[] recipientLengthBytes = recipientLengthBigInt.ToByteArray().Reverse().ToArray();
+            if (recipientLengthBytes.Length < 32)
+            {
+                recipientLengthBytes = recipientLengthBytes.Concat(new byte[32 - recipientLengthBytes.Length]).ToArray();
+            }
+
+            // Concatenate the tokenIdBytes, recipientLengthBytes, and recipientBytes.
+            List<byte> data = new List<byte>();
+            data.AddRange(tokenIdBytes);
+            data.AddRange(recipientLengthBytes);
+            data.AddRange(recipientBytes);
+
+            // Convert the resulting byte array to a hexadecimal string, ensuring it is prefixed with "0x".
+            return "0x" + BitConverter.ToString(data.ToArray()).Replace("-", string.Empty).ToLower();
         }
 
         private IEnumerable<byte> StringToByteEnumerable(string hex)
