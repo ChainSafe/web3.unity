@@ -162,9 +162,11 @@ namespace ChainSafe.Gaming.WalletConnect
 
             try
             {
-                var sessionStored = !string.IsNullOrEmpty(localData.SessionTopic);
+                var canRestoreSession = !string.IsNullOrEmpty(localData.SessionTopic)
+                                        && signClient.Find(requiredNamespaces)
+                                            .Any(s => s.Topic == localData.SessionTopic);
 
-                session = !sessionStored
+                session = !canRestoreSession
                     ? await ConnectSession()
                     : await RestoreSession();
 
