@@ -30,5 +30,10 @@ namespace ChainSafe.Gaming.Marketplace.Extensions
             services.UseMarketplace(config);
             return services;
         }
+
+        public static MarketplaceClient Marketplace(this Web3.Web3 web3)
+        {
+            return web3.ServiceProvider.GetRequiredService<MarketplaceClient>();
+        }
     }
 }
