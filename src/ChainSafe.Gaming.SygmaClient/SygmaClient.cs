@@ -84,6 +84,25 @@ namespace ChainSafe.Gaming.SygmaClient
             return transfer;
         }
 
+        public async Task<Transfer<Fungible>> CreateFungibleTransfer(
+            string sourceAddress,
+            uint destinationChainId,
+            string destinationAddress,
+            string resourceId,
+            HexBigInteger amount,
+            string destinationProviderUrl = "")
+        {
+            var transfer = await this.CreateTransfer<Fungible>(
+                sourceAddress,
+                destinationChainId,
+                destinationAddress,
+                resourceId,
+                destinationProviderUrl);
+
+            transfer.Details = new Fungible(sourceAddress, amount);
+            return transfer;
+        }
+
         private Task<Transfer<T>> CreateTransfer<T>(
             string sourceAddress,
             uint destinationChainId,

@@ -18,6 +18,14 @@ namespace ChainSafe.Gaming.SygmaClient.Types
             string tokenId,
             string destinationProviderUrl = "");
 
+        public Task<Transfer<Fungible>> CreateFungibleTransfer(
+            string sourceAddress,
+            uint destinationChainId,
+            string destinationAddress,
+            string resourceId,
+            HexBigInteger amount,
+            string destinationProviderUrl = "");
+
         public Task<EvmFee> Fee<T>(Transfer<T> transfer)
             where T : TransferType;
 
