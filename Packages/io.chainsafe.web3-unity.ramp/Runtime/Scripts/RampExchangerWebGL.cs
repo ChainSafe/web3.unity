@@ -240,7 +240,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
             throw new Web3Exception($"No handler found for sell request #{requestId}");
         }
 
-        #region JS interop
+#region JS interop
 
         // adding cs_ramp_ prefix because all methods in all *.jslib files share one namespace
         [DllImport("__Internal")]
@@ -259,7 +259,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
             string webhookStatusUrl, string hostApiKey, bool enableBuy, bool enableSell, string offrampWebHookV3Url,
             bool useSendCryptoCallback);
 
-        #endregion
+#endregion
     }
 }
 #endif

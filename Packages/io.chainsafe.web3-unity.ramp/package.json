@@ -27,7 +27,7 @@
         {
             "displayName": "Ramp Usage Sample",
             "description": "Contains example of integration and usage of Ramp functionality.",
-            "path": "Samples/RampUsageSample"
+            "path": "Samples~/Web3.Unity Ramp Samples"
         }
     ]
 }
