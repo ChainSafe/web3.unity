@@ -22,13 +22,17 @@ namespace Plugins.iBoxDB
 
         public bool Save(TEntity entity)
         {
-            try {
+            try
+            {
                 bool insertionResult = Auto.Insert(Table, entity);
-                if (!insertionResult) {
+                if (!insertionResult)
+                {
                     Log.Info("[Dao] Save: Auto.Insert result: [" + insertionResult + "]");
                 }
                 return insertionResult;
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Log.Error("[Dao] Save: Couldn't complete db operation, [" + ex.Message + "]");
             }
 
@@ -37,13 +41,17 @@ namespace Plugins.iBoxDB
 
         public bool Update(TEntity entity)
         {
-            try {
+            try
+            {
                 bool updateResult = Auto.Update(Table, entity);
-                if (!updateResult) {
+                if (!updateResult)
+                {
                     Log.Info("[Dao] Update: Auto.Update result: [" + updateResult + "]");
                 }
                 return updateResult;
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Log.Error("[Dao] Update: Couldn't complete db operation, [" + ex.Message + "]");
             }
 
@@ -53,13 +61,17 @@ namespace Plugins.iBoxDB
         public List<TEntity> LoadAll()
         {
             List<TEntity> result = new List<TEntity>();
-            try {
+            try
+            {
                 result = Auto.Select<TEntity>("from " + Table + " order by Id asc");
-                if (result.Count == 0) {
+                if (result.Count == 0)
+                {
                     Log.Info("[Dao] LoadAll: Auto.Select result: [" + string.Join(", ", result) + "]");
                 }
                 return result;
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Log.Error("[Dao] LoadAll: Couldn't complete db operation, [" + ex.Message + "]");
             }
 
@@ -68,30 +80,40 @@ namespace Plugins.iBoxDB
 
         public void Remove(params object[] key)
         {
-            try {
+            try
+            {
                 bool deletionResult = Auto.Delete(Table, key);
-                if (!deletionResult) {
+                if (!deletionResult)
+                {
                     Log.Info("[Dao] Remove: Auto.Delete result: [" + deletionResult + "]");
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Log.Error("[Dao] Remove: Couldn't complete db operation, [" + ex.Message + "]");
             }
         }
 
         public void RemoveAll()
         {
-            try {
+            try
+            {
                 List<TEntity> list = Auto.Select<TEntity>("from " + Table);
-                if (list.Count == 0) {
+                if (list.Count == 0)
+                {
                     Log.Info("[Dao] RemoveAll: Auto.Select result: [" + string.Join(", ", list) + "]");
                 }
-                foreach (TEntity entity in list) {
+                foreach (TEntity entity in list)
+                {
                     bool deletionResult = Auto.Delete(Table, entity.GetId());
-                    if (!deletionResult) {
+                    if (!deletionResult)
+                    {
                         Log.Info("[Dao] RemoveAll: Auto.Delete result: [" + deletionResult + "]");
                     }
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Log.Error("[Dao] RemoveAll: Couldn't complete db operation, [" + ex.Message + "]");
             }
         }
@@ -99,13 +121,17 @@ namespace Plugins.iBoxDB
         public long GenerateNewId()
         {
             long result;
-            try {
+            try
+            {
                 result = Auto.NewId();
-                if (result < 0) {
+                if (result < 0)
+                {
                     Log.Info("[Dao] GenerateNewId: Auto.NewId result: [" + result + "]");
                 }
                 return result;
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 result = 0;
                 Log.Error("[Dao] GenerateNewId: Couldn't complete db operation, [" + ex.Message + "]");
             }

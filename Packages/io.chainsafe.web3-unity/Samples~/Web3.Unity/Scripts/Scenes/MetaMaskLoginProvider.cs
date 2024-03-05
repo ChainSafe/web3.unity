@@ -16,11 +16,11 @@ using UnityEngine.UI;
 public class MetaMaskLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
 {
     [SerializeField] private Button loginButton;
-    
+
     protected override void Initialize()
     {
         base.Initialize();
-        
+
         loginButton.onClick.AddListener(LoginClicked);
     }
 
@@ -28,7 +28,7 @@ public class MetaMaskLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     {
         await TryLogin();
     }
-    
+
     public Web3Builder ConfigureServices(Web3Builder web3Builder)
     {
         return web3Builder.Configure(services =>

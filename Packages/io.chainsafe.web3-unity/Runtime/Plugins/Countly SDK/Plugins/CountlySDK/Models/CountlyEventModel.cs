@@ -20,7 +20,8 @@ namespace Plugins.CountlySDK.Models
         {
             Key = key;
             Count = count ?? 1;
-            if (segmentation != null) {
+            if (segmentation != null)
+            {
                 Segmentation = new SegmentModel(segmentation);
             }
             Duration = duration;

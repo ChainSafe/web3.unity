@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.MultiCall;
+using ChainSafe.Gaming.SygmaClient;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
@@ -13,6 +14,7 @@ using ChainSafe.GamingSdk.Gelato;
 using Scripts.EVM.Token;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Environment = ChainSafe.Gaming.SygmaClient.Types.Environment;
 
 namespace ChainSafe.Gaming.UnityPackage.Common
 {
@@ -30,7 +32,7 @@ namespace ChainSafe.Gaming.UnityPackage.Common
         /// All service providers used for configuring <see cref="Web3"/> instance services.
         /// </summary>
         public IWeb3BuilderServiceAdapter[] Web3BuilderServiceAdapters { get; }
-        
+
         /// <summary>
         /// All Web3 initialized handlers called when Web3 instance is initialized.
         /// </summary>
@@ -44,13 +46,13 @@ namespace ChainSafe.Gaming.UnityPackage.Common
             Web3.Web3 web3;
 
             Web3Builder web3Builder = new Web3Builder(ProjectConfigUtilities.Load()).Configure(ConfigureCommonServices);
-
+            
             web3Builder = ConfigureWeb3Services(web3Builder);
 
             web3 = await web3Builder.LaunchAsync();
-
-            Web3Accessor.Set(web3);
             
+            Web3Accessor.Set(web3);
+
             OnWeb3Initialized();
         }
 
@@ -61,7 +63,7 @@ namespace ChainSafe.Gaming.UnityPackage.Common
                 web3InitializedHandler.OnWeb3Initialized();
             }
         }
-        
+
         /// <summary>
         /// Configure services to inject based on the type of Login/Provider you want to use.
         /// </summary>
@@ -76,13 +78,14 @@ namespace ChainSafe.Gaming.UnityPackage.Common
 
             return web3Builder;
         }
-        
+
         private void ConfigureCommonServices(IWeb3ServiceCollection services)
         {
             services
                 .UseUnityEnvironment()
                 .UseGelato(GelatoApiKey)
                 .UseMultiCall()
+                .UseSygmaClient()
                 .UseRpcProvider();
 
             /* As many contracts as needed may be registered here.

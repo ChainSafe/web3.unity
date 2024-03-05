@@ -20,7 +20,8 @@ namespace Plugins.CountlySDK.Services
         internal PushCountlyService(CountlyConfiguration configuration, CountlyLogHelper logHelper, RequestCountlyHelper requestCountlyHelper, INotificationsService notificationsService, NotificationsCallbackService notificationsCallbackService, ConsentCountlyService consentService) : base(configuration, logHelper, consentService)
         {
             Log.Debug("[PushCountlyService] Initializing.");
-            if (configuration.NotificationEventListeners.Count > 0) {
+            if (configuration.NotificationEventListeners.Count > 0)
+            {
                 Log.Debug("[PushCountlyService] Registering " + configuration.NotificationEventListeners.Count + "  notification event listeners.");
             }
 
@@ -37,7 +38,8 @@ namespace Plugins.CountlySDK.Services
             Log.Debug("[PushCountlyService] EnableNotification");
 
             //Enables push notification on start
-            if (_configuration.EnableTestMode || !_consentService.CheckConsentInternal(Consents.Push) || _configuration.NotificationMode == TestMode.None) {
+            if (_configuration.EnableTestMode || !_consentService.CheckConsentInternal(Consents.Push) || _configuration.NotificationMode == TestMode.None)
+            {
                 return;
             }
 
@@ -55,7 +57,8 @@ namespace Plugins.CountlySDK.Services
 
             _mode = mode;
             _isDeviceRegistered = true;
-            _notificationsService.GetToken(async result => {
+            _notificationsService.GetToken(async result =>
+            {
                 _token = result;
                 /*
                  * When the push notification service gets enabled successfully for the device, 
@@ -65,12 +68,14 @@ namespace Plugins.CountlySDK.Services
                 await ReportPushActionAsync();
             });
 
-            _notificationsService.OnNotificationClicked(async (data, index) => {
+            _notificationsService.OnNotificationClicked(async (data, index) =>
+            {
                 _notificationsCallbackService.NotifyOnNotificationClicked(data, index);
                 await ReportPushActionAsync();
             });
 
-            _notificationsService.OnNotificationReceived(data => {
+            _notificationsService.OnNotificationReceived(data =>
+            {
                 _notificationsCallbackService.NotifyOnNotificationReceived(data);
             });
 
@@ -84,7 +89,8 @@ namespace Plugins.CountlySDK.Services
         {
             Log.Debug("[PushCountlyService] PostToCountlyAsync : token = " + token);
 
-            if (!_mode.HasValue || !_consentService.CheckConsentInternal(Consents.Push)) {
+            if (!_mode.HasValue || !_consentService.CheckConsentInternal(Consents.Push))
+            {
                 return;
             }
 
@@ -107,7 +113,8 @@ namespace Plugins.CountlySDK.Services
         {
             Log.Debug("[PushCountlyService] ReportPushActionAsync");
 
-            if (!_consentService.CheckConsentInternal(Consents.Push)) {
+            if (!_consentService.CheckConsentInternal(Consents.Push))
+            {
                 return new CountlyResponse { IsSuccess = false };
             }
 
@@ -122,7 +129,8 @@ namespace Plugins.CountlySDK.Services
         }
         internal override void ConsentChanged(List<Consents> updatedConsents, bool newConsentValue, ConsentChangedAction action)
         {
-            if (updatedConsents.Contains(Consents.Push) && newConsentValue && !_isDeviceRegistered) {
+            if (updatedConsents.Contains(Consents.Push) && newConsentValue && !_isDeviceRegistered)
+            {
                 EnableNotification();
             }
         }

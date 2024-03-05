@@ -39,10 +39,10 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
 
         public Task<OnRampPurchaseData> BuyCrypto(RampBuyWidgetSettings settings)
             => platformImplementation.BuyCrypto(settings);
-        
+
         public Task<OffRampSaleData> SellCrypto(RampSellWidgetSettings settings)
             => platformImplementation.SellCrypto(settings);
-        
+
         public Task<RampTransactionData> BuyOrSellCrypto(RampBuyOrSellWidgetSettings settings)
             => platformImplementation.BuyOrSellCrypto(settings);
 
