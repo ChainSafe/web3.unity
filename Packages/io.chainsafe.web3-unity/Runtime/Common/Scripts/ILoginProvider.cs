@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.JsonRpc;
+using ChainSafe.Gaming.Marketplace.Extensions;
 using ChainSafe.Gaming.MultiCall;
 using ChainSafe.Gaming.SygmaClient;
 using ChainSafe.Gaming.UnityPackage;
@@ -86,7 +87,8 @@ namespace ChainSafe.Gaming.UnityPackage.Common
                 .UseGelato(GelatoApiKey)
                 .UseMultiCall()
                 .UseSygmaClient()
-                .UseRpcProvider();
+                .UseRpcProvider()
+                .UseMarketplace();
 
             /* As many contracts as needed may be registered here.
              * It is better to register all contracts the application
