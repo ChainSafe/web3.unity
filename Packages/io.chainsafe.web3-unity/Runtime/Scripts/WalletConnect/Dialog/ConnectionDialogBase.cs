@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.WalletConnect.Connection;
 using ChainSafe.Gaming.WalletConnect.Models;
+using ChainSafe.Gaming.WalletConnect.Storage;
 using UnityEngine;
 
 namespace ChainSafe.Gaming.WalletConnect.Dialog
@@ -130,6 +131,7 @@ namespace ChainSafe.Gaming.WalletConnect.Dialog
             {
                 OnException(e);
             }
+            
         }
     }
 }
