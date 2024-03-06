@@ -43,6 +43,7 @@ namespace ChainSafe.Gaming.WalletConnect
         private SessionStruct session;
         private bool connected;
         private IAnalyticsClient analyticsClient;
+        private ConnectionHandlerConfig connectionHandlerConfig;
 
         public WalletConnectProvider(
             IWalletConnectConfig config,
@@ -170,10 +171,9 @@ namespace ChainSafe.Gaming.WalletConnect
 
                 localData.SessionTopic = session.Topic;
 
-                var connectedLocally = session.Peer.Metadata.Redirect == null;
-                if (connectedLocally)
+                var sessionLocalWallet = GetSessionLocalWallet();
+                if (sessionLocalWallet != null)
                 {
-                    var sessionLocalWallet = GetSessionLocalWallet();
                     localData.ConnectedLocalWalletName = sessionLocalWallet.Name;
                     WCLogger.Log($"\"{sessionLocalWallet.Name}\" set as locally connected wallet for the current session.");
                 }
@@ -247,7 +247,7 @@ namespace ChainSafe.Gaming.WalletConnect
             Task dialogTask;
             try
             {
-                dialogTask = connectionHandler.ConnectUserWallet(new ConnectionHandlerConfig
+                connectionHandlerConfig = new ConnectionHandlerConfig
                 {
                     ConnectRemoteWalletUri = connectedData.Uri,
                     DelegateLocalWalletSelectionToOs = OsManageWalletSelection,
@@ -265,7 +265,8 @@ namespace ChainSafe.Gaming.WalletConnect
                     RedirectOsManaged = OsManageWalletSelection
                         ? () => redirection.RedirectConnectionOsManaged(connectedData.Uri)
                         : null,
-                });
+                };
+                dialogTask = connectionHandler.ConnectUserWallet(connectionHandlerConfig);
 
                 // awaiting handler task to catch exceptions, actually awaiting only for approval
                 var combinedTasks = await Task.WhenAny(dialogTask, connectedData.Approval);
@@ -370,12 +371,18 @@ namespace ChainSafe.Gaming.WalletConnect
             {
                 if (args.Topic != sessionTopic)
                 {
+                    logWriter.LogError("Session topic is different than args -> " +
+                                       $"sessionTopic: {sessionTopic}, args.Topic: {args.Topic}");
                     return;
                 }
 
                 if (localData.ConnectedLocalWalletName != null)
                 {
                     redirection.Redirect(localData.ConnectedLocalWalletName);
+                }
+                else
+                {
+                    logWriter.LogError("Connected Wallet Name is NULL!");
                 }
             }
         }
