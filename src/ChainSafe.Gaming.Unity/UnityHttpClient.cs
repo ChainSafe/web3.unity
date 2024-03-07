@@ -1,4 +1,3 @@
-using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Unity;
@@ -94,9 +93,9 @@ namespace ChainSafe.Gaming.Web3.Core.Unity
                 {
                     return JsonConvert.DeserializeObject<TResponse>(x);
                 }
-                catch (JsonReaderException)
+                catch (JsonReaderException e)
                 {
-                    throw new Web3Exception($"Tried deserializing response, but failed.\nResponse body:\n{x}");
+                    throw new Web3Exception($"Tried deserializing response, but failed.\nMessage:{e.Message}\nResponse body:\n{x}");
                 }
             });
         }
