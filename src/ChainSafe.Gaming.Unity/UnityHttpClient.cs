@@ -88,7 +88,17 @@ namespace ChainSafe.Gaming.Web3.Core.Unity
         public async ValueTask<NetworkResponse<TResponse>> Get<TResponse>(string url)
         {
             var response = await GetRaw(url);
-            return response.Map(x => JsonConvert.DeserializeObject<TResponse>(x));
+            return response.Map(x =>
+            {
+                try
+                {
+                    return JsonConvert.DeserializeObject<TResponse>(x);
+                }
+                catch (JsonReaderException)
+                {
+                    throw new Web3Exception($"Tried deserializing response, but failed.\nResponse body:\n{x}");
+                }
+            });
         }
 
         /// <summary>
@@ -103,7 +113,17 @@ namespace ChainSafe.Gaming.Web3.Core.Unity
         {
             var requestJson = JsonConvert.SerializeObject(data);
             var response = await PostRaw(url, requestJson, "application/json");
-            return response.Map(x => JsonConvert.DeserializeObject<TResponse>(x));
+            return response.Map(x =>
+            {
+                try
+                {
+                    return JsonConvert.DeserializeObject<TResponse>(x);
+                }
+                catch (JsonReaderException e)
+                {
+                    throw new Web3Exception($"Tried deserializing response, but failed.\nMessage:{e.Message}\nResponse body:\n{x}");
+                }
+            });
         }
     }
 }
