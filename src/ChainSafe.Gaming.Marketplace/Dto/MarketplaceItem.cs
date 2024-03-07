@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace ChainSafe.Gaming.Marketplace
@@ -10,7 +9,7 @@ namespace ChainSafe.Gaming.Marketplace
         public string Id { get; set; }
 
         [JsonProperty(PropertyName = "chain_id")]
-        public string ChainId { get; set; }
+        public int ChainId { get; set; }
 
         [JsonProperty(PropertyName = "project_id")]
         public string ProjectId { get; set; }
@@ -27,14 +26,14 @@ namespace ChainSafe.Gaming.Marketplace
         [JsonProperty(PropertyName = "seller")]
         public string Seller { get; set; }
 
-        [JsonProperty(PropertyName = "seller")]
+        [JsonProperty(PropertyName = "buyer")]
         public string Buyer { get; set; }
 
         [JsonProperty(PropertyName = "price")]
         public string Price { get; set; }
 
         [JsonProperty(PropertyName = "listed_at")]
-        public int ListedAtRaw { get; set; }
+        public long ListedAtRaw { get; set; }
 
         [JsonProperty(PropertyName = "status")]
         public string StatusRaw { get; set; }

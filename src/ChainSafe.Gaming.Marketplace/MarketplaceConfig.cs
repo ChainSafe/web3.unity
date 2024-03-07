@@ -6,7 +6,7 @@
 
         public static MarketplaceConfig Default => new MarketplaceConfig
         {
-            EndpointOverride = "https://dashboard.gaming.chainsafe.io",
+            EndpointOverride = "https://api.gaming.chainsafe.io",
         };
 
         public string? EndpointOverride
