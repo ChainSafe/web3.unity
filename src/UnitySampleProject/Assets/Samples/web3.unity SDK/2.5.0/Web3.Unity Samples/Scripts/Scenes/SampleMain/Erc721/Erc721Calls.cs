@@ -69,7 +69,7 @@ public class Erc721Calls : MonoBehaviour
     public async void OwnerOf()
     {
         var contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.Erc721, Contracts.Erc721);
-        Debug.Log(contract.Calldata("ownerOf", new object[]{tokenIdOwnerOf}));
+        Debug.Log(contract.Calldata("ownerOf", new object[] { tokenIdOwnerOf }));
         var owner = tokenIdOwnerOf.StartsWith("0x") ?
             await Erc721.OwnerOf(Web3Accessor.Web3, Contracts.Erc721, tokenIdOwnerOf)
             : await Erc721.OwnerOf(Web3Accessor.Web3, Contracts.Erc721, BigInteger.Parse(tokenIdOwnerOf));

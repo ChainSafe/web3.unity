@@ -7,8 +7,8 @@ namespace ChainSafe.Gaming.SygmaClient.Types
     {
         public EvmFee(string handlerAddress, FeeHandlerType type)
         {
-            this.Type = type;
-            this.HandlerAddress = handlerAddress;
+            Type = type;
+            HandlerAddress = handlerAddress;
         }
 
         public HexBigInteger Fee { get; set; }

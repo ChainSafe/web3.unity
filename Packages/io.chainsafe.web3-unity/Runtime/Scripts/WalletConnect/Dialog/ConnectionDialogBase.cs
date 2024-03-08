@@ -131,7 +131,7 @@ namespace ChainSafe.Gaming.WalletConnect.Dialog
             {
                 OnException(e);
             }
-            
+
         }
     }
 }
