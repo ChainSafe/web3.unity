@@ -10,14 +10,16 @@ namespace ChainSafe.Gaming.SygmaClient.Contracts
     public class BasicFeeHandler : IBasicHandler
     {
         private const string MethodCalculateFee = "calculateFee";
-        private Contract contract;
-        private string address;
+        private const string FeeHandlerAbi =
+            "[ { \"inputs\": [  { \"internalType\": \"address\", \"name\": \"bridgeAddress\", \"type\": \"address\"  },  { \"internalType\": \"address\", \"name\": \"feeHandlerRouterAddress\", \"type\": \"address\"  }],\"stateMutability\": \"nonpayable\",\"type\": \"constructor\"\n  },\n  {\"inputs\": [  { \"internalType\": \"uint8\", \"name\": \"\", \"type\": \"uint8\"  },  { \"internalType\": \"bytes32\", \"name\": \"\", \"type\": \"bytes32\"  }],\"name\": \"_domainResourceIDToFee\",\"outputs\": [  { \"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\"  }],\"stateMutability\": \"view\",\"type\": \"function\"\n  },\n  {\"inputs\": [],\"name\": \"_feeHandlerRouterAddress\",\"outputs\": [  { \"internalType\": \"address\", \"name\": \"\", \"type\": \"address\"  }],\"stateMutability\": \"view\",\"type\": \"function\"\n  },\n  {\"inputs\": [  { \"internalType\": \"address\", \"name\": \"sender\", \"type\": \"address\"  },  { \"internalType\": \"uint8\", \"name\": \"fromDomainID\", \"type\": \"uint8\"  },  { \"internalType\": \"uint8\", \"name\": \"destinationDomainID\", \"type\": \"uint8\"  },  { \"internalType\": \"bytes32\", \"name\": \"resourceID\", \"type\": \"bytes32\"  },  { \"internalType\": \"bytes\", \"name\": \"depositData\", \"type\": \"bytes\"  },  { \"internalType\": \"bytes\", \"name\": \"feeData\", \"type\": \"bytes\"  }],\"name\": \"calculateFee\",\"outputs\": [  { \"internalType\": \"uint256\", \"name\": \"\", \"type\": \"uint256\"  },  { \"internalType\": \"address\", \"name\": \"\", \"type\": \"address\"  }],\"stateMutability\": \"view\",\"type\": \"function\"\n  },\n  {\"inputs\": [  { \"internalType\": \"address payable[]\", \"name\": \"addrs\", \"type\": \"address[]\"  },  { \"internalType\": \"uint256[]\", \"name\": \"amounts\", \"type\": \"uint256[]\"  }],\"name\": \"transferFee\",\"outputs\": [],\"stateMutability\": \"nonpayable\",\"type\": \"function\" } ]";
+
+        private readonly Contract contract;
+        private readonly string address;
 
         public BasicFeeHandler(IContractBuilder cb, string address)
         {
-            var contractAbi = File.ReadAllText("Abi/BasicFeeHandler.json");
             this.address = address;
-            contract = cb.Build(contractAbi, address);
+            this.contract = cb.Build(FeeHandlerAbi, address);
         }
 
         public Task<EvmFee> CalculateBasicFee(

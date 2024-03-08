@@ -16,6 +16,7 @@ using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Environment;
+using Nethereum.ABI;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
 using Newtonsoft.Json;
@@ -66,21 +67,42 @@ namespace ChainSafe.Gaming.SygmaClient
         }
 
         public async Task<Transfer<NonFungible>> CreateNonFungibleTransfer(
+            NonFungibleTransferType type,
             string sourceAddress,
             uint destinationChainId,
             string destinationAddress,
             string resourceId,
             string tokenId,
+            HexBigInteger amount = null,
             string destinationProviderUrl = "")
         {
-            var transfer = await this.CreateTransfer<NonFungible>(
+            var transfer = await CreateTransfer<NonFungible>(
                 sourceAddress,
                 destinationChainId,
                 destinationAddress,
                 resourceId,
                 destinationProviderUrl);
 
-            transfer.Details = new NonFungible(sourceAddress, tokenId);
+            transfer.Details = new NonFungible(type, sourceAddress, tokenId, amount);
+            return transfer;
+        }
+
+        public async Task<Transfer<Fungible>> CreateFungibleTransfer(
+            string sourceAddress,
+            uint destinationChainId,
+            string destinationAddress,
+            string resourceId,
+            HexBigInteger amount,
+            string destinationProviderUrl = "")
+        {
+            var transfer = await CreateTransfer<Fungible>(
+                sourceAddress,
+                destinationChainId,
+                destinationAddress,
+                resourceId,
+                destinationProviderUrl);
+
+            transfer.Details = new Fungible(sourceAddress, amount);
             return transfer;
         }
 
@@ -92,7 +114,7 @@ namespace ChainSafe.Gaming.SygmaClient
             string destinationProviderUrl = "")
             where T : TransferType
         {
-            var transferParams = this.BaseTransferParams(destinationChainId, resourceId);
+            var transferParams = BaseTransferParams(destinationChainId, resourceId);
             var transfer = new Transfer<T>(transferParams.DestinationDomain, transferParams.SourceDomain, sourceAddress)
             {
                 Resource = transferParams.Resource,
@@ -104,11 +126,11 @@ namespace ChainSafe.Gaming.SygmaClient
         public async Task<EvmFee> Fee<T>(Transfer<T> transfer)
             where T : TransferType
         {
-            var feeData = await this.GetFeeInformation(transfer);
+            var feeData = await GetFeeInformation(transfer);
             switch (feeData.Type)
             {
                 case FeeHandlerType.Basic:
-                    return await this.CalculateBasicFee(transfer, feeData);
+                    return await CalculateBasicFee(transfer, feeData);
                 default:
                     throw new Exception("Unsupported fee handler type");
             }
@@ -117,7 +139,7 @@ namespace ChainSafe.Gaming.SygmaClient
         public async Task<TransactionRequest> BuildApprovals<T>(Transfer<T> transfer, EvmFee fee, string tokenAddress)
             where T : TransferType
         {
-            var bridge = new Bridge(this.contractBuilder, clientConfiguration.SourceDomainConfig().Bridge);
+            var bridge = new Bridge(contractBuilder, clientConfiguration.SourceDomainConfig().Bridge);
             var handlerAddress = await bridge.DomainResourceIDToHandlerAddress(transfer.Resource.ResourceId);
             switch (transfer.Resource.Type)
             {
@@ -135,8 +157,10 @@ namespace ChainSafe.Gaming.SygmaClient
             {
                 case ResourceType.NonFungible:
                     var nonFungible = transfer as Transfer<NonFungible>;
-                    return Erc721Transfer(
-                        nonFungible!.Details.TokenId,
+                    return NonFungibleTransfer(
+                        nonFungible!.Details.Type,
+                        nonFungible.Details.TokenId,
+                        nonFungible.Details.Amount,
                         nonFungible.Details.Recipient,
                         nonFungible.To.Id.ToString(),
                         transfer.Resource.ResourceId,
@@ -146,10 +170,29 @@ namespace ChainSafe.Gaming.SygmaClient
             }
         }
 
-        private async Task<TransactionRequest> Erc721Transfer(string tokenId, string recipientAddress, string domainId, string resourceId, EvmFee feeData)
+        private async Task<TransactionRequest> NonFungibleTransfer(
+            NonFungibleTransferType typer,
+            string tokenId,
+            HexBigInteger amount,
+            string recipientAddress,
+            string domainId,
+            string resourceId,
+            EvmFee feeData)
         {
             var sourceDomainConfig = clientConfiguration.SourceDomainConfig();
-            var depositData = CreateDepositData(tokenId, recipientAddress);
+            string depositData;
+            switch (typer)
+            {
+                case NonFungibleTransferType.Erc721:
+                    depositData = CreateErc721DepositData(tokenId, recipientAddress);
+                    break;
+                case NonFungibleTransferType.Erc1155:
+                    depositData = CreateERC1155DepositData(tokenId, recipientAddress);
+                    break;
+                default:
+                    throw new Web3Exception("This non fungible transfer type is not supported");
+            }
+
             var bridge = new Bridge(contractBuilder, sourceDomainConfig.Bridge);
 
             var tx = await bridge.Contract.PrepareTransactionRequest(
@@ -166,9 +209,9 @@ namespace ChainSafe.Gaming.SygmaClient
             return tx;
         }
 
-        // In sygmas SDK we also have Substrate, (check helpers.ts -> CreateERCDepositData)
+        // In Sygma's SDK we also have Substrate, (check helpers.ts -> CreateERCDepositData)
         // We don't need paraChainID just yet since we are only working with Ethereum
-        private string CreateDepositData(string tokenId, string recipient)
+        private string CreateErc721DepositData(string tokenId, string recipient)
         {
             // Convert tokenId to a BigInteger and ensure it is a positive value.
             BigInteger tokenBigInt = BigInteger.Parse(tokenId);
@@ -185,7 +228,7 @@ namespace ChainSafe.Gaming.SygmaClient
             }
 
             // Convert recipient string to byte array.
-            byte[] recipientBytes = Encoding.UTF8.GetBytes(recipient);
+            byte[] recipientBytes = Units.ConvertHexStringToByteArray(recipient);
 
             // Encode the length of the recipient byte array as a 32-byte array.
             BigInteger recipientLengthBigInt = new BigInteger(recipientBytes.Length);
@@ -203,6 +246,19 @@ namespace ChainSafe.Gaming.SygmaClient
 
             // Convert the resulting byte array to a hexadecimal string, ensuring it is prefixed with "0x".
             return "0x" + BitConverter.ToString(data.ToArray()).Replace("-", string.Empty).ToLower();
+        }
+
+        private string CreateERC1155DepositData(string tokenId, string recipient)
+        {
+            var abiEncode = new ABIEncode();
+            var data = new Erc1155Deposit()
+            {
+                Amounts = new[] { BigInteger.Parse("1") },
+                TokenIds = new[] { BigInteger.Parse(tokenId) },
+                DestinationRecipientAddress = Units.ConvertHexStringToByteArray(recipient),
+            };
+
+            return abiEncode.GetABIEncoded(data).ToHex();
         }
 
         public async Task<TransferStatus> TransferStatusData(Environment environment, string transactionHash)

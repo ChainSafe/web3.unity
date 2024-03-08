@@ -1,8 +1,16 @@
+using System.Numerics;
 using ChainSafe.Gaming.SygmaClient.Dto;
+using Nethereum.ABI.FunctionEncoding.Attributes;
 using Nethereum.Hex.HexTypes;
 
 namespace ChainSafe.Gaming.SygmaClient.Types
 {
+    public enum NonFungibleTransferType
+    {
+        Erc721,
+        Erc1155,
+    }
+
     public class Transfer<T>
         where T : TransferType
     {
@@ -26,7 +34,7 @@ namespace ChainSafe.Gaming.SygmaClient.Types
 
     public class TransferType
     {
-        public TransferType(string recipient)
+        protected TransferType(string recipient)
         {
             Recipient = recipient;
         }
@@ -39,20 +47,35 @@ namespace ChainSafe.Gaming.SygmaClient.Types
         public Fungible(string recipient, HexBigInteger amount)
             : base(recipient)
         {
-            Amount = amount;
+            Amount = amount ?? new HexBigInteger("0x0");
         }
 
         public HexBigInteger Amount { get; }
     }
 
-    public class NonFungible : TransferType
+    public class NonFungible : Fungible
     {
-        public NonFungible(string recipient, string tokenId)
-            : base(recipient)
+        public NonFungible(NonFungibleTransferType type, string recipient, string tokenId, HexBigInteger amount = null)
+            : base(recipient, amount)
         {
             TokenId = tokenId;
+            Type = type;
         }
 
         public string TokenId { get; }
+
+        public NonFungibleTransferType Type { get; }
+    }
+
+    public class Erc1155Deposit
+    {
+        [Parameter("unit256[]", 1)]
+        public BigInteger[] TokenIds { get; set; }
+
+        [Parameter("unit256[]", 2)]
+        public BigInteger[] Amounts { get; set; }
+
+        [Parameter("bytes", 3)]
+        public byte[] DestinationRecipientAddress { get; set; }
     }
 }
