@@ -11,11 +11,21 @@ namespace ChainSafe.Gaming.SygmaClient.Types
         public bool Initialize(Environment environment);
 
         public Task<Transfer<NonFungible>> CreateNonFungibleTransfer(
+            NonFungibleTransferType type,
             string sourceAddress,
             uint destinationChainId,
             string destinationAddress,
             string resourceId,
             string tokenId,
+            HexBigInteger amount = null,
+            string destinationProviderUrl = "");
+
+        public Task<Transfer<Fungible>> CreateFungibleTransfer(
+            string sourceAddress,
+            uint destinationChainId,
+            string destinationAddress,
+            string resourceId,
+            HexBigInteger amount,
             string destinationProviderUrl = "");
 
         public Task<EvmFee> Fee<T>(Transfer<T> transfer)

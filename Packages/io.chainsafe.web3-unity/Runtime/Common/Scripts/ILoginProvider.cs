@@ -46,11 +46,11 @@ namespace ChainSafe.Gaming.UnityPackage.Common
             Web3.Web3 web3;
 
             Web3Builder web3Builder = new Web3Builder(ProjectConfigUtilities.Load()).Configure(ConfigureCommonServices);
-            
+
             web3Builder = ConfigureWeb3Services(web3Builder);
 
             web3 = await web3Builder.LaunchAsync();
-            
+
             Web3Accessor.Set(web3);
 
             OnWeb3Initialized();
