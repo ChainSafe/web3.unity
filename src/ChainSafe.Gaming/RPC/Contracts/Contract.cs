@@ -266,6 +266,11 @@ namespace ChainSafe.Gaming.Evm.Contracts
             txReq.Data ??= function.GetData(parameters);
 
             var feeData = await provider.GetFeeData();
+            if (feeData == null)
+            {
+                return await PrepareTransactionRequestNoGasInfo(method, parameters, overwrite);
+            }
+
             txReq.MaxFeePerGas = feeData.MaxFeePerGas.ToHexBigInteger();
             if (!feeData.MaxPriorityFeePerGas.IsZero)
             {
@@ -273,6 +278,20 @@ namespace ChainSafe.Gaming.Evm.Contracts
             }
 
             txReq.GasLimit ??= await provider.EstimateGas(txReq);
+
+            return txReq;
+        }
+
+        public async Task<TransactionRequest> PrepareTransactionRequestNoGasInfo(string method, object[] parameters, TransactionRequest overwrite = null)
+        {
+            parameters ??= Array.Empty<object>();
+
+            var function = contractBuilder.GetFunctionBuilder(method);
+            var txReq = overwrite ?? new TransactionRequest();
+
+            txReq.From ??= signer == null ? null : await signer.GetAddress();
+            txReq.To ??= address;
+            txReq.Data ??= function.GetData(parameters);
 
             return txReq;
         }
