@@ -98,5 +98,21 @@ namespace ChainSafe.Gaming.Evm.Utils
             var unitIndex = Array.IndexOf(Names, unitName);
             return unitIndex == -1 ? ParseUnits(value, 18) : ParseUnits(value, unitIndex * 3);
         }
+
+        public static byte[] ConvertHexStringToByteArray(string hexString)
+        {
+            if (hexString.Length % 2 != 0)
+            {
+                throw new ArgumentException("Invalid hex string length");
+            }
+
+            byte[] byteArray = new byte[hexString.Length / 2];
+            for (int i = 0; i < byteArray.Length; i++)
+            {
+                byteArray[i] = Convert.ToByte(hexString.Substring(i * 2, 2), 16);
+            }
+
+            return byteArray;
+        }
     }
 }
