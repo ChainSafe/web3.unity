@@ -22,5 +22,5 @@ namespace ChainSafe.Gaming.SygmaClient.Dto
             var result = this.Contract.Call(MethodDomainResourceIDToHandlerAddress, new object[] { resourceID });
             return Task.FromResult(result.ToString());
         }
- }
+    }
 }
