@@ -12,6 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ChainSafe.Gaming.Marketplace\ChainSafe.Gaming.Marketplace.csproj" />
     <ProjectReference Include="..\ChainSafe.Gaming.Lootboxes.Chainlink\ChainSafe.Gaming.Lootboxes.Chainlink.csproj" />
     <ProjectReference Include="..\Chainsafe.Gaming.Chainlink\Chainsafe.Gaming.Chainlink.csproj" />
     <ProjectReference Include="..\ChainSafe.Gaming.Debugging\ChainSafe.Gaming.Debugging.csproj" />
@@ -22,6 +23,7 @@
     <ProjectReference Include="..\ChainSafe.Gaming.MetaMask.Unity\ChainSafe.Gaming.MetaMask.Unity.csproj" />
     <ProjectReference Include="..\ChainSafe.Gaming.Unity.ThirdParty\ChainSafe.Gaming.Unity.ThirdParty.csproj" />
     <ProjectReference Include="..\ChainSafe.Gaming.Gelato\ChainSafe.Gaming.Gelato.csproj" />
+    <ProjectReference Include="..\ChainSafe.Gaming.SygmaClient\ChainSafe.Gaming.SygmaClient.csproj" />
   </ItemGroup>
 
   <ItemGroup>
