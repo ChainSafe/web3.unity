@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 namespace ChainSafe.Gaming.WalletConnect.Models
 {
     /// <summary>
-    /// Wallet Connect Model used in <see cref="WalletConnectWalletModel"/> for Wallet's image url if any.
+    /// Wallet Connect Model used in <see cref="WalletModel"/> for Wallet's image url if any.
     /// </summary>
     public class ImageUrlsModel
     {

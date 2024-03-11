@@ -47,7 +47,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
         /// <returns>A <see cref="ValueTask"/> representing the asynchronous operation.</returns>
         public async ValueTask WillStartAsync()
         {
-            
+
             analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
                 ChainId = analyticsClient.ChainConfig.ChainId,

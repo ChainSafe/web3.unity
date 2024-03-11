@@ -16,26 +16,28 @@ public static class SampleProjectEditorUtil
     private static string _publishToUnityPackageName = $"publish-to-unity-package{_unityPackageExtension}";
 
     private static string _unityPackageExtension = (Application.platform == RuntimePlatform.WindowsEditor ? ".bat" : ".sh");
-    
-    
+
+
     /// <summary>
     /// This is only needed in the actual UnitySampleProject. Doesn't make sense for it to be in the samples.
     /// That's why it's only in the UnitySampleProject/Scripts folder.
     /// </summary>
     [MenuItem("Assets/Open Chainsafe.Gaming Solution")]
-    private static void OpenQuantumProject() {
-      var path = System.IO.Path.GetFullPath(ChainsafeGamingPath);
+    private static void OpenQuantumProject()
+    {
+        var path = System.IO.Path.GetFullPath(ChainsafeGamingPath);
 
-      if (!System.IO.File.Exists(path)) {
-        EditorUtility.DisplayDialog("Open Quantum Project", "Solution file '" + path + "' not found. Check QuantumProjectPath in your QuantumEditorSettings.", "Ok");
-      }
+        if (!System.IO.File.Exists(path))
+        {
+            EditorUtility.DisplayDialog("Open Quantum Project", "Solution file '" + path + "' not found. Check QuantumProjectPath in your QuantumEditorSettings.", "Ok");
+        }
 
-      var uri = new Uri(path);
-      Application.OpenURL(uri.AbsoluteUri);
+        var uri = new Uri(path);
+        Application.OpenURL(uri.AbsoluteUri);
     }
-    
+
     [MenuItem("Assets/Build & Publish Web3.Unity to Unity")]
-    private static void PublishSolutionsToUnityPackage() 
+    private static void PublishSolutionsToUnityPackage()
     {
         var path = System.IO.Path.GetFullPath(_publishToUnityPackagePath);
 
@@ -75,7 +77,7 @@ public static class SampleProjectEditorUtil
                     Debug.LogError(error);
                 }
             }
-        }   
+        }
         AssetDatabase.Refresh();
     }
 }
