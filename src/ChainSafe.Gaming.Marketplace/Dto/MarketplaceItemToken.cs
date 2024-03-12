@@ -1,4 +1,8 @@
-﻿namespace ChainSafe.Gaming.Marketplace
+﻿// <copyright file="MarketplaceItemToken.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+namespace ChainSafe.Gaming.Marketplace
 {
     using System.Collections.Generic;
     using Newtonsoft.Json;
@@ -9,31 +13,31 @@
     public class MarketplaceItemToken
     {
         /// <summary>
-        /// Gets & sets token Id.
+        /// Gets or sets token Id.
         /// </summary>
         [JsonProperty(PropertyName = "token_id")]
         public string Id { get; set; }
 
         /// <summary>
-        /// Gets & sets token type.
+        /// Gets or sets token type.
         /// </summary>
         [JsonProperty(PropertyName = "token_type")]
         public string Type { get; set; }
 
         /// <summary>
-        /// Gets & sets contract address.
+        /// Gets or sets contract address.
         /// </summary>
         [JsonProperty(PropertyName = "contract_address")]
         public string ContractAddress { get; set; }
 
         /// <summary>
-        /// Gets & sets uri.
+        /// Gets or sets uri.
         /// </summary>
         [JsonProperty(PropertyName = "uri")]
         public string Uri { get; set; }
 
         /// <summary>
-        /// Gets & sets metadata.
+        /// Gets or sets metadata.
         /// </summary>
         [JsonProperty(PropertyName = "metadata")]
         public Dictionary<string, string> Metadata { get; set; }

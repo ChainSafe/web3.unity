@@ -1,4 +1,8 @@
-﻿namespace ChainSafe.Gaming.Marketplace
+﻿// <copyright file="MarketplaceItem.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+namespace ChainSafe.Gaming.Marketplace
 {
     using System;
     using Newtonsoft.Json;
@@ -9,67 +13,67 @@
     public class MarketplaceItem
     {
         /// <summary>
-        /// Gets & sets Id.
+        /// Gets or sets Id.
         /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
         /// <summary>
-        /// Gets & sets chain Id.
+        /// Gets or sets chain Id.
         /// </summary>
         [JsonProperty(PropertyName = "chain_id")]
         public int ChainId { get; set; }
 
         /// <summary>
-        /// Gets & sets project Id.
+        /// Gets or sets project Id.
         /// </summary>
         [JsonProperty(PropertyName = "project_id")]
         public string ProjectId { get; set; }
 
         /// <summary>
-        /// Gets & sets marketplace Id.
+        /// Gets or sets marketplace Id.
         /// </summary>
         [JsonProperty(PropertyName = "marketplace_id")]
         public string MarketPlaceId { get; set; }
 
         /// <summary>
-        /// Gets & sets token.
+        /// Gets or sets token.
         /// </summary>
         [JsonProperty(PropertyName = "token")]
         public MarketplaceItemToken Token { get; set; }
 
         /// <summary>
-        /// Gets & sets the marketplace contract address.
+        /// Gets or sets the marketplace contract address.
         /// </summary>
         [JsonProperty(PropertyName = "marketplace_contract_address")]
         public string MarketPlaceContractAddress { get; set; }
 
         /// <summary>
-        /// Gets & sets seller.
+        /// Gets or sets seller.
         /// </summary>
         [JsonProperty(PropertyName = "seller")]
         public string Seller { get; set; }
 
         /// <summary>
-        /// Gets & sets buyer.
+        /// Gets or sets buyer.
         /// </summary>
         [JsonProperty(PropertyName = "buyer")]
         public string Buyer { get; set; }
 
         /// <summary>
-        /// Gets & sets price.
+        /// Gets or sets price.
         /// </summary>
         [JsonProperty(PropertyName = "price")]
         public string Price { get; set; }
 
         /// <summary>
-        /// Gets & sets listed at time.
+        /// Gets or sets listed at time.
         /// </summary>
         [JsonProperty(PropertyName = "listed_at")]
         public long ListedAtRaw { get; set; }
 
         /// <summary>
-        /// Gets & sets statusRaw for use with item status.
+        /// Gets or sets statusRaw for use with item status.
         /// </summary>
         [JsonProperty(PropertyName = "status")]
         public string StatusRaw { get; set; }

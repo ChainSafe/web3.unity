@@ -13,31 +13,31 @@ namespace ChainSafe.Gaming.Marketplace
     public class MarketplacePage
     {
         /// <summary>
-        /// Gets & sets page number.
+        /// Gets or sets page number.
         /// </summary>
         [JsonProperty(PropertyName = "page_number")]
         public int PageNumber { get; set; }
 
         /// <summary>
-        /// Gets & sets page size.
+        /// Gets or sets page size.
         /// </summary>
         [JsonProperty(PropertyName = "page_size")]
         public int PageSize { get; set; }
 
         /// <summary>
-        /// Gets & sets total.
+        /// Gets or sets total.
         /// </summary>
         [JsonProperty(PropertyName = "total")]
         public int Total { get; set; }
 
         /// <summary>
-        /// Gets & sets cursor.
+        /// Gets or sets cursor.
         /// </summary>
         [JsonProperty(PropertyName = "cursor")]
         public string Cursor { get; set; }
 
         /// <summary>
-        /// Gets & sets items.
+        /// Gets or sets items.
         /// </summary>
         [JsonProperty(PropertyName = "items")]
         public List<MarketplaceItem> Items { get; set; }
