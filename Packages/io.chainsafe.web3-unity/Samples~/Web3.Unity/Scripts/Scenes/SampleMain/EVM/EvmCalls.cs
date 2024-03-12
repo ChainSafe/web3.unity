@@ -1,13 +1,20 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using ChainSafe.Gaming.Evm.Contracts.Extensions;
 using ChainSafe.Gaming.MultiCall;
 using ChainSafe.Gaming.UnityPackage;
+using Nethereum.ABI.FunctionEncoding.Attributes;
+using Nethereum.BlockchainProcessing.BlockStorage.Entities;
 using Nethereum.Contracts.QueryHandlers.MultiCall;
 using Nethereum.Hex.HexConvertors.Extensions;
+using Nethereum.RPC.Eth.DTOs;
+using Newtonsoft.Json;
 using Scripts.EVM.Token;
 using UnityEngine;
 using Web3Unity.Scripts.Prefabs;
+using TransactionReceipt = ChainSafe.Gaming.Evm.Transactions.TransactionReceipt;
 
 public class EvmCalls : MonoBehaviour
 {
@@ -80,6 +87,25 @@ public class EvmCalls : MonoBehaviour
     #region Multi Call
 
     private string Erc20Account = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
+
+    #endregion
+
+    #region EventData
+
+    /// <summary>
+    /// Class for the event data that we're calling, this must match the solidity event i.e. event AmountIncreased(address indexed wallet, uint256 amount);
+    /// </summary>
+    [Event("AmountIncreased")]
+    private class AmountIncreasedEvent : IEventDTO
+    {
+        [Parameter("address", "wallet", 1, true)]
+        public string wallet { get; set; }
+
+        [Parameter("uint256", "amount", 2, false)]
+        public BigInteger amount { get; set; }
+    }
+
+    private string eventContract = "0x9832B82746a4316E9E3A5e6c7ea02451bdAC4546";
 
     #endregion
 
@@ -224,13 +250,51 @@ public class EvmCalls : MonoBehaviour
     }
 
     /// <summary>
-    /// Signs a message and verifs account ownership
+    /// Signs a message and verify account ownership
     /// </summary>
     public async void SignVerify()
     {
         var signatureVerified = await Evm.SignVerify(Web3Accessor.Web3, messageSignVerify);
         var output = signatureVerified ? "Verified" : "Failed to verify";
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.SignVerify));
+    }
+
+    /// <summary>
+    /// Gets events data from a transaction
+    /// </summary>
+    public async void EventTxData()
+    {
+        // Contract write
+        var amount = 1;
+        object[] args =
+        {
+            amount
+        };
+        var contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.ArrayTotal, eventContract);
+        var data = await contract.SendWithReceipt("addTotal", args);
+        // Quick pause to deal with chain congestion
+        await new WaitForSeconds(2);
+        // Event data from receipt
+        var logs = data.receipt.Logs.Select(jToken => JsonConvert.DeserializeObject<FilterLog>(jToken.ToString()));
+        var eventAbi = EventExtensions.GetEventABI<AmountIncreasedEvent>();
+        var eventLogs = logs
+            .Select(log => eventAbi.DecodeEvent<AmountIncreasedEvent>(log))
+            .Where(l => l != null);
+
+        if (!eventLogs.Any())
+        {
+            Debug.Log("No event data");
+        }
+        else
+        {
+            Debug.Log("Event data found");
+            foreach (var eventLog in eventLogs)
+            {
+                var eventData = eventLog.Event;
+                Debug.Log($"Wallet from event data: {eventData.wallet}");
+                Debug.Log($"Amount from event data: {eventData.amount}");
+            }
+        }
     }
 
     /// <summary>

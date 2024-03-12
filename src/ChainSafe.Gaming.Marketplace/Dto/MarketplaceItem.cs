@@ -1,8 +1,12 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿// <copyright file="MarketplaceItem.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ChainSafe.Gaming.Marketplace
 {
+    using System;
+    using Newtonsoft.Json;
+
     public class MarketplaceItem
     {
         [JsonProperty(PropertyName = "id")]
@@ -38,18 +42,18 @@ namespace ChainSafe.Gaming.Marketplace
         [JsonProperty(PropertyName = "status")]
         public string StatusRaw { get; set; }
 
-        public DateTime ListedAt => DateTime.UnixEpoch + TimeSpan.FromMilliseconds(ListedAtRaw);
+        public DateTime ListedAt => DateTime.UnixEpoch + TimeSpan.FromMilliseconds(this.ListedAtRaw);
 
         public MarketplaceItemStatus Status
         {
             get
             {
-                switch (StatusRaw)
+                switch (this.StatusRaw)
                 {
                     case "sold": return MarketplaceItemStatus.Sold;
                     case "listed": return MarketplaceItemStatus.Listed;
                     case "canceled": return MarketplaceItemStatus.Canceled;
-                    default: throw new ArgumentOutOfRangeException(nameof(StatusRaw));
+                    default: throw new ArgumentOutOfRangeException(nameof(this.StatusRaw));
                 }
             }
         }

@@ -1,12 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using ChainSafe.Gaming.Web3;
-using ChainSafe.Gaming.Web3.Environment;
+﻿// <copyright file="MarketplaceClient.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ChainSafe.Gaming.Marketplace
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using System.Web;
+    using ChainSafe.Gaming.Web3;
+    using ChainSafe.Gaming.Web3.Environment;
+
     /*
      * todo add method wrappers for "Get Marketplace Items" and "Get Item" also
      * https://docs.gaming.chainsafe.io/marketplace-api/docs/marketplaceapi/#tag/Items/operation/getItem
@@ -34,22 +38,22 @@ namespace ChainSafe.Gaming.Marketplace
 
         public Task<MarketplacePage> LoadPage(MarketplacePage? prevPage = null)
         {
-            return LoadPage(prevPage?.Cursor ?? null);
+            return this.LoadPage(prevPage?.Cursor ?? null);
         }
 
         public async Task<MarketplacePage> LoadPage(string? cursor)
         {
-            var endpoint = config.EndpointOverride;
+            var endpoint = this.config.EndpointOverride;
             if (endpoint.EndsWith('/'))
             {
                 endpoint = endpoint.Substring(0, endpoint.LastIndexOf('/'));
             }
 
-            var projectId = projectConfig.ProjectId;
+            var projectId = this.projectConfig.ProjectId;
             var baseUri = $"{endpoint}/v1/projects/{projectId}/items";
             var queryParameters = new Dictionary<string, string>
             {
-                ["chainId"] = chainConfig.ChainId,
+                ["chainId"] = this.chainConfig.ChainId,
             };
 
             if (!string.IsNullOrEmpty(cursor))
@@ -62,7 +66,7 @@ namespace ChainSafe.Gaming.Marketplace
             var query = string.Join('&', queryParametersString);
             var uri = $"{baseUri}?{query}";
 
-            var response = await httpClient.Get<MarketplacePage>(uri);
+            var response = await this.httpClient.Get<MarketplacePage>(uri);
             return response.AssertSuccess();
         }
     }
