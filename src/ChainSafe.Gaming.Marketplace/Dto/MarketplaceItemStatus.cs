@@ -18,7 +18,7 @@ namespace ChainSafe.Gaming.Marketplace
         /// Listed
         /// </summary>
         Listed,
-        
+
         /// <summary>
         /// Canceled
         /// </summary>
