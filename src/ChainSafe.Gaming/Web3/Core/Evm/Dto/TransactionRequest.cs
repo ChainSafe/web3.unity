@@ -11,73 +11,73 @@ namespace ChainSafe.Gaming.Evm.Transactions
         /// <summary>
         ///    QUANTITY - The transaction type.
         /// </summary>
-        [JsonProperty(PropertyName = "type")]
+        [JsonProperty(PropertyName = "type", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public HexBigInteger Type { get; set; }
 
         /// <summary>
         ///    QUANTITY - The transaction chain id.
         /// </summary>
-        [JsonProperty(PropertyName = "chainId")]
+        [JsonProperty(PropertyName = "chainId", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public HexBigInteger ChainId { get; set; }
 
         /// <summary>
         ///     DATA, 20 Bytes - The address the transaction is send from.
         /// </summary>
-        [JsonProperty(PropertyName = "from")]
+        [JsonProperty(PropertyName = "from", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string From { get; set; }
 
         /// <summary>
         ///     DATA, 20 Bytes - address of the receiver. null when its a contract creation transaction.
         /// </summary>
-        [JsonProperty(PropertyName = "to")]
+        [JsonProperty(PropertyName = "to", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string To { get; set; }
 
         /// <summary>
         ///   QUANTITY - gas provided by the sender.
         /// </summary>
-        [JsonProperty(PropertyName = "gas")]
+        [JsonProperty(PropertyName = "gas", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public HexBigInteger GasLimit { get; set; }
 
         /// <summary>
         ///   QUANTITY - gas price provided by the sender in Wei.
         /// </summary>
-        [JsonProperty(PropertyName = "gasPrice")]
+        [JsonProperty(PropertyName = "gasPrice", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public HexBigInteger GasPrice { get; set; }
 
         /// <summary>
         ///   QUANTITY - Max Fee Per Gas provided by the sender in Wei.
         /// </summary>
-        [JsonProperty(PropertyName = "maxFeePerGas")]
+        [JsonProperty(PropertyName = "maxFeePerGas", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public HexBigInteger MaxFeePerGas { get; set; }
 
         /// <summary>
         ///   QUANTITY - Max Priority Fee Per Gas provided by the sender in Wei.
         /// </summary>
-        [JsonProperty(PropertyName = "maxPriorityFeePerGas")]
+        [JsonProperty(PropertyName = "maxPriorityFeePerGas", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public HexBigInteger MaxPriorityFeePerGas { get; set; }
 
         /// <summary>
         ///     QUANTITY - value transferred in Wei.
         /// </summary>
-        [JsonProperty(PropertyName = "value")]
+        [JsonProperty(PropertyName = "value", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public HexBigInteger Value { get; set; }
 
         /// <summary>
         ///     DATA - the data send along with the transaction.
         /// </summary>
-        [JsonProperty(PropertyName = "data")]
+        [JsonProperty(PropertyName = "data", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string Data { get; set; }
 
         /// <summary>
         ///     QUANTITY - the number of transactions made by the sender prior to this one.
         /// </summary>
-        [JsonProperty(PropertyName = "nonce")]
+        [JsonProperty(PropertyName = "nonce", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public HexBigInteger Nonce { get; set; }
 
         /// <summary>
         ///   Access list.
         /// </summary>
-        [JsonProperty(PropertyName = "accessList")]
+        [JsonProperty(PropertyName = "accessList", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public List<AccessList> AccessList { get; set; }
 
         public object Clone()
