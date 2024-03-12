@@ -9,8 +9,17 @@ namespace ChainSafe.Gaming.Marketplace
     /// </summary>
     public enum MarketplaceItemStatus
     {
+        /// <summary>
+        /// Sold
+        /// </summary>
         Sold,
+        /// <summary>
+        /// Listed
+        /// </summary>
         Listed,
+        /// <summary>
+        /// Canceled
+        /// </summary>
         Canceled,
     }
 }

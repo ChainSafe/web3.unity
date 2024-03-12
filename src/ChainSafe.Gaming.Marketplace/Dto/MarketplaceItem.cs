@@ -6,7 +6,7 @@ namespace ChainSafe.Gaming.Marketplace
 {
     using System;
     using Newtonsoft.Json;
-    
+
     /// <summary>
     /// Marketplace items.
     /// </summary>
@@ -79,7 +79,7 @@ namespace ChainSafe.Gaming.Marketplace
         public string StatusRaw { get; set; }
 
         /// <summary>
-        /// Get listed at data
+        /// Gets listed at time data.
         /// </summary>
         public DateTime ListedAt => DateTime.UnixEpoch + TimeSpan.FromMilliseconds(this.ListedAtRaw);
 
