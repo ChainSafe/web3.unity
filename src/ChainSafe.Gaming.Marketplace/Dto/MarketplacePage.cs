@@ -1,5 +1,5 @@
-﻿// <copyright file="MarketplacePage.cs" company="ChainSafe Gaming">
-// Copyright (c) ChainSafe Gaming. All rights reserved.
+﻿// <copyright file="MarketplacePage.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ChainSafe.Gaming.Marketplace
@@ -15,7 +15,6 @@ namespace ChainSafe.Gaming.Marketplace
         /// <summary>
         /// Gets or sets page number.
         /// </summary>
-        /// <param name="PageNumber">PageNumber.</param>
         [JsonProperty(PropertyName = "page_number")]
         public int PageNumber { get; set; }
 
