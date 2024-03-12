@@ -1,9 +1,13 @@
-﻿using ChainSafe.Gaming.Web3.Build;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+﻿// <copyright file="MarketplaceExtensions.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ChainSafe.Gaming.Marketplace.Extensions
 {
+    using ChainSafe.Gaming.Web3.Build;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.DependencyInjection.Extensions;
+
     public static class MarketplaceExtensions
     {
         public static IWeb3ServiceCollection ConfigureMarketplace(

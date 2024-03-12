@@ -106,7 +106,7 @@ public class EvmCalls : MonoBehaviour
     }
 
     private string eventContract = "0x9832B82746a4316E9E3A5e6c7ea02451bdAC4546";
-    
+
     #endregion
 
     #endregion
