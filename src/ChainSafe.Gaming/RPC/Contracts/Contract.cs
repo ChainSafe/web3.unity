@@ -253,7 +253,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
             return function.GetData(parameters);
         }
-        // test
+ 
         public async Task<TransactionRequest> PrepareTransactionRequest(string method, object[] parameters, TransactionRequest overwrite = null)
         {
             parameters ??= Array.Empty<object>();
