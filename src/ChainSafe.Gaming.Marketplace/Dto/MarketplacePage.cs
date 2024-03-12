@@ -1,8 +1,12 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿// <copyright file="MarketplacePage.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ChainSafe.Gaming.Marketplace
 {
+    using System.Collections.Generic;
+    using Newtonsoft.Json;
+
     public class MarketplacePage
     {
         [JsonProperty(PropertyName = "page_number")]
