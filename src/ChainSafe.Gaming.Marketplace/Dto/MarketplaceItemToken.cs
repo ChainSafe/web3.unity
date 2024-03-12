@@ -18,6 +18,6 @@ namespace ChainSafe.Gaming.Marketplace
         public string Uri { get; set; }
 
         [JsonProperty(PropertyName = "metadata")]
-        public Dictionary<string, string> Metadata { get; set; }
+        public Dictionary<string, object> Metadata { get; set; }
     }
 }
