@@ -4,8 +4,14 @@
 
 namespace ChainSafe.Gaming.Marketplace
 {
+    /// <summary>
+    /// Marketplace config interface.
+    /// </summary>
     public interface IMarketplaceConfig
     {
+        /// <summary>
+        /// Gets or sets end point override.
+        /// </summary>
         string EndpointOverride { get; set; }
     }
 }
