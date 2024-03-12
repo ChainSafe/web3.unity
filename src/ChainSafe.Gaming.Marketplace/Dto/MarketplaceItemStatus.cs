@@ -13,10 +13,12 @@ namespace ChainSafe.Gaming.Marketplace
         /// Sold
         /// </summary>
         Sold,
+
         /// <summary>
         /// Listed
         /// </summary>
         Listed,
+        
         /// <summary>
         /// Canceled
         /// </summary>

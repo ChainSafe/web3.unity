@@ -1,5 +1,5 @@
-﻿// <copyright file="MarketplaceItemToken.cs" company="PlaceholderCompany">
-// Copyright (c) PlaceholderCompany. All rights reserved.
+﻿// <copyright file="MarketplaceItemToken.cs" company="ChainSafe Gaming">
+// Copyright (c) ChainSafe Gaming. All rights reserved.
 // </copyright>
 
 namespace ChainSafe.Gaming.Marketplace

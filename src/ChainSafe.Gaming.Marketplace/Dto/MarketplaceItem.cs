@@ -1,5 +1,5 @@
-﻿// <copyright file="MarketplaceItem.cs" company="PlaceholderCompany">
-// Copyright (c) PlaceholderCompany. All rights reserved.
+﻿// <copyright file="MarketplaceItem.cs" company="ChainSafe Gaming">
+// Copyright (c) ChainSafe Gaming. All rights reserved.
 // </copyright>
 
 namespace ChainSafe.Gaming.Marketplace
@@ -84,7 +84,7 @@ namespace ChainSafe.Gaming.Marketplace
         public DateTime ListedAt => DateTime.UnixEpoch + TimeSpan.FromMilliseconds(this.ListedAtRaw);
 
         /// <summary>
-        /// Used to find the status of marketplace items.
+        /// Gets the status of marketplace items.
         /// </summary>
         public MarketplaceItemStatus Status
         {
