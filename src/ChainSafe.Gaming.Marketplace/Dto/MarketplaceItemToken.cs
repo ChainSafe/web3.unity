@@ -1,40 +1,39 @@
-﻿// <copyright file="MarketplaceItemToken.cs" company="PlaceholderCompany">
-// Copyright (c) PlaceholderCompany. All rights reserved.
-// </copyright>
-
-namespace ChainSafe.Gaming.Marketplace
+﻿namespace ChainSafe.Gaming.Marketplace
 {
     using System.Collections.Generic;
     using Newtonsoft.Json;
 
+    /// <summary>
+    /// Marketplace item token.
+    /// </summary>
     public class MarketplaceItemToken
     {
         /// <summary>
-        /// Token Id
+        /// Gets & sets token Id.
         /// </summary>
         [JsonProperty(PropertyName = "token_id")]
         public string Id { get; set; }
 
         /// <summary>
-        /// Token type
+        /// Gets & sets token type.
         /// </summary>
         [JsonProperty(PropertyName = "token_type")]
         public string Type { get; set; }
 
         /// <summary>
-        /// Contract address
+        /// Gets & sets contract address.
         /// </summary>
         [JsonProperty(PropertyName = "contract_address")]
         public string ContractAddress { get; set; }
 
         /// <summary>
-        /// Uri
+        /// Gets & sets uri.
         /// </summary>
         [JsonProperty(PropertyName = "uri")]
         public string Uri { get; set; }
 
         /// <summary>
-        /// Metadata
+        /// Gets & sets metadata.
         /// </summary>
         [JsonProperty(PropertyName = "metadata")]
         public Dictionary<string, string> Metadata { get; set; }

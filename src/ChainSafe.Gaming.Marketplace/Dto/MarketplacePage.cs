@@ -7,34 +7,37 @@ namespace ChainSafe.Gaming.Marketplace
     using System.Collections.Generic;
     using Newtonsoft.Json;
 
+    /// <summary>
+    /// Marketplace page.
+    /// </summary>
     public class MarketplacePage
     {
         /// <summary>
-        /// Page number
+        /// Gets & sets page number.
         /// </summary>
         [JsonProperty(PropertyName = "page_number")]
         public int PageNumber { get; set; }
 
         /// <summary>
-        /// Page size
+        /// Gets & sets page size.
         /// </summary>
         [JsonProperty(PropertyName = "page_size")]
         public int PageSize { get; set; }
 
         /// <summary>
-        /// Total
+        /// Gets & sets total.
         /// </summary>
         [JsonProperty(PropertyName = "total")]
         public int Total { get; set; }
 
         /// <summary>
-        /// Cursor
+        /// Gets & sets cursor.
         /// </summary>
         [JsonProperty(PropertyName = "cursor")]
         public string Cursor { get; set; }
 
         /// <summary>
-        /// Items
+        /// Gets & sets items.
         /// </summary>
         [JsonProperty(PropertyName = "items")]
         public List<MarketplaceItem> Items { get; set; }
