@@ -4,9 +4,6 @@ document.body.appendChild(Object.assign(document.createElement("script"), { type
 document.body.appendChild(Object.assign(document.createElement("script"), { type: "text/javascript", src: "./web3/lib/web3modal.js" }));
 // load web3js to create transactions
 document.body.appendChild(Object.assign(document.createElement("script"), { type: "text/javascript", src: "./web3/lib/web3.min.js" }));
-
-// uncomment to enable torus wallet
-// document.body.appendChild(Object.assign(document.createElement("script"), { type: "text/javascript", src: "https://unpkg.com/@toruslabs/torus-embed" }));
 // uncomment to enable walletconnect
 // document.body.appendChild(Object.assign(document.createElement("script"), { type: "text/javascript", src: "https://unpkg.com/@walletconnect/web3-provider@1.2.1/dist/umd/index.min.js" }));
 
@@ -49,11 +46,8 @@ async function connect() {
         alert("No browser wallet extension detected. Please install one & retry");
         return;
     };
-    // uncomment to enable torus and walletconnect
+    // uncomment to enable walletconnect
     const providerOptions = {
-        // torus: {
-        //   package: Torus,
-        // },
         // walletconnect: {
         //   package: window.WalletConnectProvider.default,
         //   options: {
@@ -89,7 +83,7 @@ async function connect() {
     }
 
     // set current account
-    // provider.selectedAddress works for metamask and torus
+    // provider.selectedAddress works for metamask
     // provider.accounts[0] works for walletconnect
 
     web3gl.connectAccount =  web3.utils.toChecksumAddress(provider.selectedAddress) || web3.utils.toChecksumAddress(provider.accounts[0]);
