@@ -13,4 +13,9 @@
         <ProjectReference Include="..\ChainSafe.Gaming\ChainSafe.Gaming.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="marketplace-abi.json" />
+      <EmbeddedResource Include="marketplace-abi.json" />
+    </ItemGroup>
+
 </Project>
