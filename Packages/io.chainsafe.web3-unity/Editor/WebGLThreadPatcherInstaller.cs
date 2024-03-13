@@ -23,9 +23,9 @@ public static class WebGLThreadPatcherInstaller
         {
             return;
         }
-        
+
         TryInstallThreadPatcher();
-        
+
         SessionState.SetBool(WebGLThreadPatchedInstalled, true);
 #else
         // reset.

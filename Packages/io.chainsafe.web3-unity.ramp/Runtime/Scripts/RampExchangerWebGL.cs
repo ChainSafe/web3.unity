@@ -37,7 +37,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
         {
             this.signer = signer;
             this.config = config;
-            
+
             if (!RampJsInjected)
             {
                 cs_ramp_injectRamp();
@@ -55,12 +55,12 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
             var webhookStatusUrl = config.WebhookStatusUrl ?? settings.OverrideWebhookStatusUrl;
             var requestId = RequestIndexer++;
 
-            cs_ramp_showWidget(requestId, settings.SwapAsset, string.Empty, settings.SwapAmount, 
-                settings.FiatCurrency, settings.FiatValue, userAddress, hostLogoUrl, hostAppName, 
-                settings.UserEmailAddress, settings.SelectedCountryCode, settings.DefaultAsset, config.Url, 
+            cs_ramp_showWidget(requestId, settings.SwapAsset, string.Empty, settings.SwapAmount,
+                settings.FiatCurrency, settings.FiatValue, userAddress, hostLogoUrl, hostAppName,
+                settings.UserEmailAddress, settings.SelectedCountryCode, settings.DefaultAsset, config.Url,
                 webhookStatusUrl, config.HostApiKey, true, false, string.Empty,
                 false);
-            
+
             var tcs = new TaskCompletionSource<OnRampPurchaseData>();
             purchaseTaskMap.Add(requestId, tcs);
 
@@ -77,9 +77,9 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
             var offrampWebhookV3Url = config.OfframpWebHookV3Url ?? settings.OverrideOfframpWebHookV3Url;
             var requestId = RequestIndexer++;
 
-            cs_ramp_showWidget(requestId, string.Empty, settings.OfframpAsset, settings.SwapAmount, 
-                settings.FiatCurrency, settings.FiatValue, userAddress, hostLogoUrl, hostAppName, 
-                settings.UserEmailAddress, settings.SelectedCountryCode, settings.DefaultAsset, config.Url, 
+            cs_ramp_showWidget(requestId, string.Empty, settings.OfframpAsset, settings.SwapAmount,
+                settings.FiatCurrency, settings.FiatValue, userAddress, hostLogoUrl, hostAppName,
+                settings.UserEmailAddress, settings.SelectedCountryCode, settings.DefaultAsset, config.Url,
                 string.Empty, config.HostApiKey, false, true, offrampWebhookV3Url,
                 settings.UseSendCryptoCallback);
 
@@ -100,15 +100,15 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
             var offrampWebhookV3Url = config.OfframpWebHookV3Url ?? settings.OverrideOfframpWebHookV3Url;
             var requestId = RequestIndexer++;
 
-            cs_ramp_showWidget(requestId, settings.SwapAsset, settings.OfframpAsset, settings.SwapAmount, 
-                settings.FiatCurrency, settings.FiatValue, userAddress, hostLogoUrl, hostAppName, 
-                settings.UserEmailAddress, settings.SelectedCountryCode, settings.DefaultAsset, config.Url, 
+            cs_ramp_showWidget(requestId, settings.SwapAsset, settings.OfframpAsset, settings.SwapAmount,
+                settings.FiatCurrency, settings.FiatValue, userAddress, hostLogoUrl, hostAppName,
+                settings.UserEmailAddress, settings.SelectedCountryCode, settings.DefaultAsset, config.Url,
                 webhookStatusUrl, config.HostApiKey, true, true, offrampWebhookV3Url,
                 settings.UseSendCryptoCallback);
 
             var tcs = new TaskCompletionSource<RampTransactionData>();
             purchaseOrSellTaskMap.Add(requestId, tcs);
-            
+
             var transactionData = await tcs.Task;
             if (transactionData.IsPurchase)
             {
@@ -118,34 +118,34 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
             {
                 OffRampSaleCreated?.Invoke(transactionData.SaleData!.Value);
             }
-            
+
             return transactionData;
         }
 
         [MonoPInvokeCallback(typeof(Action))]
         private static void OnOnRampPurchase(
             int requestId,
-            double appliedFee, 
-            string? assetAddress, 
-            int assetDecimals, 
-            string assetName, 
-            string assetSymbol, 
-            string assetType, 
-            double assetExchangeRate, 
-            double baseRampFee, 
-            string createdAt, 
-            string cryptoAmount, 
-            string? endTime, 
+            double appliedFee,
+            string? assetAddress,
+            int assetDecimals,
+            string assetName,
+            string assetSymbol,
+            string assetType,
+            double assetExchangeRate,
+            double baseRampFee,
+            string createdAt,
+            string cryptoAmount,
+            string? endTime,
             // string? escrowAddress, not found in JS SDK
             // string? escrowDetailsHash, 
-            string fiatCurrency, 
-            double fiatValue, 
-            string? finalTxHash, 
-            string id, 
-            double networkFee, 
-            string paymentMethodType, 
-            string receiverAddress, 
-            string status, 
+            string fiatCurrency,
+            double fiatValue,
+            string? finalTxHash,
+            string id,
+            double networkFee,
+            string paymentMethodType,
+            string receiverAddress,
+            string status,
             string updatedAt)
         {
             var purchaseData = new OnRampPurchaseData
@@ -236,22 +236,22 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
                 tcs.SetResult(new RampTransactionData { SaleData = saleData });
                 return;
             }
-            
+
             throw new Web3Exception($"No handler found for sell request #{requestId}");
         }
 
-#region JS interop
+        #region JS interop
 
         // adding cs_ramp_ prefix because all methods in all *.jslib files share one namespace
         [DllImport("__Internal")]
         private static extern void cs_ramp_injectRamp();
-        
+
         [DllImport("__Internal")]
         private static extern void cs_ramp_setOnRampPurchaseCallback(OnOnRampPurchaseCallback callback);
-        
+
         [DllImport("__Internal")]
         private static extern void cs_ramp_setOffRampSaleCallback(OffRampSaleCallback callback);
-        
+
         [DllImport("__Internal")]
         private static extern void cs_ramp_showWidget(int requestId, string swapAsset, string offrampAsset, int swapAmount,
             string fiatCurrency, int fiatValue, string userAddress, string hostLogoUrl, string hostAppName,
@@ -259,7 +259,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
             string webhookStatusUrl, string hostApiKey, bool enableBuy, bool enableSell, string offrampWebHookV3Url,
             bool useSendCryptoCallback);
 
-#endregion
+        #endregion
     }
 }
 #endif
