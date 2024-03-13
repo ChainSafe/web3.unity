@@ -13,5 +13,7 @@ namespace ChainSafe.Gaming.Marketplace
         /// Gets or sets end point override.
         /// </summary>
         string EndpointOverride { get; set; }
+
+        string? MarketplaceContractAbi { get; set; }
     }
 }
