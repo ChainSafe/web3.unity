@@ -272,12 +272,14 @@ namespace ChainSafe.Gaming.Evm.Contracts
                 {
                     txReq.MaxPriorityFeePerGas = feeData.MaxFeePerGas.ToHexBigInteger();
                 }
+
                 txReq.GasLimit ??= await provider.EstimateGas(txReq);
             }
             catch (Exception e)
             {
-
+                Console.WriteLine(e);
             }
+
             return txReq;
         }
     }
