@@ -40,6 +40,6 @@ namespace ChainSafe.Gaming.Marketplace
         /// Gets or sets metadata.
         /// </summary>
         [JsonProperty(PropertyName = "metadata")]
-        public Dictionary<string, string> Metadata { get; set; }
+        public Dictionary<string, object> Metadata { get; set; }
     }
 }
