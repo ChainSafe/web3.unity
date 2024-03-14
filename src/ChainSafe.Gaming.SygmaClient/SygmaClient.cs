@@ -37,7 +37,15 @@ namespace ChainSafe.Gaming.SygmaClient
         private readonly IHttpClient httpClient;
         private readonly ILogWriter logWriter;
 
-        public SygmaClient(ILogWriter logWriter, IHttpClient httpClient, IChainConfig sourceChainConfig, IChainConfig destinationChainConfig, ISigner signer, IContractBuilder contractBuilder, IAnalyticsClient analyticsClient, IProjectConfig projectConfig)
+        public SygmaClient(
+            ILogWriter logWriter,
+            IHttpClient httpClient,
+            IChainConfig sourceChainConfig,
+            IChainConfig destinationChainConfig,
+            ISigner signer,
+            IContractBuilder contractBuilder,
+            IAnalyticsClient analyticsClient,
+            IProjectConfig projectConfig)
         {
             this.contractBuilder = contractBuilder;
             this.signer = signer;
@@ -45,7 +53,7 @@ namespace ChainSafe.Gaming.SygmaClient
             this.destinationChainConfig = destinationChainConfig;
             this.analyticsClient = analyticsClient;
             this.projectConfig = projectConfig;
-            clientConfiguration = new Config(httpClient, uint.Parse(sourceChainConfig.ChainId));
+            this.clientConfiguration = new Config(httpClient, uint.Parse(sourceChainConfig.ChainId));
             this.httpClient = httpClient;
             this.logWriter = logWriter;
         }
@@ -66,6 +74,8 @@ namespace ChainSafe.Gaming.SygmaClient
             return true;
         }
 
+        public Config ClientConfiguration() => this.clientConfiguration;
+
         public async Task<Transfer<NonFungible>> CreateNonFungibleTransfer(
             NonFungibleTransferType type,
             string sourceAddress,
@@ -79,11 +89,9 @@ namespace ChainSafe.Gaming.SygmaClient
             var transfer = await CreateTransfer<NonFungible>(
                 sourceAddress,
                 destinationChainId,
-                destinationAddress,
-                resourceId,
-                destinationProviderUrl);
+                resourceId);
 
-            transfer.Details = new NonFungible(type, sourceAddress, tokenId, amount);
+            transfer.Details = new NonFungible(type, destinationAddress, tokenId, amount);
             return transfer;
         }
 
@@ -98,9 +106,7 @@ namespace ChainSafe.Gaming.SygmaClient
             var transfer = await CreateTransfer<Fungible>(
                 sourceAddress,
                 destinationChainId,
-                destinationAddress,
-                resourceId,
-                destinationProviderUrl);
+                resourceId);
 
             transfer.Details = new Fungible(sourceAddress, amount);
             return transfer;
@@ -109,9 +115,7 @@ namespace ChainSafe.Gaming.SygmaClient
         private Task<Transfer<T>> CreateTransfer<T>(
             string sourceAddress,
             uint destinationChainId,
-            string destinationAddress,
-            string resourceId,
-            string destinationProviderUrl = "")
+            string resourceId)
             where T : TransferType
         {
             var transferParams = BaseTransferParams(destinationChainId, resourceId);
@@ -190,7 +194,7 @@ namespace ChainSafe.Gaming.SygmaClient
                     depositData = CreateERC1155DepositData(tokenId, recipientAddress);
                     break;
                 default:
-                    throw new Web3Exception("This non fungible transfer type is not supported");
+                    throw new Web3Exception("This non-fungible transfer type is not supported");
             }
 
             var bridge = new Bridge(contractBuilder, sourceDomainConfig.Bridge);

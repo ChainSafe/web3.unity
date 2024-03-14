@@ -38,5 +38,7 @@ namespace ChainSafe.Gaming.SygmaClient.Types
             where T : TransferType;
 
         public Task<TransferStatus> TransferStatusData(Environment environment, string transactionHash);
+
+        public Config ClientConfiguration();
     }
 }
