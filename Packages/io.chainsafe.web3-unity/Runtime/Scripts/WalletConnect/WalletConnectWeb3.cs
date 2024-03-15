@@ -2,6 +2,7 @@
 using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Unity;
 
@@ -25,6 +26,7 @@ namespace ChainSafe.Gaming.WalletConnect
             return new Web3Builder(projectConfig).Configure(services =>
             {
                 services.UseUnityEnvironment();
+                services.DisableAnalytics();
                 services.UseRpcProvider();
                 services.UseWalletConnect(wcConfig);
             }).LaunchAsync();
