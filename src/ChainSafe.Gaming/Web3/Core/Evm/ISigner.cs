@@ -16,11 +16,11 @@ namespace ChainSafe.Gaming.Evm.Signers
         /// <summary>
         /// Asynchronously retrieves the wallet address associated with the signer.
         /// </summary>
-        /// <returns>
-        /// A <see cref="Task"/> representing the asynchronous operation. The task result contains
-        /// the wallet address associated with the signer as a string.
-        /// </returns>
-        Task<string> GetAddress();
+        /// <value>
+        ///     A <see cref="Task"/> representing the asynchronous operation. The task result contains
+        ///     the wallet address associated with the signer as a string.
+        /// </value>
+        string PublicAddress { get; }
 
         /// <summary>
         /// Asynchronously signs a given message.
