@@ -186,7 +186,7 @@ namespace ChainSafe.Gaming.Wallets
     public class WebGLWallet : ISigner, ITransactionExecutor, ILifecycleParticipant
     {
         public string PublicAddress => throw new NotImplementedException();
-        
+
         public ValueTask WillStartAsync()
         {
             throw new Web3Exception(

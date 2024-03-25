@@ -14,11 +14,10 @@ namespace ChainSafe.Gaming.Evm.Signers
     public interface ISigner
     {
         /// <summary>
-        /// Asynchronously retrieves the wallet address associated with the signer.
+        /// Retrieves the wallet address associated with the signer.
         /// </summary>
         /// <value>
-        ///     A <see cref="Task"/> representing the asynchronous operation. The task result contains
-        ///     the wallet address associated with the signer as a string.
+        /// The wallet address associated with the signer as a string.
         /// </value>
         string PublicAddress { get; }
 
