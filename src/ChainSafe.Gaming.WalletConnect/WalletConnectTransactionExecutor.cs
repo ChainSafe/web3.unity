@@ -32,7 +32,7 @@ namespace ChainSafe.Gaming.WalletConnect
         {
             if (string.IsNullOrEmpty(transaction.From))
             {
-                transaction.From = await signer.GetAddress();
+                transaction.From = signer.PublicAddress;
             }
 
             var requestData = new EthSendTransaction(new TransactionModel

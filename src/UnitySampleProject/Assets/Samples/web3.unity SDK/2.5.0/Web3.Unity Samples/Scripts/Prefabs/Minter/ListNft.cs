@@ -30,13 +30,13 @@ namespace Web3Unity.Scripts.Prefabs.Minter
         public Text noListedItems;
         public Text playerAccount;
 
-        public async void Awake()
+        public void Awake()
         {
             description.text = "";
             tokenURI.text = "";
             isApproved.text = "";
             contractAddr.text = "";
-            account = await Web3Accessor.Web3.Signer.GetAddress();
+            account = Web3Accessor.Web3.Signer.PublicAddress;
         }
 
         // Start is called before the first frame update

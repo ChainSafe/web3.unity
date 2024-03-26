@@ -49,7 +49,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
 
         public async Task<OnRampPurchaseData> BuyCrypto(RampBuyWidgetSettings settings)
         {
-            var userAddress = settings.OverrideUserAddress ?? await signer.GetAddress();
+            var userAddress = settings.OverrideUserAddress ?? signer.PublicAddress;
             var hostLogoUrl = settings.OverrideHostLogoUrl ?? config.HostLogoUrl;
             var hostAppName = settings.OverrideHostAppName ?? config.HostAppName;
             var webhookStatusUrl = config.WebhookStatusUrl ?? settings.OverrideWebhookStatusUrl;
@@ -71,7 +71,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
 
         public async Task<OffRampSaleData> SellCrypto(RampSellWidgetSettings settings)
         {
-            var userAddress = settings.OverrideUserAddress ?? await signer.GetAddress();
+            var userAddress = settings.OverrideUserAddress ?? signer.PublicAddress;
             var hostLogoUrl = settings.OverrideHostLogoUrl ?? config.HostLogoUrl;
             var hostAppName = settings.OverrideHostAppName ?? config.HostAppName;
             var offrampWebhookV3Url = config.OfframpWebHookV3Url ?? settings.OverrideOfframpWebHookV3Url;
@@ -93,7 +93,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
 
         public async Task<RampTransactionData> BuyOrSellCrypto(RampBuyOrSellWidgetSettings settings)
         {
-            var userAddress = settings.OverrideUserAddress ?? await signer.GetAddress();
+            var userAddress = settings.OverrideUserAddress ?? signer.PublicAddress;
             var hostLogoUrl = settings.OverrideHostLogoUrl ?? config.HostLogoUrl;
             var hostAppName = settings.OverrideHostAppName ?? config.HostAppName;
             var webhookStatusUrl = config.WebhookStatusUrl ?? settings.OverrideWebhookStatusUrl;

@@ -171,7 +171,7 @@ public class GelatoSample
         {
             Target = target,
             Data = data,
-            User = await _web3.Signer.GetAddress(),
+            User = _web3.Signer.PublicAddress,
         });
 
         while (true)

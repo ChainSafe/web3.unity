@@ -47,7 +47,7 @@ namespace ChainSafe.Gaming.MetaMask
         {
             if (string.IsNullOrEmpty(transaction.From))
             {
-                transaction.From = await signer.GetAddress();
+                transaction.From = signer.PublicAddress;
             }
 
             TransactionInput transactionInput = new TransactionInput

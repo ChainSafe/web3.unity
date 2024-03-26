@@ -102,7 +102,7 @@ namespace ChainSafe.GamingSdk.Gelato
                     ChainId = int.Parse(chainConfig.ChainId),
                     Target = request.Target,
                     Data = request.Data,
-                    User = await signer.GetAddress(),
+                    User = signer.PublicAddress,
                     UserDeadline = request.UserDeadline,
                     UserNonce = request.UserNonce,
                     FeeToken = request.FeeToken,

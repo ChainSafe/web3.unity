@@ -261,7 +261,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
             var function = contractBuilder.GetFunctionBuilder(method);
             var txReq = overwrite ?? new TransactionRequest();
 
-            txReq.From ??= signer == null ? null : await signer.GetAddress();
+            txReq.From ??= signer?.PublicAddress;
             txReq.To ??= address;
             txReq.Data ??= function.GetData(parameters);
             try

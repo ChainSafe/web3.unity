@@ -5,7 +5,6 @@ using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.InProcessSigner;
 using ChainSafe.Gaming.InProcessTransactionExecutor;
 using ChainSafe.Gaming.InProcessTransactionExecutor.Unity;
-using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
@@ -40,6 +39,11 @@ namespace ChainSafe.GamingSdk.Web3Auth
             this.rpcProvider = rpcProvider;
             this.analyticsClient = analyticsClient;
         }
+
+        /// <summary>
+        /// Gets the blockchain address associated with this wallet.
+        /// </summary>
+        public string PublicAddress => signer.PublicAddress;
 
         /// <summary>
         /// Asynchronously prepares the Web3Auth wallet for operation, triggered when initializing the module in the dependency injection work flow.
@@ -97,12 +101,6 @@ namespace ChainSafe.GamingSdk.Web3Auth
                 logoutTcs.SetResult(null);
             }
         }
-
-        /// <summary>
-        /// Gets the blockchain address associated with this wallet.
-        /// </summary>
-        /// <returns>A <see cref="Task"/> that represents the asynchronous operation and returns the blockchain address as a string.</returns>
-        public Task<string> GetAddress() => signer.GetAddress();
 
         /// <summary>
         /// Signs a message using the private key associated with this wallet.

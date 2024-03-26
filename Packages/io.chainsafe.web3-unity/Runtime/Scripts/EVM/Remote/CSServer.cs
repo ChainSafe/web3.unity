@@ -3,10 +3,8 @@ using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.UnityPackage.Model;
 using ChainSafe.Gaming.Web3;
-using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
-using Scripts.EVM.Token;
 
 namespace Scripts.EVM.Remote
 {
