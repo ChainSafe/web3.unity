@@ -23,9 +23,9 @@ namespace ChainSafe.Gaming.Evm.Contracts
             // get team mate addresses
             {
                 var teamId = 256;
-                var teamMateAddresses = await contract.CallMany<string, BigInteger>("getTeamMateAddresses", teamId);
+                var teammateAddresses = await contract.CallMany<string, BigInteger>("getTeammateAddresses", teamId);
                 var blockedPlayerAddresses = new[] { "0x20934800uu9283798439873298dfu2f93" };
-                var allowedTeamMateAddresses = teamMateAddresses.Except(blockedPlayerAddresses).ToList();
+                var allowedTeammateAddresses = teammateAddresses.Except(blockedPlayerAddresses).ToList();
             }
 
             // block players
@@ -321,6 +321,15 @@ namespace ChainSafe.Gaming.Evm.Contracts
             return contract.Send(methodName, new object[] { in1, in2, in3 }, requestPrototype);
         }
 
+        /// <summary>
+        /// Asynchronously sends a transaction to a smart contract method that is expected to return a single value of a specified type.
+        /// </summary>
+        /// <typeparam name="TOut">The expected type of the return value from the smart contract method.</typeparam>
+        /// <param name="contract">The contract instance on which the transaction is sent.</param>
+        /// <param name="methodName">The name of the smart contract method to which the transaction is sent.</param>
+        /// <param name="requestPrototype">Optional. A prototype object for the transaction request. This can include transaction parameters such as gas limit, gas price, value, etc., if necessary.</param>
+        /// <returns>A task representing the asynchronous operation, with a result of the specified type <typeparamref name="TOut"/>, containing the return value from the smart contract method.</returns>
+        /// <exception cref="Web3Exception">Thrown if the response from the smart contract is empty, or if the response cannot be converted to the specified type <typeparamref name="TOut"/>.</exception>
         public static async Task<TOut> SendSingle<TOut>(
             this Contract contract,
             string methodName,
@@ -331,6 +340,17 @@ namespace ChainSafe.Gaming.Evm.Contracts
             return AssertAndConvertSingle<TOut>(response);
         }
 
+        /// <summary>
+        /// Asynchronously sends a transaction to a smart contract method that is expected to return a single value of a specified type.
+        /// </summary>
+        /// <typeparam name="TOut">The expected type of the return value from the smart contract method.</typeparam>
+        /// <typeparam name="TIn1">The type of the first input parameter.</typeparam>
+        /// <param name="contract">The contract instance on which the transaction is sent.</param>
+        /// <param name="methodName">The name of the smart contract method to which the transaction is sent.</param>
+        /// <param name="in1">The first input parameter.</param>
+        /// <param name="requestPrototype">Optional. A prototype object for the transaction request. This can include transaction parameters such as gas limit, gas price, value, etc., if necessary.</param>
+        /// <returns>A task representing the asynchronous operation, with a result of the specified type <typeparamref name="TOut"/>, containing the return value from the smart contract method.</returns>
+        /// <exception cref="Web3Exception">Thrown if the response from the smart contract is empty, or if the response cannot be converted to the specified type <typeparamref name="TOut"/>.</exception>
         public static async Task<TOut> SendSingle<TOut, TIn1>(
             this Contract contract,
             string methodName,
@@ -342,6 +362,19 @@ namespace ChainSafe.Gaming.Evm.Contracts
             return AssertAndConvertSingle<TOut>(response);
         }
 
+        /// <summary>
+        /// Asynchronously sends a transaction to a smart contract method that is expected to return a single value of a specified type.
+        /// </summary>
+        /// <typeparam name="TOut">The expected type of the return value from the smart contract method.</typeparam>
+        /// <typeparam name="TIn1">The type of the first input parameter.</typeparam>
+        /// <typeparam name="TIn2">The type of the second input parameter.</typeparam>
+        /// <param name="contract">The contract instance on which the transaction is sent.</param>
+        /// <param name="methodName">The name of the smart contract method to which the transaction is sent.</param>
+        /// <param name="in1">The first input parameter.</param>
+        /// <param name="in2">The second input parameter.</param>
+        /// <param name="requestPrototype">Optional. A prototype object for the transaction request. This can include transaction parameters such as gas limit, gas price, value, etc., if necessary.</param>
+        /// <returns>A task representing the asynchronous operation, with a result of the specified type <typeparamref name="TOut"/>, containing the return value from the smart contract method.</returns>
+        /// <exception cref="Web3Exception">Thrown if the response from the smart contract is empty, or if the response cannot be converted to the specified type <typeparamref name="TOut"/>.</exception>
         public static async Task<TOut> SendSingle<TOut, TIn1, TIn2>(
             this Contract contract,
             string methodName,
@@ -354,6 +387,21 @@ namespace ChainSafe.Gaming.Evm.Contracts
             return AssertAndConvertSingle<TOut>(response);
         }
 
+        /// <summary>
+        /// Asynchronously sends a transaction to a smart contract method that is expected to return a single value of a specified type.
+        /// </summary>
+        /// <typeparam name="TOut">The expected type of the return value from the smart contract method.</typeparam>
+        /// <typeparam name="TIn1">The type of the first input parameter.</typeparam>
+        /// <typeparam name="TIn2">The type of the second input parameter.</typeparam>
+        /// <typeparam name="TIn3">The type of the third input parameter.</typeparam>
+        /// <param name="contract">The contract instance on which the transaction is sent.</param>
+        /// <param name="methodName">The name of the smart contract method to which the transaction is sent.</param>
+        /// <param name="in1">The first input parameter.</param>
+        /// <param name="in2">The second input parameter.</param>
+        /// <param name="in3">The third input parameter.</param>
+        /// <param name="requestPrototype">Optional. A prototype object for the transaction request. This can include transaction parameters such as gas limit, gas price, value, etc., if necessary.</param>
+        /// <returns>A task representing the asynchronous operation, with a result of the specified type <typeparamref name="TOut"/>, containing the return value from the smart contract method.</returns>
+        /// <exception cref="Web3Exception">Thrown if the response from the smart contract is empty, or if the response cannot be converted to the specified type <typeparamref name="TOut"/>.</exception>
         public static async Task<TOut> SendSingle<TOut, TIn1, TIn2, TIn3>(
             this Contract contract,
             string methodName,
@@ -367,6 +415,16 @@ namespace ChainSafe.Gaming.Evm.Contracts
             return AssertAndConvertSingle<TOut>(response);
         }
 
+        /// <summary>
+        /// Asynchronously sends a transaction to a smart contract method that is expected to return multiple values of a specified type.
+        /// This method is suitable for interacting with smart contract methods designed to return an array or list of elements, allowing for the retrieval of multiple items in a single transaction.
+        /// </summary>
+        /// <typeparam name="TOut">The type of the elements expected to be returned by the smart contract method. The response will be cast to an enumerable collection of this type.</typeparam>
+        /// <param name="contract">The contract instance on which the transaction is sent.</param>
+        /// <param name="methodName">The name of the smart contract method to which the transaction is sent.</param>
+        /// <param name="requestPrototype">Optional. A prototype object for the transaction request. This can be used to specify additional parameters for the transaction such as gas limit, gas price, value, etc., if required.</param>
+        /// <returns>A task representing the asynchronous operation, with a result of an <see cref="IEnumerable{TOut}"/>, containing the items returned by the smart contract method.</returns>
+        /// <exception cref="Web3Exception">Thrown if the response from the smart contract is empty or if any of the items in the response cannot be converted to the specified type <typeparamref name="TOut"/>, indicating a potential type mismatch.</exception>
         public static async Task<IEnumerable<TOut>> SendMany<TOut>(
             this Contract contract,
             string methodName,
@@ -378,6 +436,18 @@ namespace ChainSafe.Gaming.Evm.Contracts
             return response.Cast<TOut>();
         }
 
+        /// <summary>
+        /// Asynchronously sends a transaction to a smart contract method that is expected to return multiple values of a specified type.
+        /// This method is suitable for interacting with smart contract methods designed to return an array or list of elements, allowing for the retrieval of multiple items in a single transaction.
+        /// </summary>
+        /// <typeparam name="TOut">The type of the elements expected to be returned by the smart contract method. The response will be cast to an enumerable collection of this type.</typeparam>
+        /// <typeparam name="TIn1">The type of the first input parameter.</typeparam>
+        /// <param name="contract">The contract instance on which the transaction is sent.</param>
+        /// <param name="methodName">The name of the smart contract method to which the transaction is sent.</param>
+        /// <param name="in1">The first input parameter.</param>
+        /// <param name="requestPrototype">Optional. A prototype object for the transaction request. This can be used to specify additional parameters for the transaction such as gas limit, gas price, value, etc., if required.</param>
+        /// <returns>A task representing the asynchronous operation, with a result of an <see cref="IEnumerable{TOut}"/>, containing the items returned by the smart contract method.</returns>
+        /// <exception cref="Web3Exception">Thrown if the response from the smart contract is empty or if any of the items in the response cannot be converted to the specified type <typeparamref name="TOut"/>, indicating a potential type mismatch.</exception>
         public static async Task<IEnumerable<TOut>> SendMany<TOut, TIn1>(
             this Contract contract,
             string methodName,
@@ -390,6 +460,20 @@ namespace ChainSafe.Gaming.Evm.Contracts
             return response.Cast<TOut>();
         }
 
+        /// <summary>
+        /// Asynchronously sends a transaction to a smart contract method that is expected to return multiple values of a specified type.
+        /// This method is suitable for interacting with smart contract methods designed to return an array or list of elements, allowing for the retrieval of multiple items in a single transaction.
+        /// </summary>
+        /// <typeparam name="TOut">The type of the elements expected to be returned by the smart contract method. The response will be cast to an enumerable collection of this type.</typeparam>
+        /// <typeparam name="TIn1">The type of the first input parameter.</typeparam>
+        /// <typeparam name="TIn2">The type of the second input parameter.</typeparam>
+        /// <param name="contract">The contract instance on which the transaction is sent.</param>
+        /// <param name="methodName">The name of the smart contract method to which the transaction is sent.</param>
+        /// <param name="in1">The first input parameter.</param>
+        /// <param name="in2">The second input parameter.</param>
+        /// <param name="requestPrototype">Optional. A prototype object for the transaction request. This can be used to specify additional parameters for the transaction such as gas limit, gas price, value, etc., if required.</param>
+        /// <returns>A task representing the asynchronous operation, with a result of an <see cref="IEnumerable{TOut}"/>, containing the items returned by the smart contract method.</returns>
+        /// <exception cref="Web3Exception">Thrown if the response from the smart contract is empty or if any of the items in the response cannot be converted to the specified type <typeparamref name="TOut"/>, indicating a potential type mismatch.</exception>
         public static async Task<IEnumerable<TOut>> SendMany<TOut, TIn1, TIn2>(
             this Contract contract,
             string methodName,
@@ -403,6 +487,22 @@ namespace ChainSafe.Gaming.Evm.Contracts
             return response.Cast<TOut>();
         }
 
+        /// <summary>
+        /// Asynchronously sends a transaction to a smart contract method that is expected to return multiple values of a specified type.
+        /// This method is suitable for interacting with smart contract methods designed to return an array or list of elements, allowing for the retrieval of multiple items in a single transaction.
+        /// </summary>
+        /// <typeparam name="TOut">The type of the elements expected to be returned by the smart contract method. The response will be cast to an enumerable collection of this type.</typeparam>
+        /// <typeparam name="TIn1">The type of the first input parameter.</typeparam>
+        /// <typeparam name="TIn2">The type of the second input parameter.</typeparam>
+        /// <typeparam name="TIn3">The type of the third input parameter.</typeparam>
+        /// <param name="contract">The contract instance on which the transaction is sent.</param>
+        /// <param name="methodName">The name of the smart contract method to which the transaction is sent.</param>
+        /// <param name="in1">The first input parameter.</param>
+        /// <param name="in2">The second input parameter.</param>
+        /// <param name="in3">The third input parameter.</param>
+        /// <param name="requestPrototype">Optional. A prototype object for the transaction request. This can be used to specify additional parameters for the transaction such as gas limit, gas price, value, etc., if required.</param>
+        /// <returns>A task representing the asynchronous operation, with a result of an <see cref="IEnumerable{TOut}"/>, containing the items returned by the smart contract method.</returns>
+        /// <exception cref="Web3Exception">Thrown if the response from the smart contract is empty or if any of the items in the response cannot be converted to the specified type <typeparamref name="TOut"/>, indicating a potential type mismatch.</exception>
         public static async Task<IEnumerable<TOut>> SendMany<TOut, TIn1, TIn2, TIn3>(
             this Contract contract,
             string methodName,
