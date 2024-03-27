@@ -1,7 +1,8 @@
 name: Duplicate Packages Samples Workflow
 
 on:
-  workflow_call:
+  pull_request:
+    branches: [ main ]
 
 jobs:
   duplicate:
@@ -11,6 +12,7 @@ jobs:
     - uses: actions/checkout@v4
       with:
         ref: ${{ github.event.pull_request.head.ref }}
+        repository: ${{ github.event.pull_request.head.repo.full_name }}
     - name: Duplicate Web3 Unity Samples
       run: |
         git config user.email $git_email
@@ -20,13 +22,15 @@ jobs:
         export DESTINATION_DIRECTORY=
         export DESTINATION_PATH=
         
-        export DUPLICATE_SAMPLE_VARS=${{ vars.DUPLICATE_SAMPLE_VARS }}
+        export DUPLICATE_SAMPLE_VARS=("src/UnitySampleProject/Assets/Samples/web3.unity SDK:Web3.Unity Samples:Packages/io.chainsafe.web3-unity/Samples~/Web3.Unity/" "src/UnitySampleProject/Assets/Samples/web3.unity SDK Web3Auth:Web3.Unity Web3Auth Samples:Packages/io.chainsafe.web3-unity.web3auth/Samples~/Web3.Unity Web3Auth/" "src/UnitySampleProject/Assets/Samples/web3.unity SDK Lootboxes:Chainlink Lootbox Sample:Packages/io.chainsafe.web3-unity.lootboxes/Samples~/Chainlink Lootbox Samples/")
         
         for entry in "${DUPLICATE_SAMPLE_VARS[@]}"
         do
           IFS=':' read -ra dirs <<< "$entry"
           SOURCE_PATH=${dirs[0]}
           DESTINATION_DIRECTORY=${dirs[1]}
+
+          echo "logs ${{ vars.DUPLICATE_SAMPLE_VARS }} ${dirs[0]} ${dirs[1]} ${dirs[2]}"
           
           SOURCE_PATH="${GITHUB_WORKSPACE}/$SOURCE_PATH/$(ls "$SOURCE_PATH" | head -n 1)/$DESTINATION_DIRECTORY"
         
