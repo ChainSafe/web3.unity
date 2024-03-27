@@ -36,7 +36,7 @@ public static IWeb3ServiceCollection UseJsonRpcProvider(this IWeb3ServiceCollect
     serviceCollection.AssertServiceNotBound<IEvmProvider>();
     
     // register Service with IEvmProvider as a Contract Type
-    // and JsonRpcProvider as Implmentation Type
+    // and JsonRpcProvider as Implementation Type
     serviceCollection.AddSingleton<IEvmProvider, JsonRpcProvider>();
     return serviceCollection;
 }
