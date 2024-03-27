@@ -7,7 +7,7 @@ on:
 jobs:
   duplicate_samples:
     name: Duplicate Samples
-    uses: ChainSafe/web3.unity/.github/workflows/duplicate_samples.yml@test-fork
+    uses: rob1997/web3.unity/.github/workflows/duplicate_samples.yml@test-fork
   publish_dependencies:
     name: Publish Dependencies
     uses: ChainSafe/web3.unity/.github/workflows/publish_dependencies.yml@main
