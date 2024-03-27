@@ -22,7 +22,7 @@ jobs:
         export DESTINATION_DIRECTORY=
         export DESTINATION_PATH=
         
-        export DUPLICATE_SAMPLE_VARS=${{ vars.DUPLICATE_SAMPLE_VARS }}
+        export DUPLICATE_SAMPLE_VARS=("src/UnitySampleProject/Assets/Samples/web3.unity SDK:Web3.Unity Samples:Packages/io.chainsafe.web3-unity/Samples~/Web3.Unity/" "src/UnitySampleProject/Assets/Samples/web3.unity SDK Web3Auth:Web3.Unity Web3Auth Samples:Packages/io.chainsafe.web3-unity.web3auth/Samples~/Web3.Unity Web3Auth/" "src/UnitySampleProject/Assets/Samples/web3.unity SDK Lootboxes:Chainlink Lootbox Sample:Packages/io.chainsafe.web3-unity.lootboxes/Samples~/Chainlink Lootbox Samples/")
         
         for entry in "${DUPLICATE_SAMPLE_VARS[@]}"
         do
