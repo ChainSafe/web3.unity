@@ -30,7 +30,7 @@ jobs:
           SOURCE_PATH=${dirs[0]}
           DESTINATION_DIRECTORY=${dirs[1]}
 
-          echo "${dirs[0]} ${dirs[1]} ${dirs[2]}"
+          echo "logs ${{ vars.DUPLICATE_SAMPLE_VARS }} ${dirs[0]} ${dirs[1]} ${dirs[2]}"
           
           SOURCE_PATH="${GITHUB_WORKSPACE}/$SOURCE_PATH/$(ls "$SOURCE_PATH" | head -n 1)/$DESTINATION_DIRECTORY"
         
