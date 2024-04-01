@@ -2,7 +2,7 @@ name: Check and Commit
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ rob/contribution-format-fix ]
 
 jobs:
   check_and_commit:
