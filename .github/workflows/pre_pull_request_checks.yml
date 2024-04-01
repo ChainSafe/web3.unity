@@ -2,7 +2,7 @@ name: Merge Checks
 
 on:
   pull_request:
-    branches: [ main, release ]
+    branches: [ dev, main ]
     types:
       - labeled
       - ready_for_review
@@ -18,7 +18,7 @@ jobs:
     needs: [ web3_tests ]
   unity_tests:
     name: Unity Tests
-    if: ${{ github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name }}
+    if: ${{ github.event.pull_request.head.ref == main }}
     uses: ChainSafe/web3.unity/.github/workflows/unity_tests.yml@main
     needs: [ analyze_code ]
     secrets: inherit
