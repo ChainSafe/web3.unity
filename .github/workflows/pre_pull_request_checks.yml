@@ -2,7 +2,7 @@ name: Merge Checks
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [ main, release ]
     types:
       - labeled
       - ready_for_review
@@ -12,12 +12,13 @@ jobs:
     name: Web3 Tests
     if: ${{ github.event.action == 'ready_for_review' || github.event.label.name == 'ready-to-merge'}}
     uses: ChainSafe/web3.unity/.github/workflows/test.yaml@main
-  unity_tests:
-    name: Unity Tests
-    uses: ChainSafe/web3.unity/.github/workflows/unity_tests.yml@main
-    needs: [web3_tests]
-    secrets: inherit
   analyze_code:
     name: Analyze Code
     uses: ChainSafe/web3.unity/.github/workflows/codeql.yml@main
-    needs: [unity_tests]
+    needs: [ web3_tests ]
+  unity_tests:
+    name: Unity Tests
+    if: ${{ github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name }}
+    uses: ChainSafe/web3.unity/.github/workflows/unity_tests.yml@main
+    needs: [ analyze_code ]
+    secrets: inherit

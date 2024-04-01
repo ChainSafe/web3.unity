@@ -2,13 +2,19 @@ name: Auto Commits
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [ release ]
 
 jobs:
   duplicate_samples:
     name: Duplicate Samples
+    if: ${{ github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name }}
     uses: ChainSafe/web3.unity/.github/workflows/duplicate_samples.yml@main
   publish_dependencies:
     name: Publish Dependencies
     uses: ChainSafe/web3.unity/.github/workflows/publish_dependencies.yml@main
     needs: [duplicate_samples]
+  unity_tests:
+    name: Unity Tests
+    uses: ChainSafe/web3.unity/.github/workflows/unity_tests.yml@main
+    needs: [ publish_dependencies ]
+    secrets: inherit
