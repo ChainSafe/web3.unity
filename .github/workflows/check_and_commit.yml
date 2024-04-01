@@ -5,8 +5,8 @@ on:
     branches: [ rob/contribution-format-fix ]
 
 jobs:
-  check_and_commit:
-    name: Check and Commit
+  duplicate_samples_and_publish_dependencies:
+    name: Duplicate Samples And Publish Dependencies
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -91,8 +91,16 @@ jobs:
 
           git add "$PACKAGE_LIB_PATH." -f
         done
-    - uses: ChainSafe/web3.unity/.github/workflows/unity_tests.yml@main
-      secrets: inherit
+  unity_tests:
+    name: Unity Tests
+    uses: ChainSafe/web3.unity/.github/workflows/unity_tests.yml@main
+    needs: [ duplicate_samples_and_publish_dependencies ]
+    secrets: inherit
+  commit_and_push_changes:
+    name: Commit And Push Changes
+    needs: [ unity_tests ]
+    runs-on: ubuntu-latest
+    steps:
     - name: Commit and Push changes
       run: |
         git diff-index --cached --quiet HEAD || git commit -m "Auto-duplicate Packages Samples"
