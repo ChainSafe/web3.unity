@@ -3,11 +3,20 @@ name: Check and Commit
 on:
   push:
     branches: [ rob/contribution-format-fix ]
+  workflow_call:
 
 jobs:
   duplicate_samples_and_publish_dependencies:
     name: Duplicate Samples And Publish Dependencies
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        projectPath:
+          - src/UnitySampleProject
+        testMode:
+          - PlayMode
+          - EditMode
     steps:
     - uses: actions/checkout@v4
       with:
@@ -91,7 +100,35 @@ jobs:
 
           git add "$PACKAGE_LIB_PATH." -f
         done
+    - uses: actions/cache@v2
+      with:
+        path: ${{ matrix.projectPath }}/Library
+        key: Library-${{ matrix.projectPath }}
+        restore-keys: |
+          Library-
+    - uses: game-ci/unity-test-runner@v3
+      id: tests
+      env:
+        UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+      with:
+        projectPath: ${{ matrix.projectPath }}
+        testMode: ${{ matrix.testMode }}
+        artifactsPath: ${{ matrix.testMode }}-artifacts
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
+        checkName: ${{ matrix.testMode }} Test Results
+        coverageOptions: 'generateAdditionalMetrics;generateHtmlReport;generateBadgeReport;'
+    - uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: Test results for ${{ matrix.testMode }}
+        path: ${{ steps.tests.outputs.artifactsPath }}
+    - uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: Coverage results for ${{ matrix.testMode }}
+        path: ${{ steps.tests.outputs.coveragePath }}
     - name: Commit and Push changes
+      if: ${{ github.ref_name == 'rob/contribution-format-fix' }}
       run: |
         git diff-index --cached --quiet HEAD || git commit -m 'Auto Commit
         - Duplicate Packages Samples
