@@ -2,7 +2,9 @@ name: Merge Checks
 
 on:
   pull_request:
-    branches: [ dev, main ]
+    branches:
+      - main
+      - dev
     types:
       - labeled
       - ready_for_review
