@@ -53,7 +53,7 @@ namespace ChainSafe.Gaming.SygmaClient
             this.destinationChainConfig = destinationChainConfig;
             this.analyticsClient = analyticsClient;
             this.projectConfig = projectConfig;
-            this.clientConfiguration = new Config(httpClient, uint.Parse(sourceChainConfig.ChainId));
+            this.clientConfiguration = new Config(httpClient, uint.Parse(sourceChainConfig.ChainId), logWriter);
             this.httpClient = httpClient;
             this.logWriter = logWriter;
         }
@@ -70,6 +70,7 @@ namespace ChainSafe.Gaming.SygmaClient
 
         public bool Initialize(Environment environment)
         {
+            logWriter.Log("Initializing Sygma client...");
             this.clientConfiguration.Fetch(environment);
             return true;
         }
