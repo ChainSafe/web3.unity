@@ -7,16 +7,18 @@ namespace ChainSafe.Gaming.SygmaClient
 {
     public class Config
     {
-        private IHttpClient httpClient;
+        private readonly ILogWriter logWriter;
+        private readonly IHttpClient httpClient;
 
         private uint chainId;
 
         private Environment environment;
 
-        public Config(IHttpClient http, uint chain)
+        public Config(IHttpClient http, uint chain, ILogWriter logWriter)
         {
             chainId = chain;
             httpClient = http;
+            this.logWriter = logWriter;
         }
 
         public RawConfig EnvironmentConfig { get; set; }
@@ -41,6 +43,9 @@ namespace ChainSafe.Gaming.SygmaClient
                 Environment.Testnet => ConfigUrl.Testnet,
                 _ => ConfigUrl.Mainnet
             };
+
+            var result = await httpClient.GetRaw(configUrl);
+            logWriter.Log(result.Response);
 
             EnvironmentConfig = (await httpClient.Get<RawConfig>(configUrl)).AssertSuccess();
         }

@@ -2598,7 +2598,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 37375165}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.35242558
+  m_Size: 0.40298143
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2651,8 +2651,9 @@ GameObject:
   m_Component:
   - component: {fileID: 389923745}
   - component: {fileID: 389923747}
+  - component: {fileID: 389923748}
   m_Layer: 5
-  m_Name: Category - Ramp (1)
+  m_Name: Category - Sygma
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2701,6 +2702,22 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &389923748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 389923744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e045c8abdfda6b4e9cfe97128a5a6a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destinationChainId: 338
+  resourceId: 0x0000000000000000000000000000000000000000000000000000000000000400
+  sygmaEnvironment: 2
+  button: {fileID: 1026620238}
 --- !u!1001 &413551942
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6399,7 +6416,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8775736491206355084, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_Name
-      value: Button - On Ramp
+      value: Button - Sygma
       objectReference: {fileID: 0}
     - target: {fileID: 8781309615174179339, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_text
@@ -6440,6 +6457,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4764608378852082086, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
   m_PrefabInstance: {fileID: 1026620236}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1026620238 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7324590823460843055, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
+  m_PrefabInstance: {fileID: 1026620236}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1031869231
 PrefabInstance:
   m_ObjectHideFlags: 0

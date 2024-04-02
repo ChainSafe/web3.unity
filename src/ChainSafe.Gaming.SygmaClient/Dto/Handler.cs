@@ -16,6 +16,12 @@ namespace ChainSafe.Gaming.SygmaClient.Dto
 
         [EnumMember(Value = "permissionlessGeneric")]
         PermissionlessGeneric,
+        [EnumMember(Value = "erc20")]
+        Erc20,
+        [EnumMember(Value = "erc721")]
+        Erc721,
+        [EnumMember(Value = "erc1155")]
+        Erc1155,
     }
 
     public class Handler
