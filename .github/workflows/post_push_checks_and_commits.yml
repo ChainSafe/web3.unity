@@ -1,0 +1,11 @@
+name: Post Push Checks and Commits
+
+on:
+  push:
+    branches: [ rob/contribution-format-fix ]
+
+jobs:
+  check_and_commit:
+    name: Check and Commit
+    uses: ChainSafe/web3.unity/.github/workflows/check_and_commit.yaml@rob/contribution-format-fix
+    secrets: inherit

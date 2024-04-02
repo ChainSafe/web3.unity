@@ -1,8 +1,6 @@
 name: Check and Commit
 
 on:
-  push:
-    branches: [ rob/contribution-format-fix ]
   workflow_call:
 
 jobs:
