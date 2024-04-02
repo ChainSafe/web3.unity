@@ -93,5 +93,6 @@ jobs:
         done
     - name: Commit and Push changes
       run: |
-        git diff-index --cached --quiet HEAD || git commit -m "Auto Commit <br/> - Duplicate Packages Samples - Publish DLL Dependencies"
+        git diff-index --cached --quiet HEAD || git commit -m 'Auto Commit
+        - Duplicate Packages Samples - Publish DLL Dependencies'
         git push
