@@ -22,19 +22,19 @@ namespace ChainSafe.Gaming.SygmaClient.Contracts
             this.contract = cb.Build(FeeHandlerAbi, address);
         }
 
-        public Task<EvmFee> CalculateBasicFee(
+        public async Task<EvmFee> CalculateBasicFee(
             string sender,
             uint fromDomainID,
             uint destinationDomainID,
-            string resourceID)
+            HexBigInteger resourceID)
         {
-            var result = this.contract.Call(MethodCalculateFee, new object[] { sender, fromDomainID, destinationDomainID, resourceID }).Result;
+            var result = await this.contract.Call(MethodCalculateFee, new object[] { sender, fromDomainID, destinationDomainID, resourceID.ToHexByteArray() });
             var fee = new EvmFee(this.address, FeeHandlerType.Basic)
             {
                 Fee = new HexBigInteger(result[0].ToString()),
                 FeeData = result[1] as string,
             };
-            return Task.FromResult(fee);
+            return fee;
         }
     }
 }
