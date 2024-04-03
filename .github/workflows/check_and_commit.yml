@@ -22,10 +22,8 @@ jobs:
         ssh-key: ${{ secrets.DEPLOY_KEY }}
     - name: Configure Git
       run: |
-        git config user.email $git_email
-        git config user.name "${{ github.actor }}"
-      env:
-        git_email: "${{ github.actor }}@users.noreply.github.com"
+        git config --local user.name github-actions
+        git config --local user.email github-actions@github.com
     - name: Duplicate Web3 Unity Samples
       run: |
         export SOURCE_PATH=
