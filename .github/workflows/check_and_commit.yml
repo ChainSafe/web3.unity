@@ -131,4 +131,4 @@ jobs:
         git diff-index --cached --quiet HEAD || git commit -m 'Auto Commit
         - Duplicate Packages Samples
         - Publish DLL Dependencies'
-        git push
+        git push -f
