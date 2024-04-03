@@ -20,7 +20,7 @@ jobs:
     needs: [ web3_tests ]
   unity_tests:
     name: Unity Tests
-    if: ${{ github.event.pull_request.head.ref == 'main' }}
+    if: ${{ github.base_ref == 'main' }}
     uses: ChainSafe/web3.unity/.github/workflows/check_and_commit.yml@main
     needs: [ analyze_code ]
     secrets: inherit
