@@ -2,6 +2,7 @@ using System.IO;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.SygmaClient.Types;
+using Nethereum.Hex.HexTypes;
 
 namespace ChainSafe.Gaming.SygmaClient.Contracts
 {
@@ -18,12 +19,12 @@ namespace ChainSafe.Gaming.SygmaClient.Contracts
             this.contract = cb.Build(FeeHandlerAbi, address);
         }
 
-        public Task<string> DomainResourceIDToFeeHandlerAddress(
+        public async Task<string> DomainResourceIDToFeeHandlerAddress(
             uint domainID,
-            string resourceID)
+            HexBigInteger resourceID)
         {
-            var result = this.contract.Call(MethodDomainResourceIDToFeeHandlerAddress, new object[] { domainID, resourceID });
-            return Task.FromResult(result.ToString());
+            var result = await this.contract.Call(MethodDomainResourceIDToFeeHandlerAddress, new object[] { domainID, resourceID.ToHexByteArray() });
+            return result[0].ToString();
         }
     }
 }

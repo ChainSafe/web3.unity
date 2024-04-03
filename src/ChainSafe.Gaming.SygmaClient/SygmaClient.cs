@@ -119,7 +119,7 @@ namespace ChainSafe.Gaming.SygmaClient
             string resourceId)
             where T : TransferType
         {
-            var transferParams = BaseTransferParams(destinationChainId, resourceId);
+            var transferParams = BaseTransferParams(destinationChainId, new HexBigInteger(resourceId));
             var transfer = new Transfer<T>(transferParams.DestinationDomain, transferParams.SourceDomain, sourceAddress)
             {
                 Resource = transferParams.Resource,
@@ -168,7 +168,7 @@ namespace ChainSafe.Gaming.SygmaClient
                         nonFungible.Details.Amount,
                         nonFungible.Details.Recipient,
                         nonFungible.To.Id.ToString(),
-                        transfer.Resource.ResourceId,
+                        new HexBigInteger(transfer.Resource.ResourceId),
                         fee);
                 default:
                     throw new NotImplementedException($"This type {transfer.Resource.Type} is not implemented yet");
@@ -181,7 +181,7 @@ namespace ChainSafe.Gaming.SygmaClient
             HexBigInteger amount,
             string recipientAddress,
             string domainId,
-            string resourceId,
+            HexBigInteger resourceId,
             EvmFee feeData)
         {
             var sourceDomainConfig = clientConfiguration.SourceDomainConfig();
@@ -206,7 +206,7 @@ namespace ChainSafe.Gaming.SygmaClient
                 new object[]
                 {
                 domainId,
-                resourceId,
+                resourceId.ToHexByteArray(),
                 depositData,
                 feeData.FeeData ?? "0x0",
                 });
@@ -290,11 +290,11 @@ namespace ChainSafe.Gaming.SygmaClient
             return Enum.Parse<TransferStatus>(jArray[0]["status"].ToString(), true);
         }
 
-        private async Task<EvmFee> CalculateBasicFee<T>(Transfer<T> transfer, EvmFee feeData)
+        private Task<EvmFee> CalculateBasicFee<T>(Transfer<T> transfer, EvmFee feeData)
             where T : TransferType
         {
             var basicFeeHandler = new BasicFeeHandler(this.contractBuilder, feeData.HandlerAddress);
-            return await basicFeeHandler.CalculateBasicFee(transfer.Sender, transfer.From.Id, transfer.To.Id, transfer.Resource.ResourceId);
+            return basicFeeHandler.CalculateBasicFee(transfer.Sender, transfer.From.Id, transfer.To.Id, new HexBigInteger(transfer.Resource.ResourceId));
         }
 
         private async Task<EvmFee> GetFeeInformation<T>(Transfer<T> transfer)
@@ -302,17 +302,19 @@ namespace ChainSafe.Gaming.SygmaClient
         {
             var domainConfig = this.clientConfiguration.SourceDomainConfig();
             var feeRouter = new FeeHandlerRouter(this.contractBuilder, domainConfig.FeeRouter);
-            var feeHandlerAddress = await feeRouter.DomainResourceIDToFeeHandlerAddress(transfer.To.Id, transfer.Resource.ResourceId);
+            logWriter.Log("Domain before");
+            var feeHandlerAddress = await feeRouter.DomainResourceIDToFeeHandlerAddress(transfer.To.Id, new HexBigInteger(transfer.Resource.ResourceId));
+            logWriter.Log("Domain aftera");
             var feeHandlerConfig = domainConfig.FeeHandlers.Find(feeHandler => feeHandler.Address.Equals(feeHandlerAddress, StringComparison.OrdinalIgnoreCase));
             if (feeHandlerConfig == null)
             {
                 throw new Exception("Fee handler not found");
             }
 
-            return await Task.FromResult(new EvmFee(feeHandlerAddress, feeHandlerConfig.Type));
+            return new EvmFee(feeHandlerAddress, feeHandlerConfig.Type);
         }
 
-        private BaseTransferParams BaseTransferParams(uint destinationChainId, string resourceId)
+        private BaseTransferParams BaseTransferParams(uint destinationChainId, HexBigInteger resourceId)
         {
             var sourceDomain = this.clientConfiguration.SourceDomainConfig();
             if (sourceDomain == null)
@@ -327,7 +329,7 @@ namespace ChainSafe.Gaming.SygmaClient
                 throw new Exception("Config for the provided destination domain is not setup");
             }
 
-            var resource = sourceDomain.Resources.Find(r => r.ResourceId.Equals(resourceId, StringComparison.OrdinalIgnoreCase));
+            var resource = sourceDomain.Resources.Find(r => r.ResourceId.Equals(resourceId.HexValue, StringComparison.OrdinalIgnoreCase));
             if (resource == null)
             {
                 throw new Exception("Config for the provided resource is not setup");
