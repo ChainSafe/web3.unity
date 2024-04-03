@@ -21,6 +21,6 @@ jobs:
   unity_tests:
     name: Unity Tests
     if: ${{ github.base_ref == 'main' }}
-    uses: ChainSafe/web3.unity/.github/workflows/check_and_commit.yml@main
+    uses: ChainSafe/web3.unity/.github/workflows/check_and_commit.yml@dev
     needs: [ analyze_code ]
     secrets: inherit
