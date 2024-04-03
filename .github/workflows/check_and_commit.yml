@@ -19,14 +19,12 @@ jobs:
       with:
         lfs: true
         ssh-key: ${{ secrets.DEPLOY_KEY }}
-    - name: Set up SSH keys
-      uses: webfactory/ssh-agent@v0.5.3
-      with:
-        ssh-private-key: ${{ secrets.DEPLOY_KEY }}
     - name: Configure Git
       run: |
-        git config user.name github-actions
-        git config user.email github-actions@github.com
+        git config user.email $git_email
+        git config user.name "${{ github.actor }}"
+      env:
+        git_email: "${{ github.actor }}@users.noreply.github.com"
     - name: Duplicate Web3 Unity Samples
       run: |
         export SOURCE_PATH=
