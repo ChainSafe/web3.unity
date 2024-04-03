@@ -7,6 +7,6 @@ on:
 jobs:
   check_and_commit:
     name: Check and Commit
-    if: ${{ git log -n 1 --pretty=format:%ae != 'github-actions@github.com' }}
+    if: ${{ "$(git log -n 1 --pretty=format:%ae)" != "github-actions@github.com" }}
     uses: ChainSafe/web3.unity/.github/workflows/check_and_commit.yml@dev
     secrets: inherit
