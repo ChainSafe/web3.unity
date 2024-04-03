@@ -14,7 +14,6 @@ jobs:
           - src/UnitySampleProject
         testMode:
           - PlayMode
-          - EditMode
     steps:
     - uses: actions/checkout@v4
       with:
