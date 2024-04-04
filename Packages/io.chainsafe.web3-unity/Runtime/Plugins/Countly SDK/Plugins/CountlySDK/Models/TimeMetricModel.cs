@@ -39,16 +39,13 @@ namespace Plugins.CountlySDK.Models
             //get current timestamp in miliseconds
             DateTimeOffset currentMilliSecTimeStamp = DateTimeOffset.UtcNow;
 
-            if (requestedDatetime.HasValue)
-            {
+            if (requestedDatetime.HasValue) {
                 currentMilliSecTimeStamp = requestedDatetime.Value;
 
                 _lastMilliSecTimeStamp = _lastMilliSecTimeStamp >= currentMilliSecTimeStamp
                                         ? _lastMilliSecTimeStamp.AddMilliseconds(1)
                                         : _lastMilliSecTimeStamp = currentMilliSecTimeStamp;
-            }
-            else
-            {
+            } else {
                 _lastMilliSecTimeStamp = currentMilliSecTimeStamp;
             }
 
@@ -59,8 +56,7 @@ namespace Plugins.CountlySDK.Models
         {
             DateTime currentDateTime = DateTime.Now;
             TimeMetricModel model =
-                new TimeMetricModel
-                {
+                new TimeMetricModel {
                     Hour = currentDateTime.TimeOfDay.Hours,
                     DayOfWeek = (int)currentDateTime.DayOfWeek,
                     Timezone = TimeZone.CurrentTimeZone.GetUtcOffset(currentDateTime).TotalMinutes.ToString(CultureInfo.InvariantCulture)

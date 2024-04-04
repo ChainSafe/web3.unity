@@ -85,7 +85,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
             parameters ??= Array.Empty<object>();
 
-            var txReq = await PrepareTransactionRequest(method, parameters, overwrite);
+            var txReq = await PrepareTransactionRequest(method, parameters, overwrite, false);
 
             var result = await provider.Call(txReq);
             analyticsClient.CaptureEvent(new AnalyticsEvent()
@@ -254,7 +254,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
             return function.GetData(parameters);
         }
 
-        public async Task<TransactionRequest> PrepareTransactionRequest(string method, object[] parameters, TransactionRequest overwrite = null)
+        public async Task<TransactionRequest> PrepareTransactionRequest(string method, object[] parameters, TransactionRequest overwrite = null, bool shouldEstimateGas = true)
         {
             parameters ??= Array.Empty<object>();
 
@@ -272,7 +272,10 @@ namespace ChainSafe.Gaming.Evm.Contracts
                 txReq.MaxPriorityFeePerGas = feeData.MaxFeePerGas.ToHexBigInteger();
             }
 
-            txReq.GasLimit ??= await provider.EstimateGas(txReq);
+            if (shouldEstimateGas)
+            {
+                txReq.GasLimit ??= await provider.EstimateGas(txReq);
+            }
 
             return txReq;
         }

@@ -37,12 +37,9 @@ namespace Plugins.CountlySDK.Services
             _requestBuilder = requestBuilder;
             _requestCountlyHelper = requestCountlyHelper;
 
-            if (_consentService.CheckConsentInternal(Consents.RemoteConfig))
-            {
+            if (_consentService.CheckConsentInternal(Consents.RemoteConfig)) {
                 Configs = FetchConfigFromDB();
-            }
-            else
-            {
+            } else {
                 _configDao.RemoveAll();
             }
 
@@ -55,8 +52,7 @@ namespace Plugins.CountlySDK.Services
         {
             Log.Debug("[RemoteConfigCountlyService] InitConfig");
 
-            if (_configuration.EnableTestMode)
-            {
+            if (_configuration.EnableTestMode) {
                 return new CountlyResponse { IsSuccess = true };
             }
 
@@ -71,8 +67,7 @@ namespace Plugins.CountlySDK.Services
         {
             Dictionary<string, object> config = null;
             List<ConfigEntity> allConfigs = _configDao.LoadAll();
-            if (allConfigs != null && allConfigs.Count > 0)
-            {
+            if (allConfigs != null && allConfigs.Count > 0) {
                 config = Converter.ConvertJsonToDictionary(allConfigs[0].Json, Log);
             }
 
@@ -89,10 +84,8 @@ namespace Plugins.CountlySDK.Services
         {
             Log.Info("[RemoteConfigCountlyService] Update");
 
-            if (!_consentService.CheckConsentInternal(Consents.RemoteConfig))
-            {
-                return new CountlyResponse
-                {
+            if (!_consentService.CheckConsentInternal(Consents.RemoteConfig)) {
+                return new CountlyResponse {
                     IsSuccess = false
                 };
             }
@@ -107,20 +100,15 @@ namespace Plugins.CountlySDK.Services
             string data = _requestBuilder.BuildQueryString(requestParams);
 
             CountlyResponse response;
-            if (_configuration.EnablePost)
-            {
+            if (_configuration.EnablePost) {
                 response = await Task.Run(() => _requestCountlyHelper.PostAsync(_countlyUtils.ServerInputUrl, data));
-            }
-            else
-            {
+            } else {
                 response = await Task.Run(() => _requestCountlyHelper.GetAsync(_countlyUtils.ServerInputUrl, data));
 
             }
-            if (response.IsSuccess)
-            {
+            if (response.IsSuccess) {
                 _configDao.RemoveAll();
-                ConfigEntity configEntity = new ConfigEntity
-                {
+                ConfigEntity configEntity = new ConfigEntity {
                     Id = _configDao.GenerateNewId(),
                     Json = response.Data
                 };
@@ -137,8 +125,7 @@ namespace Plugins.CountlySDK.Services
         #region override Methods
         internal override void ConsentChanged(List<Consents> updatedConsents, bool newConsentValue, ConsentChangedAction action)
         {
-            if (updatedConsents.Contains(Consents.RemoteConfig) && !newConsentValue)
-            {
+            if (updatedConsents.Contains(Consents.RemoteConfig) && !newConsentValue) {
                 Configs = null;
                 _configDao.RemoveAll();
             }

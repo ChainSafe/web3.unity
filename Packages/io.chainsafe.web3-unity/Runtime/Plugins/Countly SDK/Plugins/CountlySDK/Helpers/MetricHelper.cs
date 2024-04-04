@@ -24,10 +24,8 @@ namespace Plugins.CountlySDK.Helpers
 
         public string OS
         {
-            get
-            {
-                if (overridenMetrics != null && overridenMetrics.ContainsKey("_os"))
-                {
+            get {
+                if (overridenMetrics != null && overridenMetrics.ContainsKey("_os")) {
                     return overridenMetrics["_os"];
                 }
                 return unityPlatform;
@@ -36,10 +34,8 @@ namespace Plugins.CountlySDK.Helpers
 
         public string OSVersion
         {
-            get
-            {
-                if (overridenMetrics != null && overridenMetrics.ContainsKey("_os_version"))
-                {
+            get {
+                if (overridenMetrics != null && overridenMetrics.ContainsKey("_os_version")) {
                     return overridenMetrics["_os_version"];
                 }
                 return SystemInfo.operatingSystem;
@@ -48,10 +44,8 @@ namespace Plugins.CountlySDK.Helpers
 
         public string Device
         {
-            get
-            {
-                if (overridenMetrics != null && overridenMetrics.ContainsKey("_device"))
-                {
+            get {
+                if (overridenMetrics != null && overridenMetrics.ContainsKey("_device")) {
                     return overridenMetrics["_device"];
                 }
                 return SystemInfo.deviceModel;
@@ -60,10 +54,8 @@ namespace Plugins.CountlySDK.Helpers
 
         public string Resolution
         {
-            get
-            {
-                if (overridenMetrics != null && overridenMetrics.ContainsKey("_resolution"))
-                {
+            get {
+                if (overridenMetrics != null && overridenMetrics.ContainsKey("_resolution")) {
                     return overridenMetrics["_resolution"];
                 }
                 return Screen.currentResolution.ToString();
@@ -72,10 +64,8 @@ namespace Plugins.CountlySDK.Helpers
 
         public string AppVersion
         {
-            get
-            {
-                if (overridenMetrics != null && overridenMetrics.ContainsKey("_app_version"))
-                {
+            get {
+                if (overridenMetrics != null && overridenMetrics.ContainsKey("_app_version")) {
                     return overridenMetrics["_app_version"];
                 }
                 return Application.version;
@@ -84,10 +74,8 @@ namespace Plugins.CountlySDK.Helpers
 
         public string Density
         {
-            get
-            {
-                if (overridenMetrics != null && overridenMetrics.ContainsKey("_density"))
-                {
+            get {
+                if (overridenMetrics != null && overridenMetrics.ContainsKey("_density")) {
                     return overridenMetrics["_density"];
                 }
                 return Screen.dpi.ToString();
@@ -96,10 +84,8 @@ namespace Plugins.CountlySDK.Helpers
 
         public string Locale
         {
-            get
-            {
-                if (overridenMetrics != null && overridenMetrics.ContainsKey("_locale"))
-                {
+            get {
+                if (overridenMetrics != null && overridenMetrics.ContainsKey("_locale")) {
                     return overridenMetrics["_locale"];
                 }
                 return Application.systemLanguage.ToString();
@@ -122,12 +108,9 @@ namespace Plugins.CountlySDK.Helpers
                 { "_locale", Locale}
             };
 
-            if (overridenMetrics != null)
-            {
-                foreach (KeyValuePair<string, string> kvp in overridenMetrics)
-                {
-                    if (!metrics.ContainsKey(kvp.Key))
-                    {
+            if (overridenMetrics != null) {
+                foreach (KeyValuePair<string, string> kvp in overridenMetrics) {
+                    if (!metrics.ContainsKey(kvp.Key)) {
                         metrics[kvp.Key] = kvp.Value;
                     }
                 }

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
+using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.SygmaClient.Dto;
 using ChainSafe.Gaming.SygmaClient.Types;
 using Nethereum.Hex.HexTypes;

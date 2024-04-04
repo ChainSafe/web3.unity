@@ -30,8 +30,7 @@ namespace Plugins.CountlySDK.Persistance.Repositories
         {
             Log.Verbose("[Repository] Enqueue, TModel: " + model);
 
-            if (!ValidateModelBeforeEnqueue(model))
-            {
+            if (!ValidateModelBeforeEnqueue(model)) {
                 return false;
             }
 
@@ -62,11 +61,9 @@ namespace Plugins.CountlySDK.Persistance.Repositories
             Models.Clear();
 
             List<TEntity> entities = _dao.LoadAll();
-            foreach (TEntity entity in entities)
-            {
+            foreach (TEntity entity in entities) {
                 TModel model = ConvertEntityToModel(entity);
-                if (!ValidateModelBeforeEnqueue(model))
-                {
+                if (!ValidateModelBeforeEnqueue(model)) {
                     continue;
                 }
 

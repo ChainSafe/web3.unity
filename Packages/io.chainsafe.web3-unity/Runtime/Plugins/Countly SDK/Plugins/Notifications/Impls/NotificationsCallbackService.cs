@@ -23,8 +23,7 @@ namespace Notifications
         /// <param name="listener"></param>
         public void AddListener(INotificationListener listener)
         {
-            if (_listeners.Contains(listener))
-            {
+            if (_listeners.Contains(listener)) {
                 return;
             }
 
@@ -38,8 +37,7 @@ namespace Notifications
         /// <param name="listener"></param>
         public void RemoveListener(INotificationListener listener)
         {
-            if (!_listeners.Contains(listener))
-            {
+            if (!_listeners.Contains(listener)) {
                 return;
             }
 
@@ -54,10 +52,8 @@ namespace Notifications
         /// <param name="data"></param>
         internal void NotifyOnNotificationReceived(string data)
         {
-            foreach (INotificationListener listener in _listeners)
-            {
-                if (listener != null)
-                {
+            foreach (INotificationListener listener in _listeners) {
+                if (listener != null) {
                     listener.OnNotificationReceived(data);
                 }
             }
@@ -73,10 +69,8 @@ namespace Notifications
         /// <param name="index"></param>
         internal void NotifyOnNotificationClicked(string data, int index)
         {
-            foreach (INotificationListener listener in _listeners)
-            {
-                if (listener != null)
-                {
+            foreach (INotificationListener listener in _listeners) {
+                if (listener != null) {
                     listener.OnNotificationClicked(data, index);
                 }
             }
