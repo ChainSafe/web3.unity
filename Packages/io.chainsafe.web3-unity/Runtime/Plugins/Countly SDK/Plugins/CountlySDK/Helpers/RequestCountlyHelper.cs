@@ -42,13 +42,11 @@ namespace Plugins.CountlySDK.Helpers
         {
             Log.Verbose("[RequestCountlyHelper] AddRequestToQueue: " + request.ToString());
 
-            if (_config.EnableTestMode)
-            {
+            if (_config.EnableTestMode) {
                 return;
             }
 
-            if (_requestRepo.Count == _config.StoredRequestLimit)
-            {
+            if (_requestRepo.Count == _config.StoredRequestLimit) {
 
                 Log.Warning("[RequestCountlyHelper] Request Queue is full. Dropping the oldest request.");
 
@@ -64,8 +62,7 @@ namespace Plugins.CountlySDK.Helpers
         /// </summary>
         internal async Task ProcessQueue()
         {
-            if (_isQueueBeingProcess)
-            {
+            if (_isQueueBeingProcess) {
                 return;
             }
 
@@ -74,15 +71,13 @@ namespace Plugins.CountlySDK.Helpers
 
             Log.Verbose("[RequestCountlyHelper] Process queue, requests: " + requests.Length);
 
-            foreach (CountlyRequestModel reqModel in requests)
-            {
+            foreach (CountlyRequestModel reqModel in requests) {
                 //add the remaining request count in RequestData
                 reqModel.RequestData += "&rr=" + (requests.Length - 1);
 
                 CountlyResponse response = await ProcessRequest(reqModel);
 
-                if (!response.IsSuccess)
-                {
+                if (!response.IsSuccess) {
                     Log.Verbose("[RequestCountlyHelper] ProcessQueue: Request fail, " + response.ToString());
                     break;
                 }
@@ -102,10 +97,10 @@ namespace Plugins.CountlySDK.Helpers
             bool shouldPost = _config.EnablePost || model.RequestData.Length > 2000;
 
 #if UNITY_WEBGL
+            // There is not HTTP GET for webGL. We always do a HTTP POST
             return await StartProcessRequestRoutine(_countlyUtils.ServerInputUrl, model.RequestData);
 #else
-            if (shouldPost)
-            {
+            if (shouldPost) {
                 return await Task.Run(() => PostAsync(_countlyUtils.ServerInputUrl, model.RequestData));
             }
             return await Task.Run(() => GetAsync(_countlyUtils.ServerInputUrl, model.RequestData));
@@ -124,11 +119,9 @@ namespace Plugins.CountlySDK.Helpers
 
         private string AddChecksum(string query)
         {
-            if (!string.IsNullOrEmpty(_config.Salt))
-            {
+            if (!string.IsNullOrEmpty(_config.Salt)) {
                 // Create a SHA256
-                using (SHA256 sha256Hash = SHA256.Create())
-                {
+                using (SHA256 sha256Hash = SHA256.Create()) {
                     byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(query + _config.Salt));
                     string hex = _countlyUtils.GetStringFromBytes(bytes);
 
@@ -154,18 +147,13 @@ namespace Plugins.CountlySDK.Helpers
             string query = AddChecksum(data);
             string url = uri + query;
 
-            try
-            {
+            try {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-                using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
-                {
+                using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync()) {
                     int code = (int)response.StatusCode;
                     using (Stream stream = response.GetResponseStream())
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
+                    using (StreamReader reader = new StreamReader(stream)) {
                         string res = await reader.ReadToEndAsync();
-
-                        JObject body = JObject.Parse(res);
 
                         countlyResponse.Data = res;
                         countlyResponse.StatusCode = code;
@@ -173,17 +161,13 @@ namespace Plugins.CountlySDK.Helpers
                     }
 
                 }
-            }
-            catch (WebException ex)
-            {
+            } catch (WebException ex) {
                 countlyResponse.ErrorMessage = ex.Message;
-                if (ex.Response != null)
-                {
+                if (ex.Response != null) {
                     HttpWebResponse response = (HttpWebResponse)ex.Response;
                     int code = (int)response.StatusCode;
                     using (Stream stream = ex.Response.GetResponseStream())
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
+                    using (StreamReader reader = new StreamReader(stream)) {
                         string res = await reader.ReadToEndAsync();
                         countlyResponse.StatusCode = code;
                         countlyResponse.Data = res;
@@ -210,8 +194,7 @@ namespace Plugins.CountlySDK.Helpers
         {
             CountlyResponse countlyResponse = new CountlyResponse();
 
-            try
-            {
+            try {
                 string query = AddChecksum(data);
                 byte[] dataBytes = Encoding.ASCII.GetBytes(query);
 
@@ -220,38 +203,28 @@ namespace Plugins.CountlySDK.Helpers
                 request.ContentType = "application/x-www-form-urlencoded";
                 request.Method = "POST";
 
-
-                using (Stream requestBody = request.GetRequestStream())
-                {
+                using (Stream requestBody = request.GetRequestStream()) {
                     await requestBody.WriteAsync(dataBytes, 0, dataBytes.Length);
                 }
 
-                using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
-                {
+                using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync()) {
                     int code = (int)response.StatusCode;
                     using (Stream stream = response.GetResponseStream())
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
+                    using (StreamReader reader = new StreamReader(stream)) {
                         string res = await reader.ReadToEndAsync();
-
-                        JObject body = JObject.Parse(res);
 
                         countlyResponse.Data = res;
                         countlyResponse.StatusCode = code;
                         countlyResponse.IsSuccess = IsSuccess(countlyResponse);
                     }
                 }
-            }
-            catch (WebException ex)
-            {
+            } catch (WebException ex) {
                 countlyResponse.ErrorMessage = ex.Message;
-                if (ex.Response != null)
-                {
+                if (ex.Response != null) {
                     HttpWebResponse response = (HttpWebResponse)ex.Response;
                     int code = (int)response.StatusCode;
                     using (Stream stream = ex.Response.GetResponseStream())
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
+                    using (StreamReader reader = new StreamReader(stream)) {
                         string res = await reader.ReadToEndAsync();
                         countlyResponse.StatusCode = code;
                         countlyResponse.Data = res;
@@ -277,8 +250,7 @@ namespace Plugins.CountlySDK.Helpers
         {
             TaskCompletionSource<CountlyResponse> tcs = new TaskCompletionSource<CountlyResponse>();
 
-            _monoBehaviour.StartCoroutine(ProcessRequestCoroutine(uri, data, (response) =>
-            {
+            _monoBehaviour.StartCoroutine(ProcessRequestCoroutine(uri, data, (response) => {
                 tcs.SetResult(response);
             }));
 
@@ -300,8 +272,7 @@ namespace Plugins.CountlySDK.Helpers
             string query = AddChecksum(data);
             string url = uri + query;
 
-            using (UnityWebRequest webRequest = UnityWebRequest.Put(url, data))
-            {
+            using (UnityWebRequest webRequest = UnityWebRequest.Put(url, data)) {
 
                 webRequest.method = UnityWebRequest.kHttpVerbPOST;
 
@@ -324,22 +295,17 @@ namespace Plugins.CountlySDK.Helpers
 
         private bool IsSuccess(CountlyResponse countlyResponse)
         {
-            if (countlyResponse.StatusCode >= 200 && countlyResponse.StatusCode < 300)
-            {
-                try
-                {
+            if (countlyResponse.StatusCode >= 200 && countlyResponse.StatusCode < 300) {
+                try {
                     JObject json = JObject.Parse(countlyResponse.Data);
 
-                    if (json.ContainsKey("result"))
-                    {
+                    if (json.ContainsKey("result")) {
                         return true;
                     }
-                }
-                catch (JsonException)
-                {
+                } catch(JsonException) {
                     Log.Debug("[RequestCountlyHelper] IsSuccess : Returned request is not a JSON object");
                     return false;
-                }
+                } 
             }
 
             return false;

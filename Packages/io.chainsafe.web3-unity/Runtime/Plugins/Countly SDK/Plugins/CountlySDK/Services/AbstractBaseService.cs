@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +10,6 @@ namespace Plugins.CountlySDK.Services
     {
         internal object LockObj { get; set; }
         internal List<AbstractBaseService> Listeners { get; set; }
-
         protected CountlyLogHelper Log { get; private set; }
         protected readonly CountlyConfiguration _configuration;
         protected readonly ConsentCountlyService _consentService;
@@ -26,40 +24,35 @@ namespace Plugins.CountlySDK.Services
 
         protected IDictionary<string, object> RemoveSegmentInvalidDataTypes(IDictionary<string, object> segments)
         {
-
-            if (segments == null || segments.Count == 0)
-            {
+            if (segments == null || segments.Count == 0) {
                 return segments;
             }
 
             string moduleName = GetType().Name;
             int i = 0;
             List<string> toRemove = new List<string>();
-            foreach (KeyValuePair<string, object> item in segments)
-            {
-                if (++i > _configuration.MaxSegmentationValues)
-                {
+            foreach (KeyValuePair<string, object> item in segments) {
+                if (++i > _configuration.MaxSegmentationValues) {
                     toRemove.Add(item.Key);
                     continue;
                 }
+
                 Type type = item.Value?.GetType();
                 bool isValidDataType = item.Value != null
                     && (type == typeof(int)
                     || type == typeof(bool)
                     || type == typeof(float)
                     || type == typeof(double)
-                    || type == typeof(string));
+                    || type == typeof(string)
+                    || type == typeof(long));
 
-
-                if (!isValidDataType)
-                {
+                if (!isValidDataType) {
                     toRemove.Add(item.Key);
                     Log.Warning("[" + moduleName + "] RemoveSegmentInvalidDataTypes: In segmentation Data type '" + type + "' of item '" + item.Key + "' isn't valid.");
                 }
             }
 
-            foreach (string k in toRemove)
-            {
+            foreach (string k in toRemove) {
                 segments.Remove(k);
             }
 
@@ -68,8 +61,7 @@ namespace Plugins.CountlySDK.Services
 
         protected string TrimKey(string k)
         {
-            if (k.Length > _configuration.MaxKeyLength)
-            {
+            if (k.Length > _configuration.MaxKeyLength) {
                 Log.Warning("[" + GetType().Name + "] TrimKey : Max allowed key length is " + _configuration.MaxKeyLength + ". " + k + " will be truncated.");
                 k = k.Substring(0, _configuration.MaxKeyLength);
             }
@@ -79,23 +71,19 @@ namespace Plugins.CountlySDK.Services
 
         protected string[] TrimValues(string[] values)
         {
-            for (int i = 0; i < values.Length; ++i)
-            {
-                if (values[i].Length > _configuration.MaxValueSize)
-                {
+            for (int i = 0; i < values.Length; ++i) {
+                if (values[i].Length > _configuration.MaxValueSize) {
                     Log.Warning("[" + GetType().Name + "] TrimKey : Max allowed value length is " + _configuration.MaxKeyLength + ". " + values[i] + " will be truncated.");
                     values[i] = values[i].Substring(0, _configuration.MaxValueSize);
                 }
             }
-
 
             return values;
         }
 
         protected string TrimValue(string fieldName, string v)
         {
-            if (v != null && v.Length > _configuration.MaxValueSize)
-            {
+            if (v != null && v.Length > _configuration.MaxValueSize) {
                 Log.Warning("[" + GetType().Name + "] TrimValue : Max allowed '" + fieldName + "' length is " + _configuration.MaxValueSize + ". " + v + " will be truncated.");
                 v = v.Substring(0, _configuration.MaxValueSize);
             }
@@ -105,26 +93,27 @@ namespace Plugins.CountlySDK.Services
 
         protected IDictionary<string, object> FixSegmentKeysAndValues(IDictionary<string, object> segments)
         {
-            if (segments == null || segments.Count == 0)
-            {
+            if (segments == null || segments.Count == 0) {
                 return segments;
             }
 
             IDictionary<string, object> segmentation = new Dictionary<string, object>();
-            foreach (KeyValuePair<string, object> item in segments)
-            {
+            foreach (KeyValuePair<string, object> item in segments) {
                 string k = item.Key;
                 object v = item.Value;
 
-                if (k == null || k.Length == 0 || v == null)
-                {
+                if (k == null || k.Length == 0) {
+                    Log.Warning($"[{GetType().Name}] FixSegmentKeysAndValues: Provided key is {(k == null ? "null" : "empty")}, will be skipped.");
+                    continue;
+                }
+                if (v == null) {
+                    Log.Warning($"[{GetType().Name}] FixSegmentKeysAndValues: Provided value for '{k}' is null, will be skipped.");
                     continue;
                 }
 
                 k = TrimKey(k);
 
-                if (v.GetType() == typeof(string))
-                {
+                if (v.GetType() == typeof(string)) {
                     v = TrimValue(k, (string)v);
                 }
 
@@ -144,5 +133,4 @@ namespace Plugins.CountlySDK.Services
         ConsentUpdated,
         DeviceIDChangedNotMerged,
     }
-
 }

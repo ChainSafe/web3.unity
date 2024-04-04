@@ -58,9 +58,7 @@ public class SygmaClient : MonoBehaviour
         // SigmaClient::CreateErc721DepositData and SigmaClient::CreateErc1155DepositData methods.
         
         // Token ID is a unique identifier of the token (NFT) you want to transfer.
-        Debug.Log("Minting");
-        await Erc1155.MintErc1155(Web3Accessor.Web3, ABI.Erc1155, Contracts.Erc1155, 1, 1);
-        Debug.Log("Minting Done");
+       
         var address = await _web3.Signer.GetAddress();
         Debug.Log("Preparing transfer");
         var transfer = await _sygmaClient.CreateNonFungibleTransfer(NonFungibleTransferType.Erc1155,  address , destination, address, resourceId, "1");

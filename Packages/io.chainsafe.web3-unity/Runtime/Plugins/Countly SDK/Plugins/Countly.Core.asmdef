@@ -1,5 +1,5 @@
 {
-    "name": "PluginAssembly",
+    "name": "Countly.Core",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
