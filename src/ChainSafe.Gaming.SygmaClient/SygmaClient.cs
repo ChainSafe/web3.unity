@@ -148,7 +148,7 @@ namespace ChainSafe.Gaming.SygmaClient
             var handlerAddress = await bridge.DomainResourceIDToHandlerAddress(transfer.Resource.ResourceId);
             switch (transfer.Resource.Type)
             {
-                case ResourceType.NonFungible:
+                case ResourceType.NonFungible: case ResourceType.Erc1155:
                     return await new Erc1155Approvals(contractBuilder, tokenAddress).ApprovalTransactionRequest(transfer, handlerAddress);
                 default:
                     throw new NotImplementedException("This type is not implemented yet");
@@ -294,7 +294,7 @@ namespace ChainSafe.Gaming.SygmaClient
             where T : TransferType
         {
             var basicFeeHandler = new BasicFeeHandler(this.contractBuilder, feeData.HandlerAddress);
-            return basicFeeHandler.CalculateBasicFee(transfer.Sender, transfer.From.Id, transfer.To.Id, new HexBigInteger(transfer.Resource.ResourceId));
+            return basicFeeHandler.CalculateBasicFee(transfer.Sender, transfer.Details.Recipient, transfer.From.Id, transfer.To.Id, new HexBigInteger(transfer.Resource.ResourceId), feeData);
         }
 
         private async Task<EvmFee> GetFeeInformation<T>(Transfer<T> transfer)

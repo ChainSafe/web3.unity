@@ -1,9 +1,16 @@
+using System;
 using System.IO;
+using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
+using ChainSafe.Gaming.Evm.Contracts.Builders;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.SygmaClient.Dto;
 using ChainSafe.Gaming.SygmaClient.Types;
+using Nethereum.ABI;
+using Nethereum.ABI.FunctionEncoding;
+using Nethereum.ABI.Model;
+using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
 
 namespace ChainSafe.Gaming.SygmaClient.Contracts
@@ -25,17 +32,33 @@ namespace ChainSafe.Gaming.SygmaClient.Contracts
 
         public async Task<EvmFee> CalculateBasicFee(
             string sender,
+            string reciever,
             uint fromDomainID,
             uint destinationDomainID,
-            HexBigInteger resourceID)
+            HexBigInteger resourceID,
+            EvmFee feeData)
         {
-            var result = await this.contract.Call(MethodCalculateFee, new object[] { sender, fromDomainID, destinationDomainID, resourceID.ToHexByteArray() });
+            var data = EncodeStuff(reciever);
+            var result = await this.contract.Call(MethodCalculateFee, new object[] { sender, fromDomainID, destinationDomainID, resourceID.ToHexByteArray(), data, feeData.FeeData.HexToByteArray() });
             var fee = new EvmFee(this.address, FeeHandlerType.Basic)
             {
                 Fee = new HexBigInteger(result[0].ToString()),
                 FeeData = result[1] as string,
             };
             return fee;
+        }
+
+        private byte[] EncodeStuff(string reciever)
+        {
+            // Your data to encode
+            BigInteger[] tokenIDs = { 1 };
+            BigInteger[] amounts = { 1 };
+            byte[] recipient = reciever.HexToByteArray(); // Convert recipient address to byte array
+            byte[] transferData = Array.Empty<byte>();
+
+            ABIEncode abiEncode = new ABIEncode();
+            var depositData = abiEncode.GetABIEncoded(tokenIDs, amounts, recipient, transferData).ToHex();
+            return depositData.HexToByteArray();
         }
     }
 }
