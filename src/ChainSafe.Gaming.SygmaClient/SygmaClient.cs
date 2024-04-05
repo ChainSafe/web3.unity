@@ -160,7 +160,7 @@ namespace ChainSafe.Gaming.SygmaClient
         {
             switch (transfer.Resource.Type)
             {
-                case ResourceType.NonFungible:
+                case ResourceType.NonFungible: case ResourceType.Erc1155:
                     var nonFungible = transfer as Transfer<NonFungible>;
                     return NonFungibleTransfer(
                         nonFungible!.Details.Type,
@@ -207,8 +207,8 @@ namespace ChainSafe.Gaming.SygmaClient
                 {
                 domainId,
                 resourceId.ToHexByteArray(),
-                depositData,
-                feeData.FeeData ?? "0x0",
+                depositData.HexToByteArray(),
+                feeData.FeeData.HexToByteArray(),
                 });
 #pragma warning restore SA1118
             return tx;
@@ -260,7 +260,7 @@ namespace ChainSafe.Gaming.SygmaClient
             {
                 Amounts = new[] { BigInteger.Parse("1") },
                 TokenIds = new[] { BigInteger.Parse(tokenId) },
-                DestinationRecipientAddress = Units.ConvertHexStringToByteArray(recipient),
+                DestinationRecipientAddress = recipient.HexToByteArray(),
             };
 
             return abiEncode.GetABIEncoded(data).ToHex();
