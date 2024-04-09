@@ -14,11 +14,11 @@ jobs:
           - src/UnitySampleProject
         testMode:
           - PlayMode
-          - EditMode
     steps:
     - uses: actions/checkout@v4
       with:
         lfs: true
+        ssh-key: ${{ secrets.DEPLOY_KEY }}
     - name: Configure Git
       run: |
         git config user.email $git_email
@@ -128,7 +128,7 @@ jobs:
     - name: Commit and Push changes
       if: ${{ github.ref_name == 'dev' }}
       run: |
-        git diff-index --cached --quiet HEAD || git commit -m 'Auto Commit
+        git diff-index --cached --quiet HEAD || git commit -m 'Auto Commit [skip ci]
         - Duplicate Packages Samples
         - Publish DLL Dependencies'
-        git push
+        git push -f
