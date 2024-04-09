@@ -149,7 +149,7 @@ namespace ChainSafe.Gaming.SygmaClient
             switch (transfer.Resource.Type)
             {
                 case ResourceType.NonFungible: case ResourceType.Erc1155:
-                    return await new Erc1155Approvals(contractBuilder, tokenAddress).ApprovalTransactionRequest(transfer, handlerAddress);
+                    return await new Erc1155Approvals(contractBuilder, await signer.GetAddress()).ApprovalTransactionRequest(handlerAddress, signer);
                 default:
                     throw new NotImplementedException("This type is not implemented yet");
             }

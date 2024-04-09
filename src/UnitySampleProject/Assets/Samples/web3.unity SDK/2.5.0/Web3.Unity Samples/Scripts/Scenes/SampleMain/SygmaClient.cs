@@ -1,3 +1,6 @@
+using System.Numerics;
+using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.SygmaClient;
 using ChainSafe.Gaming.SygmaClient.Types;
 using ChainSafe.Gaming.UnityPackage;
@@ -58,7 +61,6 @@ public class SygmaClient : MonoBehaviour
         // SigmaClient::CreateErc721DepositData and SigmaClient::CreateErc1155DepositData methods.
         
         // Token ID is a unique identifier of the token (NFT) you want to transfer.
-       
         var address = await _web3.Signer.GetAddress();
         Debug.Log("Preparing transfer");
         var transfer = await _sygmaClient.CreateNonFungibleTransfer(NonFungibleTransferType.Erc1155,  address , destination, address, resourceId, "1");
@@ -67,7 +69,7 @@ public class SygmaClient : MonoBehaviour
         var fee = await _sygmaClient.Fee(transfer);
         Debug.Log("Done fee");
         SampleOutputUtil.PrintResult("Fee calculated", "SygmaClient", "Fee");
-        var approvals = await _sygmaClient.BuildApprovals(transfer, fee, "");
+        var approvals = await _sygmaClient.BuildApprovals(transfer, fee, Contracts.Erc1155);
         Debug.Log("Approvals done");
 
         SampleOutputUtil.PrintResult("Approvals created", "SygmaClient", "BuildApprovals");
@@ -78,4 +80,19 @@ public class SygmaClient : MonoBehaviour
         var transactionHash = await Web3Accessor.Web3.TransactionExecutor.SendTransaction(transferTransaction);
         SampleOutputUtil.PrintResult("Transaction hash: " + transactionHash.Hash, "SygmaClient", "SendTransaction");
     }
-}
+    
+    public static async Task<(object[], TransactionReceipt)> MintErc1155(Web3 web3, string abi, string contractAddress, BigInteger id, BigInteger amount)
+    {
+        byte[] dataObject = { };
+        const string method = EthMethod.Mint;
+        var destination = await web3.Signer.GetAddress();
+        var contract = web3.ContractBuilder.Build(abi, contractAddress);
+        var response = await contract.SendWithReceipt(method, new object[]
+        {
+            destination,
+            id,
+            amount,
+            dataObject
+        });
+        return response;
+    }}
