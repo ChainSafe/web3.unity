@@ -59,7 +59,7 @@ public class SygmaClient : MonoBehaviour
         // This data will be encoded into execution data of the passed cross-chain transaction.
         // To understand how it will be used check:
         // SigmaClient::CreateErc721DepositData and SigmaClient::CreateErc1155DepositData methods.
-        
+        Debug.Log(await Erc1155.BalanceOf(_web3, "0xc6DE9aa04eF369540A6A4Fa2864342732bC99d06", await _web3.Signer.GetAddress(), "1"));
         // Token ID is a unique identifier of the token (NFT) you want to transfer.
         var address = await _web3.Signer.GetAddress();
         Debug.Log("Preparing transfer");

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Numerics;
 using System.Threading.Tasks;
@@ -40,11 +41,14 @@ namespace ChainSafe.Gaming.SygmaClient.Contracts
         {
             var data = CreateERC1155DepositData("1", reciever);
             var result = await this.contract.Call(MethodCalculateFee, new object[] { sender, fromDomainID, destinationDomainID, resourceID.ToHexByteArray(), data, feeData.FeeData.HexToByteArray() });
+
+// Your original code for creating the fee object
             var fee = new EvmFee(this.address, FeeHandlerType.Basic)
             {
-                Fee = new HexBigInteger(result[0].ToString()),
+                Fee = BigInteger.Parse(result[0].ToString()),
                 FeeData = result[1] as string,
             };
+
             return fee;
         }
 
@@ -54,11 +58,15 @@ namespace ChainSafe.Gaming.SygmaClient.Contracts
             BigInteger[] tokenIDs = { BigInteger.Parse(tokenId) };
             BigInteger[] amounts = { 1 };
             byte[] recipient = reciever.HexToByteArray(); // Convert recipient address to byte array
-            byte[] transferData = Array.Empty<byte>();
+            List<ABIValue> abivalues = new();
+            abivalues.Add(new ABIValue(new DynamicArrayType("uint[]"), tokenIDs));
+            abivalues.Add(new ABIValue(new DynamicArrayType("uint[]"), amounts));
+            abivalues.Add(new ABIValue(new BytesType(), recipient));
+            abivalues.Add(new ABIValue(new BytesType(), Array.Empty<byte>()));
 
             ABIEncode abiEncode = new ABIEncode();
-            var depositData = abiEncode.GetABIEncoded(tokenIDs, amounts, recipient, transferData).ToHex();
-            return depositData.HexToByteArray();
+            var depositData = abiEncode.GetABIEncoded(abivalues.ToArray());
+            return depositData;
         }
     }
 }
