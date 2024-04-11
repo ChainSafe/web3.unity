@@ -149,7 +149,7 @@ namespace ChainSafe.Gaming.SygmaClient
             switch (transfer.Resource.Type)
             {
                 case ResourceType.NonFungible: case ResourceType.Erc1155:
-                    return await new Erc1155Approvals(contractBuilder, await signer.GetAddress()).ApprovalTransactionRequest(handlerAddress, signer);
+                    return await new Erc1155Approvals(contractBuilder, "0xc6DE9aa04eF369540A6A4Fa2864342732bC99d06").ApprovalTransactionRequest(handlerAddress, signer);
                 default:
                     throw new NotImplementedException("This type is not implemented yet");
             }
@@ -185,11 +185,11 @@ namespace ChainSafe.Gaming.SygmaClient
             EvmFee feeData)
         {
             var sourceDomainConfig = clientConfiguration.SourceDomainConfig();
-            string depositData;
+            byte[] depositData = Array.Empty<byte>();
             switch (typer)
             {
                 case NonFungibleTransferType.Erc721:
-                    depositData = CreateErc721DepositData(tokenId, recipientAddress);
+                    // depositData = CreateErc721DepositData(tokenId, recipientAddress);
                     break;
                 case NonFungibleTransferType.Erc1155:
                     depositData = CreateERC1155DepositData(tokenId, recipientAddress);
@@ -207,8 +207,12 @@ namespace ChainSafe.Gaming.SygmaClient
                 {
                 domainId,
                 resourceId.ToHexByteArray(),
-                depositData.HexToByteArray(),
+                depositData,
                 feeData.FeeData.HexToByteArray(),
+                }, new TransactionRequest()
+                {
+                    Value = feeData.Fee,
+                    GasLimit = new HexBigInteger(300000),
                 });
 #pragma warning restore SA1118
             return tx;
@@ -253,17 +257,17 @@ namespace ChainSafe.Gaming.SygmaClient
             return "0x" + BitConverter.ToString(data.ToArray()).Replace("-", string.Empty).ToLower();
         }
 
-        private string CreateERC1155DepositData(string tokenId, string recipient)
+        private byte[] CreateERC1155DepositData(string tokenId, string reciever)
         {
-            var abiEncode = new ABIEncode();
-            var data = new Erc1155Deposit()
-            {
-                Amounts = new[] { BigInteger.Parse("1") },
-                TokenIds = new[] { BigInteger.Parse(tokenId) },
-                DestinationRecipientAddress = recipient.HexToByteArray(),
-            };
+            // Your data to encode
+            BigInteger[] tokenIDs = { 1 };
+            BigInteger[] amounts = { 1 };
+            byte[] recipient = reciever.HexToByteArray(); // Convert recipient address to byte array
+            byte[] transferData = Array.Empty<byte>();
 
-            return abiEncode.GetABIEncoded(data).ToHex();
+            ABIEncode abiEncode = new ABIEncode();
+            var depositData = abiEncode.GetABIEncoded(tokenIDs, amounts, recipient, transferData).ToHex();
+            return depositData.HexToByteArray();
         }
 
         public async Task<TransferStatus> TransferStatusData(Environment environment, string transactionHash)
