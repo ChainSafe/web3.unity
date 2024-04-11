@@ -211,7 +211,7 @@ namespace ChainSafe.Gaming.SygmaClient
                 feeData.FeeData.HexToByteArray(),
                 }, new TransactionRequest()
                 {
-                    Value = feeData.Fee,
+                    Value = feeData.Fee.ToHexBigInteger(),
                     GasLimit = new HexBigInteger(300000),
                 });
 #pragma warning restore SA1118
@@ -260,14 +260,18 @@ namespace ChainSafe.Gaming.SygmaClient
         private byte[] CreateERC1155DepositData(string tokenId, string reciever)
         {
             // Your data to encode
-            BigInteger[] tokenIDs = { 1 };
+            BigInteger[] tokenIDs = { BigInteger.Parse(tokenId) };
             BigInteger[] amounts = { 1 };
             byte[] recipient = reciever.HexToByteArray(); // Convert recipient address to byte array
-            byte[] transferData = Array.Empty<byte>();
+            List<ABIValue> abivalues = new();
+            abivalues.Add(new ABIValue(new DynamicArrayType("uint[]"), tokenIDs));
+            abivalues.Add(new ABIValue(new DynamicArrayType("uint[]"), amounts));
+            abivalues.Add(new ABIValue(new BytesType(), recipient));
+            abivalues.Add(new ABIValue(new BytesType(), Array.Empty<byte>()));
 
             ABIEncode abiEncode = new ABIEncode();
-            var depositData = abiEncode.GetABIEncoded(tokenIDs, amounts, recipient, transferData).ToHex();
-            return depositData.HexToByteArray();
+            var depositData = abiEncode.GetABIEncoded(abivalues.ToArray());
+            return depositData;
         }
 
         public async Task<TransferStatus> TransferStatusData(Environment environment, string transactionHash)
