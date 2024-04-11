@@ -69,8 +69,10 @@ public class SygmaClient : MonoBehaviour
         var fee = await _sygmaClient.Fee(transfer);
         Debug.Log("Done fee");
         SampleOutputUtil.PrintResult("Fee calculated", "SygmaClient", "Fee");
-        var approvals = await _sygmaClient.BuildApprovals(transfer, fee, Contracts.Erc1155);
+        var approvals = await _sygmaClient.BuildApprovals(transfer, fee, "0x0d3Ce33038a3E9bF940eCA6f5EADF355d47D36B3");
+        await Web3Accessor.Web3.TransactionExecutor.SendTransaction(approvals);
         Debug.Log("Approvals done");
+        
 
         SampleOutputUtil.PrintResult("Approvals created", "SygmaClient", "BuildApprovals");
         var transferTransaction = await _sygmaClient.BuildTransferTransaction(transfer, fee);

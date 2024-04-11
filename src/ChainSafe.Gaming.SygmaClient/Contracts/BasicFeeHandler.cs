@@ -38,7 +38,7 @@ namespace ChainSafe.Gaming.SygmaClient.Contracts
             HexBigInteger resourceID,
             EvmFee feeData)
         {
-            var data = EncodeStuff(reciever);
+            var data = CreateERC1155DepositData("1", reciever);
             var result = await this.contract.Call(MethodCalculateFee, new object[] { sender, fromDomainID, destinationDomainID, resourceID.ToHexByteArray(), data, feeData.FeeData.HexToByteArray() });
             var fee = new EvmFee(this.address, FeeHandlerType.Basic)
             {
@@ -48,10 +48,10 @@ namespace ChainSafe.Gaming.SygmaClient.Contracts
             return fee;
         }
 
-        private byte[] EncodeStuff(string reciever)
+        private byte[] CreateERC1155DepositData(string tokenId, string reciever)
         {
             // Your data to encode
-            BigInteger[] tokenIDs = { 1 };
+            BigInteger[] tokenIDs = { BigInteger.Parse(tokenId) };
             BigInteger[] amounts = { 1 };
             byte[] recipient = reciever.HexToByteArray(); // Convert recipient address to byte array
             byte[] transferData = Array.Empty<byte>();
