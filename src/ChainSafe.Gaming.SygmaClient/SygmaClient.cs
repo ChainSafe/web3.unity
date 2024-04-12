@@ -96,7 +96,8 @@ namespace ChainSafe.Gaming.SygmaClient
             Transfer transfer = null;
             switch (transferParams.ResourceType)
             {
-                case ResourceType.Erc721: case ResourceType.Erc1155:
+                case ResourceType.Erc721:
+                case ResourceType.Erc1155:
                     transfer = await CreateNonFungibleTransfer(transferParams.SourceAddress, transferParams.DestinationAddress, transferParams.DestinationChainId, transferParams.ResourceType, transferParams.TokenId, transferParams.Amount);
                     break;
                 case ResourceType.Erc20:
@@ -179,7 +180,8 @@ namespace ChainSafe.Gaming.SygmaClient
         {
             switch (transfer.Resource.Type)
             {
-                case ResourceType.NonFungible: case ResourceType.Erc1155:
+                case ResourceType.NonFungible:
+                case ResourceType.Erc1155:
                     var nonFungible = transfer as Transfer<NonFungible>;
                     return NonFungibleTransfer(
                         nonFungible,
