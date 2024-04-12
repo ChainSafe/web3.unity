@@ -1,3 +1,4 @@
+using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Providers;
@@ -52,6 +53,8 @@ namespace ChainSafe.Gaming.WalletConnect
             }
 
             WCLogger.Log($"Transaction executed successfully. Hash: {hash}.");
+
+            await Task.Delay(TimeSpan.FromSeconds(1)); // hack: rpcProvider.GetTransaction can't find transaction by hash
 
             return await rpcProvider.GetTransaction(hash);
 
