@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Analytics;
+using ChainSafe.Gaming.Web3.Core.Logout;
 using ChainSafe.Gaming.Web3.Environment;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -10,7 +11,7 @@ namespace ChainSafe.Gaming.MetaMask.Unity
     /// <summary>
     /// Concrete implementation of <see cref="IMetaMaskProvider"/>.
     /// </summary>
-    public class MetaMaskProvider : IMetaMaskProvider
+    public class MetaMaskProvider : IMetaMaskProvider, ILogoutHandler
     {
         private readonly ILogWriter logWriter;
 
@@ -85,6 +86,13 @@ namespace ChainSafe.Gaming.MetaMask.Unity
         public async Task<T> Request<T>(string method, params object[] parameters)
         {
             return await metaMaskController.Request<T>(method, parameters);
+        }
+
+        public Task OnLogout()
+        {
+            Object.Destroy(metaMaskController.gameObject);
+
+            return Task.CompletedTask;
         }
     }
 }
