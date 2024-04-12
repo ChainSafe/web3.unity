@@ -11,34 +11,30 @@ namespace ChainSafe.Gaming.SygmaClient.Types
         public bool Initialize(Environment environment);
 
         public Task<Transfer<NonFungible>> CreateNonFungibleTransfer(
-            NonFungibleTransferType type,
             string sourceAddress,
-            uint destinationChainId,
             string destinationAddress,
-            string resourceId,
+            uint destinationChainId,
+            ResourceType resourceType,
             string tokenId,
             HexBigInteger amount = null,
             string destinationProviderUrl = "");
 
+        public Task<TransactionResponse> Transfer(SygmaTransferParams transferParams);
+
         public Task<Transfer<Fungible>> CreateFungibleTransfer(
             string sourceAddress,
-            uint destinationChainId,
             string destinationAddress,
-            string resourceId,
+            uint destinationChainId,
+            ResourceType resourceType,
             HexBigInteger amount,
             string destinationProviderUrl = "");
 
-        public Task<EvmFee> Fee<T>(Transfer<T> transfer)
-            where T : TransferType;
+        public Task<EvmFee> Fee(Transfer transfer);
 
-        public Task<TransactionRequest> BuildApprovals<T>(Transfer<T> transfer, EvmFee fee, string tokenAddress)
-            where T : TransferType;
+        public Task<TransactionRequest> BuildApprovals(Transfer transfer);
 
-        public Task<TransactionRequest> BuildTransferTransaction<T>(Transfer<T> transfer, EvmFee fee)
-            where T : TransferType;
+        public Task<TransactionRequest> BuildTransferTransaction(Transfer transfer, EvmFee fee);
 
         public Task<TransferStatus> TransferStatusData(Environment environment, string transactionHash);
-
-        public Config ClientConfiguration();
     }
 }

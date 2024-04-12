@@ -16,14 +16,14 @@ namespace ChainSafe.Gaming.SygmaClient.Contracts
 
         public FeeHandlerRouter(IContractBuilder cb, string address)
         {
-            this.contract = cb.Build(FeeHandlerAbi, address);
+            contract = cb.Build(FeeHandlerAbi, address);
         }
 
         public async Task<string> DomainResourceIDToFeeHandlerAddress(
             uint domainID,
             HexBigInteger resourceID)
         {
-            var result = await this.contract.Call(MethodDomainResourceIDToFeeHandlerAddress, new object[] { domainID, resourceID.ToHexByteArray() });
+            var result = await contract.Call(MethodDomainResourceIDToFeeHandlerAddress, new object[] { domainID, resourceID.ToHexByteArray() });
             return result[0].ToString();
         }
     }

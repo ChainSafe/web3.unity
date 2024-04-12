@@ -5,23 +5,14 @@ using Nethereum.Hex.HexTypes;
 
 namespace ChainSafe.Gaming.SygmaClient.Types
 {
-    public enum NonFungibleTransferType
+    public class Transfer
     {
-        Erc721,
-        Erc1155,
-    }
-
-    public class Transfer<T>
-        where T : TransferType
-    {
-        public Transfer(Domain to, Domain from, string sender)
+        protected Transfer(Domain to, Domain from, string sender)
         {
             To = to;
             From = from;
             Sender = sender;
         }
-
-        public T Details { get; set; }
 
         public Domain To { get; }
 
@@ -30,6 +21,17 @@ namespace ChainSafe.Gaming.SygmaClient.Types
         public BaseResources Resource { get; set; }
 
         public string Sender { get; }
+    }
+
+    public class Transfer<T> : Transfer
+        where T : TransferType
+    {
+        public Transfer(Domain to, Domain from, string sender)
+            : base(to, from, sender)
+        {
+        }
+
+        public T Details { get; set; }
     }
 
     public class TransferType
@@ -55,16 +57,13 @@ namespace ChainSafe.Gaming.SygmaClient.Types
 
     public class NonFungible : Fungible
     {
-        public NonFungible(NonFungibleTransferType type, string recipient, string tokenId, HexBigInteger amount = null)
+        public NonFungible(string recipient, string tokenId, HexBigInteger amount = null)
             : base(recipient, amount)
         {
             TokenId = tokenId;
-            Type = type;
         }
 
         public string TokenId { get; }
-
-        public NonFungibleTransferType Type { get; }
     }
 
     public class Erc1155Deposit

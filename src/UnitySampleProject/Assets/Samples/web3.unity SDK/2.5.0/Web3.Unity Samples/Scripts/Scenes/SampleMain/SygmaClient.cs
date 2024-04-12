@@ -1,20 +1,33 @@
+using System;
 using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.SygmaClient;
+using ChainSafe.Gaming.SygmaClient.Dto;
 using ChainSafe.Gaming.SygmaClient.Types;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3;
+using Nethereum.Hex.HexTypes;
 using Scripts.EVM.Token;
 using UnityEngine;
 using UnityEngine.UI;
+using Environment = ChainSafe.Gaming.SygmaClient.Types.Environment;
+
+[Serializable]
+public class SygmaConfig
+{
+    [field:SerializeField] public ResourceType ResourceType { get; private set; } = ResourceType.Erc1155;
+    [field: SerializeField] public string TokenId { get; private set; } = "1";
+    [field: SerializeField] public Environment SygmaEnvironment { get; private set; } = Environment.Testnet;
+    [field: SerializeField] public uint DestinationChainId { get; private set; } = 338;
+    [field: SerializeField] public uint Amount { get; private set; } = 1;
+}
 
 public class SygmaClient : MonoBehaviour
 {
-    [SerializeField] private string destinationChainId;
-    [SerializeField] private string resourceId;
-    [SerializeField] private Environment sygmaEnvironment = Environment.Testnet;
     [SerializeField] private Button button;
+    [SerializeField] private SygmaConfig sygmaConfig;
+    
 
     private ISygmaClient _sygmaClient;
     private bool _isSygmaInitialized;
@@ -25,12 +38,11 @@ public class SygmaClient : MonoBehaviour
         button.onClick.AddListener(CallSygma);
         _web3 = Web3Accessor.Web3;
         _sygmaClient = Web3Accessor.Web3.SygmaClient();
-        Debug.Log("Initializing Sygma...");
-        _isSygmaInitialized = _sygmaClient.Initialize(sygmaEnvironment);
-        Debug.Log("DONE!...");
+        _isSygmaInitialized = _sygmaClient.Initialize(sygmaConfig.SygmaEnvironment);
+
         if (!_isSygmaInitialized)
         {
-            Debug.LogError("Sygma failed to initialized");
+            throw new Web3Exception("Sygma failed to initialize");
         }
     }
 
@@ -41,46 +53,21 @@ public class SygmaClient : MonoBehaviour
             Debug.LogError("Can't call Sygma if it's not initialized");
             return;
         }
-        
-        // Chain ID might be coming from the IChainConfig. But you need 2 of them. Source and Destination.
-        // Probably this needs to be implemented in on the Dependency Injection level.
-
-        if(!uint.TryParse(destinationChainId, out var destination))
-        {
-            Debug.LogError("Invalid destination chain id");
-            return;
-        }
-        // ResourceID should be coming from the Sygma resource registration process.
-        // As soon as you register your 1155 or 721 in the Bridge, the appropriate resource id will be assigned.
-        
-        // Source Address is the address of the user who is sending the token. Basically Signer.GetAddress()
-        
-        // Destination Address is the address of the user who is receiving the token.
-        // This data will be encoded into execution data of the passed cross-chain transaction.
-        // To understand how it will be used check:
-        // SigmaClient::CreateErc721DepositData and SigmaClient::CreateErc1155DepositData methods.
-        Debug.Log(await Erc1155.BalanceOf(_web3, "0xc6DE9aa04eF369540A6A4Fa2864342732bC99d06", await _web3.Signer.GetAddress(), "1"));
-        // Token ID is a unique identifier of the token (NFT) you want to transfer.
         var address = await _web3.Signer.GetAddress();
-        Debug.Log("Preparing transfer");
-        var transfer = await _sygmaClient.CreateNonFungibleTransfer(NonFungibleTransferType.Erc1155,  address , destination, address, resourceId, "1");
-        Debug.Log("Done transfer");
-        SampleOutputUtil.PrintResult("Transfer created", "SygmaClient", "CreateNonFungibleTransfer");
-        var fee = await _sygmaClient.Fee(transfer);
-        Debug.Log("Done fee");
-        SampleOutputUtil.PrintResult("Fee calculated", "SygmaClient", "Fee");
-        var approvals = await _sygmaClient.BuildApprovals(transfer, fee, "0x0d3Ce33038a3E9bF940eCA6f5EADF355d47D36B3");
-        await Web3Accessor.Web3.TransactionExecutor.SendTransaction(approvals);
-        Debug.Log("Approvals done");
         
-
-        SampleOutputUtil.PrintResult("Approvals created", "SygmaClient", "BuildApprovals");
-        var transferTransaction = await _sygmaClient.BuildTransferTransaction(transfer, fee);
-        Debug.Log("Transfer transaction done nice");
-
-        SampleOutputUtil.PrintResult("Transfer transaction created", "SygmaClient", "BuildTransferTransaction");
-        var transactionHash = await Web3Accessor.Web3.TransactionExecutor.SendTransaction(transferTransaction);
-        SampleOutputUtil.PrintResult("Transaction hash: " + transactionHash.Hash, "SygmaClient", "SendTransaction");
+        Debug.Log("Starting sygma transfer");
+        var transactionResponse = await _sygmaClient.Transfer(new SygmaTransferParams()
+        {
+            DestinationChainId = sygmaConfig.DestinationChainId,
+            DestinationAddress = address,
+            SourceAddress = address,
+            Amount = new HexBigInteger(sygmaConfig.Amount),
+            ResourceType = sygmaConfig.ResourceType,
+            TokenId = sygmaConfig.TokenId
+        });
+        
+        
+        SampleOutputUtil.PrintResult("Transaction hash: " + transactionResponse.Hash, "SygmaClient", "SendTransaction");
     }
     
     public static async Task<(object[], TransactionReceipt)> MintErc1155(Web3 web3, string abi, string contractAddress, BigInteger id, BigInteger amount)
