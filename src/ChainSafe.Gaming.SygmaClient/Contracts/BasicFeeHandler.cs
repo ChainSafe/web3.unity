@@ -1,18 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
-using ChainSafe.Gaming.Evm.Contracts.Builders;
-using ChainSafe.Gaming.Evm.Transactions;
+using ChainSafe.Gaming.SygmaClient.DepositDataHandlers;
 using ChainSafe.Gaming.SygmaClient.Dto;
 using ChainSafe.Gaming.SygmaClient.Types;
-using Nethereum.ABI;
-using Nethereum.ABI.FunctionEncoding;
-using Nethereum.ABI.Model;
 using Nethereum.Hex.HexConvertors.Extensions;
-using Nethereum.Hex.HexTypes;
 
 namespace ChainSafe.Gaming.SygmaClient.Contracts
 {
@@ -28,45 +20,23 @@ namespace ChainSafe.Gaming.SygmaClient.Contracts
         public BasicFeeHandler(IContractBuilder cb, string address)
         {
             this.address = address;
-            this.contract = cb.Build(FeeHandlerAbi, address);
+            contract = cb.Build(FeeHandlerAbi, address);
         }
 
-        public async Task<EvmFee> CalculateBasicFee(
-            string sender,
-            string reciever,
-            uint fromDomainID,
-            uint destinationDomainID,
-            HexBigInteger resourceID,
-            EvmFee feeData)
+        public async Task<EvmFee> CalculateBasicFee(Transfer transfer, EvmFee feeData)
         {
-            var data = CreateERC1155DepositData("1", reciever);
-            var result = await this.contract.Call(MethodCalculateFee, new object[] { sender, fromDomainID, destinationDomainID, resourceID.ToHexByteArray(), data, feeData.FeeData.HexToByteArray() });
+            var handler = DepositDataFactory.Handler(transfer.Resource.Type);
+            var depositData = handler.CreateDepositData(transfer);
 
-// Your original code for creating the fee object
-            var fee = new EvmFee(this.address, FeeHandlerType.Basic)
+            var result = await contract.Call(MethodCalculateFee, new object[] { transfer.Sender, transfer.From.Id, transfer.To.Id, transfer.Resource.ResourceId.HexToByteArray(), depositData, feeData.FeeData.HexToByteArray() });
+
+            var fee = new EvmFee(address, FeeHandlerType.Basic)
             {
                 Fee = BigInteger.Parse(result[0].ToString()),
                 FeeData = result[1] as string,
             };
 
             return fee;
-        }
-
-        private byte[] CreateERC1155DepositData(string tokenId, string reciever)
-        {
-            // Your data to encode
-            BigInteger[] tokenIDs = { BigInteger.Parse(tokenId) };
-            BigInteger[] amounts = { 1 };
-            byte[] recipient = reciever.HexToByteArray(); // Convert recipient address to byte array
-            List<ABIValue> abivalues = new();
-            abivalues.Add(new ABIValue(new DynamicArrayType("uint[]"), tokenIDs));
-            abivalues.Add(new ABIValue(new DynamicArrayType("uint[]"), amounts));
-            abivalues.Add(new ABIValue(new BytesType(), recipient));
-            abivalues.Add(new ABIValue(new BytesType(), Array.Empty<byte>()));
-
-            ABIEncode abiEncode = new ABIEncode();
-            var depositData = abiEncode.GetABIEncoded(abivalues.ToArray());
-            return depositData;
         }
     }
 }

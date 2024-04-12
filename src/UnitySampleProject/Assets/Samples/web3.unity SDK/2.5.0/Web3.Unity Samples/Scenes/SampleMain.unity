@@ -2598,7 +2598,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 37375165}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.40298143
+  m_Size: 0.28983933
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2714,10 +2714,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e045c8abdfda6b4e9cfe97128a5a6a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destinationChainId: 338
-  resourceId: 0x0000000000000000000000000000000000000000000000000000000000000400
-  sygmaEnvironment: 2
   button: {fileID: 1026620238}
+  sygmaConfig:
+    <ResourceType>k__BackingField: 6
+    <TokenId>k__BackingField: 1
+    <SygmaEnvironment>k__BackingField: 2
+    <DestinationChainId>k__BackingField: 338
 --- !u!1001 &413551942
 PrefabInstance:
   m_ObjectHideFlags: 0

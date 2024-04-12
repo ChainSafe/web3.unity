@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using ChainSafe.Gaming.SygmaClient.Dto;
 using ChainSafe.Gaming.SygmaClient.Types;
 using ChainSafe.Gaming.Web3.Environment;
@@ -7,33 +8,37 @@ namespace ChainSafe.Gaming.SygmaClient
 {
     public class Config
     {
-        private readonly ILogWriter logWriter;
         private readonly IHttpClient httpClient;
-
-        private uint chainId;
+        private readonly uint sourceChainIdId;
 
         private Environment environment;
 
-        public Config(IHttpClient http, uint chain, ILogWriter logWriter)
+        private Dictionary<uint, EvmConfig> domainDictionary;
+
+        public Config(IHttpClient http, uint sourceChainId)
         {
-            chainId = chain;
+            sourceChainIdId = sourceChainId;
             httpClient = http;
-            this.logWriter = logWriter;
         }
 
-        public RawConfig EnvironmentConfig { get; set; }
+        public EvmConfig SourceDomainConfig => domainDictionary[sourceChainIdId];
+
+        public EvmConfig DestinationDomainConfig(uint destinationChainId) => domainDictionary[destinationChainId];
 
         public async void Fetch(Environment env)
         {
-            if (chainId == 0)
+            if (sourceChainIdId == 0)
             {
                 return;
             }
 
+            RawConfig environmentConfig = null;
+
             environment = env;
             if (environment == Environment.Local)
             {
-                EnvironmentConfig = LocalConfig.Fetch();
+                environmentConfig = LocalConfig.Fetch();
+                domainDictionary = environmentConfig.Domains.ToDictionary(domain => domain.ChainId, value => value);
                 return;
             }
 
@@ -44,15 +49,8 @@ namespace ChainSafe.Gaming.SygmaClient
                 _ => ConfigUrl.Mainnet
             };
 
-            var result = await httpClient.GetRaw(configUrl);
-            logWriter.Log(result.Response);
-
-            EnvironmentConfig = (await httpClient.Get<RawConfig>(configUrl)).AssertSuccess();
-        }
-
-        public EvmConfig SourceDomainConfig()
-        {
-            return EnvironmentConfig.Domains.Find(cfg => cfg.ChainId == chainId);
+            environmentConfig = (await httpClient.Get<RawConfig>(configUrl)).AssertSuccess();
+            domainDictionary = environmentConfig.Domains.ToDictionary(domain => domain.ChainId, value => value);
         }
     }
 }

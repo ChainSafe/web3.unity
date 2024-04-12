@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using ChainSafe.Gaming.SygmaClient.Types;
 using Nethereum.Hex.HexTypes;
