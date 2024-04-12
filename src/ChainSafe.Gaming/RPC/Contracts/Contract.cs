@@ -264,17 +264,23 @@ namespace ChainSafe.Gaming.Evm.Contracts
             txReq.From ??= signer == null ? null : await signer.GetAddress();
             txReq.To ??= address;
             txReq.Data ??= function.GetData(parameters);
-
-            var feeData = await provider.GetFeeData();
-            txReq.MaxFeePerGas = feeData.MaxFeePerGas.ToHexBigInteger();
-            if (!feeData.MaxPriorityFeePerGas.IsZero)
+            try
             {
-                txReq.MaxPriorityFeePerGas = feeData.MaxFeePerGas.ToHexBigInteger();
+                var feeData = await provider.GetFeeData();
+                txReq.MaxFeePerGas = feeData.MaxFeePerGas.ToHexBigInteger();
+                if (!feeData.MaxPriorityFeePerGas.IsZero)
+                {
+                    txReq.MaxPriorityFeePerGas = feeData.MaxFeePerGas.ToHexBigInteger();
+                }
+
+                if (shouldEstimateGas)
+                {
+                    txReq.GasLimit ??= await provider.EstimateGas(txReq);
+                }
             }
-
-            if (shouldEstimateGas)
+            catch (Exception e)
             {
-                txReq.GasLimit ??= await provider.EstimateGas(txReq);
+                Console.WriteLine(e);
             }
 
             return txReq;
