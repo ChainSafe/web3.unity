@@ -21,23 +21,28 @@ namespace Plugins.CountlySDK.Helpers
         public static CountlyEventModel ConvertEventEntityToEventModel(EventEntity entity, CountlyLogHelper L)
         {
             // Check if the input EventEntity is null
-            if (entity == null) {
+            if (entity == null)
+            {
                 L?.Warning("[Converter] 'ConvertEventEntityToEventModel': EventEntity variable is null");
                 return null;
             }
-            if (string.IsNullOrEmpty(entity.Json)) {
+            if (string.IsNullOrEmpty(entity.Json))
+            {
                 L?.Warning("[Converter] 'ConvertEventEntityToEventModel': EventEntity.Json variable is null or empty");
                 return null;
             }
 
-            try {
+            try
+            {
 
                 CountlyEventModel model = JsonConvert.DeserializeObject<CountlyEventModel>(entity.Json);
                 model.Id = entity.Id;
 
                 return model;
 
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 // Handle JSON serialization error
                 L?.Warning($"[Converter] 'ConvertEventEntityToEventModel': JSON serialization error: {ex.Message}");
                 return null;
@@ -53,7 +58,8 @@ namespace Plugins.CountlySDK.Helpers
             string json = JsonConvert.SerializeObject(model, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             model.Id = id;
 
-            return new EventEntity {
+            return new EventEntity
+            {
                 Id = id,
                 Json = json
             };
@@ -79,7 +85,8 @@ namespace Plugins.CountlySDK.Helpers
             string json = JsonConvert.SerializeObject(model, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             model.Id = id;
 
-            return new SegmentEntity {
+            return new SegmentEntity
+            {
                 Id = id,
                 Json = json
             };
@@ -106,7 +113,8 @@ namespace Plugins.CountlySDK.Helpers
                 new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             model.Id = id;
 
-            return new RequestEntity {
+            return new RequestEntity
+            {
                 Id = id,
                 Json = json
             };
@@ -118,7 +126,8 @@ namespace Plugins.CountlySDK.Helpers
         /// <returns>Dictionary of string and object representing the converted JSON data, or null if the input JSON string is null.</returns>
         public static Dictionary<string, object> ConvertJsonToDictionary(string json, CountlyLogHelper L)
         {
-            if (json == null) {
+            if (json == null)
+            {
                 L?.Warning("[Converter] 'ConvertJsonToDictionary': Provided Json is null");
                 return null;
             }

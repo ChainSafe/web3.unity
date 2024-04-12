@@ -51,10 +51,13 @@ namespace Plugins.CountlySDK.Helpers
             _logHelper = logHelper;
             _requestBuilder = requestBuilder;
 
-            if (FirstLaunchAppHelper.IsFirstLaunchApp) {
+            if (FirstLaunchAppHelper.IsFirstLaunchApp)
+            {
                 CurrentVersion = SchemaVersion;
                 PlayerPrefs.SetInt(Constants.SchemaVersion, SchemaVersion);
-            } else {
+            }
+            else
+            {
                 CurrentVersion = PlayerPrefs.GetInt(Constants.SchemaVersion, 0);
             }
         }
@@ -72,7 +75,8 @@ namespace Plugins.CountlySDK.Helpers
             db.GetConfig().EnsureTable<EventEntity>(EntityType.NonViewEvents.ToString(), "Id");
             db.GetConfig().EnsureTable<SegmentEntity>(EntityType.NonViewEventSegments.ToString(), "Id");
 
-            if (CurrentVersion < 1) {
+            if (CurrentVersion < 1)
+            {
                 db.GetConfig().EnsureTable<EventEntity>(EntityType.ViewEvents.ToString(), "Id");
                 db.GetConfig().EnsureTable<SegmentEntity>(EntityType.ViewEventSegments.ToString(), "Id");
                 db.GetConfig().EnsureTable<EventNumberInSameSessionEntity>(EntityType.EventNumberInSameSessions.ToString(), "Id");
@@ -99,7 +103,8 @@ namespace Plugins.CountlySDK.Helpers
             RequestDao = new Dao<RequestEntity>(auto, EntityType.Requests.ToString(), _logHelper);
             EventDao = new Dao<EventEntity>(auto, EntityType.NonViewEvents.ToString(), _logHelper);
 
-            if (CurrentVersion < 1) {
+            if (CurrentVersion < 1)
+            {
                 EventNrInSameSessionDao = new Dao<EventNumberInSameSessionEntity>(auto, EntityType.EventNumberInSameSessions.ToString(), _logHelper);
 
                 Dao<EventEntity> viewDao = new Dao<EventEntity>(auto, EntityType.ViewEvents.ToString(), _logHelper);
@@ -139,7 +144,8 @@ namespace Plugins.CountlySDK.Helpers
              * - Deletion of the data in the “EventNumberInSameSessionEntity” table
              * - Copy data of 'Views Repository(Entity Dao, Segment Dao)' into Event Repository(Entity Dao, Segment Dao)'.
             */
-            if (CurrentVersion == 0) {
+            if (CurrentVersion == 0)
+            {
                 Migration_EventNumberInSameSessionEntityDataRemoval();
                 Migration_CopyViewDataIntoEventData();
 
@@ -147,13 +153,15 @@ namespace Plugins.CountlySDK.Helpers
                 PlayerPrefs.SetInt(Constants.SchemaVersion, CurrentVersion);
             }
 
-            if (CurrentVersion == 1) {
+            if (CurrentVersion == 1)
+            {
                 Migration_MigrateOldRequests();
                 CurrentVersion = 2;
                 PlayerPrefs.SetInt(Constants.SchemaVersion, CurrentVersion);
             }
 
-            if (CurrentVersion == 2) {
+            if (CurrentVersion == 2)
+            {
                 bool customIdProvided = (bool)migrationParams[key_from_2_to_3_custom_id_set];
                 Migration_GuessTheDeviceIDType(customIdProvided);
                 CurrentVersion = 3;
@@ -177,7 +185,8 @@ namespace Plugins.CountlySDK.Helpers
         /// </summary>
         private void Migration_CopyViewDataIntoEventData()
         {
-            while (ViewRepo.Count > 0) {
+            while (ViewRepo.Count > 0)
+            {
                 EventRepo.Enqueue(ViewRepo.Dequeue());
             }
             _logHelper.Verbose("[CountlyStorageHelper] Migration_CopyViewDataIntoEventData");
@@ -193,9 +202,11 @@ namespace Plugins.CountlySDK.Helpers
         {
             //get all stored requests
             CountlyRequestModel[] requestModels = RequestRepo.Models.ToArray();
-            foreach (CountlyRequestModel request in requestModels) {
+            foreach (CountlyRequestModel request in requestModels)
+            {
                 //go through all of them
-                if (request.RequestData == null) {
+                if (request.RequestData == null)
+                {
                     // if we have no request data then that means that all of the info is in the request URL
                     // start by parsing all the params from the URL.
                     // remove the checksum and then write the request back as a string
@@ -209,7 +220,9 @@ namespace Plugins.CountlySDK.Helpers
 
                     request.RequestUrl = null;
                     request.RequestData = data;
-                } else {
+                }
+                else
+                {
                     // if we don't have request data then that means that all of the request params are in the request data field
                     // deserialize the values, remove the checksum and then combine them all into a single array which should then be the replacement
                     Dictionary<string, object> requestData = JsonConvert.DeserializeObject<Dictionary<string, object>>(request.RequestData);
@@ -220,7 +233,8 @@ namespace Plugins.CountlySDK.Helpers
                 }
 
                 bool result = RequestRepo.Update(request);
-                if (!result) {
+                if (!result)
+                {
                     _logHelper.Warning("[CountlyStorageHelper] Migration_MigrateOldRequests: updating the request failed");
                     //we failed to update the old request,
 
@@ -235,9 +249,12 @@ namespace Plugins.CountlySDK.Helpers
 
         private void Migration_GuessTheDeviceIDType(bool customIdProvided)
         {
-            if (customIdProvided) {
+            if (customIdProvided)
+            {
                 PlayerPrefs.SetInt(Constants.DeviceIDTypeKey, (int)DeviceIdType.DeveloperProvided);
-            } else {
+            }
+            else
+            {
                 PlayerPrefs.SetInt(Constants.DeviceIDTypeKey, (int)DeviceIdType.SDKGenerated);
             }
         }

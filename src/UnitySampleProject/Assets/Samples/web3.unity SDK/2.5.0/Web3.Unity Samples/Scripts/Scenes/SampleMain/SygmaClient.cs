@@ -16,7 +16,7 @@ using Environment = ChainSafe.Gaming.SygmaClient.Types.Environment;
 [Serializable]
 public class SygmaConfig
 {
-    [field:SerializeField] public ResourceType ResourceType { get; private set; } = ResourceType.Erc1155;
+    [field: SerializeField] public ResourceType ResourceType { get; private set; } = ResourceType.Erc1155;
     [field: SerializeField] public string TokenId { get; private set; } = "1";
     [field: SerializeField] public Environment SygmaEnvironment { get; private set; } = Environment.Testnet;
     [field: SerializeField] public uint DestinationChainId { get; private set; } = 338;
@@ -27,7 +27,7 @@ public class SygmaClient : MonoBehaviour
 {
     [SerializeField] private Button button;
     [SerializeField] private SygmaConfig sygmaConfig;
-    
+
 
     private ISygmaClient _sygmaClient;
     private bool _isSygmaInitialized;
@@ -54,7 +54,7 @@ public class SygmaClient : MonoBehaviour
             return;
         }
         var address = await _web3.Signer.GetAddress();
-        
+
         Debug.Log("Starting sygma transfer");
         var transactionResponse = await _sygmaClient.Transfer(new SygmaTransferParams()
         {
@@ -65,11 +65,11 @@ public class SygmaClient : MonoBehaviour
             ResourceType = sygmaConfig.ResourceType,
             TokenId = sygmaConfig.TokenId
         });
-        
-        
+
+
         SampleOutputUtil.PrintResult("Transaction hash: " + transactionResponse.Hash, "SygmaClient", "SendTransaction");
     }
-    
+
     public static async Task<(object[], TransactionReceipt)> MintErc1155(Web3 web3, string abi, string contractAddress, BigInteger id, BigInteger amount)
     {
         byte[] dataObject = { };
@@ -84,4 +84,5 @@ public class SygmaClient : MonoBehaviour
             dataObject
         });
         return response;
-    }}
+    }
+}
