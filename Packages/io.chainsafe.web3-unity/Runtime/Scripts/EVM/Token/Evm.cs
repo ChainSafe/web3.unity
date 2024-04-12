@@ -131,7 +131,7 @@ namespace Scripts.EVM.Token
             var msgHash = new Sha3Keccack().CalculateHash(Encoding.UTF8.GetBytes(msg));
             var signature = MessageSigner.ExtractEcdsaSignature(signatureString);
             var key = EthECKey.RecoverFromSignature(signature, msgHash);
-            return key.GetPublicAddress() == playerAccount;
+            return key.GetPublicAddress().ToLower() == playerAccount.ToLower();
         }
 
         public static string EcdsaSignTransaction(string _privateKey, string _transaction, string _chainId)

@@ -1,4 +1,5 @@
 using ChainSafe.Gaming.Web3.Build;
+using ChainSafe.Gaming.Web3.Core.Logout;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ChainSafe.Gaming.MetaMask.Unity
@@ -18,7 +19,7 @@ namespace ChainSafe.Gaming.MetaMask.Unity
             collection.AssertServiceNotBound<IMetaMaskProvider>();
 
             // wallet
-            collection.AddSingleton<IMetaMaskProvider, MetaMaskProvider>();
+            collection.AddSingleton<ILogoutHandler, IMetaMaskProvider, MetaMaskProvider>();
 
             return collection;
         }
