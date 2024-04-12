@@ -16,7 +16,7 @@ public class SampleTransfer : MonoBehaviour
 
     private async void Awake()
     {
-        
+
         if (Web3Accessor.TryWeb3 == null)
         {
             throw new Web3Exception("Web3 Instance is not set. Please set it after you've configured the W");
@@ -28,10 +28,10 @@ public class SampleTransfer : MonoBehaviour
     {
         var toAddress = addressInput.text;
         var amount = amountInput.text;
-        
-        if(!toAddress.IsHex())
+
+        if (!toAddress.IsHex())
             throw new Web3Exception("Not a hex address");
-    
+
         if (Web3Accessor.TryWeb3 == null)
         {
             throw new Web3Exception("Web3 Instance is not set. Please set it after you've built the Web3 instance.");

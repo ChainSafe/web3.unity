@@ -43,7 +43,8 @@ namespace Notifications.Impls.Android
 
             JObject jObject = JObject.Parse(data);
 
-            if (jObject != null) {
+            if (jObject != null)
+            {
                 index = (int)jObject.GetValue("click_index");
             }
             _OnNotificationClickResult?.Invoke(data, index);

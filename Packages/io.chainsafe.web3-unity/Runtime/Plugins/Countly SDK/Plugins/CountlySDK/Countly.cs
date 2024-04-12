@@ -51,8 +51,10 @@ namespace Plugins.CountlySDK
         /// <returns>Countly</returns>
         public static Countly Instance
         {
-            get {
-                if (_instance == null) {
+            get
+            {
+                if (_instance == null)
+                {
 
                     GameObject gameObject = new GameObject("_countly");
                     _instance = gameObject.AddComponent<Countly>();
@@ -62,7 +64,8 @@ namespace Plugins.CountlySDK
                 return _instance;
 
             }
-            internal set {
+            internal set
+            {
                 _instance = value;
             }
         }
@@ -146,7 +149,8 @@ namespace Plugins.CountlySDK
             Instance = this;
             countlyMainThreadHandler = CountlyMainThreadHandler.Instance;
             //Auth and Config will not be null in case initializing through countly prefab
-            if (Auth != null && Config != null) {
+            if (Auth != null && Config != null)
+            {
                 Init(new CountlyConfiguration(Auth, Config));
             }
         }
@@ -155,10 +159,13 @@ namespace Plugins.CountlySDK
         {
 
             // Check if the current thread is the main thread
-            if (countlyMainThreadHandler.IsMainThread()) {
+            if (countlyMainThreadHandler.IsMainThread())
+            {
                 // If on the main thread, initialize directly
                 InitInternal(configuration);
-            } else {
+            }
+            else
+            {
                 // If not on the main thread, schedule initialization on the main thread
                 // This ensures that SDK is initialized on the main thread
                 countlyMainThreadHandler.RunOnMainThread(() => { InitInternal(configuration); });
@@ -170,7 +177,8 @@ namespace Plugins.CountlySDK
 
         public void InitInternal(CountlyConfiguration configuration)
         {
-            if (IsSDKInitialized) {
+            if (IsSDKInitialized)
+            {
                 _logHelper.Error("SDK has already been initialized, 'Init' should not be called a second time!");
                 return;
             }
@@ -182,117 +190,143 @@ namespace Plugins.CountlySDK
 
             configuration.metricHelper = new MetricHelper(configuration.overridenMetrics);
 
-            if (configuration.Parent != null) {
+            if (configuration.Parent != null)
+            {
                 transform.parent = configuration.Parent.transform;
             }
 
-            if (string.IsNullOrEmpty(configuration.ServerUrl)) {
+            if (string.IsNullOrEmpty(configuration.ServerUrl))
+            {
                 throw new ArgumentNullException(configuration.ServerUrl, "Server URL is required.");
             }
 
-            if (string.IsNullOrEmpty(configuration.AppKey)) {
+            if (string.IsNullOrEmpty(configuration.AppKey))
+            {
                 throw new ArgumentNullException(configuration.AppKey, "App Key is required.");
             }
 
-            if (configuration.ServerUrl[configuration.ServerUrl.Length - 1] == '/') {
+            if (configuration.ServerUrl[configuration.ServerUrl.Length - 1] == '/')
+            {
                 configuration.ServerUrl = configuration.ServerUrl.Remove(configuration.ServerUrl.Length - 1);
             }
 
             _logHelper.Debug("[Init] SDK initialized with the URL:[" + configuration.ServerUrl + "] and the appKey:[" + configuration.AppKey + "]");
 
 
-            if (configuration.SessionDuration < 1) {
+            if (configuration.SessionDuration < 1)
+            {
                 _logHelper.Error("[Init] provided session duration is less than 1. Replacing it with 1.");
                 configuration.SessionDuration = 1;
             }
             _logHelper.Debug("[Init] session duration set to [" + configuration.SessionDuration + "]");
 
-            if (configuration.EnablePost) {
+            if (configuration.EnablePost)
+            {
                 _logHelper.Debug("[Init] Setting HTTP POST to be forced");
             }
 
-            if (configuration.Salt != null) {
+            if (configuration.Salt != null)
+            {
                 _logHelper.Debug("[Init] Enabling tamper protection");
             }
 
-            if (configuration.NotificationMode != TestMode.None) {
+            if (configuration.NotificationMode != TestMode.None)
+            {
                 _logHelper.Debug("[Init] Enabling push notification");
             }
 
-            if (configuration.EnableTestMode) {
+            if (configuration.EnableTestMode)
+            {
                 _logHelper.Warning("[Init] Enabling test mode");
             }
 
-            if (configuration.EnableAutomaticCrashReporting) {
+            if (configuration.EnableAutomaticCrashReporting)
+            {
                 _logHelper.Debug("[Init] Enabling automatic crash reporting");
             }
 
             // Have a look at the SDK limit values
-            if (configuration.EventQueueThreshold < 1) {
+            if (configuration.EventQueueThreshold < 1)
+            {
                 _logHelper.Error("[Init] provided event queue size is less than 1. Replacing it with 1.");
                 configuration.EventQueueThreshold = 1;
             }
             _logHelper.Debug("[Init] event queue size set to [" + configuration.EventQueueThreshold + "]");
 
-            if (configuration.StoredRequestLimit < 1) {
+            if (configuration.StoredRequestLimit < 1)
+            {
                 _logHelper.Error("[Init] provided request queue size is less than 1. Replacing it with 1.");
                 configuration.StoredRequestLimit = 1;
             }
             _logHelper.Debug("[Init] request queue size set to [" + configuration.StoredRequestLimit + "]");
 
-            if (configuration.MaxKeyLength != MaxKeyLengthDefault) {
-                if (configuration.MaxKeyLength < 1) {
+            if (configuration.MaxKeyLength != MaxKeyLengthDefault)
+            {
+                if (configuration.MaxKeyLength < 1)
+                {
                     configuration.MaxKeyLength = 1;
                     _logHelper.Warning("[Init] provided 'maxKeyLength' is less than '1'. Setting it to '1'.");
                 }
                 _logHelper.Info("[Init] provided 'maxKeyLength' override:[" + configuration.MaxKeyLength + "]");
             }
 
-            if (configuration.MaxValueSize != MaxValueSizeDefault) {
-                if (configuration.MaxValueSize < 1) {
+            if (configuration.MaxValueSize != MaxValueSizeDefault)
+            {
+                if (configuration.MaxValueSize < 1)
+                {
                     configuration.MaxValueSize = 1;
                     _logHelper.Warning("[Init] provided 'maxValueSize' is less than '1'. Setting it to '1'.");
                 }
                 _logHelper.Info("[Init] provided 'maxValueSize' override:[" + configuration.MaxValueSize + "]");
             }
 
-            if (configuration.MaxSegmentationValues != MaxSegmentationValuesDefault) {
-                if (configuration.MaxSegmentationValues < 1) {
+            if (configuration.MaxSegmentationValues != MaxSegmentationValuesDefault)
+            {
+                if (configuration.MaxSegmentationValues < 1)
+                {
                     configuration.MaxSegmentationValues = 1;
                     _logHelper.Warning("[Init] provided 'maxSegmentationValues' is less than '1'. Setting it to '1'.");
                 }
                 _logHelper.Info("[Init] provided 'maxSegmentationValues' override:[" + configuration.MaxSegmentationValues + "]");
             }
 
-            if (configuration.TotalBreadcrumbsAllowed != MaxBreadcrumbCountDefault) {
-                if (configuration.TotalBreadcrumbsAllowed < 1) {
+            if (configuration.TotalBreadcrumbsAllowed != MaxBreadcrumbCountDefault)
+            {
+                if (configuration.TotalBreadcrumbsAllowed < 1)
+                {
                     configuration.TotalBreadcrumbsAllowed = 1;
                     _logHelper.Warning("[Init] provided 'maxBreadcrumbCount' is less than '1'. Setting it to '1'.");
                 }
                 _logHelper.Info("[Init] provided 'maxBreadcrumbCount' override:[" + configuration.TotalBreadcrumbsAllowed + "]");
             }
 
-            if (configuration.MaxStackTraceLinesPerThread != MaxStackTraceLinesPerThreadDefault) {
-                if (configuration.MaxStackTraceLinesPerThread < 1) {
+            if (configuration.MaxStackTraceLinesPerThread != MaxStackTraceLinesPerThreadDefault)
+            {
+                if (configuration.MaxStackTraceLinesPerThread < 1)
+                {
                     configuration.MaxStackTraceLinesPerThread = 1;
                     _logHelper.Warning("[Init] provided 'maxStackTraceLinesPerThread' is less than '1'. Setting it to '1'.");
                 }
                 _logHelper.Info("[Init] provided 'maxStackTraceLinesPerThread' override:[" + configuration.MaxStackTraceLinesPerThread + "]");
             }
 
-            if (configuration.MaxStackTraceLineLength != MaxStackTraceLineLengthDefault) {
-                if (configuration.MaxStackTraceLineLength < 1) {
+            if (configuration.MaxStackTraceLineLength != MaxStackTraceLineLengthDefault)
+            {
+                if (configuration.MaxStackTraceLineLength < 1)
+                {
                     configuration.MaxStackTraceLineLength = 1;
                     _logHelper.Warning("[Init] provided 'maxStackTraceLineLength' is less than '1'. Setting it to '1'.");
                 }
                 _logHelper.Info("[Init] provided 'maxStackTraceLineLength' override:[" + configuration.MaxStackTraceLineLength + "]");
             }
 
-            if (configuration.SafeEventIDGenerator == null) {
+            if (configuration.SafeEventIDGenerator == null)
+            {
                 configuration.SafeEventIDGenerator = new SafeIDGenerator();
             }
 
-            if (configuration.SafeViewIDGenerator == null) {
+            if (configuration.SafeViewIDGenerator == null)
+            {
                 configuration.SafeViewIDGenerator = new SafeIDGenerator();
             }
 
@@ -347,10 +381,12 @@ namespace Plugins.CountlySDK
 
         private async void OnInitialisationComplete()
         {
-            lock (lockObj) {
+            lock (lockObj)
+            {
                 IsSDKInitialized = true;
                 _ = Initialization.OnInitialisationComplete();
-                foreach (AbstractBaseService listener in _listeners) {
+                foreach (AbstractBaseService listener in _listeners)
+                {
                     listener.OnInitializationCompleted();
                 }
             }
@@ -380,7 +416,8 @@ namespace Plugins.CountlySDK
             Device.Listeners = _listeners;
             Consents.Listeners = _listeners;
 
-            foreach (AbstractBaseService listener in _listeners) {
+            foreach (AbstractBaseService listener in _listeners)
+            {
                 listener.LockObj = lockObj;
             }
         }
@@ -390,7 +427,8 @@ namespace Plugins.CountlySDK
         /// </summary>
         private void OnApplicationQuit()
         {
-            if (!IsSDKInitialized) {
+            if (!IsSDKInitialized)
+            {
                 return;
             }
 
@@ -406,7 +444,8 @@ namespace Plugins.CountlySDK
 
         internal void ClearStorage()
         {
-            if (!IsSDKInitialized) {
+            if (!IsSDKInitialized)
+            {
                 return;
             }
 
@@ -420,40 +459,52 @@ namespace Plugins.CountlySDK
 
         private void OnApplicationFocus(bool hasFocus)
         {
-            if (!IsSDKInitialized) {
+            if (!IsSDKInitialized)
+            {
                 return;
             }
 
             _logHelper?.Debug("[Countly] OnApplicationFocus: " + hasFocus);
 
-            if (hasFocus) {
+            if (hasFocus)
+            {
                 SubscribeAppLog();
-            } else {
+            }
+            else
+            {
                 HandleAppPauseOrFocus();
             }
         }
 
         private void OnApplicationPause(bool pauseStatus)
         {
-            lock (lockObj) {
-                if (!IsSDKInitialized) {
+            lock (lockObj)
+            {
+                if (!IsSDKInitialized)
+                {
                     return;
                 }
 
                 _logHelper?.Debug("[Countly] OnApplicationPause: " + pauseStatus);
 
-                if (CrashReports != null) {
+                if (CrashReports != null)
+                {
                     CrashReports.IsApplicationInBackground = pauseStatus;
                 }
 
-                if (pauseStatus) {
+                if (pauseStatus)
+                {
                     HandleAppPauseOrFocus();
-                    if (!Configuration.IsAutomaticSessionTrackingDisabled) {
+                    if (!Configuration.IsAutomaticSessionTrackingDisabled)
+                    {
                         _ = Session?.EndSessionAsync();
                     }
-                } else {
+                }
+                else
+                {
                     SubscribeAppLog();
-                    if (!Configuration.IsAutomaticSessionTrackingDisabled) {
+                    if (!Configuration.IsAutomaticSessionTrackingDisabled)
+                    {
                         _ = Session?.BeginSessionAsync();
                     }
                 }
@@ -479,7 +530,8 @@ namespace Plugins.CountlySDK
 
         private void LogCallback(string condition, string stackTrace, LogType type)
         {
-            if (type == LogType.Exception) {
+            if (type == LogType.Exception)
+            {
                 CrashReports?.SendCrashReportAsync(condition, stackTrace);
             }
 
@@ -487,7 +539,8 @@ namespace Plugins.CountlySDK
 
         private void SubscribeAppLog()
         {
-            if (_logSubscribed) {
+            if (_logSubscribed)
+            {
                 return;
             }
 
@@ -497,7 +550,8 @@ namespace Plugins.CountlySDK
 
         private void UnsubscribeAppLog()
         {
-            if (!_logSubscribed) {
+            if (!_logSubscribed)
+            {
                 return;
             }
 

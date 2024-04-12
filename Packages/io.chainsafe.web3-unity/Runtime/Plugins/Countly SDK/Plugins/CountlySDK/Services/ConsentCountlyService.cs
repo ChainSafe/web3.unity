@@ -20,12 +20,15 @@ namespace Plugins.CountlySDK.Services
         {
             Log.Debug("[ConsentCountlyService] Initializing.");
 
-            if (configuration.RequiresConsent) {
-                if (configuration.GivenConsent != null) {
+            if (configuration.RequiresConsent)
+            {
+                if (configuration.GivenConsent != null)
+                {
                     Log.Debug("[ConsentCountlyService] Enabling consent: " + string.Format("[{0}]", string.Join(", ", configuration.GivenConsent)));
                 }
 
-                foreach (KeyValuePair<string, Consents[]> entry in configuration.ConsentGroups) {
+                foreach (KeyValuePair<string, Consents[]> entry in configuration.ConsentGroups)
+                {
                     Log.Debug("[ConsentCountlyService] Enabling consent group " + entry.Key + ": " + string.Format("[{0}]", string.Join(", ", entry.Value)));
                 }
             }
@@ -35,9 +38,12 @@ namespace Plugins.CountlySDK.Services
             RequiresConsent = _configuration.RequiresConsent;
             _countlyConsentGroups = new Dictionary<string, Consents[]>(_configuration.ConsentGroups);
 
-            if (_configuration.EnabledConsentGroups != null) {
-                foreach (KeyValuePair<string, Consents[]> entry in _countlyConsentGroups) {
-                    if (_configuration.EnabledConsentGroups.Contains(entry.Key)) {
+            if (_configuration.EnabledConsentGroups != null)
+            {
+                foreach (KeyValuePair<string, Consents[]> entry in _countlyConsentGroups)
+                {
+                    if (_configuration.EnabledConsentGroups.Contains(entry.Key))
+                    {
                         SetConsentInternal(entry.Value, true, sendRequest: false, ConsentChangedAction.Initialization);
                     }
                 }
@@ -54,7 +60,8 @@ namespace Plugins.CountlySDK.Services
         /// <returns>Returns "true" if the consent for the checked feature has been provided</returns>
         public bool CheckConsent(Consents consent)
         {
-            lock (LockObj) {
+            lock (LockObj)
+            {
                 Log.Info("[ConsentCountlyService] CheckConsent : consent = " + consent.ToString());
                 return CheckConsentInternal(consent);
             }
@@ -90,13 +97,16 @@ namespace Plugins.CountlySDK.Services
         {
             bool result = !RequiresConsent;
 
-            if (result) {
+            if (result)
+            {
                 Log.Verbose("[ConsentCountlyService] AnyConsentGiven = " + result);
                 return result;
             }
 
-            foreach (KeyValuePair<Consents, bool> entry in CountlyConsents) {
-                if (entry.Value) {
+            foreach (KeyValuePair<Consents, bool> entry in CountlyConsents)
+            {
+                if (entry.Value)
+                {
                     result = true;
                     break;
                 }
@@ -114,10 +124,12 @@ namespace Plugins.CountlySDK.Services
         /// <returns></returns>
         public void GiveConsent(Consents[] consents)
         {
-            lock (LockObj) {
+            lock (LockObj)
+            {
                 Log.Info("[ConsentCountlyService] GiveConsent : consents = " + (consents != null));
 
-                if (!RequiresConsent) {
+                if (!RequiresConsent)
+                {
                     Log.Debug("[ConsentCountlyService] GiveConsent: Please set consent to be required before calling this!");
                     return;
                 }
@@ -132,10 +144,12 @@ namespace Plugins.CountlySDK.Services
         /// <returns></returns>
         public void GiveConsentAll()
         {
-            lock (LockObj) {
+            lock (LockObj)
+            {
                 Log.Info("[ConsentCountlyService] GiveConsentAll");
 
-                if (!RequiresConsent) {
+                if (!RequiresConsent)
+                {
                     Log.Debug("[ConsentCountlyService] GiveConsentAll: Please set consent to be required before calling this!");
                     return;
                 }
@@ -152,15 +166,18 @@ namespace Plugins.CountlySDK.Services
         /// <returns></returns>
         public void RemoveConsent(Consents[] consents)
         {
-            lock (LockObj) {
+            lock (LockObj)
+            {
                 Log.Info("[ConsentCountlyService] RemoveConsent : consents = " + (consents != null));
 
-                if (!RequiresConsent) {
+                if (!RequiresConsent)
+                {
                     Log.Debug("[ConsentCountlyService] RemoveConsent: Please set consent to be required before calling this!");
                     return;
                 }
 
-                if (consents == null) {
+                if (consents == null)
+                {
                     Log.Debug("[ConsentCountlyService] Calling RemoveConsent with null consents list!");
                     return;
                 }
@@ -178,10 +195,12 @@ namespace Plugins.CountlySDK.Services
         /// <returns></returns>
         public void RemoveAllConsent()
         {
-            lock (LockObj) {
+            lock (LockObj)
+            {
                 Log.Info("[ConsentCountlyService] RemoveAllConsent");
 
-                if (!RequiresConsent) {
+                if (!RequiresConsent)
+                {
                     Log.Debug("[ConsentCountlyService] RemoveAllConsent: Please set consent to be required before calling this!");
                     return;
                 }
@@ -197,21 +216,26 @@ namespace Plugins.CountlySDK.Services
         /// <returns></returns>
         public void GiveConsentToGroup(string[] groupName)
         {
-            lock (LockObj) {
+            lock (LockObj)
+            {
                 Log.Info("[ConsentCountlyService] GiveConsentToGroup : groupName = " + (groupName != null));
 
-                if (!RequiresConsent) {
+                if (!RequiresConsent)
+                {
                     Log.Debug("[ConsentCountlyService] GiveConsentToGroup: Please set consent to be required before calling this!");
                     return;
                 }
 
-                if (groupName == null) {
+                if (groupName == null)
+                {
                     Log.Debug("[ConsentCountlyService] Calling GiveConsentToGroup with null groupName!");
                     return;
                 }
 
-                foreach (string name in groupName) {
-                    if (_countlyConsentGroups.ContainsKey(name)) {
+                foreach (string name in groupName)
+                {
+                    if (_countlyConsentGroups.ContainsKey(name))
+                    {
                         Consents[] consents = _countlyConsentGroups[name];
                         SetConsentInternal(consents, true, sendRequest: true);
                     }
@@ -226,21 +250,26 @@ namespace Plugins.CountlySDK.Services
         /// <returns></returns>
         public void RemoveConsentOfGroup(string[] groupName)
         {
-            lock (LockObj) {
+            lock (LockObj)
+            {
                 Log.Info("[ConsentCountlyService] RemoveConsentOfGroup : groupName = " + (groupName != null));
 
-                if (!RequiresConsent) {
+                if (!RequiresConsent)
+                {
                     Log.Debug("[ConsentCountlyService] RemoveConsentOfGroup: Please set consent to be required before calling this!");
                     return;
                 }
 
-                if (groupName == null) {
+                if (groupName == null)
+                {
                     Log.Debug("[ConsentCountlyService] Calling RemoveConsentOfGroup with null groupName!");
                     return;
                 }
 
-                foreach (string name in groupName) {
-                    if (_countlyConsentGroups.ContainsKey(name)) {
+                foreach (string name in groupName)
+                {
+                    if (_countlyConsentGroups.ContainsKey(name))
+                    {
                         Consents[] consents = _countlyConsentGroups[name];
                         SetConsentInternal(consents, false, sendRequest: true);
                     }
@@ -257,13 +286,15 @@ namespace Plugins.CountlySDK.Services
         /// <param name="value">value to be set</param>
         internal async Task SendConsentChanges()
         {
-            if (!RequiresConsent || _requestCountlyHelper == null) {
+            if (!RequiresConsent || _requestCountlyHelper == null)
+            {
                 return;
             }
 
             JObject jObj = new JObject();
             Consents[] consents = System.Enum.GetValues(typeof(Consents)).Cast<Consents>().ToArray();
-            foreach (Consents consent in consents) {
+            foreach (Consents consent in consents)
+            {
                 jObj.Add(GetConsentKey(consent), CheckConsentRawValue(consent));
             }
 
@@ -284,7 +315,8 @@ namespace Plugins.CountlySDK.Services
         private string GetConsentKey(Consents consent)
         {
             string key = "";
-            switch (consent) {
+            switch (consent)
+            {
                 case Consents.Clicks:
                     key = "clicks";
                     break;
@@ -329,18 +361,22 @@ namespace Plugins.CountlySDK.Services
         /// <param name="value">value to be set</param>
         internal async void SetConsentInternal(Consents[] consents, bool value, bool sendRequest = false, ConsentChangedAction action = ConsentChangedAction.ConsentUpdated)
         {
-            if (consents == null) {
+            if (consents == null)
+            {
                 Log.Debug("[ConsentCountlyService] Calling SetConsentInternal with null consents list!");
                 return;
             }
 
             List<Consents> updatedConsents = new List<Consents>(consents.Length);
-            foreach (Consents consent in consents) {
-                if (CountlyConsents.ContainsKey(consent) && CountlyConsents[consent] == value) {
+            foreach (Consents consent in consents)
+            {
+                if (CountlyConsents.ContainsKey(consent) && CountlyConsents[consent] == value)
+                {
                     continue;
                 }
 
-                if (!CountlyConsents.ContainsKey(consent) && !value) {
+                if (!CountlyConsents.ContainsKey(consent) && !value)
+                {
                     continue;
                 }
 
@@ -350,7 +386,8 @@ namespace Plugins.CountlySDK.Services
                 Log.Debug("[ConsentCountlyService] Setting consent for: [" + consent.ToString() + "] with value: [" + value + "]");
             }
 
-            if (sendRequest && updatedConsents.Count > 0) {
+            if (sendRequest && updatedConsents.Count > 0)
+            {
                 await SendConsentChanges();
             }
 
@@ -364,11 +401,13 @@ namespace Plugins.CountlySDK.Services
         /// <param name="newConsentValue">Modified Consents's new value</param>
         private void NotifyListeners(List<Consents> updatedConsents, bool newConsentValue, ConsentChangedAction action)
         {
-            if (Listeners == null || updatedConsents.Count < 1) {
+            if (Listeners == null || updatedConsents.Count < 1)
+            {
                 return;
             }
 
-            foreach (AbstractBaseService listener in Listeners) {
+            foreach (AbstractBaseService listener in Listeners)
+            {
                 listener.ConsentChanged(updatedConsents, newConsentValue, action);
             }
 
