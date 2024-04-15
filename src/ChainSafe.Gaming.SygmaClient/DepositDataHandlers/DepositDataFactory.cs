@@ -10,7 +10,7 @@ namespace ChainSafe.Gaming.SygmaClient.DepositDataHandlers
         {
             return resourceType switch
             {
-                ResourceType.Erc1155 => Erc115DepositDataHandler.Instance,
+                ResourceType.SemiFungible => SemiFungibleDepositDataHandler.Instance,
                 ResourceType.Erc721 => Erc721DepositDataHandler.Instance,
                 _ => throw new NotImplementedException($"Handler not implemented for resource type: {resourceType} And Resource Type: {resourceType}")
             };

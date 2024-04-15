@@ -1,6 +1,7 @@
 using System;
 using System.Numerics;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.SygmaClient;
 using ChainSafe.Gaming.SygmaClient.Dto;
@@ -54,6 +55,7 @@ public class SygmaClient : MonoBehaviour
             return;
         }
         var address = await _web3.Signer.GetAddress();
+       
 
         Debug.Log("Starting sygma transfer");
         var transactionResponse = await _sygmaClient.Transfer(new SygmaTransferParams()

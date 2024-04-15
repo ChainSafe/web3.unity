@@ -10,6 +10,8 @@ namespace ChainSafe.Gaming.SygmaClient.Dto
 
         [EnumMember(Value = "nonFungible")]
         NonFungible,
+        [EnumMember(Value = "semifungible")]
+        SemiFungible,
 
         [EnumMember(Value = "permissionedGeneric")]
         PermissionedGeneric,
