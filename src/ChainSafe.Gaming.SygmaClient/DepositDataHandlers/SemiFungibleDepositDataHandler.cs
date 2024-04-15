@@ -9,9 +9,9 @@ using Nethereum.Hex.HexConvertors.Extensions;
 namespace ChainSafe.Gaming.SygmaClient.DepositDataHandlers
 {
     // Struct so we don't allocate memory on the heap
-    public class Erc115DepositDataHandler : IDepositDataHandler
+    public class SemiFungibleDepositDataHandler : IDepositDataHandler
     {
-        public static readonly Erc115DepositDataHandler Instance = new();
+        public static readonly SemiFungibleDepositDataHandler Instance = new();
 
         public byte[] CreateDepositData(Transfer t)
         {
