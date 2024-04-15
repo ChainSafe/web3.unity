@@ -2598,7 +2598,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 37375165}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.28983933
+  m_Size: 0.29030234
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2716,10 +2716,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   button: {fileID: 1026620238}
   sygmaConfig:
-    <ResourceType>k__BackingField: 6
+    <ResourceType>k__BackingField: 2
     <TokenId>k__BackingField: 1
     <SygmaEnvironment>k__BackingField: 2
     <DestinationChainId>k__BackingField: 338
+    <Amount>k__BackingField: 1
 --- !u!1001 &413551942
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -170,7 +170,7 @@ namespace ChainSafe.Gaming.SygmaClient
 
             return transfer.Resource.Type switch
             {
-                ResourceType.NonFungible or ResourceType.Erc1155 => await new Erc1155Approvals(
+                ResourceType.NonFungible or ResourceType.Erc1155 or ResourceType.SemiFungible => await new Erc1155Approvals(
                     contractBuilder,
                     evmResource.Address).ApprovalTransactionRequest(handlerAddress, signer),
                 _ => throw new NotImplementedException("This type is not implemented yet")
