@@ -16,30 +16,52 @@ namespace Plugins.CountlySDK
         internal string ServerInputUrl { get; private set; }
         internal string ServerOutputUrl { get; private set; }
 
+        string appVersion;
+
         public CountlyUtils(Countly countly)
         {
             _countly = countly;
-
             ServerInputUrl = _countly.Configuration.ServerUrl + "/i?";
             ServerOutputUrl = _countly.Configuration.ServerUrl + "/o/sdk?";
         }
 
         public static string GetUniqueDeviceId()
         {
+            string result;
             string uniqueID = SystemInfo.deviceUniqueIdentifier;
+
             if (uniqueID.Length > 5)
             {
-                return "CLY_" + uniqueID;
+                result = uniqueID;
             }
             else
             {
-                return "CLY_" + SafeRandomVal();
+                result = SafeRandomVal();
             }
+
+            return "CLY_" + result;
         }
 
-        public static string GetAppVersion()
+        /// <summary>
+        /// Returns the current version of the Application.
+        /// </summary>
+        public string GetAppVersion()
         {
-            return Application.version;
+            try
+            {
+                if (appVersion == null)
+                {
+                    // Application.version can only be called on main thread
+                    appVersion = Application.version;
+                }
+                return appVersion;
+            }
+            catch (Exception ex)
+            {
+                Debug.Log("Error getting application version: " + ex.Message);
+                // Returns "-" to make sure that initialization process doesn't crash
+                return "-";
+            }
         }
 
         /// <summary>
@@ -240,7 +262,7 @@ namespace Plugins.CountlySDK
                 string key = entry.Key;
                 object value = entry.Value;
 
-                if (string.IsNullOrEmpty(key) || !(value is string || value is int || value is double || value is bool || value is float))
+                if (string.IsNullOrEmpty(key) || !(value is string || value is int || value is double || value is bool || value is float || value is long))
                 {
                     // found unsupported data type or null key or value, add key to removal list
                     keysToRemove.Add(key);

@@ -1,9 +1,10 @@
-using System.IO;
+using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
+using ChainSafe.Gaming.SygmaClient.DepositDataHandlers;
 using ChainSafe.Gaming.SygmaClient.Dto;
 using ChainSafe.Gaming.SygmaClient.Types;
-using Nethereum.Hex.HexTypes;
+using Nethereum.Hex.HexConvertors.Extensions;
 
 namespace ChainSafe.Gaming.SygmaClient.Contracts
 {
@@ -19,22 +20,23 @@ namespace ChainSafe.Gaming.SygmaClient.Contracts
         public BasicFeeHandler(IContractBuilder cb, string address)
         {
             this.address = address;
-            this.contract = cb.Build(FeeHandlerAbi, address);
+            contract = cb.Build(FeeHandlerAbi, address);
         }
 
-        public Task<EvmFee> CalculateBasicFee(
-            string sender,
-            uint fromDomainID,
-            uint destinationDomainID,
-            string resourceID)
+        public async Task<EvmFee> CalculateBasicFee(Transfer transfer, EvmFee feeData)
         {
-            var result = this.contract.Call(MethodCalculateFee, new object[] { sender, fromDomainID, destinationDomainID, resourceID }).Result;
-            var fee = new EvmFee(this.address, FeeHandlerType.Basic)
+            var handler = DepositDataFactory.Handler(transfer.Resource.Type);
+            var depositData = handler.CreateDepositData(transfer);
+
+            var result = await contract.Call(MethodCalculateFee, new object[] { transfer.Sender, transfer.From.Id, transfer.To.Id, transfer.Resource.ResourceId.HexToByteArray(), depositData, feeData.FeeData.HexToByteArray() });
+
+            var fee = new EvmFee(address, FeeHandlerType.Basic)
             {
-                Fee = new HexBigInteger(result[0].ToString()),
+                Fee = BigInteger.Parse(result[0].ToString()),
                 FeeData = result[1] as string,
             };
-            return Task.FromResult(fee);
+
+            return fee;
         }
     }
 }

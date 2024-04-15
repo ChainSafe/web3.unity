@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
+using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.SygmaClient.Types;
 using Nethereum.Hex.HexTypes;
@@ -20,21 +21,20 @@ namespace ChainSafe.Gaming.SygmaClient.Contracts
             contract = contractBuilder.Build(Erc1155Abi, contractAddress);
         }
 
-        public async Task<TransactionRequest> ApprovalTransactionRequest<T>(Transfer<T> transfer, string handlerAddress)
-            where T : TransferType
+        public async Task<TransactionRequest> ApprovalTransactionRequest(string handlerAddress, ISigner signer)
         {
             var transactionRequest = new TransactionRequest();
-            if (await IsApprovedForAll(handlerAddress))
+            if (await IsApprovedForAll(handlerAddress, signer))
             {
                 return await Task.FromResult(transactionRequest);
             }
 
-            return await contract.PrepareTransactionRequest("setApprovalForAll", new object[] { handlerAddress, bool.TrueString });
+            return await contract.PrepareTransactionRequest("setApprovalForAll", new object[] { handlerAddress, true });
         }
 
-        private async Task<bool> IsApprovedForAll(string handlerAddress)
+        private async Task<bool> IsApprovedForAll(string handlerAddress, ISigner signer)
         {
-            var approvedAddress = await contract.Call("isApprovedForAll", new object[] { handlerAddress });
+            var approvedAddress = await contract.Call("isApprovedForAll", new object[] { await signer.GetAddress(), handlerAddress });
             return approvedAddress[0].ToString() == handlerAddress;
         }
     }

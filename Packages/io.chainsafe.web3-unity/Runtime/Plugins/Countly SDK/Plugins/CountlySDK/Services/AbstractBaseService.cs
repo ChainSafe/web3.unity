@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +10,6 @@ namespace Plugins.CountlySDK.Services
     {
         internal object LockObj { get; set; }
         internal List<AbstractBaseService> Listeners { get; set; }
-
         protected CountlyLogHelper Log { get; private set; }
         protected readonly CountlyConfiguration _configuration;
         protected readonly ConsentCountlyService _consentService;
@@ -26,7 +24,6 @@ namespace Plugins.CountlySDK.Services
 
         protected IDictionary<string, object> RemoveSegmentInvalidDataTypes(IDictionary<string, object> segments)
         {
-
             if (segments == null || segments.Count == 0)
             {
                 return segments;
@@ -42,14 +39,15 @@ namespace Plugins.CountlySDK.Services
                     toRemove.Add(item.Key);
                     continue;
                 }
+
                 Type type = item.Value?.GetType();
                 bool isValidDataType = item.Value != null
                     && (type == typeof(int)
                     || type == typeof(bool)
                     || type == typeof(float)
                     || type == typeof(double)
-                    || type == typeof(string));
-
+                    || type == typeof(string)
+                    || type == typeof(long));
 
                 if (!isValidDataType)
                 {
@@ -88,7 +86,6 @@ namespace Plugins.CountlySDK.Services
                 }
             }
 
-
             return values;
         }
 
@@ -116,8 +113,14 @@ namespace Plugins.CountlySDK.Services
                 string k = item.Key;
                 object v = item.Value;
 
-                if (k == null || k.Length == 0 || v == null)
+                if (k == null || k.Length == 0)
                 {
+                    Log.Warning($"[{GetType().Name}] FixSegmentKeysAndValues: Provided key is {(k == null ? "null" : "empty")}, will be skipped.");
+                    continue;
+                }
+                if (v == null)
+                {
+                    Log.Warning($"[{GetType().Name}] FixSegmentKeysAndValues: Provided value for '{k}' is null, will be skipped.");
                     continue;
                 }
 
@@ -144,5 +147,4 @@ namespace Plugins.CountlySDK.Services
         ConsentUpdated,
         DeviceIDChangedNotMerged,
     }
-
 }

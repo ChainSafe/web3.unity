@@ -1,5 +1,5 @@
+using System.Numerics;
 using ChainSafe.Gaming.SygmaClient.Dto;
-using Nethereum.Hex.HexTypes;
 
 namespace ChainSafe.Gaming.SygmaClient.Types
 {
@@ -11,7 +11,7 @@ namespace ChainSafe.Gaming.SygmaClient.Types
             HandlerAddress = handlerAddress;
         }
 
-        public HexBigInteger Fee { get; set; }
+        public BigInteger Fee { get; set; }
 
         public FeeHandlerType Type { get; }
 

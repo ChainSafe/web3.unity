@@ -102,10 +102,10 @@ namespace Plugins.CountlySDK.Helpers
             bool shouldPost = _config.EnablePost || model.RequestData.Length > 2000;
 
 #if UNITY_WEBGL
+            // There is not HTTP GET for webGL. We always do a HTTP POST
             return await StartProcessRequestRoutine(_countlyUtils.ServerInputUrl, model.RequestData);
 #else
-            if (shouldPost)
-            {
+            if (shouldPost) {
                 return await Task.Run(() => PostAsync(_countlyUtils.ServerInputUrl, model.RequestData));
             }
             return await Task.Run(() => GetAsync(_countlyUtils.ServerInputUrl, model.RequestData));
@@ -165,8 +165,6 @@ namespace Plugins.CountlySDK.Helpers
                     {
                         string res = await reader.ReadToEndAsync();
 
-                        JObject body = JObject.Parse(res);
-
                         countlyResponse.Data = res;
                         countlyResponse.StatusCode = code;
                         countlyResponse.IsSuccess = IsSuccess(countlyResponse);
@@ -220,7 +218,6 @@ namespace Plugins.CountlySDK.Helpers
                 request.ContentType = "application/x-www-form-urlencoded";
                 request.Method = "POST";
 
-
                 using (Stream requestBody = request.GetRequestStream())
                 {
                     await requestBody.WriteAsync(dataBytes, 0, dataBytes.Length);
@@ -233,8 +230,6 @@ namespace Plugins.CountlySDK.Helpers
                     using (StreamReader reader = new StreamReader(stream))
                     {
                         string res = await reader.ReadToEndAsync();
-
-                        JObject body = JObject.Parse(res);
 
                         countlyResponse.Data = res;
                         countlyResponse.StatusCode = code;

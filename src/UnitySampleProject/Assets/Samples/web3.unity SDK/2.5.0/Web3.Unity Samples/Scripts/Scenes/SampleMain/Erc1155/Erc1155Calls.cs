@@ -43,9 +43,9 @@ public class Erc1155Calls : MonoBehaviour
 
     #region Transfer
 
-    private string toAccountTransfer = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
+    private string toAccountTransfer = "0xaBed4239E4855E120fDA34aDBEABDd2911626BA1";
     private BigInteger tokenIdTransfer = 1;
-    private BigInteger amountTransfer = 1;
+    private BigInteger amountTransfer = 3;
 
     #endregion
 
@@ -104,8 +104,10 @@ public class Erc1155Calls : MonoBehaviour
     /// </summary>
     public async void TransferErc1155()
     {
+        Debug.Log("TRANSFERING");
         var response = await Erc1155.TransferErc1155(Web3Accessor.Web3, Contracts.Erc1155, tokenIdTransfer, amountTransfer, toAccountTransfer);
         var output = SampleOutputUtil.BuildOutputValue(response);
+        Debug.Log("TRANSFER DONE");
         SampleOutputUtil.PrintResult(output, nameof(Erc1155), nameof(Erc1155.TransferErc1155));
     }
 

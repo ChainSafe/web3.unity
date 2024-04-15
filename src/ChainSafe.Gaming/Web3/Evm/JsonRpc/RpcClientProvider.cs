@@ -126,14 +126,15 @@ namespace ChainSafe.Gaming.Evm.Providers
                 environment.AnalyticsClient.CaptureEvent(new AnalyticsEvent()
                 {
                     Rpc = method,
-                    Network = network?.Name,
-                    ChainId = network?.ChainId.ToString(),
+                    Network = environment.AnalyticsClient.ChainConfig.Network,
+                    ChainId = environment.AnalyticsClient.ChainConfig.ChainId,
                     EventName = $"{method}",
                     GameData = new AnalyticsGameData()
                     {
                         Params = parameters,
                     },
                     PackageName = "io.chainsafe.web3-unity",
+                    ProjectId = environment.AnalyticsClient.ProjectConfig.ProjectId,
                 });
             }
         }
