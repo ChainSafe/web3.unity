@@ -30,7 +30,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
             // block players
             {
                 var blockAddresses = new[] { "0x20934800uu9283798439873298dfu2f93", "0x20934800uu9283798439873298dfu2f93" };
-                var success = await contract.SendSingle<bool, string[]>("blockPlayers", blockAddresses);
+                await contract.SendVoid("blockPlayers", blockAddresses);
             }
 
             // greet friends, read their statuses
