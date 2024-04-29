@@ -40,7 +40,7 @@ public class SecurePlayerPrefs
 
 
     /**
-	 * Initializes the encryptor. If its the frist time, it will generate
+	 * Initializes the encryptor. If its the first time, it will generate
 	 * a random 3 digit number and puts it between private key and its appendix.
 	 * If this was initialized on this device before, it will load it and create
 	 * the private key.
