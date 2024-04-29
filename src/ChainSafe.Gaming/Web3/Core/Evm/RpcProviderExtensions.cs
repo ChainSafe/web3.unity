@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Numerics;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Core;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
@@ -289,38 +288,53 @@ namespace ChainSafe.Gaming.Evm.Providers
         /// </summary>
         /// <param name="provider">The RPC provider.</param>
         /// <param name="transactionHash">The hash of the transaction to retrieve.</param>
+        /// <param name="timeOut">(Optional) The time after which the method will fail if we can't find the transaction by hash. 15 seconds by default.</param>
         /// <returns>
         /// A <see cref="Task"/> representing the asynchronous operation.
         /// The task result contains the transaction details as a <see cref="TransactionResponse"/>.
         /// </returns>
-        public static async Task<TransactionResponse> GetTransaction(this IRpcProvider provider, string transactionHash)
+        public static async Task<TransactionResponse> GetTransaction(this IRpcProvider provider, string transactionHash, TimeSpan? timeOut = null)
         {
+            timeOut ??= TimeSpan.FromSeconds(15);
+
+            // Poll transaction till it's available on the given node
+            TransactionResponse transaction = null;
             var parameters = new object[] { transactionHash };
-
-            var result = await provider.Perform<TransactionResponse>("eth_getTransactionByHash", parameters);
-
-            if (result == null)
+            var pollStartTime = DateTime.UtcNow;
+            while (DateTime.UtcNow - pollStartTime < timeOut)
             {
-                throw new Web3Exception("transaction not found");
+                transaction = await provider.Perform<TransactionResponse>("eth_getTransactionByHash", parameters);
+
+                if (transaction != null)
+                {
+                    break;
+                }
+
+                await DelayUtil.SafeDelay(TimeSpan.FromSeconds(1));
             }
 
-            if (result.BlockNumber == null)
+            if (transaction == null)
             {
-                result.Confirmations = 0;
+                throw new Web3Exception("Transaction not found.");
             }
-            else if (result.Confirmations == null)
+
+            if (transaction.BlockNumber == null)
+            {
+                transaction.Confirmations = 0;
+            }
+            else if (transaction.Confirmations == null)
             {
                 var blockNumber = await provider.GetBlockNumber();
-                var confirmations = (blockNumber.ToUlong() - result.BlockNumber.ToUlong()) + 1;
+                var confirmations = (blockNumber.ToUlong() - transaction.BlockNumber.ToUlong()) + 1;
                 if (confirmations <= 0)
                 {
                     confirmations = 1;
                 }
 
-                result.Confirmations = confirmations;
+                transaction.Confirmations = confirmations;
             }
 
-            return result;
+            return transaction;
         }
 
         /// <summary>
