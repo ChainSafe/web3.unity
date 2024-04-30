@@ -316,7 +316,7 @@ public class EvmCalls : MonoBehaviour
     }
 
     /// <summary>
-    /// Gets an address via ECDSA key
+    /// Gets an addres via ECDSA key
     /// </summary>
     public void EcdsaGetAddress()
     {
