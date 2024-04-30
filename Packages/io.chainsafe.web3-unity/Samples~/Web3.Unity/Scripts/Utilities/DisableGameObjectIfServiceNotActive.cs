@@ -1,3 +1,4 @@
+#if RAMP_AVAILABLE
 using System;
 using System.Collections.Generic;
 using ChainSafe.Gaming.Exchangers.Ramp;
@@ -27,6 +28,5 @@ public class DisableGameObjectIfServiceNotActive : MonoBehaviour
     {
         gameObject.SetActive(Web3Accessor.Web3.ServiceProvider.GetService(_typesDictionary[serviceType]) != null);
     }
-
-
 }
+#endif
