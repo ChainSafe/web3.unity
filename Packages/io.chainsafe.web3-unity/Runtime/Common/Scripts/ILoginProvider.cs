@@ -86,7 +86,6 @@ namespace ChainSafe.Gaming.UnityPackage.Common
                 .UseUnityEnvironment()
                 .UseGelato(GelatoApiKey)
                 .UseMultiCall()
-                .UseSygmaClient()
                 .UseRpcProvider()
                 .UseMarketplace();
 
