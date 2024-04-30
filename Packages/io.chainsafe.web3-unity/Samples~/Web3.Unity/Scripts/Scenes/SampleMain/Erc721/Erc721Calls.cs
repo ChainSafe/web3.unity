@@ -105,7 +105,7 @@ public class Erc721Calls : MonoBehaviour
     }
 
     /// <summary>
-    /// Mint ERC721 tokens
+    /// Mint ERC1155 tokens
     /// </summary>
     public async void MintErc721()
     {
@@ -115,7 +115,7 @@ public class Erc721Calls : MonoBehaviour
     }
 
     /// <summary>
-    /// Transfer ERC721 tokens
+    /// Transfer ERC1155 tokens
     /// </summary>
     public async void TransferErc721()
     {
