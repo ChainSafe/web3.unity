@@ -39,7 +39,7 @@ public class ListCollections : MonoBehaviour
     async void LoadNftDataSellPage()
     {
         var chainConfig = Web3Accessor.Web3.ChainConfig;
-        account = await Web3Accessor.Web3.Signer.GetAddress();
+        account = Web3Accessor.Web3.Signer.PublicAddress;
         // create a reference to a list and iterate through it to gain token id
         List<string> tokenIdList = new List<String>();
         // checks if filter should be applied

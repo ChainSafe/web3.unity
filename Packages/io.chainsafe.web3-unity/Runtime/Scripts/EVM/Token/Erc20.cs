@@ -34,7 +34,7 @@ namespace Scripts.EVM.Token
         public static async Task<BigInteger> CustomTokenBalance(Web3 web3, string contractAbi, string contractAddress)
         {
             var contract = web3.ContractBuilder.Build(contractAbi, contractAddress);
-            string address = await web3.Signer.GetAddress();
+            string address = web3.Signer.PublicAddress;
             var contractData = await contract.Call(EthMethod.BalanceOf, new object[] { address });
             return BigInteger.Parse(contractData[0].ToString());
         }

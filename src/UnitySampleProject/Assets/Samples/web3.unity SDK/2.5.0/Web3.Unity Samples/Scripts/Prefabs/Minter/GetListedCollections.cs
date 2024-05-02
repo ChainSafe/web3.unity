@@ -36,7 +36,7 @@ public class GetListedCollections : MonoBehaviour
     }
     async void LoadNftDataBuyPage()
     {
-        account = await Web3Accessor.Web3.Signer.GetAddress();
+        account = Web3Accessor.Web3.Signer.PublicAddress;
         var chainConfig = Web3Accessor.Web3.ChainConfig;
         // create a reference to a list and iterate through it to gain token id
         List<string> tokenIdList = new();

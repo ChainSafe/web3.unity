@@ -128,7 +128,7 @@ public class GetListedNFT : MonoBehaviour
     {
         var chainConfig = Web3Accessor.Web3.ChainConfig;
         BuyNFT.Response response = await CSServer.CreatePurchaseNftTransaction(Web3Accessor.Web3, chainConfig.Chain, chainConfig.Network,
-            await Web3Accessor.Web3.Signer.GetAddress(), _itemID, _itemPrice, _tokenType);
+            Web3Accessor.Web3.Signer.PublicAddress, _itemID, _itemPrice, _tokenType);
         Debug.Log("Account: " + response.tx.account);
         Debug.Log("To : " + response.tx.to);
         Debug.Log("Value : " + response.tx.value);

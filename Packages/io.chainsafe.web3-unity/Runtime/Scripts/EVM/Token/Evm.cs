@@ -60,7 +60,7 @@ namespace Scripts.EVM.Token
         {
             var transactionRequest = new TransactionRequest
             {
-                To = await web3.Signer.GetAddress(),
+                To = web3.Signer.PublicAddress,
                 Value = new HexBigInteger(100000)
             };
             var transactionResponse = await web3.TransactionExecutor.SendTransaction(transactionRequest);
@@ -71,7 +71,7 @@ namespace Scripts.EVM.Token
         {
             var transactionRequest = new TransactionRequest
             {
-                To = await web3.Signer.GetAddress(),
+                To = web3.Signer.PublicAddress,
                 Value = new HexBigInteger(10000000)
             };
             var transactionResponse = await web3.TransactionExecutor.SendTransaction(transactionRequest);
@@ -82,7 +82,7 @@ namespace Scripts.EVM.Token
 
         public static async Task<BigInteger> UseRegisteredContract(Web3 web3, string contractName, string method)
         {
-            var account = await web3.Signer.GetAddress();
+            var account = web3.Signer.PublicAddress;
             var contract = web3.ContractBuilder.Build(contractName);
             var response = await contract.Call(method, new[] { account });
             var balance = BigInteger.Parse(response[0].ToString());
@@ -125,7 +125,7 @@ namespace Scripts.EVM.Token
         // todo extract in a separate service
         public static async Task<bool> SignVerify(Web3 web3, string message)
         {
-            var playerAccount = await web3.Signer.GetAddress();
+            var playerAccount = web3.Signer.PublicAddress;
             var signatureString = await web3.Signer.SignMessage(message);
             var msg = "\x19" + "Ethereum Signed Message:\n" + message.Length + message;
             var msgHash = new Sha3Keccack().CalculateHash(Encoding.UTF8.GetBytes(msg));

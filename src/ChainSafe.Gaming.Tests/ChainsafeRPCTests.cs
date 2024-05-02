@@ -47,13 +47,8 @@ namespace ChainSafe.Gaming.Tests
             var secondAccountTask = Web3Util.CreateWeb3(1).AsTask();
             secondAccountTask.Wait();
 
-            var firstWalletAddressTask = firstAccount.Signer.GetAddress();
-            firstWalletAddressTask.Wait();
-
-            firstWalletAddress = firstWalletAddressTask.Result;
-            var secondaryWalletAddressTask = secondAccountTask.Result.Signer.GetAddress();
-            secondaryWalletAddressTask.Wait();
-            secondaryWalletAddress = secondaryWalletAddressTask.Result;
+            firstWalletAddress = firstAccount.Signer.PublicAddress;
+            secondaryWalletAddress = secondAccountTask.Result.Signer.PublicAddress;
 
             var amount = new HexBigInteger(1000000);
             var txTask = firstAccount.TransactionExecutor.SendTransaction(new TransactionRequest
@@ -234,7 +229,7 @@ namespace ChainSafe.Gaming.Tests
         [Test]
         public void CallContractMethodTest()
         {
-            var address = firstAccount.Signer.GetAddress().Result;
+            var address = firstAccount.Signer.PublicAddress;
             var contract = firstAccount.ContractBuilder.Build(nft721ABI, nft721Address);
 
             var ret = contract.Send("safeMint", new object[] { address }).Result;
