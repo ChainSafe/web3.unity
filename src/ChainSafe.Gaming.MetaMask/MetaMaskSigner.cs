@@ -17,16 +17,17 @@ namespace ChainSafe.Gaming.MetaMask
         /// Initializes a new instance of the <see cref="MetaMaskSigner"/> class.
         /// </summary>
         /// <param name="metaMaskProvider">Metamask provider that connects to Metamask and makes JsonRPC requests.</param>
-        /// <param name="logWriter">Log Writer used for logging messages and errors.</param>
-        public MetaMaskSigner(IMetaMaskProvider metaMaskProvider, ILogWriter logWriter)
+        public MetaMaskSigner(IMetaMaskProvider metaMaskProvider)
         {
             this.metaMaskProvider = metaMaskProvider;
         }
 
         /// <summary>
-        /// Signer's public key/address.
+        /// Implementation of <see cref="ISigner.GetAddress"/>.
+        /// Get public address of connected client.
         /// </summary>
-        private string Address { get; set; }
+        /// <value>Wallet address of connected client.</value>
+        public string PublicAddress { get; private set; }
 
         /// <summary>
         /// Implementation of <see cref="ILifecycleParticipant.WillStartAsync"/>.
@@ -35,17 +36,7 @@ namespace ChainSafe.Gaming.MetaMask
         /// <returns>async awaitable task.</returns>
         public async ValueTask WillStartAsync()
         {
-            Address = await metaMaskProvider.Connect();
-        }
-
-        /// <summary>
-        /// Implementation of <see cref="ISigner.GetAddress"/>.
-        /// Get public address of connected client.
-        /// </summary>
-        /// <returns>Wallet address of connected client.</returns>
-        public Task<string> GetAddress()
-        {
-            return Task.FromResult(Address);
+            PublicAddress = await metaMaskProvider.Connect();
         }
 
         /// <summary>
@@ -55,9 +46,9 @@ namespace ChainSafe.Gaming.MetaMask
         /// </summary>
         /// <param name="message">Message to sign.</param>
         /// <returns>Hash response of a successfully signed message.</returns>
-        public async Task<string> SignMessage(string message)
+        public Task<string> SignMessage(string message)
         {
-            return await metaMaskProvider.Request<string>("personal_sign", message, Address);
+            return metaMaskProvider.Request<string>("personal_sign", message, PublicAddress);
         }
 
         /// <summary>
@@ -68,12 +59,12 @@ namespace ChainSafe.Gaming.MetaMask
         /// <param name="message">Data to be signed.</param>
         /// <typeparam name="TStructType">Data type of data to be signed.</typeparam>
         /// <returns>Hash response of a successfully signed typed data.</returns>
-        public async Task<string> SignTypedData<TStructType>(SerializableDomain domain, TStructType message)
+        public Task<string> SignTypedData<TStructType>(SerializableDomain domain, TStructType message)
         {
             SerializableTypedData<TStructType> typedData = new SerializableTypedData<TStructType>(domain, message);
 
             // MetaMask doesn't work with regular eth_signTypedData method, has to be eth_signTypedData_v4.
-            return await metaMaskProvider.Request<string>("eth_signTypedData_v4", typedData, Address);
+            return metaMaskProvider.Request<string>("eth_signTypedData_v4", typedData, PublicAddress);
         }
 
         /// <summary>
@@ -81,6 +72,6 @@ namespace ChainSafe.Gaming.MetaMask
         /// Lifetime event method, called during "Web3.TerminateAsync".
         /// </summary>
         /// <returns>async awaitable task.</returns>
-        public ValueTask WillStopAsync() => new ValueTask(Task.CompletedTask);
+        public ValueTask WillStopAsync() => new(Task.CompletedTask);
     }
 }

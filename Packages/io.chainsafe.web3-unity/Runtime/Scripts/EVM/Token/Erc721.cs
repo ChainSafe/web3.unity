@@ -132,7 +132,7 @@ namespace Scripts.EVM.Token
         public static async Task<object[]> MintErc721(Web3 web3, string abi, string contractAddress, string uri)
         {
             const string method = EthMethod.SafeMint;
-            var destination = await web3.Signer.GetAddress();
+            var destination = web3.Signer.PublicAddress;
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
             var response = await contract.Send(method, new object[]
             {
@@ -154,7 +154,7 @@ namespace Scripts.EVM.Token
         {
             var abi = ABI.Erc721;
             var method = EthMethod.SafeTransferFrom;
-            var account = await web3.Signer.GetAddress();
+            var account = web3.Signer.PublicAddress;
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
 
             var response = await contract.Send(method, new object[]

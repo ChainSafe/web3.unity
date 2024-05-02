@@ -13,7 +13,7 @@ public class CreateApproval : MonoBehaviour
     public async void ApproveTransaction()
     {
         var chainConfig = Web3Accessor.Web3.ChainConfig;
-        var response = await CSServer.CreateApproveTransaction(Web3Accessor.Web3, chainConfig.Chain, chainConfig.Network, await Web3Accessor.Web3.Signer.GetAddress(), tokenType);
+        var response = await CSServer.CreateApproveTransaction(Web3Accessor.Web3, chainConfig.Chain, chainConfig.Network, Web3Accessor.Web3.Signer.PublicAddress, tokenType);
         Debug.Log("Response: " + response.connection.chain);
 
         try
