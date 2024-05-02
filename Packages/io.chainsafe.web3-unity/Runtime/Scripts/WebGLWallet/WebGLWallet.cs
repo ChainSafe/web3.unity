@@ -20,30 +20,26 @@ namespace ChainSafe.Gaming.Wallets
     public class WebGLWallet : ISigner, ITransactionExecutor, ILifecycleParticipant
     {
         private readonly IRpcProvider provider;
-        [CanBeNull] private string address;
 
         public WebGLWallet(IRpcProvider provider)
         {
             this.provider = provider;
         }
 
+        [CanBeNull]
+        public string PublicAddress { get; private set; }
+
         public async ValueTask WillStartAsync()
         {
             // Get user address
             JS_resetConnectAccount();
             JS_web3Connect();
-            address = await PollJsSide(JS_getConnectAccount);
+            PublicAddress = await PollJsSide(JS_getConnectAccount);
         }
 
         public ValueTask WillStopAsync()
         {
             return new ValueTask(Task.CompletedTask);
-        }
-
-        public Task<string> GetAddress()
-        {
-            address.AssertNotNull(nameof(address));
-            return Task.FromResult(address);
         }
 
         public async Task<string> SignMessage(string message)
@@ -189,6 +185,8 @@ namespace ChainSafe.Gaming.Wallets
     // Stub implementation for other platforms
     public class WebGLWallet : ISigner, ITransactionExecutor, ILifecycleParticipant
     {
+        public string PublicAddress => throw new NotImplementedException();
+
         public ValueTask WillStartAsync()
         {
             throw new Web3Exception(
@@ -196,11 +194,6 @@ namespace ChainSafe.Gaming.Wallets
         }
 
         public ValueTask WillStopAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<string> GetAddress()
         {
             throw new NotImplementedException();
         }

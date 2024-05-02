@@ -118,7 +118,7 @@ public class EvmCalls : MonoBehaviour
     {
         object[] args =
         {
-            await Web3Accessor.Web3.Signer.GetAddress()
+            Web3Accessor.Web3.Signer.PublicAddress
         };
         var response = await Evm.ContractCall(Web3Accessor.Web3, methodCall, ABI.ArrayTotal, Contracts.ArrayTotal, args);
         Debug.Log(response);
