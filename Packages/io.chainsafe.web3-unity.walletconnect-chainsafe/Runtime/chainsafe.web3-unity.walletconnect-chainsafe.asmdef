@@ -1,8 +1,9 @@
 {
-    "name": "chainsafe.web3-unity",
-    "rootNamespace": "ChainSafe.Gaming",
+    "name": "chainsafe.web3-unity.walletconnect-chainsafe",
+    "rootNamespace": "ChainSafe.Gaming.WalletConnectChainSafe",
     "references": [
-        "GUID:1e69005fbbf5a4cd0a6c61596a74886e"
+        "chainsafe.web3-unity",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

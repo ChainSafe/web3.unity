@@ -139,6 +139,36 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.walletconnect.core": {
+      "version": "3.1.5",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "3.2.1"
+      },
+      "url": "https://package.openupm.com"
+    },
+    "com.walletconnect.modal": {
+      "version": "1.1.5",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.walletconnect.core": "3.1.5",
+        "com.walletconnect.ui": "1.1.5"
+      },
+      "url": "https://package.openupm.com"
+    },
+    "com.walletconnect.ui": {
+      "version": "1.1.5",
+      "depth": 2,
+      "source": "registry",
+      "dependencies": {
+        "com.walletconnect.core": "3.1.5",
+        "com.unity.textmeshpro": "3.0.0",
+        "com.unity.ugui": "1.0.0"
+      },
+      "url": "https://package.openupm.com"
+    },
     "io.chainsafe.web3-unity": {
       "version": "file:../../../Packages/io.chainsafe.web3-unity",
       "depth": 0,
@@ -163,6 +193,25 @@
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.0.2",
         "io.chainsafe.web3-unity": "2.5.0"
+      }
+    },
+    "io.chainsafe.web3-unity.walletconnect": {
+      "version": "file:../../../Packages/io.chainsafe.web3-unity.walletconnect",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {
+        "io.chainsafe.web3-unity": "2.5.5",
+        "com.walletconnect.core": "3.1.5",
+        "com.walletconnect.modal": "1.1.5"
+      }
+    },
+    "io.chainsafe.web3-unity.walletconnect-chainsafe": {
+      "version": "file:../../../Packages/io.chainsafe.web3-unity.walletconnect-chainsafe",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {
+        "io.chainsafe.web3-unity": "2.5.5",
+        "com.unity.textmeshpro": "3.0.6"
       }
     },
     "io.chainsafe.web3-unity.web3auth": {
