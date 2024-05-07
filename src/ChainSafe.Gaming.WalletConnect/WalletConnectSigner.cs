@@ -16,27 +16,25 @@ namespace ChainSafe.Gaming.WalletConnect
     {
         private readonly IWalletConnectProvider provider;
 
-        private string address;
-
         public WalletConnectSigner(IWalletConnectProvider provider)
         {
             this.provider = provider;
         }
 
+        public string PublicAddress { get; private set; }
+
         public async ValueTask WillStartAsync()
         {
-            address = await provider.Connect();
+            PublicAddress = await provider.Connect();
         }
 
         ValueTask ILifecycleParticipant.WillStopAsync() => new(Task.CompletedTask);
 
         public Task OnLogout() => provider.Disconnect();
 
-        public Task<string> GetAddress() => Task.FromResult(address);
-
         public async Task<string> SignMessage(string message)
         {
-            var requestData = new EthSignMessage(message, address);
+            var requestData = new EthSignMessage(message, PublicAddress);
             var hash = await provider.Request(requestData);
 
             if (!ValidateSignResponse(hash))
@@ -50,7 +48,7 @@ namespace ChainSafe.Gaming.WalletConnect
 
         public async Task<string> SignTypedData<TStructType>(SerializableDomain domain, TStructType message)
         {
-            var requestData = new EthSignTypedData<TStructType>(address, domain, message);
+            var requestData = new EthSignTypedData<TStructType>(PublicAddress, domain, message);
             var hash = await provider.Request(requestData);
 
             if (!ValidateSignResponse(hash))

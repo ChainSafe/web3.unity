@@ -32,7 +32,7 @@ namespace ChainSafe.Gaming.WalletConnect
         {
             if (string.IsNullOrEmpty(transaction.From))
             {
-                transaction.From = await signer.GetAddress();
+                transaction.From = signer.PublicAddress;
             }
 
             var requestData = new EthSendTransaction(new TransactionModel
@@ -53,8 +53,6 @@ namespace ChainSafe.Gaming.WalletConnect
             }
 
             WCLogger.Log($"Transaction executed successfully. Hash: {hash}.");
-
-            await Task.Delay(TimeSpan.FromSeconds(1)); // hack: rpcProvider.GetTransaction can't find transaction by hash
 
             return await rpcProvider.GetTransaction(hash);
 

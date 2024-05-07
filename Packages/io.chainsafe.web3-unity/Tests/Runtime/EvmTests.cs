@@ -48,7 +48,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestContractCall()
     {
-        var address = web3.Signer.GetAddress().Result;
+        var address = web3.Signer.PublicAddress;
         object[] args = { address };
         var callContract = Evm.ContractCall(web3, ContractCallMethod, ABI.ArrayTotal, Contracts.ArrayTotal, args);
         yield return new WaitUntil(() => callContract.IsCompleted);
