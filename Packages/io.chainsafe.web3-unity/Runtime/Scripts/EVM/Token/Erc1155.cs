@@ -4,7 +4,6 @@ using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.UnityPackage.Model;
 using ChainSafe.Gaming.Web3;
-using Scripts.EVM.Remote;
 using UnityEngine;
 using UnityEngine.Networking;
 
