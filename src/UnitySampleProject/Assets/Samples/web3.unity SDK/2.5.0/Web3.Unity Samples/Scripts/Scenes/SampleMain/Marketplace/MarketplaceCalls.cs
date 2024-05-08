@@ -1,6 +1,4 @@
-using ChainSafe.Gaming.UnityPackage;
-using ChainSafe.Gaming.UnityPackage.Model;
-using Scripts.EVM.Remote;
+using Scripts.EVM.Marketplace;
 using UnityEngine;
 
 /// <summary>
@@ -29,35 +27,29 @@ public class MarketplaceCalls : MonoBehaviour
     
     /// <summary>
     /// Gets all items in a project.
-    /// Path: https://api.gaming.chainsafe.io/v1/projects/{projectID}/items
     /// </summary>
     public async void GetProjectItems()
     {
-        string path = $"/items?chainId={Web3Accessor.Web3.ChainConfig.ChainId}";
-        var response = await CSServer.GetData<MarketplaceModel.Root>(path);
-        CSServer.PrintObject(response);
+        var response = await Marketplace.GetProjectItems();
+        Marketplace.PrintObject(response);
     }
     
     /// <summary>
     /// Gets all items in a marketplace.
-    /// Path: https://api.gaming.chainsafe.io/v1/projects/{projectID}/marketplaces/{marketplaceID}/items
     /// </summary>
     public async void GetMarketplaceItems()
     {
-        string path = $"/marketplaces/{marketplaceId}/items";
-        var response = await CSServer.GetData<MarketplaceModel.Root>(path);
-        CSServer.PrintObject(response);
+        var response = await Marketplace.GetMarketplaceItems(marketplaceId);
+        Marketplace.PrintObject(response);
     }
     
     /// <summary>
     /// Gets items listed by token id.
-    /// Path: https://api.gaming.chainsafe.io/v1/projects/{projectID}/marketplaces/{marketplaceID}/items/{itemID}
     /// </summary>
     public async void GetItem()
     {
-        string path = $"/marketplaces/{marketplaceId}/items/{tokenId}";
-        var response = await CSServer.GetData<MarketplaceModel.Root>(path);
-        CSServer.PrintObject(response);
+        var response = await Marketplace.GetItem(marketplaceId, tokenId);
+        Marketplace.PrintObject(response);
     }
     #endregion
     
@@ -65,58 +57,47 @@ public class MarketplaceCalls : MonoBehaviour
     
     /// <summary>
     /// Gets all tokens in a project.
-    /// Path: https://api.gaming.chainsafe.io/v1/projects/{projectID}/tokens
     /// </summary>
     public async void GetProjectTokens()
     {
-        string path = $"/tokens?chainId={Web3Accessor.Web3.ChainConfig.ChainId}";
-        var response = await CSServer.GetData<NftTokenModel.Root>(path);
-        CSServer.PrintObject(response);
+        var response = await Marketplace.GetProjectTokens();
+        Marketplace.PrintObject(response);
     }
     
     /// <summary>
     /// Gets all tokens in a 721 collection.
-    /// Path: https://api.gaming.chainsafe.io/v1/projects/{projectID}/collections/{collectionID}/tokens
     /// </summary>
     public async void GetCollectionTokens721()
     {
-        string path = $"/collections/{collectionId721}/tokens";
-        var response = await CSServer.GetData<NftTokenModel.Root>(path);
-        CSServer.PrintObject(response);
+        var response = await Marketplace.GetCollectionTokens721(collectionId721);
+        Marketplace.PrintObject(response);;
     }
     
     /// <summary>
     /// Gets all tokens in a 1155 collection.
-    /// Path https://api.gaming.chainsafe.io/v1/projects/{projectID}/collections/{collectionID}/tokens
     /// </summary>
     public async void GetCollectionTokens1155()
     {
-        string path = $"/collections/{collectionId1155}/tokens";
-        var response = await CSServer.GetData<NftTokenModel.Root>(path);
-        CSServer.PrintObject(response);
+        var response = await Marketplace.GetCollectionTokens1155(collectionId1155);
+        Marketplace.PrintObject(response);
     }
     
     /// <summary>
-    /// Gets the information of a token in a collection via id.
-    /// Path: https://api.gaming.chainsafe.io/v1/projects/{projectID}/collections/{collectionID}/tokens/:tokenID
-    /// Token id is optional
+    /// Gets the information of a token in a collection via id. Token id is optional.
     /// </summary>
     public async void GetCollectionToken()
     {
-        string path = $"/collections/{collectionId721}/tokens/{tokenId}";
-        var response = await CSServer.GetData<NftTokenModel.Token>(path);
-        CSServer.PrintObject(response);
+        var response = await Marketplace.GetCollectionToken(collectionId721, tokenId);
+        Marketplace.PrintObject(response);
     }
     
     /// <summary>
     /// Gets the owners of a token id in a collection.
-    /// Path: https://api.gaming.chainsafe.io/v1/projects/{projectID}/collections/{collectionID}/tokens/{tokenID}/owners
     /// </summary>
     public async void GetTokenOwners()
     {
-        string path = $"/collections/{collectionId1155}/tokens/{tokenId}/owners";
-        var response = await CSServer.GetData<NftTokenModel.Token>(path);
-        CSServer.PrintObject(response);
+        var response = await Marketplace.GetTokenOwners(collectionId1155, tokenId);
+        Marketplace.PrintObject(response);
     }
 
     #endregion

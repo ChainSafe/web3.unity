@@ -8,7 +8,13 @@ namespace Scripts.EVM.Remote
 {
     public class CSServer
     {
+        #region Fields
+
         private static readonly string host = "https://api.gaming.chainsafe.io/v1/projects/";
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Unity web request helper function to retrieve data.
@@ -28,19 +34,8 @@ namespace Scripts.EVM.Remote
             var response = JsonConvert.DeserializeObject<T>(json);
             return response;
         }
-    
-        /// <summary>
-        /// Prints json properties in the console on new lines.
-        /// </summary>
-        /// <param name="obj">The object to print out</param>
-        public static void PrintObject(object obj)
-        {
-            var properties = obj.GetType().GetProperties();
-            foreach (var property in properties)
-            {
-                var value = property.GetValue(obj);
-                Debug.Log($"{property.Name}: {value}");
-            }
-        }
+
+        #endregion
+
     }
 }
