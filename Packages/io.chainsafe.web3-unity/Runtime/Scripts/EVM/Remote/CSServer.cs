@@ -20,7 +20,7 @@ namespace Scripts.EVM.Remote
             await webRequest.SendWebRequest();
             if (webRequest.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError("Error: " + webRequest.error);
+                Debug.LogError("Error: Your project ID doesn't have a marketplace, please go to dashboard and create items " + webRequest.error);
                 return null;
             }
             var json = webRequest.downloadHandler.text;
