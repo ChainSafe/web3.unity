@@ -43,7 +43,7 @@ namespace Scripts.EVM.Marketplace
         /// </summary>
         /// <param name="marketplaceId">MarketplaceID to query</param>
         /// <param name="tokenId">TokenID to query</param>
-        /// <returns>MarketplaceModel.Root</returns>
+        /// <returns>MarketplaceModel.Item</returns>
         public static async Task<MarketplaceModel.Item> GetItem(string marketplaceId, string tokenId)
         {
             string path = $"/marketplaces/{marketplaceId}/items/{tokenId}";
