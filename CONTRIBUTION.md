@@ -74,7 +74,7 @@ If you're unsure how you would actually extend Chainsafe's SDK, take a look at t
 4. **Write Tests**: Write unit tests for your code and ensure that all existing tests pass.
 5. **Commit Changes**: Commit your changes with a descriptive commit message using `git commit -m "Add feature X"`.
 6. **Push to Your Fork**: Push your changes to your forked repository with `git push origin my-contribution`.
-7. **Submit a Pull Request**: Finally, submit a pull request targeting the `dev` branch of web3.unity repository.
+7. **Submit a Pull Request**: Finally, submit a pull request targeting the `dev` branch of web3.unity repository and label it with `ready-to-merge` so required checks can initialize once your changes are ready for review.
 
 ## Reporting Issues
 
