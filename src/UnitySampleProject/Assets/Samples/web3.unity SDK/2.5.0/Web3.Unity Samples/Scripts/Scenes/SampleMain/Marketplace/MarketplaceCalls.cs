@@ -1,6 +1,5 @@
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Model;
-using Newtonsoft.Json;
 using Scripts.EVM.Remote;
 using UnityEngine;
 
@@ -35,8 +34,7 @@ public class MarketplaceCalls : MonoBehaviour
     public async void GetProjectItems()
     {
         string path = $"/items?chainId={Web3Accessor.Web3.ChainConfig.ChainId}";
-        var jsonResponse = await CSServer.GetData(path);
-        MarketplaceModel.Root response = JsonConvert.DeserializeObject<MarketplaceModel.Root>(jsonResponse);
+        var response = await CSServer.GetData<MarketplaceModel.Root>(path);
         CSServer.PrintObject(response);
     }
     
@@ -47,8 +45,7 @@ public class MarketplaceCalls : MonoBehaviour
     public async void GetMarketplaceItems()
     {
         string path = $"/marketplaces/{marketplaceId}/items";
-        var jsonResponse = await CSServer.GetData(path);
-        MarketplaceModel.Root response = JsonConvert.DeserializeObject<MarketplaceModel.Root>(jsonResponse);
+        var response = await CSServer.GetData<MarketplaceModel.Root>(path);
         CSServer.PrintObject(response);
     }
     
@@ -59,8 +56,7 @@ public class MarketplaceCalls : MonoBehaviour
     public async void GetItem()
     {
         string path = $"/marketplaces/{marketplaceId}/items/{tokenId}";
-        var jsonResponse = await CSServer.GetData(path);
-        MarketplaceModel.Item response = JsonConvert.DeserializeObject<MarketplaceModel.Item>(jsonResponse);
+        var response = await CSServer.GetData<MarketplaceModel.Root>(path);
         CSServer.PrintObject(response);
     }
     #endregion
@@ -74,8 +70,7 @@ public class MarketplaceCalls : MonoBehaviour
     public async void GetProjectTokens()
     {
         string path = $"/tokens?chainId={Web3Accessor.Web3.ChainConfig.ChainId}";
-        var jsonResponse = await CSServer.GetData(path);
-        NftTokenModel.Root response = JsonConvert.DeserializeObject<NftTokenModel.Root>(jsonResponse);
+        var response = await CSServer.GetData<NftTokenModel.Root>(path);
         CSServer.PrintObject(response);
     }
     
@@ -86,8 +81,7 @@ public class MarketplaceCalls : MonoBehaviour
     public async void GetCollectionTokens721()
     {
         string path = $"/collections/{collectionId721}/tokens";
-        var jsonResponse = await CSServer.GetData(path);
-        NftTokenModel.Root response = JsonConvert.DeserializeObject<NftTokenModel.Root>(jsonResponse);
+        var response = await CSServer.GetData<NftTokenModel.Root>(path);
         CSServer.PrintObject(response);
     }
     
@@ -98,8 +92,7 @@ public class MarketplaceCalls : MonoBehaviour
     public async void GetCollectionTokens1155()
     {
         string path = $"/collections/{collectionId1155}/tokens";
-        var jsonResponse = await CSServer.GetData(path);
-        NftTokenModel.Root response = JsonConvert.DeserializeObject<NftTokenModel.Root>(jsonResponse);
+        var response = await CSServer.GetData<NftTokenModel.Root>(path);
         CSServer.PrintObject(response);
     }
     
@@ -111,8 +104,7 @@ public class MarketplaceCalls : MonoBehaviour
     public async void GetCollectionToken()
     {
         string path = $"/collections/{collectionId721}/tokens/{tokenId}";
-        var jsonResponse = await CSServer.GetData(path);
-        NftTokenModel.Token response = JsonConvert.DeserializeObject<NftTokenModel.Token>(jsonResponse);
+        var response = await CSServer.GetData<NftTokenModel.Token>(path);
         CSServer.PrintObject(response);
     }
     
@@ -123,8 +115,7 @@ public class MarketplaceCalls : MonoBehaviour
     public async void GetTokenOwners()
     {
         string path = $"/collections/{collectionId1155}/tokens/{tokenId}/owners";
-        var jsonResponse = await CSServer.GetData(path);
-        NftTokenModel.Root response = JsonConvert.DeserializeObject<NftTokenModel.Root>(jsonResponse);
+        var response = await CSServer.GetData<NftTokenModel.Token>(path);
         CSServer.PrintObject(response);
     }
 
