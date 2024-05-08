@@ -41,7 +41,8 @@ public static class Utils
     var uri = new Uri(redirectUri);
     web3auth_launch(url, uri.Scheme, objectName);
 #elif UNITY_WEBGL
-    OpenURL(url);
+    string jsCode = "window.close(); window.open('" + url + "', '_blank');";
+    Application.ExternalEval(jsCode);
 #endif
     }
 
