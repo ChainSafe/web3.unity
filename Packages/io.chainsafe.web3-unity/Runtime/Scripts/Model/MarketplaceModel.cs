@@ -12,6 +12,7 @@ namespace ChainSafe.Gaming.UnityPackage.Model
             public int total { get; set; }
             public string cursor { get; set; }
             public List<Item> items { get; set; }
+            public List<Owners> owners { get; set; }
         }
         
         public class Item
@@ -47,6 +48,12 @@ namespace ChainSafe.Gaming.UnityPackage.Model
         {
             public string trait_type { get; set; }
             public string value { get; set; }
+        }
+        
+        public class Owners
+        {
+            public string owner { get; set; }
+            public string supply { get; set; }
         }
     }
 }
