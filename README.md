@@ -20,7 +20,7 @@ public async void ContractCall()
     {
         object[] args =
         {
-            await Web3Accessor.Web3.Signer.GetAddress()
+            Web3Accessor.Web3.Signer.PublicAddress
         };
         var data = await Evm.ContractCall(Web3Accessor.Web3, method, abi, contractAddress, args);
         var response = SampleOutputUtil.BuildOutputValue(data);
