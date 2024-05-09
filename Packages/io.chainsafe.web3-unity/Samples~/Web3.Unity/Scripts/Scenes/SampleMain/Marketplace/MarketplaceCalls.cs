@@ -9,12 +9,17 @@ using UnityEngine;
 public class MarketplaceCalls : MonoBehaviour
 {
     #region fields
-
+    [Header("Change the fields below for testing purposes")]
+    
     #region Collections
     
+    [Header("721 Collection Call")]
     [SerializeField] private string collectionId721 = "d588268b-8a5b-486a-8ea1-4122b510d71e";
+    [Header("1155 Collection Call")]
     [SerializeField] private string collectionId1155 = "ebeaaee5-f7c2-4561-abb9-60ba749db7cd";
+    [Header("Marketplace Calls")]
     [SerializeField] private string marketplaceId = "4986983b-2bcc-4bb3-b0db-a3448fbdee2b";
+    [Header("Token Calls")]
     [SerializeField] private string tokenId = "0";
 
     #endregion
