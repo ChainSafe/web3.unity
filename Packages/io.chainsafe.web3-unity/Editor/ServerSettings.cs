@@ -118,7 +118,7 @@ public class ChainSafeServerSettings : EditorWindow
     }
 
     // Initializes window
-    [MenuItem("Window/ChainSafe SDK/Server Settings")]
+    [MenuItem("Window/ChainSafe SDK/Server Settings", false, 1)]
     public static void ShowWindow()
     {
         // Show existing window instance. If one doesn't exist, make one.
