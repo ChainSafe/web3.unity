@@ -9,6 +9,14 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
         public FiatOffRamp Fiat { get; set; }
         public Guid Id { get; set; }
 
+        public OffRampSaleData(string createdAt, CryptoOffRamp crypto, FiatOffRamp fiat, Guid id)
+        {
+            CreatedAt = createdAt;
+            Crypto = crypto;
+            Fiat = fiat;
+            Id = id;
+        }
+
         public override string ToString()
         {
             return
