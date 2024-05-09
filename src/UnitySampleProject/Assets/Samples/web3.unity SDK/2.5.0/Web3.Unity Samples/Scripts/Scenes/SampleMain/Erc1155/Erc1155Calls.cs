@@ -13,45 +13,52 @@ using UnityEngine.UI;
 public class Erc1155Calls : MonoBehaviour
 {
     #region Fields
+    [Header("Change the fields below for testing purposes")]
 
     #region Balance Of
-
-    private string accountBalanceOf = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
-    private string tokenIdBalanceOf = "1";
+    
+    [Header("Balance Of Call")]
+    [SerializeField] private string accountBalanceOf = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
+    [SerializeField] private string tokenIdBalanceOf = "1";
 
     #endregion
 
     #region Balance Of Batch
-
-    private string[] accountsBalanceOfBatch = { "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2", "0xE51995Cdb3b1c109E0e6E67ab5aB31CDdBB83E4a" };
-    private string[] tokenIdsBalanceOfBatch = { "1", "2" };
+    
+    [Header("Balance Of Batch Call")]
+    [SerializeField] private string[] accountsBalanceOfBatch = { "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2", "0xE51995Cdb3b1c109E0e6E67ab5aB31CDdBB83E4a" };
+    [SerializeField] private string[] tokenIdsBalanceOfBatch = { "1", "2" };
 
     #endregion
 
     #region Uri
-
-    private string tokenIdUri = "1";
+    
+    [Header("URI Call")]
+    [SerializeField] private string tokenIdUri = "1";
 
     #endregion
 
     #region Mint
-
-    private BigInteger idMint = 1;
-    private BigInteger amountMint = 1;
+    
+    [Header("Mint Call")]
+    [SerializeField] private BigInteger idMint = 1;
+    [SerializeField] private BigInteger amountMint = 1;
 
     #endregion
 
     #region Transfer
-
-    private string toAccountTransfer = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
-    private BigInteger tokenIdTransfer = 1;
-    private BigInteger amountTransfer = 1;
+    
+    [Header("Transfer Call")]
+    [SerializeField] private string toAccountTransfer = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
+    [SerializeField] private BigInteger tokenIdTransfer = 1;
+    [SerializeField] private BigInteger amountTransfer = 1;
 
     #endregion
 
     #region Texture
-
-    private string tokenIdTexture = "0";
+    
+    [Header("Token ID for IPFS texture")]
+    [SerializeField] private string tokenIdTexture = "0";
     public RawImage rawImage;
 
     #endregion
