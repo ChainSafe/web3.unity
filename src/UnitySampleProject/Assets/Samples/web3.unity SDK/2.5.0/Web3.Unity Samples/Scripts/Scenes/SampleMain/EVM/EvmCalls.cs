@@ -1,12 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ChainSafe.Gaming.Evm.Contracts.Extensions;
 using ChainSafe.Gaming.MultiCall;
 using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.UnityPackage.Model;
 using Nethereum.ABI.FunctionEncoding.Attributes;
-using Nethereum.BlockchainProcessing.BlockStorage.Entities;
 using Nethereum.Contracts.QueryHandlers.MultiCall;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.RPC.Eth.DTOs;
@@ -14,7 +13,6 @@ using Newtonsoft.Json;
 using Scripts.EVM.Token;
 using UnityEngine;
 using Web3Unity.Scripts.Prefabs;
-using TransactionReceipt = ChainSafe.Gaming.Evm.Transactions.TransactionReceipt;
 
 public class EvmCalls : MonoBehaviour
 {
@@ -92,11 +90,12 @@ public class EvmCalls : MonoBehaviour
     #region IPFS
     
     [Header("IPFS VALUES")]
-    [SerializeField] private string apiKey = "YOUR_CHAINSAFE_STORE_API_KEY";
-    [SerializeField] private string data = "YOUR_DATA";
-    [SerializeField] private string bucketId = "BUCKET_ID";
-    [SerializeField] private string path = "/PATH";
-    [SerializeField] private string filename = "FILENAME.EXT";
+    [SerializeField] private string apiKey = "Fill In Your API Key From Storage";
+    [SerializeField] private string bucketId = "Fill In Your Bucket ID From Storage";
+    [SerializeField] private string fileNameImage = "Logo.png";
+    [SerializeField] private string fileNameMetaData = "MetaData.json";
+    [SerializeField] private string name = "ChainSafe";
+    [SerializeField] private string description = "An NFT description";
 
     #endregion
 
@@ -337,16 +336,18 @@ public class EvmCalls : MonoBehaviour
     /// <summary>
     /// Uploads to IPFS
     /// </summary>
-    public async void IPFSUpload()
+    public void IPFSUpload()
     {
-        var cid = await Evm.IPFSUpload(new IpfsUploadRequest
+        var uploadRequest = new IPFSUploadRequestModel
         {
             ApiKey = apiKey,
-            Data = data,
             BucketId = bucketId,
-            Filename = filename
-        });
-        SampleOutputUtil.PrintResult(cid, nameof(IpfsSample), nameof(IpfsSample.Upload));
+            FileNameImage = fileNameImage,
+            FileNameMetaData = fileNameMetaData,
+            Name = name,
+            Description = description
+        };
+        IpfsSample.UploadImageFromFile(uploadRequest);
     }
 
     /// <summary>

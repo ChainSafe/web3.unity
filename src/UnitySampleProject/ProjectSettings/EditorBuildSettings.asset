@@ -20,10 +20,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Samples/web3.unity SDK Ramp/1.0.0/Web3.Unity Ramp Samples/SampleRampIntegration.unity
     guid: 9583b7671e7df46028765b84323c9bf7
-  - enabled: 0
+  - enabled: 1
     path: Assets/Samples/web3.unity SDK/2.5.0/Web3.Unity Samples/Scenes/SampleMain.unity
     guid: 516f54f8261cf44459691b7adc25e055
-  - enabled: 1
-    path: Assets/Samples/web3.unity SDK/2.5.0/Web3.Unity Samples/Scenes/Scene1.unity
-    guid: 1a9b992727e0fe94c97b1af8b623354e
   m_configObjects: {}
