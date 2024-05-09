@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using ChainSafe.Gaming.WalletConnect;
 using ChainSafe.Gaming.Web3;
-using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core;
 using WalletConnectSharp.Sign.Models;
 using WalletConnectSharp.Sign.Models.Engine;
@@ -18,6 +17,12 @@ namespace ChainSafe.Gaming.WalletConnectUnity
         
         private readonly IWalletConnectUnityConfig config;
         private readonly IChainConfig chainConfig;
+
+        public WalletConnectUnityProvider(IChainConfig chainConfig)
+        {
+            this.chainConfig = chainConfig;
+            this.config = new WalletConnectUnityConfig();
+        }
 
         public WalletConnectUnityProvider(IWalletConnectUnityConfig config, IChainConfig chainConfig)
         {
@@ -51,9 +56,9 @@ namespace ChainSafe.Gaming.WalletConnectUnity
         
         public async Task<string> Connect()
         {
-            if (OriginalWc.Instance.IsConnected)
+            if (OriginalWc.Instance.IsConnected) // WalletConnectModal tries resuming the session automatically, so we check if it succeeded right here
             {
-                // return OriginalWc.Instance.ActiveSession todo
+                return ReadPublicAddress();
             }
 
             var tcs = new TaskCompletionSource<byte>();
@@ -79,6 +84,8 @@ namespace ChainSafe.Gaming.WalletConnectUnity
                 WalletConnectModal.ConnectionError -= ConnectionError;
             }
 
+            return ReadPublicAddress();
+
             void OnConnected(object sender, EventArgs e)
             {
                 tcs.SetResult(0);
@@ -96,10 +103,9 @@ namespace ChainSafe.Gaming.WalletConnectUnity
             return Task.CompletedTask;
         }
 
-        public Task<string> Request<T>(T data, long? expiry = null)
-        {
-            return OriginalWc.Instance.RequestAsync<T, string>(data);
-        }
+        public Task<string> Request<T>(T data, long? expiry = null) => OriginalWc.Instance.RequestAsync<T, string>(data);
+
+        private string ReadPublicAddress() => OriginalWc.Instance.ActiveSession.CurrentAddress(chainConfig.ChainId).Address;
 
         private ConnectOptions BuildConnectOptions()
         {
@@ -127,23 +133,6 @@ namespace ChainSafe.Gaming.WalletConnectUnity
             {
                 RequiredNamespaces = requiredNamespaces
             };
-        }
-    }
-
-    public interface IWalletConnectUnityConfig
-    {
-        public string[] IncludedWalletIds { get; }
-
-        public string[] ExcludedWalletIds { get; }
-    }
-
-    public static class WalletConnectUnityExtensions
-    {
-        public static IWeb3ServiceCollection UseWalletConnectUnity(this IWeb3ServiceCollection services)
-        {
-            services.AssertServiceNotBound<IWalletConnectProvider>();
-            services.AddSingleton<IWalletConnectProvider, ILifecycleParticipant, WalletConnectUnityProvider>();
-            return services;
         }
     }
 }
