@@ -13,42 +13,49 @@ using UnityEngine;
 public class Erc721Calls : MonoBehaviour
 {
     #region Fields
+    [Header("Change the fields below for testing purposes")]
 
     #region Balance Of
-
-    private string accountBalanceOf = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
+    
+    [Header("Balance Of Call")]
+    [SerializeField] private string accountBalanceOf = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
 
     #endregion
 
     #region Owner Of
-
-    private string tokenIdOwnerOf = "1";
+    
+    [Header("Owner Of Call")]
+    [SerializeField] private string tokenIdOwnerOf = "1";
 
     #endregion
-
+    
+    [Header("Balance Of Batch Call")]
     #region Owner Of Batch
 
-    private string[] tokenIdsOwnerOfBatch = { "4", "50", "6" };
+    [SerializeField] private string[] tokenIdsOwnerOfBatch = { "4", "50", "6" };
 
     #endregion
 
     #region Uri
-
-    private string tokenIdUri = "0x01559ae4021a565d5cc4740f1cefa95de8c1fb193949ecd32c337b03047da501";
+    
+    [Header("URI Call")]
+    [SerializeField] private string tokenIdUri = "0x01559ae4021a565d5cc4740f1cefa95de8c1fb193949ecd32c337b03047da501";
 
     #endregion
 
     #region Mint
-
-    private string uriMint = "1";
+    
+    [Header("Mint Call")]
+    [SerializeField] private string uriMint = "1";
 
     #endregion
 
     #region Transfer
-
-    private string contractTransfer = "0x358AA13c52544ECCEF6B0ADD0f801012ADAD5eE3";
-    private string toAccountTransfer = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
-    private int tokenIdTransfer = 0;
+    
+    [Header("Transfer Call")]
+    [SerializeField] private string contractTransfer = "0x358AA13c52544ECCEF6B0ADD0f801012ADAD5eE3";
+    [SerializeField] private string toAccountTransfer = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
+    [SerializeField] private int tokenIdTransfer = 0;
 
     #endregion
 
