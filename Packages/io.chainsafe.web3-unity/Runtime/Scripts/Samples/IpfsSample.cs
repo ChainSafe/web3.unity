@@ -4,20 +4,11 @@ using ChainSafe.Gaming.UnityPackage.Model;
 using Newtonsoft.Json;
 using Scripts.EVM.Token;
 using UnityEngine;
-using Web3Unity.Scripts.Library.IPFS;
 
 namespace Web3Unity.Scripts.Prefabs
 {
     public class IpfsSample
     {
-        public static async Task<string> Upload(IPFSUploadRequestModel request)
-        {
-            var rawData = System.Text.Encoding.UTF8.GetBytes(request.Data);
-            var ipfs = new Ipfs(request.ApiKey);
-            var cid = await ipfs.Upload(request.BucketId, request.Filename, rawData, "application/octet-stream");
-            return cid;
-        }
-        
         public static async void UploadImageFromFile(IPFSUploadRequestModel request)
         {
             try
