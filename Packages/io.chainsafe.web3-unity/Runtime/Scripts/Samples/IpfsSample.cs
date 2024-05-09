@@ -5,22 +5,6 @@ using Web3Unity.Scripts.Library.IPFS;
 
 namespace Web3Unity.Scripts.Prefabs
 {
-    public class Attribute
-    {
-        public string display_type { get; set; }
-        public string trait_type { get; set; }
-        public object value { get; set; }
-    }
-
-    public class Metadata
-    {
-        public string description { get; set; }
-        public string external_url { get; set; }
-        public string image { get; set; }
-        public string name { get; set; }
-        public List<Attribute> attributes { get; set; }
-    }
-    
     public class IpfsUploadRequest
     {
         public string ApiKey { get; set; }
@@ -28,6 +12,22 @@ namespace Web3Unity.Scripts.Prefabs
         public string BucketId { get; set; }
         public string Filename { get; set; }
         public Texture2D Image { get; set; }
+        
+        public class Attribute
+        {
+            public string display_type { get; set; }
+            public string trait_type { get; set; }
+            public string value { get; set; }
+        }
+
+        public class Metadata
+        {
+            public string description { get; set; }
+            public string external_url { get; set; }
+            public string image { get; set; }
+            public string name { get; set; }
+            public List<Attribute> attributes { get; set; }
+        }
     }
 
     public class IpfsSample
@@ -39,5 +39,6 @@ namespace Web3Unity.Scripts.Prefabs
             var cid = await ipfs.Upload(request.BucketId, request.Filename, rawData, "application/octet-stream");
             return cid;
         }
+        
     }
 }

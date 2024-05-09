@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using Web3Unity.Scripts.Prefabs;
 using Scripts.EVM.Token;
@@ -13,12 +14,14 @@ The scripts function should be called by a method of your choosing - button, fun
 public class Ipfs : MonoBehaviour
 {
     // Variables
-    private string apiKey = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTUyNjg2MzAsImNuZiI6eyJqa3UiOiIvY2VydHMiLCJraWQiOiI5aHE4bnlVUWdMb29ER2l6VnI5SEJtOFIxVEwxS0JKSFlNRUtTRXh4eGtLcCJ9LCJ0eXBlIjoiYXBpX3NlY3JldCIsImlkIjo5NDc2LCJ1dWlkIjoiMmEyYWY0MWYtMTQ4MC00YWE0LWE1MDYtMjJkNjA3OTUzNjU4IiwicGVybSI6eyJiaWxsaW5nIjoiKiIsInNlYXJjaCI6IioiLCJzdG9yYWdlIjoiKiIsInVzZXIiOiIqIn0sImFwaV9rZXkiOiJHV0pCVFBWWU5BUklaRVhQTVhPTCIsInNlcnZpY2UiOiJzdG9yYWdlIiwicHJvdmlkZXIiOiIifQ._E7ZHMdmDGPA1y9bssvaTSTP4NU7Q-OqlJ2pe2nVpl0pEAwWJiDVjqmg4d8Xp_rXFsFY0bZW20ZzKloQ-JX9Ww";
-    private string bucketId = "011266de-050d-4b5c-9c52-23dba893f67e";
-    private string fileNameMetaData = "MetaData.json";
-    private string fileNameImage = "Logo.png";
+    [SerializeField] private string apiKey = "FILLOUT";
+    [SerializeField] private string bucketId = "FILLOUT";
+    [SerializeField] private string fileNameImage = "Logo.png";
+    [SerializeField] private string fileNameMetaData = "MetaData.json";
+    [SerializeField] private string name = "ChainSafe";
+    [SerializeField] private string description = "An NFT description";
     
-    public async void UploadImage()
+    public async void UploadImageFromFile()
     {
         var imagePath = UnityEditor.EditorUtility.OpenFilePanel("Select Image", "", "png,jpg,jpeg,gif");
         if (string.IsNullOrEmpty(imagePath)) return;
@@ -33,16 +36,17 @@ public class Ipfs : MonoBehaviour
             ApiKey = apiKey,
             BucketId = bucketId,
             Filename = fileNameImage,
-            Image = image
+            Image = image,
         });
         IPFSUploadMetaData(cid);
     }
     
     private async void IPFSUploadMetaData(string imageCid)
     {
-        var metaDataObj = new Metadata
+        var metaDataObj = new IpfsUploadRequest.Metadata
         {
-            name = "ChainSafe",
+            name = name,
+            description = description,
             image = imageCid
         };
         var metaData = JsonConvert.SerializeObject(metaDataObj);

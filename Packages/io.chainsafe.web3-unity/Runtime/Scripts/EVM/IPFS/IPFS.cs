@@ -43,7 +43,8 @@ namespace Web3Unity.Scripts.Library.IPFS
             {
                 throw new WebException(requestUpload.error);
             }
-            
+
+            // var jsonFile ="{\"path\": \""+path+"/"+filename+"\", \"source\": \""+bucketId+"\"}";
             var jsonFile = "{\"path\": \"" + filename + "\", \"source\": \"" + bucketId + "\"}";
 
             using var requestFile = new UnityWebRequest(host + "/api/v1/bucket/" + bucketId + "/file", "POST");
