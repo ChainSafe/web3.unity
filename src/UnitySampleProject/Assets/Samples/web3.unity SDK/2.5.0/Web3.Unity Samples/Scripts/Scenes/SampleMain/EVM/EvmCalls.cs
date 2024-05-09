@@ -339,12 +339,11 @@ public class EvmCalls : MonoBehaviour
     /// </summary>
     public async void IPFSUpload()
     {
-        var cid = await Evm.Upload(new IpfsUploadRequest
+        var cid = await Evm.IPFSUpload(new IpfsUploadRequest
         {
             ApiKey = apiKey,
             Data = data,
             BucketId = bucketId,
-            Path = path,
             Filename = filename
         });
         SampleOutputUtil.PrintResult(cid, nameof(IpfsSample), nameof(IpfsSample.Upload));

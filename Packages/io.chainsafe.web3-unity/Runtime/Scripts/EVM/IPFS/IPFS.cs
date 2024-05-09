@@ -28,11 +28,10 @@ namespace Web3Unity.Scripts.Library.IPFS
             _apiKey = apiKey;
         }
 
-        public async Task<string> Upload(string bucketId, string path, string filename, byte[] content, string contentType)
+        public async Task<string> Upload(string bucketId, string filename, byte[] content, string contentType)
         {
             var formUpload = new List<IMultipartFormSection>
             {
-                new MultipartFormDataSection("path=" + path),
                 new MultipartFormFileSection("file", content, filename, contentType)
             };
 
@@ -44,8 +43,7 @@ namespace Web3Unity.Scripts.Library.IPFS
             {
                 throw new WebException(requestUpload.error);
             }
-
-            // var jsonFile ="{\"path\": \""+path+"/"+filename+"\", \"source\": \""+bucketId+"\"}";
+            
             var jsonFile = "{\"path\": \"" + filename + "\", \"source\": \"" + bucketId + "\"}";
 
             using var requestFile = new UnityWebRequest(host + "/api/v1/bucket/" + bucketId + "/file", "POST");

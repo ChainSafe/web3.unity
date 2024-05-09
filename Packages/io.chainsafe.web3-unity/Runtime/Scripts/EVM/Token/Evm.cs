@@ -8,6 +8,7 @@ using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3;
+using JetBrains.Annotations;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
 using Nethereum.Signer;
@@ -178,12 +179,12 @@ namespace Scripts.EVM.Token
             return signature;
         }
 
-        // IPFS upload
-        public static async Task<string> Upload(IpfsUploadRequest request)
+        // IPFS upload metadata or image
+        public static async Task<string> IPFSUpload(IpfsUploadRequest request)
         {
-            var rawData = System.Text.Encoding.UTF8.GetBytes(request.Data);
+            var data = request.Image != null ? request.Image.EncodeToPNG() : Encoding.UTF8.GetBytes(request.Data);
             var ipfs = new Ipfs(request.ApiKey);
-            var cid = await ipfs.Upload(request.BucketId, request.Path, request.Filename, rawData, "application/octet-stream");
+            var cid = await ipfs.Upload(request.BucketId, request.Filename, data, "application/octet-stream");
             return cid;
         }
     }
