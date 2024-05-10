@@ -176,14 +176,5 @@ namespace Scripts.EVM.Token
             string signature = signer.HashAndSign(_message, _privateKey);
             return signature;
         }
-
-        // IPFS upload metadata or image
-        public static async Task<string> IPFSUpload(IPFSUploadRequestModel request)
-        {
-            var data = request.ImageTexture != null ? request.ImageTexture.EncodeToPNG() : Encoding.UTF8.GetBytes(request.Data);
-            var ipfs = new Ipfs(request.ApiKey);
-            var cid = await ipfs.Upload(request.BucketId, request.Filename, data, "application/octet-stream");
-            return cid;
-        }
     }
 }

@@ -722,6 +722,7 @@ Transform:
   - {fileID: 108046415}
   - {fileID: 626054679}
   - {fileID: 496534497}
+  - {fileID: 2077011803}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -987,12 +988,6 @@ MonoBehaviour:
   transactionHash: 0x123456789
   chainId: 11155111
   Erc20Account: 0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2
-  apiKey: YOUR_CHAINSAFE_STORE_API_KEY
-  bucketId: BUCKET_ID
-  fileNameImage: Logo.png
-  fileNameMetaData: MetaData.json
-  name: ChainSafe
-  description: An NFT description
 --- !u!1 &128166330
 GameObject:
   m_ObjectHideFlags: 0
@@ -1456,7 +1451,7 @@ PrefabInstance:
     - target: {fileID: 266788301277215411, guid: fed17eec8cc2ebf4abd403772e93693d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 108046416}
+      objectReference: {fileID: 2077011804}
     - target: {fileID: 266788301277215411, guid: fed17eec8cc2ebf4abd403772e93693d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
@@ -1479,7 +1474,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 266788301277215411, guid: fed17eec8cc2ebf4abd403772e93693d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: EvmCalls, Samples
+      value: IPFSCalls, Samples
       objectReference: {fileID: 0}
     - target: {fileID: 266788301277215411, guid: fed17eec8cc2ebf4abd403772e93693d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
@@ -1496,7 +1491,7 @@ PrefabInstance:
     - target: {fileID: 531827906274991465, guid: fed17eec8cc2ebf4abd403772e93693d, type: 3}
       propertyPath: Target
       value: 
-      objectReference: {fileID: 11500000, guid: d61a1e7c98424af8b0ed86a6516bbcc0, type: 3}
+      objectReference: {fileID: 11500000, guid: 9a86b695c20675b43ba7a0f0a496749c, type: 3}
     - target: {fileID: 1196625356310129404, guid: fed17eec8cc2ebf4abd403772e93693d, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 134
@@ -12319,6 +12314,56 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7978786051816279264, guid: 0bece0d54c82072478aba621b52f134f, type: 3}
   m_PrefabInstance: {fileID: 7978786053810957039}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2077011802
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2077011803}
+  - component: {fileID: 2077011804}
+  m_Layer: 0
+  m_Name: IPFSCalls
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2077011803
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2077011802}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 67264514}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2077011804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2077011802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a86b695c20675b43ba7a0f0a496749c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  apiKey: Fill In Your API Key From Storage
+  bucketId: Fill In Your Bucket ID From Storage
+  fileNameImage: Logo.png
+  fileNameMetaData: MetaData.json
+  name: ChainSafe
+  description: An NFT description
 --- !u!1001 &2092108891
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -12,7 +12,6 @@ using Nethereum.RPC.Eth.DTOs;
 using Newtonsoft.Json;
 using Scripts.EVM.Token;
 using UnityEngine;
-using Web3Unity.Scripts.Prefabs;
 
 public class EvmCalls : MonoBehaviour
 {
@@ -84,18 +83,6 @@ public class EvmCalls : MonoBehaviour
     
     [Header("MutliCall")]
     [SerializeField] private string Erc20Account = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
-
-    #endregion
-    
-    #region IPFS
-    
-    [Header("IPFS VALUES")]
-    [SerializeField] private string apiKey = "Fill In Your API Key From Storage";
-    [SerializeField] private string bucketId = "Fill In Your Bucket ID From Storage";
-    [SerializeField] private string fileNameImage = "Logo.png";
-    [SerializeField] private string fileNameMetaData = "MetaData.json";
-    [SerializeField] private string name = "ChainSafe";
-    [SerializeField] private string description = "An NFT description";
 
     #endregion
 
@@ -331,23 +318,6 @@ public class EvmCalls : MonoBehaviour
     {
         var result = Evm.EcdsaGetAddress(ecdsaKey);
         SampleOutputUtil.PrintResult(result, nameof(Evm), nameof(Evm.EcdsaGetAddress));
-    }
-
-    /// <summary>
-    /// Uploads to IPFS
-    /// </summary>
-    public void IPFSUpload()
-    {
-        var uploadRequest = new IPFSUploadRequestModel
-        {
-            ApiKey = apiKey,
-            BucketId = bucketId,
-            FileNameImage = fileNameImage,
-            FileNameMetaData = fileNameMetaData,
-            Name = name,
-            Description = description
-        };
-        IpfsSample.UploadImageFromFile(uploadRequest);
     }
 
     /// <summary>
