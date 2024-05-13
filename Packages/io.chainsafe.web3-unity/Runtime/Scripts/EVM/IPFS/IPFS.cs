@@ -12,55 +12,69 @@ namespace Web3Unity.Scripts.Library.IPFS
 {
     public static class IPFS
     {
-        #region IPFS
+        #region Fields
         
         private static readonly string host = "https://api.chainsafe.io";
 
         #endregion
 
-        [System.Serializable]
-        public class GetFileInfoResponse
+        #region Methods
+        
+        /// <summary>
+        /// Creates a list of attributes
+        /// </summary>
+        /// <param name="display_types">List of display types</param>
+        /// <param name="trait_types">List of trait types</param>
+        /// <param name="values">List of trait values</param>
+        /// <returns>List of IPFSUploadRequestModel.Attributes</returns>
+        public static List<IPFSUploadRequestModel.Attributes> CreateAttributesList(List<string> display_types, List<string> trait_types, List<string> values)
         {
-            [System.Serializable]
-            public class Content
+            // Create a list to store attributes
+            var attributeList = new List<IPFSUploadRequestModel.Attributes>();
+            for (int i = 0; i < display_types.Count; i++)
             {
-                public string cid;
+                // Create a new instance of Attributes and set its properties
+                var attribute = new IPFSUploadRequestModel.Attributes
+                {
+                    Display_types = new List<string> { display_types[i] },
+                    Trait_types = new List<string> { trait_types[i] },
+                    Values = new List<string> { values[i] }
+                };
+                // Add the attribute to the list
+                attributeList.Add(attribute);
             }
-
-            public Content content;
+            return attributeList;
         }
         
-        public static async void UploadImageFromFile(IPFSUploadRequestModel request)
+        /// <summary>
+        /// Converts & uploads an image from file to IPFS
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public static async Task<string> UploadImageFromFile(IPFSUploadRequestModel request)
         {
             try
             {
+                // Upload image from file & convert to byte[]
                 var imagePath = UnityEditor.EditorUtility.OpenFilePanel("Select Image", "", "png,jpg,jpeg,gif");
-                if (string.IsNullOrEmpty(imagePath)) return;
+                if (string.IsNullOrEmpty(imagePath)) return null;
                 var www = await new WWW("file://" + imagePath);
-                // Upload image
-                var imageCid = await ConvertCIDUpload(new IPFSUploadRequestModel
-                {
-                    ApiKey = request.ApiKey,
-                    BucketId = request.BucketId,
-                    Filename = request.FileNameImage,
-                    ImageTexture = www.texture
-                });
+                var imageData = www.texture.EncodeToPNG();
                 // Upload metadata with image
+                var imageCid = await Upload(request.ApiKey, request.BucketId, request.FileNameImage, imageData, "application/octet-stream");
                 var metaDataObj = new IPFSUploadRequestModel
                 {
-                    Name = request.Name,
                     Description = request.Description,
-                    Image = imageCid
+                    External_url = request.External_url,
+                    Image = imageCid,
+                    Name = request.Name,
+                    attributes = request.attributes
                 };
-                var metaData = JsonConvert.SerializeObject(metaDataObj, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-                var cid = await ConvertCIDUpload(new IPFSUploadRequestModel
-                {
-                    ApiKey = request.ApiKey,
-                    Data = metaData,
-                    BucketId = request.BucketId,
-                    Filename = request.FileNameMetaData
-                });
-                Debug.Log($"Metadata uploaded to https://ipfs.chainsafe.io/ipfs/{cid}");
+                // Serialize
+                var metaData = JsonConvert.SerializeObject(metaDataObj);
+                var data = Encoding.UTF8.GetBytes(metaData);
+                var cid = await Upload(request.ApiKey, request.BucketId, request.FileNameMetaData, data, "application/octet-stream");
+                return cid;
             }
             catch (Exception e)
             {
@@ -69,13 +83,16 @@ namespace Web3Unity.Scripts.Library.IPFS
             }
         }
         
-        private static async Task<string> ConvertCIDUpload(IPFSUploadRequestModel request)
-        {
-            var data = request.ImageTexture != null ? request.ImageTexture.EncodeToPNG() : Encoding.UTF8.GetBytes(request.Data);
-            var cid = await Upload(request.ApiKey, request.BucketId, request.Filename, data, "application/octet-stream");
-            return cid;
-        }
-
+        /// <summary>
+        /// Uploads a file to IPFS
+        /// </summary>
+        /// <param name="apiKey">Chainsafe API key</param>
+        /// <param name="bucketId">Chainsafe bucket ID from the dashboard</param>
+        /// <param name="filename">Name of the file being uploaded</param>
+        /// <param name="content">The data content in bytes</param>
+        /// <param name="contentType">The type of content being uploaded</param>
+        /// <returns>The CID of the file uploaded</returns>
+        /// <exception cref="WebException">Web request error</exception>
         private static async Task<string> Upload(string apiKey, string bucketId, string filename, byte[] content, string contentType)
         {
             var formUpload = new List<IMultipartFormSection>
@@ -110,5 +127,7 @@ namespace Web3Unity.Scripts.Library.IPFS
             var data = JsonUtility.FromJson<GetFileInfoResponse>(requestFile.downloadHandler.text);
             return data.content.cid;
         }
+        
+        #endregion
     }
 }

@@ -1706,23 +1706,34 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5575651454046172251, guid: fed17eec8cc2ebf4abd403772e93693d, type: 3}
       propertyPath: m_text
-      value: InterPlanetary File System is a decentralized protocol and network designed
-        to create a more resilient and distributed method of storing and sharing
-        data on the internet. It uses a content-addressable system, where files are
-        identified and retrieved based on their cryptographic hashes rather than
-        their location. This enables faster and more efficient data retrieval, reduces
-        reliance on central servers, and promotes greater data availability and censorship
-        resistance. IPFS aims to revolutionize how information is stored, accessed,
-        and shared across the internet by creating a peer-to-peer, decentralized
-        web of content.
+      value: 'InterPlanetary File System is a decentralized protocol and network
+        designed to create a more resilient and distributed method of storing and
+        sharing data on the internet. It uses a content-addressable system, where
+        files are identified and retrieved based on their cryptographic hashes rather
+        than their location. This enables faster and more efficient data retrieval.
+        Our example script will allow you to upload an image from your device and
+        metadata via the SDK. You can then add these CIDs to the URI fields of your
+        NFTs to make them dynamic.
+
+
+        Please remember to set your API & bucket
+        keys in the IPFSCalls object in the hierarchy to the left.'
       objectReference: {fileID: 0}
     - target: {fileID: 5575651454046172251, guid: fed17eec8cc2ebf4abd403772e93693d, type: 3}
       propertyPath: m_fontSize
-      value: 13.75
+      value: 12.85
       objectReference: {fileID: 0}
     - target: {fileID: 5575651454046172251, guid: fed17eec8cc2ebf4abd403772e93693d, type: 3}
       propertyPath: m_margin.w
       value: 111.76738
+      objectReference: {fileID: 0}
+    - target: {fileID: 5575651454046172251, guid: fed17eec8cc2ebf4abd403772e93693d, type: 3}
+      propertyPath: m_VerticalAlignment
+      value: 512
+      objectReference: {fileID: 0}
+    - target: {fileID: 5575651454046172251, guid: fed17eec8cc2ebf4abd403772e93693d, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5855924980481563309, guid: fed17eec8cc2ebf4abd403772e93693d, type: 3}
       propertyPath: m_Name
@@ -2596,7 +2607,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 37375165}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.24647003
+  m_Size: 0.26306736
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -12362,8 +12373,18 @@ MonoBehaviour:
   bucketId: Fill In Your Bucket ID From Storage
   fileNameImage: Logo.png
   fileNameMetaData: MetaData.json
-  name: ChainSafe
+  name: Name of the NFT
   description: An NFT description
+  externalUrl: The URL that appears below your assets image
+  display_types:
+  - Stamina
+  - Boost Number
+  trait_types:
+  - Health
+  - Thunder Power
+  values:
+  - 5
+  - 20
 --- !u!1001 &2092108891
 PrefabInstance:
   m_ObjectHideFlags: 0
