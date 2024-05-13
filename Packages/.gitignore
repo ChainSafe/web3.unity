@@ -85,6 +85,7 @@ crashlytics-build.properties
 /io.chainsafe.web3-unity/Runtime/Libraries/*.pdb.meta
 
 /io.chainsafe.web3-unity.lootboxes/Chainlink/Runtime/Libraries/*.dll
+/io.chainsafe.web3-unity.lootboxes/Chainlink/Runtime/Libraries/*.dll.meta
 /io.chainsafe.web3-unity.lootboxes/Chainlink/Runtime/Libraries/*.pdb
 /io.chainsafe.web3-unity.lootboxes/Chainlink/Runtime/Libraries/*.pdb.meta
 
