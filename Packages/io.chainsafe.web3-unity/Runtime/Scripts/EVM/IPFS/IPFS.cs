@@ -50,8 +50,63 @@ namespace Web3Unity.Scripts.Library.IPFS
         /// Converts & uploads an image from file to IPFS
         /// </summary>
         /// <param name="request"></param>
-        /// <returns></returns>
-        public static async Task<string> UploadImageFromFile(IPFSUploadRequestModel request)
+        /// <returns>CID containing an image</returns>
+        public static async Task<string> UploadImage(IPFSUploadRequestModel request)
+        {
+            try
+            {
+                // Upload image from file & convert to byte[]
+                var imagePath = UnityEditor.EditorUtility.OpenFilePanel("Select Image", "", "png,jpg,jpeg,gif");
+                if (string.IsNullOrEmpty(imagePath)) return null;
+                var www = await new WWW("file://" + imagePath);
+                var imageData = www.texture.EncodeToPNG();
+                // Upload metadata with image
+                var imageCid = await Upload(request.ApiKey, request.BucketId, request.FileNameImage, imageData, "application/octet-stream");
+                return imageCid;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error uploading image: {e}");
+                throw;
+            }
+        }
+        
+        /// <summary>
+        /// Uploads a metadata file to IPFS
+        /// </summary>
+        /// <param name="request">IPFSUploadRequestModel</param>
+        /// <returns>CID containing metadata</returns>
+        public static async Task<string> UploadMetaData(IPFSUploadRequestModel request)
+        {
+            try
+            {
+                var metaDataObj = new IPFSUploadRequestModel
+                {
+                    Description = request.Description,
+                    External_url = request.External_url,
+                    Image = $"https://ipfs.chainsafe.io/ipfs/{request.Image}",
+                    Name = request.Name,
+                    attributes = request.attributes
+                };
+                // Serialize
+                var metaData = JsonConvert.SerializeObject(metaDataObj, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                var data = Encoding.UTF8.GetBytes(metaData);
+                var cid = await Upload(request.ApiKey, request.BucketId, request.FileNameMetaData, data, "application/octet-stream");
+                return cid;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error uploading metadata: {e}");
+                throw;
+            }
+        }
+        
+        /// <summary>
+        /// Converts & uploads an image from file to IPFS
+        /// </summary>
+        /// <param name="request">IPFSUploadRequestModel</param>
+        /// <returns>CID containing metadata & image</returns>
+        public static async Task<string> UploadImageAndMetadata(IPFSUploadRequestModel request)
         {
             try
             {
@@ -66,19 +121,19 @@ namespace Web3Unity.Scripts.Library.IPFS
                 {
                     Description = request.Description,
                     External_url = request.External_url,
-                    Image = imageCid,
+                    Image = $"https://ipfs.chainsafe.io/ipfs/{imageCid}",
                     Name = request.Name,
                     attributes = request.attributes
                 };
                 // Serialize
-                var metaData = JsonConvert.SerializeObject(metaDataObj);
+                var metaData = JsonConvert.SerializeObject(metaDataObj, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
                 var data = Encoding.UTF8.GetBytes(metaData);
                 var cid = await Upload(request.ApiKey, request.BucketId, request.FileNameMetaData, data, "application/octet-stream");
                 return cid;
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Error uploading metadata: {e}");
+                Console.WriteLine($"Error uploading image & metadata: {e}");
                 throw;
             }
         }
