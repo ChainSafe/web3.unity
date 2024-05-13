@@ -1,20 +1,17 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ChainSafe.Gaming.Evm.Contracts.Extensions;
 using ChainSafe.Gaming.MultiCall;
 using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.UnityPackage.Model;
 using Nethereum.ABI.FunctionEncoding.Attributes;
-using Nethereum.BlockchainProcessing.BlockStorage.Entities;
 using Nethereum.Contracts.QueryHandlers.MultiCall;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.RPC.Eth.DTOs;
 using Newtonsoft.Json;
 using Scripts.EVM.Token;
 using UnityEngine;
-using Web3Unity.Scripts.Prefabs;
-using TransactionReceipt = ChainSafe.Gaming.Evm.Transactions.TransactionReceipt;
 
 public class EvmCalls : MonoBehaviour
 {
@@ -86,17 +83,6 @@ public class EvmCalls : MonoBehaviour
     
     [Header("MutliCall")]
     [SerializeField] private string Erc20Account = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
-
-    #endregion
-    
-    #region IPFS
-    
-    [Header("IPFS VALUES")]
-    [SerializeField] private string apiKey = "YOUR_CHAINSAFE_STORE_API_KEY";
-    [SerializeField] private string data = "YOUR_DATA";
-    [SerializeField] private string bucketId = "BUCKET_ID";
-    [SerializeField] private string path = "/PATH";
-    [SerializeField] private string filename = "FILENAME.EXT";
 
     #endregion
 
@@ -332,22 +318,6 @@ public class EvmCalls : MonoBehaviour
     {
         var result = Evm.EcdsaGetAddress(ecdsaKey);
         SampleOutputUtil.PrintResult(result, nameof(Evm), nameof(Evm.EcdsaGetAddress));
-    }
-
-    /// <summary>
-    /// Uploads to IPFS
-    /// </summary>
-    public async void IPFSUpload()
-    {
-        var cid = await Evm.Upload(new IpfsUploadRequest
-        {
-            ApiKey = apiKey,
-            Data = data,
-            BucketId = bucketId,
-            Path = path,
-            Filename = filename
-        });
-        SampleOutputUtil.PrintResult(cid, nameof(IpfsSample), nameof(IpfsSample.Upload));
     }
 
     /// <summary>
