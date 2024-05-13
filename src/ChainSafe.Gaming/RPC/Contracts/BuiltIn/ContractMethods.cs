@@ -1,6 +1,6 @@
-namespace Scripts.EVM.Token
+namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
 {
-    public static class EthMethod
+    public static class ContractMethods
     {
         public const string BalanceOf = "balanceOf";
         public const string Name = "name";
