@@ -163,6 +163,12 @@ namespace Web3Unity.Scripts.Library.IPFS
             {
                 throw new WebException(requestUpload.error);
             }
+            
+            var uploadResponse = JsonConvert.DeserializeObject<Path>(requestUpload.downloadHandler.text);
+            if (uploadResponse.files_details[0].status == "failed")
+            {
+                throw new Exception($"Upload Failed: {uploadResponse.files_details[0].message}");
+            }
 
             // var jsonFile ="{\"path\": \""+path+"/"+filename+"\", \"source\": \""+bucketId+"\"}";
             var jsonFile = "{\"path\": \"" + filename + "\", \"source\": \"" + bucketId + "\"}";
