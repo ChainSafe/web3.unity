@@ -95,16 +95,27 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         }
 
         /// <summary>
+        /// Mints a specified amount of tokens to the current user address.
+        /// </summary>
+        /// <param name="amount">The amount of tokens to mint.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains an array of objects.</returns>
+        public Task<object[]> Mint(BigInteger amount)
+        {
+            EnsureSigner();
+            return Mint(amount, signer.PublicAddress);
+        }
+
+        /// <summary>
         /// Mint the specified amount of tokens to the specified account address.
         /// </summary>
-        /// <param name="toAccountAddress">The account address to mint tokens to.</param>
         /// <param name="amount">The amount of tokens to mint.</param>
+        /// <param name="destinationAddress">The account address to mint tokens to.</param>
         /// <returns>An array of objects representing the response after minting.</returns>
-        public async Task<object[]> Mint(string toAccountAddress, BigInteger amount)
+        public async Task<object[]> Mint(BigInteger amount, string destinationAddress)
         {
             var response = await Send(
                 ContractMethods.Mint,
-                new object[] { toAccountAddress, amount });
+                new object[] { destinationAddress, amount });
 
             return response;
         }
@@ -112,14 +123,14 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// <summary>
         /// Transfers a specified amount to the specified account address.
         /// </summary>
-        /// <param name="toAccountAddress">The address of the account to transfer the amount to.</param>
+        /// <param name="destinationAddress">The address of the account to transfer the amount to.</param>
         /// <param name="amount">The amount to transfer.</param>
         /// <returns>An array of objects representing the response of the transfer operation.</returns>
-        public async Task<object[]> Transfer(string toAccountAddress, BigInteger amount)
+        public async Task<object[]> Transfer(string destinationAddress, BigInteger amount)
         {
             var response = await Send(
                 ContractMethods.Transfer,
-                new object[] { toAccountAddress, amount });
+                new object[] { destinationAddress, amount });
 
             return response;
         }

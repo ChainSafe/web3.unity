@@ -55,7 +55,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// <param name="tokenIds">An array of token IDs.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains a list of BigInteger objects representing the balances of each specified account for the corresponding token.</returns>
         [Pure]
-        public Task<List<BigInteger>> GetBalanceOfBatch(string[] accountAddresses, string[] tokenIds)
+        public Task<List<BigInteger>> GetBalanceOfBatch(string[] accountAddresses, string[] tokenIds) // TODO refine return value format
         {
             return Original.CallSingle<List<BigInteger>, string[], string[]>(
                 ContractMethods.BalanceOfBatch,
