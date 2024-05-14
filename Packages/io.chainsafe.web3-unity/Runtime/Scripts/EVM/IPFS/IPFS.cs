@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.UnityPackage.Model;
+using ChainSafe.Gaming.Web3;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -178,7 +179,7 @@ namespace Web3Unity.Scripts.Library.IPFS
             var uploadResponse = JsonConvert.DeserializeObject<Path>(requestUpload.downloadHandler.text);
             if (uploadResponse.files_details[0].status == "failed")
             {
-                throw new Exception($"Upload Failed: {uploadResponse.files_details[0].message}");
+                throw new Web3Exception($"Upload Failed: {uploadResponse.files_details[0].message}");
             }
 
             // var jsonFile ="{\"path\": \""+path+"/"+filename+"\", \"source\": \""+bucketId+"\"}";
