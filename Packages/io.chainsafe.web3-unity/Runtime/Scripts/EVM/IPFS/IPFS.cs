@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.UnityPackage.Model;
+using ChainSafe.Gaming.Web3;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -55,11 +57,16 @@ namespace Web3Unity.Scripts.Library.IPFS
         {
             try
             {
+                // TODO: Fix for webgl
+                #if UNITY_WEBGL && !UNITY_EDITOR
+                byte[] imageData = null;
+                #else
                 // Upload image from file & convert to byte[]
                 var imagePath = UnityEditor.EditorUtility.OpenFilePanel("Select Image", "", "png,jpg,jpeg,gif");
                 if (string.IsNullOrEmpty(imagePath)) return null;
                 var www = await new WWW("file://" + imagePath);
                 var imageData = www.texture.EncodeToPNG();
+                #endif
                 // Upload metadata with image
                 var imageCid = await Upload(request.ApiKey, request.BucketId, request.FileNameImage, imageData, "application/octet-stream");
                 return imageCid;
@@ -110,11 +117,16 @@ namespace Web3Unity.Scripts.Library.IPFS
         {
             try
             {
+                // TODO: Fix for webgl
+                #if UNITY_WEBGL && !UNITY_EDITOR
+                byte[] imageData = null;
+                #else
                 // Upload image from file & convert to byte[]
                 var imagePath = UnityEditor.EditorUtility.OpenFilePanel("Select Image", "", "png,jpg,jpeg,gif");
                 if (string.IsNullOrEmpty(imagePath)) return null;
                 var www = await new WWW("file://" + imagePath);
                 var imageData = www.texture.EncodeToPNG();
+                #endif
                 // Upload metadata with image
                 var imageCid = await Upload(request.ApiKey, request.BucketId, request.FileNameImage, imageData, "application/octet-stream");
                 var metaDataObj = new IPFSUploadRequestModel
@@ -162,6 +174,12 @@ namespace Web3Unity.Scripts.Library.IPFS
             if (requestUpload.result != UnityWebRequest.Result.Success)
             {
                 throw new WebException(requestUpload.error);
+            }
+            
+            var uploadResponse = JsonConvert.DeserializeObject<Path>(requestUpload.downloadHandler.text);
+            if (uploadResponse.files_details[0].status == "failed")
+            {
+                throw new Web3Exception($"Upload Failed: {uploadResponse.files_details[0].message}");
             }
 
             // var jsonFile ="{\"path\": \""+path+"/"+filename+"\", \"source\": \""+bucketId+"\"}";

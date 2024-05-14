@@ -32,4 +32,22 @@ namespace ChainSafe.Gaming.UnityPackage.Model
 
         public Content content;
     }
+    
+    public class FilesDetail
+    {
+        public string path { get; set; }
+        public string cid { get; set; }
+        public string content_type { get; set; }
+        public int size { get; set; }
+        public string status { get; set; }
+        public int error_code { get; set; }
+        public string message { get; set; }
+        public string suggestion { get; set; }
+    }
+
+    public class Path
+    {
+        public string path { get; set; }
+        public List<FilesDetail> files_details { get; set; }
+    }
 }
