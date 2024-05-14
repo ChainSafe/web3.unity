@@ -35,7 +35,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         [Pure]
         public async Task<int> GetBalanceOf(string accountAddress)
         {
-            var response = await Call(ContractMethods.BalanceOf, new object[] { accountAddress });
+            var response = await Call(EthMethods.BalanceOf, new object[] { accountAddress });
             return int.Parse(response[0].ToString());
         }
 
@@ -58,7 +58,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         [Pure]
         private async Task<string> GetOwnerOfInternal(object id)
         {
-            var response = await Call(ContractMethods.OwnerOf, new[] { id });
+            var response = await Call(EthMethods.OwnerOf, new[] { id });
             return response[0].ToString();
         }
 
@@ -96,7 +96,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
             Call3Value BuildCall(string tokenId)
             {
                 object param = tokenId.StartsWith("0x") ? tokenId : BigInteger.Parse(tokenId);
-                var callData = Calldata(ContractMethods.OwnerOf, new[] { param });
+                var callData = Calldata(EthMethods.OwnerOf, new[] { param });
                 return new Call3Value { Target = Original.Address, AllowFailure = true, CallData = callData.HexToByteArray(), };
             }
 
@@ -107,7 +107,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
                     return new OwnerOfBatchModel { Failure = true };
                 }
 
-                var owner = Decode(ContractMethods.OwnerOf, result.ReturnData.ToHex());
+                var owner = Decode(EthMethods.OwnerOf, result.ReturnData.ToHex());
                 return new OwnerOfBatchModel { TokenId = tokenIds[index], Owner = owner[0].ToString() };
             }
         }
@@ -127,7 +127,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
                 return IpfsHelper.DecodeTokenIdToUri(tokenId);
             }
 
-            var response = await Original.Call(ContractMethods.TokenUri, new object[] { tokenId });
+            var response = await Original.Call(EthMethods.TokenUri, new object[] { tokenId });
             var uri = response[0].ToString();
             return uri;
         }
@@ -146,7 +146,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
             }
 
             var parameters = new object[] { signer.PublicAddress, uri };
-            var response = await Send(ContractMethods.SafeMint, parameters);
+            var response = await Send(EthMethods.SafeMint, parameters);
             return response;
         }
 
@@ -159,7 +159,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         public async Task<object[]> Mint(string uri, string destinationAddress) // todo review if still relevant
         {
             var parameters = new object[] { destinationAddress, uri };
-            var response = await Send(ContractMethods.SafeMint, parameters);
+            var response = await Send(EthMethods.SafeMint, parameters);
             return response;
         }
 
@@ -188,7 +188,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
             }
 
             var parameters = new object[] { signer.PublicAddress, toAccount, tokenId };
-            var response = await Send(ContractMethods.SafeTransferFrom, parameters);
+            var response = await Send(EthMethods.SafeTransferFrom, parameters);
             return response;
         }
     }

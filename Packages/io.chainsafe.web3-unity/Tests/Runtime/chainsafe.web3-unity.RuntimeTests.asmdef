@@ -17,7 +17,8 @@
         "ChainSafe.Gaming.dll",
         "ChainSafe.Gaming.Unity.dll",
         "ChainSafe.Gaming.Gelato.dll",
-        "ChainSafe.Gaming.WalletConnect.dll"
+        "ChainSafe.Gaming.WalletConnect.dll",
+        "Nethereum.RPC.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [

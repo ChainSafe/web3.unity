@@ -20,7 +20,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
 
         private Erc721Service()
         {
-            abi = AbiHelper.ReadAbiFromResources(Assembly.GetExecutingAssembly(), "ChainSafe.Gaming.erc-721-abi.json");
+            abi = AbiHelper.ReadAbiFromResources(Assembly.GetExecutingAssembly(), "ChainSafe.Gaming.Resources.erc-721-abi.json");
         }
 
         public Erc721Service(IContractBuilder contractBuilder)

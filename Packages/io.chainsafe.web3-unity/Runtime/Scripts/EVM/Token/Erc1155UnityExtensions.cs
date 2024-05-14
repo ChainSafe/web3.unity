@@ -11,8 +11,7 @@ namespace Scripts.EVM.Token
 {
     public static class Erc1155UnityExtensions
     {
-        [Pure]
-        public static async Task<Texture2D> ImportTexture(Erc1155Contract contract, string tokenId)
+        public static async Task<Texture2D> ImportTexture(this Erc1155Contract contract, string tokenId)
         {
             // fetch uri from chain
             var uri = await contract.GetUri(tokenId);
@@ -41,6 +40,11 @@ namespace Scripts.EVM.Token
             var texture = ((DownloadHandlerTexture)textureRequest.downloadHandler).texture;
 
             return texture;
+        }
+
+        public static Task<Texture2D> ImportTexture(this Erc1155Service service, string contractAddress, string tokenId)
+        {
+            return service.BuildContract(contractAddress).ImportTexture(tokenId);
         }
     }
 }

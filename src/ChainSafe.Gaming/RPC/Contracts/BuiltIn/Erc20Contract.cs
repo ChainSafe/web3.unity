@@ -26,7 +26,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         [Pure]
         public async Task<string> GetName()
         {
-            var response = await Call(ContractMethods.Name);
+            var response = await Call(EthMethods.Name);
             return response[0].ToString();
         }
 
@@ -39,7 +39,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         [Pure]
         public async Task<string> GetSymbol()
         {
-            var response = await Call(ContractMethods.Symbol);
+            var response = await Call(EthMethods.Symbol);
             return response[0].ToString();
         }
 
@@ -63,7 +63,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         public async Task<BigInteger> GetBalanceOf(string accountAddress)
         {
             var response = await Call(
-                ContractMethods.BalanceOf,
+                EthMethods.BalanceOf,
                 new object[] { accountAddress });
 
             return BigInteger.Parse(response[0].ToString());
@@ -76,7 +76,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         [Pure]
         public async Task<BigInteger> GetDecimals()
         {
-            var response = await Call(ContractMethods.Decimals);
+            var response = await Call(EthMethods.Decimals);
             return BigInteger.Parse(response[0].ToString());
         }
 
@@ -90,7 +90,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         [Pure]
         public async Task<BigInteger> GetTotalSupply()
         {
-            var response = await Call(ContractMethods.TotalSupply);
+            var response = await Call(EthMethods.TotalSupply);
             return BigInteger.Parse(response[0].ToString());
         }
 
@@ -114,7 +114,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         public async Task<object[]> Mint(BigInteger amount, string destinationAddress)
         {
             var response = await Send(
-                ContractMethods.Mint,
+                EthMethods.Mint,
                 new object[] { destinationAddress, amount });
 
             return response;
@@ -129,7 +129,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         public async Task<object[]> Transfer(string destinationAddress, BigInteger amount)
         {
             var response = await Send(
-                ContractMethods.Transfer,
+                EthMethods.Transfer,
                 new object[] { destinationAddress, amount });
 
             return response;
