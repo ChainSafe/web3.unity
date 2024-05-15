@@ -27,15 +27,19 @@ public class DisableGameObjectIfServiceNotActive : MonoBehaviour
     private void Awake()
     {
         if (serviceType != ServiceType.Ramp)
-            gameObject.SetActive(Web3Accessor.Web3.ServiceProvider.GetService(_typesDictionary[serviceType]) != null);
+            ShouldGameObjectBeDisabled();
         else
             CheckRamp();
     }
 
+    private void ShouldGameObjectBeDisabled() => gameObject.SetActive(
+        _typesDictionary.TryGetValue(serviceType, out var value)
+        && Web3Accessor.Web3.ServiceProvider.GetService(value) != null);
+
     private void CheckRamp()
     {
 #if RAMP_AVAILABLE
-            gameObject.SetActive(Web3Accessor.Web3.ServiceProvider.GetService(_typesDictionary[serviceType]) != null);
+            ShouldGameObjectBeDisabled();
 #else 
         gameObject.SetActive(false);
 #endif
