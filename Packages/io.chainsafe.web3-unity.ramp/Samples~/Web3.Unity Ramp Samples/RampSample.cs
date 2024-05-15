@@ -1,4 +1,3 @@
-#define RAMP_AVAILABLE
 using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Wallets;
