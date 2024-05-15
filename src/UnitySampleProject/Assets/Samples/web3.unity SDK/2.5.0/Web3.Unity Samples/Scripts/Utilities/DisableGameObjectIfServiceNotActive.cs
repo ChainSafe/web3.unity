@@ -26,8 +26,7 @@ public class DisableGameObjectIfServiceNotActive : MonoBehaviour
 
     private void Awake()
     {
-        if (serviceType != ServiceType.Ramp)
-            ShouldGameObjectBeDisabled();
+        ShouldGameObjectBeDisabled();
     }
 
     private void ShouldGameObjectBeDisabled() => gameObject.SetActive(
