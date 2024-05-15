@@ -14,7 +14,6 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
         public Web3Builder ConfigureServices(Web3Builder web3Builder)
         {
 #if !UNITY_EDITOR && (UNITY_WEBGL || UNITY_IOS)
-#define RAMP_AVAILABLE
             return web3Builder.Configure(services => { services.UseRampExchanger(rampConfig); });
 #endif
             return web3Builder;
