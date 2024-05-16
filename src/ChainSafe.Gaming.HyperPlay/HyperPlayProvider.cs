@@ -1,7 +1,7 @@
-using System;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.HyperPlay.Dto;
 using ChainSafe.Gaming.Web3;
-using ChainSafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.Web3.Core.Debug;
 using ChainSafe.Gaming.Web3.Environment;
 using Newtonsoft.Json;
 
@@ -34,9 +34,7 @@ namespace ChainSafe.Gaming.HyperPlay
         {
             string[] accounts = await Request<string[]>("eth_accounts");
 
-            string account = accounts[0];
-
-            string hash = await Request<string>("personal_sign", "Sign-in with Ethereum.", account);
+            string account = accounts[0].AssertIsPublicAddress(nameof(account));
 
             return account;
         }
@@ -65,20 +63,22 @@ namespace ChainSafe.Gaming.HyperPlay
 
             string response = (await httpClient.PostRaw("localhost:9680/rpc", body, "application/json")).Response;
 
+            // In case response is just a primitive type like string/number...
+            // Deserializing it directly doesn't work.
+            if (response is T result)
+            {
+                return result;
+            }
+
             try
+            {
+                return JsonConvert.DeserializeObject<T>(response);
+            }
+            catch (JsonSerializationException)
             {
                 var error = JsonConvert.DeserializeObject<HyperPlayError>(response);
 
                 throw new Web3Exception($"HyperPlay RPC request failed: {error.Message}");
-            }
-            catch (Exception)
-            {
-                if (response is T result)
-                {
-                    return result;
-                }
-
-                return JsonConvert.DeserializeObject<T>(response);
             }
         }
     }

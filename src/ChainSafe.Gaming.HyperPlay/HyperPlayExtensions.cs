@@ -9,32 +9,45 @@ namespace ChainSafe.Gaming.HyperPlay
     public static class HyperPlayExtensions
     {
         /// <summary>
-        /// Use HyperPlay to connect to wallet, sign messages, transactions, and execute transactions.
+        /// Binds implementation of <see cref="IHyperPlayProvider"/> as <see cref="HyperPlayProvider"/> to Web3 as a service.
         /// </summary>
-        /// <param name="collection">Service collection.</param>
-        public static void UseHyperPlay(this IWeb3ServiceCollection collection)
+        /// <param name="collection">Service collection to bind implementations to.</param>
+        /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
+        public static IWeb3ServiceCollection UseHyperPlay(this IWeb3ServiceCollection collection)
         {
             collection.AssertServiceNotBound<IHyperPlayProvider>();
 
             collection.AddSingleton<IHyperPlayProvider, HyperPlayProvider>();
 
-            UseHyperPlaySigner(collection);
-
-            UseHyperPlayTransactionExecutor(collection);
+            return collection;
         }
 
-        private static void UseHyperPlaySigner(this IWeb3ServiceCollection collection)
+        /// <summary>
+        /// Binds implementation of <see cref="ISigner"/> as <see cref="HyperPlaySigner"/> to Web3 as a service.
+        /// </summary>
+        /// <param name="collection">Service collection to bind implementations to.</param>
+        /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
+        public static IWeb3ServiceCollection UseHyperPlaySigner(this IWeb3ServiceCollection collection)
         {
             collection.AssertServiceNotBound<ISigner>();
 
             collection.AddSingleton<ILifecycleParticipant, ISigner, HyperPlaySigner>();
+
+            return collection;
         }
 
-        private static void UseHyperPlayTransactionExecutor(this IWeb3ServiceCollection collection)
+        /// <summary>
+        /// Binds implementation of <see cref="ITransactionExecutor"/> as <see cref="HyperPlayTransactionExecutor"/> to Web3 as a service.
+        /// </summary>
+        /// <param name="collection">Service collection to bind implementations to.</param>
+        /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
+        public static IWeb3ServiceCollection UseHyperPlayTransactionExecutor(this IWeb3ServiceCollection collection)
         {
             collection.AssertServiceNotBound<ITransactionExecutor>();
 
             collection.AddSingleton<ITransactionExecutor, HyperPlayTransactionExecutor>();
+
+            return collection;
         }
     }
 }
