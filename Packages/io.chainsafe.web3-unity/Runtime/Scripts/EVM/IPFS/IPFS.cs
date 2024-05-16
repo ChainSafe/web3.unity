@@ -15,7 +15,7 @@ namespace Web3Unity.Scripts.Library.IPFS
         #region Fields
         
         private static readonly string host = "https://api.chainsafe.io";
-
+        
         #endregion
 
         #region Methods
