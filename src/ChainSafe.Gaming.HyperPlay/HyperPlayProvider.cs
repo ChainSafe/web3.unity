@@ -61,7 +61,7 @@ namespace ChainSafe.Gaming.HyperPlay
                 },
             });
 
-            string response = (await httpClient.PostRaw("localhost:9680/rpc", body, "application/json")).Response;
+            string response = (await httpClient.PostRaw("http://localhost:9680/rpc", body, "application/json")).Response;
 
             // In case response is just a primitive type like string/number...
             // Deserializing it directly doesn't work.
