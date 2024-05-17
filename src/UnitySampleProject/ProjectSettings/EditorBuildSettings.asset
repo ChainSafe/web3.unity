@@ -18,6 +18,10 @@ EditorBuildSettings:
       - MetaMask.unity
     guid: 7e829b2033fc8554eb0048ce07704f77
   - enabled: 1
+    path: Assets/Samples/web3.unity SDK/2.5.0/Web3.Unity Samples/Scenes/SampleLogin
+      - HyperPlay.unity
+    guid: a31aa87c0b8cd954bb4b14166cc257dd
+  - enabled: 1
     path: Assets/Samples/web3.unity SDK Ramp/1.0.0/Web3.Unity Ramp Samples/SampleRampIntegration.unity
     guid: 9583b7671e7df46028765b84323c9bf7
   - enabled: 1
