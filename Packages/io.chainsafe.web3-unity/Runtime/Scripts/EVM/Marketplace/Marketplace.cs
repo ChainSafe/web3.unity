@@ -338,10 +338,14 @@ namespace Scripts.EVM.Marketplace
         /// <returns>Byte array of image data</returns>
         private static async Task<byte[]> GetImageData()
         {
+            #if UNITY_WEBGL && !UNITY_EDITOR
+            byte[] imageData = null;
+            #else
             var imagePath = UnityEditor.EditorUtility.OpenFilePanel("Select Image", "", "png,jpg,jpeg,gif");
             while (string.IsNullOrEmpty(imagePath)) return null;
             var www = await new WWW("file://" + imagePath);
             var imageData = www.texture.EncodeToPNG();
+            #endif
             return imageData;
         }
 
