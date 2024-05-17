@@ -159,7 +159,7 @@ public class MarketplaceCalls : MonoBehaviour
     public async void Create721Collection()
     {
         var response = await Marketplace.Create721Collection(bearerToken, collectionName721, collectionDescription721);
-        Marketplace.PrintObject(response);
+        Debug.Log(response);
     }
     
     /// <summary>
@@ -168,7 +168,7 @@ public class MarketplaceCalls : MonoBehaviour
     public async void Create1155Collection()
     {
         var response = await Marketplace.Create1155Collection(bearerToken, collectionName1155, collectionDescription1155);
-        Marketplace.PrintObject(response);
+        Debug.Log(response);
     }
     
     /// <summary>
@@ -197,7 +197,7 @@ public class MarketplaceCalls : MonoBehaviour
     public async void DeleteCollection()
     {
         var response = await Marketplace.DeleteCollection(bearerToken, collectionToDelete);
-        Marketplace.PrintObject(response);
+        Debug.Log(response);
     }
     
     /// <summary>
@@ -206,7 +206,7 @@ public class MarketplaceCalls : MonoBehaviour
     public async void CreateMarketplace()
     {
         var response = await Marketplace.CreateMarketplace(bearerToken, marketplaceName, marketplaceDescription);
-        Marketplace.PrintObject(response);
+        Debug.Log(response);
     }
     
     /// <summary>
@@ -215,7 +215,7 @@ public class MarketplaceCalls : MonoBehaviour
     public async void DeleteMarketplace()
     {
         var response = await Marketplace.DeleteMarketplace(bearerToken,marketplaceToDelete);
-        Marketplace.PrintObject(response);
+        Debug.Log(response);
     }
     
     /// <summary>
