@@ -54,7 +54,7 @@ namespace ChainSafe.Gaming.HyperPlay
 
             var key = EthECKey.RecoverFromSignature(signature, messageHash);
 
-            if (key.GetPublicAddress() != account)
+            if (key.GetPublicAddress().ToLower().Trim() != account.ToLower().Trim())
             {
                 throw new Web3Exception("Fetched address does not match the signing address.");
             }
