@@ -12,7 +12,7 @@ using Chain = ChainSafe.Gaming.HyperPlay.Dto.Chain;
 namespace ChainSafe.Gaming.HyperPlay
 {
     /// <summary>
-    /// Concrete implementation of <see cref="IHyperPlayProvider"/>
+    /// Concrete implementation of <see cref="IHyperPlayProvider"/>.
     /// </summary>
     public class HyperPlayProvider : IHyperPlayProvider
     {
