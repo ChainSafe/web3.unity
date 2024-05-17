@@ -1,9 +1,13 @@
+using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.HyperPlay.Dto;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Core.Debug;
 using ChainSafe.Gaming.Web3.Environment;
+using Nethereum.Signer;
+using Nethereum.Util;
 using Newtonsoft.Json;
+using Chain = ChainSafe.Gaming.HyperPlay.Dto.Chain;
 
 namespace ChainSafe.Gaming.HyperPlay
 {
@@ -35,6 +39,25 @@ namespace ChainSafe.Gaming.HyperPlay
             string[] accounts = await Request<string[]>("eth_accounts");
 
             string account = accounts[0].AssertIsPublicAddress(nameof(account));
+
+            string message = "Sign-in with Ethereum";
+
+            string hash = await Request<string>("personal_sign", message, account);
+
+            // Verify signature.
+            // TODO: Make into a Util Method.
+            EthECDSASignature signature = MessageSigner.ExtractEcdsaSignature(hash);
+
+            string messageToHash = "\x19" + "Ethereum Signed Message:\n" + message.Length + message;
+
+            byte[] messageHash = new Sha3Keccack().CalculateHash(Encoding.UTF8.GetBytes(messageToHash));
+
+            var key = EthECKey.RecoverFromSignature(signature, messageHash);
+
+            if (key.GetPublicAddress() != account)
+            {
+                throw new Web3Exception("Fetched address does not match the signing address.");
+            }
 
             return account;
         }
