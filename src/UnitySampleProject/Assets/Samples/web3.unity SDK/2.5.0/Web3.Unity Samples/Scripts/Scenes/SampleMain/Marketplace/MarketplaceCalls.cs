@@ -29,10 +29,12 @@ public class MarketplaceCalls : MonoBehaviour
     [Header("Create 721 Collection Call")]
     [SerializeField] private string collectionName721 = "Set 721 collection name";
     [SerializeField] private string collectionDescription721 = "Set 721 collection description";
+    [SerializeField] private bool collectionMintingPublic721 = false;
     
     [Header("Create 1155 Collection Call")]
     [SerializeField] private string collectionName1155 = "Set 1155 collection name";
     [SerializeField] private string collectionDescription1155 = "Set 1155 collection description";
+    [SerializeField] private bool collectionMintingPublic1155 = false;
     
     [Header("Delete calls (Can only be used before the item is on chain)")]
     [SerializeField] private string collectionToDelete = "Set collection to delete";
@@ -50,6 +52,7 @@ public class MarketplaceCalls : MonoBehaviour
     [Header("Create marketplace call")]
     [SerializeField] private string marketplaceName = "Set marketplace name";
     [SerializeField] private string marketplaceDescription = "Set marketplace description";
+    [SerializeField] private bool marketplaceWhitelisting = false;
     
     [Header("List to marketplace calls")]
     [SerializeField] private string tokenIdToList = "Set token ID to list";
@@ -158,7 +161,7 @@ public class MarketplaceCalls : MonoBehaviour
     /// </summary>
     public async void Create721Collection()
     {
-        var data = await Marketplace.Create721Collection(bearerToken, collectionName721, collectionDescription721);
+        var data = await Marketplace.Create721Collection(bearerToken, collectionName721, collectionDescription721, collectionMintingPublic721);
         var response = SampleOutputUtil.BuildOutputValue(data);
         Debug.Log($"TX: {response}");
     }
@@ -168,7 +171,7 @@ public class MarketplaceCalls : MonoBehaviour
     /// </summary>
     public async void Create1155Collection()
     {
-        var data = await Marketplace.Create1155Collection(bearerToken, collectionName1155, collectionDescription1155);
+        var data = await Marketplace.Create1155Collection(bearerToken, collectionName1155, collectionDescription1155, collectionMintingPublic1155);
         var response = SampleOutputUtil.BuildOutputValue(data);
         Debug.Log($"TX: {response}");
     }
@@ -207,8 +210,9 @@ public class MarketplaceCalls : MonoBehaviour
     /// </summary>
     public async void CreateMarketplace()
     {
-        var response = await Marketplace.CreateMarketplace(bearerToken, marketplaceName, marketplaceDescription);
-        Debug.Log(response);
+        var data = await Marketplace.CreateMarketplace(bearerToken, marketplaceName, marketplaceDescription, marketplaceWhitelisting);
+        var response = SampleOutputUtil.BuildOutputValue(data);
+        Debug.Log($"TX: {response}");
     }
     
     /// <summary>

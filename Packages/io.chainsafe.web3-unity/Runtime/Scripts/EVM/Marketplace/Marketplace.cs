@@ -4,6 +4,8 @@ using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Model;
+using ChainSafe.Gaming.Web3;
+using Newtonsoft.Json;
 using Scripts.EVM.Remote;
 using Scripts.EVM.Token;
 using UnityEngine;
@@ -129,37 +131,46 @@ namespace Scripts.EVM.Marketplace
         /// <param name="_name">Name of the 721 collection being created</param>
         /// <param name="_description">Description of the 721 collection being created</param>
         /// <returns></returns>
-        public static async Task<object[]> Create721Collection(string _bearerToken, string _name, string _description)
+        public static async Task<object[]> Create721Collection(string _bearerToken, string _name, string _description, bool _isMintingPublic)
         {
-            var logoImageData = await GetImageData();
-            var bannerImageData = await GetImageData();
-            var formData = new List<IMultipartFormSection>
+            try
             {
-                new MultipartFormDataSection("name", _name),
-                new MultipartFormDataSection("description", _description),
-                new MultipartFormDataSection("owner", Web3Accessor.Web3.Signer.PublicAddress),
-                new MultipartFormDataSection("chain_id", Web3Accessor.Web3.ChainConfig.ChainId),
-                new MultipartFormDataSection("projectID", Web3Accessor.Web3.ProjectConfig.ProjectId),
-                new MultipartFormFileSection("logo", logoImageData, "logo.png", "image/png"),
-                new MultipartFormFileSection("banner", bannerImageData, "banner.png", "image/png"),
-                new MultipartFormDataSection("isImported", "true"),
-                new MultipartFormDataSection("contractAddress", Token.Contracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId]),
-                new MultipartFormDataSection("type", "erc721")
-            };
-            var path = "/collections";
-            var collectionData = await CSServer.CreateData(_bearerToken, path, formData);
-            var method = "create721Collection";
-            object[] args =
+                var logoImageData = await GetImageData();
+                var bannerImageData = await GetImageData();
+                var formData = new List<IMultipartFormSection>
+                {
+                    new MultipartFormDataSection("name", _name),
+                    new MultipartFormDataSection("description", _description),
+                    new MultipartFormDataSection("owner", Web3Accessor.Web3.Signer.PublicAddress),
+                    new MultipartFormDataSection("chain_id", Web3Accessor.Web3.ChainConfig.ChainId),
+                    new MultipartFormDataSection("projectID", Web3Accessor.Web3.ProjectConfig.ProjectId),
+                    new MultipartFormFileSection("logo", logoImageData, "logo.png", "image/png"),
+                    new MultipartFormFileSection("banner", bannerImageData, "banner.png", "image/png"),
+                    new MultipartFormDataSection("isImported", "true"),
+                    new MultipartFormDataSection("contractAddress", Token.Contracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId]),
+                    new MultipartFormDataSection("type", "erc721")
+                };
+                var path = "/collections";
+                var collectionResponse = await CSServer.CreateData(_bearerToken, path, formData);
+                var collectionData = JsonConvert.DeserializeObject<CollectionResponses.Collections>(collectionResponse);
+                var method = "create721Collection";
+                object[] args =
+                {
+                    Web3Accessor.Web3.ProjectConfig.ProjectId,
+                    collectionData.id,
+                    _name,
+                    collectionData.type,
+                    collectionData.banner,
+                    _isMintingPublic
+                };
+                var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.MarketplaceFactory, Token.Contracts.MarketplaceContracts["11155111"], args);
+                return data;
+            }
+            catch (Web3Exception e)
             {
-                Web3Accessor.Web3.ProjectConfig.ProjectId,
-                collectionData,
-                _name,
-                "",
-                "",
-                false
-            };
-            var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.Marketplace, Token.Contracts.MarketplaceContracts["11155111"], args);
-            return data;
+                Console.WriteLine(e);
+                throw;
+            }
         }
         
         /// <summary>
@@ -170,35 +181,44 @@ namespace Scripts.EVM.Marketplace
         /// <param name="_name">Name of the 1155 collection being created</param>
         /// <param name="_description">Description of the 1155 collection being created</param>
         /// <returns>Server response</returns>
-        public static async Task<object[]> Create1155Collection(string _bearerToken, string _name, string _description)
+        public static async Task<object[]> Create1155Collection(string _bearerToken, string _name, string _description, bool _isMintingPublic)
         {
-            var logoImageData = await GetImageData();
-            var bannerImageData = await GetImageData();
-            var formData = new List<IMultipartFormSection>
+            try
             {
-                new MultipartFormDataSection("name", _name),
-                new MultipartFormDataSection("description", _description),
-                new MultipartFormDataSection("owner", Web3Accessor.Web3.Signer.PublicAddress),
-                new MultipartFormDataSection("chain_id", Web3Accessor.Web3.ChainConfig.ChainId),
-                new MultipartFormDataSection("projectID", Web3Accessor.Web3.ProjectConfig.ProjectId),
-                new MultipartFormFileSection("logo", logoImageData, "logo.png", "image/png"),
-                new MultipartFormFileSection("banner", bannerImageData, "banner.png", "image/png"),
-                new MultipartFormDataSection("isImported", "true"),
-                new MultipartFormDataSection("contractAddress", Token.Contracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId]),
-                new MultipartFormDataSection("type", "erc1155")
-            };
-            var path = "/collections";
-            var collectionData = await CSServer.CreateData(_bearerToken, path, formData);
-            var method = "create1155Collection";
-            object[] args =
+                var logoImageData = await GetImageData();
+                var bannerImageData = await GetImageData();
+                var formData = new List<IMultipartFormSection>
+                {
+                    new MultipartFormDataSection("name", _name),
+                    new MultipartFormDataSection("description", _description),
+                    new MultipartFormDataSection("owner", Web3Accessor.Web3.Signer.PublicAddress),
+                    new MultipartFormDataSection("chain_id", Web3Accessor.Web3.ChainConfig.ChainId),
+                    new MultipartFormDataSection("projectID", Web3Accessor.Web3.ProjectConfig.ProjectId),
+                    new MultipartFormFileSection("logo", logoImageData, "logo.png", "image/png"),
+                    new MultipartFormFileSection("banner", bannerImageData, "banner.png", "image/png"),
+                    new MultipartFormDataSection("isImported", "true"),
+                    new MultipartFormDataSection("contractAddress", Token.Contracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId]),
+                    new MultipartFormDataSection("type", "erc1155")
+                };
+                var path = "/collections";
+                var collectionResponse = await CSServer.CreateData(_bearerToken, path, formData);
+                var collectionData = JsonConvert.DeserializeObject<CollectionResponses.Collections>(collectionResponse);
+                var method = "create1155Collection";
+                object[] args =
+                {
+                    Web3Accessor.Web3.ProjectConfig.ProjectId,
+                    collectionData.id,
+                    collectionData.banner,
+                    _isMintingPublic
+                };
+                var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.MarketplaceFactory, Token.Contracts.MarketplaceContracts["11155111"], args);
+                return data;
+            }
+            catch (Web3Exception e)
             {
-                Web3Accessor.Web3.ProjectConfig.ProjectId,
-                collectionData,
-                "",
-                false
-            };
-            var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.Marketplace, Token.Contracts.MarketplaceContracts["11155111"], args);
-            return data;
+                Console.WriteLine(e);
+                throw;
+            }
         }
         
         /// <summary>
@@ -209,14 +229,22 @@ namespace Scripts.EVM.Marketplace
         /// <returns>Contract send data object</returns>
         public static async Task<object[]> Mint721CollectionNft(string _collectionContract, string _uri)
         {
-            var method = "mint";
-            object[] args =
+            try
             {
-                _collectionContract,
-                _uri
-            };
-            var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.GeneralErc721, _collectionContract, args);
-            return data;
+                var method = "mint";
+                object[] args =
+                {
+                    _collectionContract,
+                    _uri
+                };
+                var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.GeneralErc721, _collectionContract, args);
+                return data;
+            }
+            catch (Web3Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
         
         /// <summary>
@@ -228,16 +256,24 @@ namespace Scripts.EVM.Marketplace
         /// <returns>Contract send data object</returns>
         public static async Task<object[]> Mint1155CollectionNft(string _collectionContract, string _uri, string _amount)
         {
-            var method = "mint";
-            var amount = BigInteger.Parse(_amount);
-            object[] args =
+            try
             {
-                _collectionContract,
-                _uri,
-                amount
-            };
-            var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.GeneralErc1155, _collectionContract, args);
-            return data;
+                var method = "mint";
+                var amount = BigInteger.Parse(_amount);
+                object[] args =
+                {
+                    _collectionContract,
+                    _uri,
+                    amount
+                };
+                var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.GeneralErc1155, _collectionContract, args);
+                return data;
+            }
+            catch (Web3Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
         
         /// <summary>
@@ -262,19 +298,37 @@ namespace Scripts.EVM.Marketplace
         /// <param name="_name">Marketplace name</param>
         /// <param name="_description">Marketplace description</param>
         /// <returns>Server response</returns>
-        public static async Task<string> CreateMarketplace(string _bearerToken, string _name, string _description)
+        public static async Task<object[]> CreateMarketplace(string _bearerToken, string _name, string _description, bool _whitelisting)
         {
-            var bannerImageData = await GetImageData();
-            var formData = new List<IMultipartFormSection>
+            try
             {
-                new MultipartFormDataSection("name", _name),
-                new MultipartFormDataSection("description", _description),
-                new MultipartFormDataSection("chain_id", Web3Accessor.Web3.ChainConfig.ChainId),
-                new MultipartFormFileSection("banner", bannerImageData, "banner.png", "image/png")
-            };
-            var path = "/marketplaces";
-            var response = await CSServer.CreateData(_bearerToken, path, formData);
-            return response;
+                var bannerImageData = await GetImageData();
+                var formData = new List<IMultipartFormSection>
+                {
+                    new MultipartFormDataSection("name", _name),
+                    new MultipartFormDataSection("description", _description),
+                    new MultipartFormDataSection("chain_id", Web3Accessor.Web3.ChainConfig.ChainId),
+                    new MultipartFormFileSection("banner", bannerImageData, "banner.png", "image/png")
+                };
+                var path = "/marketplaces";
+                var marketplaceResponse = await CSServer.CreateData(_bearerToken, path, formData);
+                Debug.Log(marketplaceResponse);
+                var collectionData = JsonConvert.DeserializeObject<CollectionResponses.Marketplace>(marketplaceResponse);
+                var method = "createMarketplace";
+                object[] args =
+                {
+                    Web3Accessor.Web3.ProjectConfig.ProjectId,
+                    collectionData.id,
+                    _whitelisting
+                };
+                var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.MarketplaceFactory, Token.Contracts.MarketplaceContracts["11155111"], args);
+                return data;
+            }
+            catch (Web3Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
         
         /// <summary>
@@ -300,15 +354,23 @@ namespace Scripts.EVM.Marketplace
         /// <returns>Contract send data object</returns>
         public static async Task<object[]> SetApprovalMarketplace(string _nftContract, string _marketplaceContract, string _type, bool _permission)
         {
-            var method = "setApprovalForAll";
-            object[] args =
+            try
             {
-                _marketplaceContract,
-                _permission
-            };
-            var abi = _type == "721" ? Token.ABI.GeneralErc721 : Token.ABI.GeneralErc1155;
-            var data = await Evm.ContractSend(Web3Accessor.Web3, method, abi, _nftContract, args);
-            return data;
+                var method = "setApprovalForAll";
+                object[] args =
+                {
+                    _marketplaceContract,
+                    _permission
+                };
+                var abi = _type == "721" ? Token.ABI.GeneralErc721 : Token.ABI.GeneralErc1155;
+                var data = await Evm.ContractSend(Web3Accessor.Web3, method, abi, _nftContract, args);
+                return data;
+            }
+            catch (Web3Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
         
         /// <summary>
@@ -321,19 +383,27 @@ namespace Scripts.EVM.Marketplace
         /// <returns>Contract send data object</returns>
         public static async Task<object[]> ListNftsToMarketplace(string _marketplaceContract, string _nftContract, string _tokenId, string _priceInWei)
         {
-            var method = "listItem";
-            BigInteger priceInWei = BigInteger.Parse(_priceInWei);
-            BigInteger tokenId = BigInteger.Parse(_tokenId);
-            BigInteger deadline = DateTimeOffset.UtcNow.AddDays(7).ToUnixTimeSeconds();
-            object[] args =
+            try
             {
-                _nftContract,
-                tokenId,
-                priceInWei,
-                deadline
-            };
-            var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.Marketplace, _marketplaceContract, args);
-            return data;
+                var method = "listItem";
+                BigInteger priceInWei = BigInteger.Parse(_priceInWei);
+                BigInteger tokenId = BigInteger.Parse(_tokenId);
+                BigInteger deadline = DateTimeOffset.UtcNow.AddDays(7).ToUnixTimeSeconds();
+                object[] args =
+                {
+                    _nftContract,
+                    tokenId,
+                    priceInWei,
+                    deadline
+                };
+                var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.Marketplace, _marketplaceContract, args);
+                return data;
+            }
+            catch (Web3Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         #region Utilities
@@ -359,7 +429,7 @@ namespace Scripts.EVM.Marketplace
         private static async Task<byte[]> GetImageData()
         {
             #if UNITY_WEBGL && !UNITY_EDITOR
-            byte[] imageData = null;
+            var imageData = await CSServer.UploadImageWebGL();
             #else
             var imagePath = UnityEditor.EditorUtility.OpenFilePanel("Select Image", "", "png,jpg,jpeg,gif");
             while (string.IsNullOrEmpty(imagePath)) return null;

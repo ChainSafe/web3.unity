@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.UnityPackage;
 using Newtonsoft.Json;
@@ -10,7 +12,10 @@ namespace Scripts.EVM.Remote
     public class CSServer
     {
         #region Fields
-
+        
+        [DllImport("__Internal")]
+        private static extern void UploadImage();
+        public static event EventHandler<byte[]> ImageSelected;
         private static readonly string host = "https://api.gaming.chainsafe.io/v1/projects/";
 
         #endregion
@@ -78,6 +83,36 @@ namespace Scripts.EVM.Remote
                 return request.downloadHandler.text;
             }
         }
+
+        #region Utilities
+        
+        /// <summary>
+        /// Uploads an image in webgl builds
+        /// </summary>
+        /// <returns>Image data</returns>
+        public static async Task<byte[]> UploadImageWebGL()
+        {
+            var imageDataTask = new TaskCompletionSource<byte[]>();
+            ImageSelected += (sender, imageData) => imageDataTask.SetResult(imageData);
+            UploadImage();
+            var imageData = await imageDataTask.Task;
+            return imageData;
+        }
+        
+        /// <summary>
+        /// Invokes event to pass image data
+        /// </summary>
+        /// <param name="base64Data">Image data</param>
+        public static void OnImageSelected(string imageData)
+        {
+            // Remove metadata from url
+            var base64String = imageData.Substring(imageData.IndexOf(",") + 1);
+            // Convert data URL to byte array
+            byte[] imageDataBytes = Convert.FromBase64String(base64String);
+            ImageSelected?.Invoke(null, imageDataBytes);
+        }
+
+        #endregion
 
         #endregion
 
