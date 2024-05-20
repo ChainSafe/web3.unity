@@ -1,8 +1,9 @@
 {
   "dependencies": {
     "com.tools.webglthreadingpatcher": "https://github.com/VolodymyrBS/WebGLThreadingPatcher.git",
-    "com.unity.collab-proxy": "2.2.0",
-    "com.unity.ide.rider": "3.0.27",
+    "com.unity.ai.navigation": "1.1.5",
+    "com.unity.collab-proxy": "2.3.1",
+    "com.unity.ide.rider": "3.0.28",
     "com.unity.ide.vscode": "1.2.5",
     "com.unity.nuget.newtonsoft-json": "3.2.1",
     "com.unity.test-framework": "2.0.1-pre.18",
@@ -10,7 +11,7 @@
     "com.unity.timeline": "1.7.6",
     "com.unity.toolchain.macos-arm64-linux-x86_64": "2.0.0",
     "com.unity.ugui": "1.0.0",
-    "com.unity.visualscripting": "1.9.1",
+    "com.unity.visualscripting": "1.9.4",
     "io.chainsafe.web3-unity": "file:../../../Packages/io.chainsafe.web3-unity",
     "io.chainsafe.web3-unity.lootboxes": "file:../../../Packages/io.chainsafe.web3-unity.lootboxes",
     "io.chainsafe.web3-unity.ramp": "file:../../../Packages/io.chainsafe.web3-unity.ramp",
