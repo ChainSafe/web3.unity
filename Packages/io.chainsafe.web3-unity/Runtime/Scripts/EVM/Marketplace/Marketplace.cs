@@ -129,7 +129,7 @@ namespace Scripts.EVM.Marketplace
         /// <param name="_name">Name of the 721 collection being created</param>
         /// <param name="_description">Description of the 721 collection being created</param>
         /// <returns></returns>
-        public static async Task<string> Create721Collection(string _bearerToken, string _name, string _description)
+        public static async Task<object[]> Create721Collection(string _bearerToken, string _name, string _description)
         {
             var logoImageData = await GetImageData();
             var bannerImageData = await GetImageData();
@@ -147,8 +147,19 @@ namespace Scripts.EVM.Marketplace
                 new MultipartFormDataSection("type", "erc721")
             };
             var path = "/collections";
-            var response = await CSServer.CreateData(_bearerToken, path, formData);
-            return response;
+            var collectionData = await CSServer.CreateData(_bearerToken, path, formData);
+            var method = "create721Collection";
+            object[] args =
+            {
+                Web3Accessor.Web3.ProjectConfig.ProjectId,
+                collectionData,
+                _name,
+                "",
+                "",
+                false
+            };
+            var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.Marketplace, Token.Contracts.MarketplaceContracts["11155111"], args);
+            return data;
         }
         
         /// <summary>
@@ -159,7 +170,7 @@ namespace Scripts.EVM.Marketplace
         /// <param name="_name">Name of the 1155 collection being created</param>
         /// <param name="_description">Description of the 1155 collection being created</param>
         /// <returns>Server response</returns>
-        public static async Task<string> Create1155Collection(string _bearerToken, string _name, string _description)
+        public static async Task<object[]> Create1155Collection(string _bearerToken, string _name, string _description)
         {
             var logoImageData = await GetImageData();
             var bannerImageData = await GetImageData();
@@ -177,8 +188,17 @@ namespace Scripts.EVM.Marketplace
                 new MultipartFormDataSection("type", "erc1155")
             };
             var path = "/collections";
-            var response = await CSServer.CreateData(_bearerToken, path, formData);
-            return response;
+            var collectionData = await CSServer.CreateData(_bearerToken, path, formData);
+            var method = "create1155Collection";
+            object[] args =
+            {
+                Web3Accessor.Web3.ProjectConfig.ProjectId,
+                collectionData,
+                "",
+                false
+            };
+            var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.Marketplace, Token.Contracts.MarketplaceContracts["11155111"], args);
+            return data;
         }
         
         /// <summary>
