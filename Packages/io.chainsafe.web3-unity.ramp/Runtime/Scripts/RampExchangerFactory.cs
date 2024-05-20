@@ -8,10 +8,14 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
     {
         public static IRampExchanger CreateRampExchanger(IRampExchangerConfig config, ISigner signer)
         {
+            //Unity Editor is not compatible.
+#if !UNITY_EDITOR
 #if UNITY_IOS
             return new RampExchangeriOS(config, signer);
-#elif UNITY_WEBGL && !UNITY_EDITOR
+#elif UNITY_WEBGL
             return new RampExchangerWebGL(config, signer);
+#endif
+            return new RampExchangerAndroid(config, signer);
 #endif
             throw new Web3Exception(
                 $"No {nameof(IRampExchanger)} implementation found for " +

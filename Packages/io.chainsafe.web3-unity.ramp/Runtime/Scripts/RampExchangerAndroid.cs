@@ -38,7 +38,6 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
         public event Action<OffRampSaleData> OffRampSaleCreated;
         public async Task<OnRampPurchaseData> BuyCrypto(RampBuyWidgetSettings settings)
         {
-            var taskCompletionSource = new TaskCompletionSource<OnRampPurchaseData>();
             AndroidJavaClass flowClass = new AndroidJavaClass("network.ramp.sdk.facade.Flow");
 
             
@@ -72,8 +71,8 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
             );
 
             _rampCallback = new RampCallback(requestIndex, PurchaseHappened, SaleHappened);
-            var tcs = new TaskCompletionSource<RampTransactionData>();
-            purchaseOrSellTaskMap.Add(requestIndex, tcs);
+            var tcs = new TaskCompletionSource<OnRampPurchaseData>();
+            purchaseTaskMap.Add(requestIndex, tcs);
             // Calling the Ramp SDK to start the transaction
             _unityActivity.Call("runOnUiThread", new AndroidJavaRunnable(() =>
             {
@@ -82,12 +81,12 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
             
             var transactionData = await tcs.Task;
             
-            return transactionData.PurchaseData!.Value;
+            return transactionData;
         }
 
         private void SaleHappened(int arg1, OffRampSaleData arg2)
         {
-            
+            Debug.Log("Sale Happened");
         }
 
         private void PurchaseHappened(int requestId, OnRampPurchaseData purchaseData)
@@ -111,16 +110,98 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
 
         }
 
-        public Task<OffRampSaleData> SellCrypto(RampSellWidgetSettings settings)
+        public async Task<OffRampSaleData> SellCrypto(RampSellWidgetSettings settings)
         {
-            throw new NotImplementedException();
+            AndroidJavaClass flowClass = new AndroidJavaClass("network.ramp.sdk.facade.Flow");
+            AndroidJavaObject offrampFlow = flowClass.GetStatic<AndroidJavaObject>("OFFRAMP");
+            
+            AndroidJavaObject set = new AndroidJavaObject("java.util.HashSet");
+            set.Call<bool>("add", offrampFlow);
+            var requestIndex = RequestIndexer++;
+            // Setting up the Config object based on the provided settings
+            var config = new AndroidJavaObject("network.ramp.sdk.facade.Config",
+                settings.OverrideHostAppName ?? _rampData.HostAppName,
+                settings.OverrideHostLogoUrl ?? _rampData.HostLogoUrl,
+                _rampData.Url,
+                string.Empty,
+                settings.OfframpAsset, // offrampAsset is not needed for buying
+                settings.SwapAmount.ToString(),
+                settings.FiatCurrency,
+                settings.FiatValue.ToString(),
+                settings.OverrideUserAddress ?? _signer.PublicAddress,
+                settings.UserEmailAddress ?? "",
+                settings.SelectedCountryCode ?? "",
+                settings.DefaultAsset ?? "",
+                "",
+                _rampData.HostApiKey,
+                offrampFlow, // Default flow for buying
+                set,
+                _rampData.OfframpWebHookV3Url,
+                null,
+                null
+            );
 
+            _rampCallback = new RampCallback(requestIndex, PurchaseHappened, SaleHappened);
+            var tcs = new TaskCompletionSource<OffRampSaleData>();
+            sellTaskMap.Add(requestIndex, tcs);
+            // Calling the Ramp SDK to start the transaction
+            _unityActivity.Call("runOnUiThread", new AndroidJavaRunnable(() =>
+            {
+                _rampSDK.Call("startTransaction", _unityActivity, config, _rampCallback);
+            }));
+            
+            var transactionData = await tcs.Task;
+            
+            return transactionData;
         }
 
-        public Task<RampTransactionData> BuyOrSellCrypto(RampBuyOrSellWidgetSettings settings)
+        public async Task<RampTransactionData> BuyOrSellCrypto(RampBuyOrSellWidgetSettings settings)
         {
-            throw new NotImplementedException();
+            AndroidJavaClass flowClass = new AndroidJavaClass("network.ramp.sdk.facade.Flow");
 
+            
+            AndroidJavaObject onrampFlow = flowClass.GetStatic<AndroidJavaObject>("ONRAMP");
+            AndroidJavaObject offrampFlow = flowClass.GetStatic<AndroidJavaObject>("OFFRAMP");
+            
+            AndroidJavaObject set = new AndroidJavaObject("java.util.HashSet");
+            set.Call<bool>("add", onrampFlow);
+            set.Call<bool>("add", offrampFlow);
+            var requestIndex = RequestIndexer++;
+            // Setting up the Config object based on the provided settings
+            var config = new AndroidJavaObject("network.ramp.sdk.facade.Config",
+                settings.OverrideHostAppName ?? _rampData.HostAppName,
+                settings.OverrideHostLogoUrl ?? _rampData.HostLogoUrl,
+                _rampData.Url,
+                settings.SwapAsset,
+                settings.OfframpAsset, 
+                settings.SwapAmount.ToString(),
+                settings.FiatCurrency,
+                settings.FiatValue.ToString(),
+                settings.OverrideUserAddress ?? _signer.PublicAddress,
+                settings.UserEmailAddress ?? "",
+                settings.SelectedCountryCode ?? "",
+                settings.DefaultAsset ?? "",
+                settings.OverrideWebhookStatusUrl ?? "",
+                _rampData.HostApiKey,
+                onrampFlow, 
+                set,
+                _rampData.OfframpWebHookV3Url,
+                null,
+                null
+            );
+
+            _rampCallback = new RampCallback(requestIndex, PurchaseHappened, SaleHappened);
+            var tcs = new TaskCompletionSource<RampTransactionData>();
+            purchaseOrSellTaskMap.Add(requestIndex, tcs);
+            // Calling the Ramp SDK to start the transaction
+            _unityActivity.Call("runOnUiThread", new AndroidJavaRunnable(() =>
+            {
+                _rampSDK.Call("startTransaction", _unityActivity, config, _rampCallback);
+            }));
+            
+            var transactionData = await tcs.Task;
+            
+            return transactionData;
         }
     }
     

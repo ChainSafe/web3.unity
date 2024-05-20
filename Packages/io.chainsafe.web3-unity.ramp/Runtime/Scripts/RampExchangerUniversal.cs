@@ -4,6 +4,7 @@ using System;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Web3.Core;
+using UnityEngine;
 
 namespace ChainSafe.Gaming.Exchangers.Ramp
 {
@@ -49,9 +50,15 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
             => platformImplementation.BuyOrSellCrypto(settings);
 
         private void InvokeOnRampPurchaseCreated(OnRampPurchaseData obj)
-            => OnRampPurchaseCreated?.Invoke(obj);
+        {
+            Debug.Log("Invoking this mf");
+            OnRampPurchaseCreated?.Invoke(obj);
+        }
 
         private void InvokeOffRampSaleCreated(OffRampSaleData obj)
-            => OffRampSaleCreated?.Invoke(obj);
+        {
+            Debug.Log("Invoking this other mf");
+            OffRampSaleCreated?.Invoke(obj);
+        }
     }
 }

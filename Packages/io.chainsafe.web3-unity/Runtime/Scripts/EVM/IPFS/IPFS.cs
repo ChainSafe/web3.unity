@@ -62,7 +62,12 @@ namespace Web3Unity.Scripts.Library.IPFS
                 byte[] imageData = null;
                 #else
                 // Upload image from file & convert to byte[]
-                var imagePath = UnityEditor.EditorUtility.OpenFilePanel("Select Image", "", "png,jpg,jpeg,gif");
+                string imagePath = 
+                    #if UNITY_EDITOR
+                    UnityEditor.EditorUtility.OpenFilePanel("Select Image", "", "png,jpg,jpeg,gif");
+                    #else 
+                    null;
+                    #endif
                 if (string.IsNullOrEmpty(imagePath)) return null;
                 var www = await new WWW("file://" + imagePath);
                 var imageData = www.texture.EncodeToPNG();
@@ -122,7 +127,12 @@ namespace Web3Unity.Scripts.Library.IPFS
                 byte[] imageData = null;
                 #else
                 // Upload image from file & convert to byte[]
-                var imagePath = UnityEditor.EditorUtility.OpenFilePanel("Select Image", "", "png,jpg,jpeg,gif");
+                string imagePath = 
+#if UNITY_EDITOR
+                UnityEditor.EditorUtility.OpenFilePanel("Select Image", "", "png,jpg,jpeg,gif");
+#else 
+                    null;
+#endif
                 if (string.IsNullOrEmpty(imagePath)) return null;
                 var www = await new WWW("file://" + imagePath);
                 var imageData = www.texture.EncodeToPNG();
