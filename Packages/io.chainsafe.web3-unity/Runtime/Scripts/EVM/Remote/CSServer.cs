@@ -57,7 +57,7 @@ namespace Scripts.EVM.Remote
                 Debug.LogError($"Error deleting: {request.error}");
                 return request.error;
             }
-            return request.downloadHandler.text;
+            return "Deleted successfully";
         }
         
         /// <summary>
