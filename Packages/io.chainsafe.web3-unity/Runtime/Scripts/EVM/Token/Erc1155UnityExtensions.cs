@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.Ipfs;
 using ChainSafe.Gaming.Web3;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -26,7 +27,7 @@ namespace Scripts.EVM.Token
             }
 
             // prepare texture uri
-            var metadata = JsonUtility.FromJson<Erc1155Metadata>(Encoding.UTF8.GetString(metaRequest.downloadHandler.data));
+            var metadata = JsonConvert.DeserializeObject<Erc1155Metadata>(Encoding.UTF8.GetString(metaRequest.downloadHandler.data));
             var textureUri = IpfsHelper.RollupIpfsUri(metadata.image);
             
             // fetch texture
