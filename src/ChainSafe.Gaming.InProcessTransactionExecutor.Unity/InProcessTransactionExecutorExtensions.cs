@@ -1,8 +1,6 @@
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using Microsoft.Extensions.DependencyInjection;
-using Nethereum.JsonRpc.Client;
-using Nethereum.Unity.Rpc;
 
 namespace ChainSafe.Gaming.InProcessTransactionExecutor.Unity
 {
@@ -21,8 +19,8 @@ namespace ChainSafe.Gaming.InProcessTransactionExecutor.Unity
             collection.AssertServiceNotBound<ITransactionExecutor>();
             collection.AddSingleton<ITransactionExecutor, InProcessTransactionExecutor>();
 
-            collection.AssertServiceNotBound<IClient>();
-            collection.AddSingleton<IClient, UnityWebRequestRpcTaskClient>();
+            collection.AssertServiceNotBound<IRpcClientWrapper>();
+            collection.AddSingleton<IRpcClientWrapper, RpcClientWrapper>();
             return collection;
         }
     }
