@@ -335,7 +335,7 @@ namespace Scripts.EVM.Marketplace
         /// <returns>Server response</returns>
         public static async Task<string> DeleteMarketplace(string _bearerToken, string _marketplaceId)
         {
-            var path = $"/collections/{_marketplaceId}";
+            var path = $"/marketplaces/{_marketplaceId}";
             var response = await CSServer.DeleteData(_bearerToken, path);
             return response;
         }
