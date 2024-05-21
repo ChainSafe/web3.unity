@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Web3;
@@ -62,7 +63,7 @@ namespace ChainSafe.Gaming.HyperPlay
                 throw new Web3Exception($"incorrect txn response format {hash}");
             }
 
-            return await walletProvider.Perform<TransactionResponse>("eth_getTransactionByHash", hash);
+            return await walletProvider.GetTransaction(hash);
         }
     }
 }

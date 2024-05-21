@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Web3;
@@ -73,7 +74,7 @@ namespace ChainSafe.Gaming.MetaMask
 
             logWriter.Log($"Transaction executed with hash {hash}");
 
-            return await walletProvider.Perform<TransactionResponse>("eth_getTransactionByHash", hash);
+            return await walletProvider.GetTransaction(hash);
         }
     }
 }
