@@ -130,11 +130,10 @@ namespace Scripts.EVM.Marketplace
         /// <param name="_bearerToken">Bearer token to access dashboard services</param>
         /// <param name="_name">Name of the 721 collection being created</param>
         /// <param name="_description">Description of the 721 collection being created</param>
-        /// <returns></returns>
+        /// <param name="_isMintingPublic">If minting is public or not</param>
+        /// <returns>Contract send data object</returns>
         public static async Task<object[]> Create721Collection(string _bearerToken, string _name, string _description, bool _isMintingPublic)
         {
-            try
-            {
                 var logoImageData = await GetImageData();
                 var bannerImageData = await GetImageData();
                 var formData = new List<IMultipartFormSection>
@@ -165,12 +164,6 @@ namespace Scripts.EVM.Marketplace
                 };
                 var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.MarketplaceFactory, Token.Contracts.MarketplaceContracts["11155111"], args);
                 return data;
-            }
-            catch (Web3Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
         }
         
         /// <summary>
@@ -180,7 +173,8 @@ namespace Scripts.EVM.Marketplace
         /// <param name="_bearerToken">Bearer token to access dashboard services</param>
         /// <param name="_name">Name of the 1155 collection being created</param>
         /// <param name="_description">Description of the 1155 collection being created</param>
-        /// <returns>Server response</returns>
+        /// <param name="_isMintingPublic">If minting is public or not</param>
+        /// <returns>Contract send data object</returns>
         public static async Task<object[]> Create1155Collection(string _bearerToken, string _name, string _description, bool _isMintingPublic)
         {
             try
@@ -297,7 +291,8 @@ namespace Scripts.EVM.Marketplace
         /// <param name="_bearerToken">Bearer token to access dashboard services</param>
         /// <param name="_name">Marketplace name</param>
         /// <param name="_description">Marketplace description</param>
-        /// <returns>Server response</returns>
+        /// <param name="_whitelisting">If whitelisting is enabled or not</param>
+        /// <returns>Contract send data object</returns>
         public static async Task<object[]> CreateMarketplace(string _bearerToken, string _name, string _description, bool _whitelisting)
         {
             try
@@ -433,8 +428,10 @@ namespace Scripts.EVM.Marketplace
             #else
             var imagePath = UnityEditor.EditorUtility.OpenFilePanel("Select Image", "", "png,jpg,jpeg,gif");
             while (string.IsNullOrEmpty(imagePath)) return null;
-            var www = await new WWW("file://" + imagePath);
-            var imageData = www.texture.EncodeToPNG();
+            UnityWebRequest www = UnityWebRequestTexture.GetTexture("file://" + imagePath);
+            await www.SendWebRequest();
+            Texture2D texture = DownloadHandlerTexture.GetContent(www);
+            var imageData = texture.EncodeToPNG();
             #endif
             return imageData;
         }

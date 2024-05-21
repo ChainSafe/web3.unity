@@ -93,23 +93,39 @@ namespace Scripts.EVM.Remote
         public static async Task<byte[]> UploadImageWebGL()
         {
             var imageDataTask = new TaskCompletionSource<byte[]>();
-            ImageSelected += (sender, imageData) => imageDataTask.SetResult(imageData);
+            // Event handler to set the result when the image is selected
+            void OnImageSelectedHandler(object sender, byte[] imageData)
+            {
+                imageDataTask.SetResult(imageData);
+                // Unsubscribe from the event after handling it
+                ImageSelected -= OnImageSelectedHandler;
+            }
+            ImageSelected += OnImageSelectedHandler;
             UploadImage();
             var imageData = await imageDataTask.Task;
             return imageData;
         }
         
         /// <summary>
-        /// Invokes event to pass image data
+        /// Invokes event to pass image data from js function
         /// </summary>
         /// <param name="base64Data">Image data</param>
         public static void OnImageSelected(string imageData)
         {
-            // Remove metadata from url
-            var base64String = imageData.Substring(imageData.IndexOf(",") + 1);
-            // Convert data URL to byte array
-            byte[] imageDataBytes = Convert.FromBase64String(base64String);
-            ImageSelected?.Invoke(null, imageDataBytes);
+            try
+            {
+                // Remove metadata from url
+                var base64String = imageData.Substring(imageData.IndexOf(",") + 1);
+                // Convert data URL to byte array
+                byte[] imageDataBytes = Convert.FromBase64String(base64String);
+                // Invoke event to complete the upload tasks
+                ImageSelected?.Invoke(null, imageDataBytes);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         #endregion

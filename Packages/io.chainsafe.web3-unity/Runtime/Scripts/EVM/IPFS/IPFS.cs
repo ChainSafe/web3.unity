@@ -64,8 +64,10 @@ namespace Web3Unity.Scripts.Library.IPFS
                 // Upload image from file & convert to byte[]
                 var imagePath = UnityEditor.EditorUtility.OpenFilePanel("Select Image", "", "png,jpg,jpeg,gif");
                 if (string.IsNullOrEmpty(imagePath)) return null;
-                var www = await new WWW("file://" + imagePath);
-                var imageData = www.texture.EncodeToPNG();
+                UnityWebRequest www = UnityWebRequestTexture.GetTexture("file://" + imagePath);
+                await www.SendWebRequest();
+                Texture2D texture = DownloadHandlerTexture.GetContent(www);
+                var imageData = texture.EncodeToPNG();
                 #endif
                 // Upload metadata with image
                 var imageCid = await Upload(request.ApiKey, request.BucketId, request.FileNameImage, imageData, "application/octet-stream");
@@ -123,8 +125,10 @@ namespace Web3Unity.Scripts.Library.IPFS
                 // Upload image from file & convert to byte[]
                 var imagePath = UnityEditor.EditorUtility.OpenFilePanel("Select Image", "", "png,jpg,jpeg,gif");
                 if (string.IsNullOrEmpty(imagePath)) return null;
-                var www = await new WWW("file://" + imagePath);
-                var imageData = www.texture.EncodeToPNG();
+                UnityWebRequest www = UnityWebRequestTexture.GetTexture("file://" + imagePath);
+                await www.SendWebRequest();
+                Texture2D texture = DownloadHandlerTexture.GetContent(www);
+                var imageData = texture.EncodeToPNG();
                 #endif
                 // Upload metadata with image
                 var imageCid = await Upload(request.ApiKey, request.BucketId, request.FileNameImage, imageData, "application/octet-stream");
