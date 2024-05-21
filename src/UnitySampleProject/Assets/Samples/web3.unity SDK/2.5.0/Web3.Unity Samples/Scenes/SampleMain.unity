@@ -5285,15 +5285,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8775736491206355084, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_Name
-      value: Button - ApproveListNftsToMaketplace
+      value: Button - ApproveListNftsToMarketplace
       objectReference: {fileID: 0}
     - target: {fileID: 8781309615174179339, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_text
-      value: ApproveListNftsToMaketplace
+      value: ApproveListNftsToMarketplace
       objectReference: {fileID: 0}
     - target: {fileID: 8781309615174179339, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_fontSize
-      value: 15.15
+      value: 14.75
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -13129,15 +13129,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8775736491206355084, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_Name
-      value: Button - RevokeApprovalListNftsToMaketplace (1)
+      value: Button - RevokeApprovalListNftsToMarketplace
       objectReference: {fileID: 0}
     - target: {fileID: 8781309615174179339, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_text
-      value: RevokeApprovalListNftsToMaketplace
+      value: RevokeApprovalListNftsToMarketplace
       objectReference: {fileID: 0}
     - target: {fileID: 8781309615174179339, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_fontSize
-      value: 12.05
+      value: 11.8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -13747,11 +13747,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8775736491206355084, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_Name
-      value: Button - ListNftsToMaketplace
+      value: Button - ListNftsToMarketplace
       objectReference: {fileID: 0}
     - target: {fileID: 8781309615174179339, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_text
-      value: ListNftsToMaketplace
+      value: ListNftsToMarketplace
       objectReference: {fileID: 0}
     - target: {fileID: 8781309615174179339, guid: 50ad8ea555027414b8ddfc03fc7d41ab, type: 3}
       propertyPath: m_fontSize
