@@ -18,6 +18,7 @@ namespace Scripts.EVM.Token
 
             // fetch metadata from uri
             var metaRequest = UnityWebRequest.Get(uri);
+            await metaRequest.SendWebRequest();
             
             if (metaRequest.result != UnityWebRequest.Result.Success)
             {
