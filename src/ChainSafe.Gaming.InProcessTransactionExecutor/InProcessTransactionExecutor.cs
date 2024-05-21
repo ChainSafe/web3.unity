@@ -6,6 +6,7 @@ using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using Nethereum.Hex.HexTypes;
+using Nethereum.JsonRpc.Client;
 using Nethereum.RPC.Eth.DTOs;
 using Nethereum.Web3.Accounts;
 using NIpcClient = Nethereum.JsonRpc.IpcClient.IpcClient;
@@ -28,9 +29,9 @@ namespace ChainSafe.Gaming.InProcessTransactionExecutor
         /// <param name="signer">Injected <see cref="ISigner"/>.</param>
         /// <param name="chainConfig">Injected <see cref="IChainConfig"/>.</param>
         /// <param name="rpcProvider">Injected <see cref="IRpcProvider"/>.</param>
-        /// <param name="rpcClientWrapper">Injected <see cref="IRpcClientWrapper"/>.</param>
+        /// <param name="rpcClient">Injected <see cref="IClient"/>.</param>
         /// <exception cref="Web3Exception">Throws exception if initializing instance fails.</exception>
-        public InProcessTransactionExecutor(ISigner signer, IChainConfig chainConfig, IRpcProvider rpcProvider, IRpcClientWrapper rpcClientWrapper)
+        public InProcessTransactionExecutor(ISigner signer, IChainConfig chainConfig, IRpcProvider rpcProvider, IClient rpcClient)
         {
             // It should be possible to set up other signers to work with this as well.
             // However, does it make sense to let a remote wallet sign a transaction, but
@@ -41,12 +42,12 @@ namespace ChainSafe.Gaming.InProcessTransactionExecutor
             var account = new Account(privateKey);
             if (chainConfig.Rpc is not null && !string.Empty.Equals(chainConfig.Rpc))
             {
-                web3 = new NWeb3(account, rpcClientWrapper.Client);
+                web3 = new NWeb3(account, rpcClient);
             }
             else if (chainConfig.Ipc is not null && !string.Empty.Equals(chainConfig.Ipc))
             {
-                var client = new NIpcClient(chainConfig.Rpc);
-                web3 = new NWeb3(client);
+                var ipcClient = new NIpcClient(chainConfig.Rpc);
+                web3 = new NWeb3(ipcClient);
             }
             else
             {
