@@ -228,7 +228,7 @@ namespace Scripts.EVM.Marketplace
                 var method = "mint";
                 object[] args =
                 {
-                    _collectionContract,
+                    Web3Accessor.Web3.Signer.PublicAddress,
                     _uri
                 };
                 var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.GeneralErc721, _collectionContract, args);
@@ -256,7 +256,7 @@ namespace Scripts.EVM.Marketplace
                 var amount = BigInteger.Parse(_amount);
                 object[] args =
                 {
-                    _collectionContract,
+                    Web3Accessor.Web3.Signer.PublicAddress,
                     _uri,
                     amount
                 };
