@@ -13,6 +13,8 @@ using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Debug;
 using ChainSafe.Gaming.Web3.Environment;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
+using Nethereum.JsonRpc.Client.RpcMessages;
+using Newtonsoft.Json;
 using WalletConnectSharp.Common.Logging;
 using WalletConnectSharp.Common.Model.Errors;
 using WalletConnectSharp.Common.Utils;
@@ -38,6 +40,7 @@ namespace ChainSafe.Gaming.WalletConnect
         private readonly IOperatingSystemMediator osMediator;
         private readonly IWalletRegistry walletRegistry;
         private readonly RedirectionHandler redirection;
+        private readonly IHttpClient httpClient;
 
         private WalletConnectCore core;
         private WalletConnectSignClient signClient;
@@ -56,6 +59,7 @@ namespace ChainSafe.Gaming.WalletConnect
             IOperatingSystemMediator osMediator,
             IWalletRegistry walletRegistry,
             RedirectionHandler redirection,
+            IHttpClient httpClient,
             IAnalyticsClient analyticsClient,
             ChainRegistryProvider chainRegistryProvider)
             : base(chainRegistryProvider: chainRegistryProvider)
@@ -68,6 +72,7 @@ namespace ChainSafe.Gaming.WalletConnect
             this.storage = storage;
             this.config = config;
             this.logWriter = logWriter;
+            this.httpClient = httpClient;
         }
 
         public bool StoredSessionAvailable => localData.SessionTopic != null;
@@ -484,14 +489,18 @@ namespace ChainSafe.Gaming.WalletConnect
         // Direct RPC request via WalletConnect RPC url.
         private async Task<T> Request<T>(string method, params object[] parameters)
         {
-            var @namespace = session.Namespaces.First();
+            string chain = session.Namespaces.First().Value.Chains[0];
 
             // Using WalletConnect Blockchain API: https://docs.walletconnect.com/cloud/blockchain-api
-            var url = $"https://rpc.walletconnect.com/v1?chainId={@namespace.Value.Chains[0]}&projectId={config.ProjectId}";
+            var url = $"https://rpc.walletconnect.com/v1?chainId={chain}&projectId={config.ProjectId}";
 
-            var web3 = new Nethereum.Web3.Web3(url);
+            string body = JsonConvert.SerializeObject(new RpcRequestMessage(Guid.NewGuid().ToString(), method, parameters));
 
-            return await web3.Eth.Client.SendRequestAsync<T>(method, null, parameters);
+            var rawResult = await httpClient.PostRaw(url, body, "application/json");
+
+            RpcResponseMessage response = JsonConvert.DeserializeObject<RpcResponseMessage>(rawResult.Response);
+
+            return response.Result.ToObject<T>();
         }
     }
 }
