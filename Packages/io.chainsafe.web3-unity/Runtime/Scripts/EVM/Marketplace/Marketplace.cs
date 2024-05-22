@@ -136,8 +136,8 @@ namespace Scripts.EVM.Marketplace
         /// <returns>Contract send data object</returns>
         public static async Task<object[]> Create721Collection(string _bearerToken, string _name, string _description, bool _isMintingPublic)
         {
-                var logoImageData = await CSServer.GetImageData();
-                var bannerImageData = await CSServer.GetImageData();
+                var logoImageData = await UploadPlatforms.GetImageData();
+                var bannerImageData = await UploadPlatforms.GetImageData();
                 var formData = new List<IMultipartFormSection>
                 {
                     new MultipartFormDataSection("name", _name),
@@ -181,8 +181,8 @@ namespace Scripts.EVM.Marketplace
         {
             try
             {
-                var logoImageData = await CSServer.GetImageData();
-                var bannerImageData = await CSServer.GetImageData();
+                var logoImageData = await UploadPlatforms.GetImageData();
+                var bannerImageData = await UploadPlatforms.GetImageData();
                 var formData = new List<IMultipartFormSection>
                 {
                     new MultipartFormDataSection("name", _name),
@@ -299,7 +299,7 @@ namespace Scripts.EVM.Marketplace
         {
             try
             {
-                var bannerImageData = await CSServer.GetImageData();
+                var bannerImageData = await UploadPlatforms.GetImageData();
                 var formData = new List<IMultipartFormSection>
                 {
                     new MultipartFormDataSection("name", _name),

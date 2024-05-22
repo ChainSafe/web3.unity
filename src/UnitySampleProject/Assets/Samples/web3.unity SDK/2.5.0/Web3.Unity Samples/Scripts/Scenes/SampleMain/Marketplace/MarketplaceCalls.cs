@@ -264,7 +264,7 @@ public class MarketplaceCalls : MonoBehaviour
     /// </summary>
     public async void PurchaseNftFromMarketplace()
     {
-        var data = await Marketplace.PurchaseNft(marketplaceContractToBuyFrom,tokenIdToBuy, weiPriceToBuy);
+        var data = await Marketplace.PurchaseNft(marketplaceContractToBuyFrom, tokenIdToBuy, weiPriceToBuy);
         var response = SampleOutputUtil.BuildOutputValue(data);
         Debug.Log($"TX: {response}");
     }

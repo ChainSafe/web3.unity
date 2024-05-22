@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.UnityPackage.Model;
 using ChainSafe.Gaming.Web3;
 using Newtonsoft.Json;
-using Scripts.EVM.Remote;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -194,7 +192,7 @@ namespace Web3Unity.Scripts.Library.IPFS
             var imageData = await CSServer.UploadImageWebGL();
             return imageData;
             #elif UNITY_EDITOR
-            var imageData = await CSServer.UploadImageEditor();
+            var imageData = await UploadPlatforms.UploadImageEditor();
             return imageData;
             #elif UNITY_STANDALONE_WIN
             var imageData = await CSServer.UploadImageWindows();
