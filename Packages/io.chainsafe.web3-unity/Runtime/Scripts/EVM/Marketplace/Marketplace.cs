@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Model;
@@ -425,15 +426,20 @@ namespace Scripts.EVM.Marketplace
         {
             #if UNITY_WEBGL && !UNITY_EDITOR
             var imageData = await CSServer.UploadImageWebGL();
-            #else
-            var imagePath = UnityEditor.EditorUtility.OpenFilePanel("Select Image", "", "png,jpg,jpeg,gif");
-            while (string.IsNullOrEmpty(imagePath)) return null;
-            UnityWebRequest www = UnityWebRequestTexture.GetTexture("file://" + imagePath);
-            await www.SendWebRequest();
-            Texture2D texture = DownloadHandlerTexture.GetContent(www);
-            var imageData = texture.EncodeToPNG();
-            #endif
             return imageData;
+            #elif UNITY_EDITOR
+            var imageData = await CSServer.UploadImageEditor();
+            return imageData;
+            #elif UNITY_STANDALONE_WIN
+            var imageData = await CSServer.UploadImageWindows();
+            return imageData;
+            #elif UNITY_STANDALONE_OSX
+            var imageData = await CSServer.UploadImageOsx();
+            return imageData;
+            #else
+            Debug.LogError("File picking is not implemented for this platform.");
+            return null;
+            #endif
         }
 
         #endregion

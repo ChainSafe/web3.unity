@@ -5,6 +5,7 @@ namespace ChainSafe.Gaming
 {
     public class ImageUploader : MonoBehaviour
     {
+        #if UNITY_WEBGL && !UNITY_EDITOR
         /// <summary>
         /// Emits an event with image data for uploading with webgl
         /// </summary>
@@ -13,5 +14,6 @@ namespace ChainSafe.Gaming
         {
             CSServer.OnImageSelected(imageData);
         }
+        #endif
     }
 }

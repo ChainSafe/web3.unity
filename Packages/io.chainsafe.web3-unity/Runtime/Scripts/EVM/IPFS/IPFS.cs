@@ -60,14 +60,15 @@ namespace Web3Unity.Scripts.Library.IPFS
             {
                 #if UNITY_WEBGL && !UNITY_EDITOR
                 var imageData = await CSServer.UploadImageWebGL();
+                #elif UNITY_EDITOR
+                var imageData = await CSServer.UploadImageEditor();
+                #elif UNITY_STANDALONE_WIN
+                var imageData = await CSServer.UploadImageWindows();
+                #elif UNITY_STANDALONE_OSX
+                var imageData = await CSServer.UploadImageOsx();
                 #else
-                // Upload image from file & convert to byte[]
-                var imagePath = UnityEditor.EditorUtility.OpenFilePanel("Select Image", "", "png,jpg,jpeg,gif");
-                if (string.IsNullOrEmpty(imagePath)) return null;
-                UnityWebRequest www = UnityWebRequestTexture.GetTexture("file://" + imagePath);
-                await www.SendWebRequest();
-                Texture2D texture = DownloadHandlerTexture.GetContent(www);
-                var imageData = texture.EncodeToPNG();
+                Debug.LogError("File picking is not implemented for this platform.");
+                var imageData = null;
                 #endif
                 // Upload metadata with image
                 var imageCid = await Upload(request.ApiKey, request.BucketId, request.FileNameImage, imageData, "application/octet-stream");
@@ -121,14 +122,15 @@ namespace Web3Unity.Scripts.Library.IPFS
             {
                 #if UNITY_WEBGL && !UNITY_EDITOR
                 var imageData = await CSServer.UploadImageWebGL();
+                #elif UNITY_EDITOR
+                var imageData = await CSServer.UploadImageEditor();
+                #elif UNITY_STANDALONE_WIN
+                var imageData = await CSServer.UploadImageWindows();
+                #elif UNITY_STANDALONE_OSX
+                var imageData = await CSServer.UploadImageOsx();
                 #else
-                // Upload image from file & convert to byte[]
-                var imagePath = UnityEditor.EditorUtility.OpenFilePanel("Select Image", "", "png,jpg,jpeg,gif");
-                if (string.IsNullOrEmpty(imagePath)) return null;
-                UnityWebRequest www = UnityWebRequestTexture.GetTexture("file://" + imagePath);
-                await www.SendWebRequest();
-                Texture2D texture = DownloadHandlerTexture.GetContent(www);
-                var imageData = texture.EncodeToPNG();
+                Debug.LogError("File picking is not implemented for this platform.");
+                var imageData = null;
                 #endif
                 // Upload metadata with image
                 var imageCid = await Upload(request.ApiKey, request.BucketId, request.FileNameImage, imageData, "application/octet-stream");
