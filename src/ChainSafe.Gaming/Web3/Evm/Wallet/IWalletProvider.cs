@@ -6,5 +6,7 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
     public interface IWalletProvider : IRpcProvider
     {
         Task<string> Connect();
+
+        Task Disconnect();
     }
 }

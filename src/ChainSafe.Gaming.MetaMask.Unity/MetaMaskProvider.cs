@@ -61,13 +61,19 @@ namespace ChainSafe.Gaming.MetaMask.Unity
             metaMaskController.Initialize(this.logWriter);
         }
 
+        public override Task Disconnect()
+        {
+            // Currently no disconnect logic for MetaMask lib on NEthereum.
+            return Task.CompletedTask;
+        }
+
         public override async Task<T> Perform<T>(string method, params object[] parameters)
         {
             return await metaMaskController.Request<T>(method, parameters);
         }
 
         /// <summary>
-        /// Implementation of <see cref="IMetaMaskProvider.Connect"/>.
+        /// Implementation of <see cref="IWalletProvider.Connect"/>.
         /// Called to connect to MetaMask.
         /// </summary>
         /// <returns>Connected account.</returns>

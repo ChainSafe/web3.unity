@@ -37,6 +37,8 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
 
         public abstract Task<string> Connect();
 
+        public abstract Task Disconnect();
+
         public abstract Task<T> Perform<T>(string method, params object[] parameters);
     }
 }

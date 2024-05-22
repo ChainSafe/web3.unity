@@ -66,6 +66,12 @@ namespace ChainSafe.Gaming.HyperPlay
             return account;
         }
 
+        public override Task Disconnect()
+        {
+            // currently HyperPlay doesn't support disconnecting.
+            return Task.CompletedTask;
+        }
+
         /// <summary>
         /// Make RPC request to HyperPlay desktop client.
         /// </summary>
