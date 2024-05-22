@@ -190,22 +190,22 @@ namespace Web3Unity.Scripts.Library.IPFS
         /// <returns>Byte array of image data</returns>
         private static async Task<byte[]> GetImageData()
         {
-        #if UNITY_WEBGL && !UNITY_EDITOR
-        var imageData = await CSServer.UploadImageWebGL();
-        return imageData;
-        #elif UNITY_EDITOR
-        var imageData = await CSServer.UploadImageEditor();
-        return imageData;
-        #elif UNITY_STANDALONE_WIN
-        var imageData = await CSServer.UploadImageWindows();
-        return imageData;
-        #elif UNITY_STANDALONE_OSX
-        var imageData = await CSServer.UploadImageOsx();
-        return imageData;
-        #else
-        Debug.LogError("File picking is not implemented for this platform.");
-        return null;
-        #endif
+            #if UNITY_WEBGL && !UNITY_EDITOR
+            var imageData = await CSServer.UploadImageWebGL();
+            return imageData;
+            #elif UNITY_EDITOR
+            var imageData = await CSServer.UploadImageEditor();
+            return imageData;
+            #elif UNITY_STANDALONE_WIN
+            var imageData = await CSServer.UploadImageWindows();
+            return imageData;
+            #elif UNITY_STANDALONE_OSX
+            var imageData = await CSServer.UploadImageOsx();
+            return imageData;
+            #else
+            Debug.LogError("File picking is not implemented for this platform.");
+            return null;
+            #endif
         }
         
         #endregion
