@@ -6,10 +6,17 @@ using Nethereum.Hex.HexTypes;
 
 namespace ChainSafe.Gaming.Web3.Evm.Wallet
 {
+    /// <summary>
+    /// Concrete implementation of <see cref="IWalletProvider"/>.
+    /// </summary>
     public abstract class WalletProvider : IWalletProvider
     {
         private readonly ChainRegistryProvider chainRegistryProvider;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WalletProvider"/> class.
+        /// </summary>
+        /// <param name="chainRegistryProvider">Injected <see cref="chainRegistryProvider"/>.</param>
         protected WalletProvider(ChainRegistryProvider chainRegistryProvider)
         {
             this.chainRegistryProvider = chainRegistryProvider;
