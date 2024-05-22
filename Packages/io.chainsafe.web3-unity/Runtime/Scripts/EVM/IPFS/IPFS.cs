@@ -57,7 +57,7 @@ namespace Web3Unity.Scripts.Library.IPFS
             try
             {
                 // Upload metadata with image
-                var imageData = await GetImageData();
+                var imageData = await UploadPlatforms.GetImageData();
                 var imageCid = await Upload(request.ApiKey, request.BucketId, request.FileNameImage, imageData, "application/octet-stream");
                 return imageCid;
             }
@@ -108,7 +108,7 @@ namespace Web3Unity.Scripts.Library.IPFS
             try
             {
                 // Upload metadata with image
-                var imageData = await GetImageData();
+                var imageData = await UploadPlatforms.GetImageData();
                 var imageCid = await Upload(request.ApiKey, request.BucketId, request.FileNameImage, imageData, "application/octet-stream");
                 var metaDataObj = new IPFSUploadRequestModel
                 {
@@ -180,30 +180,6 @@ namespace Web3Unity.Scripts.Library.IPFS
 
             var data = JsonUtility.FromJson<GetFileInfoResponse>(requestFile.downloadHandler.text);
             return data.content.cid;
-        }
-        
-        /// <summary>
-        /// Gets the binary data of a png image.
-        /// </summary>
-        /// <returns>Byte array of image data</returns>
-        private static async Task<byte[]> GetImageData()
-        {
-            #if UNITY_WEBGL && !UNITY_EDITOR
-            var imageData = await CSServer.UploadImageWebGL();
-            return imageData;
-            #elif UNITY_EDITOR
-            var imageData = await UploadPlatforms.UploadImageEditor();
-            return imageData;
-            #elif UNITY_STANDALONE_WIN
-            var imageData = await CSServer.UploadImageWindows();
-            return imageData;
-            #elif UNITY_STANDALONE_OSX
-            var imageData = await CSServer.UploadImageOsx();
-            return imageData;
-            #else
-            Debug.LogError("File picking is not implemented for this platform.");
-            return null;
-            #endif
         }
         
         #endregion

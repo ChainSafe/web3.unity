@@ -12,7 +12,7 @@ namespace ChainSafe.Gaming
         /// <param name="imageData">Image data</param>
         public void OnImageSelected(string imageData)
         {
-            CSServer.OnImageSelected(imageData);
+            UploadPlatforms.OnImageSelected(imageData);
         }
         #endif
     }

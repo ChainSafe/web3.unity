@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using AOT;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -8,7 +9,7 @@ public class UploadPlatforms
 {
     
     #region Fields
-        
+    
     [DllImport("__Internal")]
     private static extern void UploadImage();
     public static event EventHandler<byte[]> ImageSelected;
@@ -42,7 +43,7 @@ public class UploadPlatforms
         }
         
         #if UNITY_EDITOR
-        public static async Task<byte[]> UploadImageEditor()
+        private static async Task<byte[]> UploadImageEditor()
         {
             var imagePath = UnityEditor.EditorUtility.OpenFilePanel("Select Image", "", "png,jpg,jpeg,gif");
             while (string.IsNullOrEmpty(imagePath)) return null;
@@ -59,7 +60,7 @@ public class UploadPlatforms
         /// Uploads an image in webgl builds
         /// </summary>
         /// <returns>Image data</returns>
-        public static async Task<byte[]> UploadImageWebGL()
+        private static async Task<byte[]> UploadImageWebGL()
         {
             var imageDataTask = new TaskCompletionSource<byte[]>();
             // Event handler to set the result when the image is selected
@@ -79,12 +80,12 @@ public class UploadPlatforms
         /// Invokes event to pass image data from js function
         /// </summary>
         /// <param name="base64Data">Image data</param>
-        public static void OnImageSelected(string imageData)
+        public static void OnImageSelected(string _imageData)
         {
             try
             {
                 // Remove metadata from url
-                var base64String = imageData.Substring(imageData.IndexOf(",") + 1);
+                var base64String = _imageData.Substring(_imageData.IndexOf(",") + 1);
                 // Convert data URL to byte array
                 byte[] imageDataBytes = Convert.FromBase64String(base64String);
                 // Invoke event to complete the upload tasks
@@ -147,7 +148,7 @@ public class UploadPlatforms
         private const int OFN_FILEMUSTEXIST = 0x00001000;
         private const int OFN_PATHMUSTEXIST = 0x00000800;
         
-        public static async Task<byte[]> UploadImageWindows()
+        private static async Task<byte[]> UploadImageWindows()
         {
             string imagePath = OpenFilePanel("Select Image", "", "Image files\0*.png;*.jpg;*.jpeg;*.gif\0\0");
             if (string.IsNullOrEmpty(imagePath)) return null;
@@ -187,7 +188,7 @@ public class UploadPlatforms
 
         private TaskCompletionSource<string> tcs;
         
-        public async Task<byte[]> UploadImageOsx()
+        private async Task<byte[]> UploadImageOsx()
         {
             string imagePath = await OpenFilePanelMac("Select Image", "png,jpg,jpeg,gif");
             if (string.IsNullOrEmpty(imagePath)) return null;
