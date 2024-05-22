@@ -85,7 +85,30 @@ namespace Scripts.EVM.Remote
 
         #region Utilities
         
-        // Used for uploading images on different platforms
+        /// <summary>
+        /// Gets the binary data of a png image with a compiler conditional for different platforms.
+        /// </summary>
+        /// <returns>Byte array of image data</returns>
+        public static async Task<byte[]> GetImageData()
+        {
+            #if UNITY_WEBGL && !UNITY_EDITOR
+            var imageData = await UploadImageWebGL();
+            return imageData;
+            #elif UNITY_EDITOR
+            var imageData = await UploadImageEditor();
+            return imageData;
+            #elif UNITY_STANDALONE_WIN
+            var imageData = await UploadImageWindows();
+            return imageData;
+            #elif UNITY_STANDALONE_OSX
+            var imageData = await UploadImageOsx();
+            return imageData;
+            #else
+            Debug.LogError("File picking is not implemented for this platform.");
+            return null;
+            #endif
+        }
+        
         #if UNITY_EDITOR
         public static async Task<byte[]> UploadImageEditor()
         {

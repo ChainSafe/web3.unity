@@ -135,8 +135,8 @@ namespace Scripts.EVM.Marketplace
         /// <returns>Contract send data object</returns>
         public static async Task<object[]> Create721Collection(string _bearerToken, string _name, string _description, bool _isMintingPublic)
         {
-                var logoImageData = await GetImageData();
-                var bannerImageData = await GetImageData();
+                var logoImageData = await CSServer.GetImageData();
+                var bannerImageData = await CSServer.GetImageData();
                 var formData = new List<IMultipartFormSection>
                 {
                     new MultipartFormDataSection("name", _name),
@@ -180,8 +180,8 @@ namespace Scripts.EVM.Marketplace
         {
             try
             {
-                var logoImageData = await GetImageData();
-                var bannerImageData = await GetImageData();
+                var logoImageData = await CSServer.GetImageData();
+                var bannerImageData = await CSServer.GetImageData();
                 var formData = new List<IMultipartFormSection>
                 {
                     new MultipartFormDataSection("name", _name),
@@ -298,7 +298,7 @@ namespace Scripts.EVM.Marketplace
         {
             try
             {
-                var bannerImageData = await GetImageData();
+                var bannerImageData = await CSServer.GetImageData();
                 var formData = new List<IMultipartFormSection>
                 {
                     new MultipartFormDataSection("name", _name),
@@ -416,30 +416,6 @@ namespace Scripts.EVM.Marketplace
                 var value = property.GetValue(obj);
                 Debug.Log($"{property.Name}: {value}");
             }
-        }
-        
-        /// <summary>
-        /// Gets the binary data of a png image.
-        /// </summary>
-        /// <returns>Byte array of image data</returns>
-        private static async Task<byte[]> GetImageData()
-        {
-            #if UNITY_WEBGL && !UNITY_EDITOR
-            var imageData = await CSServer.UploadImageWebGL();
-            return imageData;
-            #elif UNITY_EDITOR
-            var imageData = await CSServer.UploadImageEditor();
-            return imageData;
-            #elif UNITY_STANDALONE_WIN
-            var imageData = await CSServer.UploadImageWindows();
-            return imageData;
-            #elif UNITY_STANDALONE_OSX
-            var imageData = await CSServer.UploadImageOsx();
-            return imageData;
-            #else
-            Debug.LogError("File picking is not implemented for this platform.");
-            return null;
-            #endif
         }
 
         #endregion
