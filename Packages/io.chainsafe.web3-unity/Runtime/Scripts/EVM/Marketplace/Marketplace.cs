@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Model;
 using ChainSafe.Gaming.Web3;
+using Nethereum.Hex.HexTypes;
 using Newtonsoft.Json;
 using Scripts.EVM.Remote;
 using Scripts.EVM.Token;
@@ -360,6 +361,26 @@ namespace Scripts.EVM.Marketplace
                 };
                 var abi = _type == "721" ? Token.ABI.GeneralErc721 : Token.ABI.GeneralErc1155;
                 var data = await Evm.ContractSend(Web3Accessor.Web3, method, abi, _nftContract, args);
+                return data;
+            }
+            catch (Web3Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+        
+        public static async Task<object[]> PurchaseNft(string _marketplaceContract, string _itemId, string _amountToSend)
+        {
+            try
+            {
+                var method = "purchaseItem";
+                BigInteger itemId = BigInteger.Parse(_itemId);
+                object[] args =
+                {
+                    itemId
+                };
+                var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.Marketplace, _marketplaceContract, args, new HexBigInteger(_amountToSend));
                 return data;
             }
             catch (Web3Exception e)
