@@ -1,10 +1,10 @@
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Signers;
-using ChainSafe.Gaming.WalletConnect.Methods;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using ChainSafe.Gaming.Web3.Core.Logout;
+using ChainSafe.Gaming.Web3.Evm.Wallet;
 using WalletConnectSharp.Common.Logging;
 
 namespace ChainSafe.Gaming.WalletConnect
@@ -14,9 +14,9 @@ namespace ChainSafe.Gaming.WalletConnect
     /// </summary>
     public class WalletConnectSigner : ISigner, ILifecycleParticipant, ILogoutHandler
     {
-        private readonly IWalletConnectProvider provider;
+        private readonly IWalletProvider provider;
 
-        public WalletConnectSigner(IWalletConnectProvider provider)
+        public WalletConnectSigner(IWalletProvider provider)
         {
             this.provider = provider;
         }
@@ -34,8 +34,7 @@ namespace ChainSafe.Gaming.WalletConnect
 
         public async Task<string> SignMessage(string message)
         {
-            var requestData = new EthSignMessage(message, PublicAddress);
-            var hash = await provider.Request(requestData);
+            var hash = await provider.Perform<string>("personal_sign", message, PublicAddress);
 
             if (!ValidateSignResponse(hash))
             {
@@ -48,8 +47,9 @@ namespace ChainSafe.Gaming.WalletConnect
 
         public async Task<string> SignTypedData<TStructType>(SerializableDomain domain, TStructType message)
         {
-            var requestData = new EthSignTypedData<TStructType>(PublicAddress, domain, message);
-            var hash = await provider.Request(requestData);
+            SerializableTypedData<TStructType> typedData = new SerializableTypedData<TStructType>(domain, message);
+
+            var hash = await provider.Perform<string>("eth_signTypedData", PublicAddress, typedData);
 
             if (!ValidateSignResponse(hash))
             {
