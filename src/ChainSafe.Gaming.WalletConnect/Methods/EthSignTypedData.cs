@@ -8,28 +8,26 @@ namespace ChainSafe.Gaming.WalletConnect.Methods
     /// <summary>
     /// Sign Typed Data Wallet Connect Json RPC method params.
     /// </summary>
-    /// <typeparam name="TStruct">Type of data to be signed.</typeparam>
     [RpcMethod("eth_signTypedData")]
     [RpcRequestOptions(Clock.ONE_MINUTE, 99998)]
-    public class EthSignTypedData<TStruct> : List<object>
+    public class EthSignTypedData : List<object>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="EthSignTypedData{TStruct}"/> class.
+        /// Initializes a new instance of the <see cref="EthSignTypedData"/> class.
         /// </summary>
         /// <param name="address">Public address of signer.</param>
-        /// <param name="domain">Serializable domain for Json RPC.</param>
-        /// <param name="message">Typed Data to be signed.</param>
-        public EthSignTypedData(string address, SerializableDomain domain, TStruct message)
+        /// <param name="typedData">SerializableTypedData.</param>
+        public EthSignTypedData(string address, object typedData)
             : base(new object[]
             {
                 address,
-                new SerializableTypedData<TStruct>(domain, message),
+                typedData,
             })
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EthSignTypedData{TStruct}"/> class used by json.net.
+        /// Initializes a new instance of the <see cref="EthSignTypedData"/> class used by json.net.
         /// Preserved for Unity using ChainSafe.Gaming.Unity/link.xml.
         /// </summary>
         public EthSignTypedData()
