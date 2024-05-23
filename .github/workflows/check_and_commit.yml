@@ -104,7 +104,15 @@ jobs:
         key: Library-${{ matrix.projectPath }}
         restore-keys: |
           Library-
-    - uses: game-ci/unity-test-runner@v3.1.0
+    - name: Install Latest Docker
+      run: |
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+        sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu  $(lsb_release -cs)  stable"
+        sudo apt-get update
+        sudo apt-get install docker-ce
+    - name: Check Docker Version
+      run: docker --version
+    - uses: game-ci/unity-test-runner@v3
       id: tests
       env:
         UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
