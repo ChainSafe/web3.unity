@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm;
@@ -40,30 +41,39 @@ namespace ChainSafe.Gaming.HyperPlay
         /// <returns>Signed-in account public address.</returns>
         public override async Task<string> Connect()
         {
-            string[] accounts = await Perform<string[]>("eth_accounts");
-
-            string account = accounts[0].AssertIsPublicAddress(nameof(account));
-
-            string message = "Sign-in with Ethereum";
-
-            string hash = await Perform<string>("personal_sign", message, account);
-
-            // Verify signature.
-            // TODO: Make into a Util Method.
-            EthECDSASignature signature = MessageSigner.ExtractEcdsaSignature(hash);
-
-            string messageToHash = "\x19" + "Ethereum Signed Message:\n" + message.Length + message;
-
-            byte[] messageHash = new Sha3Keccack().CalculateHash(Encoding.UTF8.GetBytes(messageToHash));
-
-            var key = EthECKey.RecoverFromSignature(signature, messageHash);
-
-            if (key.GetPublicAddress().ToLower().Trim() != account.ToLower().Trim())
+            if (HyperPlayConfig.storedWallet != string.Empty)
             {
-                throw new Web3Exception("Fetched address does not match the signing address.");
+                Console.WriteLine("Wallet exists");
+                string account = HyperPlayConfig.storedWallet.ToLower();
+                return account;
             }
+            else
+            {
+                string[] accounts = await Perform<string[]>("eth_accounts");
+                string account = accounts[0].AssertIsPublicAddress(nameof(account));
+                string message = "Sign-in with Ethereum";
+                string hash = await Perform<string>("personal_sign", message, account);
 
-            return account;
+                // Verify signature.
+                // TODO: Make into a Util Method.
+                EthECDSASignature signature = MessageSigner.ExtractEcdsaSignature(hash);
+                string messageToHash = "\x19" + "Ethereum Signed Message:\n" + message.Length + message;
+                byte[] messageHash = new Sha3Keccack().CalculateHash(Encoding.UTF8.GetBytes(messageToHash));
+                var key = EthECKey.RecoverFromSignature(signature, messageHash);
+                if (key.GetPublicAddress().ToLower().Trim() != account.ToLower().Trim())
+                {
+                    throw new Web3Exception("Fetched address does not match the signing address.");
+                }
+
+                if (!HyperPlayConfig.rememberMe)
+                {
+                    return account;
+                }
+
+                HyperPlayConfig.storedWallet = account;
+                HyperPlayConfig.storedSessionAvailable = true;
+                return account;
+            }
         }
 
         public override Task Disconnect()
@@ -110,7 +120,6 @@ namespace ChainSafe.Gaming.HyperPlay
             catch (JsonSerializationException)
             {
                 var error = JsonConvert.DeserializeObject<HyperPlayError>(response);
-
                 throw new Web3Exception($"HyperPlay RPC request failed: {error.Message}");
             }
         }
