@@ -8,7 +8,14 @@ namespace ChainSafe.Gaming.UnityPackage
     {
         [SerializeField] private bool storedSessionAvailable;
         [SerializeField] private string storedWallet;
-
+        [SerializeField] private bool rememberMe;
+        
+        public bool RememberMe
+        {
+            get => rememberMe;
+            set => rememberMe = value;
+        }
+        
         public bool StoredSessionAvailable
         {
             get => storedSessionAvailable;

@@ -21,6 +21,7 @@ namespace ChainSafe.Gaming.HyperPlay
     {
         private readonly IHttpClient httpClient;
         private readonly IChainConfig chainConfig;
+        private readonly HyperPlayConfig hyperPlayConfig;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HyperPlayProvider"/> class.
@@ -28,11 +29,12 @@ namespace ChainSafe.Gaming.HyperPlay
         /// <param name="httpClient">HttpClient to make requests.</param>
         /// <param name="chainConfig">ChainConfig to fetch chain data.</param>
         /// <param name="chainRegistryProvider">Injected <see cref="ChainRegistryProvider"/>.</param>
-        public HyperPlayProvider(IHttpClient httpClient, IChainConfig chainConfig, ChainRegistryProvider chainRegistryProvider)
+        public HyperPlayProvider(IHttpClient httpClient, IChainConfig chainConfig, ChainRegistryProvider chainRegistryProvider, HyperPlayConfig hyperPlayConfig)
             : base(chainRegistryProvider: chainRegistryProvider)
         {
             this.httpClient = httpClient;
             this.chainConfig = chainConfig;
+            this.hyperPlayConfig = hyperPlayConfig;
         }
 
         /// <summary>
@@ -41,10 +43,10 @@ namespace ChainSafe.Gaming.HyperPlay
         /// <returns>Signed-in account public address.</returns>
         public override async Task<string> Connect()
         {
-            if (HyperPlayConfig.storedWallet != string.Empty)
+            if (hyperPlayConfig.storedWallet != string.Empty)
             {
                 Console.WriteLine("Wallet exists");
-                string account = HyperPlayConfig.storedWallet.ToLower();
+                string account = hyperPlayConfig.storedWallet.ToLower();
                 return account;
             }
             else
@@ -65,13 +67,13 @@ namespace ChainSafe.Gaming.HyperPlay
                     throw new Web3Exception("Fetched address does not match the signing address.");
                 }
 
-                if (!HyperPlayConfig.rememberMe)
+                if (!hyperPlayConfig.rememberMe)
                 {
                     return account;
                 }
 
-                HyperPlayConfig.storedWallet = account;
-                HyperPlayConfig.storedSessionAvailable = true;
+                hyperPlayConfig.storedWallet = account;
+                hyperPlayConfig.storedSessionAvailable = true;
                 return account;
             }
         }

@@ -19,6 +19,8 @@ namespace ChainSafe.Gaming.HyperPlay
             collection.AssertServiceNotBound<IWalletProvider>();
 
             collection.AddSingleton<IWalletProvider, HyperPlayProvider>();
+            
+            collection.AddSingleton<HyperPlayConfig>();
 
             return collection;
         }

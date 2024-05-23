@@ -1,9 +1,9 @@
 ﻿namespace ChainSafe.Gaming.HyperPlay
 {
-    public static class HyperPlayConfig
+    public class HyperPlayConfig
     {
-        public static string storedWallet { get; set; }
-        public static bool storedSessionAvailable { get; set; }
-        public static bool rememberMe { get; set; }
+        public string storedWallet { get; set; }
+        public bool storedSessionAvailable { get; set; }
+        public bool rememberMe { get; set; }
     }
 }

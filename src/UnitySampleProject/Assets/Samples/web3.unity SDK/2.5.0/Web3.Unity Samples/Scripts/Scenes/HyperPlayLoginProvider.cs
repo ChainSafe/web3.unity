@@ -27,7 +27,7 @@ public class HyperPlayLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     {
         base.Initialize();
         var hyperPlayWallet = await GetHyperPlayWallet();
-        storedSessionAvailable = string.Equals(hyperPlayWallet, HyperPlayConfig.storedWallet, StringComparison.CurrentCultureIgnoreCase);
+        storedSessionAvailable = string.Equals(hyperPlayWallet, hyperPlayConfigData.StoredWallet, StringComparison.CurrentCultureIgnoreCase);
         if (autoLoginPreviousSession && storedSessionAvailable)
         {
             Debug.Log("Proceeding with auto-login.");
@@ -67,30 +67,30 @@ public class HyperPlayLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     private void SaveData(bool _sessionData, string _walletData)
     {
         Debug.Log("Saving data for next login");
-        Debug.Log($"Session: {_sessionData}");
-        Debug.Log($"Wallet: {_walletData}");
         hyperPlayConfigData.StoredSessionAvailable = _sessionData;
         hyperPlayConfigData.StoredWallet = _walletData;
         EditorUtility.SetDirty(hyperPlayConfigData);
         AssetDatabase.SaveAssets();
+        Debug.Log($"Session: {_sessionData}");
+        Debug.Log($"Wallet: {_walletData}");
     }
         
     private void LoadData()
     {
         Debug.Log("Loading Data");
         hyperPlayConfigData = Resources.Load<HyperPlayConfigScriptableObject>("HyperPlayConfigData");
-        HyperPlayConfig.storedSessionAvailable = Convert.ToBoolean(hyperPlayConfigData.StoredSessionAvailable);
-        HyperPlayConfig.storedWallet = hyperPlayConfigData.StoredWallet;
-        Debug.Log($"Session: {HyperPlayConfig.storedSessionAvailable}");
-        Debug.Log($"Wallet: {HyperPlayConfig.storedWallet}");
+        hyperPlayConfigData.StoredSessionAvailable = Convert.ToBoolean(hyperPlayConfigData.StoredSessionAvailable);
+        hyperPlayConfigData.StoredWallet = hyperPlayConfigData.StoredWallet;
+        Debug.Log($"Session: {hyperPlayConfigData.StoredSessionAvailable}");
+        Debug.Log($"Wallet: {hyperPlayConfigData.StoredWallet}");
     }
     
     private async void OnLoginClicked()
     {
         if (rememberSessionToggle.isOn)
         {
-            HyperPlayConfig.rememberMe = true;
-            SaveData(HyperPlayConfig.storedSessionAvailable, HyperPlayConfig.storedWallet);
+            hyperPlayConfigData.RememberMe = true;
+            SaveData(hyperPlayConfigData.StoredSessionAvailable, hyperPlayConfigData.StoredWallet);
         }
         await TryLogin();
     }
