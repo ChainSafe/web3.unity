@@ -98,7 +98,7 @@ jobs:
 
           git add "$PACKAGE_LIB_PATH." -f
         done
-    - uses: actions/cache@v3
+    - uses: actions/cache@v2
       with:
         path: ${{ matrix.projectPath }}/Library
         key: Library-${{ matrix.projectPath }}
@@ -110,7 +110,7 @@ jobs:
         UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
       with:
         projectPath: ${{ matrix.projectPath }}
-        unityVersion: '2022.3.26f1'
+        customImage: 'unityci/editor:ubuntu-2022.3.26f1-linux-il2cpp-3.1.0'
         testMode: ${{ matrix.testMode }}
         artifactsPath: ${{ matrix.testMode }}-artifacts
         githubToken: ${{ secrets.GITHUB_TOKEN }}
