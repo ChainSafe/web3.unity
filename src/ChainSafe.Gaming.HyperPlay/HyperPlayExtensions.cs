@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core;
@@ -14,12 +15,13 @@ namespace ChainSafe.Gaming.HyperPlay
         /// </summary>
         /// <param name="collection">Service collection to bind implementations to.</param>
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
-        public static IWeb3ServiceCollection UseHyperPlay(this IWeb3ServiceCollection collection)
+        public static IWeb3ServiceCollection UseHyperPlay(this IWeb3ServiceCollection collection, HyperPlayConfig hyperPlayConfig)
         {
             collection.AssertServiceNotBound<IWalletProvider>();
             collection.AssertServiceNotBound<HyperPlayConfig>();
 
             collection.AddSingleton<IWalletProvider, HyperPlayProvider>();
+            collection.AddSingleton(hyperPlayConfig);
 
             return collection;
         }

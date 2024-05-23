@@ -38,9 +38,15 @@ public class HyperPlayLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
 
     public Web3Builder ConfigureServices(Web3Builder web3Builder)
     {
+        var hyperPlayConfig = new HyperPlayConfig
+        {
+            storedSessionAvailable = hyperPlayConfigData.StoredSessionAvailable,
+            storedWallet = hyperPlayConfigData.StoredWallet,
+            rememberMe = hyperPlayConfigData.RememberMe
+        };
         return web3Builder.Configure(services =>
         {
-            services.UseHyperPlay().UseHyperPlaySigner().UseHyperPlayTransactionExecutor();
+            services.UseHyperPlay(hyperPlayConfig).UseHyperPlaySigner().UseHyperPlayTransactionExecutor();
         });
     }
 
