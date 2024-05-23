@@ -1,8 +1,10 @@
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Core.Logout;
 using ChainSafe.Gaming.Web3.Environment;
+using ChainSafe.Gaming.Web3.Evm.Wallet;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -11,7 +13,7 @@ namespace ChainSafe.Gaming.MetaMask.Unity
     /// <summary>
     /// Concrete implementation of <see cref="IMetaMaskProvider"/>.
     /// </summary>
-    public class MetaMaskProvider : IMetaMaskProvider, ILogoutHandler
+    public class MetaMaskProvider : WalletProvider, ILogoutHandler
     {
         private readonly ILogWriter logWriter;
 
@@ -24,7 +26,13 @@ namespace ChainSafe.Gaming.MetaMask.Unity
         /// Initializes a new instance of the <see cref="MetaMaskProvider"/> class.
         /// </summary>
         /// <param name="logWriter">Common Logger used for logging messages and errors.</param>
-        public MetaMaskProvider(ILogWriter logWriter, IAnalyticsClient analyticsClient, IChainConfig chainConfig, IProjectConfig projectConfig)
+        /// <param name="chainConfig">Injected <see cref="IChainConfig"/>.</param>
+        /// <param name="projectConfig">Injected <see cref="IProjectConfig"/>.</param>
+        /// <param name="chainRegistryProvider">Injected <see cref="ChainRegistryProvider"/>.</param>
+        /// <param name="analyticsClient">Injected <see cref="IAnalyticsClient"/>.</param>
+        public MetaMaskProvider(ILogWriter logWriter, IAnalyticsClient analyticsClient, IChainConfig chainConfig, IProjectConfig projectConfig, ChainRegistryProvider chainRegistryProvider)
+            : base(
+            chainRegistryProvider: chainRegistryProvider)
         {
             this.logWriter = logWriter;
             this.chainConfig = chainConfig;
@@ -53,12 +61,23 @@ namespace ChainSafe.Gaming.MetaMask.Unity
             metaMaskController.Initialize(this.logWriter);
         }
 
+        public override Task Disconnect()
+        {
+            // Currently no disconnect logic for MetaMask lib on NEthereum.
+            return Task.CompletedTask;
+        }
+
+        public override async Task<T> Perform<T>(string method, params object[] parameters)
+        {
+            return await metaMaskController.Request<T>(method, parameters);
+        }
+
         /// <summary>
-        /// Implementation of <see cref="IMetaMaskProvider.Connect"/>.
+        /// Implementation of <see cref="IWalletProvider.Connect"/>.
         /// Called to connect to MetaMask.
         /// </summary>
         /// <returns>Connected account.</returns>
-        public async Task<string> Connect()
+        public override async Task<string> Connect()
         {
             logWriter.Log("Connecting from Metamask...");
 
@@ -74,18 +93,6 @@ namespace ChainSafe.Gaming.MetaMask.Unity
             });
 
             return await metaMaskController.Connect();
-        }
-
-        /// <summary>
-        /// Make JsonRPC requests using MetaMask.
-        /// </summary>
-        /// <param name="method">JsonRPC method name.</param>
-        /// <param name="parameters">JsonRPC request parameters.</param>
-        /// <typeparam name="T">Type of response result.</typeparam>
-        /// <returns>Response result.</returns>
-        public async Task<T> Request<T>(string method, params object[] parameters)
-        {
-            return await metaMaskController.Request<T>(method, parameters);
         }
 
         public Task OnLogout()

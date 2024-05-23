@@ -3,6 +3,7 @@ using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using ChainSafe.Gaming.Web3.Environment;
+using ChainSafe.Gaming.Web3.Evm.Wallet;
 
 namespace ChainSafe.Gaming.MetaMask
 {
@@ -11,22 +12,17 @@ namespace ChainSafe.Gaming.MetaMask
     /// </summary>
     public class MetaMaskSigner : ISigner, ILifecycleParticipant
     {
-        private readonly IMetaMaskProvider metaMaskProvider;
+        private readonly IWalletProvider walletProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MetaMaskSigner"/> class.
         /// </summary>
-        /// <param name="metaMaskProvider">Metamask provider that connects to Metamask and makes JsonRPC requests.</param>
-        public MetaMaskSigner(IMetaMaskProvider metaMaskProvider)
+        /// <param name="walletProvider">Metamask provider that connects to Metamask and makes JsonRPC requests.</param>
+        public MetaMaskSigner(IWalletProvider walletProvider)
         {
-            this.metaMaskProvider = metaMaskProvider;
+            this.walletProvider = walletProvider;
         }
 
-        /// <summary>
-        /// Implementation of <see cref="ISigner.GetAddress"/>.
-        /// Get public address of connected client.
-        /// </summary>
-        /// <value>Wallet address of connected client.</value>
         public string PublicAddress { get; private set; }
 
         /// <summary>
@@ -36,7 +32,7 @@ namespace ChainSafe.Gaming.MetaMask
         /// <returns>async awaitable task.</returns>
         public async ValueTask WillStartAsync()
         {
-            PublicAddress = await metaMaskProvider.Connect();
+            PublicAddress = await walletProvider.Connect();
         }
 
         /// <summary>
@@ -48,7 +44,7 @@ namespace ChainSafe.Gaming.MetaMask
         /// <returns>Hash response of a successfully signed message.</returns>
         public Task<string> SignMessage(string message)
         {
-            return metaMaskProvider.Request<string>("personal_sign", message, PublicAddress);
+            return walletProvider.Perform<string>("personal_sign", message, PublicAddress);
         }
 
         /// <summary>
@@ -64,7 +60,7 @@ namespace ChainSafe.Gaming.MetaMask
             SerializableTypedData<TStructType> typedData = new SerializableTypedData<TStructType>(domain, message);
 
             // MetaMask doesn't work with regular eth_signTypedData method, has to be eth_signTypedData_v4.
-            return metaMaskProvider.Request<string>("eth_signTypedData_v4", typedData, PublicAddress);
+            return walletProvider.Perform<string>("eth_signTypedData_v4", typedData, PublicAddress);
         }
 
         /// <summary>

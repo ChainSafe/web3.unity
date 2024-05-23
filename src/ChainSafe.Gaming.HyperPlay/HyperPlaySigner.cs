@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
+using ChainSafe.Gaming.Web3.Evm.Wallet;
 
 namespace ChainSafe.Gaming.HyperPlay
 {
@@ -10,22 +11,22 @@ namespace ChainSafe.Gaming.HyperPlay
     /// </summary>
     public class HyperPlaySigner : ISigner, ILifecycleParticipant
     {
-        private readonly IHyperPlayProvider hyperPlayProvider;
+        private readonly IWalletProvider walletProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HyperPlaySigner"/> class.
         /// </summary>
-        /// <param name="hyperPlayProvider">HyperPlay connection provider to connect and make RPC requests.</param>
-        public HyperPlaySigner(IHyperPlayProvider hyperPlayProvider)
+        /// <param name="walletProvider">HyperPlay connection provider to connect and make RPC requests.</param>
+        public HyperPlaySigner(IWalletProvider walletProvider)
         {
-            this.hyperPlayProvider = hyperPlayProvider;
+            this.walletProvider = walletProvider;
         }
 
         public string PublicAddress { get; private set; }
 
         public async ValueTask WillStartAsync()
         {
-            PublicAddress = await hyperPlayProvider.Connect();
+            PublicAddress = await walletProvider.Connect();
         }
 
         /// <summary>
@@ -35,7 +36,7 @@ namespace ChainSafe.Gaming.HyperPlay
         /// <returns>Signed message hash.</returns>
         public Task<string> SignMessage(string message)
         {
-            return hyperPlayProvider.Request<string>("personal_sign", message, PublicAddress);
+            return walletProvider.Perform<string>("personal_sign", message, PublicAddress);
         }
 
         /// <summary>
@@ -49,7 +50,7 @@ namespace ChainSafe.Gaming.HyperPlay
         {
             SerializableTypedData<TStructType> typedData = new SerializableTypedData<TStructType>(domain, message);
 
-            return hyperPlayProvider.Request<string>("eth_signTypedData_v3", PublicAddress, typedData);
+            return walletProvider.Perform<string>("eth_signTypedData_v3", PublicAddress, typedData);
         }
 
         public ValueTask WillStopAsync()

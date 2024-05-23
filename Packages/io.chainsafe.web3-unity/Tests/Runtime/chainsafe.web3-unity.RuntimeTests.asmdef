@@ -13,11 +13,13 @@
     "precompiledReferences": [
         "nunit.framework.dll",
         "Nethereum.Hex.dll",
+        "Nethereum.JsonRpc.Client.dll",
         "Microsoft.Extensions.DependencyInjection.Abstractions.dll",
         "ChainSafe.Gaming.dll",
         "ChainSafe.Gaming.Unity.dll",
         "ChainSafe.Gaming.Gelato.dll",
-        "ChainSafe.Gaming.WalletConnect.dll"
+        "ChainSafe.Gaming.WalletConnect.dll",
+        "Newtonsoft.Json.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [
