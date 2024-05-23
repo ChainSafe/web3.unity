@@ -2,10 +2,10 @@ name: Post Push Checks and Commits
 
 on:
   push:
-    branches: [ rob/ci-fix ]
+    branches: [ dev ]
 
 jobs:
   check_and_commit:
     name: Check and Commit
-    uses: ChainSafe/web3.unity/.github/workflows/check_and_commit.yml@rob/ci-fix
+    uses: ChainSafe/web3.unity/.github/workflows/check_and_commit.yml@main
     secrets: inherit
