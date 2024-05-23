@@ -17,10 +17,9 @@ namespace ChainSafe.Gaming.HyperPlay
         public static IWeb3ServiceCollection UseHyperPlay(this IWeb3ServiceCollection collection)
         {
             collection.AssertServiceNotBound<IWalletProvider>();
+            collection.AssertServiceNotBound<HyperPlayConfig>();
 
             collection.AddSingleton<IWalletProvider, HyperPlayProvider>();
-            
-            collection.AddSingleton<HyperPlayConfig>();
 
             return collection;
         }
