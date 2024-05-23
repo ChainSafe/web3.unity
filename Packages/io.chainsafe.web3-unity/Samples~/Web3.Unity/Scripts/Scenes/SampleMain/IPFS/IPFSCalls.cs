@@ -12,7 +12,7 @@ public class IPFSCalls : MonoBehaviour
     [SerializeField] private string bucketId = "Fill In Your Bucket ID From Storage";
     [SerializeField] private string fileNameImage = "Logo.png";
     [SerializeField] private string fileNameMetaData = "MetaData.json";
-    [SerializeField] private string name = "Name of the NFT";
+    [SerializeField] private string nftName = "Name of the NFT";
     [SerializeField] private string description = "An NFT description";
     [SerializeField] private string externalUrl = "The URL that appears below your assets image";
     [SerializeField] private List<string> display_types = new List<string> { "Stamina", "Boost Number" };
@@ -51,7 +51,7 @@ public class IPFSCalls : MonoBehaviour
             BucketId = bucketId,
             Image = imageCID,
             FileNameMetaData = fileNameMetaData,
-            Name = name,
+            Name = nftName,
             Description = description,
             External_url = externalUrl,
             attributes = IPFS.CreateAttributesList(display_types, trait_types, values)
