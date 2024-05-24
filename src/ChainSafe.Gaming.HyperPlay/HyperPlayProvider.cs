@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm;
@@ -7,8 +8,11 @@ using ChainSafe.Gaming.Web3.Core.Debug;
 using ChainSafe.Gaming.Web3.Environment;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
 using Nethereum.Signer;
+using Nethereum.Unity.Util;
 using Nethereum.Util;
 using Newtonsoft.Json;
+using UnityEngine;
+using UnityEngine.Networking;
 using Chain = ChainSafe.Gaming.HyperPlay.Dto.Chain;
 
 namespace ChainSafe.Gaming.HyperPlay
@@ -40,30 +44,38 @@ namespace ChainSafe.Gaming.HyperPlay
         /// <returns>Signed-in account public address.</returns>
         public override async Task<string> Connect()
         {
-            string[] accounts = await Perform<string[]>("eth_accounts");
-
-            string account = accounts[0].AssertIsPublicAddress(nameof(account));
-
-            string message = "Sign-in with Ethereum";
-
-            string hash = await Perform<string>("personal_sign", message, account);
-
-            // Verify signature.
-            // TODO: Make into a Util Method.
-            EthECDSASignature signature = MessageSigner.ExtractEcdsaSignature(hash);
-
-            string messageToHash = "\x19" + "Ethereum Signed Message:\n" + message.Length + message;
-
-            byte[] messageHash = new Sha3Keccack().CalculateHash(Encoding.UTF8.GetBytes(messageToHash));
-
-            var key = EthECKey.RecoverFromSignature(signature, messageHash);
-
-            if (key.GetPublicAddress().ToLower().Trim() != account.ToLower().Trim())
+            if (PlayerPrefs.GetString("HyperPlayWallet") != string.Empty)
             {
-                throw new Web3Exception("Fetched address does not match the signing address.");
+                Console.WriteLine("Wallet session exists");
+                return PlayerPrefs.GetString("HyperPlayWallet");
             }
+            else
+            {
+                string[] accounts = await Perform<string[]>("eth_accounts");
 
-            return account;
+                string account = accounts[0].AssertIsPublicAddress(nameof(account));
+
+                string message = "Sign-in with Ethereum";
+
+                string hash = await Perform<string>("personal_sign", message, account);
+
+                // Verify signature.
+                // TODO: Make into a Util Method.
+                EthECDSASignature signature = MessageSigner.ExtractEcdsaSignature(hash);
+
+                string messageToHash = "\x19" + "Ethereum Signed Message:\n" + message.Length + message;
+
+                byte[] messageHash = new Sha3Keccack().CalculateHash(Encoding.UTF8.GetBytes(messageToHash));
+
+                var key = EthECKey.RecoverFromSignature(signature, messageHash);
+
+                if (key.GetPublicAddress().ToLower().Trim() != account.ToLower().Trim())
+                {
+                    throw new Web3Exception("Fetched address does not match the signing address.");
+                }
+
+                return account;
+            }
         }
 
         public override Task Disconnect()
@@ -113,6 +125,25 @@ namespace ChainSafe.Gaming.HyperPlay
 
                 throw new Web3Exception($"HyperPlay RPC request failed: {error.Message}");
             }
+        }
+
+        public static async Task<string> GetConnectedWallet(string _chainId)
+        {
+            string jsonString = $"{{\"request\":{{\"method\":\"eth_accounts\"}},\"chain\":{{\"chainId\":\"{_chainId}\"}}}}";
+            byte[] jsonBytes = System.Text.Encoding.UTF8.GetBytes(jsonString);
+            UnityWebRequest request = new UnityWebRequest("localhost:9680/rpc", "POST");
+            request.uploadHandler = new UploadHandlerRaw(jsonBytes);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+            await request.SendWebRequest();
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                Console.WriteLine(request.error);
+                return null;
+            }
+
+            var addressResponse = JsonConvert.DeserializeObject<string[]>(request.downloadHandler.text);
+            return addressResponse[0];
         }
     }
 }
