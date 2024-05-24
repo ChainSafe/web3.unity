@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.UnityPackage.Model;
 using ChainSafe.Gaming.Web3;
 using Newtonsoft.Json;
-using Scripts.EVM.Remote;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -58,18 +56,8 @@ namespace Web3Unity.Scripts.Library.IPFS
         {
             try
             {
-                #if UNITY_WEBGL && !UNITY_EDITOR
-                var imageData = await CSServer.UploadImageWebGL();
-                #else
-                // Upload image from file & convert to byte[]
-                var imagePath = UnityEditor.EditorUtility.OpenFilePanel("Select Image", "", "png,jpg,jpeg,gif");
-                if (string.IsNullOrEmpty(imagePath)) return null;
-                UnityWebRequest www = UnityWebRequestTexture.GetTexture("file://" + imagePath);
-                await www.SendWebRequest();
-                Texture2D texture = DownloadHandlerTexture.GetContent(www);
-                var imageData = texture.EncodeToPNG();
-                #endif
                 // Upload metadata with image
+                var imageData = await UploadPlatforms.GetImageData();
                 var imageCid = await Upload(request.ApiKey, request.BucketId, request.FileNameImage, imageData, "application/octet-stream");
                 return imageCid;
             }
@@ -119,18 +107,8 @@ namespace Web3Unity.Scripts.Library.IPFS
         {
             try
             {
-                #if UNITY_WEBGL && !UNITY_EDITOR
-                var imageData = await CSServer.UploadImageWebGL();
-                #else
-                // Upload image from file & convert to byte[]
-                var imagePath = UnityEditor.EditorUtility.OpenFilePanel("Select Image", "", "png,jpg,jpeg,gif");
-                if (string.IsNullOrEmpty(imagePath)) return null;
-                UnityWebRequest www = UnityWebRequestTexture.GetTexture("file://" + imagePath);
-                await www.SendWebRequest();
-                Texture2D texture = DownloadHandlerTexture.GetContent(www);
-                var imageData = texture.EncodeToPNG();
-                #endif
                 // Upload metadata with image
+                var imageData = await UploadPlatforms.GetImageData();
                 var imageCid = await Upload(request.ApiKey, request.BucketId, request.FileNameImage, imageData, "application/octet-stream");
                 var metaDataObj = new IPFSUploadRequestModel
                 {
