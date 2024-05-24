@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm;
@@ -44,10 +45,11 @@ namespace ChainSafe.Gaming.HyperPlay
         /// <returns>Signed-in account public address.</returns>
         public override async Task<string> Connect()
         {
-            if (PlayerPrefs.GetString("HyperPlayWallet") != string.Empty)
+            var walletPath = Path.Combine(Application.persistentDataPath, "HyperPlayWallet.txt");
+            if (File.Exists(walletPath) && File.ReadAllText(walletPath) != string.Empty)
             {
                 Console.WriteLine("Wallet session exists");
-                return PlayerPrefs.GetString("HyperPlayWallet");
+                return File.ReadAllText(walletPath);
             }
             else
             {
