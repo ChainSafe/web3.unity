@@ -27,6 +27,30 @@ namespace ChainSafe.Gaming.HyperPlay
         private readonly IChainConfig chainConfig;
 
         /// <summary>
+        /// Get the connected HyperPlay wallet
+        /// </summary>
+        /// <param name="chainId">Chain id we're connected to</param>
+        /// <returns>Connected HyperPlay wallet address</returns>
+        public static async Task<string> GetConnectedWallet(string chainId)
+        {
+            string jsonString = $"{{\"request\":{{\"method\":\"eth_accounts\"}},\"chain\":{{\"chainId\":\"{chainId}\"}}}}";
+            byte[] jsonBytes = System.Text.Encoding.UTF8.GetBytes(jsonString);
+            UnityWebRequest request = new UnityWebRequest("localhost:9680/rpc", "POST");
+            request.uploadHandler = new UploadHandlerRaw(jsonBytes);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+            await request.SendWebRequest();
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                Console.WriteLine(request.error);
+                return null;
+            }
+
+            var addressResponse = JsonConvert.DeserializeObject<string[]>(request.downloadHandler.text);
+            return addressResponse[0];
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="HyperPlayProvider"/> class.
         /// </summary>
         /// <param name="httpClient">HttpClient to make requests.</param>
@@ -127,25 +151,6 @@ namespace ChainSafe.Gaming.HyperPlay
 
                 throw new Web3Exception($"HyperPlay RPC request failed: {error.Message}");
             }
-        }
-
-        public static async Task<string> GetConnectedWallet(string _chainId)
-        {
-            string jsonString = $"{{\"request\":{{\"method\":\"eth_accounts\"}},\"chain\":{{\"chainId\":\"{_chainId}\"}}}}";
-            byte[] jsonBytes = System.Text.Encoding.UTF8.GetBytes(jsonString);
-            UnityWebRequest request = new UnityWebRequest("localhost:9680/rpc", "POST");
-            request.uploadHandler = new UploadHandlerRaw(jsonBytes);
-            request.downloadHandler = new DownloadHandlerBuffer();
-            request.SetRequestHeader("Content-Type", "application/json");
-            await request.SendWebRequest();
-            if (request.result != UnityWebRequest.Result.Success)
-            {
-                Console.WriteLine(request.error);
-                return null;
-            }
-
-            var addressResponse = JsonConvert.DeserializeObject<string[]>(request.downloadHandler.text);
-            return addressResponse[0];
         }
     }
 }
