@@ -1,4 +1,6 @@
-﻿#import <Cocoa/Cocoa.h>
+﻿#if __has_include(<Cocoa/Cocoa.h>)
+#import <Cocoa/Cocoa.h>
+#endif
 
 extern "C"
 {
