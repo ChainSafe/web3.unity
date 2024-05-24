@@ -60,6 +60,11 @@ public class MarketplaceCalls : MonoBehaviour
     [SerializeField] private string marketplaceContractToListTo = "Set marketplace contract to list to";
     [SerializeField] private string collectionContractToList = "Set collection contract to list from";
     
+    [Header("List to marketplace calls")]
+    [SerializeField] private string marketplaceContractToBuyFrom = "Set marketplace contract to list to";
+    [SerializeField] private string tokenIdToBuy = "Set token ID to buy";
+    [SerializeField] private string weiPriceToBuy = "Set price in wei to buy with i.e 100000000000000";
+    
     #endregion
 
     #region Methods
@@ -250,6 +255,16 @@ public class MarketplaceCalls : MonoBehaviour
     public async void ListNftsToMarketplace()
     {
         var data = await Marketplace.ListNftsToMarketplace(marketplaceContractToListTo,collectionContractToList, tokenIdToList, weiPriceToList);
+        var response = SampleOutputUtil.BuildOutputValue(data);
+        Debug.Log($"TX: {response}");
+    }
+    
+    /// <summary>
+    /// Purchases an Nft from the marketplace
+    /// </summary>
+    public async void PurchaseNftFromMarketplace()
+    {
+        var data = await Marketplace.PurchaseNft(marketplaceContractToBuyFrom, tokenIdToBuy, weiPriceToBuy);
         var response = SampleOutputUtil.BuildOutputValue(data);
         Debug.Log($"TX: {response}");
     }
