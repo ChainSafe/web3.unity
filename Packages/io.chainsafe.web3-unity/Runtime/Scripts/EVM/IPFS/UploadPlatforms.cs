@@ -188,7 +188,7 @@ public class UploadPlatforms
 
     private TaskCompletionSource<string> tcs;
     
-    private async Task<byte[]> UploadImageOsx()
+    private static async Task<byte[]> UploadImageOsx()
     {
         string imagePath = await OpenFilePanelMac("Select Image", "png,jpg,jpeg,gif");
         if (string.IsNullOrEmpty(imagePath)) return null;

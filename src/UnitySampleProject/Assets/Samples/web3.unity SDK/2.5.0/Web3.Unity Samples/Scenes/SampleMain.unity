@@ -3357,7 +3357,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 37375165}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.1588307
+  m_Size: 0.19966036
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -15639,8 +15639,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a86b695c20675b43ba7a0f0a496749c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  apiSecretKey: eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTY0MDA1MzEsImNuZiI6eyJqa3UiOiIvY2VydHMiLCJraWQiOiI5aHE4bnlVUWdMb29ER2l6VnI5SEJtOFIxVEwxS0JKSFlNRUtTRXh4eGtLcCJ9LCJ0eXBlIjoiYXBpX3NlY3JldCIsImlkIjo5NDc2LCJ1dWlkIjoiMmEyYWY0MWYtMTQ4MC00YWE0LWE1MDYtMjJkNjA3OTUzNjU4IiwicGVybSI6eyJiaWxsaW5nIjoiKiIsInNlYXJjaCI6IioiLCJzdG9yYWdlIjoiKiIsInVzZXIiOiIqIn0sImFwaV9rZXkiOiJWTUFLUEZXSlpPSlBZSE5LSllYTSIsInNlcnZpY2UiOiJzdG9yYWdlIiwicHJvdmlkZXIiOiIifQ.he_5VYdwIItgAICTLT5mxAxJmY--LPAEyVAGGZfy2YW8h4aYtVcZy5XIDm0gAC6bYQYC1K4aqLstNYOF9hNVRQ
-  bucketId: 011266de-050d-4b5c-9c52-23dba893f67e
+  apiSecretKey: Fill In Your API Secret Key From Storage
+  bucketId: Fill In Your Bucket ID From Storage
   fileNameImage: Logo.png
   fileNameMetaData: MetaData.json
   nftName: Name of the NFT
