@@ -199,7 +199,7 @@ public class UploadPlatforms
         return imageData;
     }        
 
-    private Task<string> OpenFilePanelMac(string title, params string[] allowedFileTypes)
+    private static Task<string> OpenFilePanelMac(string title, params string[] allowedFileTypes)
     {
         tcs = new TaskCompletionSource<string>();
         ShowOpenFileDialog(title, allowedFileTypes, allowedFileTypes.Length, Marshal.GetFunctionPointerForDelegate((Action<string>)OnFileSelectedMac));
