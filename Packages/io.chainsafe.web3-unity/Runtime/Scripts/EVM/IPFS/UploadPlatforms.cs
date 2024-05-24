@@ -186,7 +186,7 @@ public class UploadPlatforms
     [DllImport("__Internal")]
     private static extern void ShowOpenFileDialog(string title, string[] allowedFileTypes, int allowedFileTypesCount, IntPtr callback);
 
-    private TaskCompletionSource<string> tcs;
+    private static TaskCompletionSource<string> tcs;
     
     private static async Task<byte[]> UploadImageOsx()
     {
@@ -206,7 +206,7 @@ public class UploadPlatforms
         return tcs.Task;
     }
 
-    private void OnFileSelectedMac(string path)
+    private static void OnFileSelectedMac(string path)
     {
         tcs.SetResult(path);
     }
