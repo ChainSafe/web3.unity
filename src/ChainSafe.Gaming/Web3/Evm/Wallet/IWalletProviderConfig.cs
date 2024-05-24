@@ -1,6 +1,6 @@
 namespace ChainSafe.Gaming.Web3.Evm.Wallet
 {
-    public interface IWalletConfig
+    public interface IWalletProviderConfig
     {
         public string SignMessageRpcMethodName { get; }
 

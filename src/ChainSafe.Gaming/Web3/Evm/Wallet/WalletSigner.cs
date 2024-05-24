@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.Web3.Core.Debug;
 using ChainSafe.Gaming.Web3.Core.Evm;
 
 namespace ChainSafe.Gaming.Web3.Evm.Wallet
@@ -8,9 +9,9 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
     public class WalletSigner : ISigner, ILifecycleParticipant
     {
         private readonly IWalletProvider walletProvider;
-        private readonly IWalletConfig walletConfig;
+        private readonly IWalletProviderConfig walletConfig;
 
-        public WalletSigner(IWalletProvider walletProvider, IWalletConfig walletConfig)
+        public WalletSigner(IWalletProvider walletProvider, IWalletProviderConfig walletConfig)
         {
             this.walletProvider = walletProvider;
             this.walletConfig = walletConfig;
@@ -20,20 +21,25 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
 
         public virtual async ValueTask WillStartAsync()
         {
-            PublicAddress = await walletProvider.Connect();
+            string address = await walletProvider.Connect();
+
+            PublicAddress = address.AssertIsPublicAddress();
         }
 
-        public virtual Task<string> SignMessage(string message)
+        public virtual async Task<string> SignMessage(string message)
         {
-            return walletProvider.Perform<string>(walletConfig.SignMessageRpcMethodName, message, PublicAddress);
+            string hash = await walletProvider.Perform<string>(walletConfig.SignMessageRpcMethodName, message, PublicAddress);
+
+            return hash.AssertSignatureValid(message, PublicAddress);
         }
 
-        public virtual Task<string> SignTypedData<TStructType>(SerializableDomain domain, TStructType message)
+        public virtual async Task<string> SignTypedData<TStructType>(SerializableDomain domain, TStructType message)
         {
             SerializableTypedData<TStructType> typedData = new SerializableTypedData<TStructType>(domain, message);
 
-            // MetaMask doesn't work with regular eth_signTypedData method, has to be eth_signTypedData_v4.
-            return walletProvider.Perform<string>(walletConfig.SignTypedMessageRpcMethodName, typedData, PublicAddress);
+            string hash = await walletProvider.Perform<string>(walletConfig.SignTypedMessageRpcMethodName, typedData, PublicAddress);
+
+            return hash.AssertTypedDataSignatureValid(typedData, PublicAddress);
         }
 
         public virtual async ValueTask WillStopAsync()

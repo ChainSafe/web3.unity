@@ -13,28 +13,13 @@ namespace ChainSafe.Gaming.HyperPlay
         /// Binds implementation of <see cref="IWalletProvider"/> as <see cref="HyperPlayProvider"/> to Web3 as a service.
         /// </summary>
         /// <param name="collection">Service collection to bind implementations to.</param>
+        /// <param name="config">Config for wallet provider.</param>
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
-        public static IWeb3ServiceCollection UseHyperPlay(this IWeb3ServiceCollection collection)
+        public static IWeb3ServiceCollection UseHyperPlay(this IWeb3ServiceCollection collection, HyperPlayConfig config = null)
         {
-            collection.AssertServiceNotBound<IWalletProvider>();
+            config ??= new HyperPlayConfig();
 
-            collection.AddSingleton<IWalletProvider, HyperPlayProvider>();
-
-            return collection;
-        }
-
-        /// <summary>
-        /// Binds implementation of <see cref="ISigner"/> as <see cref="HyperPlaySigner"/> to Web3 as a service.
-        /// </summary>
-        /// <param name="collection">Service collection to bind implementations to.</param>
-        /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
-        public static IWeb3ServiceCollection UseHyperPlaySigner(this IWeb3ServiceCollection collection)
-        {
-            collection.AssertServiceNotBound<ISigner>();
-
-            collection.AddSingleton<ILifecycleParticipant, ISigner, HyperPlaySigner>();
-
-            return collection;
+            return collection.UseWalletProvider<HyperPlayProvider>(config).UseWalletSigner();
         }
 
         /// <summary>

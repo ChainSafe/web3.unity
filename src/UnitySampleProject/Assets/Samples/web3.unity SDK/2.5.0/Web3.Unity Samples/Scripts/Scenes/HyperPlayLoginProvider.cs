@@ -26,7 +26,7 @@ public class HyperPlayLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     {
         return web3Builder.Configure(services =>
         {
-            services.UseHyperPlay().UseHyperPlaySigner().UseHyperPlayTransactionExecutor();
+            services.UseHyperPlay().UseHyperPlayTransactionExecutor();
         });
     }
     
