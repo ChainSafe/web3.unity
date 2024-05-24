@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Model;
 using ChainSafe.Gaming.Web3;
+using Nethereum.Hex.HexTypes;
 using Newtonsoft.Json;
 using Scripts.EVM.Remote;
 using Scripts.EVM.Token;
@@ -134,8 +136,8 @@ namespace Scripts.EVM.Marketplace
         /// <returns>Contract send data object</returns>
         public static async Task<object[]> Create721Collection(string _bearerToken, string _name, string _description, bool _isMintingPublic)
         {
-                var logoImageData = await GetImageData();
-                var bannerImageData = await GetImageData();
+                var logoImageData = await UploadPlatforms.GetImageData();
+                var bannerImageData = await UploadPlatforms.GetImageData();
                 var formData = new List<IMultipartFormSection>
                 {
                     new MultipartFormDataSection("name", _name),
@@ -179,8 +181,8 @@ namespace Scripts.EVM.Marketplace
         {
             try
             {
-                var logoImageData = await GetImageData();
-                var bannerImageData = await GetImageData();
+                var logoImageData = await UploadPlatforms.GetImageData();
+                var bannerImageData = await UploadPlatforms.GetImageData();
                 var formData = new List<IMultipartFormSection>
                 {
                     new MultipartFormDataSection("name", _name),
@@ -297,7 +299,7 @@ namespace Scripts.EVM.Marketplace
         {
             try
             {
-                var bannerImageData = await GetImageData();
+                var bannerImageData = await UploadPlatforms.GetImageData();
                 var formData = new List<IMultipartFormSection>
                 {
                     new MultipartFormDataSection("name", _name),
@@ -368,6 +370,26 @@ namespace Scripts.EVM.Marketplace
             }
         }
         
+        public static async Task<object[]> PurchaseNft(string _marketplaceContract, string _itemId, string _amountToSend)
+        {
+            try
+            {
+                var method = "purchaseItem";
+                BigInteger itemId = BigInteger.Parse(_itemId);
+                object[] args =
+                {
+                    itemId
+                };
+                var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.Marketplace, _marketplaceContract, args, new HexBigInteger(_amountToSend));
+                return data;
+            }
+            catch (Web3Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+        
         /// <summary>
         /// Lists Nfts to the marketplace
         /// </summary>
@@ -415,25 +437,6 @@ namespace Scripts.EVM.Marketplace
                 var value = property.GetValue(obj);
                 Debug.Log($"{property.Name}: {value}");
             }
-        }
-        
-        /// <summary>
-        /// Gets the binary data of a png image.
-        /// </summary>
-        /// <returns>Byte array of image data</returns>
-        private static async Task<byte[]> GetImageData()
-        {
-            #if UNITY_WEBGL && !UNITY_EDITOR
-            var imageData = await CSServer.UploadImageWebGL();
-            #else
-            var imagePath = UnityEditor.EditorUtility.OpenFilePanel("Select Image", "", "png,jpg,jpeg,gif");
-            while (string.IsNullOrEmpty(imagePath)) return null;
-            UnityWebRequest www = UnityWebRequestTexture.GetTexture("file://" + imagePath);
-            await www.SendWebRequest();
-            Texture2D texture = DownloadHandlerTexture.GetContent(www);
-            var imageData = texture.EncodeToPNG();
-            #endif
-            return imageData;
         }
 
         #endregion

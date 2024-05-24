@@ -13,9 +13,6 @@ namespace Scripts.EVM.Remote
     {
         #region Fields
         
-        [DllImport("__Internal")]
-        private static extern void UploadImage();
-        public static event EventHandler<byte[]> ImageSelected;
         private static readonly string host = "https://api.gaming.chainsafe.io/v1/projects/";
 
         #endregion
@@ -82,52 +79,6 @@ namespace Scripts.EVM.Remote
                 return request.downloadHandler.text;
             }
         }
-
-        #region Utilities
-        
-        /// <summary>
-        /// Uploads an image in webgl builds
-        /// </summary>
-        /// <returns>Image data</returns>
-        public static async Task<byte[]> UploadImageWebGL()
-        {
-            var imageDataTask = new TaskCompletionSource<byte[]>();
-            // Event handler to set the result when the image is selected
-            void OnImageSelectedHandler(object sender, byte[] imageData)
-            {
-                imageDataTask.SetResult(imageData);
-                // Unsubscribe from the event after handling it
-                ImageSelected -= OnImageSelectedHandler;
-            }
-            ImageSelected += OnImageSelectedHandler;
-            UploadImage();
-            var imageData = await imageDataTask.Task;
-            return imageData;
-        }
-        
-        /// <summary>
-        /// Invokes event to pass image data from js function
-        /// </summary>
-        /// <param name="base64Data">Image data</param>
-        public static void OnImageSelected(string imageData)
-        {
-            try
-            {
-                // Remove metadata from url
-                var base64String = imageData.Substring(imageData.IndexOf(",") + 1);
-                // Convert data URL to byte array
-                byte[] imageDataBytes = Convert.FromBase64String(base64String);
-                // Invoke event to complete the upload tasks
-                ImageSelected?.Invoke(null, imageDataBytes);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-        }
-
-        #endregion
 
         #endregion
 
