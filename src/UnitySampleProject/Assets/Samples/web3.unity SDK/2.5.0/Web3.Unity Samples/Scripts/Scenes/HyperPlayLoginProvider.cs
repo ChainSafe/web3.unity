@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using ChainSafe.Gaming;
 using ChainSafe.Gaming.HyperPlay;
 using ChainSafe.Gaming.UnityPackage.Common;
 using ChainSafe.Gaming.WalletConnect;
 using ChainSafe.Gaming.Web3.Build;
+using Microsoft.Extensions.DependencyInjection;
 using Scenes;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,11 +16,34 @@ using UnityEngine.UI;
 public class HyperPlayLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
 {
     [SerializeField] private Button loginButton;
+    [SerializeField] private Toggle rememberMeToggle;
+
+    private bool _storedSessionAvailable;
     
-    protected override void Initialize()
+    protected override async void Initialize()
     {
         base.Initialize();
+
+        _storedSessionAvailable = false;
         
+        await using (var lightWeb3 = await HyperPlayWeb3.BuildLightweightWeb3())
+        {
+            var data = lightWeb3.ServiceProvider.GetService<IHyperPlayData>();
+
+            _storedSessionAvailable = data.RememberSession;
+        }
+
+        if (_storedSessionAvailable) // auto-login
+        {
+            Debug.Log("Proceeding with auto-login.");
+            await TryLogin();
+        }
+
+        else
+        {
+            Debug.Log("No stored session available.");
+        }
+
         loginButton.onClick.AddListener(OnLoginClicked);
     }
 
@@ -26,7 +51,10 @@ public class HyperPlayLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     {
         return web3Builder.Configure(services =>
         {
-            services.UseHyperPlay().UseHyperPlaySigner().UseHyperPlayTransactionExecutor();
+            services.UseHyperPlay(new HyperPlayConfig
+            {
+                RememberSession = rememberMeToggle.isOn || _storedSessionAvailable,
+            }).UseHyperPlaySigner().UseHyperPlayTransactionExecutor();
         });
     }
     

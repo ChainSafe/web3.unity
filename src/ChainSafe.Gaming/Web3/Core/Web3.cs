@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
+using ChainSafe.Gaming.LocalStorage;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using ChainSafe.Gaming.Web3.Core.Logout;
@@ -23,6 +24,7 @@ namespace ChainSafe.Gaming.Web3
         private readonly ITransactionExecutor? transactionExecutor;
         private readonly IEvmEvents? events;
         private readonly ILogoutManager logoutManager;
+        private readonly DataStorage dataStorage;
 
         private bool initialized;
         private bool terminated;
@@ -38,6 +40,7 @@ namespace ChainSafe.Gaming.Web3
             ProjectConfig = serviceProvider.GetRequiredService<IProjectConfig>();
             ChainConfig = serviceProvider.GetRequiredService<IChainConfig>();
             logoutManager = this.serviceProvider.GetRequiredService<ILogoutManager>();
+            dataStorage = this.serviceProvider.GetRequiredService<DataStorage>();
         }
 
         /// <summary>
@@ -89,6 +92,14 @@ namespace ChainSafe.Gaming.Web3
 
         internal async ValueTask InitializeAsync()
         {
+            foreach (var storable in serviceProvider.GetServices<IStorable>())
+            {
+                if (storable.LoadOnInitialize)
+                {
+                    await dataStorage.Load(storable);
+                }
+            }
+
             foreach (var lifecycleParticipant in serviceProvider.GetServices<ILifecycleParticipant>())
             {
                 await lifecycleParticipant.WillStartAsync();
@@ -122,7 +133,7 @@ namespace ChainSafe.Gaming.Web3
                 }
             }
 
-            serviceProvider.Dispose();
+            await serviceProvider.DisposeAsync();
             terminated = true;
         }
 
