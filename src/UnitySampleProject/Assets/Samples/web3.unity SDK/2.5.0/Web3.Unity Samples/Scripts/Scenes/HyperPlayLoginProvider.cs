@@ -20,6 +20,8 @@ public class HyperPlayLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     [SerializeField] private bool autoLoginPreviousSession = true;
     private string hyperPlayWallet;
     private bool storedSessionAvailable;
+    private string rememberMePath;
+    private string walletPath;
 
     #endregion
 
@@ -31,8 +33,11 @@ public class HyperPlayLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     protected override void Initialize()
     {
         base.Initialize();
-            
-        if (File.Exists(HyperPlayConfig.WALLET_PATH) && File.ReadAllText(HyperPlayConfig.REMEMBER_ME_PATH) == true.ToString())
+        
+        rememberMePath = Path.Combine(Application.persistentDataPath, HyperPlayConfig.REMEMBER_ME_PATH);
+        walletPath = Path.Combine(Application.persistentDataPath, HyperPlayConfig.WALLET_PATH);
+        
+        if (File.Exists(walletPath) && File.ReadAllText(rememberMePath) == true.ToString())
         {
             rememberSessionToggle.isOn = true;
             LoadData();
@@ -80,7 +85,7 @@ public class HyperPlayLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     private async void LoadData()
     {
         hyperPlayWallet = await HyperPlayProvider.GetConnectedWallet(ProjectConfigUtilities.Load().ChainId);
-        storedSessionAvailable = File.Exists(HyperPlayConfig.WALLET_PATH) && string.Equals(hyperPlayWallet, File.ReadAllText(HyperPlayConfig.WALLET_PATH), StringComparison.CurrentCultureIgnoreCase);
+        storedSessionAvailable = File.Exists(walletPath) && string.Equals(hyperPlayWallet, File.ReadAllText(walletPath), StringComparison.CurrentCultureIgnoreCase);
         if (!autoLoginPreviousSession || !storedSessionAvailable) return;
         Debug.Log("Proceeding with auto-login.");
         OnLoginClicked();
@@ -91,8 +96,8 @@ public class HyperPlayLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     /// </summary>
     private void SaveData()
     {
-        File.WriteAllText(HyperPlayConfig.REMEMBER_ME_PATH, true.ToString());
-        File.WriteAllText(HyperPlayConfig.WALLET_PATH, hyperPlayWallet);
+        File.WriteAllText(rememberMePath, true.ToString());
+        File.WriteAllText(walletPath, hyperPlayWallet);
     }
     
     /// <summary>
@@ -100,8 +105,8 @@ public class HyperPlayLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     /// </summary>
     private void ClearData()
     {
-        if (File.Exists(HyperPlayConfig.WALLET_PATH)) File.Delete(HyperPlayConfig.WALLET_PATH);
-        File.WriteAllText(HyperPlayConfig.REMEMBER_ME_PATH, false.ToString());
+        if (File.Exists(walletPath)) File.Delete(walletPath);
+        File.WriteAllText(rememberMePath, false.ToString());
     }
 
     #endregion

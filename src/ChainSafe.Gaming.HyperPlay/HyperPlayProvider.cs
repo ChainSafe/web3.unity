@@ -73,9 +73,11 @@ namespace ChainSafe.Gaming.HyperPlay
 
             string account = accounts[0].AssertIsPublicAddress(nameof(account));
 
-            if (File.Exists(HyperPlayConfig.WALLET_PATH))
+            string walletPath = Path.Combine(Application.persistentDataPath, HyperPlayConfig.WALLET_PATH);
+
+            if (File.Exists(walletPath))
             {
-                if (string.Equals(account, File.ReadAllText(HyperPlayConfig.WALLET_PATH),
+                if (string.Equals(account, File.ReadAllText(walletPath),
                         StringComparison.CurrentCultureIgnoreCase))
                 {
                     return account;
