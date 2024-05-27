@@ -55,7 +55,7 @@ public class HyperPlayLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     {
         HyperPlayConfig hyperPlayConfig = new HyperPlayConfig()
         {
-            HyperPlayWallet = this.HyperPlayWallet
+            HyperPlayWallet = hyperPlayWallet
         };
         return web3Builder.Configure(services =>
         {
