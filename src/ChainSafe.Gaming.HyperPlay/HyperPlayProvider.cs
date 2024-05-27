@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm;
@@ -7,8 +9,11 @@ using ChainSafe.Gaming.Web3.Core.Debug;
 using ChainSafe.Gaming.Web3.Environment;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
 using Nethereum.Signer;
+using Nethereum.Unity.Util;
 using Nethereum.Util;
 using Newtonsoft.Json;
+using UnityEngine;
+using UnityEngine.Networking;
 using Chain = ChainSafe.Gaming.HyperPlay.Dto.Chain;
 
 namespace ChainSafe.Gaming.HyperPlay
@@ -35,6 +40,30 @@ namespace ChainSafe.Gaming.HyperPlay
         }
 
         /// <summary>
+        /// Get the connected HyperPlay wallet
+        /// </summary>
+        /// <param name="chainId">Chain id we're connected to</param>
+        /// <returns>Connected HyperPlay wallet address</returns>
+        public static async Task<string> GetConnectedWallet(string chainId)
+        {
+            string jsonString = $"{{\"request\":{{\"method\":\"eth_accounts\"}},\"chain\":{{\"chainId\":\"{chainId}\"}}}}";
+            byte[] jsonBytes = System.Text.Encoding.UTF8.GetBytes(jsonString);
+            var request = Application.platform == RuntimePlatform.WebGLPlayer ? new UnityWebRequest("localhost:8000/rpc", "POST") : new UnityWebRequest("localhost:9680/rpc", "POST");
+            request.uploadHandler = new UploadHandlerRaw(jsonBytes);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+            await request.SendWebRequest();
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                Console.WriteLine(request.error);
+                return null;
+            }
+
+            var addressResponse = JsonConvert.DeserializeObject<string[]>(request.downloadHandler.text);
+            return addressResponse[0];
+        }
+
+        /// <summary>
         /// Connect to wallet via HyperPlay desktop client and return the account address.
         /// </summary>
         /// <returns>Signed-in account public address.</returns>
@@ -43,6 +72,15 @@ namespace ChainSafe.Gaming.HyperPlay
             string[] accounts = await Perform<string[]>("eth_accounts");
 
             string account = accounts[0].AssertIsPublicAddress(nameof(account));
+
+            if (File.Exists(HyperPlayConfig.WALLET_PATH))
+            {
+                if (string.Equals(account, File.ReadAllText(HyperPlayConfig.WALLET_PATH),
+                        StringComparison.CurrentCultureIgnoreCase))
+                {
+                    return account;
+                }
+            }
 
             string message = "Sign-in with Ethereum";
 
@@ -94,7 +132,7 @@ namespace ChainSafe.Gaming.HyperPlay
                 },
             });
 
-            string response = (await httpClient.PostRaw("http://localhost:9680/rpc", body, "application/json")).Response;
+            string response = Application.platform == RuntimePlatform.WebGLPlayer ? (await httpClient.PostRaw("http://localhost:8000/rpc", body, "application/json")).Response : (await httpClient.PostRaw("http://localhost:9680/rpc", body, "application/json")).Response;
 
             // In case response is just a primitive type like string/number...
             // Deserializing it directly doesn't work.

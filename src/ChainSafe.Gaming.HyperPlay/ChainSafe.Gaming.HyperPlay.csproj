@@ -14,4 +14,13 @@
         <ProjectReference Include="../ChainSafe.Gaming/ChainSafe.Gaming.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="Nethereum.Unity">
+        <HintPath>..\..\libs\Nethereum-UnityAOT\Nethereum.Unity.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine">
+        <HintPath>..\..\libs\UnityEngine\UnityEngine.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>
