@@ -4,7 +4,6 @@ using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.UnityPackage.Model;
 using ChainSafe.Gaming.Web3;
-using Scripts.EVM.Remote;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -107,7 +106,7 @@ namespace Scripts.EVM.Token
         {
             byte[] dataObject = { };
             const string method = EthMethod.Mint;
-            var destination = await web3.Signer.GetAddress();
+            var destination = web3.Signer.PublicAddress;
             var contract = web3.ContractBuilder.Build(abi, contractAddress);
             var response = await contract.Send(method, new object[]
             {
@@ -130,7 +129,7 @@ namespace Scripts.EVM.Token
         /// <returns></returns>
         public static async Task<object[]> TransferErc1155(Web3 web3, string contractAddress, BigInteger tokenId, BigInteger amount, string toAccount)
         {
-            var account = await web3.Signer.GetAddress();
+            var account = web3.Signer.PublicAddress;
             var abi = ABI.Erc1155;
             var method = EthMethod.SafeTransferFrom;
             byte[] dataObject = { };

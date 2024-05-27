@@ -1,10 +1,12 @@
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using ChainSafe.Gaming.Web3.Environment;
+using ChainSafe.Gaming.Web3.Evm.Wallet;
 using Nethereum.RPC.Eth.DTOs;
 
 namespace ChainSafe.Gaming.MetaMask
@@ -16,7 +18,7 @@ namespace ChainSafe.Gaming.MetaMask
     {
         private readonly ILogWriter logWriter;
 
-        private readonly IMetaMaskProvider metaMaskProvider;
+        private readonly IWalletProvider walletProvider;
 
         private readonly ISigner signer;
 
@@ -24,13 +26,13 @@ namespace ChainSafe.Gaming.MetaMask
         /// Initializes a new instance of the <see cref="MetaMaskTransactionExecutor"/> class.
         /// </summary>
         /// <param name="logWriter">Log Writer used for logging messages and errors.</param>
-        /// <param name="metaMaskProvider">Metamask provider that connects to Metamask and makes JsonRPC requests.</param>
+        /// <param name="walletProvider">Metamask provider that connects to Metamask and makes JsonRPC requests.</param>
         /// <param name="signer">Signer for fetching address.</param>
-        public MetaMaskTransactionExecutor(ILogWriter logWriter, IMetaMaskProvider metaMaskProvider, ISigner signer)
+        public MetaMaskTransactionExecutor(ILogWriter logWriter, IWalletProvider walletProvider, ISigner signer)
         {
             this.logWriter = logWriter;
 
-            this.metaMaskProvider = metaMaskProvider;
+            this.walletProvider = walletProvider;
 
             this.signer = signer;
         }
@@ -47,7 +49,7 @@ namespace ChainSafe.Gaming.MetaMask
         {
             if (string.IsNullOrEmpty(transaction.From))
             {
-                transaction.From = await signer.GetAddress();
+                transaction.From = signer.PublicAddress;
             }
 
             TransactionInput transactionInput = new TransactionInput
@@ -62,7 +64,7 @@ namespace ChainSafe.Gaming.MetaMask
                 AccessList = transaction.AccessList,
             };
 
-            string hash = await metaMaskProvider.Request<string>("eth_sendTransaction", transactionInput);
+            string hash = await walletProvider.Perform<string>("eth_sendTransaction", transactionInput);
 
             string hashPattern = @"^0x[a-fA-F0-9]{64}$";
             if (!Regex.IsMatch(hash, hashPattern))
@@ -72,7 +74,7 @@ namespace ChainSafe.Gaming.MetaMask
 
             logWriter.Log($"Transaction executed with hash {hash}");
 
-            return await metaMaskProvider.Request<TransactionResponse>("eth_getTransactionByHash", hash);
+            return await walletProvider.GetTransaction(hash);
         }
     }
 }
