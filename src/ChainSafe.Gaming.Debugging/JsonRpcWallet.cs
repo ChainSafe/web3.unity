@@ -17,26 +17,25 @@ namespace ChainSafe.Gaming.Wallets
     {
         private readonly JsonRpcWalletConfig config;
         private readonly IRpcProvider provider;
-        private string address;
 
         public JsonRpcWallet(JsonRpcWalletConfig config, IRpcProvider provider)
         {
             this.config = config;
             this.provider = provider;
-            address = this.config.AddressOverride;
+            PublicAddress = this.config.AddressOverride;
         }
+
+        public string PublicAddress { get; private set; }
 
         public async ValueTask WillStartAsync()
         {
-            if (string.IsNullOrEmpty(address))
+            if (string.IsNullOrEmpty(PublicAddress))
             {
-                address = await QueryAddress();
+                PublicAddress = await QueryAddress();
             }
         }
 
         public ValueTask WillStopAsync() => new ValueTask(Task.CompletedTask);
-
-        public Task<string> GetAddress() => Task.FromResult(address);
 
         private async Task<string> QueryAddress()
         {
@@ -49,14 +48,14 @@ namespace ChainSafe.Gaming.Wallets
             return accounts[config.AccountIndex];
         }
 
-        public async Task<string> SignMessage(byte[] message)
+        public Task<string> SignMessage(byte[] message)
         {
-            return await SignMessageImpl(message.ToHex());
+            return SignMessageImpl(message.ToHex());
         }
 
-        public async Task<string> SignMessage(string message)
+        public Task<string> SignMessage(string message)
         {
-            return await SignMessageImpl(message.ToHexUTF8());
+            return SignMessageImpl(message.ToHexUTF8());
         }
 
         public async Task<TransactionResponse> SendTransaction(TransactionRequest transaction)
@@ -78,7 +77,7 @@ namespace ChainSafe.Gaming.Wallets
         {
             if (transaction.From == null)
             {
-                var fromAddress = (await GetAddress()).ToLower();
+                var fromAddress = PublicAddress.ToLower();
                 transaction.From = fromAddress;
             }
 
@@ -92,13 +91,12 @@ namespace ChainSafe.Gaming.Wallets
             return await provider.Perform<string>("eth_sendTransaction", rpcTxParams);
         }
 
-        private async Task<string> SignMessageImpl(string hexMessage)
+        private Task<string> SignMessageImpl(string hexMessage)
         {
-            var adr = await GetAddress();
-            return await provider.Perform<string>("personal_sign", hexMessage, adr.ToLower());
+            return provider.Perform<string>("personal_sign", hexMessage, PublicAddress.ToLower());
         }
 
-        public async Task<string> SignTypedData<TStructType>(SerializableDomain domain, TStructType message)
+        public Task<string> SignTypedData<TStructType>(SerializableDomain domain, TStructType message)
         {
             var typedData = new TypedData<SerializableDomain>
             {
@@ -110,8 +108,7 @@ namespace ChainSafe.Gaming.Wallets
 
             var data = Eip712TypedDataSigner.Current.EncodeTypedData(typedData);
 
-            var adr = await GetAddress();
-            return await provider.Perform<string>("eth_signTypedData_v4", adr.ToLower(), data);
+            return provider.Perform<string>("eth_signTypedData_v4", PublicAddress.ToLower(), data);
         }
     }
 }

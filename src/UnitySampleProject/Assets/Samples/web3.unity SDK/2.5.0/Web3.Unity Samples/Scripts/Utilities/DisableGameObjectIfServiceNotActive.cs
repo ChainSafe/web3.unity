@@ -28,7 +28,10 @@ public class DisableGameObjectIfServiceNotActive : MonoBehaviour
 
     private void Awake()
     {
-        gameObject.SetActive(Web3Accessor.Web3.ServiceProvider.GetService(_typesDictionary[serviceType]) != null);
+        if (_typesDictionary.TryGetValue(serviceType, out var value))
+        {
+            gameObject.SetActive(Web3Accessor.Web3.ServiceProvider.GetService(value) != null);
+        }
     }
 
 

@@ -57,10 +57,10 @@ namespace ChainSafe.Gaming.Tests
         public void SendTransactionTest()
         {
             // Get initial balances and addresses for both sender and receiver accounts.
-            var fromAddress = firstAccount.Signer.GetAddress().Result;
+            var fromAddress = firstAccount.Signer.PublicAddress;
             var fromInitialBalance = firstAccount.RpcProvider.GetBalance(fromAddress).Result.Value;
 
-            var toAddress = secondAccount.Signer.GetAddress().Result;
+            var toAddress = secondAccount.Signer.PublicAddress;
             var toInitialBalance = firstAccount.RpcProvider.GetBalance(toAddress).Result.Value;
 
             var amount = new HexBigInteger(1000000);

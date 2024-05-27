@@ -6,12 +6,30 @@
 
 ## Notices
 
-After **June 15, 2023** all users of the SDK will be required to have their projects registered. Please ensure that you have a valid project ID to avoid any service interruptions by this time. If you need help getting a project ID, we've put together a tutorial to guide you through the process: https://docs.gaming.chainsafe.io/current/project-id-registration.
+After **June 15, 2023** all users of the SDK will be required to have their projects registered. Please ensure that you have a valid project ID to avoid any service interruptions by this time. If you need help getting a project ID, we've put together a tutorial to guide you through the process: https://docs.gaming.chainsafe.io/current/getting-started
 
 As always, we're here to help, so feel free to message us in ⁠🕹web3unity-gaming-general  or ⁠🕹gaming-help if you're stuck and need help!
 
 ## Documentation
-https://docs.gaming.chainsafe.io/
+You can access the docs here: https://docs.gaming.chainsafe.io/
+
+Our codebase is quite easy to use. This is an example of a contract call from the SDK within unity.
+
+```
+public async void ContractCall()
+    {
+        object[] args =
+        {
+            Web3Accessor.Web3.Signer.PublicAddress
+        };
+        var data = await Evm.ContractCall(Web3Accessor.Web3, method, abi, contractAddress, args);
+        var response = SampleOutputUtil.BuildOutputValue(data);
+        Debug.Log($"Output: {response}");
+        // You can make additional changes after this line
+    }
+```
+
+Additional prefab scripts can be found here https://docs.gaming.chainsafe.io/current/prefab-scripts#contract-call
 
 ## Support
 - Need help with web3.unity or found a bug? Be sure to read the documentation above, then review existing issues or create a new one [here](https://github.com/ChainSafe/web3.unity/issues). This is the best way to get help from the ChainSafe Gaming team.
