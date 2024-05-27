@@ -183,14 +183,14 @@ public class UploadPlatforms
     #endif
 
     #if UNITY_STANDALONE_OSX
-    [DllImport("__Internal")]
-    private static extern void ShowOpenFileDialog(string title, string[] allowedFileTypes, int allowedFileTypesCount, IntPtr callback);
+    [DllImport("MacOSFilePicker", EntryPoint = "showOpenFileDialogWithTitle")]
+    private static extern void showOpenFileDialog(string title, string[] allowedFileTypes, int allowedFileTypesCount, IntPtr callback);
 
     private static TaskCompletionSource<string> tcs;
     
     private static async Task<byte[]> UploadImageOsx()
     {
-        string imagePath = await OpenFilePanelMac("Select Image", "png,jpg,jpeg,gif");
+        string imagePath = await OpenFilePanelMac("Select Image", "public.png", "public.jpg", "public.jpeg", "public.gif");
         if (string.IsNullOrEmpty(imagePath)) return null;
         UnityWebRequest www = UnityWebRequestTexture.GetTexture("file://" + imagePath);
         await www.SendWebRequest();
@@ -202,7 +202,7 @@ public class UploadPlatforms
     private static Task<string> OpenFilePanelMac(string title, params string[] allowedFileTypes)
     {
         tcs = new TaskCompletionSource<string>();
-        ShowOpenFileDialog(title, allowedFileTypes, allowedFileTypes.Length, Marshal.GetFunctionPointerForDelegate((Action<string>)OnFileSelectedMac));
+        showOpenFileDialog(title, allowedFileTypes, allowedFileTypes.Length, Marshal.GetFunctionPointerForDelegate((Action<string>)OnFileSelectedMac));
         return tcs.Task;
     }
 
