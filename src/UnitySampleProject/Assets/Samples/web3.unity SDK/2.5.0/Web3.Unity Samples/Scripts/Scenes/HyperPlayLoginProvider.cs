@@ -34,8 +34,8 @@ public class HyperPlayLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     {
         base.Initialize();
         
-        rememberMePath = Path.Combine(Application.persistentDataPath, HyperPlayConfig.REMEMBER_ME_PATH);
-        walletPath = Path.Combine(Application.persistentDataPath, HyperPlayConfig.WALLET_PATH);
+        rememberMePath = Path.Combine(Application.persistentDataPath, HyperPlayConfig.REMEMBERMEPATH);
+        walletPath = Path.Combine(Application.persistentDataPath, HyperPlayConfig.WALLETPATH);
         
         if (File.Exists(walletPath) && File.ReadAllText(rememberMePath) == true.ToString())
         {
@@ -55,7 +55,7 @@ public class HyperPlayLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     {
         HyperPlayConfig hyperPlayConfig = new HyperPlayConfig()
         {
-            hyperPlayWallet = this.hyperPlayWallet
+            HyperPlayWallet = this.HyperPlayWallet
         };
         return web3Builder.Configure(services =>
         {

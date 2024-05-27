@@ -2,10 +2,10 @@
 {
     public class HyperPlayConfig
     {
-        public string hyperPlayWallet { get; set; }
+        public const string WALLETPATH = "WalletHyperPlay.txt";
 
-        public const string WALLET_PATH = "WalletHyperPlay.txt";
+        public const string REMEMBERMEPATH = "RememberMeHyperPlay.txt";
 
-        public const string REMEMBER_ME_PATH = "RememberMeHyperPlay.txt";
+        public string HyperPlayWallet { get; set; }
     }
 }

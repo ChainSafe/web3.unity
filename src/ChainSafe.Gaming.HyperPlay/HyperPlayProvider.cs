@@ -40,10 +40,10 @@ namespace ChainSafe.Gaming.HyperPlay
         }
 
         /// <summary>
-        /// Get the connected HyperPlay wallet
+        /// Get the connected HyperPlay wallet.
         /// </summary>
-        /// <param name="chainId">Chain id we're connected to</param>
-        /// <returns>Connected HyperPlay wallet address</returns>
+        /// <param name="chainId">Chain id we're connected to.</param>
+        /// <returns>Connected HyperPlay wallet address.</returns>
         public static async Task<string> GetConnectedWallet(string chainId)
         {
             string jsonString = $"{{\"request\":{{\"method\":\"eth_accounts\"}},\"chain\":{{\"chainId\":\"{chainId}\"}}}}";
@@ -73,12 +73,11 @@ namespace ChainSafe.Gaming.HyperPlay
 
             string account = accounts[0].AssertIsPublicAddress(nameof(account));
 
-            string walletPath = Path.Combine(Application.persistentDataPath, HyperPlayConfig.WALLET_PATH);
+            string walletPath = Path.Combine(Application.persistentDataPath, HyperPlayConfig.WALLETPATH);
 
             if (File.Exists(walletPath))
             {
-                if (string.Equals(account, File.ReadAllText(walletPath),
-                        StringComparison.CurrentCultureIgnoreCase))
+                if (string.Equals(account, File.ReadAllText(walletPath), StringComparison.CurrentCultureIgnoreCase))
                 {
                     return account;
                 }
