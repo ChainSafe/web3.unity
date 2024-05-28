@@ -8,12 +8,9 @@ using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Core.Debug;
 using ChainSafe.Gaming.Web3.Environment;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
-using Nethereum.Signer;
-using Nethereum.Unity.Util;
 using Nethereum.Util;
 using Newtonsoft.Json;
 using UnityEngine;
-using UnityEngine.Networking;
 using Chain = ChainSafe.Gaming.HyperPlay.Dto.Chain;
 
 namespace ChainSafe.Gaming.HyperPlay
@@ -40,60 +37,6 @@ namespace ChainSafe.Gaming.HyperPlay
         }
 
         /// <summary>
-        /// Get the connected HyperPlay wallet.
-        /// </summary>
-        /// <param name="chainId">Chain id we're connected to.</param>
-        /// <returns>Connected HyperPlay wallet address.</returns>
-        public static async Task<string> GetConnectedWallet(string chainId)
-        {
-            string jsonString = $"{{\"request\":{{\"method\":\"eth_accounts\"}},\"chain\":{{\"chainId\":\"{chainId}\"}}}}";
-            byte[] jsonBytes = System.Text.Encoding.UTF8.GetBytes(jsonString);
-            var request = Application.platform == RuntimePlatform.WebGLPlayer ? new UnityWebRequest("localhost:8000/rpc", "POST") : new UnityWebRequest("localhost:9680/rpc", "POST");
-            request.uploadHandler = new UploadHandlerRaw(jsonBytes);
-            request.downloadHandler = new DownloadHandlerBuffer();
-            request.SetRequestHeader("Content-Type", "application/json");
-            await request.SendWebRequest();
-            if (request.result != UnityWebRequest.Result.Success)
-            {
-                Console.WriteLine(request.error);
-                return null;
-            }
-
-            var addressResponse = JsonConvert.DeserializeObject<string[]>(request.downloadHandler.text);
-            return addressResponse[0];
-        }
-
-        /// <summary>
-        /// Connect to wallet via HyperPlay desktop client and return the account address.
-        /// </summary>
-        /// <returns>Signed in account's public address.</returns>
-        public override async Task<string> Connect()
-        {
-            string[] accounts = await Perform<string[]>("eth_accounts");
-
-            string account = accounts[0].AssertIsPublicAddress(nameof(account));
-
-            string walletPath = Path.Combine(Application.persistentDataPath, HyperPlayConfig.WALLETPATH);
-
-            if (File.Exists(walletPath))
-            {
-                if (string.Equals(account, File.ReadAllText(walletPath), StringComparison.CurrentCultureIgnoreCase))
-                {
-                    return account;
-                }
-            }
-
-            var key = await GetAccountViaSignature(account);
-
-            if (key != account.ToLower().Trim())
-            {
-                throw new Web3Exception("Fetched address does not match the signing address.");
-            }
-
-            return account;
-        }
-
-        /// <summary>
         /// Gets the public address of a wallet via signature.
         /// </summary>
         /// <param name="account">The account address to verify.</param>
@@ -113,6 +56,48 @@ namespace ChainSafe.Gaming.HyperPlay
             var key = EthECKey.RecoverFromSignature(signature, messageHash);
 
             return key.GetPublicAddress().ToLower().Trim();
+        }
+
+        /// <summary>
+        /// Get the connected HyperPlay wallet.
+        /// </summary>
+        /// <param name="chainId">Chain id we're connected to.</param>
+        /// <returns>Connected HyperPlay wallet address.</returns>
+        public async Task<string> GetConnectedWallet()
+        {
+            string[] accounts = await Perform<string[]>("eth_accounts");
+
+            string account = accounts[0].AssertIsPublicAddress(nameof(account));
+
+            return account;
+        }
+
+        /// <summary>
+        /// Connect to wallet via HyperPlay desktop client and return the account address.
+        /// </summary>
+        /// <returns>Signed in account's public address.</returns>
+        public override async Task<string> Connect()
+        {
+            string account = await GetConnectedWallet();
+
+            string walletPath = Path.Combine(Application.persistentDataPath, HyperPlayConfig.WALLETPATH);
+
+            if (File.Exists(walletPath))
+            {
+                if (string.Equals(account, File.ReadAllText(walletPath), StringComparison.CurrentCultureIgnoreCase))
+                {
+                    return account;
+                }
+            }
+
+            var key = await GetAccountViaSignature(account);
+
+            if (key != account.ToLower().Trim())
+            {
+                throw new Web3Exception("Fetched address does not match the signing address.");
+            }
+
+            return account;
         }
 
         /// <summary>
