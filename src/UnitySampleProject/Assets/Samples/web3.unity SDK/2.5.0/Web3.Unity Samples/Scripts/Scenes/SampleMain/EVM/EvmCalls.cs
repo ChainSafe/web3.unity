@@ -1,53 +1,44 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ChainSafe.Gaming.Evm.Contracts.Extensions;
 using ChainSafe.Gaming.MultiCall;
 using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.UnityPackage.Model;
 using Nethereum.ABI.FunctionEncoding.Attributes;
-using Nethereum.BlockchainProcessing.BlockStorage.Entities;
 using Nethereum.Contracts.QueryHandlers.MultiCall;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.RPC.Eth.DTOs;
 using Newtonsoft.Json;
 using Scripts.EVM.Token;
 using UnityEngine;
-using Web3Unity.Scripts.Prefabs;
-using TransactionReceipt = ChainSafe.Gaming.Evm.Transactions.TransactionReceipt;
 
 public class EvmCalls : MonoBehaviour
 {
     #region Fields
-
-    #region IPFS
-
-    private string apiKey = "YOUR_CHAINSAFE_STORE_API_KEY";
-    private string data = "YOUR_DATA";
-    private string bucketId = "BUCKET_ID";
-    private string path = "/PATH";
-    private string filename = "FILENAME.EXT";
-
-    #endregion
+    [Header("Change the fields below for testing purposes")]
 
     #region Contract Send
-
-    private string methodSend = "addTotal";
-    private int increaseAmountSend = 1;
+    
+    [Header("Contract Send")]
+    [SerializeField] private string methodSend = "addTotal";
+    [SerializeField] private int increaseAmountSend = 1;
 
     #endregion
 
     #region Contract Call
-
-    private string methodCall = "myTotal";
+    
+    [Header("Contract Call")]
+    [SerializeField] private string methodCall = "myTotal";
 
     #endregion
 
     #region Get Send Array
-
-    private string methodArrayGet = "getStore";
-    private string methodArraySend = "setStore";
-    private string[] stringArraySend =
+    
+    [Header("Array Calls")]
+    [SerializeField] private string methodArrayGet = "getStore";
+    [SerializeField] private string methodArraySend = "setStore";
+    [SerializeField] private string[] stringArraySend =
     {
         "0xFb3aECf08940785D4fB3Ad87cDC6e1Ceb20e9aac",
         "0x92d4040e4f3591e60644aaa483821d1bd87001e3"
@@ -56,37 +47,42 @@ public class EvmCalls : MonoBehaviour
     #endregion
 
     #region Sign Verify Sha3
-
-    private string messageSign = "The right man in the wrong place can make all the difference in the world.";
-    private string messageSignVerify = "A man chooses, a slave obeys.";
-    private string messageSha = "It’s dangerous to go alone, take this!";
+    
+    [Header("Sign Verify SHA3 calls")]
+    [SerializeField] private string messageSign = "The right man in the wrong place can make all the difference in the world.";
+    [SerializeField] private string messageSignVerify = "A man chooses, a slave obeys.";
+    [SerializeField] private string messageSha = "It’s dangerous to go alone, take this!";
 
     #endregion
 
     #region Send Transaction
-
-    private string toAddress = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
+    
+    [Header("Send Transaction Call")]
+    [SerializeField] private string toAddress = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
 
     #endregion
 
     #region Registered Contract
-
-    private string registeredContractName = "CsTestErc20";
+    
+    [Header("Registered Contract Call")]
+    [SerializeField] private string registeredContractName = "CsTestErc20";
 
     #endregion
 
     #region ECDSA
-
-    private string ecdsaKey = "0x78dae1a22c7507a4ed30c06172e7614eb168d3546c13856340771e63ad3c0081";
-    private string ecdsaMessage = "This is a test message";
-    private string transactionHash = "0x123456789";
-    private string chainId = "11155111";
+    
+    [Header("ECDSA Calls")]
+    [SerializeField] private string ecdsaKey = "0x78dae1a22c7507a4ed30c06172e7614eb168d3546c13856340771e63ad3c0081";
+    [SerializeField] private string ecdsaMessage = "This is a test message";
+    [SerializeField] private string transactionHash = "0x123456789";
+    [SerializeField] private string chainId = "11155111";
 
     #endregion
 
     #region Multi Call
-
-    private string Erc20Account = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
+    
+    [Header("MutliCall")]
+    [SerializeField] private string Erc20Account = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
 
     #endregion
 
@@ -322,22 +318,6 @@ public class EvmCalls : MonoBehaviour
     {
         var result = Evm.EcdsaGetAddress(ecdsaKey);
         SampleOutputUtil.PrintResult(result, nameof(Evm), nameof(Evm.EcdsaGetAddress));
-    }
-
-    /// <summary>
-    /// Uploads to IPFS
-    /// </summary>
-    public async void IPFSUpload()
-    {
-        var cid = await Evm.Upload(new IpfsUploadRequest
-        {
-            ApiKey = apiKey,
-            Data = data,
-            BucketId = bucketId,
-            Path = path,
-            Filename = filename
-        });
-        SampleOutputUtil.PrintResult(cid, nameof(IpfsSample), nameof(IpfsSample.Upload));
     }
 
     /// <summary>

@@ -17,7 +17,7 @@ public class ReportBug : EditorWindow
     Texture2D logo = null;
 
     // Initializes window
-    [MenuItem("Window/ChainSafe SDK/Report Bug")]
+    [MenuItem("ChainSafe SDK/Report Bug")]
     public static void ShowWindow()
     {
         // show existing window instance. If one doesn't exist, make one.

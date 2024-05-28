@@ -9,23 +9,27 @@ using UnityEngine;
 public class Erc20Calls : MonoBehaviour
 {
     #region Fields
+    [Header("Change the fields below for testing purposes")]
 
     #region Balance Of
-
-    private string accountBalanceOf = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
+    
+    [Header("Balance Of Call")]
+    [SerializeField] private string accountBalanceOf = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
 
     #endregion
 
     #region Mint
-
-    private BigInteger amountMint = 1000000000000000000;
+    
+    [Header("Mint Call")]
+    [SerializeField] private BigInteger amountMint = 1000000000000000000;
 
     #endregion
 
     #region Transfer
-
-    private const string toAccount = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
-    private BigInteger amountTransfer = 1000000000000000;
+    
+    [Header("Transfer Call")]
+    [SerializeField] private string toAccount = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
+    [SerializeField] private BigInteger amountTransfer = 1000000000000000;
 
     #endregion
 
