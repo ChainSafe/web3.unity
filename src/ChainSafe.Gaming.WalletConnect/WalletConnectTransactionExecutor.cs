@@ -1,13 +1,12 @@
-using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
-using ChainSafe.Gaming.WalletConnect.Methods;
 using ChainSafe.Gaming.WalletConnect.Models;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Core.Evm;
+using ChainSafe.Gaming.Web3.Evm.Wallet;
 using WalletConnectSharp.Common.Logging;
 
 namespace ChainSafe.Gaming.WalletConnect
@@ -17,13 +16,11 @@ namespace ChainSafe.Gaming.WalletConnect
     /// </summary>
     public class WalletConnectTransactionExecutor : ITransactionExecutor
     {
-        private readonly IRpcProvider rpcProvider;
-        private readonly IWalletConnectProvider provider;
+        private readonly IWalletProvider provider;
         private readonly ISigner signer;
 
-        public WalletConnectTransactionExecutor(IWalletConnectProvider provider, IRpcProvider rpcProvider, ISigner signer)
+        public WalletConnectTransactionExecutor(IWalletProvider provider, ISigner signer)
         {
-            this.rpcProvider = rpcProvider;
             this.provider = provider;
             this.signer = signer;
         }
@@ -35,7 +32,7 @@ namespace ChainSafe.Gaming.WalletConnect
                 transaction.From = signer.PublicAddress;
             }
 
-            var requestData = new EthSendTransaction(new TransactionModel
+            var requestData = new TransactionModel
             {
                 From = transaction.From,
                 To = transaction.To,
@@ -44,9 +41,9 @@ namespace ChainSafe.Gaming.WalletConnect
                 Value = transaction.Value?.HexValue,
                 Data = transaction.Data ?? "0x",
                 Nonce = transaction.Nonce?.HexValue,
-            });
+            };
 
-            var hash = await provider.Request(requestData);
+            var hash = await provider.Perform<string>("eth_sendTransaction", requestData);
             if (!ValidateResponseHash(hash))
             {
                 throw new Web3Exception($"Incorrect transaction response format: \"{hash}\".");
@@ -54,7 +51,7 @@ namespace ChainSafe.Gaming.WalletConnect
 
             WCLogger.Log($"Transaction executed successfully. Hash: {hash}.");
 
-            return await rpcProvider.GetTransaction(hash);
+            return await provider.GetTransaction(hash);
 
             bool ValidateResponseHash(string hash)
             {

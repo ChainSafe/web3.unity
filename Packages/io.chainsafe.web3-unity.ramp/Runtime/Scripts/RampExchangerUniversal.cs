@@ -1,6 +1,4 @@
-﻿#define RAMP_AVAILABLE
-
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Web3.Core;

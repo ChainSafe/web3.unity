@@ -1,9 +1,11 @@
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Core.Evm;
+using ChainSafe.Gaming.Web3.Evm.Wallet;
 using Nethereum.RPC.Eth.DTOs;
 
 namespace ChainSafe.Gaming.HyperPlay
@@ -13,17 +15,17 @@ namespace ChainSafe.Gaming.HyperPlay
     /// </summary>
     public class HyperPlayTransactionExecutor : ITransactionExecutor
     {
-        private readonly IHyperPlayProvider hyperPlayProvider;
+        private readonly IWalletProvider walletProvider;
         private readonly ISigner signer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HyperPlayTransactionExecutor"/> class.
         /// </summary>
-        /// <param name="hyperPlayProvider">HyperPlay provider for making RPC requests.</param>
+        /// <param name="walletProvider">HyperPlay provider for making RPC requests.</param>
         /// <param name="signer">Signer for fetching public address.</param>
-        public HyperPlayTransactionExecutor(IHyperPlayProvider hyperPlayProvider, ISigner signer)
+        public HyperPlayTransactionExecutor(IWalletProvider walletProvider, ISigner signer)
         {
-            this.hyperPlayProvider = hyperPlayProvider;
+            this.walletProvider = walletProvider;
             this.signer = signer;
         }
 
@@ -53,7 +55,7 @@ namespace ChainSafe.Gaming.HyperPlay
                 AccessList = transaction.AccessList,
             };
 
-            string hash = await hyperPlayProvider.Request<string>("eth_sendTransaction", transactionInput);
+            string hash = await walletProvider.Perform<string>("eth_sendTransaction", transactionInput);
 
             string hashPattern = @"^0x[a-fA-F0-9]{64}$";
             if (!Regex.IsMatch(hash, hashPattern))
@@ -61,7 +63,7 @@ namespace ChainSafe.Gaming.HyperPlay
                 throw new Web3Exception($"incorrect txn response format {hash}");
             }
 
-            return await hyperPlayProvider.Request<TransactionResponse>("eth_getTransactionByHash", hash);
+            return await walletProvider.GetTransaction(hash);
         }
     }
 }
