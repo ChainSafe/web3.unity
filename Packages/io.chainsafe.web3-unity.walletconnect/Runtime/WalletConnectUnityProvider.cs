@@ -38,7 +38,7 @@ namespace ChainSafe.Gaming.WalletConnectUnity
                     $"One instance of {nameof(WalletConnectUnityProvider)} is already running. This integration of WalletConnect does not support running multiple instances.");
             }
 
-            if (!WalletConnectModal.IsReady)
+            if (!WalletConnectModal.IsReady) 
             {
                 throw new Web3Exception(
                     $"{nameof(WalletConnectModal)} is not ready yet. Make sure it's loaded and initialized before launching {nameof(Web3.Web3)}");
@@ -105,7 +105,9 @@ namespace ChainSafe.Gaming.WalletConnectUnity
 
         public Task<string> Request<T>(T data, long? expiry = null) => OriginalWc.Instance.RequestAsync<T, string>(data);
 
-        private string ReadPublicAddress() => OriginalWc.Instance.ActiveSession.CurrentAddress(chainConfig.ChainId).Address;
+        private string FullChainId => $"{ChainConstants.Namespaces.Evm}:{chainConfig.ChainId}";
+
+        private string ReadPublicAddress() => OriginalWc.Instance.ActiveSession.CurrentAddress(FullChainId).Address;
 
         private ConnectOptions BuildConnectOptions()
         {
@@ -115,7 +117,7 @@ namespace ChainSafe.Gaming.WalletConnectUnity
                     ChainConstants.Namespaces.Evm,
                     new ProposedNamespace
                     {
-                        Chains = new[] { $"{ChainConstants.Namespaces.Evm}:{chainConfig.ChainId}" },
+                        Chains = new[] { FullChainId },
                         Events = new[] { "chainChanged", "accountsChanged" },
                         Methods = new[]
                         {
