@@ -84,9 +84,8 @@ public class HyperPlayLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     /// </summary>
     private async void LoadData()
     {
-        var hyperPlayProvider = (HyperPlayProvider)Web3Accessor.Web3.ServiceProvider.GetService(typeof(HyperPlayProvider));
-        var connectedWallet = await hyperPlayProvider.GetConnectedWallet();
-        storedSessionAvailable = File.Exists(walletPath) && string.Equals(connectedWallet, File.ReadAllText(walletPath), StringComparison.CurrentCultureIgnoreCase);
+        hyperPlayWallet = await HyperPlayProvider.GetConnectedWallet(ProjectConfigUtilities.Load().ChainId);
+        storedSessionAvailable = File.Exists(walletPath) && string.Equals(hyperPlayWallet, File.ReadAllText(walletPath), StringComparison.CurrentCultureIgnoreCase);
         if (!autoLoginPreviousSession || !storedSessionAvailable) return;
         Debug.Log("Proceeding with auto-login.");
         OnLoginClicked();

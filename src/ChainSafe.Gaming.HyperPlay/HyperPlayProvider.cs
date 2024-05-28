@@ -8,9 +8,12 @@ using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Core.Debug;
 using ChainSafe.Gaming.Web3.Environment;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
+using Nethereum.Signer;
+using Nethereum.Unity.Util;
 using Nethereum.Util;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.Networking;
 using Chain = ChainSafe.Gaming.HyperPlay.Dto.Chain;
 
 namespace ChainSafe.Gaming.HyperPlay
@@ -37,39 +40,27 @@ namespace ChainSafe.Gaming.HyperPlay
         }
 
         /// <summary>
-        /// Gets the public address of a wallet via signature.
-        /// </summary>
-        /// <param name="account">The account address to verify.</param>
-        /// <returns>Public account address in lower case.</returns>
-        private async Task<string> GetAccountViaSignature(string account)
-        {
-            string message = "Sign-in with Ethereum";
-
-            string hash = await Perform<string>("personal_sign", message, account);
-
-            EthECDSASignature signature = MessageSigner.ExtractEcdsaSignature(hash);
-
-            string messageToHash = "\x19" + "Ethereum Signed Message:\n" + message.Length + message;
-
-            byte[] messageHash = new Sha3Keccack().CalculateHash(Encoding.UTF8.GetBytes(messageToHash));
-
-            var key = EthECKey.RecoverFromSignature(signature, messageHash);
-
-            return key.GetPublicAddress().ToLower().Trim();
-        }
-
-        /// <summary>
         /// Get the connected HyperPlay wallet.
         /// </summary>
         /// <param name="chainId">Chain id we're connected to.</param>
         /// <returns>Connected HyperPlay wallet address.</returns>
-        public async Task<string> GetConnectedWallet()
+        public static async Task<string> GetConnectedWallet(string chainId)
         {
-            string[] accounts = await Perform<string[]>("eth_accounts");
+            string jsonString = $"{{\"request\":{{\"method\":\"eth_accounts\"}},\"chain\":{{\"chainId\":\"{chainId}\"}}}}";
+            byte[] jsonBytes = System.Text.Encoding.UTF8.GetBytes(jsonString);
+            var request = Application.platform == RuntimePlatform.WebGLPlayer ? new UnityWebRequest("localhost:8000/rpc", "POST") : new UnityWebRequest("localhost:9680/rpc", "POST");
+            request.uploadHandler = new UploadHandlerRaw(jsonBytes);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+            await request.SendWebRequest();
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                Console.WriteLine(request.error);
+                return null;
+            }
 
-            string account = accounts[0].AssertIsPublicAddress(nameof(account));
-
-            return account;
+            var addressResponse = JsonConvert.DeserializeObject<string[]>(request.downloadHandler.text);
+            return addressResponse[0];
         }
 
         /// <summary>
@@ -78,7 +69,9 @@ namespace ChainSafe.Gaming.HyperPlay
         /// <returns>Signed in account's public address.</returns>
         public override async Task<string> Connect()
         {
-            string account = await GetConnectedWallet();
+            string[] accounts = await Perform<string[]>("eth_accounts");
+
+            string account = accounts[0].AssertIsPublicAddress(nameof(account));
 
             string walletPath = Path.Combine(Application.persistentDataPath, HyperPlayConfig.WALLETPATH);
 
@@ -98,6 +91,28 @@ namespace ChainSafe.Gaming.HyperPlay
             }
 
             return account;
+        }
+
+        /// <summary>
+        /// Gets the public address of a wallet via signature.
+        /// </summary>
+        /// <param name="account">The account address to verify.</param>
+        /// <returns>Public account address in lower case.</returns>
+        private async Task<string> GetAccountViaSignature(string account)
+        {
+            string message = "Sign-in with Ethereum";
+
+            string hash = await Perform<string>("personal_sign", message, account);
+
+            EthECDSASignature signature = MessageSigner.ExtractEcdsaSignature(hash);
+
+            string messageToHash = "\x19" + "Ethereum Signed Message:\n" + message.Length + message;
+
+            byte[] messageHash = new Sha3Keccack().CalculateHash(Encoding.UTF8.GetBytes(messageToHash));
+
+            var key = EthECKey.RecoverFromSignature(signature, messageHash);
+
+            return key.GetPublicAddress().ToLower().Trim();
         }
 
         /// <summary>
