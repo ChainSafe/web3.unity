@@ -1438,11 +1438,6 @@ MonoBehaviour:
   transactionHash: 0x123456789
   chainId: 11155111
   Erc20Account: 0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2
-  apiKey: YOUR_CHAINSAFE_STORE_API_KEY
-  data: YOUR_DATA
-  bucketId: BUCKET_ID
-  path: /PATH
-  filename: FILENAME.EXT
 --- !u!1 &128166330
 GameObject:
   m_ObjectHideFlags: 0
@@ -3362,7 +3357,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 37375165}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.19966036
+  m_Size: 0.29418686
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
