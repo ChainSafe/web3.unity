@@ -58,6 +58,7 @@ namespace ChainSafe.Gaming.HyperPlay
                 Console.WriteLine(request.error);
                 return null;
             }
+
             var addressResponse = JsonConvert.DeserializeObject<string[]>(request.downloadHandler.text);
             return addressResponse[0];
         }
