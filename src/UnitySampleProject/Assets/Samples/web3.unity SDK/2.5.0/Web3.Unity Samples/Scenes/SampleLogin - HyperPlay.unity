@@ -537,7 +537,7 @@ MonoBehaviour:
   errorPopup: {fileID: 314965761}
   loginButton: {fileID: 2048731599}
   rememberSessionToggle: {fileID: 598553147}
-  autoLoginPreviousSession: 1
+  autoLoginPreviousSession: 0
 --- !u!1 &598553144
 GameObject:
   m_ObjectHideFlags: 0

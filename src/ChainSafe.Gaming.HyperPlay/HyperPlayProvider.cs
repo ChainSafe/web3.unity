@@ -58,7 +58,6 @@ namespace ChainSafe.Gaming.HyperPlay
                 Console.WriteLine(request.error);
                 return null;
             }
-
             var addressResponse = JsonConvert.DeserializeObject<string[]>(request.downloadHandler.text);
             return addressResponse[0];
         }
@@ -66,7 +65,7 @@ namespace ChainSafe.Gaming.HyperPlay
         /// <summary>
         /// Connect to wallet via HyperPlay desktop client and return the account address.
         /// </summary>
-        /// <returns>Signed-in account public address.</returns>
+        /// <returns>Signed in account's public address.</returns>
         public override async Task<string> Connect()
         {
             string[] accounts = await Perform<string[]>("eth_accounts");
@@ -83,12 +82,27 @@ namespace ChainSafe.Gaming.HyperPlay
                 }
             }
 
+            var key = await GetAccountViaSignature(account);
+
+            if (key != account.ToLower().Trim())
+            {
+                throw new Web3Exception("Fetched address does not match the signing address.");
+            }
+
+            return account;
+        }
+
+        /// <summary>
+        /// Gets the public address of a wallet via signature.
+        /// </summary>
+        /// <param name="account">The account address to verify.</param>
+        /// <returns>Public account address in lower case.</returns>
+        private async Task<string> GetAccountViaSignature(string account)
+        {
             string message = "Sign-in with Ethereum";
 
             string hash = await Perform<string>("personal_sign", message, account);
 
-            // Verify signature.
-            // TODO: Make into a Util Method.
             EthECDSASignature signature = MessageSigner.ExtractEcdsaSignature(hash);
 
             string messageToHash = "\x19" + "Ethereum Signed Message:\n" + message.Length + message;
@@ -97,17 +111,15 @@ namespace ChainSafe.Gaming.HyperPlay
 
             var key = EthECKey.RecoverFromSignature(signature, messageHash);
 
-            if (key.GetPublicAddress().ToLower().Trim() != account.ToLower().Trim())
-            {
-                throw new Web3Exception("Fetched address does not match the signing address.");
-            }
-
-            return account;
+            return key.GetPublicAddress().ToLower().Trim();
         }
 
+        /// <summary>
+        /// Disconnect call, currently HyperPlay doesn't support disconnecting.
+        /// </summary>
+        /// <returns>Completed task.</returns>
         public override Task Disconnect()
         {
-            // currently HyperPlay doesn't support disconnecting.
             return Task.CompletedTask;
         }
 
