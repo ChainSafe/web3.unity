@@ -6,7 +6,6 @@ using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.Marketplace.Extensions;
 using ChainSafe.Gaming.MultiCall;
-using ChainSafe.Gaming.SygmaClient;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
