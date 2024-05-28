@@ -10,8 +10,7 @@ public class UploadPlatforms
     
     #region Fields
     
-    [DllImport("__Internal")]
-    private static extern void UploadImage();
+   
     public static event EventHandler<byte[]> ImageSelected;
 
     #endregion
@@ -56,6 +55,10 @@ public class UploadPlatforms
     #endif
     
     #if UNITY_WEBGL && !UNITY_EDITOR
+    
+    [DllImport("__Internal")]
+    private static extern void UploadImage();
+    
     /// <summary>
     /// Uploads an image in webgl builds
     /// </summary>
