@@ -31,7 +31,7 @@ jobs:
         export DESTINATION_DIRECTORY=
         export DESTINATION_PATH=
         
-        cat "${GITHUB_WORKSPACE}/scripts/data/duplicate_samples.txt" | while IFS= read -r entry
+        while IFS= read -r entry
         do
         
           IFS=':' read -ra dirs <<< "$entry"
@@ -47,12 +47,7 @@ jobs:
           cp -r "$SOURCE_PATH/." "$DESTINATION_PATH"
         
           git add "$DESTINATION_PATH." -f
-        done
-        
-        for entry in "${DUPLICATE_SAMPLE_VARS[@]}"
-        do
-          
-        done
+        done < "${GITHUB_WORKSPACE}/scripts/data/duplicate_samples.txt"
     - name: update submodules
       # clone submodules
       run: |
