@@ -14,7 +14,7 @@
     "defineConstraints": [],
     "versionDefines": [
         {
-            "name": "io.chainsafe.web3-unity.marketplace",
+            "name": "Unity",
             "expression": "",
             "define": "MARKETPLACE_AVAILABLE"
         }
