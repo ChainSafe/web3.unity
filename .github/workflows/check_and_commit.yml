@@ -31,9 +31,7 @@ jobs:
         export DESTINATION_DIRECTORY=
         export DESTINATION_PATH=
         
-        export DUPLICATE_SAMPLE_VARS=(<${GITHUB_WORKSPACE}/scripts/data/duplicate_samples.txt)
-        
-        while IFS= read -r entry
+        cat "${GITHUB_WORKSPACE}/scripts/data/duplicate_samples.txt" | while IFS= read -r entry
         do
           IFS=':' read -ra dirs <<< "$entry"
           SOURCE_PATH=${dirs[0]}
@@ -48,7 +46,7 @@ jobs:
           cp -r "$SOURCE_PATH/." "$DESTINATION_PATH"
         
           git add "$DESTINATION_PATH." -f
-        done < $DUPLICATE_SAMPLE_VARS
+        done
         
         for entry in "${DUPLICATE_SAMPLE_VARS[@]}"
         do
