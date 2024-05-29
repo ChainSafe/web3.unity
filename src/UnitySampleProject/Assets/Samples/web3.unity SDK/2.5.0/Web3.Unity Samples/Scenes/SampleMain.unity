@@ -5683,7 +5683,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b044657e16866a4dbee5eccdd4a15b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serviceType: 1
+  serviceType: 3
 --- !u!114 &743188462
 MonoBehaviour:
   m_ObjectHideFlags: 0
