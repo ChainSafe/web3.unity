@@ -26,7 +26,7 @@
     "samples": [
         {
             "displayName": "Marketplace Usage Sample",
-            "description": "Contains example of integration and usage of Marketplace functionality.",
+            "description": "Coming soon with SDK version 3.0 - Contains example of integration and usage of Marketplace functionality.",
             "path": "Samples~/Web3.Unity Marketplace Samples"
         }
     ]
