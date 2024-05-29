@@ -74,7 +74,6 @@ public class CscRspChecker
         };
         watcher.Deleted += OnCscRspDeleted;
         watcher.EnableRaisingEvents = true;
-        Debug.Log("FileSystemWatcher setup to monitor csc.rsp file.");
     }
 
     private static void OnCscRspDeleted(object sender, FileSystemEventArgs e)
