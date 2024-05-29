@@ -148,7 +148,7 @@ namespace Scripts.EVM.Marketplace
                     new MultipartFormFileSection("logo", logoImageData, "logo.png", "image/png"),
                     new MultipartFormFileSection("banner", bannerImageData, "banner.png", "image/png"),
                     new MultipartFormDataSection("isImported", "true"),
-                    new MultipartFormDataSection("contractAddress", Token.Contracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId]),
+                    new MultipartFormDataSection("contractAddress", ChainSafeContracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId]),
                     new MultipartFormDataSection("type", "erc721")
                 };
                 var path = "/collections";
@@ -164,7 +164,7 @@ namespace Scripts.EVM.Marketplace
                     collectionData.banner,
                     _isMintingPublic
                 };
-                var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.MarketplaceFactory, Token.Contracts.MarketplaceContracts["11155111"], args);
+                var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.MarketplaceFactory, ChainSafeContracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId], args);
                 return data;
         }
         
@@ -193,7 +193,7 @@ namespace Scripts.EVM.Marketplace
                     new MultipartFormFileSection("logo", logoImageData, "logo.png", "image/png"),
                     new MultipartFormFileSection("banner", bannerImageData, "banner.png", "image/png"),
                     new MultipartFormDataSection("isImported", "true"),
-                    new MultipartFormDataSection("contractAddress", Token.Contracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId]),
+                    new MultipartFormDataSection("contractAddress", ChainSafeContracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId]),
                     new MultipartFormDataSection("type", "erc1155")
                 };
                 var path = "/collections";
@@ -207,7 +207,7 @@ namespace Scripts.EVM.Marketplace
                     collectionData.banner,
                     _isMintingPublic
                 };
-                var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.MarketplaceFactory, Token.Contracts.MarketplaceContracts["11155111"], args);
+                var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.MarketplaceFactory, ChainSafeContracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId], args);
                 return data;
             }
             catch (Web3Exception e)
@@ -318,7 +318,7 @@ namespace Scripts.EVM.Marketplace
                     collectionData.id,
                     _whitelisting
                 };
-                var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.MarketplaceFactory, Token.Contracts.MarketplaceContracts["11155111"], args);
+                var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.MarketplaceFactory, ChainSafeContracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId] , args);
                 return data;
             }
             catch (Web3Exception e)

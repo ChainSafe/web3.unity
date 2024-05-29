@@ -19,6 +19,7 @@
         "ChainSafe.Gaming.Unity.dll",
         "ChainSafe.Gaming.Gelato.dll",
         "ChainSafe.Gaming.WalletConnect.dll",
+        "Nethereum.RPC.dll",
         "Newtonsoft.Json.dll"
     ],
     "autoReferenced": false,
