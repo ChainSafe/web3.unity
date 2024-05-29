@@ -3,10 +3,11 @@ using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Debug;
 using ChainSafe.Gaming.Web3.Core.Evm;
+using ChainSafe.Gaming.Web3.Core.Logout;
 
 namespace ChainSafe.Gaming.Web3.Evm.Wallet
 {
-    public class WalletSigner : ISigner, ILifecycleParticipant
+    public class WalletSigner : ISigner, ILifecycleParticipant, ILogoutHandler
     {
         private readonly IWalletProvider walletProvider;
         private readonly IWalletProviderConfig walletConfig;
@@ -42,7 +43,12 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
             return hash.AssertTypedDataSignatureValid(typedData, PublicAddress);
         }
 
-        public virtual async ValueTask WillStopAsync()
+        public virtual ValueTask WillStopAsync()
+        {
+            return new ValueTask(Task.CompletedTask);
+        }
+
+        public async Task OnLogout()
         {
             await walletProvider.Disconnect();
         }
