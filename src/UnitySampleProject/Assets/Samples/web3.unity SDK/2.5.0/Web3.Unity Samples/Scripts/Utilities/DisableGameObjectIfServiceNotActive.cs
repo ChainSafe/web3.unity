@@ -5,7 +5,7 @@ using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.GamingSdk.Gelato.Types;
 using UnityEngine;
 #if MARKETPLACE_AVAILABLE
-using Scripts.EVM.Marketplace;
+using ChainSafe.Gaming.Marketplace;
 #endif
 
 public enum ServiceType
@@ -25,7 +25,7 @@ public class DisableGameObjectIfServiceNotActive : MonoBehaviour
         {ServiceType.Ramp, typeof(ChainSafe.Gaming.Exchangers.Ramp.IRampExchanger)},
         #endif
         #if MARKETPLACE_AVAILABLE
-        {ServiceType.Marketplace, typeof(Marketplace)},
+        {ServiceType.Marketplace, typeof(MarketplaceClient)},
         #endif
         {ServiceType.Gelato, typeof(IGelato)},
         {ServiceType.Multicall, typeof(IMultiCall)}
