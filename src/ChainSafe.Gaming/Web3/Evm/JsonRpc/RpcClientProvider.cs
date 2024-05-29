@@ -125,9 +125,6 @@ namespace ChainSafe.Gaming.Evm.Providers
             {
                 environment.AnalyticsClient.CaptureEvent(new AnalyticsEvent()
                 {
-                    Rpc = method,
-                    Network = network?.Name,
-                    ChainId = network?.ChainId.ToString(),
                     EventName = $"{method}",
                     GameData = new AnalyticsGameData()
                     {
