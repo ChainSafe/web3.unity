@@ -6,6 +6,7 @@ using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Unity;
+using Nethereum.Hex.HexTypes;
 using NUnit.Framework;
 using Scripts.EVM.Token;
 using UnityEngine;
@@ -38,7 +39,7 @@ public class Erc20Tests : SampleTestsBase
     {
         var getNativeBalanceOf = web3.RpcProvider.GetBalance(Account);
         yield return new WaitUntil(() => getNativeBalanceOf.IsCompleted);
-        Assert.AreEqual(new BigInteger(500000000000000000), getNativeBalanceOf.Result);
+        Assert.AreEqual(new HexBigInteger(500000000000000000), new HexBigInteger(getNativeBalanceOf.Result));
     }
 
     [UnityTest]

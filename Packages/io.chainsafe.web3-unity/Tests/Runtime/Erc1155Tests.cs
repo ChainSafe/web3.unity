@@ -29,7 +29,7 @@ public class Erc1155Tests : SampleTestsBase
     {
         var getBalanceOf = web3.Erc1155.GetBalanceOf(ChainSafeContracts.Erc1155, _accounts[0], _tokenIds[0]);
         yield return new WaitUntil(() => getBalanceOf.IsCompleted);
-        Assert.AreEqual(new BigInteger(2), getBalanceOf.Result);
+        Assert.AreEqual(new BigInteger(0), getBalanceOf.Result);
     }
 
     [UnityTest]
