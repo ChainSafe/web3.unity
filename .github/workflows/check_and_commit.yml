@@ -31,7 +31,7 @@ jobs:
         export DESTINATION_DIRECTORY=
         export DESTINATION_PATH=
         
-        while IFS= read -r entry
+        while IFS= read -r entry || [ -n "$entry" ];
         do
         
           IFS=':' read -ra dirs <<< "$entry"
@@ -69,7 +69,7 @@ jobs:
 
         export DLL_META_FILE_TEMPLATE="${{ vars.DLL_META_FILE_TEMPLATE }}"
 
-        while IFS= read -r entry
+        while IFS= read -r entry || [ -n "$entry" ];
         do
           IFS=':' read -ra dirs <<< "$entry"
           export PACKAGE_LIB_PATH="${GITHUB_WORKSPACE}/${dirs[0]}"
