@@ -31,7 +31,7 @@ jobs:
         export DESTINATION_DIRECTORY=
         export DESTINATION_PATH=
         
-        export DUPLICATE_SAMPLE_VARS=${{ vars.DUPLICATE_SAMPLE_VARS }}
+        export DUPLICATE_SAMPLE_VARS=($(<${GITHUB_WORKSPACE}/scripts/data/duplicate_samples.txt))
         
         for entry in "${DUPLICATE_SAMPLE_VARS[@]}"
         do
