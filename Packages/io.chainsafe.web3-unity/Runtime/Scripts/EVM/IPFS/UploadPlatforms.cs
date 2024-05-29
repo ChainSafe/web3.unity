@@ -10,8 +10,7 @@ public class UploadPlatforms
     
     #region Fields
     
-    [DllImport("__Internal")]
-    private static extern void UploadImage();
+   
     public static event EventHandler<byte[]> ImageSelected;
 
     #endregion
@@ -24,19 +23,23 @@ public class UploadPlatforms
     /// <returns>Byte array of image data</returns>
     public static async Task<byte[]> GetImageData()
     {
+        byte[] imageData = null;
         #if UNITY_WEBGL && !UNITY_EDITOR
-        var imageData = await UploadImageWebGL();
+        imageData = await UploadImageWebGL();
         return imageData;
         #elif UNITY_EDITOR
-        var imageData = await UploadImageEditor();
+        imageData = await UploadImageEditor();
         return imageData;
         #elif UNITY_STANDALONE_WIN
-        var imageData = await UploadImageWindows();
+        imageData = await UploadImageWindows();
         return imageData;
         #elif UNITY_STANDALONE_OSX
-        var imageData = await UploadImageOsx();
+        imageData = await UploadImageOsx();
         return imageData;
-        #else
+        #elif UNITY_IOS
+        imageData = await UploadImageIOS();
+        return imageData;
+#else
         Debug.LogError("File picking is not implemented for this platform.");
         return null;
         #endif
@@ -56,6 +59,10 @@ public class UploadPlatforms
     #endif
     
     #if UNITY_WEBGL && !UNITY_EDITOR
+    
+    [DllImport("__Internal")]
+    private static extern void UploadImage();
+    
     /// <summary>
     /// Uploads an image in webgl builds
     /// </summary>
@@ -183,14 +190,14 @@ public class UploadPlatforms
     #endif
 
     #if UNITY_STANDALONE_OSX
-    [DllImport("__Internal")]
-    private static extern void ShowOpenFileDialog(string title, string[] allowedFileTypes, int allowedFileTypesCount, IntPtr callback);
+    [DllImport("MacOSFilePicker", EntryPoint = "showOpenFileDialogWithTitle")]
+    private static extern void showOpenFileDialog(string title, string[] allowedFileTypes, int allowedFileTypesCount, IntPtr callback);
 
     private static TaskCompletionSource<string> tcs;
     
     private static async Task<byte[]> UploadImageOsx()
     {
-        string imagePath = await OpenFilePanelMac("Select Image", "png,jpg,jpeg,gif");
+        string imagePath = await OpenFilePanelMac("Select Image", "public.png", "public.jpg", "public.jpeg", "public.gif");
         if (string.IsNullOrEmpty(imagePath)) return null;
         UnityWebRequest www = UnityWebRequestTexture.GetTexture("file://" + imagePath);
         await www.SendWebRequest();
@@ -202,7 +209,7 @@ public class UploadPlatforms
     private static Task<string> OpenFilePanelMac(string title, params string[] allowedFileTypes)
     {
         tcs = new TaskCompletionSource<string>();
-        ShowOpenFileDialog(title, allowedFileTypes, allowedFileTypes.Length, Marshal.GetFunctionPointerForDelegate((Action<string>)OnFileSelectedMac));
+        showOpenFileDialog(title, allowedFileTypes, allowedFileTypes.Length, Marshal.GetFunctionPointerForDelegate((Action<string>)OnFileSelectedMac));
         return tcs.Task;
     }
 
@@ -211,6 +218,39 @@ public class UploadPlatforms
         tcs.SetResult(path);
     }
     #endif
+    
+#if UNITY_IOS
+    [DllImport("__Internal")]
+    private static extern void showActionSheet(string title, string[] allowedFileTypes, int allowedFileTypesCount, IntPtr callback);
 
+    private static TaskCompletionSource<string> tcs;
+    
+
+    public static async Task<byte[]> UploadImageIOS()
+    {
+        string imagePath = await OpenFilePaneliOS("Select Source", "public.png", "public.jpg", "public.jpeg", "public.gif");
+        Debug.Log(imagePath);
+        if (string.IsNullOrEmpty(imagePath)) return null;
+        UnityWebRequest www = UnityWebRequestTexture.GetTexture("file://" + imagePath);
+        await www.SendWebRequest();
+        Texture2D texture = DownloadHandlerTexture.GetContent(www);
+        var imageData = texture.EncodeToPNG();
+        return imageData;
+    }
+
+    private static Task<string> OpenFilePaneliOS(string title, params string[] allowedFileTypes)
+    {
+        tcs = new TaskCompletionSource<string>();
+        showActionSheet(title, allowedFileTypes, allowedFileTypes.Length, Marshal.GetFunctionPointerForDelegate((Action<IntPtr>)OnFileSelectediOS));
+        return tcs.Task;
+    }
+
+    [AOT.MonoPInvokeCallback(typeof(Action<IntPtr>))]
+    private static void OnFileSelectediOS(IntPtr pathPtr)
+    {
+        string path = Marshal.PtrToStringAnsi(pathPtr);
+        tcs.SetResult(path);
+    }
+#endif
     #endregion
 }

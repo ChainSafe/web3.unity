@@ -9,15 +9,6 @@
       },
       "hash": "c2f3628a028373afc8c66e443f7ce21bcb613a47"
     },
-    "com.unity.ai.navigation": {
-      "version": "1.1.5",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.modules.ai": "1.0.0"
-      },
-      "url": "https://packages.unity.com"
-    },
     "com.unity.collab-proxy": {
       "version": "2.3.1",
       "depth": 0,

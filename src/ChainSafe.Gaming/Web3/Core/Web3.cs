@@ -2,6 +2,7 @@
 using System;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
+using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.LocalStorage;
@@ -41,6 +42,9 @@ namespace ChainSafe.Gaming.Web3
             ChainConfig = serviceProvider.GetRequiredService<IChainConfig>();
             logoutManager = this.serviceProvider.GetRequiredService<ILogoutManager>();
             dataStorage = this.serviceProvider.GetRequiredService<DataStorage>();
+            Erc20 = this.serviceProvider.GetRequiredService<Erc20Service>();
+            Erc721 = this.serviceProvider.GetRequiredService<Erc721Service>();
+            Erc1155 = this.serviceProvider.GetRequiredService<Erc1155Service>();
         }
 
         /// <summary>
@@ -77,6 +81,21 @@ namespace ChainSafe.Gaming.Web3
         /// Access the factory for creating Ethereum smart contract wrappers.
         /// </summary>
         public IContractBuilder ContractBuilder { get; }
+
+        /// <summary>
+        /// Represents an ERC20 service that provides functionality to interact with ERC20 tokens.
+        /// </summary>
+        public Erc20Service Erc20 { get; }
+
+        /// <summary>
+        /// Represents an ERC721 service that provides functionality to interact with ERC721 tokens.
+        /// </summary>
+        public Erc721Service Erc721 { get; }
+
+        /// <summary>
+        /// Represents an ERC1155 service that provides functionality to interact with ERC1155 tokens.
+        /// </summary>
+        public Erc1155Service Erc1155 { get; }
 
         /// <summary>
         /// Access the service provider of this Web3 instance.
