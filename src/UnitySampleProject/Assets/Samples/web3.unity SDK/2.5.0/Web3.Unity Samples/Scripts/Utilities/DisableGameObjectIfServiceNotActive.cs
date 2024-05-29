@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using ChainSafe.Gaming.MultiCall;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.GamingSdk.Gelato.Types;
+using Scripts.EVM.Marketplace;
 using UnityEngine;
 
 public enum ServiceType
 {
     Ramp = 0,
     Gelato = 1,
-    Multicall = 2
+    Multicall = 2,
+    Marketplace = 3
 }
 
 public class DisableGameObjectIfServiceNotActive : MonoBehaviour
@@ -17,9 +19,12 @@ public class DisableGameObjectIfServiceNotActive : MonoBehaviour
     [SerializeField] private ServiceType serviceType;
     private readonly Dictionary<ServiceType, Type> _typesDictionary = new()
     {
-#if RAMP_AVAILABLE
+        #if RAMP_AVAILABLE
         {ServiceType.Ramp, typeof(ChainSafe.Gaming.Exchangers.Ramp.IRampExchanger)},
-#endif
+        #endif
+        #if MARKETPLACE_AVAILABLE
+        {ServiceType.Marketplace, typeof(Marketplace)},
+        #endif
         {ServiceType.Gelato, typeof(IGelato)},
         {ServiceType.Multicall, typeof(IMultiCall)}
     };
