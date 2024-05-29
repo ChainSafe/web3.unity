@@ -1,3 +1,4 @@
+#define MARKETPLACE_AVAILABLE
 using UnityEngine;
 
 public class SampleMarketplace : MonoBehaviour
