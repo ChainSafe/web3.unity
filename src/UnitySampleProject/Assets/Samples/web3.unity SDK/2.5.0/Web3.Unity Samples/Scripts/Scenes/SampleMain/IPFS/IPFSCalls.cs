@@ -1,3 +1,4 @@
+#if MARKETPLACE_AVAILABLE
 using System.Collections.Generic;
 using ChainSafe.Gaming.UnityPackage.Model;
 using UnityEngine;
@@ -82,3 +83,4 @@ public class IPFSCalls : MonoBehaviour
 
     #endregion
 }
+#endif
