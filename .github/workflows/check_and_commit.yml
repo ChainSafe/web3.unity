@@ -31,11 +31,10 @@ jobs:
         export DESTINATION_DIRECTORY=
         export DESTINATION_PATH=
         
-        export DUPLICATE_SAMPLE_VARS=($(<${GITHUB_WORKSPACE}/scripts/data/duplicate_samples.txt))
+        export DUPLICATE_SAMPLE_VARS='$(<${GITHUB_WORKSPACE}/scripts/data/duplicate_samples.txt)'
+        echo "$DUPLICATE_SAMPLE_VARS"
         DUPLICATE_SAMPLE_VARS="${DUPLICATE_SAMPLE_VARS//$'\n'/ }"
         DUPLICATE_SAMPLE_VARS="${DUPLICATE_SAMPLE_VARS//$'\r'/}"
-        
-        echo "$DUPLICATE_SAMPLE_VARS"
         
         for entry in "${DUPLICATE_SAMPLE_VARS[@]}"
         do
