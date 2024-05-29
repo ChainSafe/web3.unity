@@ -5,23 +5,18 @@ using UnityEngine;
 [InitializeOnLoad]
 public class CscRspChecker
 {
-    private static FileSystemWatcher watcher;
     private static string defineSymbol = "MARKETPLACE_AVAILABLE";
-    private static string cscRspPath = Path.Combine(Application.dataPath, "../../../Packages/io.chainsafe.web3-unity.marketplace/csc.rsp");
+    private static string cscRspPath = Path.Combine(Application.dataPath, "csc.rsp");
     private static string packagePath = Path.Combine(Application.dataPath, "../../../Packages/io.chainsafe.web3-unity.marketplace");
+    private static bool initialized;
 
     static CscRspChecker()
     {
-        // Check if the package directory exists
-        if (!Directory.Exists(packagePath))
+        // Check if already initialized
+        if (initialized)
         {
-            Debug.Log("Package directory does not exist. Exiting.");
             return;
         }
-
-        // Setup FileSystemWatcher to monitor the csc.rsp file
-        SetupFileSystemWatcher();
-
         // Check if the csc.rsp file exists and handle its content
         CheckAndCreateCscRsp();
     }
@@ -30,7 +25,7 @@ public class CscRspChecker
     {
         if (!Directory.Exists(packagePath))
         {
-            Debug.Log("Package directory does not exist. Exiting.");
+            RemoveDefine();
             return;
         }
         
@@ -39,7 +34,6 @@ public class CscRspChecker
             // Read all lines from the file
             var lines = File.ReadAllLines(cscRspPath);
             var containsDefine = false;
-
             // Check if any line contains the required define
             foreach (var line in lines)
             {
@@ -49,7 +43,6 @@ public class CscRspChecker
                     break;
                 }
             }
-
             // If define is not found, append it to the file
             if (!containsDefine)
             {
@@ -61,26 +54,9 @@ public class CscRspChecker
         {
             // If the file does not exist, create it and add define
             File.WriteAllText(cscRspPath, $"-define:{defineSymbol}");
-            Debug.Log("csc.rsp file created with MARKETPLACE_AVAILABLE define.");
+            Debug.Log($"csc.rsp file created with {defineSymbol} define.");
         }
-    }
-
-    private static void SetupFileSystemWatcher()
-    {
-        watcher = new FileSystemWatcher(Path.GetDirectoryName(cscRspPath))
-        {
-            Filter = Path.GetFileName(cscRspPath),
-            NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite
-        };
-        watcher.Deleted += OnCscRspDeleted;
-        watcher.EnableRaisingEvents = true;
-    }
-
-    private static void OnCscRspDeleted(object sender, FileSystemEventArgs e)
-    {
-        Debug.Log("csc.rsp file deleted. Removing define.");
-        watcher.EnableRaisingEvents = false;
-        RemoveDefine();
+        initialized = true;
     }
 
     private static void RemoveDefine()
