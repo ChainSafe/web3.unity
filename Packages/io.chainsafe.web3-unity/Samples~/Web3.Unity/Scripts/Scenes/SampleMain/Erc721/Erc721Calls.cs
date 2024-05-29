@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Model;
 using Scripts.EVM.Token;
@@ -66,8 +67,8 @@ public class Erc721Calls : MonoBehaviour
     /// </summary>
     public async void BalanceOf()
     {
-        var balance = await Erc721.BalanceOf(Web3Accessor.Web3, Contracts.Erc721, accountBalanceOf);
-        SampleOutputUtil.PrintResult(balance.ToString(), nameof(Erc721), nameof(Erc721.BalanceOf));
+        var balance = await Web3Accessor.Web3.Erc721.GetBalanceOf(ChainSafeContracts.Erc721, accountBalanceOf);
+        SampleOutputUtil.PrintResult(balance.ToString(), "ERC-721", nameof(Erc721Service.GetBalanceOf));
     }
 
     /// <summary>
@@ -75,12 +76,8 @@ public class Erc721Calls : MonoBehaviour
     /// </summary>
     public async void OwnerOf()
     {
-        var contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.Erc721, Contracts.Erc721);
-        Debug.Log(contract.Calldata("ownerOf", new object[] { tokenIdOwnerOf }));
-        var owner = tokenIdOwnerOf.StartsWith("0x") ?
-            await Erc721.OwnerOf(Web3Accessor.Web3, Contracts.Erc721, tokenIdOwnerOf)
-            : await Erc721.OwnerOf(Web3Accessor.Web3, Contracts.Erc721, BigInteger.Parse(tokenIdOwnerOf));
-        SampleOutputUtil.PrintResult(owner, nameof(Erc721), nameof(Erc721.OwnerOf));
+        var owner = await Web3Accessor.Web3.Erc721.GetOwnerOf(ChainSafeContracts.Erc721, tokenIdOwnerOf);
+        SampleOutputUtil.PrintResult(owner, "ERC-721", nameof(Erc721Service.GetOwnerOf));
     }
 
     /// <summary>
@@ -88,8 +85,8 @@ public class Erc721Calls : MonoBehaviour
     /// </summary>
     public async void OwnerOfBatch()
     {
-        var owners = await Erc721.OwnerOfBatch(Web3Accessor.Web3, Contracts.Erc721, tokenIdsOwnerOfBatch);
-        StringBuilder ownersString = new StringBuilder();
+        var owners = await Web3Accessor.Web3.Erc721.GetOwnerOfBatch(ChainSafeContracts.Erc721, tokenIdsOwnerOfBatch);
+        var ownersString = new StringBuilder();
         var dict = owners.GroupBy(x => x.Owner).ToDictionary(x => x.Key, x => x.Select(x => x.TokenId).ToList());
         foreach (var owner in dict)
         {
@@ -99,7 +96,7 @@ public class Erc721Calls : MonoBehaviour
                 ownersString.AppendLine("\t" + tokenId);
             }
         }
-        SampleOutputUtil.PrintResult(ownersString.ToString(), nameof(Erc721), nameof(Erc721.OwnerOfBatch));
+        SampleOutputUtil.PrintResult(ownersString.ToString(), "ERC-721", nameof(Erc721Service.GetOwnerOfBatch));
     }
 
     /// <summary>
@@ -107,8 +104,8 @@ public class Erc721Calls : MonoBehaviour
     /// </summary>
     public async void Uri()
     {
-        var uri = await Erc721.Uri(Web3Accessor.Web3, Contracts.Erc721, tokenIdUri);
-        SampleOutputUtil.PrintResult(uri, nameof(Erc721), nameof(Erc721.Uri));
+        var uri = await Web3Accessor.Web3.Erc721.GetUri(ChainSafeContracts.Erc721, tokenIdUri);
+        SampleOutputUtil.PrintResult(uri, "ERC-721", nameof(Erc721Service.GetUri));
     }
 
     /// <summary>
@@ -116,9 +113,9 @@ public class Erc721Calls : MonoBehaviour
     /// </summary>
     public async void MintErc721()
     {
-        var response = await Erc721.MintErc721(Web3Accessor.Web3, ABI.Erc721, Contracts.Erc721, uriMint);
+        var response = await Web3Accessor.Web3.Erc721.Mint(ChainSafeContracts.Erc721, uriMint);
         var output = SampleOutputUtil.BuildOutputValue(response);
-        SampleOutputUtil.PrintResult(output, nameof(Erc721), nameof(Erc721.MintErc721));
+        SampleOutputUtil.PrintResult(output, "ERC-721", nameof(Erc721Service.GetUri));
     }
 
     /// <summary>
@@ -126,8 +123,8 @@ public class Erc721Calls : MonoBehaviour
     /// </summary>
     public async void TransferErc721()
     {
-        var response = await Erc721.TransferErc721(Web3Accessor.Web3, contractTransfer, toAccountTransfer, tokenIdTransfer);
+        var response = await Web3Accessor.Web3.Erc721.Transfer(contractTransfer, toAccountTransfer, tokenIdTransfer);
         var output = SampleOutputUtil.BuildOutputValue(response);
-        SampleOutputUtil.PrintResult(output, nameof(Erc721), nameof(Erc721.TransferErc721));
+        SampleOutputUtil.PrintResult(output, "ERC-721", nameof(Erc721Service.Transfer));
     }
 }
