@@ -35,6 +35,8 @@ jobs:
         DUPLICATE_SAMPLE_VARS="${DUPLICATE_SAMPLE_VARS//$'\n'/ }"
         DUPLICATE_SAMPLE_VARS="${DUPLICATE_SAMPLE_VARS//$'\r'/}"
         
+        echo "$DUPLICATE_SAMPLE_VARS"
+        
         for entry in "${DUPLICATE_SAMPLE_VARS[@]}"
         do
           IFS=':' read -ra dirs <<< "$entry"
