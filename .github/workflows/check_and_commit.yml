@@ -46,7 +46,7 @@ jobs:
           cp -r "$SOURCE_PATH/." "$DESTINATION_PATH"
         
           git add "$DESTINATION_PATH." -f
-        done <"${GITHUB_WORKSPACE}/scripts/data/duplicate_samples.txt"
+        done < ${GITHUB_WORKSPACE}/scripts/data/duplicate_samples.txt
         
         for entry in "${DUPLICATE_SAMPLE_VARS[@]}"
         do
