@@ -26,8 +26,6 @@ namespace ChainSafe.Gaming.HyperPlay
 
             collection.AddSingleton<IHyperPlayData, IStorable, HyperPlayData>();
 
-            collection.AddSingleton<IHyperPlayConfig, HyperPlayConfig>();
-
             collection.Replace(ServiceDescriptor.Singleton(typeof(IHyperPlayConfig), config));
 
             return collection;

@@ -26,7 +26,7 @@ public class HyperPlayLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
 
         _storedSessionAvailable = false;
         
-        await using (var lightWeb3 = await HyperPlayWeb3.BuildLightweightWeb3())
+        await using (var lightWeb3 = await HyperPlayWeb3.BuildLightweightWeb3(new HyperPlayConfig()))
         {
             var data = lightWeb3.ServiceProvider.GetService<IHyperPlayData>();
 
@@ -36,12 +36,8 @@ public class HyperPlayLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
         if (_storedSessionAvailable) // auto-login
         {
             Debug.Log("Proceeding with auto-login.");
+            
             await TryLogin();
-        }
-
-        else
-        {
-            Debug.Log("No stored session available.");
         }
 
         loginButton.onClick.AddListener(OnLoginClicked);

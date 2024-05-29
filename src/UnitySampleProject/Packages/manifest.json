@@ -14,7 +14,7 @@
     "com.unity.ugui": "1.0.0",
     "com.unity.visualscripting": "1.9.4",
     "io.chainsafe.web3-unity": "file:../../../Packages/io.chainsafe.web3-unity",
-    "io.chainsafe.web3-unity.hyperplay": "file:C:/Users/robel/Documents/ChainSafe/Code/Main/web3.unity/Packages/io.chainsafe.web3-unity.hyperplay",
+    "io.chainsafe.web3-unity.hyperplay": "file:../../../Packages/io.chainsafe.web3-unity.hyperplay",
     "io.chainsafe.web3-unity.lootboxes": "file:../../../Packages/io.chainsafe.web3-unity.lootboxes",
     "io.chainsafe.web3-unity.ramp": "file:../../../Packages/io.chainsafe.web3-unity.ramp",
     "io.chainsafe.web3-unity.web3auth": "file:../../../Packages/io.chainsafe.web3-unity.web3auth",

@@ -92,13 +92,7 @@ namespace ChainSafe.Gaming.Web3
 
         internal async ValueTask InitializeAsync()
         {
-            foreach (var storable in serviceProvider.GetServices<IStorable>())
-            {
-                if (storable.LoadOnInitialize)
-                {
-                    await dataStorage.Load(storable);
-                }
-            }
+            await dataStorage.Initialize();
 
             foreach (var lifecycleParticipant in serviceProvider.GetServices<ILifecycleParticipant>())
             {

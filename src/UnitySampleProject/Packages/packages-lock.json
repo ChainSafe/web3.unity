@@ -159,7 +159,7 @@
       }
     },
     "io.chainsafe.web3-unity.hyperplay": {
-      "version": "file:C:/Users/robel/Documents/ChainSafe/Code/Main/web3.unity/Packages/io.chainsafe.web3-unity.hyperplay",
+      "version": "file:../../../Packages/io.chainsafe.web3-unity.hyperplay",
       "depth": 0,
       "source": "local",
       "dependencies": {

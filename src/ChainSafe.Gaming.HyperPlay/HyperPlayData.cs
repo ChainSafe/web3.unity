@@ -2,6 +2,9 @@ using Newtonsoft.Json;
 
 namespace ChainSafe.Gaming.HyperPlay
 {
+    /// <summary>
+    /// Concrete implementation of <see cref="IHyperPlayData"/>.
+    /// </summary>
     public class HyperPlayData : IHyperPlayData
     {
         [JsonIgnore]
