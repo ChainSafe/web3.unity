@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using ChainSafe.Gaming.MultiCall;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.GamingSdk.Gelato.Types;
-using Scripts.EVM.Marketplace;
 using UnityEngine;
+#if MARKETPLACE_AVAILABLE
+using Scripts.EVM.Marketplace;
+#endif
 
 public enum ServiceType
 {
