@@ -1,5 +1,4 @@
 #if MARKETPLACE_AVAILABLE
-using ChainSafe.Gaming.Marketplace;
 using Scripts.EVM.Marketplace;
 using UnityEngine;
 
