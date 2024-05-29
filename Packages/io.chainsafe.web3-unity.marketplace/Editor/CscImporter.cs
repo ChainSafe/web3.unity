@@ -6,6 +6,7 @@ using UnityEngine;
 public class CscRspChecker
 {
     private static bool checkDone = false;
+    
     static CscRspChecker()
     {
         if (checkDone)
@@ -44,6 +45,32 @@ public class CscRspChecker
             // If the file does not exist, create it and add the define
             File.WriteAllText(cscRspPath, "-define:MARKETPLACE_AVAILABLE");
             Debug.Log("csc.rsp file created with MARKETPLACE_AVAILABLE define.");
+        }
+    }
+    
+    private static void SetupFileSystemWatcher()
+    {
+        watcher = new FileSystemWatcher(Path.GetDirectoryName(cscRspPath));
+        watcher.Filter = Path.GetFileName(cscRspPath);
+        watcher.Deleted += OnCscRspDeleted;
+        watcher.EnableRaisingEvents = true;
+    }
+    
+    private static void OnCscRspDeleted(object sender, FileSystemEventArgs e)
+    {
+        Debug.Log("csc.rsp file deleted. Removing define.");
+        RemoveDefine();
+    }
+    
+    private static void RemoveDefine()
+    {
+        // Remove the define from PlayerSettings
+        string defines = PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
+        if (defines.Contains(defineSymbol))
+        {
+            defines = defines.Replace(defineSymbol, "").Replace(";;", ";");
+            PlayerSettings.SetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup, defines);
+            Debug.Log($"{defineSymbol} define removed from scripting define symbols.");
         }
     }
 
