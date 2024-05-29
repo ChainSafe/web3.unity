@@ -31,24 +31,23 @@ jobs:
         export DESTINATION_DIRECTORY=
         export DESTINATION_PATH=
         
-        export DUPLICATE_SAMPLE_VARS=${{ vars.DUPLICATE_SAMPLE_VARS }}
-        
-        for entry in "${DUPLICATE_SAMPLE_VARS[@]}"
+        while IFS= read -r entry || [ -n "$entry" ];
         do
+        
           IFS=':' read -ra dirs <<< "$entry"
           SOURCE_PATH=${dirs[0]}
           DESTINATION_DIRECTORY=${dirs[1]}
-          
+        
           SOURCE_PATH="${GITHUB_WORKSPACE}/$SOURCE_PATH/$(ls "$SOURCE_PATH" | head -n 1)/$DESTINATION_DIRECTORY"
         
           DESTINATION_PATH="${GITHUB_WORKSPACE}/${dirs[2]}"
-          
+        
           rm -rf "$DESTINATION_PATH"
           mkdir -p "$DESTINATION_PATH"
           cp -r "$SOURCE_PATH/." "$DESTINATION_PATH"
         
           git add "$DESTINATION_PATH." -f
-        done
+        done < "${GITHUB_WORKSPACE}/scripts/data/duplicate_samples.txt"
     - name: update submodules
       # clone submodules
       run: |
@@ -68,14 +67,9 @@ jobs:
 
         echo -e "DLLs Generated\n$(ls "$PUBLISH_PATH")"
 
-        export PACKAGE_DEPENDENCIES=($(<${GITHUB_WORKSPACE}/scripts/data/published_dependencies.txt))
-
-        PACKAGE_DEPENDENCIES="${PACKAGE_DEPENDENCIES//$'\n'/ }"
-        PACKAGE_DEPENDENCIES="${PACKAGE_DEPENDENCIES//$'\r'/}"
-
         export DLL_META_FILE_TEMPLATE="${{ vars.DLL_META_FILE_TEMPLATE }}"
 
-        for entry in "${PACKAGE_DEPENDENCIES[@]}"
+        while IFS= read -r entry || [ -n "$entry" ];
         do
           IFS=':' read -ra dirs <<< "$entry"
           export PACKAGE_LIB_PATH="${GITHUB_WORKSPACE}/${dirs[0]}"
@@ -97,7 +91,7 @@ jobs:
           done
 
           git add "$PACKAGE_LIB_PATH." -f
-        done
+        done < "${GITHUB_WORKSPACE}/scripts/data/published_dependencies.txt"
     - uses: actions/cache@v2
       with:
         path: ${{ matrix.projectPath }}/Library
