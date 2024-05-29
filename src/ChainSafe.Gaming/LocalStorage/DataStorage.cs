@@ -28,7 +28,7 @@ namespace ChainSafe.Gaming.LocalStorage
         {
             var path = AbsolutePath(storable.StoragePath);
 
-            if (!createFile && !File.Exists(path))
+            if (!createFile && !Exists(path))
             {
                 return;
             }
@@ -44,7 +44,7 @@ namespace ChainSafe.Gaming.LocalStorage
         {
             var path = AbsolutePath(storable.StoragePath);
 
-            if (!File.Exists(path))
+            if (!Exists(path))
             {
                 return;
             }
@@ -70,12 +70,17 @@ namespace ChainSafe.Gaming.LocalStorage
         {
             string path = AbsolutePath(storable.StoragePath);
 
-            if (!File.Exists(path))
+            if (!Exists(path))
             {
                 return;
             }
 
             File.Delete(path);
+        }
+
+        private bool Exists(string path)
+        {
+            return File.Exists(path);
         }
 
         private string AbsolutePath(string path)
