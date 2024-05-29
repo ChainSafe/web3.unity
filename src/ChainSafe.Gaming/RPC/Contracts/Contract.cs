@@ -13,7 +13,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
     /// <summary>
     /// Representation of a contract.
     /// </summary>
-    public class Contract
+    public class Contract : IContract
     {
         private readonly string abi;
         private readonly string address;
@@ -47,6 +47,8 @@ namespace ChainSafe.Gaming.Evm.Contracts
             contractBuilder = new Builders.ContractBuilder(abi, address);
         }
 
+        public string Address => address;
+
         /// <summary>
         /// Returns a new instance of the Contract attached to a new address. This is useful
         /// if there are multiple similar or identical copies of a Contract on the network
@@ -54,7 +56,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
         /// </summary>
         /// <param name="address">Address of the contract to attach to.</param>
         /// <returns>The new contract.</returns>
-        public Contract Attach(string address)
+        public IContract Attach(string address)
         {
             if (string.IsNullOrEmpty(address))
             {

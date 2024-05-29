@@ -35,6 +35,14 @@
     <PackageReference Include="Nethereum.Web3" Version="4.16.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="Resources\erc-20-abi.json" />
+    <EmbeddedResource Include="Resources\erc-20-abi.json" />
+    <None Remove="Resources\erc-721-abi.json" />
+    <EmbeddedResource Include="Resources\erc-721-abi.json" />
+    <None Remove="Resources\erc-1155-abi.json" />
+    <EmbeddedResource Include="Resources\erc-1155-abi.json" />
+  </ItemGroup>
 
   <!--
     The Unity version of Nethereum is referenced inside src/Directory.Build.props
