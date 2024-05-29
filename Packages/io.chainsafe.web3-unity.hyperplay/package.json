@@ -8,7 +8,7 @@
     "documentationUrl": "https://docs.gaming.chainsafe.io/",
     "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.0.2",
-        "io.chainsafe.web3-unity": "2.5.0"
+        "io.chainsafe.web3-unity": "2.6.0"
     },
     "keywords": [
         "web3",
