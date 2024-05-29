@@ -95,7 +95,10 @@ namespace ChainSafe.Gaming.HyperPlay
 
         public override Task Disconnect()
         {
-            dataStorage.Clear(data);
+            if (data.RememberSession)
+            {
+                dataStorage.Clear(data);
+            }
 
             return Task.CompletedTask;
         }

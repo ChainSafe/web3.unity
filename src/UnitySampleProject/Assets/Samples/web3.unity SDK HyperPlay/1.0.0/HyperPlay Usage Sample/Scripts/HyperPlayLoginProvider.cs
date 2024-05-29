@@ -1,9 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using ChainSafe.Gaming;
 using ChainSafe.Gaming.HyperPlay;
 using ChainSafe.Gaming.UnityPackage.Common;
-using ChainSafe.Gaming.WalletConnect;
 using ChainSafe.Gaming.Web3.Build;
 using Microsoft.Extensions.DependencyInjection;
 using Scenes;

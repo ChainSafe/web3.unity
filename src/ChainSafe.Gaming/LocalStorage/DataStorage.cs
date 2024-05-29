@@ -39,7 +39,7 @@ namespace ChainSafe.Gaming.LocalStorage
         {
             foreach (var storable in store)
             {
-                if (storable.LoadOnInitialize)
+                if (storable.LoadOnInitialize && Exists(AbsolutePath(storable.StoragePath)))
                 {
                     await Load(storable);
                 }
