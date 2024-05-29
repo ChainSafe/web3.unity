@@ -46,6 +46,8 @@ public class CscRspChecker
             File.WriteAllText(cscRspPath, "-define:MARKETPLACE_AVAILABLE");
             Debug.Log("csc.rsp file created with MARKETPLACE_AVAILABLE define.");
         }
+        // Setup FileSystemWatcher to monitor the csc.rsp file
+        SetupFileSystemWatcher();
     }
     
     private static void SetupFileSystemWatcher()
