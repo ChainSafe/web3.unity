@@ -56,7 +56,7 @@ public class EvmCustomResponseTests
         {
             IncreaseAmount
         };
-        var sendContract = Evm.ContractSend(web3, ContractSendMethod, ABI.ArrayTotal, Contracts.ArrayTotal, args);
+        var sendContract = Evm.ContractSend(web3, ContractSendMethod, ABI.ArrayTotal, ChainSafeContracts.ArrayTotal, args);
         yield return new WaitUntil(() => sendContract.IsCompleted);
         if (sendContract.Exception != null) throw sendContract.Exception;
         Assert.IsTrue(sendContract.IsCompletedSuccessfully);
@@ -67,7 +67,7 @@ public class EvmCustomResponseTests
     public IEnumerator TestSendArray()
     {
         yield return BuildWeb3WithTestResponse("0x3446b949c3d214fba7e61c9cf127eac6cd0b2983564cf76be618099879b6f1e1");
-        var sendArray = Evm.SendArray(web3, SendArrayMethod, ABI.ArrayTotal, Contracts.ArrayTotal, ArrayToSend.ToArray());
+        var sendArray = Evm.SendArray(web3, SendArrayMethod, ABI.ArrayTotal, ChainSafeContracts.ArrayTotal, ArrayToSend.ToArray());
         yield return new WaitUntil(() => sendArray.IsCompleted);
         if (sendArray.Exception != null) throw sendArray.Exception;
         Assert.IsTrue(sendArray.IsCompletedSuccessfully);
@@ -136,7 +136,7 @@ public class EvmCustomResponseTests
     public IEnumerator TestMintErc20()
     {
         yield return BuildWeb3WithTestResponse("0xf6133ad76359ffaf67853a5eb138a94ed11f29d350b907420a92c685c6df5303");
-        var mint20 = Erc20.MintErc20(web3, Contracts.Erc20, SendToAddress, Mint20Amount);
+        var mint20 = web3.Erc20.Mint(ChainSafeContracts.Erc20, Mint20Amount, SendToAddress);
         yield return new WaitUntil(() => mint20.IsCompleted);
         if (mint20.Exception != null) throw mint20.Exception;
         Assert.IsTrue(mint20.IsCompletedSuccessfully);
@@ -147,7 +147,7 @@ public class EvmCustomResponseTests
     public IEnumerator TestMintErc721()
     {
         yield return BuildWeb3WithTestResponse("0x09f1c615d638ae0b3a8c4a5555b46170c42dba214f04412400f3ff639657a223");
-        var mint721 = Erc721.MintErc721(web3, ABI.Erc721, Contracts.Erc721, Mint721Uri);
+        var mint721 = web3.Erc721.Mint(ChainSafeContracts.Erc721, Mint721Uri);
         yield return new WaitUntil(() => mint721.IsCompleted);
         if (mint721.Exception != null) throw mint721.Exception;
         Assert.IsTrue(mint721.IsCompletedSuccessfully);
@@ -158,7 +158,7 @@ public class EvmCustomResponseTests
     public IEnumerator TestMintErc1155()
     {
         yield return BuildWeb3WithTestResponse("0xa04294541b934b48ada4073b07ba01492d8ad676aa2db6f93249cec0820a1dca");
-        var mint1155 = Erc1155.MintErc1155(web3, ABI.Erc1155, Contracts.Erc1155, Mint1155Id, Mint1155Amount);
+        var mint1155 = web3.Erc1155.Mint(ChainSafeContracts.Erc1155, Mint1155Id, Mint1155Amount);
         yield return new WaitUntil(() => mint1155.IsCompleted);
         if (mint1155.Exception != null) throw mint1155.Exception;
         Assert.IsTrue(mint1155.IsCompletedSuccessfully);
@@ -169,7 +169,7 @@ public class EvmCustomResponseTests
     public IEnumerator TestTransferErc20()
     {
         yield return BuildWeb3WithTestResponse("0x87d8826e895247b4106596040c5133a18ecbf76077c5433091a5f18c355a120b");
-        var transferErc20 = Erc20.TransferErc20(web3, Contracts.Erc20, SendToAddress, TransferErc20Amount);
+        var transferErc20 = web3.Erc20.Transfer(ChainSafeContracts.Erc20, SendToAddress, TransferErc20Amount);
         yield return new WaitUntil(() => transferErc20.IsCompleted);
         if (transferErc20.Exception != null) throw transferErc20.Exception;
         Assert.IsTrue(transferErc20.IsCompletedSuccessfully);
@@ -180,7 +180,7 @@ public class EvmCustomResponseTests
     public IEnumerator TestTransferErc721()
     {
         yield return BuildWeb3WithTestResponse("0xba034c4150f2a5fd50926551a8e95028d51dcc91e3c3b566bbd316968bc29375");
-        var transferErc721 = Erc721.TransferErc721(web3, Contracts.Erc721, SendToAddress, Transfer721Id);
+        var transferErc721 = web3.Erc721.Transfer(ChainSafeContracts.Erc721, SendToAddress, Transfer721Id);
         yield return new WaitUntil(() => transferErc721.IsCompleted);
         if (transferErc721.Exception != null) throw transferErc721.Exception;
         Assert.IsTrue(transferErc721.IsCompletedSuccessfully);
@@ -191,7 +191,7 @@ public class EvmCustomResponseTests
     public IEnumerator TestTransferErc1155()
     {
         yield return BuildWeb3WithTestResponse("0x390b47d378e9a6de830e2cc6d624de0920efc44d7b40fb61f75d983545c987fc");
-        var transferErc1155 = Erc1155.TransferErc1155(web3, Contracts.Erc1155, Transfer1155Id, Transfer1155Amount, SendToAddress);
+        var transferErc1155 = web3.Erc1155.Transfer(ChainSafeContracts.Erc1155, Transfer1155Id, Transfer1155Amount, SendToAddress);
         yield return new WaitUntil(() => transferErc1155.IsCompleted);
         if (transferErc1155.Exception != null) throw transferErc1155.Exception;
         yield return new WaitUntil(() => transferErc1155.IsCompletedSuccessfully);

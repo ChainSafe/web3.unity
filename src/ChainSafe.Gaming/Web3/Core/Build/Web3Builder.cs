@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm;
 using ChainSafe.Gaming.Evm.Contracts;
+using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm.EventPoller;
 using ChainSafe.Gaming.Web3.Core.Logout;
@@ -26,7 +27,10 @@ namespace ChainSafe.Gaming.Web3.Build
                 .UseEventPoller()
                 .AddSingleton<ChainRegistryProvider>()
                 .AddSingleton<IContractBuilder, ContractBuilder>()
-                .AddSingleton<ILogoutManager, LogoutManager>();
+                .AddSingleton<ILogoutManager, LogoutManager>()
+                .AddSingleton<Erc20Service>()
+                .AddSingleton<Erc721Service>()
+                .AddSingleton<Erc1155Service>();
         }
 
         /// <summary>
