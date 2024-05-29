@@ -31,23 +31,26 @@ jobs:
         export DESTINATION_DIRECTORY=
         export DESTINATION_PATH=
         
-        export DUPLICATE_SAMPLE_VARS=$(<${GITHUB_WORKSPACE}/scripts/data/duplicate_samples.txt)
-        
-        for entry in "${DUPLICATE_SAMPLE_VARS[@]}"
+        while IFS= read -r entry
         do
           IFS=':' read -ra dirs <<< "$entry"
           SOURCE_PATH=${dirs[0]}
           DESTINATION_DIRECTORY=${dirs[1]}
-          
+        
           SOURCE_PATH="${GITHUB_WORKSPACE}/$SOURCE_PATH/$(ls "$SOURCE_PATH" | head -n 1)/$DESTINATION_DIRECTORY"
         
           DESTINATION_PATH="${GITHUB_WORKSPACE}/${dirs[2]}"
-          
+        
           rm -rf "$DESTINATION_PATH"
           mkdir -p "$DESTINATION_PATH"
           cp -r "$SOURCE_PATH/." "$DESTINATION_PATH"
         
           git add "$DESTINATION_PATH." -f
+        done < "${GITHUB_WORKSPACE}/scripts/data/duplicate_samples.txt"
+        
+        for entry in "${DUPLICATE_SAMPLE_VARS[@]}"
+        do
+          
         done
     - name: update submodules
       # clone submodules
