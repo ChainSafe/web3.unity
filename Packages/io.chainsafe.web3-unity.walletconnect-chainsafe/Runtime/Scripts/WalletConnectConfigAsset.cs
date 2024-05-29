@@ -7,8 +7,8 @@ using WalletConnectSharp.Network.Interfaces;
 
 namespace ChainSafe.Gaming.WalletConnect
 {
-    [CreateAssetMenu(menuName = "ChainSafe/WalletConnect/WalletConnect Config", fileName = "WalletConnectConfig", order = 0)]
-    public class WalletConnectConfigSO : ScriptableObject, IWalletConnectConfig
+    [CreateAssetMenu(menuName = "ChainSafe/WalletConnect (ChainSafe)/WalletConnect Config", fileName = "WalletConnectConfig", order = 20)]
+    public class WalletConnectConfigAsset : ScriptableObject, IWalletConnectConfig
     {
         [field: SerializeField] public bool AutoRenewSession { get; set; } = true;
         [field: SerializeField] public string ProjectName { get; set; }
@@ -19,7 +19,7 @@ namespace ChainSafe.Gaming.WalletConnect
         [field: SerializeField] public string OverrideRegistryUri { get; set; }
         [SerializeField] private List<string> enabledWallets;
         [SerializeField] private List<string> disabledWallets;
-        [SerializeField] private ConnectionHandlerProviderSO connectionHandlerProvider;
+        [SerializeField] private ConnectionHandlerProviderAsset connectionHandlerProvider;
         [field: SerializeField] public WalletLocationOption WalletLocationOption { get; set; }
 
         public bool RememberSession { get; set; }

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ChainSafe.Gaming.WalletConnect;
+using ChainSafe.Gaming.Evm.Network;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.Web3.Evm.Wallet;
 using WalletConnectSharp.Sign.Models;
 using WalletConnectSharp.Sign.Models.Engine;
 using WalletConnectUnity.Core;
@@ -11,7 +12,7 @@ using OriginalWc = WalletConnectUnity.Core.WalletConnect;
 
 namespace ChainSafe.Gaming.WalletConnectUnity
 {
-    public class WalletConnectUnityProvider : IWalletConnectProvider, ILifecycleParticipant
+    public class WalletConnectUnityProvider : IWalletProvider, ILifecycleParticipant
     {
         private static bool instanceStarted;
         
@@ -37,6 +38,11 @@ namespace ChainSafe.Gaming.WalletConnectUnity
                 throw new Web3Exception(
                     $"One instance of {nameof(WalletConnectUnityProvider)} is already running. This integration of WalletConnect does not support running multiple instances.");
             }
+
+            // if (config.ShouldSpawnModal)
+            // {
+            //     await SpawnModal();
+            // }
 
             if (!WalletConnectModal.IsReady) 
             {
@@ -103,11 +109,30 @@ namespace ChainSafe.Gaming.WalletConnectUnity
             return Task.CompletedTask;
         }
 
-        public Task<string> Request<T>(T data, long? expiry = null) => OriginalWc.Instance.RequestAsync<T, string>(data);
+        public Task<string> Request<T>(T data) => OriginalWc.Instance.RequestAsync<T, string>(data);
 
         private string FullChainId => $"{ChainConstants.Namespaces.Evm}:{chainConfig.ChainId}";
 
         private string ReadPublicAddress() => OriginalWc.Instance.ActiveSession.CurrentAddress(FullChainId).Address;
+
+        // private async Task SpawnModal()
+        // {
+        //     if (!config.ModalPrefab)
+        //     {
+        //         throw new Web3Exception("No WalletConnectModal was provided in config.");
+        //     }
+        //
+        //     var tcs = new TaskCompletionSource<bool>();
+        //     WalletConnectModal.Ready += OnModalReady;
+        //     await Object.InstantiateAsync(config.ModalPrefab);
+        //     await tcs.Task;
+        //
+        //     void OnModalReady(object sender, ModalReadyEventArgs modalReadyEventArgs)
+        //     {
+        //         WalletConnectModal.Ready -= OnModalReady;
+        //         tcs.SetResult(true);
+        //     }
+        // }
 
         private ConnectOptions BuildConnectOptions()
         {
@@ -136,5 +161,17 @@ namespace ChainSafe.Gaming.WalletConnectUnity
                 RequiredNamespaces = requiredNamespaces
             };
         }
+
+        public Task<Network> RefreshNetwork()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<T> Perform<T>(string method, params object[] parameters)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Network LastKnownNetwork { get; }
     }
 }

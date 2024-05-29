@@ -8,8 +8,8 @@ namespace ChainSafe.Gaming.WalletConnect.Dialog
     /// Simple version of connection handler provider.
     /// Lacking Pool functionality and loading from Addressables.
     /// </summary>
-    [CreateAssetMenu(menuName = "ChainSafe/WalletConnect/Connection Handler Provider", fileName = "ConnectionHandlerProvider", order = 0)]
-    public class ConnectionHandlerProviderChainSafe : ConnectionHandlerProviderSO
+    [CreateAssetMenu(menuName = "ChainSafe/WalletConnect (ChainSafe)/Connection Handler Provider", fileName = "ConnectionHandlerProvider", order = 21)]
+    public class ConnectionHandlerProviderChainSafe : ConnectionHandlerProviderAsset
     {
         [SerializeField] private ConnectionHandlerBehaviour handlerPrefab;
 

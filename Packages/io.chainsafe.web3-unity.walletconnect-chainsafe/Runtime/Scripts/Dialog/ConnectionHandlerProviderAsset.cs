@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ChainSafe.Gaming.WalletConnect.Dialog
 {
-    public abstract class ConnectionHandlerProviderSO : ScriptableObject, IConnectionHandlerProvider
+    public abstract class ConnectionHandlerProviderAsset : ScriptableObject, IConnectionHandlerProvider
     {
         public abstract Task<IConnectionHandler> ProvideHandler();
     }

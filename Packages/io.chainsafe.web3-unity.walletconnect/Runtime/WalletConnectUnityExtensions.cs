@@ -1,10 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using ChainSafe.Gaming.WalletConnect;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.Web3.Evm.Wallet;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using UnityEngine;
 using WalletConnectUnity.Modal;
 
 namespace ChainSafe.Gaming.WalletConnectUnity
@@ -19,14 +22,21 @@ namespace ChainSafe.Gaming.WalletConnectUnity
         
         public static IWeb3ServiceCollection UseWalletConnectUnity(this IWeb3ServiceCollection services)
         {
-            services.AssertServiceNotBound<IWalletConnectProvider>();
-            services.AddSingleton<IWalletConnectProvider, ILifecycleParticipant, WalletConnectUnityProvider>();
+            services.AssertServiceNotBound<IWalletProvider>();
+            TryBindDefaultConfig();
+            services.AddSingleton<IWalletProvider, ILifecycleParticipant, WalletConnectUnityProvider>();
             return services;
+            
+            void TryBindDefaultConfig()
+            {
+                if (services.Any(descriptor => descriptor.ServiceType == typeof(IWalletConnectUnityConfig))) return;
+                services.AddSingleton<IWalletConnectUnityConfig>(LoadDefaultConfig());
+            }
         }
-        
+
         public static IWeb3ServiceCollection UseWalletConnectUnity(this IWeb3ServiceCollection services, IWalletConnectUnityConfig config)
         {
-            services.AssertServiceNotBound<IWalletConnectProvider>();
+            services.AssertServiceNotBound<IWalletProvider>();
             services.ConfigureWalletConnectUnity(config);
             services.UseWalletConnectUnity();
             return services;
@@ -48,6 +58,11 @@ namespace ChainSafe.Gaming.WalletConnectUnity
                 tcs.SetResult(0);
                 WalletConnectModal.Ready -= OnReady;
             }
+        }
+
+        public static WalletConnectUnityConfigAsset LoadDefaultConfig()
+        {
+            return Resources.Load<WalletConnectUnityConfigAsset>("DefaultWalletConnectConfig");
         }
     }
 }
