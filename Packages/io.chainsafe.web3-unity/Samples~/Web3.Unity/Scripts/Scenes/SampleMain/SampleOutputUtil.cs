@@ -4,6 +4,11 @@ using UnityEngine;
 
 public static class SampleOutputUtil
 {
+    public static string PrintResult(string value, string sampleName)
+    {
+        return $"{sampleName} executed successfully.\nOutput: {value}";
+    }
+    
     public static void PrintResult(string value, string sampleClassName, string sampleMethodName)
     {
         var msg = BuildResultMessage(value, sampleClassName, sampleMethodName);
