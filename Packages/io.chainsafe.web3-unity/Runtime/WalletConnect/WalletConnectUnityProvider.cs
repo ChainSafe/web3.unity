@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm;
 using ChainSafe.Gaming.Evm.Network;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Core;
@@ -12,22 +13,28 @@ using OriginalWc = WalletConnectUnity.Core.WalletConnect;
 
 namespace ChainSafe.Gaming.WalletConnectUnity
 {
-    public class WalletConnectUnityProvider : IWalletProvider, ILifecycleParticipant
+    public class WalletConnectUnityProvider : WalletProvider, ILifecycleParticipant
     {
         private static bool instanceStarted;
         
         private readonly IWalletConnectUnityConfig config;
         private readonly IChainConfig chainConfig;
 
-        public WalletConnectUnityProvider(IChainConfig chainConfig)
+        public WalletConnectUnityProvider(
+            IChainConfig chainConfig, 
+            ChainRegistryProvider chainRegistry)
+            : base(chainRegistry)
         {
             this.chainConfig = chainConfig;
-            this.config = new WalletConnectUnityConfig();
+            config = new WalletConnectUnityConfig();
         }
 
-        public WalletConnectUnityProvider(IWalletConnectUnityConfig config, IChainConfig chainConfig)
+        public WalletConnectUnityProvider(
+            IWalletConnectUnityConfig config, 
+            IChainConfig chainConfig,
+            ChainRegistryProvider chainRegistry)
+            : this(chainConfig, chainRegistry)
         {
-            this.chainConfig = chainConfig;
             this.config = config;
         }
         
@@ -60,7 +67,7 @@ namespace ChainSafe.Gaming.WalletConnectUnity
             return new ValueTask(Task.CompletedTask);
         }
         
-        public async Task<string> Connect()
+        public override async Task<string> Connect()
         {
             if (OriginalWc.Instance.IsConnected) // WalletConnectModal tries resuming the session automatically, so we check if it succeeded right here
             {
@@ -103,10 +110,15 @@ namespace ChainSafe.Gaming.WalletConnectUnity
             }
         }
 
-        public Task Disconnect()
+        public override Task Disconnect()
         {
             WalletConnectModal.Disconnect();
             return Task.CompletedTask;
+        }
+
+        public override Task<T> Perform<T>(string method, params object[] parameters)
+        {
+            throw new NotImplementedException();
         }
 
         public Task<string> Request<T>(T data) => OriginalWc.Instance.RequestAsync<T, string>(data);
@@ -161,17 +173,5 @@ namespace ChainSafe.Gaming.WalletConnectUnity
                 RequiredNamespaces = requiredNamespaces
             };
         }
-
-        public Task<Network> RefreshNetwork()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<T> Perform<T>(string method, params object[] parameters)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Network LastKnownNetwork { get; }
     }
 }

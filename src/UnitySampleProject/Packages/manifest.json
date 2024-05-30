@@ -16,7 +16,6 @@
     "io.chainsafe.web3-unity": "file:../../../Packages/io.chainsafe.web3-unity",
     "io.chainsafe.web3-unity.lootboxes": "file:../../../Packages/io.chainsafe.web3-unity.lootboxes",
     "io.chainsafe.web3-unity.ramp": "file:../../../Packages/io.chainsafe.web3-unity.ramp",
-    "io.chainsafe.web3-unity.walletconnect": "file:../../../Packages/io.chainsafe.web3-unity.walletconnect",
     "io.chainsafe.web3-unity.walletconnect-chainsafe": "file:../../../Packages/io.chainsafe.web3-unity.walletconnect-chainsafe",
     "io.chainsafe.web3-unity.web3auth": "file:../../../Packages/io.chainsafe.web3-unity.web3auth",
     "com.unity.modules.ai": "1.0.0",

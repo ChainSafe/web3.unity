@@ -140,7 +140,7 @@
       "url": "https://packages.unity.com"
     },
     "com.walletconnect.core": {
-      "version": "3.1.5",
+      "version": "3.1.6",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -149,21 +149,21 @@
       "url": "https://package.openupm.com"
     },
     "com.walletconnect.modal": {
-      "version": "1.1.5",
-      "depth": 1,
+      "version": "1.1.6",
+      "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.walletconnect.core": "3.1.5",
-        "com.walletconnect.ui": "1.1.5"
+        "com.walletconnect.core": "3.1.6",
+        "com.walletconnect.ui": "1.1.6"
       },
       "url": "https://package.openupm.com"
     },
     "com.walletconnect.ui": {
-      "version": "1.1.5",
-      "depth": 2,
+      "version": "1.1.6",
+      "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.walletconnect.core": "3.1.5",
+        "com.walletconnect.core": "3.1.6",
         "com.unity.textmeshpro": "3.0.0",
         "com.unity.ugui": "1.0.0"
       },
@@ -175,7 +175,8 @@
       "source": "local",
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.0.2",
-        "com.unity.textmeshpro": "3.0.6"
+        "com.unity.textmeshpro": "3.0.6",
+        "com.walletconnect.modal": "1.1.6"
       }
     },
     "io.chainsafe.web3-unity.lootboxes": {
@@ -193,16 +194,6 @@
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.0.2",
         "io.chainsafe.web3-unity": "2.5.0"
-      }
-    },
-    "io.chainsafe.web3-unity.walletconnect": {
-      "version": "file:../../../Packages/io.chainsafe.web3-unity.walletconnect",
-      "depth": 0,
-      "source": "local",
-      "dependencies": {
-        "io.chainsafe.web3-unity": "2.5.5",
-        "com.walletconnect.core": "3.1.5",
-        "com.walletconnect.modal": "1.1.5"
       }
     },
     "io.chainsafe.web3-unity.walletconnect-chainsafe": {
