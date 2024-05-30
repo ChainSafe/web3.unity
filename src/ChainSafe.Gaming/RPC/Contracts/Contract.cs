@@ -92,12 +92,8 @@ namespace ChainSafe.Gaming.Evm.Contracts
             var result = await provider.Call(txReq);
             analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
-                ChainId = analyticsClient.ChainConfig.ChainId,
                 EventName = method,
-                Network = analyticsClient.ChainConfig.Network,
-                Version = analyticsClient.AnalyticsVersion,
                 PackageName = "io.chainsafe.web3.unity",
-                ProjectId = analyticsClient.ProjectConfig.ProjectId,
             });
 
             return Decode(method, result);
@@ -170,12 +166,8 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
             analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
-                ChainId = analyticsClient.ChainConfig.ChainId,
                 EventName = method,
-                Network = analyticsClient.ChainConfig.Network,
-                Version = analyticsClient.AnalyticsVersion,
                 PackageName = "io.chainsafe.web3.unity",
-                ProjectId = analyticsClient.ProjectConfig.ProjectId,
             });
 
             return (outputValues, receipt);
@@ -245,12 +237,8 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
             analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
-                ChainId = analyticsClient.ChainConfig.ChainId,
                 EventName = method,
-                Network = analyticsClient.ChainConfig.Network,
-                Version = analyticsClient.AnalyticsVersion,
                 PackageName = "io.chainsafe.web3.unity",
-                ProjectId = analyticsClient.ProjectConfig.ProjectId,
             });
 
             return function.GetData(parameters);

@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using NBitcoin;
 
 namespace ChainSafe.Gaming.SygmaClient.Types
 {
