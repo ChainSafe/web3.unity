@@ -54,10 +54,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
 
             analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
-                ChainId = analyticsClient.ChainConfig.ChainId,
-                Network = analyticsClient.ChainConfig.Network,
                 EventName = $"Web3Auth Initialized",
-                ProjectId = analyticsClient.ProjectConfig.ProjectId,
                 PackageName = "io.chainsafe.web3-unity.web3auth",
             });
             coreInstance = CreateCoreInstance();
