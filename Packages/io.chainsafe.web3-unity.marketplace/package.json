@@ -23,11 +23,5 @@
         "email": "bd@chainsafe.io",
         "url": "https://gaming.chainsafe.io/"
     },
-    "samples": [
-        {
-            "displayName": "Marketplace Usage Sample",
-            "description": "Coming soon with SDK version 3.0 - Contains example of integration and usage of Marketplace functionality.",
-            "path": "Samples~/"
-        }
-    ]
+    "samples": []
 }
