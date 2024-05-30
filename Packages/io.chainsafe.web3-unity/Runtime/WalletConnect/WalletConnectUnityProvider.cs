@@ -1,10 +1,17 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm;
-using ChainSafe.Gaming.Evm.Network;
+using ChainSafe.Gaming.WalletConnect;
+using ChainSafe.Gaming.WalletConnect.Methods;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.Web3.Environment;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
+using Nethereum.JsonRpc.Client.RpcMessages;
+using Newtonsoft.Json;
+using WalletConnectSharp.Common.Utils;
+using WalletConnectSharp.Core.Models.Publisher;
 using WalletConnectSharp.Sign.Models;
 using WalletConnectSharp.Sign.Models.Engine;
 using WalletConnectUnity.Core;
@@ -19,21 +26,25 @@ namespace ChainSafe.Gaming.WalletConnectUnity
         
         private readonly IWalletConnectUnityConfig config;
         private readonly IChainConfig chainConfig;
+        private readonly IHttpClient httpClient;
 
         public WalletConnectUnityProvider(
             IChainConfig chainConfig, 
-            ChainRegistryProvider chainRegistry)
+            ChainRegistryProvider chainRegistry,
+            IHttpClient httpClient)
             : base(chainRegistry)
         {
             this.chainConfig = chainConfig;
+            this.httpClient = httpClient;
             config = new WalletConnectUnityConfig();
         }
 
         public WalletConnectUnityProvider(
             IWalletConnectUnityConfig config, 
             IChainConfig chainConfig,
-            ChainRegistryProvider chainRegistry)
-            : this(chainConfig, chainRegistry)
+            ChainRegistryProvider chainRegistry,
+            IHttpClient httpClient)
+            : this(chainConfig, chainRegistry, httpClient)
         {
             this.config = config;
         }
@@ -116,12 +127,29 @@ namespace ChainSafe.Gaming.WalletConnectUnity
             return Task.CompletedTask;
         }
 
-        public override Task<T> Perform<T>(string method, params object[] parameters)
+        public override async Task<T> Perform<T>(string method, params object[] parameters)
         {
-            throw new NotImplementedException();
-        }
+            if (!OriginalWc.Instance.IsConnected)
+            {
+                throw new WalletConnectException("Can't send requests. No session is connected at the moment.");
+            }
 
-        public Task<string> Request<T>(T data) => OriginalWc.Instance.RequestAsync<T, string>(data);
+            // check if session is expired to renew session
+
+            bool methodRegistered = OriginalWc.Instance.ActiveSession.Namespaces.Any(n => n.Value.Methods.Contains(method));
+
+            if (!methodRegistered)
+            {
+                throw new WalletConnectException(
+                    $"RPC method {method} is not supported. " +
+                    $"If you add a new method you have to update {nameof(WalletConnectProvider)} code to reflect those changes. " +
+                    "Contact ChainSafe if you think a specific method should be included in the SDK.");
+            }
+
+            string chainId = OriginalWc.Instance.ActiveSession.Namespaces.First().Value.Chains[0].Split(':')[1];
+
+            return await WalletConnectRequest<T>(method, chainId, parameters);
+        }
 
         private string FullChainId => $"{ChainConstants.Namespaces.Evm}:{chainConfig.ChainId}";
 
@@ -172,6 +200,54 @@ namespace ChainSafe.Gaming.WalletConnectUnity
             {
                 RequiredNamespaces = requiredNamespaces
             };
+        }
+        
+        private async Task<T> WalletConnectRequest<T>(string method, string chainId, params object[] parameters)
+        {
+            // Helper method to make a request using WalletConnectSignClient.
+            async Task<T> MakeRequest<TRequest>()
+            {
+                var data = (TRequest)Activator.CreateInstance(typeof(TRequest), parameters);
+                return await OriginalWc.Instance.RequestAsync<TRequest, T>(data, chainId);
+            }
+
+            switch (method)
+            {
+                case "personal_sign":
+                    return await MakeRequest<EthSignMessage>();
+                case "eth_signTypedData":
+                    return await MakeRequest<EthSignTypedData>();
+                case "eth_signTransaction":
+                    return await MakeRequest<EthSignTransaction>();
+                case "eth_sendTransaction":
+                    return await MakeRequest<EthSendTransaction>();
+                default:
+                    try
+                    {
+                        return await Request<T>(method, parameters);
+                    }
+                    catch (Exception e)
+                    {
+                        throw new WalletConnectException($"{method} RPC method currently not implemented.", e);
+                    }
+            }
+        }
+
+        // Direct RPC request via WalletConnect RPC url.
+        private async Task<T> Request<T>(string method, params object[] parameters)
+        {
+            string chain = OriginalWc.Instance.ActiveSession.Namespaces.First().Value.Chains[0];
+
+            // Using WalletConnect Blockchain API: https://docs.walletconnect.com/cloud/blockchain-api
+            var url = $"https://rpc.walletconnect.com/v1?chainId={chain}&projectId={config.ProjectId}";
+
+            string body = JsonConvert.SerializeObject(new RpcRequestMessage(Guid.NewGuid().ToString(), method, parameters));
+
+            var rawResult = await httpClient.PostRaw(url, body, "application/json");
+
+            RpcResponseMessage response = JsonConvert.DeserializeObject<RpcResponseMessage>(rawResult.Response);
+
+            return response.Result.ToObject<T>();
         }
     }
 }

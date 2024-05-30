@@ -8,6 +8,8 @@ namespace ChainSafe.Gaming.WalletConnectUnity
         //
         // public WalletConnectModal ModalPrefab { get; }
         
+        public string[] ProjectId { get; }
+        
         public string[] IncludedWalletIds { get; }
 
         public string[] ExcludedWalletIds { get; }
