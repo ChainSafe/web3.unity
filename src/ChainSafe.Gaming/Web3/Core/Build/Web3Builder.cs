@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm;
 using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
-using ChainSafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.LocalStorage;
 using ChainSafe.Gaming.Web3.Core.Evm.EventPoller;
 using ChainSafe.Gaming.Web3.Core.Logout;
 using ChainSafe.Gaming.Web3.Environment;
@@ -25,6 +25,7 @@ namespace ChainSafe.Gaming.Web3.Build
             // Bind default services
             serviceCollection
                 .UseEventPoller()
+                .AddSingleton<DataStorage>()
                 .AddSingleton<ChainRegistryProvider>()
                 .AddSingleton<IContractBuilder, ContractBuilder>()
                 .AddSingleton<ILogoutManager, LogoutManager>()

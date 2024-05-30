@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
+using ChainSafe.Gaming.Web3.Core.Logout;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
 
 namespace ChainSafe.Gaming.HyperPlay
@@ -9,7 +10,7 @@ namespace ChainSafe.Gaming.HyperPlay
     /// <summary>
     /// Concrete implementation of <see cref="ISigner"/> via HyperPlay desktop client.
     /// </summary>
-    public class HyperPlaySigner : ISigner, ILifecycleParticipant
+    public class HyperPlaySigner : ISigner, ILifecycleParticipant, ILogoutHandler
     {
         private readonly IWalletProvider walletProvider;
 
@@ -56,6 +57,11 @@ namespace ChainSafe.Gaming.HyperPlay
         public ValueTask WillStopAsync()
         {
             return new ValueTask(Task.CompletedTask);
+        }
+
+        public async Task OnLogout()
+        {
+            await walletProvider.Disconnect();
         }
     }
 }

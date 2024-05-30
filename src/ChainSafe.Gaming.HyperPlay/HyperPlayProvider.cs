@@ -2,8 +2,11 @@ using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm;
 using ChainSafe.Gaming.HyperPlay.Dto;
+using ChainSafe.Gaming.LocalStorage;
 using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Debug;
+using ChainSafe.Gaming.Web3.Core.Logout;
 using ChainSafe.Gaming.Web3.Environment;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
 using Nethereum.Signer;
@@ -18,18 +21,27 @@ namespace ChainSafe.Gaming.HyperPlay
     /// </summary>
     public class HyperPlayProvider : WalletProvider
     {
+        private readonly IHyperPlayConfig config;
+        private readonly IHyperPlayData data;
+        private readonly DataStorage dataStorage;
         private readonly IHttpClient httpClient;
         private readonly IChainConfig chainConfig;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HyperPlayProvider"/> class.
         /// </summary>
+        /// <param name="config">Injected <see cref="HyperPlayConfig"/>.</param>
+        /// <param name="data">Injected <see cref="IHyperPlayData"/>.</param>
+        /// <param name="dataStorage">Injected <see cref="DataStorage"/>.</param>
         /// <param name="httpClient">HttpClient to make requests.</param>
         /// <param name="chainConfig">ChainConfig to fetch chain data.</param>
         /// <param name="chainRegistryProvider">Injected <see cref="ChainRegistryProvider"/>.</param>
-        public HyperPlayProvider(IHttpClient httpClient, IChainConfig chainConfig, ChainRegistryProvider chainRegistryProvider)
+        public HyperPlayProvider(IHyperPlayConfig config, IHyperPlayData data, DataStorage dataStorage, IHttpClient httpClient, IChainConfig chainConfig, ChainRegistryProvider chainRegistryProvider)
             : base(chainRegistryProvider: chainRegistryProvider)
         {
+            this.config = config;
+            this.data = data;
+            this.dataStorage = dataStorage;
             this.httpClient = httpClient;
             this.chainConfig = chainConfig;
         }
@@ -43,6 +55,12 @@ namespace ChainSafe.Gaming.HyperPlay
             string[] accounts = await Perform<string[]>("eth_accounts");
 
             string account = accounts[0].AssertIsPublicAddress(nameof(account));
+
+            // Saved account exists.
+            if (data.RememberSession && data.SavedAccount == account)
+            {
+                return account;
+            }
 
             string message = "Sign-in with Ethereum";
 
@@ -63,12 +81,25 @@ namespace ChainSafe.Gaming.HyperPlay
                 throw new Web3Exception("Fetched address does not match the signing address.");
             }
 
+            if (config.RememberSession)
+            {
+                data.RememberSession = true;
+
+                data.SavedAccount = account;
+
+                await dataStorage.Save(data);
+            }
+
             return account;
         }
 
         public override Task Disconnect()
         {
-            // currently HyperPlay doesn't support disconnecting.
+            if (data.RememberSession)
+            {
+                dataStorage.Clear(data);
+            }
+
             return Task.CompletedTask;
         }
 
@@ -94,7 +125,7 @@ namespace ChainSafe.Gaming.HyperPlay
                 },
             });
 
-            string response = (await httpClient.PostRaw("http://localhost:9680/rpc", body, "application/json")).Response;
+            string response = (await httpClient.PostRaw(config.Url, body, "application/json")).Response;
 
             // In case response is just a primitive type like string/number...
             // Deserializing it directly doesn't work.
