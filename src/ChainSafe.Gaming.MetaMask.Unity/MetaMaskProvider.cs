@@ -83,13 +83,8 @@ namespace ChainSafe.Gaming.MetaMask.Unity
 
             analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
-                ProjectId = projectConfig.ProjectId,
-                Network = chainConfig.Network,
-                ChainId = chainConfig.ChainId,
-                Rpc = chainConfig.Rpc,
                 EventName = "Metamask WebGL Initialized",
                 PackageName = "io.chainsafe.web3-unity",
-                Version = analyticsClient.AnalyticsVersion,
             });
 
             return await metaMaskController.Connect();
