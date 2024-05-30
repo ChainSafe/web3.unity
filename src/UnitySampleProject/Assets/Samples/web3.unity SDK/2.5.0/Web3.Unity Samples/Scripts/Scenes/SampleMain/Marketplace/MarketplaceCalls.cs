@@ -1,3 +1,4 @@
+#if MARKETPLACE_AVAILABLE
 using Scripts.EVM.Marketplace;
 using UnityEngine;
 
@@ -271,3 +272,4 @@ public class MarketplaceCalls : MonoBehaviour
     
     #endregion
 }
+#endif
