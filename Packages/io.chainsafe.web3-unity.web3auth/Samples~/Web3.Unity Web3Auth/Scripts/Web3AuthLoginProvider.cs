@@ -95,11 +95,7 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
         IAnalyticsClient client = (IAnalyticsClient)Web3Accessor.Web3.ServiceProvider.GetService(typeof(IAnalyticsClient));
         client.CaptureEvent(new AnalyticsEvent()
         {
-            ChainId = Web3Accessor.Web3.ChainConfig.ChainId,
-            Network = Web3Accessor.Web3.ChainConfig.Network,
-            ProjectId = Web3Accessor.Web3.ProjectConfig.ProjectId,
             EventName = $"Login provider {provider}",
-            Version = client.AnalyticsVersion,
             PackageName = "io.chainsafe.web3-unity.web3auth",
         });
     }
