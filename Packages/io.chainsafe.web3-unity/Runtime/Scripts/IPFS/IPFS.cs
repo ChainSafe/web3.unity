@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace Web3Unity.Scripts.Library.IPFS
+namespace ChainSafe.Gaming.Marketplace
 {
     public static class IPFS
     {

@@ -1,7 +1,7 @@
 using Scripts.EVM.Remote;
 using UnityEngine;
 
-namespace ChainSafe.Gaming
+namespace ChainSafe.Gaming.Marketplace
 {
     public class ImageUploader : MonoBehaviour
     {

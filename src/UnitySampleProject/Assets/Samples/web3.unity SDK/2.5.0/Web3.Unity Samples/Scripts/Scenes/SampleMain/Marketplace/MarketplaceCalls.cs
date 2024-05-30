@@ -1,3 +1,4 @@
+#if MARKETPLACE_AVAILABLE
 using Scripts.EVM.Marketplace;
 using UnityEngine;
 
@@ -61,7 +62,7 @@ public class MarketplaceCalls : MonoBehaviour
     [SerializeField] private string collectionContractToList = "Set collection contract to list from";
     
     [Header("List to marketplace calls")]
-    [SerializeField] private string marketplaceContractToBuyFrom = "Set marketplace contract to list to";
+    [SerializeField] private string marketplaceContractToBuyFrom = "Set marketplace contract to buy from";
     [SerializeField] private string tokenIdToBuy = "Set token ID to buy";
     [SerializeField] private string weiPriceToBuy = "Set price in wei to buy with i.e 100000000000000";
     
@@ -271,3 +272,4 @@ public class MarketplaceCalls : MonoBehaviour
     
     #endregion
 }
+#endif

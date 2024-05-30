@@ -13,7 +13,7 @@ using Nethereum.Hex.HexTypes;
 using Nethereum.Signer;
 using Nethereum.Util;
 using UnityEngine;
-using Web3Unity.Scripts.Library.IPFS;
+using ChainSafe.Gaming.Marketplace;
 
 namespace Scripts.EVM.Token
 {

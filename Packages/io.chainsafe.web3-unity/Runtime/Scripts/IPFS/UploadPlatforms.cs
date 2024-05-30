@@ -10,7 +10,6 @@ public class UploadPlatforms
     
     #region Fields
     
-   
     public static event EventHandler<byte[]> ImageSelected;
 
     #endregion
@@ -39,7 +38,7 @@ public class UploadPlatforms
         #elif UNITY_IOS
         imageData = await UploadImageIOS();
         return imageData;
-#else
+        #else
         Debug.LogError("File picking is not implemented for this platform.");
         return null;
         #endif
@@ -219,7 +218,7 @@ public class UploadPlatforms
     }
     #endif
     
-#if UNITY_IOS
+    #if UNITY_IOS
     [DllImport("__Internal")]
     private static extern void showActionSheet(string title, string[] allowedFileTypes, int allowedFileTypesCount, IntPtr callback);
 
@@ -251,6 +250,7 @@ public class UploadPlatforms
         string path = Marshal.PtrToStringAnsi(pathPtr);
         tcs.SetResult(path);
     }
-#endif
+    #endif
+    
     #endregion
 }
