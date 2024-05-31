@@ -1,9 +1,6 @@
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.UnityPackage;
-using ChainSafe.Gaming.UnityPackage.Model;
 using Scripts.EVM.Token;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,7 +12,7 @@ public class Erc1155Calls : MonoBehaviour
 {
     #region Fields
     [Header("Change the fields below for testing purposes")]
-
+    
     #region Balance Of
     
     [Header("Balance Of Call")]
@@ -65,8 +62,7 @@ public class Erc1155Calls : MonoBehaviour
     #endregion
 
     #endregion
-
-
+    
     /// <summary>
     /// Balance Of ERC1155 Address
     /// </summary>

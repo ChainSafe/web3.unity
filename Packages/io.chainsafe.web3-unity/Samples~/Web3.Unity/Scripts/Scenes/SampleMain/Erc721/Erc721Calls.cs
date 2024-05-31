@@ -1,10 +1,7 @@
-using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Text;
 using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.UnityPackage;
-using ChainSafe.Gaming.UnityPackage.Model;
 using Scripts.EVM.Token;
 using UnityEngine;
 
