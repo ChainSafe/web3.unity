@@ -1,13 +1,13 @@
 {
     "name": "io.chainsafe.web3-unity.lootboxes",
-    "version": "2.5.5",
+    "version": "2.6.0",
     "displayName": "web3.unity SDK Lootboxes",
     "description": "This additional package provides you with sample scene and sample scripts for opening lootboxes of various types",
     "license": "LGPL-3.0-only",
     "licensesUrl": "https://github.com/ChainSafe/web3.unity/blob/main/LICENSE",
     "documentationUrl": "https://docs.gaming.chainsafe.io/",
     "dependencies": {
-        "io.chainsafe.web3-unity": "2.5.5"
+        "io.chainsafe.web3-unity": "2.6.0"
     },
     "keywords": [
         "web3",

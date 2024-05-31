@@ -163,7 +163,7 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "io.chainsafe.web3-unity": "2.5.5"
+        "io.chainsafe.web3-unity": "2.6.0"
       }
     },
     "io.chainsafe.web3-unity.marketplace": {
@@ -181,7 +181,7 @@
       "source": "local",
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.0.2",
-        "io.chainsafe.web3-unity": "2.5.0"
+        "io.chainsafe.web3-unity": "2.6.0"
       }
     },
     "io.chainsafe.web3-unity.web3auth": {
@@ -190,7 +190,7 @@
       "source": "local",
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.0.2",
-        "io.chainsafe.web3-unity": "2.5.5"
+        "io.chainsafe.web3-unity": "2.6.0"
       }
     },
     "nuget.mono-cecil": {
