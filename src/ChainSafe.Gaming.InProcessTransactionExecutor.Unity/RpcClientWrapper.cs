@@ -1,4 +1,5 @@
 using System;
+using System.Net.Http;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Environment;
 using Nethereum.JsonRpc.Client;
@@ -15,6 +16,6 @@ namespace ChainSafe.Gaming.InProcessTransactionExecutor.Unity
             this.chainConfig = chainConfig;
         }
 
-        public IClient Client => new UnityWebRequestRpcTaskClient(new Uri(chainConfig.Rpc));
+        public IClient Client => new RpcClient(new Uri(chainConfig.Rpc));
     }
 }
