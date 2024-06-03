@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace ChainSafe.Gaming.Unity
+namespace ChainSafe.Gaming.Web3.Environment
 {
     public interface IMainThreadRunner
     {

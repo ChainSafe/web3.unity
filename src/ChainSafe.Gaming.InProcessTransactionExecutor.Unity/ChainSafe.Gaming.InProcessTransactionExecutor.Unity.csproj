@@ -13,7 +13,6 @@
 
     <ItemGroup>
         <ProjectReference Include="../ChainSafe.Gaming.InProcessTransactionExecutor/ChainSafe.Gaming.InProcessTransactionExecutor.csproj" />
-        <ProjectReference Include="../ChainSafe.Gaming.Unity/ChainSafe.Gaming.Unity.csproj" />
     </ItemGroup>
 
     <ItemGroup>
