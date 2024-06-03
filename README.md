@@ -5,22 +5,23 @@
 [<img alt="Twitter" src="https://img.shields.io/twitter/follow/espadrine.svg?style=for-the-badge&label=Twitter&color=1DA1F2" height="20">](https://twitter.com/chainsafeth)
 
 ## Documentation
-You can access the docs here: https://docs.gaming.chainsafe.io/
+You can access the full docs at [docs.gaming.chainsafe.io](https://docs.gaming.chainsafe.io)
 
-Our codebase is quite easy to use. This is an example of a contract call from the SDK within unity.
+Our codebase is quite easy to use. This is an example of accessing player balance and calling a write method of a custom Smart Contract within Unity.
 
-```
-public async void ContractCall()
-    {
-        object[] args =
-        {
-            Web3Accessor.Web3.Signer.PublicAddress
-        };
-        var data = await Evm.ContractCall(Web3Accessor.Web3, method, abi, contractAddress, args);
-        var response = SampleOutputUtil.BuildOutputValue(data);
-        Debug.Log($"Output: {response}");
-        // You can make additional changes after this line
-    }
+```csharp
+async void Awake()
+{
+    // Build Web3 client
+    var web3 = await BuildWeb3();
+    
+    // Get ERC-20 balance for current user
+    var balance = await web3.Erc20.GetBalanceOf(erc20ContractAddress);
+    
+    // Interact with custom Contract
+    var customContract = web3.ContractBuilder.Build(contractAbi, contractAddress);
+    var friendHp = await customContract.SendSingle<int, BigInteger>("healPlayer", nftItemId);
+}
 ```
 
 Additional prefab scripts can be found here https://docs.gaming.chainsafe.io/current/prefab-scripts#contract-call
