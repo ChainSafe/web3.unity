@@ -6,7 +6,6 @@
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <EnableNETAnalyzers>True</EnableNETAnalyzers>
     <CodeAnalysisRuleSet>../../global.ruleset</CodeAnalysisRuleSet>
-    <Nullable>enable</Nullable>
     <Configurations>Debug;Release;Test</Configurations>
     <Platforms>AnyCPU</Platforms>
     <RootNamespace>ChainSafe.Gaming.InProcessTransactionExecutor</RootNamespace>
