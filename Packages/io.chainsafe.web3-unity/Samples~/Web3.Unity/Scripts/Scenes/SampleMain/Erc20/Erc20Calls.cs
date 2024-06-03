@@ -52,7 +52,7 @@ public class Erc20Calls : MonoBehaviour
     public async void NativeBalanceOf()
     {
         var balance = await Web3Accessor.Web3.RpcProvider.GetBalance(accountBalanceOf);
-        SampleOutputUtil.PrintResult(balance.ToString(), "Native Balance Of");
+        SampleOutputUtil.PrintResult(balance.ToString(), "ERC-20", nameof(NativeBalanceOf));
     }
 
     /// <summary>
