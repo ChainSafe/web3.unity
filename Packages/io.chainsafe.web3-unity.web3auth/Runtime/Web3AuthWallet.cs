@@ -72,7 +72,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
             var signerConfig = new InProcessSignerConfig { PrivateKey = privateKey };
             signer = new InProcessSigner(signerConfig);
 
-            transactionExecutor = new InProcessTransactionExecutor(signer, analyticsClient.ChainConfig, rpcProvider, new RpcClientWrapper(analyticsClient.ChainConfig, mainThreadRunner));
+            transactionExecutor = new InProcessTransactionExecutor(signer, analyticsClient.ChainConfig, rpcProvider, mainThreadRunner, new RpcClientWrapper(analyticsClient.ChainConfig));
 
             void Web3Auth_OnLogin(Web3AuthResponse response)
             {

@@ -8,14 +8,13 @@ namespace ChainSafe.Gaming.InProcessTransactionExecutor.Unity
 {
     public class RpcClientWrapper : IRpcClientWrapper
     {
-        public RpcClientWrapper(IChainConfig chainConfig, IMainThreadRunner mainThreadRunner)
+        private readonly IChainConfig chainConfig;
+
+        public RpcClientWrapper(IChainConfig chainConfig)
         {
-            mainThreadRunner.Enqueue(() =>
-            {
-                Client = new UnityWebRequestRpcTaskClient(new Uri(chainConfig.Rpc));
-            });
+            this.chainConfig = chainConfig;
         }
 
-        public IClient Client { get; private set; }
+        public IClient Client => new UnityWebRequestRpcTaskClient(new Uri(chainConfig.Rpc));
     }
 }
