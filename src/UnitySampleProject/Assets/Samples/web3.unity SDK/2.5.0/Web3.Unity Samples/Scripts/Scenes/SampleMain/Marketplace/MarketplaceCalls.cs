@@ -61,7 +61,7 @@ public class MarketplaceCalls : MonoBehaviour
     [SerializeField] private string marketplaceContractToListTo = "Set marketplace contract to list to";
     [SerializeField] private string collectionContractToList = "Set collection contract to list from";
     
-    [Header("List to marketplace calls")]
+    [Header("Marketplace purchase calls")]
     [SerializeField] private string marketplaceContractToBuyFrom = "Set marketplace contract to buy from";
     [SerializeField] private string tokenIdToBuy = "Set token ID to buy";
     [SerializeField] private string weiPriceToBuy = "Set price in wei to buy with i.e 100000000000000";
