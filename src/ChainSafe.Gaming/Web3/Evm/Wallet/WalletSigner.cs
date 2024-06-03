@@ -38,7 +38,7 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
         {
             SerializableTypedData<TStructType> typedData = new SerializableTypedData<TStructType>(domain, message);
 
-            string hash = await walletProvider.Perform<string>(walletConfig.SignTypedMessageRpcMethodName, typedData, PublicAddress);
+            string hash = await walletProvider.Perform<string>(walletConfig.SignTypedMessageRpcMethodName, PublicAddress, typedData);
 
             return hash.AssertTypedDataSignatureValid(typedData, PublicAddress);
         }

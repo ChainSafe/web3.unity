@@ -9,6 +9,13 @@ namespace ChainSafe.Gaming.Web3.Core.Debug
 {
     public static class HashExtensions
     {
+        public static bool IsTransactionHashValid(this string hash)
+        {
+            string regexPattern = @"^0x[a-fA-F0-9]{64}$";
+
+            return !string.IsNullOrEmpty(hash) && Regex.IsMatch(hash, regexPattern);
+        }
+
         public static bool IsSignatureHashValid(this string hash)
         {
             string regexPattern = @"^0x[a-fA-F0-9]{130}$";
@@ -24,6 +31,16 @@ namespace ChainSafe.Gaming.Web3.Core.Debug
         public static bool IsTypedDataSignatureValid<TMessage>(this string hash, SerializableTypedData<TMessage> typedData, string account)
         {
             return IsSignatureHashValid(hash) && IsTypedDataSignatureAuthentic(hash, typedData, account);
+        }
+
+        public static string AssertTransactionValid(this string hash)
+        {
+            if (!IsTransactionHashValid(hash))
+            {
+                throw new Web3AssertionException("Transaction hash is not valid.");
+            }
+
+            return hash;
         }
 
         public static string AssertSignatureValid(this string hash, string message, string account)

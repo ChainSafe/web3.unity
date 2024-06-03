@@ -10,6 +10,9 @@ namespace ChainSafe.Gaming.WalletConnect
     [CreateAssetMenu(menuName = "ChainSafe/WalletConnect/WalletConnect Config", fileName = "WalletConnectConfig", order = 0)]
     public class WalletConnectConfigSO : ScriptableObject, IWalletConnectConfig
     {
+        public string SignMessageRpcMethodName => "personal_sign";
+        public string SignTypedMessageRpcMethodName => "eth_signTypedData";
+        
         [field: SerializeField] public bool AutoRenewSession { get; set; } = true;
         [field: SerializeField] public string ProjectName { get; set; }
         [field: SerializeField] public string ProjectId { get; set; }

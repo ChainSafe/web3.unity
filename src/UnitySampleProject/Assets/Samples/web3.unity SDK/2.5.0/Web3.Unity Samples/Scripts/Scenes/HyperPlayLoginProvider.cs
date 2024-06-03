@@ -4,6 +4,7 @@ using ChainSafe.Gaming.HyperPlay;
 using ChainSafe.Gaming.UnityPackage.Common;
 using ChainSafe.Gaming.WalletConnect;
 using ChainSafe.Gaming.Web3.Build;
+using ChainSafe.Gaming.Web3.Evm.Wallet;
 using Scenes;
 using UnityEngine;
 using UnityEngine.UI;
@@ -26,7 +27,7 @@ public class HyperPlayLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     {
         return web3Builder.Configure(services =>
         {
-            services.UseHyperPlay().UseHyperPlayTransactionExecutor();
+            services.UseHyperPlay().UseWalletSigner().UseWalletTransactionExecutor();
         });
     }
     
