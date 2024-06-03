@@ -1,11 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using ChainSafe.Gaming.Exchangers.Ramp;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Common;
-using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.GamingSdk.Web3Auth;
