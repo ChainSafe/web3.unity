@@ -11,7 +11,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="../ChainSafe.Gaming.MetaMask/ChainSafe.Gaming.MetaMask.csproj" />
+        <ProjectReference Include="../ChainSafe.Gaming/ChainSafe.Gaming.csproj" />
     </ItemGroup>
 
     <ItemGroup>
