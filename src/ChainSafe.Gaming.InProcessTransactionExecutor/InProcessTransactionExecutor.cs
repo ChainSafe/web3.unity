@@ -31,10 +31,9 @@ namespace ChainSafe.Gaming.InProcessTransactionExecutor
         /// <param name="signer">Injected <see cref="ISigner"/>.</param>
         /// <param name="chainConfig">Injected <see cref="IChainConfig"/>.</param>
         /// <param name="rpcProvider">Injected <see cref="IRpcProvider"/>.</param>
-        /// <param name="mainThreadRunner">Injected <see cref="IMainThreadRunner"/>.</param>
         /// <param name="rpcClient">Injected <see cref="IClient"/>.</param>
         /// <exception cref="Web3Exception">Throws exception if initializing instance fails.</exception>
-        public InProcessTransactionExecutor(ISigner signer, IChainConfig chainConfig, IRpcProvider rpcProvider, IMainThreadRunner mainThreadRunner, IClient rpcClient)
+        public InProcessTransactionExecutor(ISigner signer, IChainConfig chainConfig, IRpcProvider rpcProvider, IClient rpcClient)
         {
             // It should be possible to set up other signers to work with this as well.
             // However, does it make sense to let a remote wallet sign a transaction, but
@@ -44,23 +43,19 @@ namespace ChainSafe.Gaming.InProcessTransactionExecutor
             accountAddress = privateKey.GetPublicAddress();
             var account = new Account(privateKey);
 
-            // Initialize Web3 on the main thread.
-            mainThreadRunner.Enqueue(() =>
+            if (chainConfig.Rpc is not null && !string.Empty.Equals(chainConfig.Rpc))
             {
-                if (chainConfig.Rpc is not null && !string.Empty.Equals(chainConfig.Rpc))
-                {
-                    web3 = new NWeb3(account, rpcClient);
-                }
-                else if (chainConfig.Ipc is not null && !string.Empty.Equals(chainConfig.Ipc))
-                {
-                    var client = new NIpcClient(chainConfig.Rpc);
-                    web3 = new NWeb3(client);
-                }
-                else
-                {
-                    throw new Web3Exception($"{nameof(IChainConfig)} should have at least one communication method set.");
-                }
-            });
+                web3 = new NWeb3(account, rpcClient);
+            }
+            else if (chainConfig.Ipc is not null && !string.Empty.Equals(chainConfig.Ipc))
+            {
+                var client = new NIpcClient(chainConfig.Rpc);
+                web3 = new NWeb3(client);
+            }
+            else
+            {
+                throw new Web3Exception($"{nameof(IChainConfig)} should have at least one communication method set.");
+            }
 
             this.rpcProvider = rpcProvider;
         }

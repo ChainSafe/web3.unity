@@ -20,8 +20,6 @@ namespace ChainSafe.Gaming.InProcessTransactionExecutor.Unity
             collection.AssertServiceNotBound<ITransactionExecutor>();
             collection.AddSingleton<ITransactionExecutor, InProcessTransactionExecutor>();
 
-            collection.AssertServiceNotBound<IClient>();
-            collection.AddSingleton<IClient, RpcClient>();
             return collection;
         }
     }
