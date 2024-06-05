@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using ChainSafe.Gaming.UnityPackage.Model;
 using UnityEngine;
-using Web3Unity.Scripts.Library.IPFS;
+using ChainSafe.Gaming.Marketplace;
 
 public class IPFSCalls : MonoBehaviour
 {

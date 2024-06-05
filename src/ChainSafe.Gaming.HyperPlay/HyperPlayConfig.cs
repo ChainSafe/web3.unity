@@ -1,11 +1,14 @@
-using ChainSafe.Gaming.Web3.Evm.Wallet;
-
 namespace ChainSafe.Gaming.HyperPlay
 {
-    public class HyperPlayConfig : IWalletProviderConfig
+    /// <summary>
+    /// Config for a HyperPlay connection.
+    /// </summary>
+    public class HyperPlayConfig : IHyperPlayConfig
     {
-        public string SignMessageRpcMethodName => "personal_sign";
-
-        public string SignTypedMessageRpcMethodName => "eth_signTypedData_v3";
+        /// <summary>
+        /// Remember the HyperPlay session.
+        /// Like remember me for login.
+        /// </summary>
+        public bool RememberSession { get; set; }
     }
 }

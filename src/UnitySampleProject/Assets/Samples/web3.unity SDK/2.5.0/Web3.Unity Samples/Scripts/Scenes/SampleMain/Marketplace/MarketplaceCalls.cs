@@ -1,3 +1,4 @@
+#if MARKETPLACE_AVAILABLE
 using Scripts.EVM.Marketplace;
 using UnityEngine;
 
@@ -59,6 +60,11 @@ public class MarketplaceCalls : MonoBehaviour
     [SerializeField] private string weiPriceToList = "Set price in wei to list for i.e 100000000000000";
     [SerializeField] private string marketplaceContractToListTo = "Set marketplace contract to list to";
     [SerializeField] private string collectionContractToList = "Set collection contract to list from";
+    
+    [Header("Marketplace purchase calls")]
+    [SerializeField] private string marketplaceContractToBuyFrom = "Set marketplace contract to buy from";
+    [SerializeField] private string tokenIdToBuy = "Set token ID to buy";
+    [SerializeField] private string weiPriceToBuy = "Set price in wei to buy with i.e 100000000000000";
     
     #endregion
 
@@ -254,5 +260,16 @@ public class MarketplaceCalls : MonoBehaviour
         Debug.Log($"TX: {response}");
     }
     
+    /// <summary>
+    /// Purchases an Nft from the marketplace
+    /// </summary>
+    public async void PurchaseNftFromMarketplace()
+    {
+        var data = await Marketplace.PurchaseNft(marketplaceContractToBuyFrom, tokenIdToBuy, weiPriceToBuy);
+        var response = SampleOutputUtil.BuildOutputValue(data);
+        Debug.Log($"TX: {response}");
+    }
+    
     #endregion
 }
+#endif

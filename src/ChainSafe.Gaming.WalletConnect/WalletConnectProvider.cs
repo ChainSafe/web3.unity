@@ -96,13 +96,8 @@ namespace ChainSafe.Gaming.WalletConnect
 
             analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
-                ProjectId = analyticsClient.ProjectConfig.ProjectId,
-                Network = analyticsClient.ChainConfig.Network,
-                ChainId = analyticsClient.ChainConfig.ChainId,
-                Rpc = analyticsClient.ChainConfig.Rpc,
                 EventName = "Wallet Connect Initialized",
                 PackageName = "io.chainsafe.web3-unity",
-                Version = analyticsClient.AnalyticsVersion,
             });
 
             ValidateConfig();

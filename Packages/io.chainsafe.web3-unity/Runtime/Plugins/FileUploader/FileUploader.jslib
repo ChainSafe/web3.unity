@@ -10,10 +10,10 @@
         var reader = new FileReader();
         reader.onload = function(event) {
             var dataUrl = event.target.result;
-            nethereumUnityInstance.SendMessage('ImageUploader', 'OnImageSelected', dataUrl);
+            SendMessage('ImageUploader', 'OnImageSelected', dataUrl);
         };
         reader.readAsDataURL(file);
     };
     input.click();
-    },
+    }
 });
