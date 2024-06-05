@@ -20,7 +20,13 @@ namespace ChainSafe.Gaming.HyperPlay
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
         public static IWeb3ServiceCollection UseHyperPlay(this IWeb3ServiceCollection collection, IHyperPlayConfig config)
         {
+            collection.AssertServiceNotBound<IHyperPlayData>();
+
             collection.AddSingleton<IHyperPlayData, IStorable, HyperPlayData>();
+
+            collection.AssertServiceNotBound<IHyperPlayConfig>();
+
+            collection.Replace(ServiceDescriptor.Singleton(typeof(IHyperPlayConfig), config));
 
             collection.UseWalletProvider<HyperPlayProvider>(config);
 

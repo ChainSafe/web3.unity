@@ -7,7 +7,7 @@ namespace ChainSafe.Gaming.HyperPlay
     {
         public string SignMessageRpcMethodName => "personal_sign";
 
-        public string SignTypedMessageRpcMethodName => "eth_signTypedData_v4";
+        public string SignTypedMessageRpcMethodName => "eth_signTypedData_v3";
 
         /// <summary>
         /// Remember the HyperPlay session.
