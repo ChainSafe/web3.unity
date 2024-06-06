@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using ChainSafe.Gaming.WalletConnect.Models;
+using ChainSafe.Gaming.Evm.Transactions;
 using WalletConnectSharp.Common.Utils;
 using WalletConnectSharp.Network.Models;
 
@@ -10,13 +10,13 @@ namespace ChainSafe.Gaming.WalletConnect.Methods
     /// </summary>
     [RpcMethod("eth_sendTransaction")]
     [RpcRequestOptions(Clock.ONE_MINUTE, 99999)]
-    public class EthSendTransaction : List<TransactionModel>
+    public class EthSendTransaction : List<TransactionRequest>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EthSendTransaction"/> class.
         /// </summary>
         /// <param name="transactions">Transaction to be sent.</param>
-        public EthSendTransaction(params TransactionModel[] transactions)
+        public EthSendTransaction(params TransactionRequest[] transactions)
             : base(transactions)
         {
         }

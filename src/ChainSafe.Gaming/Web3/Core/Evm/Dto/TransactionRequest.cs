@@ -85,21 +85,6 @@ namespace ChainSafe.Gaming.Evm.Transactions
             return this.MemberwiseClone();
         }
 
-        public TransactionInput ToTransactionInput()
-        {
-            return new TransactionInput
-            {
-                From = From,
-                To = To,
-                Gas = GasLimit,
-                GasPrice = GasPrice,
-                Value = Value,
-                Data = Data ?? "0x",
-                Nonce = Nonce,
-                AccessList = AccessList,
-            };
-        }
-
         public Dictionary<string, object> ToRPCParam()
         {
             var param = new Dictionary<string, object>();

@@ -12,16 +12,12 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
 {
     public class WalletTransactionExecutor : ITransactionExecutor
     {
-        private readonly ILogWriter logWriter;
-
         private readonly IWalletProvider walletProvider;
 
         private readonly ISigner signer;
 
-        public WalletTransactionExecutor(ILogWriter logWriter, IWalletProvider walletProvider, ISigner signer)
+        public WalletTransactionExecutor(IWalletProvider walletProvider, ISigner signer)
         {
-            this.logWriter = logWriter;
-
             this.walletProvider = walletProvider;
 
             this.signer = signer;
@@ -29,18 +25,12 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
 
         public async Task<TransactionResponse> SendTransaction(TransactionRequest transaction)
         {
-            if (string.IsNullOrEmpty(transaction.From))
-            {
-                transaction.From = signer.PublicAddress;
-            }
+            transaction.From ??= signer.PublicAddress;
+            transaction.Data ??= "0x";
 
-            TransactionInput transactionInput = transaction.ToTransactionInput();
-
-            string hash = await walletProvider.Perform<string>("eth_sendTransaction", transactionInput);
+            string hash = await walletProvider.Perform<string>("eth_sendTransaction", transaction);
 
             hash = hash.AssertTransactionValid();
-
-            logWriter.Log($"Transaction executed with hash {hash}");
 
             return await walletProvider.GetTransaction(hash);
         }
