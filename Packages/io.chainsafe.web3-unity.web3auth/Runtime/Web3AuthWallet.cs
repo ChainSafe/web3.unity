@@ -9,6 +9,7 @@ using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using ChainSafe.Gaming.Web3.Environment;
+using Nethereum.JsonRpc.Client;
 using Nethereum.Signer;
 using UnityEngine;
 using TWeb3Auth = Web3Auth;
@@ -26,20 +27,21 @@ namespace ChainSafe.GamingSdk.Web3Auth
         private TWeb3Auth coreInstance;
         private InProcessSigner signer;
         private InProcessTransactionExecutor transactionExecutor;
-        private IMainThreadRunner mainThreadRunner;
+        private IClient rpcClient;
         private readonly IAnalyticsClient analyticsClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Web3AuthWallet"/> class.
         /// </summary>
         /// <param name="config">The configuration for the Web3Auth wallet.</param>
-        /// <param name="chainConfig">The configuration for the target blockchain.</param>
         /// <param name="rpcProvider">The RPC provider for blockchain interaction.</param>
-        public Web3AuthWallet(Web3AuthWalletConfig config, IRpcProvider rpcProvider, IMainThreadRunner mainThreadRunner, IAnalyticsClient analyticsClient)
+        /// <param name="rpcClient"></param>
+        /// <param name="analyticsClient"></param>
+        public Web3AuthWallet(Web3AuthWalletConfig config, IRpcProvider rpcProvider, IClient rpcClient, IAnalyticsClient analyticsClient)
         {
             this.config = config;
             this.rpcProvider = rpcProvider;
-            this.mainThreadRunner = mainThreadRunner;
+            this.rpcClient = rpcClient;
             this.analyticsClient = analyticsClient;
         }
 
@@ -72,7 +74,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
             var signerConfig = new InProcessSignerConfig { PrivateKey = privateKey };
             signer = new InProcessSigner(signerConfig);
 
-            transactionExecutor = new InProcessTransactionExecutor(signer, analyticsClient.ChainConfig, rpcProvider, mainThreadRunner, new RpcClientWrapper(analyticsClient.ChainConfig));
+            transactionExecutor = new InProcessTransactionExecutor(signer, analyticsClient.ChainConfig, rpcProvider, rpcClient);
 
             void Web3Auth_OnLogin(Web3AuthResponse response)
             {
