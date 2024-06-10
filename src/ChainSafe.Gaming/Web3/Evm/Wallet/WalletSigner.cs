@@ -7,6 +7,10 @@ using ChainSafe.Gaming.Web3.Core.Logout;
 
 namespace ChainSafe.Gaming.Web3.Evm.Wallet
 {
+    /// <summary>
+    /// Concrete implementation of <see cref="ISigner"/> for signing messages using a wallet.
+    /// This can be used with any wallet provider that implements <see cref="IWalletProvider"/>.
+    /// </summary>
     public class WalletSigner : ISigner, ILifecycleParticipant, ILogoutHandler
     {
         private readonly IWalletProvider walletProvider;

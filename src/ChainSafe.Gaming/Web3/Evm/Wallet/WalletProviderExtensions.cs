@@ -10,6 +10,13 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
 {
     public static class WalletProviderExtensions
     {
+        /// <summary>
+        /// Inject a Wallet Provider for <see cref="IWalletProvider"/>.
+        /// </summary>
+        /// <param name="collection">Collection of services.</param>
+        /// <param name="config">Config for wallet connection, injected <see cref="IWalletProviderConfig"/>.</param>
+        /// <typeparam name="TProvider">Concrete Type of provider to be injected.</typeparam>
+        /// <returns>Collection of services with services injected.</returns>
         public static IWeb3ServiceCollection UseWalletProvider<TProvider>(this IWeb3ServiceCollection collection, IWalletProviderConfig config)
             where TProvider : WalletProvider
         {
@@ -22,6 +29,11 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
             return collection;
         }
 
+        /// <summary>
+        /// Inject <see cref="WalletSigner"/> for <see cref="ISigner"/>.
+        /// </summary>
+        /// <param name="collection">Collection of registered services.</param>
+        /// <returns>Collection of registered services with a registered <see cref="ISigner"/>.</returns>
         public static IWeb3ServiceCollection UseWalletSigner(this IWeb3ServiceCollection collection)
         {
             collection.AssertServiceNotBound<ISigner>();
@@ -31,6 +43,11 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
             return collection;
         }
 
+        /// <summary>
+        /// Inject <see cref="WalletTransactionExecutor"/> for <see cref="ITransactionExecutor"/>.
+        /// </summary>
+        /// <param name="collection">Collection of registered services.</param>
+        /// <returns>Collection of registered services with a registered <see cref="ITransactionExecutor"/>.</returns>
         public static IWeb3ServiceCollection UseWalletTransactionExecutor(this IWeb3ServiceCollection collection)
         {
             collection.AssertServiceNotBound<ITransactionExecutor>();

@@ -10,6 +10,10 @@ using Nethereum.RPC.Eth.DTOs;
 
 namespace ChainSafe.Gaming.Web3.Evm.Wallet
 {
+    /// <summary>
+    /// Concrete implementation of <see cref="ITransactionExecutor"/> for sending transactions using a wallet.
+    /// This can be used with any wallet provider that implements <see cref="IWalletProvider"/>.
+    /// </summary>
     public class WalletTransactionExecutor : ITransactionExecutor
     {
         private readonly IWalletProvider walletProvider;
