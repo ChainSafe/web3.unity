@@ -59,6 +59,7 @@ public class EvmCalls : MonoBehaviour
     
     [Header("Send Transaction Call")]
     [SerializeField] private string toAddress = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
+    [SerializeField] private string value = "12300000000000000";
 
     #endregion
 
@@ -223,7 +224,7 @@ public class EvmCalls : MonoBehaviour
     /// </summary>
     public async void SendTransaction()
     {
-        var transactionHash = await Evm.SendTransaction(Web3Accessor.Web3, toAddress);
+        var transactionHash = await Evm.SendTransaction(Web3Accessor.Web3, toAddress, BigInteger.Parse(value));
         SampleOutputUtil.PrintResult(transactionHash, nameof(Evm), nameof(Evm.SendTransaction));
     }
 

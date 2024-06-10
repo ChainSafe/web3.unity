@@ -95,16 +95,14 @@ namespace Scripts.EVM.Token
             object[] objArray = array.Cast<object>().ToArray();
             return await contract.Send(method, new object[] { objArray });
         }
-
-        // todo danger - possible money loss 
-        // todo rework input
-        public static async Task<string> SendTransaction(Web3 web3, string to)
+        
+        public static async Task<string> SendTransaction(Web3 web3, string to, BigInteger value)
         {
             var txRequest = new TransactionRequest
             {
                 To = to,
-                Value = new HexBigInteger(12300000000000000),
-                MaxFeePerGas = new HexBigInteger((await web3.RpcProvider.GetFeeData()).MaxFeePerGas),
+                Value = new HexBigInteger(value.ToString("X")),
+                MaxFeePerGas = new HexBigInteger((await web3.RpcProvider.GetFeeData()).MaxFeePerGas)
             };
             var response = await web3.TransactionExecutor.SendTransaction(txRequest);
             return response.Hash;
