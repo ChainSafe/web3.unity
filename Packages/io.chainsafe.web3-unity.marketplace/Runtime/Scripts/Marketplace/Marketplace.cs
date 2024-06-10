@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Model;
 using ChainSafe.Gaming.Web3;
@@ -133,7 +134,7 @@ namespace Scripts.EVM.Marketplace
         /// <param name="_description">Description of the 721 collection being created</param>
         /// <param name="_isMintingPublic">If minting is public or not</param>
         /// <returns>Contract send data object</returns>
-        public static async Task<object[]> Create721Collection(string _bearerToken, string _name, string _description, bool _isMintingPublic)
+        public static async Task<TransactionReceipt> Create721Collection(string _bearerToken, string _name, string _description, bool _isMintingPublic)
         {
                 var logoImageData = await UploadPlatforms.GetImageData();
                 var bannerImageData = await UploadPlatforms.GetImageData();
@@ -163,8 +164,9 @@ namespace Scripts.EVM.Marketplace
                     collectionData.banner,
                     _isMintingPublic
                 };
-                var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.MarketplaceFactory, ChainSafeContracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId], args);
-                return data;
+                var contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.MarketplaceFactory, ChainSafeContracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId]);
+                var data = await contract.SendWithReceipt(method, args); 
+                return data.receipt;
         }
         
         /// <summary>
@@ -176,7 +178,7 @@ namespace Scripts.EVM.Marketplace
         /// <param name="_description">Description of the 1155 collection being created</param>
         /// <param name="_isMintingPublic">If minting is public or not</param>
         /// <returns>Contract send data object</returns>
-        public static async Task<object[]> Create1155Collection(string _bearerToken, string _name, string _description, bool _isMintingPublic)
+        public static async Task<TransactionReceipt> Create1155Collection(string _bearerToken, string _name, string _description, bool _isMintingPublic)
         {
             try
             {
@@ -206,8 +208,9 @@ namespace Scripts.EVM.Marketplace
                     collectionData.banner,
                     _isMintingPublic
                 };
-                var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.MarketplaceFactory, ChainSafeContracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId], args);
-                return data;
+                var contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.MarketplaceFactory, ChainSafeContracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId]);
+                var data = await contract.SendWithReceipt(method, args); 
+                return data.receipt;
             }
             catch (Web3Exception e)
             {
@@ -222,7 +225,7 @@ namespace Scripts.EVM.Marketplace
         /// <param name="_collectionContract">721 collection contract to mint from/to</param>
         /// <param name="_uri">URI in full format i.e https://ipfs.chainsafe.io/ipfs/bafyjvzacdj4apx52hvbyjkwyf7i6a7t3pcqd4kw4xxfc67hgvn3a</param>
         /// <returns>Contract send data object</returns>
-        public static async Task<object[]> Mint721CollectionNft(string _collectionContract, string _uri)
+        public static async Task<TransactionReceipt> Mint721CollectionNft(string _collectionContract, string _uri)
         {
             try
             {
@@ -232,8 +235,9 @@ namespace Scripts.EVM.Marketplace
                     Web3Accessor.Web3.Signer.PublicAddress,
                     _uri
                 };
-                var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.GeneralErc721, _collectionContract, args);
-                return data;
+                var contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.GeneralErc721, _collectionContract);
+                var data = await contract.SendWithReceipt(method, args); 
+                return data.receipt;
             }
             catch (Web3Exception e)
             {
@@ -249,7 +253,7 @@ namespace Scripts.EVM.Marketplace
         /// <param name="_uri">URI in full format i.e https://ipfs.chainsafe.io/ipfs/bafyjvzacdj4apx52hvbyjkwyf7i6a7t3pcqd4kw4xxfc67hgvn3a</param>
         /// <param name="_amount">Amount of Nfts to mint</param>
         /// <returns>Contract send data object</returns>
-        public static async Task<object[]> Mint1155CollectionNft(string _collectionContract, string _uri, string _amount)
+        public static async Task<TransactionReceipt> Mint1155CollectionNft(string _collectionContract, string _uri, string _amount)
         {
             try
             {
@@ -261,8 +265,10 @@ namespace Scripts.EVM.Marketplace
                     _uri,
                     amount
                 };
-                var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.GeneralErc1155, _collectionContract, args);
-                return data;
+                
+                var contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.GeneralErc1155, _collectionContract);
+                var data = await contract.SendWithReceipt(method, args); 
+                return data.receipt;
             }
             catch (Web3Exception e)
             {
@@ -294,7 +300,7 @@ namespace Scripts.EVM.Marketplace
         /// <param name="_description">Marketplace description</param>
         /// <param name="_whitelisting">If whitelisting is enabled or not</param>
         /// <returns>Contract send data object</returns>
-        public static async Task<object[]> CreateMarketplace(string _bearerToken, string _name, string _description, bool _whitelisting)
+        public static async Task<TransactionReceipt> CreateMarketplace(string _bearerToken, string _name, string _description, bool _whitelisting)
         {
             try
             {
@@ -317,8 +323,9 @@ namespace Scripts.EVM.Marketplace
                     collectionData.id,
                     _whitelisting
                 };
-                var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.MarketplaceFactory, ChainSafeContracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId] , args);
-                return data;
+                var contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.MarketplaceFactory, ChainSafeContracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId]);
+                var data = await contract.SendWithReceipt(method, args); 
+                return data.receipt;
             }
             catch (Web3Exception e)
             {
@@ -348,7 +355,7 @@ namespace Scripts.EVM.Marketplace
         /// <param name="_marketplaceContract">Marketplace to approve</param>
         /// <param name="_permission">Permission being granted</param>
         /// <returns>Contract send data object</returns>
-        public static async Task<object[]> SetApprovalMarketplace(string _nftContract, string _marketplaceContract, string _type, bool _permission)
+        public static async Task<TransactionReceipt> SetApprovalMarketplace(string _nftContract, string _marketplaceContract, string _type, bool _permission)
         {
             try
             {
@@ -359,8 +366,9 @@ namespace Scripts.EVM.Marketplace
                     _permission
                 };
                 var abi = _type == "721" ? Token.ABI.GeneralErc721 : Token.ABI.GeneralErc1155;
-                var data = await Evm.ContractSend(Web3Accessor.Web3, method, abi, _nftContract, args);
-                return data;
+                var contract = Web3Accessor.Web3.ContractBuilder.Build(abi, _nftContract);
+                var data = await contract.SendWithReceipt(method, args); 
+                return data.receipt;
             }
             catch (Web3Exception e)
             {
@@ -369,7 +377,14 @@ namespace Scripts.EVM.Marketplace
             }
         }
         
-        public static async Task<object[]> PurchaseNft(string _marketplaceContract, string _itemId, string _amountToSend)
+        /// <summary>
+        /// Purchases NFT from the marketplace
+        /// </summary>
+        /// <param name="_marketplaceContract">The marketplace contract to purchase from</param>
+        /// <param name="_itemId">The NFT id to purchase</param>
+        /// <param name="_amountToSend">The amount to send in wei</param>
+        /// <returns>Contract send data object</returns>
+        public static async Task<TransactionReceipt> PurchaseNft(string _marketplaceContract, string _itemId, string _amountToSend)
         {
             try
             {
@@ -379,8 +394,13 @@ namespace Scripts.EVM.Marketplace
                 {
                     itemId
                 };
-                var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.Marketplace, _marketplaceContract, args, new HexBigInteger(_amountToSend));
-                return data;
+                var tx = new TransactionRequest
+                {
+                    Value = new HexBigInteger(BigInteger.Parse(_amountToSend).ToString("X"))
+                };
+                var contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.Marketplace, _marketplaceContract);
+                var data = await contract.SendWithReceipt(method, args, tx); 
+                return data.receipt;
             }
             catch (Web3Exception e)
             {
@@ -397,7 +417,7 @@ namespace Scripts.EVM.Marketplace
         /// <param name="_tokenId">Toked ID to list</param>
         /// <param name="_price">Price in wei to list for</param>
         /// <returns>Contract send data object</returns>
-        public static async Task<object[]> ListNftsToMarketplace(string _marketplaceContract, string _nftContract, string _tokenId, string _priceInWei)
+        public static async Task<TransactionReceipt> ListNftsToMarketplace(string _marketplaceContract, string _nftContract, string _tokenId, string _priceInWei)
         {
             try
             {
@@ -412,8 +432,9 @@ namespace Scripts.EVM.Marketplace
                     priceInWei,
                     deadline
                 };
-                var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.Marketplace, _marketplaceContract, args);
-                return data;
+                var contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.Marketplace, _marketplaceContract);
+                var data = await contract.SendWithReceipt(method, args); 
+                return data.receipt;
             }
             catch (Web3Exception e)
             {
