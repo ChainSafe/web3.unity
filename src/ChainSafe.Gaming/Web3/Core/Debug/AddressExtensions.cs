@@ -1,3 +1,5 @@
+using System.Text.RegularExpressions;
+
 namespace ChainSafe.Gaming.Web3.Core.Debug
 {
     public static class AddressExtensions
@@ -9,22 +11,22 @@ namespace ChainSafe.Gaming.Web3.Core.Debug
         /// <returns>True if the string provided is a public address.</returns>
         public static bool IsPublicAddress(string value)
         {
-            // TODO: more accurate test/Regex
-            return !string.IsNullOrEmpty(value) && value.Length == 42;
+            string regexPattern = @"^0x[a-fA-F0-9]{40}$";
+
+            return !string.IsNullOrEmpty(value) && Regex.IsMatch(value, regexPattern);
         }
 
         /// <summary>
         /// Assert that the string provided is a public address.
         /// </summary>
         /// <param name="value">String to check.</param>
-        /// <param name="variableName">Name of the string variable (nameof).</param>
         /// <returns>String that was checked.</returns>
         /// <exception cref="Web3Exception">The string provided is not public address.</exception>
-        public static string AssertIsPublicAddress(this string value, string variableName)
+        public static string AssertIsPublicAddress(this string value)
         {
             if (!IsPublicAddress(value))
             {
-                throw new Web3AssertionException($"\"{variableName}\" is not a public address.");
+                throw new Web3AssertionException($"\"{value}\" is not a public address.");
             }
 
             return value;

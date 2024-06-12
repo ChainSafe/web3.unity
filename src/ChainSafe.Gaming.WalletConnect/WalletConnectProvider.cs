@@ -29,7 +29,7 @@ using WalletConnectSharp.Sign.Models.Engine;
 namespace ChainSafe.Gaming.WalletConnect
 {
     /// <summary>
-    /// Default implementation of <see cref="IWalletConnectProvider"/>.
+    /// Default implementation of <see cref="IWalletProvider"/>.
     /// </summary>
     public class WalletConnectProvider : WalletProvider, ILifecycleParticipant, IConnectionHelper
     {
@@ -48,6 +48,7 @@ namespace ChainSafe.Gaming.WalletConnect
         private LocalData localData;
         private SessionStruct session;
         private bool connected;
+        private bool initialized;
         private IAnalyticsClient analyticsClient;
         private ConnectionHandlerConfig connectionHandlerConfig;
 
@@ -81,8 +82,18 @@ namespace ChainSafe.Gaming.WalletConnect
 
         private static bool SessionExpired(SessionStruct s) => s.Expiry != null && Clock.IsExpired((long)s.Expiry);
 
-        async ValueTask ILifecycleParticipant.WillStartAsync()
+        public async ValueTask WillStartAsync()
         {
+            await Initialize();
+        }
+
+        private async Task Initialize()
+        {
+            if (initialized)
+            {
+                return;
+            }
+
             analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
                 EventName = "Wallet Connect Initialized",
@@ -138,6 +149,8 @@ namespace ChainSafe.Gaming.WalletConnect
                     }
                 },
             };
+
+            initialized = true;
         }
 
         private void ValidateConfig()
@@ -153,10 +166,12 @@ namespace ChainSafe.Gaming.WalletConnect
             }
         }
 
-        async ValueTask ILifecycleParticipant.WillStopAsync()
+        public ValueTask WillStopAsync()
         {
             signClient?.Dispose();
             core?.Dispose();
+
+            return new ValueTask(Task.CompletedTask);
         }
 
         public override async Task<string> Connect()
@@ -165,6 +180,11 @@ namespace ChainSafe.Gaming.WalletConnect
             {
                 throw new WalletConnectException(
                     $"Tried connecting {nameof(WalletConnectProvider)}, but it's already been connected.");
+            }
+
+            if (!initialized)
+            {
+                await Initialize();
             }
 
             try

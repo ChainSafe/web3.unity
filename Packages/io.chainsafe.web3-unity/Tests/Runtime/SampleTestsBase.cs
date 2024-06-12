@@ -62,8 +62,8 @@ public class SampleTestsBase
 
             services.AddSingleton(new StubWalletConnectProviderConfig()); // can be replaced
             services.AddSingleton<IWalletProvider, StubWalletConnectProvider>();
-            services.UseWalletConnectSigner();
-            services.UseWalletConnectTransactionExecutor();
+            services.UseWalletSigner();
+            services.UseWalletTransactionExecutor();
 
             // Add any contracts we would want to use
             services.ConfigureRegisteredContracts(contracts =>
