@@ -32,11 +32,10 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     [SerializeField] private Network network;
     [Header("UI")]
     [SerializeField] private List<ProviderAndButtonPair> providerAndButtonPairs;
-
+    [SerializeField] private GameObject web3AuthWalletGUIPrefab;
+    [SerializeField] private bool enableWalletGUI;
     private bool useProvider;
-
     private Provider selectedProvider;
-
     private bool rememberMe;
 
     public void SetRememberMe(bool rememberMe)
@@ -59,9 +58,8 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
         if (!string.IsNullOrEmpty(uri.Fragment))
         {
             useProvider = false;
-
             await TryLogin();
-           
+            EnableWalletGUI();
         }
 #else
         if (!string.IsNullOrEmpty(KeyStoreManagerUtils.getPreferencesData(KeyStoreManagerUtils.SESSION_ID)))
@@ -69,6 +67,7 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
             useProvider = false;
             rememberMe = true;
             await TryLogin();
+            EnableWalletGUI();
             Debug.Log("Restoring existing Web3Auth session (Remember Me");
         }
 #endif
@@ -81,9 +80,15 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
             useProvider = true;
         }
         selectedProvider = provider;
-
         await TryLogin();
+        EnableWalletGUI();
         LogAnalytics(provider);
+    }
+
+    private void EnableWalletGUI()
+    {
+        if (!enableWalletGUI) return;
+        Instantiate(web3AuthWalletGUIPrefab);
     }
 
     private void LogAnalytics(Provider provider)
