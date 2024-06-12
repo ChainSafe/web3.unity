@@ -28,6 +28,7 @@ public class EvmCustomResponseTests
     private const int Transfer1155Amount = 1;
 
     private const string SendToAddress = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
+    private BigInteger SendToValue = 12300000000000000;
 
     private BigInteger TransferErc20Amount = 1;
 
@@ -101,7 +102,7 @@ public class EvmCustomResponseTests
     {
         const string testResponse = "0x3446b949c3d214fba7e61c9cf127eac6cd0b2983564cf76be618099879b6f1e1";
         yield return BuildWeb3WithTestResponse(testResponse);
-        var sendTransaction = Evm.SendTransaction(web3, SendToAddress);
+        var sendTransaction = Evm.SendTransaction(web3, SendToAddress, SendToValue);
         yield return new WaitUntil(() => sendTransaction.IsCompleted);
         if (sendTransaction.Exception != null) throw sendTransaction.Exception;
         Assert.IsTrue(sendTransaction.IsCompletedSuccessfully);
