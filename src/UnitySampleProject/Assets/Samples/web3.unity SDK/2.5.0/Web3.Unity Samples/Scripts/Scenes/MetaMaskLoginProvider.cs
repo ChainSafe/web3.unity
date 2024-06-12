@@ -3,6 +3,7 @@ using ChainSafe.Gaming.UnityPackage.Common;
 #if UNITY_WEBGL && !UNITY_EDITOR
 using ChainSafe.Gaming.MetaMask;
 using ChainSafe.Gaming.MetaMask.Unity;
+using ChainSafe.Gaming.Web3.Evm.Wallet;
 #endif
 using ChainSafe.Gaming.Web3.Build;
 using Scenes;
@@ -36,7 +37,7 @@ public class MetaMaskLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
             // Currently Metamask browser connections can only run in WebGL builds.
             // See point 5 in https://github.com/Nethereum/Unity3dSampleTemplate?tab=readme-ov-file#important-notes.
 #if UNITY_WEBGL && !UNITY_EDITOR
-            services.UseMetaMask().UseMetaMaskSigner().UseMetaMaskTransactionExecutor();
+            services.UseMetaMask().UseWalletSigner().UseWalletTransactionExecutor();
 #else
             Debug.LogError("Metamask browser connection, currently, only works on WebGL Builds (not in editor).");
 #endif
