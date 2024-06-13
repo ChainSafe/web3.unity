@@ -41,7 +41,7 @@ namespace ChainSafe.Gaming.Web3
         public string Ws { get; }
 
         /// <summary>
-        /// The block explorer URL for the active chain
+        /// The block explorer URL for the active chain.
         /// </summary>
         public string BlockExplorerUrl { get; }
     }

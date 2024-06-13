@@ -1,5 +1,7 @@
 using System;
 using ChainSafe.Gaming.InProcessSigner;
+using ChainSafe.Gaming.InProcessTransactionExecutor;
+using ChainSafe.Gaming.InProcessTransactionExecutor.Unity;
 using ChainSafe.Gaming.UnityPackage;
 using TMPro;
 using UnityEngine;
@@ -30,8 +32,8 @@ public class Web3AuthWalletGUI : MonoBehaviour
     
     public void AcceptRequest()
     {
-        var txe = (InProcessSigner)Web3Accessor.Web3.ServiceProvider.GetService(typeof(InProcessSigner));
-        
+        //var signer = (InProcessSigner)Web3Accessor.Web3.ServiceProvider.GetService(typeof(InProcessSigner));
+        //var executor = (InProcessTransactionExecutor)Web3Accessor.Web3.ServiceProvider.GetService(typeof(InProcessTransactionExecutor));
         
         // TODO update vars below with tx data
         // Get transaction data
