@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.InProcessSigner;
 using ChainSafe.Gaming.InProcessTransactionExecutor;
@@ -19,6 +20,8 @@ public class Web3AuthWalletGUI : MonoBehaviour
 
     #region Fields
     
+    [DllImport("__Internal")]
+    private static extern void CopyToClipboard(string text);
     [SerializeField] private Toggle autoTxToggle;
     [SerializeField] private TextMeshProUGUI walletAddressText;
     [SerializeField] private TextMeshProUGUI privateKeyText;
@@ -109,7 +112,11 @@ public class Web3AuthWalletGUI : MonoBehaviour
 
     private void CopyWalletAddressButton()
     {
+        #if UNITY_WEBGL && !UNITY_EDITOR
+        CopyToClipboard(walletAddressText.text);
+        #else
         GUIUtility.systemCopyBuffer = walletAddressText.text;
+        #endif
     }
     
     private void TogglePrivateKeyMenuButton()
@@ -139,7 +146,11 @@ public class Web3AuthWalletGUI : MonoBehaviour
 
     private void CopyPrivateKeyButton()
     {
+        #if UNITY_WEBGL && !UNITY_EDITOR
+        CopyToClipboard(privateKeyText.text);
+        #else
         GUIUtility.systemCopyBuffer = privateKeyText.text;
+        #endif
     }
     
     private void ToggleAddTokensMenuButton()
