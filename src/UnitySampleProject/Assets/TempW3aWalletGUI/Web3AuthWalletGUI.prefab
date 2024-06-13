@@ -4881,6 +4881,7 @@ MonoBehaviour:
   txHistoryScrollPanel: {fileID: 7703379847668005035}
   txHistoryDataPrefab: {fileID: 4431949681538198682, guid: 51ed3e26bf55990459944308a5d4d4d6, type: 3}
   txHistoryDisplayCount: 20
+  txScrollRect: {fileID: 7290349391647968346}
 --- !u!1 &3059909609810995664
 GameObject:
   m_ObjectHideFlags: 0

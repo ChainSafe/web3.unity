@@ -62,6 +62,7 @@ public class Web3AuthWalletGUI : MonoBehaviour
     [SerializeField] private GameObject txHistoryScrollPanel;
     [SerializeField] private GameObject txHistoryDataPrefab;
     [SerializeField] private int txHistoryDisplayCount = 20;
+    [SerializeField] private ScrollRect txScrollRect;
     private GameObject[] TxHistoryPrefabs;
     private int txObjectNumber = 1;
     private string customTokenContract;
@@ -258,6 +259,7 @@ public class Web3AuthWalletGUI : MonoBehaviour
 
     private void ResetTransactionDisplay()
     {
+        txScrollRect.verticalNormalizedPosition = 0;
         incomingTxNotification.SetActive(false);
         if (autoTxToggle) return;
         incomingTxActionText.text = string.Empty;
