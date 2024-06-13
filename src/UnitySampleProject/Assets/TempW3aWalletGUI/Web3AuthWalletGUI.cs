@@ -148,17 +148,16 @@ public class Web3AuthWalletGUI : MonoBehaviour
     
     private void AddTokenButton()
     {
-        AcceptRequest();
-        // if (!File.Exists(Path.Combine(Application.persistentDataPath, "customToken.txt")))
-        // {
-        //     File.WriteAllText(Path.Combine(Application.persistentDataPath, "customToken.txt"), $"{customTokenAddressInput.text},{customTokenSymbolInput.text}");
-        // }
-        // customTokenSymbolText.text = customTokenSymbolInput.text;
-        // customTokenAddressInput.text = string.Empty;
-        // customTokenSymbolInput.text = string.Empty;
-        // addCustomTokensContainer.SetActive(false);
-        // customTokenPlaceHolder.SetActive(false);
-        // customTokenDisplay.SetActive(true);
+        if (!File.Exists(Path.Combine(Application.persistentDataPath, "customToken.txt")))
+        {
+            File.WriteAllText(Path.Combine(Application.persistentDataPath, "customToken.txt"), $"{customTokenAddressInput.text},{customTokenSymbolInput.text}");
+        }
+        customTokenSymbolText.text = customTokenSymbolInput.text;
+        customTokenAddressInput.text = string.Empty;
+        customTokenSymbolInput.text = string.Empty;
+        addCustomTokensContainer.SetActive(false);
+        customTokenPlaceHolder.SetActive(false);
+        customTokenDisplay.SetActive(true);
     }
     
     private void ToggleTransferTokensMenuButton()
@@ -279,7 +278,8 @@ public class Web3AuthWalletGUI : MonoBehaviour
     
     private void OpenBlockExplorer(string txHash)
     {
-        Application.OpenURL($"https://sepolia.etherscan.io/tx/{txHash}");
+        Debug.Log($"opening URL {Web3Accessor.Web3.ChainConfig.BlockExplorerUrl}/{txHash}");
+        Application.OpenURL($"{Web3Accessor.Web3.ChainConfig.BlockExplorerUrl}/{txHash}");
     }
     
     private void WalletToggleKeyInputCheck()

@@ -27,6 +27,7 @@ public class ChainSafeServerSettings : EditorWindow
     private const string NetworkDefault = "Sepolia";
     private const string SymbolDefault = "Seth";
     private const string RpcDefault = "https://rpc.sepolia.org";
+    private const string BlockExplorerUrlDefault = "https://sepolia.etherscan.io";
 
     // Chain values
     private string projectID;
@@ -36,6 +37,7 @@ public class ChainSafeServerSettings : EditorWindow
     private string symbol;
     private string rpc;
     private string newRpc;
+    private string blockExplorerUrl;
     public string previousProjectId;
 
     private Texture2D logo;
@@ -62,7 +64,7 @@ public class ChainSafeServerSettings : EditorWindow
     #region Methods
 
     /// <summary>
-    ///     Checks if data is already entered, sets default values if not
+    /// Checks if data is already entered, sets default values if not
     /// </summary>
     private void Awake()
     {
@@ -74,6 +76,7 @@ public class ChainSafeServerSettings : EditorWindow
         network = string.IsNullOrEmpty(projectConfig?.Network) ? NetworkDefault : projectConfig.Network;
         symbol = string.IsNullOrEmpty(projectConfig?.Symbol) ? SymbolDefault : projectConfig.Symbol;
         rpc = string.IsNullOrEmpty(projectConfig?.Rpc) ? RpcDefault : projectConfig.Rpc;
+        blockExplorerUrl = string.IsNullOrEmpty(projectConfig?.BlockExplorerUrl) ? BlockExplorerUrlDefault : projectConfig.BlockExplorerUrl;
         // Search menu
         onDropDownChange = new UnityEvent();
         onDropDownChange.AddListener(UpdateServerMenuInfo);
@@ -81,7 +84,7 @@ public class ChainSafeServerSettings : EditorWindow
     }
 
     /// <summary>
-    ///     Updates the values in the server settings area when an item is selected
+    /// Updates the values in the server settings area when an item is selected
     /// </summary>
     public void UpdateServerMenuInfo()
     {
@@ -99,6 +102,7 @@ public class ChainSafeServerSettings : EditorWindow
             selectedRpcIndex = Mathf.Clamp(selectedRpcIndex, 0, chainList[selectedChainIndex].rpc.Count - 1);
             // Set the rpc
             rpc = chainList[selectedChainIndex].rpc[selectedRpcIndex];
+            blockExplorerUrl = chainList[selectedChainIndex].blockExplorerUrl;
         }
         else
         {
@@ -108,7 +112,7 @@ public class ChainSafeServerSettings : EditorWindow
     }
 
     /// <summary>
-    ///     Fetches the supported EVM chains list from Chainlist's github json
+    /// Fetches the supported EVM chains list from Chainlist's github json
     /// </summary>
     private async void FetchSupportedChains()
     {
@@ -135,7 +139,7 @@ public class ChainSafeServerSettings : EditorWindow
     }
 
     /// <summary>
-    ///     Called when menu is opened, loads Chainsafe Logo
+    /// Called when menu is opened, loads Chainsafe Logo
     /// </summary>
     private void OnEnable()
     {
@@ -145,7 +149,7 @@ public class ChainSafeServerSettings : EditorWindow
     }
 
     /// <summary>
-    ///     Displayed content
+    /// Displayed content
     /// </summary>
     private void OnGUI()
     {
@@ -191,6 +195,7 @@ public class ChainSafeServerSettings : EditorWindow
         network = EditorGUILayout.TextField("Network: ", network);
         chainID = EditorGUILayout.TextField("Chain ID: ", chainID);
         symbol = EditorGUILayout.TextField("Symbol: ", symbol);
+        blockExplorerUrl = EditorGUILayout.TextField("Block Explorer: ", blockExplorerUrl);
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.PrefixLabel("Select RPC");
         // Remove "https://" so the user doesn't have to click through 2 levels for the rpc options
@@ -231,6 +236,7 @@ public class ChainSafeServerSettings : EditorWindow
             projectConfig.Network = network;
             projectConfig.Symbol = symbol;
             projectConfig.Rpc = rpc;
+            projectConfig.BlockExplorerUrl = blockExplorerUrl;
             ProjectConfigUtilities.Save(projectConfig);
             if(projectID != previousProjectId)
                 ValidateProjectID(projectID);
@@ -243,8 +249,7 @@ public class ChainSafeServerSettings : EditorWindow
     }
 
     /// <summary>
-    ///     Validates the project ID via ChainSafe's backend & writes values to the network js file, static so it can be called
-    ///     externally
+    /// Validates the project ID via ChainSafe's backend & writes values to the network js file, static so it can be called externally
     /// </summary>
     /// <param name="projectID"></param>
     private static async void ValidateProjectID(string projectID)
@@ -266,7 +271,7 @@ public class ChainSafeServerSettings : EditorWindow
     }
 
     /// <summary>
-    ///     Validates the project ID via ChainSafe's backend
+    /// Validates the project ID via ChainSafe's backend
     /// </summary>
     private static async Task<bool> ValidateProjectIDAsync(string projectID)
     {
@@ -298,7 +303,7 @@ public class ChainSafeServerSettings : EditorWindow
     }
 
     /// <summary>
-    ///     Writes values to the network js file
+    /// Writes values to the network js file
     /// </summary>
     public static void WriteNetworkFile()
     {
