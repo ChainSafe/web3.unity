@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Numerics;
 using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
+using ChainSafe.Gaming.InProcessSigner;
+using ChainSafe.Gaming.InProcessTransactionExecutor;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Core.Evm;
+using ChainSafe.GamingSdk.Web3Auth;
 using Scripts.EVM.Token;
 using TMPro;
 using UnityEngine;
@@ -15,9 +19,9 @@ public class Web3AuthWalletGUI : MonoBehaviour
 
     #region Fields
     
+    [SerializeField] private Toggle autoTxToggle;
     [SerializeField] private TextMeshProUGUI walletAddressText;
     [SerializeField] private TextMeshProUGUI privateKeyText;
-    [SerializeField] private Toggle autoTxToggle;
     [SerializeField] private TextMeshProUGUI incomingTxActionText;
     [SerializeField] private TextMeshProUGUI incomingTxHashText;
     [SerializeField] private TextMeshProUGUI nativeTokenAmountText;
@@ -52,15 +56,15 @@ public class Web3AuthWalletGUI : MonoBehaviour
     [SerializeField] private GameObject customTokenDisplay;
     [SerializeField] private GameObject incomingTxPlaceHolder;
     [SerializeField] private GameObject incomingTxDisplay;
+    [SerializeField] private GameObject incomingTxNotification;
     [SerializeField] private GameObject txHistoryPlaceHolder;
     [SerializeField] private GameObject txHistoryDisplay;
     [SerializeField] private GameObject txHistoryScrollPanel;
     [SerializeField] private GameObject txHistoryDataPrefab;
-    [SerializeField] private GameObject[] TxHistoryPrefabs;
     [SerializeField] private int txHistoryDisplayCount = 20;
+    private GameObject[] TxHistoryPrefabs;
     private int txObjectNumber = 1;
     private string customTokenContract;
-    private Web3Auth web3AuthService;
 
     #endregion
 
@@ -83,7 +87,7 @@ public class Web3AuthWalletGUI : MonoBehaviour
         transferTokensButton.onClick.AddListener(TransferTokens);
         acceptRequestButton.onClick.AddListener(AcceptRequest);
         rejectRequestButton.onClick.AddListener(RejectRequest);
-        web3AuthService = (Web3Auth)Web3Accessor.Web3.ServiceProvider.GetService(typeof(Web3Auth));
+        TxHistoryPrefabs = new GameObject[txHistoryDisplayCount];
         SetPrivateKey();
         SetTokens();
     }
@@ -114,11 +118,8 @@ public class Web3AuthWalletGUI : MonoBehaviour
     
     private void SetPrivateKey()
     {
-        if (web3AuthService == null)
-        {
-            throw new Web3Exception("W3a Instance is null");
-        }
-        privateKeyText.text = web3AuthService.getPrivKey();
+        var w3a = (Web3AuthWallet)Web3Accessor.Web3.ServiceProvider.GetService(typeof(Web3AuthWallet));
+        privateKeyText.text = w3a.Key;
     }
 
     private void SetTokens()
@@ -132,7 +133,7 @@ public class Web3AuthWalletGUI : MonoBehaviour
             customTokenSymbolText.text = data[1];
         }
         // Set native token
-        nativeTokenSymbolText.text = Resources.Load<ProjectConfigScriptableObject>("ProjectConfigData").Symbol;
+        nativeTokenSymbolText.text = Web3Accessor.Web3.ChainConfig.Symbol;
     }
 
     private void CopyPrivateKeyButton()
@@ -147,15 +148,17 @@ public class Web3AuthWalletGUI : MonoBehaviour
     
     private void AddTokenButton()
     {
-        if (!File.Exists(Path.Combine(Application.persistentDataPath, "customToken.txt")))
-        {
-            File.WriteAllText(Path.Combine(Application.persistentDataPath, "customToken.txt"), $"{customTokenAddressInput.text},{customTokenSymbolInput.text}");
-        }
-        customTokenSymbolText.text = customTokenSymbolInput.text;
-        customTokenAddressInput.text = string.Empty;
-        customTokenSymbolInput.text = string.Empty;
-        addCustomTokensContainer.SetActive(false);
-        customTokenDisplay.SetActive(true);
+        AcceptRequest();
+        // if (!File.Exists(Path.Combine(Application.persistentDataPath, "customToken.txt")))
+        // {
+        //     File.WriteAllText(Path.Combine(Application.persistentDataPath, "customToken.txt"), $"{customTokenAddressInput.text},{customTokenSymbolInput.text}");
+        // }
+        // customTokenSymbolText.text = customTokenSymbolInput.text;
+        // customTokenAddressInput.text = string.Empty;
+        // customTokenSymbolInput.text = string.Empty;
+        // addCustomTokensContainer.SetActive(false);
+        // customTokenPlaceHolder.SetActive(false);
+        // customTokenDisplay.SetActive(true);
     }
     
     private void ToggleTransferTokensMenuButton()
@@ -188,13 +191,15 @@ public class Web3AuthWalletGUI : MonoBehaviour
                 SampleOutputUtil.PrintResult(output, "ERC-20", nameof(Erc20Service.Transfer));
                 break;
             default:
-                throw new Web3Exception("I don't know what this token is");
+                throw new Web3Exception("Token can't be found");
         }
     }
 
     private void IncomingTransaction()
     {
         //TODO to execute when txs are coming in
+        var txe = (InProcessSigner)Web3Accessor.Web3.ServiceProvider.GetService(typeof(InProcessSigner));
+        incomingTxNotification.SetActive(true);
         IncomingTransactionDisplay("action", "txHash");
     }
 
@@ -221,16 +226,25 @@ public class Web3AuthWalletGUI : MonoBehaviour
         var txHash = "";
         
         // Display transaction data
+        // Appends tx history list & removes oldest entry if over transaction count for performance reasons
         if (txObjectNumber >= txHistoryDisplayCount)
         {
-            Destroy(TxHistoryPrefabs[TxHistoryPrefabs.Length -1]);
-            TxHistoryPrefabs[TxHistoryPrefabs.Length -1] = Instantiate(txHistoryDataPrefab, txHistoryScrollPanel.transform);
-            UpdateTxHistoryObject(TxHistoryPrefabs.Length -1, txTime, txAction, txAmount, txHash);
+            // Destroy the oldest entry
+            Destroy(TxHistoryPrefabs[0]);
+            // Shift all elements down by one position
+            for (int i = 1; i < TxHistoryPrefabs.Length; i++)
+            {
+                TxHistoryPrefabs[i - 1] = TxHistoryPrefabs[i];
+            }
+            // Create a new entry at the end of the array
+            TxHistoryPrefabs[TxHistoryPrefabs.Length - 1] = Instantiate(txHistoryDataPrefab, txHistoryScrollPanel.transform);
+            UpdateTxHistoryObject(TxHistoryPrefabs.Length - 1, txObjectNumber.ToString(), txTime, txAction, txAmount, txHash);
         }
         else
         {
+            // Appends tx history list
             TxHistoryPrefabs[txObjectNumber] = Instantiate(txHistoryDataPrefab, txHistoryScrollPanel.transform);
-            UpdateTxHistoryObject(txObjectNumber, txTime, txAction, txAmount, txHash);
+            UpdateTxHistoryObject(txObjectNumber, txObjectNumber.ToString(), txTime, txAction, txAmount, txHash);
         }
         
         // Increase object counter and reset display
@@ -245,6 +259,7 @@ public class Web3AuthWalletGUI : MonoBehaviour
 
     private void ResetTransactionDisplay()
     {
+        incomingTxNotification.SetActive(false);
         if (autoTxToggle) return;
         incomingTxActionText.text = string.Empty;
         incomingTxHashText.text = string.Empty;
@@ -252,8 +267,9 @@ public class Web3AuthWalletGUI : MonoBehaviour
         incomingTxPlaceHolder.SetActive(true);
     }
     
-    private void UpdateTxHistoryObject(int txObjectIndex, string time, string action, string amount, string txHash)
+    private void UpdateTxHistoryObject(int txObjectIndex, string txNumber, string time, string action, string amount, string txHash)
     {
+        TxHistoryPrefabs[txObjectIndex].transform.Find("TxNumberText").GetComponent<TextMeshProUGUI>().text = $"#{txNumber}";
         TxHistoryPrefabs[txObjectIndex].transform.Find("TimeText").GetComponent<TextMeshProUGUI>().text = time;
         TxHistoryPrefabs[txObjectIndex].transform.Find("ActionText").GetComponent<TextMeshProUGUI>().text = action;
         TxHistoryPrefabs[txObjectIndex].transform.Find("AmountText").GetComponent<TextMeshProUGUI>().text = amount;

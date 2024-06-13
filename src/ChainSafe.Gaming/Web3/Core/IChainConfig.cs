@@ -11,6 +11,11 @@ namespace ChainSafe.Gaming.Web3
         public string ChainId { get; }
 
         /// <summary>
+        /// Token symbol ID.
+        /// </summary>
+        public string Symbol { get; }
+
+        /// <summary>
         /// The name of the chain to be used. Equals 'Ethereum' for Ethereum Mainnet.
         /// </summary>
         public string Chain { get; }

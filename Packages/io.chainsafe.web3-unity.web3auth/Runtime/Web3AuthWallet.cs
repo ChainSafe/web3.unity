@@ -4,11 +4,9 @@ using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.InProcessSigner;
 using ChainSafe.Gaming.InProcessTransactionExecutor;
-using ChainSafe.Gaming.InProcessTransactionExecutor.Unity;
 using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
-using ChainSafe.Gaming.Web3.Environment;
 using Nethereum.JsonRpc.Client;
 using Nethereum.Signer;
 using UnityEngine;
@@ -49,6 +47,8 @@ namespace ChainSafe.GamingSdk.Web3Auth
         /// Gets the blockchain address associated with this wallet.
         /// </summary>
         public string PublicAddress => signer.PublicAddress;
+
+        public string Key => signer.GetKey().GetPrivateKey();
 
         /// <summary>
         /// Asynchronously prepares the Web3Auth wallet for operation, triggered when initializing the module in the dependency injection work flow.
