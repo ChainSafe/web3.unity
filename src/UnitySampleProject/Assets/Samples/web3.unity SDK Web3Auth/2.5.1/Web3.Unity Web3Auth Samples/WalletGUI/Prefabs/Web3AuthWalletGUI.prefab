@@ -4803,6 +4803,10 @@ GameObject:
   m_Component:
   - component: {fileID: 7743707375381239092}
   - component: {fileID: 1468709357103397177}
+  - component: {fileID: 8598381270475430554}
+  - component: {fileID: 8648830141580000005}
+  - component: {fileID: 263661795182992369}
+  - component: {fileID: 2120780087587875003}
   m_Layer: 0
   m_Name: Web3AuthWalletGUI
   m_TagString: Untagged
@@ -4838,50 +4842,99 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75a4824992fb6ba4ea66230b9dcc92ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoTxToggle: {fileID: 2778796592338522207}
-  walletAddressText: {fileID: 208769440838698804}
-  privateKeyText: {fileID: 146584364638209816}
   incomingTxActionText: {fileID: 6925840943374636494}
   incomingTxHashText: {fileID: 905141851235353814}
-  nativeTokenAmountText: {fileID: 1012412206096704489}
-  nativeTokenSymbolText: {fileID: 6256012485412186482}
-  customTokenAmountText: {fileID: 8346934949460858011}
-  customTokenSymbolText: {fileID: 6891909999124788805}
-  customTokenAddressInput: {fileID: 1450622858095165912}
-  customTokenSymbolInput: {fileID: 3033696630416049437}
-  transferTokensWalletInput: {fileID: 7702073597766504067}
-  transferTokensAmountInput: {fileID: 3540026797197030748}
-  selectedTokenToTransfer: {fileID: 1643824617281436576}
+  acceptRequestButton: {fileID: 9165754778767219097}
+  rejectRequestButton: {fileID: 8654605469475103381}
+--- !u!114 &8598381270475430554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2911816339710442984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5b1b610458085a449b9d3be4b6f22aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  openWalletGUIContainer: {fileID: 2788637392479046008}
+  walletGUIContainer: {fileID: 8430580655084225592}
+  privateKeyContainer: {fileID: 4407843306639728011}
+  walletAddressText: {fileID: 208769440838698804}
+  privateKeyText: {fileID: 146584364638209816}
   openWalletButton: {fileID: 7911601779672545860}
   closeWalletButton: {fileID: 4506437294201990683}
   copyWalletAddressButton: {fileID: 6380949870636842558}
   openPrivateKeyMenuButton: {fileID: 2007582778956157250}
   closePrivateKeyMenuButton: {fileID: 1955890123183112007}
   copyPrivateKeyButton: {fileID: 2146662809224367004}
-  addTokensMenuButton: {fileID: 3285911010377504504}
-  addTokenButton: {fileID: 3172254933871926392}
-  closeAddTokensMenuButton: {fileID: 5417894310233579526}
-  transferTokensMenuButton: {fileID: 3166722148647569110}
-  transferTokensButton: {fileID: 7823939205480095793}
-  closeTransferTokensButton: {fileID: 3090088527211704690}
-  acceptRequestButton: {fileID: 9165754778767219097}
-  rejectRequestButton: {fileID: 8654605469475103381}
-  openWalletGUIContainer: {fileID: 2788637392479046008}
-  walletGUIContainer: {fileID: 8430580655084225592}
-  privateKeyContainer: {fileID: 4407843306639728011}
-  transferTokensContainer: {fileID: 6754551686753108061}
-  addCustomTokensContainer: {fileID: 7449198859952559396}
+--- !u!114 &8648830141580000005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2911816339710442984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb1810d93cc21304c87408cf33dbbe6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   customTokenPlaceHolder: {fileID: 6238643033416456295}
   customTokenDisplay: {fileID: 1544044832913725164}
+  transferTokensContainer: {fileID: 6754551686753108061}
+  addCustomTokensContainer: {fileID: 1018598521574791898}
+  selectedTokenToTransfer: {fileID: 1643824617281436576}
+  customTokenAddressInput: {fileID: 1450622858095165912}
+  customTokenSymbolInput: {fileID: 3033696630416049437}
+  transferTokensWalletInput: {fileID: 7702073597766504067}
+  transferTokensAmountInput: {fileID: 3540026797197030748}
+  customTokenAmountText: {fileID: 8346934949460858011}
+  customTokenSymbolText: {fileID: 6891909999124788805}
+  nativeTokenSymbolText: {fileID: 6891909999124788805}
+  nativeTokenAmountText: {fileID: 1012412206096704489}
+  addTokensMenuButton: {fileID: 3285911010377504504}
+  closeAddTokensMenuButton: {fileID: 5417894310233579526}
+  addTokenButton: {fileID: 3172254933871926392}
+  transferTokensMenuButton: {fileID: 3166722148647569110}
+  closeTransferTokensButton: {fileID: 3090088527211704690}
+  transferTokensButton: {fileID: 7823939205480095793}
+--- !u!114 &263661795182992369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2911816339710442984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 957a25dfc97cc6240a0ba2cc9c2805a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoTxToggle: {fileID: 2778796592338522207}
+  txScrollRect: {fileID: 7290349391647968346}
+  incomingTxActionText: {fileID: 6925840943374636494}
+  incomingTxHashText: {fileID: 905141851235353814}
+  txHistoryScrollPanel: {fileID: 7703379847668005035}
+  txHistoryDataPrefab: {fileID: 4431949681538198682, guid: 51ed3e26bf55990459944308a5d4d4d6, type: 3}
   incomingTxPlaceHolder: {fileID: 3225156815482742312}
   incomingTxDisplay: {fileID: 5670436737734109959}
   incomingTxNotification: {fileID: 4706101805464217323}
   txHistoryPlaceHolder: {fileID: 861225078783303682}
   txHistoryDisplay: {fileID: 8139811105131153425}
-  txHistoryScrollPanel: {fileID: 7703379847668005035}
-  txHistoryDataPrefab: {fileID: 4431949681538198682, guid: 51ed3e26bf55990459944308a5d4d4d6, type: 3}
-  txHistoryDisplayCount: 20
-  txScrollRect: {fileID: 7290349391647968346}
+--- !u!114 &2120780087587875003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2911816339710442984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6e9023b239a914478922dafa115bba8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3059909609810995664
 GameObject:
   m_ObjectHideFlags: 0
