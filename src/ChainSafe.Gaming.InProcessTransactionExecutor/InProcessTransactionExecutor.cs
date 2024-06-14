@@ -10,8 +10,10 @@ using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.Client;
 using Nethereum.RPC.Eth.DTOs;
 using Nethereum.Web3.Accounts;
+using UnityEngine;
 using NIpcClient = Nethereum.JsonRpc.IpcClient.IpcClient;
 using NWeb3 = Nethereum.Web3.Web3;
+using TransactionReceipt = ChainSafe.Gaming.Evm.Transactions.TransactionReceipt;
 
 namespace ChainSafe.Gaming.InProcessTransactionExecutor
 {
@@ -60,6 +62,10 @@ namespace ChainSafe.Gaming.InProcessTransactionExecutor
             this.rpcProvider = rpcProvider;
         }
 
+        public TaskCompletionSource<TransactionInput> TransactionRequestTcs { get; private set; }
+
+        public TaskCompletionSource<string> TransactionResponseTcs { get; private set; }
+
         /// <summary>
         /// Implementation of <see cref="ITransactionExecutor.SendTransaction"/>.
         /// Send a transaction using Wallet Connect.
@@ -70,6 +76,9 @@ namespace ChainSafe.Gaming.InProcessTransactionExecutor
         /// <exception cref="Web3Exception">Throws Exception if executing transaction fails.</exception>
         public async Task<TransactionResponse> SendTransaction(TransactionRequest transaction)
         {
+            TransactionRequestTcs = new TaskCompletionSource<TransactionInput>();
+            TransactionResponseTcs = new TaskCompletionSource<string>();
+
             if (string.IsNullOrEmpty(transaction.From))
             {
                 transaction.From = accountAddress;
@@ -108,8 +117,15 @@ namespace ChainSafe.Gaming.InProcessTransactionExecutor
 
             try
             {
+                TransactionRequestTcs.SetResult(txInput);
+                if (GameObject.Find("Web3AuthWalletGUI(Clone)") != null)
+                {
+                    await Web3AuthTransactionHelper.WaitForTransactionAsync();
+                }
+
                 var signedTransaction = await web3.TransactionManager.SignTransactionAsync(txInput);
                 var txHash = await web3.Eth.Transactions.SendRawTransaction.SendRequestAsync(signedTransaction);
+                TransactionResponseTcs.SetResult(txHash);
                 return await rpcProvider.GetTransaction(txHash);
             }
             catch (Exception ex)

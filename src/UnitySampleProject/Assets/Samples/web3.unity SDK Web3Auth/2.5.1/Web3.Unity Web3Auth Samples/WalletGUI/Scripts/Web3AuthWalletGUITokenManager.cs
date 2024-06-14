@@ -12,6 +12,8 @@ using UnityEngine.UI;
 
 public class Web3AuthWalletGUITokenManager : MonoBehaviour
 {
+    #region Fields
+    
     [SerializeField] private GameObject customTokenPlaceHolder;
     [SerializeField] private GameObject customTokenDisplay;
     [SerializeField] private GameObject transferTokensContainer;
@@ -32,6 +34,11 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
     [SerializeField] private Button closeTransferTokensButton;
     [SerializeField] private Button transferTokensButton;
     private string customTokenContract;
+    
+    #endregion
+
+    #region Methods
+    
 
     private void Awake()
     {
@@ -113,4 +120,6 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
                 throw new Web3Exception("Token can't be found");
         }
     }
+    
+    #endregion
 }

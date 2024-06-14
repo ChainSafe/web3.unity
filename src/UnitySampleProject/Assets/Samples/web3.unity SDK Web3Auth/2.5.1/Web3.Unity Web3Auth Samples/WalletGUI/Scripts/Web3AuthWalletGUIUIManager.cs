@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class Web3AuthWalletGUIUIManager : MonoBehaviour
 {
+    #region Fields
+
     [SerializeField] private GameObject openWalletGUIContainer;
     [SerializeField] private GameObject walletGUIContainer;
     [SerializeField] private GameObject privateKeyContainer;
@@ -18,6 +20,10 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     [SerializeField] private Button closePrivateKeyMenuButton;
     [SerializeField] private Button copyPrivateKeyButton;
 
+    #endregion
+
+    #region Methods
+    
     private void Awake()
     {
         openWalletButton.onClick.AddListener(ToggleWallet);
@@ -69,4 +75,6 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     {
         WalletToggleKeyInputCheck();
     }
+    
+    #endregion
 }

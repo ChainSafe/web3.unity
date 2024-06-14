@@ -1,10 +1,16 @@
+using System.Numerics;
+using System.Threading.Tasks;
+using ChainSafe.Gaming.InProcessTransactionExecutor;
 using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.GamingSdk.Web3Auth;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-public class Web3AuthWalletGUITxHistoryManager : MonoBehaviour
+public class Web3AuthWalletGUITxManager : MonoBehaviour
 {
+    #region Fields
+    
     [SerializeField] private Toggle autoTxToggle;
     [SerializeField] private ScrollRect txScrollRect;
     [SerializeField] private TextMeshProUGUI incomingTxActionText;
@@ -20,25 +26,35 @@ public class Web3AuthWalletGUITxHistoryManager : MonoBehaviour
     private Web3AuthWalletGUI w3aWalletGUI;
     private int txObjectNumber = 1;
     private int txHistoryDisplayCount = 20;
+    public TaskCompletionSource<bool> TransactionResponseTcs { get; private set; }
+    private bool hasTransactionCompleted;
+    
+    #endregion
+
+    #region Methods
+    
 
     private void Awake()
     {
         txHistoryPrefabs = new GameObject[txHistoryDisplayCount];
         w3aWalletGUI = GetComponent<Web3AuthWalletGUI>();
+        TransactionResponseTcs = new TaskCompletionSource<bool>();
     }
     
-    private void IncomingTransactionDisplay(string action, string txHash)
+    private void IncomingTransactionDisplay()
     {
+        var w3aw = (Web3AuthWallet)Web3Accessor.Web3.ServiceProvider.GetService(typeof(Web3AuthWallet));
+        var data = w3aw.InProcessTransactionExecutor.TransactionRequestTcs.Task.Result;
         incomingTxNotification.SetActive(true);
-        if (autoTxToggle)
+        if (autoTxToggle.isOn)
         {
             w3aWalletGUI.AcceptRequest();
             return;
         }
         incomingTxPlaceHolder.SetActive(false);
         incomingTxDisplay.SetActive(true);
-        incomingTxActionText.text = action;
-        incomingTxHashText.text = txHash;
+        incomingTxHashText.text = data.Data;
+        incomingTxActionText.text = data.Value == BigInteger.Parse("0") ? "Sign" : data.Value.ToString();
     }
 
     public void AddTransaction(string time, string action, string amount, string txHash)
@@ -71,6 +87,7 @@ public class Web3AuthWalletGUITxHistoryManager : MonoBehaviour
         incomingTxHashText.text = string.Empty;
         incomingTxDisplay.SetActive(false);
         incomingTxPlaceHolder.SetActive(true);
+        hasTransactionCompleted = false;
     }
 
     private void UpdateTxHistoryObject(int txObjectIndex, string txNumber, string time, string action, string amount, string txHash)
@@ -88,4 +105,17 @@ public class Web3AuthWalletGUITxHistoryManager : MonoBehaviour
         Debug.Log($"Opening URL: {Web3Accessor.Web3.ChainConfig.BlockExplorerUrl}/{txHash}");
         Application.OpenURL($"{Web3Accessor.Web3.ChainConfig.BlockExplorerUrl}/{txHash}");
     }
+
+    public void Update()
+    {
+        if (Web3AuthTransactionHelper.TransactionAcceptedTcs == null) return;
+        if (!hasTransactionCompleted && Web3AuthTransactionHelper.Working)
+        {
+            Debug.Log("Incoming wallet transaction");
+            hasTransactionCompleted = true;
+            IncomingTransactionDisplay();
+        }
+    }
+    
+    #endregion
 }

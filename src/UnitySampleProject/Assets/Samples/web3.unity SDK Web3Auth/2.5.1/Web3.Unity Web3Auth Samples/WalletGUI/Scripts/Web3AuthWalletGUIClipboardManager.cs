@@ -3,8 +3,14 @@ using UnityEngine;
 
 public class Web3AuthWalletGUIClipboardManager : MonoBehaviour
 {
+    #region Fields
+
     [DllImport("__Internal")]
     private static extern void CopyToClipboard(string text);
+
+    #endregion
+
+    #region Methods
 
     public static void CopyText(string text)
     {
@@ -14,4 +20,6 @@ public class Web3AuthWalletGUIClipboardManager : MonoBehaviour
         GUIUtility.systemCopyBuffer = text;
     #endif
     }
+    
+    #endregion
 }

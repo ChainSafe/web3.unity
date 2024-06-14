@@ -19,7 +19,6 @@ namespace ChainSafe.GamingSdk.Web3Auth
     /// </summary>
     public class Web3AuthWallet : ISigner, ITransactionExecutor, ILifecycleParticipant
     {
-
         private readonly Web3AuthWalletConfig config;
         private readonly IRpcProvider rpcProvider;
         private TWeb3Auth coreInstance;
@@ -47,8 +46,16 @@ namespace ChainSafe.GamingSdk.Web3Auth
         /// Gets the blockchain address associated with this wallet.
         /// </summary>
         public string PublicAddress => signer.PublicAddress;
-
+        
+        /// <summary>
+        /// Gets key.
+        /// </summary>
         public string Key => signer.GetKey().GetPrivateKey();
+        
+        /// <summary>
+        /// Gets InProcessTransactionExecutor for transaction halting with Web3Auth wallet GUI.
+        /// </summary>
+        public InProcessTransactionExecutor InProcessTransactionExecutor => transactionExecutor;
 
         /// <summary>
         /// Asynchronously prepares the Web3Auth wallet for operation, triggered when initializing the module in the dependency injection work flow.
