@@ -25,6 +25,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     private bool isHeldDown;
     private float holdTime;
     private float holdDuration = 2f;
+    public bool displayWalletIcon { get; set; }
 
     #endregion
 
@@ -51,6 +52,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     public void ToggleWallet()
     {
         walletGUIContainer.SetActive(!walletGUIContainer.activeSelf);
+        if (!displayWalletIcon) return;
         openWalletGUIContainer.SetActive(!openWalletGUIContainer.activeSelf);
     }
     

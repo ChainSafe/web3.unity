@@ -4848,10 +4848,50 @@ MonoBehaviour:
   incomingTxHashText: {fileID: 905141851235353814}
   acceptRequestButton: {fileID: 9165754778767219097}
   rejectRequestButton: {fileID: 8654605469475103381}
-  walletLogo: {fileID: 21300000, guid: ab400fd9b39316240b30631965553264, type: 3}
   walletIconContainer: {fileID: 2788637392479046008}
-  displayWalletIcon: 1
-  autoPopUpWalletOnTx: 0
+  primaryBackgroundObjects:
+  - {fileID: 5337648155149156134}
+  menuBackgroundObjects:
+  - {fileID: 3217246470684839201}
+  - {fileID: 882761604947625664}
+  - {fileID: 1243109084763607832}
+  - {fileID: 8826134273898236165}
+  - {fileID: 5961550521738776439}
+  - {fileID: 7792489009634226950}
+  - {fileID: 8344888920257757173}
+  - {fileID: 2116870812887026420}
+  primaryTextObjects:
+  - {fileID: 7284217069205178480}
+  - {fileID: 5914829639754659125}
+  - {fileID: 7791529212198614501}
+  - {fileID: 6350532592645231035}
+  - {fileID: 5680548798947101282}
+  - {fileID: 7642935991365548080}
+  - {fileID: 2660428171814512621}
+  - {fileID: 8213497547788454088}
+  - {fileID: 5663194347448741670}
+  - {fileID: 1892795680635865922}
+  - {fileID: 6686670528458051073}
+  - {fileID: 5702130024834109246}
+  - {fileID: 6987684487650994504}
+  - {fileID: 8149763808698114954}
+  - {fileID: 5195930409694321137}
+  - {fileID: 94047856894718475}
+  secondaryTextObjects:
+  - {fileID: 3234122125700224197}
+  - {fileID: 7831948947123237258}
+  - {fileID: 1597496313301077247}
+  - {fileID: 25570277088884245}
+  - {fileID: 407232284804818089}
+  - {fileID: 25570277088884245}
+  - {fileID: 5615503540505745168}
+  - {fileID: 7899164539788592230}
+  - {fileID: 137651923351833779}
+  - {fileID: 3320479418568579261}
+  - {fileID: 7551094773090882779}
+  - {fileID: 1253856405580558448}
+  - {fileID: 6789953013710888595}
+  - {fileID: 8115748193872107302}
 --- !u!114 &4029780974178710413
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4895,7 +4935,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdc30f297dfebf748aa84f993eb8a7fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoTxToggle: {fileID: 2778796592338522207}
   txScrollRect: {fileID: 7290349391647968346}
   incomingTxActionText: {fileID: 6925840943374636494}
   incomingTxHashText: {fileID: 905141851235353814}
@@ -4907,7 +4946,6 @@ MonoBehaviour:
   txHistoryPlaceHolder: {fileID: 861225078783303682}
   txHistoryDisplay: {fileID: 8139811105131153425}
   guiManager: {fileID: 804371200852392299}
-  autoPopUpWalletOnTx: 0
 --- !u!114 &804371200852392299
 MonoBehaviour:
   m_ObjectHideFlags: 0

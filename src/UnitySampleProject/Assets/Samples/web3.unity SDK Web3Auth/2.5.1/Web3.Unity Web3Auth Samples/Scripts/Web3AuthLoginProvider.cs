@@ -32,8 +32,17 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     [SerializeField] private Network network;
     [Header("UI")]
     [SerializeField] private List<ProviderAndButtonPair> providerAndButtonPairs;
+    [Header("Wallet GUI Options")]
     [SerializeField] private GameObject web3AuthWalletGUIPrefab;
     [SerializeField] private bool enableWalletGUI;
+    [SerializeField] private bool displayWalletIcon;
+    [SerializeField] private bool autoConfirmTransactions;
+    [SerializeField] private bool autoPopUpWalletOnTx;
+    [SerializeField] private Sprite walletLogo;
+    [SerializeField] private Color primaryBackgroundColour;
+    [SerializeField] private Color menuBackgroundColour;
+    [SerializeField] private Color primaryTextColour;
+    [SerializeField] private Color secondaryTextColour;
     private bool useProvider;
     private Provider selectedProvider;
     private bool rememberMe;
@@ -88,7 +97,9 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     private void EnableWalletGUI()
     {
         if (!enableWalletGUI) return;
-        Instantiate(web3AuthWalletGUIPrefab);
+        var web3AuthWalletInstance = Instantiate(web3AuthWalletGUIPrefab);
+        var web3AuthWalletGUI = web3AuthWalletInstance.GetComponent<Web3AuthWalletGUI>();
+        web3AuthWalletGUI.Initialize(displayWalletIcon, autoPopUpWalletOnTx, autoConfirmTransactions, walletLogo, primaryBackgroundColour, menuBackgroundColour, primaryTextColour, secondaryTextColour);
     }
 
     private void LogAnalytics(Provider provider)

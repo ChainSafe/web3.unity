@@ -10,7 +10,6 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
 {
     #region Fields
     
-    [SerializeField] private Toggle autoTxToggle;
     [SerializeField] private ScrollRect txScrollRect;
     [SerializeField] private TextMeshProUGUI incomingTxActionText;
     [SerializeField] private TextMeshProUGUI incomingTxHashText;
@@ -26,9 +25,10 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     private Web3AuthWalletGUI w3aWalletGUI;
     private int txObjectNumber = 1;
     private int txHistoryDisplayCount = 20;
-    private bool hasTransactionCompleted;
-    public bool autoPopUpWalletOnTx;
-    public TaskCompletionSource<bool> TransactionResponseTcs { get; private set; }
+    private bool hasTransactionCompleted { get; set; }
+    public bool autoPopUpWalletOnTx { get; set; }
+    public TaskCompletionSource<bool> TransactionResponseTcs { get; set; }
+    public bool autoConfirmTransactions { get; set; }
     
     #endregion
 
@@ -49,10 +49,10 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     /// </summary>
     private void IncomingTransactionDisplay()
     {
-        var w3aw = (Web3AuthWallet)Web3Accessor.Web3.ServiceProvider.GetService(typeof(Web3AuthWallet));
-        var data = w3aw.TransactionRequestTcs.Task.Result;
+        var web3AuthWallet = (Web3AuthWallet)Web3Accessor.Web3.ServiceProvider.GetService(typeof(Web3AuthWallet));
+        var data = web3AuthWallet.TransactionRequestTcs.Task.Result;
         incomingTxNotification.SetActive(true);
-        if (autoTxToggle.isOn)
+        if (autoConfirmTransactions)
         {
             w3aWalletGUI.AcceptRequest();
             return;
@@ -104,7 +104,7 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     public void ResetTransactionDisplay()
     {
         incomingTxNotification.SetActive(false);
-        if (autoTxToggle.isOn) return;
+        if (autoConfirmTransactions) return;
         incomingTxActionText.text = string.Empty;
         incomingTxHashText.text = string.Empty;
         incomingTxDisplay.SetActive(false);
