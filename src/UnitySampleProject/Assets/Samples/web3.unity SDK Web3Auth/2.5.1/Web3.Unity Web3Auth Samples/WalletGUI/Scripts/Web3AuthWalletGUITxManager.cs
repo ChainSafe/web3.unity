@@ -54,7 +54,7 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
         incomingTxPlaceHolder.SetActive(false);
         incomingTxDisplay.SetActive(true);
         incomingTxHashText.text = data.Data;
-        incomingTxActionText.text = data.Value == BigInteger.Parse("0") ? "Sign" : data.Value.ToString();
+        incomingTxActionText.text = data.Value != null ? data.Value.ToString() : "Sign Request";
     }
 
     public void AddTransaction(string time, string action, string amount, string txHash)
@@ -82,7 +82,7 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     public void ResetTransactionDisplay()
     {
         incomingTxNotification.SetActive(false);
-        if (autoTxToggle) return;
+        if (autoTxToggle.isOn) return;
         incomingTxActionText.text = string.Empty;
         incomingTxHashText.text = string.Empty;
         incomingTxDisplay.SetActive(false);
@@ -102,8 +102,7 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
 
     private void OpenBlockExplorer(string txHash)
     {
-        Debug.Log($"Opening URL: {Web3Accessor.Web3.ChainConfig.BlockExplorerUrl}/{txHash}");
-        Application.OpenURL($"{Web3Accessor.Web3.ChainConfig.BlockExplorerUrl}/{txHash}");
+        Application.OpenURL($"{Web3Accessor.Web3.ChainConfig.BlockExplorerUrl}/tx/{txHash}");
     }
 
     public void Update()

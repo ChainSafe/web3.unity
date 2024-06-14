@@ -5,6 +5,7 @@ using TMPro;
 using System.IO;
 using System.Numerics;
 using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
+using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3;
 using Scripts.EVM.Token;
@@ -17,7 +18,7 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
     [SerializeField] private GameObject customTokenPlaceHolder;
     [SerializeField] private GameObject customTokenDisplay;
     [SerializeField] private GameObject transferTokensContainer;
-    [SerializeField] private GameObject addCustomTokensContainer;
+    [SerializeField] private GameObject addCustomTokensMenu;
     [SerializeField] private TMP_Dropdown selectedTokenToTransfer;
     [SerializeField] private TMP_InputField customTokenAddressInput;
     [SerializeField] private TMP_InputField customTokenSymbolInput;
@@ -51,15 +52,19 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
         SetTokens();
     }
 
-    private void SetTokens()
+    private async void SetTokens()
     {
+        File.Delete(Path.Combine(Application.persistentDataPath, "customToken.txt"));
         if (File.Exists(Path.Combine(Application.persistentDataPath, "customToken.txt")))
         {
             var customTokenData = File.ReadAllText(Path.Combine(Application.persistentDataPath, "customToken.txt"));
             var data = customTokenData.Split(",");
+            customTokenPlaceHolder.SetActive(false);
             customTokenContract = data[0];
             customTokenSymbolText.text = data[1].ToUpper();
-            customTokenPlaceHolder.SetActive(false);
+            var balance = await Web3Accessor.Web3.Erc20.GetBalanceOf(customTokenContract, Web3Accessor.Web3.Signer.PublicAddress);
+            var customTokenValue = balance / BigInteger.Pow(10, 18);
+            customTokenAmountText.text = customTokenValue.ToString();
             customTokenDisplay.SetActive(true);
         }
         else
@@ -68,11 +73,16 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
         }
         // Set native token
         nativeTokenSymbolText.text = Web3Accessor.Web3.ChainConfig.Symbol.ToUpper();
+        var hexBalance = await Web3Accessor.Web3.RpcProvider.GetBalance(Web3Accessor.Web3.Signer.PublicAddress);
+        BigInteger nativeBalance = HexToBigInteger(hexBalance.ToString());
+        BigInteger weiToEthConversionFactor = BigInteger.Pow(10, 18);
+        decimal nativeTokenValue = (decimal)nativeBalance / (decimal)weiToEthConversionFactor;
+        nativeTokenAmountText.text = nativeTokenValue.ToString("F18");
     }
     
     private void ToggleAddTokensMenuButton()
     {
-        addCustomTokensContainer.SetActive(!addCustomTokensContainer.activeSelf);
+        addCustomTokensMenu.SetActive(!addCustomTokensMenu.activeSelf);
     }
 
     private void AddToken()
@@ -84,6 +94,8 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
         customTokenSymbolText.text = customTokenSymbolInput.text.ToUpper();
         customTokenAddressInput.text = string.Empty;
         customTokenSymbolInput.text = string.Empty;
+        addCustomTokensMenu.SetActive(false);
+        customTokenPlaceHolder.SetActive(false);
         customTokenDisplay.SetActive(true);
     }
     
@@ -119,6 +131,30 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
             default:
                 throw new Web3Exception("Token can't be found");
         }
+    }
+    
+    private BigInteger HexToBigInteger(string hex)
+    {
+        if (hex.StartsWith("0x"))
+        {
+            hex = hex.Substring(2);
+        }
+
+        // Ensure the hex string length is even
+        if (hex.Length % 2 != 0)
+        {
+            hex = "0" + hex;
+        }
+
+        byte[] bytes = new byte[hex.Length / 2];
+        for (int i = 0; i < hex.Length; i += 2)
+        {
+            bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
+        }
+
+        // Reverse the byte array to match little-endian format expected by BigInteger
+        Array.Reverse(bytes);
+        return new BigInteger(bytes);
     }
     
     #endregion
