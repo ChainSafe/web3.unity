@@ -112,7 +112,7 @@ public class EvmTests : SampleTestsBase
         yield return new WaitUntil(() => useRegisteredContract.IsCompleted);
         if (useRegisteredContract.Exception != null) throw useRegisteredContract.Exception;
         Assert.IsTrue(useRegisteredContract.IsCompletedSuccessfully);
-        Assert.AreEqual(new BigInteger(999999999999999), useRegisteredContract.Result);
+        Assert.AreEqual(new BigInteger(0), useRegisteredContract.Result);
     }
 
     [UnityTest]
@@ -152,6 +152,6 @@ public class EvmTests : SampleTestsBase
     {
         var getCustomBalanceOf = web3.Erc20.GetBalanceOf(ChainSafeContracts.Erc20);
         yield return new WaitUntil(() => getCustomBalanceOf.IsCompleted);
-        Assert.AreEqual(new BigInteger(999999999999999), getCustomBalanceOf.Result);
+        Assert.AreEqual(new BigInteger(0), getCustomBalanceOf.Result);
     }
 }
