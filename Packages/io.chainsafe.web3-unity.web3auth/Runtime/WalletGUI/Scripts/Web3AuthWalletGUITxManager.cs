@@ -76,6 +76,8 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     /// <param name="txHash">Transaction hash</param>
     public void AddTransaction(string time, string action, string amount, string txHash)
     {
+        txHistoryPlaceHolder.SetActive(false);
+        txHistoryDisplay.SetActive(true);
         if (txObjectNumber >= txHistoryDisplayCount)
         {
             Destroy(txHistoryPrefabs[0]);
