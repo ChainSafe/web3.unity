@@ -136,8 +136,15 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     private void Update()
     {
         WalletToggleKeyInputCheck();
-        // Check if the mouse button is held down
-        if (Input.GetMouseButton(0))
+        // Check for mouse input
+        bool isInputHeld = Input.GetMouseButton(0);
+        // Check for touch input
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+            isInputHeld = (touch.phase == TouchPhase.Began || touch.phase == TouchPhase.Stationary || touch.phase == TouchPhase.Moved);
+        }
+        if (isInputHeld)
         {
             if (!isHeldDown)
             {
@@ -146,11 +153,6 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
             }
             else
             {
-                if (Application.isMobilePlatform)
-                {
-                    HoldToRevealPrivateKeyButton();
-                    return;
-                }
                 holdTime += Time.deltaTime;
                 float fillAmount = Mathf.Clamp01(holdTime / holdDuration);
                 circleLoadingImage.fillAmount = fillAmount;

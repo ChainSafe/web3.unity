@@ -20,6 +20,7 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     [SerializeField] private GameObject incomingTxNotification;
     [SerializeField] private GameObject txHistoryPlaceHolder;
     [SerializeField] private GameObject txHistoryDisplay;
+    [SerializeField] private Web3AuthWalletGUI walletGui;
     [SerializeField] private Web3AuthWalletGUIUIManager guiManager;
     private GameObject[] txHistoryPrefabs;
     private Web3AuthWalletGUI w3aWalletGUI;
@@ -122,11 +123,14 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     /// <param name="txHash">Transaction hash</param>
     private void UpdateTxHistoryObject(int txObjectIndex, string txNumber, string time, string action, string amount, string txHash)
     {
-        txHistoryPrefabs[txObjectIndex].transform.Find("TxNumberText").GetComponent<TextMeshProUGUI>().text = $"#{txNumber}";
-        txHistoryPrefabs[txObjectIndex].transform.Find("TimeText").GetComponent<TextMeshProUGUI>().text = time;
-        txHistoryPrefabs[txObjectIndex].transform.Find("ActionText").GetComponent<TextMeshProUGUI>().text = action;
-        txHistoryPrefabs[txObjectIndex].transform.Find("AmountText").GetComponent<TextMeshProUGUI>().text = amount;
-        txHistoryPrefabs[txObjectIndex].transform.Find("TxHashText").GetComponent<TextMeshProUGUI>().text = txHash;
+        string[] textObjectNames = { "TxNumberText", "TimeText", "ActionText", "AmountText", "TxHashText" };
+        foreach (var textObjectName in textObjectNames)
+        {
+            var textObj = txHistoryPrefabs[txObjectIndex].transform.Find(textObjectName);
+            var textMeshPro = textObj.GetComponent<TextMeshProUGUI>();
+            textMeshPro.text = $"#{txNumber}";
+            textObj.GetComponent<Renderer>().material.color = walletGui.secondaryTextColour;
+        }
         txHistoryPrefabs[txObjectIndex].transform.Find("ExplorerButton").GetComponent<Button>().onClick.AddListener(() => OpenBlockExplorer(txHash));
     }
     

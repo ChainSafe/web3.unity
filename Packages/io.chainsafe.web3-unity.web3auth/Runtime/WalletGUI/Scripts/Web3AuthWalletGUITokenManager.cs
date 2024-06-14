@@ -59,7 +59,6 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
     /// </summary>
     private async void SetTokens()
     {
-        File.Delete(Path.Combine(Application.persistentDataPath, "customToken.txt"));
         if (File.Exists(Path.Combine(Application.persistentDataPath, "customToken.txt")))
         {
             var customTokenData = File.ReadAllText(Path.Combine(Application.persistentDataPath, "customToken.txt"));

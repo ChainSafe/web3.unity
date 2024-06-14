@@ -29,7 +29,7 @@ public class Web3AuthWalletGUI : MonoBehaviour
     private Color primaryBackgroundColour;
     private Color menuBackgroundColour;
     private Color primaryTextColour;
-    private Color secondaryTextColour;
+    public Color secondaryTextColour { get; set; }
 
     #endregion
 
