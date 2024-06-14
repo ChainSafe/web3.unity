@@ -60,8 +60,9 @@ public class SampleTestsBase
             services.UseMultiCall();
             services.UseRpcProvider();
 
-            services.AddSingleton(new StubWalletConnectProviderConfig()); // can be replaced
-            services.AddSingleton<IWalletProvider, StubWalletConnectProvider>();
+            var config = new StubWalletConnectProviderConfig();
+            services.AddSingleton(config); // can be replaced
+            services.UseWalletProvider<StubWalletConnectProvider>(config);
             services.UseWalletSigner();
             services.UseWalletTransactionExecutor();
 
