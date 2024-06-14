@@ -1,6 +1,7 @@
 using ChainSafe.Gaming.UnityPackage.Common;
 using ChainSafe.Gaming.WalletConnect;
 using ChainSafe.Gaming.Web3.Build;
+using ChainSafe.Gaming.Web3.Evm.Wallet;
 using Scenes;
 using UnityEngine;
 using UnityEngine.UI;
@@ -43,8 +44,7 @@ public class WalletConnectLoginProvider : LoginProvider, IWeb3BuilderServiceAdap
             var rememberSession = rememberSessionToggle.isOn || storedSessionAvailable;
 
             services.UseWalletConnect(walletConnectConfig.WithRememberSession(rememberSession))
-                .UseWalletConnectSigner()
-                .UseWalletConnectTransactionExecutor();
+                .UseWalletSigner().UseWalletTransactionExecutor();
         });
     }
 

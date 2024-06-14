@@ -17,10 +17,8 @@ namespace ChainSafe.Gaming.MetaMask.Unity
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
         public static IWeb3ServiceCollection UseMetaMask(this IWeb3ServiceCollection collection)
         {
-            collection.AssertServiceNotBound<IWalletProvider>();
-
             // wallet
-            collection.AddSingleton<ILogoutHandler, IWalletProvider, MetaMaskProvider>();
+            collection.UseWalletProvider<MetaMaskProvider>(new MetaMaskConfig());
 
             return collection;
         }
