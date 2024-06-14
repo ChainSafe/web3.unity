@@ -3,14 +3,17 @@ using ChainSafe.GamingSdk.Web3Auth;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Application = UnityEngine.Device.Application;
 
 public class Web3AuthWalletGUIUIManager : MonoBehaviour
 {
     #region Fields
-
+    
+    [SerializeField] private Web3AuthWalletGUITxManager txManager;
     [SerializeField] private GameObject openWalletGUIContainer;
     [SerializeField] private GameObject walletGUIContainer;
     [SerializeField] private GameObject privateKeyContainer;
+    [SerializeField] public GameObject walletLogoDisplay;
     [SerializeField] private TextMeshProUGUI walletAddressText;
     [SerializeField] private TextMeshProUGUI privateKeyText;
     [SerializeField] private Button openWalletButton;
@@ -20,8 +23,8 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     [SerializeField] private Button closePrivateKeyMenuButton;
     [SerializeField] private Button copyPrivateKeyButton;
     [SerializeField] private Button holdToRevealPrivateKeyButton;
-    [SerializeField] public GameObject walletLogoDisplay;
     [SerializeField] private Image circleLoadingImage;
+    [SerializeField] private Toggle autoTxToggle;
     private bool isHeldDown;
     private float holdTime;
     private float holdDuration = 2f;
@@ -43,6 +46,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
         closePrivateKeyMenuButton.onClick.AddListener(TogglePrivateKeyMenuButton);
         copyPrivateKeyButton.onClick.AddListener(CopyPrivateKeyButton);
         copyPrivateKeyButton.onClick.AddListener(HoldToRevealPrivateKeyButton);
+        autoTxToggle.onValueChanged.AddListener(delegate { ToggleAutoConfirmTransactions(); });
         SetPrivateKey();
     }
     
@@ -57,12 +61,20 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     }
     
     /// <summary>
+    /// Called when tx toggle is changed
+    /// </summary>
+    private void ToggleAutoConfirmTransactions()
+    {
+        txManager.autoConfirmTransactions = autoTxToggle.isOn;
+    }
+    
+    /// <summary>
     /// Keyboard input to toggle wallet display.
     /// </summary>
     private void WalletToggleKeyInputCheck()
     {
         // Check for shift + tab press to allow opening and closing of wallet GUI
-        if ((Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)) && Input.GetKeyDown(KeyCode.Tab))
+        if ((Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) && Input.GetKeyDown(KeyCode.Tab))
         {
             ToggleWallet();
         }
@@ -133,12 +145,14 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
             }
             else
             {
+                if (Application.isMobilePlatform)
+                {
+                    HoldToRevealPrivateKeyButton();
+                    return;
+                }
                 holdTime += Time.deltaTime;
-                // Calculate the fill amount based on the hold time
                 float fillAmount = Mathf.Clamp01(holdTime / holdDuration);
                 circleLoadingImage.fillAmount = fillAmount;
-
-                // Complete the action if the circle is full
                 if (fillAmount >= 1f)
                 {
                     HoldToRevealPrivateKeyButton();
@@ -150,7 +164,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
             if (isHeldDown)
             {
                 isHeldDown = false;
-                circleLoadingImage.fillAmount = 0f; // Reset the circle fill
+                circleLoadingImage.fillAmount = 0f;
             }
         }
     }

@@ -4958,9 +4958,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9179cdd6d0f947842b8b7bdcef522e96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  txManager: {fileID: 7234845548737740600}
   openWalletGUIContainer: {fileID: 2788637392479046008}
   walletGUIContainer: {fileID: 8430580655084225592}
   privateKeyContainer: {fileID: 4407843306639728011}
+  walletLogoDisplay: {fileID: 6376826215739815011}
   walletAddressText: {fileID: 208769440838698804}
   privateKeyText: {fileID: 146584364638209816}
   openWalletButton: {fileID: 7911601779672545860}
@@ -4970,8 +4972,8 @@ MonoBehaviour:
   closePrivateKeyMenuButton: {fileID: 1955890123183112007}
   copyPrivateKeyButton: {fileID: 2146662809224367004}
   holdToRevealPrivateKeyButton: {fileID: 198969248047024504}
-  walletLogoDisplay: {fileID: 6376826215739815011}
   circleLoadingImage: {fileID: 1647118626164522998}
+  autoTxToggle: {fileID: 2778796592338522207}
 --- !u!114 &3479140443333928706
 MonoBehaviour:
   m_ObjectHideFlags: 0

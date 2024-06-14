@@ -104,7 +104,6 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     public void ResetTransactionDisplay()
     {
         incomingTxNotification.SetActive(false);
-        if (autoConfirmTransactions) return;
         incomingTxActionText.text = string.Empty;
         incomingTxHashText.text = string.Empty;
         incomingTxDisplay.SetActive(false);
