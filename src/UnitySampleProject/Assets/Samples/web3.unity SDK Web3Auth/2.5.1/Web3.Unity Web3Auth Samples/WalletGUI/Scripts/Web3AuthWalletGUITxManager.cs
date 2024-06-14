@@ -22,12 +22,14 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     [SerializeField] private GameObject incomingTxNotification;
     [SerializeField] private GameObject txHistoryPlaceHolder;
     [SerializeField] private GameObject txHistoryDisplay;
+    [SerializeField] private Web3AuthWalletGUIUIManager guiManager;
     private GameObject[] txHistoryPrefabs;
     private Web3AuthWalletGUI w3aWalletGUI;
     private int txObjectNumber = 1;
     private int txHistoryDisplayCount = 20;
-    public TaskCompletionSource<bool> TransactionResponseTcs { get; private set; }
     private bool hasTransactionCompleted;
+    public bool autoPopUpWalletOnTx;
+    public TaskCompletionSource<bool> TransactionResponseTcs { get; private set; }
     
     #endregion
 
@@ -50,6 +52,10 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
         {
             w3aWalletGUI.AcceptRequest();
             return;
+        }
+        if (autoPopUpWalletOnTx)
+        {
+            guiManager.ToggleWallet();
         }
         incomingTxPlaceHolder.SetActive(false);
         incomingTxDisplay.SetActive(true);

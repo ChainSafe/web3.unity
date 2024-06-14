@@ -1578,7 +1578,7 @@ MonoBehaviour:
   - Button: {fileID: 7400892925769233044}
     Provider: 4
   web3AuthWalletGUIPrefab: {fileID: 2911816339710442984, guid: f7720d25a0e756e44a16cb88a64c519f, type: 3}
-  enableWalletGUI: 0
+  enableWalletGUI: 1
 --- !u!114 &1679801101
 MonoBehaviour:
   m_ObjectHideFlags: 0

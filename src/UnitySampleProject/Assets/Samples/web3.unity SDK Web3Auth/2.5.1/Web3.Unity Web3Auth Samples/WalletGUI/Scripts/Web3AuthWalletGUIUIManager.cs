@@ -19,6 +19,12 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     [SerializeField] private Button openPrivateKeyMenuButton;
     [SerializeField] private Button closePrivateKeyMenuButton;
     [SerializeField] private Button copyPrivateKeyButton;
+    [SerializeField] private Button holdToRevealPrivateKeyButton;
+    [SerializeField] public GameObject walletLogoDisplay;
+    [SerializeField] private Image circleLoadingImage;
+    private bool isHeldDown;
+    private float holdTime;
+    private float holdDuration = 2f;
 
     #endregion
 
@@ -32,10 +38,11 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
         openPrivateKeyMenuButton.onClick.AddListener(TogglePrivateKeyMenuButton);
         closePrivateKeyMenuButton.onClick.AddListener(TogglePrivateKeyMenuButton);
         copyPrivateKeyButton.onClick.AddListener(CopyPrivateKeyButton);
+        copyPrivateKeyButton.onClick.AddListener(HoldToRevealPrivateKeyButton);
         SetPrivateKey();
     }
 
-    private void ToggleWallet()
+    public void ToggleWallet()
     {
         walletGUIContainer.SetActive(!walletGUIContainer.activeSelf);
         openWalletGUIContainer.SetActive(!openWalletGUIContainer.activeSelf);
@@ -55,8 +62,21 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
         Web3AuthWalletGUIClipboardManager.CopyText(walletAddressText.text);
     }
     
+    private void HoldToRevealPrivateKeyButton()
+    {
+        holdToRevealPrivateKeyButton.gameObject.SetActive(false);
+        copyPrivateKeyButton.gameObject.SetActive(true);
+        privateKeyText.gameObject.SetActive(true);
+    }
+    
     private void TogglePrivateKeyMenuButton()
     {
+        if (privateKeyContainer.activeSelf)
+        {
+            holdToRevealPrivateKeyButton.gameObject.SetActive(true);
+            copyPrivateKeyButton.gameObject.SetActive(false);
+            privateKeyText.gameObject.SetActive(false);
+        }
         privateKeyContainer.SetActive(!privateKeyContainer.activeSelf);
     }
     
@@ -74,6 +94,36 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     private void Update()
     {
         WalletToggleKeyInputCheck();
+        // Check if the mouse button is held down
+        if (Input.GetMouseButton(0))
+        {
+            if (!isHeldDown)
+            {
+                isHeldDown = true;
+                holdTime = 0f;
+            }
+            else
+            {
+                holdTime += Time.deltaTime;
+                // Calculate the fill amount based on the hold time
+                float fillAmount = Mathf.Clamp01(holdTime / holdDuration);
+                circleLoadingImage.fillAmount = fillAmount;
+
+                // Complete the action if the circle is full
+                if (fillAmount >= 1f)
+                {
+                    HoldToRevealPrivateKeyButton();
+                }
+            }
+        }
+        else
+        {
+            if (isHeldDown)
+            {
+                isHeldDown = false;
+                circleLoadingImage.fillAmount = 0f; // Reset the circle fill
+            }
+        }
     }
     
     #endregion

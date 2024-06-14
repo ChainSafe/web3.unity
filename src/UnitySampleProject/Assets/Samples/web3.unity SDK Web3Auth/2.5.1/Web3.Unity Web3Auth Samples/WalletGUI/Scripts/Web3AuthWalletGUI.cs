@@ -11,11 +11,16 @@ public class Web3AuthWalletGUI : MonoBehaviour
 {
     #region Fields
     
+    [SerializeField] private Web3AuthWalletGUITxManager txManager;
+    [SerializeField] private Web3AuthWalletGUIUIManager guiManager;
     [SerializeField] private TextMeshProUGUI incomingTxActionText;
     [SerializeField] private TextMeshProUGUI incomingTxHashText;
     [SerializeField] private Button acceptRequestButton;
     [SerializeField] private Button rejectRequestButton;
-    [SerializeField] private Web3AuthWalletGUITxManager txManager;
+    [SerializeField] private Sprite walletLogo;
+    [SerializeField] private GameObject walletIconContainer;
+    [SerializeField] private bool displayWalletIcon;
+    [SerializeField] private bool autoPopUpWalletOnTx;
 
     #endregion
 
@@ -24,6 +29,9 @@ public class Web3AuthWalletGUI : MonoBehaviour
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
+        walletIconContainer.SetActive(displayWalletIcon);
+        txManager.autoPopUpWalletOnTx = autoPopUpWalletOnTx;
+        guiManager.walletLogoDisplay.GetComponent<Image>().sprite = walletLogo;
         acceptRequestButton.onClick.AddListener(AcceptRequest);
         rejectRequestButton.onClick.AddListener(RejectRequest);
     }

@@ -74,10 +74,10 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
         // Set native token
         nativeTokenSymbolText.text = Web3Accessor.Web3.ChainConfig.Symbol.ToUpper();
         var hexBalance = await Web3Accessor.Web3.RpcProvider.GetBalance(Web3Accessor.Web3.Signer.PublicAddress);
-        BigInteger nativeBalance = HexToBigInteger(hexBalance.ToString());
-        BigInteger weiToEthConversionFactor = BigInteger.Pow(10, 18);
-        decimal nativeTokenValue = (decimal)nativeBalance / (decimal)weiToEthConversionFactor;
-        nativeTokenAmountText.text = nativeTokenValue.ToString("F18");
+        var weiBalance = BigInteger.Parse(hexBalance.ToString());
+        decimal ethBalance = (decimal)weiBalance / (decimal)Math.Pow(10, 18);
+        nativeTokenAmountText.text = ethBalance.ToString("0.#########"); 
+        SetTokenDropdownOptions();
     }
     
     private void ToggleAddTokensMenuButton()
@@ -97,6 +97,18 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
         addCustomTokensMenu.SetActive(false);
         customTokenPlaceHolder.SetActive(false);
         customTokenDisplay.SetActive(true);
+        SetTokenDropdownOptions();
+    }
+
+    private void SetTokenDropdownOptions()
+    {
+        // Set token options
+        if (selectedTokenToTransfer.options == null)
+        {
+            selectedTokenToTransfer.options = new List<TMP_Dropdown.OptionData>(2);
+            selectedTokenToTransfer.options[0].text = nativeTokenSymbolText.text;
+            selectedTokenToTransfer.options[1].text = customTokenSymbolText.text;
+        }
     }
     
     private void ToggleTransferTokensMenuButton()
@@ -106,14 +118,6 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
     
     private async void TransferTokens()
     {
-        // Set token options
-        if (selectedTokenToTransfer.options == null)
-        {
-            selectedTokenToTransfer.options = new List<TMP_Dropdown.OptionData>(2);
-            selectedTokenToTransfer.options[0].text = nativeTokenSymbolText.text;
-            selectedTokenToTransfer.options[1].text = customTokenSymbolText.text;
-        }
-        
         // Token transfers
         switch (selectedTokenToTransfer.value)
         {
@@ -131,30 +135,7 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
             default:
                 throw new Web3Exception("Token can't be found");
         }
-    }
-    
-    private BigInteger HexToBigInteger(string hex)
-    {
-        if (hex.StartsWith("0x"))
-        {
-            hex = hex.Substring(2);
-        }
-
-        // Ensure the hex string length is even
-        if (hex.Length % 2 != 0)
-        {
-            hex = "0" + hex;
-        }
-
-        byte[] bytes = new byte[hex.Length / 2];
-        for (int i = 0; i < hex.Length; i += 2)
-        {
-            bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
-        }
-
-        // Reverse the byte array to match little-endian format expected by BigInteger
-        Array.Reverse(bytes);
-        return new BigInteger(bytes);
+        transferTokensContainer.SetActive(false);
     }
     
     #endregion
