@@ -46,6 +46,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
         closePrivateKeyMenuButton.onClick.AddListener(TogglePrivateKeyMenuButton);
         copyPrivateKeyButton.onClick.AddListener(CopyPrivateKeyButton);
         copyPrivateKeyButton.onClick.AddListener(HoldToRevealPrivateKeyButton);
+        walletAddressText.text = Web3Accessor.Web3.Signer.PublicAddress;
         autoTxToggle.onValueChanged.AddListener(delegate { ToggleAutoConfirmTransactions(); });
         SetPrivateKey();
     }
