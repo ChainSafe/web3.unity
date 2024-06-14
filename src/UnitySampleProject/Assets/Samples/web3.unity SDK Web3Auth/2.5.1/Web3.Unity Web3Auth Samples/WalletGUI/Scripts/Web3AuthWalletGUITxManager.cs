@@ -1,4 +1,3 @@
-using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.InProcessTransactionExecutor;
 using ChainSafe.Gaming.UnityPackage;
@@ -35,7 +34,9 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
 
     #region Methods
     
-
+    /// <summary>
+    /// Initializes objects.
+    /// </summary>
     private void Awake()
     {
         txHistoryPrefabs = new GameObject[txHistoryDisplayCount];
@@ -43,6 +44,9 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
         TransactionResponseTcs = new TaskCompletionSource<bool>();
     }
     
+    /// <summary>
+    /// Populates the incoming transaction display.
+    /// </summary>
     private void IncomingTransactionDisplay()
     {
         var w3aw = (Web3AuthWallet)Web3Accessor.Web3.ServiceProvider.GetService(typeof(Web3AuthWallet));
@@ -62,7 +66,14 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
         incomingTxHashText.text = data.Data;
         incomingTxActionText.text = data.Value != null ? data.Value.ToString() : "Sign Request";
     }
-
+    
+    /// <summary>
+    /// Adds a transaction to the history area.
+    /// </summary>
+    /// <param name="time">Transaction time</param>
+    /// <param name="action">Action being performed</param>
+    /// <param name="amount">Amount of tokens sent</param>
+    /// <param name="txHash">Transaction hash</param>
     public void AddTransaction(string time, string action, string amount, string txHash)
     {
         if (txObjectNumber >= txHistoryDisplayCount)
@@ -85,6 +96,9 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
         ResetTransactionDisplay();
     }
     
+    /// <summary>
+    /// Resets the transaction display.
+    /// </summary>
     public void ResetTransactionDisplay()
     {
         incomingTxNotification.SetActive(false);
@@ -95,7 +109,16 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
         incomingTxPlaceHolder.SetActive(true);
         hasTransactionCompleted = false;
     }
-
+    
+    /// <summary>
+    /// Updates the transaction history prefab text.
+    /// </summary>
+    /// <param name="txObjectIndex">Position in the object array</param>
+    /// <param name="txNumber">Transaction number</param>
+    /// <param name="time">Transaction time</param>
+    /// <param name="action">Action being performed</param>
+    /// <param name="amount">Amount of tokens sent</param>
+    /// <param name="txHash">Transaction hash</param>
     private void UpdateTxHistoryObject(int txObjectIndex, string txNumber, string time, string action, string amount, string txHash)
     {
         txHistoryPrefabs[txObjectIndex].transform.Find("TxNumberText").GetComponent<TextMeshProUGUI>().text = $"#{txNumber}";
@@ -105,12 +128,19 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
         txHistoryPrefabs[txObjectIndex].transform.Find("TxHashText").GetComponent<TextMeshProUGUI>().text = txHash;
         txHistoryPrefabs[txObjectIndex].transform.Find("ExplorerButton").GetComponent<Button>().onClick.AddListener(() => OpenBlockExplorer(txHash));
     }
-
+    
+    /// <summary>
+    /// Opens the block explorer url.
+    /// </summary>
+    /// <param name="txHash"></param>
     private void OpenBlockExplorer(string txHash)
     {
         Application.OpenURL($"{Web3Accessor.Web3.ChainConfig.BlockExplorerUrl}/tx/{txHash}");
     }
-
+    
+    /// <summary>
+    /// Polls for incoming transactions.
+    /// </summary>
     public void Update()
     {
         if (Web3AuthTransactionHelper.TransactionAcceptedTcs == null) return;

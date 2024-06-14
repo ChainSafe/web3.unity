@@ -40,7 +40,9 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
 
     #region Methods
     
-
+    /// <summary>
+    /// Initializes objects.
+    /// </summary>
     private void Awake()
     {
         addTokenButton.onClick.AddListener(AddToken);
@@ -51,7 +53,10 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
         transferTokensButton.onClick.AddListener(TransferTokens);
         SetTokens();
     }
-
+    
+    /// <summary>
+    /// Sets native & custom token displays.
+    /// </summary>
     private async void SetTokens()
     {
         File.Delete(Path.Combine(Application.persistentDataPath, "customToken.txt"));
@@ -80,11 +85,17 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
         SetTokenDropdownOptions();
     }
     
+    /// <summary>
+    /// Toggles the add token menu.
+    /// </summary>
     private void ToggleAddTokensMenuButton()
     {
         addCustomTokensMenu.SetActive(!addCustomTokensMenu.activeSelf);
     }
-
+    
+    /// <summary>
+    /// Adds a custom token to the wallet.
+    /// </summary>
     private void AddToken()
     {
         if (!File.Exists(Path.Combine(Application.persistentDataPath, "customToken.txt")))
@@ -99,7 +110,10 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
         customTokenDisplay.SetActive(true);
         SetTokenDropdownOptions();
     }
-
+    
+    /// <summary>
+    /// Sets the dropdown options in the token transfer menu.
+    /// </summary>
     private void SetTokenDropdownOptions()
     {
         // Set token options
@@ -111,11 +125,18 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// Toggles the transfer tokens menu.
+    /// </summary>
     private void ToggleTransferTokensMenuButton()
     {
         transferTokensContainer.SetActive(!transferTokensContainer.activeSelf);
     }
     
+    /// <summary>
+    /// Transfers tokens to a wallet address.
+    /// </summary>
+    /// <exception cref="Web3Exception"></exception>
     private async void TransferTokens()
     {
         // Token transfers

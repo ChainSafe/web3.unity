@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 using ChainSafe.Gaming.InProcessTransactionExecutor;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.GamingSdk.Web3Auth;
@@ -25,7 +24,10 @@ public class Web3AuthWalletGUI : MonoBehaviour
     #endregion
 
     #region Methods
-
+    
+    /// <summary>
+    /// Initializes objects.
+    /// </summary>
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
@@ -36,6 +38,9 @@ public class Web3AuthWalletGUI : MonoBehaviour
         rejectRequestButton.onClick.AddListener(RejectRequest);
     }
     
+    /// <summary>
+    /// Accepts an incoming transaction request.
+    /// </summary>
     public async void AcceptRequest()
     {
         Web3AuthTransactionHelper.AcceptTransaction();
@@ -51,6 +56,9 @@ public class Web3AuthWalletGUI : MonoBehaviour
         txManager.ResetTransactionDisplay();
     }
     
+    /// <summary>
+    /// Rejects an incoming transaction request.
+    /// </summary>
     private void RejectRequest()
     {
         txManager.ResetTransactionDisplay();

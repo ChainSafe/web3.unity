@@ -30,6 +30,9 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
 
     #region Methods
     
+    /// <summary>
+    /// Initializes objects.
+    /// </summary>
     private void Awake()
     {
         openWalletButton.onClick.AddListener(ToggleWallet);
@@ -41,13 +44,19 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
         copyPrivateKeyButton.onClick.AddListener(HoldToRevealPrivateKeyButton);
         SetPrivateKey();
     }
-
+    
+    /// <summary>
+    /// Toggles the wallet display.
+    /// </summary>
     public void ToggleWallet()
     {
         walletGUIContainer.SetActive(!walletGUIContainer.activeSelf);
         openWalletGUIContainer.SetActive(!openWalletGUIContainer.activeSelf);
     }
     
+    /// <summary>
+    /// Keyboard input to toggle wallet display.
+    /// </summary>
     private void WalletToggleKeyInputCheck()
     {
         // Check for shift + tab press to allow opening and closing of wallet GUI
@@ -57,11 +66,17 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// Button function to copy the wallet address.
+    /// </summary>
     private void CopyWalletAddressButton()
     {
         Web3AuthWalletGUIClipboardManager.CopyText(walletAddressText.text);
     }
     
+    /// <summary>
+    /// Reveals the private key when held down.
+    /// </summary>
     private void HoldToRevealPrivateKeyButton()
     {
         holdToRevealPrivateKeyButton.gameObject.SetActive(false);
@@ -69,6 +84,9 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
         privateKeyText.gameObject.SetActive(true);
     }
     
+    /// <summary>
+    /// Toggles the private key menu.
+    /// </summary>
     private void TogglePrivateKeyMenuButton()
     {
         if (privateKeyContainer.activeSelf)
@@ -80,17 +98,26 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
         privateKeyContainer.SetActive(!privateKeyContainer.activeSelf);
     }
     
+    /// <summary>
+    /// Sets the private key text.
+    /// </summary>
     private void SetPrivateKey()
     {
         var w3a = (Web3AuthWallet)Web3Accessor.Web3.ServiceProvider.GetService(typeof(Web3AuthWallet));
         privateKeyText.text = w3a.Key;
     }
     
+    /// <summary>
+    /// Button function to copy the wallet private key.
+    /// </summary>
     private void CopyPrivateKeyButton()
     {
         Web3AuthWalletGUIClipboardManager.CopyText(privateKeyText.text);
     }
     
+    /// <summary>
+    /// Checks for wallet toggle input & tracks private key held timer.
+    /// </summary>
     private void Update()
     {
         WalletToggleKeyInputCheck();
