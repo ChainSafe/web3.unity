@@ -1,6 +1,7 @@
 using ChainSafe.Gaming.HyperPlay;
 using ChainSafe.Gaming.UnityPackage.Common;
 using ChainSafe.Gaming.Web3.Build;
+using ChainSafe.Gaming.Web3.Evm.Wallet;
 using Microsoft.Extensions.DependencyInjection;
 using Scenes;
 using UnityEngine;
@@ -46,7 +47,7 @@ public class HyperPlayLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
             services.UseHyperPlay(new HyperPlayConfig
             {
                 RememberSession = rememberMeToggle.isOn || _storedSessionAvailable,
-            }).UseHyperPlaySigner().UseHyperPlayTransactionExecutor();
+            }).UseWalletSigner().UseWalletTransactionExecutor();
         });
     }
     
