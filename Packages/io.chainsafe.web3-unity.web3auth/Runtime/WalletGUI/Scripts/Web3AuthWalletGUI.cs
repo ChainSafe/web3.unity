@@ -124,8 +124,11 @@ public class Web3AuthWalletGUI : MonoBehaviour
     /// <summary>
     /// Rejects an incoming transaction request.
     /// </summary>
-    private void RejectRequest()
+    private async void RejectRequest()
     {
+        Web3AuthTransactionHelper.RejectTransaction();
+        // short wait to stop null ref
+        await new WaitForSeconds(2);
         txManager.ResetTransactionDisplay();
     }
     
