@@ -8,6 +8,7 @@ using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using Nethereum.JsonRpc.Client;
+using Nethereum.RPC.Eth.DTOs;
 using Nethereum.Signer;
 using UnityEngine;
 using TWeb3Auth = Web3Auth;
@@ -53,9 +54,14 @@ namespace ChainSafe.GamingSdk.Web3Auth
         public string Key => signer.GetKey().GetPrivateKey();
         
         /// <summary>
-        /// Gets InProcessTransactionExecutor for transaction halting with Web3Auth wallet GUI.
+        /// Gets transaction request task.
         /// </summary>
-        public InProcessTransactionExecutor InProcessTransactionExecutor => transactionExecutor;
+        public TaskCompletionSource<TransactionRequest> TransactionRequestTcs { get; private set; }
+        
+        /// <summary>
+        /// Gets transaction response task.
+        /// </summary>
+        public TaskCompletionSource<string> TransactionResponseTcs { get; private set; }
 
         /// <summary>
         /// Asynchronously prepares the Web3Auth wallet for operation, triggered when initializing the module in the dependency injection work flow.
@@ -132,7 +138,19 @@ namespace ChainSafe.GamingSdk.Web3Auth
         /// </summary>
         /// <param name="transaction">The transaction request to send.</param>
         /// <returns>A <see cref="Task"/> that represents the asynchronous operation and returns a <see cref="TransactionResponse"/>.</returns>
-        public Task<TransactionResponse> SendTransaction(TransactionRequest transaction) => transactionExecutor.SendTransaction(transaction);
+        public async Task<TransactionResponse> SendTransaction(TransactionRequest transaction)
+		{
+			if (GameObject.Find("Web3AuthWalletGUI(Clone)") != null)
+            {
+                TransactionRequestTcs = new TaskCompletionSource<TransactionRequest>();
+                TransactionRequestTcs.SetResult(transaction);
+                await Web3AuthTransactionHelper.WaitForTransactionAsync();
+            }
+            var txResponse = await transactionExecutor.SendTransaction(transaction);
+            TransactionResponseTcs = new TaskCompletionSource<string>();
+            TransactionResponseTcs.SetResult(txResponse.Hash);
+			return txResponse;
+		}
 
         private TWeb3Auth CreateCoreInstance()
         {

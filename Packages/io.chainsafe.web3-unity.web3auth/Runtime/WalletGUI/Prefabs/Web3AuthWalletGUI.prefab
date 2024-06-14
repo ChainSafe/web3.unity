@@ -1756,7 +1756,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6754116201436341848
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4802,11 +4802,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7743707375381239092}
-  - component: {fileID: 1468709357103397177}
-  - component: {fileID: 8598381270475430554}
-  - component: {fileID: 8648830141580000005}
-  - component: {fileID: 263661795182992369}
-  - component: {fileID: 2120780087587875003}
+  - component: {fileID: 7656622686525558909}
+  - component: {fileID: 4029780974178710413}
+  - component: {fileID: 7234845548737740600}
+  - component: {fileID: 804371200852392299}
+  - component: {fileID: 3479140443333928706}
   m_Layer: 0
   m_Name: Web3AuthWalletGUI
   m_TagString: Untagged
@@ -4830,7 +4830,7 @@ Transform:
   - {fileID: 5373238811467919373}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1468709357103397177
+--- !u!114 &7656622686525558909
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4839,20 +4839,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 2911816339710442984}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75a4824992fb6ba4ea66230b9dcc92ae, type: 3}
+  m_Script: {fileID: 11500000, guid: 949a32e9535072945a68ed9b3bebca6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  txManager: {fileID: 263661795182992369}
-  guiManager: {fileID: 8598381270475430554}
+  txManager: {fileID: 7234845548737740600}
+  guiManager: {fileID: 804371200852392299}
   incomingTxActionText: {fileID: 6925840943374636494}
   incomingTxHashText: {fileID: 905141851235353814}
   acceptRequestButton: {fileID: 9165754778767219097}
   rejectRequestButton: {fileID: 8654605469475103381}
-  walletLogo: {fileID: 21300000, guid: 66ddec427e481b242a9c9118ca33eacb, type: 3}
+  walletLogo: {fileID: 0}
   walletIconContainer: {fileID: 2788637392479046008}
   displayWalletIcon: 1
   autoPopUpWalletOnTx: 0
---- !u!114 &8598381270475430554
+--- !u!114 &4029780974178710413
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4861,33 +4861,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2911816339710442984}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5b1b610458085a449b9d3be4b6f22aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  openWalletGUIContainer: {fileID: 2788637392479046008}
-  walletGUIContainer: {fileID: 8430580655084225592}
-  privateKeyContainer: {fileID: 4407843306639728011}
-  walletAddressText: {fileID: 208769440838698804}
-  privateKeyText: {fileID: 146584364638209816}
-  openWalletButton: {fileID: 7911601779672545860}
-  closeWalletButton: {fileID: 4506437294201990683}
-  copyWalletAddressButton: {fileID: 6380949870636842558}
-  openPrivateKeyMenuButton: {fileID: 2007582778956157250}
-  closePrivateKeyMenuButton: {fileID: 1955890123183112007}
-  copyPrivateKeyButton: {fileID: 2146662809224367004}
-  holdToRevealPrivateKeyButton: {fileID: 198969248047024504}
-  walletLogoDisplay: {fileID: 6376826215739815011}
-  circleLoadingImage: {fileID: 1647118626164522998}
---- !u!114 &8648830141580000005
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2911816339710442984}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bb1810d93cc21304c87408cf33dbbe6e, type: 3}
+  m_Script: {fileID: 11500000, guid: 47116fea1309f4c428145e5cfd66f6ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   customTokenPlaceHolder: {fileID: 6238643033416456295}
@@ -4909,7 +4883,7 @@ MonoBehaviour:
   transferTokensMenuButton: {fileID: 3166722148647569110}
   closeTransferTokensButton: {fileID: 3090088527211704690}
   transferTokensButton: {fileID: 7823939205480095793}
---- !u!114 &263661795182992369
+--- !u!114 &7234845548737740600
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4918,7 +4892,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2911816339710442984}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 957a25dfc97cc6240a0ba2cc9c2805a8, type: 3}
+  m_Script: {fileID: 11500000, guid: bdc30f297dfebf748aa84f993eb8a7fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   autoTxToggle: {fileID: 2778796592338522207}
@@ -4926,15 +4900,15 @@ MonoBehaviour:
   incomingTxActionText: {fileID: 6925840943374636494}
   incomingTxHashText: {fileID: 905141851235353814}
   txHistoryScrollPanel: {fileID: 7703379847668005035}
-  txHistoryDataPrefab: {fileID: 4431949681538198682, guid: 51ed3e26bf55990459944308a5d4d4d6, type: 3}
+  txHistoryDataPrefab: {fileID: 4431949681538198682, guid: ef131aad79b2b4e4da0169a7b5886db7, type: 3}
   incomingTxPlaceHolder: {fileID: 3225156815482742312}
   incomingTxDisplay: {fileID: 5670436737734109959}
   incomingTxNotification: {fileID: 4706101805464217323}
   txHistoryPlaceHolder: {fileID: 861225078783303682}
   txHistoryDisplay: {fileID: 8139811105131153425}
-  guiManager: {fileID: 8598381270475430554}
+  guiManager: {fileID: 804371200852392299}
   autoPopUpWalletOnTx: 0
---- !u!114 &2120780087587875003
+--- !u!114 &804371200852392299
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4943,7 +4917,33 @@ MonoBehaviour:
   m_GameObject: {fileID: 2911816339710442984}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6e9023b239a914478922dafa115bba8, type: 3}
+  m_Script: {fileID: 11500000, guid: 9179cdd6d0f947842b8b7bdcef522e96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  openWalletGUIContainer: {fileID: 2788637392479046008}
+  walletGUIContainer: {fileID: 8430580655084225592}
+  privateKeyContainer: {fileID: 4407843306639728011}
+  walletAddressText: {fileID: 208769440838698804}
+  privateKeyText: {fileID: 146584364638209816}
+  openWalletButton: {fileID: 7911601779672545860}
+  closeWalletButton: {fileID: 4506437294201990683}
+  copyWalletAddressButton: {fileID: 6380949870636842558}
+  openPrivateKeyMenuButton: {fileID: 2007582778956157250}
+  closePrivateKeyMenuButton: {fileID: 1955890123183112007}
+  copyPrivateKeyButton: {fileID: 2146662809224367004}
+  holdToRevealPrivateKeyButton: {fileID: 198969248047024504}
+  walletLogoDisplay: {fileID: 6376826215739815011}
+  circleLoadingImage: {fileID: 1647118626164522998}
+--- !u!114 &3479140443333928706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2911816339710442984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15ddd9b23c8d92f4db529a02cc14ecab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3059909609810995664
@@ -11787,7 +11787,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &850847227156843899
 RectTransform:
   m_ObjectHideFlags: 0

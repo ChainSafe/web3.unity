@@ -47,8 +47,8 @@ public class Web3AuthWalletGUI : MonoBehaviour
         // short wait to stop null ref
         await new WaitForSeconds(2);
         var txExecutor = (Web3AuthWallet)Web3Accessor.Web3.ServiceProvider.GetService(typeof(Web3AuthWallet));
-        var requestData = txExecutor.InProcessTransactionExecutor.TransactionRequestTcs.Task.Result;
-        var txHash = txExecutor.InProcessTransactionExecutor.TransactionResponseTcs.Task.Result;
+        var requestData = txExecutor.TransactionRequestTcs.Task.Result;
+        var txHash = txExecutor.TransactionResponseTcs.Task.Result;
         var txTime = DateTime.Now.ToString("hh:mm: tt");
         var txAmount = requestData.Value == null ? "0" : requestData.Value.ToString();
         var txAction = incomingTxActionText.text = requestData.Value != null ? requestData.Value.ToString() : "Sign Request";

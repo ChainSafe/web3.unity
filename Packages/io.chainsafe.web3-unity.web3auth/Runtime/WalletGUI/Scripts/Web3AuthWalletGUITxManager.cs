@@ -50,7 +50,7 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     private void IncomingTransactionDisplay()
     {
         var w3aw = (Web3AuthWallet)Web3Accessor.Web3.ServiceProvider.GetService(typeof(Web3AuthWallet));
-        var data = w3aw.InProcessTransactionExecutor.TransactionRequestTcs.Task.Result;
+        var data = w3aw.TransactionRequestTcs.Task.Result;
         incomingTxNotification.SetActive(true);
         if (autoTxToggle.isOn)
         {
