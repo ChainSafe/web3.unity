@@ -124,11 +124,12 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     private void UpdateTxHistoryObject(int txObjectIndex, string txNumber, string time, string action, string amount, string txHash)
     {
         string[] textObjectNames = { "TxNumberText", "TimeText", "ActionText", "AmountText", "TxHashText" };
-        foreach (var textObjectName in textObjectNames)
+        string[] textValues = { txNumber, time, action, amount, txHash };
+        for (int i = 0; i < textObjectNames.Length; i++)
         {
-            var textObj = txHistoryPrefabs[txObjectIndex].transform.Find(textObjectName);
+            var textObj = txHistoryPrefabs[txObjectIndex].transform.Find(textObjectNames[i]);
             var textMeshPro = textObj.GetComponent<TextMeshProUGUI>();
-            textMeshPro.text = $"#{txNumber}";
+            textMeshPro.text = textValues[i];
             textObj.GetComponent<Renderer>().material.color = walletGui.secondaryTextColour;
         }
         txHistoryPrefabs[txObjectIndex].transform.Find("ExplorerButton").GetComponent<Button>().onClick.AddListener(() => OpenBlockExplorer(txHash));
