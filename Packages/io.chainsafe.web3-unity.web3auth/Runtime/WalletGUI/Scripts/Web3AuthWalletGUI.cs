@@ -98,8 +98,16 @@ public class Web3AuthWalletGUI : MonoBehaviour
         {
             foreach (var item in objects)
             {
-                item.GetComponent<Renderer>().material.color = color;
-                item.GetComponent<TextMeshProUGUI>().material.color = color;
+                var imageRenderer = item.GetComponent<Image>();
+                if (imageRenderer != null)
+                {
+                    //imageRenderer.color = color;
+                }
+                var textMeshPro = item.GetComponent<TextMeshProUGUI>();
+                if (textMeshPro != null)
+                {
+                    //textMeshPro.color = color;
+                }
             }
         }
     }
