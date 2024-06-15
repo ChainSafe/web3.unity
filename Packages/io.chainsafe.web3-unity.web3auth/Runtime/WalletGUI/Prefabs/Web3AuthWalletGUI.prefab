@@ -1341,7 +1341,7 @@ MonoBehaviour:
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1280, y: 720}
-  m_ScreenMatchMode: 0
+  m_ScreenMatchMode: 1
   m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
@@ -4945,6 +4945,7 @@ MonoBehaviour:
   incomingTxNotification: {fileID: 4706101805464217323}
   txHistoryPlaceHolder: {fileID: 861225078783303682}
   txHistoryDisplay: {fileID: 8139811105131153425}
+  walletGui: {fileID: 0}
   guiManager: {fileID: 804371200852392299}
 --- !u!114 &804371200852392299
 MonoBehaviour:
