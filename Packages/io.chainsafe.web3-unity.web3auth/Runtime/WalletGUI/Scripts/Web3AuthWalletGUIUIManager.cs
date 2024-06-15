@@ -3,7 +3,6 @@ using ChainSafe.GamingSdk.Web3Auth;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Application = UnityEngine.Device.Application;
 
 public class Web3AuthWalletGUIUIManager : MonoBehaviour
 {
@@ -28,7 +27,12 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     private bool isHeldDown;
     private float holdTime;
     private float holdDuration = 2f;
-    public bool displayWalletIcon { get; set; }
+
+    #endregion
+
+    #region Properties
+
+    public bool DisplayWalletIcon { get; set; }
 
     #endregion
 
@@ -39,16 +43,24 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        openWalletButton.onClick.AddListener(ToggleWallet);
-        closeWalletButton.onClick.AddListener(ToggleWallet);
-        copyWalletAddressButton.onClick.AddListener(CopyWalletAddressButton);
-        openPrivateKeyMenuButton.onClick.AddListener(TogglePrivateKeyMenuButton);
-        closePrivateKeyMenuButton.onClick.AddListener(TogglePrivateKeyMenuButton);
-        copyPrivateKeyButton.onClick.AddListener(CopyPrivateKeyButton);
-        copyPrivateKeyButton.onClick.AddListener(HoldToRevealPrivateKeyButton);
+        InitializeButtons();
         walletAddressText.text = Web3Accessor.Web3.Signer.PublicAddress;
         autoTxToggle.onValueChanged.AddListener(delegate { ToggleAutoConfirmTransactions(); });
         SetPrivateKey();
+    }
+    
+    /// <summary>
+    /// Initializes button listeners
+    /// </summary>
+    private void InitializeButtons()
+    {
+        openWalletButton.onClick.AddListener(ToggleWallet);
+        closeWalletButton.onClick.AddListener(ToggleWallet);
+        copyWalletAddressButton.onClick.AddListener(CopyWalletAddress);
+        openPrivateKeyMenuButton.onClick.AddListener(TogglePrivateKeyMenu);
+        closePrivateKeyMenuButton.onClick.AddListener(TogglePrivateKeyMenu);
+        copyPrivateKeyButton.onClick.AddListener(CopyPrivateKey);
+        holdToRevealPrivateKeyButton.onClick.AddListener(RevealPrivateKey);
     }
     
     /// <summary>
@@ -57,52 +69,53 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     public void ToggleWallet()
     {
         walletGUIContainer.SetActive(!walletGUIContainer.activeSelf);
-        if (!displayWalletIcon) return;
-        openWalletGUIContainer.SetActive(!openWalletGUIContainer.activeSelf);
+        if (DisplayWalletIcon)
+        {
+            openWalletGUIContainer.SetActive(!openWalletGUIContainer.activeSelf);
+        }
     }
-    
+
     /// <summary>
     /// Called when tx toggle is changed
     /// </summary>
     private void ToggleAutoConfirmTransactions()
     {
-        txManager.autoConfirmTransactions = autoTxToggle.isOn;
+        txManager.AutoConfirmTransactions = autoTxToggle.isOn;
     }
-    
+
     /// <summary>
-    /// Keyboard input to toggle wallet display.
+    /// Checks for keyboard input to toggle wallet display.
     /// </summary>
-    private void WalletToggleKeyInputCheck()
+    private void CheckWalletToggleKeyInput()
     {
-        // Check for shift + tab press to allow opening and closing of wallet GUI
         if ((Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) && Input.GetKeyDown(KeyCode.Tab))
         {
             ToggleWallet();
         }
     }
-    
+
     /// <summary>
-    /// Button function to copy the wallet address.
+    /// Copies the wallet address to clipboard.
     /// </summary>
-    private void CopyWalletAddressButton()
+    private void CopyWalletAddress()
     {
         Web3AuthWalletGUIClipboardManager.CopyText(walletAddressText.text);
     }
-    
+
     /// <summary>
     /// Reveals the private key when held down.
     /// </summary>
-    private void HoldToRevealPrivateKeyButton()
+    private void RevealPrivateKey()
     {
         holdToRevealPrivateKeyButton.gameObject.SetActive(false);
         copyPrivateKeyButton.gameObject.SetActive(true);
         privateKeyText.gameObject.SetActive(true);
     }
-    
+
     /// <summary>
     /// Toggles the private key menu.
     /// </summary>
-    private void TogglePrivateKeyMenuButton()
+    private void TogglePrivateKeyMenu()
     {
         if (privateKeyContainer.activeSelf)
         {
@@ -112,38 +125,36 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
         }
         privateKeyContainer.SetActive(!privateKeyContainer.activeSelf);
     }
-    
+
     /// <summary>
     /// Sets the private key text.
     /// </summary>
     private void SetPrivateKey()
     {
-        var w3a = (Web3AuthWallet)Web3Accessor.Web3.ServiceProvider.GetService(typeof(Web3AuthWallet));
-        privateKeyText.text = w3a.Key;
+        var web3AuthWallet = (Web3AuthWallet)Web3Accessor.Web3.ServiceProvider.GetService(typeof(Web3AuthWallet));
+        privateKeyText.text = web3AuthWallet.Key;
     }
-    
+
     /// <summary>
-    /// Button function to copy the wallet private key.
+    /// Copies the wallet private key to clipboard.
     /// </summary>
-    private void CopyPrivateKeyButton()
+    private void CopyPrivateKey()
     {
         Web3AuthWalletGUIClipboardManager.CopyText(privateKeyText.text);
     }
-    
+
     /// <summary>
-    /// Checks for wallet toggle input & tracks private key held timer.
+    /// Checks for mouse or touch input on private key menu
     /// </summary>
-    private void Update()
+    private void CheckHoldPrivateKeyButtonInput()
     {
-        WalletToggleKeyInputCheck();
-        // Check for mouse input
         bool isInputHeld = Input.GetMouseButton(0);
-        // Check for touch input
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
-            isInputHeld = (touch.phase == TouchPhase.Began || touch.phase == TouchPhase.Stationary || touch.phase == TouchPhase.Moved);
+            isInputHeld = touch.phase == TouchPhase.Began || touch.phase == TouchPhase.Stationary || touch.phase == TouchPhase.Moved;
         }
+
         if (isInputHeld)
         {
             if (!isHeldDown)
@@ -154,22 +165,27 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
             else
             {
                 holdTime += Time.deltaTime;
-                float fillAmount = Mathf.Clamp01(holdTime / holdDuration);
-                circleLoadingImage.fillAmount = fillAmount;
-                if (fillAmount >= 1f)
+                circleLoadingImage.fillAmount = Mathf.Clamp01(holdTime / holdDuration);
+                if (circleLoadingImage.fillAmount >= 1f)
                 {
-                    HoldToRevealPrivateKeyButton();
+                    RevealPrivateKey();
                 }
             }
         }
-        else
+        else if (isHeldDown)
         {
-            if (isHeldDown)
-            {
-                isHeldDown = false;
-                circleLoadingImage.fillAmount = 0f;
-            }
+            isHeldDown = false;
+            circleLoadingImage.fillAmount = 0f;
         }
+    }
+
+    /// <summary>
+    /// Checks for wallet toggle input & tracks private key held timer.
+    /// </summary>
+    private void Update()
+    {
+        CheckWalletToggleKeyInput();
+        CheckHoldPrivateKeyButtonInput();
     }
     
     #endregion

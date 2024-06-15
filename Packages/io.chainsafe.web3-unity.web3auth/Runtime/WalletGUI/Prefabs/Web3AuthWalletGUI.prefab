@@ -4844,8 +4844,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   txManager: {fileID: 7234845548737740600}
   guiManager: {fileID: 804371200852392299}
-  incomingTxActionText: {fileID: 6925840943374636494}
-  incomingTxHashText: {fileID: 905141851235353814}
   acceptRequestButton: {fileID: 9165754778767219097}
   rejectRequestButton: {fileID: 8654605469475103381}
   walletIconContainer: {fileID: 2788637392479046008}
@@ -4945,7 +4943,7 @@ MonoBehaviour:
   incomingTxNotification: {fileID: 4706101805464217323}
   txHistoryPlaceHolder: {fileID: 861225078783303682}
   txHistoryDisplay: {fileID: 8139811105131153425}
-  walletGui: {fileID: 0}
+  walletGui: {fileID: 7656622686525558909}
   guiManager: {fileID: 804371200852392299}
 --- !u!114 &804371200852392299
 MonoBehaviour:

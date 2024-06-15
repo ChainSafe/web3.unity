@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using UnityEngine;
 
-namespace ChainSafe.Gaming.InProcessTransactionExecutor
+namespace ChainSafe.GamingSdk.Web3Auth
 {
     public static class Web3AuthTransactionHelper
     {

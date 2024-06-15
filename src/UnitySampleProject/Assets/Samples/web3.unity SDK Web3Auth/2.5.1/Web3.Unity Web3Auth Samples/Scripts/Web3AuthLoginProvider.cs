@@ -99,7 +99,18 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
         if (!enableWalletGUI) return;
         var web3AuthWalletInstance = Instantiate(web3AuthWalletGUIPrefab);
         var web3AuthWalletGUI = web3AuthWalletInstance.GetComponent<Web3AuthWalletGUI>();
-        web3AuthWalletGUI.Initialize(displayWalletIcon, autoPopUpWalletOnTx, autoConfirmTransactions, walletLogo, primaryBackgroundColour, menuBackgroundColour, primaryTextColour, secondaryTextColour);
+        var w3aWalletGuiConfig = new Web3AuthWalletGUI.Web3AuthWalletConfig
+        {
+            DisplayWalletIcon = displayWalletIcon,
+            AutoPopUpWalletOnTx = autoPopUpWalletOnTx,
+            AutoConfirmTransactions = autoConfirmTransactions,
+            WalletLogo = walletLogo,
+            PrimaryBackgroundColour = primaryBackgroundColour,
+            MenuBackgroundColour = menuBackgroundColour,
+            PrimaryTextColour = primaryTextColour,
+            SecondaryTextColour = secondaryTextColour
+        };
+        web3AuthWalletGUI.Initialize(w3aWalletGuiConfig);
     }
 
     private void LogAnalytics(Provider provider)
