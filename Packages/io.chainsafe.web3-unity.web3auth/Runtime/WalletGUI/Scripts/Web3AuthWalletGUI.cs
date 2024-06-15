@@ -30,6 +30,7 @@ public class Web3AuthWalletGUI : MonoBehaviour
     private bool DisplayWalletIcon { get; set; }
     private bool AutoPopUpWalletOnTx { get; set; }
     private bool AutoConfirmTransactions { get; set; }
+    private Sprite WalletIcon { get; set; }
     private Sprite WalletLogo { get; set; }
     private Color PrimaryBackgroundColour { get; set; }
     private Color MenuBackgroundColour { get; set; }
@@ -50,6 +51,7 @@ public class Web3AuthWalletGUI : MonoBehaviour
         DisplayWalletIcon = config.DisplayWalletIcon;
         AutoPopUpWalletOnTx = config.AutoPopUpWalletOnTx;
         AutoConfirmTransactions = config.AutoConfirmTransactions;
+        WalletIcon = config.WalletIcon;
         WalletLogo = config.WalletLogo;
         PrimaryBackgroundColour = config.PrimaryBackgroundColour;
         MenuBackgroundColour = config.MenuBackgroundColour;
@@ -67,6 +69,7 @@ public class Web3AuthWalletGUI : MonoBehaviour
         txManager.AutoPopUpWalletOnTx = AutoPopUpWalletOnTx;
         txManager.AutoConfirmTransactions = AutoConfirmTransactions;
         guiManager.DisplayWalletIcon = DisplayWalletIcon;
+        guiManager.walletIconDisplay.GetComponent<Image>().sprite = WalletIcon;
         guiManager.walletLogoDisplay.GetComponent<Image>().sprite = WalletLogo;
         SetupButton(acceptRequestButton, AcceptRequest);
         SetupButton(rejectRequestButton, RejectRequest);
@@ -153,6 +156,7 @@ public class Web3AuthWalletGUI : MonoBehaviour
         public bool DisplayWalletIcon;
         public bool AutoPopUpWalletOnTx;
         public bool AutoConfirmTransactions;
+        public Sprite WalletIcon;
         public Sprite WalletLogo;
         public Color PrimaryBackgroundColour;
         public Color MenuBackgroundColour;

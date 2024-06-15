@@ -4961,6 +4961,7 @@ MonoBehaviour:
   openWalletGUIContainer: {fileID: 2788637392479046008}
   walletGUIContainer: {fileID: 8430580655084225592}
   privateKeyContainer: {fileID: 4407843306639728011}
+  walletIconDisplay: {fileID: 9063072531496809982}
   walletLogoDisplay: {fileID: 6376826215739815011}
   walletAddressText: {fileID: 208769440838698804}
   privateKeyText: {fileID: 146584364638209816}

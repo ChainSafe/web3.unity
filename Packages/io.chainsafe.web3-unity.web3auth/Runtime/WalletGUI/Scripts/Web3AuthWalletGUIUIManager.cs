@@ -15,6 +15,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     [SerializeField] private GameObject openWalletGUIContainer;
     [SerializeField] private GameObject walletGUIContainer;
     [SerializeField] private GameObject privateKeyContainer;
+    [SerializeField] public GameObject walletIconDisplay;
     [SerializeField] public GameObject walletLogoDisplay;
     [SerializeField] private TextMeshProUGUI walletAddressText;
     [SerializeField] private TextMeshProUGUI privateKeyText;

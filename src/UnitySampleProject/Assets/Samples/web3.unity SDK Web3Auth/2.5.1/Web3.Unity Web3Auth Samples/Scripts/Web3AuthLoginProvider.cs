@@ -38,6 +38,7 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     [SerializeField] private bool displayWalletIcon;
     [SerializeField] private bool autoConfirmTransactions;
     [SerializeField] private bool autoPopUpWalletOnTx;
+    [SerializeField] private Sprite walletIcon;
     [SerializeField] private Sprite walletLogo;
     [SerializeField] private Color primaryBackgroundColour;
     [SerializeField] private Color menuBackgroundColour;
@@ -104,6 +105,7 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
             DisplayWalletIcon = displayWalletIcon,
             AutoPopUpWalletOnTx = autoPopUpWalletOnTx,
             AutoConfirmTransactions = autoConfirmTransactions,
+            WalletIcon = walletIcon,
             WalletLogo = walletLogo,
             PrimaryBackgroundColour = primaryBackgroundColour,
             MenuBackgroundColour = menuBackgroundColour,
