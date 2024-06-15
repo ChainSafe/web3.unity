@@ -6,6 +6,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Web3Auth wallet GUI main class to manage initialization.
+/// </summary>
 public class Web3AuthWalletGUI : MonoBehaviour
 {
     #region Fields

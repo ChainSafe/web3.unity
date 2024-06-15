@@ -11,6 +11,9 @@ using ChainSafe.Gaming.Web3;
 using Scripts.EVM.Token;
 using UnityEngine.UI;
 
+/// <summary>
+/// Web3Auth waller GUI token manager to handle token displays and logic.
+/// </summary>
 public class Web3AuthWalletGUITokenManager : MonoBehaviour
 {
     #region Fields

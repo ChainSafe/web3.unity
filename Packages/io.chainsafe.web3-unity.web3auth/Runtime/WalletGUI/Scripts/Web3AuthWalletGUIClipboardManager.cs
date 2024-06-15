@@ -1,6 +1,9 @@
 using System.Runtime.InteropServices;
 using UnityEngine;
 
+/// <summary>
+/// Web3Auth waller GUI clipboard manager to handle strings.
+/// </summary>
 public class Web3AuthWalletGUIClipboardManager : MonoBehaviour
 {
     #region Fields

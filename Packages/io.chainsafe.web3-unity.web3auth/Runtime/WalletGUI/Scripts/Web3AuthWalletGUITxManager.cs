@@ -5,6 +5,9 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
+/// <summary>
+/// Web3Auth wallet GUI transaction manager to handle transaction display & logic.
+/// </summary>
 public class Web3AuthWalletGUITxManager : MonoBehaviour
 {
     #region Fields

@@ -4,6 +4,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Web3Auth wallet GUI manager to handle UI elements.
+/// </summary>
 public class Web3AuthWalletGUIUIManager : MonoBehaviour
 {
     #region Fields
