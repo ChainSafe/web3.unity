@@ -1644,8 +1644,8 @@ MonoBehaviour:
   walletLogo: {fileID: 21300000, guid: ab400fd9b39316240b30631965553264, type: 3}
   primaryBackgroundColour: {r: 0, g: 0, b: 0, a: 0.8627451}
   menuBackgroundColour: {r: 1, g: 1, b: 1, a: 1}
-  primaryTextColour: {r: 0.6745098, g: 1, b: 0.4862745, a: 0}
-  secondaryTextColour: {r: 1, g: 1, b: 1, a: 0}
+  primaryTextColour: {r: 0.6745098, g: 1, b: 0.4862745, a: 1}
+  secondaryTextColour: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &1679801101
 MonoBehaviour:
   m_ObjectHideFlags: 0

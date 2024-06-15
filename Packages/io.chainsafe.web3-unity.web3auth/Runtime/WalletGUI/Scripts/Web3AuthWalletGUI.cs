@@ -109,7 +109,7 @@ public class Web3AuthWalletGUI : MonoBehaviour
                 var textMeshPro = item.GetComponent<TextMeshProUGUI>();
                 if (textMeshPro != null)
                 {
-                    textMeshPro.font.material.color = color;
+                    textMeshPro.color = color;
                 }
             }
         }
