@@ -137,7 +137,7 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
             var textObj = txHistoryPrefabs[txObjectIndex].transform.Find(textObjectNames[i]);
             var textMeshPro = textObj.GetComponent<TextMeshProUGUI>();
             textMeshPro.text = textValues[i];
-            //textMeshPro.color = walletGui.SecondaryTextColour;
+            textMeshPro.font.material.color = walletGui.SecondaryTextColour;
         }
         txHistoryPrefabs[txObjectIndex].transform.Find("ExplorerButton").GetComponent<Button>().onClick.AddListener(() => OpenBlockExplorer(txHash));
     }

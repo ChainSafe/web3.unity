@@ -101,12 +101,12 @@ public class Web3AuthWalletGUI : MonoBehaviour
                 var imageRenderer = item.GetComponent<Image>();
                 if (imageRenderer != null)
                 {
-                    //imageRenderer.color = color;
+                    imageRenderer.color = color;
                 }
                 var textMeshPro = item.GetComponent<TextMeshProUGUI>();
                 if (textMeshPro != null)
                 {
-                    //textMeshPro.color = color;
+                    textMeshPro.font.material.color = color;
                 }
             }
         }
