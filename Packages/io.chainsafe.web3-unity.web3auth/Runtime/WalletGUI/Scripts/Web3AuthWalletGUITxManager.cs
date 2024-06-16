@@ -140,6 +140,7 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
             var textObj = txHistoryPrefabs[txObjectIndex].transform.Find(textObjectNames[i]);
             var textMeshPro = textObj.GetComponent<TextMeshProUGUI>();
             textMeshPro.text = textValues[i];
+            textMeshPro.font = walletGui.DisplayFont;
             textMeshPro.color = walletGui.SecondaryTextColour;
         }
 

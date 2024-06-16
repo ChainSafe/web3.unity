@@ -6,6 +6,7 @@ using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.GamingSdk.Web3Auth;
 using Scenes;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Network = Web3Auth.Network;
@@ -40,6 +41,7 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     [SerializeField] private bool autoPopUpWalletOnTx;
     [SerializeField] private Sprite walletIcon;
     [SerializeField] private Sprite walletLogo;
+    [SerializeField] public TMP_FontAsset displayFont;
     [SerializeField] private Color primaryBackgroundColour;
     [SerializeField] private Color menuBackgroundColour;
     [SerializeField] private Color primaryTextColour;
@@ -107,6 +109,7 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
             AutoConfirmTransactions = autoConfirmTransactions,
             WalletIcon = walletIcon,
             WalletLogo = walletLogo,
+            DisplayFont = displayFont,
             PrimaryBackgroundColour = primaryBackgroundColour,
             MenuBackgroundColour = menuBackgroundColour,
             PrimaryTextColour = primaryTextColour,

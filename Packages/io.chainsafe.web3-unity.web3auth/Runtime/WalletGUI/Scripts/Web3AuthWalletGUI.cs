@@ -32,6 +32,7 @@ public class Web3AuthWalletGUI : MonoBehaviour
     private bool AutoConfirmTransactions { get; set; }
     private Sprite WalletIcon { get; set; }
     private Sprite WalletLogo { get; set; }
+    public TMP_FontAsset DisplayFont { get; private set; }
     private Color PrimaryBackgroundColour { get; set; }
     private Color MenuBackgroundColour { get; set; }
     private Color PrimaryTextColour { get; set; }
@@ -53,6 +54,7 @@ public class Web3AuthWalletGUI : MonoBehaviour
         AutoConfirmTransactions = config.AutoConfirmTransactions;
         WalletIcon = config.WalletIcon;
         WalletLogo = config.WalletLogo;
+        DisplayFont = config.DisplayFont;
         PrimaryBackgroundColour = config.PrimaryBackgroundColour;
         MenuBackgroundColour = config.MenuBackgroundColour;
         PrimaryTextColour = config.PrimaryTextColour;
@@ -112,6 +114,7 @@ public class Web3AuthWalletGUI : MonoBehaviour
                 var textMeshPro = item.GetComponent<TextMeshProUGUI>();
                 if (textMeshPro != null)
                 {
+                    textMeshPro.font = DisplayFont;
                     textMeshPro.color = color;
                 }
             }
@@ -158,6 +161,7 @@ public class Web3AuthWalletGUI : MonoBehaviour
         public bool AutoConfirmTransactions;
         public Sprite WalletIcon;
         public Sprite WalletLogo;
+        public TMP_FontAsset DisplayFont;
         public Color PrimaryBackgroundColour;
         public Color MenuBackgroundColour;
         public Color PrimaryTextColour;
