@@ -37,6 +37,7 @@ public class Web3AuthWalletGUI : MonoBehaviour
     private Color MenuBackgroundColour { get; set; }
     private Color PrimaryTextColour { get; set; }
     public Color SecondaryTextColour { get; private set; }
+    private Web3AuthWallet Web3AuthWallet { get; set; }
 
     #endregion
 
@@ -49,6 +50,8 @@ public class Web3AuthWalletGUI : MonoBehaviour
     public void Initialize(Web3AuthWalletConfig config)
     {
         DontDestroyOnLoad(gameObject);
+        Web3AuthWallet = (Web3AuthWallet)Web3Accessor.Web3.ServiceProvider.GetService(typeof(Web3AuthWallet));
+        Web3AuthWallet.WalletObjectInstance = gameObject;
         DisplayWalletIcon = config.DisplayWalletIcon;
         AutoPopUpWalletOnTx = config.AutoPopUpWalletOnTx;
         AutoConfirmTransactions = config.AutoConfirmTransactions;
@@ -129,9 +132,8 @@ public class Web3AuthWalletGUI : MonoBehaviour
     {
         Web3AuthTransactionHelper.AcceptTransaction();
         await new WaitForSeconds(2);
-        var txExecutor = (Web3AuthWallet)Web3Accessor.Web3.ServiceProvider.GetService(typeof(Web3AuthWallet));
-        var requestData = await txExecutor.TransactionRequestTcs.Task;
-        var txHash = await txExecutor.TransactionResponseTcs.Task;
+        var requestData = await Web3AuthWallet.TransactionRequestTcs.Task;
+        var txHash = await Web3AuthWallet.TransactionResponseTcs.Task;
         var txTime = DateTime.Now.ToString("hh:mm tt");
         var txAmount = requestData.Value?.ToString() ?? "0";
         var txAction = requestData.Value != null ? requestData.Value.ToString() : "Sign Request";
