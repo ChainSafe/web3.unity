@@ -147,13 +147,12 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
             case 0:
                 var amountInWei0 = BigInteger.Parse(transferTokensAmountInput.text) * (BigInteger)Math.Pow(10, 18);
                 var response0 = await Evm.SendTransaction(Web3Accessor.Web3, transferTokensWalletInput.text, amountInWei0);
-                SampleOutputUtil.PrintResult(response0, nameof(Evm), nameof(Evm.SendTransaction));
+                Debug.Log($"Transfer Complete! {response0}");
                 break;
             case 1:
                 var amountInWei1 = BigInteger.Parse(transferTokensAmountInput.text) * (BigInteger)Math.Pow(10, 18);
                 var response1 = await Web3Accessor.Web3.Erc20.Transfer(customTokenContract, transferTokensWalletInput.text, amountInWei1);
-                var output = SampleOutputUtil.BuildOutputValue(response1);
-                SampleOutputUtil.PrintResult(output, "ERC-20", nameof(Erc20Service.Transfer));
+                Debug.Log($"Transfer Complete! {response1}");
                 break;
             default:
                 throw new Web3Exception("Token can't be found");

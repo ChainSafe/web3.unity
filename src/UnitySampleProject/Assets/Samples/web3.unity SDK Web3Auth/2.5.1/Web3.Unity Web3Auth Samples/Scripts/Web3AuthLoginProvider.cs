@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Common;
 using ChainSafe.Gaming.Web3.Analytics;
@@ -71,7 +72,6 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
         {
             useProvider = false;
             await TryLogin();
-            EnableWalletGUI();
         }
 #else
         if (!string.IsNullOrEmpty(KeyStoreManagerUtils.getPreferencesData(KeyStoreManagerUtils.SESSION_ID)))
@@ -79,7 +79,6 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
             useProvider = false;
             rememberMe = true;
             await TryLogin();
-            EnableWalletGUI();
             Debug.Log("Restoring existing Web3Auth session (Remember Me");
         }
 #endif
@@ -93,8 +92,21 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
         }
         selectedProvider = provider;
         await TryLogin();
-        EnableWalletGUI();
         LogAnalytics(provider);
+    }
+    
+    public override async Task TryLogin()
+    {
+        try
+        {
+            await (this as ILoginProvider).Login();
+            EnableWalletGUI();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Login failed, please try again\n{e.Message} (see console for more details)");
+            throw;
+        }
     }
 
     private void EnableWalletGUI()
