@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using TMPro;
 using UnityEngine;
 
 /// <summary>
@@ -13,8 +14,6 @@ public class Web3AuthWalletGUIClipboardManager : MonoBehaviour
     
     [DllImport("__Internal")]
     private static extern void PasteFromClipboard();
-    
-    public string ClipboardText { get; set; }
 
     #endregion
 
@@ -26,13 +25,17 @@ public class Web3AuthWalletGUIClipboardManager : MonoBehaviour
     /// <param name="text">Clipboard text</param>
     public void OnPasteWebGL(string text)
     {
-        ClipboardText = text;
+        var activeInputField = FindObjectOfType<TMP_InputField>();
+        if (activeInputField != null)
+        {
+            activeInputField.text = text;
+        }
     }
 
     /// <summary>
     /// Pastes clipboard text.
     /// </summary>
-    private static void PasteText()
+    private void PasteText()
     {
         if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.V))
         {
@@ -53,6 +56,9 @@ public class Web3AuthWalletGUIClipboardManager : MonoBehaviour
     #endif
     }
 
+    /// <summary>
+    /// Polls for paste text if on WebGL.
+    /// </summary>
     private void Update()
     {
         #if UNITY_WEBGL && !UNITY_EDITOR
