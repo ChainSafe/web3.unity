@@ -124,12 +124,12 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
     {
         File.WriteAllText(Path.Combine(Application.persistentDataPath, "customToken.txt"), $"{customTokenAddressInput.text},{customTokenSymbolInput.text}");
         customTokenSymbolText.text = customTokenSymbolInput.text.ToUpper();
-        customTokenAddressInput.text = string.Empty;
-        customTokenSymbolInput.text = string.Empty;
         addCustomTokensMenu.SetActive(false);
         customTokenPlaceHolder.SetActive(false);
         customTokenDisplay.SetActive(true);
-        SetTokenDropdownOptions();
+        customTokenAddressInput.text = string.Empty;
+        customTokenSymbolInput.text = string.Empty;
+        SetTokens();
     }
     
     /// <summary>

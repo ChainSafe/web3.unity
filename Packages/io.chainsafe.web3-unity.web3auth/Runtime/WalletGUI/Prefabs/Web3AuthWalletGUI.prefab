@@ -719,7 +719,7 @@ GameObject:
   - component: {fileID: 2799478431904196229}
   - component: {fileID: 1450622858095165912}
   m_Layer: 5
-  m_Name: TokenAddressInput
+  m_Name: CustomTokenAddressInput
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1512,7 +1512,7 @@ GameObject:
   - component: {fileID: 3233963952638541409}
   - component: {fileID: 3172254933871926392}
   m_Layer: 5
-  m_Name: AddTokenButton
+  m_Name: AddCustomTokenButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3573,7 +3573,7 @@ GameObject:
   - component: {fileID: 6250220794838659502}
   - component: {fileID: 3033696630416049437}
   m_Layer: 5
-  m_Name: TokenSymbolInput
+  m_Name: CustomTokenSymbolInput
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

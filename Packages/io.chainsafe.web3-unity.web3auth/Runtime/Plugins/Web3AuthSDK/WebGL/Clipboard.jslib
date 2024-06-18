@@ -6,5 +6,15 @@ mergeInto(LibraryManager.library, {
         }).catch(function (error) {
             console.error('Failed to copy text: ', error);
         });
+    },
+    
+    PasteFromClipboard: function () {
+        navigator.clipboard.readText().then(
+            clipText => {
+                UnityInstance.SendMessage('Web3AuthWalletGUITokenManager', 'OnPasteWebGL', clipText);
+            }
+        ).catch(err => {
+            console.error('Failed to read clipboard contents: ', err);
+        });
     }
 });
