@@ -1415,7 +1415,7 @@ MonoBehaviour:
   web3AuthWalletGUIPrefab: {fileID: 2911816339710442984, guid: b394e6c49b9bd734089cea0293265bd3, type: 3}
   enableWalletGUI: 1
   displayWalletIcon: 1
-  autoConfirmTransactions: 0
+  autoConfirmTransactions: 1
   autoPopUpWalletOnTx: 0
   walletIcon: {fileID: 21300000, guid: 55a46a48cd53d834f99fda690cfea4b1, type: 3}
   walletLogo: {fileID: 21300000, guid: ab400fd9b39316240b30631965553264, type: 3}

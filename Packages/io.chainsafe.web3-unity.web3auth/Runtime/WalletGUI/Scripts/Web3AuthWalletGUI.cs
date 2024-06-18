@@ -139,11 +139,11 @@ public class Web3AuthWalletGUI : MonoBehaviour
     /// </summary>
     public async void AcceptRequest()
     {
-        Web3AuthTransactionHelper.TransactionAccepted.Invoke();
         txManager.ShowTxLoadingMenu();
+        Web3AuthTransactionHelper.TransactionAccepted.Invoke();
         var requestData = Web3AuthTransactionHelper.StoredTransactionRequest;
-        while (Web3AuthTransactionHelper.StoredTransactionResponse == null) await new WaitForSeconds(2);
-        var txHash = Web3AuthTransactionHelper.StoredTransactionResponse.Data;
+        while (Web3AuthTransactionHelper.StoredTransactionResponse == null) await new WaitForSeconds(1);
+        var txHash = Web3AuthTransactionHelper.StoredTransactionResponse.Hash;
         var txTime = DateTime.Now.ToString("hh:mm tt");
         var txAmount = requestData.Value?.ToString() ?? "0";
         var txAction = requestData.Value != null ? requestData.Value.ToString() : "Sign Request";
