@@ -4,11 +4,13 @@ using UnityEngine;
 using TMPro;
 using System.IO;
 using System.Numerics;
+using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3;
 using Scripts.EVM.Token;
+using UnityEditor;
 using UnityEngine.UI;
 
 /// <summary>
@@ -37,6 +39,7 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
     [SerializeField] private Button transferTokensMenuButton;
     [SerializeField] private Button closeTransferTokensButton;
     [SerializeField] private Button transferTokensButton;
+    private Task<string> symbolTask;
     private string customTokenContract;
     
     #endregion
@@ -83,7 +86,7 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
         var hexBalance = await Web3Accessor.Web3.RpcProvider.GetBalance(Web3Accessor.Web3.Signer.PublicAddress);
         var weiBalance = BigInteger.Parse(hexBalance.ToString());
         decimal ethBalance = (decimal)weiBalance / (decimal)Math.Pow(10, 18);
-        nativeTokenAmountText.text = ethBalance.ToString("0.#########"); 
+        nativeTokenAmountText.text = ethBalance.ToString("0.#########");
         SetTokenDropdownOptions();
     }
     
@@ -93,6 +96,25 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
     private void ToggleAddTokensMenuButton()
     {
         addCustomTokensMenu.SetActive(!addCustomTokensMenu.activeSelf);
+    }
+
+    /// <summary>
+    /// Calls the symbol form the contract address so the user doesn't have to enter it.
+    /// </summary>
+    private async void GetSymbol()
+    {
+        if (!addCustomTokensMenu.activeSelf) return;
+        if (symbolTask != null && !symbolTask.IsCompleted) return;
+        if (customTokenAddressInput.text == null || customTokenAddressInput.text.Length != 42) return;
+        try
+        {
+            symbolTask = Web3Accessor.Web3.Erc20.GetSymbol(customTokenAddressInput.text);
+            customTokenSymbolInput.text = await symbolTask;
+        }
+        catch (Web3Exception e)
+        {
+            Debug.LogError($"Error fetching symbol: {e.Message}");
+        }
     }
     
     /// <summary>
@@ -118,13 +140,12 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
     /// </summary>
     private void SetTokenDropdownOptions()
     {
-        // Set token options
-        if (selectedTokenToTransfer.options == null)
-        {
-            selectedTokenToTransfer.options = new List<TMP_Dropdown.OptionData>(2);
-            selectedTokenToTransfer.options[0].text = nativeTokenSymbolText.text;
-            selectedTokenToTransfer.options[1].text = customTokenSymbolText.text;
-        }
+        selectedTokenToTransfer.options = new List<TMP_Dropdown.OptionData>();
+        var nativeTokenOption = new TMP_Dropdown.OptionData { text = nativeTokenSymbolText.text };
+        var customTokenOption = new TMP_Dropdown.OptionData { text = customTokenSymbolText.text };
+        selectedTokenToTransfer.options.Add(nativeTokenOption);
+        selectedTokenToTransfer.options.Add(customTokenOption);
+        selectedTokenToTransfer.RefreshShownValue();
     }
     
     /// <summary>
@@ -138,7 +159,7 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
     /// <summary>
     /// Transfers tokens to a wallet address.
     /// </summary>
-    /// <exception cref="Web3Exception"></exception>
+    /// <exception cref="Web3Exception">Exception is thrown if transfer fails</exception>
     private async void TransferTokens()
     {
         // Token transfers
@@ -155,9 +176,17 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
                 Debug.Log($"Transfer Complete! {response1}");
                 break;
             default:
-                throw new Web3Exception("Token can't be found");
+                throw new Web3Exception("Transfer Failed, please check that the token contract exists & you have enough tokens to complete the transfer");
         }
         transferTokensContainer.SetActive(false);
+    }
+
+    /// <summary>
+    /// Polls for contract address change to get token symbol.
+    /// </summary>
+    private void Update()
+    {
+        GetSymbol();
     }
     
     #endregion

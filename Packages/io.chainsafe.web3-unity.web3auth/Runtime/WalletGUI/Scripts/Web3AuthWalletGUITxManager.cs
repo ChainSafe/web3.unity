@@ -56,8 +56,7 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     /// </summary>
     private void DisplayIncomingTransaction()
     {
-        var web3AuthWallet = (Web3AuthWallet)Web3Accessor.Web3.ServiceProvider.GetService(typeof(Web3AuthWallet));
-        var data = web3AuthWallet.TransactionRequestTcs.Task.Result;
+        var data = Web3AuthTransactionHelper.StoredTransactionRequest;
 
         incomingTxNotification.SetActive(true);
 
@@ -164,13 +163,10 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     private void CheckForIncomingTransaction()
     {
         if (Web3AuthTransactionHelper.TransactionAcceptedTcs == null) return;
-
-        if (!hasTransactionCompleted && Web3AuthTransactionHelper.Working)
-        {
-            Debug.Log("Incoming wallet transaction");
-            hasTransactionCompleted = true;
-            DisplayIncomingTransaction();
-        }
+        if (hasTransactionCompleted) return;
+        Debug.Log("Incoming wallet transaction");
+        hasTransactionCompleted = true;
+        DisplayIncomingTransaction();
     }
     
     /// <summary>

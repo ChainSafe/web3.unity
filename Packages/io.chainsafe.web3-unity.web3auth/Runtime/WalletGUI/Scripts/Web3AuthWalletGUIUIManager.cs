@@ -49,6 +49,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     {
         InitializeButtons();
         walletAddressText.text = Web3Accessor.Web3.Signer.PublicAddress;
+        autoTxToggle.isOn = txManager.AutoConfirmTransactions;
         autoTxToggle.onValueChanged.AddListener(delegate { ToggleAutoConfirmTransactions(); });
         SetPrivateKey();
     }

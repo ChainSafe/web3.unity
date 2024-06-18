@@ -53,16 +53,6 @@ namespace ChainSafe.GamingSdk.Web3Auth
         public string Key => signer.GetKey().GetPrivateKey();
         
         /// <summary>
-        /// Gets transaction request task.
-        /// </summary>
-        public TaskCompletionSource<TransactionRequest> TransactionRequestTcs { get; private set; }
-        
-        /// <summary>
-        /// Gets transaction response task.
-        /// </summary>
-        public TaskCompletionSource<string> TransactionResponseTcs { get; private set; }
-        
-        /// <summary>
         /// Wallet instance prefab.
         /// </summary>
         public GameObject WalletObjectInstance { get; set; }
@@ -150,13 +140,11 @@ namespace ChainSafe.GamingSdk.Web3Auth
 		{
 			if (WalletObjectInstance != null)
             {
-                TransactionRequestTcs = new TaskCompletionSource<TransactionRequest>();
-                TransactionRequestTcs.SetResult(transaction);
+                Web3AuthTransactionHelper.OnTransactionRequest(transaction);
                 await Web3AuthTransactionHelper.WaitForTransactionAsync();
             }
             var txResponse = await transactionExecutor.SendTransaction(transaction);
-            TransactionResponseTcs = new TaskCompletionSource<string>();
-            TransactionResponseTcs.SetResult(txResponse.Hash);
+            Web3AuthTransactionHelper.OnTransactionResponse(txResponse);
 			return txResponse;
 		}
 

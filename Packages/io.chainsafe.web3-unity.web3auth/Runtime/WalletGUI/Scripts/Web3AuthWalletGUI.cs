@@ -22,7 +22,8 @@ public class Web3AuthWalletGUI : MonoBehaviour
     [SerializeField] private List<GameObject> menuBackgroundObjects;
     [SerializeField] private List<GameObject> primaryTextObjects;
     [SerializeField] private List<GameObject> secondaryTextObjects;
-
+    [SerializeField] private List<GameObject> displayLineObjects;
+    
     #endregion
 
     #region Properties
@@ -42,6 +43,26 @@ public class Web3AuthWalletGUI : MonoBehaviour
     #endregion
 
     #region Methods
+
+    /// <summary>
+    /// Subscribes to events.
+    /// </summary>
+    /// <returns></returns>
+    private void OnEnable()
+    {
+        Web3AuthTransactionHelper.TransactionAccepted += AcceptRequest;
+        Web3AuthTransactionHelper.TransactionRejected += RejectRequest;
+    }
+    
+    /// <summary>
+    /// Unsubscribes from events.
+    /// </summary>
+    /// <returns></returns>
+    private void OnDisable()
+    {
+        Web3AuthTransactionHelper.TransactionAccepted -= AcceptRequest;
+        Web3AuthTransactionHelper.TransactionRejected -= RejectRequest;
+    }
     
     /// <summary>
     /// Method to initialize parameters after prefab creation
@@ -102,23 +123,29 @@ public class Web3AuthWalletGUI : MonoBehaviour
             (primaryBackgroundObjects, PrimaryBackgroundColour),
             (menuBackgroundObjects, MenuBackgroundColour),
             (primaryTextObjects, PrimaryTextColour),
-            (secondaryTextObjects, SecondaryTextColour)
+            (secondaryTextObjects, SecondaryTextColour),
+            (displayLineObjects, SecondaryTextColour)
         };
 
-        foreach (var (objects, color) in objectsAndColours)
+        foreach (var (objects, colour) in objectsAndColours)
         {
             foreach (var item in objects)
             {
                 var imageRenderer = item.GetComponent<Image>();
                 if (imageRenderer != null)
                 {
-                    imageRenderer.color = color;
+                    imageRenderer.color = colour;
+                    var imageBorder = item.GetComponent<Outline>();
+                    if (imageBorder != null)
+                    {
+                        imageBorder.effectColor = SecondaryTextColour;
+                    }
                 }
                 var textMeshPro = item.GetComponent<TextMeshProUGUI>();
                 if (textMeshPro != null)
                 {
                     textMeshPro.font = DisplayFont;
-                    textMeshPro.color = color;
+                    textMeshPro.color = colour;
                 }
             }
         }
@@ -130,10 +157,10 @@ public class Web3AuthWalletGUI : MonoBehaviour
     /// </summary>
     public async void AcceptRequest()
     {
-        Web3AuthTransactionHelper.AcceptTransaction();
+        Web3AuthTransactionHelper.OnTransactionAccepted();
         await new WaitForSeconds(2);
-        var requestData = await Web3AuthWallet.TransactionRequestTcs.Task;
-        var txHash = await Web3AuthWallet.TransactionResponseTcs.Task;
+        var requestData = Web3AuthTransactionHelper.StoredTransactionRequest;
+        var txHash = Web3AuthTransactionHelper.StoredTransactionResponse.Data;
         var txTime = DateTime.Now.ToString("hh:mm tt");
         var txAmount = requestData.Value?.ToString() ?? "0";
         var txAction = requestData.Value != null ? requestData.Value.ToString() : "Sign Request";
@@ -146,7 +173,7 @@ public class Web3AuthWalletGUI : MonoBehaviour
     /// </summary>
     private async void RejectRequest()
     {
-        Web3AuthTransactionHelper.RejectTransaction();
+        Web3AuthTransactionHelper.OnTransactionRejected();
         await new WaitForSeconds(2);
         txManager.ResetTransactionDisplay();
     }
