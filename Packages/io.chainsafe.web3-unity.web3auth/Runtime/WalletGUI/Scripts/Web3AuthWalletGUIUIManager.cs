@@ -33,6 +33,9 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     private float holdTime;
     private float holdDuration = 2f;
 
+    // Original screen orientation before forcing landscape
+    private ScreenOrientation originalOrientation;
+
     #endregion
 
     #region Properties
@@ -49,6 +52,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     private void Start()
     {
         InitializeButtons();
+        originalOrientation = Screen.orientation;
         walletAddressText.text = Web3Accessor.Web3.Signer.PublicAddress;
         autoTxToggle.isOn = txManager.AutoConfirmTransactions;
         autoTxToggle.onValueChanged.AddListener(delegate { ToggleAutoConfirmTransactions(); });
@@ -78,6 +82,15 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
         if (DisplayWalletIcon)
         {
             openWalletGUIContainer.SetActive(!openWalletGUIContainer.activeSelf);
+        }
+
+        if (!walletGUIContainer.activeSelf)
+        {
+            SetOriginalOrientation();
+        }
+        else
+        {
+            SetLandscapeOrientation();
         }
         tokenManager.SetTokens();
     }
@@ -183,6 +196,29 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
         {
             isHeldDown = false;
             circleLoadingImage.fillAmount = 0f;
+        }
+    }
+    
+    /// <summary>
+    /// Sets original orientation
+    /// </summary>
+    private void SetOriginalOrientation()
+    {
+        if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.Android)
+        {
+            Screen.orientation = originalOrientation;
+        }
+    }
+    
+    /// <summary>
+    /// Sets landscape origin for mobile devices when opened.
+    /// </summary>
+    private void SetLandscapeOrientation()
+    {
+        // Set landscape orientation based on platform
+        if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.Android)
+        {
+            Screen.orientation = ScreenOrientation.LandscapeLeft;
         }
     }
 
