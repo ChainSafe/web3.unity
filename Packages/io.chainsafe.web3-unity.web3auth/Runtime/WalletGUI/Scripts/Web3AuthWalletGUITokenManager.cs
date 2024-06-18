@@ -40,6 +40,8 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
     [SerializeField] private Button closeTransferTokensButton;
     [SerializeField] private Button transferTokensButton;
     private Task<string> symbolTask;
+    private bool isSymbolTaskRunning;
+    private string lastCheckedAddress;
     private string customTokenContract;
     
     #endregion
@@ -103,9 +105,11 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
     /// </summary>
     private async void GetSymbol()
     {
-        if (!addCustomTokensMenu.activeSelf) return;
-        if (symbolTask != null && !symbolTask.IsCompleted) return;
+        if (isSymbolTaskRunning) return;
+        if (!addCustomTokensMenu.activeSelf || customTokenAddressInput.text == lastCheckedAddress) return;
         if (customTokenAddressInput.text == null || customTokenAddressInput.text.Length != 42) return;
+        isSymbolTaskRunning = true;
+        lastCheckedAddress = customTokenAddressInput.text;
         try
         {
             symbolTask = Web3Accessor.Web3.Erc20.GetSymbol(customTokenAddressInput.text);
@@ -114,6 +118,10 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
         catch (Web3Exception e)
         {
             Debug.LogError($"Error fetching symbol: {e.Message}");
+        }
+        finally
+        {
+            isSymbolTaskRunning = false;
         }
     }
     
