@@ -11,7 +11,7 @@ mergeInto(LibraryManager.library, {
     PasteFromClipboard: function () {
         navigator.clipboard.readText().then(
             clipText => {
-                UnityInstance.SendMessage('Web3AuthWalletGUITokenManager', 'OnPasteWebGL', clipText);
+                UnityInstance.SendMessage('Web3AuthWalletGUIClipboardManager', 'OnPasteWebGL', clipText);
             }
         ).catch(err => {
             console.error('Failed to read clipboard contents: ', err);
