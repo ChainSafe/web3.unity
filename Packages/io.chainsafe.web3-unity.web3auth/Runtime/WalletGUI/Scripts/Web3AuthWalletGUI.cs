@@ -44,26 +44,6 @@ public class Web3AuthWalletGUI : MonoBehaviour
     #endregion
 
     #region Methods
-
-    /// <summary>
-    /// Subscribes to events.
-    /// </summary>
-    /// <returns></returns>
-    private void OnEnable()
-    {
-        Web3AuthTransactionHelper.TransactionAccepted += AcceptRequest;
-        Web3AuthTransactionHelper.TransactionRejected += RejectRequest;
-    }
-    
-    /// <summary>
-    /// Unsubscribes from events.
-    /// </summary>
-    /// <returns></returns>
-    private void OnDisable()
-    {
-        Web3AuthTransactionHelper.TransactionAccepted -= AcceptRequest;
-        Web3AuthTransactionHelper.TransactionRejected -= RejectRequest;
-    }
     
     /// <summary>
     /// Method to initialize parameters after prefab creation
@@ -159,10 +139,10 @@ public class Web3AuthWalletGUI : MonoBehaviour
     /// </summary>
     public async void AcceptRequest()
     {
-        Web3AuthTransactionHelper.OnTransactionAccepted();
-        // TODO The manual await shouldn't be here, the request is null without it
-        while (Web3AuthTransactionHelper.StoredTransactionResponse == null) await new WaitForSeconds(2);
+        Web3AuthTransactionHelper.TransactionAccepted.Invoke();
+        txManager.ShowTxLoadingMenu();
         var requestData = Web3AuthTransactionHelper.StoredTransactionRequest;
+        while (Web3AuthTransactionHelper.StoredTransactionResponse == null) await new WaitForSeconds(2);
         var txHash = Web3AuthTransactionHelper.StoredTransactionResponse.Data;
         var txTime = DateTime.Now.ToString("hh:mm tt");
         var txAmount = requestData.Value?.ToString() ?? "0";
@@ -174,9 +154,9 @@ public class Web3AuthWalletGUI : MonoBehaviour
     /// <summary>
     /// Rejects an incoming transaction request.
     /// </summary>
-    private async void RejectRequest()
+    private void RejectRequest()
     {
-        Web3AuthTransactionHelper.OnTransactionRejected();
+        Web3AuthTransactionHelper.TransactionRejected.Invoke();
         txManager.ResetTransactionDisplay();
     }
     

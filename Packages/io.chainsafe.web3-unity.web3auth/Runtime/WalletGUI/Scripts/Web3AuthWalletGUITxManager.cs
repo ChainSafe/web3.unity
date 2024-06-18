@@ -143,9 +143,10 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
 
         var txHistoryObj = txHistoryPrefabs[txObjectIndex].transform.Find("ExplorerButton");
         // Disable block explorer button if no tx hash is returned.
-        //if (txHash == null) { txHistoryObj.gameObject.SetActive(false); return; }
+        if (txHash == null) { txHistoryObj.gameObject.SetActive(false); return; }
         txHistoryObj.GetComponent<Button>().onClick.AddListener(() => OpenBlockExplorer(txHash));
         txHistoryObj.GetComponent<Image>().color = walletGui.SecondaryTextColour;
+        HideTxLoadingMenu();
     }
     
     /// <summary>
@@ -167,6 +168,24 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
         Debug.Log("Incoming wallet transaction");
         hasTransactionCompleted = true;
         DisplayIncomingTransaction();
+    }
+    
+    /// <summary>
+    /// Shows the Tx loading menu
+    /// </summary>
+    public void ShowTxLoadingMenu()
+    {
+        incomingTxPlaceHolder.SetActive(true);
+        incomingTxDisplay.SetActive(false);
+    }
+    
+    /// <summary>
+    /// Hides the Tx loading menu
+    /// </summary>
+    private void HideTxLoadingMenu()
+    {
+        incomingTxDisplay.SetActive(true);
+        incomingTxPlaceHolder.SetActive(false);
     }
     
     /// <summary>

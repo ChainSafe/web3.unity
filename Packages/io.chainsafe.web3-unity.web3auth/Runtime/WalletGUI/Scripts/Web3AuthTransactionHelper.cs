@@ -20,7 +20,6 @@ namespace ChainSafe.GamingSdk.Web3Auth
         public static Action <TransactionResponse> TransactionResponse { get; set; }
         public static Action TransactionAccepted { get; set; }
         public static Action TransactionRejected { get; set; }
-        private static bool TransactionProcessing { get; set; }
 
         #endregion
 
@@ -38,7 +37,6 @@ namespace ChainSafe.GamingSdk.Web3Auth
             TransactionResponse = (response) =>
             {
                 StoredTransactionResponse = response;
-                TransactionProcessing = false;
             };
             TransactionAccepted = () =>
             {
@@ -49,44 +47,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
             {
                 TransactionAcceptedTcs?.SetResult(false);
                 TransactionAcceptedTcs = null;
-                TransactionProcessing = false;
             };
-        }
-        
-        /// <summary>
-        /// Event method, invokes transaction request event.
-        /// </summary>
-        /// <param name="request">Transaction request</param>
-        public static void OnTransactionRequest(TransactionRequest request)
-        {
-            TransactionRequest?.Invoke(request);
-        }
-        
-        /// <summary>
-        /// Event method, invokes transaction response event.
-        /// </summary>
-        /// <param name="response">Transaction response</param>
-        public static void OnTransactionResponse(TransactionResponse response)
-        {
-            TransactionResponse?.Invoke(response);
-        }
-        
-        /// <summary>
-        /// Event method, invokes transaction accepted event.
-        /// </summary>
-        public static void OnTransactionAccepted()
-        {
-            if (TransactionProcessing) return;
-            TransactionProcessing = true;
-            TransactionAccepted?.Invoke();
-        }
-        
-        /// <summary>
-        /// Event method, invokes transaction rejected event.
-        /// </summary>
-        public static void OnTransactionRejected()
-        {
-            TransactionRejected?.Invoke();
         }
         
         /// <summary>
