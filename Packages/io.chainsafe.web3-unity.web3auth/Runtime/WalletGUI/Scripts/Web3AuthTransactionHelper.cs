@@ -13,14 +13,14 @@ namespace ChainSafe.GamingSdk.Web3Auth
 
         #region Properties
         
+        public static TaskCompletionSource<bool> TransactionAcceptedTcs { get; set; }
         public static TransactionRequest StoredTransactionRequest { get; set; }
         public static TransactionResponse StoredTransactionResponse { get; set; }
-        public static TaskCompletionSource<bool> TransactionAcceptedTcs { get; set; }
         public static Action<TransactionRequest> TransactionRequest { get; set; }
         public static Action <TransactionResponse> TransactionResponse { get; set; }
         public static Action TransactionAccepted { get; set; }
         public static Action TransactionRejected { get; set; }
-        
+        private static bool TransactionProcessing { get; set; }
 
         #endregion
 
@@ -34,29 +34,27 @@ namespace ChainSafe.GamingSdk.Web3Auth
             TransactionRequest = (request) =>
             {
                 StoredTransactionRequest = request;
-                Console.WriteLine($"Transaction Request Stored");
             };
             TransactionResponse = (response) =>
             {
                 StoredTransactionResponse = response;
-                Console.WriteLine($"Transaction Response Stored");
+                TransactionProcessing = false;
             };
             TransactionAccepted = () =>
             {
-                Console.WriteLine("Transaction Accepted");
                 TransactionAcceptedTcs?.SetResult(true);
                 TransactionAcceptedTcs = null;
             };
             TransactionRejected = () =>
             {
-                Console.WriteLine("Transaction Rejected");
                 TransactionAcceptedTcs?.SetResult(false);
                 TransactionAcceptedTcs = null;
+                TransactionProcessing = false;
             };
         }
         
         /// <summary>
-        /// Event method, called when transaction request event is invoked.
+        /// Event method, invokes transaction request event.
         /// </summary>
         /// <param name="request">Transaction request</param>
         public static void OnTransactionRequest(TransactionRequest request)
@@ -65,7 +63,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
         }
         
         /// <summary>
-        /// Event method, called when transaction response event is invoked.
+        /// Event method, invokes transaction response event.
         /// </summary>
         /// <param name="response">Transaction response</param>
         public static void OnTransactionResponse(TransactionResponse response)
@@ -74,15 +72,17 @@ namespace ChainSafe.GamingSdk.Web3Auth
         }
         
         /// <summary>
-        /// Event method, called when transaction accepted event is invoked.
+        /// Event method, invokes transaction accepted event.
         /// </summary>
         public static void OnTransactionAccepted()
         {
+            if (TransactionProcessing) return;
+            TransactionProcessing = true;
             TransactionAccepted?.Invoke();
         }
         
         /// <summary>
-        /// Event method, called when transaction rejected event is invoked.
+        /// Event method, invokes transaction rejected event.
         /// </summary>
         public static void OnTransactionRejected()
         {

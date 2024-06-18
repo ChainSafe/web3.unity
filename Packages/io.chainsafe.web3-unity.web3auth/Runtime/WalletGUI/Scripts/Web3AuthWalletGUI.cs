@@ -17,6 +17,7 @@ public class Web3AuthWalletGUI : MonoBehaviour
     [SerializeField] private Web3AuthWalletGUIUIManager guiManager;
     [SerializeField] private Button acceptRequestButton;
     [SerializeField] private Button rejectRequestButton;
+    [SerializeField] private Text autoConfirmTxLabel;
     [SerializeField] private GameObject walletIconContainer;
     [SerializeField] private List<GameObject> primaryBackgroundObjects;
     [SerializeField] private List<GameObject> menuBackgroundObjects;
@@ -33,11 +34,11 @@ public class Web3AuthWalletGUI : MonoBehaviour
     private bool AutoConfirmTransactions { get; set; }
     private Sprite WalletIcon { get; set; }
     private Sprite WalletLogo { get; set; }
-    public TMP_FontAsset DisplayFont { get; private set; }
     private Color PrimaryBackgroundColour { get; set; }
     private Color MenuBackgroundColour { get; set; }
     private Color PrimaryTextColour { get; set; }
     public Color SecondaryTextColour { get; private set; }
+    public TMP_FontAsset DisplayFont { get; private set; }
     private Web3AuthWallet Web3AuthWallet { get; set; }
 
     #endregion
@@ -149,6 +150,7 @@ public class Web3AuthWalletGUI : MonoBehaviour
                 }
             }
         }
+        autoConfirmTxLabel.color = SecondaryTextColour;
     }
 
     
@@ -158,7 +160,8 @@ public class Web3AuthWalletGUI : MonoBehaviour
     public async void AcceptRequest()
     {
         Web3AuthTransactionHelper.OnTransactionAccepted();
-        await new WaitForSeconds(2);
+        // TODO The manual await shouldn't be here, the request is null without it
+        while (Web3AuthTransactionHelper.StoredTransactionResponse == null) await new WaitForSeconds(2);
         var requestData = Web3AuthTransactionHelper.StoredTransactionRequest;
         var txHash = Web3AuthTransactionHelper.StoredTransactionResponse.Data;
         var txTime = DateTime.Now.ToString("hh:mm tt");
@@ -174,7 +177,6 @@ public class Web3AuthWalletGUI : MonoBehaviour
     private async void RejectRequest()
     {
         Web3AuthTransactionHelper.OnTransactionRejected();
-        await new WaitForSeconds(2);
         txManager.ResetTransactionDisplay();
     }
     

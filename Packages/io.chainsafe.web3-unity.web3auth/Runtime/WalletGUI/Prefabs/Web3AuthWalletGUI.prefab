@@ -2769,7 +2769,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 438, y: 198}
-  m_SizeDelta: {x: 150, y: 150}
+  m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2868371671197637926
 CanvasRenderer:
@@ -4093,7 +4093,7 @@ GameObject:
   - component: {fileID: 2518357282531181621}
   - component: {fileID: 1179463636107580475}
   m_Layer: 5
-  m_Name: Background
+  m_Name: AutoConfirmTxBackground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4971,6 +4971,7 @@ MonoBehaviour:
   guiManager: {fileID: 804371200852392299}
   acceptRequestButton: {fileID: 9165754778767219097}
   rejectRequestButton: {fileID: 8654605469475103381}
+  autoConfirmTxLabel: {fileID: 2012475564352559022}
   walletIconContainer: {fileID: 2788637392479046008}
   primaryBackgroundObjects:
   - {fileID: 5337648155149156134}
@@ -4983,6 +4984,7 @@ MonoBehaviour:
   - {fileID: 7792489009634226950}
   - {fileID: 8344888920257757173}
   - {fileID: 2116870812887026420}
+  - {fileID: 8685563512772929392}
   primaryTextObjects:
   - {fileID: 7284217069205178480}
   - {fileID: 5914829639754659125}
@@ -5015,6 +5017,13 @@ MonoBehaviour:
   - {fileID: 1253856405580558448}
   - {fileID: 6789953013710888595}
   - {fileID: 8115748193872107302}
+  - {fileID: 7526343669070873047}
+  - {fileID: 2017735293429426601}
+  - {fileID: 4710847077161502025}
+  - {fileID: 1152253115440363283}
+  - {fileID: 4053848110303973978}
+  - {fileID: 1343096901685853903}
+  - {fileID: 6791535591774963464}
   displayLineObjects:
   - {fileID: 3146313566770778794}
   - {fileID: 3922797289987004089}
@@ -5087,6 +5096,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9179cdd6d0f947842b8b7bdcef522e96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tokenManager: {fileID: 4029780974178710413}
   txManager: {fileID: 7234845548737740600}
   openWalletGUIContainer: {fileID: 2788637392479046008}
   walletGUIContainer: {fileID: 8430580655084225592}
@@ -6088,7 +6098,7 @@ GameObject:
   - component: {fileID: 6834966195459801618}
   - component: {fileID: 2718810780194847419}
   m_Layer: 5
-  m_Name: Checkmark
+  m_Name: AutoConfirmTxCheckmark
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6239,7 +6249,7 @@ GameObject:
   - component: {fileID: 3737367681361694160}
   - component: {fileID: 1955890123183112007}
   m_Layer: 5
-  m_Name: ClosePrivateKeyButton
+  m_Name: PrivateKeyCloseButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6262,7 +6272,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 438, y: 198}
-  m_SizeDelta: {x: 150, y: 150}
+  m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6548923446918035049
 CanvasRenderer:
@@ -9713,7 +9723,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 438, y: 198}
-  m_SizeDelta: {x: 150, y: 150}
+  m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2600966789712739599
 CanvasRenderer:
@@ -10417,7 +10427,7 @@ GameObject:
   - component: {fileID: 2723197741059919853}
   - component: {fileID: 2012475564352559022}
   m_Layer: 5
-  m_Name: Label
+  m_Name: AutoConfirmTxLabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12675,7 +12685,7 @@ GameObject:
   - component: {fileID: 7375217990803316297}
   - component: {fileID: 8157090757279648382}
   m_Layer: 5
-  m_Name: Viewport
+  m_Name: TxHistoryViewportBg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -34,7 +34,6 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
 
     private bool hasTransactionCompleted { get; set; }
     public bool AutoPopUpWalletOnTx { get; set; }
-    public TaskCompletionSource<bool> TransactionResponseTcs { get; private set; }
     public bool AutoConfirmTransactions { get; set; }
     
     #endregion
@@ -48,7 +47,6 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     {
         txHistoryPrefabs = new GameObject[txHistoryDisplayCount];
         walletGui = GetComponent<Web3AuthWalletGUI>();
-        TransactionResponseTcs = new TaskCompletionSource<bool>();
     }
     
     /// <summary>
@@ -144,6 +142,8 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
         }
 
         var txHistoryObj = txHistoryPrefabs[txObjectIndex].transform.Find("ExplorerButton");
+        // Disable block explorer button if no tx hash is returned.
+        //if (txHash == null) { txHistoryObj.gameObject.SetActive(false); return; }
         txHistoryObj.GetComponent<Button>().onClick.AddListener(() => OpenBlockExplorer(txHash));
         txHistoryObj.GetComponent<Image>().color = walletGui.SecondaryTextColour;
     }

@@ -11,6 +11,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
 {
     #region Fields
     
+    [SerializeField] private Web3AuthWalletGUITokenManager tokenManager;
     [SerializeField] private Web3AuthWalletGUITxManager txManager;
     [SerializeField] private GameObject openWalletGUIContainer;
     [SerializeField] private GameObject walletGUIContainer;
@@ -45,7 +46,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     /// <summary>
     /// Initializes objects.
     /// </summary>
-    private void Awake()
+    private void Start()
     {
         InitializeButtons();
         walletAddressText.text = Web3Accessor.Web3.Signer.PublicAddress;
@@ -78,6 +79,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
         {
             openWalletGUIContainer.SetActive(!openWalletGUIContainer.activeSelf);
         }
+        tokenManager.SetTokens();
     }
 
     /// <summary>

@@ -59,11 +59,11 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
         transferTokensButton.onClick.AddListener(TransferTokens);
         SetTokens();
     }
-    
+
     /// <summary>
     /// Sets native & custom token displays.
     /// </summary>
-    private async void SetTokens()
+    public async void SetTokens()
     {
         if (File.Exists(Path.Combine(Application.persistentDataPath, "customToken.txt")))
         {
@@ -166,19 +166,20 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
         switch (selectedTokenToTransfer.value)
         {
             case 0:
-                var amountInWei0 = BigInteger.Parse(transferTokensAmountInput.text) * (BigInteger)Math.Pow(10, 18);
+                BigInteger amountInWei0 = BigInteger.Parse((decimal.Parse(transferTokensAmountInput.text) * (decimal)Math.Pow(10, 18)).ToString("F0"));
+                transferTokensContainer.SetActive(false);
                 var response0 = await Evm.SendTransaction(Web3Accessor.Web3, transferTokensWalletInput.text, amountInWei0);
                 Debug.Log($"Transfer Complete! {response0}");
                 break;
             case 1:
-                var amountInWei1 = BigInteger.Parse(transferTokensAmountInput.text) * (BigInteger)Math.Pow(10, 18);
+                BigInteger amountInWei1 = BigInteger.Parse((decimal.Parse(transferTokensAmountInput.text) * (decimal)Math.Pow(10, 18)).ToString("F0"));
+                transferTokensContainer.SetActive(false);
                 var response1 = await Web3Accessor.Web3.Erc20.Transfer(customTokenContract, transferTokensWalletInput.text, amountInWei1);
                 Debug.Log($"Transfer Complete! {response1}");
                 break;
             default:
-                throw new Web3Exception("Transfer Failed, please check that the token contract exists & you have enough tokens to complete the transfer");
+                throw new Web3Exception("Transfer failed, please check that the token contract exists & you have enough tokens to complete the transfer");
         }
-        transferTokensContainer.SetActive(false);
     }
 
     /// <summary>
