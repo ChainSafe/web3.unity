@@ -3,27 +3,22 @@ using System.Runtime.InteropServices;
 using TMPro;
 using UnityEngine;
 
-/// <summary>
-/// Web3Auth waller GUI clipboard manager to handle strings.
-/// </summary>
 public class Web3AuthWalletGUIClipboardManager : MonoBehaviour
 {
     #region Fields
 
+    #if UNITY_IOS && !UNITY_EDITOR
     [DllImport("__Internal")]
     private static extern void CopyToClipboard(string text);
-    
+
     [DllImport("__Internal")]
-    private static extern void PasteFromClipboard();
+    private static extern string PasteFromClipboard();
+    #endif
 
     #endregion
 
     #region Methods
-    
-    /// <summary>
-    /// Handles pasting on WebGl.
-    /// </summary>
-    /// <param name="text">Clipboard text</param>
+
     public void OnPasteWebGL(string text)
     {
         var inputFields = FindObjectsOfType<TMP_InputField>();
@@ -34,39 +29,38 @@ public class Web3AuthWalletGUIClipboardManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Pastes clipboard text.
-    /// </summary>
     private void PasteText()
     {
         if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.V))
         {
+        #if UNITY_WEBGL && !UNITY_EDITOR
             PasteFromClipboard();
+        #elif UNITY_IOS && !UNITY_EDITOR
+            string text = PasteFromClipboard();
+            OnPasteWebGL(text);
+        #else
+            OnPasteWebGL(GUIUtility.systemCopyBuffer);
+        #endif
         }
     }
-    
-    /// <summary>
-    /// Copies text from editor or browser environment to the clipboard.
-    /// </summary>
-    /// <param name="text"></param>
+
     public static void CopyText(string text)
     {
-    #if UNITY_WEBGL && !UNITY_EDITOR
+        #if UNITY_WEBGL && !UNITY_EDITOR
         CopyToClipboard(text);
-    #else
+        #elif UNITY_IOS && !UNITY_EDITOR
+        CopyToClipboard(text);
+        #else
         GUIUtility.systemCopyBuffer = text;
-    #endif
+        #endif
     }
 
-    /// <summary>
-    /// Polls for paste text if on WebGL.
-    /// </summary>
     private void Update()
     {
         #if UNITY_WEBGL && !UNITY_EDITOR
         PasteText();
         #endif
     }
-    
+
     #endregion
 }
