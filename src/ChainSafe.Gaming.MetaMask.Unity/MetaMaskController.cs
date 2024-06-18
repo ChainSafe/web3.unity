@@ -42,6 +42,11 @@ namespace ChainSafe.Gaming.MetaMask.Unity
         public string ConnectedAddress { get; private set; }
 
         /// <summary>
+        /// Task completion source to track connection.
+        /// </summary>
+        private TaskCompletionSource<string> ConnectedTsc { get; set; }
+
+        /// <summary>
         /// Initialize script with references.
         /// </summary>
         /// <param name="logWriter">Use to write logs. Use this instead of <see cref="Debug"/>.</param>
@@ -56,7 +61,7 @@ namespace ChainSafe.Gaming.MetaMask.Unity
         /// <returns>Connected account address.</returns>
         public Task<string> Connect()
         {
-            var taskCompletionSource = new TaskCompletionSource<string>();
+            ConnectedTsc = new TaskCompletionSource<string>();
 
             // Unsubscribe in case we're already subscribed from a previous login.
             OnAccountConnected -= Connected;
@@ -68,9 +73,9 @@ namespace ChainSafe.Gaming.MetaMask.Unity
             {
                 ConnectedAddress = address;
 
-                if (!taskCompletionSource.TrySetResult(ConnectedAddress))
+                if (!ConnectedTsc.TrySetResult(ConnectedAddress))
                 {
-                    taskCompletionSource.SetException(new Web3Exception("Error setting connected account address."));
+                    ConnectedTsc.SetException(new Web3Exception("Error setting connected account address."));
                 }
                 else
                 {
@@ -93,7 +98,7 @@ namespace ChainSafe.Gaming.MetaMask.Unity
                 return null;
             }
 
-            return taskCompletionSource.Task;
+            return ConnectedTsc.Task;
         }
 
         /// <summary>
@@ -195,6 +200,10 @@ namespace ChainSafe.Gaming.MetaMask.Unity
         private void DisplayError(string message)
         {
             logger.LogError(message);
+            if (ConnectedTsc != null && !ConnectedTsc.Task.IsCompleted)
+            {
+                ConnectedTsc.SetException(new Web3Exception(message));
+            }
         }
     }
 }
