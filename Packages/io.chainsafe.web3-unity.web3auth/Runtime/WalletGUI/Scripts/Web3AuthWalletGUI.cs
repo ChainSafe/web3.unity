@@ -15,8 +15,6 @@ public class Web3AuthWalletGUI : MonoBehaviour
     
     [SerializeField] private Web3AuthWalletGUITxManager txManager;
     [SerializeField] private Web3AuthWalletGUIUIManager guiManager;
-    [SerializeField] private Button acceptRequestButton;
-    [SerializeField] private Button rejectRequestButton;
     [SerializeField] private Text autoConfirmTxLabel;
     [SerializeField] private GameObject walletIconContainer;
     [SerializeField] private List<GameObject> primaryBackgroundObjects;
@@ -78,20 +76,7 @@ public class Web3AuthWalletGUI : MonoBehaviour
         guiManager.DisplayWalletIcon = DisplayWalletIcon;
         guiManager.walletIconDisplay.GetComponent<Image>().sprite = WalletIcon;
         guiManager.walletLogoDisplay.GetComponent<Image>().sprite = WalletLogo;
-        SetupButton(acceptRequestButton, AcceptRequest);
-        SetupButton(rejectRequestButton, RejectRequest);
         SetCustomColours();
-    }
-    
-    /// <summary>
-    /// Utility method to amend button listeners
-    /// </summary>
-    /// <param name="button">Button to amend</param>
-    /// <param name="action">Action to add</param>
-    private void SetupButton(Button button, UnityEngine.Events.UnityAction action)
-    {
-        button.onClick.RemoveAllListeners();
-        button.onClick.AddListener(action);
     }
     
     /// <summary>
@@ -131,33 +116,6 @@ public class Web3AuthWalletGUI : MonoBehaviour
             }
         }
         autoConfirmTxLabel.color = SecondaryTextColour;
-    }
-
-    
-    /// <summary>
-    /// Accepts an incoming transaction request.
-    /// </summary>
-    public async void AcceptRequest()
-    {
-        txManager.ShowTxLoadingMenu();
-        Web3AuthTransactionHelper.TransactionAccepted.Invoke();
-        var requestData = Web3AuthTransactionHelper.StoredTransactionRequest;
-        while (Web3AuthTransactionHelper.StoredTransactionResponse == null) await new WaitForSeconds(1);
-        var txHash = Web3AuthTransactionHelper.StoredTransactionResponse.Hash;
-        var txTime = DateTime.Now.ToString("hh:mm tt");
-        var txAmount = requestData.Value?.ToString() ?? "0";
-        var txAction = requestData.Value != null ? requestData.Value.ToString() : "Sign Request";
-        txManager.AddTransaction(txTime, txAction, txAmount, txHash);
-        txManager.ResetTransactionDisplay();
-    }
-    
-    /// <summary>
-    /// Rejects an incoming transaction request.
-    /// </summary>
-    private void RejectRequest()
-    {
-        Web3AuthTransactionHelper.TransactionRejected.Invoke();
-        txManager.ResetTransactionDisplay();
     }
     
     #endregion

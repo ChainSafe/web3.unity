@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+using System;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.GamingSdk.Web3Auth;
 using UnityEngine;
@@ -22,6 +22,8 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     [SerializeField] private GameObject incomingTxNotification;
     [SerializeField] private GameObject txHistoryPlaceHolder;
     [SerializeField] private GameObject txHistoryDisplay;
+    [SerializeField] private Button acceptRequestButton;
+    [SerializeField] private Button rejectRequestButton;
     [SerializeField] private Web3AuthWalletGUI walletGui;
     [SerializeField] private Web3AuthWalletGUIUIManager guiManager;
     private GameObject[] txHistoryPrefabs;
@@ -47,6 +49,8 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     {
         txHistoryPrefabs = new GameObject[txHistoryDisplayCount];
         walletGui = GetComponent<Web3AuthWalletGUI>();
+        SetupButton(acceptRequestButton, AcceptRequest);
+        SetupButton(rejectRequestButton, RejectRequest);
     }
     
     /// <summary>
@@ -60,7 +64,7 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
 
         if (AutoConfirmTransactions)
         {
-            walletGui.AcceptRequest();
+            AcceptRequest();
             return;
         }
 
@@ -76,13 +80,47 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     }
     
     /// <summary>
+    /// Accepts an incoming transaction request.
+    /// </summary>
+    private void AcceptRequest()
+    {
+        ShowTxLoadingMenu();
+        Web3AuthTransactionHelper.TransactionAccepted.Invoke();
+        GetTransactionData();
+    }
+    
+    /// <summary>
+    /// Rejects an incoming transaction request.
+    /// </summary>
+    private void RejectRequest()
+    {
+        Web3AuthTransactionHelper.TransactionRejected.Invoke();
+        ResetTransactionDisplay();
+    }
+    
+    /// <summary>
+    /// Gets transaction data.
+    /// </summary>
+    private async void GetTransactionData()
+    {
+        var requestData = Web3AuthTransactionHelper.StoredTransactionRequest;
+        while (Web3AuthTransactionHelper.StoredTransactionResponse == null) await new WaitForSeconds(1);
+        var txHash = Web3AuthTransactionHelper.StoredTransactionResponse.Hash;
+        var txTime = DateTime.Now.ToString("hh:mm tt");
+        var txAmount = requestData.Value?.ToString() ?? "0";
+        var txAction = requestData.Value != null ? requestData.Value.ToString() : "Sign Request";
+        AddTransactionToHistory(txTime, txAction, txAmount, txHash);
+        ResetTransactionDisplay();
+    }
+    
+    /// <summary>
     /// Adds a transaction to the history area.
     /// </summary>
     /// <param name="time">Transaction time</param>
     /// <param name="action">Action being performed</param>
     /// <param name="amount">Amount of tokens sent</param>
     /// <param name="txHash">Transaction hash</param>
-    public void AddTransaction(string time, string action, string amount, string txHash)
+    private void AddTransactionToHistory(string time, string action, string amount, string txHash)
     {
         txHistoryPlaceHolder.SetActive(false);
         txHistoryDisplay.SetActive(true);
@@ -109,7 +147,7 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     /// <summary>
     /// Resets the transaction display.
     /// </summary>
-    public void ResetTransactionDisplay()
+    private void ResetTransactionDisplay()
     {
         incomingTxNotification.SetActive(false);
         incomingTxActionText.text = string.Empty;
@@ -160,6 +198,15 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     }
     
     /// <summary>
+    /// Shows the Tx loading menu
+    /// </summary>
+    private void ShowTxLoadingMenu()
+    {
+        incomingTxPlaceHolder.SetActive(true);
+        incomingTxDisplay.SetActive(false);
+    }
+    
+    /// <summary>
     /// Polls for incoming transactions & triggers display.
     /// </summary>
     private void CheckForIncomingTransaction()
@@ -172,13 +219,16 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     }
     
     /// <summary>
-    /// Shows the Tx loading menu
+    /// Utility method to amend button listeners
     /// </summary>
-    public void ShowTxLoadingMenu()
+    /// <param name="button">Button to amend</param>
+    /// <param name="action">Action to add</param>
+    private void SetupButton(Button button, UnityEngine.Events.UnityAction action)
     {
-        incomingTxPlaceHolder.SetActive(true);
-        incomingTxDisplay.SetActive(false);
+        button.onClick.RemoveAllListeners();
+        button.onClick.AddListener(action);
     }
+
     
     /// <summary>
     /// Polls for incoming transactions.
