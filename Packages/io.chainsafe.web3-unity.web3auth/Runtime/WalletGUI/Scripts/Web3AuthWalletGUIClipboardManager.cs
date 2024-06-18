@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Runtime.InteropServices;
 using TMPro;
 using UnityEngine;
@@ -25,10 +26,11 @@ public class Web3AuthWalletGUIClipboardManager : MonoBehaviour
     /// <param name="text">Clipboard text</param>
     public void OnPasteWebGL(string text)
     {
-        var activeInputField = FindObjectOfType<TMP_InputField>();
-        if (activeInputField != null)
+        var inputFields = FindObjectsOfType<TMP_InputField>();
+        TMP_InputField focusedInputField = inputFields.FirstOrDefault(inputField => inputField.isFocused);
+        if (focusedInputField != null)
         {
-            activeInputField.text = text;
+            focusedInputField.text = text;
         }
     }
 

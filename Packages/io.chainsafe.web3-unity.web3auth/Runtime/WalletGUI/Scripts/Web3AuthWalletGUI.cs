@@ -22,6 +22,7 @@ public class Web3AuthWalletGUI : MonoBehaviour
     [SerializeField] private List<GameObject> primaryTextObjects;
     [SerializeField] private List<GameObject> secondaryTextObjects;
     [SerializeField] private List<GameObject> displayLineObjects;
+    [SerializeField] private List<GameObject> borderButtonObjects;
     
     #endregion
 
@@ -36,6 +37,7 @@ public class Web3AuthWalletGUI : MonoBehaviour
     private Color MenuBackgroundColour { get; set; }
     private Color PrimaryTextColour { get; set; }
     public Color SecondaryTextColour { get; private set; }
+    private Color BorderButtonColour { get; set; }
     public TMP_FontAsset DisplayFont { get; private set; }
     private Web3AuthWallet Web3AuthWallet { get; set; }
 
@@ -62,6 +64,7 @@ public class Web3AuthWalletGUI : MonoBehaviour
         MenuBackgroundColour = config.MenuBackgroundColour;
         PrimaryTextColour = config.PrimaryTextColour;
         SecondaryTextColour = config.SecondaryTextColour;
+        BorderButtonColour = config.BorderButtonColour;
         SetCustomConfig();
     }
     
@@ -89,8 +92,7 @@ public class Web3AuthWalletGUI : MonoBehaviour
             (primaryBackgroundObjects, PrimaryBackgroundColour),
             (menuBackgroundObjects, MenuBackgroundColour),
             (primaryTextObjects, PrimaryTextColour),
-            (secondaryTextObjects, SecondaryTextColour),
-            (displayLineObjects, SecondaryTextColour)
+            (secondaryTextObjects, SecondaryTextColour)
         };
 
         foreach (var (objects, colour) in objectsAndColours)
@@ -116,6 +118,35 @@ public class Web3AuthWalletGUI : MonoBehaviour
             }
         }
         autoConfirmTxLabel.color = SecondaryTextColour;
+        SetButtonsAndLines();
+    }
+    
+    /// <summary>
+    /// Sets border buttons & menu lines.
+    /// </summary>
+    private void SetButtonsAndLines()
+    {
+        var objectsAndColours = new List<(List<GameObject> objects, Color color)>
+        {
+            (borderButtonObjects, BorderButtonColour),
+            (displayLineObjects, BorderButtonColour)
+        };
+        foreach (var (objects, colour) in objectsAndColours)
+        {
+            foreach (var item in objects)
+            {
+                var imageRenderer = item.GetComponent<Image>();
+                if (imageRenderer != null)
+                {
+                    imageRenderer.color = colour;
+                    var imageBorder = item.GetComponent<Outline>();
+                    if (imageBorder != null)
+                    {
+                        imageBorder.effectColor = SecondaryTextColour;
+                    }
+                }
+            }
+        }
     }
     
     #endregion
@@ -135,6 +166,7 @@ public class Web3AuthWalletGUI : MonoBehaviour
         public Color MenuBackgroundColour;
         public Color PrimaryTextColour;
         public Color SecondaryTextColour;
+        public Color BorderButtonColour;
     }
     
     #endregion

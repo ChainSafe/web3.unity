@@ -1424,6 +1424,7 @@ MonoBehaviour:
   menuBackgroundColour: {r: 0.05660379, g: 0.05660379, b: 0.05660379, a: 1}
   primaryTextColour: {r: 0.6745098, g: 1, b: 0.4862745, a: 1}
   secondaryTextColour: {r: 1, g: 1, b: 1, a: 1}
+  borderButtonColour: {r: 1, g: 1, b: 1, a: 0}
 --- !u!114 &1679801101
 MonoBehaviour:
   m_ObjectHideFlags: 0

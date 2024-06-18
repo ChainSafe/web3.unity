@@ -47,6 +47,7 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     [SerializeField] private Color menuBackgroundColour;
     [SerializeField] private Color primaryTextColour;
     [SerializeField] private Color secondaryTextColour;
+    [SerializeField] private Color borderButtonColour;
     private bool useProvider;
     private Provider selectedProvider;
     private bool rememberMe;
@@ -122,7 +123,8 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
             PrimaryBackgroundColour = primaryBackgroundColour,
             MenuBackgroundColour = menuBackgroundColour,
             PrimaryTextColour = primaryTextColour,
-            SecondaryTextColour = secondaryTextColour
+            SecondaryTextColour = secondaryTextColour,
+            BorderButtonColour = borderButtonColour
         };
         var web3AuthWalletInstance = Instantiate(web3AuthWalletGUIPrefab);
         web3AuthWalletInstance.GetComponent<Web3AuthWalletGUI>().Initialize(w3aWalletGuiConfig);
