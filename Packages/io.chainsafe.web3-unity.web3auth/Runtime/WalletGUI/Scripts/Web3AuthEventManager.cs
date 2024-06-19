@@ -7,7 +7,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
     /// <summary>
     /// Web3Auth event manager handles non data sensitive events.
     /// </summary>
-    public class Web3AuthEventManager : MonoBehaviour
+    public static class Web3AuthEventManager
     {
         #region Events
         
