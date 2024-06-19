@@ -48,8 +48,8 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     private void Awake()
     {
         txHistoryPrefabs = new GameObject[txHistoryDisplayCount];
-        SetupButton(acceptRequestButton, AcceptRequest);
-        SetupButton(rejectRequestButton, RejectRequest);
+        acceptRequestButton.onClick.AddListener(RejectRequest);
+        rejectRequestButton.onClick.AddListener(RejectRequest);
         autoTxToggle.onValueChanged.AddListener(ToggleAutoTx);
     }
     
@@ -64,6 +64,7 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
 
         if (AutoConfirmTransactions)
         {
+            // TODO Fix later, not safe, check for tx tcs status before continuing
             await new WaitForSeconds(1);
             AcceptRequest();
             return;
@@ -86,7 +87,7 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     private void AcceptRequest()
     {
         ShowTxLoadingMenu();
-        Web3AuthTransactionHelper.TransactionAccepted.Invoke();
+        Web3AuthTransactionHelper.InvokeTransactionAccepted();
         GetTransactionData();
     }
     
@@ -95,7 +96,7 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     /// </summary>
     private void RejectRequest()
     {
-        Web3AuthTransactionHelper.TransactionRejected.Invoke();
+        Web3AuthTransactionHelper.InvokeTransactionRejected();
         ResetTransactionDisplay();
     }
     
@@ -212,17 +213,6 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     private void ToggleAutoTx(bool arg0)
     {
         AutoConfirmTransactions = arg0;
-    }
-    
-    /// <summary>
-    /// Utility method to amend button listeners
-    /// </summary>
-    /// <param name="button">Button to amend</param>
-    /// <param name="action">Action to add</param>
-    private void SetupButton(Button button, UnityEngine.Events.UnityAction action)
-    {
-        button.onClick.RemoveAllListeners();
-        button.onClick.AddListener(action);
     }
 
     /// <summary>

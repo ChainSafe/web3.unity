@@ -140,11 +140,11 @@ namespace ChainSafe.GamingSdk.Web3Auth
 		{
 			if (WalletObjectInstance != null)
             {
-                Web3AuthTransactionHelper.TransactionRequest.Invoke(transaction);
+                Web3AuthTransactionHelper.InvokeTransactionRequested(transaction);
                 await Web3AuthTransactionHelper.WaitForTransactionAsync();
             }
             var txResponse = await transactionExecutor.SendTransaction(transaction);
-            Web3AuthTransactionHelper.TransactionResponse.Invoke(txResponse);
+            Web3AuthTransactionHelper.InvokeTransactionResponded(txResponse);
 			return txResponse;
 		}
 

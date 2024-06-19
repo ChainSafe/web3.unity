@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using System;
 using ChainSafe.Gaming.Evm.Transactions;
 using UnityEngine;
 
@@ -16,10 +15,26 @@ namespace ChainSafe.GamingSdk.Web3Auth
         private static TaskCompletionSource<bool> TransactionAcceptedTcs { get; set; }
         public static TransactionRequest StoredTransactionRequest { get; set; }
         public static TransactionResponse StoredTransactionResponse { get; set; }
-        public static Action<TransactionRequest> TransactionRequest { get; set; }
-        public static Action <TransactionResponse> TransactionResponse { get; set; }
-        public static Action TransactionAccepted { get; set; }
-        public static Action TransactionRejected { get; set; }
+        
+        #endregion
+
+        #region Events
+        
+        public delegate void TransactionRequested(TransactionRequest request);
+
+        public static event TransactionRequested OnTransactionRequested;
+        
+        public delegate void TransactionResponded(TransactionResponse response);
+
+        public static event TransactionResponded OnTransactionResponse;
+        
+        public delegate void TransactionAccepted();
+
+        public static event TransactionAccepted OnTransactionAccepted;
+        
+        public delegate void TransactionRejected();
+
+        public static event TransactionRejected OnTransactionRejected;
 
         #endregion
 
@@ -30,21 +45,21 @@ namespace ChainSafe.GamingSdk.Web3Auth
         /// </summary>
         static Web3AuthTransactionHelper()
         {
-            TransactionRequest = (request) =>
+            OnTransactionRequested = (request) =>
             {
                 StoredTransactionRequest = request;
                 Web3AuthEventManager.RaiseIncomingTransaction();
             };
-            TransactionResponse = (response) =>
+            OnTransactionResponse = (response) =>
             {
                 StoredTransactionResponse = response;
             };
-            TransactionAccepted = () =>
+            OnTransactionAccepted = () =>
             {
                 TransactionAcceptedTcs?.SetResult(true);
                 TransactionAcceptedTcs = null;
             };
-            TransactionRejected = () =>
+            OnTransactionRejected = () =>
             {
                 TransactionAcceptedTcs?.SetResult(false);
                 TransactionAcceptedTcs = null;
@@ -59,6 +74,40 @@ namespace ChainSafe.GamingSdk.Web3Auth
             Debug.Log("Waiting For Web3AuthWallet TX Confirmation");
             TransactionAcceptedTcs = new TaskCompletionSource<bool>();
             await TransactionAcceptedTcs.Task;
+        }
+        
+        /// <summary>
+        /// Invokes transaction requested.
+        /// </summary>
+        /// <param name="request">The transaction request</param>
+        public static void InvokeTransactionRequested(TransactionRequest request)
+        {
+            OnTransactionRequested?.Invoke(request);
+        }
+        
+        /// <summary>
+        /// Invokes transaction response.
+        /// </summary>
+        /// <param name="response">The transaction response</param>
+        public static void InvokeTransactionResponded(TransactionResponse response)
+        {
+            OnTransactionResponse?.Invoke(response);
+        }
+        
+        /// <summary>
+        /// Invokes transaction accepted.
+        /// </summary>
+        public static void InvokeTransactionAccepted()
+        {
+            OnTransactionAccepted?.Invoke();
+        }
+        
+        /// <summary>
+        /// Invokes transaction rejected.
+        /// </summary>
+        public static void InvokeTransactionRejected()
+        {
+            OnTransactionRejected?.Invoke();
         }
         
         #endregion
