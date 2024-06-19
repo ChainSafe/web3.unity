@@ -44,7 +44,7 @@ namespace ChainSafe.Gaming.MetaMask.Unity
         /// <summary>
         /// Task completion source to track connection.
         /// </summary>
-        public TaskCompletionSource<string> ConnectedTsc { get; set; }
+        public TaskCompletionSource<string> ConnectedTcs { get; set; }
 
         /// <summary>
         /// Initialize script with references.
@@ -61,7 +61,13 @@ namespace ChainSafe.Gaming.MetaMask.Unity
         /// <returns>Connected account address.</returns>
         public Task<string> Connect()
         {
-            ConnectedTsc = new TaskCompletionSource<string>();
+            if (ConnectedTcs != null && !ConnectedTcs.Task.IsCompleted)
+            {
+                ConnectedTcs.SetException(new Web3Exception("Already trying to connect."));
+                return ConnectedTcs.Task;
+            }
+
+            ConnectedTcs = new TaskCompletionSource<string>();
 
             // Unsubscribe in case we're already subscribed from a previous login.
             OnAccountConnected -= Connected;
@@ -73,9 +79,9 @@ namespace ChainSafe.Gaming.MetaMask.Unity
             {
                 ConnectedAddress = address;
 
-                if (!ConnectedTsc.TrySetResult(ConnectedAddress))
+                if (!ConnectedTcs.TrySetResult(ConnectedAddress))
                 {
-                    ConnectedTsc.SetException(new Web3Exception("Error setting connected account address."));
+                    ConnectedTcs.SetException(new Web3Exception("Error setting connected account address."));
                 }
                 else
                 {
@@ -98,7 +104,7 @@ namespace ChainSafe.Gaming.MetaMask.Unity
                 return null;
             }
 
-            return ConnectedTsc.Task;
+            return ConnectedTcs.Task;
         }
 
         /// <summary>
@@ -199,9 +205,9 @@ namespace ChainSafe.Gaming.MetaMask.Unity
         // Callback for displaying an error if operation fails.
         private void DisplayError(string message)
         {
-            if (ConnectedTsc != null && !ConnectedTsc.Task.IsCompleted)
+            if (ConnectedTcs != null && !ConnectedTcs.Task.IsCompleted)
             {
-                ConnectedTsc.SetException(new Web3Exception(message));
+                ConnectedTcs.SetException(new Web3Exception(message));
             }
 
             logger.LogError(message);

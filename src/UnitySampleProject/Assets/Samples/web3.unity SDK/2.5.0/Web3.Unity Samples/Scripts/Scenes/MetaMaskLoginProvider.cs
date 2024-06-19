@@ -19,35 +19,27 @@ using UnityEngine.UI;
 public class MetaMaskLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
 {
     [SerializeField] private Button loginButton;
-    #if UNITY_WEBGL && !UNITY_EDITOR
-    private MetaMaskController metaMaskController;
-    #endif
 
     protected override void Initialize()
     {
         base.Initialize();
         loginButton.onClick.AddListener(LoginClicked);
-        #if UNITY_WEBGL && !UNITY_EDITOR
-        metaMaskController = Object.FindObjectOfType<MetaMaskController>();
-        #endif
     }
     
     public override async Task TryLogin()
     {
         try
         {
-            #if UNITY_WEBGL && !UNITY_EDITOR
-            metaMaskController.ConnectedTsc = new TaskCompletionSource<string>();
-            #endif
             await base.TryLogin();
         }
         catch (Web3Exception e)
         {
             errorPopup.ShowError($"Login failed, please try again\n{e.Message}");
             #if UNITY_WEBGL && !UNITY_EDITOR
-            if (metaMaskController.ConnectedTsc != null && !metaMaskController.ConnectedTsc.Task.IsCompleted)
+            var metaMaskController = Object.FindObjectOfType<MetaMaskController>();
+            if (metaMaskController.ConnectedTcs != null && !metaMaskController.ConnectedTcs.Task.IsCompleted)
             {
-                metaMaskController.ConnectedTsc.SetException(e);
+                metaMaskController.ConnectedTcs.SetException(e);
             }
             #endif
             throw;
