@@ -56,7 +56,7 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     /// <summary>
     /// Populates the incoming transaction display.
     /// </summary>
-    private void DisplayIncomingTransaction()
+    private async void DisplayIncomingTransaction()
     {
         var data = Web3AuthTransactionHelper.StoredTransactionRequest;
 
@@ -64,6 +64,7 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
 
         if (AutoConfirmTransactions)
         {
+            await new WaitForSeconds(1);
             AcceptRequest();
             return;
         }
