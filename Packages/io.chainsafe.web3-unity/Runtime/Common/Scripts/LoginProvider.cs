@@ -12,7 +12,7 @@ namespace Scenes
     {
         [SerializeField] private string gelatoApiKey = "";
 
-        [SerializeField] public ErrorPopup errorPopup;
+        [SerializeField] private ErrorPopup errorPopup;
 
         public string GelatoApiKey => gelatoApiKey;
         public IWeb3BuilderServiceAdapter[] Web3BuilderServiceAdapters { get; private set; }
@@ -36,7 +36,7 @@ namespace Scenes
         /// <summary>
         /// Try to Login and displays error and throws exception on a failed attempt.
         /// </summary>
-        public virtual async Task TryLogin()
+        public async Task TryLogin()
         {
             try
             {

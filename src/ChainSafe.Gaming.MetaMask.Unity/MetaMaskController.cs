@@ -17,6 +17,8 @@ namespace ChainSafe.Gaming.MetaMask.Unity
     {
         private bool isInitialized;
 
+        private TaskCompletionSource<string> connectionTcs;
+
         /// Use this instead of <see cref="Debug"/>.
         private ILogWriter logger;
 
@@ -42,11 +44,6 @@ namespace ChainSafe.Gaming.MetaMask.Unity
         public string ConnectedAddress { get; private set; }
 
         /// <summary>
-        /// Task completion source to track connection.
-        /// </summary>
-        public TaskCompletionSource<string> ConnectedTcs { get; set; }
-
-        /// <summary>
         /// Initialize script with references.
         /// </summary>
         /// <param name="logWriter">Use to write logs. Use this instead of <see cref="Debug"/>.</param>
@@ -61,13 +58,14 @@ namespace ChainSafe.Gaming.MetaMask.Unity
         /// <returns>Connected account address.</returns>
         public Task<string> Connect()
         {
-            if (ConnectedTcs != null && !ConnectedTcs.Task.IsCompleted)
+            if (connectionTcs != null && !connectionTcs.Task.IsCompleted)
             {
-                ConnectedTcs.SetException(new Web3Exception("Already trying to connect."));
-                return ConnectedTcs.Task;
+                connectionTcs.SetException(new Web3Exception("Metamask connection not completed."));
+
+                return connectionTcs.Task;
             }
 
-            ConnectedTcs = new TaskCompletionSource<string>();
+            connectionTcs = new TaskCompletionSource<string>();
 
             // Unsubscribe in case we're already subscribed from a previous login.
             OnAccountConnected -= Connected;
@@ -79,9 +77,9 @@ namespace ChainSafe.Gaming.MetaMask.Unity
             {
                 ConnectedAddress = address;
 
-                if (!ConnectedTcs.TrySetResult(ConnectedAddress))
+                if (!connectionTcs.TrySetResult(ConnectedAddress))
                 {
-                    ConnectedTcs.SetException(new Web3Exception("Error setting connected account address."));
+                    connectionTcs.SetException(new Web3Exception("Error setting connected account address."));
                 }
                 else
                 {
@@ -96,7 +94,7 @@ namespace ChainSafe.Gaming.MetaMask.Unity
             }
             else
             {
-                logger.LogError("Metamask is not available, please install it first.");
+                connectionTcs.SetException(new Web3Exception("Metamask is not available, please install it first."));
 
                 // Unsubscribe to event.
                 OnAccountConnected -= Connected;
@@ -104,7 +102,7 @@ namespace ChainSafe.Gaming.MetaMask.Unity
                 return null;
             }
 
-            return ConnectedTcs.Task;
+            return connectionTcs.Task;
         }
 
         /// <summary>
@@ -205,12 +203,14 @@ namespace ChainSafe.Gaming.MetaMask.Unity
         // Callback for displaying an error if operation fails.
         private void DisplayError(string message)
         {
-            if (ConnectedTcs != null && !ConnectedTcs.Task.IsCompleted)
+            if (connectionTcs != null && !connectionTcs.Task.IsCompleted)
             {
-                ConnectedTcs.SetException(new Web3Exception(message));
+                connectionTcs.SetException(new Web3Exception(message));
             }
-
-            logger.LogError(message);
+            else
+            {
+                logger.LogError(message);
+            }
         }
     }
 }
