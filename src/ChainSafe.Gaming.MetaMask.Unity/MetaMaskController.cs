@@ -44,7 +44,7 @@ namespace ChainSafe.Gaming.MetaMask.Unity
         /// <summary>
         /// Task completion source to track connection.
         /// </summary>
-        private TaskCompletionSource<string> ConnectedTsc { get; set; }
+        public TaskCompletionSource<string> ConnectedTsc { get; set; }
 
         /// <summary>
         /// Initialize script with references.
@@ -199,11 +199,12 @@ namespace ChainSafe.Gaming.MetaMask.Unity
         // Callback for displaying an error if operation fails.
         private void DisplayError(string message)
         {
-            logger.LogError(message);
             if (ConnectedTsc != null && !ConnectedTsc.Task.IsCompleted)
             {
                 ConnectedTsc.SetException(new Web3Exception(message));
             }
+
+            logger.LogError(message);
         }
     }
 }
