@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Threading.Tasks;
 using ChainSafe.Gaming.UnityPackage.Common;
-using ChainSafe.Gaming.Web3;
 #if UNITY_WEBGL && !UNITY_EDITOR
 using ChainSafe.Gaming.MetaMask;
 using ChainSafe.Gaming.MetaMask.Unity;
@@ -23,27 +21,8 @@ public class MetaMaskLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     protected override void Initialize()
     {
         base.Initialize();
+
         loginButton.onClick.AddListener(LoginClicked);
-    }
-    
-    public override async Task TryLogin()
-    {
-        try
-        {
-            await base.TryLogin();
-        }
-        catch (Web3Exception e)
-        {
-            errorPopup.ShowError($"Login failed, please try again\n{e.Message}");
-            #if UNITY_WEBGL && !UNITY_EDITOR
-            var metaMaskController = Object.FindObjectOfType<MetaMaskController>();
-            if (metaMaskController.ConnectedTcs != null && !metaMaskController.ConnectedTcs.Task.IsCompleted)
-            {
-                metaMaskController.ConnectedTcs.SetException(e);
-            }
-            #endif
-            throw;
-        }
     }
 
     private async void LoginClicked()
