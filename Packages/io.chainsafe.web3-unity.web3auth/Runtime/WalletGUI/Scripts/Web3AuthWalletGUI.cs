@@ -73,7 +73,7 @@ public class Web3AuthWalletGUI : MonoBehaviour
     {
         var txConfigArgs = new TxManagerConfigEventArgs(AutoPopUpWalletOnTx, AutoConfirmTransactions, DisplayFont, SecondaryTextColour);
         Web3AuthEventManager.RaiseConfigureTxManager(txConfigArgs);
-        var guiConfigArgs = new GuiManagerConfigEventArgs(AutoConfirmTransactions, DisplayWalletIcon, WalletIcon, WalletLogo);
+        var guiConfigArgs = new GuiManagerConfigEventArgs(DisplayWalletIcon, WalletIcon, WalletLogo);
         Web3AuthEventManager.RaiseConfigureGuiManager(guiConfigArgs);
         walletIconContainer.SetActive(DisplayWalletIcon);
         SetCustomColours();

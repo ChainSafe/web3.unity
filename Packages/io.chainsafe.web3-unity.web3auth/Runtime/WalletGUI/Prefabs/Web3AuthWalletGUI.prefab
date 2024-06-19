@@ -4967,8 +4967,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 949a32e9535072945a68ed9b3bebca6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  txManager: {fileID: 7234845548737740600}
-  guiManager: {fileID: 804371200852392299}
   autoConfirmTxLabel: {fileID: 2012475564352559022}
   walletIconContainer: {fileID: 2788637392479046008}
   primaryBackgroundObjects:
@@ -5084,8 +5082,7 @@ MonoBehaviour:
   txHistoryDisplay: {fileID: 8139811105131153425}
   acceptRequestButton: {fileID: 9165754778767219097}
   rejectRequestButton: {fileID: 8654605469475103381}
-  walletGui: {fileID: 7656622686525558909}
-  guiManager: {fileID: 804371200852392299}
+  autoTxToggle: {fileID: 2778796592338522207}
 --- !u!114 &804371200852392299
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5098,8 +5095,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9179cdd6d0f947842b8b7bdcef522e96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tokenManager: {fileID: 4029780974178710413}
-  txManager: {fileID: 7234845548737740600}
   openWalletGUIContainer: {fileID: 2788637392479046008}
   walletGUIContainer: {fileID: 8430580655084225592}
   privateKeyContainer: {fileID: 4407843306639728011}
@@ -5115,7 +5110,6 @@ MonoBehaviour:
   copyPrivateKeyButton: {fileID: 2146662809224367004}
   holdToRevealPrivateKeyButton: {fileID: 198969248047024504}
   circleLoadingImage: {fileID: 1647118626164522998}
-  autoTxToggle: {fileID: 2778796592338522207}
 --- !u!114 &3479140443333928706
 MonoBehaviour:
   m_ObjectHideFlags: 0

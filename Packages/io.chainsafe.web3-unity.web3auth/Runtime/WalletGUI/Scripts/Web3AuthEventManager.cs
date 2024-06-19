@@ -44,6 +44,14 @@ namespace ChainSafe.GamingSdk.Web3Auth
         }
         
         /// <summary>
+        /// Invokes incoming transaction.
+        /// </summary>
+        public static void RaiseIncomingTransaction()
+        {
+            IncomingTransaction?.Invoke();
+        }
+        
+        /// <summary>
         /// Invokes set tokens.
         /// </summary>
         public static void RaiseSetTokens()
@@ -59,14 +67,6 @@ namespace ChainSafe.GamingSdk.Web3Auth
             ToggleWallet?.Invoke();
         }
         
-        /// <summary>
-        /// Invokes incoming transaction.
-        /// </summary>
-        public static void RaiseIncomingTransaction()
-        {
-            IncomingTransaction?.Invoke();
-        }
-        
         #endregion
     }
 
@@ -79,12 +79,12 @@ namespace ChainSafe.GamingSdk.Web3Auth
     {
         #region Properties
 
-        public bool AutoPopUpWalletOnTx { get; }
-        public bool AutoConfirmTransactions { get; }
+        public bool AutoPopUpWalletOnTx { get; private set; }
+        public bool AutoConfirmTransactions { get; private set; }
+        
+        public TMP_FontAsset DisplayFont { get; private set; }
 
-        public TMP_FontAsset DisplayFont { get; set; }
-
-        public Color SecondaryTextColour { get; set; }
+        public Color SecondaryTextColour { get; private set; }
 
         #endregion
 
@@ -108,18 +108,16 @@ namespace ChainSafe.GamingSdk.Web3Auth
     {
         #region Properties
         
-        public bool AutoConfirmTransactions { get; }
-        public bool DisplayWalletIcon { get; set; }
-        public Sprite WalletIcon { get; set; }
-        public Sprite WalletLogo { get; set; }
+        public bool DisplayWalletIcon { get; private set; }
+        public Sprite WalletIcon { get; private set; }
+        public Sprite WalletLogo { get; private set; }
         
         #endregion
 
         #region Methods
         
-        public GuiManagerConfigEventArgs(bool autoConfirmTransactions, bool displayWalletIcon, Sprite walletIcon, Sprite walletLogo)
+        public GuiManagerConfigEventArgs(bool displayWalletIcon, Sprite walletIcon, Sprite walletLogo)
         {
-            AutoConfirmTransactions = autoConfirmTransactions;
             DisplayWalletIcon = displayWalletIcon;
             WalletIcon = walletIcon;
             WalletLogo = walletLogo;

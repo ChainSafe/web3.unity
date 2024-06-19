@@ -24,6 +24,7 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     [SerializeField] private GameObject txHistoryDisplay;
     [SerializeField] private Button acceptRequestButton;
     [SerializeField] private Button rejectRequestButton;
+    [SerializeField] private Toggle autoTxToggle;
     private GameObject[] txHistoryPrefabs;
     private int txObjectNumber = 1;
     private int txHistoryDisplayCount = 20;
@@ -49,6 +50,7 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
         txHistoryPrefabs = new GameObject[txHistoryDisplayCount];
         SetupButton(acceptRequestButton, AcceptRequest);
         SetupButton(rejectRequestButton, RejectRequest);
+        autoTxToggle.onValueChanged.AddListener(ToggleAutoTx);
     }
     
     /// <summary>
@@ -108,7 +110,6 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
         var txAmount = requestData.Value?.ToString() ?? "0";
         var txAction = requestData.Value != null ? requestData.Value.ToString() : "Sign Request";
         AddTransactionToHistory(txTime, txAction, txAmount, txHash);
-        ResetTransactionDisplay();
     }
     
     /// <summary>
@@ -204,6 +205,15 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     }
     
     /// <summary>
+    /// Toggles auto transactions.
+    /// </summary>
+    /// <param name="arg0"></param>
+    private void ToggleAutoTx(bool arg0)
+    {
+        AutoConfirmTransactions = arg0;
+    }
+    
+    /// <summary>
     /// Utility method to amend button listeners
     /// </summary>
     /// <param name="button">Button to amend</param>
@@ -240,9 +250,10 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     private void OnConfigureTxManager(object sender, TxManagerConfigEventArgs args)
     {
         AutoPopUpWalletOnTx = args.AutoPopUpWalletOnTx;
-        AutoConfirmTransactions = args.AutoConfirmTransactions;
         DisplayFont = args.DisplayFont;
         SecondaryTextColour = args.SecondaryTextColour;
+        AutoConfirmTransactions = args.AutoConfirmTransactions;
+        autoTxToggle.isOn = AutoConfirmTransactions;
     }
     
     #endregion

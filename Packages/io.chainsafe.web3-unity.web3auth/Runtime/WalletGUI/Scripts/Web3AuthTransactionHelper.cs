@@ -32,8 +32,8 @@ namespace ChainSafe.GamingSdk.Web3Auth
         {
             TransactionRequest = (request) =>
             {
-                Web3AuthEventManager.RaiseIncomingTransaction();
                 StoredTransactionRequest = request;
+                Web3AuthEventManager.RaiseIncomingTransaction();
             };
             TransactionResponse = (response) =>
             {

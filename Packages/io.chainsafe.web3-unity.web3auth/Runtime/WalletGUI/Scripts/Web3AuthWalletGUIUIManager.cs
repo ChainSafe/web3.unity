@@ -1,4 +1,3 @@
-using System;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.GamingSdk.Web3Auth;
 using TMPro;
@@ -27,7 +26,6 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     [SerializeField] private Button copyPrivateKeyButton;
     [SerializeField] private Button holdToRevealPrivateKeyButton;
     [SerializeField] private Image circleLoadingImage;
-    [SerializeField] private Toggle autoTxToggle;
     private ScreenOrientation originalOrientation;
     private bool isHeldDown;
     private float holdTime;
@@ -234,7 +232,6 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     /// <param name="args"></param>
     private void OnConfigureGuiManager(object sender, GuiManagerConfigEventArgs args)
     {
-        autoTxToggle.isOn = args.AutoConfirmTransactions;
         DisplayWalletIcon = args.DisplayWalletIcon;
         walletIconDisplay.GetComponent<Image>().sprite = args.WalletIcon;
         walletLogoDisplay.GetComponent<Image>().sprite = args.WalletLogo;
