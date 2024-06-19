@@ -24,8 +24,6 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     [SerializeField] private GameObject txHistoryDisplay;
     [SerializeField] private Button acceptRequestButton;
     [SerializeField] private Button rejectRequestButton;
-    [SerializeField] private Web3AuthWalletGUI walletGui;
-    [SerializeField] private Web3AuthWalletGUIUIManager guiManager;
     private GameObject[] txHistoryPrefabs;
     private int txObjectNumber = 1;
     private int txHistoryDisplayCount = 20;
@@ -33,10 +31,11 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     #endregion
 
     #region Properties
-
-    private bool hasTransactionCompleted { get; set; }
-    public bool AutoPopUpWalletOnTx { get; set; }
-    public bool AutoConfirmTransactions { get; set; }
+    
+    private bool AutoPopUpWalletOnTx { get; set; }
+    private bool AutoConfirmTransactions { get; set; }
+    private TMP_FontAsset DisplayFont { get; set; }
+    private Color SecondaryTextColour { get; set; }
     
     #endregion
 
@@ -48,7 +47,6 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     private void Awake()
     {
         txHistoryPrefabs = new GameObject[txHistoryDisplayCount];
-        walletGui = GetComponent<Web3AuthWalletGUI>();
         SetupButton(acceptRequestButton, AcceptRequest);
         SetupButton(rejectRequestButton, RejectRequest);
     }
@@ -56,7 +54,7 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     /// <summary>
     /// Populates the incoming transaction display.
     /// </summary>
-    private void DisplayIncomingTransaction()
+    private void DisplayIncomingTransaction(object sender, EventArgs eventArgs)
     {
         var data = Web3AuthTransactionHelper.StoredTransactionRequest;
 
@@ -70,7 +68,7 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
 
         if (AutoPopUpWalletOnTx)
         {
-            guiManager.ToggleWallet();
+            Web3AuthEventManager.RaiseToggleWallet();
         }
 
         incomingTxPlaceHolder.SetActive(false);
@@ -156,7 +154,6 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
         incomingTxPlaceHolder.SetActive(true);
         Web3AuthTransactionHelper.StoredTransactionRequest = null;
         Web3AuthTransactionHelper.StoredTransactionResponse = null;
-        hasTransactionCompleted = false;
     }
     
     /// <summary>
@@ -177,15 +174,15 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
             var textObj = txHistoryPrefabs[txObjectIndex].transform.Find(textObjectNames[i]);
             var textMeshPro = textObj.GetComponent<TextMeshProUGUI>();
             textMeshPro.text = textValues[i];
-            textMeshPro.font = walletGui.DisplayFont;
-            textMeshPro.color = walletGui.SecondaryTextColour;
+            textMeshPro.font = DisplayFont;
+            textMeshPro.color = SecondaryTextColour;
         }
 
         var txHistoryObj = txHistoryPrefabs[txObjectIndex].transform.Find("ExplorerButton");
         // Disable block explorer button if no tx hash is returned.
         if (txHash == null) { txHistoryObj.gameObject.SetActive(false); return; }
         txHistoryObj.GetComponent<Button>().onClick.AddListener(() => OpenBlockExplorer(txHash));
-        txHistoryObj.GetComponent<Image>().color = walletGui.SecondaryTextColour;
+        txHistoryObj.GetComponent<Image>().color = SecondaryTextColour;
     }
     
     /// <summary>
@@ -207,18 +204,6 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     }
     
     /// <summary>
-    /// Polls for incoming transactions & triggers display.
-    /// </summary>
-    private void CheckForIncomingTransaction()
-    {
-        if (Web3AuthTransactionHelper.TransactionAcceptedTcs == null) return;
-        if (hasTransactionCompleted) return;
-        Debug.Log("Incoming wallet transaction");
-        hasTransactionCompleted = true;
-        DisplayIncomingTransaction();
-    }
-    
-    /// <summary>
     /// Utility method to amend button listeners
     /// </summary>
     /// <param name="button">Button to amend</param>
@@ -229,13 +214,35 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
         button.onClick.AddListener(action);
     }
 
+    /// <summary>
+    /// Subscribes to events.
+    /// </summary>
+	private void OnEnable()
+    {
+        Web3AuthEventManager.ConfigureTxManager += OnConfigureTxManager;
+		Web3AuthEventManager.IncomingTransaction += DisplayIncomingTransaction;
+    }
     
     /// <summary>
-    /// Polls for incoming transactions.
+    /// Unsubscribes from events.
     /// </summary>
-    private void Update()
+    private void OnDisable()
     {
-        CheckForIncomingTransaction();
+        Web3AuthEventManager.ConfigureTxManager -= OnConfigureTxManager;
+        Web3AuthEventManager.IncomingTransaction -= DisplayIncomingTransaction;
+    }
+    
+    /// <summary>
+    /// Configures class properties.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="args"></param>
+    private void OnConfigureTxManager(object sender, TxManagerConfigEventArgs args)
+    {
+        AutoPopUpWalletOnTx = args.AutoPopUpWalletOnTx;
+        AutoConfirmTransactions = args.AutoConfirmTransactions;
+        DisplayFont = args.DisplayFont;
+        SecondaryTextColour = args.SecondaryTextColour;
     }
     
     #endregion

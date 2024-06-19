@@ -13,8 +13,6 @@ public class Web3AuthWalletGUI : MonoBehaviour
 {
     #region Fields
     
-    [SerializeField] private Web3AuthWalletGUITxManager txManager;
-    [SerializeField] private Web3AuthWalletGUIUIManager guiManager;
     [SerializeField] private Text autoConfirmTxLabel;
     [SerializeField] private GameObject walletIconContainer;
     [SerializeField] private List<GameObject> primaryBackgroundObjects;
@@ -36,9 +34,9 @@ public class Web3AuthWalletGUI : MonoBehaviour
     private Color PrimaryBackgroundColour { get; set; }
     private Color MenuBackgroundColour { get; set; }
     private Color PrimaryTextColour { get; set; }
-    public Color SecondaryTextColour { get; private set; }
+    private Color SecondaryTextColour { get; set; }
     private Color BorderButtonColour { get; set; }
-    public TMP_FontAsset DisplayFont { get; private set; }
+    private TMP_FontAsset DisplayFont { get; set; }
     private Web3AuthWallet Web3AuthWallet { get; set; }
 
     #endregion
@@ -69,21 +67,20 @@ public class Web3AuthWalletGUI : MonoBehaviour
     }
     
     /// <summary>
-    /// Sets custom config from the login scene
+    /// Sets custom config from the login scene.
     /// </summary>
     private void SetCustomConfig()
     {
+        var txConfigArgs = new TxManagerConfigEventArgs(AutoPopUpWalletOnTx, AutoConfirmTransactions, DisplayFont, SecondaryTextColour);
+        Web3AuthEventManager.RaiseConfigureTxManager(txConfigArgs);
+        var guiConfigArgs = new GuiManagerConfigEventArgs(AutoConfirmTransactions, DisplayWalletIcon, WalletIcon, WalletLogo);
+        Web3AuthEventManager.RaiseConfigureGuiManager(guiConfigArgs);
         walletIconContainer.SetActive(DisplayWalletIcon);
-        txManager.AutoPopUpWalletOnTx = AutoPopUpWalletOnTx;
-        txManager.AutoConfirmTransactions = AutoConfirmTransactions;
-        guiManager.DisplayWalletIcon = DisplayWalletIcon;
-        guiManager.walletIconDisplay.GetComponent<Image>().sprite = WalletIcon;
-        guiManager.walletLogoDisplay.GetComponent<Image>().sprite = WalletLogo;
         SetCustomColours();
     }
     
     /// <summary>
-    /// Sets custom colours for menu and text objects
+    /// Sets custom colours for menu and text objects.
     /// </summary>
     private void SetCustomColours()
     {

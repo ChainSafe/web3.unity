@@ -5,12 +5,11 @@ using TMPro;
 using System.IO;
 using System.Numerics;
 using System.Threading.Tasks;
-using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3;
+using ChainSafe.GamingSdk.Web3Auth;
 using Scripts.EVM.Token;
-using UnityEditor;
 using UnityEngine.UI;
 
 /// <summary>
@@ -59,13 +58,13 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
         transferTokensMenuButton.onClick.AddListener(ToggleTransferTokensMenuButton);
         closeTransferTokensButton.onClick.AddListener(ToggleTransferTokensMenuButton);
         transferTokensButton.onClick.AddListener(TransferTokens);
-        SetTokens();
+        SetTokens(null, null);
     }
 
     /// <summary>
     /// Sets native & custom token displays.
     /// </summary>
-    public async void SetTokens()
+    private async void SetTokens(object sender, EventArgs eventArgs)
     {
         if (File.Exists(Path.Combine(Application.persistentDataPath, "customToken.txt")))
         {
@@ -98,6 +97,10 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
     private void ToggleAddTokensMenuButton()
     {
         addCustomTokensMenu.SetActive(!addCustomTokensMenu.activeSelf);
+        if (addCustomTokensMenu.activeSelf)
+        {
+            addTokenButton.gameObject.SetActive(false);
+        }
     }
 
     /// <summary>
@@ -114,6 +117,7 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
         {
             symbolTask = Web3Accessor.Web3.Erc20.GetSymbol(customTokenAddressInput.text);
             customTokenSymbolInput.text = await symbolTask;
+            addTokenButton.gameObject.SetActive(true);
         }
         catch (Web3Exception e)
         {
@@ -130,14 +134,15 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
     /// </summary>
     private void AddToken()
     {
+        if (customTokenAddressInput.text.Length != 42) return;
         File.WriteAllText(Path.Combine(Application.persistentDataPath, "customToken.txt"), $"{customTokenAddressInput.text},{customTokenSymbolInput.text}");
         customTokenSymbolText.text = customTokenSymbolInput.text.ToUpper();
-        addCustomTokensMenu.SetActive(false);
+        ToggleAddTokensMenuButton();
         customTokenPlaceHolder.SetActive(false);
         customTokenDisplay.SetActive(true);
         customTokenAddressInput.text = string.Empty;
         customTokenSymbolInput.text = string.Empty;
-        SetTokens();
+        SetTokens(null, null);
     }
     
     /// <summary>
@@ -185,6 +190,22 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
             default:
                 throw new Web3Exception("Transfer failed, please check that the token contract exists & you have enough tokens to complete the transfer");
         }
+    }
+    
+    /// <summary>
+    /// Subscribes to events.
+    /// </summary>
+    private void OnEnable()
+    {
+        Web3AuthEventManager.SetTokens += SetTokens;
+    }
+    
+    /// <summary>
+    /// Unsubscribes from events.
+    /// </summary>
+    private void OnDisable()
+    {
+        Web3AuthEventManager.SetTokens -= SetTokens;
     }
 
     /// <summary>

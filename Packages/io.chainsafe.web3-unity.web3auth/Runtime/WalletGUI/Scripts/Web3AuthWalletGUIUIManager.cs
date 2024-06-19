@@ -1,3 +1,4 @@
+using System;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.GamingSdk.Web3Auth;
 using TMPro;
@@ -11,8 +12,6 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
 {
     #region Fields
     
-    [SerializeField] private Web3AuthWalletGUITokenManager tokenManager;
-    [SerializeField] private Web3AuthWalletGUITxManager txManager;
     [SerializeField] private GameObject openWalletGUIContainer;
     [SerializeField] private GameObject walletGUIContainer;
     [SerializeField] private GameObject privateKeyContainer;
@@ -40,7 +39,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
 
     #region Properties
 
-    public bool DisplayWalletIcon { get; set; }
+    private bool DisplayWalletIcon { get; set; }
 
     #endregion
 
@@ -54,8 +53,6 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
         InitializeButtons();
         originalOrientation = Screen.orientation;
         walletAddressText.text = Web3Accessor.Web3.Signer.PublicAddress;
-        autoTxToggle.isOn = txManager.AutoConfirmTransactions;
-        autoTxToggle.onValueChanged.AddListener(delegate { ToggleAutoConfirmTransactions(); });
         SetPrivateKey();
     }
     
@@ -76,7 +73,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     /// <summary>
     /// Toggles the wallet display.
     /// </summary>
-    public void ToggleWallet()
+    private void ToggleWallet()
     {
         walletGUIContainer.SetActive(!walletGUIContainer.activeSelf);
         if (DisplayWalletIcon)
@@ -92,15 +89,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
         {
             SetLandscapeOrientation();
         }
-        tokenManager.SetTokens();
-    }
-
-    /// <summary>
-    /// Called when tx toggle is changed
-    /// </summary>
-    private void ToggleAutoConfirmTransactions()
-    {
-        txManager.AutoConfirmTransactions = autoTxToggle.isOn;
+        Web3AuthEventManager.RaiseSetTokens();
     }
 
     /// <summary>
@@ -220,6 +209,47 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
         {
             Screen.orientation = ScreenOrientation.LandscapeLeft;
         }
+    }
+    
+    /// <summary>
+    /// Subscribes to events.
+    /// </summary>
+    private void OnEnable()
+    {
+        Web3AuthEventManager.ConfigureGuiManager += OnConfigureGuiManager;
+        Web3AuthEventManager.ToggleWallet += ToggleWalletEvent;
+    }
+
+    /// <summary>
+    /// Unsubscribes from events.
+    /// </summary>
+    private void OnDisable()
+    {
+        Web3AuthEventManager.ConfigureGuiManager -= OnConfigureGuiManager;
+        Web3AuthEventManager.ToggleWallet -= ToggleWalletEvent;
+    }
+    
+    /// <summary>
+    /// Helper method.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="eventArgs"></param>
+    private void ToggleWalletEvent(object sender, EventArgs eventArgs)
+    {
+        ToggleWallet();
+    }
+    
+    /// <summary>
+    /// Configures class properties.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="args"></param>
+    private void OnConfigureGuiManager(object sender, GuiManagerConfigEventArgs args)
+    {
+        autoTxToggle.isOn = args.AutoConfirmTransactions;
+        DisplayWalletIcon = args.DisplayWalletIcon;
+        walletIconDisplay.GetComponent<Image>().sprite = args.WalletIcon;
+        walletLogoDisplay.GetComponent<Image>().sprite = args.WalletLogo;
     }
 
     /// <summary>
