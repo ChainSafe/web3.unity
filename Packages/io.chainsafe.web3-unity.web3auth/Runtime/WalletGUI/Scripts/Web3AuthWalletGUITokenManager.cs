@@ -58,13 +58,13 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
         transferTokensMenuButton.onClick.AddListener(ToggleTransferTokensMenuButton);
         closeTransferTokensButton.onClick.AddListener(ToggleTransferTokensMenuButton);
         transferTokensButton.onClick.AddListener(TransferTokens);
-        SetTokens(null, null);
+        SetTokens();
     }
 
     /// <summary>
     /// Sets native & custom token displays.
     /// </summary>
-    private async void SetTokens(object sender, EventArgs eventArgs)
+    private async void SetTokens()
     {
         if (File.Exists(Path.Combine(Application.persistentDataPath, "customToken.txt")))
         {
@@ -142,7 +142,7 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
         customTokenDisplay.SetActive(true);
         customTokenAddressInput.text = string.Empty;
         customTokenSymbolInput.text = string.Empty;
-        SetTokens(null, null);
+        SetTokens();
     }
     
     /// <summary>

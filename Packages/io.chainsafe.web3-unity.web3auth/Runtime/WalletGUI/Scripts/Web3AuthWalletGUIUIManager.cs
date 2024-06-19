@@ -28,12 +28,10 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     [SerializeField] private Button holdToRevealPrivateKeyButton;
     [SerializeField] private Image circleLoadingImage;
     [SerializeField] private Toggle autoTxToggle;
+    private ScreenOrientation originalOrientation;
     private bool isHeldDown;
     private float holdTime;
     private float holdDuration = 2f;
-
-    // Original screen orientation before forcing landscape
-    private ScreenOrientation originalOrientation;
 
     #endregion
 
@@ -217,7 +215,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     private void OnEnable()
     {
         Web3AuthEventManager.ConfigureGuiManager += OnConfigureGuiManager;
-        Web3AuthEventManager.ToggleWallet += ToggleWalletEvent;
+        Web3AuthEventManager.ToggleWallet += ToggleWallet;
     }
 
     /// <summary>
@@ -226,17 +224,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     private void OnDisable()
     {
         Web3AuthEventManager.ConfigureGuiManager -= OnConfigureGuiManager;
-        Web3AuthEventManager.ToggleWallet -= ToggleWalletEvent;
-    }
-    
-    /// <summary>
-    /// Helper method.
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="eventArgs"></param>
-    private void ToggleWalletEvent(object sender, EventArgs eventArgs)
-    {
-        ToggleWallet();
+        Web3AuthEventManager.ToggleWallet -= ToggleWallet;
     }
     
     /// <summary>

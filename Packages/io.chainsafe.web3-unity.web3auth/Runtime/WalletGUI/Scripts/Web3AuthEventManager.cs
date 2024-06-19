@@ -15,11 +15,11 @@ namespace ChainSafe.GamingSdk.Web3Auth
         
         public static event EventHandler<GuiManagerConfigEventArgs> ConfigureGuiManager;
         
-        public static event EventHandler IncomingTransaction;
+        public static event Action IncomingTransaction;
         
-        public static event EventHandler SetTokens;
+        public static event Action SetTokens;
         
-        public static event EventHandler ToggleWallet;
+        public static event Action ToggleWallet;
         
         #endregion
 
@@ -48,7 +48,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
         /// </summary>
         public static void RaiseSetTokens()
         {
-            SetTokens?.Invoke(null, EventArgs.Empty);
+            SetTokens?.Invoke();
         }
         
         /// <summary>
@@ -56,7 +56,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
         /// </summary>
         public static void RaiseToggleWallet()
         {
-            ToggleWallet?.Invoke(null, EventArgs.Empty);
+            ToggleWallet?.Invoke();
         }
         
         /// <summary>
@@ -64,7 +64,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
         /// </summary>
         public static void RaiseIncomingTransaction()
         {
-            IncomingTransaction?.Invoke(null, EventArgs.Empty);
+            IncomingTransaction?.Invoke();
         }
         
         #endregion

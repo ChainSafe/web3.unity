@@ -13,7 +13,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
 
         #region Properties
         
-        public static TaskCompletionSource<bool> TransactionAcceptedTcs { get; set; }
+        private static TaskCompletionSource<bool> TransactionAcceptedTcs { get; set; }
         public static TransactionRequest StoredTransactionRequest { get; set; }
         public static TransactionResponse StoredTransactionResponse { get; set; }
         public static Action<TransactionRequest> TransactionRequest { get; set; }
