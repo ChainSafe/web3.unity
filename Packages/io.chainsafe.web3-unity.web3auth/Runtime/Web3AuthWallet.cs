@@ -177,7 +177,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
         /// <summary>
         /// Invokes transaction requested.
         /// </summary>
-        /// <param name="request">The transaction request</param>
+        /// <param name="request">The transaction request.</param>
         private static void InvokeTransactionRequested(TransactionRequest request)
         {
             OnTransactionRequested?.Invoke(request);
@@ -186,7 +186,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
         /// <summary>
         /// Invokes transaction response.
         /// </summary>
-        /// <param name="response">The transaction response</param>
+        /// <param name="response">The transaction response.</param>
         private static void InvokeTransactionResponded(TransactionResponse response)
         {
             OnTransactionResponse?.Invoke(response);
@@ -212,23 +212,9 @@ namespace ChainSafe.GamingSdk.Web3Auth
         }
         
         /// <summary>
-        /// Static constructor for event handlers.
+        /// Creates core instance.
         /// </summary>
-        static Web3AuthWallet()
-        {
-            OnTransactionRequested = (request) =>
-            {
-                Web3AuthTransactionHelper.StoredTransactionRequest = request;
-                Web3AuthEventManager.RaiseIncomingTransaction();
-            };
-            OnTransactionResponse = (response) =>
-            {
-                Web3AuthTransactionHelper.StoredTransactionResponse = response;
-            };
-            Web3AuthTransactionHelper.OnTransactionAccepted += () => SetTcsResult(true);
-            Web3AuthTransactionHelper.OnTransactionRejected += () => SetTcsResult(false);
-        }
-
+        /// <returns>Core instance.</returns>
         private TWeb3Auth CreateCoreInstance()
         {
             Debug.Log("Creating Core Instance");
@@ -240,6 +226,26 @@ namespace ChainSafe.GamingSdk.Web3Auth
             instance.setOptions(config.Web3AuthOptions, config.RememberMe);
 
             return instance;
+        }
+        
+        /// <summary>
+        /// Initializer for event handlers.
+        /// </summary>
+        public void InitializeWeb3AuthWallet(GameObject wallet)
+        {
+            WalletObjectInstance = wallet;
+            var txManager = wallet.GetComponent<Web3AuthWalletGUITxManager>();
+            OnTransactionRequested = (request) =>
+            {
+                txManager.StoredTransactionRequest = request;
+                Web3AuthEventManager.RaiseIncomingTransaction();
+            };
+            OnTransactionResponse = (response) =>
+            {
+                txManager.StoredTransactionResponse = response;
+            };
+            txManager.OnTransactionAccepted += () => SetTcsResult(true);
+            txManager.OnTransactionRejected += () => SetTcsResult(false);
         }
     }
 }

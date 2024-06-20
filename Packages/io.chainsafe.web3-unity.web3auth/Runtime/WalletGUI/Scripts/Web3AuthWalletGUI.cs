@@ -51,7 +51,7 @@ public class Web3AuthWalletGUI : MonoBehaviour
     {
         DontDestroyOnLoad(gameObject);
         Web3AuthWallet = (Web3AuthWallet)Web3Accessor.Web3.ServiceProvider.GetService(typeof(Web3AuthWallet));
-        Web3AuthWallet.WalletObjectInstance = gameObject;
+        Web3AuthWallet.InitializeWeb3AuthWallet(gameObject);
         DisplayWalletIcon = config.DisplayWalletIcon;
         AutoPopUpWalletOnTx = config.AutoPopUpWalletOnTx;
         AutoConfirmTransactions = config.AutoConfirmTransactions;

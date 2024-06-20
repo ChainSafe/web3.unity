@@ -1,4 +1,5 @@
 using System;
+using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.GamingSdk.Web3Auth;
 using UnityEngine;
@@ -37,7 +38,21 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     private bool AutoConfirmTransactions { get; set; }
     private TMP_FontAsset DisplayFont { get; set; }
     private Color SecondaryTextColour { get; set; }
+    public TransactionRequest StoredTransactionRequest { get; set; }
+    public TransactionResponse StoredTransactionResponse { get; set; }
     
+    #endregion
+    
+    #region Events
+        
+    public delegate void TransactionAccepted();
+
+    public event TransactionAccepted OnTransactionAccepted;
+        
+    public delegate void TransactionRejected();
+
+    public event TransactionRejected OnTransactionRejected;
+
     #endregion
 
     #region Methods
@@ -58,8 +73,8 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     /// </summary>
     private async void DisplayIncomingTransaction()
     {
-        while (Web3AuthTransactionHelper.StoredTransactionRequest == null) await new WaitForSeconds(1);
-        var data = Web3AuthTransactionHelper.StoredTransactionRequest;
+        while (StoredTransactionRequest == null) await new WaitForSeconds(1);
+        var data = StoredTransactionRequest;
         incomingTxNotification.SetActive(true);
 
         if (AutoConfirmTransactions)
@@ -85,7 +100,7 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     private void AcceptRequest()
     {
         ShowTxLoadingMenu();
-        Web3AuthTransactionHelper.InvokeTransactionAccepted();
+        OnTransactionAccepted?.Invoke();
         GetTransactionData();
     }
     
@@ -94,7 +109,7 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     /// </summary>
     private void RejectRequest()
     {
-        Web3AuthTransactionHelper.InvokeTransactionRejected();
+        OnTransactionRejected?.Invoke();
         ResetTransactionDisplay();
     }
     
@@ -103,9 +118,9 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     /// </summary>
     private async void GetTransactionData()
     {
-        var requestData = Web3AuthTransactionHelper.StoredTransactionRequest;
-        while (Web3AuthTransactionHelper.StoredTransactionResponse == null) await new WaitForSeconds(1);
-        var txHash = Web3AuthTransactionHelper.StoredTransactionResponse.Hash;
+        var requestData = StoredTransactionRequest;
+        while (StoredTransactionResponse == null) await new WaitForSeconds(1);
+        var txHash = StoredTransactionResponse.Hash;
         var txTime = DateTime.Now.ToString("hh:mm tt");
         var txAmount = requestData.Value?.ToString() ?? "0";
         var txAction = requestData.Value != null ? requestData.Value.ToString() : "Sign Request";
@@ -153,8 +168,8 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
         incomingTxHashText.text = string.Empty;
         incomingTxDisplay.SetActive(false);
         incomingTxPlaceHolder.SetActive(true);
-        Web3AuthTransactionHelper.StoredTransactionRequest = null;
-        Web3AuthTransactionHelper.StoredTransactionResponse = null;
+        StoredTransactionRequest = null;
+        StoredTransactionResponse = null;
     }
     
     /// <summary>
