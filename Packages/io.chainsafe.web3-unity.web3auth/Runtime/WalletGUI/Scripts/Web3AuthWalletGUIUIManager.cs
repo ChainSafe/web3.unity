@@ -174,6 +174,8 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
             circleLoadingImage.fillAmount = circleLoadingImage.fillAmount;
             yield return null;
         }
+
+        OnPointerUp();
     }
     
 
