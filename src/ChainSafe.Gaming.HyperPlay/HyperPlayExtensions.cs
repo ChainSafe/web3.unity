@@ -1,9 +1,5 @@
-using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.LocalStorage;
 using ChainSafe.Gaming.Web3.Build;
-using ChainSafe.Gaming.Web3.Core;
-using ChainSafe.Gaming.Web3.Core.Evm;
-using ChainSafe.Gaming.Web3.Core.Logout;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -20,6 +16,12 @@ namespace ChainSafe.Gaming.HyperPlay
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
         public static IWeb3ServiceCollection UseHyperPlay(this IWeb3ServiceCollection collection, IHyperPlayConfig config)
         {
+            return collection.UseHyperPlay<HyperPlayProvider>(config);
+        }
+
+        public static IWeb3ServiceCollection UseHyperPlay<T>(this IWeb3ServiceCollection collection, IHyperPlayConfig config)
+            where T : WalletProvider
+        {
             collection.AssertServiceNotBound<IHyperPlayData>();
 
             collection.AddSingleton<IHyperPlayData, IStorable, HyperPlayData>();
@@ -28,7 +30,7 @@ namespace ChainSafe.Gaming.HyperPlay
 
             collection.Replace(ServiceDescriptor.Singleton(typeof(IHyperPlayConfig), config));
 
-            collection.UseWalletProvider<HyperPlayProvider>(config);
+            collection.UseWalletProvider<T>(config);
 
             return collection;
         }
