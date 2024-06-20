@@ -48,7 +48,7 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     private void Awake()
     {
         txHistoryPrefabs = new GameObject[txHistoryDisplayCount];
-        acceptRequestButton.onClick.AddListener(RejectRequest);
+        acceptRequestButton.onClick.AddListener(AcceptRequest);
         rejectRequestButton.onClick.AddListener(RejectRequest);
         autoTxToggle.onValueChanged.AddListener(ToggleAutoTx);
     }
@@ -58,14 +58,12 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     /// </summary>
     private async void DisplayIncomingTransaction()
     {
+        while (Web3AuthTransactionHelper.StoredTransactionRequest == null) await new WaitForSeconds(1);
         var data = Web3AuthTransactionHelper.StoredTransactionRequest;
-
         incomingTxNotification.SetActive(true);
 
         if (AutoConfirmTransactions)
         {
-            // TODO Fix later, not safe, check for tx tcs status before continuing
-            await new WaitForSeconds(1);
             AcceptRequest();
             return;
         }

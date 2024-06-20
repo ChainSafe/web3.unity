@@ -56,6 +56,31 @@ namespace ChainSafe.GamingSdk.Web3Auth
         /// Wallet instance prefab.
         /// </summary>
         public GameObject WalletObjectInstance { get; set; }
+        
+        /// <summary>
+        /// Transaction completion task to check if tx is accepted.
+        /// </summary>
+        private static TaskCompletionSource<bool> TransactionAcceptedTcs { get; set; }
+        
+        /// <summary>
+        /// TransactionRequested delegate.
+        /// </summary>
+        private delegate void TransactionRequested(TransactionRequest request);
+        
+        /// <summary>
+        /// TransactionRequested event.
+        /// </summary>
+        private static event TransactionRequested OnTransactionRequested;
+        
+        /// <summary>
+        /// TransactionResponded delegate.
+        /// </summary>
+        private delegate void TransactionResponded(TransactionResponse response);
+        
+        /// <summary>
+        /// TransactionResponded event.
+        /// </summary>
+        private static event TransactionResponded OnTransactionResponse;
 
         /// <summary>
         /// Asynchronously prepares the Web3Auth wallet for operation, triggered when initializing the module in the dependency injection work flow.
@@ -140,13 +165,69 @@ namespace ChainSafe.GamingSdk.Web3Auth
 		{
 			if (WalletObjectInstance != null)
             {
-                Web3AuthTransactionHelper.InvokeTransactionRequested(transaction);
-                await Web3AuthTransactionHelper.WaitForTransactionAsync();
+                InvokeTransactionRequested(transaction);
+                await WaitForTransactionAsync();
+                TransactionAcceptedTcs = null;
             }
             var txResponse = await transactionExecutor.SendTransaction(transaction);
-            Web3AuthTransactionHelper.InvokeTransactionResponded(txResponse);
+            InvokeTransactionResponded(txResponse);
 			return txResponse;
 		}
+        
+        /// <summary>
+        /// Invokes transaction requested.
+        /// </summary>
+        /// <param name="request">The transaction request</param>
+        private static void InvokeTransactionRequested(TransactionRequest request)
+        {
+            OnTransactionRequested?.Invoke(request);
+        }
+        
+        /// <summary>
+        /// Invokes transaction response.
+        /// </summary>
+        /// <param name="response">The transaction response</param>
+        private static void InvokeTransactionResponded(TransactionResponse response)
+        {
+            OnTransactionResponse?.Invoke(response);
+        }
+        
+        /// <summary>
+        /// Waits for transaction confirmation.
+        /// </summary>
+        private static async Task WaitForTransactionAsync()
+        {
+            Debug.Log("Waiting For Web3AuthWallet TX Confirmation");
+            TransactionAcceptedTcs = new TaskCompletionSource<bool>();
+            await TransactionAcceptedTcs.Task;
+        }
+        
+        /// <summary>
+        /// Sets task completion result for transactions.
+        /// </summary>
+        /// <param name="result">The user interaction result.</param>
+        private static void SetTcsResult(bool result)
+        {
+            TransactionAcceptedTcs?.SetResult(result);
+        }
+        
+        /// <summary>
+        /// Static constructor for event handlers.
+        /// </summary>
+        static Web3AuthWallet()
+        {
+            OnTransactionRequested = (request) =>
+            {
+                Web3AuthTransactionHelper.StoredTransactionRequest = request;
+                Web3AuthEventManager.RaiseIncomingTransaction();
+            };
+            OnTransactionResponse = (response) =>
+            {
+                Web3AuthTransactionHelper.StoredTransactionResponse = response;
+            };
+            Web3AuthTransactionHelper.OnTransactionAccepted += () => SetTcsResult(true);
+            Web3AuthTransactionHelper.OnTransactionRejected += () => SetTcsResult(false);
+        }
 
         private TWeb3Auth CreateCoreInstance()
         {
