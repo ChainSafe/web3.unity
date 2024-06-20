@@ -112,7 +112,7 @@ public class EvmCustomResponseTests
     [UnityTest]
     public IEnumerator TestSignMessage()
     {
-        const string testResponse = "0xda2880dde86b7d870ac9ddfa690010bed8a679350415f8e9cce02d87bac91651081c40455538bce7a18792e3f2ea56457183e8dba8568f3a92785ab0d743ce0b1b";
+        const string testResponse = "0x87dfaa646f476ca53ba8b6e8d122839571e52866be0984ec0497617ad3e988b7401c6b816858df27625166cb98a688f99ba92fa593da3c86c78b19c78c1f51cc1c";
         yield return BuildWeb3WithTestResponse(testResponse);
         var signMessage = Evm.SignMessage(web3, "The right man in the wrong place can make all the difference in the world.");
         yield return new WaitUntil(() => signMessage.IsCompleted);
@@ -125,7 +125,7 @@ public class EvmCustomResponseTests
     public IEnumerator TestSignVerify()
     {
         yield return BuildWeb3WithTestResponse(
-            "0xda2880dde86b7d870ac9ddfa690010bed8a679350415f8e9cce02d87bac91651081c40455538bce7a18792e3f2ea56457183e8dba8568f3a92785ab0d743ce0b1b");
+            "0x5c996d43c2e804a0d0de7f8b07cc660bbae638aa7ea137df6156621abe5e1fbb1727ebb06f7e0067537cb0f942825fa15ead9dea6d74e4d17fa6e69007cb59561c");
         var signVerify = Evm.SignVerify(web3, "A man chooses, a slave obeys.");
         yield return new WaitUntil(() => signVerify.IsCompleted);
         if (signVerify.Exception != null) throw signVerify.Exception;
