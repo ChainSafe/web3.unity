@@ -51,7 +51,6 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
         InitializeButtons();
         originalOrientation = Screen.orientation;
         walletAddressText.text = Web3Accessor.Web3.Signer.PublicAddress;
-        SetPrivateKey();
     }
     
     /// <summary>
@@ -113,6 +112,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     /// </summary>
     private void RevealPrivateKey()
     {
+        SetPrivateKey();
         holdToRevealPrivateKeyButton.gameObject.SetActive(false);
         copyPrivateKeyButton.gameObject.SetActive(true);
         privateKeyText.gameObject.SetActive(true);
@@ -148,7 +148,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     {
         if (circleLoadingImage.fillAmount >= 1.0f)
         {
-            ShowPrivateKey();
+            RevealPrivateKey();
         }
 
         if (holdCoroutine != null)
@@ -176,13 +176,6 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
         }
     }
     
-    /// <summary>
-    /// Shows the private key.
-    /// </summary>
-    private void ShowPrivateKey()
-    {
-        privateKeyText.gameObject.SetActive(true);
-    }
 
     /// <summary>
     /// Sets the private key text.
@@ -238,6 +231,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
+        privateKeyText.text = "";
         Web3AuthEventManager.ConfigureGuiManager -= OnConfigureGuiManager;
         Web3AuthEventManager.ToggleWallet -= ToggleWallet;
     }
