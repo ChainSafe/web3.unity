@@ -35,7 +35,7 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     [Header("UI")]
     [SerializeField] private List<ProviderAndButtonPair> providerAndButtonPairs;
     [Header("Wallet GUI Options")]
-    [SerializeField] private GameObject web3AuthWalletGUIPrefab;
+    [SerializeField] private Web3AuthWalletGUI web3AuthWalletGUIPrefab;
     [SerializeField] private bool enableWalletGUI;
     [SerializeField] private bool displayWalletIcon;
     [SerializeField] private bool autoConfirmTransactions;
@@ -127,7 +127,7 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
             BorderButtonColour = borderButtonColour
         };
         var web3AuthWalletInstance = Instantiate(web3AuthWalletGUIPrefab);
-        web3AuthWalletInstance.GetComponent<Web3AuthWalletGUI>().Initialize(w3aWalletGuiConfig);
+        web3AuthWalletInstance.Initialize(w3aWalletGuiConfig);
     }
 
     private void LogAnalytics(Provider provider)

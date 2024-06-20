@@ -5110,6 +5110,7 @@ MonoBehaviour:
   copyPrivateKeyButton: {fileID: 2146662809224367004}
   holdToRevealPrivateKeyButton: {fileID: 198969248047024504}
   circleLoadingImage: {fileID: 1647118626164522998}
+  holdDuration: 2
 --- !u!114 &3479140443333928706
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7626,13 +7627,13 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2911816339710442984}
-          m_TargetAssemblyTypeName: 
-          m_MethodName: 
+        - m_Target: {fileID: 804371200852392299}
+          m_TargetAssemblyTypeName: Web3AuthWalletGUIUIManager, chainsafe.web3-unity.web3auth
+          m_MethodName: OnPointerDown
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: 
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: 
@@ -7642,13 +7643,13 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2911816339710442984}
-          m_TargetAssemblyTypeName: 
-          m_MethodName: 
+        - m_Target: {fileID: 804371200852392299}
+          m_TargetAssemblyTypeName: Web3AuthWalletGUIUIManager, chainsafe.web3-unity.web3auth
+          m_MethodName: OnPointerUp
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: 
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: 

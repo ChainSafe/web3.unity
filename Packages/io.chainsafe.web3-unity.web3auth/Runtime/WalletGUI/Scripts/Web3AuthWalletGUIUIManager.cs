@@ -1,7 +1,10 @@
+using System.Collections;
+using System.Collections.Generic;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.GamingSdk.Web3Auth;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>
@@ -27,9 +30,9 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     [SerializeField] private Button holdToRevealPrivateKeyButton;
     [SerializeField] private Image circleLoadingImage;
     private ScreenOrientation originalOrientation;
-    private bool isHeldDown;
-    private float holdTime;
-    private float holdDuration = 2f;
+    public float holdDuration = 2.0f;
+    private Coroutine holdCoroutine;
+    private float fillProgress;
 
     #endregion
 
@@ -124,11 +127,63 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     {
         if (privateKeyContainer.activeSelf)
         {
+            circleLoadingImage.fillAmount = 0;
             holdToRevealPrivateKeyButton.gameObject.SetActive(true);
             copyPrivateKeyButton.gameObject.SetActive(false);
             privateKeyText.gameObject.SetActive(false);
         }
         privateKeyContainer.SetActive(!privateKeyContainer.activeSelf);
+    }
+    
+    /// <summary>
+    /// On pointer down check.
+    /// </summary>
+    public void OnPointerDown()
+    {
+        holdCoroutine = StartCoroutine(CheckHoldPrivateKeyButtonInput());
+    }
+
+    /// <summary>
+    /// On pointer up check.
+    /// </summary>
+    public void OnPointerUp()
+    {
+        if (fillProgress >= 1.0f)
+        {
+            ShowPrivateKey();
+        }
+
+        if (holdCoroutine != null)
+        {
+            StopCoroutine(holdCoroutine);
+            holdCoroutine = null;
+        }
+
+        fillProgress = 0f;
+    }
+    
+    /// <summary>
+    /// IEnumerator for private key check.
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator CheckHoldPrivateKeyButtonInput()
+    {
+        fillProgress = 0f;
+
+        while (fillProgress < 1.0f)
+        {
+            fillProgress += Time.deltaTime / holdDuration;
+            circleLoadingImage.fillAmount = fillProgress;
+            yield return null;
+        }
+    }
+    
+    /// <summary>
+    /// Shows the private key.
+    /// </summary>
+    private void ShowPrivateKey()
+    {
+        privateKeyText.gameObject.SetActive(true);
     }
 
     /// <summary>
@@ -146,42 +201,6 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     private void CopyPrivateKey()
     {
         Web3AuthWalletGUIClipboardManager.CopyText(privateKeyText.text);
-    }
-
-    /// <summary>
-    /// Checks for mouse or touch input on private key menu
-    /// </summary>
-    private void CheckHoldPrivateKeyButtonInput()
-    {
-        bool isInputHeld = Input.GetMouseButton(0);
-        if (Input.touchCount > 0)
-        {
-            Touch touch = Input.GetTouch(0);
-            isInputHeld = touch.phase == TouchPhase.Began || touch.phase == TouchPhase.Stationary || touch.phase == TouchPhase.Moved;
-        }
-
-        if (isInputHeld)
-        {
-            if (!isHeldDown)
-            {
-                isHeldDown = true;
-                holdTime = 0f;
-            }
-            else
-            {
-                holdTime += Time.deltaTime;
-                circleLoadingImage.fillAmount = Mathf.Clamp01(holdTime / holdDuration);
-                if (circleLoadingImage.fillAmount >= 1f)
-                {
-                    RevealPrivateKey();
-                }
-            }
-        }
-        else if (isHeldDown)
-        {
-            isHeldDown = false;
-            circleLoadingImage.fillAmount = 0f;
-        }
     }
     
     /// <summary>
@@ -243,7 +262,6 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     private void Update()
     {
         CheckWalletToggleKeyInput();
-        CheckHoldPrivateKeyButtonInput();
     }
     
     #endregion
