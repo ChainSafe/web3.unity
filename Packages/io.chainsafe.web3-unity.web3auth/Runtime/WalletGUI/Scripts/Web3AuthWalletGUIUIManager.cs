@@ -32,7 +32,6 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     private ScreenOrientation originalOrientation;
     public float holdDuration = 2.0f;
     private Coroutine holdCoroutine;
-    private float fillProgress;
 
     #endregion
 
@@ -66,7 +65,6 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
         openPrivateKeyMenuButton.onClick.AddListener(TogglePrivateKeyMenu);
         closePrivateKeyMenuButton.onClick.AddListener(TogglePrivateKeyMenu);
         copyPrivateKeyButton.onClick.AddListener(CopyPrivateKey);
-        holdToRevealPrivateKeyButton.onClick.AddListener(RevealPrivateKey);
     }
     
     /// <summary>
@@ -148,7 +146,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     /// </summary>
     public void OnPointerUp()
     {
-        if (fillProgress >= 1.0f)
+        if (circleLoadingImage.fillAmount >= 1.0f)
         {
             ShowPrivateKey();
         }
@@ -159,7 +157,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
             holdCoroutine = null;
         }
 
-        fillProgress = 0f;
+        circleLoadingImage.fillAmount = 0f;
     }
     
     /// <summary>
@@ -168,12 +166,12 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     /// <returns></returns>
     private IEnumerator CheckHoldPrivateKeyButtonInput()
     {
-        fillProgress = 0f;
+        circleLoadingImage.fillAmount = 0f;
 
-        while (fillProgress < 1.0f)
+        while (circleLoadingImage.fillAmount < 1.0f)
         {
-            fillProgress += Time.deltaTime / holdDuration;
-            circleLoadingImage.fillAmount = fillProgress;
+            circleLoadingImage.fillAmount += Time.deltaTime / holdDuration;
+            circleLoadingImage.fillAmount = circleLoadingImage.fillAmount;
             yield return null;
         }
     }
