@@ -19,8 +19,15 @@ namespace ChainSafe.Gaming.HyperPlay
             return collection.UseHyperPlay<HyperPlayProvider>(config);
         }
 
+        /// <summary>
+        /// Binds implementation of <see cref="IWalletProvider"/> as <see cref="T"/> to Web3 as a service.
+        /// </summary>
+        /// <param name="collection">Service collection to bind implementations to.</param>
+        /// <param name="config">Config for connecting via HyperPlay.</param>
+        /// <typeparam name="T">Type of <see cref="HyperPlayProvider"/>.</typeparam>
+        /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
         public static IWeb3ServiceCollection UseHyperPlay<T>(this IWeb3ServiceCollection collection, IHyperPlayConfig config)
-            where T : WalletProvider
+            where T : HyperPlayProvider
         {
             collection.AssertServiceNotBound<IHyperPlayData>();
 
