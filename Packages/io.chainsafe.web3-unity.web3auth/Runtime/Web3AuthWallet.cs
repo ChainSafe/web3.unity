@@ -1,15 +1,20 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.InProcessSigner;
 using ChainSafe.Gaming.InProcessTransactionExecutor;
+using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using Nethereum.JsonRpc.Client;
 using Nethereum.Signer;
 using UnityEngine;
+using Object = UnityEngine.Object;
 using TWeb3Auth = Web3Auth;
 
 namespace ChainSafe.GamingSdk.Web3Auth
@@ -26,6 +31,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
         private InProcessTransactionExecutor transactionExecutor;
         private IClient rpcClient;
         private readonly IAnalyticsClient analyticsClient;
+        private readonly IWeb3AuthTransactionHandler transactionHandler;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Web3AuthWallet"/> class.
@@ -34,12 +40,14 @@ namespace ChainSafe.GamingSdk.Web3Auth
         /// <param name="rpcProvider">The RPC provider for blockchain interaction.</param>
         /// <param name="rpcClient"></param>
         /// <param name="analyticsClient"></param>
-        public Web3AuthWallet(Web3AuthWalletConfig config, IRpcProvider rpcProvider, IClient rpcClient, IAnalyticsClient analyticsClient)
+        public Web3AuthWallet(Web3AuthWalletConfig config, IRpcProvider rpcProvider, IClient rpcClient, IWeb3AuthTransactionHandler transactionHandler, IAnalyticsClient analyticsClient)
         {
             this.config = config;
             this.rpcProvider = rpcProvider;
             this.rpcClient = rpcClient;
             this.analyticsClient = analyticsClient;
+
+            this.transactionHandler = transactionHandler;
         }
 
         /// <summary>
@@ -52,36 +60,9 @@ namespace ChainSafe.GamingSdk.Web3Auth
         /// </summary>
         public string Key => signer.GetKey().GetPrivateKey();
         
-        /// <summary>
-        /// Wallet instance prefab.
-        /// </summary>
-        public GameObject WalletObjectInstance { get; set; }
+        private readonly Dictionary<TransactionRequested, TaskCompletionSource<TransactionResponse>> _transactionPool =
+            new Dictionary<TransactionRequested, TaskCompletionSource<TransactionResponse>>();
         
-        /// <summary>
-        /// Transaction completion task to check if tx is accepted.
-        /// </summary>
-        private static TaskCompletionSource<bool> TransactionAcceptedTcs { get; set; }
-        
-        /// <summary>
-        /// TransactionRequested delegate.
-        /// </summary>
-        private delegate void TransactionRequested(TransactionRequest request);
-        
-        /// <summary>
-        /// TransactionRequested event.
-        /// </summary>
-        private static event TransactionRequested OnTransactionRequested;
-        
-        /// <summary>
-        /// TransactionResponded delegate.
-        /// </summary>
-        private delegate void TransactionResponded(TransactionResponse response);
-        
-        /// <summary>
-        /// TransactionResponded event.
-        /// </summary>
-        private static event TransactionResponded OnTransactionResponse;
-
         /// <summary>
         /// Asynchronously prepares the Web3Auth wallet for operation, triggered when initializing the module in the dependency injection work flow.
         /// </summary>
@@ -108,6 +89,9 @@ namespace ChainSafe.GamingSdk.Web3Auth
 
             transactionExecutor = new InProcessTransactionExecutor(signer, analyticsClient.ChainConfig, rpcProvider, rpcClient);
 
+            transactionHandler.OnTransactionApproved += OnTransactionApproved;
+            transactionHandler.OnTransactionDeclined += OnTransactionDeclined;
+            
             void Web3Auth_OnLogin(Web3AuthResponse response)
             {
                 coreInstance.onLogin -= Web3Auth_OnLogin;
@@ -128,12 +112,12 @@ namespace ChainSafe.GamingSdk.Web3Auth
             await logoutTcs.Task;
 
             coreInstance.onLogout -= Web3Auth_OnLogout;
-            if (WalletObjectInstance != null)
-            {
-                Object.Destroy(WalletObjectInstance);
-            }
+            
             Object.Destroy(coreInstance.gameObject);
 
+            transactionHandler.OnTransactionApproved += OnTransactionApproved;
+            transactionHandler.OnTransactionDeclined += OnTransactionDeclined;
+            
             void Web3Auth_OnLogout()
             {
                 logoutTcs.SetResult(null);
@@ -161,54 +145,38 @@ namespace ChainSafe.GamingSdk.Web3Auth
         /// </summary>
         /// <param name="transaction">The transaction request to send.</param>
         /// <returns>A <see cref="Task"/> that represents the asynchronous operation and returns a <see cref="TransactionResponse"/>.</returns>
-        public async Task<TransactionResponse> SendTransaction(TransactionRequest transaction)
-		{
-			if (WalletObjectInstance != null)
-            {
-                InvokeTransactionRequested(transaction);
-                await WaitForTransactionAsync();
-                TransactionAcceptedTcs = null;
-            }
-            var txResponse = await transactionExecutor.SendTransaction(transaction);
-            InvokeTransactionResponded(txResponse);
-			return txResponse;
+        public Task<TransactionResponse> SendTransaction(TransactionRequest transaction)
+        {
+            string id = Guid.NewGuid().ToString();
+
+            var request = new TransactionRequested(id, transaction);
+            
+            transactionHandler.RequestTransaction(request);
+
+            var tcs = new TaskCompletionSource<TransactionResponse>();
+            
+            _transactionPool.Add(request, tcs);
+            
+			return tcs.Task;
 		}
-        
-        /// <summary>
-        /// Invokes transaction requested.
-        /// </summary>
-        /// <param name="request">The transaction request.</param>
-        private static void InvokeTransactionRequested(TransactionRequest request)
+
+        public async void OnTransactionApproved(TransactionApproved transactionApproved)
         {
-            OnTransactionRequested?.Invoke(request);
+            var pair = _transactionPool.Single(t => t.Key.Id == transactionApproved.Id);
+            
+            var response = await transactionExecutor.SendTransaction(pair.Key.Transaction);
+            
+            pair.Value.SetResult(response);
+
+            transactionHandler.ConfirmTransaction(new TransactionConfirmed(response));
+            
         }
         
-        /// <summary>
-        /// Invokes transaction response.
-        /// </summary>
-        /// <param name="response">The transaction response.</param>
-        private static void InvokeTransactionResponded(TransactionResponse response)
+        public void OnTransactionDeclined(TransactionDeclined transactionDeclined)
         {
-            OnTransactionResponse?.Invoke(response);
-        }
-        
-        /// <summary>
-        /// Waits for transaction confirmation.
-        /// </summary>
-        private static async Task WaitForTransactionAsync()
-        {
-            Debug.Log("Waiting For Web3AuthWallet TX Confirmation");
-            TransactionAcceptedTcs = new TaskCompletionSource<bool>();
-            await TransactionAcceptedTcs.Task;
-        }
-        
-        /// <summary>
-        /// Sets task completion result for transactions.
-        /// </summary>
-        /// <param name="result">The user interaction result.</param>
-        private static void SetTcsResult(bool result)
-        {
-            TransactionAcceptedTcs?.SetResult(result);
+            var pair = _transactionPool.Single(t => t.Key.Id == transactionDeclined.Id);
+            
+            pair.Value.SetCanceled();
         }
         
         /// <summary>
@@ -226,26 +194,6 @@ namespace ChainSafe.GamingSdk.Web3Auth
             instance.setOptions(config.Web3AuthOptions, config.RememberMe);
 
             return instance;
-        }
-        
-        /// <summary>
-        /// Initializer for event handlers.
-        /// </summary>
-        public void InitializeWeb3AuthWallet(GameObject wallet)
-        {
-            WalletObjectInstance = wallet;
-            var txManager = wallet.GetComponent<Web3AuthWalletGUITxManager>();
-            OnTransactionRequested = (request) =>
-            {
-                txManager.StoredTransactionRequest = request;
-                Web3AuthEventManager.RaiseIncomingTransaction();
-            };
-            OnTransactionResponse = (response) =>
-            {
-                txManager.StoredTransactionResponse = response;
-            };
-            txManager.OnTransactionAccepted += () => SetTcsResult(true);
-            txManager.OnTransactionRejected += () => SetTcsResult(false);
         }
     }
 }

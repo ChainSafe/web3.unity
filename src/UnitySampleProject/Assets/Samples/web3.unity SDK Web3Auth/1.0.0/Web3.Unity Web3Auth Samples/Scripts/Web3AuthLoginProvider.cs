@@ -97,16 +97,9 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     
     public override async Task TryLogin()
     {
-        try
-        {
-            await (this as ILoginProvider).Login();
-            EnableWalletGUI();
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"Login failed, please try again\n{e.Message} (see console for more details)");
-            throw;
-        }
+        await base.TryLogin();
+        
+        EnableWalletGUI();
     }
 
     private void EnableWalletGUI()
@@ -126,7 +119,7 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
             SecondaryTextColour = secondaryTextColour,
             BorderButtonColour = borderButtonColour
         };
-        var web3AuthWalletInstance = Instantiate(web3AuthWalletGUIPrefab);
+        var web3AuthWalletInstance = Instantiate(web3AuthWalletGUIPrefab, FindObjectOfType<Web3Auth>().transform);
         web3AuthWalletInstance.Initialize(w3aWalletGuiConfig);
     }
 

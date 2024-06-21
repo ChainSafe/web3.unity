@@ -36,6 +36,8 @@ public static class Web3AuthWalletExtensions
 
         collection.AddSingleton<ISigner, ITransactionExecutor, ILifecycleParticipant, Web3AuthWallet>();
 
+        collection.AddSingleton<IWeb3AuthTransactionHandler, Web3AuthTransactionHandler>();
+        
         return collection;
     }
 

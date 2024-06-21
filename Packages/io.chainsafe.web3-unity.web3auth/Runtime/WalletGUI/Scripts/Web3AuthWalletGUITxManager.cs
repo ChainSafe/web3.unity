@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.GamingSdk.Web3Auth;
+using Microsoft.Extensions.DependencyInjection;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
@@ -29,6 +31,10 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     private GameObject[] txHistoryPrefabs;
     private int txObjectNumber = 1;
     private int txHistoryDisplayCount = 20;
+
+    private bool _processingTransaction;
+    private IWeb3AuthTransactionHandler _transactionHandler;
+    private Queue<TransactionRequested> _transactionQueue = new Queue<TransactionRequested>();
     
     #endregion
 
@@ -38,21 +44,7 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     private bool AutoConfirmTransactions { get; set; }
     private TMP_FontAsset DisplayFont { get; set; }
     private Color SecondaryTextColour { get; set; }
-    public TransactionRequest StoredTransactionRequest { get; set; }
-    public TransactionResponse StoredTransactionResponse { get; set; }
     
-    #endregion
-    
-    #region Events
-        
-    public delegate void TransactionAccepted();
-
-    public event TransactionAccepted OnTransactionAccepted;
-        
-    public delegate void TransactionRejected();
-
-    public event TransactionRejected OnTransactionRejected;
-
     #endregion
 
     #region Methods
@@ -66,20 +58,37 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
         acceptRequestButton.onClick.AddListener(AcceptRequest);
         rejectRequestButton.onClick.AddListener(RejectRequest);
         autoTxToggle.onValueChanged.AddListener(ToggleAutoTx);
+
+        _transactionHandler = Web3Accessor.Web3.ServiceProvider.GetService<IWeb3AuthTransactionHandler>();
     }
     
     /// <summary>
     /// Populates the incoming transaction display.
     /// </summary>
-    private async void DisplayIncomingTransaction()
+    private void OnTransactionRequested(TransactionRequested transactionRequested)
     {
-        while (StoredTransactionRequest == null) await new WaitForSeconds(1);
-        var data = StoredTransactionRequest;
+        _transactionQueue.Enqueue(transactionRequested);
+
+        if (_processingTransaction)
+        {
+            return;
+        }
+
+        _processingTransaction = true;
+        
+        PromptTransactionRequest();
+    }
+
+    private void PromptTransactionRequest()
+    {
+        TransactionRequested transactionRequested = _transactionQueue.Peek();
+        
         incomingTxNotification.SetActive(true);
 
         if (AutoConfirmTransactions)
         {
             AcceptRequest();
+            
             return;
         }
 
@@ -90,8 +99,8 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
 
         incomingTxPlaceHolder.SetActive(false);
         incomingTxDisplay.SetActive(true);
-        incomingTxHashText.text = data.Data;
-        incomingTxActionText.text = data.Value?.ToString() ?? "Sign Request";
+        incomingTxHashText.text = transactionRequested.Transaction.Data;
+        incomingTxActionText.text = transactionRequested.Transaction.Value?.ToString() ?? "Sign Request";
     }
     
     /// <summary>
@@ -99,9 +108,10 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     /// </summary>
     private void AcceptRequest()
     {
+        TransactionRequested transactionRequested = _transactionQueue.Dequeue();
         ShowTxLoadingMenu();
-        OnTransactionAccepted?.Invoke();
-        GetTransactionData();
+        _transactionHandler.ApproveTransaction(new TransactionApproved(transactionRequested.Id));
+        ResetTransactionDisplay();
     }
     
     /// <summary>
@@ -109,21 +119,22 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     /// </summary>
     private void RejectRequest()
     {
-        OnTransactionRejected?.Invoke();
+        TransactionRequested transactionRequested = _transactionQueue.Dequeue();
+        _transactionHandler.DeclineTransaction(new TransactionDeclined(transactionRequested.Id));
         ResetTransactionDisplay();
     }
     
     /// <summary>
     /// Gets transaction data.
     /// </summary>
-    private async void GetTransactionData()
+    private void OnTransactionConfirmed(TransactionConfirmed transactionConfirmed)
     {
-        var requestData = StoredTransactionRequest;
-        while (StoredTransactionResponse == null) await new WaitForSeconds(1);
-        var txHash = StoredTransactionResponse.Hash;
+        var response = transactionConfirmed.Transaction;
+        
+        var txHash = response.Hash;
         var txTime = DateTime.Now.ToString("hh:mm tt");
-        var txAmount = requestData.Value?.ToString() ?? "0";
-        var txAction = requestData.Value != null ? requestData.Value.ToString() : "Sign Request";
+        var txAmount = response.Value?.ToString() ?? "0";
+        var txAction = response.Value != null ? response.Value.ToString() : "Sign Request";
         AddTransactionToHistory(txTime, txAction, txAmount, txHash);
     }
     
@@ -155,7 +166,6 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
         }
         txObjectNumber++;
         txScrollRect.verticalNormalizedPosition = 0;
-        ResetTransactionDisplay();
     }
     
     /// <summary>
@@ -168,8 +178,16 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
         incomingTxHashText.text = string.Empty;
         incomingTxDisplay.SetActive(false);
         incomingTxPlaceHolder.SetActive(true);
-        StoredTransactionRequest = null;
-        StoredTransactionResponse = null;
+        // there's transactions in queue
+        if (_transactionQueue.Count > 0)
+        {
+            PromptTransactionRequest();
+        }
+
+        else
+        {
+            _processingTransaction = false;
+        }
     }
     
     /// <summary>
@@ -234,7 +252,8 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
 	private void OnEnable()
     {
         Web3AuthEventManager.ConfigureTxManager += OnConfigureTxManager;
-		Web3AuthEventManager.IncomingTransaction += DisplayIncomingTransaction;
+		_transactionHandler.OnTransactionRequested += OnTransactionRequested;
+		_transactionHandler.OnTransactionConfirmed += OnTransactionConfirmed;
     }
     
     /// <summary>
@@ -243,7 +262,8 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     private void OnDisable()
     {
         Web3AuthEventManager.ConfigureTxManager -= OnConfigureTxManager;
-        Web3AuthEventManager.IncomingTransaction -= DisplayIncomingTransaction;
+        _transactionHandler.OnTransactionRequested -= OnTransactionRequested;
+        _transactionHandler.OnTransactionConfirmed -= OnTransactionConfirmed;
     }
     
     /// <summary>

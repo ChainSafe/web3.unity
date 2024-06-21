@@ -2,8 +2,9 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Web3AuthWalletGUIClipboardManager : MonoBehaviour
+public class Web3AuthWalletGUIClipboardManager
 {
     #region Fields
 
@@ -21,11 +22,25 @@ public class Web3AuthWalletGUIClipboardManager : MonoBehaviour
 
     public void OnPasteWebGL(string text)
     {
-        var inputFields = FindObjectsOfType<TMP_InputField>();
-        TMP_InputField focusedInputField = inputFields.FirstOrDefault(inputField => inputField.isFocused);
-        if (focusedInputField != null)
+        EventSystem system = EventSystem.current;
+        
+        GameObject selectedObj = system.currentSelectedGameObject;
+        
+        if (selectedObj != null && selectedObj.TryGetComponent(out TMP_InputField selectedInput))
         {
-            focusedInputField.text = text;
+            if (!selectedInput.isFocused)
+            {
+                Debug.LogError("Selected InputField is not focused.");
+                
+                return;
+            }
+            
+            selectedInput.text = text;
+        }
+
+        else
+        {
+            Debug.LogError("No InputField selected to paste text into.");
         }
     }
 

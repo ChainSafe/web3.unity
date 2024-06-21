@@ -15,8 +15,6 @@ namespace ChainSafe.GamingSdk.Web3Auth
         
         public static event EventHandler<GuiManagerConfigEventArgs> ConfigureGuiManager;
         
-        public static event Action IncomingTransaction;
-        
         public static event Action SetTokens;
         
         public static event Action ToggleWallet;
@@ -41,14 +39,6 @@ namespace ChainSafe.GamingSdk.Web3Auth
         public static void RaiseConfigureGuiManager(GuiManagerConfigEventArgs args)
         {
             ConfigureGuiManager?.Invoke(null, args);
-        }
-        
-        /// <summary>
-        /// Invokes incoming transaction.
-        /// </summary>
-        public static void RaiseIncomingTransaction()
-        {
-            IncomingTransaction?.Invoke();
         }
         
         /// <summary>

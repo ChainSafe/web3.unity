@@ -37,8 +37,7 @@ public class Web3AuthWalletGUI : MonoBehaviour
     private Color SecondaryTextColour { get; set; }
     private Color BorderButtonColour { get; set; }
     private TMP_FontAsset DisplayFont { get; set; }
-    private Web3AuthWallet Web3AuthWallet { get; set; }
-
+    
     #endregion
 
     #region Methods
@@ -50,8 +49,6 @@ public class Web3AuthWalletGUI : MonoBehaviour
     public void Initialize(Web3AuthWalletConfig config)
     {
         DontDestroyOnLoad(gameObject);
-        Web3AuthWallet = (Web3AuthWallet)Web3Accessor.Web3.ServiceProvider.GetService(typeof(Web3AuthWallet));
-        Web3AuthWallet.InitializeWeb3AuthWallet(gameObject);
         DisplayWalletIcon = config.DisplayWalletIcon;
         AutoPopUpWalletOnTx = config.AutoPopUpWalletOnTx;
         AutoConfirmTransactions = config.AutoConfirmTransactions;
