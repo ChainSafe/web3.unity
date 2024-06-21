@@ -2,19 +2,18 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-public class Web3AuthWalletGUIClipboardManager
+public class Web3AuthWalletGUIClipboardManager : MonoBehaviour
 {
     #region Fields
 
-    #if UNITY_IOS && !UNITY_EDITOR
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
     [DllImport("__Internal")]
     private static extern void CopyToClipboard(string text);
 
     [DllImport("__Internal")]
     private static extern string PasteFromClipboard();
-    #endif
+#endif
 
     #endregion
 
@@ -22,25 +21,11 @@ public class Web3AuthWalletGUIClipboardManager
 
     public void OnPasteWebGL(string text)
     {
-        EventSystem system = EventSystem.current;
-        
-        GameObject selectedObj = system.currentSelectedGameObject;
-        
-        if (selectedObj != null && selectedObj.TryGetComponent(out TMP_InputField selectedInput))
+        var inputFields = FindObjectsOfType<TMP_InputField>();
+        TMP_InputField focusedInputField = inputFields.FirstOrDefault(inputField => inputField.isFocused);
+        if (focusedInputField != null)
         {
-            if (!selectedInput.isFocused)
-            {
-                Debug.LogError("Selected InputField is not focused.");
-                
-                return;
-            }
-            
-            selectedInput.text = text;
-        }
-
-        else
-        {
-            Debug.LogError("No InputField selected to paste text into.");
+            focusedInputField.text = text;
         }
     }
 
@@ -48,33 +33,33 @@ public class Web3AuthWalletGUIClipboardManager
     {
         if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.V))
         {
-        #if UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_WEBGL && !UNITY_EDITOR
             PasteFromClipboard();
-        #elif UNITY_IOS && !UNITY_EDITOR
+#elif UNITY_IOS && !UNITY_EDITOR
             string text = PasteFromClipboard();
             OnPasteWebGL(text);
-        #else
+#else
             OnPasteWebGL(GUIUtility.systemCopyBuffer);
-        #endif
+#endif
         }
     }
 
     public static void CopyText(string text)
     {
-        #if UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_WEBGL && !UNITY_EDITOR
         CopyToClipboard(text);
-        #elif UNITY_IOS && !UNITY_EDITOR
+#elif UNITY_IOS && !UNITY_EDITOR
         CopyToClipboard(text);
-        #else
+#else
         GUIUtility.systemCopyBuffer = text;
-        #endif
+#endif
     }
 
     private void Update()
     {
-        #if UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_WEBGL && !UNITY_EDITOR
         PasteText();
-        #endif
+#endif
     }
 
     #endregion
