@@ -14,5 +14,6 @@ namespace ChainSafe.Gaming.UnityPackage.Model
         public List<string> rpc { get; set; }
         public NativeCurrency nativeCurrency { get; set; }
         public object chainId { get; set; }
+        public string blockExplorerUrl { get; set; }
     }
 }
