@@ -30,7 +30,9 @@ namespace LootBoxes.Chainlink
             public string ChainId => "31337";
             public string Chain => "Anvil";
             public string Network => "GoChain Testnet";
+            public string Symbol => "GO";
             public string Rpc => $"http://127.0.0.1:8545";
+            public string BlockExplorerUrl => "https://explorer.gochain.io/";
             public string Ipc { get; }
             public string Ws { get; }
         }
