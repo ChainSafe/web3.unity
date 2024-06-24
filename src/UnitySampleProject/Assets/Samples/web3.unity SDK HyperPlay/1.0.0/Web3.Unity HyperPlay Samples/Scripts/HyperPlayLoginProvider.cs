@@ -44,10 +44,16 @@ public class HyperPlayLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     {
         return web3Builder.Configure(services =>
         {
-            services.UseHyperPlay(new HyperPlayConfig
+            var config = new HyperPlayConfig
             {
                 RememberSession = rememberMeToggle.isOn || _storedSessionAvailable,
-            }).UseWalletSigner().UseWalletTransactionExecutor();
+            };
+#if UNITY_WEBGL && !UNITY_EDITOR
+            services.UseHyperPlay<HyperPlayWebGLProvider>(config);
+#else
+            services.UseHyperPlay(config);
+#endif
+            services.UseWalletSigner().UseWalletTransactionExecutor();
         });
     }
     
