@@ -1412,19 +1412,6 @@ MonoBehaviour:
     Provider: 3
   - Button: {fileID: 7400892925769233044}
     Provider: 4
-  web3AuthWalletGUIPrefab: {fileID: 2911816339710442984, guid: b394e6c49b9bd734089cea0293265bd3, type: 3}
-  enableWalletGUI: 1
-  displayWalletIcon: 1
-  autoConfirmTransactions: 1
-  autoPopUpWalletOnTx: 0
-  walletIcon: {fileID: 21300000, guid: 55a46a48cd53d834f99fda690cfea4b1, type: 3}
-  walletLogo: {fileID: 21300000, guid: ab400fd9b39316240b30631965553264, type: 3}
-  displayFont: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  primaryBackgroundColour: {r: 0, g: 0, b: 0, a: 0.8627451}
-  menuBackgroundColour: {r: 0.05490196, g: 0.05490196, b: 0.05490196, a: 1}
-  primaryTextColour: {r: 1, g: 1, b: 1, a: 1}
-  secondaryTextColour: {r: 0.38549072, g: 0.7169812, b: 0.28746888, a: 1}
-  borderButtonColour: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &1679801101
 MonoBehaviour:
   m_ObjectHideFlags: 0
