@@ -8,7 +8,8 @@
     "documentationUrl": "https://docs.gaming.chainsafe.io/",
     "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.0.2",
-        "com.unity.textmeshpro": "3.0.6"
+        "com.unity.textmeshpro": "3.0.6",
+        "com.walletconnect.modal": "1.1.6"
     },
     "keywords": [
         "web3",

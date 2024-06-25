@@ -45,6 +45,7 @@ namespace ChainSafe.GamingSdk.Gelato
             this.chainConfig = chainConfig;
             this.contractBuilder = contractBuilder;
             this.projectConfig = projectConfig;
+            this.analyticsClient = analyticsClient;
         }
 
         public async ValueTask WillStartAsync()

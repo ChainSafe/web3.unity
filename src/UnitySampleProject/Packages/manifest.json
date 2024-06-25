@@ -12,11 +12,13 @@
     "com.unity.toolchain.win-x86_64-linux-x86_64": "2.0.9",
     "com.unity.ugui": "1.0.0",
     "com.unity.visualscripting": "1.9.4",
+    "com.walletconnect.modal": "1.1.6",
     "io.chainsafe.web3-unity": "file:../../../Packages/io.chainsafe.web3-unity",
     "io.chainsafe.web3-unity.hyperplay": "file:../../../Packages/io.chainsafe.web3-unity.hyperplay",
     "io.chainsafe.web3-unity.lootboxes": "file:../../../Packages/io.chainsafe.web3-unity.lootboxes",
     "io.chainsafe.web3-unity.marketplace": "file:../../../Packages/io.chainsafe.web3-unity.marketplace",
     "io.chainsafe.web3-unity.ramp": "file:../../../Packages/io.chainsafe.web3-unity.ramp",
+    "io.chainsafe.web3-unity.walletconnect-chainsafe": "file:../../../Packages/io.chainsafe.web3-unity.walletconnect-chainsafe",
     "io.chainsafe.web3-unity.web3auth": "file:../../../Packages/io.chainsafe.web3-unity.web3auth",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
@@ -52,5 +54,14 @@
   },
   "testables": [
     "io.chainsafe.web3-unity"
+  ],
+  "scopedRegistries": [
+    {
+      "name": "OpenUPM",
+      "url": "https://package.openupm.com",
+      "scopes": [
+        "com.walletconnect"
+      ]
+    }
   ]
 }

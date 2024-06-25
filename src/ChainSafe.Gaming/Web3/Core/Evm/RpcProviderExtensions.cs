@@ -288,14 +288,14 @@ namespace ChainSafe.Gaming.Evm.Providers
         /// </summary>
         /// <param name="provider">The RPC provider.</param>
         /// <param name="transactionHash">The hash of the transaction to retrieve.</param>
-        /// <param name="timeOut">(Optional) The time after which the method will fail if we can't find the transaction by hash. 15 seconds by default.</param>
+        /// <param name="timeOut">(Optional) The time after which the method will fail if we can't find the transaction by hash. 30 seconds by default.</param>
         /// <returns>
         /// A <see cref="Task"/> representing the asynchronous operation.
         /// The task result contains the transaction details as a <see cref="TransactionResponse"/>.
         /// </returns>
         public static async Task<TransactionResponse> GetTransaction(this IRpcProvider provider, string transactionHash, TimeSpan? timeOut = null)
         {
-            timeOut ??= TimeSpan.FromSeconds(15);
+            timeOut ??= TimeSpan.FromSeconds(30);
 
             // Poll transaction till it's available on the given node
             TransactionResponse transaction = null;

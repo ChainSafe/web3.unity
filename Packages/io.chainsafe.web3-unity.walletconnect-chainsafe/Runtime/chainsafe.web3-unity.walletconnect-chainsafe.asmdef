@@ -1,0 +1,17 @@
+{
+    "name": "chainsafe.web3-unity.walletconnect-chainsafe",
+    "rootNamespace": "ChainSafe.Gaming.WalletConnectChainSafe",
+    "references": [
+        "chainsafe.web3-unity",
+        "Unity.TextMeshPro"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
