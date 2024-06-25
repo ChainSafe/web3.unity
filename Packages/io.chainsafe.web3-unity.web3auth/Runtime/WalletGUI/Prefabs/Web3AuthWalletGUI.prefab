@@ -5014,6 +5014,7 @@ MonoBehaviour:
   - {fileID: 1253856405580558448}
   - {fileID: 6789953013710888595}
   - {fileID: 8115748193872107302}
+  - {fileID: 1136090464794109220}
   displayLineObjects:
   - {fileID: 3146313566770778794}
   - {fileID: 3922797289987004089}
@@ -11112,8 +11113,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4286381996
-  m_fontColor: {r: 0.6745098, g: 1, b: 0.4862745, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
