@@ -376,7 +376,7 @@ public class Web3Auth : MonoBehaviour
             sessionId = newSessionId;
             // Debug.Log("sessionId during  authorizeSession in else part =>" + sessionId);
         }
-
+        Debug.Log(KeyStoreManagerUtils.getPubKey(sessionId));
         if (!string.IsNullOrEmpty(sessionId))
         {
             var pubKey = KeyStoreManagerUtils.getPubKey(sessionId);
@@ -391,10 +391,13 @@ public class Web3Auth : MonoBehaviour
                         shareMetadata.ephemPublicKey,
                         shareMetadata.iv
                     );
+                    
 
                     var encryptedShareBytes = AES256CBC.toByteArray(new BigInteger(shareMetadata.ciphertext, 16));
                     var share = aes256cbc.decrypt(encryptedShareBytes, shareMetadata.mac);
                     var tempJson = JsonConvert.DeserializeObject<JObject>(System.Text.Encoding.UTF8.GetString(share));
+                    
+                    Debug.Log(tempJson);
 
                     this.web3AuthResponse = JsonConvert.DeserializeObject<Web3AuthResponse>(tempJson.ToString());
                     if (this.web3AuthResponse != null)

@@ -69,10 +69,12 @@ namespace ChainSafe.GamingSdk.Web3Auth
             if (config.LoginParams != null) coreInstance.login(config.LoginParams);
 
             var privateKeyString = await loginTcs.Task;
-
             var privateKey = new EthECKey(privateKeyString);
+
             var signerConfig = new InProcessSignerConfig { PrivateKey = privateKey };
+
             signer = new InProcessSigner(signerConfig);
+
 
             transactionExecutor = new InProcessTransactionExecutor(signer, analyticsClient.ChainConfig, rpcProvider, rpcClient);
 
@@ -134,7 +136,6 @@ namespace ChainSafe.GamingSdk.Web3Auth
             Object.DontDestroyOnLoad(gameObject);
 
             var instance = gameObject.GetComponent<TWeb3Auth>();
-            instance.Awake();
             instance.setOptions(config.Web3AuthOptions, config.RememberMe);
 
             return instance;

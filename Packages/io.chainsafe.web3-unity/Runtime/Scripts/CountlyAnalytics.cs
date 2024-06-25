@@ -14,7 +14,8 @@ public class CountlyAnalytics : IAnalyticsClient
 
     public async void CaptureEvent(AnalyticsEvent eventData)
     {
-        await Countly.Instance.Events.RecordEventAsync(eventData.EventName);
+        Debug.Log("Capturing event " + eventData.EventName);
+        //await Countly.Instance.Events.RecordEventAsync(eventData.EventName);
     }
 
     public string AnalyticsVersion => "2.6";
@@ -23,7 +24,7 @@ public class CountlyAnalytics : IAnalyticsClient
 
     public CountlyAnalytics(IChainConfig chainConfig, IProjectConfig projectConfig)
     {
-        Countly.Instance.Init(new CountlyConfiguration(AppKey, ServerUrl));
+        /*Countly.Instance.Init(new CountlyConfiguration(AppKey, ServerUrl));
 
         var userDetails = new Dictionary<string, object>
         {
@@ -35,6 +36,7 @@ public class CountlyAnalytics : IAnalyticsClient
         };
 
         Countly.Instance.UserDetails.SetCustomUserDetails(userDetails);
+        */
 
         ChainConfig = chainConfig;
         ProjectConfig = projectConfig;
