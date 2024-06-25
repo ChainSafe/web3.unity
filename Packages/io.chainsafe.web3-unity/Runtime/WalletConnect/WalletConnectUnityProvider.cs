@@ -148,7 +148,9 @@ namespace ChainSafe.Gaming.WalletConnectUnity
 
             string chainId = OriginalWc.Instance.ActiveSession.Namespaces.First().Value.Chains[0].Split(':')[1];
 
-            return await WalletConnectRequest<T>(method, chainId, parameters);
+            throw new NotImplementedException("Interacting with WalletConnectUnity was not implemented yet.");
+            
+            // return await WalletConnectRequest<T>(method, chainId, parameters);
         }
 
         private string FullChainId => $"{ChainConstants.Namespaces.Evm}:{chainConfig.ChainId}";
@@ -202,52 +204,52 @@ namespace ChainSafe.Gaming.WalletConnectUnity
             };
         }
         
-        private async Task<T> WalletConnectRequest<T>(string method, string chainId, params object[] parameters)
-        {
-            // Helper method to make a request using WalletConnectSignClient.
-            async Task<T> MakeRequest<TRequest>()
-            {
-                var data = (TRequest)Activator.CreateInstance(typeof(TRequest), parameters);
-                return await OriginalWc.Instance.RequestAsync<TRequest, T>(data, chainId);
-            }
-
-            switch (method)
-            {
-                case "personal_sign":
-                    return await MakeRequest<EthSignMessage>();
-                case "eth_signTypedData":
-                    return await MakeRequest<EthSignTypedData>();
-                case "eth_signTransaction":
-                    return await MakeRequest<EthSignTransaction>();
-                case "eth_sendTransaction":
-                    return await MakeRequest<EthSendTransaction>();
-                default:
-                    try
-                    {
-                        return await Request<T>(method, parameters);
-                    }
-                    catch (Exception e)
-                    {
-                        throw new WalletConnectException($"{method} RPC method currently not implemented.", e);
-                    }
-            }
-        }
-
-        // Direct RPC request via WalletConnect RPC url.
-        private async Task<T> Request<T>(string method, params object[] parameters)
-        {
-            string chain = OriginalWc.Instance.ActiveSession.Namespaces.First().Value.Chains[0];
-
-            // Using WalletConnect Blockchain API: https://docs.walletconnect.com/cloud/blockchain-api
-            var url = $"https://rpc.walletconnect.com/v1?chainId={chain}&projectId={config.ProjectId}";
-
-            string body = JsonConvert.SerializeObject(new RpcRequestMessage(Guid.NewGuid().ToString(), method, parameters));
-
-            var rawResult = await httpClient.PostRaw(url, body, "application/json");
-
-            RpcResponseMessage response = JsonConvert.DeserializeObject<RpcResponseMessage>(rawResult.Response);
-
-            return response.Result.ToObject<T>();
-        }
+        // private async Task<T> WalletConnectRequest<T>(string method, string chainId, params object[] parameters)
+        // {
+        //     // Helper method to make a request using WalletConnectSignClient.
+        //     async Task<T> MakeRequest<TRequest>()
+        //     {
+        //         var data = (TRequest)Activator.CreateInstance(typeof(TRequest), parameters);
+        //         return await OriginalWc.Instance.RequestAsync<TRequest, T>(data, chainId);
+        //     }
+        //
+        //     switch (method)
+        //     {
+        //         case "personal_sign":
+        //             return await MakeRequest<EthSignMessage>();
+        //         case "eth_signTypedData":
+        //             return await MakeRequest<EthSignTypedData>();
+        //         case "eth_signTransaction":
+        //             return await MakeRequest<EthSignTransaction>();
+        //         case "eth_sendTransaction":
+        //             return await MakeRequest<EthSendTransaction>();
+        //         default:
+        //             try
+        //             {
+        //                 return await Request<T>(method, parameters);
+        //             }
+        //             catch (Exception e)
+        //             {
+        //                 throw new WalletConnectException($"{method} RPC method currently not implemented.", e);
+        //             }
+        //     }
+        // }
+        //
+        // // Direct RPC request via WalletConnect RPC url.
+        // private async Task<T> Request<T>(string method, params object[] parameters)
+        // {
+        //     string chain = OriginalWc.Instance.ActiveSession.Namespaces.First().Value.Chains[0];
+        //
+        //     // Using WalletConnect Blockchain API: https://docs.walletconnect.com/cloud/blockchain-api
+        //     var url = $"https://rpc.walletconnect.com/v1?chainId={chain}&projectId={config.ProjectId}";
+        //
+        //     string body = JsonConvert.SerializeObject(new RpcRequestMessage(Guid.NewGuid().ToString(), method, parameters));
+        //
+        //     var rawResult = await httpClient.PostRaw(url, body, "application/json");
+        //
+        //     RpcResponseMessage response = JsonConvert.DeserializeObject<RpcResponseMessage>(rawResult.Response);
+        //
+        //     return response.Result.ToObject<T>();
+        // }
     }
 }
