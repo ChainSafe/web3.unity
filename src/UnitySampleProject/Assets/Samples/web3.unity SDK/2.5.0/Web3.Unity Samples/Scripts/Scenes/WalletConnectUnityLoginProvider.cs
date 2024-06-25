@@ -2,6 +2,7 @@
 using ChainSafe.Gaming.WalletConnect;
 using ChainSafe.Gaming.WalletConnectUnity;
 using ChainSafe.Gaming.Web3.Build;
+using ChainSafe.Gaming.Web3.Evm.Wallet;
 using Scenes;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,8 +28,8 @@ public class WalletConnectUnityLoginProvider : LoginProvider, IWeb3BuilderServic
         return web3Builder.Configure(services =>
         {
             services.UseWalletConnectUnity()
-                .UseWalletConnectSigner()
-                .UseWalletConnectTransactionExecutor();
+                .UseWalletSigner()
+                .UseWalletTransactionExecutor();
         });
     }
 }
