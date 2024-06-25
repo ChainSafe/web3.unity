@@ -74,8 +74,8 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
             customTokenContract = data[0];
             customTokenSymbolText.text = data[1].ToUpper();
             var balance = await Web3Accessor.Web3.Erc20.GetBalanceOf(customTokenContract, Web3Accessor.Web3.Signer.PublicAddress);
-            var customTokenValue = balance / BigInteger.Pow(10, 18);
-            customTokenAmountText.text = customTokenValue.ToString();
+            var customTokenValue = (decimal)balance / (decimal)BigInteger.Pow(10, 18);
+            customTokenAmountText.text = customTokenValue.ToString("N18");
             customTokenDisplay.SetActive(true);
         }
         else

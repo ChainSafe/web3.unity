@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.GamingSdk.Web3Auth;
@@ -78,8 +79,11 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
         
         PromptTransactionRequest();
     }
-
-    private void PromptTransactionRequest()
+    
+    /// <summary>
+    /// Prompts transaction request display.
+    /// </summary>
+    private async void PromptTransactionRequest()
     {
         TransactionRequested transactionRequested = _transactionQueue.Peek();
         
@@ -87,6 +91,8 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
 
         if (AutoConfirmTransactions)
         {
+            await Task.Delay(1000);
+            
             AcceptRequest();
             
             return;

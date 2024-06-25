@@ -102,7 +102,7 @@ public class ChainSafeServerSettings : EditorWindow
             selectedRpcIndex = Mathf.Clamp(selectedRpcIndex, 0, chainList[selectedChainIndex].rpc.Count - 1);
             // Set the rpc
             rpc = chainList[selectedChainIndex].rpc[selectedRpcIndex];
-            blockExplorerUrl = chainList[selectedChainIndex].blockExplorerUrl;
+            blockExplorerUrl = chainList[selectedChainIndex].explorers[0].url;
         }
         else
         {
