@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Unity;
+using ChainSafe.Gaming.Web3.Environment;
 
 namespace ChainSafe.Gaming.Unity
 {

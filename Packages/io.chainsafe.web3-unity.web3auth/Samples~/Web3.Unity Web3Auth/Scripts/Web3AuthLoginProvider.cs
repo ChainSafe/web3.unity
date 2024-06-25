@@ -1,15 +1,13 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ChainSafe.Gaming.Exchangers.Ramp;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Common;
-using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.GamingSdk.Web3Auth;
 using Scenes;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Network = Web3Auth.Network;
@@ -36,11 +34,22 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     [SerializeField] private Network network;
     [Header("UI")]
     [SerializeField] private List<ProviderAndButtonPair> providerAndButtonPairs;
-
+    [Header("Wallet GUI Options")]
+    [SerializeField] private GameObject web3AuthWalletGUIPrefab;
+    [SerializeField] private bool enableWalletGUI;
+    [SerializeField] private bool displayWalletIcon;
+    [SerializeField] private bool autoConfirmTransactions;
+    [SerializeField] private bool autoPopUpWalletOnTx;
+    [SerializeField] private Sprite walletIcon;
+    [SerializeField] private Sprite walletLogo;
+    [SerializeField] public TMP_FontAsset displayFont;
+    [SerializeField] private Color primaryBackgroundColour;
+    [SerializeField] private Color menuBackgroundColour;
+    [SerializeField] private Color primaryTextColour;
+    [SerializeField] private Color secondaryTextColour;
+    [SerializeField] private Color borderButtonColour;
     private bool useProvider;
-
     private Provider selectedProvider;
-
     private bool rememberMe;
 
     public void SetRememberMe(bool rememberMe)
@@ -63,15 +72,12 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
         if (!string.IsNullOrEmpty(uri.Fragment))
         {
             useProvider = false;
-
             await TryLogin();
-           
         }
 #else
-        if (!string.IsNullOrEmpty(KeyStoreManagerUtils.getPreferencesData(KeyStoreManagerUtils.SESSION_ID)))
+        if (!string.IsNullOrEmpty(KeyStoreManagerUtils.getPreferencesData(KeyStoreManagerUtils.SESSION_ID)) && rememberMe)
         {
             useProvider = false;
-            rememberMe = true;
             await TryLogin();
             Debug.Log("Restoring existing Web3Auth session (Remember Me");
         }
@@ -85,9 +91,43 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
             useProvider = true;
         }
         selectedProvider = provider;
-
         await TryLogin();
         LogAnalytics(provider);
+    }
+    
+    public override async Task TryLogin()
+    {
+        try
+        {
+            await (this as ILoginProvider).Login();
+            EnableWalletGUI();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Login failed, please try again\n{e.Message} (see console for more details)");
+            throw;
+        }
+    }
+
+    private void EnableWalletGUI()
+    {
+        if (!enableWalletGUI) return;
+        var w3aWalletGuiConfig = new Web3AuthWalletGUI.Web3AuthWalletConfig
+        {
+            DisplayWalletIcon = displayWalletIcon,
+            AutoPopUpWalletOnTx = autoPopUpWalletOnTx,
+            AutoConfirmTransactions = autoConfirmTransactions,
+            WalletIcon = walletIcon,
+            WalletLogo = walletLogo,
+            DisplayFont = displayFont,
+            PrimaryBackgroundColour = primaryBackgroundColour,
+            MenuBackgroundColour = menuBackgroundColour,
+            PrimaryTextColour = primaryTextColour,
+            SecondaryTextColour = secondaryTextColour,
+            BorderButtonColour = borderButtonColour
+        };
+        var web3AuthWalletInstance = Instantiate(web3AuthWalletGUIPrefab);
+        web3AuthWalletInstance.GetComponent<Web3AuthWalletGUI>().Initialize(w3aWalletGuiConfig);
     }
 
     private void LogAnalytics(Provider provider)
@@ -95,11 +135,7 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
         IAnalyticsClient client = (IAnalyticsClient)Web3Accessor.Web3.ServiceProvider.GetService(typeof(IAnalyticsClient));
         client.CaptureEvent(new AnalyticsEvent()
         {
-            ChainId = Web3Accessor.Web3.ChainConfig.ChainId,
-            Network = Web3Accessor.Web3.ChainConfig.Network,
-            ProjectId = Web3Accessor.Web3.ProjectConfig.ProjectId,
             EventName = $"Login provider {provider}",
-            Version = client.AnalyticsVersion,
             PackageName = "io.chainsafe.web3-unity.web3auth",
         });
     }

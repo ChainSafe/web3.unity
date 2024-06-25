@@ -1,3 +1,4 @@
+#if MARKETPLACE_AVAILABLE
 using Scripts.EVM.Marketplace;
 using UnityEngine;
 
@@ -60,9 +61,9 @@ public class MarketplaceCalls : MonoBehaviour
     [SerializeField] private string marketplaceContractToListTo = "Set marketplace contract to list to";
     [SerializeField] private string collectionContractToList = "Set collection contract to list from";
     
-    [Header("List to marketplace calls")]
-    [SerializeField] private string marketplaceContractToBuyFrom = "Set marketplace contract to list to";
-    [SerializeField] private string tokenIdToBuy = "Set token ID to buy";
+    [Header("Marketplace purchase calls")]
+    [SerializeField] private string marketplaceContractToBuyFrom = "Set marketplace contract to buy from";
+    [SerializeField] private string itemIdToBuy = "Set item ID to buy (the index id of the nft in the marketplace i.e 0 or 1)";
     [SerializeField] private string weiPriceToBuy = "Set price in wei to buy with i.e 100000000000000";
     
     #endregion
@@ -166,9 +167,8 @@ public class MarketplaceCalls : MonoBehaviour
     /// </summary>
     public async void Create721Collection()
     {
-        var data = await Marketplace.Create721Collection(bearerToken, collectionName721, collectionDescription721, collectionMintingPublic721);
-        var response = SampleOutputUtil.BuildOutputValue(data);
-        Debug.Log($"TX: {response}");
+        var response = await Marketplace.Create721Collection(bearerToken, collectionName721, collectionDescription721, collectionMintingPublic721);
+        Debug.Log($"TX: {response.TransactionHash}");
     }
     
     /// <summary>
@@ -176,9 +176,8 @@ public class MarketplaceCalls : MonoBehaviour
     /// </summary>
     public async void Create1155Collection()
     {
-        var data = await Marketplace.Create1155Collection(bearerToken, collectionName1155, collectionDescription1155, collectionMintingPublic1155);
-        var response = SampleOutputUtil.BuildOutputValue(data);
-        Debug.Log($"TX: {response}");
+        var response = await Marketplace.Create1155Collection(bearerToken, collectionName1155, collectionDescription1155, collectionMintingPublic1155);
+        Debug.Log($"TX: {response.TransactionHash}");
     }
     
     /// <summary>
@@ -186,9 +185,8 @@ public class MarketplaceCalls : MonoBehaviour
     /// </summary>
     public async void Mint721CollectionNft()
     {
-        var data = await Marketplace.Mint721CollectionNft(collectionContract721, uri721);
-        var response = SampleOutputUtil.BuildOutputValue(data);
-        Debug.Log($"TX: {response}");
+        var response = await Marketplace.Mint721CollectionNft(collectionContract721, uri721);
+        Debug.Log($"TX: {response.TransactionHash}");
     }
     
     /// <summary>
@@ -196,9 +194,8 @@ public class MarketplaceCalls : MonoBehaviour
     /// </summary>
     public async void Mint1155CollectionNft()
     {
-        var data = await Marketplace.Mint1155CollectionNft(collectionContract1155, uri1155, amount1155);
-        var response = SampleOutputUtil.BuildOutputValue(data);
-        Debug.Log($"TX: {response}");
+        var response = await Marketplace.Mint1155CollectionNft(collectionContract1155, uri1155, amount1155);
+        Debug.Log($"TX: {response.TransactionHash}");
     }
     
     /// <summary>
@@ -215,9 +212,8 @@ public class MarketplaceCalls : MonoBehaviour
     /// </summary>
     public async void CreateMarketplace()
     {
-        var data = await Marketplace.CreateMarketplace(bearerToken, marketplaceName, marketplaceDescription, marketplaceWhitelisting);
-        var response = SampleOutputUtil.BuildOutputValue(data);
-        Debug.Log($"TX: {response}");
+        var response = await Marketplace.CreateMarketplace(bearerToken, marketplaceName, marketplaceDescription, marketplaceWhitelisting);
+        Debug.Log($"TX: {response.TransactionHash}");
     }
     
     /// <summary>
@@ -234,9 +230,8 @@ public class MarketplaceCalls : MonoBehaviour
     /// </summary>
     public async void ApproveListNftsToMarketplace()
     {
-        var data = await Marketplace.SetApprovalMarketplace(collectionContractToList, marketplaceContractToListTo, "1155",true);
-        var response = SampleOutputUtil.BuildOutputValue(data);
-        Debug.Log($"TX: {response}");
+        var response = await Marketplace.SetApprovalMarketplace(collectionContractToList, marketplaceContractToListTo, "1155",true);
+        Debug.Log($"TX: {response.TransactionHash}");
     }
     
     /// <summary>
@@ -244,9 +239,8 @@ public class MarketplaceCalls : MonoBehaviour
     /// </summary>
     public async void RevokeApprovalListNftsToMarketplace()
     {
-        var data = await Marketplace.SetApprovalMarketplace(collectionContractToList, marketplaceContractToListTo, "1155",false);
-        var response = SampleOutputUtil.BuildOutputValue(data);
-        Debug.Log($"TX: {response}");
+        var response = await Marketplace.SetApprovalMarketplace(collectionContractToList, marketplaceContractToListTo, "1155",false);
+        Debug.Log($"TX: {response.TransactionHash}");
     }
     
     /// <summary>
@@ -254,20 +248,19 @@ public class MarketplaceCalls : MonoBehaviour
     /// </summary>
     public async void ListNftsToMarketplace()
     {
-        var data = await Marketplace.ListNftsToMarketplace(marketplaceContractToListTo,collectionContractToList, tokenIdToList, weiPriceToList);
-        var response = SampleOutputUtil.BuildOutputValue(data);
-        Debug.Log($"TX: {response}");
+        var response = await Marketplace.ListNftsToMarketplace(marketplaceContractToListTo,collectionContractToList, tokenIdToList, weiPriceToList);
+        Debug.Log($"TX: {response.TransactionHash}");
     }
     
     /// <summary>
-    /// Purchases an Nft from the marketplace
+    /// Purchases Nft from the marketplace
     /// </summary>
     public async void PurchaseNftFromMarketplace()
     {
-        var data = await Marketplace.PurchaseNft(marketplaceContractToBuyFrom, tokenIdToBuy, weiPriceToBuy);
-        var response = SampleOutputUtil.BuildOutputValue(data);
-        Debug.Log($"TX: {response}");
+        var response = await Marketplace.PurchaseNft(marketplaceContractToBuyFrom, itemIdToBuy, weiPriceToBuy);
+        Debug.Log($"TX: {response.TransactionHash}");
     }
     
     #endregion
 }
+#endif

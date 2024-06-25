@@ -2,8 +2,10 @@
 using System;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
+using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
+using ChainSafe.Gaming.LocalStorage;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using ChainSafe.Gaming.Web3.Core.Logout;
@@ -23,6 +25,7 @@ namespace ChainSafe.Gaming.Web3
         private readonly ITransactionExecutor? transactionExecutor;
         private readonly IEvmEvents? events;
         private readonly ILogoutManager logoutManager;
+        private readonly DataStorage dataStorage;
 
         private bool initialized;
         private bool terminated;
@@ -38,6 +41,10 @@ namespace ChainSafe.Gaming.Web3
             ProjectConfig = serviceProvider.GetRequiredService<IProjectConfig>();
             ChainConfig = serviceProvider.GetRequiredService<IChainConfig>();
             logoutManager = this.serviceProvider.GetRequiredService<ILogoutManager>();
+            dataStorage = this.serviceProvider.GetRequiredService<DataStorage>();
+            Erc20 = this.serviceProvider.GetRequiredService<Erc20Service>();
+            Erc721 = this.serviceProvider.GetRequiredService<Erc721Service>();
+            Erc1155 = this.serviceProvider.GetRequiredService<Erc1155Service>();
         }
 
         /// <summary>
@@ -76,6 +83,21 @@ namespace ChainSafe.Gaming.Web3
         public IContractBuilder ContractBuilder { get; }
 
         /// <summary>
+        /// Represents an ERC20 service that provides functionality to interact with ERC20 tokens.
+        /// </summary>
+        public Erc20Service Erc20 { get; }
+
+        /// <summary>
+        /// Represents an ERC721 service that provides functionality to interact with ERC721 tokens.
+        /// </summary>
+        public Erc721Service Erc721 { get; }
+
+        /// <summary>
+        /// Represents an ERC1155 service that provides functionality to interact with ERC1155 tokens.
+        /// </summary>
+        public Erc1155Service Erc1155 { get; }
+
+        /// <summary>
         /// Access the service provider of this Web3 instance.
         /// Use this to retrieve any service that was bound to this Web3 instance during the build phase.
         /// </summary>
@@ -89,6 +111,8 @@ namespace ChainSafe.Gaming.Web3
 
         internal async ValueTask InitializeAsync()
         {
+            await dataStorage.Initialize();
+
             foreach (var lifecycleParticipant in serviceProvider.GetServices<ILifecycleParticipant>())
             {
                 await lifecycleParticipant.WillStartAsync();
@@ -122,7 +146,7 @@ namespace ChainSafe.Gaming.Web3
                 }
             }
 
-            serviceProvider.Dispose();
+            await serviceProvider.DisposeAsync();
             terminated = true;
         }
 

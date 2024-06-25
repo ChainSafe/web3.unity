@@ -1,7 +1,6 @@
 {
   "dependencies": {
     "com.tools.webglthreadingpatcher": "https://github.com/VolodymyrBS/WebGLThreadingPatcher.git",
-    "com.unity.ai.navigation": "1.1.5",
     "com.unity.collab-proxy": "2.3.1",
     "com.unity.ide.rider": "3.0.28",
     "com.unity.ide.vscode": "1.2.5",
@@ -10,11 +9,14 @@
     "com.unity.textmeshpro": "3.0.6",
     "com.unity.timeline": "1.7.6",
     "com.unity.toolchain.macos-arm64-linux-x86_64": "2.0.0",
+    "com.unity.toolchain.win-x86_64-linux-x86_64": "2.0.9",
     "com.unity.ugui": "1.0.0",
     "com.unity.visualscripting": "1.9.4",
     "com.walletconnect.modal": "1.1.6",
     "io.chainsafe.web3-unity": "file:../../../Packages/io.chainsafe.web3-unity",
+    "io.chainsafe.web3-unity.hyperplay": "file:../../../Packages/io.chainsafe.web3-unity.hyperplay",
     "io.chainsafe.web3-unity.lootboxes": "file:../../../Packages/io.chainsafe.web3-unity.lootboxes",
+    "io.chainsafe.web3-unity.marketplace": "file:../../../Packages/io.chainsafe.web3-unity.marketplace",
     "io.chainsafe.web3-unity.ramp": "file:../../../Packages/io.chainsafe.web3-unity.ramp",
     "io.chainsafe.web3-unity.walletconnect-chainsafe": "file:../../../Packages/io.chainsafe.web3-unity.walletconnect-chainsafe",
     "io.chainsafe.web3-unity.web3auth": "file:../../../Packages/io.chainsafe.web3-unity.web3auth",

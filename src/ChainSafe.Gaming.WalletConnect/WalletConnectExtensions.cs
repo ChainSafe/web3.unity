@@ -16,27 +16,15 @@ namespace ChainSafe.Gaming.WalletConnect
     public static class WalletConnectExtensions
     {
         /// <summary>
-        /// Use this to configure WalletConnect functionality for this instance of <see cref="Web3.Web3"/>.
-        /// </summary>
-        /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
-        public static IWeb3ServiceCollection ConfigureWalletConnect(this IWeb3ServiceCollection services, IWalletConnectConfig config)
-        {
-            services.Replace(ServiceDescriptor.Singleton(typeof(IWalletConnectConfig), config));
-            return services;
-        }
-
-        /// <summary>
         /// Use this to enable WalletConnect functionality for this instance of Web3.
         /// </summary>
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
-        public static IWeb3ServiceCollection UseWalletConnect(this IWeb3ServiceCollection services)
+        private static IWeb3ServiceCollection UseWalletConnect(this IWeb3ServiceCollection services)
         {
-            services.AssertServiceNotBound<IWalletProvider>();
-
             services.AddSingleton<DataStorage>();
             services.AddSingleton<IWalletRegistry, ILifecycleParticipant, WalletRegistry>();
             services.AddSingleton<RedirectionHandler>();
-            services.AddSingleton<IWalletProvider, IConnectionHelper, ILifecycleParticipant, WalletConnectProvider>();
+            services.AddSingleton<IConnectionHelper, ILifecycleParticipant, WalletConnectProvider>();
 
             return services;
         }
@@ -47,41 +35,11 @@ namespace ChainSafe.Gaming.WalletConnect
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
         public static IWeb3ServiceCollection UseWalletConnect(this IWeb3ServiceCollection services, IWalletConnectConfig config)
         {
-            services.AssertServiceNotBound<IWalletProvider>();
+            services = UseWalletConnect(services);
 
-            services.ConfigureWalletConnect(config);
-            services.UseWalletConnect();
+            services.Replace(ServiceDescriptor.Singleton(typeof(IWalletConnectConfig), config));
 
-            return services;
-        }
-
-        /// <summary>
-        /// Use this to set <see cref="WalletConnectSigner"/> as the <see cref="ISigner"/> for this instance of Web3.
-        /// </summary>
-        /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
-        public static IWeb3ServiceCollection UseWalletConnectSigner(this IWeb3ServiceCollection services)
-        {
-            EnsureProviderBoundFirst(services);
-            services.AssertServiceNotBound<ISigner>();
-
-            services.AddSingleton<ISigner, ILifecycleParticipant, ILogoutHandler, WalletConnectSigner>();
-
-            return services;
-        }
-
-        /// <summary>
-        /// Use this to set <see cref="WalletConnectTransactionExecutor"/> as the <see cref="ITransactionExecutor"/>
-        /// for this instance of Web3.
-        /// </summary>
-        /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
-        public static IWeb3ServiceCollection UseWalletConnectTransactionExecutor(this IWeb3ServiceCollection services)
-        {
-            EnsureProviderBoundFirst(services);
-            services.AssertServiceNotBound<ITransactionExecutor>();
-
-            services.AddSingleton<ITransactionExecutor, WalletConnectTransactionExecutor>();
-
-            return services;
+            return services.UseWalletProvider<WalletConnectProvider>(config);
         }
 
         /// <summary>
@@ -118,20 +76,6 @@ namespace ChainSafe.Gaming.WalletConnect
         public static IConnectionHelper ConnectionHelper(this WalletConnectSubCategory walletConnect)
         {
             return ((IWeb3SubCategory)walletConnect).Web3.ServiceProvider.GetRequiredService<IConnectionHelper>();
-        }
-
-        /// <summary>
-        /// We need this to be sure <see cref="WalletConnectProvider"/>
-        /// initializes first as a <see cref="ILifecycleParticipant"/>.
-        /// </summary>
-        private static void EnsureProviderBoundFirst(IWeb3ServiceCollection services)
-        {
-            if (services.Any(descriptor => descriptor.ServiceType == typeof(IWalletProvider)))
-            {
-                return;
-            }
-
-            throw new Web3BuildException($"You should bind {nameof(IWalletProvider)} first.");
         }
     }
 }

@@ -17,6 +17,8 @@ namespace ChainSafe.Gaming.MetaMask.Unity
     {
         private bool isInitialized;
 
+        private TaskCompletionSource<string> connectionTcs;
+
         /// Use this instead of <see cref="Debug"/>.
         private ILogWriter logger;
 
@@ -56,7 +58,14 @@ namespace ChainSafe.Gaming.MetaMask.Unity
         /// <returns>Connected account address.</returns>
         public Task<string> Connect()
         {
-            var taskCompletionSource = new TaskCompletionSource<string>();
+            if (connectionTcs != null && !connectionTcs.Task.IsCompleted)
+            {
+                connectionTcs.SetException(new Web3Exception("Metamask connection not completed."));
+
+                return connectionTcs.Task;
+            }
+
+            connectionTcs = new TaskCompletionSource<string>();
 
             // Unsubscribe in case we're already subscribed from a previous login.
             OnAccountConnected -= Connected;
@@ -68,9 +77,9 @@ namespace ChainSafe.Gaming.MetaMask.Unity
             {
                 ConnectedAddress = address;
 
-                if (!taskCompletionSource.TrySetResult(ConnectedAddress))
+                if (!connectionTcs.TrySetResult(ConnectedAddress))
                 {
-                    taskCompletionSource.SetException(new Web3Exception("Error setting connected account address."));
+                    connectionTcs.SetException(new Web3Exception("Error setting connected account address."));
                 }
                 else
                 {
@@ -85,7 +94,7 @@ namespace ChainSafe.Gaming.MetaMask.Unity
             }
             else
             {
-                logger.LogError("Metamask is not available, please install it first.");
+                connectionTcs.SetException(new Web3Exception("Metamask is not available, please install it first."));
 
                 // Unsubscribe to event.
                 OnAccountConnected -= Connected;
@@ -93,7 +102,7 @@ namespace ChainSafe.Gaming.MetaMask.Unity
                 return null;
             }
 
-            return taskCompletionSource.Task;
+            return connectionTcs.Task;
         }
 
         /// <summary>
@@ -194,7 +203,14 @@ namespace ChainSafe.Gaming.MetaMask.Unity
         // Callback for displaying an error if operation fails.
         private void DisplayError(string message)
         {
-            logger.LogError(message);
+            if (connectionTcs != null && !connectionTcs.Task.IsCompleted)
+            {
+                connectionTcs.SetException(new Web3Exception(message));
+            }
+            else
+            {
+                logger.LogError(message);
+            }
         }
     }
 }

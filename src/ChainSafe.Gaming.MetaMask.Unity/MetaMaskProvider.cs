@@ -11,9 +11,9 @@ using Object = UnityEngine.Object;
 namespace ChainSafe.Gaming.MetaMask.Unity
 {
     /// <summary>
-    /// Concrete implementation of <see cref="IMetaMaskProvider"/>.
+    /// Concrete implementation of <see cref="MetaMaskProvider"/>.
     /// </summary>
-    public class MetaMaskProvider : WalletProvider, ILogoutHandler
+    public class MetaMaskProvider : WalletProvider
     {
         private readonly ILogWriter logWriter;
 
@@ -63,7 +63,8 @@ namespace ChainSafe.Gaming.MetaMask.Unity
 
         public override Task Disconnect()
         {
-            // Currently no disconnect logic for MetaMask lib on NEthereum.
+            Object.Destroy(metaMaskController.gameObject);
+
             return Task.CompletedTask;
         }
 
@@ -83,23 +84,11 @@ namespace ChainSafe.Gaming.MetaMask.Unity
 
             analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
-                ProjectId = projectConfig.ProjectId,
-                Network = chainConfig.Network,
-                ChainId = chainConfig.ChainId,
-                Rpc = chainConfig.Rpc,
                 EventName = "Metamask WebGL Initialized",
                 PackageName = "io.chainsafe.web3-unity",
-                Version = analyticsClient.AnalyticsVersion,
             });
 
             return await metaMaskController.Connect();
-        }
-
-        public Task OnLogout()
-        {
-            Object.Destroy(metaMaskController.gameObject);
-
-            return Task.CompletedTask;
         }
     }
 }

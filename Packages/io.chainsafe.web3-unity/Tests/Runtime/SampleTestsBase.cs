@@ -60,14 +60,15 @@ public class SampleTestsBase
             services.UseMultiCall();
             services.UseRpcProvider();
 
-            services.AddSingleton(new StubWalletConnectProviderConfig()); // can be replaced
-            services.AddSingleton<IWalletProvider, StubWalletConnectProvider>();
-            services.UseWalletConnectSigner();
-            services.UseWalletConnectTransactionExecutor();
+            var config = new StubWalletConnectProviderConfig();
+            services.AddSingleton(config); // can be replaced
+            services.UseWalletProvider<StubWalletConnectProvider>(config);
+            services.UseWalletSigner();
+            services.UseWalletTransactionExecutor();
 
             // Add any contracts we would want to use
             services.ConfigureRegisteredContracts(contracts =>
-                contracts.RegisterContract("CsTestErc20", ABI.Erc20, Contracts.Erc20));
+                contracts.RegisterContract("CsTestErc20", ABI.Erc20, ChainSafeContracts.Erc20));
         });
 
         if (customConfiguration != null)
