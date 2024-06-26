@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using TMPro;
@@ -21,6 +22,18 @@ namespace ChainSafe.Gaming.Marketplace
         [SerializeField] private Button requestEmailButton;
         [SerializeField] private Button verifyAuthCodeButton;
         [SerializeField] private Button verifyAuthCodeBackButton;
+        [SerializeField] public TMP_FontAsset displayFont;
+        [SerializeField] private Color primaryBackgroundColour;
+        [SerializeField] private Color menuBackgroundColour;
+        [SerializeField] private Color primaryTextColour;
+        [SerializeField] private Color secondaryTextColour;
+        [SerializeField] private Color borderButtonColour;
+        [SerializeField] private List<GameObject> primaryBackgroundObjects;
+        [SerializeField] private List<GameObject> menuBackgroundObjects;
+        [SerializeField] private List<GameObject> primaryTextObjects;
+        [SerializeField] private List<GameObject> secondaryTextObjects;
+        [SerializeField] private List<GameObject> displayLineObjects;
+        [SerializeField] private List<GameObject> borderButtonObjects;
         [Header("Enable this for testing to bypass auth")]
         [SerializeField] private bool test;
 
@@ -43,6 +56,24 @@ namespace ChainSafe.Gaming.Marketplace
             requestEmailButton.onClick.AddListener(RequestEmailAuthCode);
             verifyAuthCodeButton.onClick.AddListener(VerifyEmailAuthCode);
             verifyAuthCodeBackButton.onClick.AddListener(ToggleEmailMenu);
+            SetCustomConfig();
+        }
+        
+        /// <summary>
+        /// Sets config & object colours.
+        /// </summary>
+        private void SetCustomConfig()
+        {
+            var marketplaceGuiConfigArgs = new EventManagerMarketplace.MarketplaceGUIConfigEventArgs(displayFont, primaryBackgroundColour, menuBackgroundColour, primaryTextColour, secondaryTextColour, borderButtonColour);
+            EventManagerMarketplace.RaiseConfigureMarketplaceGuiManager(marketplaceGuiConfigArgs);
+            CustomizationHelperMarketplace.SetCustomColours(
+                displayFont,
+                primaryBackgroundObjects, primaryBackgroundColour,
+                menuBackgroundObjects, menuBackgroundColour,
+                primaryTextObjects, primaryTextColour,
+                secondaryTextObjects, secondaryTextColour,
+                borderButtonObjects, borderButtonColour,
+                displayLineObjects);
         }
 
         /// <summary>
