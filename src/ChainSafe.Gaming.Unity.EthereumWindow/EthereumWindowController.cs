@@ -1,29 +1,34 @@
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using ChainSafe.Gaming.HyperPlay.Dto;
+using ChainSafe.Gaming.Evm;
+using ChainSafe.Gaming.Unity.EthereumWindow.Dto;
 using ChainSafe.Gaming.Web3;
+using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.Client.RpcMessages;
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace ChainSafe.Gaming.HyperPlay
+namespace ChainSafe.Gaming.Unity.EthereumWindow
 {
     /// <summary>
-    /// A controller script for side-loaded browser games and making awaitable JsonRPC requests.
+    /// A controller script for making awaitable JsonRPC requests to browser wallets via window.ethereum.
+    /// Make sure EthereumWindow.jslib is present in your Web3.Unity Package.
+    /// TODO: link to EthereumWindow.jslib.
     /// </summary>
-    public class HyperPlayController : MonoBehaviour
+    public class EthereumWindowController : MonoBehaviour
     {
+        private readonly Dictionary<string, TaskCompletionSource<RpcResponseMessage>> requestTcsMap = new Dictionary<string, TaskCompletionSource<RpcResponseMessage>>();
+
+        private TaskCompletionSource<string> connectionTcs;
+
         [DllImport("__Internal")]
         public static extern string Request(string message, string gameObjectName, string callback, string fallback);
-        
+
         [DllImport("__Internal")]
         public static extern string Connect(string chain, string gameObjectName, string callback, string fallback);
-
-        private readonly Dictionary<string, TaskCompletionSource<RpcResponseMessage>> _requestTcsMap = new Dictionary<string, TaskCompletionSource<RpcResponseMessage>>();
-
-        private TaskCompletionSource<string> _connectionTcs;
 
         /// <summary>
         /// Make JsonRPC request to the HyperPlay side-loaded browser games on HyperPlay desktop client.
@@ -31,20 +36,20 @@ namespace ChainSafe.Gaming.HyperPlay
         /// <param name="method">JsonRPC method name.</param>
         /// <param name="parameters">JsonRPC request parameters.</param>
         /// <returns>Rpc Response.</returns>
-        public Task<RpcResponseMessage> Request(string method, params object[] parameters)
+        public virtual Task<RpcResponseMessage> Request(string method, params object[] parameters)
         {
             string id = Guid.NewGuid().ToString();
-            
+
             var request = new RpcRequestMessage(id, method, parameters);
 
             string message = JsonConvert.SerializeObject(request);
-            
+
             var requestTcs = new TaskCompletionSource<RpcResponseMessage>();
-            
-            _requestTcsMap.Add(id, requestTcs);
-            
+
+            requestTcsMap.Add(id, requestTcs);
+
             Request(message, gameObject.name, nameof(Response), nameof(RequestError));
-            
+
             return requestTcs.Task;
         }
 
@@ -57,20 +62,19 @@ namespace ChainSafe.Gaming.HyperPlay
         {
             var response = JsonConvert.DeserializeObject<RpcResponseMessage>(result);
 
-            if (_requestTcsMap.TryGetValue(response.Id.ToString(), out TaskCompletionSource<RpcResponseMessage> requestTcs))
+            if (requestTcsMap.TryGetValue(response.Id.ToString(), out TaskCompletionSource<RpcResponseMessage> requestTcs))
             {
                 if (!requestTcs.TrySetResult(response))
                 {
                     requestTcs.SetException(new Web3Exception("Error setting result."));
                 }
             }
-
             else
             {
                 throw new Web3Exception("Can't find Request Task.");
             }
         }
-        
+
         /// <summary>
         /// Request Error callback.
         /// </summary>
@@ -79,43 +83,70 @@ namespace ChainSafe.Gaming.HyperPlay
         public void RequestError(string error)
         {
             var response = JsonConvert.DeserializeObject<RpcResponseMessage>(error);
-            
-            if (_requestTcsMap.TryGetValue(response.Id.ToString(), out TaskCompletionSource<RpcResponseMessage> requestTcs))
+
+            if (requestTcsMap.TryGetValue(response.Id.ToString(), out TaskCompletionSource<RpcResponseMessage> requestTcs))
             {
                 if (!requestTcs.TrySetException(new Web3Exception(response.Error.Message)))
                 {
                     requestTcs.SetException(new Web3Exception($"Error setting error: {response.Error.Message}"));
                 }
             }
-
             else
             {
                 throw new Web3Exception("Can't find request Task.");
             }
         }
 
-        public Task<string> Connect(Chain chain)
+        public virtual async Task<string> Connect(IChainConfig chainConfig, ChainRegistryProvider chainRegistryProvider)
         {
-            if (_connectionTcs != null && !_connectionTcs.Task.IsCompleted)
+            var chain = await WalletChain(chainConfig, chainRegistryProvider);
+
+            if (connectionTcs != null && !connectionTcs.Task.IsCompleted)
             {
-                _connectionTcs.SetCanceled();
+                connectionTcs.SetCanceled();
             }
 
-            _connectionTcs = new TaskCompletionSource<string>();
-            
+            connectionTcs = new TaskCompletionSource<string>();
+
             Connect(JsonConvert.SerializeObject(chain), gameObject.name, nameof(Connected), nameof(ConnectError));
 
-            return _connectionTcs.Task;
+            return await connectionTcs.Task;
         }
-        
+
+        private async Task<WalletChain> WalletChain(IChainConfig chainConfig, ChainRegistryProvider chainRegistryProvider)
+        {
+            int chainId = int.Parse(chainConfig.ChainId);
+
+            var registryChain = await chainRegistryProvider.GetChain((ulong)chainId);
+
+            var nativeCurrency = registryChain?.NativeCurrencyInfo;
+
+            string hexChainId = new BigInteger(chainId).ToHexBigInteger().HexValue;
+
+            return new WalletChain
+            {
+                ChainId = hexChainId,
+                Name = registryChain != null ? registryChain.Name : chainConfig.Chain,
+                RpcUrls = registryChain != null ? registryChain.RPC : new string[] { chainConfig.Rpc },
+                NativeCurrency = registryChain != null
+                    ? new NativeCurrency
+                    {
+                        Name = nativeCurrency.Name,
+                        Symbol = nativeCurrency.Symbol,
+                        Decimals = (int)nativeCurrency.Decimals,
+                    }
+                    : new NativeCurrency(chainConfig.Symbol),
+            };
+        }
+
         public void Connected(string result)
         {
-            _connectionTcs.SetResult(result);
+            connectionTcs.SetResult(result);
         }
-        
+
         public void ConnectError(string error)
         {
-            _connectionTcs.SetException(new Web3Exception(error));
+            connectionTcs.SetException(new Web3Exception(error));
         }
     }
 }

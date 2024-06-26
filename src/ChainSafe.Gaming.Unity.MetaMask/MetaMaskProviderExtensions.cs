@@ -3,7 +3,7 @@ using ChainSafe.Gaming.Web3.Core.Logout;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ChainSafe.Gaming.MetaMask.Unity
+namespace ChainSafe.Gaming.Unity.MetaMask
 {
     /// <summary>
     /// <see cref="MetaMaskProvider"/> extension methods.

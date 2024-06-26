@@ -70,5 +70,8 @@ mergeInto(LibraryManager.library, {
         {
             nethereumUnityInstance.SendMessage(parsedObjectName, parsedFallback, e.message);
         }
+    },
+    IsMetaMask: function() {
+        return window.ethereum.isMetaMask;
     }
 });
