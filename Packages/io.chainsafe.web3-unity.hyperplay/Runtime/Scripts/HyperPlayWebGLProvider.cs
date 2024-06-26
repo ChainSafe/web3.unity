@@ -1,9 +1,15 @@
+using System;
+using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm;
+using ChainSafe.Gaming.Evm.Network;
+using ChainSafe.Gaming.HyperPlay.Dto;
 using ChainSafe.Gaming.LocalStorage;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Environment;
+using Nethereum.Hex.HexTypes;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace ChainSafe.Gaming.HyperPlay
 {
@@ -15,6 +21,8 @@ namespace ChainSafe.Gaming.HyperPlay
         private readonly IHyperPlayConfig _config;
         private readonly IHyperPlayData _data;
         private readonly DataStorage _dataStorage;
+        private readonly IChainConfig _chainConfig;
+        private readonly ChainRegistryProvider _chainRegistryProvider;
         private readonly HyperPlayController _hyperPlayController;
         
         /// <summary>
@@ -31,6 +39,8 @@ namespace ChainSafe.Gaming.HyperPlay
             _config = config;
             _data = data;
             _dataStorage = dataStorage;
+            _chainConfig = chainConfig;
+            _chainRegistryProvider = chainRegistryProvider;
             
             // Initialize Unity controller.
             _hyperPlayController = Object.FindObjectOfType<HyperPlayController>();
@@ -54,6 +64,45 @@ namespace ChainSafe.Gaming.HyperPlay
             string[] accounts = await Perform<string[]>("eth_requestAccounts");
 
             string account = accounts[0];
+
+            string currentChainId = await Perform<string>("eth_chainId");
+
+            var currentIntegerChainId = (new HexBigInteger(currentChainId)).Value;
+
+            int intChainId = int.Parse(_chainConfig.ChainId);
+            
+            // If chain is different change it.
+            if (currentIntegerChainId != intChainId)
+            {
+                string hexChainId = (new BigInteger(intChainId)).ToHexBigInteger().HexValue;
+                
+                try
+                {
+                    await Perform<string>("wallet_switchEthereumChain", new Chain
+                    {
+                        ChainId = hexChainId
+                    });
+                }
+                catch (Exception)
+                {
+                    var chain = await _chainRegistryProvider.GetChain((ulong) intChainId);
+
+                    var nativeCurrency = chain?.NativeCurrencyInfo;
+                    
+                    await Perform<string>("wallet_addEthereumChain", new Chain
+                    {
+                        ChainId = hexChainId,
+                        Name = chain != null ? chain.Name : _chainConfig.Chain,
+                        RpcUrls = chain != null ? chain.RPC : new string[]{_chainConfig.Rpc},
+                        NativeCurrency = chain != null ? new NativeCurrency
+                        {
+                            Name = nativeCurrency.Name,
+                            Symbol = nativeCurrency.Symbol,
+                            Decimals = (int) nativeCurrency.Decimals,
+                        } : new NativeCurrency(_chainConfig.Symbol),
+                    });
+                }
+            }
             
             // Saved account exists.
             if (_data.RememberSession)

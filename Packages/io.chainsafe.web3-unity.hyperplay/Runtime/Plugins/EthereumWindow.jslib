@@ -16,6 +16,7 @@ mergeInto(LibraryManager.library, {
             }
             
             var json = JSON.stringify(rpcResponse);
+            console.log(json);
             nethereumUnityInstance.SendMessage(parsedObjectName, parsedCallback, json);
         }
         catch(e)
@@ -30,6 +31,7 @@ mergeInto(LibraryManager.library, {
                 }
             }
             var json = JSON.stringify(rpcResponse);
+            console.log(e.message);
             nethereumUnityInstance.SendMessage(parsedObjectName, parsedFallback, json);
         }
     }
