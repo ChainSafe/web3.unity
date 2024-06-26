@@ -1,7 +1,19 @@
 var Web3AuthWebGLNoModal =  {
     $Web3AuthWebGLNoModal : {},
+    cs_inject_web3auth: function () {
+        console.log("Injecting Web3Auth scripts...")
+        const scripts = [ "https://cdn.jsdelivr.net/npm/@web3auth/no-modal",
+        "https://cdn.jsdelivr.net/npm/@web3auth/wallet-services-plugin",
+        "https://cdn.jsdelivr.net/npm/@web3auth/openlogin-adapter",
+        "https://cdn.jsdelivr.net/npm/@web3auth/ethereum-provider"];
+        scripts.forEach((scriptUrl) => {
+            const script = document.createElement("script");
+            script.src = scriptUrl;
+            document.head.appendChild(script);
+        });
+    },
 
-     cs_web3auth_setLoginCallback: function (login) {
+    cs_web3auth_setLoginCallback: function (login) {
         Web3AuthWebGLNoModal.loginCallback = function(sessionId){
             var returnStr = sessionId;
             var bufferSize = lengthBytesUTF8(returnStr) + 1;
