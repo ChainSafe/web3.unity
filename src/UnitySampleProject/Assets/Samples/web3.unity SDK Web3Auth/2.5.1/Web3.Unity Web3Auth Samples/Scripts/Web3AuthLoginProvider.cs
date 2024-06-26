@@ -82,14 +82,15 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
             Debug.Log("Restoring existing Web3Auth session (Remember Me");
         }
         #endif
-
     }
-
+#if !UNITY_EDITOR && UNITY_WEBGL
     private async void Web3AuthSet(string sessionId)
     {
+        Web3AuthWebGLConnected -= Web3AuthSet;
         KeyStoreManagerUtils.savePreferenceData(KeyStoreManagerUtils.SESSION_ID, sessionId);
         await TryLogin();
     }
+#endif
     
 #if !UNITY_EDITOR && UNITY_WEBGL
     [MonoPInvokeCallback(typeof(Action))]

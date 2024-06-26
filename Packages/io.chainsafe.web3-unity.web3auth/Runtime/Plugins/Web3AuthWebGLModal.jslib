@@ -7,11 +7,10 @@ var Web3AuthWebGLNoModal =  {
             var bufferSize = lengthBytesUTF8(returnStr) + 1;
             var buffer = _malloc(bufferSize);
             stringToUTF8(returnStr, buffer, bufferSize);
-            Module['dynCall_vi'](login, [buffer]);
+            Module.dynCall_vi(login, [buffer]);
         };
     },
     InitWeb3Auth: function (clientId, chainId, rpcTarget, displayName, blockExplorerUrl, ticker, tickerName, network) {
-        // Initialize web3auth and other variables
         window.web3auth = null;
         window.walletServicesPlugin = null;
 
@@ -36,13 +35,8 @@ var Web3AuthWebGLNoModal =  {
             });
 
             window.web3auth.on("connected", (data) => {
-                // Step 1: Retrieve the item from localStorage
                 const openLoginStore = localStorage.getItem("openlogin_store");
-
-                // Step 2: Parse the string into an object
                 const openLoginStoreObj = JSON.parse(openLoginStore);
-
-                // Step 3: Access the sessionId property
                 const sessionId = openLoginStoreObj.sessionId;
 
                 Web3AuthWebGLNoModal.loginCallback(sessionId);
@@ -63,21 +57,12 @@ var Web3AuthWebGLNoModal =  {
                 loginProvider: UTF8ToString(provider)
             });
             if (!rememberMe){
-                localStorage.removeItem("openlogin_store", JSON.stringify({ sessionId: window.web3auth.sessionId }));
+                localStorage.removeItem("openlogin_store");
             }
         } catch (error) {
             console.log(error.message);
         }
     },
-
-    Web3AuthLogout: function () {
-        window.web3auth.logout().then(() => {
-            $(".btn-logged-in").hide();
-            $(".btn-logged-out").show();
-        }).catch(error => {
-            console.error(error.message);
-        });
-    }
 };
 
 autoAddDeps(Web3AuthWebGLNoModal, '$Web3AuthWebGLNoModal');
