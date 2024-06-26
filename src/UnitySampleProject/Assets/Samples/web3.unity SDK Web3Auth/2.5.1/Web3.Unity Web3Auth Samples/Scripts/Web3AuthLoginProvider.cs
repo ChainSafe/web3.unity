@@ -74,7 +74,6 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
         #else  
         if (!string.IsNullOrEmpty(KeyStoreManagerUtils.getPreferencesData(KeyStoreManagerUtils.SESSION_ID)))
         {
-            Debug.Log(KeyStoreManagerUtils.getPreferencesData(KeyStoreManagerUtils.SESSION_ID));
             rememberMe = true;
             await TryLogin();
             Debug.Log("Restoring existing Web3Auth session (Remember Me");
