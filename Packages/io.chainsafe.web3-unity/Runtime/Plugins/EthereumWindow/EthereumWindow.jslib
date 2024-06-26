@@ -16,7 +16,7 @@ mergeInto(LibraryManager.library, {
             }
             
             var json = JSON.stringify(rpcResponse);
-            nethereumUnityInstance.SendMessage(parsedObjectName, parsedCallback, json);
+            web3UnityInstance.SendMessage(parsedObjectName, parsedCallback, json);
         }
         catch(e)
         {
@@ -30,7 +30,7 @@ mergeInto(LibraryManager.library, {
                 }
             }
             var json = JSON.stringify(rpcResponse);
-            nethereumUnityInstance.SendMessage(parsedObjectName, parsedFallback, json);
+            web3UnityInstance.SendMessage(parsedObjectName, parsedFallback, json);
         }
     },
     Connect: async function (chain, gameObjectName, callback, fallback) {
@@ -57,18 +57,18 @@ mergeInto(LibraryManager.library, {
                     
                     else
                     {
-                        nethereumUnityInstance.SendMessage(parsedObjectName, parsedFallback, e.message);
+                        web3UnityInstance.SendMessage(parsedObjectName, parsedFallback, e.message);
                         
                         return null;
                     }
                 }
             }
             
-            nethereumUnityInstance.SendMessage(parsedObjectName, parsedCallback, accounts[0]);
+            web3UnityInstance.SendMessage(parsedObjectName, parsedCallback, accounts[0]);
         }
         catch(e)
         {
-            nethereumUnityInstance.SendMessage(parsedObjectName, parsedFallback, e.message);
+            web3UnityInstance.SendMessage(parsedObjectName, parsedFallback, e.message);
         }
     },
     IsMetaMask: function() {
