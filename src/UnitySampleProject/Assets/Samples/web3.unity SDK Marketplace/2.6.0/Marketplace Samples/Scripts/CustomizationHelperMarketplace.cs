@@ -3,80 +3,85 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-/// <summary>
-/// Customization helper to assist with custom config colours.
-/// </summary>
-public static class CustomizationHelperMarketplace
+namespace ChainSafe.Gaming.Marketplace
 {
     /// <summary>
-    /// Sets custom colours for menu and text objects.
+    /// Customization helper to assist with custom config colours.
     /// </summary>
-    public static void SetCustomColours(
-        TMP_FontAsset displayFont,
-        List<GameObject> primaryBackgroundObjects, Color primaryBackgroundColour,
-        List<GameObject> menuBackgroundObjects, Color menuBackgroundColour,
-        List<GameObject> primaryTextObjects, Color primaryTextColour,
-        List<GameObject> secondaryTextObjects, Color secondaryTextColour,
-        List<GameObject> borderButtonObjects, Color borderButtonColour,
-        List<GameObject> displayLineObjects)
+    public static class CustomizationHelperMarketplace
     {
-        var objectsAndColours = new List<(List<GameObject> objects, Color color)>
+        /// <summary>
+        /// Sets custom colours for menu and text objects.
+        /// </summary>
+        public static void SetCustomColours(
+            TMP_FontAsset displayFont,
+            List<GameObject> primaryBackgroundObjects, Color primaryBackgroundColour,
+            List<GameObject> menuBackgroundObjects, Color menuBackgroundColour,
+            List<GameObject> primaryTextObjects, Color primaryTextColour,
+            List<GameObject> secondaryTextObjects, Color secondaryTextColour,
+            List<GameObject> borderButtonObjects, Color borderButtonColour,
+            List<GameObject> displayLineObjects)
         {
-            (primaryBackgroundObjects, primaryBackgroundColour),
-            (menuBackgroundObjects, menuBackgroundColour),
-            (primaryTextObjects, primaryTextColour),
-            (secondaryTextObjects, secondaryTextColour)
-        };
-
-        foreach (var (objects, colour) in objectsAndColours)
-        {
-            foreach (var item in objects)
+            var objectsAndColours = new List<(List<GameObject> objects, Color color)>
             {
-                var imageRenderer = item.GetComponent<Image>();
-                if (imageRenderer != null)
+                (primaryBackgroundObjects, primaryBackgroundColour),
+                (menuBackgroundObjects, menuBackgroundColour),
+                (primaryTextObjects, primaryTextColour),
+                (secondaryTextObjects, secondaryTextColour)
+            };
+
+            foreach (var (objects, colour) in objectsAndColours)
+            {
+                foreach (var item in objects)
                 {
-                    imageRenderer.color = colour;
-                    var imageBorder = item.GetComponent<Outline>();
-                    if (imageBorder != null)
+                    var imageRenderer = item.GetComponent<Image>();
+                    if (imageRenderer != null)
                     {
-                        imageBorder.effectColor = secondaryTextColour;
+                        imageRenderer.color = colour;
+                        var imageBorder = item.GetComponent<Outline>();
+                        if (imageBorder != null)
+                        {
+                            imageBorder.effectColor = secondaryTextColour;
+                        }
+                    }
+
+                    var textMeshPro = item.GetComponent<TextMeshProUGUI>();
+                    if (textMeshPro != null)
+                    {
+                        textMeshPro.font = displayFont;
+                        textMeshPro.color = colour;
                     }
                 }
-                var textMeshPro = item.GetComponent<TextMeshProUGUI>();
-                if (textMeshPro != null)
-                {
-                    textMeshPro.font = displayFont;
-                    textMeshPro.color = colour;
-                }
             }
-        }
-        SetButtonsAndLines(borderButtonObjects, borderButtonColour, displayLineObjects, secondaryTextColour);
-    }
 
-    /// <summary>
-    /// Sets border buttons & menu lines.
-    /// </summary>
-    private static void SetButtonsAndLines(
-        List<GameObject> borderButtonObjects, Color borderButtonColour,
-        List<GameObject> displayLineObjects, Color secondaryTextColour)
-    {
-        var objectsAndColours = new List<(List<GameObject> objects, Color color)>
+            SetButtonsAndLines(borderButtonObjects, borderButtonColour, displayLineObjects, secondaryTextColour);
+        }
+
+        /// <summary>
+        /// Sets border buttons & menu lines.
+        /// </summary>
+        private static void SetButtonsAndLines(
+            List<GameObject> borderButtonObjects, Color borderButtonColour,
+            List<GameObject> displayLineObjects, Color secondaryTextColour)
         {
-            (borderButtonObjects, borderButtonColour),
-            (displayLineObjects, borderButtonColour)
-        };
-        foreach (var (objects, colour) in objectsAndColours)
-        {
-            foreach (var item in objects)
+            var objectsAndColours = new List<(List<GameObject> objects, Color color)>
             {
-                var imageRenderer = item.GetComponent<Image>();
-                if (imageRenderer != null)
+                (borderButtonObjects, borderButtonColour),
+                (displayLineObjects, borderButtonColour)
+            };
+            foreach (var (objects, colour) in objectsAndColours)
+            {
+                foreach (var item in objects)
                 {
-                    imageRenderer.color = colour;
-                    var imageBorder = item.GetComponent<Outline>();
-                    if (imageBorder != null)
+                    var imageRenderer = item.GetComponent<Image>();
+                    if (imageRenderer != null)
                     {
-                        imageBorder.effectColor = secondaryTextColour;
+                        imageRenderer.color = colour;
+                        var imageBorder = item.GetComponent<Outline>();
+                        if (imageBorder != null)
+                        {
+                            imageBorder.effectColor = secondaryTextColour;
+                        }
                     }
                 }
             }
