@@ -3,6 +3,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/// <summary>
+/// Customization helper to assist with custom config colours.
+/// </summary>
 public static class CustomizationHelperMarketplace
 {
     /// <summary>
