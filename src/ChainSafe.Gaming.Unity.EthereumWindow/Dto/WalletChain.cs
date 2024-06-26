@@ -2,6 +2,9 @@ using Newtonsoft.Json;
 
 namespace ChainSafe.Gaming.Unity.EthereumWindow.Dto
 {
+    /// <summary>
+    /// Chain Data for switching and adding new chain to Ethereum Window (browser) wallet.
+    /// </summary>
     public struct WalletChain
     {
         [JsonProperty("chainId")]

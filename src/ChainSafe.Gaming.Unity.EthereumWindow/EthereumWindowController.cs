@@ -16,7 +16,7 @@ namespace ChainSafe.Gaming.Unity.EthereumWindow
     /// <summary>
     /// A controller script for making awaitable JsonRPC requests to browser wallets via window.ethereum.
     /// Make sure EthereumWindow.jslib is present in your Web3.Unity Package.
-    /// TODO: link to EthereumWindow.jslib.
+    /// https://github.com/ChainSafe/web3.unity/blob/main/Packages/io.chainsafe.web3-unity/Runtime/Plugins/EthereumWindow/EthereumWindow.jslib
     /// </summary>
     public class EthereumWindowController : MonoBehaviour
     {
@@ -97,6 +97,13 @@ namespace ChainSafe.Gaming.Unity.EthereumWindow
             }
         }
 
+        /// <summary>
+        /// Connects to an Ethereum window (browser) wallet.
+        /// </summary>
+        /// <param name="chainConfig">Chain config for what chain to connect to.</param>
+        /// <param name="chainRegistryProvider">List of all known chains with details.</param>
+        /// <returns>Connected account address.</returns>
+        /// <exception cref="Web3Exception">Throws Exception if connection is unsuccessful.</exception>
         public virtual async Task<string> Connect(IChainConfig chainConfig, ChainRegistryProvider chainRegistryProvider)
         {
             var chain = await WalletChain(chainConfig, chainRegistryProvider);
