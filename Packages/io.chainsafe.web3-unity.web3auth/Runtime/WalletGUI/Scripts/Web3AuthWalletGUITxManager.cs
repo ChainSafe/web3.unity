@@ -78,7 +78,10 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
         
         PromptTransactionRequest();
     }
-
+    
+    /// <summary>
+    /// Prompts transaction request display.
+    /// </summary>
     private void PromptTransactionRequest()
     {
         TransactionRequested transactionRequested = _transactionQueue.Peek();

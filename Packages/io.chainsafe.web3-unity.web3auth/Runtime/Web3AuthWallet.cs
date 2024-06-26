@@ -151,11 +151,11 @@ namespace ChainSafe.GamingSdk.Web3Auth
 
             var request = new TransactionRequested(id, transaction);
             
-            transactionHandler.RequestTransaction(request);
-
             var tcs = new TaskCompletionSource<TransactionResponse>();
             
             _transactionPool.Add(request, tcs);
+            
+            transactionHandler.RequestTransaction(request);
             
 			return tcs.Task;
 		}
