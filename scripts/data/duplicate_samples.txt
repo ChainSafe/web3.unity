@@ -3,4 +3,4 @@ src/UnitySampleProject/Assets/Samples/web3.unity SDK Web3Auth:Web3Auth Samples:P
 src/UnitySampleProject/Assets/Samples/web3.unity SDK Lootboxes:Lootboxes Samples:Packages/io.chainsafe.web3-unity.lootboxes/Samples~/Web3.Unity Chainlink Lootboxes/
 src/UnitySampleProject/Assets/Samples/web3.unity SDK Ramp:Ramp Samples:Packages/io.chainsafe.web3-unity.ramp/Samples~/Web3.Unity Ramp/
 src/UnitySampleProject/Assets/Samples/web3.unity SDK HyperPlay:HyperPlay Samples:Packages/io.chainsafe.web3-unity.hyperplay/Samples~/Web3.Unity HyperPlay/
-src/UnitySampleProject/Assets/Samples/web3.unity SDK Marketplace:Marketplace Samples:Packages/io.chainsafe.web3-unity.marketplace/Samples~/Marketplace/
+src/UnitySampleProject/Assets/Samples/web3.unity SDK Marketplace:Marketplace Samples:Packages/io.chainsafe.web3-unity.marketplace/Samples~/Web3.Unity Marketplace/
