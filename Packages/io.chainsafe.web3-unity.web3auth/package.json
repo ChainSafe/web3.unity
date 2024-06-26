@@ -24,7 +24,7 @@
     },
     "samples": [
         {
-            "displayName": "Web3.Unity Web3Auth Samples",
+            "displayName": "Web3Auth Samples",
             "description": "Contains implementations for Web3 Auth Sample Operations using Web3Auth Package.",
             "path": "Samples~/Web3.Unity Web3Auth"
         }
