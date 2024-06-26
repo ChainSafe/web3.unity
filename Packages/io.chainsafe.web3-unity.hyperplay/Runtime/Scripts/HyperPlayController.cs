@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.HyperPlay.Dto;
 using ChainSafe.Gaming.Web3;
 using Nethereum.JsonRpc.Client.RpcMessages;
 using Newtonsoft.Json;
@@ -16,9 +17,14 @@ namespace ChainSafe.Gaming.HyperPlay
     {
         [DllImport("__Internal")]
         public static extern string Request(string message, string gameObjectName, string callback, string fallback);
+        
+        [DllImport("__Internal")]
+        public static extern string Connect(string chain, string gameObjectName, string callback, string fallback);
 
         private readonly Dictionary<string, TaskCompletionSource<RpcResponseMessage>> _requestTcsMap = new Dictionary<string, TaskCompletionSource<RpcResponseMessage>>();
-        
+
+        private TaskCompletionSource<string> _connectionTcs;
+
         /// <summary>
         /// Make JsonRPC request to the HyperPlay side-loaded browser games on HyperPlay desktop client.
         /// </summary>
@@ -86,6 +92,30 @@ namespace ChainSafe.Gaming.HyperPlay
             {
                 throw new Web3Exception("Can't find request Task.");
             }
+        }
+
+        public Task<string> Connect(Chain chain)
+        {
+            if (_connectionTcs != null && !_connectionTcs.Task.IsCompleted)
+            {
+                _connectionTcs.SetCanceled();
+            }
+
+            _connectionTcs = new TaskCompletionSource<string>();
+            
+            Connect(JsonConvert.SerializeObject(chain), gameObject.name, nameof(Connected), nameof(ConnectError));
+
+            return _connectionTcs.Task;
+        }
+        
+        public void Connected(string result)
+        {
+            _connectionTcs.SetResult(result);
+        }
+        
+        public void ConnectError(string error)
+        {
+            _connectionTcs.SetException(new Web3Exception(error));
         }
     }
 }

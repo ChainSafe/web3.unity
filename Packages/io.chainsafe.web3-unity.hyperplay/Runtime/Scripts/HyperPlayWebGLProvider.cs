@@ -61,48 +61,30 @@ namespace ChainSafe.Gaming.HyperPlay
         /// <returns>Signed-in account public address.</returns>
         public override async Task<string> Connect()
         {
-            string[] accounts = await Perform<string[]>("eth_requestAccounts");
-
-            string account = accounts[0];
-
-            string currentChainId = await Perform<string>("eth_chainId");
-
-            var currentIntegerChainId = (new HexBigInteger(currentChainId)).Value;
-
-            int intChainId = int.Parse(_chainConfig.ChainId);
+            int chainId = int.Parse(_chainConfig.ChainId);
             
-            // If chain is different change it.
-            if (currentIntegerChainId != intChainId)
-            {
-                string hexChainId = (new BigInteger(intChainId)).ToHexBigInteger().HexValue;
-                
-                try
-                {
-                    await Perform<string>("wallet_switchEthereumChain", new Chain
-                    {
-                        ChainId = hexChainId
-                    });
-                }
-                catch (Exception)
-                {
-                    var chain = await _chainRegistryProvider.GetChain((ulong) intChainId);
+            var registryChain = await _chainRegistryProvider.GetChain((ulong) chainId);
 
-                    var nativeCurrency = chain?.NativeCurrencyInfo;
-                    
-                    await Perform<string>("wallet_addEthereumChain", new Chain
+            var nativeCurrency = registryChain?.NativeCurrencyInfo;
+            
+            string hexChainId = (new BigInteger(chainId)).ToHexBigInteger().HexValue;
+
+            Chain chain = new Chain
+            {
+                ChainId = hexChainId,
+                Name = registryChain != null ? registryChain.Name : _chainConfig.Chain,
+                RpcUrls = registryChain != null ? registryChain.RPC : new string[] { _chainConfig.Rpc },
+                NativeCurrency = registryChain != null
+                    ? new NativeCurrency
                     {
-                        ChainId = hexChainId,
-                        Name = chain != null ? chain.Name : _chainConfig.Chain,
-                        RpcUrls = chain != null ? chain.RPC : new string[]{_chainConfig.Rpc},
-                        NativeCurrency = chain != null ? new NativeCurrency
-                        {
-                            Name = nativeCurrency.Name,
-                            Symbol = nativeCurrency.Symbol,
-                            Decimals = (int) nativeCurrency.Decimals,
-                        } : new NativeCurrency(_chainConfig.Symbol),
-                    });
-                }
-            }
+                        Name = nativeCurrency.Name,
+                        Symbol = nativeCurrency.Symbol,
+                        Decimals = (int)nativeCurrency.Decimals,
+                    }
+                    : new NativeCurrency(_chainConfig.Symbol),
+            };
+            
+            string account = await _hyperPlayController.Connect(chain);
             
             // Saved account exists.
             if (_data.RememberSession)
