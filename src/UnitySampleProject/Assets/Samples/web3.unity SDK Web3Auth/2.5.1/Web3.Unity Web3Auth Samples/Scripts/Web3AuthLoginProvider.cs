@@ -48,9 +48,7 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     [DllImport("__Internal")]
     private static extern void Web3AuthLogin(string provider, bool rememberMe);    
     [DllImport("__Internal")]
-    private static extern void cs_web3auth_setLoginCallback(Action<string> callback);
-    [DllImport("__Internal")]
-    private static extern void cs_inject_web3auth();
+    private static extern void SetLoginCallback(Action<string> callback);
     
     public static event Action<string> Web3AuthWebGLConnected;
     #endif
@@ -69,9 +67,8 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
         #if !UNITY_EDITOR && UNITY_WEBGL
         Web3AuthWebGLConnected += Web3AuthSet;
         var projectSettings = ProjectConfigUtilities.Load();
+        SetLoginCallback(Web3AuthConnected);
         //1155 is a decimal number, we need to convert it to an integer
-        cs_inject_web3auth();
-        cs_web3auth_setLoginCallback(Web3AuthConnected);
         InitWeb3Auth(clientId, new HexBigInteger(BigInteger.Parse(projectSettings.ChainId)).HexValue, 
         projectSettings.Rpc, projectSettings.Network, "", projectSettings.Symbol, "", network.ToString().ToLower());
         #else  
