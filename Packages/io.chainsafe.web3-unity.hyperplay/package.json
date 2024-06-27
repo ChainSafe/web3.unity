@@ -25,9 +25,9 @@
     },
     "samples": [
         {
-            "displayName": "HyperPlay Usage Sample",
+            "displayName": "HyperPlay Samples",
             "description": "Contains example of integration and usage of HyperPlay functionality.",
-            "path": "Samples~/Web3.Unity HyperPlay Samples"
+            "path": "Samples~/Web3.Unity HyperPlay"
         }
     ]
 }

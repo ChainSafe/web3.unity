@@ -13,6 +13,7 @@ namespace ChainSafe.Gaming.UnityPackage
         [SerializeField] private string network;
         [SerializeField] private string symbol;
         [SerializeField] private string rpc;
+        [SerializeField] private string blockExplorerUrl;
 
         public string Symbol
         {
@@ -60,6 +61,12 @@ namespace ChainSafe.Gaming.UnityPackage
         {
             get => rpc;
             set => rpc = value;
+        }
+        
+        public string BlockExplorerUrl
+        {
+            get => blockExplorerUrl;
+            set => blockExplorerUrl = value;
         }
     }
 }

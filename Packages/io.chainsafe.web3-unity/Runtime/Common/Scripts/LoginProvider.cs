@@ -36,7 +36,7 @@ namespace Scenes
         /// <summary>
         /// Try to Login and displays error and throws exception on a failed attempt.
         /// </summary>
-        public async Task TryLogin()
+        public virtual async Task TryLogin()
         {
             try
             {
