@@ -296,6 +296,10 @@ PrefabInstance:
       value: MarketplaceLoginGUI
       objectReference: {fileID: 0}
     - target: {fileID: 5223788654180130285, guid: 9632a7d8952d45449843f4e8c3be0acc, type: 3}
+      propertyPath: test
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5223788654180130285, guid: 9632a7d8952d45449843f4e8c3be0acc, type: 3}
       propertyPath: menuBackgroundColour.a
       value: 1
       objectReference: {fileID: 0}

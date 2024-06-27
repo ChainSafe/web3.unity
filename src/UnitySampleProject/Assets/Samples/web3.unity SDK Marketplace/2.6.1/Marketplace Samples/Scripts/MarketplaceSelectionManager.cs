@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,6 +32,7 @@ namespace ChainSafe.Gaming.Marketplace
             createMarketplaceButton.onClick.AddListener(OpenCreateMarketplaceMenu);
             browseMarketplaceButton.onClick.AddListener(OpenBrowseMarketplaceMenu);
             openSelectMarketplaceOptionButton.onClick.AddListener(OpenSelectMarketplaceOptionMenu);
+            StartCoroutine(WaitForTokenExpiration());
         }
 
         /// <summary>
@@ -58,6 +61,19 @@ namespace ChainSafe.Gaming.Marketplace
             createMarketplaceMenu.SetActive(false);
             browseMarketplaceMenu.SetActive(false);
             selectMarketplaceMenu.SetActive(true);
+        }
+        
+        // TODO: Shouldn't be firing instantly, fix later.
+        /// <summary>
+        /// Waits for token expiry then refreshes it.
+        /// </summary>
+        private IEnumerator WaitForTokenExpiration()
+        {
+            DateTime currentTime = DateTime.UtcNow;
+            TimeSpan timeToWait = MarketplaceAuth.BearerTokenExpires - currentTime;
+            yield return new WaitForSeconds((float)timeToWait.TotalSeconds);
+            Debug.Log("Refresh Expired");
+            //MarketplaceAuth.RefreshExpiredToken();
         }
 
         #endregion
