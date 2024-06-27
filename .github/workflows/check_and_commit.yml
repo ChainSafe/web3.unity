@@ -89,7 +89,7 @@ jobs:
             fi
           fi
 
-          git add "$PACKAGE_LIB_PATH." -f
+          git add "$PACKAGE_LIB_PATH$DEPENDENCY" -f
         done < "${GITHUB_WORKSPACE}/scripts/data/published_dependencies.txt"
     - uses: actions/cache@v2
       with:
@@ -98,6 +98,7 @@ jobs:
         restore-keys: |
           Library-
     - uses: game-ci/unity-test-runner@v3
+      if: ${{ github.ref_name == 'dev' }}
       id: tests
       env:
         UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
@@ -120,7 +121,7 @@ jobs:
         name: Coverage results for ${{ matrix.testMode }}
         path: ${{ steps.tests.outputs.coveragePath }}
     - name: Commit and Push changes
-      if: ${{ github.ref_name == 'dev' }}
+      if: ${{ github.ref_name == 'rob/scripts-data-formatting-1015' }}
       run: |
         git diff-index --cached --quiet HEAD || git commit -m 'Auto Commit [skip ci]
         - Duplicate Packages Samples
