@@ -89,7 +89,7 @@ jobs:
             fi
           fi
 
-          git add "$PACKAGE_LIB_PATH$DEPENDENCY" -f
+          git add "$PACKAGE_LIB_PATH." -f
         done < "${GITHUB_WORKSPACE}/scripts/data/published_dependencies.txt"
     - uses: actions/cache@v2
       with:
