@@ -37,7 +37,7 @@ jobs:
           display_name_prefix="display_name:"
           destination_prefix="destination:"
           
-          entry=$(echo "$entry" | tr -d '\t' | tr -d ' ')
+          entry=$(echo "$entry" | tr -d '\t')
           
           if [[ $entry = $source_prefix* ]]
           then
