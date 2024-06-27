@@ -41,7 +41,7 @@ jobs:
           
           if [[ $entry = $source_prefix* ]]
           then
-            SOURCE_PATH="${GITHUB_WORKSPACE}/{entry#"$source_prefix"}"
+            SOURCE_PATH="${GITHUB_WORKSPACE}/${entry#"$source_prefix"}"
           elif [[ $entry = $display_name_prefix* ]]
           then
             DESTINATION_DIRECTORY=${entry#"$display_name_prefix"}
