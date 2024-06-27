@@ -1,9 +1,11 @@
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm;
 using ChainSafe.Gaming.LocalStorage;
+using ChainSafe.Gaming.Unity.EthereumWindow;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Environment;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace ChainSafe.Gaming.HyperPlay
 {
@@ -15,7 +17,9 @@ namespace ChainSafe.Gaming.HyperPlay
         private readonly IHyperPlayConfig _config;
         private readonly IHyperPlayData _data;
         private readonly DataStorage _dataStorage;
-        private readonly HyperPlayController _hyperPlayController;
+        private readonly IChainConfig _chainConfig;
+        private readonly ChainRegistryProvider _chainRegistryProvider;
+        private readonly EthereumWindowController _ethereumController;
         
         /// <summary>
         /// Initializes a new instance of the <see cref="HyperPlayWebGLProvider"/> class.
@@ -31,18 +35,20 @@ namespace ChainSafe.Gaming.HyperPlay
             _config = config;
             _data = data;
             _dataStorage = dataStorage;
+            _chainConfig = chainConfig;
+            _chainRegistryProvider = chainRegistryProvider;
             
             // Initialize Unity controller.
-            _hyperPlayController = Object.FindObjectOfType<HyperPlayController>();
+            _ethereumController = Object.FindObjectOfType<EthereumWindowController>();
 
-            if (_hyperPlayController == null)
+            if (_ethereumController == null)
             {
-                GameObject controllerObj = new GameObject(nameof(HyperPlayController), typeof(HyperPlayController));
+                GameObject controllerObj = new GameObject(nameof(EthereumWindowController), typeof(EthereumWindowController));
 
-                _hyperPlayController = controllerObj.GetComponent<HyperPlayController>();
+                _ethereumController = controllerObj.GetComponent<EthereumWindowController>();
             }
 
-            Object.DontDestroyOnLoad(_hyperPlayController.gameObject);
+            Object.DontDestroyOnLoad(_ethereumController.gameObject);
         }
 
         /// <summary>
@@ -51,9 +57,7 @@ namespace ChainSafe.Gaming.HyperPlay
         /// <returns>Signed-in account public address.</returns>
         public override async Task<string> Connect()
         {
-            string[] accounts = await Perform<string[]>("eth_requestAccounts");
-
-            string account = accounts[0];
+            string account = await _ethereumController.Connect(_chainConfig, _chainRegistryProvider);
             
             // Saved account exists.
             if (_data.RememberSession)
@@ -82,7 +86,7 @@ namespace ChainSafe.Gaming.HyperPlay
         /// <returns>RPC request Response.</returns>
         public override async Task<T> Perform<T>(string method, params object[] parameters)
         {
-            var response = await _hyperPlayController.Request(method, parameters);
+            var response = await _ethereumController.Request(method, parameters);
             
             return response.Result.ToObject<T>();
         }

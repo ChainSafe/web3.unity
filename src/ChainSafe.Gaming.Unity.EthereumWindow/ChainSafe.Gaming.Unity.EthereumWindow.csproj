@@ -15,8 +15,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Reference Include="../../libs/Nethereum-UnityAOT/Nethereum.Unity.dll" />
-        <Reference Include="../../libs/Nethereum-UnityAOT/Nethereum.Unity.Metamask.dll" />
         <Reference Include="../../libs/UnityEngine/UnityEngine.dll" />
     </ItemGroup>
 

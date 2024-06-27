@@ -2,13 +2,12 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Analytics;
-using ChainSafe.Gaming.Web3.Core.Logout;
 using ChainSafe.Gaming.Web3.Environment;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace ChainSafe.Gaming.MetaMask.Unity
+namespace ChainSafe.Gaming.Unity.MetaMask
 {
     /// <summary>
     /// Concrete implementation of <see cref="MetaMaskProvider"/>.
@@ -20,7 +19,7 @@ namespace ChainSafe.Gaming.MetaMask.Unity
         private readonly MetaMaskController metaMaskController;
         private readonly IChainConfig chainConfig;
         private readonly IAnalyticsClient analyticsClient;
-        private readonly IProjectConfig projectConfig;
+        private readonly ChainRegistryProvider chainRegistryProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MetaMaskProvider"/> class.
@@ -37,7 +36,7 @@ namespace ChainSafe.Gaming.MetaMask.Unity
             this.logWriter = logWriter;
             this.chainConfig = chainConfig;
             this.analyticsClient = analyticsClient;
-            this.projectConfig = projectConfig;
+            this.chainRegistryProvider = chainRegistryProvider;
 
             if (Application.isEditor || Application.platform != RuntimePlatform.WebGLPlayer)
             {
@@ -57,8 +56,6 @@ namespace ChainSafe.Gaming.MetaMask.Unity
             }
 
             Object.DontDestroyOnLoad(metaMaskController.gameObject);
-
-            metaMaskController.Initialize(this.logWriter);
         }
 
         public override Task Disconnect()
@@ -70,7 +67,9 @@ namespace ChainSafe.Gaming.MetaMask.Unity
 
         public override async Task<T> Perform<T>(string method, params object[] parameters)
         {
-            return await metaMaskController.Request<T>(method, parameters);
+            var response = await metaMaskController.Request(method, parameters);
+
+            return response.Result.ToObject<T>();
         }
 
         /// <summary>
@@ -88,7 +87,7 @@ namespace ChainSafe.Gaming.MetaMask.Unity
                 PackageName = "io.chainsafe.web3-unity",
             });
 
-            return await metaMaskController.Connect();
+            return await metaMaskController.Connect(chainConfig, chainRegistryProvider);
         }
     }
 }
