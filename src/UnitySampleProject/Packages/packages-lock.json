@@ -24,7 +24,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.rider": {
-      "version": "3.0.28",
+      "version": "3.0.31",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -172,7 +172,7 @@
       "source": "local",
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.0.2",
-        "io.chainsafe.web3-unity": "2.6.0"
+        "io.chainsafe.web3-unity": "2.6.1"
       }
     },
     "io.chainsafe.web3-unity.ramp": {
