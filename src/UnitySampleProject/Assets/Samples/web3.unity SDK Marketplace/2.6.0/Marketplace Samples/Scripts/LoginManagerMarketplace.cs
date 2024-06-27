@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
 using TMPro;
 using UnityEngine.UI;
-using ChainSafe.Gaming.Marketplace.Models;
 
 namespace ChainSafe.Gaming.Marketplace
 {
@@ -36,6 +34,8 @@ namespace ChainSafe.Gaming.Marketplace
         [SerializeField] private List<GameObject> secondaryTextObjects;
         [SerializeField] private List<GameObject> displayLineObjects;
         [SerializeField] private List<GameObject> borderButtonObjects;
+        [Header("Enable this for testing to bypass auth")]
+        [SerializeField] private bool test;
 
         #endregion
 
@@ -81,17 +81,15 @@ namespace ChainSafe.Gaming.Marketplace
         /// </summary>
         private async void RequestEmailAuthCode()
         {
-            EmailAddress = emailAddressInput.text ?? throw new Exception("Email address not set");
-            var payload = new AuthPayload.EmailRequestPayload
+            if (test)
             {
-                email = EmailAddress
-            };
-            var jsonPayload = JsonConvert.SerializeObject(payload);
-            var request = new UnityWebRequest("https://api.chainsafe.io/api/v1/user/email", "POST");
-            var bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonPayload);
-            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-            request.downloadHandler = new DownloadHandlerBuffer();
-            request.SetRequestHeader("Content-Type", "application/json");
+                ToggleEmailMenu();
+                return;
+            }
+            EmailAddress = emailAddressInput.text ?? throw new Exception("Email address not set");
+            WWWForm form = new WWWForm();
+            form.AddField("email", EmailAddress);
+            UnityWebRequest request = UnityWebRequest.Post("https://api.chainsafe.io/api/v1/user/email", form);
             await request.SendWebRequest();
             if (request.result != UnityWebRequest.Result.Success)
             {
@@ -108,65 +106,23 @@ namespace ChainSafe.Gaming.Marketplace
         /// </summary>
         private async void VerifyEmailAuthCode()
         {
+            if (test)
+            {
+                InstantiateMarketplace();
+                return;
+            }
             AuthCode = authCodeInput.text ?? throw new Exception("Auth code not set");
-            var payload = new AuthPayload.AuthCodePayload()
-            {
-                email = EmailAddress,
-                nonce = AuthCode
-            };
-            var jsonPayload = JsonConvert.SerializeObject(payload);
-            var request = new UnityWebRequest("https://api.chainsafe.io/api/v1/user/email/verify", "POST");
-            var bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonPayload);
-            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-            request.downloadHandler = new DownloadHandlerBuffer();
-            request.SetRequestHeader("Content-Type", "application/json");
-    
+            WWWForm form = new WWWForm();
+            form.AddField("email", EmailAddress);
+            form.AddField("nonce", AuthCode);
+            UnityWebRequest request = UnityWebRequest.Post("https://api.chainsafe.io/api/v1/user/email/verify", form);
             await request.SendWebRequest();
-    
             if (request.result != UnityWebRequest.Result.Success)
             {
                 Debug.LogError($"Error: {request.error}");
             }
             else
             {
-                string jsonResponse = request.downloadHandler.text;
-                AuthSystemResponse.AuthResponse authResponse = JsonConvert.DeserializeObject<AuthSystemResponse.AuthResponse>(jsonResponse);
-                TryLogin(authResponse.token);
-            }
-        }
-        
-        /// <summary>
-        /// Retrieves the user account ID.
-        /// </summary>
-        private async void TryLogin(string authResponseToken)
-        {
-            var payload = new AuthPayload.LoginPayload()
-            {
-                provider = "email",
-                service = "gaming",
-                token = authResponseToken
-            };
-            var jsonPayload = JsonConvert.SerializeObject(payload);
-            var request = new UnityWebRequest("https://api.chainsafe.io/api/v1/user/login", "POST");
-            var bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonPayload);
-            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-            request.downloadHandler = new DownloadHandlerBuffer();
-            request.SetRequestHeader("Content-Type", "application/json");
-    
-            await request.SendWebRequest();
-    
-            if (request.result != UnityWebRequest.Result.Success)
-            {
-                Debug.LogError($"Error: {request.error}");
-            }
-            else
-            {
-                string jsonResponse = request.downloadHandler.text;
-                AuthSystemResponse.LoginResponse loginResponse = JsonConvert.DeserializeObject<AuthSystemResponse.LoginResponse>(jsonResponse);
-                var authSystemManagerConfigArgs = new EventManagerMarketplace.MarketplaceAuthSystemManagerConfigEventArgs(loginResponse.access_token.token, DateTime.Parse(loginResponse.access_token.expires), loginResponse.refresh_token.token, DateTime.Parse(loginResponse.refresh_token.expires));
-                EventManagerMarketplace.RaiseConfigureAuthSystemManager(authSystemManagerConfigArgs);
-                var marketplaceBrowserManagerConfigArgs = new EventManagerMarketplace.MarketplaceBrowserConfigEventArgs(displayFont, secondaryTextColour, loginResponse.access_token.token);
-                EventManagerMarketplace.RaiseConfigureMarketplaceBrowserManager(marketplaceBrowserManagerConfigArgs);
                 InstantiateMarketplace();
             }
         }

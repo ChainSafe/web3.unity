@@ -1094,10 +1094,10 @@ MonoBehaviour:
   - {fileID: 5833498877037384762}
   secondaryTextObjects:
   - {fileID: 1649941262688614450}
-  - {fileID: 1677968316374065117}
+  - {fileID: 1649941262688614450}
   displayLineObjects:
   - {fileID: 1686292479457944369}
-  - {fileID: 5990508210497694103}
+  - {fileID: 1686292479457944369}
   borderButtonObjects: []
   test: 1
 --- !u!1 &3905764076522623970

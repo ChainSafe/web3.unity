@@ -1,18 +1,19 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Manages the marketplace creation GUI.
+/// </summary>
+
 namespace ChainSafe.Gaming.Marketplace
 {
-    /// <summary>
-    /// Manages the marketplace creation GUI.
-    /// </summary>
     public class CreateMarketplaceManager : MonoBehaviour
     {
         #region Fields
 
         [SerializeField] private GameObject selectMarketplaceMenu;
-        [SerializeField] private GameObject createMarketplaceMenu;
         [SerializeField] private Button openSelectMarketplaceOptionButton;
+        [SerializeField] private GameObject createMarketplaceMenu;
 
         #endregion
 
