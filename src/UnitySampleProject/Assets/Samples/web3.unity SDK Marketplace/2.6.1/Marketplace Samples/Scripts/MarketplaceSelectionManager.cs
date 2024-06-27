@@ -70,9 +70,10 @@ namespace ChainSafe.Gaming.Marketplace
         private IEnumerator WaitForTokenExpiration()
         {
             DateTime currentTime = DateTime.UtcNow;
-            TimeSpan timeToWait = AuthSystemManagerMarketplace.BearerTokenExpires - currentTime;
+            TimeSpan timeToWait = MarketplaceAuth.BearerTokenExpires - currentTime;
             yield return new WaitForSeconds((float)timeToWait.TotalSeconds);
-            AuthSystemManagerMarketplace.RefreshExpiredToken();
+            Debug.Log("Refresh Expired");
+            //MarketplaceAuth.RefreshExpiredToken();
         }
 
         #endregion
