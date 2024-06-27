@@ -19,7 +19,7 @@
     
     "samples": [
         {
-            "displayName": "Lootboxes Sample",
+            "displayName": "Lootboxes Samples",
             "description": "Contains Sample scene and some basic interaction with Chainlink Lootboxes.",
             "path": "Samples~/Web3.Unity Chainlink Lootboxes"
         }

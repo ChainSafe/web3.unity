@@ -405,10 +405,7 @@ namespace ChainSafe.Gaming.WalletConnect
                 {
                     redirection.Redirect(localData.ConnectedLocalWalletName);
                 }
-                else
-                {
-                    logWriter.LogError("Connected Wallet Name is NULL!");
-                }
+
             }
         }
 
