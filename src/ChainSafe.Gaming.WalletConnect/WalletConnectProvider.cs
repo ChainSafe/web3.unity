@@ -405,7 +405,6 @@ namespace ChainSafe.Gaming.WalletConnect
                 {
                     redirection.Redirect(localData.ConnectedLocalWalletName);
                 }
-
             }
         }
 

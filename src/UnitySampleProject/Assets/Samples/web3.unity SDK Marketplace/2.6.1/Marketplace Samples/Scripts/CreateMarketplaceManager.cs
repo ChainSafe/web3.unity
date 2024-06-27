@@ -1,18 +1,17 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-/// <summary>
-/// Manages the marketplace browse GUI.
-/// </summary>
 namespace ChainSafe.Gaming.Marketplace
 {
-    public class BrowseMarketplaceManager : MonoBehaviour
+    /// <summary>
+    /// Manages the marketplace creation GUI.
+    /// </summary>
+    public class CreateMarketplaceManager : MonoBehaviour
     {
         #region Fields
 
         [SerializeField] private GameObject selectMarketplaceMenu;
-        [SerializeField] private GameObject browseMarketplaceMenu;
-        [SerializeField] private GameObject marketplaceItemPrefab;
+        [SerializeField] private GameObject createMarketplaceMenu;
         [SerializeField] private Button openSelectMarketplaceOptionButton;
 
         #endregion
@@ -32,7 +31,7 @@ namespace ChainSafe.Gaming.Marketplace
         /// </summary>
         private void OpenSelectMarketplaceOptionMenu()
         {
-            browseMarketplaceMenu.SetActive(false);
+            createMarketplaceMenu.SetActive(false);
             selectMarketplaceMenu.SetActive(true);
         }
 
