@@ -53,8 +53,7 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     [SerializeField] private Color primaryTextColour;
     [SerializeField] private Color secondaryTextColour;
     [SerializeField] private Color borderButtonColour;
-    private bool useProvider;
-    private Provider selectedProvider;
+    private Provider? selectedProvider;
     private bool rememberMe;
     
     #if UNITY_WEBGL && !UNITY_EDITOR
