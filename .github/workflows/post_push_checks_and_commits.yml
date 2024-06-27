@@ -2,10 +2,10 @@ name: Post Push Checks and Commits
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ rob/scripts-data-formatting-1015 ]
 
 jobs:
   check_and_commit:
     name: Check and Commit
-    uses: ChainSafe/web3.unity/.github/workflows/check_and_commit.yml@main
+    uses: ChainSafe/web3.unity/.github/workflows/check_and_commit.yml@rob/scripts-data-formatting-1015
     secrets: inherit
