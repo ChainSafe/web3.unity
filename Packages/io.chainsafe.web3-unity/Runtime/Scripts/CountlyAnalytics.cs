@@ -1,10 +1,8 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Analytics;
 using Plugins.CountlySDK;
 using Plugins.CountlySDK.Models;
-using UnityEngine;
 
 public class CountlyAnalytics : IAnalyticsClient
 {

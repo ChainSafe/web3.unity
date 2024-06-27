@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Numerics;
+using System.Runtime.InteropServices;
+using AOT;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Common;
 using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.GamingSdk.Web3Auth;
+using Nethereum.Hex.HexTypes;
 using Scenes;
 using TMPro;
 using UnityEngine;
@@ -34,6 +38,7 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     [SerializeField] private Network network;
     [Header("UI")]
     [SerializeField] private List<ProviderAndButtonPair> providerAndButtonPairs;
+
     [Header("Wallet GUI Options")]
     [SerializeField] private GameObject web3AuthWalletGUIPrefab;
     [SerializeField] private bool enableWalletGUI;
@@ -48,10 +53,21 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     [SerializeField] private Color primaryTextColour;
     [SerializeField] private Color secondaryTextColour;
     [SerializeField] private Color borderButtonColour;
-    private bool useProvider;
-    private Provider selectedProvider;
+    private Provider? selectedProvider;
     private bool rememberMe;
-
+    
+    #if UNITY_WEBGL && !UNITY_EDITOR
+    [DllImport("__Internal")]
+    private static extern void InitWeb3Auth(string clientId, string chainId, string rpcTarget, string displayName, string blockExplorerUrl, string ticker, string tickerName, string network);
+    [DllImport("__Internal")]
+    private static extern void Web3AuthLogin(string provider, bool rememberMe);    
+    [DllImport("__Internal")]
+    private static extern void SetLoginCallback(Action<string> callback);
+    
+    public static event Action<string> Web3AuthWebGLConnected;
+    #endif
+    
+    
     public void SetRememberMe(bool rememberMe)
     {
         this.rememberMe = rememberMe;
@@ -60,36 +76,46 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     protected override async void Initialize()
     {
         base.Initialize();
-
-        //Always first add listeners.
         providerAndButtonPairs.ForEach(p =>
             p.Button.onClick.AddListener(delegate { LoginWithWeb3Auth(p.Provider); }));
-
-#if UNITY_WEBGL && !UNITY_EDITOR
-        Uri uri = new Uri(Application.absoluteURL);
-
-        // make sure this load isn't redirected from Web3Auth a login
-        if (!string.IsNullOrEmpty(uri.Fragment))
+        #if !UNITY_EDITOR && UNITY_WEBGL
+        Web3AuthWebGLConnected += Web3AuthSet;
+        var projectSettings = ProjectConfigUtilities.Load();
+        SetLoginCallback(Web3AuthConnected);
+        //1155 is a decimal number, we need to convert it to an integer
+        InitWeb3Auth(clientId, new HexBigInteger(BigInteger.Parse(projectSettings.ChainId)).HexValue, 
+        projectSettings.Rpc, projectSettings.Network, "", projectSettings.Symbol, "", network.ToString().ToLower());
+        #else  
+        if (!string.IsNullOrEmpty(KeyStoreManagerUtils.getPreferencesData(KeyStoreManagerUtils.SESSION_ID)))
         {
-            useProvider = false;
-            await TryLogin();
-        }
-#else
-        if (!string.IsNullOrEmpty(KeyStoreManagerUtils.getPreferencesData(KeyStoreManagerUtils.SESSION_ID)) && rememberMe)
-        {
-            useProvider = false;
+            rememberMe = true;
             await TryLogin();
             Debug.Log("Restoring existing Web3Auth session (Remember Me");
         }
-#endif
+        #endif
     }
+#if !UNITY_EDITOR && UNITY_WEBGL
+    private async void Web3AuthSet(string sessionId)
+    {
+        Web3AuthWebGLConnected -= Web3AuthSet;
+        KeyStoreManagerUtils.savePreferenceData(KeyStoreManagerUtils.SESSION_ID, sessionId);
+        await TryLogin();
+    }
+#endif
+    
+#if !UNITY_EDITOR && UNITY_WEBGL
+    [MonoPInvokeCallback(typeof(Action))]
+    private static void Web3AuthConnected(string sessionId)
+    {
+        Web3AuthWebGLConnected?.Invoke(sessionId);
+    }
+#endif
 
     private async void LoginWithWeb3Auth(Provider provider)
     {
-        if (!useProvider)
-        {
-            useProvider = true;
-        }
+#if UNITY_WEBGL && !UNITY_EDITOR
+        Web3AuthLogin(provider.ToString().ToLower(), rememberMe);
+#else
         selectedProvider = provider;
         await TryLogin();
         LogAnalytics(provider);
@@ -138,8 +164,10 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
             EventName = $"Login provider {provider}",
             PackageName = "io.chainsafe.web3-unity.web3auth",
         });
-    }
+#endif
 
+    }
+    
     public Web3Builder ConfigureServices(Web3Builder web3Builder)
     {
         return web3Builder.Configure(services =>
@@ -161,11 +189,11 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
                 RememberMe = rememberMe
             };
 
-            if (useProvider)
+            if (selectedProvider.HasValue)
             {
                 web3AuthConfig.LoginParams = new LoginParams()
                 {
-                    loginProvider = selectedProvider
+                    loginProvider = selectedProvider.Value
                 };
             }
 
