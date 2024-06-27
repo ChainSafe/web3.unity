@@ -3,14 +3,13 @@ using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
 using ChainSafe.Gaming.Marketplace.Models;
-using ChainSafe.Gaming.Marketplace.Interfaces;
 
 namespace ChainSafe.Gaming.Marketplace
 {
     /// <summary>
     /// Auth system manager to help with refresh tokens.
     /// </summary>
-    public class MarketplaceAuth : IMarketplaceAuth
+    public static class AuthSystemManagerMarketplace
     {
         #region Properties
 
@@ -24,7 +23,7 @@ namespace ChainSafe.Gaming.Marketplace
         /// <summary>
         /// Refreshes an expired bearer token.
         /// </summary>
-        public async void RefreshExpiredToken()
+        public static async void RefreshExpiredToken()
         {
             if (RefreshToken == null)
             {
