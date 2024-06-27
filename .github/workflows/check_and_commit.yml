@@ -32,12 +32,11 @@ jobs:
         export DESTINATION_PATH=
         while IFS= read -r entry || [ -n "$entry" ];
         do
-          echo -e "Duplicate Samples $entry"
           source_prefix="source:"
           display_name_prefix="display_name:"
           destination_prefix="destination:"
           
-          entry=$(echo "$entry" | tr -d '\t')
+          entry=$(echo "$entry" | sed -e 's/^[[:space:]]*//')
           
           if [[ $entry = $source_prefix* ]]
           then
