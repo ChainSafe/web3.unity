@@ -11,30 +11,109 @@ namespace ChainSafe.Gaming.Marketplace
     {
         #region Events
         
+        public static event EventHandler<MarketplaceAuthSystemManagerConfigEventArgs> ConfigureAuthSystemManager;
         public static event EventHandler<MarketplaceGUIConfigEventArgs> ConfigureMarketplaceGuiManager;
         public static event EventHandler<MarketplaceBrowserConfigEventArgs> ConfigureMarketplaceBrowserManager;
-        public static event EventHandler<MarketplaceAuthSystemManagerConfigEventArgs> ConfigureAuthSystemManager;
-        public static event Action LoginMarketplace;
-        public static event Action LogoutMarketplace;
+        public static event EventHandler<CollectionBrowserConfigEventArgs> ConfigureCollectionBrowserManager;
+        public static event Action ToggleMarketplacesMenu;
+        public static event Action ToggleCreateMarketplaceMenu;
+        public static event Action ToggleCollectionsMenu;
+        public static event Action ToggleCreateCollectionMenu;
+        public static event Action ToggleSelectionMenu;
+        public static event Action ToggleMintNftToCollectionMenu;
+        public static event Action UploadMarketplaceImage;
+        public static event Action UploadCollectionImage;
+        public static event Action UploadNftToCollectionImage;
         
         #endregion
         
         #region Methods
         
-        public static void RaiseLoginMarketplace()
+        /// <summary>
+        /// Invokes ToggleMarketplacesMenu.
+        /// </summary>
+        public static void RaiseToggleMarketplacesMenu()
         {
-            LoginMarketplace?.Invoke();
+            ToggleMarketplacesMenu?.Invoke();
         }
         
-        public static void RaiseLogoutMarketplace()
+        /// <summary>
+        /// Invokes ToggleCreateMarketplaceMenu.
+        /// </summary>
+        public static void RaiseToggleCreateMarketplaceMenu()
         {
-            LogoutMarketplace?.Invoke();
+            ToggleCreateMarketplaceMenu?.Invoke();
+        }
+        
+        /// <summary>
+        /// Invokes ToggleCollectionsMenu.
+        /// </summary>
+        public static void RaiseToggleCollectionsMenu()
+        {
+            ToggleCollectionsMenu?.Invoke();
+        }
+        
+        /// <summary>
+        /// Invokes ToggleCreateCollectionMenu.
+        /// </summary>
+        public static void RaiseToggleCreateCollectionMenu()
+        {
+            ToggleCreateCollectionMenu?.Invoke();
+        }
+        
+        /// <summary>
+        /// Invokes ToggleMintNftToSelectionMenu.
+        /// </summary>
+        public static void RaiseToggleMintNftToSelectionMenu()
+        {
+            ToggleMintNftToCollectionMenu?.Invoke();
+        }
+        
+        /// <summary>
+        /// Invokes ToggleSelectionMenu.
+        /// </summary>
+        public static void RaiseToggleSelectionMenu()
+        {
+            ToggleSelectionMenu?.Invoke();
+        }
+        
+        /// <summary>
+        /// Invokes UploadMarketplaceImage.
+        /// </summary>
+        public static void RaiseUploadMarketplaceImage()
+        {
+            UploadMarketplaceImage?.Invoke();
+        }
+        
+        /// <summary>
+        /// Invokes UploadCollectionImage.
+        /// </summary>
+        public static void RaiseUploadCollectionImage()
+        {
+            UploadCollectionImage?.Invoke();
+        }
+        
+        /// <summary>
+        /// Invokes UploadNftToCollectionImage.
+        /// </summary>
+        public static void RaiseUploadNftToCollectionImage()
+        {
+            UploadNftToCollectionImage?.Invoke();
+        }
+        
+        /// <summary>
+        /// Configure auth system manager.
+        /// </summary>
+        /// <param name="args">Input args.</param>
+        public static void RaiseConfigureAuthSystemManager(MarketplaceAuthSystemManagerConfigEventArgs args)
+        {
+            ConfigureAuthSystemManager?.Invoke(null, args);
         }
         
         /// <summary>
         /// Configure GUI manager.
         /// </summary>
-        /// <param name="args"></param>
+        /// <param name="args">Input args.</param>
         public static void RaiseConfigureMarketplaceGuiManager(MarketplaceGUIConfigEventArgs args)
         {
             ConfigureMarketplaceGuiManager?.Invoke(null, args);
@@ -43,24 +122,54 @@ namespace ChainSafe.Gaming.Marketplace
         /// <summary>
         /// Configure marketplace browser manager.
         /// </summary>
-        /// <param name="args"></param>
+        /// <param name="args">Input args.</param>
         public static void RaiseConfigureMarketplaceBrowserManager(MarketplaceBrowserConfigEventArgs args)
         {
             ConfigureMarketplaceBrowserManager?.Invoke(null, args);
         }
         
         /// <summary>
-        /// Configure auth system manager.
+        /// Configure collection browser manager.
         /// </summary>
-        /// <param name="args"></param>
-        public static void RaiseConfigureAuthSystemManager(MarketplaceAuthSystemManagerConfigEventArgs args)
+        /// <param name="args">Input args.</param>
+        public static void RaiseConfigureCollectionBrowserManager(CollectionBrowserConfigEventArgs args)
         {
-            ConfigureAuthSystemManager?.Invoke(null, args);
+            ConfigureCollectionBrowserManager?.Invoke(null, args);
         }
         
         #endregion
         
         #region Configuration Classes
+        
+        /// <summary>
+        /// Configuration class for the Marketplace Auth System Manager.
+        /// </summary>
+        public class MarketplaceAuthSystemManagerConfigEventArgs : EventArgs
+        {
+            #region Properties
+            
+            public string BearerToken { get; private set; }
+
+            public DateTime BearerTokenExpires { get; private set; }
+            
+            public string RefreshToken { get; private set; }
+
+            public DateTime RefreshTokenExpires { get; set; }
+
+            #endregion
+    
+            #region Methods
+    
+            public MarketplaceAuthSystemManagerConfigEventArgs(string bearerToken, DateTime bearerTokenExpires, string refreshToken, DateTime refreshTokenExpires)
+            {
+                BearerToken = bearerToken;
+                BearerTokenExpires = bearerTokenExpires;
+                RefreshToken = refreshToken;
+                RefreshTokenExpires = refreshTokenExpires;
+            }
+            
+            #endregion
+        }
             
         /// <summary>
         /// Configuration class for the Marketplace GUI Manager.
@@ -119,30 +228,25 @@ namespace ChainSafe.Gaming.Marketplace
         }
         
         /// <summary>
-        /// Configuration class for the Marketplace Auth System Manager.
+        /// Configuration class for the Marketplace Browser Manager.
         /// </summary>
-        public class MarketplaceAuthSystemManagerConfigEventArgs : EventArgs
+        public class CollectionBrowserConfigEventArgs : EventArgs
         {
             #region Properties
             
-            private string BearerToken { get; set; }
-
-            private DateTime BearerTokenExpires { get; set; }
-            
-            private string RefreshToken { get; set; }
-
-            private DateTime RefreshTokenExpires { get; set; }
-
+            public TMP_FontAsset DisplayFont { get; private set; }
+            public Color SecondaryTextColour { get; private set; }
+            public string BearerToken { get; private set; }
+    
             #endregion
     
             #region Methods
     
-            public MarketplaceAuthSystemManagerConfigEventArgs(string bearerToken, DateTime bearerTokenExpires, string refreshToken, DateTime refreshTokenExpires)
+            public CollectionBrowserConfigEventArgs(TMP_FontAsset displayFont, Color secondaryTextColour, string bearerToken)
             {
+                DisplayFont = displayFont;
+                SecondaryTextColour = secondaryTextColour;
                 BearerToken = bearerToken;
-                BearerTokenExpires = bearerTokenExpires;
-                RefreshToken = refreshToken;
-                RefreshTokenExpires = refreshTokenExpires;
             }
             
             #endregion

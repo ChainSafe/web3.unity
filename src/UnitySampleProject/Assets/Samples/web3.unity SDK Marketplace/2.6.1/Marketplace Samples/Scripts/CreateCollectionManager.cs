@@ -3,24 +3,24 @@ using UnityEngine;
 namespace ChainSafe.Gaming.Marketplace
 {
     /// <summary>
-    /// Manages marketplace creation.
+    /// Manages the collection creation.
     /// </summary>
-    public class CreateMarketplaceManager : MonoBehaviour
+    public class CreateCollectionManager : MonoBehaviour
     {
         #region Methods
         
         /// <summary>
-        /// Uploads marketplace image.
+        /// Uploads collection image.
         /// </summary>
-        private void UploadMarketplaceImage()
+        private void UploadCollectionImage()
         {
             Debug.Log("TODO: Uploading image");
         }
-
+        
         /// <summary>
         /// Toggles marketplace menu.
         /// </summary>
-        private void ToggleCreateMarketplaceMenu()
+        private void ToggleCreateCollectionMenu()
         {
             Debug.Log("TODO: Toggle logic");
         }
@@ -30,8 +30,8 @@ namespace ChainSafe.Gaming.Marketplace
         /// </summary>
         private void OnEnable()
         {
-            EventManagerMarketplace.UploadMarketplaceImage += UploadMarketplaceImage;
-            EventManagerMarketplace.ToggleCreateMarketplaceMenu += ToggleCreateMarketplaceMenu;
+            EventManagerMarketplace.UploadCollectionImage += UploadCollectionImage;
+            EventManagerMarketplace.ToggleCreateCollectionMenu += ToggleCreateCollectionMenu;
         }
         
         /// <summary>
@@ -39,8 +39,8 @@ namespace ChainSafe.Gaming.Marketplace
         /// </summary>
         private void OnDisable()
         {
-            EventManagerMarketplace.UploadMarketplaceImage -= UploadMarketplaceImage;
-            EventManagerMarketplace.ToggleCreateMarketplaceMenu -= ToggleCreateMarketplaceMenu;
+            EventManagerMarketplace.UploadCollectionImage -= UploadCollectionImage;
+            EventManagerMarketplace.ToggleCreateCollectionMenu -= ToggleCreateCollectionMenu;
         }
         
         #endregion

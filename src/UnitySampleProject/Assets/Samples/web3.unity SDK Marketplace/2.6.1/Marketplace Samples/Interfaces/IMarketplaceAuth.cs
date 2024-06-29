@@ -1,10 +1,17 @@
-namespace ChainSafe.Gaming.Marketplace.Interfaces
+using System;
+
+namespace ChainSafe.Gaming.Marketplace
 {
     /// <summary>
     /// Marketplace auth interface.
     /// </summary>
     public interface IMarketplaceAuth
     {
-        void RefreshExpiredToken();
+        string BearerToken { get; }
+        DateTime BearerTokenExpires { get; }
+        string RefreshToken { get; }
+        DateTime RefreshTokenExpires { get; }
+        
+        void InitializeConfig(object sender, EventManagerMarketplace.MarketplaceAuthSystemManagerConfigEventArgs marketplaceAuthSystemManagerConfigEventArgs);
     }
 }
