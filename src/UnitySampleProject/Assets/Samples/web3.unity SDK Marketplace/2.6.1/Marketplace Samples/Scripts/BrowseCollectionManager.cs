@@ -183,7 +183,7 @@ namespace ChainSafe.Gaming.Collection
         /// <param name="projectCollectionsObjectIndex">Index of Collection.</param>
         /// <param name="CollectionName">Collection name.</param>
         /// <param name="CollectionBannerUri">Collection Uri.</param>
-        private async void UpdateProjectCollectionsDisplay(int projectCollectionsObjectIndex, string CollectionName, string CollectionBannerUri)
+        private void UpdateProjectCollectionsDisplay(int projectCollectionsObjectIndex, string CollectionName, string CollectionBannerUri)
         {
             string[] textObjectNames = { "NameText"};
             string[] textValues = { CollectionName };
@@ -194,9 +194,9 @@ namespace ChainSafe.Gaming.Collection
                 textMeshPro.text = textValues[i];
                 textMeshPro.font = DisplayFont;
                 textMeshPro.color = SecondaryTextColour;
-                var image = await ImportTexture(CollectionBannerUri);
-                var imageObj = projectCollectionsPrefabs[projectCollectionsObjectIndex].transform.Find("Image").GetComponent<Image>();
-                imageObj.material.mainTexture = image;
+                // var image = await ImportTexture(CollectionBannerUri);
+                // var imageObj = projectCollectionsPrefabs[projectCollectionsObjectIndex].transform.Find("Image").GetComponent<Image>();
+                // imageObj.material.mainTexture = image;
                 var buttonObj = projectCollectionsPrefabs[projectCollectionsObjectIndex].transform.Find("Image").GetComponent<Button>();
                 buttonObj.onClick.AddListener(() => OpenCollection(projectCollectionsObjectIndex));
             }
@@ -210,7 +210,7 @@ namespace ChainSafe.Gaming.Collection
         /// <param name="nftType">Nft name.</param>
         /// <param name="nftPrice">Nft price.</param>
         /// <param name="nftUri">Nft Uri.</param>
-        private async void UpdateCollectionItemDisplay(int collectionObjectIndex, string nftId, string nftType, string nftPrice, string nftUri)
+        private void UpdateCollectionItemDisplay(int collectionObjectIndex, string nftId, string nftType, string nftPrice, string nftUri)
         {
             string[] textObjectNames = { "IdText", "TypeText", "PriceText" };
             string[] textValues = { nftId, nftType, nftPrice };
@@ -221,9 +221,9 @@ namespace ChainSafe.Gaming.Collection
                 textMeshPro.text = textValues[i];
                 textMeshPro.font = DisplayFont;
                 textMeshPro.color = SecondaryTextColour;
-                var image = await ImportTexture(nftUri);
-                var imageObj = CollectionItemPrefabs[collectionObjectIndex].transform.Find("Image").GetComponent<Image>();
-                imageObj.material.mainTexture = image;
+                // var image = await ImportTexture(nftUri);
+                // var imageObj = CollectionItemPrefabs[collectionObjectIndex].transform.Find("Image").GetComponent<Image>();
+                // imageObj.material.mainTexture = image;
             }
         }
         

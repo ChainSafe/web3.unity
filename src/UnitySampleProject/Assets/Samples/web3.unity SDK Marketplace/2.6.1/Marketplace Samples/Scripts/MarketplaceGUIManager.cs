@@ -31,6 +31,7 @@ namespace ChainSafe.Gaming.Marketplace
         [SerializeField] private Button createCollectionButton;
         [SerializeField] private Button createCollectionUploadImageButton;
         [SerializeField] private Button closeCreateCollectionButton;
+        [SerializeField] private Button mintNftToCollectionMenuButton;
         [SerializeField] private Button mintNftToCollectionButton;
         [SerializeField] private Button[] backToSelectionMenuButtons;
         [SerializeField] private Button logOutButton;
@@ -53,7 +54,8 @@ namespace ChainSafe.Gaming.Marketplace
             closeCreateCollectionButton.onClick.AddListener(ToggleCreateCollectionMenu);
             createMarketplaceUploadImageButton.onClick.AddListener(UploadMarketplaceImage);
             createCollectionUploadImageButton.onClick.AddListener(UploadCollectionImage);
-            mintNftToCollectionButton.onClick.AddListener(ToggleMintNftToCollectionMenu);
+            mintNftToCollectionMenuButton.onClick.AddListener(ToggleMintNftToCollectionMenu);
+            mintNftToCollectionButton.onClick.AddListener(UploadNftImageToCollection);
             foreach (var button in backToSelectionMenuButtons)
             {
                 button.onClick.AddListener(BackToSelectionMenu);
@@ -140,6 +142,14 @@ namespace ChainSafe.Gaming.Marketplace
         private void UploadMarketplaceImage()
         {
             EventManagerMarketplace.RaiseUploadMarketplaceImage();
+        }
+        
+        /// <summary>
+        /// Uploads marketplace image.
+        /// </summary>
+        private void UploadNftImageToCollection()
+        {
+            EventManagerMarketplace.RaiseUploadNftImageToCollection();
         }
         
         /// <summary>

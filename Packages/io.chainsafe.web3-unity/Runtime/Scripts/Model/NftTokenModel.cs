@@ -34,7 +34,7 @@ namespace ChainSafe.Gaming.UnityPackage.Model
 
         #endregion
 
-        #region CollectionsItems
+        #region CollectionItems
         
         public class CollectionItemsResponse
         {

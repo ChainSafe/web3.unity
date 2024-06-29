@@ -1,4 +1,6 @@
+using TMPro;
 using UnityEngine;
+using EvmMarketplace = Scripts.EVM.Marketplace.Marketplace;
 
 namespace ChainSafe.Gaming.Marketplace
 {
@@ -7,6 +9,21 @@ namespace ChainSafe.Gaming.Marketplace
     /// </summary>
     public class CreateCollectionManager : MonoBehaviour
     {
+        #region Fields
+
+        [SerializeField] private TMP_Dropdown typeDropDown;
+        [SerializeField] private TMP_InputField nameInput;
+        [SerializeField] private TMP_InputField descriptionInput;
+        [SerializeField] private bool publicMinting;
+
+        #endregion
+        
+        #region Properties
+        
+        private string BearerToken { get; set; }
+    
+        #endregion
+        
         #region Methods
         
         /// <summary>
@@ -14,16 +31,35 @@ namespace ChainSafe.Gaming.Marketplace
         /// </summary>
         private void UploadCollectionImage()
         {
-            Debug.Log("TODO: Uploading image");
+            switch (typeDropDown.options[typeDropDown.value].text)
+            {
+                case "721":
+                    Create721Collection(nameInput.text, descriptionInput.text, publicMinting);
+                    break;
+                case "1155":
+                    Create1155Collection(nameInput.text, descriptionInput.text, publicMinting);
+                    break;
+            }
         }
         
         /// <summary>
-        /// Toggles marketplace menu.
+        /// Creates a 721 collection
         /// </summary>
-        private void ToggleCreateCollectionMenu()
+        public async void Create721Collection(string collectionName721, string collectionDescription721, bool collectionMintingPublic721)
         {
-            Debug.Log("TODO: Toggle logic");
+            var response = await EvmMarketplace.Create721Collection(BearerToken, collectionName721, collectionDescription721, collectionMintingPublic721);
+            Debug.Log($"TX: {response.TransactionHash}");
         }
+        
+        /// <summary>
+        /// Creates a 1155 collection
+        /// </summary>
+        public async void Create1155Collection(string collectionName1155, string collectionDescription1155, bool collectionMintingPublic1155)
+        {
+            var response = await EvmMarketplace.Create1155Collection(BearerToken, collectionName1155, collectionDescription1155, collectionMintingPublic1155);
+            Debug.Log($"TX: {response.TransactionHash}");
+        }
+        
         
         /// <summary>
         /// Subscribes to events.
@@ -31,7 +67,7 @@ namespace ChainSafe.Gaming.Marketplace
         private void OnEnable()
         {
             EventManagerMarketplace.UploadCollectionImage += UploadCollectionImage;
-            EventManagerMarketplace.ToggleCreateCollectionMenu += ToggleCreateCollectionMenu;
+            EventManagerMarketplace.ConfigureCollectionCreateManager += OnConfigureCollectionCreateManager;
         }
         
         /// <summary>
@@ -40,7 +76,17 @@ namespace ChainSafe.Gaming.Marketplace
         private void OnDisable()
         {
             EventManagerMarketplace.UploadCollectionImage -= UploadCollectionImage;
-            EventManagerMarketplace.ToggleCreateCollectionMenu -= ToggleCreateCollectionMenu;
+            EventManagerMarketplace.ConfigureCollectionCreateManager -= OnConfigureCollectionCreateManager;
+        }
+        
+        /// <summary>
+        /// Configures class properties.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void OnConfigureCollectionCreateManager(object sender, EventManagerMarketplace.CollectionCreateConfigEventArgs args)
+        {
+            BearerToken = args.BearerToken;
         }
         
         #endregion

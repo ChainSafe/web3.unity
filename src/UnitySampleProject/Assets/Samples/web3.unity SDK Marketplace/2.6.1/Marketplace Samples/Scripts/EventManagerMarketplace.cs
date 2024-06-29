@@ -15,6 +15,8 @@ namespace ChainSafe.Gaming.Marketplace
         public static event EventHandler<MarketplaceGUIConfigEventArgs> ConfigureMarketplaceGuiManager;
         public static event EventHandler<MarketplaceBrowserConfigEventArgs> ConfigureMarketplaceBrowserManager;
         public static event EventHandler<CollectionBrowserConfigEventArgs> ConfigureCollectionBrowserManager;
+        public static event EventHandler<MarketplaceCreateConfigEventArgs> ConfigureMarketplaceCreateManager;
+        public static event EventHandler<CollectionCreateConfigEventArgs> ConfigureCollectionCreateManager;
         public static event Action ToggleMarketplacesMenu;
         public static event Action ToggleCreateMarketplaceMenu;
         public static event Action ToggleCollectionsMenu;
@@ -23,7 +25,7 @@ namespace ChainSafe.Gaming.Marketplace
         public static event Action ToggleMintNftToCollectionMenu;
         public static event Action UploadMarketplaceImage;
         public static event Action UploadCollectionImage;
-        public static event Action UploadNftToCollectionImage;
+        public static event Action UploadNftImageToCollection;
         
         #endregion
         
@@ -96,9 +98,9 @@ namespace ChainSafe.Gaming.Marketplace
         /// <summary>
         /// Invokes UploadNftToCollectionImage.
         /// </summary>
-        public static void RaiseUploadNftToCollectionImage()
+        public static void RaiseUploadNftImageToCollection()
         {
-            UploadNftToCollectionImage?.Invoke();
+            UploadNftImageToCollection?.Invoke();
         }
         
         /// <summary>
@@ -135,6 +137,24 @@ namespace ChainSafe.Gaming.Marketplace
         public static void RaiseConfigureCollectionBrowserManager(CollectionBrowserConfigEventArgs args)
         {
             ConfigureCollectionBrowserManager?.Invoke(null, args);
+        }
+        
+        /// <summary>
+        /// Configure marketplace create manager.
+        /// </summary>
+        /// <param name="args">Input args.</param>
+        public static void RaiseConfigureMarketplaceCreateManager(MarketplaceCreateConfigEventArgs args)
+        {
+            ConfigureMarketplaceCreateManager?.Invoke(null, args);
+        }
+        
+        /// <summary>
+        /// Configure collection create manager.
+        /// </summary>
+        /// <param name="args">Input args.</param>
+        public static void RaiseConfigureCollectionCreateManager(CollectionCreateConfigEventArgs args)
+        {
+            ConfigureCollectionCreateManager?.Invoke(null, args);
         }
         
         #endregion
@@ -246,6 +266,48 @@ namespace ChainSafe.Gaming.Marketplace
             {
                 DisplayFont = displayFont;
                 SecondaryTextColour = secondaryTextColour;
+                BearerToken = bearerToken;
+            }
+            
+            #endregion
+        }
+        
+        /// <summary>
+        /// Configuration class for the Marketplace Create Manager.
+        /// </summary>
+        public class MarketplaceCreateConfigEventArgs : EventArgs
+        {
+            #region Properties
+            
+            public string BearerToken { get; private set; }
+    
+            #endregion
+    
+            #region Methods
+    
+            public MarketplaceCreateConfigEventArgs(string bearerToken)
+            {
+                BearerToken = bearerToken;
+            }
+            
+            #endregion
+        }
+        
+        /// <summary>
+        /// Configuration class for the Marketplace Create Manager.
+        /// </summary>
+        public class CollectionCreateConfigEventArgs : EventArgs
+        {
+            #region Properties
+            
+            public string BearerToken { get; private set; }
+    
+            #endregion
+    
+            #region Methods
+    
+            public CollectionCreateConfigEventArgs(string bearerToken)
+            {
                 BearerToken = bearerToken;
             }
             

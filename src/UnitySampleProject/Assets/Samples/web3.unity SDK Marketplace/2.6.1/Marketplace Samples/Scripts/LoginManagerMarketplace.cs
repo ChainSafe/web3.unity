@@ -170,6 +170,10 @@ namespace ChainSafe.Gaming.Marketplace
                 EventManagerMarketplace.RaiseConfigureMarketplaceBrowserManager(marketplaceBrowserManagerConfigArgs);
                 var collectionBrowserManagerConfigArgs = new EventManagerMarketplace.CollectionBrowserConfigEventArgs(displayFont, secondaryTextColour, loginResponse.access_token.token);
                 EventManagerMarketplace.RaiseConfigureCollectionBrowserManager(collectionBrowserManagerConfigArgs);
+                var marketplaceCreateConfigArgs = new EventManagerMarketplace.MarketplaceCreateConfigEventArgs(loginResponse.access_token.token);
+                EventManagerMarketplace.RaiseConfigureMarketplaceCreateManager(marketplaceCreateConfigArgs);
+                var collectionCreateConfigArgs = new EventManagerMarketplace.CollectionCreateConfigEventArgs(loginResponse.access_token.token);
+                EventManagerMarketplace.RaiseConfigureCollectionCreateManager(collectionCreateConfigArgs);
             }
         }
         
