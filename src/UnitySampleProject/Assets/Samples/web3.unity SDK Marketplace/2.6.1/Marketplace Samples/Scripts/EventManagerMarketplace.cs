@@ -26,6 +26,8 @@ namespace ChainSafe.Gaming.Marketplace
         public static event Action UploadMarketplaceImage;
         public static event Action UploadCollectionImage;
         public static event Action UploadNftImageToCollection;
+        public static event Action ListNftToMarketplace;
+        public static event Action ToggleListNftToMarketplaceMenu;
         
         #endregion
         
@@ -101,6 +103,22 @@ namespace ChainSafe.Gaming.Marketplace
         public static void RaiseUploadNftImageToCollection()
         {
             UploadNftImageToCollection?.Invoke();
+        }
+
+        /// <summary>
+        /// Invokes ToggleListNftToMarketplaceMenu.
+        /// </summary>
+        public static void RaiseToggleListNftToMarketplaceMenu()
+        {
+            ToggleListNftToMarketplaceMenu?.Invoke();
+        }
+        
+        /// <summary>
+        /// Invokes ListNftToMarketplace.
+        /// </summary>
+        public static void RaiseListNftToMarketplace()
+        {
+            ListNftToMarketplace?.Invoke();
         }
         
         /// <summary>

@@ -33,6 +33,8 @@ namespace ChainSafe.Gaming.Marketplace
         [SerializeField] private Button closeCreateCollectionButton;
         [SerializeField] private Button mintNftToCollectionMenuButton;
         [SerializeField] private Button mintNftToCollectionButton;
+        [SerializeField] private Button listNftToMarketplaceMenuButton;
+        [SerializeField] private Button listNftToMarketplaceButton;
         [SerializeField] private Button[] backToSelectionMenuButtons;
         [SerializeField] private Button logOutButton;
 
@@ -56,6 +58,8 @@ namespace ChainSafe.Gaming.Marketplace
             createCollectionUploadImageButton.onClick.AddListener(UploadCollectionImage);
             mintNftToCollectionMenuButton.onClick.AddListener(ToggleMintNftToCollectionMenu);
             mintNftToCollectionButton.onClick.AddListener(UploadNftImageToCollection);
+            listNftToMarketplaceMenuButton.onClick.AddListener(ToggleListNftToMarketplaceMenu);
+            listNftToMarketplaceButton.onClick.AddListener(ListNftToMarketplace);
             foreach (var button in backToSelectionMenuButtons)
             {
                 button.onClick.AddListener(BackToSelectionMenu);
@@ -158,6 +162,22 @@ namespace ChainSafe.Gaming.Marketplace
         private void ToggleMintNftToCollectionMenu()
         {
             EventManagerMarketplace.RaiseToggleMintNftToSelectionMenu();
+        }
+
+        /// <summary>
+        /// Toggles list nft to marketplace menu.
+        /// </summary>
+        private void ToggleListNftToMarketplaceMenu()
+        {
+            EventManagerMarketplace.RaiseToggleListNftToMarketplaceMenu();
+        }
+        
+        /// <summary>
+        /// Lists nft to marketplace.
+        /// </summary>
+        private void ListNftToMarketplace()
+        {
+            EventManagerMarketplace.RaiseListNftToMarketplace();
         }
         
         /// <summary>
