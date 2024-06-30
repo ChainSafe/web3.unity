@@ -12,6 +12,6 @@ namespace ChainSafe.Gaming.Marketplace
         string RefreshToken { get; }
         DateTime RefreshTokenExpires { get; }
         
-        void InitializeConfig(object sender, EventManagerMarketplace.MarketplaceAuthSystemManagerConfigEventArgs marketplaceAuthSystemManagerConfigEventArgs);
+        void InitializeConfig(object sender, EventManagerMarketplace.MarketplaceAuthSystemConfigEventArgs marketplaceAuthSystemManagerConfigEventArgs);
     }
 }

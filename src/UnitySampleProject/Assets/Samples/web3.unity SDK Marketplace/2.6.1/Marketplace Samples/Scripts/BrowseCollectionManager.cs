@@ -14,7 +14,6 @@ using UnityEngine.UI;
 using EvmMarketplace = Scripts.EVM.Marketplace.Marketplace;
 using ChainSafe.Gaming.Marketplace.Models;
 using ChainSafe.Gaming.UnityPackage.Model;
-using UnityEngine.Events;
 
 namespace ChainSafe.Gaming.Collection
 {
@@ -63,6 +62,7 @@ namespace ChainSafe.Gaming.Collection
         /// </summary>
         private async void GetProjectCollections()
         {
+            Debug.Log("GetProjectCollections");
             var response = await EvmMarketplace.GetProjectCollections(BearerToken);
             if (response.Collections.Count > 0)
             {
@@ -75,33 +75,58 @@ namespace ChainSafe.Gaming.Collection
         /// </summary>
         private void PopulateCollections(NftTokenModel.ProjectCollectionsResponse collectionsResponse)
         {
+            Debug.Log("PopulateCollections");
             foreach (var collection in collectionsResponse.Collections)
             {
-                AddCollectionToDisplay(collection.Name, collection.Banner);
+                AddCollectionToDisplay(collection.Name, collection.Type, collection.Banner);
             }
         }
-        
+
         /// <summary>
         /// Populates items to be added to the Collection display.
         /// </summary>
         /// <param name="index">The index of the project to populate from.</param>
-        private async void PopulateCollectionItems(int index)
+        /// <param name="collectionType">Collection type.</param>
+        private async void PopulateCollectionItems(int index, string collectionType)
         {
+            Debug.Log("PopulateCollectionItems");
             var projectResponse = await EvmMarketplace.GetProjectTokens();
-            var response = await EvmMarketplace.GetCollectionTokens721(projectResponse.Tokens[index].CollectionID);
-            foreach (var item in response.Tokens)
+            switch (collectionType)
             {
-                AddCollectionItemToDisplay(item.TokenID, item.TokenType, item.Supply, item.Uri);
+                case "721":
+                {
+                    var response = await EvmMarketplace.GetCollectionTokens721(projectResponse.Tokens[index].CollectionID);
+                    foreach (var item in response.Tokens)
+                    {
+                        AddCollectionItemToDisplay(item.TokenID, item.TokenType, item.Supply, item.Uri);
+                    }
+
+                    break;
+                }
+                case "1155":
+                {
+                    var response = await EvmMarketplace.GetCollectionTokens1155(projectResponse.Tokens[index].CollectionID);
+                    foreach (var item in response.Tokens)
+                    {
+                        AddCollectionItemToDisplay(item.TokenID, item.TokenType, item.Supply, item.Uri);
+                    }
+    
+                    break;
+                }
+                default:
+                    return;
             }
         }
-        
+
         /// <summary>
         /// Adds Collection to the display panel.
         /// </summary>
         /// <param name="collectionName">Collection name to add.</param>
+        /// <param name="collectionType">Collection type.</param>
         /// <param name="collectionBannerUri">Collection image uri to add.</param>
-        private void AddCollectionToDisplay(string collectionName, string collectionBannerUri)
+        private void AddCollectionToDisplay(string collectionName, string collectionType, string collectionBannerUri)
         {
+            Debug.Log("AddCollectionToDisplay");
             if (projectCollectionsObjectNumber >= projectCollectionsDisplayCount)
             {
                 Destroy(projectCollectionsPrefabs[0]);
@@ -110,12 +135,12 @@ namespace ChainSafe.Gaming.Collection
                     projectCollectionsPrefabs[i - 1] = projectCollectionsPrefabs[i];
                 }
                 projectCollectionsPrefabs[projectCollectionsPrefabs.Length - 1] = Instantiate(projectCollectionsPrefab, CollectionPanel.transform);
-                UpdateProjectCollectionsDisplay(projectCollectionsObjectNumber, collectionName, collectionBannerUri);
+                UpdateProjectCollectionsDisplay(projectCollectionsObjectNumber, collectionName, collectionType, collectionBannerUri);
             }
             else
             {
                 projectCollectionsPrefabs[projectCollectionsObjectNumber] = Instantiate(projectCollectionsPrefab, CollectionPanel.transform);
-                UpdateProjectCollectionsDisplay(projectCollectionsObjectNumber, collectionName, collectionBannerUri);
+                UpdateProjectCollectionsDisplay(projectCollectionsObjectNumber, collectionName, collectionType, collectionBannerUri);
             }
             projectCollectionsObjectNumber++;
             CollectionScrollRect.horizontalNormalizedPosition = 0;
@@ -130,6 +155,7 @@ namespace ChainSafe.Gaming.Collection
         /// <param name="nftUri">Nft Uri.</param>
         private void AddCollectionItemToDisplay(string nftId, string nftType, string supply, string nftUri)
         {
+            Debug.Log("AddCollectionItemToDisplay");
             if (CollectionItemsObjectNumber >= CollectionItemDisplayCount)
             {
                 Destroy(CollectionItemPrefabs[0]);
@@ -176,17 +202,19 @@ namespace ChainSafe.Gaming.Collection
 
             return texture;
         }
-        
+
         /// <summary>
         /// Updates the Collections display.
         /// </summary>
         /// <param name="projectCollectionsObjectIndex">Index of Collection.</param>
-        /// <param name="CollectionName">Collection name.</param>
-        /// <param name="CollectionBannerUri">Collection Uri.</param>
-        private void UpdateProjectCollectionsDisplay(int projectCollectionsObjectIndex, string CollectionName, string CollectionBannerUri)
+        /// <param name="collectionName">Collection name.</param>
+        /// <param name="collectionType">Collection type.</param>
+        /// <param name="collectionBannerUri">Collection Uri.</param>
+        private void UpdateProjectCollectionsDisplay(int projectCollectionsObjectIndex, string collectionName, string collectionType, string collectionBannerUri)
         {
-            string[] textObjectNames = { "NameText"};
-            string[] textValues = { CollectionName };
+            Debug.Log("UpdateProjectCollectionsDisplay");
+            string[] textObjectNames = { "NameText", "TypeText" };
+            string[] textValues = { collectionName, collectionType };
             for (int i = 0; i < textObjectNames.Length; i++)
             {
                 var textObj = projectCollectionsPrefabs[projectCollectionsObjectIndex].transform.Find(textObjectNames[i]);
@@ -194,11 +222,11 @@ namespace ChainSafe.Gaming.Collection
                 textMeshPro.text = textValues[i];
                 textMeshPro.font = DisplayFont;
                 textMeshPro.color = SecondaryTextColour;
-                // var image = await ImportTexture(CollectionBannerUri);
+                // var image = await ImportTexture(collectionBannerUri);
                 // var imageObj = projectCollectionsPrefabs[projectCollectionsObjectIndex].transform.Find("Image").GetComponent<Image>();
                 // imageObj.material.mainTexture = image;
                 var buttonObj = projectCollectionsPrefabs[projectCollectionsObjectIndex].transform.Find("Image").GetComponent<Button>();
-                buttonObj.onClick.AddListener(() => OpenCollection(projectCollectionsObjectIndex));
+                buttonObj.onClick.AddListener(() => OpenCollection(projectCollectionsObjectIndex, collectionType));
             }
         }
         
@@ -212,6 +240,7 @@ namespace ChainSafe.Gaming.Collection
         /// <param name="nftUri">Nft Uri.</param>
         private void UpdateCollectionItemDisplay(int collectionObjectIndex, string nftId, string nftType, string nftPrice, string nftUri)
         {
+            Debug.Log("UpdateCollectionItemDisplay");
             string[] textObjectNames = { "IdText", "TypeText", "PriceText" };
             string[] textValues = { nftId, nftType, nftPrice };
             for (int i = 0; i < textObjectNames.Length; i++)
@@ -233,6 +262,7 @@ namespace ChainSafe.Gaming.Collection
         /// <param name="index">The index to populate.</param>
         private void ResetProjectCollectionsPrefabsDisplay(int? index = null)
         {
+            Debug.Log("ResetProjectCollectionsPrefabsDisplay");
             foreach (var prefab in projectCollectionsPrefabs)
             {
                 if (prefab != null)
@@ -252,6 +282,7 @@ namespace ChainSafe.Gaming.Collection
         /// <param name="index">The index to populate.</param>
         private void ResetCollectionItemPrefabsDisplay(int? index = null)
         {
+            Debug.Log("ResetCollectionItemPrefabsDisplay");
             foreach (var prefab in CollectionItemPrefabs)
             {
                 if (prefab != null)
@@ -262,17 +293,29 @@ namespace ChainSafe.Gaming.Collection
             Array.Clear(CollectionItemPrefabs, 0, CollectionItemPrefabs.Length);
             CollectionItemsObjectNumber = 0;
             if (!index.HasValue) return;
-            PopulateCollectionItems(index.Value);
+            PopulateCollectionItems(index.Value, null);
         }
         
+        /// <summary>
+        /// Toggles selected collection.
+        /// </summary>
+        private void ToggleSelectedCollection()
+        {
+            Debug.Log("ToggleSelectedCollection");
+            ResetCollectionItemPrefabsDisplay();
+            ResetProjectCollectionsPrefabsDisplay(0);
+        }
+
         /// <summary>
         /// Opens selected Collection.
         /// </summary>
         /// <param name="collectionIndex">Index of the Collection to open.</param>
-        private void OpenCollection(int collectionIndex)
+        /// <param name="collectionType">Collection type.</param>
+        private void OpenCollection(int collectionIndex, string collectionType)
         {
+            Debug.Log("OpenCollection");
             ResetProjectCollectionsPrefabsDisplay();
-            PopulateCollectionItems(collectionIndex);
+            PopulateCollectionItems(collectionIndex, collectionType);
         }
         
         /// <summary>
@@ -280,6 +323,7 @@ namespace ChainSafe.Gaming.Collection
         /// </summary>
         private void CloseCollection()
         {
+            Debug.Log("CloseCollection");
             ResetProjectCollectionsPrefabsDisplay();
             ResetCollectionItemPrefabsDisplay();
         }
@@ -292,6 +336,7 @@ namespace ChainSafe.Gaming.Collection
             EventManagerMarketplace.ConfigureCollectionBrowserManager += OnConfigureCollectionBrowserManager;
             EventManagerMarketplace.ToggleCollectionsMenu += GetProjectCollections;
             EventManagerMarketplace.ToggleSelectionMenu += CloseCollection;
+            EventManagerMarketplace.ToggleSelectedCollection += ToggleSelectedCollection;
         }
         
         /// <summary>
@@ -302,6 +347,7 @@ namespace ChainSafe.Gaming.Collection
             EventManagerMarketplace.ConfigureCollectionBrowserManager -= OnConfigureCollectionBrowserManager;
             EventManagerMarketplace.ToggleCollectionsMenu -= GetProjectCollections;
             EventManagerMarketplace.ToggleSelectionMenu -= CloseCollection;
+            EventManagerMarketplace.ToggleSelectedCollection -= ToggleSelectedCollection;
         }
         
         /// <summary>

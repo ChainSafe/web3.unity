@@ -23,6 +23,8 @@ namespace ChainSafe.Gaming.Marketplace
         [SerializeField] private GameObject browseCollectionsMenu;
         [SerializeField] private GameObject createMarketplaceMenu;
         [SerializeField] private GameObject createCollectionMenu;
+        [SerializeField] private GameObject mintNftToCollectionMenu;
+        [SerializeField] private GameObject listNftToMarketplaceMenu;
         [SerializeField] private Button openMarketplacesMenuButton;
         [SerializeField] private Button openCollectionsMenuButton;
         [SerializeField] private Button createMarketplaceButton;
@@ -35,7 +37,10 @@ namespace ChainSafe.Gaming.Marketplace
         [SerializeField] private Button mintNftToCollectionButton;
         [SerializeField] private Button listNftToMarketplaceMenuButton;
         [SerializeField] private Button listNftToMarketplaceButton;
-        [SerializeField] private Button[] backToSelectionMenuButtons;
+        [SerializeField] private Button backButtonBrowseSelectedMarketplace;
+        [SerializeField] private Button backButtonBrowseSelectedCollection;
+        [SerializeField] private Button backButtonBrowseMarketplace;
+        [SerializeField] private Button backButtonBrowseCollection;
         [SerializeField] private Button logOutButton;
 
         #endregion
@@ -60,10 +65,10 @@ namespace ChainSafe.Gaming.Marketplace
             mintNftToCollectionButton.onClick.AddListener(UploadNftImageToCollection);
             listNftToMarketplaceMenuButton.onClick.AddListener(ToggleListNftToMarketplaceMenu);
             listNftToMarketplaceButton.onClick.AddListener(ListNftToMarketplace);
-            foreach (var button in backToSelectionMenuButtons)
-            {
-                button.onClick.AddListener(BackToSelectionMenu);
-            }
+            backButtonBrowseSelectedMarketplace.onClick.AddListener(ToggleSelectedMarketplace);
+            backButtonBrowseSelectedCollection.onClick.AddListener(ToggleSelectedCollection);
+            backButtonBrowseMarketplace.onClick.AddListener(BackToSelectionMenu);
+            backButtonBrowseCollection.onClick.AddListener(BackToSelectionMenu);
         }
         
         /// <summary>
@@ -122,6 +127,28 @@ namespace ChainSafe.Gaming.Marketplace
         }
         
         /// <summary>
+        /// Toggles Selected Collection.
+        /// </summary>
+        private void ToggleSelectedCollection()
+        {
+            EventManagerMarketplace.RaiseToggleSelectedCollection();
+            mintNftToCollectionMenuButton.gameObject.SetActive(!mintNftToCollectionMenuButton.gameObject.activeSelf);
+            backButtonBrowseSelectedCollection.gameObject.SetActive(!backButtonBrowseSelectedCollection.gameObject.activeSelf);
+            backButtonBrowseCollection.gameObject.SetActive(!backButtonBrowseCollection.gameObject.activeSelf);
+        }
+        
+        /// <summary>
+        /// Toggles Selected Marketplace.
+        /// </summary>
+        private void ToggleSelectedMarketplace()
+        {
+            EventManagerMarketplace.RaiseToggleSelectedMarketplace();
+            listNftToMarketplaceMenuButton.gameObject.SetActive(!listNftToMarketplaceMenuButton.gameObject.activeSelf);
+            backButtonBrowseSelectedMarketplace.gameObject.SetActive(!backButtonBrowseSelectedMarketplace.gameObject.activeSelf);
+            backButtonBrowseMarketplace.gameObject.SetActive(!backButtonBrowseMarketplace.gameObject);
+        }
+        
+        /// <summary>
         /// Toggles selection menu.
         /// </summary>
         private void BackToSelectionMenu()
@@ -161,6 +188,7 @@ namespace ChainSafe.Gaming.Marketplace
         /// </summary>
         private void ToggleMintNftToCollectionMenu()
         {
+            mintNftToCollectionMenu.SetActive(!mintNftToCollectionMenu.activeSelf);
             EventManagerMarketplace.RaiseToggleMintNftToSelectionMenu();
         }
 
@@ -169,6 +197,7 @@ namespace ChainSafe.Gaming.Marketplace
         /// </summary>
         private void ToggleListNftToMarketplaceMenu()
         {
+            listNftToMarketplaceMenu.SetActive(!listNftToMarketplaceMenu.activeSelf);
             EventManagerMarketplace.RaiseToggleListNftToMarketplaceMenu();
         }
         
@@ -185,6 +214,7 @@ namespace ChainSafe.Gaming.Marketplace
         /// </summary>
         private void MarketplaceLogout()
         {
+            EventManagerMarketplace.RaiseLogoutMarketplace();
             Instantiate(marketplaceLoginPrefab);
             Destroy(gameObject);
         }
@@ -195,6 +225,7 @@ namespace ChainSafe.Gaming.Marketplace
         private void OnEnable()
         {
             EventManagerMarketplace.ConfigureMarketplaceGuiManager += SetCustomColours;
+            EventManagerMarketplace.ToggleSelectedMarketplace += ToggleSelectedMarketplace;
         }
         
         /// <summary>
@@ -203,6 +234,7 @@ namespace ChainSafe.Gaming.Marketplace
         private void OnDisable()
         {
             EventManagerMarketplace.ConfigureMarketplaceGuiManager -= SetCustomColours;
+            EventManagerMarketplace.ToggleSelectedMarketplace -= ToggleSelectedMarketplace;
         }
 
         #endregion

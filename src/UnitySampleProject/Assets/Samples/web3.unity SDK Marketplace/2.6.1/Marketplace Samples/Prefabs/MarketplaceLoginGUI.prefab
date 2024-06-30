@@ -1080,7 +1080,7 @@ MonoBehaviour:
   verifyAuthCodeBackButton: {fileID: 1364789102463700846}
   displayFont: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   primaryBackgroundColour: {r: 0, g: 0, b: 0, a: 0.8627451}
-  menuBackgroundColour: {r: 0.05490196, g: 0.05490196, b: 0.05490196, a: 0}
+  menuBackgroundColour: {r: 0.05490196, g: 0.05490196, b: 0.05490196, a: 1}
   primaryTextColour: {r: 0.6745098, g: 1, b: 0.4862745, a: 1}
   secondaryTextColour: {r: 1, g: 1, b: 1, a: 1}
   borderButtonColour: {r: 1, g: 1, b: 1, a: 1}
@@ -1099,7 +1099,6 @@ MonoBehaviour:
   - {fileID: 1686292479457944369}
   - {fileID: 5990508210497694103}
   borderButtonObjects: []
-  test: 1
 --- !u!1 &3905764076522623970
 GameObject:
   m_ObjectHideFlags: 0

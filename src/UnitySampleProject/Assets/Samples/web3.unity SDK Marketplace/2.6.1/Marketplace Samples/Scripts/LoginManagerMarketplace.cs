@@ -164,7 +164,7 @@ namespace ChainSafe.Gaming.Marketplace
                 string jsonResponse = request.downloadHandler.text;
                 AuthSystemResponse.LoginResponse loginResponse = JsonConvert.DeserializeObject<AuthSystemResponse.LoginResponse>(jsonResponse);
                 InstantiateMarketplace();
-                var authSystemManagerConfigArgs = new EventManagerMarketplace.MarketplaceAuthSystemManagerConfigEventArgs(loginResponse.access_token.token, DateTime.Parse(loginResponse.access_token.expires), loginResponse.refresh_token.token, DateTime.Parse(loginResponse.refresh_token.expires));
+                var authSystemManagerConfigArgs = new EventManagerMarketplace.MarketplaceAuthSystemConfigEventArgs(loginResponse.access_token.token, DateTime.Parse(loginResponse.access_token.expires), loginResponse.refresh_token.token, DateTime.Parse(loginResponse.refresh_token.expires));
                 EventManagerMarketplace.RaiseConfigureAuthSystemManager(authSystemManagerConfigArgs);
                 var marketplaceBrowserManagerConfigArgs = new EventManagerMarketplace.MarketplaceBrowserConfigEventArgs(displayFont, secondaryTextColour, loginResponse.access_token.token);
                 EventManagerMarketplace.RaiseConfigureMarketplaceBrowserManager(marketplaceBrowserManagerConfigArgs);

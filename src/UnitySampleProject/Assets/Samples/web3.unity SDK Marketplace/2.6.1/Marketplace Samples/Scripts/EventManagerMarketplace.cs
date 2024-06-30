@@ -1,4 +1,5 @@
 using System;
+using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
 
@@ -11,23 +12,27 @@ namespace ChainSafe.Gaming.Marketplace
     {
         #region Events
         
-        public static event EventHandler<MarketplaceAuthSystemManagerConfigEventArgs> ConfigureAuthSystemManager;
+        public static event EventHandler<MarketplaceAuthSystemConfigEventArgs> ConfigureAuthSystemManager;
         public static event EventHandler<MarketplaceGUIConfigEventArgs> ConfigureMarketplaceGuiManager;
         public static event EventHandler<MarketplaceBrowserConfigEventArgs> ConfigureMarketplaceBrowserManager;
         public static event EventHandler<CollectionBrowserConfigEventArgs> ConfigureCollectionBrowserManager;
         public static event EventHandler<MarketplaceCreateConfigEventArgs> ConfigureMarketplaceCreateManager;
         public static event EventHandler<CollectionCreateConfigEventArgs> ConfigureCollectionCreateManager;
-        public static event Action ToggleMarketplacesMenu;
-        public static event Action ToggleCreateMarketplaceMenu;
+        public static event EventHandler<ListNftToMarketplaceConfigEventArgs> ConfigureListNftToMarketplaceManager;
+        public static event Action ToggleSelectionMenu;
         public static event Action ToggleCollectionsMenu;
         public static event Action ToggleCreateCollectionMenu;
-        public static event Action ToggleSelectionMenu;
         public static event Action ToggleMintNftToCollectionMenu;
-        public static event Action UploadMarketplaceImage;
+        public static event Action ToggleSelectedCollection;
         public static event Action UploadCollectionImage;
         public static event Action UploadNftImageToCollection;
-        public static event Action ListNftToMarketplace;
+        public static event Action ToggleMarketplacesMenu;
+        public static event Action ToggleCreateMarketplaceMenu;
         public static event Action ToggleListNftToMarketplaceMenu;
+        public static event Action ToggleSelectedMarketplace;
+        public static event Action UploadMarketplaceImage;
+        public static event Action ListNftToMarketplace;
+        public static event Action LogoutMarketplace;
         
         #endregion
         
@@ -122,13 +127,48 @@ namespace ChainSafe.Gaming.Marketplace
         }
         
         /// <summary>
+        /// Closes the selected collection.
+        /// </summary>
+        public static void RaiseToggleSelectedCollection()
+        {
+            ToggleSelectedCollection?.Invoke();
+        }
+        
+        /// <summary>
+        /// Closes the selected marketplace.
+        /// </summary>
+        public static void RaiseToggleSelectedMarketplace()
+        {
+            ToggleSelectedMarketplace?.Invoke();
+        }
+        
+        /// <summary>
+        /// Logs the user out of the marketplace.
+        /// </summary>
+        public static void RaiseLogoutMarketplace()
+        {
+            ResetBearerTokens();
+            LogoutMarketplace?.Invoke();
+        }
+        
+        /// <summary>
         /// Configure auth system manager.
         /// </summary>
         /// <param name="args">Input args.</param>
-        public static void RaiseConfigureAuthSystemManager(MarketplaceAuthSystemManagerConfigEventArgs args)
+        public static void RaiseConfigureAuthSystemManager(MarketplaceAuthSystemConfigEventArgs args)
         {
             ConfigureAuthSystemManager?.Invoke(null, args);
         }
+        
+        /// <summary>
+        /// Configure auth system manager.
+        /// </summary>
+        /// <param name="args">Input args.</param>
+        public static void RaiseListNftToMarketplaceManager(ListNftToMarketplaceConfigEventArgs args)
+        {
+            ConfigureListNftToMarketplaceManager?.Invoke(null, args);
+        }
+
         
         /// <summary>
         /// Configure GUI manager.
@@ -177,12 +217,33 @@ namespace ChainSafe.Gaming.Marketplace
         
         #endregion
         
+        /// <summary>
+        /// Resets all bearer tokens.
+        /// </summary>
+        public static void ResetBearerTokens()
+        {
+            var authEventArgs = new MarketplaceAuthSystemConfigEventArgs(string.Empty, DateTime.Now, string.Empty, DateTime.Now);
+            RaiseConfigureAuthSystemManager(authEventArgs);
+
+            var marketplaceBrowserEventArgs = new MarketplaceBrowserConfigEventArgs(MarketplaceGUIConfigEventArgs.DisplayFont, MarketplaceGUIConfigEventArgs.SecondaryTextColour, string.Empty);
+            RaiseConfigureMarketplaceBrowserManager(marketplaceBrowserEventArgs);
+
+            var collectionBrowserEventArgs = new CollectionBrowserConfigEventArgs(MarketplaceGUIConfigEventArgs.DisplayFont, MarketplaceGUIConfigEventArgs.SecondaryTextColour, string.Empty);
+            RaiseConfigureCollectionBrowserManager(collectionBrowserEventArgs);
+
+            var marketplaceCreateEventArgs = new MarketplaceCreateConfigEventArgs(string.Empty);
+            RaiseConfigureMarketplaceCreateManager(marketplaceCreateEventArgs);
+
+            var collectionCreateEventArgs = new CollectionCreateConfigEventArgs(string.Empty);
+            RaiseConfigureCollectionCreateManager(collectionCreateEventArgs);
+        }
+        
         #region Configuration Classes
         
         /// <summary>
         /// Configuration class for the Marketplace Auth System Manager.
         /// </summary>
-        public class MarketplaceAuthSystemManagerConfigEventArgs : EventArgs
+        public class MarketplaceAuthSystemConfigEventArgs : EventArgs
         {
             #region Properties
             
@@ -198,12 +259,60 @@ namespace ChainSafe.Gaming.Marketplace
     
             #region Methods
     
-            public MarketplaceAuthSystemManagerConfigEventArgs(string bearerToken, DateTime bearerTokenExpires, string refreshToken, DateTime refreshTokenExpires)
+            public MarketplaceAuthSystemConfigEventArgs(string bearerToken, DateTime bearerTokenExpires, string refreshToken, DateTime refreshTokenExpires)
             {
                 BearerToken = bearerToken;
                 BearerTokenExpires = bearerTokenExpires;
                 RefreshToken = refreshToken;
                 RefreshTokenExpires = refreshTokenExpires;
+            }
+            
+            #endregion
+        }
+        
+        /// <summary>
+        /// Configuration class for the Marketplace Auth System Manager.
+        /// </summary>
+        public class ListNftToMarketplaceConfigEventArgs : EventArgs
+        {
+            #region Properties
+            
+            [CanBeNull] public string CollectionContractToListFrom { get; set; }
+            [CanBeNull] public string MarketplaceContractToListTo { get; set; }
+            [CanBeNull] public string TokenIdToList { get; set; }
+            [CanBeNull] public string Price { get; set; }
+            [CanBeNull] public string NftType { get; set; }
+
+            #endregion
+    
+            #region Methods
+    
+            public ListNftToMarketplaceConfigEventArgs([CanBeNull] string collectionContractToListFrom, [CanBeNull] string marketplaceContractToListTo, [CanBeNull] string tokenIdToList, [CanBeNull] string price, [CanBeNull] string nftType)
+            {
+                if (collectionContractToListFrom != null)
+                {
+                    CollectionContractToListFrom = collectionContractToListFrom;
+                }
+
+                if (marketplaceContractToListTo != null)
+                {
+                    MarketplaceContractToListTo = marketplaceContractToListTo;
+                }
+
+                if (tokenIdToList != null)
+                {
+                    TokenIdToList = tokenIdToList;
+                }
+
+                if (price != null)
+                {
+                    Price = price;
+                }
+
+                if (nftType != null)
+                {
+                    NftType = nftType;
+                }
             }
             
             #endregion

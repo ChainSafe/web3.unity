@@ -7,6 +7,9 @@ using ChainSafe.Gaming.Marketplace.Models;
 
 namespace ChainSafe.Gaming.Marketplace
 {
+    /// <summary>
+    /// Manages marketplace auth config.
+    /// </summary>
     public class MarketplaceAuth : MonoBehaviour, IMarketplaceAuth
     {
         #region Properties
@@ -20,7 +23,12 @@ namespace ChainSafe.Gaming.Marketplace
 
         #region Methods
 
-        public void InitializeConfig(object sender, EventManagerMarketplace.MarketplaceAuthSystemManagerConfigEventArgs marketplaceAuthSystemManagerConfigEventArgs)
+        /// <summary>
+        /// Initializes class properties.
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="marketplaceAuthSystemManagerConfigEventArgs">Property arguments.</param>
+        public void InitializeConfig(object sender, EventManagerMarketplace.MarketplaceAuthSystemConfigEventArgs marketplaceAuthSystemManagerConfigEventArgs)
         {
             BearerToken = marketplaceAuthSystemManagerConfigEventArgs.BearerToken;
             BearerTokenExpires = marketplaceAuthSystemManagerConfigEventArgs.BearerTokenExpires;
@@ -28,16 +36,22 @@ namespace ChainSafe.Gaming.Marketplace
             RefreshTokenExpires = marketplaceAuthSystemManagerConfigEventArgs.RefreshTokenExpires;
             StartCoroutine(WaitForTokenExpiration());
         }
-
+        
+        /// <summary>
+        /// Timer that wait for token expiration to execute refresh.
+        /// </summary>
         private IEnumerator WaitForTokenExpiration()
         {
             DateTime currentTime = DateTime.UtcNow;
             TimeSpan timeToWait = BearerTokenExpires - currentTime;
             yield return new WaitForSeconds((float)timeToWait.TotalSeconds);
-            Debug.Log("Refresh Expired");
+            Debug.Log("Refreshing Token, timer expired");
             RefreshExpiredToken();
         }
-
+        
+        /// <summary>
+        /// Refreshes an expired bearer token.
+        /// </summary>
         private async void RefreshExpiredToken()
         {
             if (RefreshToken == null)
