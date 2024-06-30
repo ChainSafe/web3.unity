@@ -104,7 +104,6 @@ jobs:
         restore-keys: |
           Library-
     - uses: game-ci/unity-test-runner@v3
-      if: ${{ github.ref_name == 'dev' }}
       id: tests
       env:
         UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
@@ -117,17 +116,17 @@ jobs:
         checkName: ${{ matrix.testMode }} Test Results
         coverageOptions: 'generateAdditionalMetrics;generateHtmlReport;generateBadgeReport;'
     - uses: actions/upload-artifact@v3
-      if: ${{ github.ref_name == 'dev' }}
+      if: always()
       with:
         name: Test results for ${{ matrix.testMode }}
         path: ${{ steps.tests.outputs.artifactsPath }}
     - uses: actions/upload-artifact@v3
-      if: ${{ github.ref_name == 'dev' }}
+      if: always()
       with:
         name: Coverage results for ${{ matrix.testMode }}
         path: ${{ steps.tests.outputs.coveragePath }}
     - name: Commit and Push changes
-      if: ${{ github.ref_name == 'rob/scripts-data-formatting-1015' }}
+      if: ${{ github.ref_name == 'dev' }}
       run: |
         git diff-index --cached --quiet HEAD || git commit -m 'Auto Commit [skip ci]
         - Duplicate Packages Samples
