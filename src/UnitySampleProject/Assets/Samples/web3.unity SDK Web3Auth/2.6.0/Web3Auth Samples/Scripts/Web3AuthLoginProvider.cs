@@ -13,7 +13,7 @@ using UnityEngine.UI;
 using Network = Web3Auth.Network;
 
 /// <summary>
-/// Login using Web3Auth.Test
+/// Login using Web3Auth.
 /// </summary>
 public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
 {

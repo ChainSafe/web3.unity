@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Login using HyperPlay desktop client.Test
+/// Login using HyperPlay desktop client.
 /// </summary>
 public class HyperPlayLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
 {

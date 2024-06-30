@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Login using an existing wallet with WalletConnect.Test
+/// Login using an existing wallet with WalletConnect.
 /// </summary>
 public class WalletConnectLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
 {
