@@ -91,10 +91,12 @@ namespace ChainSafe.Gaming.Collection
         {
             Debug.Log("PopulateCollectionItems");
             var projectResponse = await EvmMarketplace.GetProjectTokens();
+            Debug.Log($"Collection Type: {collectionType}");
             switch (collectionType)
             {
-                case "721":
+                case "erc721":
                 {
+                    Debug.Log($"Populating 721");
                     var response = await EvmMarketplace.GetCollectionTokens721(projectResponse.Tokens[index].CollectionID);
                     foreach (var item in response.Tokens)
                     {
@@ -103,8 +105,9 @@ namespace ChainSafe.Gaming.Collection
 
                     break;
                 }
-                case "1155":
+                case "erc1155":
                 {
+                    Debug.Log($"Populating 1155");
                     var response = await EvmMarketplace.GetCollectionTokens1155(projectResponse.Tokens[index].CollectionID);
                     foreach (var item in response.Tokens)
                     {
@@ -114,6 +117,7 @@ namespace ChainSafe.Gaming.Collection
                     break;
                 }
                 default:
+                    Debug.Log("No NFT type given, returning");
                     return;
             }
         }
@@ -129,6 +133,7 @@ namespace ChainSafe.Gaming.Collection
             Debug.Log("AddCollectionToDisplay");
             if (projectCollectionsObjectNumber >= projectCollectionsDisplayCount)
             {
+                Debug.Log("Over Display Count");
                 Destroy(projectCollectionsPrefabs[0]);
                 for (int i = 1; i < projectCollectionsPrefabs.Length; i++)
                 {
@@ -139,6 +144,7 @@ namespace ChainSafe.Gaming.Collection
             }
             else
             {
+                Debug.Log("Under Display Count");
                 projectCollectionsPrefabs[projectCollectionsObjectNumber] = Instantiate(projectCollectionsPrefab, CollectionPanel.transform);
                 UpdateProjectCollectionsDisplay(projectCollectionsObjectNumber, collectionName, collectionType, collectionBannerUri);
             }
@@ -158,6 +164,7 @@ namespace ChainSafe.Gaming.Collection
             Debug.Log("AddCollectionItemToDisplay");
             if (CollectionItemsObjectNumber >= CollectionItemDisplayCount)
             {
+                Debug.Log("Over Display Count");
                 Destroy(CollectionItemPrefabs[0]);
                 for (int i = 1; i < CollectionItemPrefabs.Length; i++)
                 {
@@ -168,6 +175,7 @@ namespace ChainSafe.Gaming.Collection
             }
             else
             {
+                Debug.Log("Under Display Count");
                 CollectionItemPrefabs[CollectionItemsObjectNumber] = Instantiate(CollectionItemPrefab, CollectionPanel.transform);
                 UpdateCollectionItemDisplay(CollectionItemsObjectNumber, nftId, nftType, supply, nftUri);
             }
@@ -210,11 +218,11 @@ namespace ChainSafe.Gaming.Collection
         /// <param name="collectionName">Collection name.</param>
         /// <param name="collectionType">Collection type.</param>
         /// <param name="collectionBannerUri">Collection Uri.</param>
-        private void UpdateProjectCollectionsDisplay(int projectCollectionsObjectIndex, string collectionName, string collectionType, string collectionBannerUri)
+        private async void UpdateProjectCollectionsDisplay(int projectCollectionsObjectIndex, string collectionName, string collectionType, string collectionBannerUri)
         {
             Debug.Log("UpdateProjectCollectionsDisplay");
             string[] textObjectNames = { "NameText", "TypeText" };
-            string[] textValues = { collectionName, collectionType };
+            string[] textValues = { collectionName, $"Type: {collectionType}" };
             for (int i = 0; i < textObjectNames.Length; i++)
             {
                 var textObj = projectCollectionsPrefabs[projectCollectionsObjectIndex].transform.Find(textObjectNames[i]);
@@ -222,27 +230,37 @@ namespace ChainSafe.Gaming.Collection
                 textMeshPro.text = textValues[i];
                 textMeshPro.font = DisplayFont;
                 textMeshPro.color = SecondaryTextColour;
-                // var image = await ImportTexture(collectionBannerUri);
-                // var imageObj = projectCollectionsPrefabs[projectCollectionsObjectIndex].transform.Find("Image").GetComponent<Image>();
-                // imageObj.material.mainTexture = image;
+                try
+                {
+                    var image = await ImportTexture(collectionBannerUri);
+                    var imageObj = projectCollectionsPrefabs[projectCollectionsObjectIndex].transform.Find("Image").GetComponent<Image>();
+                    imageObj.material.mainTexture = image;
+                }
+                catch (Exception e)
+                {
+                    Debug.Log($"Error getting image: {e}");
+                    throw;
+                }
                 var buttonObj = projectCollectionsPrefabs[projectCollectionsObjectIndex].transform.Find("Image").GetComponent<Button>();
+                buttonObj.onClick.RemoveAllListeners();
                 buttonObj.onClick.AddListener(() => OpenCollection(projectCollectionsObjectIndex, collectionType));
             }
         }
-        
+
         /// <summary>
         /// Updates the Collection item display.
         /// </summary>
         /// <param name="collectionObjectIndex"></param>
         /// <param name="nftId">Nft id.</param>
         /// <param name="nftType">Nft name.</param>
-        /// <param name="nftPrice">Nft price.</param>
+        /// <param name="supply">Nft supply.</param>
+        /// <param name="listedStatus">Nft listed status.</param>
         /// <param name="nftUri">Nft Uri.</param>
-        private void UpdateCollectionItemDisplay(int collectionObjectIndex, string nftId, string nftType, string nftPrice, string nftUri)
+        private async void UpdateCollectionItemDisplay(int collectionObjectIndex, string nftId, string nftType, string supply, string nftUri)
         {
             Debug.Log("UpdateCollectionItemDisplay");
-            string[] textObjectNames = { "IdText", "TypeText", "PriceText" };
-            string[] textValues = { nftId, nftType, nftPrice };
+            string[] textObjectNames = { "IdText", "TypeText", "SupplyText" };
+            string[] textValues = { $"ID: {nftId}", $"Type: {nftType}", $"Supply: {supply}"};
             for (int i = 0; i < textObjectNames.Length; i++)
             {
                 var textObj = CollectionItemPrefabs[collectionObjectIndex].transform.Find(textObjectNames[i]);
@@ -250,17 +268,23 @@ namespace ChainSafe.Gaming.Collection
                 textMeshPro.text = textValues[i];
                 textMeshPro.font = DisplayFont;
                 textMeshPro.color = SecondaryTextColour;
-                // var image = await ImportTexture(nftUri);
-                // var imageObj = CollectionItemPrefabs[collectionObjectIndex].transform.Find("Image").GetComponent<Image>();
-                // imageObj.material.mainTexture = image;
+                try
+                {
+                    var image = await ImportTexture(nftUri);
+                    var imageObj = CollectionItemPrefabs[collectionObjectIndex].transform.Find("Image").GetComponent<Image>();
+                    imageObj.material.mainTexture = image;
+                }
+                catch (Exception e)
+                {
+                    Debug.Log($"Error getting image: {e}");
+                }
             }
         }
         
         /// <summary>
         /// Resets Collection display by destroying Collection prefabs.
         /// </summary>
-        /// <param name="index">The index to populate.</param>
-        private void ResetProjectCollectionsPrefabsDisplay(int? index = null)
+        private void ResetProjectCollectionsPrefabsDisplay()
         {
             Debug.Log("ResetProjectCollectionsPrefabsDisplay");
             foreach (var prefab in projectCollectionsPrefabs)
@@ -272,15 +296,12 @@ namespace ChainSafe.Gaming.Collection
             }
             Array.Clear(projectCollectionsPrefabs, 0, projectCollectionsPrefabs.Length);
             projectCollectionsObjectNumber = 0;
-            if (!index.HasValue) return;
-            GetProjectCollections();
         }
         
         /// <summary>
         /// Resets Collection display by destroying item prefabs.
         /// </summary>
-        /// <param name="index">The index to populate.</param>
-        private void ResetCollectionItemPrefabsDisplay(int? index = null)
+        private void ResetCollectionItemPrefabsDisplay()
         {
             Debug.Log("ResetCollectionItemPrefabsDisplay");
             foreach (var prefab in CollectionItemPrefabs)
@@ -292,8 +313,6 @@ namespace ChainSafe.Gaming.Collection
             }
             Array.Clear(CollectionItemPrefabs, 0, CollectionItemPrefabs.Length);
             CollectionItemsObjectNumber = 0;
-            if (!index.HasValue) return;
-            PopulateCollectionItems(index.Value, null);
         }
         
         /// <summary>
@@ -303,7 +322,7 @@ namespace ChainSafe.Gaming.Collection
         {
             Debug.Log("ToggleSelectedCollection");
             ResetCollectionItemPrefabsDisplay();
-            ResetProjectCollectionsPrefabsDisplay(0);
+            ResetProjectCollectionsPrefabsDisplay();
         }
 
         /// <summary>
