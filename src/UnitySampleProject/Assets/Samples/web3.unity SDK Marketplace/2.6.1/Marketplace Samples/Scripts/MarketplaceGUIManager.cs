@@ -65,8 +65,8 @@ namespace ChainSafe.Gaming.Marketplace
             mintNftToCollectionButton.onClick.AddListener(UploadNftImageToCollection);
             listNftToMarketplaceMenuButton.onClick.AddListener(ToggleListNftToMarketplaceMenu);
             listNftToMarketplaceButton.onClick.AddListener(ListNftToMarketplace);
-            backButtonBrowseSelectedMarketplace.onClick.AddListener(ToggleSelectedMarketplace);
-            backButtonBrowseSelectedCollection.onClick.AddListener(ToggleSelectedCollection);
+            backButtonBrowseSelectedMarketplace.onClick.AddListener(CloseSelectedMarketplace);
+            backButtonBrowseSelectedCollection.onClick.AddListener(CloseSelectedCollection);
             backButtonBrowseMarketplace.onClick.AddListener(BackToSelectionMenu);
             backButtonBrowseCollection.onClick.AddListener(BackToSelectionMenu);
         }
@@ -127,25 +127,45 @@ namespace ChainSafe.Gaming.Marketplace
         }
         
         /// <summary>
-        /// Toggles Selected Collection.
+        /// Closes Selected Collection.
         /// </summary>
-        private void ToggleSelectedCollection()
+        private void CloseSelectedCollection()
         {
-            EventManagerMarketplace.RaiseToggleSelectedCollection();
-            mintNftToCollectionMenuButton.gameObject.SetActive(!mintNftToCollectionMenuButton.gameObject.activeSelf);
-            backButtonBrowseSelectedCollection.gameObject.SetActive(!backButtonBrowseSelectedCollection.gameObject.activeSelf);
-            backButtonBrowseCollection.gameObject.SetActive(!backButtonBrowseCollection.gameObject.activeSelf);
+            mintNftToCollectionMenuButton.gameObject.SetActive(false);
+            backButtonBrowseSelectedCollection.gameObject.SetActive(false);
+            backButtonBrowseCollection.gameObject.SetActive(true);
+            EventManagerMarketplace.RaiseCloseSelectedCollection();
         }
         
         /// <summary>
-        /// Toggles Selected Marketplace.
+        /// Opens Selected Collection.
         /// </summary>
-        private void ToggleSelectedMarketplace()
+        private void OpenSelectedCollection()
         {
-            EventManagerMarketplace.RaiseToggleSelectedMarketplace();
-            listNftToMarketplaceMenuButton.gameObject.SetActive(!listNftToMarketplaceMenuButton.gameObject.activeSelf);
-            backButtonBrowseSelectedMarketplace.gameObject.SetActive(!backButtonBrowseSelectedMarketplace.gameObject.activeSelf);
-            backButtonBrowseMarketplace.gameObject.SetActive(!backButtonBrowseMarketplace.gameObject);
+            mintNftToCollectionMenuButton.gameObject.SetActive(true);
+            backButtonBrowseSelectedCollection.gameObject.SetActive(true);
+            backButtonBrowseCollection.gameObject.SetActive(false);
+        }
+        
+        /// <summary>
+        /// Closes Selected Marketplace.
+        /// </summary>
+        private void CloseSelectedMarketplace()
+        {
+            listNftToMarketplaceMenuButton.gameObject.SetActive(false);
+            backButtonBrowseSelectedMarketplace.gameObject.SetActive(false);
+            backButtonBrowseMarketplace.gameObject.SetActive(true);
+            EventManagerMarketplace.RaiseCloseSelectedMarketplace();
+        }
+        
+        /// <summary>
+        /// Opens Selected Marketplace.
+        /// </summary>
+        private void OpenSelectedMarketplace()
+        {
+            listNftToMarketplaceMenuButton.gameObject.SetActive(true);
+            backButtonBrowseSelectedMarketplace.gameObject.SetActive(true);
+            backButtonBrowseMarketplace.gameObject.SetActive(false);
         }
         
         /// <summary>
@@ -225,7 +245,8 @@ namespace ChainSafe.Gaming.Marketplace
         private void OnEnable()
         {
             EventManagerMarketplace.ConfigureMarketplaceGuiManager += SetCustomColours;
-            EventManagerMarketplace.ToggleSelectedMarketplace += ToggleSelectedMarketplace;
+            EventManagerMarketplace.OpenSelectedMarketplace += OpenSelectedMarketplace;
+            EventManagerMarketplace.OpenSelectedCollection += OpenSelectedCollection;
         }
         
         /// <summary>
@@ -234,7 +255,8 @@ namespace ChainSafe.Gaming.Marketplace
         private void OnDisable()
         {
             EventManagerMarketplace.ConfigureMarketplaceGuiManager -= SetCustomColours;
-            EventManagerMarketplace.ToggleSelectedMarketplace -= ToggleSelectedMarketplace;
+            EventManagerMarketplace.OpenSelectedMarketplace -= OpenSelectedMarketplace;
+            EventManagerMarketplace.OpenSelectedCollection += OpenSelectedCollection;
         }
 
         #endregion

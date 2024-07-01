@@ -1,19 +1,17 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Ipfs;
 using ChainSafe.Gaming.Web3;
-using Newtonsoft.Json;
-using Scripts.EVM.Token;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using EvmMarketplace = Scripts.EVM.Marketplace.Marketplace;
 using ChainSafe.Gaming.Marketplace.Models;
+using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Model;
-using UnityEngine.Events;
 
 namespace ChainSafe.Gaming.Marketplace
 {
@@ -62,7 +60,6 @@ namespace ChainSafe.Gaming.Marketplace
         /// </summary>
         private async void GetProjectMarketplaces()
         {
-            Debug.Log("GetProjectMarketplaces");
             var response = await EvmMarketplace.GetProjectMarketplaces(BearerToken);
             if (response.Marketplaces.Count > 0)
             {
@@ -75,7 +72,6 @@ namespace ChainSafe.Gaming.Marketplace
         /// </summary>
         private void PopulateMarketplaces(MarketplaceModel.ProjectMarketplacesResponse marketplacesResponse)
         {
-            Debug.Log("PopulateMarketplaces");
             foreach (var marketplace in marketplacesResponse.Marketplaces)
             {
                 AddMarketplaceToDisplay(marketplace.ContractAddress, marketplace.Name, marketplace.Banner);
@@ -89,9 +85,7 @@ namespace ChainSafe.Gaming.Marketplace
         /// <param name="index">The index of the project to populate from.</param>
         private async void PopulateMarketplaceItems(string marketplaceContract, int index)
         {
-            Debug.Log("PopulateProjectItems");
             var projectResponse = await EvmMarketplace.GetProjectItems();
-            Debug.Log($"MarketplaceID: {projectResponse.Items[index].MarketplaceID}");
             var response = await EvmMarketplace.GetMarketplaceItems(projectResponse.Items[index].MarketplaceID);
             foreach (var item in response.Items)
             {
@@ -107,7 +101,6 @@ namespace ChainSafe.Gaming.Marketplace
         /// <param name="marketplaceBannerUri">Marketplace image uri to add.</param>
         private void AddMarketplaceToDisplay(string marketplaceContract, string marketplaceName, string marketplaceBannerUri)
         {
-            Debug.Log("AddMarketplaceToDisplay");
             if (projectMarketplacesObjectNumber >= projectMarketplacesDisplayCount)
             {
                 Destroy(projectMarketplacesPrefabs[0]);
@@ -137,7 +130,6 @@ namespace ChainSafe.Gaming.Marketplace
         /// <param name="nftUri">Nft Uri.</param>
         private void AddMarketplaceItemToDisplay(string marketplaceContract, string nftId, string nftType, string nftPrice, string nftUri)
         {
-            Debug.Log("AddMarketplaceItemToDisplay");
             if (marketplaceItemObjectNumber >= marketplaceItemDisplayCount)
             {
                 Destroy(marketplaceItemPrefabs[0]);
@@ -186,7 +178,6 @@ namespace ChainSafe.Gaming.Marketplace
         /// <param name="marketplaceBannerUri">Marketplace Uri.</param>
         private async void UpdateProjectMarketplacesDisplay(string marketplaceContract, int projectMarketplacesObjectIndex, string marketplaceName, string marketplaceBannerUri)
         {
-            Debug.Log("UpdateProjectMarketplacesDisplay");
             string[] textObjectNames = { "NameText" };
             string[] textValues = { marketplaceName };
             for (int i = 0; i < textObjectNames.Length; i++)
@@ -223,9 +214,10 @@ namespace ChainSafe.Gaming.Marketplace
         /// <param name="nftUri">Nft Uri.</param>
         private async void UpdateMarketplaceItemDisplay(string marketplaceContract, int marketplaceItemObjectIndex, string nftId, string nftType, string nftPrice, string nftUri)
         {
-            Debug.Log("UpdateMarketplaceItemDisplay");
+            var ethValue = (decimal)BigInteger.Parse(nftPrice) / (decimal)BigInteger.Pow(10, 18);
+            string formattedEthValue = ethValue.ToString("0.##################");
             string[] textObjectNames = { "IdText", "TypeText", "PriceText" };
-            string[] textValues = { $"ID: {nftId}", $"Type: {nftType}", $"Price: {nftPrice}" };
+            string[] textValues = { $"ID: {nftId}", $"{nftType}", $"{formattedEthValue} {Web3Accessor.Web3.ChainConfig.Symbol.ToUpper()}" };
             for (int i = 0; i < textObjectNames.Length; i++)
             {
                 var textObj = marketplaceItemPrefabs[marketplaceItemObjectIndex].transform.Find(textObjectNames[i]);
@@ -278,8 +270,6 @@ namespace ChainSafe.Gaming.Marketplace
         /// <param name="price">Nft price.</param>
         private async void PurchaseNft(string marketplaceContract, string marketplaceObjectIndex, string price)
         {
-            Debug.Log("PurchaseNft");
-            Debug.Log($"Marketplace contract: {marketplaceContract}");
             await EvmMarketplace.PurchaseNft(marketplaceContract, marketplaceObjectIndex, price);
         }
         
@@ -289,7 +279,6 @@ namespace ChainSafe.Gaming.Marketplace
         /// <param name="index">The index to populate.</param>
         private void ResetProjectMarketplacesPrefabsDisplay(int? index = null)
         {
-            Debug.Log("ResetProjectMarketplacesPrefabsDisplay");
             foreach (var prefab in projectMarketplacesPrefabs)
             {
                 if (prefab != null)
@@ -309,7 +298,6 @@ namespace ChainSafe.Gaming.Marketplace
         /// <param name="index">The index to populate.</param>
         private void ResetMarketplaceItemPrefabsDisplay(int? index = null)
         {
-            Debug.Log("ResetMarketplaceItemPrefabsDisplay");
             foreach (var prefab in marketplaceItemPrefabs)
             {
                 if (prefab != null)
@@ -326,10 +314,9 @@ namespace ChainSafe.Gaming.Marketplace
         /// <summary>
         /// Toggles selected marketplace.
         /// </summary>
-        private void ToggleSelectedMarketplace()
+        private void CloseSelectedMarketplace()
         {
-            Debug.Log("ToggleSelectedMarketplace");
-            ResetProjectMarketplacesPrefabsDisplay();
+            ResetProjectMarketplacesPrefabsDisplay(0);
             ResetMarketplaceItemPrefabsDisplay();
         }
 
@@ -340,7 +327,7 @@ namespace ChainSafe.Gaming.Marketplace
         /// <param name="marketplaceIndex">Index of the marketplace to open.</param>
         private void OpenSelectedMarketplace(string marketplaceContract, int marketplaceIndex)
         {
-            Debug.Log("OpenSelectedMarketplace");
+            EventManagerMarketplace.RaiseOpenSelectedMarketplace();
             ResetProjectMarketplacesPrefabsDisplay();
             PopulateMarketplaceItems(marketplaceContract, marketplaceIndex);
         }
@@ -350,7 +337,6 @@ namespace ChainSafe.Gaming.Marketplace
         /// </summary>
         private void CloseMarketplace()
         {
-            Debug.Log("CloseMarketplace");
             ResetProjectMarketplacesPrefabsDisplay();
             ResetMarketplaceItemPrefabsDisplay();
         }
@@ -362,7 +348,7 @@ namespace ChainSafe.Gaming.Marketplace
         {
             EventManagerMarketplace.ConfigureMarketplaceBrowserManager += OnConfigureMarketPlaceBrowseManager;
             EventManagerMarketplace.ToggleMarketplacesMenu += GetProjectMarketplaces;
-            EventManagerMarketplace.ToggleSelectedMarketplace += ToggleSelectedMarketplace;
+            EventManagerMarketplace.CloseSelectedMarketplace += CloseSelectedMarketplace;
             EventManagerMarketplace.ToggleSelectionMenu += CloseMarketplace;
         }
         
@@ -373,7 +359,7 @@ namespace ChainSafe.Gaming.Marketplace
         {
             EventManagerMarketplace.ConfigureMarketplaceBrowserManager -= OnConfigureMarketPlaceBrowseManager;
             EventManagerMarketplace.ToggleMarketplacesMenu -= GetProjectMarketplaces;
-            EventManagerMarketplace.ToggleSelectedMarketplace -= ToggleSelectedMarketplace;
+            EventManagerMarketplace.CloseSelectedMarketplace -= CloseSelectedMarketplace;
             EventManagerMarketplace.ToggleSelectionMenu -= CloseMarketplace;
         }
         

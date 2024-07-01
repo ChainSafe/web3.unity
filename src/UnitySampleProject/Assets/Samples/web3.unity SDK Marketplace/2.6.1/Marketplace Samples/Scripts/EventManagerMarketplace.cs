@@ -29,7 +29,10 @@ namespace ChainSafe.Gaming.Marketplace
         public static event Action ToggleMarketplacesMenu;
         public static event Action ToggleCreateMarketplaceMenu;
         public static event Action ToggleListNftToMarketplaceMenu;
-        public static event Action ToggleSelectedMarketplace;
+        public static event Action OpenSelectedMarketplace;
+        public static event Action CloseSelectedMarketplace;
+        public static event Action OpenSelectedCollection;
+        public static event Action CloseSelectedCollection;
         public static event Action UploadMarketplaceImage;
         public static event Action ListNftToMarketplace;
         public static event Action LogoutMarketplace;
@@ -119,6 +122,38 @@ namespace ChainSafe.Gaming.Marketplace
         }
         
         /// <summary>
+        /// Invokes OpenSelectedCollection.
+        /// </summary>
+        public static void RaiseOpenSelectedCollection()
+        {
+            OpenSelectedCollection?.Invoke();
+        }
+        
+        /// <summary>
+        /// Invokes CloseSelectedCollection.
+        /// </summary>
+        public static void RaiseCloseSelectedCollection()
+        {
+            CloseSelectedCollection?.Invoke();
+        }
+        
+        /// <summary>
+        /// Invokes OpenSelectedMarketplace.
+        /// </summary>
+        public static void RaiseOpenSelectedMarketplace()
+        {
+            OpenSelectedMarketplace?.Invoke();
+        }
+        
+        /// <summary>
+        /// Invokes CloseSelectedMarketplace.
+        /// </summary>
+        public static void RaiseCloseSelectedMarketplace()
+        {
+            CloseSelectedMarketplace?.Invoke();
+        }
+        
+        /// <summary>
         /// Invokes ListNftToMarketplace.
         /// </summary>
         public static void RaiseListNftToMarketplace()
@@ -132,14 +167,6 @@ namespace ChainSafe.Gaming.Marketplace
         public static void RaiseToggleSelectedCollection()
         {
             ToggleSelectedCollection?.Invoke();
-        }
-        
-        /// <summary>
-        /// Closes the selected marketplace.
-        /// </summary>
-        public static void RaiseToggleSelectedMarketplace()
-        {
-            ToggleSelectedMarketplace?.Invoke();
         }
         
         /// <summary>
@@ -220,7 +247,7 @@ namespace ChainSafe.Gaming.Marketplace
         /// <summary>
         /// Resets all bearer tokens.
         /// </summary>
-        public static void ResetBearerTokens()
+        private static void ResetBearerTokens()
         {
             var authEventArgs = new MarketplaceAuthSystemConfigEventArgs(string.Empty, DateTime.Now, string.Empty, DateTime.Now);
             RaiseConfigureAuthSystemManager(authEventArgs);
@@ -286,7 +313,10 @@ namespace ChainSafe.Gaming.Marketplace
             #endregion
     
             #region Methods
-    
+            
+            /// <summary>
+            /// Configuration class for the List Nft To Marketplace Manager.
+            /// </summary>
             public ListNftToMarketplaceConfigEventArgs([CanBeNull] string collectionContractToListFrom, [CanBeNull] string marketplaceContractToListTo, [CanBeNull] string tokenIdToList, [CanBeNull] string price, [CanBeNull] string nftType)
             {
                 if (collectionContractToListFrom != null)
