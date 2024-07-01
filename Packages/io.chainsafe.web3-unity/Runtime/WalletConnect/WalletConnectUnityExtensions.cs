@@ -14,31 +14,21 @@ namespace ChainSafe.Gaming.WalletConnectUnity
 {
     public static class WalletConnectUnityExtensions
     {
-        public static IWeb3ServiceCollection ConfigureWalletConnectUnity(this IWeb3ServiceCollection services, IWalletConnectUnityConfig config)
-        {
-            services.Replace(ServiceDescriptor.Singleton(typeof(IWalletConnectConfig), config));
-            return services;
-        }
-        
         public static IWeb3ServiceCollection UseWalletConnectUnity(this IWeb3ServiceCollection services)
         {
-            services.AssertServiceNotBound<IWalletProvider>();
-            TryBindDefaultConfig();
-            services.AddSingleton<IWalletProvider, ILifecycleParticipant, WalletConnectUnityProvider>();
+            var defaultConfig = LoadDefaultConfig();
+            services.UseWalletConnectUnity(defaultConfig);
             return services;
-            
-            void TryBindDefaultConfig()
-            {
-                if (services.Any(descriptor => descriptor.ServiceType == typeof(IWalletConnectUnityConfig))) return;
-                services.AddSingleton<IWalletConnectUnityConfig>(LoadDefaultConfig());
-            }
         }
 
         public static IWeb3ServiceCollection UseWalletConnectUnity(this IWeb3ServiceCollection services, IWalletConnectUnityConfig config)
         {
             services.AssertServiceNotBound<IWalletProvider>();
-            services.ConfigureWalletConnectUnity(config);
-            services.UseWalletConnectUnity();
+            
+            services.Replace(ServiceDescriptor.Singleton(typeof(IWalletProviderConfig), config));
+            services.Replace(ServiceDescriptor.Singleton(typeof(IWalletConnectUnityConfig), config));
+
+            services.AddSingleton<IWalletProvider, ILifecycleParticipant, WalletConnectUnityProvider>();
             return services;
         }
 
@@ -55,8 +45,8 @@ namespace ChainSafe.Gaming.WalletConnectUnity
 
             void OnReady(object sender, ModalReadyEventArgs e)
             {
-                tcs.SetResult(0);
                 WalletConnectModal.Ready -= OnReady;
+                tcs.SetResult(0);
             }
         }
 

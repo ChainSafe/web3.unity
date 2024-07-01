@@ -1,8 +1,9 @@
-﻿using WalletConnectUnity.Modal;
+﻿using ChainSafe.Gaming.Web3.Evm.Wallet;
+using WalletConnectUnity.Modal;
 
 namespace ChainSafe.Gaming.WalletConnectUnity
 {
-    public interface IWalletConnectUnityConfig
+    public interface IWalletConnectUnityConfig : IWalletProviderConfig
     {
         // public bool ShouldSpawnModal { get; }
         //

@@ -13,5 +13,9 @@ namespace ChainSafe.Gaming.WalletConnectUnity
         [field:SerializeField] public string[] IncludedWalletIds { get; private set; }
         
         [field:SerializeField] public string[] ExcludedWalletIds { get; private set; }
+        
+        [field:SerializeField] public string SignMessageRpcMethodName { get; private set; }
+        
+        [field:SerializeField] public string SignTypedMessageRpcMethodName { get; private set; }
     }
 }
