@@ -58,14 +58,12 @@ Packages/io.chainsafe.web3-unity/Runtime/Libraries/:
 	WalletConnectSharp.Web3Wallet.dll
 	Nethereum.Merkle.dll
 	Websocket.Client.dll
-	Nethereum.Metamask.dll
 	Nethereum.Siwe.Core.dll
 	Nethereum.Siwe.dll
 	Nethereum.UI.dll
-	Nethereum.Unity.Metamask.dll
-	Nethereum.Unity.dll
-	ChainSafe.Gaming.MetaMask.Unity.dll
+	ChainSafe.Gaming.Unity.MetaMask.dll
 	ChainSafe.Gaming.Marketplace.dll
+	ChainSafe.Gaming.Unity.EthereumWindow.dll
 Packages/io.chainsafe.web3-unity.lootboxes/Chainlink/Runtime/Libraries/:
 	Chainsafe.Gaming.Chainlink.dll
 	ChainSafe.Gaming.Lootboxes.Chainlink.dll
