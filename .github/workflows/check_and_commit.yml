@@ -30,14 +30,15 @@ jobs:
         export SOURCE_PATH=
         export DESTINATION_DIRECTORY=
         export DESTINATION_PATH=
+        
         while IFS= read -r entry || [ -n "$entry" ];
         do
           source_prefix="source:"
           display_name_prefix="display_name:"
           destination_prefix="destination:"
-          
+        
           entry=$(echo "$entry" | sed -e 's/^[[:space:]]*//')
-          
+        
           if [[ $entry = $source_prefix* ]]
           then
             SOURCE_PATH=${entry#"$source_prefix"}
@@ -94,7 +95,6 @@ jobs:
               echo -e "${DLL_META_FILE_TEMPLATE/"[[assetGuid]]"/"$(uuidgen | tr -d '-')"}" >> "$PACKAGE_LIB_PATH$DEPENDENCY.meta"
             fi
           fi
-
           git add "$PACKAGE_LIB_PATH." -f
         done < "${GITHUB_WORKSPACE}/scripts/data/published_dependencies.txt"
     - uses: actions/cache@v2
