@@ -88,10 +88,10 @@ namespace ChainSafe.Gaming.Marketplace
             };
             var jsonPayload = JsonConvert.SerializeObject(payload);
             var request = new UnityWebRequest("https://api.chainsafe.io/api/v1/user/email", "POST");
+            request.SetRequestHeader("Content-Type", "application/json");
             var bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonPayload);
             request.uploadHandler = new UploadHandlerRaw(bodyRaw);
             request.downloadHandler = new DownloadHandlerBuffer();
-            request.SetRequestHeader("Content-Type", "application/json");
             await request.SendWebRequest();
             if (request.result != UnityWebRequest.Result.Success)
             {
@@ -116,10 +116,10 @@ namespace ChainSafe.Gaming.Marketplace
             };
             var jsonPayload = JsonConvert.SerializeObject(payload);
             var request = new UnityWebRequest("https://api.chainsafe.io/api/v1/user/email/verify", "POST");
+            request.SetRequestHeader("Content-Type", "application/json");
             var bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonPayload);
             request.uploadHandler = new UploadHandlerRaw(bodyRaw);
             request.downloadHandler = new DownloadHandlerBuffer();
-            request.SetRequestHeader("Content-Type", "application/json");
     
             await request.SendWebRequest();
     
@@ -148,10 +148,10 @@ namespace ChainSafe.Gaming.Marketplace
             };
             var jsonPayload = JsonConvert.SerializeObject(payload);
             var request = new UnityWebRequest("https://api.chainsafe.io/api/v1/user/login", "POST");
+            request.SetRequestHeader("Content-Type", "application/json");
             var bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonPayload);
             request.uploadHandler = new UploadHandlerRaw(bodyRaw);
             request.downloadHandler = new DownloadHandlerBuffer();
-            request.SetRequestHeader("Content-Type", "application/json");
     
             await request.SendWebRequest();
     
@@ -163,11 +163,19 @@ namespace ChainSafe.Gaming.Marketplace
             {
                 string jsonResponse = request.downloadHandler.text;
                 AuthSystemResponse.LoginResponse loginResponse = JsonConvert.DeserializeObject<AuthSystemResponse.LoginResponse>(jsonResponse);
-                var authSystemManagerConfigArgs = new EventManagerMarketplace.MarketplaceAuthSystemManagerConfigEventArgs(loginResponse.access_token.token, DateTime.Parse(loginResponse.access_token.expires), loginResponse.refresh_token.token, DateTime.Parse(loginResponse.refresh_token.expires));
+                InstantiateMarketplace();
+                var authSystemManagerConfigArgs = new EventManagerMarketplace.MarketplaceAuthSystemConfigEventArgs(loginResponse.access_token.token, DateTime.Parse(loginResponse.access_token.expires), loginResponse.refresh_token.token, DateTime.Parse(loginResponse.refresh_token.expires));
                 EventManagerMarketplace.RaiseConfigureAuthSystemManager(authSystemManagerConfigArgs);
                 var marketplaceBrowserManagerConfigArgs = new EventManagerMarketplace.MarketplaceBrowserConfigEventArgs(displayFont, secondaryTextColour, loginResponse.access_token.token);
                 EventManagerMarketplace.RaiseConfigureMarketplaceBrowserManager(marketplaceBrowserManagerConfigArgs);
-                InstantiateMarketplace();
+                var collectionBrowserManagerConfigArgs = new EventManagerMarketplace.CollectionBrowserConfigEventArgs(displayFont, secondaryTextColour, loginResponse.access_token.token);
+                EventManagerMarketplace.RaiseConfigureCollectionBrowserManager(collectionBrowserManagerConfigArgs);
+                var marketplaceCreateConfigArgs = new EventManagerMarketplace.MarketplaceCreateConfigEventArgs(loginResponse.access_token.token);
+                EventManagerMarketplace.RaiseConfigureMarketplaceCreateManager(marketplaceCreateConfigArgs);
+                var collectionCreateConfigArgs = new EventManagerMarketplace.CollectionCreateConfigEventArgs(loginResponse.access_token.token);
+                EventManagerMarketplace.RaiseConfigureCollectionCreateManager(collectionCreateConfigArgs);
+                var listNftToMarketplaceCreateConfigArgs = new EventManagerMarketplace.ListNftToMarketplaceConfigEventArgs(loginResponse.access_token.token);
+                EventManagerMarketplace.RaiseConfigureListNftToMarketplaceManager(listNftToMarketplaceCreateConfigArgs);
             }
         }
         

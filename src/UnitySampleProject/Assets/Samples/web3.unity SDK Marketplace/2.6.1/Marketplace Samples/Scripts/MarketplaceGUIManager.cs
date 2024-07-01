@@ -25,8 +25,6 @@ namespace ChainSafe.Gaming.Marketplace
         [SerializeField] private GameObject createCollectionMenu;
         [SerializeField] private GameObject mintNftToCollectionMenu;
         [SerializeField] private GameObject listNftToMarketplaceMenu;
-        [SerializeField] private GameObject listNftToMarketplaceScrollMenu;
-        [SerializeField] private GameObject listNftToMarketplaceDetailsMenu;
         [SerializeField] private Button openMarketplacesMenuButton;
         [SerializeField] private Button openCollectionsMenuButton;
         [SerializeField] private Button createMarketplaceButton;
@@ -42,6 +40,8 @@ namespace ChainSafe.Gaming.Marketplace
         [SerializeField] private Button backButtonBrowseSelectedCollection;
         [SerializeField] private Button backButtonBrowseMarketplace;
         [SerializeField] private Button backButtonBrowseCollection;
+        [SerializeField] private Button backButtonMintNftToCollection;
+        [SerializeField] private Button backButtonListNftToMarketplace;
         [SerializeField] private Button logOutButton;
 
         #endregion
@@ -64,7 +64,9 @@ namespace ChainSafe.Gaming.Marketplace
             createCollectionUploadImageButton.onClick.AddListener(UploadCollectionImage);
             mintNftToCollectionMenuButton.onClick.AddListener(ToggleMintNftToCollectionMenu);
             mintNftToCollectionButton.onClick.AddListener(UploadNftImageToCollection);
+            backButtonMintNftToCollection.onClick.AddListener(ToggleMintNftToCollectionMenu);
             listNftToMarketplaceButton.onClick.AddListener(ListNftToMarketplace);
+            backButtonListNftToMarketplace.onClick.AddListener(ToggleListNftToMarketplaceMenu);
             backButtonBrowseSelectedMarketplace.onClick.AddListener(CloseSelectedMarketplace);
             backButtonBrowseSelectedCollection.onClick.AddListener(CloseSelectedCollection);
             backButtonBrowseMarketplace.onClick.AddListener(BackToSelectionMenu);

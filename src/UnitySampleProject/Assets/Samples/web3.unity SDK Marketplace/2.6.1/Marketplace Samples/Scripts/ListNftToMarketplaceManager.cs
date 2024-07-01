@@ -35,9 +35,9 @@ namespace ChainSafe.Gaming.Marketplace
         #region Methods
         
         /// <summary>
-        /// Initializes objects.
+        /// Opens the menu.
         /// </summary>
-        private void Start()
+        private void OpenMenu()
         {
             GetMarketplaceOptions();
         }
@@ -114,6 +114,7 @@ namespace ChainSafe.Gaming.Marketplace
             EventManagerMarketplace.ConfigureListNftToMarketplaceTxManager += IncomingMarketplaceListing;
             EventManagerMarketplace.CreateMarketplace += GetMarketplaceOptions;
             EventManagerMarketplace.ListNftToMarketplace += ListNftToMarketplace;
+            EventManagerMarketplace.ToggleListNftToMarketplaceMenu += OpenMenu;
         }
         
         /// <summary>
@@ -125,6 +126,7 @@ namespace ChainSafe.Gaming.Marketplace
             EventManagerMarketplace.ConfigureListNftToMarketplaceTxManager -= IncomingMarketplaceListing;
             EventManagerMarketplace.CreateMarketplace -= GetMarketplaceOptions;
             EventManagerMarketplace.ListNftToMarketplace -= ListNftToMarketplace;
+            EventManagerMarketplace.ToggleListNftToMarketplaceMenu -= OpenMenu;
         }
         
         /// <summary>

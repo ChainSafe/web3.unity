@@ -265,7 +265,7 @@ namespace ChainSafe.Gaming.Collection
                 {
                     Debug.Log($"Error getting image: {e}");
                 }
-                var imageButtonObj = projectCollectionsPrefabs[collectionObjectIndex].transform.Find("ListButton").GetComponent<Button>();
+                var imageButtonObj = CollectionItemPrefabs[collectionObjectIndex].transform.Find("ListButton").GetComponent<Button>();
                 imageButtonObj.onClick.RemoveAllListeners();
                 imageButtonObj.onClick.AddListener(() => OpenSelectedNft(collectionContract, nftId, nftType));
             }

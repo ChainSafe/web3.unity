@@ -1471,8 +1471,6 @@ MonoBehaviour:
   createCollectionMenu: {fileID: 6944100373930526079}
   mintNftToCollectionMenu: {fileID: 3558729832039940091}
   listNftToMarketplaceMenu: {fileID: 7214831712750616170}
-  listNftToMarketplaceScrollMenu: {fileID: 0}
-  listNftToMarketplaceDetailsMenu: {fileID: 0}
   openMarketplacesMenuButton: {fileID: 5226490549551036920}
   openCollectionsMenuButton: {fileID: 571043346588633499}
   createMarketplaceButton: {fileID: 4630789180151632457}
@@ -1488,6 +1486,8 @@ MonoBehaviour:
   backButtonBrowseSelectedCollection: {fileID: 3879640403469027826}
   backButtonBrowseMarketplace: {fileID: 4790343093119533911}
   backButtonBrowseCollection: {fileID: 4373093040713949531}
+  backButtonMintNftToCollection: {fileID: 2696159680897540064}
+  backButtonListNftToMarketplace: {fileID: 8192445799859298440}
   logOutButton: {fileID: 3186443771845406372}
 --- !u!114 &3111726822812566097
 MonoBehaviour:
@@ -3410,7 +3410,7 @@ GameObject:
   - component: {fileID: 8386849708960950391}
   - component: {fileID: 8192445799859298440}
   m_Layer: 5
-  m_Name: BackButtonMintNftToCollection
+  m_Name: BackButtonListNftToCollection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12114,7 +12114,7 @@ GameObject:
   - component: {fileID: 1948631145179581455}
   - component: {fileID: 3756948652510970158}
   m_Layer: 5
-  m_Name: DescriptionCSMintNftToCollection
+  m_Name: DescriptionCSListNftToCollection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
