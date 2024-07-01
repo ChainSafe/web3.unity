@@ -6,15 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Transactions;
-using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.UnityPackage.Model;
 using ChainSafe.Gaming.Web3;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
 using Nethereum.Signer;
 using Nethereum.Util;
 using UnityEngine;
-using Web3Unity.Scripts.Library.IPFS;
-using Web3Unity.Scripts.Prefabs;
+using ChainSafe.Gaming.Marketplace;
 
 namespace Scripts.EVM.Token
 {
@@ -60,7 +59,7 @@ namespace Scripts.EVM.Token
         {
             var transactionRequest = new TransactionRequest
             {
-                To = await web3.Signer.GetAddress(),
+                To = web3.Signer.PublicAddress,
                 Value = new HexBigInteger(100000)
             };
             var transactionResponse = await web3.TransactionExecutor.SendTransaction(transactionRequest);
@@ -71,7 +70,7 @@ namespace Scripts.EVM.Token
         {
             var transactionRequest = new TransactionRequest
             {
-                To = await web3.Signer.GetAddress(),
+                To = web3.Signer.PublicAddress,
                 Value = new HexBigInteger(10000000)
             };
             var transactionResponse = await web3.TransactionExecutor.SendTransaction(transactionRequest);
@@ -82,7 +81,7 @@ namespace Scripts.EVM.Token
 
         public static async Task<BigInteger> UseRegisteredContract(Web3 web3, string contractName, string method)
         {
-            var account = await web3.Signer.GetAddress();
+            var account = web3.Signer.PublicAddress;
             var contract = web3.ContractBuilder.Build(contractName);
             var response = await contract.Call(method, new[] { account });
             var balance = BigInteger.Parse(response[0].ToString());
@@ -125,7 +124,7 @@ namespace Scripts.EVM.Token
         // todo extract in a separate service
         public static async Task<bool> SignVerify(Web3 web3, string message)
         {
-            var playerAccount = await web3.Signer.GetAddress();
+            var playerAccount = web3.Signer.PublicAddress;
             var signatureString = await web3.Signer.SignMessage(message);
             var msg = "\x19" + "Ethereum Signed Message:\n" + message.Length + message;
             var msgHash = new Sha3Keccack().CalculateHash(Encoding.UTF8.GetBytes(msg));
@@ -176,15 +175,6 @@ namespace Scripts.EVM.Token
             var signer = new EthereumMessageSigner();
             string signature = signer.HashAndSign(_message, _privateKey);
             return signature;
-        }
-
-        // IPFS upload
-        public static async Task<string> Upload(IpfsUploadRequest request)
-        {
-            var rawData = System.Text.Encoding.UTF8.GetBytes(request.Data);
-            var ipfs = new Ipfs(request.ApiKey);
-            var cid = await ipfs.Upload(request.BucketId, request.Path, request.Filename, rawData, "application/octet-stream");
-            return cid;
         }
     }
 }
