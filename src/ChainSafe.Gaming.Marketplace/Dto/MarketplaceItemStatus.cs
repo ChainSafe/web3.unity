@@ -1,6 +1,4 @@
-﻿// <copyright file="MarketplaceItemStatus.cs" company="PlaceholderCompany">
-// Copyright (c) PlaceholderCompany. All rights reserved.
-// </copyright>
+﻿using System;
 
 namespace ChainSafe.Gaming.Marketplace
 {
@@ -23,5 +21,30 @@ namespace ChainSafe.Gaming.Marketplace
         /// Canceled
         /// </summary>
         Canceled,
+    }
+
+    public static class MarketplaceItemStatusExtensions
+    {
+        public static MarketplaceItemStatus FromString(string rawValue)
+        {
+            return rawValue switch
+            {
+                "sold" => MarketplaceItemStatus.Sold,
+                "listed" => MarketplaceItemStatus.Listed,
+                "canceled" => MarketplaceItemStatus.Canceled,
+                _ => throw new ArgumentOutOfRangeException(nameof(rawValue))
+            };
+        }
+
+        public static string ToRequestParameter(this MarketplaceItemStatus value)
+        {
+            return value switch
+            {
+                MarketplaceItemStatus.Sold => "sold",
+                MarketplaceItemStatus.Listed => "listed",
+                MarketplaceItemStatus.Canceled => "canceled",
+                _ => throw new ArgumentOutOfRangeException(nameof(value))
+            };
+        }
     }
 }
