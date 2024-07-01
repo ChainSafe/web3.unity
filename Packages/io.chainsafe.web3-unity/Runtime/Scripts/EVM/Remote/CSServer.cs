@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.UnityPackage;
 using Newtonsoft.Json;
@@ -9,6 +7,9 @@ using UnityEngine.Networking;
 
 namespace Scripts.EVM.Remote
 {
+    /// <summary>
+    /// Manages api calls.
+    /// </summary>
     public class CSServer
     {
         #region Fields
@@ -30,7 +31,29 @@ namespace Scripts.EVM.Remote
             await webRequest.SendWebRequest();
             if (webRequest.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError("Error: Your project ID doesn't have a marketplace or the token ID doesn't exist, please go to dashboard and create items " + webRequest.error);
+                Debug.LogError("Error: Your project ID doesn't have a marketplace or the token ID doesn't exist, please go to dashboard and create items: " + webRequest.error);
+                return default;
+            }
+            var json = webRequest.downloadHandler.text;
+            var response = JsonConvert.DeserializeObject<T>(json);
+            return response;
+        }
+        
+        /// <summary>
+        /// Unity web request helper function to retrieve data.
+        /// </summary>
+        /// <param name="_path">The path suffix to call</param>
+        /// <returns>Server response</returns>
+        public static async Task<T> GetDataWithToken<T>(string _path, string _bearerToken, int offset = 0, int pageSize = 100)
+        {
+            string url = $"{host}{Web3Accessor.Web3.ProjectConfig.ProjectId}{_path}?offset={offset}&pageSize={pageSize}";
+            using UnityWebRequest webRequest = UnityWebRequest.Get(url);
+            webRequest.SetRequestHeader("Authorization", $"Bearer {_bearerToken}");
+            webRequest.SetRequestHeader("Content-Type", "application/json");
+            await webRequest.SendWebRequest();
+            if (webRequest.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError("Error fetching data, please ensure the email you logged in with has content in the dashboard: " + webRequest.error);
                 return default;
             }
             var json = webRequest.downloadHandler.text;

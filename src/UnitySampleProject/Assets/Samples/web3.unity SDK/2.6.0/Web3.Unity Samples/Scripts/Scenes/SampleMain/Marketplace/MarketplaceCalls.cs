@@ -76,8 +76,8 @@ public class MarketplaceCalls : MonoBehaviour
     public async void GetProjectItems()
     {
         var response = await Marketplace.GetProjectItems();
-        Debug.Log($"Total: {response.total}");
-        foreach (var item in response.items)
+        Debug.Log($"Total: {response.Total}");
+        foreach (var item in response.Items)
         {
             Marketplace.PrintObject(item);
         }
@@ -89,8 +89,8 @@ public class MarketplaceCalls : MonoBehaviour
     public async void GetMarketplaceItems()
     {
         var response = await Marketplace.GetMarketplaceItems(marketplaceId);
-        Debug.Log($"Total: {response.total}");
-        foreach (var item in response.items)
+        Debug.Log($"Total: {response.Total}");
+        foreach (var item in response.Items)
         {
             Marketplace.PrintObject(item);
         }
@@ -102,7 +102,7 @@ public class MarketplaceCalls : MonoBehaviour
     public async void GetItem()
     {
         var response = await Marketplace.GetItem(marketplaceId, tokenId);
-        Marketplace.PrintObject(response.token);
+        Marketplace.PrintObject(response.Token);
     }
     
     /// <summary>
@@ -111,7 +111,7 @@ public class MarketplaceCalls : MonoBehaviour
     public async void GetProjectTokens()
     {
         var response = await Marketplace.GetProjectTokens();
-        foreach (var token in response.tokens)
+        foreach (var token in response.Tokens)
         {
             Marketplace.PrintObject(token);
         }
@@ -123,7 +123,7 @@ public class MarketplaceCalls : MonoBehaviour
     public async void GetCollectionTokens721()
     {
         var response = await Marketplace.GetCollectionTokens721(collectionId721);
-        foreach (var token in response.tokens)
+        foreach (var token in response.Tokens)
         {
             Marketplace.PrintObject(token);
         }
@@ -135,7 +135,7 @@ public class MarketplaceCalls : MonoBehaviour
     public async void GetCollectionTokens1155()
     {
         var response = await Marketplace.GetCollectionTokens1155(collectionId1155);
-        foreach (var token in response.tokens)
+        foreach (var token in response.Tokens)
         {
             Marketplace.PrintObject(token);
         }
@@ -156,7 +156,7 @@ public class MarketplaceCalls : MonoBehaviour
     public async void GetTokenOwners()
     {
         var response = await Marketplace.GetTokenOwners(collectionId1155, tokenId);
-        foreach (var owner in response.owners)
+        foreach (var owner in response.Owners)
         {
             Marketplace.PrintObject(owner);
         }
