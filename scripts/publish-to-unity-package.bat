@@ -1,41 +1,39 @@
-
-
 SET SCRIPT_DIR=%~dp0
+
+setlocal enabledelayedexpansion
 
 echo Building project...
 pushd "%SCRIPT_DIR%\..\src\ChainSafe.Gaming.Unity"
 
-del obj /F /Q
-del bin /F /Q
-dotnet restore
-dotnet publish -c release -f netstandard2.1 /property:Unity=true
-if %errorlevel% neq 0 exit /b %errorlevel%
+rem Publish the project
+dotnet publish ChainSafe.Gaming.Unity.csproj -c Release /property:Unity=true
 
-echo Moving files to Unity package...
+set PUBLISH_PATH=bin\Release\netstandard2.1\publish
 
-echo Moving files to Unity package...
-
-set "PUBLISH_PATH=bin\Release\netstandard2.1\publish"
-
+rem List generated DLLs
 echo DLLs Generated
 dir /b "%PUBLISH_PATH%"
 
-setlocal enabledelayedexpansion
-set "PACKAGE_DEPENDENCIES_FILE=%SCRIPT_DIR%\data\published_dependencies.txt"
+set PACKAGE_LIB_PATH=
 
-for /f "usebackq tokens=*" %%a in (%PACKAGE_DEPENDENCIES_FILE%) do (
-    for /f "tokens=1,* delims=:" %%b in ('echo %%a') do (
-        set "PACKAGE_LIB_PATH=%SCRIPT_DIR%\..\%%b"
+rem Read and process each line from the dependencies file
+for /f "usebackq tokens=*" %%A in ("%SCRIPT_DIR%\data\published_dependencies.txt") do (
     
-        if exist "!PACKAGE_LIB_PATH!" (
+    set entry=%%A
+    
+    rem Check if the line ends with a colon
+    if "!entry:~-1!" == ":" (
+        set "PACKAGE_LIB_PATH=%SCRIPT_DIR%..\!entry:~0,-1!"
+        if exist "!PACKAGE_LIB_PATH!\" (
             del /q "!PACKAGE_LIB_PATH!\*.dll"
         ) else (
             mkdir "!PACKAGE_LIB_PATH!"
         )
-    
-        for %%d in (%%c) do (
-            copy "%PUBLISH_PATH%\%%d.dll" "!PACKAGE_LIB_PATH!"
-        )
+        
+        echo Copying to !PACKAGE_LIB_PATH!...
+    ) else (
+        set "DEPENDENCY=!entry: =!"
+        copy /y "%PUBLISH_PATH%\!DEPENDENCY!" "!PACKAGE_LIB_PATH!"
     )
 )
 
