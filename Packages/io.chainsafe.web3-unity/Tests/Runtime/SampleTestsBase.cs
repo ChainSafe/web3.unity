@@ -7,6 +7,7 @@ using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.WalletConnect;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
+using ChainSafe.Gaming.Web3.Evm.Wallet;
 using ChainSafe.Gaming.Web3.Unity;
 using ChainSafe.GamingSdk.Gelato;
 using Microsoft.Extensions.DependencyInjection;
@@ -60,13 +61,13 @@ public class SampleTestsBase
             services.UseRpcProvider();
 
             services.AddSingleton(new StubWalletConnectProviderConfig()); // can be replaced
-            services.AddSingleton<IWalletConnectProvider, StubWalletConnectProvider>();
+            services.AddSingleton<IWalletProvider, StubWalletConnectProvider>();
             services.UseWalletConnectSigner();
             services.UseWalletConnectTransactionExecutor();
 
             // Add any contracts we would want to use
             services.ConfigureRegisteredContracts(contracts =>
-                contracts.RegisterContract("CsTestErc20", ABI.Erc20, Contracts.Erc20));
+                contracts.RegisterContract("CsTestErc20", ABI.Erc20, ChainSafeContracts.Erc20));
         });
 
         if (customConfiguration != null)

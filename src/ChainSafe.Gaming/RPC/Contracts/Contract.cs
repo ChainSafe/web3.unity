@@ -13,7 +13,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
     /// <summary>
     /// Representation of a contract.
     /// </summary>
-    public class Contract
+    public class Contract : IContract
     {
         private readonly string abi;
         private readonly string address;
@@ -47,6 +47,8 @@ namespace ChainSafe.Gaming.Evm.Contracts
             contractBuilder = new Builders.ContractBuilder(abi, address);
         }
 
+        public string Address => address;
+
         /// <summary>
         /// Returns a new instance of the Contract attached to a new address. This is useful
         /// if there are multiple similar or identical copies of a Contract on the network
@@ -54,7 +56,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
         /// </summary>
         /// <param name="address">Address of the contract to attach to.</param>
         /// <returns>The new contract.</returns>
-        public Contract Attach(string address)
+        public IContract Attach(string address)
         {
             if (string.IsNullOrEmpty(address))
             {
@@ -90,12 +92,8 @@ namespace ChainSafe.Gaming.Evm.Contracts
             var result = await provider.Call(txReq);
             analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
-                ChainId = analyticsClient.ChainConfig.ChainId,
                 EventName = method,
-                Network = analyticsClient.ChainConfig.Network,
-                Version = analyticsClient.AnalyticsVersion,
                 PackageName = "io.chainsafe.web3.unity",
-                ProjectId = analyticsClient.ProjectConfig.ProjectId,
             });
 
             return Decode(method, result);
@@ -168,12 +166,8 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
             analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
-                ChainId = analyticsClient.ChainConfig.ChainId,
                 EventName = method,
-                Network = analyticsClient.ChainConfig.Network,
-                Version = analyticsClient.AnalyticsVersion,
                 PackageName = "io.chainsafe.web3.unity",
-                ProjectId = analyticsClient.ProjectConfig.ProjectId,
             });
 
             return (outputValues, receipt);
@@ -243,12 +237,8 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
             analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
-                ChainId = analyticsClient.ChainConfig.ChainId,
                 EventName = method,
-                Network = analyticsClient.ChainConfig.Network,
-                Version = analyticsClient.AnalyticsVersion,
                 PackageName = "io.chainsafe.web3.unity",
-                ProjectId = analyticsClient.ProjectConfig.ProjectId,
             });
 
             return function.GetData(parameters);
@@ -261,7 +251,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
             var function = contractBuilder.GetFunctionBuilder(method);
             var txReq = overwrite ?? new TransactionRequest();
 
-            txReq.From ??= signer == null ? null : await signer.GetAddress();
+            txReq.From ??= signer?.PublicAddress;
             txReq.To ??= address;
             txReq.Data ??= function.GetData(parameters);
             try

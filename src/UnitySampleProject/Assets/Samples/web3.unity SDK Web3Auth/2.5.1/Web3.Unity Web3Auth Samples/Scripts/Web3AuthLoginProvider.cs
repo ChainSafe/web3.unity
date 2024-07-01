@@ -1,11 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using ChainSafe.Gaming.Exchangers.Ramp;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Common;
-using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.GamingSdk.Web3Auth;
@@ -95,11 +91,7 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
         IAnalyticsClient client = (IAnalyticsClient)Web3Accessor.Web3.ServiceProvider.GetService(typeof(IAnalyticsClient));
         client.CaptureEvent(new AnalyticsEvent()
         {
-            ChainId = Web3Accessor.Web3.ChainConfig.ChainId,
-            Network = Web3Accessor.Web3.ChainConfig.Network,
-            ProjectId = Web3Accessor.Web3.ProjectConfig.ProjectId,
             EventName = $"Login provider {provider}",
-            Version = client.AnalyticsVersion,
             PackageName = "io.chainsafe.web3-unity.web3auth",
         });
     }
