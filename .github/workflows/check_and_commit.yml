@@ -33,20 +33,27 @@ jobs:
         
         while IFS= read -r entry || [ -n "$entry" ];
         do
+          source_prefix="source:"
+          display_name_prefix="display_name:"
+          destination_prefix="destination:"
         
-          IFS=':' read -ra dirs <<< "$entry"
-          SOURCE_PATH=${dirs[0]}
-          DESTINATION_DIRECTORY=${dirs[1]}
+          entry=$(echo "$entry" | sed -e 's/^[[:space:]]*//')
         
-          SOURCE_PATH="${GITHUB_WORKSPACE}/$SOURCE_PATH/$(ls "$SOURCE_PATH" | head -n 1)/$DESTINATION_DIRECTORY"
-        
-          DESTINATION_PATH="${GITHUB_WORKSPACE}/${dirs[2]}"
-        
-          rm -rf "$DESTINATION_PATH"
-          mkdir -p "$DESTINATION_PATH"
-          cp -r "$SOURCE_PATH/." "$DESTINATION_PATH"
-        
-          git add "$DESTINATION_PATH." -f
+          if [[ $entry = $source_prefix* ]]
+          then
+            SOURCE_PATH=${entry#"$source_prefix"}
+          elif [[ $entry = $display_name_prefix* ]]
+          then
+            DESTINATION_DIRECTORY=${entry#"$display_name_prefix"}
+            SOURCE_PATH="${GITHUB_WORKSPACE}/$SOURCE_PATH/$(ls "$SOURCE_PATH" | head -n 1)/$DESTINATION_DIRECTORY"
+          elif [[ $entry = $destination_prefix* ]]
+          then
+            DESTINATION_PATH="${GITHUB_WORKSPACE}/${entry#"$destination_prefix"}"
+            rm -rf "$DESTINATION_PATH"
+            mkdir -p "$DESTINATION_PATH"
+            cp -r "$SOURCE_PATH/." "$DESTINATION_PATH"
+            git add "$DESTINATION_PATH." -f
+          fi
         done < "${GITHUB_WORKSPACE}/scripts/data/duplicate_samples.txt"
     - name: update submodules
       # clone submodules
@@ -69,27 +76,25 @@ jobs:
 
         export DLL_META_FILE_TEMPLATE="${{ vars.DLL_META_FILE_TEMPLATE }}"
 
+        export PACKAGE_LIB_PATH=
+
         while IFS= read -r entry || [ -n "$entry" ];
         do
-          IFS=':' read -ra dirs <<< "$entry"
-          export PACKAGE_LIB_PATH="${GITHUB_WORKSPACE}/${dirs[0]}"
-
-          if [ -d "$PACKAGE_LIB_PATH" ]; then
-            rm "$PACKAGE_LIB_PATH"*.dll
-          else
-            mkdir -p "$PACKAGE_LIB_PATH"
-          fi
-
-          IFS=';' read -ra dependencies <<< "${dirs[1]}"
-
-          for dependency in "${dependencies[@]}"
-          do
-            cp "$PUBLISH_PATH/$dependency.dll" $PACKAGE_LIB_PATH
-            if ! [ -f "$PACKAGE_LIB_PATH$dependency.dll.meta" ]; then
-              echo -e "${DLL_META_FILE_TEMPLATE/"[[assetGuid]]"/"$(uuidgen | tr -d '-')"}" >> "$PACKAGE_LIB_PATH$dependency.dll.meta"
+          if [[ $entry == *: ]]
+          then
+            PACKAGE_LIB_PATH="${GITHUB_WORKSPACE}/${entry%:}"
+            if [ -d "$PACKAGE_LIB_PATH" ]; then
+              rm "$PACKAGE_LIB_PATH"*.dll
+            else
+              mkdir -p "$PACKAGE_LIB_PATH"
             fi
-          done
-
+          else
+            export DEPENDENCY=$(echo "$entry" | tr -d '\t' | tr -d ' ')
+            cp "$PUBLISH_PATH/$DEPENDENCY" $PACKAGE_LIB_PATH
+            if ! [ -f "$PACKAGE_LIB_PATH$DEPENDENCY.meta" ]; then
+              echo -e "${DLL_META_FILE_TEMPLATE/"[[assetGuid]]"/"$(uuidgen | tr -d '-')"}" >> "$PACKAGE_LIB_PATH$DEPENDENCY.meta"
+            fi
+          fi
           git add "$PACKAGE_LIB_PATH." -f
         done < "${GITHUB_WORKSPACE}/scripts/data/published_dependencies.txt"
     - uses: actions/cache@v2
