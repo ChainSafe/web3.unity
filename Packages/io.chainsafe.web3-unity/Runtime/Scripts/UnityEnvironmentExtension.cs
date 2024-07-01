@@ -4,7 +4,6 @@ using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core.Unity;
 using ChainSafe.Gaming.Web3.Environment;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace ChainSafe.Gaming.Web3.Unity
 {
