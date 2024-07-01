@@ -32,7 +32,6 @@ do
     export DEPENDENCY=$(echo "$entry" | tr -d '\t' | tr -d ' ')
     cp -fr "$PUBLISH_PATH/$DEPENDENCY" $PACKAGE_LIB_PATH
   fi
-  git add "$PACKAGE_LIB_PATH." -f
 done < "$scripts_dir/data/published_dependencies.txt"
 
 popd
