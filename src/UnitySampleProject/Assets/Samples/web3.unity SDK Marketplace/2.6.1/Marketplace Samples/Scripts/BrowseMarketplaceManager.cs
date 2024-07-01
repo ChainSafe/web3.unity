@@ -240,27 +240,6 @@ namespace ChainSafe.Gaming.Marketplace
                 buttonObj.onClick.AddListener(() => PurchaseNft(marketplaceContract ,marketplaceItemObjectIndex.ToString(), nftPrice));
             }
         }
-        
-        /// <summary>
-        /// Sends event to listing manager to populate properties.
-        /// </summary>
-        /// <param name="marketplaceContract">Collection contract to list to.</param>
-        /// <param name="tokenIdToList">Collection Token Id.</param>
-        /// <param name="priceToList">Price to list.</param>
-        /// <param name="nftTypeToList">NftType to list.</param>
-        private void OpenSelectedNft(string marketplaceContract, string tokenIdToList, string priceToList, string nftTypeToList)
-        {
-            Debug.Log("OpenSelectedNft");
-            // Add this later for listing specific nft in a separate menu somehow
-            
-            // var imageButtonObj = projectMarketplacesPrefabs[marketplaceObjectIndex].transform.Find("Image").GetComponent<Button>();
-            // imageButtonObj.onClick.RemoveAllListeners();
-            // imageButtonObj.onClick.AddListener(() => OpenSelectedNft(marketplaceContract, marketplaceObjectIndex.ToString(), nftPrice, nftType));
-            
-            var listNftToMarketplaceManagerConfigArgs =
-                new EventManagerMarketplace.ListNftToMarketplaceConfigEventArgs(null, marketplaceContract, tokenIdToList, priceToList, nftTypeToList);
-            EventManagerMarketplace.RaiseListNftToMarketplaceManager(listNftToMarketplaceManagerConfigArgs);
-        }
 
         /// <summary>
         /// Purchases a marketplace Nft.

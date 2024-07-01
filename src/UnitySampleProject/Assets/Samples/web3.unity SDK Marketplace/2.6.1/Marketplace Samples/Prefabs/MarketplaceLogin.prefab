@@ -1036,7 +1036,7 @@ GameObject:
   - component: {fileID: 6828341401912270805}
   - component: {fileID: 5223788654180130285}
   m_Layer: 0
-  m_Name: MarketplaceLoginGUI
+  m_Name: MarketplaceLogin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

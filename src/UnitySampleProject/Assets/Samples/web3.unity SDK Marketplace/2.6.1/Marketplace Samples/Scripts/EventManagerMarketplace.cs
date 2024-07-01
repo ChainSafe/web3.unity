@@ -19,6 +19,7 @@ namespace ChainSafe.Gaming.Marketplace
         public static event EventHandler<MarketplaceCreateConfigEventArgs> ConfigureMarketplaceCreateManager;
         public static event EventHandler<CollectionCreateConfigEventArgs> ConfigureCollectionCreateManager;
         public static event EventHandler<ListNftToMarketplaceConfigEventArgs> ConfigureListNftToMarketplaceManager;
+        public static event EventHandler<ListNftToMarketplaceTxEventArgs> ConfigureListNftToMarketplaceTxManager;
         public static event Action ToggleSelectionMenu;
         public static event Action ToggleCollectionsMenu;
         public static event Action ToggleCreateCollectionMenu;
@@ -35,6 +36,7 @@ namespace ChainSafe.Gaming.Marketplace
         public static event Action CloseSelectedCollection;
         public static event Action UploadMarketplaceImage;
         public static event Action ListNftToMarketplace;
+        public static event Action CreateMarketplace;
         public static event Action LogoutMarketplace;
         
         #endregion
@@ -170,6 +172,14 @@ namespace ChainSafe.Gaming.Marketplace
         }
         
         /// <summary>
+        /// Invokes create marketplace.
+        /// </summary>
+        public static void RaiseCreateMarketplace()
+        {
+            CreateMarketplace?.Invoke();
+        }
+        
+        /// <summary>
         /// Logs the user out of the marketplace.
         /// </summary>
         public static void RaiseLogoutMarketplace()
@@ -188,14 +198,22 @@ namespace ChainSafe.Gaming.Marketplace
         }
         
         /// <summary>
-        /// Configure auth system manager.
+        /// Configure list nft to marketplace manager.
         /// </summary>
         /// <param name="args">Input args.</param>
-        public static void RaiseListNftToMarketplaceManager(ListNftToMarketplaceConfigEventArgs args)
+        public static void RaiseConfigureListNftToMarketplaceManager(ListNftToMarketplaceConfigEventArgs args)
         {
             ConfigureListNftToMarketplaceManager?.Invoke(null, args);
         }
-
+        
+        /// <summary>
+        /// Configure list nft to marketplace tx manager.
+        /// </summary>
+        /// <param name="args">Input args.</param>
+        public static void RaiseListNftToMarketplaceTxManager(ListNftToMarketplaceTxEventArgs args)
+        {
+            ConfigureListNftToMarketplaceTxManager?.Invoke(null, args);
+        }
         
         /// <summary>
         /// Configure GUI manager.
@@ -263,6 +281,9 @@ namespace ChainSafe.Gaming.Marketplace
 
             var collectionCreateEventArgs = new CollectionCreateConfigEventArgs(string.Empty);
             RaiseConfigureCollectionCreateManager(collectionCreateEventArgs);
+            
+            var listNftToMarketplaceCreateEventArgs = new ListNftToMarketplaceConfigEventArgs(string.Empty);
+            RaiseConfigureListNftToMarketplaceManager(listNftToMarketplaceCreateEventArgs);
         }
         
         #region Configuration Classes
@@ -298,9 +319,9 @@ namespace ChainSafe.Gaming.Marketplace
         }
         
         /// <summary>
-        /// Configuration class for the Marketplace Auth System Manager.
+        /// Transaction value class for the List Nft To Marketplace Manager.
         /// </summary>
-        public class ListNftToMarketplaceConfigEventArgs : EventArgs
+        public class ListNftToMarketplaceTxEventArgs : EventArgs
         {
             #region Properties
             
@@ -315,9 +336,9 @@ namespace ChainSafe.Gaming.Marketplace
             #region Methods
             
             /// <summary>
-            /// Configuration class for the List Nft To Marketplace Manager.
+            /// Transaction value class for the List Nft To Marketplace Manager.
             /// </summary>
-            public ListNftToMarketplaceConfigEventArgs([CanBeNull] string collectionContractToListFrom, [CanBeNull] string marketplaceContractToListTo, [CanBeNull] string tokenIdToList, [CanBeNull] string price, [CanBeNull] string nftType)
+            public ListNftToMarketplaceTxEventArgs([CanBeNull] string collectionContractToListFrom, [CanBeNull] string marketplaceContractToListTo, [CanBeNull] string tokenIdToList, [CanBeNull] string price, [CanBeNull] string nftType)
             {
                 if (collectionContractToListFrom != null)
                 {
@@ -343,6 +364,30 @@ namespace ChainSafe.Gaming.Marketplace
                 {
                     NftType = nftType;
                 }
+            }
+            
+            #endregion
+        }
+        
+        /// <summary>
+        /// Configuration class for the List Nft To Marketplace Manager.
+        /// </summary>
+        public class ListNftToMarketplaceConfigEventArgs : EventArgs
+        {
+            #region Properties
+            
+            public string BearerToken { get; set; }
+
+            #endregion
+    
+            #region Methods
+            
+            /// <summary>
+            /// Configuration class for the List Nft To Marketplace Manager.
+            /// </summary>
+            public ListNftToMarketplaceConfigEventArgs(string bearerToken)
+            {
+                BearerToken = bearerToken;
             }
             
             #endregion

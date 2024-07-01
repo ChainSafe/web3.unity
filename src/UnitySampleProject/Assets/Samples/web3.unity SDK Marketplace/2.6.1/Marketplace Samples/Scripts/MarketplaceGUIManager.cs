@@ -25,6 +25,8 @@ namespace ChainSafe.Gaming.Marketplace
         [SerializeField] private GameObject createCollectionMenu;
         [SerializeField] private GameObject mintNftToCollectionMenu;
         [SerializeField] private GameObject listNftToMarketplaceMenu;
+        [SerializeField] private GameObject listNftToMarketplaceScrollMenu;
+        [SerializeField] private GameObject listNftToMarketplaceDetailsMenu;
         [SerializeField] private Button openMarketplacesMenuButton;
         [SerializeField] private Button openCollectionsMenuButton;
         [SerializeField] private Button createMarketplaceButton;
@@ -35,7 +37,6 @@ namespace ChainSafe.Gaming.Marketplace
         [SerializeField] private Button closeCreateCollectionButton;
         [SerializeField] private Button mintNftToCollectionMenuButton;
         [SerializeField] private Button mintNftToCollectionButton;
-        [SerializeField] private Button listNftToMarketplaceMenuButton;
         [SerializeField] private Button listNftToMarketplaceButton;
         [SerializeField] private Button backButtonBrowseSelectedMarketplace;
         [SerializeField] private Button backButtonBrowseSelectedCollection;
@@ -63,7 +64,6 @@ namespace ChainSafe.Gaming.Marketplace
             createCollectionUploadImageButton.onClick.AddListener(UploadCollectionImage);
             mintNftToCollectionMenuButton.onClick.AddListener(ToggleMintNftToCollectionMenu);
             mintNftToCollectionButton.onClick.AddListener(UploadNftImageToCollection);
-            listNftToMarketplaceMenuButton.onClick.AddListener(ToggleListNftToMarketplaceMenu);
             listNftToMarketplaceButton.onClick.AddListener(ListNftToMarketplace);
             backButtonBrowseSelectedMarketplace.onClick.AddListener(CloseSelectedMarketplace);
             backButtonBrowseSelectedCollection.onClick.AddListener(CloseSelectedCollection);
@@ -152,7 +152,6 @@ namespace ChainSafe.Gaming.Marketplace
         /// </summary>
         private void CloseSelectedMarketplace()
         {
-            listNftToMarketplaceMenuButton.gameObject.SetActive(false);
             backButtonBrowseSelectedMarketplace.gameObject.SetActive(false);
             backButtonBrowseMarketplace.gameObject.SetActive(true);
             EventManagerMarketplace.RaiseCloseSelectedMarketplace();
@@ -163,7 +162,6 @@ namespace ChainSafe.Gaming.Marketplace
         /// </summary>
         private void OpenSelectedMarketplace()
         {
-            listNftToMarketplaceMenuButton.gameObject.SetActive(true);
             backButtonBrowseSelectedMarketplace.gameObject.SetActive(true);
             backButtonBrowseMarketplace.gameObject.SetActive(false);
         }

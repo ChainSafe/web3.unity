@@ -40,6 +40,7 @@ namespace ChainSafe.Gaming.Marketplace
         {
             var response = await EvmMarketplace.CreateMarketplace(BearerToken, marketplaceName, marketplaceDescription, marketplaceWhiteListing);
             Debug.Log($"TX: {response.TransactionHash}");
+            EventManagerMarketplace.RaiseCreateMarketplace();
         }
     
         /// <summary>

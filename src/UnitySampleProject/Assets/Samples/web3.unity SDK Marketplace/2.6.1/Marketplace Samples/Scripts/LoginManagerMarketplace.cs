@@ -174,6 +174,8 @@ namespace ChainSafe.Gaming.Marketplace
                 EventManagerMarketplace.RaiseConfigureMarketplaceCreateManager(marketplaceCreateConfigArgs);
                 var collectionCreateConfigArgs = new EventManagerMarketplace.CollectionCreateConfigEventArgs(loginResponse.access_token.token);
                 EventManagerMarketplace.RaiseConfigureCollectionCreateManager(collectionCreateConfigArgs);
+                var listNftToMarketplaceCreateConfigArgs = new EventManagerMarketplace.ListNftToMarketplaceConfigEventArgs(loginResponse.access_token.token);
+                EventManagerMarketplace.RaiseConfigureListNftToMarketplaceManager(listNftToMarketplaceCreateConfigArgs);
             }
         }
         

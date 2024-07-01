@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.UnityPackage.Model;
 using TMPro;
 using UnityEngine;
 using EvmMarketplace = Scripts.EVM.Marketplace.Marketplace;
@@ -14,6 +16,8 @@ namespace ChainSafe.Gaming.Marketplace
         
         [SerializeField] private TMP_InputField priceInput;
         [SerializeField] private TMP_InputField amountInput;
+        [SerializeField] private TMP_Dropdown selectMarketplaceDropDown;
+        private MarketplaceModel.ProjectMarketplacesResponse marketplaceList;
 
         #endregion
 
@@ -24,10 +28,46 @@ namespace ChainSafe.Gaming.Marketplace
         private string TokenIdToList { get; set; }
         private string Price { get; set; }
         private string NftType { get; set; }
+        private string BearerToken { get; set; }
 
         #endregion
         
         #region Methods
+        
+        /// <summary>
+        /// Initializes objects.
+        /// </summary>
+        private void Start()
+        {
+            GetMarketplaceOptions();
+        }
+
+        /// <summary>
+        /// Populates the marketplace drop down options.
+        /// </summary>
+        private async void GetMarketplaceOptions()
+        {
+            marketplaceList = await EvmMarketplace.GetProjectMarketplaces(BearerToken);
+            if (marketplaceList.Marketplaces.Count <= 0) return;
+            MarketplaceContractToListTo = marketplaceList.Marketplaces[0].Id;
+            List<string> options = new List<string>();
+            options.Add(marketplaceList.Marketplaces[0].Name);
+            selectMarketplaceDropDown.ClearOptions();
+            selectMarketplaceDropDown.AddOptions(options);
+            selectMarketplaceDropDown.onValueChanged.AddListener(OnDropdownValueChanged);
+        }
+        
+        /// <summary>
+        /// Sets selected marketplace when dropdown value is changed.
+        /// </summary>
+        /// <param name="index">The index of the selected option.</param>
+        private void OnDropdownValueChanged(int index)
+        {
+            if (index < marketplaceList.Marketplaces.Count)
+            {
+                MarketplaceContractToListTo = marketplaceList.Marketplaces[index].Id;
+            }
+        }
         
         /// <summary>
         /// List selected Nft to marketplace.
@@ -70,8 +110,10 @@ namespace ChainSafe.Gaming.Marketplace
         /// </summary>
         private void OnEnable()
         {
+            EventManagerMarketplace.ConfigureListNftToMarketplaceManager += OnConfigureListNftToMarketplaceManager;
+            EventManagerMarketplace.ConfigureListNftToMarketplaceTxManager += IncomingMarketplaceListing;
+            EventManagerMarketplace.CreateMarketplace += GetMarketplaceOptions;
             EventManagerMarketplace.ListNftToMarketplace += ListNftToMarketplace;
-            EventManagerMarketplace.ConfigureListNftToMarketplaceManager += IncomingMarketplaceListing;
         }
         
         /// <summary>
@@ -79,23 +121,34 @@ namespace ChainSafe.Gaming.Marketplace
         /// </summary>
         private void OnDisable()
         {
+            EventManagerMarketplace.ConfigureListNftToMarketplaceManager -= OnConfigureListNftToMarketplaceManager;
+            EventManagerMarketplace.ConfigureListNftToMarketplaceTxManager -= IncomingMarketplaceListing;
+            EventManagerMarketplace.CreateMarketplace -= GetMarketplaceOptions;
             EventManagerMarketplace.ListNftToMarketplace -= ListNftToMarketplace;
-            EventManagerMarketplace.ConfigureListNftToMarketplaceManager -= IncomingMarketplaceListing;
         }
         
-        //TODO CollectionContractToListFrom needs to be populated.
         /// <summary>
         /// Configures properties for nft purchase.
         /// </summary>
         /// <param name="sender">Sender.</param>
-        /// <param name="listNftToMarketplaceConfigEventArgs">Args.</param>
-        private void IncomingMarketplaceListing(object sender, EventManagerMarketplace.ListNftToMarketplaceConfigEventArgs listNftToMarketplaceConfigEventArgs)
+        /// <param name="listNftToMarketplaceTxEventArgs">Args.</param>
+        private void IncomingMarketplaceListing(object sender, EventManagerMarketplace.ListNftToMarketplaceTxEventArgs listNftToMarketplaceTxEventArgs)
         {
-            CollectionContractToListFrom = listNftToMarketplaceConfigEventArgs.CollectionContractToListFrom;
-            MarketplaceContractToListTo = listNftToMarketplaceConfigEventArgs.MarketplaceContractToListTo;
-            TokenIdToList = listNftToMarketplaceConfigEventArgs.TokenIdToList;
-            Price = listNftToMarketplaceConfigEventArgs.Price;
-            NftType = listNftToMarketplaceConfigEventArgs.NftType;
+            CollectionContractToListFrom = listNftToMarketplaceTxEventArgs.CollectionContractToListFrom;
+            MarketplaceContractToListTo = listNftToMarketplaceTxEventArgs.MarketplaceContractToListTo;
+            TokenIdToList = listNftToMarketplaceTxEventArgs.TokenIdToList;
+            Price = listNftToMarketplaceTxEventArgs.Price;
+            NftType = listNftToMarketplaceTxEventArgs.NftType;
+        }
+        
+        /// <summary>
+        /// Configures tokens.
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="listNftToMarketplaceConfigEventArgs">Args.</param>
+        private void OnConfigureListNftToMarketplaceManager(object sender, EventManagerMarketplace.ListNftToMarketplaceConfigEventArgs listNftToMarketplaceConfigEventArgs)
+        {
+            BearerToken = listNftToMarketplaceConfigEventArgs.BearerToken;
         }
         
         #endregion
