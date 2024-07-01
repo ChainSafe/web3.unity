@@ -4,14 +4,27 @@
 [<img alt="Discord" src="https://img.shields.io/discord/593655374469660673.svg?style=for-the-badge&label=Discord&logo=discord" height="20">](https://discord.gg/Q6A3YA2)
 [<img alt="Twitter" src="https://img.shields.io/twitter/follow/espadrine.svg?style=for-the-badge&label=Twitter&color=1DA1F2" height="20">](https://twitter.com/chainsafeth)
 
-## Notices
-
-After **June 15, 2023** all users of the SDK will be required to have their projects registered. Please ensure that you have a valid project ID to avoid any service interruptions by this time. If you need help getting a project ID, we've put together a tutorial to guide you through the process: https://docs.gaming.chainsafe.io/current/project-id-registration.
-
-As always, we're here to help, so feel free to message us in ⁠🕹web3unity-gaming-general  or ⁠🕹gaming-help if you're stuck and need help!
-
 ## Documentation
-https://docs.gaming.chainsafe.io/
+You can access the full docs at [docs.gaming.chainsafe.io](https://docs.gaming.chainsafe.io)
+
+Our codebase is quite easy to use. This is an example of accessing player balance and calling a write method of a custom Smart Contract within Unity.
+
+```csharp
+async void Awake()
+{
+    // Build Web3 client
+    var web3 = await BuildWeb3();
+    
+    // Get ERC-20 balance for current user
+    var balance = await web3.Erc20.GetBalanceOf(erc20ContractAddress);
+    
+    // Interact with custom Contract
+    var customContract = web3.ContractBuilder.Build(contractAbi, contractAddress);
+    var friendHp = await customContract.SendSingle<int, BigInteger>("healPlayer", nftItemId);
+}
+```
+
+Additional prefab scripts can be found here https://docs.gaming.chainsafe.io/current/prefab-scripts#contract-call
 
 ## Support
 - Need help with web3.unity or found a bug? Be sure to read the documentation above, then review existing issues or create a new one [here](https://github.com/ChainSafe/web3.unity/issues). This is the best way to get help from the ChainSafe Gaming team.

@@ -1,6 +1,7 @@
 #nullable enable
 using System.Collections.Generic;
 using ChainSafe.Gaming.WalletConnect.Connection;
+using ChainSafe.Gaming.Web3.Evm.Wallet;
 using WalletConnectSharp.Core;
 using WalletConnectSharp.Network.Interfaces;
 
@@ -9,7 +10,7 @@ namespace ChainSafe.Gaming.WalletConnect
     /// <summary>
     /// Interface for WalletConnect configuration.
     /// </summary>
-    public interface IWalletConnectConfig
+    public interface IWalletConnectConfig : IWalletProviderConfig
     {
         /// <summary>
         /// Set to true if you want to store this session on a disk for the next time.
