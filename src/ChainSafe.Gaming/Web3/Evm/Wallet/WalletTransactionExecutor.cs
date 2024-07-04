@@ -32,7 +32,7 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
             transaction.From ??= signer.PublicAddress;
             transaction.Data ??= "0x";
 
-            string hash = await walletProvider.Perform<string>("eth_sendTransaction", transaction.ToTransactionInput());
+            string hash = await walletProvider.Request<string>("eth_sendTransaction", transaction.ToTransactionInput());
 
             hash = hash.AssertTransactionValid();
 

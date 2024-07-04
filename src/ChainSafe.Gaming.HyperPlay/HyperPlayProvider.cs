@@ -24,7 +24,7 @@ namespace ChainSafe.Gaming.HyperPlay
         private readonly IHyperPlayConfig config;
         private readonly IHyperPlayData data;
         private readonly DataStorage dataStorage;
-        private readonly IHttpClient httpClient;
+        private readonly Web3Environment environment;
         private readonly IChainConfig chainConfig;
 
         /// <summary>
@@ -32,17 +32,17 @@ namespace ChainSafe.Gaming.HyperPlay
         /// </summary>
         /// <param name="config">Injected <see cref="HyperPlayConfig"/>.</param>
         /// <param name="data">Injected <see cref="IHyperPlayData"/>.</param>
-        /// <param name="dataStorage">Injected <see cref="DataStorage"/>.</param>
-        /// <param name="httpClient">HttpClient to make requests.</param>
+        /// <param name="dataStorage">Injected <see cref="dataStorage"/>.</param>
+        /// <param name="environment">Injected <see cref="environment"/>.</param>
         /// <param name="chainConfig">ChainConfig to fetch chain data.</param>
         /// <param name="chainRegistryProvider">Injected <see cref="ChainRegistryProvider"/>.</param>
-        public HyperPlayProvider(IHyperPlayConfig config, IHyperPlayData data, DataStorage dataStorage, IHttpClient httpClient, IChainConfig chainConfig, ChainRegistryProvider chainRegistryProvider)
-            : base(chainRegistryProvider: chainRegistryProvider)
+        public HyperPlayProvider(IHyperPlayConfig config, IHyperPlayData data, DataStorage dataStorage, Web3Environment environment, IChainConfig chainConfig, ChainRegistryProvider chainRegistryProvider)
+            : base(environment, chainRegistryProvider, chainConfig)
         {
             this.config = config;
             this.data = data;
             this.dataStorage = dataStorage;
-            this.httpClient = httpClient;
+            this.environment = environment;
             this.chainConfig = chainConfig;
         }
 
@@ -97,7 +97,7 @@ namespace ChainSafe.Gaming.HyperPlay
         /// <param name="parameters">RPC request parameters.</param>
         /// <typeparam name="T">RPC request response type.</typeparam>
         /// <returns>RPC request Response.</returns>
-        public override async Task<T> Perform<T>(string method, params object[] parameters)
+        public override async Task<T> Request<T>(string method, params object[] parameters)
         {
             string body = JsonConvert.SerializeObject(new HyperPlayRequest
             {
@@ -112,7 +112,7 @@ namespace ChainSafe.Gaming.HyperPlay
                 },
             });
 
-            string response = (await httpClient.PostRaw(config.Url, body, "application/json")).Response;
+            string response = (await environment.HttpClient.PostRaw(config.Url, body, "application/json")).Response;
 
             // In case response is just a primitive type like string/number...
             // Deserializing it directly doesn't work.

@@ -9,10 +9,6 @@ namespace ChainSafe.GamingSdk.Web3Auth
 
         public event Action<TransactionConfirmed> OnTransactionConfirmed;
 
-        public event Action<TransactionApproved> OnTransactionApproved; 
-        
-        public event Action<TransactionDeclined> OnTransactionDeclined;
-        
         public void RequestTransaction(TransactionRequested transactionRequested);
 
         public void ConfirmTransaction(TransactionConfirmed transactionConfirmed);
