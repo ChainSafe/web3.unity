@@ -53,6 +53,8 @@ public class Web3AuthProvider : WalletProvider
         
         var account = new Account(response.privKey);
 
+        account.TransactionManager.Client = this;
+        
         _accountProvider.Initialize(account);
         
         return account.Address;
