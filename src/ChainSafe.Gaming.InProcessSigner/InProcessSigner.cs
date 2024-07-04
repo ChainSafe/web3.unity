@@ -1,13 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Core.Evm;
-using Nethereum.ABI.EIP712;
-using Nethereum.ABI.FunctionEncoding.Attributes;
-using Nethereum.Hex.HexConvertors.Extensions;
-using Nethereum.Util;
 using Nethereum.Web3.Accounts;
 using Newtonsoft.Json;
 
@@ -44,16 +39,7 @@ namespace ChainSafe.Gaming.InProcessSigner
         /// <returns>Hash response of a successfully signed message.</returns>
         public async Task<string> SignMessage(string message)
         {
-            var byteList = new List<byte>();
-            var bytePrefix = "0x19".HexToByteArray();
-            var textBytePrefix = Encoding.UTF8.GetBytes("Ethereum Signed Message:\n" + message.Length);
-
-            byteList.AddRange(bytePrefix);
-            byteList.AddRange(textBytePrefix);
-            byteList.AddRange(Encoding.UTF8.GetBytes(message));
-            var hash = new Sha3Keccack().CalculateHash(byteList.ToArray());
-
-            return await Account.AccountSigningService.PersonalSign.SendRequestAsync(hash);
+            return await Account.AccountSigningService.PersonalSign.SendRequestAsync(Encoding.UTF8.GetBytes(message));
         }
 
         /// <summary>
@@ -65,19 +51,7 @@ namespace ChainSafe.Gaming.InProcessSigner
         /// <returns>Hash response of a successfully signed typed data.</returns>
         public async Task<string> SignTypedData<TStructType>(SerializableDomain domain, TStructType message)
         {
-            var primaryType = typeof(TStructType).Name;
-            if (StructAttribute.IsStructType(message))
-            {
-                primaryType = StructAttribute.GetAttribute(message).Name;
-            }
-
-            var typedData = new TypedData<SerializableDomain>
-            {
-                PrimaryType = primaryType,
-                Domain = domain,
-                Types = MemberDescriptionFactory.GetTypesMemberDescription(typeof(SerializableDomain), typeof(TStructType)),
-                Message = MemberValueFactory.CreateFromMessage(message),
-            };
+            SerializableTypedData<TStructType> typedData = new SerializableTypedData<TStructType>(domain, message);
 
             return await Account.AccountSigningService.SignTypedDataV4.SendRequestAsync(JsonConvert.SerializeObject(typedData));
         }
