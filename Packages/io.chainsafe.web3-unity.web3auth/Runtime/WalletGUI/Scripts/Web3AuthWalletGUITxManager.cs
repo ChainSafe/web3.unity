@@ -34,7 +34,7 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
 
     private bool _processingTransaction;
     private IWeb3AuthTransactionHandler _transactionHandler;
-    private readonly Queue<(string id, TransactionRequest request)> _transactionQueue = new();
+    private readonly Queue<TransactionRequest> _transactionQueue = new();
     
     #endregion
 
@@ -65,9 +65,9 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     /// <summary>
     /// Populates the incoming transaction display.
     /// </summary>
-    private void OnTransactionRequested((string id, TransactionRequest request) args)
+    private void OnTransactionRequested(TransactionRequest request)
     {
-        _transactionQueue.Enqueue(args);
+        _transactionQueue.Enqueue(request);
 
         if (_processingTransaction)
         {
@@ -84,7 +84,7 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     /// </summary>
     private void PromptTransactionRequest()
     {
-        var transactionRequested = _transactionQueue.Peek();
+        var transaction = _transactionQueue.Peek();
         
         incomingTxNotification.SetActive(true);
 
@@ -102,8 +102,8 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
 
         incomingTxPlaceHolder.SetActive(false);
         incomingTxDisplay.SetActive(true);
-        incomingTxHashText.text = transactionRequested.request.Data;
-        incomingTxActionText.text = transactionRequested.request.Value?.ToString() ?? "Sign Request";
+        incomingTxHashText.text = transaction.Data;
+        incomingTxActionText.text = transaction.Value?.ToString() ?? "Sign Request";
     }
     
     /// <summary>
@@ -111,9 +111,9 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     /// </summary>
     private void AcceptRequest()
     {
-        var transactionRequested = _transactionQueue.Dequeue();
+        var transaction = _transactionQueue.Dequeue();
         ShowTxLoadingMenu();
-        _transactionHandler.TransactionApproved(transactionRequested.id);
+        _transactionHandler.TransactionApproved(transaction.Id);
         ResetTransactionDisplay();
     }
     
@@ -122,8 +122,8 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     /// </summary>
     private void RejectRequest()
     {
-        var transactionRequested = _transactionQueue.Dequeue();
-        _transactionHandler.TransactionDeclined(transactionRequested.id);
+        var transaction = _transactionQueue.Dequeue();
+        _transactionHandler.TransactionDeclined(transaction.Id);
         ResetTransactionDisplay();
     }
     

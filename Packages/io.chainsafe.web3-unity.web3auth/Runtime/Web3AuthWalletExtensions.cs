@@ -39,7 +39,7 @@ public static class Web3AuthWalletExtensions
 
         collection.AddSingleton<IWalletProvider, Web3AuthProvider>();
         
-        collection.Replace(ServiceDescriptor.Singleton(typeof(AccountProvider), new AccountProvider()));
+        collection.AddSingleton( new AccountProvider());
         
         collection.AddSingleton<ISigner, ILifecycleParticipant, ILogoutHandler, Web3AuthSigner>();
         

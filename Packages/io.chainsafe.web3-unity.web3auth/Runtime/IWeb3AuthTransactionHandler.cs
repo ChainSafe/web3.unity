@@ -11,7 +11,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
         /// <summary>
         /// Invokes when transaction is requested.
         /// </summary>
-        public event Action<(string id, TransactionRequest request)> OnTransactionRequested;
+        public event Action<TransactionRequest> OnTransactionRequested;
 
         /// <summary>
         /// Invokes when transaction is confirmed on block.
