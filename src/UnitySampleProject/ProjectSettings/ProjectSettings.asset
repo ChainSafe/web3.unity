@@ -790,6 +790,7 @@ PlayerSettings:
   webGLMemoryGeometricGrowthCap: 96
   webGLPowerPreference: 2
   scriptingDefineSymbols:
+    Standalone: ENABLE_ANALYTICS
     WebGL: RAMP_AVAILABLE
   additionalCompilerArguments: {}
   platformArchitecture: {}

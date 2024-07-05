@@ -51,7 +51,7 @@ namespace ChainSafe.Gaming.Tests
                     new ProjectConfig
                     {
                         ProjectId = string.Empty,
-                        AnalyticsOptOut = false,
+                        EnableAnalytics = true,
                     },
                     new ChainConfig
                     {

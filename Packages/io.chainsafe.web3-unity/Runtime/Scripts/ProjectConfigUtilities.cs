@@ -16,7 +16,7 @@ namespace ChainSafe.Gaming.UnityPackage
         }
 
         public static ProjectConfigScriptableObject Load(string projectId, string chainId, string chain, string network,
-            string symbol, string rpc, string blockExplorerUrl, bool analyticsOptOut)
+            string symbol, string rpc, string blockExplorerUrl, bool enableAnalytics)
         {
             var projectConfig = ScriptableObject.CreateInstance<ProjectConfigScriptableObject>();
 
@@ -27,7 +27,7 @@ namespace ChainSafe.Gaming.UnityPackage
             projectConfig.Symbol = symbol;
             projectConfig.Rpc = rpc;
             projectConfig.BlockExplorerUrl = blockExplorerUrl;
-            projectConfig.AnalyticsOptOut = analyticsOptOut;
+            projectConfig.EnableAnalytics = enableAnalytics;
 
             return projectConfig;
         }

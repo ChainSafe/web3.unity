@@ -10,6 +10,6 @@ namespace ChainSafe.Gaming.Web3
         /// </summary>
         public string ProjectId { get; }
 
-        public bool AnalyticsOptOut { get; }
+        public bool EnableAnalytics => true;
     }
 }

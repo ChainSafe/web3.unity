@@ -14,7 +14,7 @@ namespace ChainSafe.Gaming.UnityPackage
         [SerializeField] private string symbol;
         [SerializeField] private string rpc;
         [SerializeField] private string blockExplorerUrl;
-        [SerializeField] private bool analyticsOptOut;
+        [SerializeField] private bool enableAnalytics;
 
         public string Symbol
         {
@@ -70,10 +70,10 @@ namespace ChainSafe.Gaming.UnityPackage
             set => blockExplorerUrl = value;
         }
         
-        public bool AnalyticsOptOut
+        public bool EnableAnalytics
         {
-            get => analyticsOptOut;
-            set => analyticsOptOut = value;
+            get => enableAnalytics;
+            set => enableAnalytics = value;
         }
     }
 }

@@ -39,7 +39,7 @@ public class ChainSafeServerSettings : EditorWindow
     private string rpc;
     private string newRpc;
     private string blockExplorerUrl;
-    private bool analyticsOptOut;
+    private bool enableAnalytics;
     public string previousProjectId;
 
     private Texture2D logo;
@@ -79,7 +79,7 @@ public class ChainSafeServerSettings : EditorWindow
         symbol = string.IsNullOrEmpty(projectConfig?.Symbol) ? SymbolDefault : projectConfig.Symbol;
         rpc = string.IsNullOrEmpty(projectConfig?.Rpc) ? RpcDefault : projectConfig.Rpc;
         blockExplorerUrl = string.IsNullOrEmpty(projectConfig?.BlockExplorerUrl) ? BlockExplorerUrlDefault : projectConfig.BlockExplorerUrl;
-        analyticsOptOut = projectConfig.AnalyticsOptOut;
+        enableAnalytics = projectConfig.EnableAnalytics;
         // Search menu
         onDropDownChange = new UnityEvent();
         onDropDownChange.AddListener(UpdateServerMenuInfo);
@@ -199,9 +199,9 @@ public class ChainSafeServerSettings : EditorWindow
         chainID = EditorGUILayout.TextField("Chain ID: ", chainID);
         symbol = EditorGUILayout.TextField("Symbol: ", symbol);
         blockExplorerUrl = EditorGUILayout.TextField("Block Explorer: ", blockExplorerUrl);
-        analyticsOptOut = EditorGUILayout.Toggle("Collect Data for Analytics: ", analyticsOptOut);
+        enableAnalytics = EditorGUILayout.Toggle("Collect Data for Analytics: ", enableAnalytics);
 
-        if (analyticsOptOut)
+        if (enableAnalytics)
         {
             ScriptingDefineSymbols.TryAddDefineSymbol(EnableAnalyticsScriptingDefineSymbol);
         }
@@ -252,7 +252,7 @@ public class ChainSafeServerSettings : EditorWindow
             projectConfig.Symbol = symbol;
             projectConfig.Rpc = rpc;
             projectConfig.BlockExplorerUrl = blockExplorerUrl;
-            projectConfig.AnalyticsOptOut = analyticsOptOut;
+            projectConfig.EnableAnalytics = enableAnalytics;
             ProjectConfigUtilities.Save(projectConfig);
             if(projectID != previousProjectId)
                 ValidateProjectID(projectID);
