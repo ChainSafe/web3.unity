@@ -35,6 +35,7 @@ namespace LootBoxes.Chainlink
             public string BlockExplorerUrl => "https://explorer.gochain.io/";
             public string Ipc { get; }
             public string Ws { get; }
+            public bool EnableAnalytics => true;
         }
 
         private async void Awake()

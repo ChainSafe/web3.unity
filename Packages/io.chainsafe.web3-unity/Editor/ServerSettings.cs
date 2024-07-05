@@ -28,6 +28,7 @@ public class ChainSafeServerSettings : EditorWindow
     private const string SymbolDefault = "Seth";
     private const string RpcDefault = "https://rpc.sepolia.org";
     private const string BlockExplorerUrlDefault = "https://sepolia.etherscan.io";
+    private const string EnableAnalyticsScriptingDefineSymbol = "ENABLE_ANALYTICS";
 
     // Chain values
     private string projectID;
@@ -38,6 +39,7 @@ public class ChainSafeServerSettings : EditorWindow
     private string rpc;
     private string newRpc;
     private string blockExplorerUrl;
+    private bool enableAnalytics;
     public string previousProjectId;
 
     private Texture2D logo;
@@ -77,6 +79,7 @@ public class ChainSafeServerSettings : EditorWindow
         symbol = string.IsNullOrEmpty(projectConfig?.Symbol) ? SymbolDefault : projectConfig.Symbol;
         rpc = string.IsNullOrEmpty(projectConfig?.Rpc) ? RpcDefault : projectConfig.Rpc;
         blockExplorerUrl = string.IsNullOrEmpty(projectConfig?.BlockExplorerUrl) ? BlockExplorerUrlDefault : projectConfig.BlockExplorerUrl;
+        enableAnalytics = projectConfig.EnableAnalytics;
         // Search menu
         onDropDownChange = new UnityEvent();
         onDropDownChange.AddListener(UpdateServerMenuInfo);
@@ -196,6 +199,18 @@ public class ChainSafeServerSettings : EditorWindow
         chainID = EditorGUILayout.TextField("Chain ID: ", chainID);
         symbol = EditorGUILayout.TextField("Symbol: ", symbol);
         blockExplorerUrl = EditorGUILayout.TextField("Block Explorer: ", blockExplorerUrl);
+        enableAnalytics = EditorGUILayout.Toggle(new GUIContent("Collect Data for Analytics:", "Consent to collecting data for analytics purposes. This will help improve our product."), enableAnalytics);
+
+        if (enableAnalytics)
+        {
+            ScriptingDefineSymbols.TryAddDefineSymbol(EnableAnalyticsScriptingDefineSymbol);
+        }
+
+        else
+        {
+            ScriptingDefineSymbols.TryRemoveDefineSymbol(EnableAnalyticsScriptingDefineSymbol);
+        }
+        
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.PrefixLabel("Select RPC");
         // Remove "https://" so the user doesn't have to click through 2 levels for the rpc options
@@ -237,6 +252,7 @@ public class ChainSafeServerSettings : EditorWindow
             projectConfig.Symbol = symbol;
             projectConfig.Rpc = rpc;
             projectConfig.BlockExplorerUrl = blockExplorerUrl;
+            projectConfig.EnableAnalytics = enableAnalytics;
             ProjectConfigUtilities.Save(projectConfig);
             if(projectID != previousProjectId)
                 ValidateProjectID(projectID);

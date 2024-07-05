@@ -30,7 +30,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
             analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
                 EventName = "Ramp Initialized",
-                PackageName = "io.chiansafe.web3-unity.exchangers.ramp"
+                PackageName = "io.chainsafe.web3-unity.exchangers.ramp"
             });
             platformImplementation = RampExchangerFactory.CreateRampExchanger(config, signer);
             platformImplementation.OnRampPurchaseCreated += InvokeOnRampPurchaseCreated;
