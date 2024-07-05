@@ -28,7 +28,6 @@ public class ChainSafeServerSettings : EditorWindow
     private const string SymbolDefault = "Seth";
     private const string RpcDefault = "https://rpc.sepolia.org";
     private const string BlockExplorerUrlDefault = "https://sepolia.etherscan.io";
-    private const bool AnalyticsOptOutDefault = false;
 
     // Chain values
     private string projectID;
@@ -79,7 +78,7 @@ public class ChainSafeServerSettings : EditorWindow
         symbol = string.IsNullOrEmpty(projectConfig?.Symbol) ? SymbolDefault : projectConfig.Symbol;
         rpc = string.IsNullOrEmpty(projectConfig?.Rpc) ? RpcDefault : projectConfig.Rpc;
         blockExplorerUrl = string.IsNullOrEmpty(projectConfig?.BlockExplorerUrl) ? BlockExplorerUrlDefault : projectConfig.BlockExplorerUrl;
-        analyticsOptOut = projectConfig?.AnalyticsOptOut ?? false;
+        analyticsOptOut = projectConfig.AnalyticsOptOut;
         // Search menu
         onDropDownChange = new UnityEvent();
         onDropDownChange.AddListener(UpdateServerMenuInfo);
