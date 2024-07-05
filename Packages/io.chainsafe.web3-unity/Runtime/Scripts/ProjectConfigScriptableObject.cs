@@ -14,6 +14,7 @@ namespace ChainSafe.Gaming.UnityPackage
         [SerializeField] private string symbol;
         [SerializeField] private string rpc;
         [SerializeField] private string blockExplorerUrl;
+        [SerializeField] private bool enableAnalytics;
 
         public string Symbol
         {
@@ -67,6 +68,12 @@ namespace ChainSafe.Gaming.UnityPackage
         {
             get => blockExplorerUrl;
             set => blockExplorerUrl = value;
+        }
+        
+        public bool EnableAnalytics
+        {
+            get => enableAnalytics;
+            set => enableAnalytics = value;
         }
     }
 }

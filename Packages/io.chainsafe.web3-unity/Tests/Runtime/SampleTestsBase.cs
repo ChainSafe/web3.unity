@@ -49,7 +49,7 @@ public class SampleTestsBase
         if (projectConfigScriptableObject == null)
         {
             projectConfigScriptableObject = ProjectConfigUtilities.Load("3dc3e125-71c4-4511-a367-e981a6a94371", "11155111",
-                "Ethereum", "Sepolia", "Seth", "https://sepolia.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f");
+                "Ethereum", "Sepolia", "Seth", "https://sepolia.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f", "https://sepolia.etherscan.io/", false);
         }
 
         // Create web3builder & assign services
