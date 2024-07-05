@@ -23,6 +23,8 @@ namespace ChainSafe.Gaming.Web3.Unity
             services.AddSingleton<IOperatingSystemMediator, UnityOperatingSystemMediator>();
 #if ENABLE_ANALYTICS
             services.AddSingleton<IAnalyticsClient, CountlyAnalytics>();
+#else
+            services.AddSingleton<IAnalyticsClient, NoOpAnalyticsClient>();
 #endif
             return services;
         }
