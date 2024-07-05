@@ -21,7 +21,9 @@ namespace ChainSafe.Gaming.Web3.Unity
             services.AddSingleton<IHttpClient, UnityHttpClient>();
             services.AddSingleton<ILogWriter, UnityLogWriter>();
             services.AddSingleton<IOperatingSystemMediator, UnityOperatingSystemMediator>();
+#if ENABLE_ANALYTICS
             services.AddSingleton<IAnalyticsClient, CountlyAnalytics>();
+#endif
             return services;
         }
     }

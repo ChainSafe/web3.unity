@@ -28,6 +28,7 @@ public class ChainSafeServerSettings : EditorWindow
     private const string SymbolDefault = "Seth";
     private const string RpcDefault = "https://rpc.sepolia.org";
     private const string BlockExplorerUrlDefault = "https://sepolia.etherscan.io";
+    private const string EnableAnalyticsScriptingDefineSymbol = "ENABLE_ANALYTICS";
 
     // Chain values
     private string projectID;
@@ -198,7 +199,18 @@ public class ChainSafeServerSettings : EditorWindow
         chainID = EditorGUILayout.TextField("Chain ID: ", chainID);
         symbol = EditorGUILayout.TextField("Symbol: ", symbol);
         blockExplorerUrl = EditorGUILayout.TextField("Block Explorer: ", blockExplorerUrl);
-        analyticsOptOut = EditorGUILayout.Toggle("Analytics Opt Out: ", analyticsOptOut);
+        analyticsOptOut = EditorGUILayout.Toggle("Collect Data for Analytics: ", analyticsOptOut);
+
+        if (analyticsOptOut)
+        {
+            ScriptingDefineSymbols.TryAddDefineSymbol(EnableAnalyticsScriptingDefineSymbol);
+        }
+
+        else
+        {
+            ScriptingDefineSymbols.TryRemoveDefineSymbol(EnableAnalyticsScriptingDefineSymbol);
+        }
+        
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.PrefixLabel("Select RPC");
         // Remove "https://" so the user doesn't have to click through 2 levels for the rpc options

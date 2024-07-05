@@ -13,7 +13,6 @@ public class CountlyAnalytics : IAnalyticsClient
 
     public async void CaptureEvent(AnalyticsEvent eventData)
     {
-        if (ProjectConfig.AnalyticsOptOut) return;
         await Countly.Instance.Events.RecordEventAsync(eventData.EventName);
     }
 
@@ -23,7 +22,6 @@ public class CountlyAnalytics : IAnalyticsClient
 
     public CountlyAnalytics(IChainConfig chainConfig, IProjectConfig projectConfig)
     {
-        if (projectConfig.AnalyticsOptOut) return;
         Countly.Instance.Init(new CountlyConfiguration(AppKey, ServerUrl));
 
         var userDetails = new Dictionary<string, object>
