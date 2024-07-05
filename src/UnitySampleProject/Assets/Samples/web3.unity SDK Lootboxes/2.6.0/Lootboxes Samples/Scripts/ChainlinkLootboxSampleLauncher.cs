@@ -36,6 +36,7 @@ namespace LootBoxes.Chainlink
             public bool AnalyticsOptOut => false;
             public string Ipc { get; }
             public string Ws { get; }
+            public bool EnableAnalytics => true;
         }
 
         private async void Awake()

@@ -8,7 +8,6 @@ public class CountlyAnalytics : IAnalyticsClient
 {
     private const string AppKey = "4d2f30cecf1b7e2b8cd909103c1fac971872aa3f";
     private const string ServerUrl = "https://chainsafe-40aca7b26551e.flex.countly.com";
-    private bool analyticsOptOut = false;
 
 
     public async void CaptureEvent(AnalyticsEvent eventData)
