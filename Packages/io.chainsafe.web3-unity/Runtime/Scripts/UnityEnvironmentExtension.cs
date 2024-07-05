@@ -24,7 +24,7 @@ namespace ChainSafe.Gaming.Web3.Unity
 #if ENABLE_ANALYTICS
             services.AddSingleton<IAnalyticsClient, CountlyAnalytics>();
 #else
-            services.AddSingleton<IAnalyticsClient, NoOpAnalyticsClient>();
+            services.DisableAnalytics();
 #endif
             return services;
         }
