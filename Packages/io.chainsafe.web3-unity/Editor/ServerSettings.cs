@@ -28,6 +28,7 @@ public class ChainSafeServerSettings : EditorWindow
     private const string SymbolDefault = "Seth";
     private const string RpcDefault = "https://rpc.sepolia.org";
     private const string BlockExplorerUrlDefault = "https://sepolia.etherscan.io";
+    private const bool AnalyticsOptOutDefault = false;
 
     // Chain values
     private string projectID;
@@ -38,6 +39,7 @@ public class ChainSafeServerSettings : EditorWindow
     private string rpc;
     private string newRpc;
     private string blockExplorerUrl;
+    private bool analyticsOptOut;
     public string previousProjectId;
 
     private Texture2D logo;
@@ -77,6 +79,7 @@ public class ChainSafeServerSettings : EditorWindow
         symbol = string.IsNullOrEmpty(projectConfig?.Symbol) ? SymbolDefault : projectConfig.Symbol;
         rpc = string.IsNullOrEmpty(projectConfig?.Rpc) ? RpcDefault : projectConfig.Rpc;
         blockExplorerUrl = string.IsNullOrEmpty(projectConfig?.BlockExplorerUrl) ? BlockExplorerUrlDefault : projectConfig.BlockExplorerUrl;
+        analyticsOptOut = projectConfig?.AnalyticsOptOut ?? false;
         // Search menu
         onDropDownChange = new UnityEvent();
         onDropDownChange.AddListener(UpdateServerMenuInfo);
@@ -196,6 +199,7 @@ public class ChainSafeServerSettings : EditorWindow
         chainID = EditorGUILayout.TextField("Chain ID: ", chainID);
         symbol = EditorGUILayout.TextField("Symbol: ", symbol);
         blockExplorerUrl = EditorGUILayout.TextField("Block Explorer: ", blockExplorerUrl);
+        analyticsOptOut = EditorGUILayout.Toggle("Analytics Opt Out: ", analyticsOptOut);
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.PrefixLabel("Select RPC");
         // Remove "https://" so the user doesn't have to click through 2 levels for the rpc options
@@ -237,6 +241,7 @@ public class ChainSafeServerSettings : EditorWindow
             projectConfig.Symbol = symbol;
             projectConfig.Rpc = rpc;
             projectConfig.BlockExplorerUrl = blockExplorerUrl;
+            projectConfig.AnalyticsOptOut = analyticsOptOut;
             ProjectConfigUtilities.Save(projectConfig);
             if(projectID != previousProjectId)
                 ValidateProjectID(projectID);

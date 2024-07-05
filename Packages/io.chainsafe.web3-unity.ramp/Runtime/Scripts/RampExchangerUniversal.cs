@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Signers;
+using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Core;
 
@@ -27,6 +28,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
 
         public ValueTask WillStartAsync()
         {
+            if (Web3Accessor.Web3.ProjectConfig.AnalyticsOptOut) return new ValueTask(Task.CompletedTask);
             analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
                 EventName = "Ramp Initialized",
@@ -57,22 +59,24 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
 
         private void InvokeOnRampPurchaseCreated(OnRampPurchaseData obj)
         {
+            OnRampPurchaseCreated?.Invoke(obj);
+            if (Web3Accessor.Web3.ProjectConfig.AnalyticsOptOut) return;
             analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
                 EventName = "Ramp Purchased Happened",
                 PackageName = "io.chiansafe.web3-unity.exchangers.ramp"
             });
-            OnRampPurchaseCreated?.Invoke(obj);
         }
 
         private void InvokeOffRampSaleCreated(OffRampSaleData obj)
         {
+            OffRampSaleCreated?.Invoke(obj);
+            if (Web3Accessor.Web3.ProjectConfig.AnalyticsOptOut) return;
             analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
                 EventName = "Ramp Sale Happened",
                 PackageName = "io.chiansafe.web3-unity.exchangers.ramp"
             });
-            OffRampSaleCreated?.Invoke(obj);
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Analytics;
 using Plugins.CountlySDK;
@@ -8,10 +9,12 @@ public class CountlyAnalytics : IAnalyticsClient
 {
     private const string AppKey = "4d2f30cecf1b7e2b8cd909103c1fac971872aa3f";
     private const string ServerUrl = "https://chainsafe-40aca7b26551e.flex.countly.com";
+    private bool analyticsOptOut = false;
 
 
     public async void CaptureEvent(AnalyticsEvent eventData)
     {
+        if (analyticsOptOut) return;
         await Countly.Instance.Events.RecordEventAsync(eventData.EventName);
     }
 
@@ -21,6 +24,8 @@ public class CountlyAnalytics : IAnalyticsClient
 
     public CountlyAnalytics(IChainConfig chainConfig, IProjectConfig projectConfig)
     {
+        analyticsOptOut = projectConfig.AnalyticsOptOut;
+        if (projectConfig.AnalyticsOptOut) return;
         Countly.Instance.Init(new CountlyConfiguration(AppKey, ServerUrl));
 
         var userDetails = new Dictionary<string, object>

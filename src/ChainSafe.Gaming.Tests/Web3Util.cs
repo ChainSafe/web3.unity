@@ -48,7 +48,11 @@ namespace ChainSafe.Gaming.Tests
             JsonRpcWalletConfig jsonRpcWalletConfig, Web3Builder.ConfigureServicesDelegate configureDelegate = null)
         {
             return new Web3Builder(
-                    new ProjectConfig { ProjectId = string.Empty },
+                    new ProjectConfig
+                    {
+                        ProjectId = string.Empty,
+                        AnalyticsOptOut = false,
+                    },
                     new ChainConfig
                     {
                         Chain = "Anvil",

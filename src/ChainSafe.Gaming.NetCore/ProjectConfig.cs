@@ -12,5 +12,11 @@ namespace ChainSafe.Gaming.NetCore
         /// Project Id fetched from the ChainSafe Gaming web dashboard.
         /// </summary>
         public string ProjectId { get; set; }
+
+        /// <summary>
+        /// Implementation of <see cref="IProjectConfig.AnalyticsOptOut"/>
+        /// Analytics opt out, enables or disables analytics.
+        /// </summary>
+        public bool AnalyticsOptOut { get; set; }
     }
 }
