@@ -199,7 +199,7 @@ public class ChainSafeServerSettings : EditorWindow
         chainID = EditorGUILayout.TextField("Chain ID: ", chainID);
         symbol = EditorGUILayout.TextField("Symbol: ", symbol);
         blockExplorerUrl = EditorGUILayout.TextField("Block Explorer: ", blockExplorerUrl);
-        enableAnalytics = EditorGUILayout.Toggle("Collect Data for Analytics: ", enableAnalytics);
+        enableAnalytics = EditorGUILayout.Toggle(new GUIContent("Collect Data for Analytics:", "Consent to collecting data for analytics purposes. This will help improve our product."), enableAnalytics);
 
         if (enableAnalytics)
         {
