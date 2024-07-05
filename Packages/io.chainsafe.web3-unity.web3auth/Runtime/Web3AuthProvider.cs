@@ -8,6 +8,9 @@ using ChainSafe.GamingSdk.Web3Auth;
 using Nethereum.Web3.Accounts;
 using UnityEngine;
 
+/// <summary>
+/// Web3Auth provider allowing users to connect a Web3Auth wallet.
+/// </summary>
 public class Web3AuthProvider : WalletProvider
 {
     private readonly Web3AuthWalletConfig _config;
@@ -23,6 +26,10 @@ public class Web3AuthProvider : WalletProvider
         _accountProvider = accountProvider;
     }
 
+    /// <summary>
+    /// Connects Web3Auth wallet.
+    /// </summary>
+    /// <returns>Connected Account.</returns>
     public override async Task<string> Connect()
     {
         _coreInstance = Object.FindObjectOfType<Web3Auth>();
@@ -65,6 +72,9 @@ public class Web3AuthProvider : WalletProvider
         _connectTcs.SetResult(response);
     }
     
+    /// <summary>
+    /// Disconnect Web3Auth wallet.
+    /// </summary>
     public override async Task Disconnect()
     {
         if (_disconnectTcs != null && !_disconnectTcs.Task.IsCompleted)
@@ -88,6 +98,13 @@ public class Web3AuthProvider : WalletProvider
         }
     }
 
+    /// <summary>
+    /// Make RPC requests to the Web3Auth wallet.
+    /// </summary>
+    /// <param name="method">RPC request method.</param>
+    /// <param name="parameters">RPC request parameters.</param>
+    /// <typeparam name="T">Type of response.</typeparam>
+    /// <returns>RPC request response.</returns>
     public override Task<T> Request<T>(string method, params object[] parameters)
     {
         return Perform<T>(method, parameters);

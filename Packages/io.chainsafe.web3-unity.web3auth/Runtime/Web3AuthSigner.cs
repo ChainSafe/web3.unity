@@ -3,8 +3,10 @@ using ChainSafe.Gaming.InProcessSigner;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Logout;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
-using UnityEngine;
 
+/// <summary>
+/// Signs using a Web3Auth wallet.
+/// </summary>
 public class Web3AuthSigner : InProcessSigner, ILifecycleParticipant, ILogoutHandler
 {
     private readonly IWalletProvider _walletProvider;
