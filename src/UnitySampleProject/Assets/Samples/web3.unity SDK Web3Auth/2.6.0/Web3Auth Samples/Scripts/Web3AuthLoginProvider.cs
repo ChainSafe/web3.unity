@@ -158,7 +158,6 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
 
     private void LogAnalytics(Provider provider)
     {
-        if (Web3Accessor.Web3.ProjectConfig.AnalyticsOptOut) return;
         IAnalyticsClient client = (IAnalyticsClient)Web3Accessor.Web3.ServiceProvider.GetService(typeof(IAnalyticsClient));
         client.CaptureEvent(new AnalyticsEvent()
         {
