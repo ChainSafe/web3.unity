@@ -54,7 +54,10 @@ public class Web3AuthProvider : WalletProvider
         
         _coreInstance.onLogin += OnLogin;
 
-        _coreInstance.login(_config.LoginParams);
+        if (_config.LoginParams != null)
+        {
+            _coreInstance.login(_config.LoginParams);
+        }
 
         var response = await _connectTcs.Task;
         
