@@ -14,13 +14,13 @@ namespace ChainSafe.Gaming.Marketplace
     public static class IPFS
     {
         #region Fields
-        
+
         private static readonly string host = "https://api.chainsafe.io";
-        
+
         #endregion
 
         #region Methods
-        
+
         /// <summary>
         /// Creates a list of attributes
         /// </summary>
@@ -46,7 +46,7 @@ namespace ChainSafe.Gaming.Marketplace
             }
             return attributeList;
         }
-        
+
         /// <summary>
         /// Converts & uploads an image from file to IPFS
         /// </summary>
@@ -67,7 +67,7 @@ namespace ChainSafe.Gaming.Marketplace
                 throw;
             }
         }
-        
+
         /// <summary>
         /// Uploads a metadata file to IPFS
         /// </summary>
@@ -97,7 +97,7 @@ namespace ChainSafe.Gaming.Marketplace
                 throw;
             }
         }
-        
+
         /// <summary>
         /// Converts & uploads an image from file to IPFS
         /// </summary>
@@ -130,7 +130,7 @@ namespace ChainSafe.Gaming.Marketplace
                 throw;
             }
         }
-        
+
         /// <summary>
         /// Uploads a file to IPFS
         /// </summary>
@@ -156,7 +156,7 @@ namespace ChainSafe.Gaming.Marketplace
             {
                 throw new WebException(requestUpload.error);
             }
-            
+
             var uploadResponse = JsonConvert.DeserializeObject<Path>(requestUpload.downloadHandler.text);
             if (uploadResponse.files_details[0].status == "failed")
             {
@@ -181,7 +181,7 @@ namespace ChainSafe.Gaming.Marketplace
             var data = JsonUtility.FromJson<GetFileInfoResponse>(requestFile.downloadHandler.text);
             return data.content.cid;
         }
-        
+
         #endregion
     }
 }
