@@ -10,12 +10,10 @@ var Web3AuthWebGLNoModal =  {
             Module.dynCall_vi(login, [buffer]);
         };
     },
-    InitWeb3Auth: function (clientId, chainId, rpcTarget, displayName, blockExplorerUrl, ticker, tickerName, network) {
+    InitWeb3Auth: function (clientId, chainId, rpcTarget, displayName, blockExplorerUrl, ticker, tickerName, network, rememberMe) {
         window.web3auth = null;
         window.walletServicesPlugin = null;
         
-       
-
         (async function init() {
             try {
 
@@ -44,6 +42,10 @@ var Web3AuthWebGLNoModal =  {
                     if (openLoginStoreObj && openLoginStoreObj.sessionId) {
                         const sessionId = openLoginStoreObj.sessionId;
                         Web3AuthWebGLNoModal.loginCallback(sessionId);
+                    
+                        if (!rememberMe)
+                            localStorage.removeItem("openlogin_store");
+                        
                     } else {
                         console.log("No session ID found in localStorage.");
                     }
@@ -60,14 +62,11 @@ var Web3AuthWebGLNoModal =  {
         })();
     },
 
-    Web3AuthLogin: async function (provider, rememberMe) {
+    Web3AuthLogin: async function (provider) {
         try {
             await window.web3auth.connectTo("openlogin", {
                 loginProvider: UTF8ToString(provider)
             });
-            if (!rememberMe){
-                localStorage.removeItem("openlogin_store");
-            }
         } catch (error) {
             console.log(error.message);
         }

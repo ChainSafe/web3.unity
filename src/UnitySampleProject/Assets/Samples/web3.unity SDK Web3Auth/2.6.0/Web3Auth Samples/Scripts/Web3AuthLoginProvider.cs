@@ -58,9 +58,9 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     
     #if UNITY_WEBGL && !UNITY_EDITOR
     [DllImport("__Internal")]
-    private static extern void InitWeb3Auth(string clientId, string chainId, string rpcTarget, string displayName, string blockExplorerUrl, string ticker, string tickerName, string network);
+    private static extern void InitWeb3Auth(string clientId, string chainId, string rpcTarget, string displayName, string blockExplorerUrl, string ticker, string tickerName, string network, bool rememberMe);
     [DllImport("__Internal")]
-    private static extern void Web3AuthLogin(string provider, bool rememberMe);    
+    private static extern void Web3AuthLogin(string provider);    
     [DllImport("__Internal")]
     private static extern void SetLoginCallback(Action<string> callback);
     
@@ -84,7 +84,7 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
         SetLoginCallback(Web3AuthConnected);
         //1155 is a decimal number, we need to convert it to an integer
         InitWeb3Auth(clientId, new HexBigInteger(BigInteger.Parse(projectSettings.ChainId)).HexValue, 
-        projectSettings.Rpc, projectSettings.Network, "", projectSettings.Symbol, "", network.ToString().ToLower());
+        projectSettings.Rpc, projectSettings.Network, "", projectSettings.Symbol, "", network.ToString().ToLower(), rememberMe);
         #else  
         if (!string.IsNullOrEmpty(KeyStoreManagerUtils.getPreferencesData(KeyStoreManagerUtils.SESSION_ID)))
         {
@@ -114,7 +114,7 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     private async void LoginWithWeb3Auth(Provider provider)
     {
 #if UNITY_WEBGL && !UNITY_EDITOR
-        Web3AuthLogin(provider.ToString().ToLower(), rememberMe);
+        Web3AuthLogin(provider.ToString().ToLower());
 #else
         selectedProvider = provider;
         await TryLogin();
