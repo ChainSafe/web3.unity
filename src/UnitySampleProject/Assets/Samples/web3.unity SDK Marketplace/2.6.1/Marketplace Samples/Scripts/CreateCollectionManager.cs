@@ -1,3 +1,4 @@
+using ChainSafe.Gaming.Web3;
 using TMPro;
 using UnityEngine;
 using EvmMarketplace = Scripts.EVM.Marketplace.Marketplace;
@@ -15,6 +16,7 @@ namespace ChainSafe.Gaming.Marketplace
         [SerializeField] private TMP_InputField nameInput;
         [SerializeField] private TMP_InputField descriptionInput;
         [SerializeField] private bool publicMinting;
+        private bool processing;
 
         #endregion
         
@@ -31,6 +33,11 @@ namespace ChainSafe.Gaming.Marketplace
         /// </summary>
         private void UploadCollectionImage()
         {
+            if (processing) return;
+            processing = true;
+            // form won't post with null values here, hacky and could be better.
+            nameInput.text ??= " ";
+            descriptionInput.text ??= " ";
             switch (typeDropDown.options[typeDropDown.value].text)
             {
                 case "721":
@@ -43,21 +50,37 @@ namespace ChainSafe.Gaming.Marketplace
         }
         
         /// <summary>
-        /// Creates a 721 collection
+        /// Creates a 721 collection.
         /// </summary>
         public async void Create721Collection(string collectionName721, string collectionDescription721, bool collectionMintingPublic721)
         {
-            var response = await EvmMarketplace.Create721Collection(BearerToken, collectionName721, collectionDescription721, collectionMintingPublic721);
-            Debug.Log($"TX: {response.TransactionHash}");
+            try
+            {
+                var response = await EvmMarketplace.Create721Collection(BearerToken, collectionName721, collectionDescription721, collectionMintingPublic721);
+                Debug.Log($"TX: {response.TransactionHash}");
+            }
+            catch (Web3Exception e)
+            {
+                processing = false;
+                Debug.Log($"Creation failed: {e}");
+            }
         }
         
         /// <summary>
-        /// Creates a 1155 collection
+        /// Creates a 1155 collection.
         /// </summary>
         public async void Create1155Collection(string collectionName1155, string collectionDescription1155, bool collectionMintingPublic1155)
         {
-            var response = await EvmMarketplace.Create1155Collection(BearerToken, collectionName1155, collectionDescription1155, collectionMintingPublic1155);
-            Debug.Log($"TX: {response.TransactionHash}");
+            try
+            {
+                var response = await EvmMarketplace.Create1155Collection(BearerToken, collectionName1155, collectionDescription1155, collectionMintingPublic1155);
+                Debug.Log($"TX: {response.TransactionHash}");
+            }
+            catch (Web3Exception e)
+            {
+                processing = false;
+                Debug.Log($"Creation failed: {e}");
+            }
         }
         
         

@@ -1,4 +1,6 @@
-﻿using TMPro;
+﻿using System;
+using ChainSafe.Gaming.Web3;
+using TMPro;
 using UnityEngine;
 using EvmMarketplace = Scripts.EVM.Marketplace.Marketplace;
 
@@ -15,6 +17,7 @@ namespace ChainSafe.Gaming.Marketplace
         [SerializeField] private TMP_InputField nameInput;
         [SerializeField] private TMP_InputField descriptionInput;
         [SerializeField] private TMP_InputField amountInput;
+        private bool processing;
 
         #endregion
         
@@ -25,6 +28,10 @@ namespace ChainSafe.Gaming.Marketplace
         /// </summary>
         private void UploadNftImage()
         {
+            if (processing) return;
+            processing = true;
+            nameInput.text ??= " ";
+            descriptionInput.text ??= " ";
             switch (typeDropDown.options[typeDropDown.value].text)
             {
                 case "721":
@@ -41,8 +48,16 @@ namespace ChainSafe.Gaming.Marketplace
         /// </summary>
         public async void Mint721CollectionNft(string collectionContract721, string uri721)
         {
-            var response = await EvmMarketplace.Mint721CollectionNft(collectionContract721, uri721);
-            Debug.Log($"TX: {response.TransactionHash}");
+            try
+            {
+                var response = await EvmMarketplace.Mint721CollectionNft(collectionContract721, uri721);
+                Debug.Log($"TX: {response.TransactionHash}");
+            }
+            catch (Web3Exception e)
+            {
+                processing = false;
+                Debug.Log($"Minting failed: {e}");
+            }
         }
         
         /// <summary>
@@ -50,8 +65,16 @@ namespace ChainSafe.Gaming.Marketplace
         /// </summary>
         public async void Mint1155CollectionNft(string collectionContract1155, string uri1155, string amount1155)
         {
-            var response = await EvmMarketplace.Mint1155CollectionNft(collectionContract1155, uri1155, amount1155);
-            Debug.Log($"TX: {response.TransactionHash}");
+            try
+            {
+                var response = await EvmMarketplace.Mint1155CollectionNft(collectionContract1155, uri1155, amount1155);
+                Debug.Log($"TX: {response.TransactionHash}");
+            }
+            catch (Web3Exception e)
+            {
+                processing = false;
+                Debug.Log($"Minting failed: {e}");
+            }
         }
         
         /// <summary>

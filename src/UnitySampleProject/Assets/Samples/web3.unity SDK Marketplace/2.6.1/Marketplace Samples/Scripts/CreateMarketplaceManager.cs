@@ -1,3 +1,5 @@
+using System;
+using ChainSafe.Gaming.Web3;
 using TMPro;
 using UnityEngine;
 using EvmMarketplace = Scripts.EVM.Marketplace.Marketplace;
@@ -14,6 +16,7 @@ namespace ChainSafe.Gaming.Marketplace
         [SerializeField] private TMP_InputField nameInput;
         [SerializeField] private TMP_InputField descriptionInput;
         [SerializeField] private bool whiteListing;
+        private bool processing;
         
         #endregion
         
@@ -30,6 +33,11 @@ namespace ChainSafe.Gaming.Marketplace
         /// </summary>
         private void UploadMarketplaceImage()
         {
+            if (processing) return;
+            processing = true;
+            // form won't post with null values here, hacky and could be better.
+            nameInput.text ??= " ";
+            descriptionInput.text ??= " ";
             CreateMarketplace(nameInput.text, descriptionInput.text, whiteListing);
         }
         
@@ -38,9 +46,17 @@ namespace ChainSafe.Gaming.Marketplace
         /// </summary>
         public async void CreateMarketplace(string marketplaceName, string marketplaceDescription, bool marketplaceWhiteListing)
         {
-            var response = await EvmMarketplace.CreateMarketplace(BearerToken, marketplaceName, marketplaceDescription, marketplaceWhiteListing);
-            Debug.Log($"TX: {response.TransactionHash}");
-            EventManagerMarketplace.RaiseCreateMarketplace();
+            try
+            {
+                var response = await EvmMarketplace.CreateMarketplace(BearerToken, marketplaceName, marketplaceDescription, marketplaceWhiteListing);
+                Debug.Log($"TX: {response.TransactionHash}");
+                EventManagerMarketplace.RaiseCreateMarketplace();
+            }
+            catch (Web3Exception e)
+            {
+                processing = false;
+                Debug.Log($"Creation failed: {e}");
+            }
         }
     
         /// <summary>
