@@ -13,7 +13,7 @@ using UnityEngine.UI;
 public class Web3AuthWalletGUIUIManager : MonoBehaviour
 {
     #region Fields
-    
+
     [SerializeField] private GameObject openWalletGUIContainer;
     [SerializeField] private GameObject walletGUIContainer;
     [SerializeField] private GameObject privateKeyContainer;
@@ -42,7 +42,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     #endregion
 
     #region Methods
-    
+
     /// <summary>
     /// Initializes objects.
     /// </summary>
@@ -52,7 +52,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
         originalOrientation = Screen.orientation;
         walletAddressText.text = Web3Accessor.Web3.Signer.PublicAddress;
     }
-    
+
     /// <summary>
     /// Initializes button listeners
     /// </summary>
@@ -65,7 +65,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
         closePrivateKeyMenuButton.onClick.AddListener(TogglePrivateKeyMenu);
         copyPrivateKeyButton.onClick.AddListener(CopyPrivateKey);
     }
-    
+
     /// <summary>
     /// Toggles the wallet display.
     /// </summary>
@@ -132,7 +132,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
         }
         privateKeyContainer.SetActive(!privateKeyContainer.activeSelf);
     }
-    
+
     /// <summary>
     /// On pointer down check.
     /// </summary>
@@ -159,7 +159,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
 
         circleLoadingImage.fillAmount = 0f;
     }
-    
+
     /// <summary>
     /// IEnumerator for private key check.
     /// </summary>
@@ -177,7 +177,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
 
         OnPointerUp();
     }
-    
+
 
     /// <summary>
     /// Sets the private key text.
@@ -195,7 +195,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     {
         Web3AuthWalletGUIClipboardManager.CopyText(privateKeyText.text);
     }
-    
+
     /// <summary>
     /// Sets original orientation
     /// </summary>
@@ -206,7 +206,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
             Screen.orientation = originalOrientation;
         }
     }
-    
+
     /// <summary>
     /// Sets landscape origin for mobile devices when opened.
     /// </summary>
@@ -218,7 +218,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
             Screen.orientation = ScreenOrientation.LandscapeLeft;
         }
     }
-    
+
     /// <summary>
     /// Subscribes to events.
     /// </summary>
@@ -237,7 +237,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
         Web3AuthEventManager.ConfigureGuiManager -= OnConfigureGuiManager;
         Web3AuthEventManager.ToggleWallet -= ToggleWallet;
     }
-    
+
     /// <summary>
     /// Configures class properties.
     /// </summary>
@@ -257,6 +257,6 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     {
         CheckWalletToggleKeyInput();
     }
-    
+
     #endregion
 }

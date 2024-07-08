@@ -10,19 +10,19 @@ namespace ChainSafe.GamingSdk.Web3Auth
     public static class Web3AuthEventManager
     {
         #region Events
-        
+
         public static event EventHandler<TxManagerConfigEventArgs> ConfigureTxManager;
-        
+
         public static event EventHandler<GuiManagerConfigEventArgs> ConfigureGuiManager;
-        
+
         public static event Action SetTokens;
-        
+
         public static event Action ToggleWallet;
-        
+
         #endregion
 
         #region Methods
-        
+
         /// <summary>
         /// Configures TX Manager.
         /// </summary>
@@ -31,7 +31,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
         {
             ConfigureTxManager?.Invoke(null, args);
         }
-        
+
         /// <summary>
         /// Configure GUI manager.
         /// </summary>
@@ -40,7 +40,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
         {
             ConfigureGuiManager?.Invoke(null, args);
         }
-        
+
         /// <summary>
         /// Invokes set tokens.
         /// </summary>
@@ -48,7 +48,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
         {
             SetTokens?.Invoke();
         }
-        
+
         /// <summary>
         /// Invokes toggle wallet.
         /// </summary>
@@ -56,12 +56,12 @@ namespace ChainSafe.GamingSdk.Web3Auth
         {
             ToggleWallet?.Invoke();
         }
-        
+
         #endregion
     }
 
     #region Configuration Classes
-    
+
     /// <summary>
     /// Configuration class for the Web3Auth Tx Manager.
     /// </summary>
@@ -71,7 +71,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
 
         public bool AutoPopUpWalletOnTx { get; private set; }
         public bool AutoConfirmTransactions { get; private set; }
-        
+
         public TMP_FontAsset DisplayFont { get; private set; }
 
         public Color SecondaryTextColour { get; private set; }
@@ -87,34 +87,34 @@ namespace ChainSafe.GamingSdk.Web3Auth
             DisplayFont = displayFont;
             SecondaryTextColour = secondaryTextColour;
         }
-        
+
         #endregion
     }
-    
+
     /// <summary>
     /// Configuration class for the Web3Auth GUI manager.
     /// </summary>
     public class GuiManagerConfigEventArgs : EventArgs
     {
         #region Properties
-        
+
         public bool DisplayWalletIcon { get; private set; }
         public Sprite WalletIcon { get; private set; }
         public Sprite WalletLogo { get; private set; }
-        
+
         #endregion
 
         #region Methods
-        
+
         public GuiManagerConfigEventArgs(bool displayWalletIcon, Sprite walletIcon, Sprite walletLogo)
         {
             DisplayWalletIcon = displayWalletIcon;
             WalletIcon = walletIcon;
             WalletLogo = walletLogo;
         }
-        
+
         #endregion
     }
-    
+
     #endregion
 }
