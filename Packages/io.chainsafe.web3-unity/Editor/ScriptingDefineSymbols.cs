@@ -12,7 +12,7 @@ public static class ScriptingDefineSymbols
         {
             return false;
         }
-        
+
         symbols = symbols.Append(symbol).ToArray();
         PlayerSettings.SetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup, symbols);
 
@@ -27,7 +27,7 @@ public static class ScriptingDefineSymbols
         {
             return false;
         }
-        
+
         symbols = symbols.Where(s => s != symbol).ToArray();
         PlayerSettings.SetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup, symbols);
 

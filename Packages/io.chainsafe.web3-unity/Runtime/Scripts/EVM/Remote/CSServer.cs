@@ -13,7 +13,7 @@ namespace Scripts.EVM.Remote
     public class CSServer
     {
         #region Fields
-        
+
         private static readonly string host = "https://api.gaming.chainsafe.io/v1/projects/";
 
         #endregion
@@ -60,7 +60,7 @@ namespace Scripts.EVM.Remote
             var response = JsonConvert.DeserializeObject<T>(json);
             return response;
         }
-        
+
         /// <summary>
         /// Unity web request helper function to delete data entries from collections/marketplace.
         /// </summary>
@@ -79,7 +79,7 @@ namespace Scripts.EVM.Remote
             }
             return "Deleted successfully";
         }
-        
+
         /// <summary>
         /// Unity web request helper function to create data entries with collections/marketplace.
         /// </summary>

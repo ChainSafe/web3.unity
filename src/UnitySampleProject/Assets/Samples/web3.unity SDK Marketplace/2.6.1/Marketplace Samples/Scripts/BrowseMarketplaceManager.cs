@@ -34,14 +34,14 @@ namespace ChainSafe.Gaming.Marketplace
         private int marketplaceItemDisplayCount = 100;
 
         #endregion
-        
+
 
         #region Properties
-        
+
         private string BearerToken { get; set; }
         private TMP_FontAsset DisplayFont { get; set; }
         private Color SecondaryTextColour { get; set; }
-    
+
         #endregion
 
         #region Methods
@@ -54,7 +54,7 @@ namespace ChainSafe.Gaming.Marketplace
             projectMarketplacesPrefabs = new GameObject[projectMarketplacesDisplayCount];
             marketplaceItemPrefabs = new GameObject[marketplaceItemDisplayCount];
         }
-        
+
         /// <summary>
         /// Populates the marketplace drop down options.
         /// </summary>
@@ -94,33 +94,6 @@ namespace ChainSafe.Gaming.Marketplace
         }
 
         /// <summary>
-        /// Adds marketplace to the display panel.
-        /// </summary>
-        /// <param name="marketplaceContract">Marketplace contract the item belongs to.</param>
-        /// <param name="marketplaceName">Marketplace name to add.</param>
-        /// <param name="marketplaceBannerUri">Marketplace image uri to add.</param>
-        private void AddMarketplaceToDisplay(string marketplaceContract, string marketplaceName, string marketplaceBannerUri)
-        {
-            if (projectMarketplacesObjectNumber >= projectMarketplacesDisplayCount)
-            {
-                Destroy(projectMarketplacesPrefabs[0]);
-                for (int i = 1; i < projectMarketplacesPrefabs.Length; i++)
-                {
-                    projectMarketplacesPrefabs[i - 1] = projectMarketplacesPrefabs[i];
-                }
-                projectMarketplacesPrefabs[projectMarketplacesPrefabs.Length - 1] = Instantiate(projectMarketplacesPrefab, marketplacePanel.transform);
-                UpdateProjectMarketplacesDisplay(marketplaceContract, projectMarketplacesObjectNumber, marketplaceName, marketplaceBannerUri);
-            }
-            else
-            {
-                projectMarketplacesPrefabs[projectMarketplacesObjectNumber] = Instantiate(projectMarketplacesPrefab, marketplacePanel.transform);
-                UpdateProjectMarketplacesDisplay(marketplaceContract, projectMarketplacesObjectNumber, marketplaceName, marketplaceBannerUri);
-            }
-            projectMarketplacesObjectNumber++;
-            marketplaceScrollRect.horizontalNormalizedPosition = 0;
-        }
-        
-        /// <summary>
         /// Adds items to the marketplace display.
         /// </summary>
         /// /// <param name="marketplaceContract">Marketplace contract.</param>
@@ -148,22 +121,30 @@ namespace ChainSafe.Gaming.Marketplace
             marketplaceItemObjectNumber++;
             marketplaceScrollRect.horizontalNormalizedPosition = 0;
         }
-        
+
         /// <summary>
         /// Imports texture (can probably be removed later for helper class)
         /// </summary>
         /// <param name="uri">Nft uri</param>
         private async Task<Texture2D> ImportTexture(string uri)
         {
-            var textureUri = IpfsHelper.RollupIpfsUri(uri);
+            var metaRequest = UnityWebRequest.Get(uri);
+            await metaRequest.SendWebRequest();
+
+            if (metaRequest.result != UnityWebRequest.Result.Success)
+            {
+                throw new Web3Exception($"Metadata request failure: {metaRequest.error}");
+            }
+            var metadata = JsonConvert.DeserializeObject<Erc1155Metadata>(Encoding.UTF8.GetString(metaRequest.downloadHandler.data));
+            var textureUri = IpfsHelper.RollupIpfsUri(metadata.image);
             var textureRequest = UnityWebRequestTexture.GetTexture(textureUri);
             await textureRequest.SendWebRequest();
-            
+
             if (textureRequest.result != UnityWebRequest.Result.Success)
             {
                 throw new Web3Exception($"Texture request failure: {textureRequest.error}");
             }
-            
+
             var texture = ((DownloadHandlerTexture)textureRequest.downloadHandler).texture;
 
             return texture;
@@ -204,55 +185,6 @@ namespace ChainSafe.Gaming.Marketplace
         }
 
         /// <summary>
-        /// Updates the marketplace item display.
-        /// </summary>
-        /// <param name="marketplaceContract">Marketplace contract to call.</param>
-        /// <param name="marketplaceItemObjectIndex">Index of the marketplace.</param>
-        /// <param name="nftId">Nft id.</param>
-        /// <param name="nftType">Nft name.</param>
-        /// <param name="nftPrice">Nft price.</param>
-        /// <param name="nftUri">Nft Uri.</param>
-        private async void UpdateMarketplaceItemDisplay(string marketplaceContract, int marketplaceItemObjectIndex, string nftId, string nftType, string nftPrice, string nftUri)
-        {
-            var ethValue = (decimal)BigInteger.Parse(nftPrice) / (decimal)BigInteger.Pow(10, 18);
-            string formattedEthValue = ethValue.ToString("0.##################");
-            string[] textObjectNames = { "IdText", "TypeText", "PriceText" };
-            string[] textValues = { $"ID: {nftId}", $"{nftType}", $"{formattedEthValue} {Web3Accessor.Web3.ChainConfig.Symbol.ToUpper()}" };
-            for (int i = 0; i < textObjectNames.Length; i++)
-            {
-                var textObj = marketplaceItemPrefabs[marketplaceItemObjectIndex].transform.Find(textObjectNames[i]);
-                var textMeshPro = textObj.GetComponent<TextMeshProUGUI>();
-                textMeshPro.text = textValues[i];
-                textMeshPro.font = DisplayFont;
-                textMeshPro.color = SecondaryTextColour;
-                try
-                {
-                    var image = await ImportTexture(nftUri);
-                    var imageObj = marketplaceItemPrefabs[marketplaceItemObjectIndex].transform.Find("Image").GetComponent<Image>();
-                    imageObj.material.mainTexture = image;
-                }
-                catch (Exception e)
-                {
-                    Debug.Log($"Error getting image: {e}");
-                }
-                var buttonObj = marketplaceItemPrefabs[marketplaceItemObjectIndex].transform.Find("PurchaseButton").GetComponent<Button>();
-                buttonObj.onClick.RemoveAllListeners();
-                buttonObj.onClick.AddListener(() => PurchaseNft(marketplaceContract ,marketplaceItemObjectIndex.ToString(), nftPrice));
-            }
-        }
-
-        /// <summary>
-        /// Purchases a marketplace Nft.
-        /// </summary>
-        /// <param name="marketplaceContract">The marketplace contract to purchase from.</param>
-        /// <param name="marketplaceObjectIndex">Index of the Nft.</param>
-        /// <param name="price">Nft price.</param>
-        private async void PurchaseNft(string marketplaceContract, string marketplaceObjectIndex, string price)
-        {
-            await EvmMarketplace.PurchaseNft(marketplaceContract, marketplaceObjectIndex, price);
-        }
-        
-        /// <summary>
         /// Resets marketplace display by destroying marketplace prefabs.
         /// </summary>
         /// <param name="index">The index to populate.</param>
@@ -270,7 +202,7 @@ namespace ChainSafe.Gaming.Marketplace
             if (!index.HasValue) return;
             GetProjectMarketplaces();
         }
-        
+
         /// <summary>
         /// Resets marketplace display by destroying item prefabs.
         /// </summary>
@@ -319,7 +251,7 @@ namespace ChainSafe.Gaming.Marketplace
             ResetProjectMarketplacesPrefabsDisplay();
             ResetMarketplaceItemPrefabsDisplay();
         }
-        
+
         /// <summary>
         /// Subscribes to events.
         /// </summary>
@@ -330,7 +262,7 @@ namespace ChainSafe.Gaming.Marketplace
             EventManagerMarketplace.CloseSelectedMarketplace += CloseSelectedMarketplace;
             EventManagerMarketplace.ToggleSelectionMenu += CloseMarketplace;
         }
-        
+
         /// <summary>
         /// Unsubscribes from events.
         /// </summary>
@@ -341,7 +273,7 @@ namespace ChainSafe.Gaming.Marketplace
             EventManagerMarketplace.CloseSelectedMarketplace -= CloseSelectedMarketplace;
             EventManagerMarketplace.ToggleSelectionMenu -= CloseMarketplace;
         }
-        
+
         /// <summary>
         /// Configures class properties.
         /// </summary>

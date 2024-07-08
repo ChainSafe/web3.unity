@@ -86,7 +86,7 @@ namespace ChainSafe.Gaming.UnityPackage.Model
             [JsonProperty("owners")]
             public List<Owners> Owners { get; set; }
         }
-        
+
         public class Item
         {
             [JsonProperty("id")]
@@ -125,22 +125,13 @@ namespace ChainSafe.Gaming.UnityPackage.Model
 
         public class Token
         {
-            [JsonProperty("token_id")]
-            public string TokenID { get; set; }
+            public string token_id { get; set; }
+            public string token_type { get; set; }
+            public string contract_address { get; set; }
+            public string uri { get; set; }
+            public Metadata metadata { get; set; }
+        }
 
-            [JsonProperty("token_type")]
-            public string TokenType { get; set; }
-
-            [JsonProperty("contract_address")]
-            public string ContractAddress { get; set; }
-
-            [JsonProperty("uri")]
-            public string Uri { get; set; }
-
-            [JsonProperty("metadata")]
-            public Metadata Metadata { get; set; }
-        }    
-        
         public class Metadata
         {
             [JsonProperty("attributes")]
@@ -155,7 +146,7 @@ namespace ChainSafe.Gaming.UnityPackage.Model
             [JsonProperty("value")]
             public string Value { get; set; }
         }
-        
+
         public class Owners
         {
             [JsonProperty("owner")]

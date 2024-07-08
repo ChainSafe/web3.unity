@@ -21,7 +21,7 @@ namespace ChainSafe.Gaming.UnityPackage.Model
             public List<string> Values { get; set; }
         }
     }
-    
+
     public class GetFileInfoResponse
     {
         [System.Serializable]
@@ -32,7 +32,7 @@ namespace ChainSafe.Gaming.UnityPackage.Model
 
         public Content content;
     }
-    
+
     public class FilesDetail
     {
         public string path { get; set; }

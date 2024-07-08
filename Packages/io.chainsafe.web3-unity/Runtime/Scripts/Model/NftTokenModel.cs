@@ -118,7 +118,7 @@ namespace ChainSafe.Gaming.UnityPackage.Model
             [JsonProperty("metadata")]
             public Metadata Metadata { get; set; }
         }
-        
+
         public class Metadata
         {
             [JsonProperty("attributes")]
@@ -136,7 +136,7 @@ namespace ChainSafe.Gaming.UnityPackage.Model
             [JsonProperty("tokenType")]
             public string TokenType { get; set; }
         }
-        
+
         public class Attribute
         {
             [JsonProperty("trait_type")]
