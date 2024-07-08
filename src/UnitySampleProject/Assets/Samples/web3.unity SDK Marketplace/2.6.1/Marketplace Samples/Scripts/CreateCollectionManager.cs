@@ -58,6 +58,7 @@ namespace ChainSafe.Gaming.Marketplace
             {
                 var response = await EvmMarketplace.Create721Collection(BearerToken, collectionName721, collectionDescription721, collectionMintingPublic721);
                 Debug.Log($"TX: {response.TransactionHash}");
+                processing = false;
             }
             catch (Web3Exception e)
             {
@@ -75,6 +76,7 @@ namespace ChainSafe.Gaming.Marketplace
             {
                 var response = await EvmMarketplace.Create1155Collection(BearerToken, collectionName1155, collectionDescription1155, collectionMintingPublic1155);
                 Debug.Log($"TX: {response.TransactionHash}");
+                processing = false;
             }
             catch (Web3Exception e)
             {
