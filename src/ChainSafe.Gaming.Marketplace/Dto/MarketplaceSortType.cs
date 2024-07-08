@@ -1,12 +1,16 @@
-﻿using System;
+﻿// <copyright file="MarketplaceSortType.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ChainSafe.Gaming.Marketplace.Dto
 {
+    using System;
+
     public enum MarketplaceSortType
     {
         None,
         ListedAt,
-        Price
+        Price,
     }
 
     public static class MarketplaceSortTypeExtensions

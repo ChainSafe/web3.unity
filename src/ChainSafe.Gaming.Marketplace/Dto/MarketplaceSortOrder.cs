@@ -1,11 +1,15 @@
-﻿using System;
+﻿// <copyright file="MarketplaceSortOrder.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ChainSafe.Gaming.Marketplace.Dto
 {
+    using System;
+
     public enum MarketplaceSortOrder
     {
         Ascending,
-        Descending
+        Descending,
     }
 
     public static class MarketplaceSortOrderExtensions
