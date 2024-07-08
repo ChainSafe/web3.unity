@@ -11,12 +11,12 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
         private readonly IRampExchangerConfig config;
         private readonly ISigner signer;
         private readonly IAnalyticsClient analyticsClient;
-        
+
         public event Action<OnRampPurchaseData> OnRampPurchaseCreated;
         public event Action<OffRampSaleData> OffRampSaleCreated;
 
         private IRampExchanger platformImplementation;
-        
+
 
         public RampExchangerUniversal(IRampExchangerConfig config, ISigner signer, IAnalyticsClient analyticsClient)
         {

@@ -54,15 +54,15 @@ namespace ChainSafe.GamingSdk.Web3Auth
         /// Gets the blockchain address associated with this wallet.
         /// </summary>
         public string PublicAddress => signer.PublicAddress;
-        
+
         /// <summary>
         /// Gets key.
         /// </summary>
         public string Key => signer.GetKey().GetPrivateKey();
-        
+
         private readonly Dictionary<TransactionRequested, TaskCompletionSource<TransactionResponse>> _transactionPool =
             new Dictionary<TransactionRequested, TaskCompletionSource<TransactionResponse>>();
-        
+
         /// <summary>
         /// Asynchronously prepares the Web3Auth wallet for operation, triggered when initializing the module in the dependency injection work flow.
         /// </summary>
@@ -93,7 +93,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
 
             transactionHandler.OnTransactionApproved += OnTransactionApproved;
             transactionHandler.OnTransactionDeclined += OnTransactionDeclined;
-            
+
             void Web3Auth_OnLogin(Web3AuthResponse response)
             {
                 coreInstance.onLogin -= Web3Auth_OnLogin;
@@ -114,12 +114,12 @@ namespace ChainSafe.GamingSdk.Web3Auth
             await logoutTcs.Task;
 
             coreInstance.onLogout -= Web3Auth_OnLogout;
-            
+
             Object.Destroy(coreInstance.gameObject);
 
             transactionHandler.OnTransactionApproved += OnTransactionApproved;
             transactionHandler.OnTransactionDeclined += OnTransactionDeclined;
-            
+
             void Web3Auth_OnLogout()
             {
                 logoutTcs.SetResult(null);
@@ -152,35 +152,35 @@ namespace ChainSafe.GamingSdk.Web3Auth
             string id = Guid.NewGuid().ToString();
 
             var request = new TransactionRequested(id, transaction);
-            
+
             var tcs = new TaskCompletionSource<TransactionResponse>();
-            
+
             _transactionPool.Add(request, tcs);
-            
+
             transactionHandler.RequestTransaction(request);
-            
-			return tcs.Task;
-		}
+
+            return tcs.Task;
+        }
 
         public async void OnTransactionApproved(TransactionApproved transactionApproved)
         {
             var pair = _transactionPool.Single(t => t.Key.Id == transactionApproved.Id);
-            
+
             var response = await transactionExecutor.SendTransaction(pair.Key.Transaction);
-            
+
             pair.Value.SetResult(response);
 
             transactionHandler.ConfirmTransaction(new TransactionConfirmed(response));
-            
+
         }
-        
+
         public void OnTransactionDeclined(TransactionDeclined transactionDeclined)
         {
             var pair = _transactionPool.Single(t => t.Key.Id == transactionDeclined.Id);
-            
+
             pair.Value.SetCanceled();
         }
-        
+
         /// <summary>
         /// Creates core instance.
         /// </summary>

@@ -6,11 +6,11 @@ namespace ChainSafe.GamingSdk.Web3Auth
     public class Web3AuthTransactionHandler : IWeb3AuthTransactionHandler
     {
         public event Action<TransactionRequested> OnTransactionRequested;
-        
+
         public event Action<TransactionConfirmed> OnTransactionConfirmed;
-        
-        public event Action<TransactionApproved> OnTransactionApproved; 
-        
+
+        public event Action<TransactionApproved> OnTransactionApproved;
+
         public event Action<TransactionDeclined> OnTransactionDeclined;
 
         public void RequestTransaction(TransactionRequested transactionRequested)
@@ -27,7 +27,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
         {
             OnTransactionApproved?.Invoke(transactionApproved);
         }
-        
+
         public void DeclineTransaction(TransactionDeclined transactionDeclined)
         {
             OnTransactionDeclined?.Invoke(transactionDeclined);

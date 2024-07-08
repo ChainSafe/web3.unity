@@ -12,9 +12,9 @@ public class Erc1155Calls : MonoBehaviour
 {
     #region Fields
     [Header("Change the fields below for testing purposes")]
-    
+
     #region Balance Of
-    
+
     [Header("Balance Of Call")]
     [SerializeField] private string accountBalanceOf = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
     [SerializeField] private string tokenIdBalanceOf = "1";
@@ -22,7 +22,7 @@ public class Erc1155Calls : MonoBehaviour
     #endregion
 
     #region Balance Of Batch
-    
+
     [Header("Balance Of Batch Call")]
     [SerializeField] private string[] accountsBalanceOfBatch = { "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2", "0xE51995Cdb3b1c109E0e6E67ab5aB31CDdBB83E4a" };
     [SerializeField] private string[] tokenIdsBalanceOfBatch = { "1", "2" };
@@ -30,14 +30,14 @@ public class Erc1155Calls : MonoBehaviour
     #endregion
 
     #region Uri
-    
+
     [Header("URI Call")]
     [SerializeField] private string tokenIdUri = "1";
 
     #endregion
 
     #region Mint
-    
+
     [Header("Mint Call")]
     [SerializeField] private BigInteger idMint = 1;
     [SerializeField] private BigInteger amountMint = 1;
@@ -45,7 +45,7 @@ public class Erc1155Calls : MonoBehaviour
     #endregion
 
     #region Transfer
-    
+
     [Header("Transfer Call")]
     [SerializeField] private string toAccountTransfer = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
     [SerializeField] private BigInteger tokenIdTransfer = 1;
@@ -54,7 +54,7 @@ public class Erc1155Calls : MonoBehaviour
     #endregion
 
     #region Texture
-    
+
     [Header("Token ID for IPFS texture")]
     [SerializeField] private string tokenIdTexture = "0";
     public RawImage rawImage;
@@ -62,17 +62,17 @@ public class Erc1155Calls : MonoBehaviour
     #endregion
 
     #endregion
-    
+
     /// <summary>
     /// Balance Of ERC1155 Address
     /// </summary>
     public async void BalanceOf()
     {
         var balance = await Web3Accessor.Web3.Erc1155.GetBalanceOf(
-            ChainSafeContracts.Erc1155, 
+            ChainSafeContracts.Erc1155,
             tokenIdBalanceOf,
             accountBalanceOf);
-        SampleOutputUtil.PrintResult(balance.ToString(), "ERC-1155",nameof(Erc1155Service.GetBalanceOf));
+        SampleOutputUtil.PrintResult(balance.ToString(), "ERC-1155", nameof(Erc1155Service.GetBalanceOf));
     }
 
     /// <summary>
@@ -82,9 +82,9 @@ public class Erc1155Calls : MonoBehaviour
     {
         var balances = await Web3Accessor.Web3.Erc1155.GetBalanceOfBatch(
             ChainSafeContracts.Erc1155,
-            accountsBalanceOfBatch, 
+            accountsBalanceOfBatch,
             tokenIdsBalanceOfBatch);
-        SampleOutputUtil.PrintResult(string.Join(", ", balances), "ERC-1155",nameof(Erc1155Service.GetBalanceOfBatch));
+        SampleOutputUtil.PrintResult(string.Join(", ", balances), "ERC-1155", nameof(Erc1155Service.GetBalanceOfBatch));
     }
 
     /// <summary>
@@ -95,7 +95,7 @@ public class Erc1155Calls : MonoBehaviour
         var uri = await Web3Accessor.Web3.Erc1155.GetUri(
             ChainSafeContracts.Erc1155,
             tokenIdUri);
-        SampleOutputUtil.PrintResult(uri, "ERC-1155",nameof(Erc1155Service.GetUri));
+        SampleOutputUtil.PrintResult(uri, "ERC-1155", nameof(Erc1155Service.GetUri));
     }
 
     /// <summary>
@@ -108,7 +108,7 @@ public class Erc1155Calls : MonoBehaviour
             idMint,
             amountMint);
         var output = SampleOutputUtil.BuildOutputValue(response);
-        SampleOutputUtil.PrintResult(output, "ERC-1155",nameof(Erc1155Service.Mint));
+        SampleOutputUtil.PrintResult(output, "ERC-1155", nameof(Erc1155Service.Mint));
     }
 
     /// <summary>
@@ -122,7 +122,7 @@ public class Erc1155Calls : MonoBehaviour
             amountTransfer,
             toAccountTransfer);
         var output = SampleOutputUtil.BuildOutputValue(response);
-        SampleOutputUtil.PrintResult(output, "ERC-1155",nameof(Erc1155Service.Transfer));
+        SampleOutputUtil.PrintResult(output, "ERC-1155", nameof(Erc1155Service.Transfer));
     }
 
     /// <summary>
