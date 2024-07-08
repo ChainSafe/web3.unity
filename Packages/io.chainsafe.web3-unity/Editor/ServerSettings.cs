@@ -210,7 +210,7 @@ public class ChainSafeServerSettings : EditorWindow
         {
             ScriptingDefineSymbols.TryRemoveDefineSymbol(EnableAnalyticsScriptingDefineSymbol);
         }
-
+        
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.PrefixLabel("Select RPC");
         // Remove "https://" so the user doesn't have to click through 2 levels for the rpc options
@@ -254,7 +254,7 @@ public class ChainSafeServerSettings : EditorWindow
             projectConfig.BlockExplorerUrl = blockExplorerUrl;
             projectConfig.EnableAnalytics = enableAnalytics;
             ProjectConfigUtilities.Save(projectConfig);
-            if (projectID != previousProjectId)
+            if(projectID != previousProjectId)
                 ValidateProjectID(projectID);
             previousProjectId = projectConfig.ProjectId;
         }

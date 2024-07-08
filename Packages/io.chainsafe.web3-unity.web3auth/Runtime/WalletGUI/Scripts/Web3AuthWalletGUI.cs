@@ -12,7 +12,7 @@ using UnityEngine.UI;
 public class Web3AuthWalletGUI : MonoBehaviour
 {
     #region Fields
-
+    
     [SerializeField] private Text autoConfirmTxLabel;
     [SerializeField] private GameObject walletIconContainer;
     [SerializeField] private List<GameObject> primaryBackgroundObjects;
@@ -21,7 +21,7 @@ public class Web3AuthWalletGUI : MonoBehaviour
     [SerializeField] private List<GameObject> secondaryTextObjects;
     [SerializeField] private List<GameObject> displayLineObjects;
     [SerializeField] private List<GameObject> borderButtonObjects;
-
+    
     #endregion
 
     #region Properties
@@ -37,11 +37,11 @@ public class Web3AuthWalletGUI : MonoBehaviour
     private Color SecondaryTextColour { get; set; }
     private Color BorderButtonColour { get; set; }
     private TMP_FontAsset DisplayFont { get; set; }
-
+    
     #endregion
 
     #region Methods
-
+    
     /// <summary>
     /// Method to initialize parameters after prefab creation
     /// </summary>
@@ -62,7 +62,7 @@ public class Web3AuthWalletGUI : MonoBehaviour
         BorderButtonColour = config.BorderButtonColour;
         SetCustomConfig();
     }
-
+    
     /// <summary>
     /// Sets custom config from the login scene.
     /// </summary>
@@ -75,7 +75,7 @@ public class Web3AuthWalletGUI : MonoBehaviour
         walletIconContainer.SetActive(DisplayWalletIcon);
         SetCustomColours();
     }
-
+    
     /// <summary>
     /// Sets custom colours for menu and text objects.
     /// </summary>
@@ -114,7 +114,7 @@ public class Web3AuthWalletGUI : MonoBehaviour
         autoConfirmTxLabel.color = SecondaryTextColour;
         SetButtonsAndLines();
     }
-
+    
     /// <summary>
     /// Sets border buttons & menu lines.
     /// </summary>
@@ -142,11 +142,11 @@ public class Web3AuthWalletGUI : MonoBehaviour
             }
         }
     }
-
+    
     #endregion
-
+    
     #region ConfigClass
-
+    
     [Serializable]
     public class Web3AuthWalletConfig
     {
@@ -162,6 +162,6 @@ public class Web3AuthWalletGUI : MonoBehaviour
         public Color SecondaryTextColour;
         public Color BorderButtonColour;
     }
-
+    
     #endregion
 }

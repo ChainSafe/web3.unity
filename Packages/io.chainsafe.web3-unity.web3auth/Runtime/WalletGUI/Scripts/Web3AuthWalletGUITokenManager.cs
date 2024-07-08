@@ -18,7 +18,7 @@ using UnityEngine.UI;
 public class Web3AuthWalletGUITokenManager : MonoBehaviour
 {
     #region Fields
-
+    
     [SerializeField] private GameObject customTokenPlaceHolder;
     [SerializeField] private GameObject customTokenDisplay;
     [SerializeField] private GameObject transferTokensContainer;
@@ -42,11 +42,11 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
     private bool isSymbolTaskRunning;
     private string lastCheckedAddress;
     private string customTokenContract;
-
+    
     #endregion
 
     #region Methods
-
+    
     /// <summary>
     /// Initializes objects.
     /// </summary>
@@ -90,7 +90,7 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
         nativeTokenAmountText.text = ethBalance.ToString("0.#########");
         SetTokenDropdownOptions();
     }
-
+    
     /// <summary>
     /// Toggles the add token menu.
     /// </summary>
@@ -128,7 +128,7 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
             isSymbolTaskRunning = false;
         }
     }
-
+    
     /// <summary>
     /// Adds a custom token to the wallet.
     /// </summary>
@@ -144,7 +144,7 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
         customTokenSymbolInput.text = string.Empty;
         SetTokens();
     }
-
+    
     /// <summary>
     /// Sets the dropdown options in the token transfer menu.
     /// </summary>
@@ -157,7 +157,7 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
         selectedTokenToTransfer.options.Add(customTokenOption);
         selectedTokenToTransfer.RefreshShownValue();
     }
-
+    
     /// <summary>
     /// Toggles the transfer tokens menu.
     /// </summary>
@@ -165,7 +165,7 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
     {
         transferTokensContainer.SetActive(!transferTokensContainer.activeSelf);
     }
-
+    
     /// <summary>
     /// Transfers tokens to a wallet address.
     /// </summary>
@@ -191,7 +191,7 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
                 throw new Web3Exception("Transfer failed, please check that the token contract exists & you have enough tokens to complete the transfer");
         }
     }
-
+    
     /// <summary>
     /// Subscribes to events.
     /// </summary>
@@ -199,7 +199,7 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
     {
         Web3AuthEventManager.SetTokens += SetTokens;
     }
-
+    
     /// <summary>
     /// Unsubscribes from events.
     /// </summary>
@@ -215,6 +215,6 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
     {
         GetSymbol();
     }
-
+    
     #endregion
 }

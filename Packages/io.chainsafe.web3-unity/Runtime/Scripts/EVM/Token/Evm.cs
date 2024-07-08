@@ -95,7 +95,7 @@ namespace Scripts.EVM.Token
             object[] objArray = array.Cast<object>().ToArray();
             return await contract.Send(method, new object[] { objArray });
         }
-
+        
         public static async Task<string> SendTransaction(Web3 web3, string to, BigInteger value)
         {
             var txRequest = new TransactionRequest

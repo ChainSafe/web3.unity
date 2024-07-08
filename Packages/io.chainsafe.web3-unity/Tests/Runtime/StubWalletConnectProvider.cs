@@ -37,15 +37,13 @@ namespace Tests.Runtime
         {
             switch (method)
             {
-                case "personal_sign":
-                case "eth_signTypedData":
-                case "eth_sendTransaction":
+                case "personal_sign": case "eth_signTypedData": case "eth_sendTransaction":
                     return Task.FromResult((T)Convert.ChangeType(config.StubResponse, typeof(T)));
                 default:
                     return Request<T>(method, parameters);
             }
         }
-
+        
         // Direct RPC request via WalletConnect RPC url.
         private async Task<T> Request<T>(string method, params object[] parameters)
         {
@@ -53,11 +51,11 @@ namespace Tests.Runtime
             var url = $"https://rpc.walletconnect.com/v1?chainId=eip155:{chainConfig.ChainId}&projectId={config.ProjectId}";
 
             string body = JsonConvert.SerializeObject(new RpcRequestMessage(Guid.NewGuid().ToString(), method, parameters));
-
+            
             var rawResult = await httpClient.PostRaw(url, body, "application/json");
 
             RpcResponseMessage response = JsonConvert.DeserializeObject<RpcResponseMessage>(rawResult.Response);
-
+            
             return response.Result.ToObject<T>();
         }
     }

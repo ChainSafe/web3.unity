@@ -9,7 +9,7 @@ namespace Tests.Runtime
 
         public string SignMessageRpcMethodName => "personal_sign";
         public string SignTypedMessageRpcMethodName => "eth_signTypedData";
-
+        
         public string ProjectId { get; set; } = DefaultProjectId;
         public string WalletAddress { get; set; } = DefaultWalletAddress;
         public string StubResponse { get; set; }

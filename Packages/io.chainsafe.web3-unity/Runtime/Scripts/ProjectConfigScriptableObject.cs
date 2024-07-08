@@ -63,13 +63,13 @@ namespace ChainSafe.Gaming.UnityPackage
             get => rpc;
             set => rpc = value;
         }
-
+        
         public string BlockExplorerUrl
         {
             get => blockExplorerUrl;
             set => blockExplorerUrl = value;
         }
-
+        
         public bool EnableAnalytics
         {
             get => enableAnalytics;

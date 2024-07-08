@@ -22,9 +22,9 @@ public class IPFSCalls : MonoBehaviour
     [SerializeField] private string imageCID = "Enter your image CID from storage or upload call";
 
     #endregion
-
+    
     #region Methods
-
+    
     /// <summary>
     /// Uploads an image selected by the user to IPFS
     /// </summary>
@@ -37,9 +37,9 @@ public class IPFSCalls : MonoBehaviour
             FileNameImage = fileNameImage
         };
         var cid = await IPFS.UploadImage(uploadRequest);
-        Debug.Log($"Image uploaded to https://ipfs.chainsafe.io/ipfs/{cid}");
+        Debug.Log($"Image uploaded to https://ipfs.chainsafe.io/ipfs/{cid}"); 
     }
-
+    
     /// <summary>
     /// Uploads metadata to IPFS
     /// </summary>
@@ -57,9 +57,9 @@ public class IPFSCalls : MonoBehaviour
             attributes = IPFS.CreateAttributesList(display_types, trait_types, values)
         };
         var cid = await IPFS.UploadMetaData(uploadRequest);
-        Debug.Log($"Metadata uploaded to https://ipfs.chainsafe.io/ipfs/{cid}");
+        Debug.Log($"Metadata uploaded to https://ipfs.chainsafe.io/ipfs/{cid}"); 
     }
-
+    
     /// <summary>
     /// Uploads an image selected by the user including metadata to IPFS
     /// </summary>
@@ -77,7 +77,7 @@ public class IPFSCalls : MonoBehaviour
             attributes = IPFS.CreateAttributesList(display_types, trait_types, values)
         };
         var cid = await IPFS.UploadImageAndMetadata(uploadRequest);
-        Debug.Log($"Image & metadata uploaded to https://ipfs.chainsafe.io/ipfs/{cid}");
+        Debug.Log($"Image & metadata uploaded to https://ipfs.chainsafe.io/ipfs/{cid}"); 
     }
 
     #endregion
