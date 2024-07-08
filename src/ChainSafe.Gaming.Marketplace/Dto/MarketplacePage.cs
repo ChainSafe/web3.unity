@@ -1,4 +1,8 @@
-﻿namespace ChainSafe.Gaming.Marketplace
+﻿// <copyright file="MarketplacePage.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+namespace ChainSafe.Gaming.Marketplace
 {
     using System.Collections.Generic;
     using Newtonsoft.Json;

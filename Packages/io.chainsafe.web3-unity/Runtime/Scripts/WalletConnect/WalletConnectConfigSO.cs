@@ -12,7 +12,7 @@ namespace ChainSafe.Gaming.WalletConnect
     {
         public string SignMessageRpcMethodName => "personal_sign";
         public string SignTypedMessageRpcMethodName => "eth_signTypedData";
-        
+
         [field: SerializeField] public bool AutoRenewSession { get; set; } = true;
         [field: SerializeField] public string ProjectName { get; set; }
         [field: SerializeField] public string ProjectId { get; set; }
@@ -63,7 +63,7 @@ namespace ChainSafe.Gaming.WalletConnect
 
                 return connectionBuilder;
 #else
-            return null;
+                return null;
 #endif
             }
         }
