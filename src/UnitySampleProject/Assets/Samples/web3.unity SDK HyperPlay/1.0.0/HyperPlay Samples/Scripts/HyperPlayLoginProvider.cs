@@ -10,7 +10,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Login using HyperPlay desktop client.
 /// </summary>
-public class HyperPlayLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
+public class HyperPlayLoginProvider : ConnectionHandler, IWeb3BuilderServiceAdapter
 {
     [SerializeField] private Button loginButton;
     [SerializeField] private Toggle rememberMeToggle;
@@ -34,7 +34,7 @@ public class HyperPlayLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
         {
             Debug.Log("Proceeding with auto-login.");
             
-            await TryLogin();
+            await TryConnect();
         }
 
         loginButton.onClick.AddListener(OnLoginClicked);
@@ -59,6 +59,6 @@ public class HyperPlayLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     
     private async void OnLoginClicked()
     {
-        await TryLogin();
+        await TryConnect();
     }
 }

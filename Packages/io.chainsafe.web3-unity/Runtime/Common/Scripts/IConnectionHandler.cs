@@ -74,6 +74,7 @@ namespace ChainSafe.Gaming.UnityPackage.Common
 
         private void ConfigureCommonServices(IWeb3ServiceCollection services)
         {
+            // TODO: most of these can/should be service adapters
             services
                 .UseUnityEnvironment()
                 .UseGelato(GelatoApiKey)

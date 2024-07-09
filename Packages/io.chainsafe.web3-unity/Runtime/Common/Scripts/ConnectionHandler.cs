@@ -14,7 +14,7 @@ namespace Scenes
         [SerializeField] private string gelatoApiKey = "";
         [Space]
         [SerializeField] private ConnectModal connectModal;
-        [SerializeField] private ConnectionProvider[] providers;
+        [HideInInspector] [SerializeField] private ConnectionProvider[] providers;
         
         public string GelatoApiKey => gelatoApiKey;
         public IWeb3BuilderServiceAdapter[] Web3BuilderServiceAdapters { get; private set; }

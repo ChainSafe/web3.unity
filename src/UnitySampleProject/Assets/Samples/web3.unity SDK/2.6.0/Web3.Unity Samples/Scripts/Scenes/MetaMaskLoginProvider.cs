@@ -12,7 +12,7 @@ using UnityEngine.UI;
 /// Login using MetaMask.
 /// Only works for UnityWebGL build (not in editor).
 /// </summary>
-public class MetaMaskLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
+public class MetaMaskLoginProvider : ConnectionHandler, IWeb3BuilderServiceAdapter
 {
     [SerializeField] private Button loginButton;
 
@@ -25,7 +25,7 @@ public class MetaMaskLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
 
     private async void LoginClicked()
     {
-        await TryLogin();
+        await TryConnect();
     }
 
     public Web3Builder ConfigureServices(Web3Builder web3Builder)
