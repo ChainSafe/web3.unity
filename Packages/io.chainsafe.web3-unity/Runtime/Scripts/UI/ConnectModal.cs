@@ -13,6 +13,10 @@ namespace ChainSafe.Gaming
         [SerializeField] private Button closeButton;
         // Closes modal when background is clicked
         [SerializeField] private Button closeFromBackgroundButton;
+        
+        [Space]
+        
+        [SerializeField] private RectTransform providerContainer;
 
         private void Start()
         {
@@ -20,19 +24,24 @@ namespace ChainSafe.Gaming
             closeFromBackgroundButton.onClick.AddListener(Close);
         }
 
-        private void DisplayError(string message)
+        public void DisplayError(string message)
         {
             errorOverlay.DisplayError(message);
         }
         
-        private void ShowLoading()
+        public void ShowLoading()
         {
             loadingOverlay.gameObject.SetActive(true);
         }
         
-        private void HideLoading()
+        public void HideLoading()
         {
             loadingOverlay.gameObject.SetActive(false);
+        }
+
+        public ConnectionProvider AddProvider(ConnectionProvider provider)
+        {
+            return Instantiate(provider, providerContainer);
         }
         
         private void Close()
