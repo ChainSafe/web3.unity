@@ -16,13 +16,13 @@ public class HyperPlayLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     [SerializeField] private Toggle rememberMeToggle;
 
     private bool _storedSessionAvailable;
-    
+
     protected override async void Initialize()
     {
         base.Initialize();
 
         _storedSessionAvailable = false;
-        
+
         await using (var lightWeb3 = await HyperPlayWeb3.BuildLightweightWeb3(new HyperPlayConfig()))
         {
             var data = lightWeb3.ServiceProvider.GetService<IHyperPlayData>();
@@ -33,7 +33,7 @@ public class HyperPlayLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
         if (_storedSessionAvailable) // auto-login
         {
             Debug.Log("Proceeding with auto-login.");
-            
+
             await TryLogin();
         }
 
@@ -56,7 +56,7 @@ public class HyperPlayLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
             services.UseWalletSigner().UseWalletTransactionExecutor();
         });
     }
-    
+
     private async void OnLoginClicked()
     {
         await TryLogin();

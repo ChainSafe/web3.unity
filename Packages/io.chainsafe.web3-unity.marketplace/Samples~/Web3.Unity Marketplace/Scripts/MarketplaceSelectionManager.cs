@@ -62,7 +62,7 @@ namespace ChainSafe.Gaming.Marketplace
             browseMarketplaceMenu.SetActive(false);
             selectMarketplaceMenu.SetActive(true);
         }
-        
+
         // TODO: Shouldn't be firing instantly, fix later.
         /// <summary>
         /// Waits for token expiry then refreshes it.
@@ -77,6 +77,6 @@ namespace ChainSafe.Gaming.Marketplace
         }
 
         #endregion
-        
+
     }
 }
