@@ -1,0 +1,22 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Nethereum.Hex.HexTypes;
+using ChainSafe.Gaming.Evm.Contracts;
+using ChainSafe.Gaming.Evm.Providers;
+using ChainSafe.Gaming.Evm.Signers;
+using ChainSafe.Gaming.Evm.Transactions;
+using ChainSafe.Gaming.Web3.Analytics;
+
+namespace ChainSafe.Gaming.Evm.Contracts.Generated
+{
+    public class {CLASS_NAME} : Contract
+    {
+        public {CLASS_NAME}(string abi, string address, IRpcProvider provider, ISigner signer = null, ITransactionExecutor transactionExecutor = null, IAnalyticsClient analyticsClient = null)
+            : base(abi, address, provider, signer, transactionExecutor, analyticsClient)
+        {
+        }
+
+        {METHODS}
+    }
+}

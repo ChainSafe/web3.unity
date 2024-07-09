@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Contracts.Builders;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
@@ -19,7 +20,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
         private readonly string address;
         private readonly IRpcProvider provider;
         private readonly ISigner signer;
-        private readonly Builders.ContractBuilder contractBuilder;
+        private readonly ContractAbiManager contractAbiManager;
         private readonly ITransactionExecutor transactionExecutor;
         private readonly IAnalyticsClient analyticsClient;
 
@@ -44,7 +45,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
             this.signer = signer;
             this.transactionExecutor = transactionExecutor;
             this.analyticsClient = analyticsClient;
-            contractBuilder = new Builders.ContractBuilder(abi, address);
+            contractAbiManager = new ContractAbiManager(abi, address);
         }
 
         public string Address => address;
@@ -107,7 +108,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
         /// <returns>The decoded outputs of a provided method.</returns>
         public object[] Decode(string method, string output)
         {
-            var function = contractBuilder.GetFunctionBuilder(method);
+            var function = contractAbiManager.GetFunctionBuilder(method);
             var decodedOutput = function.DecodeOutput(output);
             var array = new object[decodedOutput.Count];
             for (var i = 0; i < decodedOutput.Count; i++)
@@ -154,7 +155,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
             parameters ??= Array.Empty<object>();
 
-            var function = contractBuilder.GetFunctionBuilder(method);
+            var function = contractAbiManager.GetFunctionBuilder(method);
 
             var txReq = await PrepareTransactionRequest(method, parameters, overwrite);
 
@@ -233,7 +234,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
             };
             var dataObject = GameLogger.Log("", "", dataWebGL);
 #endif
-            var function = contractBuilder.GetFunctionBuilder(method);
+            var function = contractAbiManager.GetFunctionBuilder(method);
 
             analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
@@ -248,7 +249,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
         {
             parameters ??= Array.Empty<object>();
 
-            var function = contractBuilder.GetFunctionBuilder(method);
+            var function = contractAbiManager.GetFunctionBuilder(method);
             var txReq = overwrite ?? new TransactionRequest();
 
             txReq.From ??= signer?.PublicAddress;
