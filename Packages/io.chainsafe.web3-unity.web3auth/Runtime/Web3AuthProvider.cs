@@ -5,27 +5,28 @@ using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Environment;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
 using ChainSafe.GamingSdk.Web3Auth;
+using Nethereum.RPC.Accounts;
 using Nethereum.Web3.Accounts;
 using UnityEngine;
 
 /// <summary>
 /// Web3Auth provider allowing users to connect a Web3Auth wallet.
 /// </summary>
-public class Web3AuthProvider : WalletProvider
+public class Web3AuthProvider : WalletProvider, IAccountProvider
 {
     private readonly Web3AuthWalletConfig _config;
-    private readonly AccountProvider _accountProvider;
     
     private Web3Auth _coreInstance;
     private TaskCompletionSource<Web3AuthResponse> _connectTcs;
     private TaskCompletionSource<object> _disconnectTcs;
 
-    public Web3AuthProvider(Web3AuthWalletConfig config, AccountProvider accountProvider, Web3Environment environment, IChainConfig chainConfig, ChainRegistryProvider chainRegistryProvider) : base(environment, chainRegistryProvider, chainConfig)
+    public Web3AuthProvider(Web3AuthWalletConfig config, Web3Environment environment, IChainConfig chainConfig, ChainRegistryProvider chainRegistryProvider) : base(environment, chainRegistryProvider, chainConfig)
     {
         _config = config;
-        _accountProvider = accountProvider;
     }
 
+    public IAccount Account { get; private set; }
+    
     /// <summary>
     /// Connects Web3Auth wallet.
     /// </summary>
@@ -61,13 +62,11 @@ public class Web3AuthProvider : WalletProvider
 
         var response = await _connectTcs.Task;
         
-        var account = new Account(response.privKey);
+        Account = new Account(response.privKey);
 
-        account.TransactionManager.Client = this;
+        Account.TransactionManager.Client = this;
         
-        _accountProvider.Initialize(account);
-        
-        return account.Address;
+        return Account.Address;
     }
 
     private void OnLogin(Web3AuthResponse response)

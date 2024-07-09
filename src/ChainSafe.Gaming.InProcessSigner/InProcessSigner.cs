@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Core.Evm;
-using Nethereum.Web3.Accounts;
+using Nethereum.RPC.Accounts;
 using Newtonsoft.Json;
 
 namespace ChainSafe.Gaming.InProcessSigner
@@ -13,18 +13,18 @@ namespace ChainSafe.Gaming.InProcessSigner
     /// </summary>
     public class InProcessSigner : ISigner
     {
-        private readonly AccountProvider accountProvider;
+        private readonly IAccountProvider accountProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InProcessSigner"/> class.
         /// </summary>
         /// <exception cref="Web3Exception">Throws Exception if initializing instance fails.</exception>
-        public InProcessSigner(AccountProvider accountProvider)
+        public InProcessSigner(IAccountProvider accountProvider)
         {
             this.accountProvider = accountProvider;
         }
 
-        private Account Account => accountProvider.Account;
+        private IAccount Account => accountProvider.Account;
 
         /// <summary>
         /// Public Address.

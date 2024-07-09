@@ -6,8 +6,8 @@ using ChainSafe.Gaming.InProcessSigner;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using Nethereum.Hex.HexTypes;
+using Nethereum.RPC.Accounts;
 using Nethereum.RPC.Eth.DTOs;
-using Nethereum.Web3.Accounts;
 
 namespace ChainSafe.Gaming.InProcessTransactionExecutor
 {
@@ -17,21 +17,21 @@ namespace ChainSafe.Gaming.InProcessTransactionExecutor
     public class InProcessTransactionExecutor : ITransactionExecutor
     {
         private readonly IRpcProvider rpcProvider;
-        private readonly AccountProvider accountProvider;
+        private readonly IAccountProvider accountProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InProcessTransactionExecutor"/> class.
         /// </summary>
-        /// <param name="accountProvider">Injected <see cref="AccountProvider"/>.</param>
+        /// <param name="accountProvider">Injected <see cref="IAccountProvider"/>.</param>
         /// <param name="rpcProvider">Injected <see cref="IRpcProvider"/>.</param>
         /// <exception cref="Web3Exception">Throws exception if initializing instance fails.</exception>
-        public InProcessTransactionExecutor(AccountProvider accountProvider, IRpcProvider rpcProvider)
+        public InProcessTransactionExecutor(IAccountProvider accountProvider, IRpcProvider rpcProvider)
         {
             this.rpcProvider = rpcProvider;
             this.accountProvider = accountProvider;
         }
 
-        private Account Account => accountProvider.Account;
+        private IAccount Account => accountProvider.Account;
 
         /// <summary>
         /// Implementation of <see cref="ITransactionExecutor.SendTransaction"/>.

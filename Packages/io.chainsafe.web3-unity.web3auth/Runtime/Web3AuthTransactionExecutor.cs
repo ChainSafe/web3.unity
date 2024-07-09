@@ -20,7 +20,7 @@ public class Web3AuthTransactionExecutor : InProcessTransactionExecutor, IWeb3Au
         
     private readonly Dictionary<string, (TransactionRequest request, TaskCompletionSource<TransactionResponse> response)> _transactionPool = new();
     
-    public Web3AuthTransactionExecutor(AccountProvider accountProvider, IRpcProvider rpcProvider) : base(accountProvider, rpcProvider)
+    public Web3AuthTransactionExecutor(IAccountProvider accountProvider, IRpcProvider rpcProvider) : base(accountProvider, rpcProvider)
     {
     }
 

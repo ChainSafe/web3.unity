@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ChainSafe.Gaming.InProcessSigner;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.GamingSdk.Web3Auth;
+using Nethereum.Web3.Accounts;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -185,9 +186,9 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     /// </summary>
     private void SetPrivateKey()
     {
-        var accountProvider = (AccountProvider)Web3Accessor.Web3.ServiceProvider.GetService(typeof(AccountProvider));
+        var accountProvider = (IAccountProvider)Web3Accessor.Web3.ServiceProvider.GetService(typeof(IAccountProvider));
         
-        privateKeyText.text = accountProvider.Account.PrivateKey;
+        privateKeyText.text = ((Account) accountProvider.Account).PrivateKey;
     }
 
     /// <summary>
