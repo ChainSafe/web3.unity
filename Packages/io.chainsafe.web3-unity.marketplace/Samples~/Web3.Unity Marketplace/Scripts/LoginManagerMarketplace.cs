@@ -121,7 +121,6 @@ namespace ChainSafe.Gaming.Marketplace
             request.uploadHandler = new UploadHandlerRaw(bodyRaw);
             request.downloadHandler = new DownloadHandlerBuffer();
             request.SetRequestHeader("Content-Type", "application/json");
-    
             await request.SendWebRequest();
 
             if (request.result != UnityWebRequest.Result.Success)

@@ -287,6 +287,111 @@ namespace ChainSafe.Gaming.Marketplace
         }
         
         #region Configuration Classes
+        
+        /// <summary>
+        /// Configuration class for the Marketplace Auth System Manager.
+        /// </summary>
+        public class MarketplaceAuthSystemConfigEventArgs : EventArgs
+        {
+            #region Properties
+            
+            public string BearerToken { get; private set; }
+
+            public DateTime BearerTokenExpires { get; private set; }
+            
+            public string RefreshToken { get; private set; }
+
+            public DateTime RefreshTokenExpires { get; set; }
+
+            #endregion
+    
+            #region Methods
+    
+            public MarketplaceAuthSystemConfigEventArgs(string bearerToken, DateTime bearerTokenExpires, string refreshToken, DateTime refreshTokenExpires)
+            {
+                BearerToken = bearerToken;
+                BearerTokenExpires = bearerTokenExpires;
+                RefreshToken = refreshToken;
+                RefreshTokenExpires = refreshTokenExpires;
+            }
+            
+            #endregion
+        }
+        
+        /// <summary>
+        /// Transaction value class for the List Nft To Marketplace Manager.
+        /// </summary>
+        public class ListNftToMarketplaceTxEventArgs : EventArgs
+        {
+            #region Properties
+            
+            [CanBeNull] public string CollectionContractToListFrom { get; set; }
+            [CanBeNull] public string MarketplaceContractToListTo { get; set; }
+            [CanBeNull] public string TokenIdToList { get; set; }
+            [CanBeNull] public string Price { get; set; }
+            [CanBeNull] public string NftType { get; set; }
+
+            #endregion
+    
+            #region Methods
+            
+            /// <summary>
+            /// Transaction value class for the List Nft To Marketplace Manager.
+            /// </summary>
+            public ListNftToMarketplaceTxEventArgs([CanBeNull] string collectionContractToListFrom, [CanBeNull] string marketplaceContractToListTo, [CanBeNull] string tokenIdToList, [CanBeNull] string price, [CanBeNull] string nftType)
+            {
+                if (collectionContractToListFrom != null)
+                {
+                    CollectionContractToListFrom = collectionContractToListFrom;
+                }
+
+                if (marketplaceContractToListTo != null)
+                {
+                    MarketplaceContractToListTo = marketplaceContractToListTo;
+                }
+
+                if (tokenIdToList != null)
+                {
+                    TokenIdToList = tokenIdToList;
+                }
+
+                if (price != null)
+                {
+                    Price = price;
+                }
+
+                if (nftType != null)
+                {
+                    NftType = nftType;
+                }
+            }
+            
+            #endregion
+        }
+        
+        /// <summary>
+        /// Configuration class for the List Nft To Marketplace Manager.
+        /// </summary>
+        public class ListNftToMarketplaceConfigEventArgs : EventArgs
+        {
+            #region Properties
+            
+            public string BearerToken { get; set; }
+
+            #endregion
+    
+            #region Methods
+            
+            /// <summary>
+            /// Configuration class for the List Nft To Marketplace Manager.
+            /// </summary>
+            public ListNftToMarketplaceConfigEventArgs(string bearerToken)
+            {
+                BearerToken = bearerToken;
+            }
+            
+            #endregion
+        }
             
         /// <summary>
         /// Configuration class for the Marketplace GUI Manager.
@@ -376,14 +481,29 @@ namespace ChainSafe.Gaming.Marketplace
         {
             #region Properties
             
-            private string BearerToken { get; set; }
-
-            private DateTime BearerTokenExpires { get; set; }
+            public string BearerToken { get; private set; }
+    
+            #endregion
+    
+            #region Methods
+    
+            public MarketplaceCreateConfigEventArgs(string bearerToken)
+            {
+                BearerToken = bearerToken;
+            }
             
-            private string RefreshToken { get; set; }
-
-            private DateTime RefreshTokenExpires { get; set; }
-
+            #endregion
+        }
+        
+        /// <summary>
+        /// Configuration class for the Marketplace Create Manager.
+        /// </summary>
+        public class CollectionCreateConfigEventArgs : EventArgs
+        {
+            #region Properties
+            
+            public string BearerToken { get; private set; }
+    
             #endregion
 
             #region Methods
