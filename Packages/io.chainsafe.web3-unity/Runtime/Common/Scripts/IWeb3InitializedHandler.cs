@@ -6,7 +6,7 @@ namespace ChainSafe.Gaming.UnityPackage.Common
     public interface IWeb3InitializedHandler
     {
         /// <summary>
-        /// Called when Web3 Instance in <see cref="ILoginProvider"/> is initialized.
+        /// Called when Web3 Instance in <see cref="IConnectionHandler"/> is initialized.
         /// </summary>
         public void OnWeb3Initialized();
     }
