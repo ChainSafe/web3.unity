@@ -52,7 +52,6 @@ namespace ChainSafe.Gaming.Marketplace
             {
                 var response = await EvmMarketplace.Mint721CollectionNft(collectionContract721, uri721);
                 Debug.Log($"TX: {response.TransactionHash}");
-                processing = false;
             }
             catch (Web3Exception e)
             {
@@ -70,7 +69,6 @@ namespace ChainSafe.Gaming.Marketplace
             {
                 var response = await EvmMarketplace.Mint1155CollectionNft(collectionContract1155, uri1155, amount1155);
                 Debug.Log($"TX: {response.TransactionHash}");
-                processing = false;
             }
             catch (Web3Exception e)
             {
