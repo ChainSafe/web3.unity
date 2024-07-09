@@ -34,14 +34,14 @@ namespace ChainSafe.Gaming.Marketplace
         private int marketplaceItemDisplayCount = 100;
 
         #endregion
-        
+
 
         #region Properties
-        
+
         private string BearerToken { get; set; }
         private TMP_FontAsset DisplayFont { get; set; }
         private Color SecondaryTextColour { get; set; }
-    
+
         #endregion
 
         #region Methods
@@ -54,7 +54,7 @@ namespace ChainSafe.Gaming.Marketplace
             projectMarketplacesPrefabs = new GameObject[projectMarketplacesDisplayCount];
             marketplaceItemPrefabs = new GameObject[marketplaceItemDisplayCount];
         }
-        
+
         /// <summary>
         /// Populates the marketplace drop down options.
         /// </summary>
@@ -148,7 +148,7 @@ namespace ChainSafe.Gaming.Marketplace
             marketplaceItemObjectNumber++;
             marketplaceScrollRect.horizontalNormalizedPosition = 0;
         }
-        
+
         /// <summary>
         /// Imports texture (can probably be removed later for helper class)
         /// </summary>
@@ -158,12 +158,12 @@ namespace ChainSafe.Gaming.Marketplace
             var textureUri = IpfsHelper.RollupIpfsUri(uri);
             var textureRequest = UnityWebRequestTexture.GetTexture(textureUri);
             await textureRequest.SendWebRequest();
-            
+
             if (textureRequest.result != UnityWebRequest.Result.Success)
             {
                 throw new Web3Exception($"Texture request failure: {textureRequest.error}");
             }
-            
+
             var texture = ((DownloadHandlerTexture)textureRequest.downloadHandler).texture;
 
             return texture;
@@ -270,7 +270,7 @@ namespace ChainSafe.Gaming.Marketplace
             if (!index.HasValue) return;
             GetProjectMarketplaces();
         }
-        
+
         /// <summary>
         /// Resets marketplace display by destroying item prefabs.
         /// </summary>
@@ -319,7 +319,7 @@ namespace ChainSafe.Gaming.Marketplace
             ResetProjectMarketplacesPrefabsDisplay();
             ResetMarketplaceItemPrefabsDisplay();
         }
-        
+
         /// <summary>
         /// Subscribes to events.
         /// </summary>
@@ -330,7 +330,7 @@ namespace ChainSafe.Gaming.Marketplace
             EventManagerMarketplace.CloseSelectedMarketplace += CloseSelectedMarketplace;
             EventManagerMarketplace.ToggleSelectionMenu += CloseMarketplace;
         }
-        
+
         /// <summary>
         /// Unsubscribes from events.
         /// </summary>
@@ -341,7 +341,7 @@ namespace ChainSafe.Gaming.Marketplace
             EventManagerMarketplace.CloseSelectedMarketplace -= CloseSelectedMarketplace;
             EventManagerMarketplace.ToggleSelectionMenu -= CloseMarketplace;
         }
-        
+
         /// <summary>
         /// Configures class properties.
         /// </summary>

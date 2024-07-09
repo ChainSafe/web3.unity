@@ -38,9 +38,9 @@ namespace ChainSafe.Gaming.Marketplace
         public static event Action ListNftToMarketplace;
         public static event Action CreateMarketplace;
         public static event Action LogoutMarketplace;
-        
+
         #endregion
-        
+
         #region Methods
         
         /// <summary>
@@ -223,7 +223,7 @@ namespace ChainSafe.Gaming.Marketplace
         {
             ConfigureMarketplaceGuiManager?.Invoke(null, args);
         }
-        
+
         /// <summary>
         /// Configure marketplace browser manager.
         /// </summary>
@@ -232,7 +232,7 @@ namespace ChainSafe.Gaming.Marketplace
         {
             ConfigureMarketplaceBrowserManager?.Invoke(null, args);
         }
-        
+
         /// <summary>
         /// Configure collection browser manager.
         /// </summary>
@@ -259,7 +259,7 @@ namespace ChainSafe.Gaming.Marketplace
         {
             ConfigureCollectionCreateManager?.Invoke(null, args);
         }
-        
+
         #endregion
         
         /// <summary>
@@ -287,111 +287,6 @@ namespace ChainSafe.Gaming.Marketplace
         }
         
         #region Configuration Classes
-        
-        /// <summary>
-        /// Configuration class for the Marketplace Auth System Manager.
-        /// </summary>
-        public class MarketplaceAuthSystemConfigEventArgs : EventArgs
-        {
-            #region Properties
-            
-            public string BearerToken { get; private set; }
-
-            public DateTime BearerTokenExpires { get; private set; }
-            
-            public string RefreshToken { get; private set; }
-
-            public DateTime RefreshTokenExpires { get; set; }
-
-            #endregion
-    
-            #region Methods
-    
-            public MarketplaceAuthSystemConfigEventArgs(string bearerToken, DateTime bearerTokenExpires, string refreshToken, DateTime refreshTokenExpires)
-            {
-                BearerToken = bearerToken;
-                BearerTokenExpires = bearerTokenExpires;
-                RefreshToken = refreshToken;
-                RefreshTokenExpires = refreshTokenExpires;
-            }
-            
-            #endregion
-        }
-        
-        /// <summary>
-        /// Transaction value class for the List Nft To Marketplace Manager.
-        /// </summary>
-        public class ListNftToMarketplaceTxEventArgs : EventArgs
-        {
-            #region Properties
-            
-            [CanBeNull] public string CollectionContractToListFrom { get; set; }
-            [CanBeNull] public string MarketplaceContractToListTo { get; set; }
-            [CanBeNull] public string TokenIdToList { get; set; }
-            [CanBeNull] public string Price { get; set; }
-            [CanBeNull] public string NftType { get; set; }
-
-            #endregion
-    
-            #region Methods
-            
-            /// <summary>
-            /// Transaction value class for the List Nft To Marketplace Manager.
-            /// </summary>
-            public ListNftToMarketplaceTxEventArgs([CanBeNull] string collectionContractToListFrom, [CanBeNull] string marketplaceContractToListTo, [CanBeNull] string tokenIdToList, [CanBeNull] string price, [CanBeNull] string nftType)
-            {
-                if (collectionContractToListFrom != null)
-                {
-                    CollectionContractToListFrom = collectionContractToListFrom;
-                }
-
-                if (marketplaceContractToListTo != null)
-                {
-                    MarketplaceContractToListTo = marketplaceContractToListTo;
-                }
-
-                if (tokenIdToList != null)
-                {
-                    TokenIdToList = tokenIdToList;
-                }
-
-                if (price != null)
-                {
-                    Price = price;
-                }
-
-                if (nftType != null)
-                {
-                    NftType = nftType;
-                }
-            }
-            
-            #endregion
-        }
-        
-        /// <summary>
-        /// Configuration class for the List Nft To Marketplace Manager.
-        /// </summary>
-        public class ListNftToMarketplaceConfigEventArgs : EventArgs
-        {
-            #region Properties
-            
-            public string BearerToken { get; set; }
-
-            #endregion
-    
-            #region Methods
-            
-            /// <summary>
-            /// Configuration class for the List Nft To Marketplace Manager.
-            /// </summary>
-            public ListNftToMarketplaceConfigEventArgs(string bearerToken)
-            {
-                BearerToken = bearerToken;
-            }
-            
-            #endregion
-        }
             
         /// <summary>
         /// Configuration class for the Marketplace GUI Manager.
@@ -399,18 +294,18 @@ namespace ChainSafe.Gaming.Marketplace
         public class MarketplaceGUIConfigEventArgs : EventArgs
         {
             #region Properties
-            
+
             public static TMP_FontAsset DisplayFont { get; private set; }
             public static Color PrimaryBackgroundColour { get; private set; }
             public static Color MenuBackgroundColour { get; private set; }
             public static Color PrimaryTextColour { get; private set; }
             public static Color SecondaryTextColour { get; private set; }
             public static Color BorderButtonColour { get; private set; }
-    
+
             #endregion
-    
+
             #region Methods
-    
+
             public MarketplaceGUIConfigEventArgs(TMP_FontAsset displayFont, Color primaryBackgroundColour, Color menuBackgroundColour, Color primaryTextColour, Color secondaryTextColour, Color borderButtonColour)
             {
                 DisplayFont = displayFont;
@@ -420,35 +315,35 @@ namespace ChainSafe.Gaming.Marketplace
                 SecondaryTextColour = secondaryTextColour;
                 BorderButtonColour = borderButtonColour;
             }
-            
+
             #endregion
         }
-        
+
         /// <summary>
         /// Configuration class for the Marketplace Browser Manager.
         /// </summary>
         public class MarketplaceBrowserConfigEventArgs : EventArgs
         {
             #region Properties
-            
+
             public TMP_FontAsset DisplayFont { get; private set; }
             public Color SecondaryTextColour { get; private set; }
             public string BearerToken { get; private set; }
-    
+
             #endregion
-    
+
             #region Methods
-    
+
             public MarketplaceBrowserConfigEventArgs(TMP_FontAsset displayFont, Color secondaryTextColour, string bearerToken)
             {
                 DisplayFont = displayFont;
                 SecondaryTextColour = secondaryTextColour;
                 BearerToken = bearerToken;
             }
-            
+
             #endregion
         }
-        
+
         /// <summary>
         /// Configuration class for the Marketplace Browser Manager.
         /// </summary>
@@ -481,41 +376,26 @@ namespace ChainSafe.Gaming.Marketplace
         {
             #region Properties
             
-            public string BearerToken { get; private set; }
-    
+            private string BearerToken { get; set; }
+
+            private DateTime BearerTokenExpires { get; set; }
+            
+            private string RefreshToken { get; set; }
+
+            private DateTime RefreshTokenExpires { get; set; }
+
             #endregion
-    
+
             #region Methods
     
-            public MarketplaceCreateConfigEventArgs(string bearerToken)
+            public MarketplaceAuthSystemManagerConfigEventArgs(string bearerToken, DateTime bearerTokenExpires, string refreshToken, DateTime refreshTokenExpires)
             {
                 BearerToken = bearerToken;
             }
-            
+
             #endregion
         }
-        
-        /// <summary>
-        /// Configuration class for the Marketplace Create Manager.
-        /// </summary>
-        public class CollectionCreateConfigEventArgs : EventArgs
-        {
-            #region Properties
-            
-            public string BearerToken { get; private set; }
-    
-            #endregion
-    
-            #region Methods
-    
-            public CollectionCreateConfigEventArgs(string bearerToken)
-            {
-                BearerToken = bearerToken;
-            }
-            
-            #endregion
-        }
-        
+
         #endregion
     }
 }
