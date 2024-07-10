@@ -24,9 +24,7 @@ public class ConnectionHandlerEditor : Editor
     {
         base.OnInspectorGUI();
 
-        string json = File.ReadAllText("Packages/io.chainsafe.web3-unity/Runtime/providers.json");
-        
-        var providers = JsonConvert.DeserializeObject<Provider[]>(json);
+        var providers = Resources.LoadAll<ConnectionProviderConfig>(string.Empty);
 
         _foldout = EditorGUILayout.Foldout(_foldout, "Connection Providers");
         
@@ -56,11 +54,11 @@ public class ConnectionHandlerEditor : Editor
             
             foreach (var provider in providers)
             {
-                var loadedProvider = AssetDatabase.LoadAssetAtPath<ConnectionProvider>(provider.Path);
+                var loadedProvider = provider.ProviderRow;
 
                 if (loadedProvider == null)
                 {
-                    Debug.LogWarning($"Error loading {provider.Name} Provider at {provider.Path}");
+                    Debug.LogWarning($"Error loading {provider.Name} Provider.");
                     
                     continue;
                 }

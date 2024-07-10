@@ -1147,9 +1147,9 @@ MonoBehaviour:
   gelatoApiKey: 7MFQqyGS1Iui_e_MgmFW1BfbFeJ06g8nnL2oUTlIJug_
   connectModal: {fileID: 5955209656218357189}
   providers:
-  - {fileID: 1727169539746137890, guid: 71b112e16f898d140935553a4b33ae1f, type: 3}
-  - {fileID: 4276990323382053958, guid: 1200437cb83a29c4fb63faa44cf63f0d, type: 3}
   - {fileID: 4800578877220411311, guid: 4591cfadb2bf9824da90ebf4005728a8, type: 3}
+  - {fileID: 4276990323382053958, guid: 1200437cb83a29c4fb63faa44cf63f0d, type: 3}
+  - {fileID: 1727169539746137890, guid: 71b112e16f898d140935553a4b33ae1f, type: 3}
 --- !u!1 &6095527205806428435
 GameObject:
   m_ObjectHideFlags: 0
