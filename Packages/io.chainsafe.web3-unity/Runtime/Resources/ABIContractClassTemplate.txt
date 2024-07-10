@@ -1,20 +1,22 @@
 using System.Threading.Tasks;
+using System;
 using ChainSafe.Gaming.Evm.Transactions;
 using Nethereum.Hex.HexTypes;
 using ChainSafe.Gaming.Evm.Contracts;
+using System.Numerics;
 
 namespace ChainSafe.Gaming.Evm.Contracts.Custom
 {
     public class {CLASS_NAME} : ICustomContract
     {
        
-        private string ABI => {CONTRACT_ABI};
+        public string ABI => "{CONTRACT_ABI}";
         
-        public string Address { get; set; }
+        public string ContractAddress { get; set; }
         
         public IContractBuilder ContractBuilder { get; set; }
 
-        Contract OriginalContract { get; set; }
+        public Contract OriginalContract { get; set; }
         
         {EVENTS}
         
@@ -24,44 +26,52 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
         
         #region Interface Implemented Methods
         
+        [Obsolete("It's not advisable to use this method. Use the pre-generated methods instead.")]
         public IContract Attach(string address)
         {
-            return _contract.Attach(address);
+            return OriginalContract.Attach(address);
         }
-
+        
+        [Obsolete("It's not advisable to use this method. Use the pre-generated methods instead.")]
         public Task<object[]> Call(string method, object[] parameters = null, TransactionRequest overwrite = null)
         {
-            return _contract.Call(method, parameters, overwrite);
+            return OriginalContract.Call(method, parameters, overwrite);
         }
-
+        
+        [Obsolete("It's not advisable to use this method. Use the pre-generated methods instead.")]
         public object[] Decode(string method, string output)
         {
-            return _contract.Decode(method, output);
+            return OriginalContract.Decode(method, output);
         }
-
+        
+        [Obsolete("It's not advisable to use this method. Use the pre-generated methods instead.")]
         public Task<object[]> Send(string method, object[] parameters = null, TransactionRequest overwrite = null)
         {
-            return _contract.Send(method, parameters, overwrite);
+            return OriginalContract.Send(method, parameters, overwrite);
         }
-
+        
+        [Obsolete("It's not advisable to use this method. Use the pre-generated methods instead.")]
         public Task<(object[] response, TransactionReceipt receipt)> SendWithReceipt(string method, object[] parameters = null, TransactionRequest overwrite = null)
         {
-            return _contract.SendWithReceipt(method, parameters, overwrite);
+            return OriginalContract.SendWithReceipt(method, parameters, overwrite);
         }
-
+        
+        [Obsolete("It's not advisable to use this method. Use the pre-generated methods instead.")]
         public Task<HexBigInteger> EstimateGas(string method, object[] parameters, TransactionRequest overwrite = null)
         {
-            return _contract.EstimateGas(method, parameters, overwrite);
+            return OriginalContract.EstimateGas(method, parameters, overwrite);
         }
-
+        
+        [Obsolete("It's not advisable to use this method. Use the pre-generated methods instead.")]
         public string Calldata(string method, object[] parameters = null)
         {
-            return _contract.Calldata(method, parameters);
+            return OriginalContract.Calldata(method, parameters);
         }
-
+        
+        [Obsolete("It's not advisable to use this method. Use the pre-generated methods instead.")]
         public Task<TransactionRequest> PrepareTransactionRequest(string method, object[] parameters, TransactionRequest overwrite = null)
         {
-            return _contract.PrepareTransactionRequest(method, parameters, overwrite);
+            return OriginalContract.PrepareTransactionRequest(method, parameters, overwrite);
         }
         #endregion
     }

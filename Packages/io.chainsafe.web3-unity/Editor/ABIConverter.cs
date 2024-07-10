@@ -18,7 +18,7 @@ public class ABIWindow : EditorWindow
     {
         GetWindow<ABIWindow>("ChainSafe ABI Formatter");
     }
-
+        
 
     private void OnGUI()
     {

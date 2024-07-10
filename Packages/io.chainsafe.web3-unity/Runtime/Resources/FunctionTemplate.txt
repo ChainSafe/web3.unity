@@ -1,8 +1,8 @@
-public async Task<{OUTPUT_PARAM}> {METHOD_NAME}({INPUT_PARAMS}) 
+public async Task<{RETURN_TYPE}> {METHOD_NAME}({INPUT_PARAMS}) 
 {
-    var response = await {FUNCTION_CALL}({METHOD_NAME}, new object [] {
+    var response = await OriginalContract.{FUNCTION_CALL}("{CONTRACT_METHOD_CALL}", new object [] {
         {INPUT_PARAM_NAMES}
     });
     
-    return {OUTPUT_PARAM_TYPECAST};
+    return {RETURN_STATEMENT};
 }

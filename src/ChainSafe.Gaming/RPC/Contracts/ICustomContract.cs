@@ -6,7 +6,7 @@
 
         public string ContractAddress { get; set; }
 
-        protected Contract OriginalContract { get; set; }
+        public Contract OriginalContract { get;  set; }
 
         public ICustomContract Build(IContractBuilder builder)
         {

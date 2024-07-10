@@ -1,4 +1,7 @@
-
+using System;
+using System.Linq;
+using System.Text;
+using System.Text.Json;
 using Nethereum.ABI.ABIDeserialisation;
 using Nethereum.ABI.Model;
 using UnityEditor;
@@ -12,14 +15,14 @@ public class ABICSharpConverter : EditorWindow
     private string _contractName;
     private bool _abiIsValid;
     private ContractABI _contractABI;
-    
+
     [MenuItem("ChainSafe SDK/ABI to C# Contract Converter")]
     // Show our window
     public static void ShowWindow()
     {
         GetWindow<ABICSharpConverter>("ABI to C# Contract Converter");
     }
-    
+
     private void OnGUI()
     {
         // Ensure our labels are using Rich text for added customization
@@ -34,9 +37,9 @@ public class ABICSharpConverter : EditorWindow
         _contractName = EditorGUILayout.TextField("Contract Name", _contractName);
 
         _targetFolder = (DefaultAsset)EditorGUILayout.ObjectField(
-            "Select Folder", 
-            _targetFolder, 
-            typeof(DefaultAsset), 
+            "Select Folder",
+            _targetFolder,
+            typeof(DefaultAsset),
             false);
 
         if (_targetFolder == null)
@@ -44,7 +47,7 @@ public class ABICSharpConverter : EditorWindow
             EditorGUILayout.HelpBox("No folder selected, please select a folder first", MessageType.Error);
             return;
         }
-        
+
         EditorGUI.BeginChangeCheck();
         _abi = EditorGUILayout.TextField("ABI", _abi);
         if (EditorGUI.EndChangeCheck())
@@ -54,21 +57,238 @@ public class ABICSharpConverter : EditorWindow
         {
             EditorGUILayout.HelpBox("Invalid ABI", MessageType.Error);
             return;
-        }  
-        
+        }
+
         if (GUILayout.Button("Convert"))
         {
-            var textAsset = Resources.Load<TextAsset>("ABIContractClassTemplate");
+            _contractABI = ABIDeserialiserFactory.DeserialiseContractABI(_abi);
+            var text = new StringBuilder(Resources.Load<TextAsset>("ABIContractClassTemplate").text);
+            text = text.Replace("{CLASS_NAME}", _contractName);
+            var minifiedJson = JsonDocument.Parse(_abi).RootElement.GetRawText();
+            var escapedJson = minifiedJson.Replace("\"", "\\\"");
+            text = text.Replace("{CONTRACT_ABI}", escapedJson);
+            text = text.Replace("{EVENTS}", ParseEvents());
+            text = text.Replace("{EVENT_METHODS}", ParseEventMethods());
+            text = text.Replace("{METHODS}", ParseMethods());
+            var path = AssetDatabase.GetAssetPath(_targetFolder);
+            var fullPath = $"{path}/{_contractName}.cs";
+            System.IO.File.WriteAllText(fullPath, text.ToString());
+            AssetDatabase.Refresh();
         }
     }
-    
+
+    private string ParseMethods()
+    {
+        var functionTemplateBase = Resources.Load<TextAsset>("FunctionTemplate").text;
+        var result = new StringBuilder();
+
+        foreach (var functionABI in _contractABI.Functions)
+        {
+            var functionNoTransactionReceipt = PopulateFunction(functionABI, functionTemplateBase, false);
+            var functionWithTransactionReceipt = "";
+            if (!functionABI.Constant)
+                functionWithTransactionReceipt = PopulateFunction(functionABI, functionTemplateBase, true);
+            result.Append(functionNoTransactionReceipt);
+            result.Append("\n");
+            result.Append(functionWithTransactionReceipt);
+            result.Append("\n");
+
+        }
+
+        return result.ToString();
+    }
+
+    private static string PopulateFunction(FunctionABI functionABI, string functionTemplateBase,
+        bool useTransactionReciept)
+    {
+        var functionStringBuilder = new StringBuilder(functionTemplateBase);
+        functionStringBuilder = functionStringBuilder.Replace("{METHOD_NAME}",
+            functionABI.Name.RemoveFirstUnderline().Capitalize() + (useTransactionReciept ? "WithReceipt" : "")); 
+        functionStringBuilder = functionStringBuilder.Replace("{INPUT_PARAMS}",
+            string.Join(", ", functionABI.InputParameters.Select(x => $"{x.Type.ToCSharpType()} {(string.IsNullOrEmpty(x.Name.ReplaceReservedNames()) ? $"{x.Type}" : $"{x.Name.ReplaceReservedNames().ReplaceReservedNames()}")}")));
+        functionStringBuilder = functionStringBuilder.Replace("{CONTRACT_METHOD_CALL}", functionABI.Name);
+
+        if (useTransactionReciept)
+        {
+            if(functionABI.OutputParameters.Length >= 1)
+                functionStringBuilder = functionStringBuilder.Replace("{RETURN_TYPE}",
+                    "(" + string.Join(", ", functionABI.OutputParameters.Select(x => $"{x.Type.ToCSharpType()} {x.Name.ReplaceReservedNames()}")) +
+                    (functionABI.OutputParameters.Length != 0 ? ", " : "") + "TransactionReceipt receipt)");
+            else functionStringBuilder = functionStringBuilder.Replace("{RETURN_TYPE}", "TransactionReceipt");
+        }
+        else
+        {
+            if (functionABI.OutputParameters.Length > 1)
+                functionStringBuilder = functionStringBuilder.Replace("{RETURN_TYPE}",
+                    "(" + string.Join(", ",
+                        functionABI.OutputParameters.Select(x => $"{x.Type.ToCSharpType()} {x.Name.ReplaceReservedNames()}")) + ")");
+            else if (functionABI.OutputParameters.Length == 1)
+                functionStringBuilder = functionStringBuilder.Replace("{RETURN_TYPE}",
+                    functionABI.OutputParameters[0].Type.ToCSharpType());
+            //This means function doesn't return anything so we're removing the Tasks Generic param altogether
+            else functionStringBuilder = functionStringBuilder.Replace("<{RETURN_TYPE}>", "");
+        }
+
+        if (functionABI.Constant)
+            functionStringBuilder.Replace("{FUNCTION_CALL}", "Call");
+        else
+            functionStringBuilder.Replace("{FUNCTION_CALL}", useTransactionReciept ? "SendWithReceipt" : "Send");
+
+        functionStringBuilder.Replace("{METHOD_NAME}", functionABI.Name);
+        functionStringBuilder.Replace("{INPUT_PARAM_NAMES}",
+            string.Join(", ", functionABI.InputParameters.Select(x => x.Name.ReplaceReservedNames())));
+        var sb = new StringBuilder();
+        
+        if (functionABI.OutputParameters.Length > 1)
+        {
+            sb.Append("(");
+            for (var i = 0; i < functionABI.OutputParameters.Length; i++)
+            {
+                sb.Append($"({functionABI.OutputParameters[i].Type.ToCSharpType()})response" +
+                          $"{(useTransactionReciept ? ".response" : "")}[{i}]");
+                if (i != functionABI.OutputParameters.Length - 1)
+                    sb.Append(", ");
+            }
+
+            sb.Append(useTransactionReciept ? ", response.receipt)" : ")");
+        }
+        else if (functionABI.OutputParameters.Length == 1)
+        {
+            if (useTransactionReciept)
+                sb.Append("(");
+            sb.Append(
+                $"({functionABI.OutputParameters[0].Type.ToCSharpType()}) response{(useTransactionReciept ? ".response" : "")}[0]");
+            sb.Append(useTransactionReciept ? ", response.receipt)" : "");
+        }
+
+        if (functionABI.OutputParameters.Length != 0)
+            functionStringBuilder = functionStringBuilder.Replace("{RETURN_STATEMENT}", sb.ToString());
+        else
+            functionStringBuilder = functionStringBuilder.Replace("return {RETURN_STATEMENT};",
+                useTransactionReciept ? "return response.receipt;" : "");
+
+        return functionStringBuilder.ToString();
+    }
+
+
+    private string ParseEventMethods()
+    {
+        return string.Empty;
+    }
+
+    private string ParseEvents()
+    {
+        return string.Empty;
+    }
+
     private bool IsValidAbi(string abi)
     {
         abi = abi.Trim();
-        _contractABI = ABIDeserialiserFactory.DeserialiseContractABI(abi);
+        var contractABI = ABIDeserialiserFactory.DeserialiseContractABI(abi);
 
-        return !string.IsNullOrEmpty(abi) && (_contractABI.Functions.Length > 0 || _contractABI.Events.Length > 0 ||
-                                              _contractABI.Errors.Length > 0);
+        return !string.IsNullOrEmpty(abi) && (contractABI.Functions.Length > 0 || contractABI.Events.Length > 0 ||
+                                              contractABI.Errors.Length > 0);
+    }
+}
+
+public static class ABIToCSHarpTypesExtension
+{
+    public static string ToCSharpType(this string parameter)
+    {
+        return parameter switch
+        {
+            "uint256" => "BigInteger",
+            "uint256[]" => "BigInteger[]",
+            "uint8" => "byte",
+            "uint8[]" => "byte[]",
+            "uint16" => "ushort",
+            "uint16[]" => "ushort[]",
+            "uint32" => "uint",
+            "uint32[]" => "uint[]",
+            "uint64" => "ulong",
+            "uint64[]" => "ulong[]",
+            "uint128" => "BigInteger",
+            "uint128[]" => "BigInteger[]",
+            "uint" => "BigInteger", // Alias for uint256
+            "uint[]" => "BigInteger[]",
+            "int256" => "BigInteger",
+            "int256[]" => "BigInteger[]",
+            "int8" => "sbyte",
+            "int8[]" => "sbyte[]",
+            "int16" => "short",
+            "int16[]" => "short[]",
+            "int32" => "int",
+            "int32[]" => "int[]",
+            "int64" => "long",
+            "int64[]" => "long[]",
+            "int128" => "BigInteger",
+            "int128[]" => "BigInteger[]",
+            "int" => "BigInteger", // Alias for int256
+            "int[]" => "BigInteger[]",
+            "address" => "string",
+            "address[]" => "string[]",
+            "bool" => "bool",
+            "bool[]" => "bool[]",
+            "string" => "string",
+            "string[]" => "string[]",
+            "bytes" => "byte[]",
+            "bytes[]" => "byte[][]",
+            "bytes1" => "byte[]",
+            "bytes2" => "byte[]",
+            "bytes3" => "byte[]",
+            "bytes4" => "byte[]",
+            "bytes5" => "byte[]",
+            "bytes6" => "byte[]",
+            "bytes7" => "byte[]",
+            "bytes8" => "byte[]",
+            "bytes9" => "byte[]",
+            "bytes10" => "byte[]",
+            "bytes11" => "byte[]",
+            "bytes12" => "byte[]",
+            "bytes13" => "byte[]",
+            "bytes14" => "byte[]",
+            "bytes15" => "byte[]",
+            "bytes16" => "byte[]",
+            "bytes17" => "byte[]",
+            "bytes18" => "byte[]",
+            "bytes19" => "byte[]",
+            "bytes20" => "byte[]",
+            "bytes21" => "byte[]",
+            "bytes22" => "byte[]",
+            "bytes23" => "byte[]",
+            "bytes24" => "byte[]",
+            "bytes25" => "byte[]",
+            "bytes26" => "byte[]",
+            "bytes27" => "byte[]",
+            "bytes28" => "byte[]",
+            "bytes29" => "byte[]",
+            "bytes30" => "byte[]",
+            "bytes31" => "byte[]",
+            "bytes32" => "byte[]",
+            _ => "object" // Default case for unknown types
+        };
     }
 
+    public static string Capitalize(this string str)
+    {
+        return char.ToUpper(str[0]) + str[1..];
+    }
+
+    public static string RemoveFirstUnderline(this string str)
+    {
+        return str[0] == '_' ? str[1..] : str;
+    }
+
+    public static string ReplaceReservedNames(this string str)
+    {
+        return str switch
+        {
+            "operator" => "@operator",
+            "params" => "@params",
+            "event" => "@event",
+            "delegate" => "@delegate",
+            "object" => "@object",
+            _ => str
+        };
+    }
 }
