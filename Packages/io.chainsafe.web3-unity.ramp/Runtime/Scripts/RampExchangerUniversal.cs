@@ -11,12 +11,12 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
         private readonly IRampExchangerConfig config;
         private readonly ISigner signer;
         private readonly IAnalyticsClient analyticsClient;
-        
+
         public event Action<OnRampPurchaseData> OnRampPurchaseCreated;
         public event Action<OffRampSaleData> OffRampSaleCreated;
 
         private IRampExchanger platformImplementation;
-        
+
 
         public RampExchangerUniversal(IRampExchangerConfig config, ISigner signer, IAnalyticsClient analyticsClient)
         {
@@ -30,7 +30,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
             analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
                 EventName = "Ramp Initialized",
-                PackageName = "io.chiansafe.web3-unity.exchangers.ramp"
+                PackageName = "io.chainsafe.web3-unity.exchangers.ramp"
             });
             platformImplementation = RampExchangerFactory.CreateRampExchanger(config, signer);
             platformImplementation.OnRampPurchaseCreated += InvokeOnRampPurchaseCreated;
