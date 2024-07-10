@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using ChainSafe.Gaming;
 using Newtonsoft.Json;
@@ -31,6 +32,28 @@ public class ConnectionHandlerEditor : Editor
         
         if (_foldout)
         {
+            List<ConnectionProvider> availableProviders = new List<ConnectionProvider>();
+            
+            var providersProperty = serializedObject.FindProperty("providers");
+
+            int arraySize = providersProperty.arraySize;
+            
+            for (int i = 0; i < arraySize; i++)
+            {
+                var providerProperty = providersProperty.GetArrayElementAtIndex(i);
+                    
+                if (providerProperty.objectReferenceValue == null)
+                {
+                    providersProperty.DeleteArrayElementAtIndex(i);
+                        
+                    serializedObject.ApplyModifiedProperties();
+                        
+                    return;
+                }
+                
+                availableProviders.Add(providerProperty.objectReferenceValue as ConnectionProvider);
+            }
+            
             foreach (var provider in providers)
             {
                 var loadedProvider = AssetDatabase.LoadAssetAtPath<ConnectionProvider>(provider.Path);
@@ -38,40 +61,13 @@ public class ConnectionHandlerEditor : Editor
                 if (loadedProvider == null)
                 {
                     Debug.LogWarning($"Error loading {provider.Name} Provider at {provider.Path}");
-                }
-                
-                var providersProperty = serializedObject.FindProperty("providers");
-
-                bool isAvailable = false;
-                
-                int providerIndex = - 1;
-
-                int arraySize = providersProperty.arraySize;
-                
-                for (int i = 0; i < arraySize; i++)
-                {
-                    var providerProperty = providersProperty.GetArrayElementAtIndex(i);
                     
-                    isAvailable = loadedProvider == providerProperty.objectReferenceValue;
-
-                    if (isAvailable)
-                    {
-                        providerIndex = i;
-                        
-                        break;
-                    }
-
-                    if (providerProperty.objectReferenceValue == null)
-                    {
-                        providersProperty.DeleteArrayElementAtIndex(i);
-                        
-                        serializedObject.ApplyModifiedProperties();
-                        
-                        break;
-                    }
+                    continue;
                 }
                 
                 EditorGUI.BeginChangeCheck();
+
+                bool isAvailable = availableProviders.Contains(loadedProvider);
                 
                 isAvailable = GUILayout.Toggle(isAvailable, provider.Name);
 
@@ -86,12 +82,12 @@ public class ConnectionHandlerEditor : Editor
 
                     else
                     {
-                        providersProperty.DeleteArrayElementAtIndex(providerIndex);
+                        providersProperty.DeleteArrayElementAtIndex(availableProviders.IndexOf(loadedProvider));
                     }
 
                     serializedObject.ApplyModifiedProperties();
                     
-                    break;
+                    return;
                 }
             }
         }

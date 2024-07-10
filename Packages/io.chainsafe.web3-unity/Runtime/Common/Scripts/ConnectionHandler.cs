@@ -37,7 +37,7 @@ namespace Scenes
             
             foreach (var provider in providers)
             {
-                if (provider.IsAvailable)
+                if (provider != null && provider.IsAvailable)
                 {
                     var instantiatedProvider = connectModal.AddProvider(provider);
                     
