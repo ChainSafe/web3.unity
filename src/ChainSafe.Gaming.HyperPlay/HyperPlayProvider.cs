@@ -52,7 +52,7 @@ namespace ChainSafe.Gaming.HyperPlay
         /// <returns>Signed-in account public address.</returns>
         public override async Task<string> Connect()
         {
-            string[] accounts = await Perform<string[]>("eth_accounts");
+            string[] accounts = await Request<string[]>("eth_accounts");
 
             string account = accounts[0];
 
@@ -64,7 +64,7 @@ namespace ChainSafe.Gaming.HyperPlay
 
             string message = "Sign-in with Ethereum";
 
-            string hash = await Perform<string>("personal_sign", message, account);
+            string hash = await Request<string>("personal_sign", message, account);
 
             hash.AssertSignatureValid(message, account);
 
