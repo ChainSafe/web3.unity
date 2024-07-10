@@ -59,6 +59,12 @@ public class ABICSharpConverter : EditorWindow
             EditorGUILayout.HelpBox("Invalid ABI", MessageType.Error);
             return;
         }
+        
+        if(string.IsNullOrEmpty(_contractName))
+        {
+            EditorGUILayout.HelpBox("Contract Name cannot be empty", MessageType.Error);
+            return;
+        }
 
         if (GUILayout.Button("Convert"))
         {
