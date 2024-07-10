@@ -96,10 +96,10 @@ namespace ChainSafe.Gaming.Marketplace
         private async void PopulateMarketplaceItems(int index)
         {
             var projectResponse = await EvmMarketplace.GetProjectItems();
-            var response = await EvmMarketplace.GetMarketplaceItems(projectResponse.items[index].marketplace_id);
-            foreach (var item in response.items)
+            var response = await EvmMarketplace.GetMarketplaceItems(projectResponse.Items[index].MarketplaceID);
+            foreach (var item in response.Items)
             {
-                AddMarketplaceItemToDisplay(item.id, item.token.token_type, item.price, item.token.uri);
+                AddMarketplaceItemToDisplay(item.Id, item.Token.TokenType, item.Price, item.Token.Uri);
             }
         }
 
