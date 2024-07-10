@@ -52,7 +52,10 @@ namespace ChainSafe.Gaming.Evm.Contracts
             this.signer = signer;
             this.transactionExecutor = transactionExecutor;
             this.analyticsClient = analyticsClient; // Initialize analytics client
+            BasicContracts = new Dictionary<string, Contract>();
         }
+
+        public Dictionary<string, Contract> BasicContracts { get; }
 
         public Contract Build(string name)
         {
@@ -64,7 +67,16 @@ namespace ChainSafe.Gaming.Evm.Contracts
             return new Contract(data.Abi, data.Address, rpcProvider, signer, transactionExecutor, analyticsClient); // Pass analytics client to Contract
         }
 
-        public Contract Build(string abi, string address) =>
-            new Contract(abi, address, rpcProvider, signer, transactionExecutor, analyticsClient); // Pass analytics client to Contract
+        public Contract Build(string abi, string address)
+        {
+           if(BasicContracts.TryGetValue(address, out var value))
+           {
+               return value;
+           }
+
+           var contract = new Contract(abi, address, rpcProvider, signer, transactionExecutor, analyticsClient); // Pass analytics client to Contract
+           BasicContracts.Add(address, contract);
+           return contract;
+        }
     }
 }

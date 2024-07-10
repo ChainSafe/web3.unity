@@ -19,9 +19,7 @@ public class ABICSharpConverter : EditorWindow
     {
         GetWindow<ABICSharpConverter>("ABI to C# Contract Converter");
     }
-
-
-
+    
     private void OnGUI()
     {
         // Ensure our labels are using Rich text for added customization
@@ -72,6 +70,5 @@ public class ABICSharpConverter : EditorWindow
         return !string.IsNullOrEmpty(abi) && (_contractABI.Functions.Length > 0 || _contractABI.Events.Length > 0 ||
                                               _contractABI.Errors.Length > 0);
     }
-    
-    
+
 }
