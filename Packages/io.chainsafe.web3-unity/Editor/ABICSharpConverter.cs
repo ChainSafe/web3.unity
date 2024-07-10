@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using Nethereum.ABI.ABIDeserialisation;
 using Nethereum.ABI.Model;
 using UnityEditor;
@@ -62,17 +63,17 @@ public class ABICSharpConverter : EditorWindow
         if (GUILayout.Button("Convert"))
         {
             _contractABI = ABIDeserialiserFactory.DeserialiseContractABI(_abi);
-            var text = new StringBuilder(Resources.Load<TextAsset>("ABIContractClassTemplate").text);
+            var text = Resources.Load<TextAsset>("ABIContractClassTemplate").text;
             text = text.Replace("{CLASS_NAME}", _contractName);
             var minifiedJson = JsonDocument.Parse(_abi).RootElement.GetRawText();
             var escapedJson = minifiedJson.Replace("\"", "\\\"");
             text = text.Replace("{CONTRACT_ABI}", escapedJson);
-            text = text.Replace("{EVENTS}", ParseEvents());
-            text = text.Replace("{EVENT_METHODS}", ParseEventMethods());
-            text = text.Replace("{METHODS}", ParseMethods());
+            text = Regex.Replace(text, @"\s*\{EVENTS\}", "\n\n" + ParseEvents());
+            text = Regex.Replace(text, @"\s*\{EVENT_METHODS\}", "\n\n" + ParseEventMethods());
+            text = Regex.Replace(text, @"\s*\{METHODS\}", "\n\n" + ParseMethods());
             var path = AssetDatabase.GetAssetPath(_targetFolder);
             var fullPath = $"{path}/{_contractName}.cs";
-            System.IO.File.WriteAllText(fullPath, text.ToString());
+            System.IO.File.WriteAllText(fullPath, text);
             AssetDatabase.Refresh();
         }
     }
