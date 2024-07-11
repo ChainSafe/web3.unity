@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.UnityPackage;
 using Newtonsoft.Json;
@@ -37,6 +38,7 @@ public class ChainSafeServerSettings : EditorWindow
     private string network;
     private string symbol;
     private string rpc;
+    private string ws;
     private string newRpc;
     private string blockExplorerUrl;
     private bool enableAnalytics;
@@ -52,6 +54,7 @@ public class ChainSafeServerSettings : EditorWindow
     private List<ChainInfo.Root> chainList;
     private int selectedChainIndex;
     private int selectedRpcIndex;
+    private int selectedWebHookIndex;
     private FetchingStatus fetchingStatus = FetchingStatus.NotFetching;
 
     private enum FetchingStatus
@@ -214,8 +217,7 @@ public class ChainSafeServerSettings : EditorWindow
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.PrefixLabel("Select RPC");
         // Remove "https://" so the user doesn't have to click through 2 levels for the rpc options
-        var rpcOptions = chainList[selectedChainIndex].rpc.Where(rpc => rpc.StartsWith("https"))
-            .Select(rpc => rpc.Substring(8)).ToArray();
+        var rpcOptions = chainList[selectedChainIndex].rpc.Where(x => x.StartsWith("https")).Select(x => x.Replace("/", "\u2215")).ToArray();
         var selectedRpc = rpcOptions[selectedRpcIndex];
         // Show the rpc drop down menu
         if (GUILayout.Button(selectedRpc, EditorStyles.popup))
@@ -225,7 +227,7 @@ public class ChainSafeServerSettings : EditorWindow
             {
                 selectedRpcIndex = Array.IndexOf(rpcOptions, x);
                 // Add "https://" back
-                rpc = "https://" + x;
+                rpc = x;
             });
             SearchWindow.Open(new SearchWindowContext(GUIUtility.GUIToScreenPoint(Event.current.mousePosition)),
                 searchProvider);
@@ -233,9 +235,37 @@ public class ChainSafeServerSettings : EditorWindow
 
         EditorGUILayout.EndHorizontal();
         // Allows for a custom rpc
-        rpc = EditorGUILayout.TextField("RPC: ", rpc);
+        rpc = EditorGUILayout.TextField("Custom RPC: ", rpc);
         GUILayout.Label("If you're using a custom RPC it will override the selection above", EditorStyles.boldLabel);
-
+        
+        
+        
+        // Remove "https://" so the user doesn't have to click through 2 levels for the rpc options
+        var webHookOptions = chainList[selectedChainIndex].rpc.Where(x => x.StartsWith("w")).Select(x => x.Replace("/", "\u2215")).ToArray();
+        if (webHookOptions.Length > 0)
+        {
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.PrefixLabel("Select WebHook");
+            selectedWebHookIndex = Mathf.Clamp(selectedWebHookIndex, 0, webHookOptions.Length);
+            var selectedWebHook = webHookOptions[selectedWebHookIndex];
+            // Show the rpc drop down menu
+            if (GUILayout.Button(selectedWebHook, EditorStyles.popup))
+            {
+                searchProvider = CreateInstance<StringListSearchProvider>();
+                searchProvider.Initialize(webHookOptions,
+                    x =>
+                    {
+                        selectedWebHookIndex = Array.IndexOf(webHookOptions, x);
+                        ws = x;
+                    });
+                SearchWindow.Open(new SearchWindowContext(GUIUtility.GUIToScreenPoint(Event.current.mousePosition)),
+                    searchProvider);
+            }
+            EditorGUILayout.EndHorizontal();
+            ws = EditorGUILayout.TextField("Custom Webhook: ", ws);
+            GUILayout.Label("If you're using a custom Webhook it will override the selection above", EditorStyles.boldLabel);
+        }
+        
         // Buttons
         // Register
         if (GUILayout.Button("Need To Register?")) Application.OpenURL("https://dashboard.gaming.chainsafe.io/");
@@ -251,6 +281,7 @@ public class ChainSafeServerSettings : EditorWindow
             projectConfig.Network = network;
             projectConfig.Symbol = symbol;
             projectConfig.Rpc = rpc;
+            projectConfig.Ws = ws;
             projectConfig.BlockExplorerUrl = blockExplorerUrl;
             projectConfig.EnableAnalytics = enableAnalytics;
             ProjectConfigUtilities.Save(projectConfig);
