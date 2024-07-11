@@ -19,7 +19,7 @@ using Network = Web3Auth.Network;
 /// <summary>
 /// Login using Web3Auth.
 /// </summary>
-public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
+public class Web3AuthLoginProvider : ConnectionHandler, IWeb3BuilderServiceAdapter
 {
     /// <summary>
     /// Struct used for pairing login buttons to Web3 auth providers.
@@ -89,7 +89,7 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
         if (!string.IsNullOrEmpty(KeyStoreManagerUtils.getPreferencesData(KeyStoreManagerUtils.SESSION_ID)))
         {
             rememberMe = true;
-            await TryLogin();
+            await TryConnect();
             Debug.Log("Restoring existing Web3Auth session (Remember Me");
         }
 #endif
@@ -99,7 +99,7 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
     {
         Web3AuthWebGLConnected -= Web3AuthSet;
         KeyStoreManagerUtils.savePreferenceData(KeyStoreManagerUtils.SESSION_ID, sessionId);
-        await TryLogin();
+        await TryConnect();
     }
 #endif
 
@@ -117,22 +117,15 @@ public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
         Web3AuthLogin(provider.ToString().ToLower(), rememberMe);
 #else
         selectedProvider = provider;
-        await TryLogin();
+        await TryConnect();
         LogAnalytics(provider);
     }
 
-    public override async Task TryLogin()
+    public override async Task TryConnect()
     {
-        try
-        {
-            await (this as ILoginProvider).Login();
-            EnableWalletGUI();
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"Login failed, please try again\n{e.Message} (see console for more details)");
-            throw;
-        }
+        await base.TryConnect();
+        
+        EnableWalletGUI();
     }
 
     private void EnableWalletGUI()
