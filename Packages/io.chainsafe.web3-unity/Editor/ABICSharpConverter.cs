@@ -59,8 +59,8 @@ public class ABICSharpConverter : EditorWindow
             EditorGUILayout.HelpBox("Invalid ABI", MessageType.Error);
             return;
         }
-        
-        if(string.IsNullOrEmpty(_contractName))
+
+        if (string.IsNullOrEmpty(_contractName))
         {
             EditorGUILayout.HelpBox("Contract Name cannot be empty", MessageType.Error);
             return;
@@ -91,90 +91,129 @@ public class ABICSharpConverter : EditorWindow
 
         foreach (var functionABI in _contractABI.Functions)
         {
-            var functionNoTransactionReceipt = PopulateFunction(functionABI, functionTemplateBase, false);
+            var functionNoTransactionReceipt = PopulateMethod(functionABI, functionTemplateBase, false);
             var functionWithTransactionReceipt = "";
             if (!functionABI.Constant)
-                functionWithTransactionReceipt = PopulateFunction(functionABI, functionTemplateBase, true);
+                functionWithTransactionReceipt = PopulateMethod(functionABI, functionTemplateBase, true);
             result.Append(functionNoTransactionReceipt);
-            result.Append("\n");
+            result.Append("\n\n");
             result.Append(functionWithTransactionReceipt);
-            result.Append("\n");
-
+            result.Append("\n\n");
         }
 
         return result.ToString();
     }
 
-    private static string PopulateFunction(FunctionABI functionABI, string functionTemplateBase,
-        bool useTransactionReciept)
+    private static string PopulateMethod(FunctionABI functionABI, string functionTemplateBase,
+        bool useTransactionReceipt)
     {
         var functionStringBuilder = new StringBuilder(functionTemplateBase);
-        functionStringBuilder = functionStringBuilder.Replace("{METHOD_NAME}",
-            functionABI.Name.RemoveFirstUnderline().Capitalize() + (useTransactionReciept ? "WithReceipt" : "")); 
-        functionStringBuilder = functionStringBuilder.Replace("{INPUT_PARAMS}",
-            string.Join(", ", functionABI.InputParameters.Select(x => $"{x.Type.ToCSharpType()} {(string.IsNullOrEmpty(x.Name.ReplaceReservedNames()) ? $"{x.Type}" : $"{x.Name.ReplaceReservedNames().ReplaceReservedNames()}")}")));
-        functionStringBuilder = functionStringBuilder.Replace("{CONTRACT_METHOD_CALL}", functionABI.Name);
 
-        if (useTransactionReciept)
+        // Replace placeholders with actual values
+        ReplaceMethodName(functionStringBuilder, functionABI, useTransactionReceipt);
+        ReplaceInputParameters(functionStringBuilder, functionABI);
+        ReplaceContractMethodCall(functionStringBuilder, functionABI);
+        ReplaceReturnType(functionStringBuilder, functionABI, useTransactionReceipt);
+        ReplaceFunctionCall(functionStringBuilder, functionABI, useTransactionReceipt);
+        ReplaceInputParamNames(functionStringBuilder, functionABI);
+        ReplaceReturnStatement(functionStringBuilder, functionABI, useTransactionReceipt);
+
+        return functionStringBuilder.ToString();
+    }
+
+    private static void ReplaceMethodName(StringBuilder functionStringBuilder, FunctionABI functionABI,
+        bool useTransactionReceipt)
+    {
+        functionStringBuilder.Replace("{METHOD_NAME}",
+            functionABI.Name.RemoveFirstUnderline().Capitalize() + (useTransactionReceipt ? "WithReceipt" : ""));
+    }
+
+    private static void ReplaceInputParameters(StringBuilder functionStringBuilder, FunctionABI functionABI)
+    {
+        functionStringBuilder.Replace("{INPUT_PARAMS}",
+            string.Join(", ",
+                functionABI.InputParameters.Select(x =>
+                    $"{x.Type.ToCSharpType()} {(string.IsNullOrEmpty(x.Name.ReplaceReservedNames()) ? $"{x.Type}" : $"{x.Name.ReplaceReservedNames()}")}")));
+    }
+
+    private static void ReplaceContractMethodCall(StringBuilder functionStringBuilder, FunctionABI functionABI)
+    {
+        functionStringBuilder.Replace("{CONTRACT_METHOD_CALL}", functionABI.Name);
+    }
+
+    private static void ReplaceReturnType(StringBuilder functionStringBuilder, FunctionABI functionABI,
+        bool useTransactionReceipt)
+    {
+        if (useTransactionReceipt)
         {
-            if(functionABI.OutputParameters.Length >= 1)
-                functionStringBuilder = functionStringBuilder.Replace("{RETURN_TYPE}",
-                    "(" + string.Join(", ", functionABI.OutputParameters.Select(x => $"{x.Type.ToCSharpType()} {x.Name.ReplaceReservedNames()}")) +
+            if (functionABI.OutputParameters.Length >= 1)
+                functionStringBuilder.Replace("{RETURN_TYPE}",
+                    "(" + string.Join(", ",
+                        functionABI.OutputParameters.Select(x =>
+                            $"{x.Type.ToCSharpType()} {x.Name.ReplaceReservedNames()}")) +
                     (functionABI.OutputParameters.Length != 0 ? ", " : "") + "TransactionReceipt receipt)");
-            else functionStringBuilder = functionStringBuilder.Replace("{RETURN_TYPE}", "TransactionReceipt");
+            else
+                functionStringBuilder.Replace("{RETURN_TYPE}", "TransactionReceipt");
         }
         else
         {
             if (functionABI.OutputParameters.Length > 1)
-                functionStringBuilder = functionStringBuilder.Replace("{RETURN_TYPE}",
+                functionStringBuilder.Replace("{RETURN_TYPE}",
                     "(" + string.Join(", ",
-                        functionABI.OutputParameters.Select(x => $"{x.Type.ToCSharpType()} {x.Name.ReplaceReservedNames()}")) + ")");
+                        functionABI.OutputParameters.Select(x =>
+                            $"{x.Type.ToCSharpType()} {x.Name.ReplaceReservedNames()}")) + ")");
             else if (functionABI.OutputParameters.Length == 1)
-                functionStringBuilder = functionStringBuilder.Replace("{RETURN_TYPE}",
-                    functionABI.OutputParameters[0].Type.ToCSharpType());
-            //This means function doesn't return anything so we're removing the Tasks Generic param altogether
-            else functionStringBuilder = functionStringBuilder.Replace("<{RETURN_TYPE}>", "");
+                functionStringBuilder.Replace("{RETURN_TYPE}", functionABI.OutputParameters[0].Type.ToCSharpType());
+            else
+                functionStringBuilder.Replace("<{RETURN_TYPE}>", "");
         }
+    }
 
+    private static void ReplaceFunctionCall(StringBuilder functionStringBuilder, FunctionABI functionABI,
+        bool useTransactionReceipt)
+    {
         if (functionABI.Constant)
             functionStringBuilder.Replace("{FUNCTION_CALL}", "Call");
         else
-            functionStringBuilder.Replace("{FUNCTION_CALL}", useTransactionReciept ? "SendWithReceipt" : "Send");
+            functionStringBuilder.Replace("{FUNCTION_CALL}", useTransactionReceipt ? "SendWithReceipt" : "Send");
+    }
 
-        functionStringBuilder.Replace("{METHOD_NAME}", functionABI.Name);
+    private static void ReplaceInputParamNames(StringBuilder functionStringBuilder, FunctionABI functionABI)
+    {
         functionStringBuilder.Replace("{INPUT_PARAM_NAMES}",
             string.Join(", ", functionABI.InputParameters.Select(x => x.Name.ReplaceReservedNames())));
+    }
+
+    private static void ReplaceReturnStatement(StringBuilder functionStringBuilder, FunctionABI functionABI,
+        bool useTransactionReceipt)
+    {
         var sb = new StringBuilder();
-        
+
         if (functionABI.OutputParameters.Length > 1)
         {
             sb.Append("(");
             for (var i = 0; i < functionABI.OutputParameters.Length; i++)
             {
                 sb.Append($"({functionABI.OutputParameters[i].Type.ToCSharpType()})response" +
-                          $"{(useTransactionReciept ? ".response" : "")}[{i}]");
-                if (i != functionABI.OutputParameters.Length - 1)
-                    sb.Append(", ");
+                          $"{(useTransactionReceipt ? ".response" : "")}[{i}]");
+                if (i != functionABI.OutputParameters.Length - 1) sb.Append(", ");
             }
 
-            sb.Append(useTransactionReciept ? ", response.receipt)" : ")");
+            sb.Append(useTransactionReceipt ? ", response.receipt)" : ")");
         }
         else if (functionABI.OutputParameters.Length == 1)
         {
-            if (useTransactionReciept)
-                sb.Append("(");
+            if (useTransactionReceipt) sb.Append("(");
             sb.Append(
-                $"({functionABI.OutputParameters[0].Type.ToCSharpType()}) response{(useTransactionReciept ? ".response" : "")}[0]");
-            sb.Append(useTransactionReciept ? ", response.receipt)" : "");
+                $"({functionABI.OutputParameters[0].Type.ToCSharpType()}) response{(useTransactionReceipt ? ".response" : "")}[0]");
+            sb.Append(useTransactionReceipt ? ", response.receipt)" : "");
         }
 
         if (functionABI.OutputParameters.Length != 0)
-            functionStringBuilder = functionStringBuilder.Replace("{RETURN_STATEMENT}", sb.ToString());
+            functionStringBuilder.Replace("{RETURN_STATEMENT}", sb.ToString());
         else
-            functionStringBuilder = functionStringBuilder.Replace("return {RETURN_STATEMENT};",
-                useTransactionReciept ? "return response.receipt;" : "");
-
-        return functionStringBuilder.ToString();
+            functionStringBuilder.Replace("return {RETURN_STATEMENT};",
+                useTransactionReceipt ? "return response.receipt;" : "");
     }
 
 
