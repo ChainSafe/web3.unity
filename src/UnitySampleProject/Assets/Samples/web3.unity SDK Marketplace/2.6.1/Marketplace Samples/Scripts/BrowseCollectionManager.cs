@@ -42,6 +42,7 @@ namespace ChainSafe.Gaming.Collection
         private string BearerToken { get; set; }
         private TMP_FontAsset DisplayFont { get; set; }
         private Color SecondaryTextColour { get; set; }
+        
     
         #endregion
 
@@ -89,9 +90,9 @@ namespace ChainSafe.Gaming.Collection
         {
             var projectResponse = await EvmMarketplace.GetProjectTokens();
             var collectionContract = projectResponse.Tokens[index].CollectionID;
-            switch (collectionType)
+            switch (collectionType.ToUpper())
             {
-                case "erc721":
+                case "ERC721":
                 {
                     var response = await EvmMarketplace.GetCollectionTokens721(projectResponse.Tokens[index].CollectionID);
                     foreach (var item in response.Tokens)
@@ -102,7 +103,7 @@ namespace ChainSafe.Gaming.Collection
 
                     break;
                 }
-                case "erc1155":
+                case "ERC1155":
                 {
                     var response = await EvmMarketplace.GetCollectionTokens1155(projectResponse.Tokens[index].CollectionID);
                     foreach (var item in response.Tokens)
@@ -322,9 +323,10 @@ namespace ChainSafe.Gaming.Collection
         /// </summary>
         private void CloseSelectedCollection()
         {
-            ResetProjectCollectionsPrefabsDisplay();
             ResetCollectionItemPrefabsDisplay();
+            ResetProjectCollectionsPrefabsDisplay();
             GetProjectCollections();
+            EventManagerMarketplace.RaiseToggleProcessingMenu();
         }
 
         /// <summary>
