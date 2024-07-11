@@ -10,19 +10,19 @@ using UnityEngine.UI;
 /// <summary>
 /// Login using HyperPlay desktop client.
 /// </summary>
-public class HyperPlayLoginProvider : ConnectionHandler, IWeb3BuilderServiceAdapter
+public class HyperPlayLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
 {
     [SerializeField] private Button loginButton;
     [SerializeField] private Toggle rememberMeToggle;
 
     private bool _storedSessionAvailable;
-    
+
     protected override async void Initialize()
     {
         base.Initialize();
 
         _storedSessionAvailable = false;
-        
+
         await using (var lightWeb3 = await HyperPlayWeb3.BuildLightweightWeb3(new HyperPlayConfig()))
         {
             var data = lightWeb3.ServiceProvider.GetService<IHyperPlayData>();
@@ -33,8 +33,8 @@ public class HyperPlayLoginProvider : ConnectionHandler, IWeb3BuilderServiceAdap
         if (_storedSessionAvailable) // auto-login
         {
             Debug.Log("Proceeding with auto-login.");
-            
-            await TryConnect();
+
+            await TryLogin();
         }
 
         loginButton.onClick.AddListener(OnLoginClicked);
@@ -56,9 +56,9 @@ public class HyperPlayLoginProvider : ConnectionHandler, IWeb3BuilderServiceAdap
             services.UseWalletSigner().UseWalletTransactionExecutor();
         });
     }
-    
+
     private async void OnLoginClicked()
     {
-        await TryConnect();
+        await TryLogin();
     }
 }

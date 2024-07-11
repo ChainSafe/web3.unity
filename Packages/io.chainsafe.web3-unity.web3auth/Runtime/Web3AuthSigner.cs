@@ -11,7 +11,7 @@ public class Web3AuthSigner : InProcessSigner, ILifecycleParticipant, ILogoutHan
 {
     private readonly IWalletProvider _walletProvider;
     
-    public Web3AuthSigner(AccountProvider accountProvider, IWalletProvider walletProvider) : base(accountProvider)
+    public Web3AuthSigner(IAccountProvider accountProvider, IWalletProvider walletProvider) : base(accountProvider)
     {
         _walletProvider = walletProvider;
     }

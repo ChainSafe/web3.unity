@@ -37,9 +37,7 @@ public static class Web3AuthWalletExtensions
         collection.AssertServiceNotBound<ISigner>();
         collection.AssertServiceNotBound<ITransactionExecutor>();
 
-        collection.AddSingleton<IWalletProvider, Web3AuthProvider>();
-        
-        collection.AddSingleton( new AccountProvider());
+        collection.AddSingleton<IWalletProvider, IAccountProvider, Web3AuthProvider>();
         
         collection.AddSingleton<ISigner, ILifecycleParticipant, ILogoutHandler, Web3AuthSigner>();
         

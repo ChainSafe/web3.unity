@@ -19,7 +19,7 @@ using Network = Web3Auth.Network;
 /// <summary>
 /// Login using Web3Auth.
 /// </summary>
-public class Web3AuthLoginProvider : ConnectionHandler, IWeb3BuilderServiceAdapter
+public class Web3AuthLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
 {
     /// <summary>
     /// Struct used for pairing login buttons to Web3 auth providers.
@@ -55,8 +55,8 @@ public class Web3AuthLoginProvider : ConnectionHandler, IWeb3BuilderServiceAdapt
     [SerializeField] private Color borderButtonColour;
     private Provider? selectedProvider;
     private bool rememberMe;
-    
-    #if UNITY_WEBGL && !UNITY_EDITOR
+
+#if UNITY_WEBGL && !UNITY_EDITOR
     [DllImport("__Internal")]
     private static extern void InitWeb3Auth(string clientId, string chainId, string rpcTarget, string displayName, string blockExplorerUrl, string ticker, string tickerName, string network);
     [DllImport("__Internal")]
@@ -65,9 +65,9 @@ public class Web3AuthLoginProvider : ConnectionHandler, IWeb3BuilderServiceAdapt
     private static extern void SetLoginCallback(Action<string> callback);
     
     public static event Action<string> Web3AuthWebGLConnected;
-    #endif
-    
-    
+#endif
+
+
     public void SetRememberMe(bool rememberMe)
     {
         this.rememberMe = rememberMe;
@@ -78,31 +78,31 @@ public class Web3AuthLoginProvider : ConnectionHandler, IWeb3BuilderServiceAdapt
         base.Initialize();
         providerAndButtonPairs.ForEach(p =>
             p.Button.onClick.AddListener(delegate { LoginWithWeb3Auth(p.Provider); }));
-        #if !UNITY_EDITOR && UNITY_WEBGL
+#if !UNITY_EDITOR && UNITY_WEBGL
         Web3AuthWebGLConnected += Web3AuthSet;
         var projectSettings = ProjectConfigUtilities.Load();
         SetLoginCallback(Web3AuthConnected);
         //1155 is a decimal number, we need to convert it to an integer
         InitWeb3Auth(clientId, new HexBigInteger(BigInteger.Parse(projectSettings.ChainId)).HexValue, 
         projectSettings.Rpc, projectSettings.Network, "", projectSettings.Symbol, "", network.ToString().ToLower());
-        #else  
+#else
         if (!string.IsNullOrEmpty(KeyStoreManagerUtils.getPreferencesData(KeyStoreManagerUtils.SESSION_ID)))
         {
             rememberMe = true;
-            await TryConnect();
+            await TryLogin();
             Debug.Log("Restoring existing Web3Auth session (Remember Me");
         }
-        #endif
+#endif
     }
 #if !UNITY_EDITOR && UNITY_WEBGL
     private async void Web3AuthSet(string sessionId)
     {
         Web3AuthWebGLConnected -= Web3AuthSet;
         KeyStoreManagerUtils.savePreferenceData(KeyStoreManagerUtils.SESSION_ID, sessionId);
-        await TryConnect();
+        await TryLogin();
     }
 #endif
-    
+
 #if !UNITY_EDITOR && UNITY_WEBGL
     [MonoPInvokeCallback(typeof(Action))]
     private static void Web3AuthConnected(string sessionId)
@@ -117,15 +117,22 @@ public class Web3AuthLoginProvider : ConnectionHandler, IWeb3BuilderServiceAdapt
         Web3AuthLogin(provider.ToString().ToLower(), rememberMe);
 #else
         selectedProvider = provider;
-        await TryConnect();
+        await TryLogin();
         LogAnalytics(provider);
     }
-    
-    public override async Task TryConnect()
+
+    public override async Task TryLogin()
     {
-        await base.TryConnect();
-        
-        EnableWalletGUI();
+        try
+        {
+            await (this as ILoginProvider).Login();
+            EnableWalletGUI();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Login failed, please try again\n{e.Message} (see console for more details)");
+            throw;
+        }
     }
 
     private void EnableWalletGUI()
@@ -160,7 +167,7 @@ public class Web3AuthLoginProvider : ConnectionHandler, IWeb3BuilderServiceAdapt
 #endif
 
     }
-    
+
     public Web3Builder ConfigureServices(Web3Builder web3Builder)
     {
         return web3Builder.Configure(services =>
