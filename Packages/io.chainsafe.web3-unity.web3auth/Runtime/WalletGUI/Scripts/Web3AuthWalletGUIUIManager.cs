@@ -50,6 +50,15 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        if (Web3Accessor.Web3 == null)
+        {
+            Debug.LogError("Web3 instance not set.");
+            
+            gameObject.SetActive(false);
+            
+            return;
+        }
+        
         InitializeButtons();
         originalOrientation = Screen.orientation;
         walletAddressText.text = Web3Accessor.Web3.Signer.PublicAddress;
