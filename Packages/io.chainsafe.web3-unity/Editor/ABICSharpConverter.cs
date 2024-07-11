@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Nethereum.ABI.ABIDeserialisation;
 using Nethereum.ABI.Model;
 using UnityEditor;
@@ -50,7 +51,7 @@ public class ABICSharpConverter : EditorWindow
         }
 
         EditorGUI.BeginChangeCheck();
-        _abi = EditorGUILayout.TextField("ABI", _abi);
+        _abi = EditorGUILayout.TextField("ABI", _abi, EditorStyles.textArea, GUILayout.Height(200));
         if (EditorGUI.EndChangeCheck())
             _abiIsValid = IsValidAbi(_abi);
 
@@ -77,11 +78,23 @@ public class ABICSharpConverter : EditorWindow
             text = Regex.Replace(text, @"\s*\{EVENTS\}", "\n\n" + ParseEvents());
             text = Regex.Replace(text, @"\s*\{EVENT_METHODS\}", "\n\n" + ParseEventMethods());
             text = Regex.Replace(text, @"\s*\{METHODS\}", "\n\n" + ParseMethods());
+            text = Regex.Replace(text, @"\s*\{EVENT_SUBSCRIPTION\}", "\n\n" + ParseEventSubscription());
+            text = Regex.Replace(text, @"\s*\{EVENT_UNSUBSCRIPTION\}", "\n\n" + ParseEventUsubscription());
             var path = AssetDatabase.GetAssetPath(_targetFolder);
             var fullPath = $"{path}/{_contractName}.cs";
             System.IO.File.WriteAllText(fullPath, text);
             AssetDatabase.Refresh();
         }
+    }
+
+    private string ParseEventSubscription()
+    {
+        return "\t\t\treturn default;";
+    }
+
+    private string ParseEventUsubscription()
+    {
+        return "\t\t\treturn default;";
     }
 
     private string ParseMethods()
@@ -96,13 +109,14 @@ public class ABICSharpConverter : EditorWindow
             if (!functionABI.Constant)
                 functionWithTransactionReceipt = PopulateMethod(functionABI, functionTemplateBase, true);
             result.Append(functionNoTransactionReceipt);
-            result.Append("\n\n");
+            result.Append("\n");
             result.Append(functionWithTransactionReceipt);
             result.Append("\n\n");
         }
 
         return result.ToString();
     }
+
 
     private static string PopulateMethod(FunctionABI functionABI, string functionTemplateBase,
         bool useTransactionReceipt)

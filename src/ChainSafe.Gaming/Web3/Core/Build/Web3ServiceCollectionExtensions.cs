@@ -45,7 +45,8 @@ namespace ChainSafe.Gaming.Web3.Build
         /// <typeparam name="TInterface2">The second contract type.</typeparam>
         /// <typeparam name="TImplementation">The implementation type.</typeparam>
         /// <param name="serviceCollection">The Web3 service collection.</param>
-        public static void AddSingleton<TInterface1, TInterface2, TImplementation>(this IWeb3ServiceCollection serviceCollection)
+        /// <returns>Modified Web3 Service Collection.</returns>
+        public static IWeb3ServiceCollection AddSingleton<TInterface1, TInterface2, TImplementation>(this IWeb3ServiceCollection serviceCollection)
             where TInterface1 : class
             where TInterface2 : class
             where TImplementation : class, TInterface1, TInterface2
@@ -60,6 +61,8 @@ namespace ChainSafe.Gaming.Web3.Build
             serviceCollection.AddSingleton<TImplementation>();
             serviceCollection.AddSingleton<TInterface1, TImplementation>(sp => sp.GetRequiredService<TImplementation>());
             serviceCollection.AddSingleton<TInterface2, TImplementation>(sp => sp.GetRequiredService<TImplementation>());
+
+            return serviceCollection;
         }
 
         /// <summary>
@@ -70,7 +73,8 @@ namespace ChainSafe.Gaming.Web3.Build
         /// <typeparam name="TInterface1">The first contract type.</typeparam>
         /// <typeparam name="TInterface2">The second contract type.</typeparam>
         /// <typeparam name="TImplementation">The implementation type.</typeparam>
-        public static void AddSingleton<TInterface1, TInterface2, TImplementation>(this IWeb3ServiceCollection serviceCollection, Func<IServiceProvider, TImplementation> implementationFactory)
+        /// <returns> Web3 Service Collection.</returns>
+        public static IWeb3ServiceCollection AddSingleton<TInterface1, TInterface2, TImplementation>(this IWeb3ServiceCollection serviceCollection, Func<IServiceProvider, TImplementation> implementationFactory)
             where TInterface1 : class
             where TInterface2 : class
             where TImplementation : class, TInterface1, TInterface2
@@ -78,6 +82,8 @@ namespace ChainSafe.Gaming.Web3.Build
             serviceCollection.AddSingleton(implementationFactory);
             serviceCollection.AddSingleton<TInterface1, TImplementation>(sp => sp.GetRequiredService<TImplementation>());
             serviceCollection.AddSingleton<TInterface2, TImplementation>(sp => sp.GetRequiredService<TImplementation>());
+
+            return serviceCollection;
         }
 
         /// <summary>
@@ -88,7 +94,8 @@ namespace ChainSafe.Gaming.Web3.Build
         /// <typeparam name="TInterface2">The second contract type.</typeparam>
         /// <typeparam name="TInterface3">The third contract type.</typeparam>
         /// <typeparam name="TImplementation">The implementation type.</typeparam>
-        public static void AddSingleton<TInterface1, TInterface2, TInterface3, TImplementation>(this IWeb3ServiceCollection serviceCollection)
+        /// <returns> Web3 Service Collection.</returns>
+        public static IWeb3ServiceCollection AddSingleton<TInterface1, TInterface2, TInterface3, TImplementation>(this IWeb3ServiceCollection serviceCollection)
             where TInterface1 : class
             where TInterface2 : class
             where TInterface3 : class
@@ -98,6 +105,8 @@ namespace ChainSafe.Gaming.Web3.Build
             serviceCollection.AddSingleton<TInterface1, TImplementation>(sp => sp.GetRequiredService<TImplementation>());
             serviceCollection.AddSingleton<TInterface2, TImplementation>(sp => sp.GetRequiredService<TImplementation>());
             serviceCollection.AddSingleton<TInterface3, TImplementation>(sp => sp.GetRequiredService<TImplementation>());
+
+            return serviceCollection;
         }
 
         /// <summary>
@@ -109,7 +118,8 @@ namespace ChainSafe.Gaming.Web3.Build
         /// <typeparam name="TInterface2">The second contract type.</typeparam>
         /// <typeparam name="TInterface3">The third contract type.</typeparam>
         /// <typeparam name="TImplementation">The implementation type.</typeparam>
-        public static void AddSingleton<TInterface1, TInterface2, TInterface3, TImplementation>(this IWeb3ServiceCollection serviceCollection, Func<IServiceProvider, TImplementation> implementationFactory)
+        /// <returns> Web3 Service Collection.</returns>
+        public static IWeb3ServiceCollection AddSingleton<TInterface1, TInterface2, TInterface3, TImplementation>(this IWeb3ServiceCollection serviceCollection, Func<IServiceProvider, TImplementation> implementationFactory)
             where TInterface1 : class
             where TInterface2 : class
             where TInterface3 : class
@@ -119,6 +129,8 @@ namespace ChainSafe.Gaming.Web3.Build
             serviceCollection.AddSingleton<TInterface1, TImplementation>(sp => sp.GetRequiredService<TImplementation>());
             serviceCollection.AddSingleton<TInterface2, TImplementation>(sp => sp.GetRequiredService<TImplementation>());
             serviceCollection.AddSingleton<TInterface3, TImplementation>(sp => sp.GetRequiredService<TImplementation>());
+
+            return serviceCollection;
         }
     }
 }

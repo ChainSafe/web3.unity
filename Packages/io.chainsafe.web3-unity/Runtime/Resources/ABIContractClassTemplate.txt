@@ -4,6 +4,8 @@ using ChainSafe.Gaming.Evm.Transactions;
 using Nethereum.Hex.HexTypes;
 using ChainSafe.Gaming.Evm.Contracts;
 using System.Numerics;
+using Nethereum.RPC.Reactive.Eth.Subscriptions;
+
 
 namespace ChainSafe.Gaming.Evm.Contracts.Custom
 {
@@ -18,13 +20,33 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
 
         public Contract OriginalContract { get; set; }
         
+        public EthLogsObservableSubscription Subscription { get; set; }
+
+        
+        #region Events
         {EVENTS}
+        #endregion
         
+        #region Methods
         {METHODS}
+        #endregion
         
+        #region Event Methods
         {EVENT_METHODS}
         
+        #endregion
+        
         #region Interface Implemented Methods
+        
+        public  ValueTask DisposeAsync()
+        {
+            {EVENT_UNSUBSCRIPTION}
+        }
+        
+        public  ValueTask Init()
+        {
+            {EVENT_SUBSCRIPTION}
+        }
         
         [Obsolete("It's not advisable to use this method. Use the pre-generated methods instead.")]
         public IContract Attach(string address)
