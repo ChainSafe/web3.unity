@@ -25,12 +25,12 @@ namespace ChainSafe.Gaming.UnityPackage.Model
             public string uri { get; set; }
             public Metadata metadata { get; set; }
         }
-        
+
         public class Metadata
         {
             public List<Attribute> attributes { get; set; }
         }
-        
+
         public class Attribute
         {
             public string trait_type { get; set; }

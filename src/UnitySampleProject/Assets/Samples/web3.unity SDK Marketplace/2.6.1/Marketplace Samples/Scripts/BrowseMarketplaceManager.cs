@@ -35,14 +35,14 @@ namespace ChainSafe.Gaming.Marketplace
         private int marketplaceItemDisplayCount = 100;
 
         #endregion
-        
+
 
         #region Properties
-        
+
         private string BearerToken { get; set; }
         private TMP_FontAsset DisplayFont { get; set; }
         private Color SecondaryTextColour { get; set; }
-    
+
         #endregion
 
         #region Methods
@@ -55,7 +55,7 @@ namespace ChainSafe.Gaming.Marketplace
             openSelectMarketplaceOptionButton.onClick.AddListener(OpenSelectMarketplaceOptionMenu);
             marketplaceItemPrefabs = new GameObject[marketplaceItemDisplayCount];
         }
-        
+
         /// <summary>
         /// Populates the marketplace drop down options.
         /// </summary>
@@ -102,7 +102,7 @@ namespace ChainSafe.Gaming.Marketplace
                 AddMarketplaceItemToDisplay(item.id, item.token.token_type, item.price, item.token.uri);
             }
         }
-        
+
         /// <summary>
         /// Adds items to the marketplace display.
         /// </summary>
@@ -130,7 +130,7 @@ namespace ChainSafe.Gaming.Marketplace
             marketplaceObjectNumber++;
             marketplaceScrollRect.horizontalNormalizedPosition = 0;
         }
-        
+
         /// <summary>
         /// Imports texture (can probably be removed later for helper class)
         /// </summary>
@@ -139,7 +139,7 @@ namespace ChainSafe.Gaming.Marketplace
         {
             var metaRequest = UnityWebRequest.Get(uri);
             await metaRequest.SendWebRequest();
-            
+
             if (metaRequest.result != UnityWebRequest.Result.Success)
             {
                 throw new Web3Exception($"Metadata request failure: {metaRequest.error}");
@@ -148,17 +148,17 @@ namespace ChainSafe.Gaming.Marketplace
             var textureUri = IpfsHelper.RollupIpfsUri(metadata.image);
             var textureRequest = UnityWebRequestTexture.GetTexture(textureUri);
             await textureRequest.SendWebRequest();
-            
+
             if (textureRequest.result != UnityWebRequest.Result.Success)
             {
                 throw new Web3Exception($"Texture request failure: {metaRequest.error}");
             }
-            
+
             var texture = ((DownloadHandlerTexture)textureRequest.downloadHandler).texture;
 
             return texture;
         }
-        
+
         /// <summary>
         /// Updates the marketplace display.
         /// </summary>
@@ -183,7 +183,7 @@ namespace ChainSafe.Gaming.Marketplace
                 imageObj.material.mainTexture = image;
             }
         }
-        
+
         /// <summary>
         /// Called when the dropdown value is changed.
         /// </summary>
@@ -192,7 +192,7 @@ namespace ChainSafe.Gaming.Marketplace
         {
             ResetMarketplacePrefabDisplay(index);
         }
-        
+
         /// <summary>
         /// Resets marketplace display by destroying item prefabs.
         /// </summary>
@@ -220,7 +220,7 @@ namespace ChainSafe.Gaming.Marketplace
             browseMarketplaceMenu.SetActive(false);
             selectMarketplaceMenu.SetActive(true);
         }
-        
+
         /// <summary>
         /// Subscribes to events.
         /// </summary>
@@ -229,7 +229,7 @@ namespace ChainSafe.Gaming.Marketplace
             EventManagerMarketplace.ConfigureMarketplaceBrowserManager += OnConfigureMarketPlaceBrowseManager;
             GetMarketplaceOptions();
         }
-        
+
         /// <summary>
         /// Unsubscribes from events.
         /// </summary>
@@ -238,7 +238,7 @@ namespace ChainSafe.Gaming.Marketplace
             EventManagerMarketplace.ConfigureMarketplaceBrowserManager -= OnConfigureMarketPlaceBrowseManager;
             ResetMarketplacePrefabDisplay();
         }
-        
+
         /// <summary>
         /// Configures class properties.
         /// </summary>

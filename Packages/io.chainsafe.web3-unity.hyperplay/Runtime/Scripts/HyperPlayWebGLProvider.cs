@@ -21,7 +21,7 @@ namespace ChainSafe.Gaming.HyperPlay
         private readonly IChainConfig _chainConfig;
         private readonly ChainRegistryProvider _chainRegistryProvider;
         private readonly EthereumWindowController _ethereumController;
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="HyperPlayWebGLProvider"/> class.
         /// </summary>
@@ -39,7 +39,7 @@ namespace ChainSafe.Gaming.HyperPlay
             _httpClient = environment.HttpClient;
             _chainConfig = chainConfig;
             _chainRegistryProvider = chainRegistryProvider;
-            
+
             // Initialize Unity controller.
             _ethereumController = Object.FindObjectOfType<EthereumWindowController>();
 
@@ -60,7 +60,7 @@ namespace ChainSafe.Gaming.HyperPlay
         public override async Task<string> Connect()
         {
             string account = await _ethereumController.Connect(_chainConfig, _chainRegistryProvider);
-            
+
             // Saved account exists.
             if (_data.RememberSession)
             {
@@ -89,7 +89,7 @@ namespace ChainSafe.Gaming.HyperPlay
         public override async Task<T> Request<T>(string method, params object[] parameters)
         {
             var response = await _ethereumController.Request(method, parameters);
-            
+
             return response.Result.ToObject<T>();
         }
     }
