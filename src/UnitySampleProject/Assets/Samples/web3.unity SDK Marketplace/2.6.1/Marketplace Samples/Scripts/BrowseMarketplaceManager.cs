@@ -298,6 +298,7 @@ namespace ChainSafe.Gaming.Marketplace
         {
             ResetProjectMarketplacesPrefabsDisplay(0);
             ResetMarketplaceItemPrefabsDisplay();
+            EventManagerMarketplace.RaiseToggleProcessingMenu();
         }
 
         /// <summary>

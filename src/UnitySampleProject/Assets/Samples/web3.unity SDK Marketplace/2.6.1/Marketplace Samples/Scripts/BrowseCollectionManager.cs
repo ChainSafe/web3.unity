@@ -43,6 +43,12 @@ namespace ChainSafe.Gaming.Collection
         private TMP_FontAsset DisplayFont { get; set; }
         private Color SecondaryTextColour { get; set; }
         
+        private enum CollectionType
+        {
+            ERC721,
+            ERC1155,
+            Unknown
+        }
     
         #endregion
 
@@ -90,9 +96,13 @@ namespace ChainSafe.Gaming.Collection
         {
             var projectResponse = await EvmMarketplace.GetProjectTokens();
             var collectionContract = projectResponse.Tokens[index].CollectionID;
-            switch (collectionType.ToUpper())
+            if (!Enum.TryParse(collectionType, true, out CollectionType collectionTypeEnum))
             {
-                case "ERC721":
+                collectionTypeEnum = CollectionType.Unknown;
+            }
+            switch (collectionTypeEnum)
+            {
+                case CollectionType.ERC721:
                 {
                     var response = await EvmMarketplace.GetCollectionTokens721(projectResponse.Tokens[index].CollectionID);
                     foreach (var item in response.Tokens)
@@ -103,7 +113,7 @@ namespace ChainSafe.Gaming.Collection
 
                     break;
                 }
-                case "ERC1155":
+                case CollectionType.ERC1155:
                 {
                     var response = await EvmMarketplace.GetCollectionTokens1155(projectResponse.Tokens[index].CollectionID);
                     foreach (var item in response.Tokens)
