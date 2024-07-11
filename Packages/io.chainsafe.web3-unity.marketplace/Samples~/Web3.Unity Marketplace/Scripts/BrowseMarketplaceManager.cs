@@ -75,6 +75,7 @@ namespace ChainSafe.Gaming.Marketplace
             {
                 AddMarketplaceToDisplay(marketplace.ContractAddress, marketplace.Name, marketplace.Banner);
             }
+            EventManagerMarketplace.RaiseToggleProcessingMenu();
         }
 
         /// <summary>
@@ -90,6 +91,7 @@ namespace ChainSafe.Gaming.Marketplace
             {
                 AddMarketplaceItemToDisplay(marketplaceContract, item.Id, item.Token.TokenType, item.Price, item.Token.Uri);
             }
+            EventManagerMarketplace.RaiseToggleProcessingMenu();
         }
 
         /// <summary>

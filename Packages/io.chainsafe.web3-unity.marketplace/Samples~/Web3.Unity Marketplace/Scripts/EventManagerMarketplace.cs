@@ -20,6 +20,7 @@ namespace ChainSafe.Gaming.Marketplace
         public static event EventHandler<CollectionCreateConfigEventArgs> ConfigureCollectionCreateManager;
         public static event EventHandler<ListNftToMarketplaceConfigEventArgs> ConfigureListNftToMarketplaceManager;
         public static event EventHandler<ListNftToMarketplaceTxEventArgs> ConfigureListNftToMarketplaceTxManager;
+        public static event Action ToggleProcessingMenu;
         public static event Action ToggleSelectionMenu;
         public static event Action ToggleCollectionsMenu;
         public static event Action ToggleCreateCollectionMenu;
@@ -42,6 +43,14 @@ namespace ChainSafe.Gaming.Marketplace
         #endregion
         
         #region Methods
+
+        /// <summary>
+        /// Invokes ToggleProcessingMenu.
+        /// </summary>
+        public static void RaiseToggleProcessingMenu()
+        {
+            ToggleProcessingMenu.Invoke();
+        }
         
         /// <summary>
         /// Invokes ToggleMarketplacesMenu.
