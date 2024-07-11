@@ -1,101 +1,40 @@
-using System;
-using ChainSafe.Gaming.Web3;
-using TMPro;
 using UnityEngine;
-using EvmMarketplace = Scripts.EVM.Marketplace.Marketplace;
+using UnityEngine.UI;
 
 namespace ChainSafe.Gaming.Marketplace
 {
     /// <summary>
-    /// Manages marketplace creation.
+    /// Manages the marketplace creation GUI.
     /// </summary>
     public class CreateMarketplaceManager : MonoBehaviour
     {
         #region Fields
 
-        [SerializeField] private TMP_InputField nameInput;
-        [SerializeField] private TMP_InputField descriptionInput;
-        [SerializeField] private bool whiteListing;
-        private bool processing;
-        
+        [SerializeField] private GameObject selectMarketplaceMenu;
+        [SerializeField] private GameObject createMarketplaceMenu;
+        [SerializeField] private Button openSelectMarketplaceOptionButton;
+
         #endregion
-        
-        #region Properties
-        
-        private string BearerToken { get; set; }
-    
-        #endregion
-        
+
         #region Methods
-        
+
         /// <summary>
-        /// Uploads marketplace image.
+        /// Initializes objects.
         /// </summary>
-        private void UploadMarketplaceImage()
+        private void Awake()
         {
-            if (processing) return;
-            processing = true;
-            // form won't post with null values here, hacky and could be better.
-            nameInput.text ??= " ";
-            descriptionInput.text ??= " ";
-            CreateMarketplace(nameInput.text, descriptionInput.text, whiteListing);
+            openSelectMarketplaceOptionButton.onClick.AddListener(OpenSelectMarketplaceOptionMenu);
         }
-        
+
         /// <summary>
-        /// Creates a marketplace.
+        /// Opens the select marketplace option menu.
         /// </summary>
-        public async void CreateMarketplace(string marketplaceName, string marketplaceDescription, bool marketplaceWhiteListing)
+        private void OpenSelectMarketplaceOptionMenu()
         {
-            try
-            {
-                var response = await EvmMarketplace.CreateMarketplace(BearerToken, marketplaceName, marketplaceDescription, marketplaceWhiteListing);
-                Debug.Log($"TX: {response.TransactionHash}");
-                EventManagerMarketplace.RaiseCreateMarketplace();
-            }
-            catch (Web3Exception e)
-            {
-                processing = false;
-                Debug.Log($"Creation failed: {e}");
-            }
+            createMarketplaceMenu.SetActive(false);
+            selectMarketplaceMenu.SetActive(true);
         }
-    
-        /// <summary>
-        /// Deletes a marketplace that isn't on chain yet
-        /// </summary>
-        public async void DeleteMarketplace(string marketplaceToDelete)
-        {
-            var response = await EvmMarketplace.DeleteMarketplace(BearerToken,marketplaceToDelete);
-            Debug.Log(response);
-        }
-        
-        /// <summary>
-        /// Subscribes to events.
-        /// </summary>
-        private void OnEnable()
-        {
-            EventManagerMarketplace.UploadMarketplaceImage += UploadMarketplaceImage;
-            EventManagerMarketplace.ConfigureMarketplaceCreateManager += OnConfigureMarketPlaceCreateManager;
-        }
-        
-        /// <summary>
-        /// Unsubscribes from events.
-        /// </summary>
-        private void OnDisable()
-        {
-            EventManagerMarketplace.UploadMarketplaceImage -= UploadMarketplaceImage;
-            EventManagerMarketplace.ConfigureMarketplaceCreateManager -= OnConfigureMarketPlaceCreateManager;
-        }
-        
-        /// <summary>
-        /// Configures class properties.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
-        private void OnConfigureMarketPlaceCreateManager(object sender, EventManagerMarketplace.MarketplaceCreateConfigEventArgs args)
-        {
-            BearerToken = args.BearerToken;
-        }
-        
+
         #endregion
     }
 }

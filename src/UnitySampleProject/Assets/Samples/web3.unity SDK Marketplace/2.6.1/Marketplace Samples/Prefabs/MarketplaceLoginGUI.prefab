@@ -327,7 +327,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 73}
+  m_AnchoredPosition: {x: 0, y: 54}
   m_SizeDelta: {x: 651.7679, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2180320308085323734
@@ -358,7 +358,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: AN AUTH CODE WILL BE SENT TO YOUR EMAIL
+  m_text: AN AUTH CODE WILL BE SENT TO YOU
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -393,7 +393,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 1
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 512
+  m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -461,7 +461,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 73}
+  m_AnchoredPosition: {x: 0, y: 54}
   m_SizeDelta: {x: 651.7679, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2947327711915198662
@@ -492,7 +492,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: YOU SHOULD SEE AN AUTH CODE IN YOUR EMAIL
+  m_text: YOU SHOULD SEE IT IN YOUR EMAIL
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -527,7 +527,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 1
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 512
+  m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -1036,7 +1036,7 @@ GameObject:
   - component: {fileID: 6828341401912270805}
   - component: {fileID: 5223788654180130285}
   m_Layer: 0
-  m_Name: MarketplaceLogin
+  m_Name: MarketplaceLoginGUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1080,7 +1080,7 @@ MonoBehaviour:
   verifyAuthCodeBackButton: {fileID: 1364789102463700846}
   displayFont: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   primaryBackgroundColour: {r: 0, g: 0, b: 0, a: 0.8627451}
-  menuBackgroundColour: {r: 0.05490196, g: 0.05490196, b: 0.05490196, a: 1}
+  menuBackgroundColour: {r: 0.05490196, g: 0.05490196, b: 0.05490196, a: 0}
   primaryTextColour: {r: 0.6745098, g: 1, b: 0.4862745, a: 1}
   secondaryTextColour: {r: 1, g: 1, b: 1, a: 1}
   borderButtonColour: {r: 1, g: 1, b: 1, a: 1}
@@ -1099,6 +1099,7 @@ MonoBehaviour:
   - {fileID: 1686292479457944369}
   - {fileID: 5990508210497694103}
   borderButtonObjects: []
+  test: 1
 --- !u!1 &3905764076522623970
 GameObject:
   m_ObjectHideFlags: 0
@@ -1377,7 +1378,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 40, y: -30}
+  m_AnchoredPosition: {x: 40, y: -36.3}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &1884059744108182795
