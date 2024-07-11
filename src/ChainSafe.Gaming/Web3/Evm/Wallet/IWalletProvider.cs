@@ -19,5 +19,7 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
         /// </summary>
         /// <returns>Awaitable disconnect Task.</returns>
         Task Disconnect();
+
+        Task<T> Request<T>(string method, params object[] parameters);
     }
 }

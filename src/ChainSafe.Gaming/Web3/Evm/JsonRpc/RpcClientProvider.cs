@@ -14,57 +14,45 @@ namespace ChainSafe.Gaming.Evm.Providers
 {
     public class RpcClientProvider : ClientBase, IRpcProvider, ILifecycleParticipant
     {
-        private readonly RpcClientConfig config;
+        private readonly string rpcNodeUrl;
         private readonly Web3Environment environment;
         private readonly ChainRegistryProvider chainRegistryProvider;
         private readonly IChainConfig chainConfig;
 
-        private Network.Network network;
-
         public RpcClientProvider(
-            RpcClientConfig config,
             Web3Environment environment,
             ChainRegistryProvider chainRegistryProvider,
             IChainConfig chainConfig)
         {
             this.chainRegistryProvider = chainRegistryProvider;
             this.environment = environment;
-            this.config = config;
             this.chainConfig = chainConfig;
-
-            if (string.IsNullOrEmpty(this.config.RpcNodeUrl))
-            {
-                this.config.RpcNodeUrl = chainConfig.Rpc;
-            }
+            rpcNodeUrl = chainConfig.Rpc;
         }
 
-        public Network.Network LastKnownNetwork
-        {
-            get => network;
-            protected set => network = value;
-        }
+        public Network.Network LastKnownNetwork { get; private set; }
 
         public async ValueTask WillStartAsync()
         {
-            if (network is null || network.ChainId == 0)
+            if (LastKnownNetwork is null || LastKnownNetwork.ChainId == 0)
             {
                 if (ulong.TryParse(chainConfig.ChainId, out var chainId))
                 {
                     var chain = await chainRegistryProvider.GetChain(chainId);
-                    network = new Network.Network()
+                    LastKnownNetwork = new Network.Network()
                     {
                         ChainId = chainId,
                         Name = chain?.Name,
                     };
                 }
 
-                network = await RefreshNetwork();
+                LastKnownNetwork = await RefreshNetwork();
             }
         }
 
         public ValueTask WillStopAsync() => new(Task.CompletedTask);
 
-        public async Task<Network.Network> DetectNetwork()
+        public async Task<Network.Network> RefreshNetwork()
         {
             // TODO: cache
             var chainIdHexString = await Perform<string>("eth_chainId");
@@ -75,23 +63,15 @@ namespace ChainSafe.Gaming.Evm.Providers
                 throw new Web3Exception("Couldn't detect network");
             }
 
+            if (chainId == LastKnownNetwork.ChainId)
+            {
+                return LastKnownNetwork;
+            }
+
             var chain = await chainRegistryProvider.GetChain(chainId);
             return chain != null
                 ? new Network.Network { Name = chain.Name, ChainId = chainId }
                 : new Network.Network { Name = "Unknown", ChainId = chainId };
-        }
-
-        public async Task<Network.Network> RefreshNetwork()
-        {
-            var currentNetwork = await DetectNetwork();
-
-            if (network != null && network.ChainId == currentNetwork.ChainId)
-            {
-                return network;
-            }
-
-            network = currentNetwork;
-            return network;
         }
 
         public async Task<T> Perform<T>(string method, params object[] parameters)
@@ -142,7 +122,7 @@ namespace ChainSafe.Gaming.Evm.Providers
 
         private async Task<T> SendAsyncInternally<T>(string body)
         {
-            var result = await environment.HttpClient.PostRaw(config.RpcNodeUrl, body, "application/json");
+            var result = await environment.HttpClient.PostRaw(rpcNodeUrl, body, "application/json");
 
             return JsonConvert.DeserializeObject<T>(result.Response);
         }

@@ -1,7 +1,10 @@
 using ChainSafe.Gaming.Evm.Signers;
+using ChainSafe.Gaming.InProcessSigner;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
+using ChainSafe.Gaming.Web3.Core.Logout;
+using ChainSafe.Gaming.Web3.Evm.Wallet;
 using ChainSafe.GamingSdk.Web3Auth;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -34,10 +37,12 @@ public static class Web3AuthWalletExtensions
         collection.AssertServiceNotBound<ISigner>();
         collection.AssertServiceNotBound<ITransactionExecutor>();
 
-        collection.AddSingleton<ISigner, ITransactionExecutor, ILifecycleParticipant, Web3AuthWallet>();
-
-        collection.AddSingleton<IWeb3AuthTransactionHandler, Web3AuthTransactionHandler>();
-
+        collection.AddSingleton<IWalletProvider, IAccountProvider, Web3AuthProvider>();
+        
+        collection.AddSingleton<ISigner, ILifecycleParticipant, ILogoutHandler, Web3AuthSigner>();
+        
+        collection.AddSingleton<ITransactionExecutor, IWeb3AuthTransactionHandler, Web3AuthTransactionExecutor>();
+        
         return collection;
     }
 
