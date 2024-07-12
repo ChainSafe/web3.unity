@@ -64,15 +64,18 @@ namespace Scenes
             try
             {
                 connectModal.ShowLoading();
-                
+
                 await (this as IConnectionHandler).Connect();
             }
             catch (Exception e)
             {
-                connectModal.DisplayError(
-                    $"Connecting failed, please try again\n{e.Message} (see console for more details)");
+                if (!(e is TaskCanceledException))
+                {
+                    connectModal.DisplayError(
+                        $"Connecting failed, please try again\n{e.Message} (see console for more details)");
 
-                throw;
+                    throw;
+                }
             }
             finally
             {
