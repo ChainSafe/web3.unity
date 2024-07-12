@@ -33,7 +33,7 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
 
         public virtual async Task<string> SignMessage(string message)
         {
-            string hash = await walletProvider.Perform<string>(walletConfig.SignMessageRpcMethodName, message, PublicAddress);
+            string hash = await walletProvider.Request<string>(walletConfig.SignMessageRpcMethodName, message, PublicAddress);
 
             return hash.AssertSignatureValid(message, PublicAddress);
         }
@@ -42,7 +42,7 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
         {
             SerializableTypedData<TStructType> typedData = new SerializableTypedData<TStructType>(domain, message);
 
-            string hash = await walletProvider.Perform<string>(walletConfig.SignTypedMessageRpcMethodName, PublicAddress, typedData);
+            string hash = await walletProvider.Request<string>(walletConfig.SignTypedMessageRpcMethodName, PublicAddress, typedData);
 
             return hash.AssertTypedDataSignatureValid(typedData, PublicAddress);
         }

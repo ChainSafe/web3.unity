@@ -24,23 +24,20 @@ namespace ChainSafe.Gaming.Unity.MetaMask
         /// <summary>
         /// Initializes a new instance of the <see cref="MetaMaskProvider"/> class.
         /// </summary>
-        /// <param name="logWriter">Common Logger used for logging messages and errors.</param>
+        /// <param name="environment">Injected <see cref="Web3Environment"/>.</param>
         /// <param name="chainConfig">Injected <see cref="IChainConfig"/>.</param>
-        /// <param name="projectConfig">Injected <see cref="IProjectConfig"/>.</param>
         /// <param name="chainRegistryProvider">Injected <see cref="ChainRegistryProvider"/>.</param>
-        /// <param name="analyticsClient">Injected <see cref="IAnalyticsClient"/>.</param>
-        public MetaMaskProvider(ILogWriter logWriter, IAnalyticsClient analyticsClient, IChainConfig chainConfig, IProjectConfig projectConfig, ChainRegistryProvider chainRegistryProvider)
-            : base(
-            chainRegistryProvider: chainRegistryProvider)
+        public MetaMaskProvider(Web3Environment environment, IChainConfig chainConfig, ChainRegistryProvider chainRegistryProvider)
+            : base(environment, chainRegistryProvider, chainConfig)
         {
-            this.logWriter = logWriter;
+            logWriter = environment.LogWriter;
             this.chainConfig = chainConfig;
-            this.analyticsClient = analyticsClient;
+            analyticsClient = environment.AnalyticsClient;
             this.chainRegistryProvider = chainRegistryProvider;
 
             if (Application.isEditor || Application.platform != RuntimePlatform.WebGLPlayer)
             {
-                this.logWriter.LogError("You need to build to WebGL platform to run Nethereum.Metamask.Unity");
+                logWriter.LogError("You need to build to WebGL platform to run Nethereum.Metamask.Unity");
 
                 return;
             }
@@ -65,7 +62,7 @@ namespace ChainSafe.Gaming.Unity.MetaMask
             return Task.CompletedTask;
         }
 
-        public override async Task<T> Perform<T>(string method, params object[] parameters)
+        public override async Task<T> Request<T>(string method, params object[] parameters)
         {
             var response = await metaMaskController.Request(method, parameters);
 

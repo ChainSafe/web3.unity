@@ -17,6 +17,7 @@ namespace ChainSafe.Gaming.HyperPlay
         private readonly IHyperPlayConfig _config;
         private readonly IHyperPlayData _data;
         private readonly DataStorage _dataStorage;
+        private readonly IHttpClient _httpClient;
         private readonly IChainConfig _chainConfig;
         private readonly ChainRegistryProvider _chainRegistryProvider;
         private readonly EthereumWindowController _ethereumController;
@@ -27,14 +28,15 @@ namespace ChainSafe.Gaming.HyperPlay
         /// <param name="config">Injected <see cref="HyperPlayConfig"/>.</param>
         /// <param name="data">Injected <see cref="IHyperPlayData"/>.</param>
         /// <param name="dataStorage">Injected <see cref="DataStorage"/>.</param>
-        /// <param name="httpClient">HttpClient to make requests.</param>
+        /// <param name="environment">Injected <see cref="Web3Environment"/>.</param>
         /// <param name="chainConfig">ChainConfig to fetch chain data.</param>
         /// <param name="chainRegistryProvider">Injected <see cref="ChainRegistryProvider"/>.</param>
-        public HyperPlayWebGLProvider(IHyperPlayConfig config, IHyperPlayData data, DataStorage dataStorage, IHttpClient httpClient, IChainConfig chainConfig, ChainRegistryProvider chainRegistryProvider) : base(config, data, dataStorage, httpClient, chainConfig, chainRegistryProvider)
+        public HyperPlayWebGLProvider(IHyperPlayConfig config, IHyperPlayData data, DataStorage dataStorage, Web3Environment environment, IChainConfig chainConfig, ChainRegistryProvider chainRegistryProvider) : base(config, data, dataStorage, environment, chainConfig, chainRegistryProvider)
         {
             _config = config;
             _data = data;
             _dataStorage = dataStorage;
+            _httpClient = environment.HttpClient;
             _chainConfig = chainConfig;
             _chainRegistryProvider = chainRegistryProvider;
 
@@ -84,7 +86,7 @@ namespace ChainSafe.Gaming.HyperPlay
         /// <param name="parameters">RPC request parameters.</param>
         /// <typeparam name="T">RPC request response type.</typeparam>
         /// <returns>RPC request Response.</returns>
-        public override async Task<T> Perform<T>(string method, params object[] parameters)
+        public override async Task<T> Request<T>(string method, params object[] parameters)
         {
             var response = await _ethereumController.Request(method, parameters);
 

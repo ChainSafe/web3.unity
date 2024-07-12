@@ -3,22 +3,31 @@ using ChainSafe.Gaming.Evm.Transactions;
 
 namespace ChainSafe.GamingSdk.Web3Auth
 {
+    /// <summary>
+    /// Handles web3Auth Transaction requests, approvals, declines and confirmations.
+    /// </summary>
     public interface IWeb3AuthTransactionHandler
     {
-        public event Action<TransactionRequested> OnTransactionRequested;
+        /// <summary>
+        /// Invokes when transaction is requested.
+        /// </summary>
+        public event Action<TransactionRequest> OnTransactionRequested;
 
-        public event Action<TransactionConfirmed> OnTransactionConfirmed;
+        /// <summary>
+        /// Invokes when transaction is confirmed on block.
+        /// </summary>
+        public event Action<TransactionResponse> OnTransactionConfirmed;
 
-        public event Action<TransactionApproved> OnTransactionApproved;
+        /// <summary>
+        /// Transaction got approved.
+        /// </summary>
+        /// <param name="transactionId">Transaction pool Id of Transaction that was approved.</param>
+        public void TransactionApproved(string transactionId);
 
-        public event Action<TransactionDeclined> OnTransactionDeclined;
-
-        public void RequestTransaction(TransactionRequested transactionRequested);
-
-        public void ConfirmTransaction(TransactionConfirmed transactionConfirmed);
-
-        public void ApproveTransaction(TransactionApproved transactionApproved);
-
-        public void DeclineTransaction(TransactionDeclined transactionDeclined);
+        /// <summary>
+        /// Transaction got declined.
+        /// </summary>
+        /// <param name="transactionId">Transaction pool Id of Transaction that was declined.</param>
+        public void TransactionDeclined(string transactionId);
     }
 }
