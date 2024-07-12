@@ -182,13 +182,13 @@ public class Web3AuthLoginProvider : ConnectionHandler, IWeb3BuilderServiceAdapt
                 RememberMe = rememberMe
             };
 
-            if (selectedProvider.HasValue)
-            {
-                web3AuthConfig.LoginParams = new LoginParams()
-                {
-                    loginProvider = selectedProvider.Value
-                };
-            }
+            // if (selectedProvider.HasValue)
+            // {
+            //     web3AuthConfig.LoginParams = new LoginParams()
+            //     {
+            //         loginProvider = selectedProvider.Value
+            //     };
+            // }
 
             services.UseWeb3AuthWallet(web3AuthConfig);
         });

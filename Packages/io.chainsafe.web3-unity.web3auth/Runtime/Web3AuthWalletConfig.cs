@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using TWeb3Auth = Web3Auth;
 
 namespace ChainSafe.GamingSdk.Web3Auth
@@ -13,10 +15,11 @@ namespace ChainSafe.GamingSdk.Web3Auth
         public Web3AuthOptions Web3AuthOptions { get; set; }
 
         /// <summary>
-        /// Gets or sets the login parameters for authenticating with the Web3Auth instance. These parameters
-        /// may include authentication credentials or other required data.
+        /// Login Provider to use when connecting the wallet, like Google, facebook etc...
         /// </summary>
-        public LoginParams LoginParams { get; set; }
+        public Task<Provider> ProviderTask { get; set; }
+        
+        public CancellationToken CancellationToken { get; set; }
 
         public bool RememberMe { get; set; }
     }
