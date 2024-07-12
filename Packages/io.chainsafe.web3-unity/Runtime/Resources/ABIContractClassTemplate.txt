@@ -26,6 +26,8 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
         public Contract OriginalContract { get; set; }
         
         public string WebSocketUrl { get; set; }
+        
+        public bool Subscribed { get; set; }
 
         private StreamingWebSocketClient _webSocketClient;
         
@@ -42,22 +44,30 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
         
         public async ValueTask DisposeAsync()
         {
+            if(string.IsNullOrEmpty(WebSocketUrl))
+                return;
+            if(!Subscribed)
+                return;
+            Subscribed = false;
             {EVENT_UNSUBSCRIPTION}
             _webSocketClient?.Dispose();
         }
         
         public async ValueTask Init()
         {
-            if(!string.IsNullOrEmpty(WebSocketUrl))
-            {
-                _webSocketClient = new StreamingWebSocketClient(WebSocketUrl);
-                await _webSocketClient.StartAsync();
-            }
-            else
+            if(Subscribed)
+                return;
+                
+            if(string.IsNullOrEmpty(WebSocketUrl))
             {
                 Debug.LogWarning($"WebSocketUrl is not set for this class. Event Subscriptions will not work.");
                 return;
             }
+           
+            _webSocketClient ??= new StreamingWebSocketClient(WebSocketUrl);
+            await _webSocketClient.StartAsync();
+            Subscribed = true;
+            
             {EVENT_SUBSCRIPTION}
         }
         

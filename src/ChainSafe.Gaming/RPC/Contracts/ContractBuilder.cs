@@ -94,6 +94,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
         {
             if (CustomContracts.TryGetValue(address, out var value))
             {
+                await value.Init();
                 return (T)value;
             }
 

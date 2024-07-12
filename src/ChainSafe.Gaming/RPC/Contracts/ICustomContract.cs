@@ -13,6 +13,8 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
         public string WebSocketUrl { get; set; }
 
+        public bool Subscribed { get; set; }
+
         public ValueTask Init();
     }
 }
