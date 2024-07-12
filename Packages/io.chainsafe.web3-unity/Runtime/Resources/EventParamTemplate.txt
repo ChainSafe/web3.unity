@@ -1,0 +1,2 @@
+        [Parameter("{EVENT_TRUE_TYPE}", "{EVENT_TRUE_NAME}", {PARAM_ORDER}, {PARAM_INDEXED})]
+        public virtual {EVENT_CSHARP_TYPE} {EVENT_CSHARP_NAME} { get; set; }

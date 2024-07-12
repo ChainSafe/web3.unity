@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.WebSockets;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
@@ -10,8 +9,6 @@ using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using ChainSafe.Gaming.Web3.Environment;
-using Nethereum.JsonRpc.WebSocketStreamingClient;
-using Nethereum.RPC.Reactive.Eth.Subscriptions;
 
 namespace ChainSafe.Gaming.Evm.Contracts
 {
@@ -24,7 +21,6 @@ namespace ChainSafe.Gaming.Evm.Contracts
         private readonly IAnalyticsClient analyticsClient; // Added analytics client
         private readonly IChainConfig chainConfig;
         private readonly ILogWriter logWriter;
-        private readonly EthLogsObservableSubscription observableSubscription;
 
         public ContractBuilder(IRpcProvider rpcProvider, IAnalyticsClient analyticsClient, ILogWriter logWriter, IChainConfig chainConfig)
             : this(new(), rpcProvider, null, null, analyticsClient, logWriter, chainConfig )
@@ -65,14 +61,6 @@ namespace ChainSafe.Gaming.Evm.Contracts
             this.logWriter = logWriter;
             BasicContracts = new Dictionary<string, Contract>();
             CustomContracts = new Dictionary<string, ICustomContract>();
-            if(chainConfig.Ws != null)
-            {
-                observableSubscription = new EthLogsObservableSubscription(new StreamingWebSocketClient(chainConfig.Ws));
-            }
-            else
-            {
-                logWriter.Log("This chain doesn't have a websocket endpoint configured. Subscribing to blockchain events will not be available in this session.");
-            }
         }
 
         public Dictionary<string, Contract> BasicContracts { get; }
@@ -115,7 +103,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
             };
 
             contract.OriginalContract = Build(contract.ABI, contract.ContractAddress);
-            contract.Subscription = observableSubscription;
+            contract.WebSocketUrl = chainConfig.Ws;
 
             CustomContracts.Add(contract.ContractAddress, contract);
 

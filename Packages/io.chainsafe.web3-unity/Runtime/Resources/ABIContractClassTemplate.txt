@@ -5,6 +5,11 @@ using Nethereum.Hex.HexTypes;
 using ChainSafe.Gaming.Evm.Contracts;
 using System.Numerics;
 using Nethereum.RPC.Reactive.Eth.Subscriptions;
+using Nethereum.JsonRpc.WebSocketStreamingClient;
+using Nethereum.ABI.FunctionEncoding.Attributes;
+using Nethereum.Contracts;
+using UnityEngine;
+
 
 
 namespace ChainSafe.Gaming.Evm.Contracts.Custom
@@ -20,31 +25,39 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
 
         public Contract OriginalContract { get; set; }
         
-        public EthLogsObservableSubscription Subscription { get; set; }
+        public string WebSocketUrl { get; set; }
 
-        
-        #region Events
-        {EVENTS}
-        #endregion
+        private StreamingWebSocketClient _webSocketClient;
         
         #region Methods
         {METHODS}
         #endregion
         
-        #region Event Methods
-        {EVENT_METHODS}
         
+        #region Event Classes
+        {EVENT_CLASSES}
         #endregion
         
         #region Interface Implemented Methods
         
-        public  ValueTask DisposeAsync()
+        public async ValueTask DisposeAsync()
         {
             {EVENT_UNSUBSCRIPTION}
+            _webSocketClient?.Dispose();
         }
         
-        public  ValueTask Init()
+        public async ValueTask Init()
         {
+            if(!string.IsNullOrEmpty(WebSocketUrl))
+            {
+                _webSocketClient = new StreamingWebSocketClient(WebSocketUrl);
+                await _webSocketClient.StartAsync();
+            }
+            else
+            {
+                Debug.LogWarning($"WebSocketUrl is not set for this class. Event Subscriptions will not work.");
+                return;
+            }
             {EVENT_SUBSCRIPTION}
         }
         

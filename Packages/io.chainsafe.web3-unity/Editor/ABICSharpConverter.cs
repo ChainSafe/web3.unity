@@ -75,11 +75,10 @@ public class ABICSharpConverter : EditorWindow
             var minifiedJson = JsonDocument.Parse(_abi).RootElement.GetRawText();
             var escapedJson = minifiedJson.Replace("\"", "\\\"");
             text = text.Replace("{CONTRACT_ABI}", escapedJson);
-            text = Regex.Replace(text, @"\s*\{EVENTS\}", "\n\n" + ParseEvents());
-            text = Regex.Replace(text, @"\s*\{EVENT_METHODS\}", "\n\n" + ParseEventMethods());
+            text = Regex.Replace(text, @"\s*\{EVENT_CLASSES\}", "\n\n" + ParseEventClasses());
             text = Regex.Replace(text, @"\s*\{METHODS\}", "\n\n" + ParseMethods());
             text = Regex.Replace(text, @"\s*\{EVENT_SUBSCRIPTION\}", "\n\n" + ParseEventSubscription());
-            text = Regex.Replace(text, @"\s*\{EVENT_UNSUBSCRIPTION\}", "\n\n" + ParseEventUsubscription());
+            text = Regex.Replace(text, @"\s*\{EVENT_UNSUBSCRIPTION\}", "\n\n" + ParseEventUnsubscription());
             var path = AssetDatabase.GetAssetPath(_targetFolder);
             var fullPath = $"{path}/{_contractName}.cs";
             System.IO.File.WriteAllText(fullPath, text);
@@ -87,15 +86,6 @@ public class ABICSharpConverter : EditorWindow
         }
     }
 
-    private string ParseEventSubscription()
-    {
-        return "\t\t\treturn default;";
-    }
-
-    private string ParseEventUsubscription()
-    {
-        return "\t\t\treturn default;";
-    }
 
     private string ParseMethods()
     {
@@ -230,15 +220,77 @@ public class ABICSharpConverter : EditorWindow
                 useTransactionReceipt ? "return response.receipt;" : "");
     }
 
-
-    private string ParseEventMethods()
+    private string ParseEventSubscription()
     {
-        return string.Empty;
+        var sb = new StringBuilder();
+
+        foreach (var eventABI in _contractABI.Events)
+        {
+            var varName = eventABI.Name.RemoveFirstUnderline().Capitalize();
+            sb.Append(
+                $"\t\t\tvar filter{varName}Event = Event<{varName}EventDTO>.GetEventABI().CreateFilterInput();\n");
+            var eventSubscription = new StringBuilder(Resources.Load<TextAsset>("SubscriptionTemplate").text);
+            eventSubscription.Replace("{ETH_LOG_CLIENT_NAME}", $"event{varName}");
+            eventSubscription.Replace("{FILTER}", $"filter{varName}Event");
+            eventSubscription.Replace("{CLASS_DTO_NAME}", $"{varName}EventDTO");
+            eventSubscription.Replace("{EVENT_NAME}", $"On{varName}");
+            sb.Append(eventSubscription);
+            sb.Append("\n");
+        }
+
+        return sb.ToString();
     }
 
-    private string ParseEvents()
+    private string ParseEventUnsubscription()
     {
-        return string.Empty;
+        var sb = new StringBuilder();
+
+        foreach (var eventABI in _contractABI.Events)
+        {
+            var varName = eventABI.Name.RemoveFirstUnderline().Capitalize();
+            sb.Append($"\t\t\tawait event{varName}.UnsubscribeAsync();\n");
+            sb.Append($"\t\t\tOn{varName} = null;\n");
+        }
+
+        return sb.ToString();
+    }
+
+    private string ParseEventClasses()
+    {
+        var sb = new StringBuilder();
+        var eventTemplateBase = Resources.Load<TextAsset>("EventTemplate").text;
+        var eventParamTemplate = Resources.Load<TextAsset>("EventParamTemplate").text;
+
+        foreach (var eventABI in _contractABI.Events)
+        {
+            var eventStringBuilder = new StringBuilder(eventTemplateBase);
+            eventStringBuilder.Replace("{EVENT_NAME}", eventABI.Name);
+            eventStringBuilder.Replace("{EVENT_NAME_CSHARP}", eventABI.Name.RemoveFirstUnderline().Capitalize());
+            var eventParams = new StringBuilder();
+            var count = 0;
+            foreach (var param in eventABI.InputParameters)
+            {
+                var eventParamStringBuilder = new StringBuilder(eventParamTemplate);
+                eventParamStringBuilder.Replace("{EVENT_TRUE_TYPE}", param.Type);
+                eventParamStringBuilder.Replace("{EVENT_TRUE_NAME}", param.Name);
+                eventParamStringBuilder.Replace("{EVENT_CSHARP_TYPE}", param.Type.ToCSharpType());
+                eventParamStringBuilder.Replace("{EVENT_CSHARP_NAME}", param.Name.RemoveFirstUnderline().Capitalize());
+                eventParamStringBuilder.Replace("{PARAM_ORDER}", count++.ToString());
+                eventParamStringBuilder.Replace("{PARAM_INDEXED}", param.Indexed.ToString().ToLowerInvariant());
+                eventParams.Append(eventParamStringBuilder);
+                eventParams.Append("\n");
+            }
+
+            eventStringBuilder.Replace("{EVENT_PARAMS}", eventParams.ToString());
+            sb.Append(eventStringBuilder);
+            sb.Append("\n\n");
+            sb.Replace("{EVENT_LOG_SUBSCRIPTION}",
+                $"EthLogsObservableSubscription event{eventABI.Name.RemoveFirstUnderline().Capitalize()};");
+            sb.Replace("{EVENT_ACTION_SUBSCRIPTION}",
+                $"public event Action<{eventABI.Name.RemoveFirstUnderline().Capitalize()}EventDTO> On{eventABI.Name.RemoveFirstUnderline().Capitalize()};");
+        }
+
+        return sb.ToString();
     }
 
     private bool IsValidAbi(string abi)
