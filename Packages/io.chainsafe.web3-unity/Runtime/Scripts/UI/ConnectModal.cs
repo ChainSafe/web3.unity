@@ -39,11 +39,6 @@ namespace ChainSafe.Gaming
             loadingOverlay.gameObject.SetActive(false);
         }
 
-        public ConnectionProvider AddProvider(ConnectionProvider provider)
-        {
-            return Instantiate(provider, providerContainer);
-        }
-        
         private void Close()
         {
             gameObject.SetActive(false);
