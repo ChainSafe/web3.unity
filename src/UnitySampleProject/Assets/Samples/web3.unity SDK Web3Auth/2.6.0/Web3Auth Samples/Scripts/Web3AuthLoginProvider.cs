@@ -56,16 +56,16 @@ public class Web3AuthLoginProvider : ConnectionHandler, IWeb3BuilderServiceAdapt
     private Provider? selectedProvider;
     private bool rememberMe;
 
-#if UNITY_WEBGL && !UNITY_EDITOR
-    [DllImport("__Internal")]
-    private static extern void InitWeb3Auth(string clientId, string chainId, string rpcTarget, string displayName, string blockExplorerUrl, string ticker, string tickerName, string network);
-    [DllImport("__Internal")]
-    private static extern void Web3AuthLogin(string provider, bool rememberMe);    
-    [DllImport("__Internal")]
-    private static extern void SetLoginCallback(Action<string> callback);
-    
-    public static event Action<string> Web3AuthWebGLConnected;
-#endif
+// #if UNITY_WEBGL && !UNITY_EDITOR
+//     [DllImport("__Internal")]
+//     private static extern void InitWeb3Auth(string clientId, string chainId, string rpcTarget, string displayName, string blockExplorerUrl, string ticker, string tickerName, string network);
+//     [DllImport("__Internal")]
+//     private static extern void Web3AuthLogin(string provider, bool rememberMe);    
+//     [DllImport("__Internal")]
+//     private static extern void SetLoginCallback(Action<string> callback);
+//     
+//     public static event Action<string> Web3AuthWebGLConnected;
+// #endif
 
 
     public void SetRememberMe(bool rememberMe)

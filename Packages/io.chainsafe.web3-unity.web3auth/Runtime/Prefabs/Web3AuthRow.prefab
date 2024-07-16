@@ -96,6 +96,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Web3AuthRow
       objectReference: {fileID: 0}
+    - target: {fileID: 5181835182331206566, guid: 5fc3fb751209aae4a97201647b943503, type: 3}
+      propertyPath: m_Interactable
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5974183629704621284, guid: 5fc3fb751209aae4a97201647b943503, type: 3}
       propertyPath: m_Sprite
       value: 

@@ -29,7 +29,7 @@ namespace Scenes
         /// <summary>
         /// Initializes Connection Handler.
         /// </summary>
-        protected virtual void Initialize()
+        protected virtual async void Initialize()
         {
             Web3BuilderServiceAdapters = GetComponents<IWeb3BuilderServiceAdapter>();
 
@@ -40,10 +40,12 @@ namespace Scenes
                 if (provider != null && provider.IsAvailable)
                 {
                     var instantiatedProvider = connectModal.AddProvider(provider);
+
+                    await instantiatedProvider.Initialize();
                     
                     instantiatedProvider.ConnectButton.onClick.AddListener(delegate
                     {
-                        ConnectionProvider = provider;
+                        ConnectionProvider = instantiatedProvider;
                         
                         ConnectClicked();
                     });
@@ -73,8 +75,8 @@ namespace Scenes
                 {
                     connectModal.DisplayError(
                         $"Connecting failed, please try again\n{e.Message} (see console for more details)");
-
-                    throw;
+                    
+                    ConnectionProvider.HandleException(e);
                 }
             }
             finally

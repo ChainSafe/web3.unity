@@ -18,6 +18,11 @@ namespace ChainSafe.GamingSdk.Web3Auth
         /// Login Provider to use when connecting the wallet, like Google, facebook etc...
         /// </summary>
         public Task<Provider> ProviderTask { get; set; }
+
+        /// <summary>
+        /// Get the SessionId on connection from the provider.
+        /// </summary>
+        public Task<string> SessionTask { get; set; }
         
         public CancellationToken CancellationToken { get; set; }
 

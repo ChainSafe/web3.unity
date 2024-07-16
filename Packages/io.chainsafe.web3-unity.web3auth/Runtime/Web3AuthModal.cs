@@ -75,7 +75,7 @@ public class Web3AuthModal : MonoBehaviour
         loadingOverlay.gameObject.SetActive(false);
     }
     
-    private void Close()
+    public void Close()
     {
         _cancellationTokenSource.Cancel();
 

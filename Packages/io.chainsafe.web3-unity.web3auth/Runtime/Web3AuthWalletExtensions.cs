@@ -37,7 +37,11 @@ public static class Web3AuthWalletExtensions
         collection.AssertServiceNotBound<ISigner>();
         collection.AssertServiceNotBound<ITransactionExecutor>();
 
+#if UNITY_WEBGL && !UNITY_EDITOR
+        collection.AddSingleton<IWalletProvider, IAccountProvider, Web3AuthWebGLProvider>();
+#else
         collection.AddSingleton<IWalletProvider, IAccountProvider, Web3AuthProvider>();
+#endif
         
         collection.AddSingleton<ISigner, ILifecycleParticipant, ILogoutHandler, Web3AuthSigner>();
         

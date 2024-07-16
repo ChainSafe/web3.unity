@@ -54,13 +54,18 @@ public class Web3AuthProvider : WalletProvider, IAccountProvider
         _connectTcs = new TaskCompletionSource<Web3AuthResponse>();
         
         _coreInstance.onLogin += OnLogin;
+
+        var providerTask = _config.ProviderTask;
         
-        var provider = await _config.ProviderTask;
-        
-        _coreInstance.login(new LoginParams
+        if (providerTask != null && !providerTask.IsCompleted)
         {
-            loginProvider = provider,
-        });
+            var provider = await _config.ProviderTask;
+        
+            _coreInstance.login(new LoginParams
+            {
+                loginProvider = provider,
+            });
+        }
 
         await using(_config.CancellationToken.Register(Cancel))
         {
