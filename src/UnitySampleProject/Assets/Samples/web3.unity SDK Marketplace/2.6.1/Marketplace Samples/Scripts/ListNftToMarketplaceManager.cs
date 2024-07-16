@@ -48,9 +48,9 @@ namespace ChainSafe.Gaming.Marketplace
         {
             marketplaceList = await EvmMarketplace.GetProjectMarketplaces(BearerToken);
             if (marketplaceList.Marketplaces.Count <= 0) return;
-            MarketplaceContractToListTo = marketplaceList.Marketplaces[0].Id;
+            MarketplaceContractToListTo = marketplaceList.Marketplaces[0].id;
             List<string> options = new List<string>();
-            options.Add(marketplaceList.Marketplaces[0].Name);
+            options.Add(marketplaceList.Marketplaces[0].name);
             selectMarketplaceDropDown.ClearOptions();
             selectMarketplaceDropDown.AddOptions(options);
             selectMarketplaceDropDown.onValueChanged.AddListener(OnDropdownValueChanged);
@@ -64,7 +64,7 @@ namespace ChainSafe.Gaming.Marketplace
         {
             if (index < marketplaceList.Marketplaces.Count)
             {
-                MarketplaceContractToListTo = marketplaceList.Marketplaces[index].Id;
+                MarketplaceContractToListTo = marketplaceList.Marketplaces[index].id;
             }
         }
         

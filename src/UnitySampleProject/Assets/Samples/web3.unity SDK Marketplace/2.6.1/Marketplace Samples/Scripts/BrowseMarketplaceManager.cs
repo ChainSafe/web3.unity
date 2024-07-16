@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Ipfs;
 using ChainSafe.Gaming.Web3;
@@ -11,6 +12,8 @@ using UnityEngine.UI;
 using EvmMarketplace = Scripts.EVM.Marketplace.Marketplace;
 using ChainSafe.Gaming.Marketplace.Models;
 using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.UnityPackage.Model;
+using Newtonsoft.Json;
 
 namespace ChainSafe.Gaming.Marketplace
 {
@@ -31,10 +34,10 @@ namespace ChainSafe.Gaming.Marketplace
         private GameObject[] marketplaceItemPrefabs;
         private int marketplaceItemObjectNumber = 1;
         private int marketplaceItemDisplayCount = 100;
+        private string baseUrl = "https://ipfs.chainsafe.io/ipfs/";
 
         #endregion
         
-
         #region Properties
         
         private string BearerToken { get; set; }
@@ -73,7 +76,7 @@ namespace ChainSafe.Gaming.Marketplace
         {
             foreach (var marketplace in marketplacesResponse.Marketplaces)
             {
-                AddMarketplaceToDisplay(marketplace.ContractAddress, marketplace.Name, marketplace.Banner);
+                AddMarketplaceToDisplay(marketplace.contract_address, marketplace.name, baseUrl + marketplace.banner);
             }
             EventManagerMarketplace.RaiseToggleProcessingMenu();
         }
@@ -86,10 +89,10 @@ namespace ChainSafe.Gaming.Marketplace
         private async void PopulateMarketplaceItems(string marketplaceContract, int index)
         {
             var projectResponse = await EvmMarketplace.GetProjectItems();
-            var response = await EvmMarketplace.GetMarketplaceItems(projectResponse.Items[index].MarketplaceID);
-            foreach (var item in response.Items)
+            var response = await EvmMarketplace.GetMarketplaceItems(projectResponse.items[index].marketplace_id);
+            foreach (var item in response.items)
             {
-                AddMarketplaceItemToDisplay(marketplaceContract, item.Id, item.Token.TokenType, item.Price, item.Token.Uri);
+                AddMarketplaceItemToDisplay(marketplaceContract, item.id, item.token.token_type, item.price, item.token.uri);
             }
             EventManagerMarketplace.RaiseToggleProcessingMenu();
         }
@@ -156,17 +159,13 @@ namespace ChainSafe.Gaming.Marketplace
         /// <param name="uri">Nft uri</param>
         private async Task<Texture2D> ImportTexture(string uri)
         {
-            var textureUri = IpfsHelper.RollupIpfsUri(uri);
-            var textureRequest = UnityWebRequestTexture.GetTexture(textureUri);
+            var textureRequest = UnityWebRequestTexture.GetTexture(uri);
             await textureRequest.SendWebRequest();
-            
             if (textureRequest.result != UnityWebRequest.Result.Success)
             {
                 throw new Web3Exception($"Texture request failure: {textureRequest.error}");
             }
-            
             var texture = ((DownloadHandlerTexture)textureRequest.downloadHandler).texture;
-
             return texture;
         }
 
@@ -191,8 +190,9 @@ namespace ChainSafe.Gaming.Marketplace
                 try
                 {
                     var image = await ImportTexture(marketplaceBannerUri);
+                    Sprite newSprite = Sprite.Create(image, new Rect(0, 0, image.width, image.height), new UnityEngine.Vector2(0.5f, 0.5f));
                     var imageObj = projectMarketplacesPrefabs[projectMarketplacesObjectIndex].transform.Find("Image").GetComponent<Image>();
-                    imageObj.material.mainTexture = image;
+                    imageObj.sprite = newSprite;
                 }
                 catch (Exception e)
                 {
@@ -229,8 +229,9 @@ namespace ChainSafe.Gaming.Marketplace
                 try
                 {
                     var image = await ImportTexture(nftUri);
+                    Sprite newSprite = Sprite.Create(image, new Rect(0, 0, image.width, image.height), new UnityEngine.Vector2(0.5f, 0.5f));
                     var imageObj = marketplaceItemPrefabs[marketplaceItemObjectIndex].transform.Find("Image").GetComponent<Image>();
-                    imageObj.material.mainTexture = image;
+                    imageObj.sprite = newSprite;
                 }
                 catch (Exception e)
                 {

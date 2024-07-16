@@ -6,13 +6,13 @@ using ChainSafe.Gaming.Ipfs;
 using ChainSafe.Gaming.Marketplace;
 using ChainSafe.Gaming.Web3;
 using Newtonsoft.Json;
-using Scripts.EVM.Token;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using EvmMarketplace = Scripts.EVM.Marketplace.Marketplace;
 using ChainSafe.Gaming.Marketplace.Models;
+using ChainSafe.Gaming.UnityPackage.Model;
 
 namespace ChainSafe.Gaming.Collection
 {
@@ -34,6 +34,7 @@ namespace ChainSafe.Gaming.Collection
         private GameObject[] CollectionItemPrefabs;
         private int CollectionItemsObjectNumber = 1;
         private int CollectionItemDisplayCount = 100;
+        private string baseUrl = "https://ipfs.chainsafe.io/ipfs/";
 
         #endregion
         
@@ -69,7 +70,7 @@ namespace ChainSafe.Gaming.Collection
         private async void GetProjectCollections()
         {
             var response = await EvmMarketplace.GetProjectCollections(BearerToken);
-            if (response.Collections.Count > 0)
+            if (response.collections.Count > 0)
             {
                 PopulateCollections(response);
             }
@@ -80,9 +81,9 @@ namespace ChainSafe.Gaming.Collection
         /// </summary>
         private void PopulateCollections(UnityPackage.Model.NftTokenModel.ProjectCollectionsResponse collectionsResponse)
         {
-            foreach (var collection in collectionsResponse.Collections)
+            foreach (var collection in collectionsResponse.collections)
             {
-                AddCollectionToDisplay(collection.Name, collection.Type, collection.Banner);
+                AddCollectionToDisplay(collection.name, collection.type, baseUrl + collection.banner);
             }
             EventManagerMarketplace.RaiseToggleProcessingMenu();
         }
@@ -95,7 +96,7 @@ namespace ChainSafe.Gaming.Collection
         private async void PopulateCollectionItems(int index, string collectionType)
         {
             var projectResponse = await EvmMarketplace.GetProjectTokens();
-            var collectionContract = projectResponse.Tokens[index].CollectionID;
+            var collectionContract = projectResponse.tokens[index].collection_id;
             if (!Enum.TryParse(collectionType, true, out CollectionType collectionTypeEnum))
             {
                 collectionTypeEnum = CollectionType.Unknown;
@@ -104,10 +105,10 @@ namespace ChainSafe.Gaming.Collection
             {
                 case CollectionType.ERC721:
                 {
-                    var response = await EvmMarketplace.GetCollectionTokens721(projectResponse.Tokens[index].CollectionID);
-                    foreach (var item in response.Tokens)
+                    var response = await EvmMarketplace.GetCollectionTokens721(projectResponse.tokens[index].collection_id);
+                    foreach (var item in response.tokens)
                     {
-                        AddCollectionItemToDisplay(collectionContract, item.TokenID, item.TokenType, item.Supply, item.Uri);
+                        AddCollectionItemToDisplay(collectionContract, item.token_id, item.token_type, item.supply, item.uri);
                     }
                     EventManagerMarketplace.RaiseToggleProcessingMenu();
 
@@ -115,10 +116,10 @@ namespace ChainSafe.Gaming.Collection
                 }
                 case CollectionType.ERC1155:
                 {
-                    var response = await EvmMarketplace.GetCollectionTokens1155(projectResponse.Tokens[index].CollectionID);
-                    foreach (var item in response.Tokens)
+                    var response = await EvmMarketplace.GetCollectionTokens1155(projectResponse.tokens[index].collection_id);
+                    foreach (var item in response.tokens)
                     {
-                        AddCollectionItemToDisplay(collectionContract, item.TokenID, item.TokenType, item.Supply, item.Uri);
+                        AddCollectionItemToDisplay(collectionContract, item.token_id, item.token_type, item.supply, item.uri);
                     }
                     EventManagerMarketplace.RaiseToggleProcessingMenu();
     
@@ -193,25 +194,13 @@ namespace ChainSafe.Gaming.Collection
         /// <param name="uri">Nft uri</param>
         private async Task<Texture2D> ImportTexture(string uri)
         {
-            var metaRequest = UnityWebRequest.Get(uri);
-            await metaRequest.SendWebRequest();
-            
-            if (metaRequest.result != UnityWebRequest.Result.Success)
-            {
-                throw new Web3Exception($"Metadata request failure: {metaRequest.error}");
-            }
-            var metadata = JsonConvert.DeserializeObject<Erc1155Metadata>(Encoding.UTF8.GetString(metaRequest.downloadHandler.data));
-            var textureUri = IpfsHelper.RollupIpfsUri(metadata.image);
-            var textureRequest = UnityWebRequestTexture.GetTexture(textureUri);
+            var textureRequest = UnityWebRequestTexture.GetTexture(uri);
             await textureRequest.SendWebRequest();
-            
             if (textureRequest.result != UnityWebRequest.Result.Success)
             {
-                throw new Web3Exception($"Texture request failure: {metaRequest.error}");
+                throw new Web3Exception($"Texture request failure: {textureRequest.error}");
             }
-            
             var texture = ((DownloadHandlerTexture)textureRequest.downloadHandler).texture;
-
             return texture;
         }
 
@@ -236,12 +225,13 @@ namespace ChainSafe.Gaming.Collection
                 try
                 {
                     var image = await ImportTexture(collectionBannerUri);
+                    Sprite newSprite = Sprite.Create(image, new Rect(0, 0, image.width, image.height), new UnityEngine.Vector2(0.5f, 0.5f));
                     var imageObj = projectCollectionsPrefabs[projectCollectionsObjectIndex].transform.Find("Image").GetComponent<Image>();
-                    imageObj.material.mainTexture = image;
+                    imageObj.sprite = newSprite;
                 }
                 catch (Exception e)
                 {
-                    Debug.Log($"Error getting image: {e}");
+                    Debug.Log($"Error getting image {e}");
                 }
                 var buttonObj = projectCollectionsPrefabs[projectCollectionsObjectIndex].transform.Find("Image").GetComponent<Button>();
                 buttonObj.onClick.RemoveAllListeners();
@@ -272,8 +262,9 @@ namespace ChainSafe.Gaming.Collection
                 try
                 {
                     var image = await ImportTexture(nftUri);
+                    Sprite newSprite = Sprite.Create(image, new Rect(0, 0, image.width, image.height), new UnityEngine.Vector2(0.5f, 0.5f));
                     var imageObj = CollectionItemPrefabs[collectionObjectIndex].transform.Find("Image").GetComponent<Image>();
-                    imageObj.material.mainTexture = image;
+                    imageObj.sprite = newSprite;
                 }
                 catch (Exception e)
                 {

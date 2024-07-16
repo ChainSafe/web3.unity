@@ -28,38 +28,17 @@ namespace ChainSafe.Gaming.UnityPackage.Model
 
         public class Marketplace
         {
-            [JsonProperty("id")]
-            public string Id { get; set; }
-
-            [JsonProperty("name")]
-            public string Name { get; set; }
-
-            [JsonProperty("description")]
-            public string Description { get; set; }
-
-            [JsonProperty("owner")]
-            public string Owner { get; set; }
-
-            [JsonProperty("chain_id")]
-            public long ChainId { get; set; }
-
-            [JsonProperty("banner")]
-            public string Banner { get; set; }
-
-            [JsonProperty("project_id")]
-            public string ProjectId { get; set; }
-
-            [JsonProperty("contract_address")]
-            public string ContractAddress { get; set; }
-
-            [JsonProperty("deployed")]
-            public bool Deployed { get; set; }
-
-            [JsonProperty("created_at")]
-            public long CreatedAt { get; set; }
-
-            [JsonProperty("updated_at")]
-            public long UpdatedAt { get; set; }
+            public string id { get; set; }
+            public string name { get; set; }
+            public string description { get; set; }
+            public string owner { get; set; }
+            public long chain_id { get; set; }
+            public string banner { get; set; }
+            public string project_id { get; set; }
+            public string contract_address { get; set; }
+            public bool deployed { get; set; }
+            public long created_at { get; set; }
+            public long updated_at { get; set; }
         }
 
         #endregion
@@ -68,101 +47,53 @@ namespace ChainSafe.Gaming.UnityPackage.Model
 
         public class MarketplaceItemsResponse
         {
-            [JsonProperty("page_number")]
-            public int PageNumber { get; set; }
-
-            [JsonProperty("page_size")]
-            public int PageSize { get; set; }
-
-            [JsonProperty("total")]
-            public int Total { get; set; }
-
-            [JsonProperty("cursor")]
-            public string Cursor { get; set; }
-
-            [JsonProperty("items")]
-            public List<Item> Items { get; set; }
-
-            [JsonProperty("owners")]
-            public List<Owners> Owners { get; set; }
+            public int page_number { get; set; }
+            public int page_size { get; set; }
+            public int total { get; set; }
+            public string cursor { get; set; }
+            public List<Item> items { get; set; }
+            public List<Owners> owners { get; set; }
         }
         
         public class Item
         {
-            [JsonProperty("id")]
-            public string Id { get; set; }
-
-            [JsonProperty("chain_id")]
-            public string ChainID { get; set; }
-
-            [JsonProperty("project_id")]
-            public string ProjectID { get; set; }
-
-            [JsonProperty("marketplace_id")]
-            public string MarketplaceID { get; set; }
-
-            [JsonProperty("token")]
-            public Token Token { get; set; }
-
-            [JsonProperty("marketplace_contract_address")]
-            public string MarketplaceContractAddress { get; set; }
-
-            [JsonProperty("seller")]
-            public string Seller { get; set; }
-
-            [JsonProperty("buyer")]
-            public string Buyer { get; set; }
-
-            [JsonProperty("price")]
-            public string Price { get; set; }
-
-            [JsonProperty("listed_at")]
-            public BigInteger ListedAt { get; set; }
-
-            [JsonProperty("status")]
-            public string Status { get; set; }
+            public string id { get; set; }
+            public string chain_id { get; set; }
+            public string project_id { get; set; }
+            public string marketplace_id { get; set; }
+            public Token token { get; set; }
+            public string marketplace_contract_address { get; set; }
+            public string seller { get; set; }
+            public string buyer { get; set; }
+            public string price { get; set; }
+            public BigInteger listed_at { get; set; }
+            public string status { get; set; }
         }
 
         public class Token
         {
-            [JsonProperty("token_id")]
-            public string TokenID { get; set; }
-
-            [JsonProperty("token_type")]
-            public string TokenType { get; set; }
-
-            [JsonProperty("contract_address")]
-            public string ContractAddress { get; set; }
-
-            [JsonProperty("uri")]
-            public string Uri { get; set; }
-
-            [JsonProperty("metadata")]
-            public Metadata Metadata { get; set; }
+            public string token_id { get; set; }
+            public string token_type { get; set; }
+            public string contract_address { get; set; }
+            public string uri { get; set; }
+            public Metadata metadata { get; set; }
         }    
         
         public class Metadata
         {
-            [JsonProperty("attributes")]
-            public List<Attribute> Attributes { get; set; }
+            public List<Attribute> attributes { get; set; }
         }
 
         public class Attribute
         {
-            [JsonProperty("trait_type")]
-            public string TraitType { get; set; }
-
-            [JsonProperty("value")]
-            public string Value { get; set; }
+            public string trait_type { get; set; }
+            public string value { get; set; }
         }
         
         public class Owners
         {
-            [JsonProperty("owner")]
-            public string Owner { get; set; }
-            
-            [JsonProperty("supply")]
-            public string Supply { get; set; }
+            public string owner { get; set; }
+            public string supply { get; set; }
         }
         
         #endregion
