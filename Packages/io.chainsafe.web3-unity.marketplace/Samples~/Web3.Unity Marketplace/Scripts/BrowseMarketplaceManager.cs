@@ -1,17 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Ipfs;
 using ChainSafe.Gaming.Web3;
-using Newtonsoft.Json;
-using Scripts.EVM.Token;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using EvmMarketplace = Scripts.EVM.Marketplace.Marketplace;
 using ChainSafe.Gaming.Marketplace.Models;
+using ChainSafe.Gaming.UnityPackage;
 
 namespace ChainSafe.Gaming.Marketplace
 {
@@ -21,28 +20,27 @@ namespace ChainSafe.Gaming.Marketplace
     public class BrowseMarketplaceManager : MonoBehaviour
     {
         #region Fields
-
+        [SerializeField] private GameObject projectMarketplacesPrefab;
         [SerializeField] private GameObject marketplaceItemPrefab;
         [SerializeField] private GameObject marketplacePanel;
-        [SerializeField] private GameObject selectMarketplaceMenu;
-        [SerializeField] private GameObject browseMarketplaceMenu;
-        [SerializeField] private Button openSelectMarketplaceOptionButton;
-        [SerializeField] private TMP_Dropdown marketplaceDropDown;
         [SerializeField] private ScrollRect marketplaceScrollRect;
         private List<ApiResponse.Project> projects;
+        private GameObject[] projectMarketplacesPrefabs;
+        private int projectMarketplacesObjectNumber = 1;
+        private int projectMarketplacesDisplayCount = 100;
         private GameObject[] marketplaceItemPrefabs;
-        private int marketplaceObjectNumber = 1;
+        private int marketplaceItemObjectNumber = 1;
         private int marketplaceItemDisplayCount = 100;
 
         #endregion
-
+        
 
         #region Properties
-
+        
         private string BearerToken { get; set; }
         private TMP_FontAsset DisplayFont { get; set; }
         private Color SecondaryTextColour { get; set; }
-
+    
         #endregion
 
         #region Methods
@@ -52,67 +50,88 @@ namespace ChainSafe.Gaming.Marketplace
         /// </summary>
         private void Awake()
         {
-            openSelectMarketplaceOptionButton.onClick.AddListener(OpenSelectMarketplaceOptionMenu);
+            projectMarketplacesPrefabs = new GameObject[projectMarketplacesDisplayCount];
             marketplaceItemPrefabs = new GameObject[marketplaceItemDisplayCount];
         }
-
+        
         /// <summary>
         /// Populates the marketplace drop down options.
         /// </summary>
-        private async void GetMarketplaceOptions()
+        private async void GetProjectMarketplaces()
         {
-            UnityWebRequest request = UnityWebRequest.Get("https://api.gaming.chainsafe.io/project/getByAccountID");
-            request.SetRequestHeader("Authorization", $"Bearer {BearerToken}");
-            await request.SendWebRequest();
-            if (request.result != UnityWebRequest.Result.Success)
+            var response = await EvmMarketplace.GetProjectMarketplaces(BearerToken);
+            if (response.Marketplaces.Count > 0)
             {
-                Debug.LogError($"Error: {request.error}");
+                PopulateMarketplaces(response);
             }
-            else
-            {
-                ApiResponse apiResponse = JsonConvert.DeserializeObject<ApiResponse>(request.downloadHandler.text);
-                projects = apiResponse.response.projects;
-                List<string> options = new List<string>();
-                foreach (var project in projects)
-                {
-                    options.Add(project.name);
-                }
+        }
 
-                marketplaceDropDown.ClearOptions();
-                marketplaceDropDown.AddOptions(options);
-                marketplaceDropDown.onValueChanged.AddListener(OnDropdownValueChanged);
-            }
-
-            if (marketplaceDropDown.options != null)
+        /// <summary>
+        /// Populates marketplaces and adds them to the display panel.
+        /// </summary>
+        private void PopulateMarketplaces(UnityPackage.Model.MarketplaceModel.ProjectMarketplacesResponse marketplacesResponse)
+        {
+            foreach (var marketplace in marketplacesResponse.Marketplaces)
             {
-                PopulateMarketplaceItems(0);
+                AddMarketplaceToDisplay(marketplace.ContractAddress, marketplace.Name, marketplace.Banner);
             }
+            EventManagerMarketplace.RaiseToggleProcessingMenu();
         }
 
         /// <summary>
         /// Populates items to be added to the marketplace display.
         /// </summary>
+        /// <param name="marketplaceContract">Marketplace contract to call.</param>
         /// <param name="index">The index of the project to populate from.</param>
-        private async void PopulateMarketplaceItems(int index)
+        private async void PopulateMarketplaceItems(string marketplaceContract, int index)
         {
             var projectResponse = await EvmMarketplace.GetProjectItems();
-            var response = await EvmMarketplace.GetMarketplaceItems(projectResponse.items[index].marketplace_id);
-            foreach (var item in response.items)
+            var response = await EvmMarketplace.GetMarketplaceItems(projectResponse.Items[index].MarketplaceID);
+            foreach (var item in response.Items)
             {
-                AddMarketplaceItemToDisplay(item.id, item.token.token_type, item.price, item.token.uri);
+                AddMarketplaceItemToDisplay(marketplaceContract, item.Id, item.Token.TokenType, item.Price, item.Token.Uri);
             }
+            EventManagerMarketplace.RaiseToggleProcessingMenu();
         }
 
         /// <summary>
+        /// Adds marketplace to the display panel.
+        /// </summary>
+        /// <param name="marketplaceContract">Marketplace contract the item belongs to.</param>
+        /// <param name="marketplaceName">Marketplace name to add.</param>
+        /// <param name="marketplaceBannerUri">Marketplace image uri to add.</param>
+        private void AddMarketplaceToDisplay(string marketplaceContract, string marketplaceName, string marketplaceBannerUri)
+        {
+            if (projectMarketplacesObjectNumber >= projectMarketplacesDisplayCount)
+            {
+                Destroy(projectMarketplacesPrefabs[0]);
+                for (int i = 1; i < projectMarketplacesPrefabs.Length; i++)
+                {
+                    projectMarketplacesPrefabs[i - 1] = projectMarketplacesPrefabs[i];
+                }
+                projectMarketplacesPrefabs[projectMarketplacesPrefabs.Length - 1] = Instantiate(projectMarketplacesPrefab, marketplacePanel.transform);
+                UpdateProjectMarketplacesDisplay(marketplaceContract, projectMarketplacesObjectNumber, marketplaceName, marketplaceBannerUri);
+            }
+            else
+            {
+                projectMarketplacesPrefabs[projectMarketplacesObjectNumber] = Instantiate(projectMarketplacesPrefab, marketplacePanel.transform);
+                UpdateProjectMarketplacesDisplay(marketplaceContract, projectMarketplacesObjectNumber, marketplaceName, marketplaceBannerUri);
+            }
+            projectMarketplacesObjectNumber++;
+            marketplaceScrollRect.horizontalNormalizedPosition = 0;
+        }
+        
+        /// <summary>
         /// Adds items to the marketplace display.
         /// </summary>
+        /// /// <param name="marketplaceContract">Marketplace contract.</param>
         /// <param name="nftId">Nft id.</param>
         /// <param name="nftType">Nft name.</param>
         /// <param name="nftPrice">Nft price.</param>
         /// <param name="nftUri">Nft Uri.</param>
-        private void AddMarketplaceItemToDisplay(string nftId, string nftType, string nftPrice, string nftUri)
+        private void AddMarketplaceItemToDisplay(string marketplaceContract, string nftId, string nftType, string nftPrice, string nftUri)
         {
-            if (marketplaceObjectNumber >= marketplaceItemDisplayCount)
+            if (marketplaceItemObjectNumber >= marketplaceItemDisplayCount)
             {
                 Destroy(marketplaceItemPrefabs[0]);
                 for (int i = 1; i < marketplaceItemPrefabs.Length; i++)
@@ -120,84 +139,144 @@ namespace ChainSafe.Gaming.Marketplace
                     marketplaceItemPrefabs[i - 1] = marketplaceItemPrefabs[i];
                 }
                 marketplaceItemPrefabs[marketplaceItemPrefabs.Length - 1] = Instantiate(marketplaceItemPrefab, marketplacePanel.transform);
-                UpdateMarketplaceDisplay(marketplaceObjectNumber, nftId, nftType, nftPrice, nftUri);
+                UpdateMarketplaceItemDisplay(marketplaceContract, marketplaceItemObjectNumber, nftId, nftType, nftPrice, nftUri);
             }
             else
             {
-                marketplaceItemPrefabs[marketplaceObjectNumber] = Instantiate(marketplaceItemPrefab, marketplacePanel.transform);
-                UpdateMarketplaceDisplay(marketplaceObjectNumber, nftId, nftType, nftPrice, nftUri);
+                marketplaceItemPrefabs[marketplaceItemObjectNumber] = Instantiate(marketplaceItemPrefab, marketplacePanel.transform);
+                UpdateMarketplaceItemDisplay(marketplaceContract, marketplaceItemObjectNumber, nftId, nftType, nftPrice, nftUri);
             }
-            marketplaceObjectNumber++;
+            marketplaceItemObjectNumber++;
             marketplaceScrollRect.horizontalNormalizedPosition = 0;
         }
-
+        
         /// <summary>
         /// Imports texture (can probably be removed later for helper class)
         /// </summary>
         /// <param name="uri">Nft uri</param>
         private async Task<Texture2D> ImportTexture(string uri)
         {
-            var metaRequest = UnityWebRequest.Get(uri);
-            await metaRequest.SendWebRequest();
-
-            if (metaRequest.result != UnityWebRequest.Result.Success)
-            {
-                throw new Web3Exception($"Metadata request failure: {metaRequest.error}");
-            }
-            var metadata = JsonConvert.DeserializeObject<Erc1155Metadata>(Encoding.UTF8.GetString(metaRequest.downloadHandler.data));
-            var textureUri = IpfsHelper.RollupIpfsUri(metadata.image);
+            var textureUri = IpfsHelper.RollupIpfsUri(uri);
             var textureRequest = UnityWebRequestTexture.GetTexture(textureUri);
             await textureRequest.SendWebRequest();
-
+            
             if (textureRequest.result != UnityWebRequest.Result.Success)
             {
-                throw new Web3Exception($"Texture request failure: {metaRequest.error}");
+                throw new Web3Exception($"Texture request failure: {textureRequest.error}");
             }
-
+            
             var texture = ((DownloadHandlerTexture)textureRequest.downloadHandler).texture;
 
             return texture;
         }
 
         /// <summary>
-        /// Updates the marketplace display.
+        /// Updates the marketplaces display.
         /// </summary>
-        /// <param name="marketplaceObjectIndex"></param>
-        /// <param name="nftId">Nft id.</param>
-        /// <param name="nftType">Nft name.</param>
-        /// <param name="nftPrice">Nft price.</param>
-        /// <param name="nftUri">Nft Uri.</param>
-        private async void UpdateMarketplaceDisplay(int marketplaceObjectIndex, string nftId, string nftType, string nftPrice, string nftUri)
+        /// <param name="marketplaceContract">Marketplace contract.</param>
+        /// <param name="projectMarketplacesObjectIndex">Index of marketplace.</param>
+        /// <param name="marketplaceName">Marketplace name.</param>
+        /// <param name="marketplaceBannerUri">Marketplace Uri.</param>
+        private async void UpdateProjectMarketplacesDisplay(string marketplaceContract, int projectMarketplacesObjectIndex, string marketplaceName, string marketplaceBannerUri)
         {
-            string[] textObjectNames = { "IdText", "TypeText", "PriceText" };
-            string[] textValues = { nftId, nftType, nftPrice };
+            string[] textObjectNames = { "NameText" };
+            string[] textValues = { marketplaceName };
             for (int i = 0; i < textObjectNames.Length; i++)
             {
-                var textObj = marketplaceItemPrefabs[marketplaceObjectIndex].transform.Find(textObjectNames[i]);
+                var textObj = projectMarketplacesPrefabs[projectMarketplacesObjectIndex].transform.Find(textObjectNames[i]);
                 var textMeshPro = textObj.GetComponent<TextMeshProUGUI>();
                 textMeshPro.text = textValues[i];
                 textMeshPro.font = DisplayFont;
                 textMeshPro.color = SecondaryTextColour;
-                var image = await ImportTexture(nftUri);
-                var imageObj = marketplaceItemPrefabs[marketplaceObjectIndex].transform.Find("Image").GetComponent<Image>();
-                imageObj.material.mainTexture = image;
+                try
+                {
+                    var image = await ImportTexture(marketplaceBannerUri);
+                    var imageObj = projectMarketplacesPrefabs[projectMarketplacesObjectIndex].transform.Find("Image").GetComponent<Image>();
+                    imageObj.material.mainTexture = image;
+                }
+                catch (Exception e)
+                {
+                    Debug.Log($"Error getting image: {e}");
+                }
+                var buttonObj = projectMarketplacesPrefabs[projectMarketplacesObjectIndex].transform.Find("Image").GetComponent<Button>();
+                buttonObj.onClick.RemoveAllListeners();
+                buttonObj.onClick.AddListener(() => OpenSelectedMarketplace(marketplaceContract, projectMarketplacesObjectIndex));
             }
         }
 
         /// <summary>
-        /// Called when the dropdown value is changed.
+        /// Updates the marketplace item display.
         /// </summary>
-        /// <param name="index">The index of the selected option.</param>
-        private void OnDropdownValueChanged(int index)
+        /// <param name="marketplaceContract">Marketplace contract to call.</param>
+        /// <param name="marketplaceItemObjectIndex">Index of the marketplace.</param>
+        /// <param name="nftId">Nft id.</param>
+        /// <param name="nftType">Nft name.</param>
+        /// <param name="nftPrice">Nft price.</param>
+        /// <param name="nftUri">Nft Uri.</param>
+        private async void UpdateMarketplaceItemDisplay(string marketplaceContract, int marketplaceItemObjectIndex, string nftId, string nftType, string nftPrice, string nftUri)
         {
-            ResetMarketplacePrefabDisplay(index);
+            var ethValue = (decimal)BigInteger.Parse(nftPrice) / (decimal)BigInteger.Pow(10, 18);
+            string formattedEthValue = ethValue.ToString("0.##################");
+            string[] textObjectNames = { "IdText", "TypeText", "PriceText" };
+            string[] textValues = { $"ID: {nftId}", $"{nftType}", $"{formattedEthValue} {Web3Accessor.Web3.ChainConfig.Symbol.ToUpper()}" };
+            for (int i = 0; i < textObjectNames.Length; i++)
+            {
+                var textObj = marketplaceItemPrefabs[marketplaceItemObjectIndex].transform.Find(textObjectNames[i]);
+                var textMeshPro = textObj.GetComponent<TextMeshProUGUI>();
+                textMeshPro.text = textValues[i];
+                textMeshPro.font = DisplayFont;
+                textMeshPro.color = SecondaryTextColour;
+                try
+                {
+                    var image = await ImportTexture(nftUri);
+                    var imageObj = marketplaceItemPrefabs[marketplaceItemObjectIndex].transform.Find("Image").GetComponent<Image>();
+                    imageObj.material.mainTexture = image;
+                }
+                catch (Exception e)
+                {
+                    Debug.Log($"Error getting image: {e}");
+                }
+                var buttonObj = marketplaceItemPrefabs[marketplaceItemObjectIndex].transform.Find("PurchaseButton").GetComponent<Button>();
+                buttonObj.onClick.RemoveAllListeners();
+                buttonObj.onClick.AddListener(() => PurchaseNft(marketplaceContract ,marketplaceItemObjectIndex.ToString(), nftPrice));
+            }
         }
 
+        /// <summary>
+        /// Purchases a marketplace Nft.
+        /// </summary>
+        /// <param name="marketplaceContract">The marketplace contract to purchase from.</param>
+        /// <param name="marketplaceObjectIndex">Index of the Nft.</param>
+        /// <param name="price">Nft price.</param>
+        private async void PurchaseNft(string marketplaceContract, string marketplaceObjectIndex, string price)
+        {
+            await EvmMarketplace.PurchaseNft(marketplaceContract, marketplaceObjectIndex, price);
+        }
+        
+        /// <summary>
+        /// Resets marketplace display by destroying marketplace prefabs.
+        /// </summary>
+        /// <param name="index">The index to populate.</param>
+        private void ResetProjectMarketplacesPrefabsDisplay(int? index = null)
+        {
+            foreach (var prefab in projectMarketplacesPrefabs)
+            {
+                if (prefab != null)
+                {
+                    Destroy(prefab);
+                }
+            }
+            Array.Clear(projectMarketplacesPrefabs, 0, projectMarketplacesPrefabs.Length);
+            projectMarketplacesObjectNumber = 0;
+            if (!index.HasValue) return;
+            GetProjectMarketplaces();
+        }
+        
         /// <summary>
         /// Resets marketplace display by destroying item prefabs.
         /// </summary>
         /// <param name="index">The index to populate.</param>
-        private void ResetMarketplacePrefabDisplay(int? index = null)
+        private void ResetMarketplaceItemPrefabsDisplay(int? index = null)
         {
             foreach (var prefab in marketplaceItemPrefabs)
             {
@@ -207,38 +286,63 @@ namespace ChainSafe.Gaming.Marketplace
                 }
             }
             Array.Clear(marketplaceItemPrefabs, 0, marketplaceItemPrefabs.Length);
-            marketplaceObjectNumber = 0;
+            marketplaceItemObjectNumber = 0;
             if (!index.HasValue) return;
-            PopulateMarketplaceItems(index.Value);
+            PopulateMarketplaceItems(null, index.Value);
+        }
+        
+        /// <summary>
+        /// Toggles selected marketplace.
+        /// </summary>
+        private void CloseSelectedMarketplace()
+        {
+            ResetProjectMarketplacesPrefabsDisplay(0);
+            ResetMarketplaceItemPrefabsDisplay();
         }
 
         /// <summary>
-        /// Opens the select marketplace option menu.
+        /// Opens selected marketplace.
         /// </summary>
-        private void OpenSelectMarketplaceOptionMenu()
+        /// <param name="marketplaceContract">Marketpalce contract.</param>
+        /// <param name="marketplaceIndex">Index of the marketplace to open.</param>
+        private void OpenSelectedMarketplace(string marketplaceContract, int marketplaceIndex)
         {
-            browseMarketplaceMenu.SetActive(false);
-            selectMarketplaceMenu.SetActive(true);
+            EventManagerMarketplace.RaiseOpenSelectedMarketplace();
+            ResetProjectMarketplacesPrefabsDisplay();
+            PopulateMarketplaceItems(marketplaceContract, marketplaceIndex);
         }
-
+        
+        /// <summary>
+        /// Resets displays for performance on menu closed.
+        /// </summary>
+        private void CloseMarketplace()
+        {
+            ResetProjectMarketplacesPrefabsDisplay();
+            ResetMarketplaceItemPrefabsDisplay();
+        }
+        
         /// <summary>
         /// Subscribes to events.
         /// </summary>
         private void OnEnable()
         {
             EventManagerMarketplace.ConfigureMarketplaceBrowserManager += OnConfigureMarketPlaceBrowseManager;
-            GetMarketplaceOptions();
+            EventManagerMarketplace.ToggleMarketplacesMenu += GetProjectMarketplaces;
+            EventManagerMarketplace.CloseSelectedMarketplace += CloseSelectedMarketplace;
+            EventManagerMarketplace.ToggleSelectionMenu += CloseMarketplace;
         }
-
+        
         /// <summary>
         /// Unsubscribes from events.
         /// </summary>
         private void OnDisable()
         {
             EventManagerMarketplace.ConfigureMarketplaceBrowserManager -= OnConfigureMarketPlaceBrowseManager;
-            ResetMarketplacePrefabDisplay();
+            EventManagerMarketplace.ToggleMarketplacesMenu -= GetProjectMarketplaces;
+            EventManagerMarketplace.CloseSelectedMarketplace -= CloseSelectedMarketplace;
+            EventManagerMarketplace.ToggleSelectionMenu -= CloseMarketplace;
         }
-
+        
         /// <summary>
         /// Configures class properties.
         /// </summary>
