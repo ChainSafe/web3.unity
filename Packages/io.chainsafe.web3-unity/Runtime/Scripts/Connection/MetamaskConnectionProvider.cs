@@ -1,7 +1,9 @@
 using System.Threading.Tasks;
+#if UNITY_WEBGL && !UNITY_EDITOR
 using ChainSafe.Gaming.Unity.MetaMask;
-using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
+#endif
+using ChainSafe.Gaming.Web3.Build;
 using UnityEngine;
 
 namespace ChainSafe.Gaming.UnityPackage.Connection
@@ -22,7 +24,9 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         {
             return web3Builder.Configure(services =>
             {
+#if UNITY_WEBGL && !UNITY_EDITOR
                 services.UseMetaMask().UseWalletSigner().UseWalletTransactionExecutor();
+#endif
             });
         }
     }
