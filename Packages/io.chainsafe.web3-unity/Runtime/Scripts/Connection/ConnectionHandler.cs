@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ChainSafe.Gaming;
-using ChainSafe.Gaming.UnityPackage.Common;
+using ChainSafe.Gaming.UnityPackage.UI;
 using UnityEngine;
 
-namespace Scenes
+namespace ChainSafe.Gaming.UnityPackage.Connection
 {
     /// <summary>
     /// A concrete implementation of <see cref="IConnectionHandler"/>.
@@ -14,6 +13,7 @@ namespace Scenes
         [SerializeField] private string gelatoApiKey = "";
         [Space]
         [SerializeField] private ConnectModal connectModal;
+        // Handed in ConnectionHandlerEditor
         [HideInInspector] [SerializeField] private ConnectionProvider[] providers;
         
         public string GelatoApiKey => gelatoApiKey;
@@ -74,7 +74,7 @@ namespace Scenes
                 if (!(e is TaskCanceledException))
                 {
                     connectModal.DisplayError(
-                        $"Connecting failed, please try again\n{e.Message} (see console for more details)");
+                        $"Connection failed, please try again.");
                     
                     ConnectionProvider.HandleException(e);
                 }

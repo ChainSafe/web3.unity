@@ -4,6 +4,9 @@ using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Environment;
 using ChainSafe.GamingSdk.Web3Auth;
 
+/// <summary>
+/// Connection provider for connecting via Web3Auth modal on WebGL.
+/// </summary>
 public class Web3AuthWebGLProvider : Web3AuthProvider
 {
     private readonly Web3AuthWalletConfig _config;

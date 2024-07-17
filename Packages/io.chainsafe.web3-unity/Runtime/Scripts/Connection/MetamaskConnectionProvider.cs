@@ -4,8 +4,11 @@ using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
 using UnityEngine;
 
-namespace ChainSafe.Gaming
+namespace ChainSafe.Gaming.UnityPackage.Connection
 {
+    /// <summary>
+    /// Metamask connection provider used for connecting to a Metamask wallet.
+    /// </summary>
     public class MetamaskConnectionProvider : ConnectionProvider
     {
         public override bool IsAvailable => Application.platform == RuntimePlatform.WebGLPlayer && Application.isEditor == false;

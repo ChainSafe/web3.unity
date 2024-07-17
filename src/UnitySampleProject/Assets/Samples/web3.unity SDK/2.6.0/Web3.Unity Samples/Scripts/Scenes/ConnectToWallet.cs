@@ -1,7 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using ChainSafe.Gaming;
+using ChainSafe.Gaming.UnityPackage.UI;
 using UnityEngine;
 using UnityEngine.UI;
 

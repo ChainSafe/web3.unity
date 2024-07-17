@@ -1,10 +1,9 @@
-using ChainSafe.Gaming.UnityPackage.Common;
+using ChainSafe.Gaming.UnityPackage.Connection;
 #if UNITY_WEBGL && !UNITY_EDITOR
 using ChainSafe.Gaming.Web3.Evm.Wallet;
 using ChainSafe.Gaming.Unity.MetaMask;
 #endif
 using ChainSafe.Gaming.Web3.Build;
-using Scenes;
 using UnityEngine;
 using UnityEngine.UI;
 

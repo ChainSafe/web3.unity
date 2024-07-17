@@ -1,9 +1,8 @@
 using ChainSafe.Gaming.HyperPlay;
-using ChainSafe.Gaming.UnityPackage.Common;
+using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
 using Microsoft.Extensions.DependencyInjection;
-using Scenes;
 using UnityEngine;
 using UnityEngine.UI;
 

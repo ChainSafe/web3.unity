@@ -1,8 +1,7 @@
-using ChainSafe.Gaming.UnityPackage.Common;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace ChainSafe.Gaming.UnityPackage.Common
+namespace ChainSafe.Gaming.UnityPackage.Connection
 {
     /// <summary>
     /// Loads scene when Web3 Instance is initialized.

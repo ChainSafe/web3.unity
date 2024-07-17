@@ -1,4 +1,4 @@
-namespace ChainSafe.Gaming.UnityPackage.Common
+namespace ChainSafe.Gaming.UnityPackage.Connection
 {
     /// <summary>
     /// Initialized handler used for executing logic when a web3 instance is initialized.

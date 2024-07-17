@@ -9,7 +9,7 @@ using ChainSafe.Gaming.Web3.Unity;
 using ChainSafe.GamingSdk.Gelato;
 using Scripts.EVM.Token;
 
-namespace ChainSafe.Gaming.UnityPackage.Common
+namespace ChainSafe.Gaming.UnityPackage.Connection
 {
     /// <summary>
     /// Builds <see cref="Web3"/> Instance and Login using a Wallet or a provider.
@@ -31,6 +31,9 @@ namespace ChainSafe.Gaming.UnityPackage.Common
         /// </summary>
         public IWeb3InitializedHandler[] Web3InitializedHandlers { get; }
         
+        /// <summary>
+        /// Connection Provider used to create connection.
+        /// </summary>
         public ConnectionProvider ConnectionProvider { get; }
 
         /// <summary>

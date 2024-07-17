@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AOT;
 using ChainSafe.Gaming;
 using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.GamingSdk.Web3Auth;
@@ -12,6 +13,9 @@ using Nethereum.Hex.HexTypes;
 using UnityEngine;
 using Network = Web3Auth.Network;
 
+/// <summary>
+/// ConnectionProvider for connecting wallet via Web3Auth.
+/// </summary>
 public class Web3AuthConnectionProvider : ConnectionProvider
 {
     [SerializeField] private string clientId;

@@ -1,10 +1,14 @@
 using System.Threading.Tasks;
+using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
 using UnityEngine;
 
 namespace ChainSafe.Gaming.HyperPlay
 {
+    /// <summary>
+    /// Connection provider for connecting via HyperPlay Launcher.
+    /// </summary>
     public class HyperPlayConnectionProvider : ConnectionProvider
     {
         public override bool IsAvailable => Application.isEditor || Application.platform != RuntimePlatform.Android || Application.platform != RuntimePlatform.IPhonePlayer;

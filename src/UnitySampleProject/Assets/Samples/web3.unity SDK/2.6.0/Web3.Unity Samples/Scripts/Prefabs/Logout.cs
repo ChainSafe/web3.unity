@@ -1,8 +1,5 @@
-using System.Threading.Tasks;
 using ChainSafe.Gaming.UnityPackage;
-using ChainSafe.Gaming.Wallets;
-using ChainSafe.Gaming.UnityPackage.Common;
-using Scenes;
+using ChainSafe.Gaming.UnityPackage.Connection;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 

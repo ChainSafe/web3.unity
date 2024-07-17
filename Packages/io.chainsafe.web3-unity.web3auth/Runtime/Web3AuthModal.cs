@@ -1,13 +1,14 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using ChainSafe.Gaming;
+using ChainSafe.Gaming.UnityPackage.UI;
 using ChainSafe.Gaming.Web3;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Web3Auth modal used for displaying and selecting a Web3Auth provider.
+/// </summary>
 public class Web3AuthModal : MonoBehaviour
 {
     [Serializable]

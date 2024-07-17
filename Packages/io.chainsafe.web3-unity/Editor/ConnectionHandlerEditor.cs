@@ -1,11 +1,10 @@
 using System.Collections.Generic;
-using System.IO;
-using ChainSafe.Gaming;
+using ChainSafe.Gaming.UnityPackage.Connection;
 using Newtonsoft.Json;
-using Scenes;
 using UnityEditor;
 using UnityEngine;
 
+// Editor for adding and removing providers in an interactive way.
 [CustomEditor(typeof(ConnectionHandler))]
 public class ConnectionHandlerEditor : Editor
 {
