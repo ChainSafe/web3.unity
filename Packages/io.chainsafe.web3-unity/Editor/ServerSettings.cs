@@ -81,10 +81,11 @@ public class ChainSafeServerSettings : EditorWindow
         network = string.IsNullOrEmpty(projectConfig?.Network) ? NetworkDefault : projectConfig.Network;
         symbol = string.IsNullOrEmpty(projectConfig?.Symbol) ? SymbolDefault : projectConfig.Symbol;
         rpc = string.IsNullOrEmpty(projectConfig?.Rpc) ? RpcDefault : projectConfig.Rpc;
-        blockExplorerUrl = string.IsNullOrEmpty(projectConfig?.BlockExplorerUrl) ? BlockExplorerUrlDefault : projectConfig.BlockExplorerUrl;
+        blockExplorerUrl = string.IsNullOrEmpty(projectConfig?.BlockExplorerUrl)
+            ? BlockExplorerUrlDefault
+            : projectConfig.BlockExplorerUrl;
         enableAnalytics = projectConfig.EnableAnalytics;
         ws = projectConfig.Ws;
-       
     }
 
     /// <summary>
@@ -111,6 +112,13 @@ public class ChainSafeServerSettings : EditorWindow
             {
                 ws = chainList[selectedChainIndex].rpc.FirstOrDefault(x => x.StartsWith("wss"));
                 selectedWebHookIndex = chainList[selectedChainIndex].rpc.IndexOf(ws);
+            }
+            else
+            {
+                selectedWebHookIndex = chainList[selectedChainIndex].rpc.IndexOf(ws) == -1
+                    ? chainList[selectedChainIndex].rpc
+                        .IndexOf(chainList[selectedChainIndex].rpc.FirstOrDefault(x => x.StartsWith("wss")))
+                    : chainList[selectedChainIndex].rpc.IndexOf(ws);
             }
         }
         else
@@ -208,21 +216,22 @@ public class ChainSafeServerSettings : EditorWindow
         chainID = EditorGUILayout.TextField("Chain ID: ", chainID);
         symbol = EditorGUILayout.TextField("Symbol: ", symbol);
         blockExplorerUrl = EditorGUILayout.TextField("Block Explorer: ", blockExplorerUrl);
-        enableAnalytics = EditorGUILayout.Toggle(new GUIContent("Collect Data for Analytics:", "Consent to collecting data for analytics purposes. This will help improve our product."), enableAnalytics);
+        enableAnalytics =
+            EditorGUILayout.Toggle(
+                new GUIContent("Collect Data for Analytics:",
+                    "Consent to collecting data for analytics purposes. This will help improve our product."),
+                enableAnalytics);
 
         if (enableAnalytics)
-        {
             ScriptingDefineSymbols.TryAddDefineSymbol(EnableAnalyticsScriptingDefineSymbol);
-        }
         else
-        {
             ScriptingDefineSymbols.TryRemoveDefineSymbol(EnableAnalyticsScriptingDefineSymbol);
-        }
 
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.PrefixLabel("Select RPC");
         // Remove "https://" so the user doesn't have to click through 2 levels for the rpc options
-        var rpcOptions = chainList[selectedChainIndex].rpc.Where(x => x.StartsWith("https")).Select(x => x.Replace("/", "\u2215")).ToArray();
+        var rpcOptions = chainList[selectedChainIndex].rpc.Where(x => x.StartsWith("https"))
+            .Select(x => x.Replace("/", "\u2215")).ToArray();
         var selectedRpc = chainList[selectedChainIndex].rpc[selectedRpcIndex];
         // Show the rpc drop down menu
         if (GUILayout.Button(selectedRpc, EditorStyles.popup))
@@ -247,14 +256,15 @@ public class ChainSafeServerSettings : EditorWindow
 
 
         // Remove "https://" so the user doesn't have to click through 2 levels for the rpc options
-        var webHookOptions = chainList[selectedChainIndex].rpc.Where(x => x.StartsWith("w")).Select(x => x.Replace("/", "\u2215")).ToArray();
+        var webHookOptions = chainList[selectedChainIndex].rpc.Where(x => x.StartsWith("w"))
+            .Select(x => x.Replace("/", "\u2215")).ToArray();
         if (webHookOptions.Length > 0)
         {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.PrefixLabel("Select WebHook");
-            selectedWebHookIndex = Mathf.Clamp(selectedWebHookIndex, 0, chainList[selectedChainIndex].rpc.Count);
-            var selectedWebHook = chainList[selectedChainIndex].rpc[selectedWebHookIndex];
-            // Show the rpc drop down menu
+            selectedWebHookIndex = Mathf.Clamp(selectedWebHookIndex, 0, chainList[selectedChainIndex].rpc.Count - 1);
+            var webhookIndex = chainList[selectedChainIndex].rpc.IndexOf(ws);
+            var selectedWebHook = webhookIndex == -1 ? chainList[selectedChainIndex].rpc[selectedWebHookIndex] : ws;
             if (GUILayout.Button(selectedWebHook, EditorStyles.popup))
             {
                 searchProvider = CreateInstance<StringListSearchProvider>();
@@ -276,8 +286,11 @@ public class ChainSafeServerSettings : EditorWindow
             GUILayout.Label("If you're using a custom Webhook it will override the selection above",
                 EditorStyles.boldLabel);
         }
-        else ws = string.Empty;
-        
+        else
+        {
+            ws = string.Empty;
+        }
+
         // Buttons
         // Register
         if (GUILayout.Button("Need To Register?")) Application.OpenURL("https://dashboard.gaming.chainsafe.io/");
