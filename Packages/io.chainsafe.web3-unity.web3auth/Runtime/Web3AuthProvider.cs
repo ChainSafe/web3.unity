@@ -48,27 +48,44 @@ public class Web3AuthProvider : WalletProvider, IAccountProvider
 
         if (_connectTcs != null && !_connectTcs.Task.IsCompleted)
         {
-            _connectTcs.SetCanceled();
+            Cancel();
         }
         
         _connectTcs = new TaskCompletionSource<Web3AuthResponse>();
         
         _coreInstance.onLogin += OnLogin;
 
-        if (_config.LoginParams != null)
+        var providerTask = _config.ProviderTask;
+        
+        if (providerTask != null && !providerTask.IsCompleted)
         {
-            _coreInstance.login(_config.LoginParams);
+            var provider = await _config.ProviderTask;
+        
+            _coreInstance.login(new LoginParams
+            {
+                loginProvider = provider,
+            });
         }
 
-        var response = await _connectTcs.Task;
+        await using(_config.CancellationToken.Register(Cancel))
+        {
+            var response = await _connectTcs.Task;
         
-        Account = new Account(response.privKey);
+            Account = new Account(response.privKey);
 
-        Account.TransactionManager.Client = this;
+            Account.TransactionManager.Client = this;
         
-        return Account.Address;
+            return Account.Address;
+        }
     }
 
+    private void Cancel()
+    {
+        _connectTcs.SetCanceled();
+
+        _coreInstance.onLogin -= OnLogin;
+    }
+    
     private void OnLogin(Web3AuthResponse response)
     {
         _connectTcs.SetResult(response);

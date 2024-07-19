@@ -1,10 +1,10 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace ChainSafe.Gaming
+namespace ChainSafe.Gaming.UnityPackage.UI
 {
+    /// <summary>
+    /// Resizes a rect Transform responsively/based on percentage.
+    /// </summary>
     [RequireComponent(typeof(RectTransform))]
     public class Resizer : MonoBehaviour
     {
