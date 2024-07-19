@@ -121,5 +121,5 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
         #endregion
     }
     
-    {CUSTOM_CLASSES_OUTPUT}
+    {CUSTOM_CLASSES}
 }

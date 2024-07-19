@@ -1,27 +1,26 @@
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using Nethereum.ABI;
 using Nethereum.ABI.ABIDeserialisation;
+using Nethereum.ABI.FunctionEncoding.Attributes;
 using Nethereum.ABI.Model;
 using UnityEditor;
 using UnityEngine;
 
-
 public class ABICSharpConverter : EditorWindow
 {
-    private DefaultAsset _targetFolder;
     private string _abi;
-    private string _contractName;
     private bool _abiIsValid;
     private ContractABI _contractABI;
+    private string _contractName;
+    private DefaultAsset _targetFolder;
+    private Dictionary<string, List<Parameter>> _customClassDict;
 
-    [MenuItem("ChainSafe SDK/ABI to C# Contract Converter")]
-    // Show our window
-    public static void ShowWindow()
-    {
-        GetWindow<ABICSharpConverter>("ABI to C# Contract Converter");
-    }
+    public Dictionary<string, List<Parameter>> CustomClassDict => _customClassDict;
 
     private void OnGUI()
     {
@@ -59,34 +58,104 @@ public class ABICSharpConverter : EditorWindow
             return;
         }
 
-        if (string.IsNullOrEmpty(_contractName))
+        if (string.IsNullOrEmpty(_contractName.Trim()))
         {
             EditorGUILayout.HelpBox("Contract Name cannot be empty", MessageType.Error);
             return;
         }
+       
+        if (Regex.IsMatch(_contractName, @"[^a-zA-Z0-9_]|(?<=^)[0-9]"))
+        {
+            EditorGUILayout.HelpBox("Contract name is invalid", MessageType.Error);
+            return;
+        }
+
         if (GUILayout.Button("Convert"))
         {
             _contractABI = ABIDeserialiserFactory.DeserialiseContractABI(_abi);
             var text = Resources.Load<TextAsset>("ABIContractClassTemplate").text;
-            text = text.Replace("{CLASS_NAME}", _contractName);
+            var className = Regex.Replace(_contractName, @"[^a-zA-Z0-9_]|(?<=^)[0-9]", string.Empty);
+
+            text = text.Replace("{CLASS_NAME}", className);
             var minifiedJson = JsonDocument.Parse(_abi).RootElement.GetRawText();
             var escapedJson = minifiedJson.Replace("\"", "\\\"");
             text = text.Replace("{CONTRACT_ABI}", escapedJson);
+            text = Regex.Replace(text, @"\s*\{CUSTOM_CLASSES\}", "\n\n" + ParseCustomClasses());
             text = Regex.Replace(text, @"\s*\{EVENT_CLASSES\}", "\n\n" + ParseEventClasses());
             text = Regex.Replace(text, @"\s*\{METHODS\}", "\n\n" + ParseMethods());
             text = Regex.Replace(text, @"\s*\{EVENT_SUBSCRIPTION\}", "\n\n" + ParseEventSubscription());
             text = Regex.Replace(text, @"\s*\{EVENT_UNSUBSCRIPTION\}", "\n\n" + ParseEventUnsubscription());
-            text = Regex.Replace(text, @"\s*\{CUSTOM_CLASSES_OUTPUT\}", "\n\n" + ParseCustomClassesOutput());
             var path = AssetDatabase.GetAssetPath(_targetFolder);
-            var fullPath = $"{path}/{_contractName}.cs";
-            System.IO.File.WriteAllText(fullPath, text);
+            var fullPath = $"{path}/{className}.cs";
+            File.WriteAllText(fullPath, text);
             AssetDatabase.Refresh();
         }
     }
 
-    private string ParseCustomClassesOutput()
+    [MenuItem("ChainSafe SDK/ABI to C# Contract Converter")]
+    // Show our window
+    public static void ShowWindow()
     {
-        return string.Empty;
+        Instance = GetWindow<ABICSharpConverter>("ABI to C# Contract Converter");
+    }
+
+    public static ABICSharpConverter Instance;
+
+    private Dictionary<string, List<Parameter>> ExtractCustomClassesWithParams()
+    {
+        var dict = new Dictionary<string, List<Parameter>>();
+
+        foreach (var functionABI in _contractABI.Functions)
+        {
+            // Process input parameters
+            foreach (var inputParameter in functionABI.InputParameters) ProcessParameter(inputParameter, dict);
+
+            // Process output parameters
+            foreach (var outputParameter in functionABI.OutputParameters) ProcessParameter(outputParameter, dict);
+        }
+
+        return dict;
+    }
+
+    private void ProcessParameter(Parameter parameter, Dictionary<string, List<Parameter>> dict)
+    {
+        if (parameter.ABIType is TupleType tupleType)
+            ProcessTupleComponents(parameter, tupleType.Components, dict);
+        else if (parameter.ABIType is ArrayType arrayType && arrayType.ElementType is TupleType elementTupleType)
+            ProcessTupleComponents(parameter, elementTupleType.Components, dict, true);
+    }
+
+    private void ProcessTupleComponents(Parameter parameter, IReadOnlyList<Parameter> components,
+        Dictionary<string, List<Parameter>> dict, bool isArray = false)
+    {
+        var className = parameter.InternalType.Split(".")[^1].RemoveFirstUnderscore().Capitalize();
+        if (isArray) className = className.Replace("[]", "");
+
+        var classAlreadyExisted = dict.TryAdd(className, new List<Parameter>());
+        foreach (var component in components)
+        {
+            ProcessParameter(component, dict);
+            if (!classAlreadyExisted)
+                dict[className].Add(component);
+        }
+    }
+    private string ParseCustomClasses()
+    {
+        var sb = new StringBuilder();
+        _customClassDict = ExtractCustomClassesWithParams();
+
+        var customClassTemplate = Resources.Load<TextAsset>("CustomClassTemplate").text;
+        var paramTemplate = Resources.Load<TextAsset>("ParamTemplate").text;
+
+        foreach (var key in _customClassDict.Keys)
+        {
+            var classStringBuilder = new StringBuilder(customClassTemplate);
+            classStringBuilder.Replace("{CLASS_NAME}", key);
+            classStringBuilder.Replace("{PARAMETERS}", ParseParameters(_customClassDict[key], paramTemplate).ToString());
+            sb.Append(classStringBuilder);
+        }
+
+        return sb.ToString();
     }
 
 
@@ -97,10 +166,10 @@ public class ABICSharpConverter : EditorWindow
 
         foreach (var functionABI in _contractABI.Functions)
         {
-            var functionNoTransactionReceipt = PopulateMethod(functionABI, functionTemplateBase, false);
+            var functionNoTransactionReceipt = GenerateMethodWithFunctionABI(functionABI, functionTemplateBase, false);
             var functionWithTransactionReceipt = "";
             if (!functionABI.Constant)
-                functionWithTransactionReceipt = PopulateMethod(functionABI, functionTemplateBase, true);
+                functionWithTransactionReceipt = GenerateMethodWithFunctionABI(functionABI, functionTemplateBase, true);
             result.Append(functionNoTransactionReceipt);
             result.Append("\n");
             result.Append(functionWithTransactionReceipt);
@@ -111,7 +180,7 @@ public class ABICSharpConverter : EditorWindow
     }
 
 
-    private static string PopulateMethod(FunctionABI functionABI, string functionTemplateBase,
+    private static string GenerateMethodWithFunctionABI(FunctionABI functionABI, string functionTemplateBase,
         bool useTransactionReceipt)
     {
         var functionStringBuilder = new StringBuilder(functionTemplateBase);
@@ -132,7 +201,7 @@ public class ABICSharpConverter : EditorWindow
         bool useTransactionReceipt)
     {
         functionStringBuilder.Replace("{METHOD_NAME}",
-            functionABI.Name.RemoveFirstUnderline().Capitalize() + (useTransactionReceipt ? "WithReceipt" : ""));
+            functionABI.Name.RemoveFirstUnderscore().Capitalize() + (useTransactionReceipt ? "WithReceipt" : ""));
     }
 
     private static void ReplaceInputParameters(StringBuilder functionStringBuilder, FunctionABI functionABI)
@@ -151,11 +220,6 @@ public class ABICSharpConverter : EditorWindow
     private static void ReplaceReturnType(StringBuilder functionStringBuilder, FunctionABI functionABI,
         bool useTransactionReceipt)
     {
-        foreach (var outputParameter in functionABI.OutputParameters)
-        {
-
-        }
-        
         if (useTransactionReceipt)
         {
             if (functionABI.OutputParameters.Length >= 1)
@@ -175,7 +239,7 @@ public class ABICSharpConverter : EditorWindow
                         functionABI.OutputParameters.Select(x =>
                             $"{x.Type.ToCSharpType()} {x.Name.ReplaceReservedNames()}")) + ")");
             else if (functionABI.OutputParameters.Length == 1)
-                functionStringBuilder.Replace("{RETURN_TYPE}", functionABI.OutputParameters[0].Type.ToCSharpType());
+                functionStringBuilder.Replace("{RETURN_TYPE}", functionABI.OutputParameters[0].InternalType.ToCSharpType());
             else
                 functionStringBuilder.Replace("<{RETURN_TYPE}>", "");
         }
@@ -234,7 +298,7 @@ public class ABICSharpConverter : EditorWindow
 
         foreach (var eventABI in _contractABI.Events)
         {
-            var varName = eventABI.Name.RemoveFirstUnderline().Capitalize();
+            var varName = eventABI.Name.RemoveFirstUnderscore().Capitalize();
             sb.Append(
                 $"\t\t\tvar filter{varName}Event = Event<{varName}EventDTO>.GetEventABI().CreateFilterInput();\n");
             var eventSubscription = new StringBuilder(Resources.Load<TextAsset>("SubscriptionTemplate").text);
@@ -255,7 +319,7 @@ public class ABICSharpConverter : EditorWindow
 
         foreach (var eventABI in _contractABI.Events)
         {
-            var varName = eventABI.Name.RemoveFirstUnderline().Capitalize();
+            var varName = eventABI.Name.RemoveFirstUnderscore().Capitalize();
             sb.Append($"\t\t\tawait event{varName}.UnsubscribeAsync();\n");
             sb.Append($"\t\t\tOn{varName} = null;\n");
         }
@@ -267,38 +331,45 @@ public class ABICSharpConverter : EditorWindow
     {
         var sb = new StringBuilder();
         var eventTemplateBase = Resources.Load<TextAsset>("EventTemplate").text;
-        var eventParamTemplate = Resources.Load<TextAsset>("ParamTemplate").text;
+        var paramTemplate = Resources.Load<TextAsset>("ParamTemplate").text;
 
         foreach (var eventABI in _contractABI.Events)
         {
             var eventStringBuilder = new StringBuilder(eventTemplateBase);
             eventStringBuilder.Replace("{EVENT_NAME}", eventABI.Name);
-            eventStringBuilder.Replace("{EVENT_NAME_CSHARP}", eventABI.Name.RemoveFirstUnderline().Capitalize());
-            var eventParams = new StringBuilder();
-            var count = 0;
-            foreach (var param in eventABI.InputParameters)
-            {
-                var eventParamStringBuilder = new StringBuilder(eventParamTemplate);
-                eventParamStringBuilder.Replace("{TRUE_TYPE}", param.Type);
-                eventParamStringBuilder.Replace("{TRUE_NAME}", param.Name);
-                eventParamStringBuilder.Replace("{CSHARP_TYPE}", param.Type.ToCSharpType());
-                eventParamStringBuilder.Replace("{CSHARP_NAME}", param.Name.RemoveFirstUnderline().Capitalize());
-                eventParamStringBuilder.Replace("{PARAM_ORDER}", count++.ToString());
-                eventParamStringBuilder.Replace("{PARAM_INDEXED}", param.Indexed.ToString().ToLowerInvariant());
-                eventParams.Append(eventParamStringBuilder);
-                eventParams.Append("\n");
-            }
+            eventStringBuilder.Replace("{EVENT_NAME_CSHARP}", eventABI.Name.RemoveFirstUnderscore().Capitalize());
+            var stringBuilder = ParseParameters(eventABI.InputParameters, paramTemplate);
 
-            eventStringBuilder.Replace("{EVENT_PARAMS}", eventParams.ToString());
+            eventStringBuilder.Replace("{EVENT_PARAMS}", stringBuilder.ToString());
             sb.Append(eventStringBuilder);
             sb.Append("\n\n");
             sb.Replace("{EVENT_LOG_SUBSCRIPTION}",
-                $"EthLogsObservableSubscription event{eventABI.Name.RemoveFirstUnderline().Capitalize()};");
+                $"EthLogsObservableSubscription event{eventABI.Name.RemoveFirstUnderscore().Capitalize()};");
             sb.Replace("{EVENT_ACTION_SUBSCRIPTION}",
-                $"public event Action<{eventABI.Name.RemoveFirstUnderline().Capitalize()}EventDTO> On{eventABI.Name.RemoveFirstUnderline().Capitalize()};");
+                $"public event Action<{eventABI.Name.RemoveFirstUnderscore().Capitalize()}EventDTO> On{eventABI.Name.RemoveFirstUnderscore().Capitalize()};");
         }
 
         return sb.ToString();
+    }
+
+    private StringBuilder ParseParameters(IList<Parameter> parameters, string paramTemplate)
+    {
+        var stringBuilder = new StringBuilder();
+        for (var index = 0; index < parameters.Count; index++)
+        {
+            var param = parameters[index];
+            var eventParamStringBuilder = new StringBuilder(paramTemplate);
+            eventParamStringBuilder.Replace("{TRUE_TYPE}", param.Type);
+            eventParamStringBuilder.Replace("{TRUE_NAME}", param.Name);
+            eventParamStringBuilder.Replace("{CSHARP_TYPE}", param.InternalType.ToCSharpType());
+            eventParamStringBuilder.Replace("{CSHARP_NAME}", param.Name.RemoveFirstUnderscore().Capitalize());
+            eventParamStringBuilder.Replace("{PARAM_ORDER}", index.ToString());
+            eventParamStringBuilder.Replace("{PARAM_INDEXED}", param.Indexed.ToString().ToLowerInvariant());
+            stringBuilder.Append(eventParamStringBuilder);
+            stringBuilder.Append("\n");
+        }
+
+        return stringBuilder;
     }
 
     private bool IsValidAbi(string abi)
@@ -385,16 +456,29 @@ public static class ABIToCSHarpTypesExtension
             "bytes30" => "byte[]",
             "bytes31" => "byte[]",
             "bytes32" => "byte[]",
-            _ => "object" // Default case for unknown types
+            _ => GetParameterTypeFromDictionary(parameter)
         };
+    }
+
+    private static string GetParameterTypeFromDictionary(string parameter)
+    {
+        var dict = ABICSharpConverter.Instance.CustomClassDict;
+        var paramName = parameter.Split(".")[^1].RemoveFirstUnderscore().Capitalize();
+        if (!dict.ContainsKey(paramName))
+        {
+            Debug.LogError("Can't find" + parameter + " in the dictionary");
+            return "object";
+        }
+
+        return paramName;
     }
 
     public static string Capitalize(this string str)
     {
-        return char.ToUpper(str[0]) + str[1..];
+        return string.IsNullOrEmpty(str) ? str : char.ToUpper(str[0]) + str[1..];
     }
 
-    public static string RemoveFirstUnderline(this string str)
+    public static string RemoveFirstUnderscore(this string str)
     {
         return str[0] == '_' ? str[1..] : str;
     }
