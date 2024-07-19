@@ -28,5 +28,15 @@ namespace ChainSafe.Gaming.LocalStorage
 
             await dataStorage.Save(storable);
         }
+
+        public static void ClearOneTime<TStorable>(this TStorable storable, IServiceCollection services)
+            where TStorable : class, IStorable
+        {
+            IServiceProvider serviceProvider = services.BuildServiceProvider();
+
+            DataStorage dataStorage = serviceProvider.GetService<DataStorage>();
+
+            dataStorage.Clear(storable);
+        }
     }
 }

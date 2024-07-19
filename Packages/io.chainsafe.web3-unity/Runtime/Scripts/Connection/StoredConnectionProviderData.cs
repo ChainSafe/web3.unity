@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace ChainSafe.Gaming.UnityPackage.Connection
 {
-    public class StoredConnectionProviderData : IStorable, IWeb3InitializedHandler
+    public class StoredConnectionProviderData : IStorable, IWeb3InitializedHandler, ILogoutHandler
     {
         [JsonIgnore]
         public string StoragePath => "connection-provider-data.json";
@@ -23,6 +23,13 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         public async Task OnWeb3Initialized()
         {
             await this.SaveOneTime();
+        }
+
+        public Task OnLogout()
+        {
+            this.ClearOneTime();
+            
+            return Task.CompletedTask;
         }
     }
 }
