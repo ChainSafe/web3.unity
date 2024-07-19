@@ -7,6 +7,7 @@ using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Core.Evm;
+using Nethereum.ABI.Model;
 using Nethereum.Hex.HexTypes;
 
 namespace ChainSafe.Gaming.Evm.Contracts
@@ -100,6 +101,32 @@ namespace ChainSafe.Gaming.Evm.Contracts
             return Decode(method, result);
         }
 
+        public async Task<T> Call<T>(string method, object[] parameters = null, TransactionRequest overwrite = null)
+        {
+            if (string.IsNullOrEmpty(address))
+            {
+                throw new Exception("contract address is not set");
+            }
+
+            if (provider == null)
+            {
+                throw new Exception("provider or signer is not set");
+            }
+
+            parameters ??= Array.Empty<object>();
+
+            var txReq = await PrepareTransactionRequest(method, parameters, overwrite);
+
+            var result = await provider.Call(txReq);
+            analyticsClient.CaptureEvent(new AnalyticsEvent()
+            {
+                EventName = method,
+                PackageName = "io.chainsafe.web3.unity",
+            });
+
+            return contractAbiManager.GetFunctionBuilder(method).DecodeTypeOutput<T>(result);
+        }
+
         /// <summary>
         /// Decodes a result.
         /// </summary>
@@ -137,6 +164,20 @@ namespace ChainSafe.Gaming.Evm.Contracts
         /// <param name="method">The method.</param>
         /// <param name="parameters">The parameters.</param>
         /// <param name="overwrite">An existing TransactionRequest to use instead of making a new one.</param>
+        /// <typeparam name="T">Type of object you want to use.</typeparam>
+        /// <returns>The outputs of the method.</returns>
+        public async Task<T> Send<T>(string method, object[] parameters = null, TransactionRequest overwrite = null)
+        {
+            var result = (await SendWithReceipt<T>(method, parameters, overwrite)).response;
+            return result;
+        }
+
+        /// <summary>
+        /// Sends the transaction.
+        /// </summary>
+        /// <param name="method">The method.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <param name="overwrite">An existing TransactionRequest to use instead of making a new one.</param>
         /// <returns>The outputs of the method and the transaction receipt.</returns>
         public async Task<(object[] response, TransactionReceipt receipt)> SendWithReceipt(
             string method,
@@ -164,6 +205,47 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
             var output = function.DecodeOutput(tx.Data);
             var outputValues = output.Select(x => x.Result).ToArray();
+
+            analyticsClient.CaptureEvent(new AnalyticsEvent()
+            {
+                EventName = method,
+                PackageName = "io.chainsafe.web3.unity",
+            });
+
+            return (outputValues, receipt);
+        }
+
+        /// <summary>
+        /// Sends the transaction.
+        /// </summary>
+        /// <param name="method">The method.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <param name="overwrite">An existing TransactionRequest to use instead of making a new one.</param>
+        /// <typeparam name="T">Type of object you want to use.</typeparam>
+        /// <returns>The outputs of the method and the transaction receipt.</returns>
+        public async Task<(T response, TransactionReceipt receipt)> SendWithReceipt<T>(
+            string method,
+            object[] parameters = null,
+            TransactionRequest overwrite = null)
+        {
+            if (string.IsNullOrEmpty(address))
+            {
+                throw new Exception("contract address is not set");
+            }
+
+            if (signer == null)
+            {
+                throw new Exception("signer is not set");
+            }
+
+            parameters ??= Array.Empty<object>();
+
+            var txReq = await PrepareTransactionRequest(method, parameters, overwrite);
+
+            var tx = await transactionExecutor.SendTransaction(txReq);
+            var receipt = await provider.WaitForTransactionReceipt(tx.Hash);
+
+            var outputValues = contractAbiManager.GetFunctionBuilder(method).DecodeTypeOutput<T>(tx.Data);
 
             analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
