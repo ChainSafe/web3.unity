@@ -1,9 +1,7 @@
-using System;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Nethereum.ABI.ABIDeserialisation;
 using Nethereum.ABI.Model;
 using UnityEditor;
@@ -66,7 +64,6 @@ public class ABICSharpConverter : EditorWindow
             EditorGUILayout.HelpBox("Contract Name cannot be empty", MessageType.Error);
             return;
         }
-
         if (GUILayout.Button("Convert"))
         {
             _contractABI = ABIDeserialiserFactory.DeserialiseContractABI(_abi);
@@ -79,11 +76,17 @@ public class ABICSharpConverter : EditorWindow
             text = Regex.Replace(text, @"\s*\{METHODS\}", "\n\n" + ParseMethods());
             text = Regex.Replace(text, @"\s*\{EVENT_SUBSCRIPTION\}", "\n\n" + ParseEventSubscription());
             text = Regex.Replace(text, @"\s*\{EVENT_UNSUBSCRIPTION\}", "\n\n" + ParseEventUnsubscription());
+            text = Regex.Replace(text, @"\s*\{CUSTOM_CLASSES_OUTPUT\}", "\n\n" + ParseCustomClassesOutput());
             var path = AssetDatabase.GetAssetPath(_targetFolder);
             var fullPath = $"{path}/{_contractName}.cs";
             System.IO.File.WriteAllText(fullPath, text);
             AssetDatabase.Refresh();
         }
+    }
+
+    private string ParseCustomClassesOutput()
+    {
+        return string.Empty;
     }
 
 
@@ -148,6 +151,11 @@ public class ABICSharpConverter : EditorWindow
     private static void ReplaceReturnType(StringBuilder functionStringBuilder, FunctionABI functionABI,
         bool useTransactionReceipt)
     {
+        foreach (var outputParameter in functionABI.OutputParameters)
+        {
+
+        }
+        
         if (useTransactionReceipt)
         {
             if (functionABI.OutputParameters.Length >= 1)
@@ -259,7 +267,7 @@ public class ABICSharpConverter : EditorWindow
     {
         var sb = new StringBuilder();
         var eventTemplateBase = Resources.Load<TextAsset>("EventTemplate").text;
-        var eventParamTemplate = Resources.Load<TextAsset>("EventParamTemplate").text;
+        var eventParamTemplate = Resources.Load<TextAsset>("ParamTemplate").text;
 
         foreach (var eventABI in _contractABI.Events)
         {
@@ -271,10 +279,10 @@ public class ABICSharpConverter : EditorWindow
             foreach (var param in eventABI.InputParameters)
             {
                 var eventParamStringBuilder = new StringBuilder(eventParamTemplate);
-                eventParamStringBuilder.Replace("{EVENT_TRUE_TYPE}", param.Type);
-                eventParamStringBuilder.Replace("{EVENT_TRUE_NAME}", param.Name);
-                eventParamStringBuilder.Replace("{EVENT_CSHARP_TYPE}", param.Type.ToCSharpType());
-                eventParamStringBuilder.Replace("{EVENT_CSHARP_NAME}", param.Name.RemoveFirstUnderline().Capitalize());
+                eventParamStringBuilder.Replace("{TRUE_TYPE}", param.Type);
+                eventParamStringBuilder.Replace("{TRUE_NAME}", param.Name);
+                eventParamStringBuilder.Replace("{CSHARP_TYPE}", param.Type.ToCSharpType());
+                eventParamStringBuilder.Replace("{CSHARP_NAME}", param.Name.RemoveFirstUnderline().Capitalize());
                 eventParamStringBuilder.Replace("{PARAM_ORDER}", count++.ToString());
                 eventParamStringBuilder.Replace("{PARAM_INDEXED}", param.Indexed.ToString().ToLowerInvariant());
                 eventParams.Append(eventParamStringBuilder);
