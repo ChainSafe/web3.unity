@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -15,11 +16,13 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
 
         [SerializeField] private string sceneToLoad;
 
-        public void OnWeb3Initialized()
+        public Task OnWeb3Initialized()
         {
             LoginSceneBuildIndex = SceneManager.GetActiveScene().buildIndex;
 
             SceneManager.LoadSceneAsync(sceneToLoad);
+
+            return Task.CompletedTask;
         }
     }
 }

@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.LocalStorage;
 using ChainSafe.Gaming.UnityPackage.UI;
+using ChainSafe.Gaming.Web3.Build;
+using Microsoft.Extensions.DependencyInjection;
 using UnityEngine;
 
 namespace ChainSafe.Gaming.UnityPackage.Connection
@@ -8,7 +12,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
     /// <summary>
     /// A concrete implementation of <see cref="IConnectionHandler"/>.
     /// </summary>
-    public class ConnectionHandler : MonoBehaviour, IConnectionHandler
+    public class ConnectionHandler : MonoBehaviour, IConnectionHandler, IWeb3BuilderServiceAdapter
     {
         [SerializeField] private string gelatoApiKey = "";
         [Space]
@@ -18,7 +22,6 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         
         public string GelatoApiKey => gelatoApiKey;
         public IWeb3BuilderServiceAdapter[] Web3BuilderServiceAdapters { get; private set; }
-        public IWeb3InitializedHandler[] Web3InitializedHandlers { get; private set; }
         public ConnectionProvider ConnectionProvider { get; private set; }
 
         private void Start()
@@ -33,7 +36,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         {
             Web3BuilderServiceAdapters = GetComponents<IWeb3BuilderServiceAdapter>();
 
-            Web3InitializedHandlers = GetComponents<IWeb3InitializedHandler>();
+            await TryRestore();
             
             foreach (var provider in providers)
             {
@@ -53,6 +56,18 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
             }
         }
 
+        private async Task TryRestore()
+        {
+            var provider = await providers.OfType<RestorableConnectionProvider>().GetProvider();
+            
+            if (provider != null && await provider.SavedSessionAvailable())
+            {
+                ConnectionProvider = provider;
+                
+                await TryConnect();
+            }
+        }
+        
         private async void ConnectClicked()
         {
             await TryConnect();
@@ -81,8 +96,24 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
             }
             finally
             {
-                connectModal.HideLoading();
+                if (connectModal != null)
+                {
+                    connectModal.HideLoading();
+                }
             }
+        }
+
+        public Web3Builder ConfigureServices(Web3Builder web3Builder)
+        {
+            return web3Builder.Configure(services =>
+            {
+                var web3InitializedHandlers = GetComponents<IWeb3InitializedHandler>();
+
+                foreach (var handler in web3InitializedHandlers)
+                {
+                    services.AddSingleton(handler);
+                }
+            });
         }
     }
 }

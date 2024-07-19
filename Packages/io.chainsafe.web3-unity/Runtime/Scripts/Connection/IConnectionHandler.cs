@@ -7,6 +7,7 @@ using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Unity;
 using ChainSafe.GamingSdk.Gelato;
+using Microsoft.Extensions.DependencyInjection;
 using Scripts.EVM.Token;
 
 namespace ChainSafe.Gaming.UnityPackage.Connection
@@ -27,11 +28,6 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         public IWeb3BuilderServiceAdapter[] Web3BuilderServiceAdapters { get; }
 
         /// <summary>
-        /// All Web3 initialized handlers called when Web3 instance is initialized.
-        /// </summary>
-        public IWeb3InitializedHandler[] Web3InitializedHandlers { get; }
-        
-        /// <summary>
         /// Connection Provider used to create connection.
         /// </summary>
         public ConnectionProvider ConnectionProvider { get; }
@@ -49,14 +45,16 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
 
             Web3Accessor.Set(web3);
 
-            OnWeb3Initialized();
+            await OnWeb3Initialized(web3);
         }
 
-        private void OnWeb3Initialized()
+        private async Task OnWeb3Initialized(Web3.Web3 web3)
         {
-            foreach (var web3InitializedHandler in Web3InitializedHandlers)
+            var web3InitializedHandlers = web3.ServiceProvider.GetServices<IWeb3InitializedHandler>();
+            
+            foreach (var web3InitializedHandler in web3InitializedHandlers)
             {
-                web3InitializedHandler.OnWeb3Initialized();
+                await web3InitializedHandler.OnWeb3Initialized();
             }
         }
 
