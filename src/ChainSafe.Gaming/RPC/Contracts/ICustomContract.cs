@@ -9,7 +9,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
         public string ContractAddress { get; set; }
 
-        public Contract OriginalContract { get;  set; }
+        public Contract OriginalContract { get; set; }
 
         public string WebSocketUrl { get; set; }
 

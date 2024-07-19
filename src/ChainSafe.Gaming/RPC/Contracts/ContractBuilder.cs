@@ -23,7 +23,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
         private readonly ILogWriter logWriter;
 
         public ContractBuilder(IRpcProvider rpcProvider, IAnalyticsClient analyticsClient, ILogWriter logWriter, IChainConfig chainConfig)
-            : this(new(), rpcProvider, null, null, analyticsClient, logWriter, chainConfig )
+            : this(new(), rpcProvider, null, null, analyticsClient, logWriter, chainConfig)
         {
         }
 
@@ -33,7 +33,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
         }
 
         public ContractBuilder(ContractBuilderConfig config, IRpcProvider rpcProvider, ISigner signer, IAnalyticsClient analyticsClient, ILogWriter logWriter, IChainConfig chainConfig)
-            : this(config, rpcProvider, signer, null, analyticsClient,  logWriter, chainConfig)
+            : this(config, rpcProvider, signer, null, analyticsClient, logWriter, chainConfig)
         {
         }
 
@@ -79,7 +79,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
         public Contract Build(string abi, string address)
         {
-            if(BasicContracts.TryGetValue(address, out var value))
+            if (BasicContracts.TryGetValue(address, out var value))
             {
                 return value;
             }
