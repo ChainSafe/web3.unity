@@ -16,6 +16,7 @@ using Network = Web3Auth.Network;
 /// <summary>
 /// ConnectionProvider for connecting wallet via Web3Auth.
 /// </summary>
+[CreateAssetMenu(menuName = "ChainSafe/Connection Provider/Web3Auth", fileName = nameof(Web3AuthConnectionProvider))]
 public class Web3AuthConnectionProvider : ConnectionProvider
 {
     [SerializeField] private string clientId;
@@ -62,15 +63,10 @@ public class Web3AuthConnectionProvider : ConnectionProvider
         await _initializeTcs.Task;
         
         Debug.Log("Web3Auth Initialized Successfully.");
-
-        // Don't allow connection before initialization.
-        ConnectButton.interactable = true;
     }
 #else
     public override Task Initialize()
     {
-        ConnectButton.interactable = true;
-        
         return Task.CompletedTask;
     }
 #endif

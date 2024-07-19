@@ -7,9 +7,9 @@ using UnityEngine.UI;
 namespace ChainSafe.Gaming.UnityPackage.Connection
 {
     /// <summary>
-    /// Connection Provider used for connecting to a wallet.
+    /// Connection Provider Scriptable Object.
     /// </summary>
-    public abstract class ConnectionProvider : MonoBehaviour, IWeb3BuilderServiceAdapter
+    public abstract class ConnectionProvider : ScriptableObject, IWeb3BuilderServiceAdapter
     {
         /// <summary>
         /// Is provider available for connection.
@@ -18,9 +18,14 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         public abstract bool IsAvailable { get; }
         
         /// <summary>
+        /// Name of connection provider.
+        /// </summary>
+        [field: SerializeField] public string Name { get; private set; }
+        
+        /// <summary>
         /// Button to connect to the wallet.
         /// </summary>
-        [field: SerializeField] public Button ConnectButton { get; private set; }
+        [field: SerializeField] public Button ConnectButtonRow { get; private set; }
         
         /// <summary>
         /// Initialize Connection provider.

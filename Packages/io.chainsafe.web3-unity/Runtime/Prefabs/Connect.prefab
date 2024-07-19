@@ -1146,12 +1146,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gelatoApiKey: 7MFQqyGS1Iui_e_MgmFW1BfbFeJ06g8nnL2oUTlIJug_
+  autoConnectToPreviousSession: 1
   connectModal: {fileID: 5955209656218357189}
   providers:
-  - {fileID: 4800578877220411311, guid: 4591cfadb2bf9824da90ebf4005728a8, type: 3}
-  - {fileID: 4276990323382053958, guid: 1200437cb83a29c4fb63faa44cf63f0d, type: 3}
-  - {fileID: 1727169539746137890, guid: 71b112e16f898d140935553a4b33ae1f, type: 3}
-  - {fileID: 8841964981256285308, guid: 163bbaaeb51883442a20ea7532888a43, type: 3}
+  - {fileID: 11400000, guid: a15bdaf25319d6f44b48ff2159e4b7fb, type: 2}
+  - {fileID: 11400000, guid: 5a662f0c96c53db48b29a3aa7ab0f102, type: 2}
+  - {fileID: 11400000, guid: 70ad5245d5b5895448ba4fd9ad57ea95, type: 2}
+  - {fileID: 11400000, guid: f891ba0f7fed9084982e95c96826fcb7, type: 2}
 --- !u!114 &2962743025659679964
 MonoBehaviour:
   m_ObjectHideFlags: 0

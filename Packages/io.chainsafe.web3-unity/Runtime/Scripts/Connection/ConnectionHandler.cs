@@ -6,6 +6,8 @@ using ChainSafe.Gaming.UnityPackage.UI;
 using ChainSafe.Gaming.Web3.Build;
 using Microsoft.Extensions.DependencyInjection;
 using UnityEngine;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 namespace ChainSafe.Gaming.UnityPackage.Connection
 {
@@ -16,6 +18,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
     {
         [SerializeField] private string gelatoApiKey = "";
         [Space]
+        [SerializeField] private bool autoConnectToPreviousSession;
         [SerializeField] private ConnectModal connectModal;
         // Handed in ConnectionHandlerEditor
         [HideInInspector] [SerializeField] private ConnectionProvider[] providers;
@@ -36,19 +39,25 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         {
             Web3BuilderServiceAdapters = GetComponents<IWeb3BuilderServiceAdapter>();
 
-            await TryRestore();
+            if (autoConnectToPreviousSession)
+            {
+                await TryRestore();
+            }
             
             foreach (var provider in providers)
             {
                 if (provider != null && provider.IsAvailable)
                 {
-                    var instantiatedProvider = connectModal.AddProvider(provider);
-
-                    await instantiatedProvider.Initialize();
+                    Button button = connectModal.AddProvider(provider.ConnectButtonRow);
                     
-                    instantiatedProvider.ConnectButton.onClick.AddListener(delegate
+                    await provider.Initialize();
+
+                    // Don't allow connection before initialization.
+                    button.interactable = true;
+                    
+                    button.onClick.AddListener(delegate
                     {
-                        ConnectionProvider = instantiatedProvider;
+                        ConnectionProvider = provider;
                         
                         ConnectClicked();
                     });
@@ -60,7 +69,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         {
             var provider = await providers.OfType<RestorableConnectionProvider>().GetProvider();
             
-            if (provider != null && await provider.SavedSessionAvailable())
+            if (provider != null && provider.RememberSession && await provider.SavedSessionAvailable())
             {
                 ConnectionProvider = provider;
                 

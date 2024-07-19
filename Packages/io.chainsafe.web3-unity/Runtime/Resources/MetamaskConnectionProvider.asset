@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1272c3d1812e95e408d945d25da049bb, type: 3}
-  m_Name: Web3AuthConnectionProviderConfig
+  m_Script: {fileID: 11500000, guid: 1b64d00084d2c544aa644a8a6010964d, type: 3}
+  m_Name: MetamaskConnectionProvider
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Web3Auth
-  <ProviderRow>k__BackingField: {fileID: 8841964981256285308, guid: 163bbaaeb51883442a20ea7532888a43, type: 3}
+  <Name>k__BackingField: Metamask
+  <ConnectButtonRow>k__BackingField: {fileID: 8599114313589093787, guid: 1200437cb83a29c4fb63faa44cf63f0d, type: 3}

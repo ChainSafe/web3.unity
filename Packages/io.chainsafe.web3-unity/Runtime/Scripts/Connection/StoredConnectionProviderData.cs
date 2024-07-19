@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.LocalStorage;
+using ChainSafe.Gaming.Web3.Core.Logout;
 using Newtonsoft.Json;
 
 namespace ChainSafe.Gaming.UnityPackage.Connection

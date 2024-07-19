@@ -9,6 +9,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
     /// <summary>
     /// WalletConnect connection provider used for connecting to a wallet using WalletConnect.
     /// </summary>
+    [CreateAssetMenu(menuName = "ChainSafe/Connection Provider/Wallet Connect", fileName = nameof(WalletConnectConnectionProvider))]
     public class WalletConnectConnectionProvider : ConnectionProvider
     {
         [SerializeField] private WalletConnectConfigSO walletConnectConfig;

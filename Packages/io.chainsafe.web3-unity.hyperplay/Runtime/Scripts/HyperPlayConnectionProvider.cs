@@ -11,6 +11,7 @@ namespace ChainSafe.Gaming.HyperPlay
     /// <summary>
     /// Connection provider for connecting via HyperPlay Launcher.
     /// </summary>
+    [CreateAssetMenu(menuName = "ChainSafe/Connection Provider/HyperPlay", fileName = nameof(HyperPlayConnectionProvider))]
     public class HyperPlayConnectionProvider : RestorableConnectionProvider
     {
         public override bool IsAvailable => Application.isEditor || !Application.isMobilePlatform;

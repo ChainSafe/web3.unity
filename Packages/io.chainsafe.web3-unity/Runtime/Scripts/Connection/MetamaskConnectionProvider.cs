@@ -11,6 +11,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
     /// <summary>
     /// Metamask connection provider used for connecting to a Metamask wallet.
     /// </summary>
+    [CreateAssetMenu(menuName = "ChainSafe/Connection Provider/Metamask", fileName = nameof(MetamaskConnectionProvider))]
     public class MetamaskConnectionProvider : ConnectionProvider
     {
         public override bool IsAvailable => Application.platform == RuntimePlatform.WebGLPlayer && Application.isEditor == false;

@@ -53,11 +53,11 @@ namespace ChainSafe.Gaming.UnityPackage.UI
         /// <summary>
         /// Add connection provider to the modal.
         /// </summary>
-        /// <param name="provider">ConnectionProvider prefab to be added.</param>
+        /// <param name="buttonPrefab">Button row prefab for connection.</param>
         /// <returns>Added connection provider.</returns>
-        public ConnectionProvider AddProvider(ConnectionProvider provider)
+        public Button AddProvider(Button buttonPrefab)
         {
-            return Instantiate(provider, providerContainer);
+            return Instantiate(buttonPrefab, providerContainer);
         }
         
         private void Close()
