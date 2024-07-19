@@ -1,3 +1,4 @@
+#if UNITY_WEBGL && !UNITY_EDITOR
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm;
 using ChainSafe.Gaming.LocalStorage;
@@ -94,3 +95,5 @@ namespace ChainSafe.Gaming.HyperPlay
         }
     }
 }
+
+#endif

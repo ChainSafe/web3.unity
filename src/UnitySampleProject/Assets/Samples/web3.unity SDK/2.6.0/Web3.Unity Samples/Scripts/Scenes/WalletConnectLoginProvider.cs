@@ -1,15 +1,14 @@
-using ChainSafe.Gaming.UnityPackage.Common;
+using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.WalletConnect;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
-using Scenes;
 using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
 /// Login using an existing wallet with WalletConnect.
 /// </summary>
-public class WalletConnectLoginProvider : LoginProvider, IWeb3BuilderServiceAdapter
+public class WalletConnectLoginProvider : ConnectionHandler, IWeb3BuilderServiceAdapter
 {
     [SerializeField] private WalletConnectConfigSO walletConnectConfig;
     [SerializeField] private bool autoLoginPreviousSession = true;
@@ -31,7 +30,7 @@ public class WalletConnectLoginProvider : LoginProvider, IWeb3BuilderServiceAdap
         if (autoLoginPreviousSession && storedSessionAvailable) // auto-login
         {
             Debug.Log("Proceeding with auto-login.");
-            await TryLogin();
+            await TryConnect();
         }
 
         loginButton.onClick.AddListener(OnLoginClicked);
@@ -50,6 +49,6 @@ public class WalletConnectLoginProvider : LoginProvider, IWeb3BuilderServiceAdap
 
     private async void OnLoginClicked()
     {
-        await TryLogin();
+        await TryConnect();
     }
 }
