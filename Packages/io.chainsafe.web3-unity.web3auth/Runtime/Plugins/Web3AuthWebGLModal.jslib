@@ -1,20 +1,10 @@
 var Web3AuthWebGLNoModal =  {
     $Web3AuthWebGLNoModal : {},
 
-    SetLoginCallback: function (login) {
-        Web3AuthWebGLNoModal.loginCallback = function(sessionId){
-            var returnStr = sessionId;
-            var bufferSize = lengthBytesUTF8(returnStr) + 1;
-            var buffer = _malloc(bufferSize);
-            stringToUTF8(returnStr, buffer, bufferSize);
-            Module.dynCall_vi(login, [buffer]);
-        };
-    },
-    InitWeb3Auth: function (clientId, chainId, rpcTarget, displayName, blockExplorerUrl, ticker, tickerName, network) {
+    InitWeb3Auth: function (clientId, chainId, rpcTarget, displayName, blockExplorerUrl, ticker, tickerName, network, callback, fallback) {
+        
         window.web3auth = null;
         window.walletServicesPlugin = null;
-        
-       
 
         (async function init() {
             try {
@@ -53,15 +43,27 @@ var Web3AuthWebGLNoModal =  {
                 window.web3auth.configureAdapter(openloginAdapter);
 
                 await window.web3auth.init();
-                console.log("Web3Auth Initialized Successfully!");
+                
+                Module.dynCall_v(callback);
             } catch (error) {
-                console.error("Error during Web3Auth initialization:", error);
+                var stringToReturn = error.message;
+                var bufferSize = lengthBytesUTF8(stringToReturn) + 1;
+                var buffer = _malloc(bufferSize);
+                stringToUTF8(stringToReturn, buffer, bufferSize);
+                Module.dynCall_vi(fallback, [buffer]);
             }
         })();
     },
-
-    Web3AuthLogin: async function (provider, rememberMe) {
+    Web3AuthLogin: async function (provider, rememberMe, callback, fallback) {
+        
         try {
+            Web3AuthWebGLNoModal.loginCallback = function(sessionId){
+                var bufferSize = lengthBytesUTF8(sessionId) + 1;
+                var buffer = _malloc(bufferSize);
+                stringToUTF8(sessionId, buffer, bufferSize);
+                Module.dynCall_vi(callback, [buffer]);
+            };
+            
             await window.web3auth.connectTo("openlogin", {
                 loginProvider: UTF8ToString(provider)
             });
@@ -69,7 +71,11 @@ var Web3AuthWebGLNoModal =  {
                 localStorage.removeItem("openlogin_store");
             }
         } catch (error) {
-            console.log(error.message);
+            var stringToReturn = error.message;
+            var bufferSize = lengthBytesUTF8(error.message) + 1;
+            var buffer = _malloc(bufferSize);
+            stringToUTF8(stringToReturn, buffer, bufferSize);
+            Module.dynCall_vi(fallback, [buffer]);
         }
     },
 };

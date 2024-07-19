@@ -1,6 +1,6 @@
 using ChainSafe.Gaming.Web3.Build;
 
-namespace ChainSafe.Gaming.UnityPackage.Common
+namespace ChainSafe.Gaming.UnityPackage.Connection
 {
     /// <summary>
     /// Provides services for building a <see cref="Web3"/> instance.

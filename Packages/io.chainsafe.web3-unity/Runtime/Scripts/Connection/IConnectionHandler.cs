@@ -1,27 +1,20 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.Marketplace.Extensions;
 using ChainSafe.Gaming.MultiCall;
-using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Unity;
 using ChainSafe.GamingSdk.Gelato;
 using Scripts.EVM.Token;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using Environment = ChainSafe.Gaming.SygmaClient.Types.Environment;
 
-namespace ChainSafe.Gaming.UnityPackage.Common
+namespace ChainSafe.Gaming.UnityPackage.Connection
 {
     /// <summary>
     /// Builds <see cref="Web3"/> Instance and Login using a Wallet or a provider.
     /// </summary>
-    public interface ILoginProvider
+    public interface IConnectionHandler
     {
         /// <summary>
         /// Gelato API key from Gelato's Web Dashboard.
@@ -37,19 +30,22 @@ namespace ChainSafe.Gaming.UnityPackage.Common
         /// All Web3 initialized handlers called when Web3 instance is initialized.
         /// </summary>
         public IWeb3InitializedHandler[] Web3InitializedHandlers { get; }
+        
+        /// <summary>
+        /// Connection Provider used to create connection.
+        /// </summary>
+        public ConnectionProvider ConnectionProvider { get; }
 
         /// <summary>
         /// Login by Building a <see cref="Web3"/> Instance.
         /// </summary>
-        public async Task Login()
+        public async Task Connect()
         {
-            Web3.Web3 web3;
-
             Web3Builder web3Builder = new Web3Builder(ProjectConfigUtilities.Load()).Configure(ConfigureCommonServices);
 
             web3Builder = ConfigureWeb3Services(web3Builder);
 
-            web3 = await web3Builder.LaunchAsync();
+            var web3 = await web3Builder.LaunchAsync();
 
             Web3Accessor.Set(web3);
 
@@ -76,11 +72,12 @@ namespace ChainSafe.Gaming.UnityPackage.Common
                 web3Builder = adapter.ConfigureServices(web3Builder);
             }
 
-            return web3Builder;
+            return ConnectionProvider.ConfigureServices(web3Builder);
         }
 
         private void ConfigureCommonServices(IWeb3ServiceCollection services)
         {
+            // TODO: most of these can/should be service adapters
             services
                 .UseUnityEnvironment()
                 .UseGelato(GelatoApiKey)

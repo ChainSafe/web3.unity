@@ -4,8 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ChainSafe.Gaming
+namespace ChainSafe.Gaming.UnityPackage.UI
 {
+    /// <summary>
+    /// Loading overlay used for displaying a loading spinner. 
+    /// </summary>
     public class LoadingOverlay : MonoBehaviour
     {
         [SerializeField] private RectTransform spinnerTransform;
