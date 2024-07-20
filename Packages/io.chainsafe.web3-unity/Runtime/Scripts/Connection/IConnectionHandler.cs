@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Connection;
 using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.Marketplace.Extensions;
@@ -9,6 +10,7 @@ using ChainSafe.Gaming.Web3.Unity;
 using ChainSafe.GamingSdk.Gelato;
 using Microsoft.Extensions.DependencyInjection;
 using Scripts.EVM.Token;
+using CWeb3 = ChainSafe.Gaming.Web3.Web3;
 
 namespace ChainSafe.Gaming.UnityPackage.Connection
 {
@@ -28,27 +30,23 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         public IWeb3BuilderServiceAdapter[] Web3BuilderServiceAdapters { get; }
 
         /// <summary>
-        /// Connection Provider used to create connection.
-        /// </summary>
-        public ConnectionProvider ConnectionProvider { get; }
-
-        /// <summary>
         /// Login by Building a <see cref="Web3"/> Instance.
         /// </summary>
-        public async Task Connect()
+        public async Task<CWeb3> Connect(ConnectionProvider provider)
         {
-            Web3Builder web3Builder = new Web3Builder(ProjectConfigUtilities.Load()).Configure(ConfigureCommonServices);
-
-            web3Builder = ConfigureWeb3Services(web3Builder);
+            Web3Builder web3Builder = new Web3Builder(ProjectConfigUtilities.Load())
+                .Configure(ConfigureCommonServices)
+                .ConfigureServices(Web3BuilderServiceAdapters)
+                .ConfigureServices(provider);
 
             var web3 = await web3Builder.LaunchAsync();
 
-            Web3Accessor.Set(web3);
-
             await OnWeb3Initialized(web3);
+
+            return web3;
         }
 
-        private async Task OnWeb3Initialized(Web3.Web3 web3)
+        private async Task OnWeb3Initialized(CWeb3 web3)
         {
             var web3InitializedHandlers = web3.ServiceProvider.GetServices<IWeb3InitializedHandler>();
             
@@ -56,21 +54,6 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
             {
                 await web3InitializedHandler.OnWeb3Initialized();
             }
-        }
-
-        /// <summary>
-        /// Configure services to inject based on the type of Login/Provider you want to use.
-        /// </summary>
-        /// <param name="web3Builder">Builder for services to use.</param>
-        /// <returns>Builder with new services added/injected.</returns>
-        private Web3Builder ConfigureWeb3Services(Web3Builder web3Builder)
-        {
-            foreach (var adapter in Web3BuilderServiceAdapters)
-            {
-                web3Builder = adapter.ConfigureServices(web3Builder);
-            }
-
-            return ConnectionProvider.ConfigureServices(web3Builder);
         }
 
         private void ConfigureCommonServices(IWeb3ServiceCollection services)

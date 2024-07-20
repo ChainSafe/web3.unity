@@ -32,16 +32,4 @@ namespace ChainSafe.Gaming
         
         public abstract Task<bool> SavedSessionAvailable();
     }
-    
-    public static class RestorableConnectionProviderExtensions
-    {
-        public static async Task<RestorableConnectionProvider> GetProvider(this IEnumerable<RestorableConnectionProvider> providers)
-        {
-            var data = new StoredConnectionProviderData();
-
-            await data.LoadOneTime();
-
-            return providers.SingleOrDefault(p => p.GetType() == data.Type);
-        }
-    }
 }
