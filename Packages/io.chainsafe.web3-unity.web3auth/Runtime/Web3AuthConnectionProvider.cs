@@ -17,7 +17,7 @@ using Network = Web3Auth.Network;
 /// ConnectionProvider for connecting wallet via Web3Auth.
 /// </summary>
 [CreateAssetMenu(menuName = "ChainSafe/Connection Provider/Web3Auth", fileName = nameof(Web3AuthConnectionProvider))]
-public class Web3AuthConnectionProvider : ConnectionProvider
+public class Web3AuthConnectionProvider : RestorableConnectionProvider
 {
     [SerializeField] private string clientId;
     [SerializeField] private string redirectUri;
@@ -29,6 +29,8 @@ public class Web3AuthConnectionProvider : ConnectionProvider
     
     private Web3AuthModal _modal;
 
+    private bool _rememberMe;
+    
     public override bool IsAvailable => true;
 
  #if UNITY_WEBGL && !UNITY_EDITOR
@@ -71,34 +73,32 @@ public class Web3AuthConnectionProvider : ConnectionProvider
     }
 #endif
 
-    public override Web3Builder ConfigureServices(Web3Builder web3Builder)
+    protected override void ConfigureServices(IWeb3ServiceCollection services)
     {
         DisplayModal();
         
-        return web3Builder.Configure(services =>
+        var web3AuthConfig = new Web3AuthWalletConfig
         {
-            var web3AuthConfig = new Web3AuthWalletConfig
+            Web3AuthOptions = new()
             {
-                Web3AuthOptions = new()
+                clientId = clientId,
+                redirectUrl = new Uri(redirectUri),
+                network = network,
+                whiteLabel = new()
                 {
-                    clientId = clientId,
-                    redirectUrl = new Uri(redirectUri),
-                    network = network,
-                    whiteLabel = new()
-                    {
-                        mode = Web3Auth.ThemeModes.dark,
-                        defaultLanguage = Web3Auth.Language.en,
-                        appName = "ChainSafe Gaming SDK",
-                    }
-                },
-                // RememberMe = rememberMe
-            };
+                    mode = Web3Auth.ThemeModes.dark,
+                    defaultLanguage = Web3Auth.Language.en,
+                    appName = "ChainSafe Gaming SDK",
+                }
+            },
+            RememberMe = _rememberMe || RememberSession,
+        };
 
-            web3AuthConfig.CancellationToken = _modal.CancellationToken;
+        web3AuthConfig.CancellationToken = _modal.CancellationToken;
             
-            web3AuthConfig.ProviderTask = _modal.SelectProvider();
+        web3AuthConfig.ProviderTask = _modal.SelectProvider();
 
- #if UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_WEBGL && !UNITY_EDITOR
             web3AuthConfig.CancellationToken.Register(delegate
             {
                 if (_connectionTcs != null && !_connectionTcs.Task.IsCompleted)
@@ -110,8 +110,17 @@ public class Web3AuthConnectionProvider : ConnectionProvider
             web3AuthConfig.SessionTask = Connect();
 #endif
 
-            services.UseWeb3AuthWallet(web3AuthConfig);
-        });
+        services.UseWeb3AuthWallet(web3AuthConfig);
+    }
+
+    public override Task<bool> SavedSessionAvailable()
+    {
+        if (!string.IsNullOrEmpty(KeyStoreManagerUtils.getPreferencesData(KeyStoreManagerUtils.SESSION_ID)))
+        {
+            _rememberMe = true;
+        }
+        
+        return Task.FromResult(_rememberMe);
     }
 
     public override void HandleException(Exception exception)
@@ -161,7 +170,7 @@ public class Web3AuthConnectionProvider : ConnectionProvider
         
         var provider = await _modal.SelectProvider();
         
-        Web3AuthLogin(provider.ToString().ToLower(), false, Connected, ConnectError);
+        Web3AuthLogin(provider.ToString().ToLower(), _rememberMe || RememberSession, Connected, ConnectError);
 
         return await _connectionTcs.Task;
     }

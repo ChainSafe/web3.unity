@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Name>k__BackingField: WalletConnect
   <ConnectButtonRow>k__BackingField: {fileID: 8599114313589093787, guid: 4591cfadb2bf9824da90ebf4005728a8, type: 3}
+  <RememberSession>k__BackingField: 1
   walletConnectConfig: {fileID: 11400000, guid: fde7db0e37b4a884da1149e9f1999093, type: 2}

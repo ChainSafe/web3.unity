@@ -27,8 +27,7 @@ namespace ChainSafe.Gaming.HyperPlay
         {
             var config = new HyperPlayConfig
             {
-                // RememberSession = rememberMeToggle.isOn || _storedSessionAvailable,
-                RememberSession = true,
+                RememberSession = RememberSession,
             };
 #if UNITY_WEBGL && !UNITY_EDITOR
             services.UseHyperPlay<HyperPlayWebGLProvider>(config);

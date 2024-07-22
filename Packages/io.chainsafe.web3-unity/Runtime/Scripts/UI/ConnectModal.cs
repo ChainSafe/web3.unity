@@ -32,7 +32,7 @@ namespace ChainSafe.Gaming.UnityPackage.UI
             closeFromBackgroundButton.onClick.AddListener(Close);
         }
 
-        public async Task Initialize(ConnectionHandler connectionHandler)
+        public void Initialize(ConnectionHandler connectionHandler)
         {
             _connectionHandler = connectionHandler;
             
@@ -40,8 +40,6 @@ namespace ChainSafe.Gaming.UnityPackage.UI
             {
                 if (provider != null && provider.IsAvailable)
                 {
-                    await provider.Initialize();
-
                     Button button = Instantiate(provider.ConnectButtonRow, providerContainer);
 
                     // Don't allow connection before initialization.

@@ -23,7 +23,7 @@ public class ConnectToWallet : MonoBehaviour
 
     private async void Start()
     {
-        _connectionHandler.Initialize();
+        await _connectionHandler.Initialize();
         
         if (connectOnInitialize)
         {
@@ -39,8 +39,10 @@ public class ConnectToWallet : MonoBehaviour
         
         _connectModal = Instantiate(connectModalPrefab);
         
-        await _connectModal.Initialize(_connectionHandler);
+        _connectModal.Initialize(_connectionHandler);
         
         connectButton.onClick.AddListener(_connectModal.Show);
+        
+        connectButton.interactable = true;
     }
 }

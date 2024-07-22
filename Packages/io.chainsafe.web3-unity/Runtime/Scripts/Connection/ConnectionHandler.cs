@@ -25,9 +25,14 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         /// <summary>
         /// Initializes Connection Handler.
         /// </summary>
-        public void Initialize()
+        public async Task Initialize()
         {
             Web3BuilderServiceAdapters = GetComponents<IWeb3BuilderServiceAdapter>();
+
+            foreach (var provider in Providers)
+            {
+                await provider.Initialize();
+            }
         }
 
         public async Task<CWeb3> Restore()
@@ -36,7 +41,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
 
             await data.LoadOneTime();
 
-            var provider = providers.OfType<RestorableConnectionProvider>()
+            var provider = Providers.OfType<RestorableConnectionProvider>()
                 .SingleOrDefault(p => p.GetType() == data.Type);
             
             if (provider != null && provider.RememberSession && await provider.SavedSessionAvailable())
