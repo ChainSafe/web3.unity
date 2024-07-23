@@ -63,9 +63,9 @@ namespace ChainSafe.Gaming.Evm.Contracts
             CustomContracts = new Dictionary<string, ICustomContract>();
         }
 
-        public Dictionary<string, Contract> BasicContracts { get; }
+        private Dictionary<string, Contract> BasicContracts { get; }
 
-        public Dictionary<string, ICustomContract> CustomContracts { get; }
+        private Dictionary<string, ICustomContract> CustomContracts { get; }
 
         public Contract Build(string name)
         {
@@ -111,11 +111,6 @@ namespace ChainSafe.Gaming.Evm.Contracts
             await contract.Init();
 
             return contract;
-        }
-
-        public bool AddCustomContract(ICustomContract customContract)
-        {
-            return CustomContracts.TryAdd(customContract.ContractAddress, customContract);
         }
 
         public ValueTask WillStartAsync()
