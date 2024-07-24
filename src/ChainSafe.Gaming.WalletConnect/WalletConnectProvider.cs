@@ -99,7 +99,7 @@ namespace ChainSafe.Gaming.WalletConnect
 
             ValidateConfig();
 
-            WCLogger.Logger = new WCLogWriter(logWriter);
+            WCLogger.Logger = new WCLogWriter(logWriter, config);
 
             localData = !config.ForceNewSession
                 ? await storage.LoadLocalData() ?? new LocalData()
