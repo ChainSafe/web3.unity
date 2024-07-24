@@ -69,3 +69,7 @@ Packages/io.chainsafe.web3-unity.lootboxes/Chainlink/Runtime/Libraries/:
 	ChainSafe.Gaming.Lootboxes.Chainlink.dll
 Packages/io.chainsafe.web3-unity.hyperplay/Runtime/Libraries/:
 	ChainSafe.Gaming.HyperPlay.dll
+Packages/io.chainsafe.web3-unity.mud/Runtime/Libraries/:
+	ChainSafe.Gaming.Mud.dll
+	Nethereum.Mud.dll
+	Nethereum.Mud.Contracts.dll

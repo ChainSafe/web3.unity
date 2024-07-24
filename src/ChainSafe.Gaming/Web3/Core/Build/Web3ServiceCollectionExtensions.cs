@@ -14,11 +14,9 @@ namespace ChainSafe.Gaming.Web3.Build
         /// <exception cref="Web3BuildException">Service of the specified type was already bound.</exception>
         public static void AssertServiceNotBound<T>(this IWeb3ServiceCollection services)
         {
-            var assertType = typeof(T);
-
-            if (services.Any(d => d.ServiceType == assertType))
+            if (services.IsBound<T>())
             {
-                throw new Web3BuildException($"Service of type {assertType} was already bound.");
+                throw new Web3BuildException($"Service of type {typeof(T)} was already bound.");
             }
         }
 
@@ -30,12 +28,22 @@ namespace ChainSafe.Gaming.Web3.Build
         /// <exception cref="Web3BuildException">The configuration object of the specified type was already bound.</exception>
         public static void AssertConfigurationNotBound<T>(this IWeb3ServiceCollection services)
         {
-            var assertType = typeof(T);
-
-            if (services.Any(d => d.ServiceType == assertType))
+            if (services.IsBound<T>())
             {
-                throw new Web3BuildException($"Configuration object of type {assertType} was already bound.");
+                throw new Web3BuildException($"Configuration object of type {typeof(T)} was already bound.");
             }
+        }
+
+        /// <summary>
+        /// Returns true if service of the specified type was already registered.
+        /// </summary>
+        /// <typeparam name="T">The type of the service.</typeparam>
+        /// <param name="services">The Web3 service collection.</param>
+        /// <returns>True if service of the specified type was already registered.</returns>
+        public static bool IsBound<T>(this IWeb3ServiceCollection services)
+        {
+            var assertType = typeof(T);
+            return services.Any(d => d.ServiceType == assertType);
         }
 
         /// <summary>
