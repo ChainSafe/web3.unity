@@ -11,25 +11,25 @@ namespace ChainSafe.Gaming.Evm.Contracts.Builders
     /// <summary>
     /// Represents a builder pattern class used to build a contract.
     /// </summary>
-    public class ContractBuilder
+    public class ContractAbiManager
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ContractBuilder"/> class using ABI string and contract address.
+        /// Initializes a new instance of the <see cref="ContractAbiManager"/> class using ABI string and contract address.
         /// </summary>
         /// <param name="abi">ABI string of the contract.</param>
         /// <param name="contractAddress">Ethereum address of the contract.</param>
-        public ContractBuilder(string abi, string contractAddress)
+        public ContractAbiManager(string abi, string contractAddress)
         {
             ContractABI = ABIDeserialiserFactory.DeserialiseContractABI(abi);
             Address = contractAddress;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ContractBuilder"/> class using a contract message type and contract address.
+        /// Initializes a new instance of the <see cref="ContractAbiManager"/> class using a contract message type and contract address.
         /// </summary>
         /// <param name="contractMessageType">Type containing attributes representing the contract ABI.</param>
         /// <param name="contractAddress">Ethereum address of the contract.</param>
-        public ContractBuilder(Type contractMessageType, string contractAddress)
+        public ContractAbiManager(Type contractMessageType, string contractAddress)
         {
             var abiExtractor = new AttributesToABIExtractor();
             ContractABI = abiExtractor.ExtractContractABI(contractMessageType);
@@ -37,11 +37,11 @@ namespace ChainSafe.Gaming.Evm.Contracts.Builders
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ContractBuilder"/> class using multiple contract message types and contract address.
+        /// Initializes a new instance of the <see cref="ContractAbiManager"/> class using multiple contract message types and contract address.
         /// </summary>
         /// <param name="contractMessagesTypes">Array of Types containing attributes representing the contract ABI.</param>
         /// <param name="contractAddress">Ethereum address of the contract.</param>
-        public ContractBuilder(Type[] contractMessagesTypes, string contractAddress)
+        public ContractAbiManager(Type[] contractMessagesTypes, string contractAddress)
         {
             var abiExtractor = new AttributesToABIExtractor();
             ContractABI = abiExtractor.ExtractContractABI(contractMessagesTypes);
@@ -51,12 +51,12 @@ namespace ChainSafe.Gaming.Evm.Contracts.Builders
         /// <summary>
         /// Gets or sets the ABI of the contract.
         /// </summary>
-        public ContractABI ContractABI { get; set; }
+        private ContractABI ContractABI { get; }
 
         /// <summary>
         /// Gets or sets the Ethereum address of the contract.
         /// </summary>
-        public string Address { get; set; }
+        private string Address { get; }
 
         /// <summary>
         /// Retrieves the default filter input for the contract.
