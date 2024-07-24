@@ -1,43 +1,47 @@
-
-
 SET SCRIPT_DIR=%~dp0
+
+setlocal enabledelayedexpansion
 
 echo Building project...
 pushd "%SCRIPT_DIR%\..\src\ChainSafe.Gaming.Unity"
 
-del obj /F /Q
-del bin /F /Q
-dotnet restore
-dotnet publish -c debug -f netstandard2.1 /property:Unity=true
-if %errorlevel% neq 0 exit /b %errorlevel%
+rem Publish the project
+dotnet publish ChainSafe.Gaming.Unity.csproj -c Debug /property:Unity=true
 
-echo Restoring non-Unity packages...
+set PUBLISH_PATH=bin\Debug\netstandard2.1\publish
 
-echo Moving files to Unity package...
+rem List generated DLLs
+echo DLLs Generated
+dir /b "%PUBLISH_PATH%"
 
-pushd bin\debug\netstandard2.1\publish
-del Newtonsoft.Json.dll
-del UnityEngine.dll
+set PACKAGE_LIB_PATH=
 
-if exist "..\..\..\..\..\..\Packages\io.chainsafe.web3-unity.lootboxes" (
-    echo Directory exists, performing actions...
-    rmdir /s /q "..\..\..\..\..\..\Packages\io.chainsafe.web3-unity.lootboxes\Chainlink\Runtime\Libraries"
-    mkdir "..\..\..\..\..\..\Packages\io.chainsafe.web3-unity.lootboxes\Chainlink\Runtime\Libraries"
-    copy Chainsafe.Gaming.Chainlink.dll "..\..\..\..\..\..\Packages\io.chainsafe.web3-unity.lootboxes\Chainlink\Runtime\Libraries"
-    copy Chainsafe.Gaming.LootBoxes.Chainlink.dll "..\..\..\..\..\..\Packages\io.chainsafe.web3-unity.lootboxes\Chainlink\Runtime\Libraries"
-) else (
-    echo Directory does not exist, skipping actions.
+rem Read and process each line from the dependencies file
+for /f "usebackq tokens=*" %%A in ("%SCRIPT_DIR%\data\published_dependencies.txt") do (
+    
+    set entry=%%A
+    
+    rem Check if the line ends with a colon
+    if "!entry:~-1!" == ":" (
+        set "PACKAGE_LIB_PATH=%SCRIPT_DIR%..\!entry:~0,-1!"
+        if exist "!PACKAGE_LIB_PATH!\" (
+            del /q "!PACKAGE_LIB_PATH!\*.dll"
+        ) else (
+            mkdir "!PACKAGE_LIB_PATH!"
+        )
+        
+        echo Copying to !PACKAGE_LIB_PATH!...
+    ) else (
+        set "DEPENDENCY=!entry: =!"
+        copy /y "%PUBLISH_PATH%\!DEPENDENCY!" "!PACKAGE_LIB_PATH!"
+    )
 )
 
-del Chainsafe.Gaming.Chainlink.dll
-del Chainsafe.Gaming.LootBoxes.Chainlink.dll
-
-del Microsoft.CSharp.dll
-if not exist ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries mkdir ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries\
-del ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries\* /F /Q
-copy *.dll ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries
-copy *.pdb ..\..\..\..\..\..\Packages\io.chainsafe.web3-unity\Runtime\Libraries
 popd
+
+rem Restore solution
+pushd "..\"
+dotnet restore
 popd
 
 echo Done
