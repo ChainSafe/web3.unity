@@ -5,6 +5,8 @@ Packages/io.chainsafe.web3-unity/Runtime/Libraries/:
 	Nethereum.RLP.dll
 	ChainSafe.Gaming.Debugging.dll
 	Nethereum.RPC.dll
+	Nethereum.RPC.Reactive.dll
+	Nethereum.JsonRpc.WebSocketClient.dll
 	ChainSafe.Gaming.Gelato.dll
 	ChainSafe.Gaming.SygmaClient.dll
 	Nethereum.Signer.EIP712.dll

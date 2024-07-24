@@ -15,8 +15,8 @@ namespace ChainSafe.Gaming.UnityPackage
             return projectConfig ? projectConfig : null;
         }
 
-        public static ProjectConfigScriptableObject Load(string projectId, string chainId, string chain, string network,
-            string symbol, string rpc, string blockExplorerUrl, bool enableAnalytics)
+        public static ProjectConfigScriptableObject Create(string projectId, string chainId, string chain, string network,
+            string symbol, string rpc, string blockExplorerUrl, bool enableAnalytics, string ws = "")
         {
             var projectConfig = ScriptableObject.CreateInstance<ProjectConfigScriptableObject>();
 
@@ -26,6 +26,7 @@ namespace ChainSafe.Gaming.UnityPackage
             projectConfig.Network = network;
             projectConfig.Symbol = symbol;
             projectConfig.Rpc = rpc;
+            projectConfig.Ws = ws;
             projectConfig.BlockExplorerUrl = blockExplorerUrl;
             projectConfig.EnableAnalytics = enableAnalytics;
 
