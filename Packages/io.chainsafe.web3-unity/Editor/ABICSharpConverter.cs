@@ -328,7 +328,7 @@ public class ABICSharpConverter : EditorWindow
         foreach (var eventABI in _contractABI.Events)
         {
             var varName = eventABI.Name.RemoveFirstUnderscore().Capitalize();
-            sb.Append($"\t\t\tvar filter{varName}Event = Event<{varName}EventDTO>.GetEventABI().CreateFilterInput();\n");
+            sb.Append($"\t\t\tvar filter{varName}Event = Event<{varName}EventDTO>.GetEventABI().CreateFilterInput(ContractAddress);\n");
             var eventSubscription = new StringBuilder(Resources.Load<TextAsset>("SubscriptionTemplate").text);
             eventSubscription.Replace("{ETH_LOG_CLIENT_NAME}", $"event{varName}");
             eventSubscription.Replace("{FILTER}", $"filter{varName}Event");
