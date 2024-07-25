@@ -168,7 +168,7 @@ public class ABICSharpConverter : EditorWindow
 
     private void ProcessTupleComponents(Parameter parameter, IReadOnlyList<Parameter> components, Dictionary<string, List<Parameter>> dict, bool isArray = false)
     {
-        var className = parameter.InternalType.Split(".")[^1].RemoveFirstUnderscore().Capitalize();
+        var className = parameter.Type.Split(".")[^1].RemoveFirstUnderscore().Capitalize();
         if (isArray) className = className.Replace("[]", "");
 
         if (dict.ContainsKey(className))
@@ -195,7 +195,7 @@ public class ABICSharpConverter : EditorWindow
             var eventParamStringBuilder = new StringBuilder(paramTemplate);
             eventParamStringBuilder.Replace("{TRUE_TYPE}", param.Type);
             eventParamStringBuilder.Replace("{TRUE_NAME}", param.Name);
-            eventParamStringBuilder.Replace("{CSHARP_TYPE}", param.InternalType.ToCSharpType());
+            eventParamStringBuilder.Replace("{CSHARP_TYPE}", param.Type.ToCSharpType());
             eventParamStringBuilder.Replace("{CSHARP_NAME}", param.Name.RemoveFirstUnderscore().Capitalize());
             eventParamStringBuilder.Replace("{PARAM_ORDER}", index.ToString());
             eventParamStringBuilder.Replace("{PARAM_INDEXED}", param.Indexed.ToString().ToLowerInvariant());
@@ -248,7 +248,7 @@ public class ABICSharpConverter : EditorWindow
 
     private static void ReplaceInputParameters(StringBuilder functionStringBuilder, FunctionABI functionABI)
     {
-        functionStringBuilder.Replace("{INPUT_PARAMS}", string.Join(", ", functionABI.InputParameters.Select(x => $"{x.InternalType.ToCSharpType()} {(string.IsNullOrEmpty(x.Name.ReplaceReservedNames()) ? $"{x.InternalType}" : $"{x.Name.ReplaceReservedNames()}")}")));
+        functionStringBuilder.Replace("{INPUT_PARAMS}", string.Join(", ", functionABI.InputParameters.Select(x => $"{x.Type.ToCSharpType()} {(string.IsNullOrEmpty(x.Name.ReplaceReservedNames()) ? $"{x.Type}" : $"{x.Name.ReplaceReservedNames()}")}")));
     }
 
     private static void ReplaceContractMethodCall(StringBuilder functionStringBuilder, FunctionABI functionABI)
@@ -261,16 +261,16 @@ public class ABICSharpConverter : EditorWindow
         if (useTransactionReceipt)
         {
             if (functionABI.OutputParameters.Length >= 1)
-                functionStringBuilder.Replace("{RETURN_TYPE}", "(" + string.Join(", ", functionABI.OutputParameters.Select(x => $"{x.InternalType.ToCSharpType()} {x.Name.ReplaceReservedNames()}")) + (functionABI.OutputParameters.Length != 0 ? ", " : "") + "TransactionReceipt receipt)");
+                functionStringBuilder.Replace("{RETURN_TYPE}", "(" + string.Join(", ", functionABI.OutputParameters.Select(x => $"{x.Type.ToCSharpType()} {x.Name.ReplaceReservedNames()}")) + (functionABI.OutputParameters.Length != 0 ? ", " : "") + "TransactionReceipt receipt)");
             else
                 functionStringBuilder.Replace("{RETURN_TYPE}", "TransactionReceipt");
         }
         else
         {
             if (functionABI.OutputParameters.Length > 1)
-                functionStringBuilder.Replace("{RETURN_TYPE}", "(" + string.Join(", ", functionABI.OutputParameters.Select(x => $"{x.InternalType.ToCSharpType()} {x.Name.ReplaceReservedNames()}")) + ")");
+                functionStringBuilder.Replace("{RETURN_TYPE}", "(" + string.Join(", ", functionABI.OutputParameters.Select(x => $"{x.Type.ToCSharpType()} {x.Name.ReplaceReservedNames()}")) + ")");
             else if (functionABI.OutputParameters.Length == 1)
-                functionStringBuilder.Replace("{RETURN_TYPE}", functionABI.OutputParameters[0].InternalType.ToCSharpType());
+                functionStringBuilder.Replace("{RETURN_TYPE}", functionABI.OutputParameters[0].Type.ToCSharpType());
             else
                 functionStringBuilder.Replace("<{RETURN_TYPE}>", "");
         }
@@ -285,7 +285,7 @@ public class ABICSharpConverter : EditorWindow
         else
             sb.Append(useTransactionReceipt ? "SendWithReceipt" : "Send");
         if (functionABI.OutputParameters.Length == 1)
-            sb.Append($"<{functionABI.OutputParameters[0].InternalType.ToCSharpType()}>");
+            sb.Append($"<{functionABI.OutputParameters[0].Type.ToCSharpType()}>");
         functionStringBuilder.Replace("{FUNCTION_CALL}", sb.ToString());
     }
 
