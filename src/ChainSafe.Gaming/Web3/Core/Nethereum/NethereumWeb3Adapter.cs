@@ -1,5 +1,3 @@
-using System.Numerics;
-using System.Threading.Tasks;
 using Nethereum.BlockchainProcessing.Services;
 using Nethereum.Contracts.Services;
 using Nethereum.JsonRpc.Client;
@@ -7,21 +5,23 @@ using Nethereum.RPC;
 using Nethereum.RPC.DebugNode;
 using Nethereum.RPC.TransactionManagers;
 using Nethereum.RPC.TransactionReceipts;
-using Nethereum.Web3.Accounts;
 
 namespace ChainSafe.Gaming.Web3.Core.Nethereum
 {
-    public class NethereumWeb3Adapter : INethereumWeb3Adapter, ILifecycleParticipant
+    public class NethereumWeb3Adapter : INethereumWeb3Adapter
     {
-        private readonly ExternalAccount externalAccount;
-        private readonly IClient nethClient;
+        private readonly global::Nethereum.Web3.Web3 original;
 
-        private global::Nethereum.Web3.Web3 original;
-
-        public NethereumWeb3Adapter(IClient nethClient, IChainConfig chainConfig, NethereumSignerAdapter signerAdapter)
+        // build Read-Only adapter
+        public NethereumWeb3Adapter(IClient nethClient)
         {
-            this.nethClient = nethClient;
-            externalAccount = new ExternalAccount(signerAdapter, BigInteger.Parse(chainConfig.ChainId));
+            original = new global::Nethereum.Web3.Web3(nethClient);
+        }
+
+        // build Writing adapter
+        public NethereumWeb3Adapter(IClient nethClient, NethereumAccountAdapter accountAdapter)
+        {
+            original = new global::Nethereum.Web3.Web3(accountAdapter, nethClient);
         }
 
         public IClient Client => original.Client;
@@ -51,14 +51,5 @@ namespace ChainSafe.Gaming.Web3.Core.Nethereum
             get => original.TransactionReceiptPolling;
             set => original.TransactionReceiptPolling = value;
         }
-
-        public async ValueTask WillStartAsync()
-        {
-            await externalAccount.InitialiseAsync();
-            externalAccount.InitialiseDefaultTransactionManager(nethClient); // todo: possibly implement a wrapper to use as a custom transaction manager
-            original = new global::Nethereum.Web3.Web3(externalAccount, nethClient);
-        }
-
-        public ValueTask WillStopAsync() => new(Task.CompletedTask);
     }
 }
