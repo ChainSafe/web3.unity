@@ -99,7 +99,7 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void MintErc20()
     {
-        var mintResponse = await Web3Accessor.Web3.Erc20.Mint(ChainSafeContracts.Erc20,  valueToSend * weiPerEther, Web3Accessor.Web3.Signer.PublicAddress);
+        var mintResponse = await Web3Accessor.Web3.Erc20.Mint(ChainSafeContracts.Erc20,  valueToSend * weiPerEther);
         var output = SampleOutputUtil.BuildOutputValue(mintResponse);
         SampleOutputUtil.PrintResult(output, "ERC-20", nameof(Erc20Service.Mint));
     }
