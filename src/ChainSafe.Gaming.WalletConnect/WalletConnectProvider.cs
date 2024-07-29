@@ -248,11 +248,11 @@ namespace ChainSafe.Gaming.WalletConnect
             if (chainId != $"{ChainModel.EvmNamespace}:{chainConfig.ChainId}")
             {
                 await PromptNetworkSwitch();
-                UpdateSessionChainId(chainConfig.ChainId);
+                UpdateSessionChainId();
             }
         }
 
-        private void UpdateSessionChainId(string newChainId)
+        private void UpdateSessionChainId()
         {
             var defaultChain = session.Namespaces.Keys.FirstOrDefault();
 
