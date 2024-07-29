@@ -227,11 +227,9 @@ namespace ChainSafe.Gaming.WalletConnect
                     throw new Web3Exception("Public address provided by WalletConnect is not valid.");
                 }
 
-
                 connected = true;
 
                 await CheckAndSwitchNetwork();
-
 
                 return address;
             }
@@ -263,7 +261,6 @@ namespace ChainSafe.Gaming.WalletConnect
                 defaultNamespace.Chains = chains.ToArray();
                 var accounts = ConvertArrayToListAndRemoveFirst(defaultNamespace.Accounts);
                 defaultNamespace.Accounts = accounts.ToArray();
-                
             }
             else
             {
@@ -295,10 +292,10 @@ namespace ChainSafe.Gaming.WalletConnect
             catch (Exception ex)
             {
                 WCLogger.LogError($"Network switch failed: {ex.Message}");
+
                 // Optionally, you can prompt the user with a UI dialog here.
             }
         }
-
 
         public override async Task Disconnect()
         {
