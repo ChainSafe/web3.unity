@@ -7,6 +7,11 @@ namespace ChainSafe.Gaming.Evm.Contracts
     public interface IContract
     {
         /// <summary>
+        /// The address of the contract.
+        /// </summary>
+        string Address { get; }
+
+        /// <summary>
         /// Returns a new instance of the Contract attached to a new address. This is useful
         /// if there are multiple similar or identical copies of a Contract on the network
         /// and you wish to interact with each of them.
