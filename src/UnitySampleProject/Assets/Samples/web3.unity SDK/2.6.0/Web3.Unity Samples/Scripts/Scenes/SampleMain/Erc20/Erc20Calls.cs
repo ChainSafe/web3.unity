@@ -23,7 +23,8 @@ public class Erc20Calls : MonoBehaviour
     #region Mint
 
     [Header("Mint Call")]
-    [SerializeField] private BigInteger amountMint = 1000000000000000000;
+    BigInteger valueToSend = 5;
+    BigInteger weiPerEther = BigInteger.Pow(10, 18);
 
     #endregion
 
@@ -98,7 +99,7 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void MintErc20()
     {
-        var mintResponse = await Web3Accessor.Web3.Erc20.Mint(ChainSafeContracts.Erc20, amountMint, toAccount);
+        var mintResponse = await Web3Accessor.Web3.Erc20.Mint(ChainSafeContracts.Erc20,  valueToSend * weiPerEther);
         var output = SampleOutputUtil.BuildOutputValue(mintResponse);
         SampleOutputUtil.PrintResult(output, "ERC-20", nameof(Erc20Service.Mint));
     }
