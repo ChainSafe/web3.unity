@@ -8,7 +8,9 @@ using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
+using ChainSafe.Gaming.Web3.Core.Logout;
 using ChainSafe.GamingSdk.Web3Auth;
+using Microsoft.Extensions.DependencyInjection;
 using Nethereum.Hex.HexTypes;
 using UnityEngine;
 using Network = Web3Auth.Network;
@@ -17,7 +19,7 @@ using Network = Web3Auth.Network;
 /// ConnectionProvider for connecting wallet via Web3Auth.
 /// </summary>
 [CreateAssetMenu(menuName = "ChainSafe/Connection Provider/Web3Auth", fileName = nameof(Web3AuthConnectionProvider))]
-public class Web3AuthConnectionProvider : RestorableConnectionProvider
+public class Web3AuthConnectionProvider : RestorableConnectionProvider, ILogoutHandler
 {
     [SerializeField] private string clientId;
     [SerializeField] private string redirectUri;
@@ -29,7 +31,7 @@ public class Web3AuthConnectionProvider : RestorableConnectionProvider
     
     private Web3AuthModal _modal;
 
-    private bool _rememberMe;
+    [NonSerialized] private bool _rememberMe;
     
     public override bool IsAvailable => true;
 
@@ -75,7 +77,11 @@ public class Web3AuthConnectionProvider : RestorableConnectionProvider
 
     protected override void ConfigureServices(IWeb3ServiceCollection services)
     {
-        DisplayModal();
+        // Don't display modal if it's an auto login.
+        if (!_rememberMe)
+        {
+            DisplayModal();
+        }
         
         var web3AuthConfig = new Web3AuthWalletConfig
         {
@@ -92,11 +98,13 @@ public class Web3AuthConnectionProvider : RestorableConnectionProvider
                 }
             },
             RememberMe = _rememberMe || RememberSession,
+            
+            AutoLogin = _rememberMe
         };
 
-        web3AuthConfig.CancellationToken = _modal.CancellationToken;
+        web3AuthConfig.CancellationToken = _rememberMe ? default : _modal.CancellationToken;
             
-        web3AuthConfig.ProviderTask = _modal.SelectProvider();
+        web3AuthConfig.ProviderTask = _rememberMe ? default : _modal.SelectProvider();
 
 #if UNITY_WEBGL && !UNITY_EDITOR
             web3AuthConfig.CancellationToken.Register(delegate
@@ -111,6 +119,8 @@ public class Web3AuthConnectionProvider : RestorableConnectionProvider
 #endif
 
         services.UseWeb3AuthWallet(web3AuthConfig);
+        
+        services.AddSingleton<ILogoutHandler>(this);
     }
 
     public override Task<bool> SavedSessionAvailable()
@@ -187,4 +197,11 @@ public class Web3AuthConnectionProvider : RestorableConnectionProvider
         _instance._connectionTcs.SetException(new Web3Exception(message));
     }
 #endif
+    
+    public Task OnLogout()
+    {
+        _rememberMe = false;
+        
+        return Task.CompletedTask;
+    }
 }
