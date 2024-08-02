@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using CWeb3 = ChainSafe.Gaming.Web3.Web3;
 
 namespace ChainSafe.Gaming.UnityPackage.Connection
 {
@@ -10,6 +11,6 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         /// <summary>
         /// Called when Web3 Instance in <see cref="IConnectionHandler"/> is initialized.
         /// </summary>
-        public Task OnWeb3Initialized();
+        public Task OnWeb3Initialized(CWeb3 web3);
     }
 }

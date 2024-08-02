@@ -67,23 +67,19 @@ namespace ChainSafe.Gaming.UnityPackage.UI
             {
                 ShowLoading();
 
-                var web3 = await (_connectionHandler as IConnectionHandler).Connect(provider);
-
-                Web3Accessor.Set(web3);
+                await (_connectionHandler as IConnectionHandler).Connect(provider);
             }
             catch (Exception e)
             {
+                HideLoading();
+                
                 if (!(e is TaskCanceledException))
                 {
                     DisplayError(
                         "Connection failed, please try again.");
-
+                    
                     provider.HandleException(e);
                 }
-            }
-            finally
-            {
-                HideLoading();
             }
         }
 

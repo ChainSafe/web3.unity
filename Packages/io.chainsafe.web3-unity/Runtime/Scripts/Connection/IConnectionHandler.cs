@@ -52,7 +52,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
             
             foreach (var web3InitializedHandler in web3InitializedHandlers)
             {
-                await web3InitializedHandler.OnWeb3Initialized();
+                await web3InitializedHandler.OnWeb3Initialized(web3);
             }
         }
 

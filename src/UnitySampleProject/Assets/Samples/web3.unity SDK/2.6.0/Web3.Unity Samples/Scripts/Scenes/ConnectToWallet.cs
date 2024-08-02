@@ -31,8 +31,6 @@ public class ConnectToWallet : MonoBehaviour
 
             if (web3 != null)
             {
-                Web3Accessor.Set(web3);
-                
                 return;
             }
         }

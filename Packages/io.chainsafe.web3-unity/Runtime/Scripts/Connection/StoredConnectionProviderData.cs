@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.LocalStorage;
 using ChainSafe.Gaming.Web3.Core.Logout;
 using Newtonsoft.Json;
+using CWeb3 = ChainSafe.Gaming.Web3.Web3;
 
 namespace ChainSafe.Gaming.UnityPackage.Connection
 {
@@ -20,7 +21,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         [JsonIgnore]
         public Type Type => string.IsNullOrEmpty(TypeName) ? null : Type.GetType(TypeName);
         
-        public async Task OnWeb3Initialized()
+        public async Task OnWeb3Initialized(CWeb3 web3)
         {
             await this.SaveOneTime();
         }
