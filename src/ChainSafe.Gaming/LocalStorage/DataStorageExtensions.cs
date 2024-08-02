@@ -12,9 +12,9 @@ namespace ChainSafe.Gaming.LocalStorage
         {
             IServiceProvider serviceProvider = services.BuildServiceProvider();
 
-            DataStorage dataStorage = serviceProvider.GetService<DataStorage>();
+            var localStorage = serviceProvider.GetService<ILocalStorage>();
 
-            await dataStorage.Load(storable);
+            await localStorage.Load(storable);
 
             return storable;
         }
@@ -24,9 +24,9 @@ namespace ChainSafe.Gaming.LocalStorage
         {
             IServiceProvider serviceProvider = services.BuildServiceProvider();
 
-            DataStorage dataStorage = serviceProvider.GetService<DataStorage>();
+            var localStorage = serviceProvider.GetService<ILocalStorage>();
 
-            await dataStorage.Save(storable);
+            await localStorage.Save(storable);
         }
 
         public static void ClearOneTime<TStorable>(this TStorable storable, IServiceCollection services)
@@ -34,7 +34,7 @@ namespace ChainSafe.Gaming.LocalStorage
         {
             IServiceProvider serviceProvider = services.BuildServiceProvider();
 
-            DataStorage dataStorage = serviceProvider.GetService<DataStorage>();
+            var dataStorage = serviceProvider.GetService<ILocalStorage>();
 
             dataStorage.Clear(storable);
         }

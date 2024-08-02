@@ -25,7 +25,7 @@ namespace ChainSafe.Gaming.Web3.Build
             // Bind default services
             serviceCollection
                 .UseEventPoller()
-                .AddSingleton<DataStorage>()
+                .AddSingleton<ILocalStorage, DataStorage>()
                 .AddSingleton<ChainRegistryProvider>()
                 .AddSingleton<IContractBuilder, ContractBuilder>()
                 .AddSingleton<ILogoutManager, LogoutManager>()

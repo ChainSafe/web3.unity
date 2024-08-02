@@ -31,7 +31,11 @@ namespace ChainSafe.Gaming.UnityPackage
             where TStorable : class, IStorable
         {
             return new ServiceCollection()
-                .AddSingleton<DataStorage>()
+#if UNITY_WEBGL && !UNITY_EDITOR
+                .AddSingleton<ILocalStorage, WebDataStorage>()
+#else
+                .AddSingleton<ILocalStorage, DataStorage>()
+#endif
                 .AddSingleton<IStorable>(storable)
                 .AddSingleton<ILogWriter, UnityLogWriter>()
                 .AddSingleton<IOperatingSystemMediator, UnityOperatingSystemMediator>()
