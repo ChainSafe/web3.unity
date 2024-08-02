@@ -87,7 +87,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
             parameters ??= Array.Empty<object>();
 
-            var txReq = await PrepareTransactionRequest(method, parameters, overwrite);
+            var txReq = await PrepareTransactionRequest(method, parameters, true, overwrite);
 
             var result = await provider.Call(txReq);
             analyticsClient.CaptureEvent(new AnalyticsEvent()
@@ -156,7 +156,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
             var function = contractBuilder.GetFunctionBuilder(method);
 
-            var txReq = await PrepareTransactionRequest(method, parameters, overwrite);
+            var txReq = await PrepareTransactionRequest(method, parameters, false, overwrite);
 
             var tx = await transactionExecutor.SendTransaction(txReq);
             var receipt = await provider.WaitForTransactionReceipt(tx.Hash);
@@ -195,7 +195,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
                 throw new Exception("provider or signer is not set");
             }
 
-            return await provider.EstimateGas(await PrepareTransactionRequest(method, parameters, overwrite));
+            return await provider.EstimateGas(await PrepareTransactionRequest(method, parameters, false, overwrite));
         }
 
         /// <summary>
@@ -244,7 +244,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
             return function.GetData(parameters);
         }
 
-        public async Task<TransactionRequest> PrepareTransactionRequest(string method, object[] parameters, TransactionRequest overwrite = null)
+        public async Task<TransactionRequest> PrepareTransactionRequest(string method, object[] parameters, bool isReadCall = false, TransactionRequest overwrite = null)
         {
             parameters ??= Array.Empty<object>();
 
@@ -254,6 +254,12 @@ namespace ChainSafe.Gaming.Evm.Contracts
             txReq.From ??= signer?.PublicAddress;
             txReq.To ??= address;
             txReq.Data ??= function.GetData(parameters);
+
+            if (isReadCall)
+            {
+                return txReq;
+            }
+
             try
             {
                 var feeData = await provider.GetFeeData();

@@ -73,6 +73,6 @@ namespace ChainSafe.Gaming.Evm.Contracts
         /// <returns>The contract call data.</returns>
         string Calldata(string method, object[] parameters = null);
 
-        Task<TransactionRequest> PrepareTransactionRequest(string method, object[] parameters, TransactionRequest overwrite = null);
+        Task<TransactionRequest> PrepareTransactionRequest(string method, object[] parameters, bool isReadCall = false, TransactionRequest overwrite = null);
     }
 }
