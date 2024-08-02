@@ -171,6 +171,11 @@ public class Web3AuthConnectionProvider : RestorableConnectionProvider, ILogoutH
 
     private async Task<string> Connect()
     {
+        if (_rememberMe)
+        {
+            return KeyStoreManagerUtils.getPreferencesData(KeyStoreManagerUtils.SESSION_ID);
+        }
+        
         if (_connectionTcs != null && !_connectionTcs.Task.IsCompleted)
         {
             _connectionTcs.SetCanceled();
