@@ -1,3 +1,4 @@
+@echo off
 SET SCRIPT_DIR=%~dp0
 
 setlocal enabledelayedexpansion
@@ -26,6 +27,7 @@ for /f "usebackq tokens=*" %%A in ("%SCRIPT_DIR%\data\published_dependencies.txt
         set "PACKAGE_LIB_PATH=%SCRIPT_DIR%..\!entry:~0,-1!"
         if exist "!PACKAGE_LIB_PATH!\" (
             del /q "!PACKAGE_LIB_PATH!\*.dll"
+            del /q "!PACKAGE_LIB_PATH!\*.pdb"
         ) else (
             mkdir "!PACKAGE_LIB_PATH!"
         )
@@ -33,7 +35,7 @@ for /f "usebackq tokens=*" %%A in ("%SCRIPT_DIR%\data\published_dependencies.txt
         echo Copying to !PACKAGE_LIB_PATH!...
     ) else (
         set "DEPENDENCY=!entry: =!"
-        copy /y "%PUBLISH_PATH%\!DEPENDENCY!" "!PACKAGE_LIB_PATH!"
+        copy /y "%PUBLISH_PATH%\!DEPENDENCY!.dll" "!PACKAGE_LIB_PATH!"
     )
 )
 
