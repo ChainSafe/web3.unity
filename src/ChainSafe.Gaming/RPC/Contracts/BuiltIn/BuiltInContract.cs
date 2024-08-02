@@ -38,7 +38,8 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         public Task<TransactionRequest> PrepareTransactionRequest(
             string method,
             object[] parameters,
+            bool isReadCall = false,
             TransactionRequest overwrite = null)
-            => Original.PrepareTransactionRequest(method, parameters, overwrite);
+            => Original.PrepareTransactionRequest(method, parameters, isReadCall, overwrite);
     }
 }

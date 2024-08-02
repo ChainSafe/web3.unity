@@ -1260,10 +1260,10 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
         }
 
         [Obsolete("It's not advisable to use this method. Use the pre-generated methods instead.")]
-        public Task<TransactionRequest> PrepareTransactionRequest(string method, object[] parameters,
+        public Task<TransactionRequest> PrepareTransactionRequest(string method, object[] parameters, bool isReadCall = false,
             TransactionRequest overwrite = null)
         {
-            return OriginalContract.PrepareTransactionRequest(method, parameters, overwrite);
+            return OriginalContract.PrepareTransactionRequest(method, parameters, isReadCall, overwrite);
         }
 
         #endregion
