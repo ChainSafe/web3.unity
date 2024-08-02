@@ -78,19 +78,19 @@ namespace ChainSafe.Gaming.Evm.Providers
         {
             // parameters should be skipped or be an empty array if there are none
             parameters ??= Array.Empty<object>();
-
+            RpcResponseMessage response = null;
             try
             {
                 var request = new RpcRequestMessage(Guid.NewGuid().ToString(), method, parameters);
 
-                var response = await SendAsync(request);
+                response = await SendAsync(request);
 
                 var serializer = JsonSerializer.Create();
                 return serializer.Deserialize<T>(new JTokenReader(response.Result))!;
             }
             catch (Exception ex)
             {
-                throw new Web3Exception($"{method}: bad result from RPC endpoint", ex);
+                throw new Web3Exception($"{method} threw an exception:" + response?.Error.Message, ex);
             }
             finally
             {
