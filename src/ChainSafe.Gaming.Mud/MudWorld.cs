@@ -80,9 +80,10 @@ namespace ChainSafe.Gaming.Mud
             return contract.Calldata(method, parameters);
         }
 
-        Task<TransactionRequest> IContract.PrepareTransactionRequest(string method, object[] parameters, TransactionRequest overwrite = null)
+        public Task<TransactionRequest> PrepareTransactionRequest(string method, object[] parameters, bool isReadCall = false,
+            TransactionRequest overwrite = null)
         {
-            return contract.PrepareTransactionRequest(method, parameters, overwrite);
+            return contract.PrepareTransactionRequest(method, parameters, isReadCall, overwrite);
         }
 
         #endregion

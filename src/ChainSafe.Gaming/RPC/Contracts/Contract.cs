@@ -102,7 +102,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
         public async Task<T> Call<T>(string method, object[] parameters = null, TransactionRequest overwrite = null)
         {
-            if (string.IsNullOrEmpty(address))
+            if (string.IsNullOrEmpty(Address))
             {
                 throw new Exception("contract address is not set");
             }
@@ -227,7 +227,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
             object[] parameters = null,
             TransactionRequest overwrite = null)
         {
-            if (string.IsNullOrEmpty(address))
+            if (string.IsNullOrEmpty(Address))
             {
                 throw new Exception("contract address is not set");
             }
