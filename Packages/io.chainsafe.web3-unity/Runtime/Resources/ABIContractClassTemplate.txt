@@ -16,6 +16,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
 {
     public class {CLASS_NAME} : ICustomContract
     {
+        public string Address => OriginalContract.Address;
        
         public string ABI => "{CONTRACT_ABI}";
         
