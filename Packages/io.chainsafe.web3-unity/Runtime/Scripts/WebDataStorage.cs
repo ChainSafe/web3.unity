@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.LocalStorage;
 using Newtonsoft.Json;
@@ -53,13 +54,15 @@ namespace ChainSafe.Gaming.UnityPackage
         {
             string json = Load(storable.StoragePath);
 
-            if (string.IsNullOrEmpty(json))
+            if (string.IsNullOrEmpty(json) || json == JsonConvert.Null)
             {
                 Debug.Log($"Failed to load {storable.StoragePath} : File not found.");
                 
                 return Task.CompletedTask;
             }
-            
+
+            json = Regex.Unescape(json.Trim('"'));
+
             JsonConvert.PopulateObject(json, storable);
 
             return Task.CompletedTask;

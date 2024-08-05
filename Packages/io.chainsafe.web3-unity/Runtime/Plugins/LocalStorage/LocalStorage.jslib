@@ -4,9 +4,10 @@ mergeInto(LibraryManager.library, {
     },
     Load: function (key) {
         var loadedItem = window.localStorage.getItem(UTF8ToString(key));
-        var bufferSize = lengthBytesUTF8(loadedItem) + 1;
+        var json = JSON.stringify(loadedItem);
+        var bufferSize = lengthBytesUTF8(json) + 1;
         var buffer = _malloc(bufferSize);
-        stringToUTF8(loadedItem, buffer, bufferSize);
+        stringToUTF8(json, buffer, bufferSize);
         return buffer;
     },
     Clear: function (key) {
