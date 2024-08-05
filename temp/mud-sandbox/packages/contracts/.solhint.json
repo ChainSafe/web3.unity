@@ -1,0 +1,12 @@
+{
+  "extends": ["solhint:recommended", "mud"],
+  "plugins": ["mud"],
+  "rules": {
+    "compiler-version": ["error", ">=0.8.0"],
+    "avoid-low-level-calls": "off",
+    "no-inline-assembly": "off",
+    "func-visibility": ["warn", { "ignoreConstructors": true }],
+    "no-empty-blocks": "off",
+    "no-complex-fallback": "off"
+  }
+}
