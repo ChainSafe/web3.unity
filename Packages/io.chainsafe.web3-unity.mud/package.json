@@ -1,0 +1,26 @@
+{
+    "name": "io.chainsafe.web3-unity.mud",
+    "version": "2.7.0",
+    "displayName": "web3.unity SDK MUD",
+    "description": "This package includes the integration of MUD, which you can use with our Gaming SDK.",
+    "license": "LGPL-3.0-only",
+    "licensesUrl": "https://github.com/ChainSafe/web3.unity/blob/main/LICENSE",
+    "documentationUrl": "https://docs.gaming.chainsafe.io/",
+    "dependencies": {
+        "io.chainsafe.web3-unity": "2.6.1"
+    },
+    "keywords": [
+        "web3",
+        "ethereum",
+        "evm",
+        "blockchain",
+        "nft",
+        "marketplace",
+        "mud"
+    ],
+    "author": {
+        "name": "ChainSafe Gaming",
+        "email": "bd@chainsafe.io",
+        "url": "https://gaming.chainsafe.io/"
+    }
+}

@@ -1,0 +1,10 @@
+procs:
+  client:
+    cwd: packages/client
+    shell: pnpm run dev
+  contracts:
+    cwd: packages/contracts
+    shell: pnpm mud dev-contracts --rpc http://127.0.0.1:8545
+  anvil:
+    cwd: packages/contracts
+    shell: anvil --base-fee 0 --block-time 2

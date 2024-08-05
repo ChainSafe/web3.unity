@@ -16,10 +16,10 @@ namespace ChainSafe.Gaming.Evm.JsonRpc
         public static IWeb3ServiceCollection UseRpcProvider(this IWeb3ServiceCollection collection)
         {
             collection.AssertServiceNotBound<IRpcProvider>();
-            collection.AddSingleton<IRpcProvider, ILifecycleParticipant, RpcClientProvider>();
-
             collection.AssertServiceNotBound<IClient>();
-            collection.AddSingleton<IClient, RpcClientProvider>();
+
+            collection.AddSingleton<IRpcProvider, IClient, ILifecycleParticipant, RpcClientProvider>();
+
             return collection;
         }
     }

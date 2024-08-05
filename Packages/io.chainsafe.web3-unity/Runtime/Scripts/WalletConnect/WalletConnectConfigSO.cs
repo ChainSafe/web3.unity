@@ -20,6 +20,7 @@ namespace ChainSafe.Gaming.WalletConnect
         [field: SerializeField] public Metadata Metadata { get; set; }
         [field: SerializeField] public string StoragePath { get; set; } = "wallet-connect/";
         [field: SerializeField] public string OverrideRegistryUri { get; set; }
+        [field: SerializeField] public WalletConnectLogLevel LogLevel { get; set; } = WalletConnectLogLevel.ErrorOnly;
         [SerializeField] private List<string> enabledWallets;
         [SerializeField] private List<string> disabledWallets;
         [SerializeField] private ConnectionHandlerProviderSO connectionHandlerProvider;

@@ -7,6 +7,7 @@ using ChainSafe.Gaming.LocalStorage;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm.EventPoller;
 using ChainSafe.Gaming.Web3.Core.Logout;
+using ChainSafe.Gaming.Web3.Core.Nethereum;
 using ChainSafe.Gaming.Web3.Environment;
 using Microsoft.Extensions.DependencyInjection;
 
