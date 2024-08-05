@@ -12,7 +12,7 @@ namespace ChainSafe.Gaming.Marketplace.Models
         {
             public string email;
         }
-
+    
         /// <summary>
         /// Payload class for authorization post request.
         /// </summary>
@@ -21,7 +21,7 @@ namespace ChainSafe.Gaming.Marketplace.Models
             public string email;
             public string nonce;
         }
-
+    
         /// <summary>
         /// Payload class for login request.
         /// </summary>

@@ -1,5 +1,5 @@
 using ChainSafe.Gaming.Lootboxes.Chainlink;
-using ChainSafe.Gaming.UnityPackage.Common;
+using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.Web3.Build;
 using Microsoft.Extensions.DependencyInjection;
 using UnityEngine;

@@ -1226,6 +1226,7 @@ MonoBehaviour:
   messageSignVerify: A man chooses, a slave obeys.
   messageSha: "It\u2019s dangerous to go alone, take this!"
   toAddress: 0xdD4c825203f97984e7867F11eeCc813A036089D1
+  value: 12300000000000000
   registeredContractName: CsTestErc20
   ecdsaKey: 0x78dae1a22c7507a4ed30c06172e7614eb168d3546c13856340771e63ad3c0081
   ecdsaMessage: This is a test message
@@ -3151,7 +3152,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 37375165}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.17716347
+  m_Size: 0.23710066
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3965,7 +3966,8 @@ MonoBehaviour:
   marketplaceContractToListTo: Set marketplace contract to list to
   collectionContractToList: Set collection contract to list from
   marketplaceContractToBuyFrom: Set marketplace contract to buy from
-  tokenIdToBuy: Set token ID to buy
+  itemIdToBuy: Set item ID to buy (the index id of the nft in the marketplace i.e
+    0 or 1)
   weiPriceToBuy: Set price in wei to buy with i.e 100000000000000
 --- !u!1 &519420028
 GameObject:
@@ -17837,10 +17839,22 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Widely adopted standard for creating and implementing fungible tokens on
-    the Ethereum blockchain. It defines a set of rules and functions that enable
-    the creation of tokens that can be easily exchanged, transferred, and interacted
-    with within the Ethereum ecosystem.
+  m_text: 'RAMP.NETWORK is a widely used fiat on/off-ramp provider that facilitates
+    the seamless exchange of fiat currencies to cryptocurrencies and vice versa.
+    It integrates effortlessly with various platforms and wallets, providing users
+    with an easy and secure way to enter and exit the crypto market. With robust
+    compliance and user-friendly interfaces, RAMP.NETWORK supports multiple payment
+    methods, making it a preferred choice for developers and users looking to enhance
+    the accessibility and usability of cryptocurrencies within the broader financial
+    ecosystem.
+
+
+
+
+
+
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Text;
 using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
+using ChainSafe.Gaming.Evm.Contracts.Extensions;
 using ChainSafe.Gaming.UnityPackage;
 using Scripts.EVM.Token;
 using UnityEngine;

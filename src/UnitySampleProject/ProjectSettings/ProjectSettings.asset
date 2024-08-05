@@ -163,6 +163,7 @@ PlayerSettings:
   applicationIdentifier:
     Standalone: com.DefaultCompany.2DProject
   buildNumber:
+    Bratwurst: 0
     Standalone: 0
     VisionOS: 0
     iPhone: 0
@@ -774,7 +775,7 @@ PlayerSettings:
   webGLDebugSymbols: 0
   webGLEmscriptenArgs: 
   webGLModulesDirectory: 
-  webGLTemplate: PROJECT:MetaMask
+  webGLTemplate: PROJECT:Web3.Unity
   webGLAnalyzeBuildSize: 0
   webGLUseEmbeddedResources: 1
   webGLCompressionFormat: 2
@@ -792,6 +793,7 @@ PlayerSettings:
   scriptingDefineSymbols:
     Standalone: 
     WebGL: RAMP_AVAILABLE
+    iPhone: 
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
@@ -810,7 +812,7 @@ PlayerSettings:
     WebGL: 4
     Windows Store Apps: 1
     XboxOne: 1
-    iPhone: 1
+    iPhone: 4
     tvOS: 1
   incrementalIl2cppBuild: {}
   suppressCommonWarnings: 1
