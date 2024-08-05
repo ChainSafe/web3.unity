@@ -33,8 +33,13 @@ var Web3AuthWebGLNoModal =  {
                     const openLoginStoreObj = openLoginStore ? JSON.parse(openLoginStore) : null;
                     if (openLoginStoreObj && openLoginStoreObj.sessionId) {
                         const sessionId = openLoginStoreObj.sessionId;
-                        Web3AuthWebGLNoModal.loginCallback(sessionId);
-                    } else {
+                        if (Web3AuthWebGLNoModal.loginCallback !== undefined)
+                        {
+                            Web3AuthWebGLNoModal.loginCallback(sessionId);
+                        }
+                    } 
+                    else 
+                    {
                         console.log("No session ID found in localStorage.");
                     }
                 });

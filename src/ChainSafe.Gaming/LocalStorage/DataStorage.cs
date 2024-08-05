@@ -88,7 +88,7 @@ namespace ChainSafe.Gaming.LocalStorage
 
             if (!Exists(path))
             {
-                logWriter.LogError($"Failed to load {storable.StoragePath} : File not found.");
+                logWriter.Log($"Failed to load {storable.StoragePath} : File not found.");
 
                 return;
             }

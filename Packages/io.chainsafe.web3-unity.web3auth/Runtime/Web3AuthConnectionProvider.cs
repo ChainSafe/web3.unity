@@ -65,8 +65,6 @@ public class Web3AuthConnectionProvider : RestorableConnectionProvider, ILogoutH
             projectConfig.Rpc, projectConfig.Network, "", projectConfig.Symbol, "", network.ToString().ToLower(), Initialized, InitializeError);
 
         await _initializeTcs.Task;
-        
-        Debug.Log("Web3Auth Initialized Successfully.");
     }
 #else
     public override Task Initialize()
@@ -160,6 +158,8 @@ public class Web3AuthConnectionProvider : RestorableConnectionProvider, ILogoutH
     [MonoPInvokeCallback(typeof(Action))]
     private static void Initialized()
     {
+        Debug.Log("Web3Auth Initialized Successfully.");
+
         _instance._initializeTcs.SetResult(string.Empty);
     }
     

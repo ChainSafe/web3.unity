@@ -1,27 +1,73 @@
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.LocalStorage;
-using ChainSafe.Gaming.Web3.Environment;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace ChainSafe.Gaming.UnityPackage
 {
-    public class WebDataStorage : DataStorage
+    /// <summary>
+    /// Save and Load persistent data on WebGL
+    /// </summary>
+    public class WebDataStorage : ILocalStorage
     {
-        public WebDataStorage(IEnumerable<IStorable> store, IOperatingSystemMediator osMediator, ILogWriter logWriter) : base(store, osMediator, logWriter)
-        {
-        }
-    
-        public override async Task Save<T>(T storable, bool createFile = true)
-        {
-            await base.Save(storable, createFile);
-
-            // This forces the data to be saved in WebGL even when reloading WebPages.
-#if UNITY_WEBGL && !UNITY_EDITOR
-        PlayerPrefs.SetString("forceSave", string.Empty);
+        [DllImport("__Internal")]
+        private static extern void Save(string key, string value);
         
-        PlayerPrefs.Save();
-#endif
+        [DllImport("__Internal")]
+        private static extern string Load(string key);
+        
+        [DllImport("__Internal")]
+        private static extern void Clear(string key);
+
+
+        private readonly IEnumerable<IStorable> _store;
+
+        public WebDataStorage(IEnumerable<IStorable> store)
+        {
+            _store = store;
+        }
+        
+        public async Task Initialize()
+        {
+            foreach (var storable in _store)
+            {
+                if (storable.LoadOnInitialize)
+                {
+                    await Load(storable);
+                }
+            }
+        }
+
+        public Task Save<T>(T storable, bool createFile = true) where T : IStorable
+        {
+            string json = JsonConvert.SerializeObject(storable);
+
+            Save(storable.StoragePath, json);
+
+            return Task.CompletedTask;
+        }
+
+        public Task Load<T>(T storable) where T : IStorable
+        {
+            string json = Load(storable.StoragePath);
+
+            if (string.IsNullOrEmpty(json))
+            {
+                Debug.Log($"Failed to load {storable.StoragePath} : File not found.");
+                
+                return Task.CompletedTask;
+            }
+            
+            JsonConvert.PopulateObject(json, storable);
+
+            return Task.CompletedTask;
+        }
+
+        public void Clear(IStorable storable)
+        {
+            Clear(storable.StoragePath);
         }
     }
 }
