@@ -1,30 +1,58 @@
 using System;
-using ChainSafe.Gaming.Marketplace.Interfaces;
-using Newtonsoft.Json;
+using System.Collections;
 using UnityEngine;
+using Newtonsoft.Json;
 using UnityEngine.Networking;
 using ChainSafe.Gaming.Marketplace.Models;
 
 namespace ChainSafe.Gaming.Marketplace
 {
     /// <summary>
-    /// Auth system manager to help with refresh tokens.
+    /// Manages marketplace auth config.
     /// </summary>
-    public class MarketplaceAuth : IMarketplaceAuth
+    public class MarketplaceAuth : MonoBehaviour, IMarketplaceAuth
     {
         #region Properties
 
-        private static string BearerToken { get; set; }
-        public static DateTime BearerTokenExpires { get; private set; }
-        private static string RefreshToken { get; set; }
-        private static DateTime RefreshTokenExpires { get; set; }
+        public string BearerToken { get; private set; }
+        public DateTime BearerTokenExpires { get; private set; }
+        public string RefreshToken { get; private set; }
+        public DateTime RefreshTokenExpires { get; private set; }
 
         #endregion
 
+        #region Methods
+
+        /// <summary>
+        /// Initializes class properties.
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="marketplaceAuthSystemManagerConfigEventArgs">Property arguments.</param>
+        public void InitializeConfig(object sender, EventManagerMarketplace.MarketplaceAuthSystemConfigEventArgs marketplaceAuthSystemManagerConfigEventArgs)
+        {
+            BearerToken = marketplaceAuthSystemManagerConfigEventArgs.BearerToken;
+            BearerTokenExpires = marketplaceAuthSystemManagerConfigEventArgs.BearerTokenExpires;
+            RefreshToken = marketplaceAuthSystemManagerConfigEventArgs.RefreshToken;
+            RefreshTokenExpires = marketplaceAuthSystemManagerConfigEventArgs.RefreshTokenExpires;
+            StartCoroutine(WaitForTokenExpiration());
+        }
+        
+        /// <summary>
+        /// Timer that wait for token expiration to execute refresh.
+        /// </summary>
+        private IEnumerator WaitForTokenExpiration()
+        {
+            DateTime currentTime = DateTime.UtcNow;
+            TimeSpan timeToWait = BearerTokenExpires - currentTime;
+            yield return new WaitForSeconds((float)timeToWait.TotalSeconds);
+            Debug.Log("Refreshing Token, timer expired");
+            RefreshExpiredToken();
+        }
+        
         /// <summary>
         /// Refreshes an expired bearer token.
         /// </summary>
-        public async void RefreshExpiredToken()
+        private async void RefreshExpiredToken()
         {
             if (RefreshToken == null)
             {
@@ -41,9 +69,7 @@ namespace ChainSafe.Gaming.Marketplace
             request.uploadHandler = new UploadHandlerRaw(bodyRaw);
             request.downloadHandler = new DownloadHandlerBuffer();
             request.SetRequestHeader("Content-Type", "application/json");
-
             await request.SendWebRequest();
-
             if (request.result != UnityWebRequest.Result.Success)
             {
                 Debug.LogError($"Error: {request.error}");
@@ -51,13 +77,24 @@ namespace ChainSafe.Gaming.Marketplace
             else
             {
                 string jsonResponse = request.downloadHandler.text;
-                AuthSystemResponse.LoginResponse loginResponse =
-                    JsonConvert.DeserializeObject<AuthSystemResponse.LoginResponse>(jsonResponse);
+                AuthSystemResponse.LoginResponse loginResponse = JsonConvert.DeserializeObject<AuthSystemResponse.LoginResponse>(jsonResponse);
                 BearerToken = loginResponse.access_token.token;
                 BearerTokenExpires = DateTime.Parse(loginResponse.access_token.expires);
                 RefreshToken = loginResponse.refresh_token.token;
                 RefreshTokenExpires = DateTime.Parse(loginResponse.refresh_token.expires);
             }
         }
+
+        private void OnEnable()
+        {
+            EventManagerMarketplace.ConfigureAuthSystemManager += InitializeConfig;
+        }
+
+        private void OnDisable()
+        {
+            EventManagerMarketplace.ConfigureAuthSystemManager -= InitializeConfig;
+        }
+
+        #endregion
     }
 }

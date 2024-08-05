@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.UnityPackage;
 using Newtonsoft.Json;
@@ -37,6 +38,7 @@ public class ChainSafeServerSettings : EditorWindow
     private string network;
     private string symbol;
     private string rpc;
+    private string ws;
     private string newRpc;
     private string blockExplorerUrl;
     private bool enableAnalytics;
@@ -47,12 +49,13 @@ public class ChainSafeServerSettings : EditorWindow
     // Search window
     private StringListSearchProvider searchProvider;
     private ISearchWindowProvider _searchWindowProviderImplementation;
-    public UnityEvent onDropDownChange;
     private int previousNetworkDropdownIndex;
     private List<ChainInfo.Root> chainList;
     private int selectedChainIndex;
     private int selectedRpcIndex;
+    private int selectedWebHookIndex;
     private FetchingStatus fetchingStatus = FetchingStatus.NotFetching;
+    private bool _changedRpcOrWs;
 
     private enum FetchingStatus
     {
@@ -78,22 +81,20 @@ public class ChainSafeServerSettings : EditorWindow
         network = string.IsNullOrEmpty(projectConfig?.Network) ? NetworkDefault : projectConfig.Network;
         symbol = string.IsNullOrEmpty(projectConfig?.Symbol) ? SymbolDefault : projectConfig.Symbol;
         rpc = string.IsNullOrEmpty(projectConfig?.Rpc) ? RpcDefault : projectConfig.Rpc;
-        blockExplorerUrl = string.IsNullOrEmpty(projectConfig?.BlockExplorerUrl) ? BlockExplorerUrlDefault : projectConfig.BlockExplorerUrl;
+        blockExplorerUrl = string.IsNullOrEmpty(projectConfig?.BlockExplorerUrl)
+            ? BlockExplorerUrlDefault
+            : projectConfig.BlockExplorerUrl;
         enableAnalytics = projectConfig.EnableAnalytics;
-        // Search menu
-        onDropDownChange = new UnityEvent();
-        onDropDownChange.AddListener(UpdateServerMenuInfo);
-        // Fetch supported chains
+        ws = projectConfig.Ws;
     }
 
     /// <summary>
     /// Updates the values in the server settings area when an item is selected
     /// </summary>
-    public void UpdateServerMenuInfo()
+    public void UpdateServerMenuInfo(bool chainSwitched = false)
     {
         // Get the selected chain index
         selectedChainIndex = Array.FindIndex(chainList.ToArray(), x => x.name == chain);
-
         // Check if the selectedChainIndex is valid
         if (selectedChainIndex >= 0 && selectedChainIndex < chainList.Count)
         {
@@ -106,6 +107,19 @@ public class ChainSafeServerSettings : EditorWindow
             // Set the rpc
             rpc = chainList[selectedChainIndex].rpc[selectedRpcIndex];
             blockExplorerUrl = chainList[selectedChainIndex].explorers[0].url;
+
+            if (chainSwitched)
+            {
+                ws = chainList[selectedChainIndex].rpc.FirstOrDefault(x => x.StartsWith("wss"));
+                selectedWebHookIndex = chainList[selectedChainIndex].rpc.IndexOf(ws);
+            }
+            else
+            {
+                selectedWebHookIndex = chainList[selectedChainIndex].rpc.IndexOf(ws) == -1
+                    ? chainList[selectedChainIndex].rpc
+                        .IndexOf(chainList[selectedChainIndex].rpc.FirstOrDefault(x => x.StartsWith("wss")))
+                    : chainList[selectedChainIndex].rpc.IndexOf(ws);
+            }
         }
         else
         {
@@ -131,6 +145,7 @@ public class ChainSafeServerSettings : EditorWindow
         chainList = JsonConvert.DeserializeObject<List<ChainInfo.Root>>(json);
         chainList = chainList.OrderBy(x => x.name).ToList();
         fetchingStatus = FetchingStatus.Fetched;
+        UpdateServerMenuInfo();
     }
 
     // Initializes window
@@ -171,11 +186,9 @@ public class ChainSafeServerSettings : EditorWindow
         // Null check to stop the recursive loop before the web request has completed
         if (chainList == null)
         {
-            if (fetchingStatus == FetchingStatus.NotFetching || fetchingStatus == FetchingStatus.Fetched)
-            {
-                fetchingStatus = FetchingStatus.Fetching;
-                FetchSupportedChains();
-            }
+            if (fetchingStatus == FetchingStatus.Fetching) return;
+            fetchingStatus = FetchingStatus.Fetching;
+            FetchSupportedChains();
 
             return;
         }
@@ -189,7 +202,11 @@ public class ChainSafeServerSettings : EditorWindow
         if (GUILayout.Button(chain, EditorStyles.popup))
         {
             searchProvider = CreateInstance<StringListSearchProvider>();
-            searchProvider.Initialize(chainOptions, x => { chain = x; });
+            searchProvider.Initialize(chainOptions, x =>
+            {
+                chain = x;
+                UpdateServerMenuInfo(true);
+            });
             SearchWindow.Open(new SearchWindowContext(GUIUtility.GUIToScreenPoint(Event.current.mousePosition)),
                 searchProvider);
         }
@@ -199,33 +216,34 @@ public class ChainSafeServerSettings : EditorWindow
         chainID = EditorGUILayout.TextField("Chain ID: ", chainID);
         symbol = EditorGUILayout.TextField("Symbol: ", symbol);
         blockExplorerUrl = EditorGUILayout.TextField("Block Explorer: ", blockExplorerUrl);
-        enableAnalytics = EditorGUILayout.Toggle(new GUIContent("Collect Data for Analytics:", "Consent to collecting data for analytics purposes. This will help improve our product."), enableAnalytics);
+        enableAnalytics =
+            EditorGUILayout.Toggle(
+                new GUIContent("Collect Data for Analytics:",
+                    "Consent to collecting data for analytics purposes. This will help improve our product."),
+                enableAnalytics);
 
         if (enableAnalytics)
-        {
             ScriptingDefineSymbols.TryAddDefineSymbol(EnableAnalyticsScriptingDefineSymbol);
-        }
-
         else
-        {
             ScriptingDefineSymbols.TryRemoveDefineSymbol(EnableAnalyticsScriptingDefineSymbol);
-        }
 
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.PrefixLabel("Select RPC");
         // Remove "https://" so the user doesn't have to click through 2 levels for the rpc options
-        var rpcOptions = chainList[selectedChainIndex].rpc.Where(rpc => rpc.StartsWith("https"))
-            .Select(rpc => rpc.Substring(8)).ToArray();
-        var selectedRpc = rpcOptions[selectedRpcIndex];
+        var rpcOptions = chainList[selectedChainIndex].rpc.Where(x => x.StartsWith("https"))
+            .Select(x => x.Replace("/", "\u2215")).ToArray();
+        var selectedRpc = chainList[selectedChainIndex].rpc[selectedRpcIndex];
         // Show the rpc drop down menu
         if (GUILayout.Button(selectedRpc, EditorStyles.popup))
         {
             searchProvider = CreateInstance<StringListSearchProvider>();
             searchProvider.Initialize(rpcOptions, x =>
             {
-                selectedRpcIndex = Array.IndexOf(rpcOptions, x);
+                var str = x.Replace("\u2215", "/");
+                selectedRpcIndex = chainList[selectedChainIndex].rpc.IndexOf(str);
                 // Add "https://" back
-                rpc = "https://" + x;
+                rpc = str;
+                _changedRpcOrWs = true;
             });
             SearchWindow.Open(new SearchWindowContext(GUIUtility.GUIToScreenPoint(Event.current.mousePosition)),
                 searchProvider);
@@ -233,8 +251,45 @@ public class ChainSafeServerSettings : EditorWindow
 
         EditorGUILayout.EndHorizontal();
         // Allows for a custom rpc
-        rpc = EditorGUILayout.TextField("RPC: ", rpc);
+        rpc = EditorGUILayout.TextField("Custom RPC: ", rpc);
         GUILayout.Label("If you're using a custom RPC it will override the selection above", EditorStyles.boldLabel);
+
+
+        // Remove "https://" so the user doesn't have to click through 2 levels for the rpc options
+        var webHookOptions = chainList[selectedChainIndex].rpc.Where(x => x.StartsWith("w"))
+            .Select(x => x.Replace("/", "\u2215")).ToArray();
+        if (webHookOptions.Length > 0)
+        {
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.PrefixLabel("Select WebHook");
+            selectedWebHookIndex = Mathf.Clamp(selectedWebHookIndex, 0, chainList[selectedChainIndex].rpc.Count - 1);
+            var webhookIndex = chainList[selectedChainIndex].rpc.IndexOf(ws);
+            var selectedWebHook = webhookIndex == -1 ? chainList[selectedChainIndex].rpc[selectedWebHookIndex] : ws;
+            if (GUILayout.Button(selectedWebHook, EditorStyles.popup))
+            {
+                searchProvider = CreateInstance<StringListSearchProvider>();
+                searchProvider.Initialize(webHookOptions,
+                    x =>
+                    {
+                        var str = x.Replace("\u2215", "/");
+
+                        selectedWebHookIndex = chainList[selectedChainIndex].rpc.IndexOf(str);
+                        ws = str;
+                        _changedRpcOrWs = true;
+                    });
+                SearchWindow.Open(new SearchWindowContext(GUIUtility.GUIToScreenPoint(Event.current.mousePosition)),
+                    searchProvider);
+            }
+
+            EditorGUILayout.EndHorizontal();
+            ws = EditorGUILayout.TextField("Custom Webhook: ", ws);
+            GUILayout.Label("If you're using a custom Webhook it will override the selection above",
+                EditorStyles.boldLabel);
+        }
+        else
+        {
+            ws = string.Empty;
+        }
 
         // Buttons
         // Register
@@ -242,8 +297,9 @@ public class ChainSafeServerSettings : EditorWindow
         // Docs
         if (GUILayout.Button("Check Out Our Docs!")) Application.OpenURL("https://docs.gaming.chainsafe.io/");
         // Save button
-        if (EditorGUI.EndChangeCheck())
+        if (EditorGUI.EndChangeCheck() || _changedRpcOrWs)
         {
+            _changedRpcOrWs = false;
             var projectConfig = ProjectConfigUtilities.CreateOrLoad();
             projectConfig.ProjectId = projectID;
             projectConfig.ChainId = chainID;
@@ -251,6 +307,7 @@ public class ChainSafeServerSettings : EditorWindow
             projectConfig.Network = network;
             projectConfig.Symbol = symbol;
             projectConfig.Rpc = rpc;
+            projectConfig.Ws = ws;
             projectConfig.BlockExplorerUrl = blockExplorerUrl;
             projectConfig.EnableAnalytics = enableAnalytics;
             ProjectConfigUtilities.Save(projectConfig);
