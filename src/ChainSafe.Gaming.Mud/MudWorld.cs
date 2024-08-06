@@ -16,16 +16,16 @@ namespace ChainSafe.Gaming.Mud
 
         string IContract.Address => contract.Address;
 
+        /// <summary>
+        /// A Nethereum World Service. Use this if you need more control over the World.
+        /// </summary>
+        public WorldService WorldService { get; }
+
         public MudWorld(IWeb3 nethWeb3, IContract contract)
         {
             this.contract = contract;
             WorldService = new WorldService(nethWeb3, contract.Address);
         }
-
-        /// <summary>
-        /// A Nethereum World Service. Use this if you need more control over the World.
-        /// </summary>
-        public WorldService WorldService { get; }
 
         public async Task<TValue> Query<TRecord, TValue>()
             where TRecord : TableRecordSingleton<TValue>, new()
