@@ -9,7 +9,7 @@ public class ConnectToWallet : MonoBehaviour
     [SerializeField] private Button connectButton;
 
     private ConnectModal _connectModalInstance;
-    
+
     private void Start()
     {
         connectButton.onClick.AddListener(PromptConnectModal);
@@ -20,10 +20,10 @@ public class ConnectToWallet : MonoBehaviour
         if (_connectModalInstance != null)
         {
             _connectModalInstance.gameObject.SetActive(true);
-            
+
             return;
         }
-        
+
         _connectModalInstance = Instantiate(connectModalPrefab, connectModalContainer);
     }
 }
