@@ -31,8 +31,11 @@ do
     echo "Copying to $PACKAGE_LIB_PATH..."
   else
     export DEPENDENCY=$(echo "$entry" | tr -d '\t' | tr -d ' ')
-    cp -fr "$PUBLISH_PATH/$DEPENDENCY.dll" "$PACKAGE_LIB_PATH"
-    cp -fr "$PUBLISH_PATH/$DEPENDENCY.pdb" "$PACKAGE_LIB_PATH"
+    cp -fr "$PUBLISH_PATH/$DEPENDENCY".dll $PACKAGE_LIB_PATH
+    
+    if [ -f "$PUBLISH_PATH/$DEPENDENCY".pdb ]; then
+      cp -fr "$PUBLISH_PATH/$DEPENDENCY".pdb $PACKAGE_LIB_PATH
+    fi
   fi
 done < "$scripts_dir/data/published_dependencies.txt"
 
