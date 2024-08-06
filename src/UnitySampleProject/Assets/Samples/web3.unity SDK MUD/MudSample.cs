@@ -1,25 +1,17 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Numerics;
 using ChainSafe.Gaming.Debugging;
 using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.Mud;
 using ChainSafe.Gaming.UnityPackage;
-using ChainSafe.Gaming.WalletConnect;
 using ChainSafe.Gaming.Wallets;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
-using ChainSafe.Gaming.Web3.Evm.Wallet;
 using ChainSafe.Gaming.Web3.Unity;
 using Nethereum.ABI.FunctionEncoding.Attributes;
-using Nethereum.Contracts;
 using Nethereum.Mud;
 using TMPro;
-using UnityEditor.VersionControl;
 using UnityEngine;
-using Task = System.Threading.Tasks.Task;
 
 public class MudSample : MonoBehaviour
 {
