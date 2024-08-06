@@ -1,3 +1,4 @@
+#if UNITY_WEBGL && !UNITY_EDITOR
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
@@ -9,7 +10,7 @@ using UnityEngine;
 namespace ChainSafe.Gaming.UnityPackage
 {
     /// <summary>
-    /// Save and Load persistent data on WebGL
+    /// Save and Load persistent data on WebGL.
     /// </summary>
     public class WebDataStorage : ILocalStorage
     {
@@ -74,3 +75,4 @@ namespace ChainSafe.Gaming.UnityPackage
         }
     }
 }
+#endif
