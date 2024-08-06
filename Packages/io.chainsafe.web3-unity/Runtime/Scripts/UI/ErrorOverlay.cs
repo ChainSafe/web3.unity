@@ -27,10 +27,10 @@ namespace ChainSafe.Gaming.UnityPackage.UI
         public void DisplayError(string message)
         {
             gameObject.SetActive(true);
-            
+
             errorText.SetText(message);
         }
-        
+
         /// <summary>
         /// Close error overlay.
         /// </summary>
