@@ -41,8 +41,6 @@ namespace ChainSafe.Gaming.Mud
             return (await WorldService.GetRecordTableQueryAsync<TRecord, TKey, TValue>(record)).Values;
         }
 
-        #region IContract delegation
-
         string IContract.Address => contract.Address;
 
         IContract IContract.Attach(string address)
@@ -85,7 +83,5 @@ namespace ChainSafe.Gaming.Mud
         {
             return contract.PrepareTransactionRequest(method, parameters, isReadCall, overwrite);
         }
-
-        #endregion
     }
 }
