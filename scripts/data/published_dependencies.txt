@@ -50,7 +50,6 @@ Packages/io.chainsafe.web3-unity/Runtime/Libraries/:
 	Nethereum.Hex.dll
 	Nethereum.JsonRpc.Client.dll
 	WalletConnectSharp.Network.Websocket.dll
-	Nethereum.JsonRpc.IpcClient.dll
 	WalletConnectSharp.Network.dll
 	Nethereum.JsonRpc.RpcClient.dll
 	WalletConnectSharp.Sign.dll
