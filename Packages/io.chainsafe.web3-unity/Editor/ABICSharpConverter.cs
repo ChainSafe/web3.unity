@@ -36,7 +36,7 @@ public class ABICSharpConverter : EditorWindow
     }
 
     // UI rendering method
-        private void OnGUI()
+    private void OnGUI()
     {
         var style = new GUIStyle(GUI.skin.label) { richText = true };
 

@@ -14,8 +14,8 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         [Space]
         [SerializeField] private ConnectModal connectModal;
         // Handed in ConnectionHandlerEditor
-        [HideInInspector] [SerializeField] private ConnectionProvider[] providers;
-        
+        [HideInInspector][SerializeField] private ConnectionProvider[] providers;
+
         public string GelatoApiKey => gelatoApiKey;
         public IWeb3BuilderServiceAdapter[] Web3BuilderServiceAdapters { get; private set; }
         public IWeb3InitializedHandler[] Web3InitializedHandlers { get; private set; }
@@ -34,7 +34,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
             Web3BuilderServiceAdapters = GetComponents<IWeb3BuilderServiceAdapter>();
 
             Web3InitializedHandlers = GetComponents<IWeb3InitializedHandler>();
-            
+
             foreach (var provider in providers)
             {
                 if (provider != null && provider.IsAvailable)
@@ -42,11 +42,11 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
                     var instantiatedProvider = connectModal.AddProvider(provider);
 
                     await instantiatedProvider.Initialize();
-                    
+
                     instantiatedProvider.ConnectButton.onClick.AddListener(delegate
                     {
                         ConnectionProvider = instantiatedProvider;
-                        
+
                         ConnectClicked();
                     });
                 }
@@ -57,7 +57,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         {
             await TryConnect();
         }
-        
+
         /// <summary>
         /// Try to Connect and displays error and throws exception on a failed attempt.
         /// </summary>
@@ -75,7 +75,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
                 {
                     connectModal.DisplayError(
                         $"Connection failed, please try again.");
-                    
+
                     ConnectionProvider.HandleException(e);
                 }
             }

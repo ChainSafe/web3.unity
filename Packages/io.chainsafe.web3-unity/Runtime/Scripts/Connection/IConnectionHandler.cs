@@ -30,7 +30,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         /// All Web3 initialized handlers called when Web3 instance is initialized.
         /// </summary>
         public IWeb3InitializedHandler[] Web3InitializedHandlers { get; }
-        
+
         /// <summary>
         /// Connection Provider used to create connection.
         /// </summary>

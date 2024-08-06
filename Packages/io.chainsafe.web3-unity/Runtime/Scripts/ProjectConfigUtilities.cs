@@ -13,7 +13,7 @@ namespace ChainSafe.Gaming.UnityPackage
             public LocalhostChainConfig(string chainId, string symbol, string chain, string network, string port)
             {
                 var localhostEndPoint = $"127.0.0.1:{port}";
-                
+
                 ChainId = chainId;
                 Symbol = symbol;
                 Chain = chain;
@@ -32,7 +32,7 @@ namespace ChainSafe.Gaming.UnityPackage
             public string Ws { get; }
             public string BlockExplorerUrl { get; }
         }
-        
+
         private const string AssetName = "ProjectConfigData";
 
         public static ProjectConfigScriptableObject Load()
