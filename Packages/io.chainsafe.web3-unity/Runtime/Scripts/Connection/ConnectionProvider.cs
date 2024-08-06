@@ -16,18 +16,18 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         /// Could be platform specific or other conditions.
         /// </summary>
         public abstract bool IsAvailable { get; }
-        
+
         /// <summary>
         /// Button to connect to the wallet.
         /// </summary>
         [field: SerializeField] public Button ConnectButton { get; private set; }
-        
+
         /// <summary>
         /// Initialize Connection provider.
         /// </summary>
         /// <returns>Awaitable Task.</returns>
         public abstract Task Initialize();
-        
+
         /// <summary>
         /// Configure services for the Web3 instance.
         /// This is where you add wallet connection services to <see cref="Web3Builder"/>.

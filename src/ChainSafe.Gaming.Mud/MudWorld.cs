@@ -20,6 +20,8 @@ namespace ChainSafe.Gaming.Mud
             WorldService = new WorldService(nethWeb3, contract.Address);
         }
 
+        string IContract.Address => contract.Address;
+
         /// <summary>
         /// A Nethereum World Service. Use this if you need more control over the World.
         /// </summary>
@@ -40,10 +42,6 @@ namespace ChainSafe.Gaming.Mud
             var record = new TRecord { Keys = key };
             return (await WorldService.GetRecordTableQueryAsync<TRecord, TKey, TValue>(record)).Values;
         }
-
-        #region IContract delegation
-
-        string IContract.Address => contract.Address;
 
         IContract IContract.Attach(string address)
         {
@@ -80,12 +78,9 @@ namespace ChainSafe.Gaming.Mud
             return contract.Calldata(method, parameters);
         }
 
-        public Task<TransactionRequest> PrepareTransactionRequest(string method, object[] parameters, bool isReadCall = false,
-            TransactionRequest overwrite = null)
+        public Task<TransactionRequest> PrepareTransactionRequest(string method, object[] parameters, bool isReadCall = false, TransactionRequest overwrite = null)
         {
             return contract.PrepareTransactionRequest(method, parameters, isReadCall, overwrite);
         }
-
-        #endregion
     }
 }

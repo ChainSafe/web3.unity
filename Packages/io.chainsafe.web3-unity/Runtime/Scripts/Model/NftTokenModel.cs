@@ -6,7 +6,7 @@ namespace ChainSafe.Gaming.UnityPackage.Model
     public class NftTokenModel
     {
         #region ProjectCollections
-        
+
         public class ProjectCollectionsResponse
         {
             public int page_size { get; set; }
@@ -14,7 +14,7 @@ namespace ChainSafe.Gaming.UnityPackage.Model
             public string cursor { get; set; }
             public List<Collection> collections { get; set; }
         }
-        
+
         public class Collection
         {
             public string id { get; set; }
@@ -36,7 +36,7 @@ namespace ChainSafe.Gaming.UnityPackage.Model
         #endregion
 
         #region CollectionItems
-        
+
         public class CollectionItemsResponse
         {
             public int page_number { get; set; }
@@ -58,7 +58,7 @@ namespace ChainSafe.Gaming.UnityPackage.Model
             public string uri { get; set; }
             public Metadata metadata { get; set; }
         }
-        
+
         public class Metadata
         {
             public List<Attribute> attributes { get; set; }
@@ -67,14 +67,14 @@ namespace ChainSafe.Gaming.UnityPackage.Model
             public string name { get; set; }
             public string tokenType { get; set; }
         }
-        
+
         public class Attribute
         {
             public string trait_type { get; set; }
             public string value { get; set; }
         }
-        
+
         #endregion
-        
+
     }
 }
