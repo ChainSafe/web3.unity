@@ -4,8 +4,10 @@ using ChainSafe.Gaming.Evm;
 using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.LocalStorage;
+using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm.EventPoller;
 using ChainSafe.Gaming.Web3.Core.Logout;
+using ChainSafe.Gaming.Web3.Core.Nethereum;
 using ChainSafe.Gaming.Web3.Environment;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -25,9 +27,9 @@ namespace ChainSafe.Gaming.Web3.Build
             // Bind default services
             serviceCollection
                 .UseEventPoller()
+                .AddSingleton<IContractBuilder, ILifecycleParticipant, ContractBuilder>()
                 .AddSingleton<ILocalStorage, DataStorage>()
                 .AddSingleton<ChainRegistryProvider>()
-                .AddSingleton<IContractBuilder, ContractBuilder>()
                 .AddSingleton<ILogoutManager, LogoutManager>()
                 .AddSingleton<Erc20Service>()
                 .AddSingleton<Erc721Service>()

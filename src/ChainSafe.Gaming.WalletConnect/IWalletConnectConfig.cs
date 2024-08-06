@@ -94,5 +94,7 @@ namespace ChainSafe.Gaming.WalletConnect
         /// Override for the registry URI used to download the list of wallets supported by WalletConnect.
         /// </summary>
         string? OverrideRegistryUri { get; }
+
+        WalletConnectLogLevel LogLevel { get; }
     }
 }

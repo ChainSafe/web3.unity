@@ -184,6 +184,14 @@
         "io.chainsafe.web3-unity": "2.6.1"
       }
     },
+    "io.chainsafe.web3-unity.mud": {
+      "version": "file:../../../Packages/io.chainsafe.web3-unity.mud",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {
+        "io.chainsafe.web3-unity": "2.6.1"
+      }
+    },
     "io.chainsafe.web3-unity.ramp": {
       "version": "file:../../../Packages/io.chainsafe.web3-unity.ramp",
       "depth": 0,

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm;
@@ -13,8 +14,10 @@ using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Debug;
 using ChainSafe.Gaming.Web3.Environment;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
+using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.JsonRpc.Client.RpcMessages;
 using Newtonsoft.Json;
+using Org.BouncyCastle.Math;
 using WalletConnectSharp.Common.Logging;
 using WalletConnectSharp.Common.Model.Errors;
 using WalletConnectSharp.Common.Utils;
@@ -25,6 +28,7 @@ using WalletConnectSharp.Network.Models;
 using WalletConnectSharp.Sign;
 using WalletConnectSharp.Sign.Models;
 using WalletConnectSharp.Sign.Models.Engine;
+using BigInteger = System.Numerics.BigInteger;
 
 namespace ChainSafe.Gaming.WalletConnect
 {
@@ -99,7 +103,7 @@ namespace ChainSafe.Gaming.WalletConnect
 
             ValidateConfig();
 
-            WCLogger.Logger = new WCLogWriter(logWriter);
+            WCLogger.Logger = new WCLogWriter(logWriter, config);
 
             localData = !config.ForceNewSession
                 ? await storage.LoadLocalData() ?? new LocalData()
@@ -142,6 +146,7 @@ namespace ChainSafe.Gaming.WalletConnect
                             "eth_signTransaction",
                             "eth_sendTransaction",
                             "eth_getTransactionByHash",
+                            "wallet_switchEthereumChain",
                         },
                     }
                 },
@@ -224,12 +229,71 @@ namespace ChainSafe.Gaming.WalletConnect
 
                 connected = true;
 
+                await CheckAndSwitchNetwork();
+
                 return address;
             }
             catch (Exception e)
             {
                 storage.ClearLocalData();
                 throw new WalletConnectException("Error occured during WalletConnect connection process.", e);
+            }
+        }
+
+        private async Task CheckAndSwitchNetwork()
+        {
+            var chainId = GetChainId();
+            if (chainId != $"{ChainModel.EvmNamespace}:{chainConfig.ChainId}")
+            {
+                await PromptNetworkSwitch();
+                UpdateSessionChainId();
+            }
+        }
+
+        private void UpdateSessionChainId()
+        {
+            var defaultChain = session.Namespaces.Keys.FirstOrDefault();
+
+            if (!string.IsNullOrWhiteSpace(defaultChain))
+            {
+                var defaultNamespace = session.Namespaces[defaultChain];
+                var chains = ConvertArrayToListAndRemoveFirst(defaultNamespace.Chains);
+                defaultNamespace.Chains = chains.ToArray();
+                var accounts = ConvertArrayToListAndRemoveFirst(defaultNamespace.Accounts);
+                defaultNamespace.Accounts = accounts.ToArray();
+            }
+            else
+            {
+                throw new Web3Exception("Can't update session chain ID. Default chain not found.");
+            }
+        }
+
+        private List<T> ConvertArrayToListAndRemoveFirst<T>(T[] array)
+        {
+            var list = array.ToList();
+            list.RemoveAt(0);
+            return list;
+        }
+
+        private async Task PromptNetworkSwitch()
+        {
+            var str = $"{BigInteger.Parse(chainConfig.ChainId):X}";
+            str = str.TrimStart('0');
+            var networkSwitchParams = new
+            {
+                chainId = $"0x{str}", // Convert the Chain ID to hex format
+            };
+
+            try
+            {
+                await Request<string>("wallet_switchEthereumChain", networkSwitchParams);
+                WCLogger.Log("Network switch requested.");
+            }
+            catch (Exception ex)
+            {
+                WCLogger.LogError($"Network switch failed: {ex.Message}");
+
+                // Optionally, you can prompt the user with a UI dialog here.
             }
         }
 
@@ -482,6 +546,8 @@ namespace ChainSafe.Gaming.WalletConnect
                     return await MakeRequest<EthSignTransaction>();
                 case "eth_sendTransaction":
                     return await MakeRequest<EthSendTransaction>();
+                case "wallet_switchEthereumChain":
+                    return await MakeRequest<WalletSwitchEthereumChain>();
                 default:
                     try
                     {

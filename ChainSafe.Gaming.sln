@@ -45,6 +45,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.HyperPlay"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.Unity.EthereumWindow", "src\ChainSafe.Gaming.Unity.EthereumWindow\ChainSafe.Gaming.Unity.EthereumWindow.csproj", "{F743DE56-1650-4111-8613-96E8EC7CFD2D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.Mud", "src\ChainSafe.Gaming.Mud\ChainSafe.Gaming.Mud.csproj", "{084E4FCB-9376-4B29-AA8C-6871E13906E6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -153,6 +155,12 @@ Global
 		{F743DE56-1650-4111-8613-96E8EC7CFD2D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F743DE56-1650-4111-8613-96E8EC7CFD2D}.Test|Any CPU.ActiveCfg = Debug|Any CPU
 		{F743DE56-1650-4111-8613-96E8EC7CFD2D}.Test|Any CPU.Build.0 = Debug|Any CPU
+		{084E4FCB-9376-4B29-AA8C-6871E13906E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{084E4FCB-9376-4B29-AA8C-6871E13906E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{084E4FCB-9376-4B29-AA8C-6871E13906E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{084E4FCB-9376-4B29-AA8C-6871E13906E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{084E4FCB-9376-4B29-AA8C-6871E13906E6}.Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{084E4FCB-9376-4B29-AA8C-6871E13906E6}.Test|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
