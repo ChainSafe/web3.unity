@@ -42,7 +42,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         [Pure]
         public Task<BigInteger> GetBalanceOf(string tokenId, string accountAddress)
         {
-            return Original.CallSingle<BigInteger, string, string>(
+            return Original.Call<BigInteger, string, string>(
                 EthMethods.BalanceOf,
                 accountAddress,
                 tokenId);
@@ -57,7 +57,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         [Pure]
         public Task<List<BigInteger>> GetBalanceOfBatch(string[] accountAddresses, string[] tokenIds) // TODO refine return value format
         {
-            return Original.CallSingle<List<BigInteger>, string[], string[]>(
+            return Original.Call<List<BigInteger>, string[], string[]>(
                 EthMethods.BalanceOfBatch,
                 accountAddresses,
                 tokenIds);
@@ -76,7 +76,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
                 return IpfsHelper.DecodeTokenIdToUri(tokenId);
             }
 
-            return await Original.CallSingle<string, string>(EthMethods.Uri, tokenId);
+            return await Original.Call<string, string>(EthMethods.Uri, tokenId);
         }
 
         /// <summary>

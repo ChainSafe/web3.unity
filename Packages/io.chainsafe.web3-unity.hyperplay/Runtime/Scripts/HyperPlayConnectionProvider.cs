@@ -17,7 +17,7 @@ namespace ChainSafe.Gaming.HyperPlay
         {
             return Task.CompletedTask;
         }
-        
+
         public override Web3Builder ConfigureServices(Web3Builder web3Builder)
         {
             return web3Builder.Configure(services =>
@@ -27,7 +27,7 @@ namespace ChainSafe.Gaming.HyperPlay
                     // RememberSession = rememberMeToggle.isOn || _storedSessionAvailable,
                 };
 #if UNITY_WEBGL && !UNITY_EDITOR
-            services.UseHyperPlay<HyperPlayWebGLProvider>(config);
+                services.UseHyperPlay<HyperPlayWebGLProvider>(config);
 #else
                 services.UseHyperPlay(config);
 #endif

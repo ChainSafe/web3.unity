@@ -23,14 +23,19 @@ do
   then
     PACKAGE_LIB_PATH="$scripts_dir/../${entry%:}"
     if [ -d "$PACKAGE_LIB_PATH" ]; then
-      rm -rf "$PACKAGE_LIB_PATH"*.dll
+      rm -rf "$PACKAGE_LIB_PATH"/*.dll
+      rm -rf "$PACKAGE_LIB_PATH"/*.pdb
     else
       mkdir -p "$PACKAGE_LIB_PATH"
     fi
     echo "Copying to $PACKAGE_LIB_PATH..."
   else
     export DEPENDENCY=$(echo "$entry" | tr -d '\t' | tr -d ' ')
-    cp -fr "$PUBLISH_PATH/$DEPENDENCY" $PACKAGE_LIB_PATH
+    cp -fr "$PUBLISH_PATH/$DEPENDENCY".dll $PACKAGE_LIB_PATH
+    
+    if [ -f "$PUBLISH_PATH/$DEPENDENCY".pdb ]; then
+      cp -fr "$PUBLISH_PATH/$DEPENDENCY".pdb $PACKAGE_LIB_PATH
+    fi
   fi
 done < "$scripts_dir/data/published_dependencies.txt"
 

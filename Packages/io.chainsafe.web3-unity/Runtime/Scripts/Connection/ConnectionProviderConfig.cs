@@ -12,7 +12,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         /// Name of connection provider.
         /// </summary>
         [field: SerializeField] public string Name { get; private set; }
-        
+
         /// <summary>
         /// Row Prefab of connection provider.
         /// </summary>

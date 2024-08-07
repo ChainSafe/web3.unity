@@ -14,9 +14,9 @@ namespace ChainSafe.Gaming.UnityPackage.UI
         [SerializeField] private Button closeButton;
         // Closes modal when background is clicked
         [SerializeField] private Button closeFromBackgroundButton;
-        
+
         [Space]
-        
+
         [SerializeField] private RectTransform providerContainer;
 
         private void Start()
@@ -33,7 +33,7 @@ namespace ChainSafe.Gaming.UnityPackage.UI
         {
             errorOverlay.DisplayError(message);
         }
-        
+
         /// <summary>
         /// Show Loading Overlay.
         /// </summary>
@@ -41,7 +41,7 @@ namespace ChainSafe.Gaming.UnityPackage.UI
         {
             loadingOverlay.gameObject.SetActive(true);
         }
-        
+
         /// <summary>
         /// Hide Loading overlay.
         /// </summary>
@@ -59,7 +59,7 @@ namespace ChainSafe.Gaming.UnityPackage.UI
         {
             return Instantiate(provider, providerContainer);
         }
-        
+
         private void Close()
         {
             gameObject.SetActive(false);
