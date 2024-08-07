@@ -343,7 +343,7 @@ namespace Plugins.CountlySDK
             Notifications = new NotificationsCallbackService(Configuration, _logHelper);
             ProxyNotificationsService notificationsService = new ProxyNotificationsService(transform, Configuration, _logHelper, InternalStartCoroutine, Events);
             _push = new PushCountlyService(Configuration, _logHelper, RequestHelper, notificationsService, Notifications, Consents);
-            Session = new SessionCountlyService(Configuration, _logHelper, Events, RequestHelper, Location, Consents);
+            Session = new SessionCountlyService(Configuration, _logHelper, Events, RequestHelper, Location, Consents, this);
 
             CrashReports = new CrashReportsCountlyService(Configuration, _logHelper, RequestHelper, Consents);
             Initialization = new InitializationCountlyService(Configuration, _logHelper, Location, Session, Consents);
