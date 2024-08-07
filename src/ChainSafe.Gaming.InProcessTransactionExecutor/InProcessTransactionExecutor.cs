@@ -81,9 +81,9 @@ namespace ChainSafe.Gaming.InProcessTransactionExecutor
 
             try
             {
-                var receipt = await Account.TransactionManager.SendTransactionAndWaitForReceiptAsync(txInput);
+                string hash = await Account.TransactionManager.SendTransactionAsync(txInput);
 
-                return await rpcProvider.GetTransaction(receipt.TransactionHash);
+                return await rpcProvider.GetTransaction(hash);
             }
             catch (Exception ex)
             {
