@@ -12,14 +12,14 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
     public class WalletConnectConnectionProvider : ConnectionProvider
     {
         [SerializeField] private WalletConnectConfigSO walletConnectConfig;
-        
+
         public override bool IsAvailable => Application.isEditor || Application.platform != RuntimePlatform.WebGLPlayer;
-     
+
         public override Task Initialize()
         {
             return Task.CompletedTask;
         }
-        
+
         public override Web3Builder ConfigureServices(Web3Builder web3Builder)
         {
             return web3Builder.Configure(services =>

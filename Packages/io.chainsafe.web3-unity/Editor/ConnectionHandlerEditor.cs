@@ -12,13 +12,13 @@ public class ConnectionHandlerEditor : Editor
     {
         [JsonProperty("name")]
         public string Name { get; private set; }
-        
+
         [JsonProperty("path")]
         public string Path { get; private set; }
     }
-    
+
     private bool _foldout;
-    
+
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
@@ -26,31 +26,31 @@ public class ConnectionHandlerEditor : Editor
         var providers = Resources.LoadAll<ConnectionProviderConfig>(string.Empty);
 
         _foldout = EditorGUILayout.Foldout(_foldout, "Connection Providers");
-        
+
         if (_foldout)
         {
             List<ConnectionProvider> availableProviders = new List<ConnectionProvider>();
-            
+
             var providersProperty = serializedObject.FindProperty("providers");
 
             int arraySize = providersProperty.arraySize;
-            
+
             for (int i = 0; i < arraySize; i++)
             {
                 var providerProperty = providersProperty.GetArrayElementAtIndex(i);
-                    
+
                 if (providerProperty.objectReferenceValue == null)
                 {
                     providersProperty.DeleteArrayElementAtIndex(i);
-                        
+
                     serializedObject.ApplyModifiedProperties();
-                        
+
                     return;
                 }
-                
+
                 availableProviders.Add(providerProperty.objectReferenceValue as ConnectionProvider);
             }
-            
+
             foreach (var provider in providers)
             {
                 var loadedProvider = provider.ProviderRow;
@@ -58,14 +58,14 @@ public class ConnectionHandlerEditor : Editor
                 if (loadedProvider == null)
                 {
                     Debug.LogWarning($"Error loading {provider.Name} Provider.");
-                    
+
                     continue;
                 }
-                
+
                 EditorGUI.BeginChangeCheck();
 
                 bool isAvailable = availableProviders.Contains(loadedProvider);
-                
+
                 isAvailable = GUILayout.Toggle(isAvailable, provider.Name);
 
                 if (EditorGUI.EndChangeCheck())
@@ -83,7 +83,7 @@ public class ConnectionHandlerEditor : Editor
                     }
 
                     serializedObject.ApplyModifiedProperties();
-                    
+
                     return;
                 }
             }

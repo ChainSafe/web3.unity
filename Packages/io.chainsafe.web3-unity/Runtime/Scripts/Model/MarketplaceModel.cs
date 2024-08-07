@@ -42,7 +42,7 @@ namespace ChainSafe.Gaming.UnityPackage.Model
         }
 
         #endregion
-        
+
         #region MarketplaceItems
 
         public class MarketplaceItemsResponse
@@ -54,7 +54,7 @@ namespace ChainSafe.Gaming.UnityPackage.Model
             public List<Item> items { get; set; }
             public List<Owners> owners { get; set; }
         }
-        
+
         public class Item
         {
             public string id { get; set; }
@@ -77,8 +77,8 @@ namespace ChainSafe.Gaming.UnityPackage.Model
             public string contract_address { get; set; }
             public string uri { get; set; }
             public Metadata metadata { get; set; }
-        }    
-        
+        }
+
         public class Metadata
         {
             public List<Attribute> attributes { get; set; }
@@ -89,14 +89,14 @@ namespace ChainSafe.Gaming.UnityPackage.Model
             public string trait_type { get; set; }
             public string value { get; set; }
         }
-        
+
         public class Owners
         {
             public string owner { get; set; }
             public string supply { get; set; }
         }
-        
+
         #endregion
-        
+
     }
 }
