@@ -112,6 +112,7 @@ public class ChainSafeServerSettings : EditorWindow
             {
                 ws = chainList[selectedChainIndex].rpc.FirstOrDefault(x => x.StartsWith("wss"));
                 selectedWebHookIndex = chainList[selectedChainIndex].rpc.IndexOf(ws);
+                _changedRpcOrWs = true;
             }
             else
             {

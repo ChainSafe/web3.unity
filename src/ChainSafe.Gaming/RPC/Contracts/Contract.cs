@@ -18,7 +18,6 @@ namespace ChainSafe.Gaming.Evm.Contracts
     public class Contract : IContract
     {
         private readonly string abi;
-        private readonly string address;
         private readonly IRpcProvider provider;
         private readonly ISigner signer;
         private readonly ContractAbiManager contractAbiManager;
@@ -41,7 +40,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
             }
 
             this.abi = abi;
-            this.address = address;
+            this.Address = address;
             this.provider = provider;
             this.signer = signer;
             this.transactionExecutor = transactionExecutor;
@@ -49,7 +48,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
             contractAbiManager = new ContractAbiManager(abi, address);
         }
 
-        public string Address => address;
+        public string Address { get; }
 
         /// <summary>
         /// Returns a new instance of the Contract attached to a new address. This is useful
@@ -77,7 +76,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
         /// <returns>The result of calling the method.</returns>
         public async Task<object[]> Call(string method, object[] parameters = null, TransactionRequest overwrite = null)
         {
-            if (string.IsNullOrEmpty(address))
+            if (string.IsNullOrEmpty(Address))
             {
                 throw new Exception("contract address is not set");
             }
@@ -103,7 +102,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
         public async Task<T> Call<T>(string method, object[] parameters = null, TransactionRequest overwrite = null)
         {
-            if (string.IsNullOrEmpty(address))
+            if (string.IsNullOrEmpty(Address))
             {
                 throw new Exception("contract address is not set");
             }
@@ -184,7 +183,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
             object[] parameters = null,
             TransactionRequest overwrite = null)
         {
-            if (string.IsNullOrEmpty(address))
+            if (string.IsNullOrEmpty(Address))
             {
                 throw new Exception("contract address is not set");
             }
@@ -228,7 +227,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
             object[] parameters = null,
             TransactionRequest overwrite = null)
         {
-            if (string.IsNullOrEmpty(address))
+            if (string.IsNullOrEmpty(Address))
             {
                 throw new Exception("contract address is not set");
             }
@@ -268,7 +267,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
             object[] parameters,
             TransactionRequest overwrite = null)
         {
-            if (string.IsNullOrEmpty(address))
+            if (string.IsNullOrEmpty(Address))
             {
                 throw new Exception("contract address is not set");
             }
@@ -335,7 +334,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
             var txReq = overwrite ?? new TransactionRequest();
 
             txReq.From ??= signer?.PublicAddress;
-            txReq.To ??= address;
+            txReq.To ??= Address;
             txReq.Data ??= function.GetData(parameters);
             if (isReadCall)
             {
