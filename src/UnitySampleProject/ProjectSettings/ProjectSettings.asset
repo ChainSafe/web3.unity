@@ -792,7 +792,7 @@ PlayerSettings:
   webGLPowerPreference: 2
   scriptingDefineSymbols:
     Standalone: 
-    WebGL: RAMP_AVAILABLE
+    WebGL: RAMP_AVAILABLE;ENABLE_ANALYTICS
     iPhone: 
   additionalCompilerArguments: {}
   platformArchitecture: {}
