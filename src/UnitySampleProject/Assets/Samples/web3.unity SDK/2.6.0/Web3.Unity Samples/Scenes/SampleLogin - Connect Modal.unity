@@ -295,7 +295,6 @@ GameObject:
   - component: {fileID: 1658652864}
   - component: {fileID: 1658652862}
   - component: {fileID: 1658652865}
-  - component: {fileID: 1658652866}
   m_Layer: 0
   m_Name: ConnectToWallet
   m_TagString: Untagged
@@ -364,30 +363,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneToLoad: SampleMain
---- !u!114 &1658652866
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1658652861}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e470bd7f19d447ecb8618e45dc63ba88, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  web3AuthWalletGUIPrefab: {fileID: 7656622686525558909, guid: b394e6c49b9bd734089cea0293265bd3, type: 3}
-  displayWalletIcon: 1
-  autoConfirmTransactions: 1
-  autoPopUpWalletOnTx: 0
-  walletIcon: {fileID: 21300000, guid: 55a46a48cd53d834f99fda690cfea4b1, type: 3}
-  walletLogo: {fileID: 21300000, guid: ab400fd9b39316240b30631965553264, type: 3}
-  displayFont: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  primaryBackgroundColour: {r: 0, g: 0, b: 0, a: 0.7254902}
-  menuBackgroundColour: {r: 0, g: 0, b: 0, a: 1}
-  primaryTextColour: {r: 1, g: 1, b: 1, a: 1}
-  secondaryTextColour: {r: 0.42745098, g: 0.85882354, b: 0.29411766, a: 1}
-  borderButtonColour: {r: 1, g: 1, b: 1, a: 1}
 --- !u!224 &199374705475579680
 RectTransform:
   m_ObjectHideFlags: 0

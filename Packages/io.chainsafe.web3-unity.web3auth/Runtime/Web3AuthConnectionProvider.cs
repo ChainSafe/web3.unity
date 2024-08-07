@@ -19,7 +19,7 @@ using Network = Web3Auth.Network;
 /// ConnectionProvider for connecting wallet via Web3Auth.
 /// </summary>
 [CreateAssetMenu(menuName = "ChainSafe/Connection Provider/Web3Auth", fileName = nameof(Web3AuthConnectionProvider))]
-public class Web3AuthConnectionProvider : RestorableConnectionProvider, ILogoutHandler
+public class Web3AuthConnectionProvider : RestorableConnectionProvider, ILogoutHandler, IWeb3InitializedHandler
 {
     [SerializeField] private string clientId;
     [SerializeField] private string redirectUri;
@@ -27,9 +27,17 @@ public class Web3AuthConnectionProvider : RestorableConnectionProvider, ILogoutH
     
     [Space]
     
-    [SerializeField] public GameObject modalPrefab;
+    [SerializeField] private GameObject modalPrefab;
+    
+    [Space]
+    
+    [SerializeField] private bool enableWalletGui;
+    [SerializeField] private Web3AuthWalletGUI web3AuthWalletGUIPrefab;
+    [SerializeField] private Web3AuthWalletGUI.Web3AuthWalletConfig walletGuiConfig;
     
     private Web3AuthModal _modal;
+    
+    private Web3AuthWalletGUI _web3AuthWalletGui;
 
     [NonSerialized] private bool _rememberMe;
     
@@ -118,7 +126,7 @@ public class Web3AuthConnectionProvider : RestorableConnectionProvider, ILogoutH
 
         services.UseWeb3AuthWallet(web3AuthConfig);
         
-        services.AddSingleton<ILogoutHandler>(this);
+        services.AddSingleton<ILogoutHandler, IWeb3InitializedHandler, Web3AuthConnectionProvider>(_ => this);
     }
 
     public override Task<bool> SavedSessionAvailable()
@@ -206,7 +214,24 @@ public class Web3AuthConnectionProvider : RestorableConnectionProvider, ILogoutH
     public Task OnLogout()
     {
         _rememberMe = false;
+
+        if (enableWalletGui && _web3AuthWalletGui != null)
+        {
+            Destroy(_web3AuthWalletGui.gameObject);
+        }
         
+        return Task.CompletedTask;
+    }
+
+    public Task OnWeb3Initialized(Web3 web3)
+    {
+        if (enableWalletGui)
+        {
+            // TODO pass web3 instance here instead of using web3accessor
+            _web3AuthWalletGui = Instantiate(web3AuthWalletGUIPrefab);
+            _web3AuthWalletGui.Initialize(walletGuiConfig);
+        }
+
         return Task.CompletedTask;
     }
 }
