@@ -11,6 +11,7 @@ using ChainSafe.Gaming.Web3.Unity;
 using Nethereum.ABI.FunctionEncoding.Attributes;
 using Nethereum.Mud;
 using TMPro;
+using Nethereum.Contracts;
 using UnityEngine;
 
 public class MudSample : MonoBehaviour
