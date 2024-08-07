@@ -85,14 +85,15 @@ jobs:
             PACKAGE_LIB_PATH="${GITHUB_WORKSPACE}/${entry%:}"
             if [ -d "$PACKAGE_LIB_PATH" ]; then
               rm "$PACKAGE_LIB_PATH"*.dll
+              rm "$PACKAGE_LIB_PATH"*.pdb
             else
               mkdir -p "$PACKAGE_LIB_PATH"
             fi
           else
             export DEPENDENCY=$(echo "$entry" | tr -d '\t' | tr -d ' ')
             cp "$PUBLISH_PATH/$DEPENDENCY".dll $PACKAGE_LIB_PATH
-            if ! [ -f "$PACKAGE_LIB_PATH$DEPENDENCY.meta" ]; then
-              echo -e "${DLL_META_FILE_TEMPLATE/"[[assetGuid]]"/"$(uuidgen | tr -d '-')"}" >> "$PACKAGE_LIB_PATH$DEPENDENCY.meta"
+            if ! [ -f "$PACKAGE_LIB_PATH$DEPENDENCY.dll.meta" ]; then
+              echo -e "${DLL_META_FILE_TEMPLATE/"[[assetGuid]]"/"$(uuidgen | tr -d '-')"}" >> "$PACKAGE_LIB_PATH$DEPENDENCY.dll.meta"
             fi
           fi
           git add "$PACKAGE_LIB_PATH." -f
