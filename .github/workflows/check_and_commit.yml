@@ -90,7 +90,7 @@ jobs:
             fi
           else
             export DEPENDENCY=$(echo "$entry" | tr -d '\t' | tr -d ' ')
-            cp "$PUBLISH_PATH/$DEPENDENCY" $PACKAGE_LIB_PATH
+            cp "$PUBLISH_PATH/$DEPENDENCY".dll $PACKAGE_LIB_PATH
             if ! [ -f "$PACKAGE_LIB_PATH$DEPENDENCY.meta" ]; then
               echo -e "${DLL_META_FILE_TEMPLATE/"[[assetGuid]]"/"$(uuidgen | tr -d '-')"}" >> "$PACKAGE_LIB_PATH$DEPENDENCY.meta"
             fi
