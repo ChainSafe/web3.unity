@@ -27,5 +27,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
         public CancellationToken CancellationToken { get; set; }
 
         public bool RememberMe { get; set; }
+        
+        public bool AutoLogin { get; set; }
     }
 }

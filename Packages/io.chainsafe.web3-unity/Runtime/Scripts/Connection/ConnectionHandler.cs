@@ -1,88 +1,68 @@
-﻿using System;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using ChainSafe.Gaming.UnityPackage.UI;
+using ChainSafe.Gaming.Web3.Build;
+using Microsoft.Extensions.DependencyInjection;
 using UnityEngine;
+using CWeb3 = ChainSafe.Gaming.Web3.Web3;
 
 namespace ChainSafe.Gaming.UnityPackage.Connection
 {
     /// <summary>
     /// A concrete implementation of <see cref="IConnectionHandler"/>.
     /// </summary>
-    public class ConnectionHandler : MonoBehaviour, IConnectionHandler
+    public class ConnectionHandler : MonoBehaviour, IConnectionHandler, IWeb3BuilderServiceAdapter
     {
         [SerializeField] private string gelatoApiKey = "";
         [Space]
-        [SerializeField] private ConnectModal connectModal;
         // Handed in ConnectionHandlerEditor
-        [HideInInspector][SerializeField] private ConnectionProvider[] providers;
-
+        [HideInInspector, SerializeField] private ConnectionProvider[] providers;
+        
         public string GelatoApiKey => gelatoApiKey;
         public IWeb3BuilderServiceAdapter[] Web3BuilderServiceAdapters { get; private set; }
-        public IWeb3InitializedHandler[] Web3InitializedHandlers { get; private set; }
-        public ConnectionProvider ConnectionProvider { get; private set; }
 
-        private void Start()
-        {
-            Initialize();
-        }
-
+        public ConnectionProvider[] Providers => providers;
+        
         /// <summary>
         /// Initializes Connection Handler.
         /// </summary>
-        protected virtual async void Initialize()
+        public async Task Initialize()
         {
             Web3BuilderServiceAdapters = GetComponents<IWeb3BuilderServiceAdapter>();
 
-            Web3InitializedHandlers = GetComponents<IWeb3InitializedHandler>();
-
-            foreach (var provider in providers)
+            foreach (var provider in Providers)
             {
-                if (provider != null && provider.IsAvailable)
-                {
-                    var instantiatedProvider = connectModal.AddProvider(provider);
-
-                    await instantiatedProvider.Initialize();
-
-                    instantiatedProvider.ConnectButton.onClick.AddListener(delegate
-                    {
-                        ConnectionProvider = instantiatedProvider;
-
-                        ConnectClicked();
-                    });
-                }
+                await provider.Initialize();
             }
         }
 
-        private async void ConnectClicked()
+        public async Task<CWeb3> Restore()
         {
-            await TryConnect();
+            var data = new StoredConnectionProviderData();
+
+            await data.LoadOneTime();
+
+            var provider = Providers.OfType<RestorableConnectionProvider>()
+                .SingleOrDefault(p => p.GetType() == data.Type);
+            
+            if (provider != null && provider.RememberSession && await provider.SavedSessionAvailable())
+            {
+                return await (this as IConnectionHandler).Connect(provider);
+            }
+
+            return null;
         }
 
-        /// <summary>
-        /// Try to Connect and displays error and throws exception on a failed attempt.
-        /// </summary>
-        public virtual async Task TryConnect()
+        public Web3Builder ConfigureServices(Web3Builder web3Builder)
         {
-            try
+            return web3Builder.Configure(services =>
             {
-                connectModal.ShowLoading();
+                var web3InitializedHandlers = GetComponents<IWeb3InitializedHandler>();
 
-                await (this as IConnectionHandler).Connect();
-            }
-            catch (Exception e)
-            {
-                if (!(e is TaskCanceledException))
+                foreach (var handler in web3InitializedHandlers)
                 {
-                    connectModal.DisplayError(
-                        $"Connection failed, please try again.");
-
-                    ConnectionProvider.HandleException(e);
+                    services.AddSingleton(handler);
                 }
-            }
-            finally
-            {
-                connectModal.HideLoading();
-            }
+            });
         }
     }
 }
