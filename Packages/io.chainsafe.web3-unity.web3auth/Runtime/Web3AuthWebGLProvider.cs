@@ -21,7 +21,7 @@ public class Web3AuthWebGLProvider : Web3AuthProvider
         string sessionId = await _config.SessionTask;
             
         KeyStoreManagerUtils.savePreferenceData(KeyStoreManagerUtils.SESSION_ID, sessionId);
-        
+
         return await base.Connect();
     }
 }

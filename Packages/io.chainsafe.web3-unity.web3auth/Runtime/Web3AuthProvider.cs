@@ -57,7 +57,7 @@ public class Web3AuthProvider : WalletProvider, IAccountProvider
 
         var providerTask = _config.ProviderTask;
         
-        if (providerTask != null && !providerTask.IsCompleted)
+        if (!_config.AutoLogin && providerTask != null && !providerTask.IsCompleted)
         {
             var provider = await _config.ProviderTask;
         
