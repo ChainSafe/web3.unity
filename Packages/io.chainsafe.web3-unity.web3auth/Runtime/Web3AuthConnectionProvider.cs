@@ -8,7 +8,9 @@ using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
+using ChainSafe.Gaming.Web3.Core.Logout;
 using ChainSafe.GamingSdk.Web3Auth;
+using Microsoft.Extensions.DependencyInjection;
 using Nethereum.Hex.HexTypes;
 using UnityEngine;
 using Network = Web3Auth.Network;
@@ -16,7 +18,8 @@ using Network = Web3Auth.Network;
 /// <summary>
 /// ConnectionProvider for connecting wallet via Web3Auth.
 /// </summary>
-public class Web3AuthConnectionProvider : ConnectionProvider
+[CreateAssetMenu(menuName = "ChainSafe/Connection Provider/Web3Auth", fileName = nameof(Web3AuthConnectionProvider))]
+public class Web3AuthConnectionProvider : RestorableConnectionProvider, ILogoutHandler, IWeb3InitializedHandler
 {
     [SerializeField] private string clientId;
     [SerializeField] private string redirectUri;
@@ -24,10 +27,20 @@ public class Web3AuthConnectionProvider : ConnectionProvider
     
     [Space]
     
-    [SerializeField] public GameObject modalPrefab;
+    [SerializeField] private GameObject modalPrefab;
+    
+    [Space]
+    
+    [SerializeField] private bool enableWalletGui;
+    [SerializeField] private Web3AuthWalletGUI web3AuthWalletGUIPrefab;
+    [SerializeField] private Web3AuthWalletGUI.Web3AuthWalletConfig walletGuiConfig;
     
     private Web3AuthModal _modal;
+    
+    private Web3AuthWalletGUI _web3AuthWalletGui;
 
+    [NonSerialized] private bool _rememberMe;
+    
     public override bool IsAvailable => true;
 
  #if UNITY_WEBGL && !UNITY_EDITOR
@@ -60,49 +73,46 @@ public class Web3AuthConnectionProvider : ConnectionProvider
             projectConfig.Rpc, projectConfig.Network, "", projectConfig.Symbol, "", network.ToString().ToLower(), Initialized, InitializeError);
 
         await _initializeTcs.Task;
-        
-        Debug.Log("Web3Auth Initialized Successfully.");
-
-        // Don't allow connection before initialization.
-        ConnectButton.interactable = true;
     }
 #else
     public override Task Initialize()
     {
-        ConnectButton.interactable = true;
-        
         return Task.CompletedTask;
     }
 #endif
 
-    public override Web3Builder ConfigureServices(Web3Builder web3Builder)
+    protected override void ConfigureServices(IWeb3ServiceCollection services)
     {
-        DisplayModal();
-        
-        return web3Builder.Configure(services =>
+        // Don't display modal if it's an auto login.
+        if (!_rememberMe)
         {
-            var web3AuthConfig = new Web3AuthWalletConfig
+            DisplayModal();
+        }
+        
+        var web3AuthConfig = new Web3AuthWalletConfig
+        {
+            Web3AuthOptions = new()
             {
-                Web3AuthOptions = new()
+                clientId = clientId,
+                redirectUrl = new Uri(redirectUri),
+                network = network,
+                whiteLabel = new()
                 {
-                    clientId = clientId,
-                    redirectUrl = new Uri(redirectUri),
-                    network = network,
-                    whiteLabel = new()
-                    {
-                        mode = Web3Auth.ThemeModes.dark,
-                        defaultLanguage = Web3Auth.Language.en,
-                        appName = "ChainSafe Gaming SDK",
-                    }
-                },
-                // RememberMe = rememberMe
-            };
-
-            web3AuthConfig.CancellationToken = _modal.CancellationToken;
+                    mode = Web3Auth.ThemeModes.dark,
+                    defaultLanguage = Web3Auth.Language.en,
+                    appName = "ChainSafe Gaming SDK",
+                }
+            },
+            RememberMe = _rememberMe || RememberSession,
             
-            web3AuthConfig.ProviderTask = _modal.SelectProvider();
+            AutoLogin = _rememberMe
+        };
 
- #if UNITY_WEBGL && !UNITY_EDITOR
+        web3AuthConfig.CancellationToken = _rememberMe ? default : _modal.CancellationToken;
+            
+        web3AuthConfig.ProviderTask = _rememberMe ? default : _modal.SelectProvider();
+
+#if UNITY_WEBGL && !UNITY_EDITOR
             web3AuthConfig.CancellationToken.Register(delegate
             {
                 if (_connectionTcs != null && !_connectionTcs.Task.IsCompleted)
@@ -114,8 +124,19 @@ public class Web3AuthConnectionProvider : ConnectionProvider
             web3AuthConfig.SessionTask = Connect();
 #endif
 
-            services.UseWeb3AuthWallet(web3AuthConfig);
-        });
+        services.UseWeb3AuthWallet(web3AuthConfig);
+        
+        services.AddSingleton<ILogoutHandler, IWeb3InitializedHandler, Web3AuthConnectionProvider>(_ => this);
+    }
+
+    public override Task<bool> SavedSessionAvailable()
+    {
+        if (!string.IsNullOrEmpty(KeyStoreManagerUtils.getPreferencesData(KeyStoreManagerUtils.SESSION_ID)))
+        {
+            _rememberMe = true;
+        }
+        
+        return Task.FromResult(_rememberMe);
     }
 
     public override void HandleException(Exception exception)
@@ -145,6 +166,8 @@ public class Web3AuthConnectionProvider : ConnectionProvider
     [MonoPInvokeCallback(typeof(Action))]
     private static void Initialized()
     {
+        Debug.Log("Web3Auth Initialized Successfully.");
+
         _instance._initializeTcs.SetResult(string.Empty);
     }
     
@@ -156,6 +179,11 @@ public class Web3AuthConnectionProvider : ConnectionProvider
 
     private async Task<string> Connect()
     {
+        if (_rememberMe)
+        {
+            return KeyStoreManagerUtils.getPreferencesData(KeyStoreManagerUtils.SESSION_ID);
+        }
+        
         if (_connectionTcs != null && !_connectionTcs.Task.IsCompleted)
         {
             _connectionTcs.SetCanceled();
@@ -165,7 +193,7 @@ public class Web3AuthConnectionProvider : ConnectionProvider
         
         var provider = await _modal.SelectProvider();
         
-        Web3AuthLogin(provider.ToString().ToLower(), false, Connected, ConnectError);
+        Web3AuthLogin(provider.ToString().ToLower(), _rememberMe || RememberSession, Connected, ConnectError);
 
         return await _connectionTcs.Task;
     }
@@ -182,4 +210,28 @@ public class Web3AuthConnectionProvider : ConnectionProvider
         _instance._connectionTcs.SetException(new Web3Exception(message));
     }
 #endif
+    
+    public Task OnLogout()
+    {
+        _rememberMe = false;
+
+        if (enableWalletGui && _web3AuthWalletGui != null)
+        {
+            Destroy(_web3AuthWalletGui.gameObject);
+        }
+        
+        return Task.CompletedTask;
+    }
+
+    public Task OnWeb3Initialized(Web3 web3)
+    {
+        if (enableWalletGui)
+        {
+            // TODO pass web3 instance here instead of using web3accessor
+            _web3AuthWalletGui = Instantiate(web3AuthWalletGUIPrefab);
+            _web3AuthWalletGui.Initialize(walletGuiConfig);
+        }
+
+        return Task.CompletedTask;
+    }
 }

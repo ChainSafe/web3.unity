@@ -28,7 +28,7 @@ namespace ChainSafe.Gaming.Web3.Build
             serviceCollection
                 .UseEventPoller()
                 .AddSingleton<IContractBuilder, ILifecycleParticipant, ContractBuilder>()
-                .AddSingleton<DataStorage>()
+                .AddSingleton<ILocalStorage, DataStorage>()
                 .AddSingleton<ChainRegistryProvider>()
                 .AddSingleton<ILogoutManager, LogoutManager>()
                 .AddSingleton<Erc20Service>()
