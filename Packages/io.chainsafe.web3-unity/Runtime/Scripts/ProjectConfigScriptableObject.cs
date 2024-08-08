@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ChainSafe.Gaming.UnityPackage
 {
-    [CreateAssetMenu(fileName = "ProjectConfigData", menuName = "ScriptableObjects/ProjectConfigScriptableObject",
+    [CreateAssetMenu(fileName = "ProjectConfigScriptableObject", menuName = "ScriptableObjects/ProjectConfigScriptableObject",
         order = 1)]
     public class ProjectConfigScriptableObject : ScriptableObject, ICompleteProjectConfig
     {
