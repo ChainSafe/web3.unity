@@ -77,7 +77,7 @@ namespace Plugins.CountlySDK.Services
 #if UNITY_WEBGL
             _monoBehaviour.StartCoroutine(SessionTimerCoroutine());
 #else
-            _sessionTimer = new Timer { Interval = _configuration.GetUpdateSessionTimerDelay() * 1000 };
+            _sessionTimer = new Timer { Interval = _configuration.SessionDuration * 1000 };
             _sessionTimer.Elapsed += SessionTimerOnElapsedAsync;
             _sessionTimer.AutoReset = true;
             _sessionTimer.Start();
