@@ -174,7 +174,7 @@ var signer = SignerMigration.NewJsonRpcSigner(provider);
 ```
 _Migration might not be the best word for describing this process. Ping me (@oleksandrchainsafe) if you have better ideas._
 
-# Usefull links
+# Useful links
 
 * [Dependency Injection Framework](https://learn.microsoft.com/en-us/dotnet/core/extensions/dependency-injection)
 * [Design Patterns by Gang of Four](https://ru.wikipedia.org/wiki/Design_Patterns)
