@@ -134,6 +134,7 @@ namespace ChainSafe.Gaming.WalletConnect
                             "eth_signTransaction",
                             "eth_sendTransaction",
                             "eth_getTransactionByHash",
+                            "eth_blockNumber",
                         },
                     }
                 },
