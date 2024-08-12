@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Mud.Storages;
 
-namespace ChainSafe.Gaming.Mud.Draft
+namespace ChainSafe.Gaming.Mud.Tables
 {
     public class MudTable // todo make this IQueryable
     {
@@ -21,7 +22,7 @@ namespace ChainSafe.Gaming.Mud.Draft
 
         public byte[] ResourceId => tableSchema.ResourceId;
 
-        public Task<object[][]> Query(MudQuery query) // todo remove MudQueryResponse wrapper?
+        public Task<object[][]> Query(MudQuery query)
         {
             return storage.Query(tableSchema, query);
         }

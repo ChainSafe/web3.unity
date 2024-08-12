@@ -1,4 +1,4 @@
-namespace ChainSafe.Gaming.Mud.Draft
+namespace ChainSafe.Gaming.Mud.Tables
 {
     public class MudTableMutationData
     {

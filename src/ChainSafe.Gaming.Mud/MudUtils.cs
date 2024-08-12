@@ -1,6 +1,6 @@
 using Nethereum.Mud.EncodingDecoding;
 
-namespace ChainSafe.Gaming.Mud.Draft
+namespace ChainSafe.Gaming.Mud
 {
     public static class MudUtils
     {
@@ -11,6 +11,13 @@ namespace ChainSafe.Gaming.Mud.Draft
             return isOffChain
                 ? ResourceEncoder.EncodeOffchainTable(@namespace, trimmedName)
                 : ResourceEncoder.EncodeTable(@namespace, trimmedName);
+        }
+
+        public static string NamespaceFunctionName(string @namespace, string function)
+        {
+            return !function.StartsWith($"{@namespace}__")
+                ? $"{@namespace}__{function}"
+                : function; // already contains namespace
         }
     }
 }

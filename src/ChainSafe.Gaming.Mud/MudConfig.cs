@@ -1,4 +1,6 @@
-namespace ChainSafe.Gaming.Mud.Draft
+using ChainSafe.Gaming.Mud.Storages;
+
+namespace ChainSafe.Gaming.Mud
 {
     public class MudConfig : IMudConfig
     {

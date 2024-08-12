@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Mud.Tables;
 
-namespace ChainSafe.Gaming.Mud.Draft
+namespace ChainSafe.Gaming.Mud.Storages
 {
     public interface IMudStorage
     {

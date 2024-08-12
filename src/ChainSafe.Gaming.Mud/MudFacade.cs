@@ -1,23 +1,27 @@
+using System.Diagnostics;
+using System.Threading.Tasks;
+using ChainSafe.Gaming.Mud.Worlds;
+using ChainSafe.Gaming.Web3.Environment;
+
 namespace ChainSafe.Gaming.Mud
 {
     public class MudFacade
     {
         private readonly MudWorldFactory worldFactory;
+        private readonly ILogWriter logWriter;
 
-        public MudFacade(MudWorldFactory worldFactory)
+        public MudFacade(MudWorldFactory worldFactory, ILogWriter logWriter)
         {
+            this.logWriter = logWriter;
             this.worldFactory = worldFactory;
         }
 
-        /// <summary>
-        /// Builds a MUD World Client to exchange messages with a World Contract.
-        /// </summary>
-        /// <param name="contractAddress">The address of the World Contract.</param>
-        /// <param name="worldContractAbi">The ABI of the World Contract.</param>
-        /// <returns>The client for the MUD World Contract.</returns>
-        public MudWorld BuildWorld(string contractAddress, string worldContractAbi)
+        public Task<MudWorld> BuildWorld(MudWorldConfig worldConfig)
         {
-            return worldFactory.Build(contractAddress, worldContractAbi);
+            var stopwatch = Stopwatch.StartNew();
+            var world = worldFactory.Build(worldConfig);
+            logWriter.Log($"Loaded world {worldConfig.ContractAddress} in {stopwatch.Elapsed}");
+            return world;
         }
     }
 }

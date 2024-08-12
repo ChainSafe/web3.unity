@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
+using ChainSafe.Gaming.Mud.Tables;
 using Nethereum.ABI.FunctionEncoding;
 using Nethereum.ABI.Model;
 
-namespace ChainSafe.Gaming.Mud.Draft.InMemory
+namespace ChainSafe.Gaming.Mud.Storages.InMemory
 {
     public static class MudTableSchemaExtensions
     {

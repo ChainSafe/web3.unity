@@ -1,8 +1,7 @@
 using System;
 using System.Numerics;
-using ChainSafe.Gaming.Mud.Draft.InMemory;
 
-namespace ChainSafe.Gaming.Mud.Draft
+namespace ChainSafe.Gaming.Mud.Storages.InMemory
 {
     public interface IInMemoryMudStorageConfig : IMudStorageConfig
     {

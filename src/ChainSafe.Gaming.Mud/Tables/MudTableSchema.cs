@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using Nethereum.Mud.EncodingDecoding;
 
-namespace ChainSafe.Gaming.Mud.Draft
+namespace ChainSafe.Gaming.Mud.Tables
 {
     public class MudTableSchema
     {

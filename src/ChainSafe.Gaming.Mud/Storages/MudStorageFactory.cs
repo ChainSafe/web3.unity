@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Web3;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ChainSafe.Gaming.Mud.Draft
+namespace ChainSafe.Gaming.Mud.Storages
 {
     public class MudStorageFactory : IMudStorageFactory
     {
@@ -18,7 +18,7 @@ namespace ChainSafe.Gaming.Mud.Draft
         {
             if (!typeof(IMudStorage).IsAssignableFrom(mudStorageConfig.StorageStrategyType))
             {
-                throw new Web3Exception($"Provided MUD Storage Strategy type doesn't implement {nameof(IMudStorage)}");
+                throw new MudException($"Provided MUD Storage Strategy type doesn't implement {nameof(IMudStorage)}");
             }
 
             var storageStrategy = (IMudStorage)serviceProvider.GetRequiredService(mudStorageConfig.StorageStrategyType);

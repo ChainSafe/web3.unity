@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace ChainSafe.Gaming.Mud.Draft
+namespace ChainSafe.Gaming.Mud.Storages
 {
     public interface IMudStorageFactory
     {

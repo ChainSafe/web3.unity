@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace ChainSafe.Gaming.Mud.Draft
+namespace ChainSafe.Gaming.Mud.Storages.InMemory
 {
     public class InMemoryMudStorageConfig : IInMemoryMudStorageConfig
     {

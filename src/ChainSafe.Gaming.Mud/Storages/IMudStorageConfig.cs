@@ -1,6 +1,6 @@
 using System;
 
-namespace ChainSafe.Gaming.Mud.Draft
+namespace ChainSafe.Gaming.Mud.Storages
 {
     public interface IMudStorageConfig
     {
