@@ -4,6 +4,7 @@ using ChainSafe.Gaming.Evm;
 using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.LocalStorage;
+using ChainSafe.Gaming.RPC.Events;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm.EventPoller;
 using ChainSafe.Gaming.Web3.Core.Logout;
@@ -26,7 +27,7 @@ namespace ChainSafe.Gaming.Web3.Build
 
             // Bind default services
             serviceCollection
-                .UseEventPoller()
+                .UseEventPoller() // todo: remove in favor of EventManager which supports WebSocket connection
                 .AddSingleton<IContractBuilder, ILifecycleParticipant, ContractBuilder>()
                 .AddSingleton<DataStorage>()
                 .AddSingleton<ChainRegistryProvider>()
@@ -34,6 +35,9 @@ namespace ChainSafe.Gaming.Web3.Build
                 .AddSingleton<Erc20Service>()
                 .AddSingleton<Erc721Service>()
                 .AddSingleton<Erc1155Service>();
+
+            serviceCollection
+                .AddSingleton<IEventManager, ILifecycleParticipant, EventManager>();
         }
 
         /// <summary>
