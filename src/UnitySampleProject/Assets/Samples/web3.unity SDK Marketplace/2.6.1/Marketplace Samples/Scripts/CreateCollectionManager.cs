@@ -35,9 +35,6 @@ namespace ChainSafe.Gaming.Marketplace
         {
             if (processing) return;
             processing = true;
-            // form won't post with null values here, hacky and could be better.
-            nameInput.text ??= " ";
-            descriptionInput.text ??= " ";
             switch (typeDropDown.options[typeDropDown.value].text)
             {
                 case "721":
