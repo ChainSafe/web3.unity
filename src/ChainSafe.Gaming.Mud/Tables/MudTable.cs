@@ -3,7 +3,7 @@ using ChainSafe.Gaming.Mud.Storages;
 
 namespace ChainSafe.Gaming.Mud.Tables
 {
-    public class MudTable // todo make this IQueryable
+    public class MudTable // todo support LINQ
     {
         private readonly IMudStorage storage;
         private readonly MudTableSchema tableSchema;

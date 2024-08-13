@@ -1,25 +1,18 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using ChainSafe.Gaming.Debugging;
-using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.Mud;
+using ChainSafe.Gaming.Mud.Storages.InMemory;
+using ChainSafe.Gaming.Mud.Tables;
+using ChainSafe.Gaming.Mud.Worlds;
 using ChainSafe.Gaming.UnityPackage;
-using ChainSafe.Gaming.WalletConnect;
 using ChainSafe.Gaming.Wallets;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
-using ChainSafe.Gaming.Web3.Evm.Wallet;
 using ChainSafe.Gaming.Web3.Unity;
-using Nethereum.ABI.FunctionEncoding.Attributes;
-using Nethereum.Contracts;
-using Nethereum.Mud;
 using TMPro;
-using UnityEditor.VersionControl;
 using UnityEngine;
-using Task = System.Threading.Tasks.Task;
 
 public class MudSample : MonoBehaviour
 {
@@ -29,19 +22,6 @@ public class MudSample : MonoBehaviour
 
     private Web3 web3;
     private MudWorld world;
-
-    public class CounterRecord : TableRecordSingleton<CounterRecord.CounterValue> // singleton table record - no key required
-    {
-        public class CounterValue
-        {
-            [Parameter("uint32", "value", 1)] // column name
-            public BigInteger Counter { get; set; }
-        }
-
-        public CounterRecord() : base("app", "Counter") // table name
-        {
-        }
-    }
 
     private async void Awake()
     {
@@ -59,16 +39,44 @@ public class MudSample : MonoBehaviour
                 services.Debug().UseJsonRpcWallet(new JsonRpcWalletConfig { AccountIndex = 0 });
                     
                 // Enable MUD
-                services.UseMud();
+                services.UseMud(new MudConfig
+                {
+                    // InMemoryMudStorage will process all logs starting from the specified index and build a copy of
+                    // all the tables locally. It will then keep the data in sync by listening to the data mutation
+                    // events.
+                    // Consider using Offchain Indexer for data-heavy projects.
+                    StorageConfig = new InMemoryMudStorageConfig
+                    {
+                        FromBlockNumber = 0,
+                    },
+                });
             }).LaunchAsync();
-        Debug.Log("Web3 client ready");
+        Debug.Log($"Web3 client ready. Player address: {web3.Signer.PublicAddress}");
         
         // 2. Create MUD World client.
-        world = web3.Mud().BuildWorld(WorldContractAddress, WorldContractAbi.text);
+        world = await web3.Mud().BuildWorld(new MudWorldConfig
+        {
+            ContractAddress = WorldContractAddress,
+            ContractAbi = WorldContractAbi.text,
+            DefaultNamespace = "app",
+            TableSchemas = new List<MudTableSchema>
+            {
+                new()
+                {
+                    Namespace = "app",
+                    TableName = "Counter",
+                    Columns = new Dictionary<string, string>
+                    {
+                        { "value", "uint32" },
+                    },
+                },
+            },
+        });
         Debug.Log("MUD World client ready");
 
-        // 3. Query current counter value.
-        var counterValue = (await world.Query<CounterRecord, CounterRecord.CounterValue>()).Counter;
+        // 3. Query all records of the Counter table. Get single record. Get first column value.
+        var singleRecord = (await world.GetTable("Counter").Query(MudQuery.All))[0];
+        var counterValue = (BigInteger)singleRecord[0];
         Debug.Log($"Counter value on load: {counterValue}");
         CounterLabel.text = counterValue.ToString("d");
     }
@@ -83,11 +91,11 @@ public class MudSample : MonoBehaviour
         
         // 4. Send transaction to execute the Increment function of the World contract.
         Debug.Log("Sending transaction to execute the Increment function..");
-        await world.Send("app__increment");
+        await world.GetSystems().Send("increment");
         Debug.Log($"Increment successful");
         
         // 5. Query new counter value.
-        var counterValue = (await world.Query<CounterRecord, CounterRecord.CounterValue>()).Counter;
+        var counterValue = (BigInteger)(await world.GetTable("Counter").Query(MudQuery.All))[0][0];
         Debug.Log($"Counter value after increment: {counterValue}");
         CounterLabel.text = counterValue.ToString("d");
     }
