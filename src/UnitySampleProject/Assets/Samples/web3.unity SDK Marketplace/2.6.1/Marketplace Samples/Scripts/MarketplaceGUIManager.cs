@@ -64,7 +64,7 @@ namespace ChainSafe.Gaming.Marketplace
             createMarketplaceUploadImageButton.onClick.AddListener(UploadMarketplaceImage);
             createCollectionUploadImageButton.onClick.AddListener(UploadCollectionImage);
             mintNftToCollectionMenuButton.onClick.AddListener(ToggleMintNftToCollectionMenu);
-            mintNftToCollectionButton.onClick.AddListener(UploadNftImageToCollection);
+            mintNftToCollectionButton.onClick.AddListener(MintNftToCollection);
             backButtonMintNftToCollection.onClick.AddListener(ToggleMintNftToCollectionMenu);
             listNftToMarketplaceButton.onClick.AddListener(ListNftToMarketplace);
             backButtonListNftToMarketplace.onClick.AddListener(ToggleListNftToMarketplaceMenu);
@@ -215,9 +215,9 @@ namespace ChainSafe.Gaming.Marketplace
         /// <summary>
         /// Uploads marketplace image.
         /// </summary>
-        private void UploadNftImageToCollection()
+        private void MintNftToCollection()
         {
-            EventManagerMarketplace.RaiseUploadNftImageToCollection();
+            EventManagerMarketplace.RaiseMintNftToCollection();
         }
         
         /// <summary>
@@ -226,7 +226,7 @@ namespace ChainSafe.Gaming.Marketplace
         private void ToggleMintNftToCollectionMenu()
         {
             mintNftToCollectionMenu.SetActive(!mintNftToCollectionMenu.activeSelf);
-            EventManagerMarketplace.RaiseToggleMintNftToSelectionMenu();
+            EventManagerMarketplace.RaiseToggleMintNftToCollectionMenu();
         }
 
         /// <summary>

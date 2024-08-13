@@ -21,6 +21,13 @@ namespace ChainSafe.Gaming.Marketplace
 
         #endregion
         
+        #region Properties
+
+        private string CollectionContractToListFrom { get; set; }
+        private string BearerToken { get; set; }
+
+        #endregion
+        
         #region Methods
         
         /// <summary>
@@ -35,10 +42,10 @@ namespace ChainSafe.Gaming.Marketplace
             switch (typeDropDown.options[typeDropDown.value].text)
             {
                 case "721":
-                    Mint721CollectionNft(nameInput.text, descriptionInput.text);
+                    Mint721CollectionNft(BearerToken, CollectionContractToListFrom, nameInput.text, descriptionInput.text);
                     break;
                 case "1155":
-                    Mint1155CollectionNft(nameInput.text, descriptionInput.text, amountInput.text);
+                    Mint1155CollectionNft(BearerToken, CollectionContractToListFrom, nameInput.text, amountInput.text, descriptionInput.text);
                     break;
             }
         }
@@ -46,11 +53,11 @@ namespace ChainSafe.Gaming.Marketplace
         /// <summary>
         /// Mints an NFT to a 721 collection
         /// </summary>
-        public async void Mint721CollectionNft(string collectionContract721, string uri721)
+        public async void Mint721CollectionNft(string bearerToken, string collectionContract721, string name721, string description721)
         {
             try
             {
-                var response = await EvmMarketplace.Mint721CollectionNft(collectionContract721, uri721);
+                var response = await EvmMarketplace.Mint721CollectionNft(bearerToken, collectionContract721, name721, description721);
                 Debug.Log($"TX: {response.TransactionHash}");
             }
             catch (Web3Exception e)
@@ -63,11 +70,11 @@ namespace ChainSafe.Gaming.Marketplace
         /// <summary>
         /// Mints an NFT to a 1155 collection
         /// </summary>
-        public async void Mint1155CollectionNft(string collectionContract1155, string uri1155, string amount1155)
+        public async void Mint1155CollectionNft(string bearerToken, string collectionContract1155, string name1155, string amount1155, string description1155)
         {
             try
             {
-                var response = await EvmMarketplace.Mint1155CollectionNft(collectionContract1155, uri1155, amount1155);
+                var response = await EvmMarketplace.Mint1155CollectionNft(bearerToken, collectionContract1155, name1155, amount1155, description1155);
                 Debug.Log($"TX: {response.TransactionHash}");
             }
             catch (Web3Exception e)
@@ -82,7 +89,8 @@ namespace ChainSafe.Gaming.Marketplace
         /// </summary>
         private void OnEnable()
         {
-            EventManagerMarketplace.UploadNftImageToCollection += UploadNftImage;
+            EventManagerMarketplace.MintNftToCollection += UploadNftImage;
+            EventManagerMarketplace.ConfigureMintCollectionNftManager += OnConfigureMintCollectionNftManager;
         }
         
         /// <summary>
@@ -90,7 +98,22 @@ namespace ChainSafe.Gaming.Marketplace
         /// </summary>
         private void OnDisable()
         {
-            EventManagerMarketplace.UploadNftImageToCollection -= UploadNftImage;
+            EventManagerMarketplace.MintNftToCollection -= UploadNftImage;
+            EventManagerMarketplace.ConfigureMintCollectionNftManager -= OnConfigureMintCollectionNftManager;
+        }
+        
+        /// <summary>
+        /// Configures tokens.
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="mintCollectionNftConfigEventArgs">Args.</param>
+        private void OnConfigureMintCollectionNftManager(object sender, EventManagerMarketplace.MintCollectionNftConfigEventArgs mintCollectionNftConfigEventArgs)
+        {
+            if (mintCollectionNftConfigEventArgs.BearerToken != null)
+            {
+                BearerToken = mintCollectionNftConfigEventArgs.BearerToken;
+            }
+            CollectionContractToListFrom = mintCollectionNftConfigEventArgs.CollectionContractToListFrom;
         }
         
         #endregion
