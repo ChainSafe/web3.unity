@@ -6,6 +6,7 @@ using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Model;
 using ChainSafe.Gaming.Web3;
+using JetBrains.Annotations;
 using Nethereum.Hex.HexTypes;
 using Newtonsoft.Json;
 using Scripts.EVM.Remote;
@@ -257,15 +258,32 @@ namespace Scripts.EVM.Marketplace
         /// <param name="_collectionContract">721 collection contract to mint from/to</param>
         /// <param name="_uri">URI in full format i.e https://ipfs.chainsafe.io/ipfs/bafyjvzacdj4apx52hvbyjkwyf7i6a7t3pcqd4kw4xxfc67hgvn3a</param>
         /// <returns>Contract send data object</returns>
-        public static async Task<TransactionReceipt> Mint721CollectionNft(string _collectionContract, string _uri)
+        public static async Task<TransactionReceipt> Mint721CollectionNft(string _bearerToken, string _collectionContract, string _name, [CanBeNull] string _description)
         {
             try
             {
+                var imageData = await UploadPlatforms.GetImageData();
+                var formData = new List<IMultipartFormSection>
+                {
+                    new MultipartFormDataSection("name", _name),
+                    new MultipartFormFileSection("image", imageData, "nftImage.png", "image/png"),
+                    new MultipartFormDataSection("tokenType", "ERC721")
+                    // TODO add attributes to form later
+                    // attributes[0].trait_type: prop1
+                    // attributes[0].value: 100
+                };
+                if (!string.IsNullOrEmpty(_description))
+                {
+                    formData.Insert(2, new MultipartFormDataSection("description", _description));
+                }
+                var path = "/nft?hash=blake2b-208";
+                var collectionResponse = await CSServer.CreateData(_bearerToken, path, formData);
+                var collectionData = JsonConvert.DeserializeObject<ApiResponse>(collectionResponse);
                 var method = "mint";
                 object[] args =
                 {
                     Web3Accessor.Web3.Signer.PublicAddress,
-                    _uri
+                    collectionData.cid
                 };
                 var contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.GeneralErc721, _collectionContract);
                 var data = await contract.SendWithReceipt(method, args);
@@ -285,16 +303,33 @@ namespace Scripts.EVM.Marketplace
         /// <param name="_uri">URI in full format i.e https://ipfs.chainsafe.io/ipfs/bafyjvzacdj4apx52hvbyjkwyf7i6a7t3pcqd4kw4xxfc67hgvn3a</param>
         /// <param name="_amount">Amount of Nfts to mint</param>
         /// <returns>Contract send data object</returns>
-        public static async Task<TransactionReceipt> Mint1155CollectionNft(string _collectionContract, string _uri, string _amount)
+        public static async Task<TransactionReceipt> Mint1155CollectionNft(string _bearerToken, string _collectionContract, string _amount, string _name, [CanBeNull] string _description)
         {
             try
             {
+                var imageData = await UploadPlatforms.GetImageData();
+                var formData = new List<IMultipartFormSection>
+                {
+                    new MultipartFormDataSection("name", _name),
+                    new MultipartFormFileSection("image", imageData, "nftImage.png", "image/png"),
+                    new MultipartFormDataSection("tokenType", "ERC1155")
+                    // TODO add attributes to form later
+                    // attributes[0].trait_type: prop1
+                    // attributes[0].value: 100
+                };
+                if (!string.IsNullOrEmpty(_description))
+                {
+                    formData.Insert(2, new MultipartFormDataSection("description", _description));
+                }
+                var path = "/nft?hash=blake2b-208";
+                var collectionResponse = await CSServer.CreateData(_bearerToken, path, formData);
+                var collectionData = JsonConvert.DeserializeObject<ApiResponse>(collectionResponse);
                 var method = "mint";
                 var amount = BigInteger.Parse(_amount);
                 object[] args =
                 {
                     Web3Accessor.Web3.Signer.PublicAddress,
-                    _uri,
+                    collectionData.cid,
                     amount
                 };
 
@@ -492,6 +527,14 @@ namespace Scripts.EVM.Marketplace
                 var value = property.GetValue(obj);
                 Debug.Log($"{property.Name}: {value}");
             }
+        }
+        
+        /// <summary>
+        /// Handles CID response from API for metadata uploads.
+        /// </summary>
+        public class ApiResponse
+        {
+            public string cid { get; set; }
         }
 
         #endregion

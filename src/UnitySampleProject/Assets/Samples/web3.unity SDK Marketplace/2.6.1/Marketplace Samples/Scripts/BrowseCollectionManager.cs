@@ -98,6 +98,8 @@ namespace ChainSafe.Gaming.Collection
                 return;
             }
             var collectionContract = projectResponse.tokens[index].collection_id;
+            var mintCollectionNftConfigArgs = new EventManagerMarketplace.MintCollectionNftConfigEventArgs(null, collectionContract);
+            EventManagerMarketplace.RaiseMintCollectionNftManager(mintCollectionNftConfigArgs);
             if (!Enum.TryParse(collectionType, true, out CollectionType collectionTypeEnum))
             {
                 collectionTypeEnum = CollectionType.Unknown;

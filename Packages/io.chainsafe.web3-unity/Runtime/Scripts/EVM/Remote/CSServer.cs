@@ -90,7 +90,12 @@ namespace Scripts.EVM.Remote
         public static async Task<string> CreateData(string _bearerToken, string _path,
             List<IMultipartFormSection> _formData)
         {
-            using (UnityWebRequest request = UnityWebRequest.Post($"{host}{Web3Accessor.Web3.ProjectConfig.ProjectId}{_path}", _formData))
+            var url = $"{host}{Web3Accessor.Web3.ProjectConfig.ProjectId}{_path}";
+            if (_path == "/nft?hash=blake2b-208")
+            {
+                url = "https://api.chainsafe.io/v1/nft?hash=blake2b-208";
+            }
+            using (UnityWebRequest request = UnityWebRequest.Post($"{url}", _formData))
             {
                 request.SetRequestHeader("Authorization", $"Bearer {_bearerToken}");
                 await request.SendWebRequest();
