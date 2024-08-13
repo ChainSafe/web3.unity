@@ -167,7 +167,6 @@ namespace Scripts.EVM.Marketplace
             var formData = new List<IMultipartFormSection>
                 {
                     new MultipartFormDataSection("name", _name),
-                    new MultipartFormDataSection("description", _description),
                     new MultipartFormDataSection("owner", Web3Accessor.Web3.Signer.PublicAddress),
                     new MultipartFormDataSection("chain_id", Web3Accessor.Web3.ChainConfig.ChainId),
                     new MultipartFormDataSection("projectID", Web3Accessor.Web3.ProjectConfig.ProjectId),
@@ -175,8 +174,12 @@ namespace Scripts.EVM.Marketplace
                     new MultipartFormFileSection("banner", bannerImageData, "banner.png", "image/png"),
                     new MultipartFormDataSection("isImported", "true"),
                     new MultipartFormDataSection("contractAddress", ChainSafeContracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId]),
-                    new MultipartFormDataSection("type", "erc721")
+                    new MultipartFormDataSection("type", "ERC721")
                 };
+            if (!string.IsNullOrEmpty(_description))
+            {
+                formData.Insert(1, new MultipartFormDataSection("description", _description));
+            }
             var path = "/collections";
             var collectionResponse = await CSServer.CreateData(_bearerToken, path, formData);
             var collectionData = JsonConvert.DeserializeObject<CollectionResponses.Collections>(collectionResponse);
@@ -213,7 +216,6 @@ namespace Scripts.EVM.Marketplace
                 var formData = new List<IMultipartFormSection>
                 {
                     new MultipartFormDataSection("name", _name),
-                    new MultipartFormDataSection("description", _description),
                     new MultipartFormDataSection("owner", Web3Accessor.Web3.Signer.PublicAddress),
                     new MultipartFormDataSection("chain_id", Web3Accessor.Web3.ChainConfig.ChainId),
                     new MultipartFormDataSection("projectID", Web3Accessor.Web3.ProjectConfig.ProjectId),
@@ -221,8 +223,12 @@ namespace Scripts.EVM.Marketplace
                     new MultipartFormFileSection("banner", bannerImageData, "banner.png", "image/png"),
                     new MultipartFormDataSection("isImported", "true"),
                     new MultipartFormDataSection("contractAddress", ChainSafeContracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId]),
-                    new MultipartFormDataSection("type", "erc1155")
+                    new MultipartFormDataSection("type", "ERC1155")
                 };
+                if (!string.IsNullOrEmpty(_description))
+                {
+                    formData.Insert(1, new MultipartFormDataSection("description", _description));
+                }
                 var path = "/collections";
                 var collectionResponse = await CSServer.CreateData(_bearerToken, path, formData);
                 var collectionData = JsonConvert.DeserializeObject<CollectionResponses.Collections>(collectionResponse);
@@ -334,10 +340,13 @@ namespace Scripts.EVM.Marketplace
                 var formData = new List<IMultipartFormSection>
                 {
                     new MultipartFormDataSection("name", _name),
-                    new MultipartFormDataSection("description", _description),
                     new MultipartFormDataSection("chain_id", Web3Accessor.Web3.ChainConfig.ChainId),
                     new MultipartFormFileSection("banner", bannerImageData, "banner.png", "image/png")
                 };
+                if (!string.IsNullOrEmpty(_description))
+                {
+                    formData.Insert(1, new MultipartFormDataSection("description", _description));
+                }
                 var path = "/marketplaces";
                 var marketplaceResponse = await CSServer.CreateData(_bearerToken, path, formData);
                 Debug.Log(marketplaceResponse);

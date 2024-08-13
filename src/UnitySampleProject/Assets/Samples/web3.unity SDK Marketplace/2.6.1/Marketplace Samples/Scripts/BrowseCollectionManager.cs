@@ -1,18 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using ChainSafe.Gaming.Ipfs;
 using ChainSafe.Gaming.Marketplace;
 using ChainSafe.Gaming.Web3;
-using Newtonsoft.Json;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using EvmMarketplace = Scripts.EVM.Marketplace.Marketplace;
 using ChainSafe.Gaming.Marketplace.Models;
-using ChainSafe.Gaming.UnityPackage.Model;
 
 namespace ChainSafe.Gaming.Collection
 {
@@ -96,6 +92,11 @@ namespace ChainSafe.Gaming.Collection
         private async void PopulateCollectionItems(int index, string collectionType)
         {
             var projectResponse = await EvmMarketplace.GetProjectTokens();
+            if (index >= projectResponse.tokens.Count)
+            {
+                EventManagerMarketplace.RaiseToggleProcessingMenu();
+                return;
+            }
             var collectionContract = projectResponse.tokens[index].collection_id;
             if (!Enum.TryParse(collectionType, true, out CollectionType collectionTypeEnum))
             {
