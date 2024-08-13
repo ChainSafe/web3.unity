@@ -1,4 +1,3 @@
-using System;
 using ChainSafe.Gaming.Web3;
 using TMPro;
 using UnityEngine;
@@ -35,9 +34,6 @@ namespace ChainSafe.Gaming.Marketplace
         {
             if (processing) return;
             processing = true;
-            // form won't post with null values here, hacky and could be better.
-            nameInput.text ??= " ";
-            descriptionInput.text ??= " ";
             CreateMarketplace(nameInput.text, descriptionInput.text, whiteListing);
         }
         
