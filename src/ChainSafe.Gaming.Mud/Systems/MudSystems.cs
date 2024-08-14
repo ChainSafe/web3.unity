@@ -16,8 +16,6 @@ namespace ChainSafe.Gaming.Mud.Systems
             ns = @namespace;
         }
 
-        #region IContract delegation with namespace__method concatination
-
         public string Address => contract.Address;
 
         public IContract Attach(string address)
@@ -70,7 +68,5 @@ namespace ChainSafe.Gaming.Mud.Systems
                 isReadCall,
                 overwrite);
         }
-
-        #endregion
     }
 }

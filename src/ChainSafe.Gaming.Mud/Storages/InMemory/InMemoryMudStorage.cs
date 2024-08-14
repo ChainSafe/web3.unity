@@ -127,7 +127,8 @@ namespace ChainSafe.Gaming.Mud.Storages.InMemory
 
         private async Task<bool> RecordExists(byte[] tableId, List<byte[]> keyTuple)
         {
-            var existingRecord = await inMemoryRepository.GetRecordAsync(tableId.ToHex(true),
+            var existingRecord = await inMemoryRepository.GetRecordAsync(
+                tableId.ToHex(true),
                 InMemoryTableRepository.ConvertKeyToCommaSeparatedHex(keyTuple));
             var recordExists = existingRecord != null;
             return recordExists;

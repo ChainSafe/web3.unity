@@ -18,7 +18,7 @@ namespace ChainSafe.Gaming.Mud.UnityEditor
             {
                 wordWrap = true
             };
-            
+
             serializedObject.Update();
             var storageProperty = serializedObject.FindProperty(nameof(MudConfigAsset.StorageType));
 
@@ -43,7 +43,7 @@ namespace ChainSafe.Gaming.Mud.UnityEditor
 
             EditorGUILayout.EndVertical();
             EditorGUI.indentLevel--;
-            
+
             serializedObject.ApplyModifiedProperties();
         }
 
