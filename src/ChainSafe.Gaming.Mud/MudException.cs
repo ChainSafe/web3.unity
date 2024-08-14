@@ -5,12 +5,12 @@ namespace ChainSafe.Gaming.Mud
 {
     public class MudException : Web3Exception
     {
-        public MudException(string message)
+        internal MudException(string message)
             : base(message)
         {
         }
 
-        public MudException(string message, Exception innerException)
+        internal MudException(string message, Exception innerException)
             : base(message, innerException)
         {
         }

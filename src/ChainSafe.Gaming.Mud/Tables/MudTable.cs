@@ -9,7 +9,7 @@ using Nethereum.Mud.EncodingDecoding;
 
 namespace ChainSafe.Gaming.Mud.Tables
 {
-    public class MudTable // todo support LINQ
+    public class MudTable // todo support LINQ or IQueryable
     {
         private readonly IMudStorage storage;
         private readonly MudTableSchema tableSchema;

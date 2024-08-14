@@ -10,7 +10,7 @@ namespace ChainSafe.Gaming.Mud
 {
     public static class MudExtensions
     {
-        public static IWeb3ServiceCollection UseMud(this IWeb3ServiceCollection services, MudConfig mudConfig)
+        public static IWeb3ServiceCollection UseMud(this IWeb3ServiceCollection services, IMudConfig mudConfig)
         {
             services.AssertServiceNotBound<MudFacade>();
             services.AssertConfigurationNotBound<IMudConfig>();
@@ -21,9 +21,9 @@ namespace ChainSafe.Gaming.Mud
             return services;
         }
 
-        public static IWeb3ServiceCollection ConfigureMud(this IWeb3ServiceCollection services, MudConfig mudConfig)
+        public static IWeb3ServiceCollection ConfigureMud(this IWeb3ServiceCollection services, IMudConfig mudConfig)
         {
-            services.Replace(ServiceDescriptor.Singleton<IMudConfig>(mudConfig));
+            services.Replace(ServiceDescriptor.Singleton(mudConfig));
 
             return services;
         }
@@ -38,7 +38,7 @@ namespace ChainSafe.Gaming.Mud
 
             // Storage strategies
             services.AddSingleton<InMemoryMudStorage>();
-            // todo implement, then register OffchainIndexerMudStorage here
+            // todo implement OffchainIndexerMudStorage, then register it here
 
             if (!services.IsNethereumAdaptersBound())
             {

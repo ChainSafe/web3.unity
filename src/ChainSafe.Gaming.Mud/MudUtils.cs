@@ -2,7 +2,7 @@ using Nethereum.Mud.EncodingDecoding;
 
 namespace ChainSafe.Gaming.Mud
 {
-    public static class MudUtils
+    internal static class MudUtils
     {
         public static byte[] TableResourceId(string @namespace, string tableName, bool isOffChain = false)
         {

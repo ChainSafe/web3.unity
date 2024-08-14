@@ -6,24 +6,29 @@ namespace ChainSafe.Gaming.Mud.Tables
 {
     public class MudTableSchema
     {
+        private byte[]? resourceId;
+        private int[]? keyIndices;
+
         public string Namespace { get; set; }
 
         public string TableName { get; set; }
 
         /// <summary>
-        /// Column's EVM data type by name.
+        /// EVM data type by name for each column in the table.
         /// </summary>
-        public List<KeyValuePair<string, string>> Columns { get; set; }
+        public List<KeyValuePair<string, string>> Columns { get; set; } // this is not Dictionary because we care about the order
 
         public string[] KeyColumns { get; set; } = Array.Empty<string>();
 
         public bool IsOffChain { get; set; }
 
-        public byte[] ResourceId => MudUtils.TableResourceId(Namespace, TableName, IsOffChain); // todo cache
+        public byte[] ResourceId => resourceId ??= MudUtils.TableResourceId(Namespace, TableName, IsOffChain);
 
-        public string GetColumnType(string columnName) => Columns.Single(pair1 => pair1.Key == columnName).Value;
+        public int[] KeyIndices => keyIndices ??= FindKeyIndices().ToArray();
 
-        public IEnumerable<int> FindKeyIndices() // todo cache
+        public string GetColumnType(string columnName) => Columns.Single(pair => pair.Key == columnName).Value;
+
+        private IEnumerable<int> FindKeyIndices()
         {
             if (KeyColumns.Length == 0)
             {

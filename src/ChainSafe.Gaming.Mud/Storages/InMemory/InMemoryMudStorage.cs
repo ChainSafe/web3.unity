@@ -63,10 +63,9 @@ namespace ChainSafe.Gaming.Mud.Storages.InMemory
         public async Task<object[][]> Query(MudTableSchema tableSchema, MudQuery query)
         {
             var columnParameters = tableSchema.ColumnsToValueParametersOutput().ToArray();
-            var encodedRecords = await inMemoryRepository.GetRecordsAsync(tableSchema.ResourceId); // bug returns 0 elements
+            var encodedRecords = await inMemoryRepository.GetRecordsAsync(tableSchema.ResourceId);
 
-            var rawRecords = encodedRecords.Select(ToRawRecord); // todo apply 'query' filters here
-
+            var rawRecords = encodedRecords.Select(ToRawRecord);
             var filteredRecords = Filter(tableSchema, rawRecords, query);
 
             return filteredRecords.ToArray();
@@ -89,7 +88,7 @@ namespace ChainSafe.Gaming.Mud.Storages.InMemory
         {
             if (query.FindWithKey)
             {
-                var keyIndices = tableSchema.FindKeyIndices().ToArray();
+                var keyIndices = tableSchema.KeyIndices;
                 var record = rawRecords.SingleOrDefault(record => KeyEquals(record, keyIndices, query.KeyFilter));
 
                 if (record != null)
