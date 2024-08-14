@@ -26,7 +26,7 @@ public class MudSample : MonoBehaviour
     private async void Awake()
     {
         Debug.Log("To run this sample successfully you should have the MUD tutorial project running in the background.\n" +
-                  "Follow the link https://mud.dev/quickstart");
+                  "Follow the link to get started: https://mud.dev/quickstart");
         
         // 1. Initialize Web3 client.
         web3 = await new Web3Builder(ProjectConfigUtilities.Load(), ProjectConfigUtilities.BuildLocalhostConfig())
