@@ -65,20 +65,26 @@ public class MudSample : MonoBehaviour
                 {
                     Namespace = "app",
                     TableName = "Counter",
-                    Columns = new Dictionary<string, string>
+                    Columns = new List<KeyValuePair<string, string>>
                     {
-                        { "value", "uint32" },
+                        new("value", "uint32"),
                     },
                 },
             },
         });
         Debug.Log("MUD World client ready");
+        
+        // 3. Get Table client.
+        var table = world.GetTable("Counter");
 
-        // 3. Query all records of the Counter table. Get single record. Get first column value.
-        var singleRecord = (await world.GetTable("Counter").Query(MudQuery.All))[0];
+        // 4. Query all records of the Counter table. Get single record. Get first column value.
+        var singleRecord = (await table.Query(MudQuery.All))[0];
         var counterValue = (BigInteger)singleRecord[0];
         Debug.Log($"Counter value on load: {counterValue}");
-        CounterLabel.text = counterValue.ToString("d");
+        UpdateGui(counterValue);
+        
+        // 5. Subscribe to table updates.
+        table.RecordUpdated += OnCounterRecordUpdated;
     }
 
     public async void IncrementCounter()
@@ -89,14 +95,21 @@ public class MudSample : MonoBehaviour
             return;
         }
         
-        // 4. Send transaction to execute the Increment function of the World contract.
+        // 5. Send transaction to execute the Increment function of the World contract.
         Debug.Log("Sending transaction to execute the Increment function..");
         await world.GetSystems().Send("increment");
         Debug.Log($"Increment successful");
-        
-        // 5. Query new counter value.
-        var counterValue = (BigInteger)(await world.GetTable("Counter").Query(MudQuery.All))[0][0];
-        Debug.Log($"Counter value after increment: {counterValue}");
+    }
+
+    private void OnCounterRecordUpdated(object[] key, object[] record)
+    {
+        var counterValue = (BigInteger)record[0];
+        Debug.Log($"Counter value updated: {counterValue}");
+        UpdateGui(counterValue);
+    }
+
+    private void UpdateGui(BigInteger counterValue)
+    {
         CounterLabel.text = counterValue.ToString("d");
     }
 }

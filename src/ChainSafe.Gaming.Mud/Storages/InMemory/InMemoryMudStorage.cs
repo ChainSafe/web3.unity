@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -5,7 +6,7 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Mud.Tables;
 using ChainSafe.Gaming.RPC.Events;
 using ChainSafe.Gaming.Web3.Core.Nethereum;
-using Nethereum.ABI.FunctionEncoding.Attributes;
+using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Mud;
 using Nethereum.Mud.Contracts.Core.StoreEvents;
 using Nethereum.Mud.EncodingDecoding;
@@ -16,6 +17,10 @@ namespace ChainSafe.Gaming.Mud.Storages.InMemory
 {
     public class InMemoryMudStorage : IMudStorage
     {
+        public event RecordSetDelegate RecordSet;
+
+        public event RecordDeletedDelegate RecordDeleted;
+
         private readonly INethereumWeb3Adapter nWeb3;
         private readonly EventManager eventManager;
 
@@ -57,12 +62,14 @@ namespace ChainSafe.Gaming.Mud.Storages.InMemory
 
         public async Task<object[][]> Query(MudTableSchema tableSchema, MudQuery query)
         {
-            var columnParameters = tableSchema.ColumnsToParametersOutput().ToArray();
+            var columnParameters = tableSchema.ColumnsToValueParametersOutput().ToArray();
             var encodedRecords = await inMemoryRepository.GetRecordsAsync(tableSchema.ResourceId); // bug returns 0 elements
 
             var rawRecords = encodedRecords.Select(ToRawRecord); // todo apply 'query' filters here
 
-            return rawRecords.ToArray();
+            var filteredRecords = Filter(tableSchema, rawRecords, query);
+
+            return filteredRecords.ToArray();
 
             object[] ToRawRecord(EncodedTableRecord encodedRecord)
             {
@@ -77,8 +84,60 @@ namespace ChainSafe.Gaming.Mud.Storages.InMemory
             }
         }
 
+        private IEnumerable<object[]> Filter(MudTableSchema tableSchema, IEnumerable<object[]> rawRecords,
+            MudQuery query)
+        {
+            if (query.FindWithKey)
+            {
+                var keyIndices = tableSchema.FindKeyIndices().ToArray();
+                var record = rawRecords.SingleOrDefault(record => KeyEquals(record, keyIndices, query.KeyFilter));
+
+                if (record != null)
+                {
+                    return new[] { record };
+                }
+                else
+                {
+                    return Array.Empty<object[]>();
+                }
+
+                bool KeyEquals(object[] record, int[] keyColumnIndices, object[] keys)
+                {
+                    if (keyColumnIndices.Length == 0)
+                    {
+                        throw new InvalidOperationException($"{nameof(keyColumnIndices)} is empty");
+                    }
+
+                    for (var keyIndex = 0; keyIndex < keyColumnIndices.Length; keyIndex++)
+                    {
+                        var columnIndex = keyColumnIndices[keyIndex];
+
+                        if (!record[columnIndex].Equals(keys[keyIndex]))
+                        {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+            }
+
+            // fallback: return original
+            return rawRecords;
+        }
+
+        private async Task<bool> RecordExists(byte[] tableId, List<byte[]> keyTuple)
+        {
+            var existingRecord = await inMemoryRepository.GetRecordAsync(tableId.ToHex(true),
+                InMemoryTableRepository.ConvertKeyToCommaSeparatedHex(keyTuple));
+            var recordExists = existingRecord != null;
+            return recordExists;
+        }
+
         private async void OnStoreSetRecord(StoreSetRecordEventDTO obj)
         {
+            var recordExists = await RecordExists(obj.TableId, obj.KeyTuple);
+
             await storeUpdateSemaphore.WaitAsync();
             try
             {
@@ -88,10 +147,14 @@ namespace ChainSafe.Gaming.Mud.Storages.InMemory
             {
                 storeUpdateSemaphore.Release();
             }
+
+            RecordSet.Invoke(obj.TableId, obj.KeyTuple, !recordExists);
         }
 
         private async void OnStoreSpliceStaticData(StoreSpliceStaticDataEventDTO obj)
         {
+            var recordExists = await RecordExists(obj.TableId, obj.KeyTuple);
+
             await storeUpdateSemaphore.WaitAsync();
             try
             {
@@ -101,10 +164,14 @@ namespace ChainSafe.Gaming.Mud.Storages.InMemory
             {
                 storeUpdateSemaphore.Release();
             }
+
+            RecordSet.Invoke(obj.TableId, obj.KeyTuple, !recordExists);
         }
 
         private async void OnStoreSpliceDynamicDataEventDTO(StoreSpliceDynamicDataEventDTO obj)
         {
+            var recordExists = await RecordExists(obj.TableId, obj.KeyTuple);
+
             await storeUpdateSemaphore.WaitAsync();
             try
             {
@@ -114,6 +181,8 @@ namespace ChainSafe.Gaming.Mud.Storages.InMemory
             {
                 storeUpdateSemaphore.Release();
             }
+
+            RecordSet.Invoke(obj.TableId, obj.KeyTuple, !recordExists);
         }
 
         private async void OnStoreDeleteRecord(StoreDeleteRecordEventDTO obj)
@@ -127,6 +196,8 @@ namespace ChainSafe.Gaming.Mud.Storages.InMemory
             {
                 storeUpdateSemaphore.Release();
             }
+
+            RecordDeleted.Invoke(obj.TableId, obj.KeyTuple);
         }
     }
 }

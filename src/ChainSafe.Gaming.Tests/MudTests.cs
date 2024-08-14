@@ -87,9 +87,9 @@ namespace ChainSafe.Gaming.Tests
                     {
                         Namespace = "app",
                         TableName = "Counter",
-                        Columns = new Dictionary<string, string>
+                        Columns = new List<KeyValuePair<string, string>>
                         {
-                            { "value", "uint32" },
+                            new("value", "uint32"),
                         },
                     },
                 },

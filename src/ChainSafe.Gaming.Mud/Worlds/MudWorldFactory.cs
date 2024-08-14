@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Mud.Storages;
+using ChainSafe.Gaming.Web3.Environment;
 
 namespace ChainSafe.Gaming.Mud.Worlds
 {
@@ -8,10 +9,12 @@ namespace ChainSafe.Gaming.Mud.Worlds
     {
         private readonly IMudStorageFactory storageFactory;
         private readonly IMudStorageConfig defaultStorageConfig;
-        private IContractBuilder contractBuilder;
+        private readonly IContractBuilder contractBuilder;
+        private readonly IMainThreadRunner mainThreadRunner;
 
-        public MudWorldFactory(IMudStorageFactory storageFactory, IMudConfig mudConfig, IContractBuilder contractBuilder)
+        public MudWorldFactory(IMudStorageFactory storageFactory, IMudConfig mudConfig, IContractBuilder contractBuilder, IMainThreadRunner mainThreadRunner)
         {
+            this.mainThreadRunner = mainThreadRunner;
             this.contractBuilder = contractBuilder;
             defaultStorageConfig = mudConfig.StorageConfig;
             this.storageFactory = storageFactory;
@@ -21,7 +24,7 @@ namespace ChainSafe.Gaming.Mud.Worlds
         {
             var storageConfig = config.StorageConfigOverride ?? defaultStorageConfig;
             var storage = await storageFactory.Build(storageConfig, config.ContractAddress);
-            return new MudWorld(config, storage, contractBuilder);
+            return new MudWorld(config, storage, contractBuilder, mainThreadRunner);
         }
     }
 }

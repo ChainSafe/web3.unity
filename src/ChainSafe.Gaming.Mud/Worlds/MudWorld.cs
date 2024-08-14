@@ -4,6 +4,7 @@ using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Mud.Storages;
 using ChainSafe.Gaming.Mud.Systems;
 using ChainSafe.Gaming.Mud.Tables;
+using ChainSafe.Gaming.Web3.Environment;
 using Nethereum.Hex.HexTypes;
 
 namespace ChainSafe.Gaming.Mud.Worlds
@@ -16,12 +17,12 @@ namespace ChainSafe.Gaming.Mud.Worlds
         private readonly Contract contract;
         private readonly string? defaultNamespace;
 
-        public MudWorld(MudWorldConfig config, IMudStorage storage, IContractBuilder contractBuilder)
+        public MudWorld(MudWorldConfig config, IMudStorage storage, IContractBuilder contractBuilder, IMainThreadRunner mainThreadRunner)
         {
             contract = contractBuilder.Build(config.ContractAbi, config.ContractAddress);
             defaultNamespace = config.DefaultNamespace;
 
-            tables = new MudWorldTables(config.TableSchemas, storage);
+            tables = new MudWorldTables(config.TableSchemas, storage, mainThreadRunner);
             systems = new MudWorldSystems(contract);
         }
 

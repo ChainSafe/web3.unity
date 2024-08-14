@@ -8,9 +8,11 @@ namespace ChainSafe.Gaming.Mud.Storages.InMemory
 {
     public static class MudTableSchemaExtensions
     {
-        public static IEnumerable<ParameterOutput> ColumnsToParametersOutput(this MudTableSchema tableSchema)
+        public static IEnumerable<ParameterOutput> ColumnsToValueParametersOutput(this MudTableSchema tableSchema)
         {
-            return tableSchema.Columns.Select((pair, i) =>
+            return tableSchema.Columns
+                .Where(pair => tableSchema.KeyColumns.Length == 0 || !tableSchema.KeyColumns.Contains(pair.Key)) // skip keys
+                .Select((pair, i) =>
             {
                 var order = i + 1;
                 var name = pair.Key;
@@ -21,6 +23,20 @@ namespace ChainSafe.Gaming.Mud.Storages.InMemory
                 parameter.DecodedType = parameter.ABIType.GetDefaultDecodingType();
 
                 return new ParameterOutput { Parameter = parameter, };
+            });
+        }
+
+        public static IEnumerable<ParameterOutput> KeyToParametersOutput(this MudTableSchema tableSchema)
+        {
+            return tableSchema.KeyColumns.Select((columnName, i) =>
+            {
+                var columnType = tableSchema.GetColumnType(columnName);
+                var parameter = new Parameter(columnType, columnName, i);
+
+                // we can only GetDefaultDecodingType after parameter gets constructed
+                parameter.DecodedType = parameter.ABIType.GetDefaultDecodingType();
+
+                return new ParameterOutput { Parameter = parameter };
             });
         }
     }

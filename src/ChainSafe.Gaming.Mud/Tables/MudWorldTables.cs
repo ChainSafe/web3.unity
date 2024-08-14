@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ChainSafe.Gaming.Mud.Storages;
+using ChainSafe.Gaming.Web3.Environment;
 
 namespace ChainSafe.Gaming.Mud.Tables
 {
@@ -9,9 +10,11 @@ namespace ChainSafe.Gaming.Mud.Tables
     {
         private readonly IMudStorage storage;
         private readonly List<MudTable> tables;
+        private readonly IMainThreadRunner mainThreadRunner;
 
-        public MudWorldTables(List<MudTableSchema> tableSchemas, IMudStorage storage)
+        public MudWorldTables(List<MudTableSchema> tableSchemas, IMudStorage storage, IMainThreadRunner mainThreadRunner)
         {
+            this.mainThreadRunner = mainThreadRunner;
             this.storage = storage;
             tables = tableSchemas.Select(BuildTable).ToList();
         }
@@ -28,7 +31,7 @@ namespace ChainSafe.Gaming.Mud.Tables
 
         private MudTable BuildTable(MudTableSchema tableSchema)
         {
-            return new MudTable(tableSchema, storage);
+            return new MudTable(tableSchema, storage, mainThreadRunner);
         }
     }
 }
