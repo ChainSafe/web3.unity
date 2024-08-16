@@ -16,7 +16,7 @@ namespace ChainSafe.Gaming.Mud
             this.worldFactory = worldFactory;
         }
 
-        public Task<MudWorld> BuildWorld(MudWorldConfig worldConfig)
+        public Task<MudWorld> BuildWorld(IMudWorldConfig worldConfig)
         {
             var stopwatch = Stopwatch.StartNew();
             var world = worldFactory.Build(worldConfig);

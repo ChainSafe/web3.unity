@@ -1,10 +1,12 @@
+using System;
 using System.Collections.Generic;
 using ChainSafe.Gaming.Mud.Storages;
 using ChainSafe.Gaming.Mud.Tables;
 
 namespace ChainSafe.Gaming.Mud.Worlds
 {
-    public class MudWorldConfig
+    [Serializable]
+    public class MudWorldConfig : IMudWorldConfig
     {
         public string ContractAddress { get; set; }
 

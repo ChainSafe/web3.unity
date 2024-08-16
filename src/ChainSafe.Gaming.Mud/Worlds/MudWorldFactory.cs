@@ -20,7 +20,7 @@ namespace ChainSafe.Gaming.Mud.Worlds
             this.storageFactory = storageFactory;
         }
 
-        public async Task<MudWorld> Build(MudWorldConfig config)
+        public async Task<MudWorld> Build(IMudWorldConfig config)
         {
             var storageConfig = config.StorageConfigOverride ?? defaultStorageConfig;
             var storage = await storageFactory.Build(storageConfig, config.ContractAddress);

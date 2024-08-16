@@ -17,7 +17,7 @@ namespace ChainSafe.Gaming.Mud.Worlds
         private readonly Contract contract;
         private readonly string? defaultNamespace;
 
-        public MudWorld(MudWorldConfig config, IMudStorage storage, IContractBuilder contractBuilder, IMainThreadRunner mainThreadRunner)
+        public MudWorld(IMudWorldConfig config, IMudStorage storage, IContractBuilder contractBuilder, IMainThreadRunner mainThreadRunner)
         {
             contract = contractBuilder.Build(config.ContractAbi, config.ContractAddress);
             defaultNamespace = config.DefaultNamespace;
