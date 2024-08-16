@@ -1,4 +1,4 @@
 namespace ChainSafe.Gaming.Mud.Tables
 {
-    public delegate void MudRecordDeletionDelegate(object[] key);
+    public delegate void RecordDeletedDelegate(object[] key);
 }
