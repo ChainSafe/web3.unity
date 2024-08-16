@@ -38,6 +38,16 @@ namespace ChainSafe.Gaming.Mud.Tables
             return storage.Query(tableSchema, query);
         }
 
+        public Task<object[]> QuerySingle(MudQuery query)
+        {
+            return storage.QuerySingle(tableSchema, query);
+        }
+
+        public Task<object[]> QueryByKey(object[] key)
+        {
+            return storage.QuerySingle(tableSchema, MudQuery.ByKey(key));
+        }
+
         private async void OnStorageRecordSet(byte[] tableId, List<byte[]> key, bool newRecord)
         {
             if (!tableId.SequenceEqual(tableSchema.ResourceId))
