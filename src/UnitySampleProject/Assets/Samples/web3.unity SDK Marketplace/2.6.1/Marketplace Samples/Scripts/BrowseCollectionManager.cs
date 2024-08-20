@@ -75,11 +75,11 @@ namespace ChainSafe.Gaming.Collection
         /// <summary>
         /// Populates Collections and adds them to the display panel.
         /// </summary>
-        private void PopulateCollections(UnityPackage.Model.NftTokenModel.ProjectCollectionsResponse collectionsResponse)
+        private async void PopulateCollections(UnityPackage.Model.NftTokenModel.ProjectCollectionsResponse collectionsResponse)
         {
             foreach (var collection in collectionsResponse.collections)
             {
-                AddCollectionToDisplay(collection.name, collection.type, baseUrl + collection.banner);
+                await AddCollectionToDisplay(collection.name, collection.type, baseUrl + collection.banner);
             }
             EventManagerMarketplace.RaiseToggleProcessingMenu();
         }
@@ -111,7 +111,7 @@ namespace ChainSafe.Gaming.Collection
                     var response = await EvmMarketplace.GetCollectionTokens721(projectResponse.tokens[index].collection_id);
                     foreach (var item in response.tokens)
                     {
-                        AddCollectionItemToDisplay(collectionContract, item.token_id, item.token_type, item.supply, item.uri);
+                        await AddCollectionItemToDisplay(collectionContract, item.token_id, item.token_type, item.supply, item.uri);
                     }
                     EventManagerMarketplace.RaiseToggleProcessingMenu();
 
@@ -122,7 +122,7 @@ namespace ChainSafe.Gaming.Collection
                     var response = await EvmMarketplace.GetCollectionTokens1155(projectResponse.tokens[index].collection_id);
                     foreach (var item in response.tokens)
                     {
-                        AddCollectionItemToDisplay(collectionContract, item.token_id, item.token_type, item.supply, item.uri);
+                        await AddCollectionItemToDisplay(collectionContract, item.token_id, item.token_type, item.supply, item.uri);
                     }
                     EventManagerMarketplace.RaiseToggleProcessingMenu();
     
@@ -141,7 +141,7 @@ namespace ChainSafe.Gaming.Collection
         /// <param name="collectionName">Collection name to add.</param>
         /// <param name="collectionType">Collection type.</param>
         /// <param name="collectionBannerUri">Collection image uri to add.</param>
-        private void AddCollectionToDisplay(string collectionName, string collectionType, string collectionBannerUri)
+        private async Task AddCollectionToDisplay(string collectionName, string collectionType, string collectionBannerUri)
         {
             if (projectCollectionsObjectNumber >= projectCollectionsDisplayCount)
             {
@@ -151,12 +151,12 @@ namespace ChainSafe.Gaming.Collection
                     projectCollectionsPrefabs[i - 1] = projectCollectionsPrefabs[i];
                 }
                 projectCollectionsPrefabs[projectCollectionsPrefabs.Length - 1] = Instantiate(projectCollectionsPrefab, CollectionPanel.transform);
-                UpdateProjectCollectionsDisplay(projectCollectionsObjectNumber, collectionName, collectionType, collectionBannerUri);
+                await UpdateProjectCollectionsDisplay(projectCollectionsObjectNumber, collectionName, collectionType, collectionBannerUri);
             }
             else
             {
                 projectCollectionsPrefabs[projectCollectionsObjectNumber] = Instantiate(projectCollectionsPrefab, CollectionPanel.transform);
-                UpdateProjectCollectionsDisplay(projectCollectionsObjectNumber, collectionName, collectionType, collectionBannerUri);
+                await UpdateProjectCollectionsDisplay(projectCollectionsObjectNumber, collectionName, collectionType, collectionBannerUri);
             }
             projectCollectionsObjectNumber++;
             CollectionScrollRect.horizontalNormalizedPosition = 0;
@@ -170,7 +170,7 @@ namespace ChainSafe.Gaming.Collection
         /// <param name="nftType">Nft name.</param>
         /// <param name="supply">Nft supply.</param>
         /// <param name="nftUri">Nft Uri.</param>
-        private void AddCollectionItemToDisplay(string collectionContract, string nftId, string nftType, string supply, string nftUri)
+        private async Task AddCollectionItemToDisplay(string collectionContract, string nftId, string nftType, string supply, string nftUri)
         {
             if (CollectionItemsObjectNumber >= CollectionItemDisplayCount)
             {
@@ -180,12 +180,12 @@ namespace ChainSafe.Gaming.Collection
                     CollectionItemPrefabs[i - 1] = CollectionItemPrefabs[i];
                 }
                 CollectionItemPrefabs[CollectionItemPrefabs.Length - 1] = Instantiate(CollectionItemPrefab, CollectionPanel.transform);
-                UpdateCollectionItemDisplay(collectionContract, CollectionItemsObjectNumber, nftId, nftType, supply, nftUri);
+                await UpdateCollectionItemDisplay(collectionContract, CollectionItemsObjectNumber, nftId, nftType, supply, nftUri);
             }
             else
             {
                 CollectionItemPrefabs[CollectionItemsObjectNumber] = Instantiate(CollectionItemPrefab, CollectionPanel.transform);
-                UpdateCollectionItemDisplay(collectionContract, CollectionItemsObjectNumber, nftId, nftType, supply, nftUri);
+                await UpdateCollectionItemDisplay(collectionContract, CollectionItemsObjectNumber, nftId, nftType, supply, nftUri);
             }
             CollectionItemsObjectNumber++;
             CollectionScrollRect.horizontalNormalizedPosition = 0;
@@ -214,7 +214,7 @@ namespace ChainSafe.Gaming.Collection
         /// <param name="collectionName">Collection name.</param>
         /// <param name="collectionType">Collection type.</param>
         /// <param name="collectionBannerUri">Collection Uri.</param>
-        private async void UpdateProjectCollectionsDisplay(int projectCollectionsObjectIndex, string collectionName, string collectionType, string collectionBannerUri)
+        private async Task UpdateProjectCollectionsDisplay(int projectCollectionsObjectIndex, string collectionName, string collectionType, string collectionBannerUri)
         {
             string[] textObjectNames = { "NameText", "TypeText" };
             string[] textValues = { collectionName, collectionType };
@@ -251,7 +251,7 @@ namespace ChainSafe.Gaming.Collection
         /// <param name="nftType">Nft name.</param>
         /// <param name="nftSupply">Nft supply.</param>
         /// <param name="nftUri">Nft Uri.</param>
-        private async void UpdateCollectionItemDisplay(string collectionContract, int collectionObjectIndex, string nftId, string nftType, string nftSupply, string nftUri)
+        private async Task UpdateCollectionItemDisplay(string collectionContract, int collectionObjectIndex, string nftId, string nftType, string nftSupply, string nftUri)
         {
             string[] textObjectNames = { "IdText", "TypeText", "SupplyText" };
             string[] textValues = { $"ID: {nftId}", nftType, $"Supply: {nftSupply}"};

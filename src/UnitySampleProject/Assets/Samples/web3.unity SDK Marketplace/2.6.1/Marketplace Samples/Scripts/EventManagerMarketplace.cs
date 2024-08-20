@@ -557,7 +557,10 @@ namespace ChainSafe.Gaming.Marketplace
     
             public MintCollectionNftConfigEventArgs(string bearerToken, string collectionToListFrom)
             {
-                BearerToken = bearerToken;
+                if (bearerToken != null)
+                {
+                    BearerToken = bearerToken;
+                }
                 CollectionContractToListFrom = collectionToListFrom;
             }
             

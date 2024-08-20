@@ -279,6 +279,7 @@ namespace Scripts.EVM.Marketplace
                 var path = "/nft?hash=blake2b-208";
                 var collectionResponse = await CSServer.CreateData(_bearerToken, path, formData);
                 var collectionData = JsonConvert.DeserializeObject<ApiResponse>(collectionResponse);
+                Debug.Log($"CID: {collectionData.cid}");
                 var method = "mint";
                 object[] args =
                 {
@@ -292,6 +293,11 @@ namespace Scripts.EVM.Marketplace
             catch (Web3Exception e)
             {
                 Console.WriteLine(e);
+                throw;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("Error: " + e.Message);
                 throw;
             }
         }
@@ -340,6 +346,11 @@ namespace Scripts.EVM.Marketplace
             catch (Web3Exception e)
             {
                 Console.WriteLine(e);
+                throw;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("Error: " + e.Message);
                 throw;
             }
         }
