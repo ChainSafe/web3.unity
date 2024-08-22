@@ -310,7 +310,7 @@ namespace ChainSafe.Gaming.Marketplace
             var listNftToMarketplaceCreateEventArgs = new ListNftToMarketplaceConfigEventArgs(string.Empty);
             RaiseConfigureListNftToMarketplaceManager(listNftToMarketplaceCreateEventArgs);
             
-            var mintCollectionNftConfigEventArgs = new MintCollectionNftConfigEventArgs(string.Empty, string.Empty);
+            var mintCollectionNftConfigEventArgs = new MintCollectionNftConfigEventArgs(string.Empty, string.Empty, string.Empty);
             RaiseMintCollectionNftManager(mintCollectionNftConfigEventArgs);
         }
         
@@ -550,18 +550,20 @@ namespace ChainSafe.Gaming.Marketplace
             
             public string BearerToken { get; private set; }
             public string CollectionContractToListFrom { get; private set; }
+            public string CollectionTypeToListFrom { get; private set; }
 
             #endregion
     
             #region Methods
     
-            public MintCollectionNftConfigEventArgs(string bearerToken, string collectionToListFrom)
+            public MintCollectionNftConfigEventArgs(string bearerToken, string collectionToListFrom, string collectionTypeToListFrom)
             {
                 if (bearerToken != null)
                 {
                     BearerToken = bearerToken;
                 }
                 CollectionContractToListFrom = collectionToListFrom;
+                CollectionTypeToListFrom = collectionTypeToListFrom;
             }
             
             #endregion

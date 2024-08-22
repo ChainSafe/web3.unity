@@ -13,7 +13,6 @@ namespace ChainSafe.Gaming.Marketplace
     {
         #region Fields
         
-        [SerializeField] private TMP_Dropdown typeDropDown;
         [SerializeField] private TMP_InputField nameInput;
         [SerializeField] private TMP_InputField descriptionInput;
         [SerializeField] private TMP_InputField amountInput;
@@ -24,6 +23,7 @@ namespace ChainSafe.Gaming.Marketplace
         #region Properties
 
         private string CollectionContractToListFrom { get; set; }
+        private string CollectionTypeToListFrom { get; set; }
         private string BearerToken { get; set; }
 
         #endregion
@@ -37,16 +37,16 @@ namespace ChainSafe.Gaming.Marketplace
         {
             if (processing) return;
             processing = true;
-            nameInput.text ??= " ";
-            descriptionInput.text ??= " ";
-            switch (typeDropDown.options[typeDropDown.value].text)
+            switch (CollectionTypeToListFrom)
             {
-                case "721":
+                case "ERC721":
                     Mint721CollectionNft(BearerToken, CollectionContractToListFrom, nameInput.text, descriptionInput.text);
                     break;
-                case "1155":
+                case "ERC1155":
                     Mint1155CollectionNft(BearerToken, CollectionContractToListFrom, nameInput.text, amountInput.text, descriptionInput.text);
                     break;
+                default:
+                    throw new Exception($"Type not valid: {CollectionTypeToListFrom}");
             }
         }
         
@@ -124,6 +124,16 @@ namespace ChainSafe.Gaming.Marketplace
                 BearerToken = mintCollectionNftConfigEventArgs.BearerToken;
             }
             CollectionContractToListFrom = mintCollectionNftConfigEventArgs.CollectionContractToListFrom;
+            CollectionTypeToListFrom = mintCollectionNftConfigEventArgs.CollectionTypeToListFrom;
+            switch (mintCollectionNftConfigEventArgs.CollectionTypeToListFrom)
+            {
+                case "ERC721":
+                    amountInput.gameObject.SetActive(false);
+                    break;
+                case "ERC1155":
+                    amountInput.gameObject.SetActive(true);
+                    break;
+            }
         }
         
         #endregion

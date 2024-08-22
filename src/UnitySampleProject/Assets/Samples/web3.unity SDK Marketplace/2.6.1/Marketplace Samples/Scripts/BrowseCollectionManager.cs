@@ -97,8 +97,8 @@ namespace ChainSafe.Gaming.Collection
                 EventManagerMarketplace.RaiseToggleProcessingMenu();
                 return;
             }
-            var collectionContract = projectResponse.tokens[index].collection_id;
-            var mintCollectionNftConfigArgs = new EventManagerMarketplace.MintCollectionNftConfigEventArgs(null, collectionContract);
+            var collectionContract = projectResponse.tokens[index].contract_address;
+            var mintCollectionNftConfigArgs = new EventManagerMarketplace.MintCollectionNftConfigEventArgs(null, collectionContract, collectionType);
             EventManagerMarketplace.RaiseMintCollectionNftManager(mintCollectionNftConfigArgs);
             if (!Enum.TryParse(collectionType, true, out CollectionType collectionTypeEnum))
             {

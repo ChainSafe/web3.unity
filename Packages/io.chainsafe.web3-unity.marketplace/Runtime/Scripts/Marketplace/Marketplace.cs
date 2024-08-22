@@ -274,7 +274,7 @@ namespace Scripts.EVM.Marketplace
                 };
                 if (!string.IsNullOrEmpty(_description))
                 {
-                    formData.Insert(2, new MultipartFormDataSection("description", _description));
+                    formData.Insert(1, new MultipartFormDataSection("description", _description));
                 }
                 var path = "/nft?hash=blake2b-208";
                 var collectionResponse = await CSServer.CreateData(_bearerToken, path, formData);
@@ -287,7 +287,11 @@ namespace Scripts.EVM.Marketplace
                     collectionData.cid
                 };
                 var contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.GeneralErc721, _collectionContract);
-                var data = await contract.SendWithReceipt(method, args);
+                var txArgs = new TransactionRequest
+                {
+                    GasLimit = new HexBigInteger(30000)
+                };
+                var data = await contract.SendWithReceipt(method, args, txArgs);
                 return data.receipt;
             }
             catch (Web3Exception e)
@@ -325,7 +329,7 @@ namespace Scripts.EVM.Marketplace
                 };
                 if (!string.IsNullOrEmpty(_description))
                 {
-                    formData.Insert(2, new MultipartFormDataSection("description", _description));
+                    formData.Insert(1, new MultipartFormDataSection("description", _description));
                 }
                 var path = "/nft?hash=blake2b-208";
                 var collectionResponse = await CSServer.CreateData(_bearerToken, path, formData);
@@ -340,7 +344,11 @@ namespace Scripts.EVM.Marketplace
                 };
 
                 var contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.GeneralErc1155, _collectionContract);
-                var data = await contract.SendWithReceipt(method, args);
+                var txArgs = new TransactionRequest
+                {
+                    GasLimit = new HexBigInteger(30000)
+                };
+                var data = await contract.SendWithReceipt(method, args, txArgs);
                 return data.receipt;
             }
             catch (Web3Exception e)
