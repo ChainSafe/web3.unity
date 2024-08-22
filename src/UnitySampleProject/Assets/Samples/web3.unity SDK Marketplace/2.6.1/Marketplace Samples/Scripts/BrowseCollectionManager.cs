@@ -79,6 +79,7 @@ namespace ChainSafe.Gaming.Collection
         {
             foreach (var collection in collectionsResponse.collections)
             {
+                Debug.Log($"Type: {collection.type}");
                 await AddCollectionToDisplay(collection.name, collection.type, baseUrl + collection.banner);
             }
             EventManagerMarketplace.RaiseToggleProcessingMenu();
