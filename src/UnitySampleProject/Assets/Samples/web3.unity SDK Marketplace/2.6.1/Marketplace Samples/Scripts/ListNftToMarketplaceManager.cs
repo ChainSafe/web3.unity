@@ -84,14 +84,19 @@ namespace ChainSafe.Gaming.Marketplace
                 await ListNftsToMarketplace(MarketplaceContractToListTo, CollectionContractToListFrom, TokenIdToList,  priceInput.text);
                 processing = false;
             }
-            catch (Web3Exception e)
+            catch (Exception e)
             {
                 processing = false;
-                Debug.Log($"Listing failed: {e}");
-            }
-            catch (Exception)
-            {
-                processing = false;
+                switch (e)
+                {
+                    case Web3Exception web3Ex:
+                        Debug.Log($"Web3 exception: {web3Ex}");
+                        break;
+                    
+                    default:
+                        Debug.Log($"Listing failed: {e}");
+                        break;
+                }
             }
         }
         

@@ -274,7 +274,7 @@ namespace Scripts.EVM.Marketplace
                 };
                 if (!string.IsNullOrEmpty(_description))
                 {
-                    formData.Insert(1, new MultipartFormDataSection("description", _description));
+                    formData.Insert(2, new MultipartFormDataSection("description", _description));
                 }
                 var path = "/nft?hash=blake2b-208";
                 var collectionResponse = await CSServer.CreateData(_bearerToken, path, formData);
@@ -336,6 +336,7 @@ namespace Scripts.EVM.Marketplace
                 var collectionData = JsonConvert.DeserializeObject<ApiResponse>(collectionResponse);
                 var method = "mint";
                 var amount = BigInteger.Parse(_amount);
+                Debug.Log($"Amount3: {amount}");
                 object[] args =
                 {
                     Web3Accessor.Web3.Signer.PublicAddress,
@@ -454,7 +455,7 @@ namespace Scripts.EVM.Marketplace
                     _marketplaceContract,
                     _permission
                 };
-                var abi = _type == "721" ? Token.ABI.GeneralErc721 : Token.ABI.GeneralErc1155;
+                var abi = _type == "ERC721" ? Token.ABI.GeneralErc721 : Token.ABI.GeneralErc1155;
                 var contract = Web3Accessor.Web3.ContractBuilder.Build(abi, _nftContract);
                 var data = await contract.SendWithReceipt(method, args);
                 return data.receipt;

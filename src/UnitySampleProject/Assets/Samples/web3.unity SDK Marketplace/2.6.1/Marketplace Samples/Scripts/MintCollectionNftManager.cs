@@ -37,6 +37,10 @@ namespace ChainSafe.Gaming.Marketplace
         {
             if (processing) return;
             processing = true;
+            if (amountInput.text == "")
+            {
+                amountInput.text = "1";
+            }
             switch (CollectionTypeToListFrom)
             {
                 case "ERC721":
@@ -49,7 +53,7 @@ namespace ChainSafe.Gaming.Marketplace
                     throw new Exception($"Type not valid: {CollectionTypeToListFrom}");
             }
         }
-        
+
         /// <summary>
         /// Mints an NFT to a 721 collection
         /// </summary>
@@ -61,17 +65,22 @@ namespace ChainSafe.Gaming.Marketplace
                 Debug.Log($"TX: {response.TransactionHash}");
                 processing = false;
             }
-            catch (Web3Exception e)
+            catch (Exception e)
             {
                 processing = false;
-                Debug.Log($"Minting failed: {e}");
-            }
-            catch (Exception)
-            {
-                processing = false;
+                switch (e)
+                {
+                    case Web3Exception web3Ex:
+                        Debug.Log($"Web3 exception: {web3Ex}");
+                        break;
+                    
+                    default:
+                        Debug.Log($"Minting failed: {e}");
+                        break;
+                }
             }
         }
-        
+
         /// <summary>
         /// Mints an NFT to a 1155 collection
         /// </summary>
@@ -79,18 +88,23 @@ namespace ChainSafe.Gaming.Marketplace
         {
             try
             {
-                var response = await EvmMarketplace.Mint1155CollectionNft(bearerToken, collectionContract1155, name1155, amount1155, description1155);
+                var response = await EvmMarketplace.Mint1155CollectionNft(bearerToken, collectionContract1155, amount1155, name1155, description1155);
                 Debug.Log($"TX: {response.TransactionHash}");
                 processing = false;
             }
-            catch (Web3Exception e)
+            catch (Exception e)
             {
                 processing = false;
-                Debug.Log($"Minting failed: {e}");
-            }
-            catch (Exception)
-            {
-                processing = false;
+                switch (e)
+                {
+                    case Web3Exception web3Ex:
+                        Debug.Log($"Web3 exception: {web3Ex}");
+                        break;
+                    
+                    default:
+                        Debug.Log($"Minting failed: {e}");
+                        break;
+                }
             }
         }
         
