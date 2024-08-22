@@ -41,6 +41,7 @@ namespace ChainSafe.Gaming.Marketplace
             {
                 amountInput.text = "1";
             }
+            Debug.Log($"TYPE: {CollectionTypeToListFrom}");
             switch (CollectionTypeToListFrom)
             {
                 case "ERC721":
