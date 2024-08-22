@@ -41,12 +41,6 @@ namespace ChainSafe.Gaming.Collection
         private TMP_FontAsset DisplayFont { get; set; }
         private Color SecondaryTextColour { get; set; }
         
-        private enum CollectionType
-        {
-            ERC721,
-            ERC1155,
-            Unknown
-        }
     
         #endregion
 
@@ -102,13 +96,9 @@ namespace ChainSafe.Gaming.Collection
             var collectionContract = projectResponse.tokens[index].contract_address;
             var mintCollectionNftConfigArgs = new EventManagerMarketplace.MintCollectionNftConfigEventArgs(null, collectionContract, collectionType);
             EventManagerMarketplace.RaiseMintCollectionNftManager(mintCollectionNftConfigArgs);
-            if (!Enum.TryParse(collectionType, true, out CollectionType collectionTypeEnum))
+            switch (collectionType)
             {
-                collectionTypeEnum = CollectionType.Unknown;
-            }
-            switch (collectionTypeEnum)
-            {
-                case CollectionType.ERC721:
+                case "ERC721":
                 {
                     var response = await EvmMarketplace.GetCollectionTokens721(projectResponse.tokens[index].collection_id);
                     foreach (var item in response.tokens)
@@ -119,7 +109,7 @@ namespace ChainSafe.Gaming.Collection
 
                     break;
                 }
-                case CollectionType.ERC1155:
+                case "ERC1155":
                 {
                     var response = await EvmMarketplace.GetCollectionTokens1155(projectResponse.tokens[index].collection_id);
                     foreach (var item in response.tokens)
@@ -169,7 +159,7 @@ namespace ChainSafe.Gaming.Collection
         /// </summary>
         /// <param name="collectionContract">Collection contract.</param>
         /// <param name="nftId">Nft id.</param>
-        /// <param name="nftType">Nft name.</param>
+        /// <param name="nftType">Nft type.</param>
         /// <param name="supply">Nft supply.</param>
         /// <param name="nftUri">Nft Uri.</param>
         private async Task AddCollectionItemToDisplay(string collectionContract, string nftId, string nftType, string supply, string nftUri)
