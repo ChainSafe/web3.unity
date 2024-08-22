@@ -208,6 +208,7 @@ namespace ChainSafe.Gaming.Collection
         /// <param name="collectionBannerUri">Collection Uri.</param>
         private async Task UpdateProjectCollectionsDisplay(int projectCollectionsObjectIndex, string collectionName, string collectionType, string collectionBannerUri)
         {
+            Debug.Log($"COLLECTION TYPE: {collectionType}");
             string[] textObjectNames = { "NameText", "TypeText" };
             string[] textValues = { collectionName, collectionType };
             for (int i = 0; i < textObjectNames.Length; i++)
@@ -245,6 +246,11 @@ namespace ChainSafe.Gaming.Collection
         /// <param name="nftUri">Nft Uri.</param>
         private async Task UpdateCollectionItemDisplay(string collectionContract, int collectionObjectIndex, string nftId, string nftType, string nftSupply, string nftUri)
         {
+            Debug.Log($"NFT TYPE: {nftType}");
+            if (nftType == "")
+            {
+                Debug.Log($"NFTID: {nftId} from collection contract {collectionContract} has no type");
+            }
             string[] textObjectNames = { "IdText", "TypeText", "SupplyText" };
             string[] textValues = { $"ID: {nftId}", nftType, $"Supply: {nftSupply}"};
             for (int i = 0; i < textObjectNames.Length; i++)

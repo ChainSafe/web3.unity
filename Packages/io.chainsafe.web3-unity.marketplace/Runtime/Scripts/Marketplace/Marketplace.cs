@@ -289,7 +289,7 @@ namespace Scripts.EVM.Marketplace
                 var contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.GeneralErc721, _collectionContract);
                 var txArgs = new TransactionRequest
                 {
-                    GasLimit = new HexBigInteger(30000)
+                    GasLimit = new HexBigInteger(90000)
                 };
                 var data = await contract.SendWithReceipt(method, args, txArgs);
                 return data.receipt;
@@ -347,7 +347,7 @@ namespace Scripts.EVM.Marketplace
                 var contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.GeneralErc1155, _collectionContract);
                 var txArgs = new TransactionRequest
                 {
-                    GasLimit = new HexBigInteger(30000)
+                    GasLimit = new HexBigInteger(90000)
                 };
                 var data = await contract.SendWithReceipt(method, args, txArgs);
                 return data.receipt;

@@ -143,9 +143,11 @@ namespace ChainSafe.Gaming.Marketplace
             switch (mintCollectionNftConfigEventArgs.CollectionTypeToListFrom)
             {
                 case "ERC721":
+                    Debug.Log("ALTERING BUTTON STATE FALSE");
                     amountInput.gameObject.SetActive(false);
                     break;
                 case "ERC1155":
+                    Debug.Log("ALTERING BUTTON STATE TRUE");
                     amountInput.gameObject.SetActive(true);
                     break;
             }
