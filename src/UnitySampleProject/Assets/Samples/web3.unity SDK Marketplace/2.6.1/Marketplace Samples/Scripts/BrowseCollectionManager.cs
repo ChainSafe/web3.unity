@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Marketplace;
 using ChainSafe.Gaming.Web3;
@@ -77,11 +78,11 @@ namespace ChainSafe.Gaming.Collection
         /// </summary>
         private async void PopulateCollections(UnityPackage.Model.NftTokenModel.ProjectCollectionsResponse collectionsResponse)
         {
-            foreach (var collection in collectionsResponse.collections)
+            foreach (var collection in collectionsResponse.collections.Where(collection => collection.type is "ERC721" or "ERC1155"))
             {
-                Debug.Log($"Type: {collection.type}");
                 await AddCollectionToDisplay(collection.name, collection.type, baseUrl + collection.banner);
             }
+
             EventManagerMarketplace.RaiseToggleProcessingMenu();
         }
 
