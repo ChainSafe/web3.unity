@@ -44,11 +44,15 @@ public class MarketplaceCalls : MonoBehaviour
     [Header("Mint 721 to collection calls")]
     [SerializeField] private string collectionContract721 = "Set 721 collection to mint to";
     [SerializeField] private string uri721 = "Set metadata uri with full path i.e. https://ipfs.chainsafe.io/ipfs/bafyjvzacdj4apx52hvbyjkwyf7i6a7t3pcqd4kw4xxfc67hgvn3a";
+    [SerializeField] private string name721 = "Set Nft name";
+    [SerializeField] private string description721 = "Set Nft description";
 
     [Header("Mint 1155 to collection calls")]
     [SerializeField] private string collectionContract1155 = "Set 1155 collection to mint to";
     [SerializeField] private string uri1155 = "Set metadata uri with full path i.e. https://ipfs.chainsafe.io/ipfs/bafyjvzacdj4apx52hvbyjkwyf7i6a7t3pcqd4kw4xxfc67hgvn3a";
     [SerializeField] private string amount1155 = "Set amount of Nfts to mint i.e 1";
+    [SerializeField] private string name1155 = "Set Nft name";
+    [SerializeField] private string description1155 = "Set Nft description";
 
     [Header("Create marketplace call")]
     [SerializeField] private string marketplaceName = "Set marketplace name";
@@ -185,7 +189,7 @@ public class MarketplaceCalls : MonoBehaviour
     /// </summary>
     public async void Mint721CollectionNft()
     {
-        var response = await Marketplace.Mint721CollectionNft(collectionContract721, uri721);
+        var response = await Marketplace.Mint721CollectionNft(bearerToken, collectionContract721, name721, description721);
         Debug.Log($"TX: {response.TransactionHash}");
     }
 
@@ -194,7 +198,7 @@ public class MarketplaceCalls : MonoBehaviour
     /// </summary>
     public async void Mint1155CollectionNft()
     {
-        var response = await Marketplace.Mint1155CollectionNft(collectionContract1155, uri1155, amount1155);
+        var response = await Marketplace.Mint1155CollectionNft(bearerToken, collectionContract1155, name1155, amount1155, description1155);
         Debug.Log($"TX: {response.TransactionHash}");
     }
 

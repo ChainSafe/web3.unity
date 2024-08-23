@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Numerics;
-using System.Text;
 using System.Threading.Tasks;
-using ChainSafe.Gaming.Ipfs;
 using ChainSafe.Gaming.Web3;
 using TMPro;
 using UnityEngine;
@@ -12,8 +10,6 @@ using UnityEngine.UI;
 using EvmMarketplace = Scripts.EVM.Marketplace.Marketplace;
 using ChainSafe.Gaming.Marketplace.Models;
 using ChainSafe.Gaming.UnityPackage;
-using ChainSafe.Gaming.UnityPackage.Model;
-using Newtonsoft.Json;
 
 namespace ChainSafe.Gaming.Marketplace
 {
@@ -89,6 +85,11 @@ namespace ChainSafe.Gaming.Marketplace
         private async void PopulateMarketplaceItems(string marketplaceContract, int index)
         {
             var projectResponse = await EvmMarketplace.GetProjectItems();
+            if (index >= projectResponse.items.Count)
+            {
+                EventManagerMarketplace.RaiseToggleProcessingMenu();
+                return;
+            }
             var response = await EvmMarketplace.GetMarketplaceItems(projectResponse.items[index].marketplace_id);
             foreach (var item in response.items)
             {

@@ -15504,7 +15504,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3594bd0b36708be40bfaecfe61e16ab7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fillDuration: 2
   radialImage: {fileID: 5961661105869613969}
 --- !u!1 &7516127192911281330
 GameObject:
