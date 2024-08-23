@@ -16,6 +16,8 @@ public class ConnectToWallet : MonoBehaviour
     private ConnectionHandler _connectionHandler;
     private ConnectModal _connectModal;
 
+    private bool _connected;
+    
     private void Awake()
     {
         _connectionHandler = GetComponent<ConnectionHandler>();
@@ -24,23 +26,28 @@ public class ConnectToWallet : MonoBehaviour
     private async void Start()
     {
         await _connectionHandler.Initialize();
-        
-        if (connectOnInitialize)
-        {
-            var web3 = await _connectionHandler.Restore();
 
-            if (web3 != null)
+        try
+        {
+            if (connectOnInitialize)
             {
-                return;
+                var web3 = await _connectionHandler.Restore();
+                
+                _connected = web3 != null;
             }
         }
+        finally
+        {
+            if (!_connected)
+            {
+                _connectModal = Instantiate(connectModalPrefab);
         
-        _connectModal = Instantiate(connectModalPrefab);
+                _connectModal.Initialize(_connectionHandler);
         
-        _connectModal.Initialize(_connectionHandler);
+                connectButton.onClick.AddListener(_connectModal.Show);
         
-        connectButton.onClick.AddListener(_connectModal.Show);
-        
-        connectButton.interactable = true;
+                connectButton.interactable = true;
+            }
+        }
     }
 }
