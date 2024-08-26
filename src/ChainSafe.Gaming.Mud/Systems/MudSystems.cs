@@ -5,11 +5,24 @@ using Nethereum.Hex.HexTypes;
 
 namespace ChainSafe.Gaming.Mud.Systems
 {
+    /// <summary>
+    /// Represents a MUD systems client, which is a wrapper class that extends the functionality of a Contract and adds namespace support.
+    /// </summary>
+    /// <remarks>
+    /// Use this to call system functions.
+    /// You don't need to specify namespace when calling a function, just use the function name.
+    /// </remarks>
     public class MudSystems : IContract
     {
         private readonly string ns;
+
         private readonly Contract contract;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MudSystems"/> class.
+        /// </summary>
+        /// <param name="namespace">The namespace to be used.</param>
+        /// <param name="contract">The contract to be used.</param>
         public MudSystems(string @namespace, Contract contract)
         {
             this.contract = contract;

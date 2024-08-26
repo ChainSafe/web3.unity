@@ -5,6 +5,9 @@ using ChainSafe.Gaming.Web3.Environment;
 
 namespace ChainSafe.Gaming.Mud
 {
+    /// <summary>
+    /// A facade class for all the MUD-related functionality.
+    /// </summary>
     public class MudFacade
     {
         private readonly MudWorldFactory worldFactory;
@@ -16,6 +19,11 @@ namespace ChainSafe.Gaming.Mud
             this.worldFactory = worldFactory;
         }
 
+        /// <summary>
+        /// Builds a new MudWorld client based on the provided configuration.
+        /// </summary>
+        /// <param name="worldConfig">The configuration settings for the world.</param>
+        /// <returns>A Task that represents the asynchronous operation. The Task's result is the created MudWorld.</returns>
         public Task<MudWorld> BuildWorld(IMudWorldConfig worldConfig)
         {
             var stopwatch = Stopwatch.StartNew();

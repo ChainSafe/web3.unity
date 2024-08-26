@@ -9,6 +9,9 @@ using Nethereum.Hex.HexTypes;
 
 namespace ChainSafe.Gaming.Mud.Worlds
 {
+    /// <summary>
+    /// Represents a client for a MUD world.
+    /// </summary>
     public class MudWorld : IContract
     {
         private readonly MudWorldSystems systems;
@@ -17,6 +20,9 @@ namespace ChainSafe.Gaming.Mud.Worlds
         private readonly Contract contract;
         private readonly string? defaultNamespace;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MudWorld"/> class.
+        /// </summary>
         public MudWorld(IMudWorldConfig config, IMudStorage storage, IContractBuilder contractBuilder, IMainThreadRunner mainThreadRunner)
         {
             contract = contractBuilder.Build(config.ContractAbi, config.ContractAddress);
@@ -26,23 +32,41 @@ namespace ChainSafe.Gaming.Mud.Worlds
             systems = new MudWorldSystems(contract);
         }
 
+        /// <summary>
+        /// Retrieve MudTable for the specified table name in the default namespace.
+        /// </summary>
+        /// <returns>The MudTable for the specified table name.</returns>
         public MudTable GetTable(string tableName)
         {
             AssertDefaultNamespaceAvailable();
             return tables.GetTable(defaultNamespace!, tableName);
         }
 
+        /// <summary>
+        /// Retrieve MudTable for the specified table name and namespace.
+        /// </summary>
+        /// <returns>The MudTable for the specified table name and namespace.</returns>
         public MudTable GetTable(string tableName, string @namespace)
         {
             return tables.GetTable(@namespace, tableName);
         }
 
+        /// <summary>
+        /// Retrieve client for Mud Systems for the default namespace.
+        /// </summary>
+        /// <remarks>Use this to call system functions.</remarks>
+        /// <returns>The MudSystems for the default namespace.</returns>
         public MudSystems GetSystems()
         {
             AssertDefaultNamespaceAvailable();
             return systems.GetSystemsForNamespace(defaultNamespace!);
         }
 
+        /// <summary>
+        /// Retrieve client for Mud Systems for the specified namespace.
+        /// </summary>
+        /// <remarks>Use this to call system functions.</remarks>
+        /// <returns>The MudSystems for the specified namespace.</returns>
         public MudSystems GetSystems(string @namespace)
         {
             return systems.GetSystemsForNamespace(@namespace);
@@ -57,7 +81,6 @@ namespace ChainSafe.Gaming.Mud.Worlds
         }
 
         #region IContract delegation
-
         public string Address => contract.Address;
 
         public IContract Attach(string address)
