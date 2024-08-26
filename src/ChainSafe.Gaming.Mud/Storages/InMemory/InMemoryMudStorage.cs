@@ -17,10 +17,6 @@ namespace ChainSafe.Gaming.Mud.Storages.InMemory
 {
     public class InMemoryMudStorage : IMudStorage
     {
-        public event RecordSetDelegate RecordSet;
-
-        public event RecordDeletedDelegate RecordDeleted;
-
         private readonly INethereumWeb3Adapter nWeb3;
         private readonly EventManager eventManager;
 
@@ -34,6 +30,10 @@ namespace ChainSafe.Gaming.Mud.Storages.InMemory
             this.eventManager = eventManager;
             this.nWeb3 = nWeb3;
         }
+
+        public event RecordSetDelegate RecordSet;
+
+        public event RecordDeletedDelegate RecordDeleted;
 
         public async Task Initialize(IMudStorageConfig mudStorageConfig, string worldAddress)
         {
@@ -83,7 +83,9 @@ namespace ChainSafe.Gaming.Mud.Storages.InMemory
             }
         }
 
-        private IEnumerable<object[]> Filter(MudTableSchema tableSchema, IEnumerable<object[]> rawRecords,
+        private static IEnumerable<object[]> Filter(
+            MudTableSchema tableSchema,
+            IEnumerable<object[]> rawRecords,
             MudQuery query)
         {
             if (query.FindWithKey)

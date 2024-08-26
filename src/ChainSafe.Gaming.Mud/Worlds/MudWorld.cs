@@ -80,8 +80,12 @@ namespace ChainSafe.Gaming.Mud.Worlds
             }
         }
 
+#pragma warning disable SA1124
         #region IContract delegation
+#pragma warning restore SA1124
+#pragma warning disable SA1201
         public string Address => contract.Address;
+#pragma warning restore SA1201
 
         public IContract Attach(string address)
         {
@@ -118,7 +122,10 @@ namespace ChainSafe.Gaming.Mud.Worlds
             return contract.Calldata(method, parameters);
         }
 
-        public Task<TransactionRequest> PrepareTransactionRequest(string method, object[] parameters, bool isReadCall = false,
+        public Task<TransactionRequest> PrepareTransactionRequest(
+            string method,
+            object[] parameters,
+            bool isReadCall = false,
             TransactionRequest overwrite = null)
         {
             return contract.PrepareTransactionRequest(method, parameters, isReadCall, overwrite);
