@@ -13,7 +13,6 @@ namespace ChainSafe.Gaming.Marketplace
     {
         #region Fields
         
-        [SerializeField] private TMP_Dropdown typeDropDown;
         [SerializeField] private TMP_InputField nameInput;
         [SerializeField] private TMP_InputField descriptionInput;
         [SerializeField] private TMP_InputField amountInput;
@@ -24,6 +23,7 @@ namespace ChainSafe.Gaming.Marketplace
         #region Properties
 
         private string CollectionContractToListFrom { get; set; }
+        private string CollectionTypeToListFrom { get; set; }
         private string BearerToken { get; set; }
 
         #endregion
@@ -37,19 +37,24 @@ namespace ChainSafe.Gaming.Marketplace
         {
             if (processing) return;
             processing = true;
-            nameInput.text ??= " ";
-            descriptionInput.text ??= " ";
-            switch (typeDropDown.options[typeDropDown.value].text)
+            if (amountInput.text == "")
             {
-                case "721":
+                amountInput.text = "1";
+            }
+            Debug.Log($"TYPE: {CollectionTypeToListFrom}");
+            switch (CollectionTypeToListFrom)
+            {
+                case "ERC721":
                     Mint721CollectionNft(BearerToken, CollectionContractToListFrom, nameInput.text, descriptionInput.text);
                     break;
-                case "1155":
+                case "ERC1155":
                     Mint1155CollectionNft(BearerToken, CollectionContractToListFrom, nameInput.text, amountInput.text, descriptionInput.text);
                     break;
+                default:
+                    throw new Exception($"Type not valid: {CollectionTypeToListFrom}");
             }
         }
-        
+
         /// <summary>
         /// Mints an NFT to a 721 collection
         /// </summary>
@@ -59,14 +64,24 @@ namespace ChainSafe.Gaming.Marketplace
             {
                 var response = await EvmMarketplace.Mint721CollectionNft(bearerToken, collectionContract721, name721, description721);
                 Debug.Log($"TX: {response.TransactionHash}");
+                processing = false;
             }
-            catch (Web3Exception e)
+            catch (Exception e)
             {
                 processing = false;
-                Debug.Log($"Minting failed: {e}");
+                switch (e)
+                {
+                    case Web3Exception web3Ex:
+                        Debug.Log($"Web3 exception: {web3Ex}");
+                        break;
+                    
+                    default:
+                        Debug.Log($"Minting failed: {e}");
+                        break;
+                }
             }
         }
-        
+
         /// <summary>
         /// Mints an NFT to a 1155 collection
         /// </summary>
@@ -74,13 +89,23 @@ namespace ChainSafe.Gaming.Marketplace
         {
             try
             {
-                var response = await EvmMarketplace.Mint1155CollectionNft(bearerToken, collectionContract1155, name1155, amount1155, description1155);
+                var response = await EvmMarketplace.Mint1155CollectionNft(bearerToken, collectionContract1155, amount1155, name1155, description1155);
                 Debug.Log($"TX: {response.TransactionHash}");
+                processing = false;
             }
-            catch (Web3Exception e)
+            catch (Exception e)
             {
                 processing = false;
-                Debug.Log($"Minting failed: {e}");
+                switch (e)
+                {
+                    case Web3Exception web3Ex:
+                        Debug.Log($"Web3 exception: {web3Ex}");
+                        break;
+                    
+                    default:
+                        Debug.Log($"Minting failed: {e}");
+                        break;
+                }
             }
         }
         
@@ -114,6 +139,18 @@ namespace ChainSafe.Gaming.Marketplace
                 BearerToken = mintCollectionNftConfigEventArgs.BearerToken;
             }
             CollectionContractToListFrom = mintCollectionNftConfigEventArgs.CollectionContractToListFrom;
+            CollectionTypeToListFrom = mintCollectionNftConfigEventArgs.CollectionTypeToListFrom;
+            switch (mintCollectionNftConfigEventArgs.CollectionTypeToListFrom)
+            {
+                case "ERC721":
+                    Debug.Log("DISABLING AMOUNT INPUT");
+                    amountInput.gameObject.SetActive(false);
+                    break;
+                case "ERC1155":
+                    Debug.Log("ENABLING AMOUNT INPUT");
+                    amountInput.gameObject.SetActive(true);
+                    break;
+            }
         }
         
         #endregion
