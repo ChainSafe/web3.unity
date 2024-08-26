@@ -23,7 +23,7 @@ namespace ChainSafe.Gaming.HyperPlay
     {
         private readonly IHyperPlayConfig config;
         private readonly IHyperPlayData data;
-        private readonly DataStorage dataStorage;
+        private readonly ILocalStorage localStorage;
         private readonly Web3Environment environment;
         private readonly IChainConfig chainConfig;
 
@@ -32,16 +32,16 @@ namespace ChainSafe.Gaming.HyperPlay
         /// </summary>
         /// <param name="config">Injected <see cref="HyperPlayConfig"/>.</param>
         /// <param name="data">Injected <see cref="IHyperPlayData"/>.</param>
-        /// <param name="dataStorage">Injected <see cref="dataStorage"/>.</param>
+        /// <param name="localStorage">Injected <see cref="ILocalStorage"/>.</param>
         /// <param name="environment">Injected <see cref="environment"/>.</param>
         /// <param name="chainConfig">ChainConfig to fetch chain data.</param>
         /// <param name="chainRegistryProvider">Injected <see cref="ChainRegistryProvider"/>.</param>
-        public HyperPlayProvider(IHyperPlayConfig config, IHyperPlayData data, DataStorage dataStorage, Web3Environment environment, IChainConfig chainConfig, ChainRegistryProvider chainRegistryProvider)
+        public HyperPlayProvider(IHyperPlayConfig config, IHyperPlayData data, ILocalStorage localStorage, Web3Environment environment, IChainConfig chainConfig, ChainRegistryProvider chainRegistryProvider)
             : base(environment, chainRegistryProvider, chainConfig)
         {
             this.config = config;
             this.data = data;
-            this.dataStorage = dataStorage;
+            this.localStorage = localStorage;
             this.environment = environment;
             this.chainConfig = chainConfig;
         }
@@ -74,7 +74,7 @@ namespace ChainSafe.Gaming.HyperPlay
 
                 data.SavedAccount = account;
 
-                await dataStorage.Save(data);
+                await localStorage.Save(data);
             }
 
             return account;
@@ -84,7 +84,7 @@ namespace ChainSafe.Gaming.HyperPlay
         {
             if (data.RememberSession)
             {
-                dataStorage.Clear(data);
+                localStorage.Clear(data);
             }
 
             return Task.CompletedTask;

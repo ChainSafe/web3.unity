@@ -18,6 +18,7 @@ namespace ChainSafe.Gaming.Marketplace
         public static event EventHandler<CollectionBrowserConfigEventArgs> ConfigureCollectionBrowserManager;
         public static event EventHandler<MarketplaceCreateConfigEventArgs> ConfigureMarketplaceCreateManager;
         public static event EventHandler<CollectionCreateConfigEventArgs> ConfigureCollectionCreateManager;
+        public static event EventHandler<MintCollectionNftConfigEventArgs> ConfigureMintCollectionNftManager;
         public static event EventHandler<ListNftToMarketplaceConfigEventArgs> ConfigureListNftToMarketplaceManager;
         public static event EventHandler<ListNftToMarketplaceTxEventArgs> ConfigureListNftToMarketplaceTxManager;
         public static event Action ToggleProcessingMenu;
@@ -37,6 +38,7 @@ namespace ChainSafe.Gaming.Marketplace
         public static event Action CloseSelectedCollection;
         public static event Action UploadMarketplaceImage;
         public static event Action ListNftToMarketplace;
+        public static event Action MintNftToCollection;
         public static event Action CreateMarketplace;
         public static event Action LogoutMarketplace;
         
@@ -85,9 +87,9 @@ namespace ChainSafe.Gaming.Marketplace
         }
         
         /// <summary>
-        /// Invokes ToggleMintNftToSelectionMenu.
+        /// Invokes ToggleMintNftToCollectionMenu.
         /// </summary>
-        public static void RaiseToggleMintNftToSelectionMenu()
+        public static void RaiseToggleMintNftToCollectionMenu()
         {
             ToggleMintNftToCollectionMenu?.Invoke();
         }
@@ -162,6 +164,11 @@ namespace ChainSafe.Gaming.Marketplace
         public static void RaiseCloseSelectedMarketplace()
         {
             CloseSelectedMarketplace?.Invoke();
+        }
+        
+        public static void RaiseMintNftToCollection()
+        {
+            MintNftToCollection?.Invoke();
         }
         
         /// <summary>
@@ -269,6 +276,15 @@ namespace ChainSafe.Gaming.Marketplace
             ConfigureCollectionCreateManager?.Invoke(null, args);
         }
         
+        /// <summary>
+        /// Configure marketplace create manager.
+        /// </summary>
+        /// <param name="args">Input args.</param>
+        public static void RaiseMintCollectionNftManager(MintCollectionNftConfigEventArgs args)
+        {
+            ConfigureMintCollectionNftManager?.Invoke(null, args);
+        }
+        
         #endregion
         
         /// <summary>
@@ -293,6 +309,9 @@ namespace ChainSafe.Gaming.Marketplace
             
             var listNftToMarketplaceCreateEventArgs = new ListNftToMarketplaceConfigEventArgs(string.Empty);
             RaiseConfigureListNftToMarketplaceManager(listNftToMarketplaceCreateEventArgs);
+            
+            var mintCollectionNftConfigEventArgs = new MintCollectionNftConfigEventArgs(string.Empty, string.Empty, string.Empty);
+            RaiseMintCollectionNftManager(mintCollectionNftConfigEventArgs);
         }
         
         #region Configuration Classes
@@ -520,6 +539,31 @@ namespace ChainSafe.Gaming.Marketplace
             public CollectionCreateConfigEventArgs(string bearerToken)
             {
                 BearerToken = bearerToken;
+            }
+            
+            #endregion
+        }
+        
+        public class MintCollectionNftConfigEventArgs : EventArgs
+        {
+            #region Properties
+            
+            public string BearerToken { get; private set; }
+            public string CollectionContractToListFrom { get; private set; }
+            public string CollectionTypeToListFrom { get; private set; }
+
+            #endregion
+    
+            #region Methods
+    
+            public MintCollectionNftConfigEventArgs(string bearerToken, string collectionToListFrom, string collectionTypeToListFrom)
+            {
+                if (bearerToken != null)
+                {
+                    BearerToken = bearerToken;
+                }
+                CollectionContractToListFrom = collectionToListFrom;
+                CollectionTypeToListFrom = collectionTypeToListFrom;
             }
             
             #endregion

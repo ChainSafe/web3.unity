@@ -1,3 +1,5 @@
+using System;
+using System.Threading.Tasks;
 using ChainSafe.Gaming.UnityPackage.Connection;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,7 +19,12 @@ namespace ChainSafe.Gaming.UnityPackage.UI
         
         [Space]
         
+        [SerializeField] private RectTransform modalContainer;
         [SerializeField] private RectTransform providerContainer;
+
+        public ConnectionProvider[] Providers => _connectionHandler.Providers;
+        
+        private ConnectionHandler _connectionHandler;
 
         private void Start()
         {
@@ -25,11 +32,67 @@ namespace ChainSafe.Gaming.UnityPackage.UI
             closeFromBackgroundButton.onClick.AddListener(Close);
         }
 
+        public void Initialize(ConnectionHandler connectionHandler)
+        {
+            _connectionHandler = connectionHandler;
+            
+            foreach (var provider in Providers)
+            {
+                if (provider != null && provider.IsAvailable)
+                {
+                    Button button = Instantiate(provider.ConnectButtonRow, providerContainer);
+
+                    // Don't allow connection before initialization.
+                    button.interactable = true;
+                    
+                    button.onClick.AddListener(delegate
+                    {
+                        ConnectClicked(provider);
+                    });
+                }
+            }
+
+            async void ConnectClicked(ConnectionProvider provider)
+            {
+                await TryConnect(provider);
+            }
+        }
+        
+        /// <summary>
+        /// Try to Connect and displays error and throws exception on a failed attempt.
+        /// </summary>
+        private async Task TryConnect(ConnectionProvider provider)
+        {
+            try
+            {
+                ShowLoading();
+
+                await (_connectionHandler as IConnectionHandler).Connect(provider);
+            }
+            catch (Exception e)
+            {
+                HideLoading();
+                
+                if (!(e is TaskCanceledException))
+                {
+                    DisplayError(
+                        "Connection failed, please try again.");
+                    
+                    provider.HandleException(e);
+                }
+            }
+        }
+
+        public void Show()
+        {
+            modalContainer.gameObject.SetActive(true);
+        }
+        
         /// <summary>
         /// Display Error.
         /// </summary>
         /// <param name="message">Error Message.</param>
-        public void DisplayError(string message)
+        private void DisplayError(string message)
         {
             errorOverlay.DisplayError(message);
         }
@@ -37,7 +100,7 @@ namespace ChainSafe.Gaming.UnityPackage.UI
         /// <summary>
         /// Show Loading Overlay.
         /// </summary>
-        public void ShowLoading()
+        private void ShowLoading()
         {
             loadingOverlay.gameObject.SetActive(true);
         }
@@ -45,24 +108,14 @@ namespace ChainSafe.Gaming.UnityPackage.UI
         /// <summary>
         /// Hide Loading overlay.
         /// </summary>
-        public void HideLoading()
+        private void HideLoading()
         {
             loadingOverlay.gameObject.SetActive(false);
         }
 
-        /// <summary>
-        /// Add connection provider to the modal.
-        /// </summary>
-        /// <param name="provider">ConnectionProvider prefab to be added.</param>
-        /// <returns>Added connection provider.</returns>
-        public ConnectionProvider AddProvider(ConnectionProvider provider)
-        {
-            return Instantiate(provider, providerContainer);
-        }
-        
         private void Close()
         {
-            gameObject.SetActive(false);
+            modalContainer.gameObject.SetActive(false);
         }
     }
 }

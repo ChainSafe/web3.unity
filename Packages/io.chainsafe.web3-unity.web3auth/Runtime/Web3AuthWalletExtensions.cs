@@ -1,5 +1,7 @@
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.InProcessSigner;
+using ChainSafe.Gaming.LocalStorage;
+using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
@@ -38,6 +40,8 @@ public static class Web3AuthWalletExtensions
         collection.AssertServiceNotBound<ITransactionExecutor>();
 
 #if UNITY_WEBGL && !UNITY_EDITOR
+        collection.Replace(ServiceDescriptor.Singleton<ILocalStorage, WebDataStorage>());
+        
         collection.AddSingleton<IWalletProvider, IAccountProvider, Web3AuthWebGLProvider>();
 #else
         collection.AddSingleton<IWalletProvider, IAccountProvider, Web3AuthProvider>();

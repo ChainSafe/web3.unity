@@ -25,7 +25,7 @@ namespace ChainSafe.Gaming.Web3
         private readonly ITransactionExecutor? transactionExecutor;
         private readonly IEvmEvents? events;
         private readonly ILogoutManager logoutManager;
-        private readonly DataStorage dataStorage;
+        private readonly ILocalStorage localStorage;
 
         private bool initialized;
         private bool terminated;
@@ -41,7 +41,7 @@ namespace ChainSafe.Gaming.Web3
             ProjectConfig = serviceProvider.GetRequiredService<IProjectConfig>();
             ChainConfig = serviceProvider.GetRequiredService<IChainConfig>();
             logoutManager = this.serviceProvider.GetRequiredService<ILogoutManager>();
-            dataStorage = this.serviceProvider.GetRequiredService<DataStorage>();
+            localStorage = this.serviceProvider.GetRequiredService<ILocalStorage>();
             Erc20 = this.serviceProvider.GetRequiredService<Erc20Service>();
             Erc721 = this.serviceProvider.GetRequiredService<Erc721Service>();
             Erc1155 = this.serviceProvider.GetRequiredService<Erc1155Service>();
@@ -111,7 +111,7 @@ namespace ChainSafe.Gaming.Web3
 
         internal async ValueTask InitializeAsync()
         {
-            await dataStorage.Initialize();
+            await localStorage.Initialize();
 
             foreach (var lifecycleParticipant in serviceProvider.GetServices<ILifecycleParticipant>())
             {

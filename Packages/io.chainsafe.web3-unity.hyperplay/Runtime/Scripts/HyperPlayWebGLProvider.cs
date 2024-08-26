@@ -17,7 +17,7 @@ namespace ChainSafe.Gaming.HyperPlay
     {
         private readonly IHyperPlayConfig _config;
         private readonly IHyperPlayData _data;
-        private readonly DataStorage _dataStorage;
+        private readonly ILocalStorage _localStorage;
         private readonly IHttpClient _httpClient;
         private readonly IChainConfig _chainConfig;
         private readonly ChainRegistryProvider _chainRegistryProvider;
@@ -28,15 +28,15 @@ namespace ChainSafe.Gaming.HyperPlay
         /// </summary>
         /// <param name="config">Injected <see cref="HyperPlayConfig"/>.</param>
         /// <param name="data">Injected <see cref="IHyperPlayData"/>.</param>
-        /// <param name="dataStorage">Injected <see cref="DataStorage"/>.</param>
+        /// <param name="localStorage">Injected <see cref="ILocalStorage"/>.</param>
         /// <param name="environment">Injected <see cref="Web3Environment"/>.</param>
         /// <param name="chainConfig">ChainConfig to fetch chain data.</param>
         /// <param name="chainRegistryProvider">Injected <see cref="ChainRegistryProvider"/>.</param>
-        public HyperPlayWebGLProvider(IHyperPlayConfig config, IHyperPlayData data, DataStorage dataStorage, Web3Environment environment, IChainConfig chainConfig, ChainRegistryProvider chainRegistryProvider) : base(config, data, dataStorage, environment, chainConfig, chainRegistryProvider)
+        public HyperPlayWebGLProvider(IHyperPlayConfig config, IHyperPlayData data, ILocalStorage localStorage, Web3Environment environment, IChainConfig chainConfig, ChainRegistryProvider chainRegistryProvider) : base(config, data, localStorage, environment, chainConfig, chainRegistryProvider)
         {
             _config = config;
             _data = data;
-            _dataStorage = dataStorage;
+            _localStorage = localStorage;
             _httpClient = environment.HttpClient;
             _chainConfig = chainConfig;
             _chainRegistryProvider = chainRegistryProvider;
@@ -74,7 +74,7 @@ namespace ChainSafe.Gaming.HyperPlay
 
                 _data.SavedAccount = account;
 
-                await _dataStorage.Save(_data);
+                await _localStorage.Save(_data);
             }
 
             return account;

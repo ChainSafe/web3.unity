@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.Web3;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -13,7 +15,7 @@ namespace Scripts.EVM.Remote
     public class CSServer
     {
         #region Fields
-        
+
         private static readonly string host = "https://api.gaming.chainsafe.io/v1/projects/";
 
         #endregion
@@ -38,7 +40,7 @@ namespace Scripts.EVM.Remote
             var response = JsonConvert.DeserializeObject<T>(json);
             return response;
         }
-        
+
         /// <summary>
         /// Unity web request helper function to retrieve data.
         /// </summary>
@@ -60,7 +62,7 @@ namespace Scripts.EVM.Remote
             var response = JsonConvert.DeserializeObject<T>(json);
             return response;
         }
-        
+
         /// <summary>
         /// Unity web request helper function to delete data entries from collections/marketplace.
         /// </summary>
@@ -75,11 +77,11 @@ namespace Scripts.EVM.Remote
             if (request.result != UnityWebRequest.Result.Success)
             {
                 Debug.LogError($"Error deleting: {request.error}");
-                return request.error;
+                throw new Exception($"Error: {request.error}");
             }
             return "Deleted successfully";
         }
-        
+
         /// <summary>
         /// Unity web request helper function to create data entries with collections/marketplace.
         /// </summary>
@@ -90,14 +92,20 @@ namespace Scripts.EVM.Remote
         public static async Task<string> CreateData(string _bearerToken, string _path,
             List<IMultipartFormSection> _formData)
         {
-            using (UnityWebRequest request = UnityWebRequest.Post($"{host}{Web3Accessor.Web3.ProjectConfig.ProjectId}{_path}", _formData))
+            var url = $"{host}{Web3Accessor.Web3.ProjectConfig.ProjectId}{_path}";
+            if (_path == "/nft?hash=blake2b-208")
+            {
+                url = "https://api.chainsafe.io/api/v1/nft?hash=blake2b-208";
+            }
+            using (UnityWebRequest request = UnityWebRequest.Post($"{url}", _formData))
             {
                 request.SetRequestHeader("Authorization", $"Bearer {_bearerToken}");
+                request.SetRequestHeader("Accept", "application/json");
                 await request.SendWebRequest();
                 if (request.result != UnityWebRequest.Result.Success)
                 {
                     Debug.LogError("Creation failed: " + request.downloadHandler.text);
-                    return request.error;
+                    throw new Exception($"Error: {request.error}");
                 }
                 return request.downloadHandler.text;
             }

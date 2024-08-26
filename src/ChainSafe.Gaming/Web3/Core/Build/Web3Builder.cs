@@ -29,7 +29,7 @@ namespace ChainSafe.Gaming.Web3.Build
             serviceCollection
                 .UseEventPoller() // todo: remove in favor of EventManager which supports WebSocket connection
                 .AddSingleton<IContractBuilder, ILifecycleParticipant, ContractBuilder>()
-                .AddSingleton<DataStorage>()
+                .AddSingleton<ILocalStorage, DataStorage>()
                 .AddSingleton<ChainRegistryProvider>()
                 .AddSingleton<ILogoutManager, LogoutManager>()
                 .AddSingleton<Erc20Service>()

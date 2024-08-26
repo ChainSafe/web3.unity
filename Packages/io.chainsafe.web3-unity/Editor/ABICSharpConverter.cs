@@ -36,7 +36,7 @@ public class ABICSharpConverter : EditorWindow
     }
 
     // UI rendering method
-        private void OnGUI()
+    private void OnGUI()
     {
         var style = new GUIStyle(GUI.skin.label) { richText = true };
 
@@ -383,7 +383,25 @@ public static class ABIToCSHarpTypesExtension
 {
     public static string ToCSharpType(this string parameter)
     {
-        return parameter switch
+        // Regular expression for bytes followed by 0 or 3 digits but not followed by []
+        var regex = new Regex(@"^bytes(\d{0}|\d{3})$");
+
+        // Regular expression for bytes[] followed by 0 or 3 digits []
+        var regexArray = new Regex(@"^bytes(\d{0}|\d{3})\[\]$");
+
+        if (regexArray.IsMatch(parameter.ToLower()))
+        {
+            return "byte[][]";
+        }
+        
+        if (regex.IsMatch(parameter.ToLower()))
+        {
+            return "byte[]";
+        }
+    
+       
+        
+        return parameter.ToLower() switch
         {
             "uint256" => "BigInteger",
             "uint256[]" => "BigInteger[]",
@@ -419,40 +437,7 @@ public static class ABIToCSHarpTypesExtension
             "bool[]" => "bool[]",
             "string" => "string",
             "string[]" => "string[]",
-            "bytes" => "byte[]",
             "bytes[]" => "byte[][]",
-            "bytes1" => "byte[]",
-            "bytes2" => "byte[]",
-            "bytes3" => "byte[]",
-            "bytes4" => "byte[]",
-            "bytes5" => "byte[]",
-            "bytes6" => "byte[]",
-            "bytes7" => "byte[]",
-            "bytes8" => "byte[]",
-            "bytes9" => "byte[]",
-            "bytes10" => "byte[]",
-            "bytes11" => "byte[]",
-            "bytes12" => "byte[]",
-            "bytes13" => "byte[]",
-            "bytes14" => "byte[]",
-            "bytes15" => "byte[]",
-            "bytes16" => "byte[]",
-            "bytes17" => "byte[]",
-            "bytes18" => "byte[]",
-            "bytes19" => "byte[]",
-            "bytes20" => "byte[]",
-            "bytes21" => "byte[]",
-            "bytes22" => "byte[]",
-            "bytes23" => "byte[]",
-            "bytes24" => "byte[]",
-            "bytes25" => "byte[]",
-            "bytes26" => "byte[]",
-            "bytes27" => "byte[]",
-            "bytes28" => "byte[]",
-            "bytes29" => "byte[]",
-            "bytes30" => "byte[]",
-            "bytes31" => "byte[]",
-            "bytes32" => "byte[]",
             _ => GetParameterTypeFromDictionary(parameter)
         };
     }

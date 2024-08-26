@@ -9,9 +9,12 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
     /// <summary>
     /// WalletConnect connection provider used for connecting to a wallet using WalletConnect.
     /// </summary>
-    public class WalletConnectConnectionProvider : ConnectionProvider
+    [CreateAssetMenu(menuName = "ChainSafe/Connection Provider/Wallet Connect", fileName = nameof(WalletConnectConnectionProvider))]
+    public class WalletConnectConnectionProvider : RestorableConnectionProvider
     {
         [SerializeField] private WalletConnectConfigSO walletConnectConfig;
+        
+        private bool _storedSessionAvailable;
         
         public override bool IsAvailable => Application.isEditor || Application.platform != RuntimePlatform.WebGLPlayer;
      
@@ -20,14 +23,20 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
             return Task.CompletedTask;
         }
         
-        public override Web3Builder ConfigureServices(Web3Builder web3Builder)
+        protected override void ConfigureServices(IWeb3ServiceCollection services)
         {
-            return web3Builder.Configure(services =>
+            services.UseWalletConnect(walletConnectConfig.WithRememberSession(RememberSession || _storedSessionAvailable))
+                .UseWalletSigner().UseWalletTransactionExecutor();
+        }
+
+        public override async Task<bool> SavedSessionAvailable()
+        {
+            await using (var lightWeb3 = await WalletConnectWeb3.BuildLightweightWeb3(walletConnectConfig))
             {
-                // var rememberSession = rememberSessionToggle.isOn || storedSessionAvailable;
-                services.UseWalletConnect(walletConnectConfig.WithRememberSession(false))
-                    .UseWalletSigner().UseWalletTransactionExecutor();
-            });
+                _storedSessionAvailable = lightWeb3.WalletConnect().ConnectionHelper().StoredSessionAvailable;
+            }
+
+            return _storedSessionAvailable;
         }
     }
 }

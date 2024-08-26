@@ -1,3 +1,4 @@
+using System;
 using ChainSafe.Gaming.Web3;
 using TMPro;
 using UnityEngine;
@@ -35,9 +36,6 @@ namespace ChainSafe.Gaming.Marketplace
         {
             if (processing) return;
             processing = true;
-            // form won't post with null values here, hacky and could be better.
-            nameInput.text ??= " ";
-            descriptionInput.text ??= " ";
             switch (typeDropDown.options[typeDropDown.value].text)
             {
                 case "721":
@@ -58,11 +56,21 @@ namespace ChainSafe.Gaming.Marketplace
             {
                 var response = await EvmMarketplace.Create721Collection(BearerToken, collectionName721, collectionDescription721, collectionMintingPublic721);
                 Debug.Log($"TX: {response.TransactionHash}");
+                processing = false;
             }
-            catch (Web3Exception e)
+            catch (Exception e)
             {
                 processing = false;
-                Debug.Log($"Creation failed: {e}");
+                switch (e)
+                {
+                    case Web3Exception web3Ex:
+                        Debug.Log($"Web3 exception: {web3Ex}");
+                        break;
+                    
+                    default:
+                        Debug.Log($"Creation failed: {e}");
+                        break;
+                }
             }
         }
         
@@ -75,11 +83,21 @@ namespace ChainSafe.Gaming.Marketplace
             {
                 var response = await EvmMarketplace.Create1155Collection(BearerToken, collectionName1155, collectionDescription1155, collectionMintingPublic1155);
                 Debug.Log($"TX: {response.TransactionHash}");
+                processing = false;
             }
-            catch (Web3Exception e)
+            catch (Exception e)
             {
                 processing = false;
-                Debug.Log($"Creation failed: {e}");
+                switch (e)
+                {
+                    case Web3Exception web3Ex:
+                        Debug.Log($"Web3 exception: {web3Ex}");
+                        break;
+                    
+                    default:
+                        Debug.Log($"Creation failed: {e}");
+                        break;
+                }
             }
         }
         

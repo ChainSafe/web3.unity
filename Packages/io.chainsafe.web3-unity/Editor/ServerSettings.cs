@@ -81,6 +81,7 @@ public class ChainSafeServerSettings : EditorWindow
         network = string.IsNullOrEmpty(projectConfig?.Network) ? NetworkDefault : projectConfig.Network;
         symbol = string.IsNullOrEmpty(projectConfig?.Symbol) ? SymbolDefault : projectConfig.Symbol;
         rpc = string.IsNullOrEmpty(projectConfig?.Rpc) ? RpcDefault : projectConfig.Rpc;
+        Debug.Log("PROJECT CONFIG");
         blockExplorerUrl = string.IsNullOrEmpty(projectConfig?.BlockExplorerUrl)
             ? BlockExplorerUrlDefault
             : projectConfig.BlockExplorerUrl;
@@ -105,13 +106,15 @@ public class ChainSafeServerSettings : EditorWindow
             // Ensure that the selectedRpcIndex is within bounds
             selectedRpcIndex = Mathf.Clamp(selectedRpcIndex, 0, chainList[selectedChainIndex].rpc.Count - 1);
             // Set the rpc
-            rpc = chainList[selectedChainIndex].rpc[selectedRpcIndex];
+            if(chainSwitched || string.IsNullOrEmpty(rpc))
+                rpc = chainList[selectedChainIndex].rpc[selectedRpcIndex];
             blockExplorerUrl = chainList[selectedChainIndex].explorers[0].url;
 
             if (chainSwitched)
             {
                 ws = chainList[selectedChainIndex].rpc.FirstOrDefault(x => x.StartsWith("wss"));
                 selectedWebHookIndex = chainList[selectedChainIndex].rpc.IndexOf(ws);
+                _changedRpcOrWs = true;
             }
             else
             {
@@ -166,6 +169,7 @@ public class ChainSafeServerSettings : EditorWindow
                 "Packages/io.chainsafe.web3-unity/Editor/Textures/ChainSafeLogo.png");
     }
 
+    private Vector2 scrollPosition;
     /// <summary>
     /// Displayed content
     /// </summary>
@@ -175,6 +179,7 @@ public class ChainSafeServerSettings : EditorWindow
         EditorGUILayout.BeginVertical("box");
         GUILayout.Label(logo, GUILayout.MaxWidth(250f), GUILayout.MaxHeight(250f));
         EditorGUILayout.EndVertical();
+        
         EditorGUI.BeginChangeCheck();
         // Text
         GUILayout.Label("Welcome To The ChainSafe SDK!", EditorStyles.boldLabel);
@@ -192,6 +197,7 @@ public class ChainSafeServerSettings : EditorWindow
 
             return;
         }
+        scrollPosition = GUILayout.BeginScrollView(scrollPosition);
 
         // Set string array from chainList to pass into the menu
         var chainOptions = chainList.Select(x => x.name).ToArray();
@@ -315,6 +321,8 @@ public class ChainSafeServerSettings : EditorWindow
                 ValidateProjectID(projectID);
             previousProjectId = projectConfig.ProjectId;
         }
+        
+        GUILayout.EndScrollView();
 
         GUILayout.Label(
             "Reminder: Your ProjectID Must Be Valid To Save & Build With Our SDK. You Can Register For One On Our Website At Dashboard.Gaming.Chainsafe.io",

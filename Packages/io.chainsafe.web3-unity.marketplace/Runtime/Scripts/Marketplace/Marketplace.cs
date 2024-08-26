@@ -6,6 +6,7 @@ using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Model;
 using ChainSafe.Gaming.Web3;
+using JetBrains.Annotations;
 using Nethereum.Hex.HexTypes;
 using Newtonsoft.Json;
 using Scripts.EVM.Remote;
@@ -18,7 +19,7 @@ namespace Scripts.EVM.Marketplace
     public class Marketplace
     {
         #region Methods
-            
+
         /// <summary>
         /// Gets profile marketplaces.
         /// Path: https://api.gaming.chainsafe.io/v1/projects/{projectID}/marketplaces
@@ -31,7 +32,7 @@ namespace Scripts.EVM.Marketplace
             var response = await CSServer.GetDataWithToken<MarketplaceModel.ProjectMarketplacesResponse>(path, bearerToken);
             return response;
         }
-        
+
         /// <summary>
         /// Gets project collections.
         /// Path: https://api.gaming.chainsafe.io/v1/projects/{projectID}/collections
@@ -44,7 +45,7 @@ namespace Scripts.EVM.Marketplace
             var response = await CSServer.GetDataWithToken<NftTokenModel.ProjectCollectionsResponse>(path, bearerToken);
             return response;
         }
-        
+
         /// <summary>
         /// Gets all items in a project.
         /// Path: https://api.gaming.chainsafe.io/v1/projects/{projectID}/items
@@ -83,7 +84,7 @@ namespace Scripts.EVM.Marketplace
             var response = await CSServer.GetData<MarketplaceModel.Item>(path);
             return response;
         }
-        
+
         /// <summary>
         /// Gets all tokens in a project.
         /// Path: https://api.gaming.chainsafe.io/v1/projects/{projectID}/tokens
@@ -150,7 +151,7 @@ namespace Scripts.EVM.Marketplace
             var response = await CSServer.GetData<MarketplaceModel.MarketplaceItemsResponse>(path);
             return response;
         }
-        
+
         /// <summary>
         /// Creates a 721 collection
         /// /// Path https://api.gaming.chainsafe.io/v1/projects/8524f420-ecd1-4cfd-a651-706ade97cac7/collections
@@ -162,12 +163,11 @@ namespace Scripts.EVM.Marketplace
         /// <returns>Contract send data object</returns>
         public static async Task<TransactionReceipt> Create721Collection(string _bearerToken, string _name, string _description, bool _isMintingPublic)
         {
-                var logoImageData = await UploadPlatforms.GetImageData();
-                var bannerImageData = await UploadPlatforms.GetImageData();
-                var formData = new List<IMultipartFormSection>
+            var logoImageData = await UploadPlatforms.GetImageData();
+            var bannerImageData = await UploadPlatforms.GetImageData();
+            var formData = new List<IMultipartFormSection>
                 {
                     new MultipartFormDataSection("name", _name),
-                    new MultipartFormDataSection("description", _description),
                     new MultipartFormDataSection("owner", Web3Accessor.Web3.Signer.PublicAddress),
                     new MultipartFormDataSection("chain_id", Web3Accessor.Web3.ChainConfig.ChainId),
                     new MultipartFormDataSection("projectID", Web3Accessor.Web3.ProjectConfig.ProjectId),
@@ -175,14 +175,18 @@ namespace Scripts.EVM.Marketplace
                     new MultipartFormFileSection("banner", bannerImageData, "banner.png", "image/png"),
                     new MultipartFormDataSection("isImported", "true"),
                     new MultipartFormDataSection("contractAddress", ChainSafeContracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId]),
-                    new MultipartFormDataSection("type", "erc721")
+                    new MultipartFormDataSection("type", "ERC721")
                 };
-                var path = "/collections";
-                var collectionResponse = await CSServer.CreateData(_bearerToken, path, formData);
-                var collectionData = JsonConvert.DeserializeObject<CollectionResponses.Collections>(collectionResponse);
-                var method = "create721Collection";
-                object[] args =
-                {
+            if (!string.IsNullOrEmpty(_description))
+            {
+                formData.Insert(1, new MultipartFormDataSection("description", _description));
+            }
+            var path = "/collections";
+            var collectionResponse = await CSServer.CreateData(_bearerToken, path, formData);
+            var collectionData = JsonConvert.DeserializeObject<CollectionResponses.Collections>(collectionResponse);
+            var method = "create721Collection";
+            object[] args =
+            {
                     Web3Accessor.Web3.ProjectConfig.ProjectId,
                     collectionData.id,
                     _name,
@@ -190,11 +194,11 @@ namespace Scripts.EVM.Marketplace
                     collectionData.banner,
                     _isMintingPublic
                 };
-                var contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.MarketplaceFactory, ChainSafeContracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId]);
-                var data = await contract.SendWithReceipt(method, args); 
-                return data.receipt;
+            var contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.MarketplaceFactory, ChainSafeContracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId]);
+            var data = await contract.SendWithReceipt(method, args);
+            return data.receipt;
         }
-        
+
         /// <summary>
         /// Creates a 1155 collection
         /// Path https://api.gaming.chainsafe.io/v1/projects/8524f420-ecd1-4cfd-a651-706ade97cac7/collections/
@@ -213,7 +217,6 @@ namespace Scripts.EVM.Marketplace
                 var formData = new List<IMultipartFormSection>
                 {
                     new MultipartFormDataSection("name", _name),
-                    new MultipartFormDataSection("description", _description),
                     new MultipartFormDataSection("owner", Web3Accessor.Web3.Signer.PublicAddress),
                     new MultipartFormDataSection("chain_id", Web3Accessor.Web3.ChainConfig.ChainId),
                     new MultipartFormDataSection("projectID", Web3Accessor.Web3.ProjectConfig.ProjectId),
@@ -221,8 +224,12 @@ namespace Scripts.EVM.Marketplace
                     new MultipartFormFileSection("banner", bannerImageData, "banner.png", "image/png"),
                     new MultipartFormDataSection("isImported", "true"),
                     new MultipartFormDataSection("contractAddress", ChainSafeContracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId]),
-                    new MultipartFormDataSection("type", "erc1155")
+                    new MultipartFormDataSection("type", "ERC1155")
                 };
+                if (!string.IsNullOrEmpty(_description))
+                {
+                    formData.Insert(1, new MultipartFormDataSection("description", _description));
+                }
                 var path = "/collections";
                 var collectionResponse = await CSServer.CreateData(_bearerToken, path, formData);
                 var collectionData = JsonConvert.DeserializeObject<CollectionResponses.Collections>(collectionResponse);
@@ -235,7 +242,7 @@ namespace Scripts.EVM.Marketplace
                     _isMintingPublic
                 };
                 var contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.MarketplaceFactory, ChainSafeContracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId]);
-                var data = await contract.SendWithReceipt(method, args); 
+                var data = await contract.SendWithReceipt(method, args);
                 return data.receipt;
             }
             catch (Web3Exception e)
@@ -244,25 +251,47 @@ namespace Scripts.EVM.Marketplace
                 throw;
             }
         }
-        
+
         /// <summary>
         /// /// Mints a 721 collection nft to the collection
         /// </summary>
         /// <param name="_collectionContract">721 collection contract to mint from/to</param>
         /// <param name="_uri">URI in full format i.e https://ipfs.chainsafe.io/ipfs/bafyjvzacdj4apx52hvbyjkwyf7i6a7t3pcqd4kw4xxfc67hgvn3a</param>
         /// <returns>Contract send data object</returns>
-        public static async Task<TransactionReceipt> Mint721CollectionNft(string _collectionContract, string _uri)
+        public static async Task<TransactionReceipt> Mint721CollectionNft(string _bearerToken, string _collectionContract, string _name, [CanBeNull] string _description)
         {
             try
             {
+                var imageData = await UploadPlatforms.GetImageData();
+                var formData = new List<IMultipartFormSection>
+                {
+                    new MultipartFormDataSection("name", _name),
+                    new MultipartFormFileSection("image", imageData, "nftImage.png", "image/png"),
+                    new MultipartFormDataSection("tokenType", "ERC721")
+                    // TODO add attributes to form later
+                    // attributes[0].trait_type: prop1
+                    // attributes[0].value: 100
+                };
+                if (!string.IsNullOrEmpty(_description))
+                {
+                    formData.Insert(2, new MultipartFormDataSection("description", _description));
+                }
+                var path = "/nft?hash=blake2b-208";
+                var collectionResponse = await CSServer.CreateData(_bearerToken, path, formData);
+                var collectionData = JsonConvert.DeserializeObject<ApiResponse>(collectionResponse);
+                Debug.Log($"CID: {collectionData.cid}");
                 var method = "mint";
                 object[] args =
                 {
                     Web3Accessor.Web3.Signer.PublicAddress,
-                    _uri
+                    collectionData.cid
                 };
                 var contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.GeneralErc721, _collectionContract);
-                var data = await contract.SendWithReceipt(method, args); 
+                var txArgs = new TransactionRequest
+                {
+                    GasLimit = new HexBigInteger(90000)
+                };
+                var data = await contract.SendWithReceipt(method, args, txArgs);
                 return data.receipt;
             }
             catch (Web3Exception e)
@@ -270,8 +299,13 @@ namespace Scripts.EVM.Marketplace
                 Console.WriteLine(e);
                 throw;
             }
+            catch (Exception e)
+            {
+                Debug.LogError("Error: " + e.Message);
+                throw;
+            }
         }
-        
+
         /// <summary>
         /// Mints a 1155 collection nft to the collection
         /// </summary>
@@ -279,21 +313,43 @@ namespace Scripts.EVM.Marketplace
         /// <param name="_uri">URI in full format i.e https://ipfs.chainsafe.io/ipfs/bafyjvzacdj4apx52hvbyjkwyf7i6a7t3pcqd4kw4xxfc67hgvn3a</param>
         /// <param name="_amount">Amount of Nfts to mint</param>
         /// <returns>Contract send data object</returns>
-        public static async Task<TransactionReceipt> Mint1155CollectionNft(string _collectionContract, string _uri, string _amount)
+        public static async Task<TransactionReceipt> Mint1155CollectionNft(string _bearerToken, string _collectionContract, string _amount, string _name, [CanBeNull] string _description)
         {
             try
             {
+                var imageData = await UploadPlatforms.GetImageData();
+                var formData = new List<IMultipartFormSection>
+                {
+                    new MultipartFormDataSection("name", _name),
+                    new MultipartFormFileSection("image", imageData, "nftImage.png", "image/png"),
+                    new MultipartFormDataSection("tokenType", "ERC1155")
+                    // TODO add attributes to form later
+                    // attributes[0].trait_type: prop1
+                    // attributes[0].value: 100
+                };
+                if (!string.IsNullOrEmpty(_description))
+                {
+                    formData.Insert(1, new MultipartFormDataSection("description", _description));
+                }
+                var path = "/nft?hash=blake2b-208";
+                var collectionResponse = await CSServer.CreateData(_bearerToken, path, formData);
+                var collectionData = JsonConvert.DeserializeObject<ApiResponse>(collectionResponse);
                 var method = "mint";
                 var amount = BigInteger.Parse(_amount);
+                Debug.Log($"Amount3: {amount}");
                 object[] args =
                 {
                     Web3Accessor.Web3.Signer.PublicAddress,
-                    _uri,
+                    collectionData.cid,
                     amount
                 };
-                
+
                 var contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.GeneralErc1155, _collectionContract);
-                var data = await contract.SendWithReceipt(method, args); 
+                var txArgs = new TransactionRequest
+                {
+                    GasLimit = new HexBigInteger(90000)
+                };
+                var data = await contract.SendWithReceipt(method, args, txArgs);
                 return data.receipt;
             }
             catch (Web3Exception e)
@@ -301,8 +357,13 @@ namespace Scripts.EVM.Marketplace
                 Console.WriteLine(e);
                 throw;
             }
+            catch (Exception e)
+            {
+                Debug.LogError("Error: " + e.Message);
+                throw;
+            }
         }
-        
+
         /// <summary>
         /// Deletes a collection that isn't on chain yet by ID
         /// Path https://api.gaming.chainsafe.io/v1/projects/8524f420-ecd1-4cfd-a651-706ade97cac7/collections/e38e9465-fb9b-4316-8d1d-c77e81b50d6a
@@ -316,7 +377,7 @@ namespace Scripts.EVM.Marketplace
             var response = await CSServer.DeleteData(_bearerToken, path);
             return response;
         }
-        
+
         /// <summary>
         /// Creates a marketplace
         /// Path: https://api.gaming.chainsafe.io/v1/projects/8524f420-ecd1-4cfd-a651-706ade97cac7/marketplaces
@@ -334,10 +395,13 @@ namespace Scripts.EVM.Marketplace
                 var formData = new List<IMultipartFormSection>
                 {
                     new MultipartFormDataSection("name", _name),
-                    new MultipartFormDataSection("description", _description),
                     new MultipartFormDataSection("chain_id", Web3Accessor.Web3.ChainConfig.ChainId),
                     new MultipartFormFileSection("banner", bannerImageData, "banner.png", "image/png")
                 };
+                if (!string.IsNullOrEmpty(_description))
+                {
+                    formData.Insert(1, new MultipartFormDataSection("description", _description));
+                }
                 var path = "/marketplaces";
                 var marketplaceResponse = await CSServer.CreateData(_bearerToken, path, formData);
                 Debug.Log(marketplaceResponse);
@@ -350,7 +414,7 @@ namespace Scripts.EVM.Marketplace
                     _whitelisting
                 };
                 var contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.MarketplaceFactory, ChainSafeContracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId]);
-                var data = await contract.SendWithReceipt(method, args); 
+                var data = await contract.SendWithReceipt(method, args);
                 return data.receipt;
             }
             catch (Web3Exception e)
@@ -359,7 +423,7 @@ namespace Scripts.EVM.Marketplace
                 throw;
             }
         }
-        
+
         /// <summary>
         /// Deletes a marketplace that isn't on chain yet by ID
         /// Path: https://api.gaming.chainsafe.io/v1/projects/8524f420-ecd1-4cfd-a651-706ade97cac7/marketplaces/{marketplaceId}
@@ -373,7 +437,7 @@ namespace Scripts.EVM.Marketplace
             var response = await CSServer.DeleteData(_bearerToken, path);
             return response;
         }
-        
+
         /// <summary>
         /// Approves the marketplace to list 721 Nfts
         /// </summary>
@@ -391,9 +455,9 @@ namespace Scripts.EVM.Marketplace
                     _marketplaceContract,
                     _permission
                 };
-                var abi = _type == "721" ? Token.ABI.GeneralErc721 : Token.ABI.GeneralErc1155;
+                var abi = _type == "ERC721" ? Token.ABI.GeneralErc721 : Token.ABI.GeneralErc1155;
                 var contract = Web3Accessor.Web3.ContractBuilder.Build(abi, _nftContract);
-                var data = await contract.SendWithReceipt(method, args); 
+                var data = await contract.SendWithReceipt(method, args);
                 return data.receipt;
             }
             catch (Web3Exception e)
@@ -402,7 +466,7 @@ namespace Scripts.EVM.Marketplace
                 throw;
             }
         }
-        
+
         /// <summary>
         /// Purchases NFT from the marketplace
         /// </summary>
@@ -425,7 +489,7 @@ namespace Scripts.EVM.Marketplace
                     Value = new HexBigInteger(BigInteger.Parse(_amountToSend).ToString("X"))
                 };
                 var contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.Marketplace, _marketplaceContract);
-                var data = await contract.SendWithReceipt(method, args, tx); 
+                var data = await contract.SendWithReceipt(method, args, tx);
                 return data.receipt;
             }
             catch (Web3Exception e)
@@ -434,7 +498,7 @@ namespace Scripts.EVM.Marketplace
                 throw;
             }
         }
-        
+
         /// <summary>
         /// Lists Nfts to the marketplace
         /// </summary>
@@ -459,7 +523,7 @@ namespace Scripts.EVM.Marketplace
                     deadline
                 };
                 var contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.Marketplace, _marketplaceContract);
-                var data = await contract.SendWithReceipt(method, args); 
+                var data = await contract.SendWithReceipt(method, args);
                 return data.receipt;
             }
             catch (Web3Exception e)
@@ -484,9 +548,17 @@ namespace Scripts.EVM.Marketplace
                 Debug.Log($"{property.Name}: {value}");
             }
         }
+        
+        /// <summary>
+        /// Handles CID response from API for metadata uploads.
+        /// </summary>
+        public class ApiResponse
+        {
+            public string cid { get; set; }
+        }
 
         #endregion
-        
+
         #endregion
     }
 }

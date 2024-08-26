@@ -23,7 +23,7 @@ public class ConnectionHandlerEditor : Editor
     {
         base.OnInspectorGUI();
 
-        var providers = Resources.LoadAll<ConnectionProviderConfig>(string.Empty);
+        var providers = Resources.LoadAll<ConnectionProvider>(string.Empty);
 
         _foldout = EditorGUILayout.Foldout(_foldout, "Connection Providers");
         
@@ -53,9 +53,7 @@ public class ConnectionHandlerEditor : Editor
             
             foreach (var provider in providers)
             {
-                var loadedProvider = provider.ProviderRow;
-
-                if (loadedProvider == null)
+                if (provider == null)
                 {
                     Debug.LogWarning($"Error loading {provider.Name} Provider.");
                     
@@ -64,7 +62,7 @@ public class ConnectionHandlerEditor : Editor
                 
                 EditorGUI.BeginChangeCheck();
 
-                bool isAvailable = availableProviders.Contains(loadedProvider);
+                bool isAvailable = availableProviders.Contains(provider);
                 
                 isAvailable = GUILayout.Toggle(isAvailable, provider.Name);
 
@@ -74,18 +72,24 @@ public class ConnectionHandlerEditor : Editor
                     {
                         providersProperty.InsertArrayElementAtIndex(arraySize);
 
-                        providersProperty.GetArrayElementAtIndex(arraySize).objectReferenceValue = loadedProvider;
+                        providersProperty.GetArrayElementAtIndex(arraySize).objectReferenceValue = provider;
                     }
 
                     else
                     {
-                        providersProperty.DeleteArrayElementAtIndex(availableProviders.IndexOf(loadedProvider));
+                        providersProperty.DeleteArrayElementAtIndex(availableProviders.IndexOf(provider));
                     }
 
                     serializedObject.ApplyModifiedProperties();
                     
                     return;
                 }
+                
+                EditorGUI.BeginDisabledGroup(true);
+                    
+                EditorGUILayout.ObjectField(provider, typeof(ConnectionProvider), false);
+                    
+                EditorGUI.EndDisabledGroup();
             }
         }
     }
