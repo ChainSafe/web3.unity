@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using ChainSafe.Gaming.Debugging;
 using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.Mud;
 using ChainSafe.Gaming.Mud.Storages.InMemory;
 using ChainSafe.Gaming.Mud.Tables;
+using ChainSafe.Gaming.Mud.Unity;
 using ChainSafe.Gaming.Mud.Worlds;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Wallets;
@@ -13,12 +15,14 @@ using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Unity;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class MudSample : MonoBehaviour
 {
-    public string WorldContractAddress;
-    public TextAsset WorldContractAbi;
-    public TMP_Text CounterLabel;
+    public MudConfigAsset mudConfig;
+    [FormerlySerializedAs("WorldContractAddress")] public string worldContractAddress;
+    [FormerlySerializedAs("WorldContractAbi")] public TextAsset worldContractAbi;
+    [FormerlySerializedAs("CounterLabel")] public TMP_Text counterLabel;
 
     private Web3 web3;
     private MudWorld world;
@@ -39,25 +43,16 @@ public class MudSample : MonoBehaviour
                 services.Debug().UseJsonRpcWallet(new JsonRpcWalletConfig { AccountIndex = 0 });
                     
                 // Enable MUD
-                services.UseMud(new MudConfig
-                {
-                    // InMemoryMudStorage will process all logs starting from the specified index and build a copy of
-                    // all the tables locally. It will then keep the data in sync by listening to the data mutation
-                    // events.
-                    // Consider using Offchain Indexer for data-heavy projects.
-                    StorageConfig = new InMemoryMudStorageConfig
-                    {
-                        FromBlockNumber = 0,
-                    },
-                });
-            }).LaunchAsync();
+                services.UseMud(mudConfig);
+            })
+            .LaunchAsync();
         Debug.Log($"Web3 client ready. Player address: {web3.Signer.PublicAddress}");
         
         // 2. Create MUD World client.
         world = await web3.Mud().BuildWorld(new MudWorldConfig
         {
-            ContractAddress = WorldContractAddress,
-            ContractAbi = WorldContractAbi.text,
+            ContractAddress = worldContractAddress,
+            ContractAbi = worldContractAbi.text,
             DefaultNamespace = "app",
             TableSchemas = new List<MudTableSchema>
             {
@@ -69,6 +64,7 @@ public class MudSample : MonoBehaviour
                     {
                         new("value", "uint32"),
                     },
+                    KeyColumns = new string[0], // empty - singleton table 
                 },
             },
         });
@@ -77,9 +73,10 @@ public class MudSample : MonoBehaviour
         // 3. Get Table client.
         var table = world.GetTable("Counter");
 
-        // 4. Query all records of the Counter table. Get single record. Get first column value.
-        var singleRecord = (await table.Query(MudQuery.All))[0];
-        var counterValue = (BigInteger)singleRecord[0];
+        // 4. Query counter value 
+        var allRecords = await table.Query(MudQuery.All); // Query all records of the Counter table
+        var singleRecord = allRecords.Single(); // Get single record
+        var counterValue = (BigInteger)singleRecord[0]; // Get value of the first column
         Debug.Log($"Counter value on load: {counterValue}");
         UpdateGui(counterValue);
         
@@ -110,6 +107,6 @@ public class MudSample : MonoBehaviour
 
     private void UpdateGui(BigInteger counterValue)
     {
-        CounterLabel.text = counterValue.ToString("d");
+        counterLabel.text = counterValue.ToString("d");
     }
 }
