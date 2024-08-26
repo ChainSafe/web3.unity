@@ -4,7 +4,6 @@ using System.Numerics;
 using ChainSafe.Gaming.Debugging;
 using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.Mud;
-using ChainSafe.Gaming.Mud.Storages.InMemory;
 using ChainSafe.Gaming.Mud.Tables;
 using ChainSafe.Gaming.Mud.Unity;
 using ChainSafe.Gaming.Mud.Worlds;
@@ -15,14 +14,13 @@ using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Unity;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class MudSample : MonoBehaviour
 {
     public MudConfigAsset mudConfig;
-    [FormerlySerializedAs("WorldContractAddress")] public string worldContractAddress;
-    [FormerlySerializedAs("WorldContractAbi")] public TextAsset worldContractAbi;
-    [FormerlySerializedAs("CounterLabel")] public TMP_Text counterLabel;
+    public string worldContractAddress;
+    public TextAsset worldContractAbi;
+    public TMP_Text counterLabel;
 
     private Web3 web3;
     private MudWorld world;
