@@ -37,7 +37,7 @@ namespace ChainSafe.Gaming.Mud
             services.AddSingleton<IMudStorageFactory, MudStorageFactory>();
 
             // Storage strategies
-            services.AddSingleton<InMemoryMudStorage>();
+            services.AddTransient<InMemoryMudStorage>();
             // todo implement OffchainIndexerMudStorage, then register it here
 
             if (!services.IsNethereumAdaptersBound())
