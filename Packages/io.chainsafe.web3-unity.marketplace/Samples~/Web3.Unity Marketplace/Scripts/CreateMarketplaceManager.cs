@@ -1,3 +1,4 @@
+using System;
 using ChainSafe.Gaming.Web3;
 using TMPro;
 using UnityEngine;
@@ -47,11 +48,16 @@ namespace ChainSafe.Gaming.Marketplace
                 var response = await EvmMarketplace.CreateMarketplace(BearerToken, marketplaceName, marketplaceDescription, marketplaceWhiteListing);
                 Debug.Log($"TX: {response.TransactionHash}");
                 EventManagerMarketplace.RaiseCreateMarketplace();
+                processing = false;
             }
             catch (Web3Exception e)
             {
                 processing = false;
                 Debug.Log($"Creation failed: {e}");
+            }
+            catch (Exception)
+            {
+                processing = false;
             }
         }
     

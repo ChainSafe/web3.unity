@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.Web3;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -75,7 +77,7 @@ namespace Scripts.EVM.Remote
             if (request.result != UnityWebRequest.Result.Success)
             {
                 Debug.LogError($"Error deleting: {request.error}");
-                return request.error;
+                throw new Exception($"Error: {request.error}");
             }
             return "Deleted successfully";
         }
@@ -93,16 +95,17 @@ namespace Scripts.EVM.Remote
             var url = $"{host}{Web3Accessor.Web3.ProjectConfig.ProjectId}{_path}";
             if (_path == "/nft?hash=blake2b-208")
             {
-                url = "https://api.chainsafe.io/v1/nft?hash=blake2b-208";
+                url = "https://api.chainsafe.io/api/v1/nft?hash=blake2b-208";
             }
             using (UnityWebRequest request = UnityWebRequest.Post($"{url}", _formData))
             {
                 request.SetRequestHeader("Authorization", $"Bearer {_bearerToken}");
+                request.SetRequestHeader("Accept", "application/json");
                 await request.SendWebRequest();
                 if (request.result != UnityWebRequest.Result.Success)
                 {
                     Debug.LogError("Creation failed: " + request.downloadHandler.text);
-                    return request.error;
+                    throw new Exception($"Error: {request.error}");
                 }
                 return request.downloadHandler.text;
             }
