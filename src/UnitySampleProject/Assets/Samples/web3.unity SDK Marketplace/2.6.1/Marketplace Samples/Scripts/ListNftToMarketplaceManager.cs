@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Web3;
 using TMPro;
 using UnityEngine;
 using EvmMarketplace = Scripts.EVM.Marketplace.Marketplace;
@@ -17,6 +19,7 @@ namespace ChainSafe.Gaming.Marketplace
         [SerializeField] private TMP_InputField amountInput;
         [SerializeField] private TMP_Dropdown selectMarketplaceDropDown;
         private UnityPackage.Model.MarketplaceModel.ProjectMarketplacesResponse marketplaceList;
+        private bool processing;
 
         #endregion
 
@@ -73,8 +76,28 @@ namespace ChainSafe.Gaming.Marketplace
         /// </summary>
         private async void ListNftToMarketplace()
         {
-            await ApproveListNftsToMarketplace(CollectionContractToListFrom, MarketplaceContractToListTo, NftType);
-            await ListNftsToMarketplace(MarketplaceContractToListTo, CollectionContractToListFrom, TokenIdToList,  priceInput.text);
+            if (processing) return;
+            processing = true;
+            try
+            {
+                await ApproveListNftsToMarketplace(CollectionContractToListFrom, MarketplaceContractToListTo, NftType);
+                await ListNftsToMarketplace(MarketplaceContractToListTo, CollectionContractToListFrom, TokenIdToList,  priceInput.text);
+                processing = false;
+            }
+            catch (Exception e)
+            {
+                processing = false;
+                switch (e)
+                {
+                    case Web3Exception web3Ex:
+                        Debug.Log($"Web3 exception: {web3Ex}");
+                        break;
+                    
+                    default:
+                        Debug.Log($"Listing failed: {e}");
+                        break;
+                }
+            }
         }
         
         /// <summary>
