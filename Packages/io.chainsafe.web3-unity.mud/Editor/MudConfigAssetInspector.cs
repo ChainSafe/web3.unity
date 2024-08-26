@@ -50,7 +50,8 @@ namespace ChainSafe.Gaming.Mud.UnityEditor
         private void DrawLocalStorageGui()
         {
             EditorGUILayout.PropertyField(
-                serializedObject.FindProperty(nameof(MudConfigAsset.InMemoryFromBlockNumber)));
+                serializedObject.FindProperty(nameof(MudConfigAsset.InMemoryFromBlockNumber)),
+                new GUIContent("Scan From Block Number"));
         }
 
         private void DrawOffchainIndexerStorageGui()
