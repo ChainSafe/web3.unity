@@ -21,7 +21,7 @@ namespace ChainSafe.Gaming.Web3.Core.Evm
         /// A <see cref="Task"/> representing the asynchronous operation. The task result contains
         /// a <see cref="TransactionResponse"/> object with details about the executed transaction.
         /// <param name="gasFeeModifier">
-        /// Optional. If <c>null</c>, the default is an instance of <see cref="BareMinimumGasFeeModifier"/>.
+        /// Optional. If <c>null</c>, the default is an instance of <see cref="NoGasFeeModifier"/>.
         /// Instantiate one of the gas fee modifiers if you want to customize the gas fees for a specific transaction.
         /// </param>
         /// </returns>

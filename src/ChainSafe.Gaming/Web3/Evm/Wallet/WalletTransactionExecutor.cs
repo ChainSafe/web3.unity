@@ -32,7 +32,7 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
         {
             transaction.From ??= signer.PublicAddress;
             transaction.Data ??= "0x";
-            gasFeeModifier ??= new BareMinimumGasFeeModifier();
+            gasFeeModifier ??= new NoGasFeeModifier();
 
             if (!transaction.GasPrice.Value.IsZero)
             {
