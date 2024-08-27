@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.WalletConnect.Storage;
 using ChainSafe.Gaming.WalletConnect.Wallets;
 using UnityEditor;
@@ -6,7 +7,7 @@ using UnityEngine;
 
 namespace ChainSafe.Gaming.WalletConnect.Editor
 {
-    [CustomEditor(typeof(WalletConnectConfigSO))]
+    [CustomEditor(typeof(WalletConnectConnectionProvider))]
     public class WalletConnectConfigSOEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
@@ -31,7 +32,7 @@ namespace ChainSafe.Gaming.WalletConnect.Editor
 
         private void ListWalletProviders()
         {
-            var config = (WalletConnectConfigSO)target;
+            var config = (WalletConnectConnectionProvider) target;
 
             if (string.IsNullOrWhiteSpace(config.ProjectId))
             {
@@ -45,7 +46,7 @@ namespace ChainSafe.Gaming.WalletConnect.Editor
 
         private void DeleteStorage()
         {
-            var config = (WalletConnectConfigSO)target;
+            var config = (WalletConnectConnectionProvider) target;
 
             if (string.IsNullOrEmpty(config.StoragePath))
             {
