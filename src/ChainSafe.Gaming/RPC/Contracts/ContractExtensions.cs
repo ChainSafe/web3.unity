@@ -3,6 +3,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Contracts.GasFees;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Web3;
 
@@ -137,13 +138,18 @@ namespace ChainSafe.Gaming.Evm.Contracts
         /// <param name="contract">The contract instance on which the transaction is sent.</param>
         /// <param name="methodName">The name of the smart contract method to which the transaction is sent.</param>
         /// <param name="requestPrototype">Optional. A prototype object for the transaction request. This can include transaction parameters such as gas limit, gas price, value, etc.</param>
+        /// <param name="gasFeeModifier">
+        /// Optional. If <c>null</c>, the default is an instance of <see cref="BareMinimumGasFeeModifier"/>.
+        /// Instantiate one of the gas fee modifiers if you want to customize the gas fees for a specific transaction.
+        /// </param>
         /// <returns>A task representing the asynchronous operation of sending the transaction.</returns>
         public static Task Send(
             this IContract contract,
             string methodName,
-            TransactionRequest requestPrototype = null)
+            TransactionRequest requestPrototype = null,
+            IGasFeeModifier gasFeeModifier = null)
         {
-            return contract.Send(methodName, null, requestPrototype);
+            return contract.Send(methodName, null, requestPrototype, gasFeeModifier);
         }
 
         /// <summary>

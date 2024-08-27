@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts.Builders;
+using ChainSafe.Gaming.Evm.Contracts.GasFees;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
@@ -151,8 +152,12 @@ namespace ChainSafe.Gaming.Evm.Contracts
         /// <param name="method">The method.</param>
         /// <param name="parameters">The parameters.</param>
         /// <param name="overwrite">An existing TransactionRequest to use instead of making a new one.</param>
+        /// <param name="gasFeeModifier">
+        /// Optional. If <c>null</c>, the default is an instance of <see cref="BareMinimumGasFeeModifier"/>.
+        /// Instantiate one of the gas fee modifiers if you want to customize the gas fees for a specific transaction.
+        /// </param>
         /// <returns>The outputs of the method.</returns>
-        public async Task<object[]> Send(string method, object[] parameters = null, TransactionRequest overwrite = null)
+        public async Task<object[]> Send(string method, object[] parameters = null, TransactionRequest overwrite = null, IGasFeeModifier gasFeeModifier = null)
         {
             return (await SendWithReceipt(method, parameters, overwrite)).response;
         }
@@ -163,11 +168,15 @@ namespace ChainSafe.Gaming.Evm.Contracts
         /// <param name="method">The method.</param>
         /// <param name="parameters">The parameters.</param>
         /// <param name="overwrite">An existing TransactionRequest to use instead of making a new one.</param>
+        /// <param name="gasFeeModifier">
+        /// Optional. If <c>null</c>, the default is an instance of <see cref="BareMinimumGasFeeModifier"/>.
+        /// Instantiate one of the gas fee modifiers if you want to customize the gas fees for a specific transaction.
+        /// </param>
         /// <typeparam name="T">Type of object you want to use.</typeparam>
         /// <returns>The outputs of the method.</returns>
-        public async Task<T> Send<T>(string method, object[] parameters = null, TransactionRequest overwrite = null)
+        public async Task<T> Send<T>(string method, object[] parameters = null, TransactionRequest overwrite = null, IGasFeeModifier gasFeeModifier = null)
         {
-            var result = (await SendWithReceipt<T>(method, parameters, overwrite)).response;
+            var result = (await SendWithReceipt<T>(method, parameters, overwrite, gasFeeModifier)).response;
             return result;
         }
 
@@ -177,11 +186,16 @@ namespace ChainSafe.Gaming.Evm.Contracts
         /// <param name="method">The method.</param>
         /// <param name="parameters">The parameters.</param>
         /// <param name="overwrite">An existing TransactionRequest to use instead of making a new one.</param>
+        /// <param name="gasFeeModifier">
+        /// Optional. If <c>null</c>, the default is an instance of <see cref="BareMinimumGasFeeModifier"/>.
+        /// Instantiate one of the gas fee modifiers if you want to customize the gas fees for a specific transaction.
+        /// </param>
         /// <returns>The outputs of the method and the transaction receipt.</returns>
         public async Task<(object[] response, TransactionReceipt receipt)> SendWithReceipt(
             string method,
             object[] parameters = null,
-            TransactionRequest overwrite = null)
+            TransactionRequest overwrite = null,
+            IGasFeeModifier gasFeeModifier = null)
         {
             if (string.IsNullOrEmpty(Address))
             {
@@ -221,11 +235,16 @@ namespace ChainSafe.Gaming.Evm.Contracts
         /// <param name="parameters">The parameters.</param>
         /// <param name="overwrite">An existing TransactionRequest to use instead of making a new one.</param>
         /// <typeparam name="T">Type of object you want to use.</typeparam>
+        /// <param name="gasFeeModifier">
+        /// Optional. If <c>null</c>, the default is an instance of <see cref="BareMinimumGasFeeModifier"/>.
+        /// Instantiate one of the gas fee modifiers if you want to customize the gas fees for a specific transaction.
+        /// </param>
         /// <returns>The outputs of the method and the transaction receipt.</returns>
         public async Task<(T response, TransactionReceipt receipt)> SendWithReceipt<T>(
             string method,
             object[] parameters = null,
-            TransactionRequest overwrite = null)
+            TransactionRequest overwrite = null,
+            IGasFeeModifier gasFeeModifier = null)
         {
             if (string.IsNullOrEmpty(Address))
             {

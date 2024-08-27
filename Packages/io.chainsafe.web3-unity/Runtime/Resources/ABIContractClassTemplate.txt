@@ -8,6 +8,7 @@ using Nethereum.RPC.Reactive.Eth.Subscriptions;
 using Nethereum.JsonRpc.WebSocketStreamingClient;
 using Nethereum.ABI.FunctionEncoding.Attributes;
 using Nethereum.Contracts;
+using ChainSafe.Gaming.Evm.Contracts.GasFees;
 using UnityEngine;
 
 
@@ -50,6 +51,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
             if(!Subscribed)
                 return;
             Subscribed = false;
+            
             {EVENT_UNSUBSCRIPTION}
             _webSocketClient?.Dispose();
         }
@@ -59,6 +61,11 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
             if(Subscribed)
                 return;
                 
+            if(Application.platform == RuntimePlatform.WebGLPlayer)
+            {
+                Debug.LogError("WebGL Builds don't support event subscription yet");
+                return;
+            }
             if(string.IsNullOrEmpty(WebSocketUrl))
             {
                 Debug.LogWarning($"WebSocketUrl is not set for this class. Event Subscriptions will not work.");
@@ -91,15 +98,15 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
         }
         
         [Obsolete("It's not advisable to use this method. Use the pre-generated methods instead.")]
-        public Task<object[]> Send(string method, object[] parameters = null, TransactionRequest overwrite = null)
+        public Task<object[]> Send(string method, object[] parameters = null, TransactionRequest overwrite = null, IGasFeeModifier gasFeeModifier = null)
         {
-            return OriginalContract.Send(method, parameters, overwrite);
+            return OriginalContract.Send(method, parameters, overwrite, gasFeeModifier);
         }
         
         [Obsolete("It's not advisable to use this method. Use the pre-generated methods instead.")]
-        public Task<(object[] response, TransactionReceipt receipt)> SendWithReceipt(string method, object[] parameters = null, TransactionRequest overwrite = null)
+        public Task<(object[] response, TransactionReceipt receipt)> SendWithReceipt(string method, object[] parameters = null, TransactionRequest overwrite = null, IGasFeeModifier gasFeeModifier = null)
         {
-            return OriginalContract.SendWithReceipt(method, parameters, overwrite);
+            return OriginalContract.SendWithReceipt(method, parameters, overwrite, gasFeeModifier);
         }
         
         [Obsolete("It's not advisable to use this method. Use the pre-generated methods instead.")]

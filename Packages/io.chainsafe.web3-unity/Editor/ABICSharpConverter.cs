@@ -235,10 +235,17 @@ public class ABICSharpConverter : EditorWindow
         ReplaceContractMethodCall(functionStringBuilder, functionABI);
         ReplaceReturnType(functionStringBuilder, functionABI, useTransactionReceipt);
         ReplaceFunctionCall(functionStringBuilder, functionABI, useTransactionReceipt);
+        RemoveGasFeeForReadCalls(functionStringBuilder, functionABI);
         ReplaceInputParamNames(functionStringBuilder, functionABI);
         ReplaceReturnStatement(functionStringBuilder, functionABI, useTransactionReceipt);
 
         return functionStringBuilder.ToString();
+    }
+
+    private static void RemoveGasFeeForReadCalls(StringBuilder sb, FunctionABI functionABI)
+    {
+        sb.Replace("{GAS_FEE_INIT}", functionABI.Constant ? "" : ", IGasFeeModifier gasFee = null");
+        sb.Replace("{GAS_FEE_CALL}", functionABI.Constant ? "" : ", gasFee");
     }
 
     private static void ReplaceMethodName(StringBuilder functionStringBuilder, FunctionABI functionABI, bool useTransactionReceipt)
@@ -248,7 +255,11 @@ public class ABICSharpConverter : EditorWindow
 
     private static void ReplaceInputParameters(StringBuilder functionStringBuilder, FunctionABI functionABI)
     {
-        functionStringBuilder.Replace("{INPUT_PARAMS}", string.Join(", ", functionABI.InputParameters.Select(x => $"{x.Type.ToCSharpType()} {(string.IsNullOrEmpty(x.Name.ReplaceReservedNames()) ? $"{x.Type}" : $"{x.Name.ReplaceReservedNames()}")}")));
+        var replacedParams = string.Join(", ",
+            functionABI.InputParameters.Select(x =>
+                $"{x.Type.ToCSharpType()} {(string.IsNullOrEmpty(x.Name.ReplaceReservedNames()) ? $"{x.Type}" : $"{x.Name.ReplaceReservedNames()}")}"));
+        
+        functionStringBuilder.Replace("{INPUT_PARAMS}", replacedParams +  (replacedParams.Length == 0 ? "" : ","));
     }
 
     private static void ReplaceContractMethodCall(StringBuilder functionStringBuilder, FunctionABI functionABI)
@@ -281,7 +292,9 @@ public class ABICSharpConverter : EditorWindow
         var sb = new StringBuilder();
 
         if (functionABI.Constant)
+        {
             sb.Append("Call");
+        }
         else
             sb.Append(useTransactionReceipt ? "SendWithReceipt" : "Send");
         if (functionABI.OutputParameters.Length == 1)

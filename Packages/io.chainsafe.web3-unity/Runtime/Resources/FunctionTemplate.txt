@@ -1,8 +1,8 @@
-        public async Task<{RETURN_TYPE}> {METHOD_NAME}({INPUT_PARAMS}) 
+        public async Task<{RETURN_TYPE}> {METHOD_NAME}({INPUT_PARAMS} TransactionRequest txRequest = null{GAS_FEE_INIT}) 
         {
             var response = await OriginalContract.{FUNCTION_CALL}("{CONTRACT_METHOD_CALL}", new object [] {
                 {INPUT_PARAM_NAMES}
-            });
+            }, txRequest{GAS_FEE_CALL});
             
             return {RETURN_STATEMENT};
         }

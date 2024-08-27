@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Contracts.GasFees;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.InProcessSigner;
@@ -41,12 +42,14 @@ namespace ChainSafe.Gaming.InProcessTransactionExecutor
         /// <param name="transaction">Transaction to send.</param>
         /// <returns>Hash response of a successfully executed transaction.</returns>
         /// <exception cref="Web3Exception">Throws Exception if executing transaction fails.</exception>
-        public virtual async Task<TransactionResponse> SendTransaction(TransactionRequest transaction)
+        public virtual async Task<TransactionResponse> SendTransaction(TransactionRequest transaction, IGasFeeModifier gasFeeModifier = null)
         {
             if (string.IsNullOrEmpty(transaction.From))
             {
                 transaction.From = Account.Address;
             }
+
+            gasFeeModifier ??= new BareMinimumGasFeeModifier();
 
             if (transaction.GasPrice == null && transaction.MaxFeePerGas == null)
             {
@@ -55,11 +58,11 @@ namespace ChainSafe.Gaming.InProcessTransactionExecutor
                 transaction.MaxFeePerGas = feeData.MaxFeePerGas.ToHexBigInteger();
                 if (feeData.MaxFeePerGas.IsZero)
                 {
-                    transaction.GasPrice = await rpcProvider.GetGasPrice();
+                    transaction.GasPrice = gasFeeModifier.ModifyGasFee(await rpcProvider.GetGasPrice());
                 }
                 else
                 {
-                    transaction.MaxPriorityFeePerGas = feeData.MaxPriorityFeePerGas.ToHexBigInteger();
+                    transaction.MaxPriorityFeePerGas = gasFeeModifier.ModifyGasFee(feeData.MaxPriorityFeePerGas.ToHexBigInteger());
                 }
             }
 

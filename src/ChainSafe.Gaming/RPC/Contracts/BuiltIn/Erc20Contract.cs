@@ -1,6 +1,7 @@
 using System.Diagnostics.Contracts;
 using System.Numerics;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Contracts.GasFees;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Web3;
 
@@ -98,11 +99,15 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// Mints a specified amount of tokens to the current user address.
         /// </summary>
         /// <param name="amount">The amount of tokens to mint.</param>
+        /// <param name="gasFeeModifier">
+        /// Optional. If <c>null</c>, the default is an instance of <see cref="BareMinimumGasFeeModifier"/>.
+        /// Instantiate one of the gas fee modifiers if you want to customize the gas fees for a specific transaction.
+        /// </param>
         /// <returns>A task that represents the asynchronous operation. The task result contains an array of objects.</returns>
-        public Task<object[]> Mint(BigInteger amount)
+        public Task<object[]> Mint(BigInteger amount, IGasFeeModifier gasFeeModifier = null)
         {
             EnsureSigner();
-            return Mint(amount, signer.PublicAddress);
+            return Mint(amount, signer.PublicAddress, gasFeeModifier: gasFeeModifier);
         }
 
         /// <summary>
@@ -111,11 +116,12 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// <param name="amount">The amount of tokens to mint.</param>
         /// <param name="destinationAddress">The account address to mint tokens to.</param>
         /// <returns>An array of objects representing the response after minting.</returns>
-        public async Task<object[]> Mint(BigInteger amount, string destinationAddress)
+        public async Task<object[]> Mint(BigInteger amount, string destinationAddress, IGasFeeModifier gasFeeModifier = null)
         {
             var response = await Send(
                 EthMethods.Mint,
-                new object[] { destinationAddress, amount });
+                new object[] { destinationAddress, amount },
+                gasFeeModifier: gasFeeModifier);
 
             return response;
         }
@@ -126,11 +132,12 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// <param name="destinationAddress">The address of the account to transfer the amount to.</param>
         /// <param name="amount">The amount to transfer.</param>
         /// <returns>An array of objects representing the response of the transfer operation.</returns>
-        public async Task<object[]> Transfer(string destinationAddress, BigInteger amount)
+        public async Task<object[]> Transfer(string destinationAddress, BigInteger amount, IGasFeeModifier gasFeeModifier = null)
         {
             var response = await Send(
                 EthMethods.Transfer,
-                new object[] { destinationAddress, amount });
+                new object[] { destinationAddress, amount },
+                gasFeeModifier: gasFeeModifier);
 
             return response;
         }

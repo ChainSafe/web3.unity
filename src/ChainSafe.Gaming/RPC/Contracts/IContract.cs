@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Contracts.GasFees;
 using ChainSafe.Gaming.Evm.Transactions;
 using Nethereum.Hex.HexTypes;
 
@@ -43,8 +44,12 @@ namespace ChainSafe.Gaming.Evm.Contracts
         /// <param name="method">The method.</param>
         /// <param name="parameters">The parameters.</param>
         /// <param name="overwrite">An existing TransactionRequest to use instead of making a new one.</param>
+        /// <param name="gasFeeModifier">
+        /// Optional. If <c>null</c>, the default is an instance of <see cref="BareMinimumGasFeeModifier"/>.
+        /// Instantiate one of the gas fee modifiers if you want to customize the gas fees for a specific transaction.
+        /// </param>
         /// <returns>The outputs of the method.</returns>
-        Task<object[]> Send(string method, object[] parameters = null, TransactionRequest overwrite = null);
+        Task<object[]> Send(string method, object[] parameters = null, TransactionRequest overwrite = null, IGasFeeModifier gasFeeModifier = null);
 
         /// <summary>
         /// Sends the transaction.
@@ -52,11 +57,16 @@ namespace ChainSafe.Gaming.Evm.Contracts
         /// <param name="method">The method.</param>
         /// <param name="parameters">The parameters.</param>
         /// <param name="overwrite">An existing TransactionRequest to use instead of making a new one.</param>
+        /// <param name="gasFeeModifier">
+        /// Optional. If <c>null</c>, the default is an instance of <see cref="BareMinimumGasFeeModifier"/>.
+        /// Instantiate one of the gas fee modifiers if you want to customize the gas fees for a specific transaction.
+        /// </param>
         /// <returns>The outputs of the method and the transaction receipt.</returns>
         Task<(object[] response, TransactionReceipt receipt)> SendWithReceipt(
             string method,
             object[] parameters = null,
-            TransactionRequest overwrite = null);
+            TransactionRequest overwrite = null,
+            IGasFeeModifier gasFeeModifier = null);
 
         /// <summary>
         /// Estimate gas.
