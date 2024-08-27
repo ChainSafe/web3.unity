@@ -11,8 +11,12 @@ using UnityEngine;
 [CustomEditor(typeof(ConnectionHandler))]
 public class ConnectionHandlerEditor : Editor
 {
-    readonly List<Type> _providerTypes = new List<Type>();
+    private readonly List<Type> _providerTypes = new List<Type>();
     
+    private Dictionary<Type, Editor> _editors = new Dictionary<Type, Editor>();
+    
+    private Dictionary<Type, bool> _editorFoldouts = new Dictionary<Type, bool>();
+
     public struct Provider
     {
         [JsonProperty("name")]
@@ -30,6 +34,10 @@ public class ConnectionHandlerEditor : Editor
         {
             _providerTypes.AddRange(assembly.GetTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(ConnectionProvider))));
         });
+
+        _editors = _providerTypes.ToDictionary(t => t, t => default(Editor));
+        
+        _editorFoldouts = _providerTypes.ToDictionary(t => t, t => false);
     }
 
     public override void OnInspectorGUI()
@@ -40,7 +48,7 @@ public class ConnectionHandlerEditor : Editor
         
         if (_foldout)
         {
-            EditorGUILayout.BeginVertical("Box");
+            EditorGUILayout.BeginVertical();
             
             // Get provider display name.
             var providersProperty = serializedObject.FindProperty("providers");
@@ -70,17 +78,21 @@ public class ConnectionHandlerEditor : Editor
             
             foreach (Type providerType in _providerTypes)
             {
-                EditorGUILayout.BeginVertical("Box");
-                
+                EditorGUILayout.BeginVertical(GUI.skin.box);
+
                 string providerDisplayName = providerType.Name;
 
                 if (providerDisplayName.Contains(nameof(ConnectionProvider)))
                 {
                     providerDisplayName = providerDisplayName.Replace(nameof(ConnectionProvider), string.Empty);
                 }
-                
-                EditorGUILayout.LabelField(providerDisplayName, EditorStyles.boldLabel);
 
+                EditorGUI.indentLevel++;
+                
+                _editorFoldouts[providerType] = EditorGUILayout.Foldout(_editorFoldouts[providerType], providerDisplayName);
+
+                EditorGUI.indentLevel--;
+                
                 ConnectionProvider provider = allProviders.FirstOrDefault(p => p.GetType() == providerType);
 
                 if (provider != null)
@@ -113,12 +125,30 @@ public class ConnectionHandlerEditor : Editor
                     }
                     
                     EditorGUI.BeginDisabledGroup(true);
-                    
+
                     EditorGUILayout.ObjectField(provider, typeof(ConnectionProvider), false);
                     
                     EditorGUI.EndDisabledGroup();
                     
                     EditorGUILayout.EndHorizontal();
+
+                    if (_editorFoldouts[providerType])
+                    {
+                        Editor editor = _editors[providerType];
+
+                        if (!editor)
+                        {
+                            CreateCachedEditor(provider, null, ref editor);
+                        
+                            _editors[providerType] = editor;
+                        }
+                    
+                        EditorGUILayout.BeginVertical(GUI.skin.box);
+                    
+                        editor.OnInspectorGUI();
+                    
+                        EditorGUILayout.EndVertical();
+                    }
                 }
 
                 else
