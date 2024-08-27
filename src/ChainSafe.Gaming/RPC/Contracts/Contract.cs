@@ -153,7 +153,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
         /// <param name="parameters">The parameters.</param>
         /// <param name="overwrite">An existing TransactionRequest to use instead of making a new one.</param>
         /// <param name="gasFeeModifier">
-        /// Optional. If <c>null</c>, the default is an instance of <see cref="BareMinimumGasFeeModifier"/>.
+        /// Optional. If <c>null</c>, the default is an instance of <see cref="NoGasFeeModifier"/>.
         /// Instantiate one of the gas fee modifiers if you want to customize the gas fees for a specific transaction.
         /// </param>
         /// <returns>The outputs of the method.</returns>
@@ -169,7 +169,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
         /// <param name="parameters">The parameters.</param>
         /// <param name="overwrite">An existing TransactionRequest to use instead of making a new one.</param>
         /// <param name="gasFeeModifier">
-        /// Optional. If <c>null</c>, the default is an instance of <see cref="BareMinimumGasFeeModifier"/>.
+        /// Optional. If <c>null</c>, the default is an instance of <see cref="NoGasFeeModifier"/>.
         /// Instantiate one of the gas fee modifiers if you want to customize the gas fees for a specific transaction.
         /// </param>
         /// <typeparam name="T">Type of object you want to use.</typeparam>
@@ -187,7 +187,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
         /// <param name="parameters">The parameters.</param>
         /// <param name="overwrite">An existing TransactionRequest to use instead of making a new one.</param>
         /// <param name="gasFeeModifier">
-        /// Optional. If <c>null</c>, the default is an instance of <see cref="BareMinimumGasFeeModifier"/>.
+        /// Optional. If <c>null</c>, the default is an instance of <see cref="NoGasFeeModifier"/>.
         /// Instantiate one of the gas fee modifiers if you want to customize the gas fees for a specific transaction.
         /// </param>
         /// <returns>The outputs of the method and the transaction receipt.</returns>
@@ -236,7 +236,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
         /// <param name="overwrite">An existing TransactionRequest to use instead of making a new one.</param>
         /// <typeparam name="T">Type of object you want to use.</typeparam>
         /// <param name="gasFeeModifier">
-        /// Optional. If <c>null</c>, the default is an instance of <see cref="BareMinimumGasFeeModifier"/>.
+        /// Optional. If <c>null</c>, the default is an instance of <see cref="NoGasFeeModifier"/>.
         /// Instantiate one of the gas fee modifiers if you want to customize the gas fees for a specific transaction.
         /// </param>
         /// <returns>The outputs of the method and the transaction receipt.</returns>

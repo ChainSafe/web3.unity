@@ -100,7 +100,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// </summary>
         /// <param name="amount">The amount of tokens to mint.</param>
         /// <param name="gasFeeModifier">
-        /// Optional. If <c>null</c>, the default is an instance of <see cref="BareMinimumGasFeeModifier"/>.
+        /// Optional. If <c>null</c>, the default is an instance of <see cref="NoGasFeeModifier"/>.
         /// Instantiate one of the gas fee modifiers if you want to customize the gas fees for a specific transaction.
         /// </param>
         /// <returns>A task that represents the asynchronous operation. The task result contains an array of objects.</returns>

@@ -108,7 +108,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// <param name="amount">The amount of tokens to mint.</param>
         /// <param name="data">Additional data to include in the transaction (optional).</param>
         /// <param name="gasFeeModifier">
-        /// Optional. If <c>null</c>, the default is an instance of <see cref="BareMinimumGasFeeModifier"/>.
+        /// Optional. If <c>null</c>, the default is an instance of <see cref="NoGasFeeModifier"/>.
         /// Instantiate one of the gas fee modifiers if you want to customize the gas fees for a specific transaction.
         /// </param>
         /// <returns>
@@ -126,7 +126,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// <param name="amount">The amount of tokens to transfer.</param>
         /// <param name="destinationAddress">The address where the tokens will be transferred to.</param>
         /// <param name="gasFeeModifier">
-        /// Optional. If <c>null</c>, the default is an instance of <see cref="BareMinimumGasFeeModifier"/>.
+        /// Optional. If <c>null</c>, the default is an instance of <see cref="NoGasFeeModifier"/>.
         /// Instantiate one of the gas fee modifiers if you want to customize the gas fees for a specific transaction.
         /// </param>
         /// <returns>A task that represents the asynchronous transfer operation.</returns>

@@ -76,7 +76,7 @@ namespace ChainSafe.Gaming.Wallets
 
         private async Task<string> SendUncheckedTransaction(TransactionRequest transaction, IGasFeeModifier gasFeeModifier = null)
         {
-            gasFeeModifier ??= new BareMinimumGasFeeModifier();
+            gasFeeModifier ??= new NoGasFeeModifier();
 
             if (transaction.From == null)
             {

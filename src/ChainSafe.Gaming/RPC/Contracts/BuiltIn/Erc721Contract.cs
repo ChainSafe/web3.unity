@@ -138,7 +138,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// </summary>
         /// <param name="uri">The URI of the new token.</param>
         /// <param name="gasFeeModifier">
-        /// Optional. If <c>null</c>, the default is an instance of <see cref="BareMinimumGasFeeModifier"/>.
+        /// Optional. If <c>null</c>, the default is an instance of <see cref="NoGasFeeModifier"/>.
         /// Instantiate one of the gas fee modifiers if you want to customize the gas fees for a specific transaction.
         /// </param>
         /// <returns>An array of objects representing the response from the mint operation.</returns>
@@ -161,7 +161,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// <param name="uri">The URI of the object to be minted.</param>
         /// <param name="destinationAddress">The address where the minted object will be transferred.</param>
         /// <param name="gasFeeModifier">
-        /// Optional. If <c>null</c>, the default is an instance of <see cref="BareMinimumGasFeeModifier"/>.
+        /// Optional. If <c>null</c>, the default is an instance of <see cref="NoGasFeeModifier"/>.
         /// Instantiate one of the gas fee modifiers if you want to customize the gas fees for a specific transaction.
         /// </param>
         /// <returns>An array of objects representing the response from the mint operation.</returns>
@@ -178,7 +178,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// <param name="toAccount">The account to transfer the token to.</param>
         /// <param name="tokenId">The ID of the token to transfer.</param>
         /// <param name="gasFeeModifier">
-        /// Optional. If <c>null</c>, the default is an instance of <see cref="BareMinimumGasFeeModifier"/>.
+        /// Optional. If <c>null</c>, the default is an instance of <see cref="NoGasFeeModifier"/>.
         /// Instantiate one of the gas fee modifiers if you want to customize the gas fees for a specific transaction.
         /// </param>
         /// <returns>A Task object representing the asynchronous operation. The result of the task is an array of objects.</returns>
@@ -193,7 +193,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// <param name="toAccount">The address of the account to which the token will be transferred.</param>
         /// <param name="tokenId">The unique identifier of the token.</param>
         /// <param name="gasFeeModifier">
-        /// Optional. If <c>null</c>, the default is an instance of <see cref="BareMinimumGasFeeModifier"/>.
+        /// Optional. If <c>null</c>, the default is an instance of <see cref="NoGasFeeModifier"/>.
         /// Instantiate one of the gas fee modifiers if you want to customize the gas fees for a specific transaction.
         /// </param>
         /// <returns>An array of objects representing the response from the transfer operation.</returns>

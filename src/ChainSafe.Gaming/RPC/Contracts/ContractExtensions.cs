@@ -139,7 +139,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
         /// <param name="methodName">The name of the smart contract method to which the transaction is sent.</param>
         /// <param name="requestPrototype">Optional. A prototype object for the transaction request. This can include transaction parameters such as gas limit, gas price, value, etc.</param>
         /// <param name="gasFeeModifier">
-        /// Optional. If <c>null</c>, the default is an instance of <see cref="BareMinimumGasFeeModifier"/>.
+        /// Optional. If <c>null</c>, the default is an instance of <see cref="NoGasFeeModifier"/>.
         /// Instantiate one of the gas fee modifiers if you want to customize the gas fees for a specific transaction.
         /// </param>
         /// <returns>A task representing the asynchronous operation of sending the transaction.</returns>

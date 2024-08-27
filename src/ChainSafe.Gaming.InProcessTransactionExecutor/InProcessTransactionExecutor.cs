@@ -49,7 +49,7 @@ namespace ChainSafe.Gaming.InProcessTransactionExecutor
                 transaction.From = Account.Address;
             }
 
-            gasFeeModifier ??= new BareMinimumGasFeeModifier();
+            gasFeeModifier ??= new NoGasFeeModifier();
 
             if (transaction.GasPrice == null && transaction.MaxFeePerGas == null)
             {
