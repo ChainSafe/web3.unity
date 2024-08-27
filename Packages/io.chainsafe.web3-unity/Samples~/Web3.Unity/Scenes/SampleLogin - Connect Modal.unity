@@ -346,10 +346,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gelatoApiKey: 7MFQqyGS1Iui_e_MgmFW1BfbFeJ06g8nnL2oUTlIJug_
   providers:
-  - {fileID: 11400000, guid: a15bdaf25319d6f44b48ff2159e4b7fb, type: 2}
-  - {fileID: 11400000, guid: 5a662f0c96c53db48b29a3aa7ab0f102, type: 2}
-  - {fileID: 11400000, guid: 70ad5245d5b5895448ba4fd9ad57ea95, type: 2}
-  - {fileID: 11400000, guid: f891ba0f7fed9084982e95c96826fcb7, type: 2}
+  - {fileID: 11400000, guid: 835338196b5038d4b9351fadba9dac38, type: 2}
+  - {fileID: 11400000, guid: e5b50e2ca9fe0504daf70376bceb84ac, type: 2}
+  - {fileID: 11400000, guid: 0d7bd7ae4b3e79d489bbc54514343f5c, type: 2}
+  - {fileID: 11400000, guid: e56cb66917f860e489d3ed4480b4681c, type: 2}
 --- !u!114 &1658652865
 MonoBehaviour:
   m_ObjectHideFlags: 0
