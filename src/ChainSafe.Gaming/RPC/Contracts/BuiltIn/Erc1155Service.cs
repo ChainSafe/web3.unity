@@ -3,6 +3,7 @@ using System.Diagnostics.Contracts;
 using System.Numerics;
 using System.Reflection;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Contracts.GasFees;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Utils;
 
@@ -106,12 +107,16 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// <param name="tokenId">The ID of the token.</param>
         /// <param name="amount">The amount of tokens to mint.</param>
         /// <param name="data">Additional data to include in the transaction (optional).</param>
+        /// <param name="gasFeeModifier">
+        /// Optional. If <c>null</c>, the default is an instance of <see cref="BareMinimumGasFeeModifier"/>.
+        /// Instantiate one of the gas fee modifiers if you want to customize the gas fees for a specific transaction.
+        /// </param>
         /// <returns>
         /// A task that represents the asynchronous minting operation.
         /// The task result contains an array of objects with information about the minting operation.
         /// </returns>
-        public Task<object[]> Mint(string contractAddress, BigInteger tokenId, BigInteger amount, byte[] data = null) =>
-            BuildContract(contractAddress).Mint(tokenId, amount, data);
+        public Task<object[]> Mint(string contractAddress, BigInteger tokenId, BigInteger amount, byte[] data = null, IGasFeeModifier gasFeeModifier = null) =>
+            BuildContract(contractAddress).Mint(tokenId, amount, data, gasFeeModifier: gasFeeModifier);
 
         /// <summary>
         /// Transfers an amount of tokens from the curren user account to the specified destination address.
@@ -120,8 +125,12 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// <param name="tokenId">The ID of the token.</param>
         /// <param name="amount">The amount of tokens to transfer.</param>
         /// <param name="destinationAddress">The address where the tokens will be transferred to.</param>
+        /// <param name="gasFeeModifier">
+        /// Optional. If <c>null</c>, the default is an instance of <see cref="BareMinimumGasFeeModifier"/>.
+        /// Instantiate one of the gas fee modifiers if you want to customize the gas fees for a specific transaction.
+        /// </param>
         /// <returns>A task that represents the asynchronous transfer operation.</returns>
-        public Task<object[]> Transfer(string contractAddress, BigInteger tokenId, BigInteger amount, string destinationAddress) =>
-            BuildContract(contractAddress).Transfer(tokenId, amount, destinationAddress);
+        public Task<object[]> Transfer(string contractAddress, BigInteger tokenId, BigInteger amount, string destinationAddress, IGasFeeModifier gasFeeModifier = null) =>
+            BuildContract(contractAddress).Transfer(tokenId, amount, destinationAddress, gasFeeModifier: gasFeeModifier);
     }
 }

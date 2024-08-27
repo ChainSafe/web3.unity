@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Contracts.GasFees;
 using ChainSafe.Gaming.Evm.Transactions;
 
 namespace ChainSafe.Gaming.Web3.Core.Evm
@@ -19,7 +20,11 @@ namespace ChainSafe.Gaming.Web3.Core.Evm
         /// <returns>
         /// A <see cref="Task"/> representing the asynchronous operation. The task result contains
         /// a <see cref="TransactionResponse"/> object with details about the executed transaction.
+        /// <param name="gasFeeModifier">
+        /// Optional. If <c>null</c>, the default is an instance of <see cref="BareMinimumGasFeeModifier"/>.
+        /// Instantiate one of the gas fee modifiers if you want to customize the gas fees for a specific transaction.
+        /// </param>
         /// </returns>
-        public Task<TransactionResponse> SendTransaction(TransactionRequest transaction);
+        public Task<TransactionResponse> SendTransaction(TransactionRequest transaction, IGasFeeModifier gasFeeModifier = null);
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Numerics;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Contracts.GasFees;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Ipfs;
 using ChainSafe.Gaming.Web3;
@@ -80,13 +81,17 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         }
 
         /// <summary>
-        /// Mints new tokens by calling the Mint method on the contract.
+        /// Mint new tokens with the specified token ID and amount.
         /// </summary>
         /// <param name="tokenId">The ID of the token to mint.</param>
         /// <param name="amount">The amount of tokens to mint.</param>
-        /// <param name="data">(Optional) Additional data to include with the minting.</param>
+        /// <param name="data">Optional. Additional data to include with the minting.</param>
+        /// <param name="gasFeeModifier">
+        /// Optional. If <c>null</c>, the default is an instance of <see cref="BareMinimumGasFeeModifier"/>.
+        /// Instantiate one of the gas fee modifiers if you want to customize the gas fees for a specific transaction.
+        /// </param>
         /// <returns>A Task that represents the asynchronous operation. The task result is an array of objects representing the minting result.</returns>
-        public Task<object[]> Mint(BigInteger tokenId, BigInteger amount, byte[] data = null)
+        public Task<object[]> Mint(BigInteger tokenId, BigInteger amount, byte[] data = null, IGasFeeModifier gasFeeModifier = null)
         {
             EnsureSigner();
             data ??= Array.Empty<byte>();
@@ -97,7 +102,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
                 amount,
                 data,
             };
-            return Send(EthMethods.Mint, parameters);
+            return Send(EthMethods.Mint, parameters, gasFeeModifier: gasFeeModifier);
         }
 
         /// <summary>
@@ -106,8 +111,12 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// <param name="tokenId">The identifier of the token to be transferred.</param>
         /// <param name="amount">The amount of tokens to be transferred.</param>
         /// <param name="destinationAddress">The destination address to receive the transferred tokens.</param>
+        /// <param name="gasFeeModifier">
+        /// Optional. If <c>null</c>, the default is an instance of <see cref="BareMinimumGasFeeModifier"/>.
+        /// Instantiate one of the gas fee modifiers if you want to customize the gas fees for a specific transaction.
+        /// </param>
         /// <returns>A task that represents the asynchronous transfer operation. The task result contains an array of objects.</returns>
-        public Task<object[]> Transfer(BigInteger tokenId, BigInteger amount, string destinationAddress)
+        public Task<object[]> Transfer(BigInteger tokenId, BigInteger amount, string destinationAddress, IGasFeeModifier gasFeeModifier = null)
         {
             EnsureSigner();
             var data = Array.Empty<byte>();
@@ -119,7 +128,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
                 amount,
                 data,
             };
-            return Send(EthMethods.SafeTransferFrom, parameters);
+            return Send(EthMethods.SafeTransferFrom, parameters, gasFeeModifier: gasFeeModifier);
         }
 
         private void EnsureSigner()

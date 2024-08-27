@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Contracts.GasFees;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.InProcessSigner;
@@ -18,20 +19,20 @@ public class Web3AuthTransactionExecutor : InProcessTransactionExecutor, IWeb3Au
         
     public event Action<TransactionResponse> OnTransactionConfirmed;
         
-    private readonly Dictionary<string, (TransactionRequest request, TaskCompletionSource<TransactionResponse> response)> _transactionPool = new();
+    private readonly Dictionary<string, (TransactionRequest request, TaskCompletionSource<TransactionResponse> response, IGasFeeModifier gassFeeModifier)> _transactionPool = new();
     
     public Web3AuthTransactionExecutor(IAccountProvider accountProvider, IRpcProvider rpcProvider) : base(accountProvider, rpcProvider)
     {
     }
 
-    public override Task<TransactionResponse> SendTransaction(TransactionRequest transaction)
+    public override Task<TransactionResponse> SendTransaction(TransactionRequest transaction, IGasFeeModifier gasFeeModifier = null)
     {
         transaction.Id = Guid.NewGuid().ToString();
         
         var tcs = new TaskCompletionSource<TransactionResponse>();
         
         // Add transaction to pool.
-        _transactionPool.Add(transaction.Id, (transaction, tcs));
+        _transactionPool.Add(transaction.Id, (transaction, tcs, gasFeeModifier));
             
         OnTransactionRequested?.Invoke(transaction);
             
@@ -45,7 +46,7 @@ public class Web3AuthTransactionExecutor : InProcessTransactionExecutor, IWeb3Au
             throw new Web3Exception("Transaction not found in pool.");
         }
         
-        var response = await base.SendTransaction(transaction.request);
+        var response = await base.SendTransaction(transaction.request, transaction.gassFeeModifier);
             
         transaction.response.SetResult(response);
 

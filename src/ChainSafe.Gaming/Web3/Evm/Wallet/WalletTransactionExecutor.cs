@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Contracts.GasFees;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
@@ -27,10 +28,20 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
             this.signer = signer;
         }
 
-        public async Task<TransactionResponse> SendTransaction(TransactionRequest transaction)
+        public async Task<TransactionResponse> SendTransaction(TransactionRequest transaction, IGasFeeModifier gasFeeModifier = null)
         {
             transaction.From ??= signer.PublicAddress;
             transaction.Data ??= "0x";
+            gasFeeModifier ??= new BareMinimumGasFeeModifier();
+
+            if (!transaction.GasPrice.Value.IsZero)
+            {
+                transaction.GasPrice = gasFeeModifier.ModifyGasFee(transaction.GasPrice);
+            }
+            else if(!transaction.MaxFeePerGas.Value.IsZero)
+            {
+                transaction.GasPrice = gasFeeModifier.ModifyGasFee(transaction.GasPrice);
+            }
 
             string hash = await walletProvider.Request<string>("eth_sendTransaction", transaction.ToTransactionInput());
 

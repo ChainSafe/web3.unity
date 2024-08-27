@@ -3,6 +3,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Contracts.GasFees;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Ipfs;
 using ChainSafe.Gaming.MultiCall;
@@ -136,9 +137,13 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// Mint a new token with the given URI.
         /// </summary>
         /// <param name="uri">The URI of the new token.</param>
+        /// <param name="gasFeeModifier">
+        /// Optional. If <c>null</c>, the default is an instance of <see cref="BareMinimumGasFeeModifier"/>.
+        /// Instantiate one of the gas fee modifiers if you want to customize the gas fees for a specific transaction.
+        /// </param>
         /// <returns>An array of objects representing the response from the mint operation.</returns>
         /// <exception cref="Web3Exception">Thrown if no signer was provided during construction.</exception>
-        public async Task<object[]> Mint(string uri) // todo review if still relevant
+        public async Task<object[]> Mint(string uri, IGasFeeModifier gasFeeModifier = null) // todo review if still relevant
         {
             if (signer == null)
             {
@@ -146,7 +151,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
             }
 
             var parameters = new object[] { signer.PublicAddress, uri };
-            var response = await Send(EthMethods.SafeMint, parameters);
+            var response = await Send(EthMethods.SafeMint, parameters, gasFeeModifier: gasFeeModifier);
             return response;
         }
 
@@ -155,11 +160,15 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// </summary>
         /// <param name="uri">The URI of the object to be minted.</param>
         /// <param name="destinationAddress">The address where the minted object will be transferred.</param>
+        /// <param name="gasFeeModifier">
+        /// Optional. If <c>null</c>, the default is an instance of <see cref="BareMinimumGasFeeModifier"/>.
+        /// Instantiate one of the gas fee modifiers if you want to customize the gas fees for a specific transaction.
+        /// </param>
         /// <returns>An array of objects representing the response from the mint operation.</returns>
-        public async Task<object[]> Mint(string uri, string destinationAddress) // todo review if still relevant
+        public async Task<object[]> Mint(string uri, string destinationAddress, IGasFeeModifier gasFeeModifier = null) // todo review if still relevant
         {
             var parameters = new object[] { destinationAddress, uri };
-            var response = await Send(EthMethods.SafeMint, parameters);
+            var response = await Send(EthMethods.SafeMint, parameters, gasFeeModifier: gasFeeModifier);
             return response;
         }
 
@@ -168,10 +177,14 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// </summary>
         /// <param name="toAccount">The account to transfer the token to.</param>
         /// <param name="tokenId">The ID of the token to transfer.</param>
+        /// <param name="gasFeeModifier">
+        /// Optional. If <c>null</c>, the default is an instance of <see cref="BareMinimumGasFeeModifier"/>.
+        /// Instantiate one of the gas fee modifiers if you want to customize the gas fees for a specific transaction.
+        /// </param>
         /// <returns>A Task object representing the asynchronous operation. The result of the task is an array of objects.</returns>
-        public Task<object[]> Transfer(string toAccount, BigInteger tokenId)
+        public Task<object[]> Transfer(string toAccount, BigInteger tokenId, IGasFeeModifier gasFeeModifier = null)
         {
-            return Transfer(toAccount, tokenId.ToString());
+            return Transfer(toAccount, tokenId.ToString(), gasFeeModifier);
         }
 
         /// <summary>
@@ -179,8 +192,12 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// </summary>
         /// <param name="toAccount">The address of the account to which the token will be transferred.</param>
         /// <param name="tokenId">The unique identifier of the token.</param>
+        /// <param name="gasFeeModifier">
+        /// Optional. If <c>null</c>, the default is an instance of <see cref="BareMinimumGasFeeModifier"/>.
+        /// Instantiate one of the gas fee modifiers if you want to customize the gas fees for a specific transaction.
+        /// </param>
         /// <returns>An array of objects representing the response from the transfer operation.</returns>
-        public async Task<object[]> Transfer(string toAccount, string tokenId)
+        public async Task<object[]> Transfer(string toAccount, string tokenId, IGasFeeModifier gasFeeModifier = null)
         {
             if (signer == null)
             {
@@ -188,7 +205,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
             }
 
             var parameters = new object[] { signer.PublicAddress, toAccount, tokenId };
-            var response = await Send(EthMethods.SafeTransferFrom, parameters);
+            var response = await Send(EthMethods.SafeTransferFrom, parameters, gasFeeModifier: gasFeeModifier);
             return response;
         }
     }

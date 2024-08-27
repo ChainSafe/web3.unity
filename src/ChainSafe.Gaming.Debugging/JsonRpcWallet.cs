@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Contracts.GasFees;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
@@ -58,9 +59,9 @@ namespace ChainSafe.Gaming.Wallets
             return SignMessageImpl(message.ToHexUTF8());
         }
 
-        public async Task<TransactionResponse> SendTransaction(TransactionRequest transaction)
+        public async Task<TransactionResponse> SendTransaction(TransactionRequest transaction, IGasFeeModifier gasFeeModifier = null)
         {
-            var hash = await SendUncheckedTransaction(transaction);
+            var hash = await SendUncheckedTransaction(transaction, gasFeeModifier);
 
             try
             {
@@ -73,8 +74,10 @@ namespace ChainSafe.Gaming.Wallets
             }
         }
 
-        private async Task<string> SendUncheckedTransaction(TransactionRequest transaction)
+        private async Task<string> SendUncheckedTransaction(TransactionRequest transaction, IGasFeeModifier gasFeeModifier = null)
         {
+            gasFeeModifier ??= new BareMinimumGasFeeModifier();
+
             if (transaction.From == null)
             {
                 var fromAddress = PublicAddress.ToLower();
@@ -84,7 +87,7 @@ namespace ChainSafe.Gaming.Wallets
             if (transaction.GasLimit == null)
             {
                 var feeData = await provider.GetFeeData();
-                transaction.MaxFeePerGas = new HexBigInteger(feeData.MaxFeePerGas);
+                transaction.MaxFeePerGas = gasFeeModifier.ModifyGasFee(new HexBigInteger(feeData.MaxFeePerGas));
             }
 
             var rpcTxParams = transaction.ToRPCParam();

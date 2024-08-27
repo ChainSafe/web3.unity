@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Contracts.GasFees;
 using ChainSafe.Gaming.Evm.Transactions;
 using Nethereum.Hex.HexTypes;
 
@@ -22,14 +23,15 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
 
         public object[] Decode(string method, string output) => Original.Decode(method, output);
 
-        public Task<object[]> Send(string method, object[] parameters = null, TransactionRequest overwrite = null) =>
-            Original.Send(method, parameters, overwrite);
+        public Task<object[]> Send(string method, object[] parameters = null, TransactionRequest overwrite = null, IGasFeeModifier gasFeeModifier = null) =>
+            Original.Send(method, parameters, overwrite, gasFeeModifier);
 
         public Task<(object[] response, TransactionReceipt receipt)> SendWithReceipt(
             string method,
             object[] parameters = null,
-            TransactionRequest overwrite = null) =>
-            Original.SendWithReceipt(method, parameters, overwrite);
+            TransactionRequest overwrite = null,
+            IGasFeeModifier gasFeeModifier = null) =>
+            Original.SendWithReceipt(method, parameters, overwrite, gasFeeModifier);
 
         public Task<HexBigInteger>
             EstimateGas(string method, object[] parameters, TransactionRequest overwrite = null) =>
