@@ -87,16 +87,16 @@ public class ConnectionHandlerEditor : Editor
                     providerDisplayName = providerDisplayName.Replace(nameof(ConnectionProvider), string.Empty);
                 }
 
-                EditorGUI.indentLevel++;
-                
-                _editorFoldouts[providerType] = EditorGUILayout.Foldout(_editorFoldouts[providerType], providerDisplayName);
-
-                EditorGUI.indentLevel--;
-                
                 ConnectionProvider provider = allProviders.FirstOrDefault(p => p.GetType() == providerType);
-
+                
                 if (provider != null)
                 {
+                    EditorGUI.indentLevel++;
+                
+                    _editorFoldouts[providerType] = EditorGUILayout.Foldout(_editorFoldouts[providerType], providerDisplayName);
+
+                    EditorGUI.indentLevel--;
+                    
                     bool isAvailable = availableProviders.Contains(provider);
 
                     EditorGUILayout.BeginHorizontal();
@@ -153,6 +153,8 @@ public class ConnectionHandlerEditor : Editor
 
                 else
                 {
+                    EditorGUILayout.LabelField(providerDisplayName);
+                    
                     if (GUILayout.Button("Add Provider", GUILayout.MaxWidth(100)))
                     {
                         ConnectionProvider newProvider = (ConnectionProvider) CreateInstance(providerType);
