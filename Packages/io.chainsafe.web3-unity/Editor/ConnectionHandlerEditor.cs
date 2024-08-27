@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using ChainSafe.Gaming.UnityPackage.Connection;
 using Newtonsoft.Json;
 using UnityEditor;
@@ -8,6 +11,8 @@ using UnityEngine;
 [CustomEditor(typeof(ConnectionHandler))]
 public class ConnectionHandlerEditor : Editor
 {
+    readonly List<Type> _providerTypes = new List<Type>();
+    
     public struct Provider
     {
         [JsonProperty("name")]
@@ -18,23 +23,35 @@ public class ConnectionHandlerEditor : Editor
     }
     
     private bool _foldout;
-    
+
+    private void OnEnable()
+    {
+        AppDomain.CurrentDomain.GetAssemblies().ToList().ForEach(assembly =>
+        {
+            _providerTypes.AddRange(assembly.GetTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(ConnectionProvider))));
+        });
+    }
+
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-
-        var providers = Resources.LoadAll<ConnectionProvider>(string.Empty);
 
         _foldout = EditorGUILayout.Foldout(_foldout, "Connection Providers");
         
         if (_foldout)
         {
-            List<ConnectionProvider> availableProviders = new List<ConnectionProvider>();
+            EditorGUILayout.BeginVertical("Box");
             
+            // Get provider display name.
             var providersProperty = serializedObject.FindProperty("providers");
 
-            int arraySize = providersProperty.arraySize;
+            ConnectionProvider[] allProviders = Resources.LoadAll<ConnectionProvider>(string.Empty);
             
+            // Get available providers.
+            List<ConnectionProvider> availableProviders = new List<ConnectionProvider>();
+                
+            int arraySize = providersProperty.arraySize;
+                
             for (int i = 0; i < arraySize; i++)
             {
                 var providerProperty = providersProperty.GetArrayElementAtIndex(i);
@@ -51,46 +68,79 @@ public class ConnectionHandlerEditor : Editor
                 availableProviders.Add(providerProperty.objectReferenceValue as ConnectionProvider);
             }
             
-            foreach (var provider in providers)
+            foreach (Type providerType in _providerTypes)
             {
-                if (provider == null)
+                EditorGUILayout.BeginVertical("Box");
+                
+                string providerDisplayName = providerType.Name;
+
+                if (providerDisplayName.Contains(nameof(ConnectionProvider)))
                 {
-                    Debug.LogWarning($"Error loading {provider.Name} Provider.");
-                    
-                    continue;
+                    providerDisplayName = providerDisplayName.Replace(nameof(ConnectionProvider), string.Empty);
                 }
                 
-                EditorGUI.BeginChangeCheck();
+                EditorGUILayout.LabelField(providerDisplayName, EditorStyles.boldLabel);
 
-                bool isAvailable = availableProviders.Contains(provider);
-                
-                isAvailable = GUILayout.Toggle(isAvailable, provider.Name);
+                ConnectionProvider provider = allProviders.FirstOrDefault(p => p.GetType() == providerType);
 
-                if (EditorGUI.EndChangeCheck())
+                if (provider != null)
                 {
-                    if (isAvailable)
-                    {
-                        providersProperty.InsertArrayElementAtIndex(arraySize);
+                    bool isAvailable = availableProviders.Contains(provider);
 
-                        providersProperty.GetArrayElementAtIndex(arraySize).objectReferenceValue = provider;
-                    }
-
-                    else
-                    {
-                        providersProperty.DeleteArrayElementAtIndex(availableProviders.IndexOf(provider));
-                    }
-
-                    serializedObject.ApplyModifiedProperties();
+                    EditorGUILayout.BeginHorizontal();
                     
-                    return;
+                    EditorGUI.BeginChangeCheck();
+                    
+                    isAvailable = EditorGUILayout.Toggle(isAvailable, GUILayout.MaxWidth(20));
+                    
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        if (isAvailable)
+                        {
+                            providersProperty.InsertArrayElementAtIndex(providersProperty.arraySize);
+                            
+                            providersProperty.GetArrayElementAtIndex(providersProperty.arraySize - 1).objectReferenceValue = provider;
+                        }
+
+                        else
+                        {
+                            int index = availableProviders.IndexOf(provider);
+                            
+                            providersProperty.DeleteArrayElementAtIndex(index);
+                        }
+                        
+                        serializedObject.ApplyModifiedProperties();
+                    }
+                    
+                    EditorGUI.BeginDisabledGroup(true);
+                    
+                    EditorGUILayout.ObjectField(provider, typeof(ConnectionProvider), false);
+                    
+                    EditorGUI.EndDisabledGroup();
+                    
+                    EditorGUILayout.EndHorizontal();
+                }
+
+                else
+                {
+                    if (GUILayout.Button("Add Provider", GUILayout.MaxWidth(100)))
+                    {
+                        ConnectionProvider newProvider = (ConnectionProvider) CreateInstance(providerType);
+                        
+                        AssetDatabase.CreateAsset(newProvider, Path.Combine("Assets", nameof(Resources), $"{providerType.Name}.asset"));
+                        
+                        providersProperty.InsertArrayElementAtIndex(providersProperty.arraySize);
+                        
+                        providersProperty.GetArrayElementAtIndex(providersProperty.arraySize - 1).objectReferenceValue = newProvider;
+                        
+                        serializedObject.ApplyModifiedProperties();
+                    }
                 }
                 
-                EditorGUI.BeginDisabledGroup(true);
-                    
-                EditorGUILayout.ObjectField(provider, typeof(ConnectionProvider), false);
-                    
-                EditorGUI.EndDisabledGroup();
+                EditorGUILayout.EndVertical();
             }
+            
+            EditorGUILayout.EndVertical();
         }
     }
 }
