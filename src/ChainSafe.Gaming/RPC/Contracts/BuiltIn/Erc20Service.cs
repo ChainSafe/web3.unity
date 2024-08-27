@@ -4,6 +4,7 @@ using System.Numerics;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Contracts.GasFees;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Utils;
 
@@ -116,8 +117,8 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// <param name="contractAddress">The address of the contract.</param>
         /// <param name="amount">The amount of tokens to mint.</param>
         /// <returns>A task that represents the asynchronous operation. The result is an array of objects.</returns>
-        public Task<object[]> Mint(string contractAddress, BigInteger amount) =>
-            BuildContract(contractAddress).Mint(amount);
+        public Task<object[]> Mint(string contractAddress, BigInteger amount, IGasFeeModifier gasFeeModifier = null) =>
+            BuildContract(contractAddress).Mint(amount, gasFeeModifier);
 
         /// <summary>
         /// Mints tokens by invoking the 'Mint' method of a smart contract.
@@ -125,9 +126,13 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// <param name="contractAddress">The address of the smart contract.</param>
         /// <param name="amount">The amount of tokens to mint.</param>
         /// <param name="destinationAddress">The address where the minted tokens should be sent.</param>
+        /// <param name="gasFeeModifier">
+        /// Optional. If <c>null</c>, the default is an instance of <see cref="BareMinimumGasFeeModifier"/>.
+        /// Instantiate one of the gas fee modifiers if you want to customize the gas fees for a specific transaction.
+        /// </param>
         /// <returns>A task representing the asynchronous operation. The task result is an array of objects.</returns>
-        public Task<object[]> Mint(string contractAddress, BigInteger amount, string destinationAddress) =>
-            BuildContract(contractAddress).Mint(amount, destinationAddress);
+        public Task<object[]> Mint(string contractAddress, BigInteger amount, string destinationAddress, IGasFeeModifier gasFeeModifier = null) =>
+            BuildContract(contractAddress).Mint(amount, destinationAddress, gasFeeModifier);
 
         /// <summary>
         /// Transfers a specified amount of tokens from the current user account to the specified destination address.
@@ -135,10 +140,14 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// <param name="contractAddress">The contract address from which the tokens are being transferred.</param>
         /// <param name="destinationAddress">The destination address to which the tokens are being transferred.</param>
         /// <param name="amount">The amount of tokens to be transferred.</param>
+        /// <param name="gasFeeModifier">
+        /// Optional. If <c>null</c>, the default is an instance of <see cref="BareMinimumGasFeeModifier"/>.
+        /// Instantiate one of the gas fee modifiers if you want to customize the gas fees for a specific transaction.
+        /// </param>
         /// <returns>
         /// A <see cref="Task"/> representing the asynchronous operation.
         /// </returns>
-        public Task<object[]> Transfer(string contractAddress, string destinationAddress, BigInteger amount) =>
-            BuildContract(contractAddress).Transfer(destinationAddress, amount);
+        public Task<object[]> Transfer(string contractAddress, string destinationAddress, BigInteger amount, IGasFeeModifier gasFeeModifier = null) =>
+            BuildContract(contractAddress).Transfer(destinationAddress, amount, gasFeeModifier);
     }
 }
