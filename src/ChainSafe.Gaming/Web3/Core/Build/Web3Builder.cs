@@ -35,9 +35,6 @@ namespace ChainSafe.Gaming.Web3.Build
                 .AddSingleton<Erc20Service>()
                 .AddSingleton<Erc721Service>()
                 .AddSingleton<Erc1155Service>();
-
-            serviceCollection
-                .AddSingleton<IEventManager, ILifecycleParticipant, EventManager>();
         }
 
         /// <summary>

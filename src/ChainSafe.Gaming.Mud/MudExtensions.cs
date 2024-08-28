@@ -1,6 +1,7 @@
 using ChainSafe.Gaming.Mud.Storages;
 using ChainSafe.Gaming.Mud.Storages.InMemory;
 using ChainSafe.Gaming.Mud.Worlds;
+using ChainSafe.Gaming.RPC.Events;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core.Nethereum;
 using Microsoft.Extensions.DependencyInjection;
@@ -54,10 +55,14 @@ namespace ChainSafe.Gaming.Mud
             services.AddSingleton<IMudStorageFactory, MudStorageFactory>();
 
             // Storage strategies
-            services.AddTransient<InMemoryMudStorage>();
-            // todo implement OffchainIndexerMudStorage, then register it here
+            services.AddTransient<InMemoryMudStorage>(); // todo implement OffchainIndexerMudStorage, then register it in the next line
 
-            if (!services.IsNethereumAdaptersBound())
+            if (!services.IsBound<IEventManager>())
+            {
+                services.UseEvents();
+            }
+
+            if (!services.IsBound<INethereumWeb3Adapter>())
             {
                 services.UseNethereumAdapters();
             }
