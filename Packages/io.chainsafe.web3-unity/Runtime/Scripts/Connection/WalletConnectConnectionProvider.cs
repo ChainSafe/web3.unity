@@ -3,6 +3,7 @@ using ChainSafe.Gaming.WalletConnect;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ChainSafe.Gaming.UnityPackage.Connection
 {
@@ -12,6 +13,9 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
     [CreateAssetMenu(menuName = "ChainSafe/Connection Provider/Wallet Connect", fileName = nameof(WalletConnectConnectionProvider))]
     public class WalletConnectConnectionProvider : RestorableConnectionProvider
     {
+        [field: SerializeField, DefaultAssetValue("Packages/io.chainsafe.web3-unity/Runtime/Prefabs/WalletConnectRow.prefab")]
+        public override Button ConnectButtonRow { get; protected set; }
+        
         [SerializeField] private WalletConnectConfigSO walletConnectConfig;
         
         private bool _storedSessionAvailable;
