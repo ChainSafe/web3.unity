@@ -38,7 +38,6 @@ namespace ChainSafe.Gaming.WalletConnect
         {
             get
             {
-#if !UNITY_2022_1_OR_NEWER
 
                 if (connectionBuilder != null)
                 {
@@ -63,9 +62,6 @@ namespace ChainSafe.Gaming.WalletConnect
                 connectionBuilder = webSocketBuilderObj.GetComponent<NativeWebSocketConnectionBuilder>();
 
                 return connectionBuilder;
-#else
-                return null;
-#endif
             }
         }
     }

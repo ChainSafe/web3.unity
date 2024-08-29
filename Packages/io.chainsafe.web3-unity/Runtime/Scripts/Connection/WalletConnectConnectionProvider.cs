@@ -16,7 +16,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         
         private bool _storedSessionAvailable;
         
-        public override bool IsAvailable => Application.isEditor || Application.platform != RuntimePlatform.WebGLPlayer;
+        public override bool IsAvailable => true;
      
         public override Task Initialize()
         {
