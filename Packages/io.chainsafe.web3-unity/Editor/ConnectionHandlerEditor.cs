@@ -17,7 +17,7 @@ public class ConnectionHandlerEditor : Editor
     
     private Dictionary<Type, bool> _editorFoldouts = new Dictionary<Type, bool>();
 
-    private ConnectionProvider[] _allProviders = Array.Empty<ConnectionProvider>();
+    private List<ConnectionProvider> _allProviders = new List<ConnectionProvider>();
 
     private readonly List<ConnectionProvider> _availableProviders = new List<ConnectionProvider>();
     
@@ -43,7 +43,7 @@ public class ConnectionHandlerEditor : Editor
         
         _editorFoldouts = _providerTypes.ToDictionary(t => t, t => false);
         
-        _allProviders = Resources.LoadAll<ConnectionProvider>(string.Empty);
+        _allProviders = Resources.LoadAll<ConnectionProvider>(string.Empty).ToList();
     }
 
     public override void OnInspectorGUI()
@@ -59,6 +59,8 @@ public class ConnectionHandlerEditor : Editor
             // Get provider display name.
             var providersProperty = serializedObject.FindProperty("providers");
 
+            _allProviders = _allProviders.Where(p => p != null).ToList();
+            
             // Get available providers.
             _availableProviders.Clear();
                 
@@ -166,7 +168,7 @@ public class ConnectionHandlerEditor : Editor
                         AssetDatabase.CreateAsset(newProvider, Path.Combine("Assets", nameof(Resources), $"{providerType.Name}.asset"));
                         
                         //Update the list of providers.
-                        _allProviders = Resources.LoadAll<ConnectionProvider>(string.Empty);
+                        _allProviders.Add(newProvider);
                         
                         providersProperty.InsertArrayElementAtIndex(providersProperty.arraySize);
                         
