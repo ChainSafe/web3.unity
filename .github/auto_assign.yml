@@ -6,7 +6,7 @@ addAssignees: author
 
 # A list of reviewers to be added to pull requests (GitHub username)
 reviewers:
-  - oleksandrchainsafe
+  - creeppak
   - rob1997
   - sneakzttv
   - juans-chainsafe
