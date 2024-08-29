@@ -17,6 +17,10 @@ public class ConnectionHandlerEditor : Editor
     
     private Dictionary<Type, bool> _editorFoldouts = new Dictionary<Type, bool>();
 
+    private ConnectionProvider[] _allProviders = Array.Empty<ConnectionProvider>();
+
+    private readonly List<ConnectionProvider> _availableProviders = new List<ConnectionProvider>();
+    
     public struct Provider
     {
         [JsonProperty("name")]
@@ -38,6 +42,8 @@ public class ConnectionHandlerEditor : Editor
         _editors = _providerTypes.ToDictionary(t => t, t => default(Editor));
         
         _editorFoldouts = _providerTypes.ToDictionary(t => t, t => false);
+        
+        _allProviders = Resources.LoadAll<ConnectionProvider>(string.Empty);
     }
 
     public override void OnInspectorGUI()
@@ -53,10 +59,8 @@ public class ConnectionHandlerEditor : Editor
             // Get provider display name.
             var providersProperty = serializedObject.FindProperty("providers");
 
-            ConnectionProvider[] allProviders = Resources.LoadAll<ConnectionProvider>(string.Empty);
-            
             // Get available providers.
-            List<ConnectionProvider> availableProviders = new List<ConnectionProvider>();
+            _availableProviders.Clear();
                 
             int arraySize = providersProperty.arraySize;
                 
@@ -73,7 +77,7 @@ public class ConnectionHandlerEditor : Editor
                     return;
                 }
                 
-                availableProviders.Add(providerProperty.objectReferenceValue as ConnectionProvider);
+                _availableProviders.Add(providerProperty.objectReferenceValue as ConnectionProvider);
             }
             
             foreach (Type providerType in _providerTypes)
@@ -87,7 +91,7 @@ public class ConnectionHandlerEditor : Editor
                     providerDisplayName = providerDisplayName.Replace(nameof(ConnectionProvider), string.Empty);
                 }
 
-                ConnectionProvider provider = allProviders.FirstOrDefault(p => p.GetType() == providerType);
+                ConnectionProvider provider = _allProviders.FirstOrDefault(p => p.GetType() == providerType);
                 
                 if (provider != null)
                 {
@@ -97,7 +101,7 @@ public class ConnectionHandlerEditor : Editor
 
                     EditorGUI.indentLevel--;
                     
-                    bool isAvailable = availableProviders.Contains(provider);
+                    bool isAvailable = _availableProviders.Contains(provider);
 
                     EditorGUILayout.BeginHorizontal();
                     
@@ -116,7 +120,7 @@ public class ConnectionHandlerEditor : Editor
 
                         else
                         {
-                            int index = availableProviders.IndexOf(provider);
+                            int index = _availableProviders.IndexOf(provider);
                             
                             providersProperty.DeleteArrayElementAtIndex(index);
                         }
@@ -160,6 +164,9 @@ public class ConnectionHandlerEditor : Editor
                         ConnectionProvider newProvider = (ConnectionProvider) CreateInstance(providerType);
                         
                         AssetDatabase.CreateAsset(newProvider, Path.Combine("Assets", nameof(Resources), $"{providerType.Name}.asset"));
+                        
+                        //Update the list of providers.
+                        _allProviders = Resources.LoadAll<ConnectionProvider>(string.Empty);
                         
                         providersProperty.InsertArrayElementAtIndex(providersProperty.arraySize);
                         

@@ -16,7 +16,7 @@ namespace ChainSafe.Gaming
     public abstract class RestorableConnectionProvider : ConnectionProvider
     {
         [field: SerializeField, Tooltip("Should this connection provider remember a previous session.")]
-        public bool RememberSession { get; private set; }
+        public bool RememberSession { get; private set; } = true;
         
         public override Web3Builder ConfigureServices(Web3Builder web3Builder)
         {

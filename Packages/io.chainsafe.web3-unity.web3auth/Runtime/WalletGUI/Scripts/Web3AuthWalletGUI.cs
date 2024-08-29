@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ChainSafe.Gaming;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.GamingSdk.Web3Auth;
 using TMPro;
@@ -150,17 +151,21 @@ public class Web3AuthWalletGUI : MonoBehaviour
     [Serializable]
     public class Web3AuthWalletConfig
     {
-        public bool DisplayWalletIcon;
-        public bool AutoPopUpWalletOnTx;
+        public bool DisplayWalletIcon = true;
+        public bool AutoPopUpWalletOnTx = true;
         public bool AutoConfirmTransactions;
+        [DefaultAssetValue("Packages/io.chainsafe.web3-unity.web3auth/Runtime/Sprites/OpenWalletIcon.png")]
         public Sprite WalletIcon;
+        [DefaultAssetValue("Packages/io.chainsafe.web3-unity.web3auth/Runtime/Sprites/Logo.png")]
         public Sprite WalletLogo;
+        [DefaultAssetValue("Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset")]
         public TMP_FontAsset DisplayFont;
-        public Color PrimaryBackgroundColour;
-        public Color MenuBackgroundColour;
-        public Color PrimaryTextColour;
-        public Color SecondaryTextColour;
-        public Color BorderButtonColour;
+        
+        public Color PrimaryBackgroundColour = new Color(0f, 0f, 0f, .725f);
+        public Color MenuBackgroundColour = Color.black;
+        public Color PrimaryTextColour = Color.white;
+        public Color SecondaryTextColour = new Color(.4f, .85f, .3f);
+        public Color BorderButtonColour = Color.white;
     }
 
     #endregion

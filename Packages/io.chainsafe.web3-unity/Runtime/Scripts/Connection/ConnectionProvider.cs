@@ -20,7 +20,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         /// <summary>
         /// Button to connect to the wallet.
         /// </summary>
-        [field: SerializeField] public Button ConnectButtonRow { get; private set; }
+        public abstract Button ConnectButtonRow { get; protected set; }
         
         /// <summary>
         /// Initialize Connection provider.
