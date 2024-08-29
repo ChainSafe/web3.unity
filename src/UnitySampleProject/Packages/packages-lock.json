@@ -10,7 +10,7 @@
       "hash": "c2f3628a028373afc8c66e443f7ce21bcb613a47"
     },
     "com.unity.collab-proxy": {
-      "version": "2.3.1",
+      "version": "2.4.4",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -103,9 +103,9 @@
       "depth": 0,
       "source": "registry",
       "dependencies": {
+        "com.unity.modules.audio": "1.0.0",
         "com.unity.modules.director": "1.0.0",
         "com.unity.modules.animation": "1.0.0",
-        "com.unity.modules.audio": "1.0.0",
         "com.unity.modules.particlesystem": "1.0.0"
       },
       "url": "https://packages.unity.com"
