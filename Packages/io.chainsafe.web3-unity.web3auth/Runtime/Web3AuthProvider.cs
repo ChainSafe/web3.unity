@@ -57,9 +57,14 @@ public class Web3AuthProvider : WalletProvider, IAccountProvider
 
         var providerTask = _config.ProviderTask;
         
-        if (!_config.AutoLogin && providerTask != null && !providerTask.IsCompleted)
+        if (!_config.AutoLogin && providerTask != null 
+            //On webGL providerTask is always completed, so we don't have to go through another login flow.
+                               #if UNITY_WEBGL && !UNITY_EDITOR
+                               && !providerTask.IsCompleted
+                                #endif
+            )
         {
-            var provider = await _config.ProviderTask;
+            var provider = await providerTask;
         
             _coreInstance.login(new LoginParams
             {
