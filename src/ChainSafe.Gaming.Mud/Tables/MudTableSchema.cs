@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace ChainSafe.Gaming.Mud.Tables
@@ -9,8 +10,11 @@ namespace ChainSafe.Gaming.Mud.Tables
     /// </summary>
     public class MudTableSchema
     {
-        private byte[]? resourceId;
-        private int[]? keyIndices;
+        [MaybeNull]
+        private byte[] resourceId;
+
+        [MaybeNull]
+        private int[] keyIndices;
 
         /// <summary>
         /// Gets or sets the namespace.

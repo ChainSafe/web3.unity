@@ -5,14 +5,14 @@ namespace ChainSafe.Gaming.Mud.Tables
     /// </summary>
     public class MudQuery // todo extend to support complex filters
     {
+        private MudQuery()
+        {
+        }
+
         /// <summary>
         /// A query that doesn't filter any records.
         /// </summary>
         public static MudQuery All { get; } = new();
-
-        private MudQuery()
-        {
-        }
 
         /// <summary>
         /// Should this Query simply look for a record using record key.
