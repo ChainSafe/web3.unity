@@ -13,6 +13,7 @@ using ChainSafe.GamingSdk.Web3Auth;
 using Microsoft.Extensions.DependencyInjection;
 using Nethereum.Hex.HexTypes;
 using UnityEngine;
+using UnityEngine.UI;
 using Network = Web3Auth.Network;
 
 /// <summary>
@@ -21,18 +22,25 @@ using Network = Web3Auth.Network;
 [CreateAssetMenu(menuName = "ChainSafe/Connection Provider/Web3Auth", fileName = nameof(Web3AuthConnectionProvider))]
 public class Web3AuthConnectionProvider : RestorableConnectionProvider, ILogoutHandler, IWeb3InitializedHandler
 {
+    [field: SerializeField, DefaultAssetValue("Packages/io.chainsafe.web3-unity.web3auth/Runtime/Prefabs/Web3AuthRow.prefab")]
+    public override Button ConnectButtonRow { get; protected set; }
+    
     [SerializeField] private string clientId;
     [SerializeField] private string redirectUri;
     [SerializeField] private Network network;
     
     [Space]
     
-    [SerializeField] private GameObject modalPrefab;
+    [SerializeField, DefaultAssetValue("Packages/io.chainsafe.web3-unity.web3auth/Runtime/Prefabs/Web3Auth.prefab")]
+    private GameObject modalPrefab;
     
     [Space]
     
     [SerializeField] private bool enableWalletGui;
-    [SerializeField] private Web3AuthWalletGUI web3AuthWalletGUIPrefab;
+    
+    [SerializeField, DefaultAssetValue("Packages/io.chainsafe.web3-unity.web3auth/Runtime/WalletGUI/Prefabs/Web3AuthWalletGUI.prefab")]
+    private Web3AuthWalletGUI web3AuthWalletGUIPrefab;
+    
     [SerializeField] private Web3AuthWalletGUI.Web3AuthWalletConfig walletGuiConfig;
     
     private Web3AuthModal _modal;

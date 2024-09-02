@@ -5,6 +5,7 @@ using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ChainSafe.Gaming.HyperPlay
 {
@@ -14,6 +15,9 @@ namespace ChainSafe.Gaming.HyperPlay
     [CreateAssetMenu(menuName = "ChainSafe/Connection Provider/HyperPlay", fileName = nameof(HyperPlayConnectionProvider))]
     public class HyperPlayConnectionProvider : RestorableConnectionProvider
     {
+        [field: SerializeField, DefaultAssetValue("Packages/io.chainsafe.web3-unity.hyperplay/Runtime/Prefabs/HyperPlayRow.prefab")]
+        public override Button ConnectButtonRow { get; protected set; }
+        
         public override bool IsAvailable => Application.isEditor || !Application.isMobilePlatform;
 
         private bool _storedSessionAvailable;

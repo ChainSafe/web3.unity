@@ -18,14 +18,9 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         public abstract bool IsAvailable { get; }
         
         /// <summary>
-        /// Name of connection provider.
-        /// </summary>
-        [field: SerializeField] public string Name { get; private set; }
-        
-        /// <summary>
         /// Button to connect to the wallet.
         /// </summary>
-        [field: SerializeField] public Button ConnectButtonRow { get; private set; }
+        public abstract Button ConnectButtonRow { get; protected set; }
         
         /// <summary>
         /// Initialize Connection provider.

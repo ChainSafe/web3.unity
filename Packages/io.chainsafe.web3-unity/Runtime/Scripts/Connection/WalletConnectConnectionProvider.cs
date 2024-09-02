@@ -9,6 +9,7 @@ using UnityEngine;
 using WalletConnectSharp.Core;
 using WalletConnectSharp.Network.Interfaces;
 using WConnectionHandler = ChainSafe.Gaming.WalletConnect.Connection.IConnectionHandler;
+using UnityEngine.UI;
 
 namespace ChainSafe.Gaming.UnityPackage.Connection
 {
@@ -41,6 +42,9 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         [field: SerializeField] public WalletConnectLogLevel LogLevel { get; private set; } = WalletConnectLogLevel.ErrorOnly;
         
         [field: SerializeField] public WalletLocationOption WalletLocationOption { get; private set; }
+
+        [field: SerializeField, DefaultAssetValue("Packages/io.chainsafe.web3-unity/Runtime/Prefabs/WalletConnectRow.prefab")]
+        public override Button ConnectButtonRow { get; protected set; }
         
         private bool _storedSessionAvailable;
         

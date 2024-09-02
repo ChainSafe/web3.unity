@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using ChainSafe.Gaming.UnityPackage.Connection;
 using Newtonsoft.Json;
 using UnityEditor;
@@ -8,6 +11,16 @@ using UnityEngine;
 [CustomEditor(typeof(ConnectionHandler))]
 public class ConnectionHandlerEditor : Editor
 {
+    private readonly List<Type> _providerTypes = new List<Type>();
+    
+    private Dictionary<Type, Editor> _editors = new Dictionary<Type, Editor>();
+    
+    private Dictionary<Type, bool> _editorFoldouts = new Dictionary<Type, bool>();
+
+    private List<ConnectionProvider> _allProviders = new List<ConnectionProvider>();
+
+    private readonly List<ConnectionProvider> _availableProviders = new List<ConnectionProvider>();
+    
     public struct Provider
     {
         [JsonProperty("name")]
@@ -18,23 +31,41 @@ public class ConnectionHandlerEditor : Editor
     }
     
     private bool _foldout;
-    
+
+    private void OnEnable()
+    {
+        AppDomain.CurrentDomain.GetAssemblies().ToList().ForEach(assembly =>
+        {
+            _providerTypes.AddRange(assembly.GetTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(ConnectionProvider))));
+        });
+
+        _editors = _providerTypes.ToDictionary(t => t, t => default(Editor));
+        
+        _editorFoldouts = _providerTypes.ToDictionary(t => t, t => false);
+        
+        _allProviders = Resources.LoadAll<ConnectionProvider>(string.Empty).ToList();
+    }
+
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-
-        var providers = Resources.LoadAll<ConnectionProvider>(string.Empty);
 
         _foldout = EditorGUILayout.Foldout(_foldout, "Connection Providers");
         
         if (_foldout)
         {
-            List<ConnectionProvider> availableProviders = new List<ConnectionProvider>();
+            EditorGUILayout.BeginVertical();
             
+            // Get provider display name.
             var providersProperty = serializedObject.FindProperty("providers");
 
-            int arraySize = providersProperty.arraySize;
+            _allProviders = _allProviders.Where(p => p != null).ToList();
             
+            // Get available providers.
+            _availableProviders.Clear();
+                
+            int arraySize = providersProperty.arraySize;
+                
             for (int i = 0; i < arraySize; i++)
             {
                 var providerProperty = providersProperty.GetArrayElementAtIndex(i);
@@ -48,49 +79,109 @@ public class ConnectionHandlerEditor : Editor
                     return;
                 }
                 
-                availableProviders.Add(providerProperty.objectReferenceValue as ConnectionProvider);
+                _availableProviders.Add(providerProperty.objectReferenceValue as ConnectionProvider);
             }
             
-            foreach (var provider in providers)
+            foreach (Type providerType in _providerTypes)
             {
-                if (provider == null)
+                EditorGUILayout.BeginVertical(GUI.skin.box);
+
+                string providerDisplayName = providerType.Name;
+
+                if (providerDisplayName.Contains(nameof(ConnectionProvider)))
                 {
-                    Debug.LogWarning($"Error loading {provider.Name} Provider.");
+                    providerDisplayName = providerDisplayName.Replace(nameof(ConnectionProvider), string.Empty);
+                }
+
+                ConnectionProvider provider = _allProviders.FirstOrDefault(p => p.GetType() == providerType);
+                
+                if (provider != null)
+                {
+                    EditorGUI.indentLevel++;
+                
+                    _editorFoldouts[providerType] = EditorGUILayout.Foldout(_editorFoldouts[providerType], providerDisplayName);
+
+                    EditorGUI.indentLevel--;
                     
-                    continue;
+                    bool isAvailable = _availableProviders.Contains(provider);
+
+                    EditorGUILayout.BeginHorizontal();
+                    
+                    EditorGUI.BeginChangeCheck();
+                    
+                    isAvailable = EditorGUILayout.Toggle(isAvailable, GUILayout.MaxWidth(20));
+                    
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        if (isAvailable)
+                        {
+                            providersProperty.InsertArrayElementAtIndex(providersProperty.arraySize);
+                            
+                            providersProperty.GetArrayElementAtIndex(providersProperty.arraySize - 1).objectReferenceValue = provider;
+                        }
+
+                        else
+                        {
+                            int index = _availableProviders.IndexOf(provider);
+                            
+                            providersProperty.DeleteArrayElementAtIndex(index);
+                        }
+                        
+                        serializedObject.ApplyModifiedProperties();
+                    }
+                    
+                    EditorGUI.BeginDisabledGroup(true);
+
+                    EditorGUILayout.ObjectField(provider, typeof(ConnectionProvider), false);
+                    
+                    EditorGUI.EndDisabledGroup();
+                    
+                    EditorGUILayout.EndHorizontal();
+
+                    if (_editorFoldouts[providerType])
+                    {
+                        Editor editor = _editors[providerType];
+
+                        if (!editor)
+                        {
+                            CreateCachedEditor(provider, null, ref editor);
+                        
+                            _editors[providerType] = editor;
+                        }
+                    
+                        EditorGUILayout.BeginVertical(GUI.skin.box);
+                    
+                        editor.OnInspectorGUI();
+                    
+                        EditorGUILayout.EndVertical();
+                    }
+                }
+
+                else
+                {
+                    EditorGUILayout.LabelField(providerDisplayName);
+                    
+                    if (GUILayout.Button("Add Provider", GUILayout.MaxWidth(100)))
+                    {
+                        ConnectionProvider newProvider = (ConnectionProvider) CreateInstance(providerType);
+                        
+                        AssetDatabase.CreateAsset(newProvider, Path.Combine("Assets", nameof(Resources), $"{providerType.Name}.asset"));
+                        
+                        //Update the list of providers.
+                        _allProviders.Add(newProvider);
+                        
+                        providersProperty.InsertArrayElementAtIndex(providersProperty.arraySize);
+                        
+                        providersProperty.GetArrayElementAtIndex(providersProperty.arraySize - 1).objectReferenceValue = newProvider;
+                        
+                        serializedObject.ApplyModifiedProperties();
+                    }
                 }
                 
-                EditorGUI.BeginChangeCheck();
-
-                bool isAvailable = availableProviders.Contains(provider);
-                
-                isAvailable = GUILayout.Toggle(isAvailable, provider.Name);
-
-                if (EditorGUI.EndChangeCheck())
-                {
-                    if (isAvailable)
-                    {
-                        providersProperty.InsertArrayElementAtIndex(arraySize);
-
-                        providersProperty.GetArrayElementAtIndex(arraySize).objectReferenceValue = provider;
-                    }
-
-                    else
-                    {
-                        providersProperty.DeleteArrayElementAtIndex(availableProviders.IndexOf(provider));
-                    }
-
-                    serializedObject.ApplyModifiedProperties();
-                    
-                    return;
-                }
-                
-                EditorGUI.BeginDisabledGroup(true);
-                    
-                EditorGUILayout.ObjectField(provider, typeof(ConnectionProvider), false);
-                    
-                EditorGUI.EndDisabledGroup();
+                EditorGUILayout.EndVertical();
             }
+            
+            EditorGUILayout.EndVertical();
         }
     }
 }
