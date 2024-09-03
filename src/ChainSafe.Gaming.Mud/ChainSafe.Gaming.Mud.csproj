@@ -14,9 +14,6 @@
         <ProjectReference Include="..\ChainSafe.Gaming\ChainSafe.Gaming.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-    </ItemGroup>
-
     <ItemGroup Condition="'$(Unity)' != 'True'">
         <PackageReference Include="Nethereum.Mud" Version="4.21.2" />
         <PackageReference Include="Nethereum.Mud.Contracts" Version="4.21.2" />
