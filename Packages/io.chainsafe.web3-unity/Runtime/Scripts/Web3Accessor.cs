@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.UnityPackage.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -46,8 +47,9 @@ namespace ChainSafe.Gaming.UnityPackage
             {
                 Debug.LogError("Instance was not set.");
             }
-
+            LoadingOverlay.ShowLoadingOverlay("Logging out...");
             await Instance.web3.TerminateAsync(logout);
+            LoadingOverlay.HideLoadingOverlay();
             Instance.web3 = null;
         }
     }
