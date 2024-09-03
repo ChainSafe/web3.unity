@@ -10,8 +10,8 @@ using Nethereum.ABI.FunctionEncoding.Attributes;
 using Nethereum.Mud;
 using NUnit.Framework;
 
-namespace ChainSafe.Gaming.Tests
-{
+// namespace ChainSafe.Gaming.Tests
+// {
     // [TestFixture]
     // public class MudTests todo prepare environment on CI machine, start mud test chain, uncomment after
     // {
@@ -99,4 +99,4 @@ namespace ChainSafe.Gaming.Tests
     //         return world;
     //     }
     // }
-}
+// }
