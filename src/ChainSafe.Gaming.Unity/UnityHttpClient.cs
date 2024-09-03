@@ -38,13 +38,13 @@ namespace ChainSafe.Gaming.Web3.Core.Unity
 
                 if (request.result == UnityWebRequest.Result.ConnectionError)
                 {
-                    throw new Web3Exception($"HTTP.{request.method} to {request.url} - connection error.");
+                    throw new Web3Exception($"HTTP.{request.method} to '{request.url}' - connection error.");
                 }
 
                 if (request.result != UnityWebRequest.Result.Success)
                 {
                     throw new Web3Exception(
-                        $"HTTP.{request.method} to {request.url} responded with error: {request.downloadHandler.text}");
+                        $"HTTP.{request.method} to '{request.url}' responded with error: {request.downloadHandler.text}");
                 }
             }
 
