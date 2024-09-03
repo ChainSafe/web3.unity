@@ -33,6 +33,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         
         [field: SerializeField] public string OverrideRegistryUri { get; private set; }
         
+        [DefaultAssetValue("Packages/io.chainsafe.web3-unity/Runtime/Prefabs/Wallet Connect/WalletConnect Dialog.prefab")]
         [SerializeField] private ConnectionHandlerBehaviour handlerPrefab;
         
         [SerializeField] private List<string> enabledWallets;
@@ -40,8 +41,9 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         [SerializeField] private List<string> disabledWallets;
         
         [field: SerializeField] public WalletConnectLogLevel LogLevel { get; private set; } = WalletConnectLogLevel.ErrorOnly;
-        
-        [field: SerializeField] public WalletLocationOption WalletLocationOption { get; private set; }
+
+        [field: SerializeField]
+        public WalletLocationOption WalletLocationOption { get; private set; } = WalletLocationOption.LocalAndRemote;
 
         [field: SerializeField, DefaultAssetValue("Packages/io.chainsafe.web3-unity/Runtime/Prefabs/WalletConnectRow.prefab")]
         public override Button ConnectButtonRow { get; protected set; }
@@ -56,7 +58,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         public IList<string> EnabledWallets => enabledWallets;
         public IList<string> DisabledWallets => disabledWallets;
         
-        public bool RememberMe { get; set; }
+        public bool RememberConnection { get; set; }
         
         public IConnectionHandlerProvider ConnectionHandlerProvider => this;
         

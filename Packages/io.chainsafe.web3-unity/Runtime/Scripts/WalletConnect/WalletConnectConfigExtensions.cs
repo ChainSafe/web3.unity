@@ -6,14 +6,14 @@ namespace ChainSafe.Gaming.WalletConnect
     public static class WalletConnectConfigExtensions
     {
         /// <summary>
-        /// Sets <see cref="WalletConnectConnectionProvider.RememberMe"/> property of this config object.
+        /// Sets <see cref="WalletConnectConnectionProvider.RememberConnection"/> property of this config object.
         /// </summary>
         /// <param name="config">The config object.</param>
         /// <param name="rememberSession">New value for RememberSession property.</param>
         /// <returns>Updated <see cref="WalletConnectConnectionProvider"/> object.</returns>
         public static WalletConnectConnectionProvider WithRememberMe(this WalletConnectConnectionProvider config, bool rememberSession)
         {
-            config.RememberMe = rememberSession;
+            config.RememberConnection = rememberSession;
             return config;
         }
 
