@@ -74,7 +74,7 @@ public class ChainSafeServerSettings : EditorWindow
     private void Awake()
     {
         // Get saved settings or revert to default
-        var projectConfig = ProjectConfigUtilities.Load();
+        var projectConfig = ProjectConfigUtilities.CreateOrLoad();
         projectID = string.IsNullOrEmpty(projectConfig?.ProjectId) ? ProjectIdPrompt : projectConfig.ProjectId;
         chainID = string.IsNullOrEmpty(projectConfig?.ChainId) ? ChainIdDefault : projectConfig.ChainId;
         chain = string.IsNullOrEmpty(projectConfig?.Chain) ? ChainDefault : projectConfig.Chain;

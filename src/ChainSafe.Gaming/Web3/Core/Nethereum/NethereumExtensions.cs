@@ -19,10 +19,5 @@ namespace ChainSafe.Gaming.Web3.Core.Nethereum
 
             return services;
         }
-
-        public static bool IsNethereumAdaptersBound(this IWeb3ServiceCollection services)
-        {
-            return services.IsBound<INethereumWeb3Adapter>();
-        }
     }
 }
