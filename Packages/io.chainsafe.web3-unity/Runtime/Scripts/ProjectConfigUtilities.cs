@@ -8,31 +8,6 @@ namespace ChainSafe.Gaming.UnityPackage
 {
     public static class ProjectConfigUtilities
     {
-        private class LocalhostChainConfig : IChainConfig
-        {
-            public LocalhostChainConfig(string chainId, string symbol, string chain, string network, string port)
-            {
-                var localhostEndPoint = $"127.0.0.1:{port}";
-
-                ChainId = chainId;
-                Symbol = symbol;
-                Chain = chain;
-                Network = network;
-                Rpc = $"http://{localhostEndPoint}";
-                Ws = $"$ws://{localhostEndPoint}";
-                BlockExplorerUrl = $"http://{localhostEndPoint}";
-            }
-
-            public string ChainId { get; }
-            public string Symbol { get; }
-            public string Chain { get; }
-            public string Network { get; }
-            public string Rpc { get; }
-            public string Ipc => null;
-            public string Ws { get; }
-            public string BlockExplorerUrl { get; }
-        }
-
         private const string AssetName = "ProjectConfigData";
 
         public static ProjectConfigScriptableObject Load()
@@ -93,5 +68,29 @@ namespace ChainSafe.Gaming.UnityPackage
             UnityEditor.AssetDatabase.SaveAssets();
         }
 #endif
+        private class LocalhostChainConfig : IChainConfig
+        {
+            public LocalhostChainConfig(string chainId, string symbol, string chain, string network, string port)
+            {
+                var localhostEndPoint = $"127.0.0.1:{port}";
+                
+                ChainId = chainId;
+                Symbol = symbol;
+                Chain = chain;
+                Network = network;
+                Rpc = $"http://{localhostEndPoint}";
+                Ws = $"ws://{localhostEndPoint}";
+                BlockExplorerUrl = $"http://{localhostEndPoint}";
+            }
+
+            public string ChainId { get; }
+            public string Symbol { get; }
+            public string Chain { get; }
+            public string Network { get; }
+            public string Rpc { get; }
+            public string Ipc => null;
+            public string Ws { get; }
+            public string BlockExplorerUrl { get; }
+        }
     }
 }
