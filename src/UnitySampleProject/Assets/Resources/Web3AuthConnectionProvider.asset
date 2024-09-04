@@ -12,10 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b435f36106e244449abb70cf6f41008, type: 3}
   m_Name: Web3AuthConnectionProvider
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Web3Auth
-  <ConnectButtonRow>k__BackingField: {fileID: 8599114313589093787, guid: 163bbaaeb51883442a20ea7532888a43, type: 3}
   <RememberSession>k__BackingField: 1
-  clientId: BDoIQpmwh4ow7oDMshLsPTj0JHGnS-0ZsB14fMzZ6CnxB0kMJf4o3oWvFWiISuL_p7PzyGx4v7iGHDQQF4lNL-s
+  <ConnectButtonRow>k__BackingField: {fileID: 8599114313589093787, guid: 163bbaaeb51883442a20ea7532888a43, type: 3}
+  clientId: BIYV6RYoZYbQ8VulPi65LoJMXQisHcTKQ296pOstx4LmzOp9HN3LR1tfAeaM3DMuN6c3AHEvvcMFLEE6lnuefAQ
   redirectUri: torusapp://io.chainsafe.gamingsdk.sdkdemoscene/auth
   network: 1
   modalPrefab: {fileID: 1060439634540712661, guid: 42c53f26848d1d54a9ffe18fae333758, type: 3}
