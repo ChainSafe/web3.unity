@@ -115,7 +115,11 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     /// </summary>
     private void CopyWalletAddress()
     {
-        Web3AuthWalletGUIClipboardManager.CopyText(walletAddressText.text);
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        ClipboardManager.CopyText(walletAddressText.text);
+#else
+        GUIUtility.systemCopyBuffer = walletAddressText.text;
+#endif
     }
 
     /// <summary>
@@ -205,7 +209,11 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     /// </summary>
     private void CopyPrivateKey()
     {
-        Web3AuthWalletGUIClipboardManager.CopyText(privateKeyText.text);
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        ClipboardManager.CopyToClipboard(privateKeyText.text);
+        #else
+        GUIUtility.systemCopyBuffer = privateKeyText.text;
+#endif
     }
 
     /// <summary>
