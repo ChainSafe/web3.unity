@@ -38,19 +38,18 @@ namespace ChainSafe.Gaming
         private void Update()
         {
 #if ENABLE_INPUT_SYSTEM
-        // Code for the new Input System
-        if (Keyboard.current.leftCtrlKey.isPressed && Keyboard.current.vKey.wasPressedThisFrame)
-        {
+            if ((Keyboard.current.leftCtrlKey.isPressed || Keyboard.current.leftCommandKey.isPressed) && Keyboard.current.vKey.wasPressedThisFrame)
+            {
                 _clipboardHandler?.Paste();
-        }
+            }
 #else
-            // Code for the old Input System
-            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.V))
+            if ((Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.LeftCommand)) && Input.GetKeyDown(KeyCode.V))
             {
                 _clipboardHandler?.Paste();
             }
 #endif
         }
+
 
         [MonoPInvokeCallback(typeof(Action))]
         public static void OnPaste(string text)
