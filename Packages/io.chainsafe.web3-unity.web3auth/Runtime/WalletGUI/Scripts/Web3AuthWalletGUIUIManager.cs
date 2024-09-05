@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using ChainSafe.Gaming.InProcessSigner;
+using ChainSafe.Gaming;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.GamingSdk.Web3Auth;
 using Nethereum.Web3.Accounts;
@@ -115,11 +116,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     /// </summary>
     private void CopyWalletAddress()
     {
-#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
         ClipboardManager.CopyText(walletAddressText.text);
-#else
-        GUIUtility.systemCopyBuffer = walletAddressText.text;
-#endif
     }
 
     /// <summary>
@@ -209,11 +206,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     /// </summary>
     private void CopyPrivateKey()
     {
-#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
-        ClipboardManager.CopyToClipboard(privateKeyText.text);
-        #else
-        GUIUtility.systemCopyBuffer = privateKeyText.text;
-#endif
+        ClipboardManager.CopyText(walletAddressText.text);
     }
 
     /// <summary>

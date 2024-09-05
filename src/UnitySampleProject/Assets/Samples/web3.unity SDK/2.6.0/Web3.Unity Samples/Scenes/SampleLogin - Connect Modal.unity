@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -362,7 +361,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d2237df0314604419146b916b88d158, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneToLoad: SampleMain
+  sceneToLoad: MarketplaceSampleScene
 --- !u!224 &199374705475579680
 RectTransform:
   m_ObjectHideFlags: 0
