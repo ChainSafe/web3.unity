@@ -2,15 +2,13 @@ var ClipboardManager = {
     $ClipboardManager: {},
 
     SetPasteCallback: function (callback) {
-        console.log("SetPasteCallback");
         ClipboardManager.callback = callback; // Use ClipboardManager instead of this.ClipboardManager
     },
 
     PasteFromClipboard: function () {
         navigator.clipboard.readText().then(
             clipText => {
-                console.log("PasteFromClipboard: " + clipText);
-                Module.dynCall_vi(ClipboardManager.callback, stringToNewUTF8(clipText)); // Use ClipboardManager.callback
+                Module.dynCall_vi(ClipboardManager.callback, stringToNewUTF8(clipText));
             }
         ).catch(err => {
             console.error('Failed to read clipboard contents: ', err);
