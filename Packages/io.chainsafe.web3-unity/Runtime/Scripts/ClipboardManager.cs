@@ -10,7 +10,6 @@ namespace ChainSafe.Gaming
 {
     public class ClipboardManager : MonoBehaviour
     {
-        
         private static IClipboardHandler _clipboardHandler;
 
 #if (UNITY_WEBGL || UNITY_IOS) && !UNITY_EDITOR
@@ -36,12 +35,21 @@ namespace ChainSafe.Gaming
 #endif
         }
 
-        void Update()
+        private void Update()
         {
+#if ENABLE_INPUT_SYSTEM
+        // Code for the new Input System
+        if (Keyboard.current.leftCtrlKey.isPressed && Keyboard.current.vKey.wasPressedThisFrame)
+        {
+                _clipboardHandler?.Paste();
+        }
+#else
+            // Code for the old Input System
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.V))
             {
                 _clipboardHandler?.Paste();
             }
+#endif
         }
 
         [MonoPInvokeCallback(typeof(Action))]
@@ -50,7 +58,7 @@ namespace ChainSafe.Gaming
             var currentGo = EventSystem.current?.currentSelectedGameObject;
             if (currentGo != null &&
                 currentGo.TryGetComponent(out TMP_InputField inputField))
-                inputField.text = text; 
+                inputField.text = text;
         }
 
         public static void CopyText(string text)
@@ -58,7 +66,7 @@ namespace ChainSafe.Gaming
 #if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
             _clipboardHandler?.CopyTextToClipboard(text);
 #else
-            GUIUtility.systemCopyBuffer = text; 
+            GUIUtility.systemCopyBuffer = text;
 #endif
         }
     }
