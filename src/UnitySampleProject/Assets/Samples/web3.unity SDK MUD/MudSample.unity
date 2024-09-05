@@ -883,9 +883,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0784d678e93c29d44b5621a24b931617, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WorldContractAddress: 0x8d8b6b8414e1e3dcfd4168561b9be6bd3bf6ec4b
-  WorldContractAbi: {fileID: 4900000, guid: 95864876aa70fc9418d44d22c274ff16, type: 3}
-  CounterLabel: {fileID: 1231023402}
+  mudConfig: {fileID: 11400000, guid: 46875b4ce5fed5742b226cb3bac356b7, type: 2}
+  worldContractAddress: 0x8d8b6b8414e1e3dcfd4168561b9be6bd3bf6ec4b
+  worldContractAbi: {fileID: 4900000, guid: 95864876aa70fc9418d44d22c274ff16, type: 3}
+  counterLabel: {fileID: 1231023402}
 --- !u!4 &1709610250
 Transform:
   m_ObjectHideFlags: 0

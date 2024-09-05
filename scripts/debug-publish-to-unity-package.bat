@@ -10,6 +10,11 @@ pushd "%SCRIPT_DIR%\..\src\ChainSafe.Gaming.Unity"
 rem Publish the project
 dotnet publish ChainSafe.Gaming.Unity.csproj -c Debug /property:Unity=true
 
+IF %ERRORLEVEL% NEQ 0 (
+    echo Execution failed
+    exit /b %ERRORLEVEL%
+)
+
 set PUBLISH_PATH=bin\Debug\netstandard2.1\publish
 
 rem List generated DLLs
