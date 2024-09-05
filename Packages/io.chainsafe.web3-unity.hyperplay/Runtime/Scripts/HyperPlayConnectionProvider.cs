@@ -13,10 +13,16 @@ namespace ChainSafe.Gaming.HyperPlay
     /// Connection provider for connecting via HyperPlay Launcher.
     /// </summary>
     [CreateAssetMenu(menuName = "ChainSafe/Connection Provider/HyperPlay", fileName = nameof(HyperPlayConnectionProvider))]
-    public class HyperPlayConnectionProvider : RestorableConnectionProvider
+    public class HyperPlayConnectionProvider : RestorableConnectionProvider, IHyperPlayConfig
     {
+        public string SignMessageRpcMethodName => "personal_sign";
+
+        public string SignTypedMessageRpcMethodName => "eth_signTypedData_v3";
+        
         [field: SerializeField, DefaultAssetValue("Packages/io.chainsafe.web3-unity.hyperplay/Runtime/Prefabs/HyperPlayRow.prefab")]
         public override Button ConnectButtonRow { get; protected set; }
+
+        public bool RememberConnection => RememberSession;
         
         public override bool IsAvailable => Application.isEditor || !Application.isMobilePlatform;
 
@@ -29,14 +35,10 @@ namespace ChainSafe.Gaming.HyperPlay
         
         protected override void ConfigureServices(IWeb3ServiceCollection services)
         {
-            var config = new HyperPlayConfig
-            {
-                RememberSession = RememberSession,
-            };
 #if UNITY_WEBGL && !UNITY_EDITOR
-            services.UseHyperPlay<HyperPlayWebGLProvider>(config);
+            services.UseHyperPlay<HyperPlayWebGLProvider>(this);
 #else
-            services.UseHyperPlay(config);
+            services.UseHyperPlay(this);
 #endif
             services.UseWalletSigner().UseWalletTransactionExecutor();
         }

@@ -26,7 +26,7 @@ namespace ChainSafe.Gaming.WalletConnect
         [SerializeField] private ConnectionHandlerProviderSO connectionHandlerProvider;
         [field: SerializeField] public WalletLocationOption WalletLocationOption { get; set; }
 
-        public bool RememberSession { get; set; }
+        public bool RememberConnection { get; set; }
         public bool ForceNewSession { get; set; }
         public IList<string> EnabledWallets => enabledWallets;
         public IList<string> DisabledWallets => disabledWallets;
