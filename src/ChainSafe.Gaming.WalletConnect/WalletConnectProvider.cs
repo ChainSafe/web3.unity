@@ -432,16 +432,6 @@ namespace ChainSafe.Gaming.WalletConnect
                 }
             }
 
-            var methodRegistered = session.Namespaces.Any(n => n.Value.Methods.Contains(method));
-
-            if (!methodRegistered)
-            {
-                throw new WalletConnectException(
-                    $"RPC method {method} is not supported. " +
-                    $"If you add a new method you have to update {nameof(WalletConnectProvider)} code to reflect those changes. " +
-                    "Contact ChainSafe if you think a specific method should be included in the SDK.");
-            }
-
             var sessionTopic = session.Topic;
 
             EventUtils.ListenOnce<PublishParams>(
