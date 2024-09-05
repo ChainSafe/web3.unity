@@ -126,8 +126,8 @@ public class ChainSafeServerSettings : EditorWindow
         }
         else
         {
-            // Handle the case where the selected chain is not found
-            Debug.LogError("Selected chain not found in the chainList.");
+            Debug.LogError("Couldn't find the chain, switching to default chain");
+            selectedChainIndex = Array.FindIndex(chainList.ToArray(), x => x.name == "Sepolia");
         }
     }
 

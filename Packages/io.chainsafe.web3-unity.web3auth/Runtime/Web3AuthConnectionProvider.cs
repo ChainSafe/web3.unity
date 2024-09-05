@@ -235,7 +235,6 @@ public class Web3AuthConnectionProvider : RestorableConnectionProvider, ILogoutH
     {
         if (enableWalletGui)
         {
-            // TODO pass web3 instance here instead of using web3accessor
             _web3AuthWalletGui = Instantiate(web3AuthWalletGUIPrefab);
             _web3AuthWalletGui.Initialize(walletGuiConfig);
         }
