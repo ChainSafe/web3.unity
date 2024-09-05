@@ -44,13 +44,10 @@ public class SampleTestsBase
 
     internal static ValueTask<Web3> BuildTestWeb3(Web3Builder.ConfigureServicesDelegate customConfiguration = null)
     {
-        // Set project config, fallback is for github as it doesn't load
-        var projectConfigScriptableObject = ProjectConfigUtilities.Load();
-        if (projectConfigScriptableObject == null)
-        {
-            projectConfigScriptableObject = ProjectConfigUtilities.Create("3dc3e125-71c4-4511-a367-e981a6a94371", "11155111",
-                "Ethereum", "Sepolia", "Seth", "https://sepolia.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f", "https://sepolia.etherscan.io/", false, "wss://sepolia.drpc.org");
-        }
+        var projectConfigScriptableObject = ProjectConfigUtilities.Create("3dc3e125-71c4-4511-a367-e981a6a94371",
+            "11155111",
+            "Ethereum", "Sepolia", "Seth", "https://sepolia.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f",
+            "https://sepolia.etherscan.io/", false, "wss://sepolia.drpc.org");
 
         // Create web3builder & assign services
         var web3Builder = new Web3Builder(projectConfigScriptableObject).Configure(services =>
