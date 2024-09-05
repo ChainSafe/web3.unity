@@ -13,23 +13,18 @@ namespace ChainSafe.Gaming
         
         private static IClipboardHandler _clipboardHandler;
 
+#if (UNITY_WEBGL || UNITY_IOS) && !UNITY_EDITOR
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         public static void CreateGameObject()
         {
             var go = new GameObject("ClipboardManager", typeof(ClipboardManager));
             DontDestroyOnLoad(go);
         }
-
+#endif
         private void Awake()
         {
             InitializeClipboardHandler();
             _clipboardHandler?.SetTextPasteCallback(OnPaste);
-            Debug.Log("After clipboard called");
-        }
-
-        private void OnDisable()
-        {
-            Debug.Log("On disable called");
         }
 
         private void InitializeClipboardHandler()
