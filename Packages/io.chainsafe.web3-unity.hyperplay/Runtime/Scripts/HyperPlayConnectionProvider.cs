@@ -4,6 +4,8 @@ using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -37,6 +39,8 @@ namespace ChainSafe.Gaming.HyperPlay
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
             services.UseHyperPlay<HyperPlayWebGLProvider>(this);
+            
+            services.Replace(ServiceDescriptor.Singleton<ILocalStorage, WebDataStorage>());
 #else
             services.UseHyperPlay(this);
 #endif

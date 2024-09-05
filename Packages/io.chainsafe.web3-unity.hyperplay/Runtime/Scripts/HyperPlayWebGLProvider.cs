@@ -18,7 +18,6 @@ namespace ChainSafe.Gaming.HyperPlay
         private readonly IHyperPlayConfig _config;
         private readonly IHyperPlayData _data;
         private readonly ILocalStorage _localStorage;
-        private readonly IHttpClient _httpClient;
         private readonly IChainConfig _chainConfig;
         private readonly ChainRegistryProvider _chainRegistryProvider;
         private readonly EthereumWindowController _ethereumController;
@@ -26,7 +25,7 @@ namespace ChainSafe.Gaming.HyperPlay
         /// <summary>
         /// Initializes a new instance of the <see cref="HyperPlayWebGLProvider"/> class.
         /// </summary>
-        /// <param name="config">Injected <see cref="HyperPlayConfig"/>.</param>
+        /// <param name="config">Injected <see cref="IHyperPlayConfig"/>.</param>
         /// <param name="data">Injected <see cref="IHyperPlayData"/>.</param>
         /// <param name="localStorage">Injected <see cref="ILocalStorage"/>.</param>
         /// <param name="environment">Injected <see cref="Web3Environment"/>.</param>
@@ -37,7 +36,6 @@ namespace ChainSafe.Gaming.HyperPlay
             _config = config;
             _data = data;
             _localStorage = localStorage;
-            _httpClient = environment.HttpClient;
             _chainConfig = chainConfig;
             _chainRegistryProvider = chainRegistryProvider;
 
@@ -57,7 +55,7 @@ namespace ChainSafe.Gaming.HyperPlay
         /// <summary>
         /// Connect to wallet from a side-loaded browser game via HyperPlay desktop client and return the account address.
         /// </summary>
-        /// <returns>Signed-in account public address.</returns>
+        /// <returns>Signed in account public address.</returns>
         public override async Task<string> Connect()
         {
             string account = await _ethereumController.Connect(_chainConfig, _chainRegistryProvider);
