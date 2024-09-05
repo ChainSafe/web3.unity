@@ -30,7 +30,7 @@ namespace ChainSafe.Gaming.HyperPlay
         /// <summary>
         /// Initializes a new instance of the <see cref="HyperPlayProvider"/> class.
         /// </summary>
-        /// <param name="config">Injected <see cref="HyperPlayConfig"/>.</param>
+        /// <param name="config">Injected <see cref="IHyperPlayConfig"/>.</param>
         /// <param name="data">Injected <see cref="IHyperPlayData"/>.</param>
         /// <param name="localStorage">Injected <see cref="ILocalStorage"/>.</param>
         /// <param name="environment">Injected <see cref="environment"/>.</param>
@@ -49,7 +49,7 @@ namespace ChainSafe.Gaming.HyperPlay
         /// <summary>
         /// Connect to wallet via HyperPlay desktop client and return the account address.
         /// </summary>
-        /// <returns>Signed-in account public address.</returns>
+        /// <returns>Signed in account public address.</returns>
         public override async Task<string> Connect()
         {
             string[] accounts = await Request<string[]>("eth_accounts");
@@ -68,7 +68,7 @@ namespace ChainSafe.Gaming.HyperPlay
 
             hash.AssertSignatureValid(message, account);
 
-            if (config.RememberSession)
+            if (config.RememberConnection)
             {
                 data.RememberSession = true;
 

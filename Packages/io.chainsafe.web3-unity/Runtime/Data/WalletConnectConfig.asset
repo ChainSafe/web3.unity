@@ -33,6 +33,7 @@ MonoBehaviour:
     VerifyUrl: 
   <StoragePath>k__BackingField: wallet-connect/
   <OverrideRegistryUri>k__BackingField: 
+  <LogLevel>k__BackingField: 1
   enabledWallets: []
   disabledWallets: []
   connectionHandlerProvider: {fileID: 11400000, guid: cdc198015a446e54794e5921e5aa81ef, type: 2}

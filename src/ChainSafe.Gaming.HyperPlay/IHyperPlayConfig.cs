@@ -15,6 +15,6 @@ namespace ChainSafe.Gaming.HyperPlay
         /// <summary>
         /// Remember a connected session.
         /// </summary>
-        public bool RememberSession { get; set; }
+        public bool RememberConnection { get; }
     }
 }
