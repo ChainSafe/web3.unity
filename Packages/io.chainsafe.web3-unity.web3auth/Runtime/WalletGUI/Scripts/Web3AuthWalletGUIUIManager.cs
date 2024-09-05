@@ -206,7 +206,7 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     /// </summary>
     private void CopyPrivateKey()
     {
-        ClipboardManager.CopyText(walletAddressText.text);
+        ClipboardManager.CopyText(privateKeyText.text);
     }
 
     /// <summary>
