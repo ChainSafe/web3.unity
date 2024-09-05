@@ -361,7 +361,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d2237df0314604419146b916b88d158, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneToLoad: MarketplaceSampleScene
+  sceneToLoad: SampleMain
 --- !u!224 &199374705475579680
 RectTransform:
   m_ObjectHideFlags: 0
