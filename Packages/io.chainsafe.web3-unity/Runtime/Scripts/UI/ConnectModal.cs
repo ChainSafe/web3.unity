@@ -12,7 +12,6 @@ namespace ChainSafe.Gaming.UnityPackage.UI
     public class ConnectModal : MonoBehaviour
     {
         [SerializeField] private ErrorOverlay errorOverlay;
-        [SerializeField] private LoadingOverlay loadingOverlay;
         [SerializeField] private Button closeButton;
         // Closes modal when background is clicked
         [SerializeField] private Button closeFromBackgroundButton;
@@ -65,21 +64,26 @@ namespace ChainSafe.Gaming.UnityPackage.UI
         {
             try
             {
-                ShowLoading();
+                if(provider is WalletConnectConnectionProvider)
+                    ShowLoading("Connecting to the WalletConnect");
 
                 await (_connectionHandler as IConnectionHandler).Connect(provider);
+                
             }
             catch (Exception e)
             {
-                HideLoading();
-                
+
                 if (!(e is TaskCanceledException))
                 {
                     DisplayError(
                         "Connection failed, please try again.");
-                    
+
                     provider.HandleException(e);
                 }
+            }
+            finally
+            {
+                HideLoading();
             }
         }
 
@@ -100,9 +104,9 @@ namespace ChainSafe.Gaming.UnityPackage.UI
         /// <summary>
         /// Show Loading Overlay.
         /// </summary>
-        private void ShowLoading()
+        private void ShowLoading(string text = "")
         {
-            loadingOverlay.gameObject.SetActive(true);
+            LoadingOverlay.ShowLoadingOverlay(text);
         }
         
         /// <summary>
@@ -110,7 +114,7 @@ namespace ChainSafe.Gaming.UnityPackage.UI
         /// </summary>
         private void HideLoading()
         {
-            loadingOverlay.gameObject.SetActive(false);
+           LoadingOverlay.HideLoadingOverlay();
         }
 
         private void Close()
