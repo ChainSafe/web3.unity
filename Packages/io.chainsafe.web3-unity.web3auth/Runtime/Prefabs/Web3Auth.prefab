@@ -279,7 +279,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 30
   m_TargetDisplay: 0
 --- !u!114 &8895056018511876660
 MonoBehaviour:
@@ -463,6 +463,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7659d83bbcad93b4e9eae4bb0dfdeb48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loadingText: {fileID: 0}
   spinnerTransform: {fileID: 2637764744379664249}
   spinSpeed: 1
 --- !u!222 &1963591674054450660
