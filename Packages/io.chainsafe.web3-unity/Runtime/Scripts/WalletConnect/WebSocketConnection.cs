@@ -1,4 +1,4 @@
-#if !UNITY_2022_1_OR_NEWER
+
 using System;
 using System.IO;
 using System.Text;
@@ -277,4 +277,3 @@ namespace ChainSafe.Gaming.WalletConnect
         }
     }
 }
-#endif

@@ -64,7 +64,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         
         public bool ForceNewSession { get; set; }
         
-        public override bool IsAvailable => Application.isEditor || Application.platform != RuntimePlatform.WebGLPlayer;
+        public override bool IsAvailable => true;
      
         private IConnectionBuilder _connectionBuilder;
 
