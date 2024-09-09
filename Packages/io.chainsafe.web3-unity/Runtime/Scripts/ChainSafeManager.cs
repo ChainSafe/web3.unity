@@ -102,17 +102,31 @@ namespace ChainSafe.Gaming.UnityPackage
         
         public Task<string> SignMessage(string message)
         {
-            return Web3?.Signer.SignMessage(message);
+            AssetConnection();
+            
+            return Web3.Signer.SignMessage(message);
         }
 
         public Task<string> SignTypedData<TStructType>(SerializableDomain domain, TStructType message)
         {
-            return Web3?.Signer.SignTypedData(domain, message);
+            AssetConnection();
+            
+            return Web3.Signer.SignTypedData(domain, message);
         }
         
         public Task<TransactionResponse> SendTransaction(TransactionRequest transaction)
         {
-            return Web3?.TransactionExecutor.SendTransaction(transaction);
+            AssetConnection();
+            
+            return Web3.TransactionExecutor.SendTransaction(transaction);
+        }
+
+        private void AssetConnection()
+        {
+            if (!Connected)
+            {
+                throw new Web3Exception("Connected account not found.");
+            }
         }
         
         public async Task Disconnect(bool logout = false)
