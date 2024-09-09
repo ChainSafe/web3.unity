@@ -1,9 +1,9 @@
-using System;
-using System.Linq;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.UnityPackage.UI;
 using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Core.Evm;
 using UnityEngine;
 using CWeb3 = ChainSafe.Gaming.Web3.Web3;
 
@@ -31,8 +31,10 @@ namespace ChainSafe.Gaming.UnityPackage
 
         public static CWeb3 Web3 => Instance._web3;
         
+        public string Address => Web3?.Signer.PublicAddress;
+        
         public bool Connected { get; private set; }
-
+        
         [SerializeField] private bool connectOnInitialize = true;
         
         [DefaultAssetValue("Packages/io.chainsafe.web3-unity/Runtime/Prefabs/Connect.prefab")]
@@ -96,6 +98,21 @@ namespace ChainSafe.Gaming.UnityPackage
         public void ShowModal()
         {
             _connectModal.Show();
+        }
+        
+        public Task<string> SignMessage(string message)
+        {
+            return Web3?.Signer.SignMessage(message);
+        }
+
+        public Task<string> SignTypedData<TStructType>(SerializableDomain domain, TStructType message)
+        {
+            return Web3?.Signer.SignTypedData(domain, message);
+        }
+        
+        public Task<TransactionResponse> SendTransaction(TransactionRequest transaction)
+        {
+            return Web3?.TransactionExecutor.SendTransaction(transaction);
         }
         
         public async Task Disconnect(bool logout = false)
