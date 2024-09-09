@@ -45,7 +45,7 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void BalanceOf()
     {
-        var balance = await Web3Accessor.Web3.Erc20.GetBalanceOf(ChainSafeContracts.Erc20, accountBalanceOf);
+        var balance = await ChainSafeManager.Web3.Erc20.GetBalanceOf(ChainSafeContracts.Erc20, accountBalanceOf);
         SampleOutputUtil.PrintResult(balance.ToString(), "ERC-20", nameof(Erc20Service.GetBalanceOf));
     }
 
@@ -54,7 +54,7 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void NativeBalanceOf()
     {
-        var balance = await Web3Accessor.Web3.RpcProvider.GetBalance(accountBalanceOf);
+        var balance = await ChainSafeManager.Web3.RpcProvider.GetBalance(accountBalanceOf);
         SampleOutputUtil.PrintResult(balance.ToString(), "ERC-20", nameof(NativeBalanceOf));
     }
 
@@ -63,7 +63,7 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void Name()
     {
-        var name = await Web3Accessor.Web3.Erc20.GetName(ChainSafeContracts.Erc20);
+        var name = await ChainSafeManager.Web3.Erc20.GetName(ChainSafeContracts.Erc20);
         SampleOutputUtil.PrintResult(name, "ERC-20", nameof(Erc20Service.GetName));
     }
 
@@ -72,7 +72,7 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void Symbol()
     {
-        var symbol = await Web3Accessor.Web3.Erc20.GetSymbol(ChainSafeContracts.Erc20);
+        var symbol = await ChainSafeManager.Web3.Erc20.GetSymbol(ChainSafeContracts.Erc20);
         SampleOutputUtil.PrintResult(symbol, "ERC-20", nameof(Erc20Service.GetSymbol));
     }
 
@@ -81,7 +81,7 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void Decimals()
     {
-        var decimals = await Web3Accessor.Web3.Erc20.GetDecimals(ChainSafeContracts.Erc20);
+        var decimals = await ChainSafeManager.Web3.Erc20.GetDecimals(ChainSafeContracts.Erc20);
         SampleOutputUtil.PrintResult(decimals.ToString(), "ERC-20", nameof(Erc20Service.GetDecimals));
     }
 
@@ -90,7 +90,7 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void TotalSupply()
     {
-        var totalSupply = await Web3Accessor.Web3.Erc20.GetTotalSupply(ChainSafeContracts.Erc20);
+        var totalSupply = await ChainSafeManager.Web3.Erc20.GetTotalSupply(ChainSafeContracts.Erc20);
         SampleOutputUtil.PrintResult(totalSupply.ToString(), "ERC-20", nameof(Erc20Service.GetTotalSupply));
     }
 
@@ -99,7 +99,7 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void MintErc20()
     {
-        var mintResponse = await Web3Accessor.Web3.Erc20.Mint(ChainSafeContracts.Erc20, valueToSend * weiPerEther);
+        var mintResponse = await ChainSafeManager.Web3.Erc20.Mint(ChainSafeContracts.Erc20, valueToSend * weiPerEther);
         var output = SampleOutputUtil.BuildOutputValue(mintResponse);
         SampleOutputUtil.PrintResult(output, "ERC-20", nameof(Erc20Service.Mint));
     }
@@ -109,7 +109,7 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void TransferErc20()
     {
-        var mintResponse = await Web3Accessor.Web3.Erc20.Transfer(ChainSafeContracts.Erc20, toAccount, amountTransfer);
+        var mintResponse = await ChainSafeManager.Web3.Erc20.Transfer(ChainSafeContracts.Erc20, toAccount, amountTransfer);
         var output = SampleOutputUtil.BuildOutputValue(mintResponse);
         SampleOutputUtil.PrintResult(output, "ERC-20", nameof(Erc20Service.Transfer));
     }

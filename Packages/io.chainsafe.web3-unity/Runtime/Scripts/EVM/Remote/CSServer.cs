@@ -29,7 +29,7 @@ namespace Scripts.EVM.Remote
         /// <returns>Server response</returns>
         public static async Task<T> GetData<T>(string _path)
         {
-            using UnityWebRequest webRequest = UnityWebRequest.Get($"{host}{Web3Accessor.Web3.ProjectConfig.ProjectId}{_path}");
+            using UnityWebRequest webRequest = UnityWebRequest.Get($"{host}{ChainSafeManager.Web3.ProjectConfig.ProjectId}{_path}");
             await webRequest.SendWebRequest();
             if (webRequest.result != UnityWebRequest.Result.Success)
             {
@@ -48,7 +48,7 @@ namespace Scripts.EVM.Remote
         /// <returns>Server response</returns>
         public static async Task<T> GetDataWithToken<T>(string _path, string _bearerToken, int offset = 0, int pageSize = 100)
         {
-            string url = $"{host}{Web3Accessor.Web3.ProjectConfig.ProjectId}{_path}?offset={offset}&pageSize={pageSize}";
+            string url = $"{host}{ChainSafeManager.Web3.ProjectConfig.ProjectId}{_path}?offset={offset}&pageSize={pageSize}";
             using UnityWebRequest webRequest = UnityWebRequest.Get(url);
             webRequest.SetRequestHeader("Authorization", $"Bearer {_bearerToken}");
             webRequest.SetRequestHeader("Content-Type", "application/json");
@@ -71,7 +71,7 @@ namespace Scripts.EVM.Remote
         /// <returns>Server response</returns>
         public static async Task<string> DeleteData(string _bearerToken, string _path)
         {
-            using UnityWebRequest request = UnityWebRequest.Delete($"{host}{Web3Accessor.Web3.ProjectConfig.ProjectId}{_path}");
+            using UnityWebRequest request = UnityWebRequest.Delete($"{host}{ChainSafeManager.Web3.ProjectConfig.ProjectId}{_path}");
             request.SetRequestHeader("Authorization", $"Bearer {_bearerToken}");
             await request.SendWebRequest();
             if (request.result != UnityWebRequest.Result.Success)
@@ -92,7 +92,7 @@ namespace Scripts.EVM.Remote
         public static async Task<string> CreateData(string _bearerToken, string _path,
             List<IMultipartFormSection> _formData)
         {
-            var url = $"{host}{Web3Accessor.Web3.ProjectConfig.ProjectId}{_path}";
+            var url = $"{host}{ChainSafeManager.Web3.ProjectConfig.ProjectId}{_path}";
             if (_path == "/nft?hash=blake2b-208")
             {
                 url = "https://api.chainsafe.io/api/v1/nft?hash=blake2b-208";

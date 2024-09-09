@@ -21,21 +21,15 @@ namespace ChainSafe.Gaming.UnityPackage.UI
         [SerializeField] private RectTransform modalContainer;
         [SerializeField] private RectTransform providerContainer;
 
-        public ConnectionProvider[] Providers => _connectionHandler.Providers;
-        
-        private ConnectionHandler _connectionHandler;
-
         private void Start()
         {
             closeButton.onClick.AddListener(Close);
             closeFromBackgroundButton.onClick.AddListener(Close);
         }
 
-        public void Initialize(ConnectionHandler connectionHandler)
+        public void Initialize(ConnectionProvider[] providers)
         {
-            _connectionHandler = connectionHandler;
-            
-            foreach (var provider in Providers)
+            foreach (var provider in providers)
             {
                 if (provider != null && provider.IsAvailable)
                 {
@@ -64,11 +58,9 @@ namespace ChainSafe.Gaming.UnityPackage.UI
         {
             try
             {
-                if(provider is WalletConnectConnectionProvider)
-                    ShowLoading("Connecting to the WalletConnect");
+                ShowLoading();
 
-                await (_connectionHandler as IConnectionHandler).Connect(provider);
-                
+                await ChainSafeManager.Instance.Connect(provider);
             }
             catch (Exception e)
             {

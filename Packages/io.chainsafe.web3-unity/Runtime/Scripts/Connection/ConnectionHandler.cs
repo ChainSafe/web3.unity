@@ -12,12 +12,9 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
     /// </summary>
     public class ConnectionHandler : MonoBehaviour, IConnectionHandler, IWeb3BuilderServiceAdapter
     {
-        [SerializeField] private string gelatoApiKey = "";
-        [Space]
         // Handed in ConnectionHandlerEditor
         [HideInInspector, SerializeField] private ConnectionProvider[] providers;
         
-        public string GelatoApiKey => gelatoApiKey;
         public IWeb3BuilderServiceAdapter[] Web3BuilderServiceAdapters { get; private set; }
 
         public ConnectionProvider[] Providers => providers;
@@ -63,6 +60,13 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
                     services.AddSingleton(handler);
                 }
             });
+        }
+
+        public bool GetProvider<T>(out T provider) where T : ConnectionProvider
+        {
+            provider = Providers.FirstOrDefault(p => p.IsAvailable && p is T) as T;
+
+            return provider != null;
         }
     }
 }

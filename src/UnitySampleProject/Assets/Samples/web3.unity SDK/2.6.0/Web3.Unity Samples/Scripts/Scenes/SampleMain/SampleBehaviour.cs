@@ -16,7 +16,7 @@ namespace Samples.Behaviours
             SampleFeedback.Instance?.Activate();
 
             // Check if we're on default sample chain
-            if (Web3Accessor.Web3.ChainConfig.ChainId != DefaultChainId)
+            if (ChainSafeManager.Web3.ChainConfig.ChainId != DefaultChainId)
             {
                 // Log error not exception to not break flow
                 Debug.LogError($"Samples are configured for Chain Id {DefaultChainId}, Please Change Chain Id in Window > ChainSafe SDK > Server Settings to {DefaultChainId}");

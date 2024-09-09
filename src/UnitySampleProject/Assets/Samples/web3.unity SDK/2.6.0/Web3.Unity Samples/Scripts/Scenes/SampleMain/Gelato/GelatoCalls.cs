@@ -9,7 +9,7 @@ public class GelatoCalls : MonoBehaviour
     // Initializes the protocol class
     public void Awake()
     {
-        gelato = new GelatoSample(Web3Accessor.Web3);
+        gelato = new GelatoSample(ChainSafeManager.Web3);
     }
 
     /// <summary>

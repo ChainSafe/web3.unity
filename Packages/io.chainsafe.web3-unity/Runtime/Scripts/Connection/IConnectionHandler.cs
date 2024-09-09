@@ -20,11 +20,6 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
     public interface IConnectionHandler
     {
         /// <summary>
-        /// Gelato API key from Gelato's Web Dashboard.
-        /// </summary>
-        public string GelatoApiKey { get; }
-
-        /// <summary>
         /// All service providers used for configuring <see cref="Web3"/> instance services.
         /// </summary>
         public IWeb3BuilderServiceAdapter[] Web3BuilderServiceAdapters { get; }
@@ -61,7 +56,6 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
             // TODO: most of these can/should be service adapters
             services
                 .UseUnityEnvironment()
-                .UseGelato(GelatoApiKey)
                 .UseMultiCall()
                 .UseRpcProvider()
                 .UseMarketplace();

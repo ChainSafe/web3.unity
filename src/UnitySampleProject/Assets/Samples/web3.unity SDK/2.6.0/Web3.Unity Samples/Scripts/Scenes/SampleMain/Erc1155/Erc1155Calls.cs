@@ -68,7 +68,7 @@ public class Erc1155Calls : MonoBehaviour
     /// </summary>
     public async void BalanceOf()
     {
-        var balance = await Web3Accessor.Web3.Erc1155.GetBalanceOf(
+        var balance = await ChainSafeManager.Web3.Erc1155.GetBalanceOf(
             ChainSafeContracts.Erc1155,
             tokenIdBalanceOf,
             accountBalanceOf);
@@ -80,7 +80,7 @@ public class Erc1155Calls : MonoBehaviour
     /// </summary>
     public async void BalanceOfBatch()
     {
-        var balances = await Web3Accessor.Web3.Erc1155.GetBalanceOfBatch(
+        var balances = await ChainSafeManager.Web3.Erc1155.GetBalanceOfBatch(
             ChainSafeContracts.Erc1155,
             accountsBalanceOfBatch,
             tokenIdsBalanceOfBatch);
@@ -92,7 +92,7 @@ public class Erc1155Calls : MonoBehaviour
     /// </summary>
     public async void Uri()
     {
-        var uri = await Web3Accessor.Web3.Erc1155.GetUri(
+        var uri = await ChainSafeManager.Web3.Erc1155.GetUri(
             ChainSafeContracts.Erc1155,
             tokenIdUri);
         SampleOutputUtil.PrintResult(uri, "ERC-1155", nameof(Erc1155Service.GetUri));
@@ -103,7 +103,7 @@ public class Erc1155Calls : MonoBehaviour
     /// </summary>
     public async void MintErc1155()
     {
-        var response = await Web3Accessor.Web3.Erc1155.Mint(
+        var response = await ChainSafeManager.Web3.Erc1155.Mint(
             ChainSafeContracts.Erc1155,
             idMint,
             amountMint);
@@ -116,7 +116,7 @@ public class Erc1155Calls : MonoBehaviour
     /// </summary>
     public async void TransferErc1155()
     {
-        var response = await Web3Accessor.Web3.Erc1155.Transfer(
+        var response = await ChainSafeManager.Web3.Erc1155.Transfer(
             ChainSafeContracts.Erc1155,
             tokenIdTransfer,
             amountTransfer,
@@ -130,7 +130,7 @@ public class Erc1155Calls : MonoBehaviour
     /// </summary>
     public async void ImportNftTexture1155()
     {
-        var texture = await Web3Accessor.Web3.Erc1155.ImportTexture(ChainSafeContracts.Erc1155, tokenIdTexture);
+        var texture = await ChainSafeManager.Web3.Erc1155.ImportTexture(ChainSafeContracts.Erc1155, tokenIdTexture);
         rawImage.texture = texture;
     }
 }
