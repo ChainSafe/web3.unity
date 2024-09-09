@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.NetCore;
 using ChainSafe.Gaming.Web3.Environment;
 
 namespace ChainSafe.Gaming.Web3.Core.Chains
@@ -15,9 +16,26 @@ namespace ChainSafe.Gaming.Web3.Core.Chains
         public ChainManager(IChainConfigSet configSet, IList<IChainSwitchHandler> switchHandlers, ILogWriter logWriter)
         {
             this.logWriter = logWriter;
-            this.configs = configSet.Configs.ToDictionary(config => config.ChainId, config => config);
             this.switchHandlers = switchHandlers;
             Current = configSet.Configs.First();
+
+            // build configs map
+            try
+            {
+                configs = configSet.Configs.ToDictionary(config => config.ChainId, config => config.Clone()); // cloning all the configs
+            }
+            catch (ArgumentException)
+            {
+                logWriter.LogError("There are 2 or more Chain Configs with the same Chain ID. " +
+                                   "Please make sure to remove the duplicates that you don't need. " +
+                                   "Using first occurrences for now..");
+
+                var usedIds = configSet.Configs.Select(config => config.ChainId).Distinct().ToArray();
+                var filteredConfigs =
+                    usedIds.Select(chainId => configSet.Configs.First(config => config.ChainId == chainId));
+
+                configs = filteredConfigs.ToDictionary(config => config.ChainId, config => config.Clone()); // cloning all the configs
+            }
         }
 
         public event Action<IChainConfig> ChainSwitched;
@@ -28,7 +46,8 @@ namespace ChainSafe.Gaming.Web3.Core.Chains
         {
             if (!configs.TryGetValue(newChainId, out var newChainConfig))
             {
-                throw new Web3Exception($"No {nameof(IChainConfig)} was registered with id '{newChainId}'. Make sure to configure settings for the chain before switching to it.");
+                throw new Web3Exception($"No {nameof(IChainConfig)} was registered with id '{newChainId}'. " +
+                                        "Make sure to configure settings for the provided chain before switching to it.");
             }
 
             Current = newChainConfig;
@@ -79,6 +98,17 @@ namespace ChainSafe.Gaming.Web3.Core.Chains
             {
                 logWriter.LogError(e.ToString());
             }
+        }
+
+        public void AddChainConfig(IChainConfig newConfig)
+        {
+            if (configs.ContainsKey(newConfig.ChainId))
+            {
+                throw new Web3Exception(
+                    "Couldn't add Chain Config. A Chain Config with the same Chain Id is already present in the map.");
+            }
+
+            configs[newConfig.ChainId] = newConfig;
         }
     }
 }
