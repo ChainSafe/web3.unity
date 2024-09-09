@@ -8,40 +8,40 @@ namespace ChainSafe.Gaming.UnityPackage
 {
     public static class ProjectConfigUtilities
     {
-        private const string AssetName = "ProjectConfigData";
+        private const string AssetName = "ProjectConfig";
 
-        public static ProjectConfigScriptableObject Load()
+        public static ProjectConfigAsset Load()
         {
-            var projectConfig = Resources.Load<ProjectConfigScriptableObject>(AssetName);
+            var projectConfig = Resources.Load<ProjectConfigAsset>(AssetName);
             return projectConfig ? projectConfig : null;
         }
 
-        public static ProjectConfigScriptableObject Create(string projectId, string chainId, string chain, string network,
+        public static ProjectConfigAsset Create(string projectId, string chainId, string chain, string network,
             string symbol, string rpc, string blockExplorerUrl, bool enableAnalytics, string ws = "")
         {
-            var projectConfig = ScriptableObject.CreateInstance<ProjectConfigScriptableObject>();
+            var projectConfig = ScriptableObject.CreateInstance<ProjectConfigAsset>();
 
             projectConfig.ProjectId = projectId;
-            projectConfig.ChainId = chainId;
-            projectConfig.Chain = chain;
-            projectConfig.Network = network;
-            projectConfig.Symbol = symbol;
-            projectConfig.Rpc = rpc;
-            projectConfig.Ws = ws;
-            projectConfig.BlockExplorerUrl = blockExplorerUrl;
             projectConfig.EnableAnalytics = enableAnalytics;
-
+            projectConfig.ChainConfigs = new List<ChainConfigEntry>
+            {
+                new()
+                {
+                    ChainId = chainId,
+                    Chain = chain,
+                    Network = network,
+                    Symbol = symbol,
+                    Rpc = rpc,
+                    Ws = ws,
+                    BlockExplorerUrl = blockExplorerUrl,
+                }
+            };
+           
             return projectConfig;
         }
 
-        public static IChainConfig BuildLocalhostConfig(string port = "8545", string chainId = "31337",
-            string chain = "Anvil", string symbol = "ETH", string network = "GoChain Testnet")
-        {
-            return new LocalhostChainConfig(chainId, symbol, chain, network, port);
-        }
-
 #if UNITY_EDITOR
-        public static ProjectConfigScriptableObject CreateOrLoad()
+        public static ProjectConfigAsset CreateOrLoad()
         {
             var projectConfig = Load();
 
@@ -54,7 +54,7 @@ namespace ChainSafe.Gaming.UnityPackage
                     Directory.CreateDirectory(assetDirectory);
                 }
 
-                projectConfig = ScriptableObject.CreateInstance<ProjectConfigScriptableObject>();
+                projectConfig = ScriptableObject.CreateInstance<ProjectConfigAsset>();
                 UnityEditor.AssetDatabase.CreateAsset(projectConfig,
                     Path.Combine("Assets", nameof(Resources), $"{AssetName}.asset"));
             }
@@ -62,12 +62,19 @@ namespace ChainSafe.Gaming.UnityPackage
             return projectConfig;
         }
 
-        public static void Save(ProjectConfigScriptableObject projectConfig)
+        public static void Save(ProjectConfigAsset projectConfig)
         {
             UnityEditor.EditorUtility.SetDirty(projectConfig);
             UnityEditor.AssetDatabase.SaveAssets();
         }
 #endif
+
+        public static IChainConfig BuildLocalhostConfig(string port = "8545", string chainId = "31337",
+            string chain = "Anvil", string symbol = "ETH", string network = "GoChain Testnet")
+        {
+            return new LocalhostChainConfig(chainId, symbol, chain, network, port);
+        }
+        
         private class LocalhostChainConfig : IChainConfig
         {
             public LocalhostChainConfig(string chainId, string symbol, string chain, string network, string port)

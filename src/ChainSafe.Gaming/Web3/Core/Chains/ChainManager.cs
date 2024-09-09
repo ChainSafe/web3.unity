@@ -12,12 +12,12 @@ namespace ChainSafe.Gaming.Web3.Core.Chains
         private readonly IList<IChainSwitchHandler> switchHandlers;
         private readonly ILogWriter logWriter;
 
-        public ChainManager(IChainConfigSet configs, IList<IChainSwitchHandler> switchHandlers, ILogWriter logWriter)
+        public ChainManager(IChainConfigSet configSet, IList<IChainSwitchHandler> switchHandlers, ILogWriter logWriter)
         {
             this.logWriter = logWriter;
-            this.configs = configs.ToDictionary(config => config.ChainId, config => config);
+            this.configs = configSet.Configs.ToDictionary(config => config.ChainId, config => config);
             this.switchHandlers = switchHandlers;
-            Current = configs.First();
+            Current = configSet.Configs.First();
         }
 
         public event Action<IChainConfig> ChainSwitched;

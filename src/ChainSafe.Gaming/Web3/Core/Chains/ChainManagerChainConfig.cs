@@ -21,8 +21,6 @@ namespace ChainSafe.Gaming.Web3.Core.Chains
 
         public string Rpc => CurrentConfig.Rpc;
 
-        public string Ipc => CurrentConfig.Ipc;
-
         public string Ws => CurrentConfig.Ws;
 
         public string BlockExplorerUrl => CurrentConfig.BlockExplorerUrl;

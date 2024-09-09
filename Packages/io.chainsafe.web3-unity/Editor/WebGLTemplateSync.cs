@@ -73,7 +73,7 @@ namespace ChainSafe.GamingSdk.Editor
                 AssetDatabase.AllowAutoRefresh();
                 AssetDatabase.Refresh();
                 // Update template values to chain config
-                ChainSafeServerSettings.WriteNetworkFile();
+                Web3SettingsEditor.WriteNetworkFile();
             }
         }
 
