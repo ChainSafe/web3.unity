@@ -48,13 +48,18 @@ namespace ChainSafe.Gaming.Tests
             JsonRpcWalletConfig jsonRpcWalletConfig, Web3Builder.ConfigureServicesDelegate configureDelegate = null)
         {
             return new Web3Builder(
-                    new ProjectConfig { ProjectId = string.Empty },
+                    new ProjectConfig
+                    {
+                        ProjectId = string.Empty,
+                        EnableAnalytics = true,
+                    },
                     new ChainConfig
                     {
                         Chain = "Anvil",
                         ChainId = "31337",
                         Network = "GoChain Testnet",
                         Rpc = "http://127.0.0.1:8545",
+                        Ws = "ws://127.0.0.1:8545",
                     })
                 .Configure(services =>
                 {

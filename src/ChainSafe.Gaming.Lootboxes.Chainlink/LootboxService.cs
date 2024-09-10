@@ -71,13 +71,8 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
 
             analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
-                ProjectId = projectConfig.ProjectId,
-                Network = chainConfig.Network,
-                ChainId = chainConfig.ChainId,
-                Rpc = chainConfig.Rpc,
                 EventName = "Lootboxes Initialized",
                 PackageName = "io.chainsafe.web3-unity.lootboxes",
-                Version = analyticsClient.AnalyticsVersion,
             });
 
             // todo check if contract is correct

@@ -7,6 +7,7 @@ using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.WalletConnect;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
+using ChainSafe.Gaming.Web3.Evm.Wallet;
 using ChainSafe.Gaming.Web3.Unity;
 using ChainSafe.GamingSdk.Gelato;
 using Microsoft.Extensions.DependencyInjection;
@@ -43,13 +44,10 @@ public class SampleTestsBase
 
     internal static ValueTask<Web3> BuildTestWeb3(Web3Builder.ConfigureServicesDelegate customConfiguration = null)
     {
-        // Set project config, fallback is for github as it doesn't load
-        var projectConfigScriptableObject = ProjectConfigUtilities.Load();
-        if (projectConfigScriptableObject == null)
-        {
-            projectConfigScriptableObject = ProjectConfigUtilities.Load("3dc3e125-71c4-4511-a367-e981a6a94371", "11155111",
-                "Ethereum", "Sepolia", "Seth", "https://sepolia.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f");
-        }
+        var projectConfigScriptableObject = ProjectConfigUtilities.Create("3dc3e125-71c4-4511-a367-e981a6a94371",
+            "11155111",
+            "Ethereum", "Sepolia", "Seth", "https://sepolia.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f",
+            "https://sepolia.etherscan.io/", false, "wss://sepolia.drpc.org");
 
         // Create web3builder & assign services
         var web3Builder = new Web3Builder(projectConfigScriptableObject).Configure(services =>
@@ -59,14 +57,15 @@ public class SampleTestsBase
             services.UseMultiCall();
             services.UseRpcProvider();
 
-            services.AddSingleton(new StubWalletConnectProviderConfig()); // can be replaced
-            services.AddSingleton<IWalletConnectProvider, StubWalletConnectProvider>();
-            services.UseWalletConnectSigner();
-            services.UseWalletConnectTransactionExecutor();
+            var config = new StubWalletConnectProviderConfig();
+            services.AddSingleton(config); // can be replaced
+            services.UseWalletProvider<StubWalletConnectProvider>(config);
+            services.UseWalletSigner();
+            services.UseWalletTransactionExecutor();
 
             // Add any contracts we would want to use
             services.ConfigureRegisteredContracts(contracts =>
-                contracts.RegisterContract("CsTestErc20", ABI.Erc20, Contracts.Erc20));
+                contracts.RegisterContract("CsTestErc20", ABI.Erc20, ChainSafeContracts.Erc20));
         });
 
         if (customConfiguration != null)

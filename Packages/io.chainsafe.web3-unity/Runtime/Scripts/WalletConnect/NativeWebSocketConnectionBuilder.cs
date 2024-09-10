@@ -1,4 +1,4 @@
-#if !UNITY_2022_1_OR_NEWER
+
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Unity;
 using UnityEngine;
@@ -25,5 +25,3 @@ namespace ChainSafe.Gaming.WalletConnect
         }
     }
 }
-
-#endif

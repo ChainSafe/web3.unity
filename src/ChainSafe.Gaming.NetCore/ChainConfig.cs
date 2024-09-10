@@ -15,6 +15,12 @@ namespace ChainSafe.Gaming.NetCore
         public string ChainId { get; set; }
 
         /// <summary>
+        /// Implementation of <see cref="IChainConfig.Symbol"/>
+        /// Chain currency symbol.
+        /// </summary>
+        public string Symbol { get; set; }
+
+        /// <summary>
         /// Implementation of <see cref="IChainConfig.Chain"/>
         /// Chain, for eg. "Ethereum".
         /// </summary>
@@ -43,5 +49,11 @@ namespace ChainSafe.Gaming.NetCore
         /// WebSocket link.
         /// </summary>
         public string Ws { get; set; }
+
+        /// <summary>
+        /// Implementation of <see cref="IChainConfig.BlockExplorerUrl"/>
+        /// Chain block explorer.
+        /// </summary>
+        public string BlockExplorerUrl { get; set; }
     }
 }

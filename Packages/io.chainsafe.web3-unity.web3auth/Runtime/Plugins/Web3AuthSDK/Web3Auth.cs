@@ -392,9 +392,11 @@ public class Web3Auth : MonoBehaviour
                         shareMetadata.iv
                     );
 
+
                     var encryptedShareBytes = AES256CBC.toByteArray(new BigInteger(shareMetadata.ciphertext, 16));
                     var share = aes256cbc.decrypt(encryptedShareBytes, shareMetadata.mac);
                     var tempJson = JsonConvert.DeserializeObject<JObject>(System.Text.Encoding.UTF8.GetString(share));
+
 
                     this.web3AuthResponse = JsonConvert.DeserializeObject<Web3AuthResponse>(tempJson.ToString());
                     if (this.web3AuthResponse != null)

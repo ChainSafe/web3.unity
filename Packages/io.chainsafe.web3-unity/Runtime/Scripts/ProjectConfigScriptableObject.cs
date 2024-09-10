@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ChainSafe.Gaming.UnityPackage
 {
-    [CreateAssetMenu(fileName = "ProjectConfigData", menuName = "ScriptableObjects/ProjectConfigScriptableObject",
+    [CreateAssetMenu(fileName = "ProjectConfigScriptableObject", menuName = "ScriptableObjects/ProjectConfigScriptableObject",
         order = 1)]
     public class ProjectConfigScriptableObject : ScriptableObject, ICompleteProjectConfig
     {
@@ -13,6 +13,9 @@ namespace ChainSafe.Gaming.UnityPackage
         [SerializeField] private string network;
         [SerializeField] private string symbol;
         [SerializeField] private string rpc;
+        [SerializeField] private string ws;
+        [SerializeField] private string blockExplorerUrl;
+        [SerializeField] private bool enableAnalytics;
 
         public string Symbol
         {
@@ -58,8 +61,20 @@ namespace ChainSafe.Gaming.UnityPackage
 
         public string Ws
         {
-            get => rpc;
-            set => rpc = value;
+            get => ws;
+            set => ws = value;
+        }
+
+        public string BlockExplorerUrl
+        {
+            get => blockExplorerUrl;
+            set => blockExplorerUrl = value;
+        }
+
+        public bool EnableAnalytics
+        {
+            get => enableAnalytics;
+            set => enableAnalytics = value;
         }
     }
 }

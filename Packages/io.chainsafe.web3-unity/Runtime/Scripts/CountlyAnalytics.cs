@@ -1,10 +1,8 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Analytics;
 using Plugins.CountlySDK;
 using Plugins.CountlySDK.Models;
-using UnityEngine;
 
 public class CountlyAnalytics : IAnalyticsClient
 {
@@ -14,24 +12,27 @@ public class CountlyAnalytics : IAnalyticsClient
 
     public async void CaptureEvent(AnalyticsEvent eventData)
     {
-        await Countly.Instance.Events.RecordEventAsync(eventData.EventName, new Dictionary<string, object>()
-        {
-            { "chain", eventData.ChainId},
-            { "network", eventData.Network},
-            { "project-id", eventData.ProjectId},
-            { "rpc ", eventData.Rpc},
-            { "version", AnalyticsVersion},
-        });
+        await Countly.Instance.Events.RecordEventAsync(eventData.EventName);
     }
 
-    public string AnalyticsVersion => "2.5.5";
+    public string AnalyticsVersion => "2.6";
     public IChainConfig ChainConfig { get; }
     public IProjectConfig ProjectConfig { get; }
 
     public CountlyAnalytics(IChainConfig chainConfig, IProjectConfig projectConfig)
     {
         Countly.Instance.Init(new CountlyConfiguration(AppKey, ServerUrl));
-        Debug.Log("Countly initialized");
+
+        var userDetails = new Dictionary<string, object>
+        {
+            { "chainId", chainConfig.ChainId },
+            { "rpc", chainConfig.Rpc },
+            { "network", chainConfig.Network },
+            { "projectId", projectConfig.ProjectId },
+            { "analyticsVersion", AnalyticsVersion }
+        };
+
+        Countly.Instance.UserDetails.SetCustomUserDetails(userDetails);
 
         ChainConfig = chainConfig;
         ProjectConfig = projectConfig;

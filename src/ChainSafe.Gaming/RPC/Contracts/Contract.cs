@@ -1,11 +1,13 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Contracts.Builders;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Core.Evm;
+using Nethereum.ABI.Model;
 using Nethereum.Hex.HexTypes;
 
 namespace ChainSafe.Gaming.Evm.Contracts
@@ -13,13 +15,12 @@ namespace ChainSafe.Gaming.Evm.Contracts
     /// <summary>
     /// Representation of a contract.
     /// </summary>
-    public class Contract
+    public class Contract : IContract
     {
         private readonly string abi;
-        private readonly string address;
         private readonly IRpcProvider provider;
         private readonly ISigner signer;
-        private readonly Builders.ContractBuilder contractBuilder;
+        private readonly ContractAbiManager contractAbiManager;
         private readonly ITransactionExecutor transactionExecutor;
         private readonly IAnalyticsClient analyticsClient;
 
@@ -39,13 +40,15 @@ namespace ChainSafe.Gaming.Evm.Contracts
             }
 
             this.abi = abi;
-            this.address = address;
+            this.Address = address;
             this.provider = provider;
             this.signer = signer;
             this.transactionExecutor = transactionExecutor;
             this.analyticsClient = analyticsClient;
-            contractBuilder = new Builders.ContractBuilder(abi, address);
+            contractAbiManager = new ContractAbiManager(abi, address);
         }
+
+        public string Address { get; }
 
         /// <summary>
         /// Returns a new instance of the Contract attached to a new address. This is useful
@@ -54,7 +57,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
         /// </summary>
         /// <param name="address">Address of the contract to attach to.</param>
         /// <returns>The new contract.</returns>
-        public Contract Attach(string address)
+        public IContract Attach(string address)
         {
             if (string.IsNullOrEmpty(address))
             {
@@ -73,7 +76,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
         /// <returns>The result of calling the method.</returns>
         public async Task<object[]> Call(string method, object[] parameters = null, TransactionRequest overwrite = null)
         {
-            if (string.IsNullOrEmpty(address))
+            if (string.IsNullOrEmpty(Address))
             {
                 throw new Exception("contract address is not set");
             }
@@ -85,20 +88,42 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
             parameters ??= Array.Empty<object>();
 
-            var txReq = await PrepareTransactionRequest(method, parameters, overwrite);
+            var txReq = await PrepareTransactionRequest(method, parameters, true, overwrite);
 
             var result = await provider.Call(txReq);
             analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
-                ChainId = analyticsClient.ChainConfig.ChainId,
                 EventName = method,
-                Network = analyticsClient.ChainConfig.Network,
-                Version = analyticsClient.AnalyticsVersion,
                 PackageName = "io.chainsafe.web3.unity",
-                ProjectId = analyticsClient.ProjectConfig.ProjectId,
             });
 
             return Decode(method, result);
+        }
+
+        public async Task<T> Call<T>(string method, object[] parameters = null, TransactionRequest overwrite = null)
+        {
+            if (string.IsNullOrEmpty(Address))
+            {
+                throw new Exception("contract address is not set");
+            }
+
+            if (provider == null)
+            {
+                throw new Exception("provider or signer is not set");
+            }
+
+            parameters ??= Array.Empty<object>();
+
+            var txReq = await PrepareTransactionRequest(method, parameters, true, overwrite);
+
+            var result = await provider.Call(txReq);
+            analyticsClient.CaptureEvent(new AnalyticsEvent()
+            {
+                EventName = method,
+                PackageName = "io.chainsafe.web3.unity",
+            });
+
+            return contractAbiManager.GetFunctionBuilder(method).DecodeTypeOutput<T>(result);
         }
 
         /// <summary>
@@ -109,7 +134,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
         /// <returns>The decoded outputs of a provided method.</returns>
         public object[] Decode(string method, string output)
         {
-            var function = contractBuilder.GetFunctionBuilder(method);
+            var function = contractAbiManager.GetFunctionBuilder(method);
             var decodedOutput = function.DecodeOutput(output);
             var array = new object[decodedOutput.Count];
             for (var i = 0; i < decodedOutput.Count; i++)
@@ -138,13 +163,27 @@ namespace ChainSafe.Gaming.Evm.Contracts
         /// <param name="method">The method.</param>
         /// <param name="parameters">The parameters.</param>
         /// <param name="overwrite">An existing TransactionRequest to use instead of making a new one.</param>
+        /// <typeparam name="T">Type of object you want to use.</typeparam>
+        /// <returns>The outputs of the method.</returns>
+        public async Task<T> Send<T>(string method, object[] parameters = null, TransactionRequest overwrite = null)
+        {
+            var result = (await SendWithReceipt<T>(method, parameters, overwrite)).response;
+            return result;
+        }
+
+        /// <summary>
+        /// Sends the transaction.
+        /// </summary>
+        /// <param name="method">The method.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <param name="overwrite">An existing TransactionRequest to use instead of making a new one.</param>
         /// <returns>The outputs of the method and the transaction receipt.</returns>
         public async Task<(object[] response, TransactionReceipt receipt)> SendWithReceipt(
             string method,
             object[] parameters = null,
             TransactionRequest overwrite = null)
         {
-            if (string.IsNullOrEmpty(address))
+            if (string.IsNullOrEmpty(Address))
             {
                 throw new Exception("contract address is not set");
             }
@@ -156,9 +195,9 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
             parameters ??= Array.Empty<object>();
 
-            var function = contractBuilder.GetFunctionBuilder(method);
+            var function = contractAbiManager.GetFunctionBuilder(method);
 
-            var txReq = await PrepareTransactionRequest(method, parameters, overwrite);
+            var txReq = await PrepareTransactionRequest(method, parameters, false, overwrite);
 
             var tx = await transactionExecutor.SendTransaction(txReq);
             var receipt = await provider.WaitForTransactionReceipt(tx.Hash);
@@ -168,12 +207,49 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
             analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
-                ChainId = analyticsClient.ChainConfig.ChainId,
                 EventName = method,
-                Network = analyticsClient.ChainConfig.Network,
-                Version = analyticsClient.AnalyticsVersion,
                 PackageName = "io.chainsafe.web3.unity",
-                ProjectId = analyticsClient.ProjectConfig.ProjectId,
+            });
+
+            return (outputValues, receipt);
+        }
+
+        /// <summary>
+        /// Sends the transaction.
+        /// </summary>
+        /// <param name="method">The method.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <param name="overwrite">An existing TransactionRequest to use instead of making a new one.</param>
+        /// <typeparam name="T">Type of object you want to use.</typeparam>
+        /// <returns>The outputs of the method and the transaction receipt.</returns>
+        public async Task<(T response, TransactionReceipt receipt)> SendWithReceipt<T>(
+            string method,
+            object[] parameters = null,
+            TransactionRequest overwrite = null)
+        {
+            if (string.IsNullOrEmpty(Address))
+            {
+                throw new Exception("contract address is not set");
+            }
+
+            if (signer == null)
+            {
+                throw new Exception("signer is not set");
+            }
+
+            parameters ??= Array.Empty<object>();
+
+            var txReq = await PrepareTransactionRequest(method, parameters, false, overwrite);
+
+            var tx = await transactionExecutor.SendTransaction(txReq);
+            var receipt = await provider.WaitForTransactionReceipt(tx.Hash);
+
+            var outputValues = contractAbiManager.GetFunctionBuilder(method).DecodeTypeOutput<T>(tx.Data);
+
+            analyticsClient.CaptureEvent(new AnalyticsEvent()
+            {
+                EventName = method,
+                PackageName = "io.chainsafe.web3.unity",
             });
 
             return (outputValues, receipt);
@@ -191,7 +267,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
             object[] parameters,
             TransactionRequest overwrite = null)
         {
-            if (string.IsNullOrEmpty(address))
+            if (string.IsNullOrEmpty(Address))
             {
                 throw new Exception("contract address is not set");
             }
@@ -201,7 +277,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
                 throw new Exception("provider or signer is not set");
             }
 
-            return await provider.EstimateGas(await PrepareTransactionRequest(method, parameters, overwrite));
+            return await provider.EstimateGas(await PrepareTransactionRequest(method, parameters, false, overwrite));
         }
 
         /// <summary>
@@ -239,31 +315,32 @@ namespace ChainSafe.Gaming.Evm.Contracts
             };
             var dataObject = GameLogger.Log("", "", dataWebGL);
 #endif
-            var function = contractBuilder.GetFunctionBuilder(method);
+            var function = contractAbiManager.GetFunctionBuilder(method);
 
             analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
-                ChainId = analyticsClient.ChainConfig.ChainId,
                 EventName = method,
-                Network = analyticsClient.ChainConfig.Network,
-                Version = analyticsClient.AnalyticsVersion,
                 PackageName = "io.chainsafe.web3.unity",
-                ProjectId = analyticsClient.ProjectConfig.ProjectId,
             });
 
             return function.GetData(parameters);
         }
 
-        public async Task<TransactionRequest> PrepareTransactionRequest(string method, object[] parameters, TransactionRequest overwrite = null)
+        public async Task<TransactionRequest> PrepareTransactionRequest(string method, object[] parameters, bool isReadCall = false, TransactionRequest overwrite = null)
         {
             parameters ??= Array.Empty<object>();
 
-            var function = contractBuilder.GetFunctionBuilder(method);
+            var function = contractAbiManager.GetFunctionBuilder(method);
             var txReq = overwrite ?? new TransactionRequest();
 
             txReq.From ??= signer?.PublicAddress;
-            txReq.To ??= address;
+            txReq.To ??= Address;
             txReq.Data ??= function.GetData(parameters);
+            if (isReadCall)
+            {
+                return txReq;
+            }
+
             try
             {
                 var feeData = await provider.GetFeeData();
