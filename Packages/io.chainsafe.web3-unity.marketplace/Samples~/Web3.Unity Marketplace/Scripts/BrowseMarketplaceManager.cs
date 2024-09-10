@@ -31,6 +31,8 @@ namespace ChainSafe.Gaming.Marketplace
         private int marketplaceItemObjectNumber = 1;
         private int marketplaceItemDisplayCount = 100;
         private string baseUrl = "https://ipfs.chainsafe.io/ipfs/";
+        private Dictionary<string, Sprite> _cachedSprites = new ();
+
 
         #endregion
         
@@ -93,7 +95,8 @@ namespace ChainSafe.Gaming.Marketplace
             var response = await EvmMarketplace.GetMarketplaceItems(projectResponse.items[index].marketplace_id);
             foreach (var item in response.items)
             {
-                await AddMarketplaceItemToDisplay(marketplaceContract, item.id, item.token.token_type, item.price, item.token.uri);
+                if(item.status == "listed")
+                    await AddMarketplaceItemToDisplay(marketplaceContract, item.id, item.token.token_type, item.price, item.token.uri);
             }
             EventManagerMarketplace.RaiseToggleProcessingMenu();
         }
@@ -205,6 +208,7 @@ namespace ChainSafe.Gaming.Marketplace
             }
         }
 
+
         /// <summary>
         /// Updates the marketplace item display.
         /// </summary>
@@ -229,18 +233,27 @@ namespace ChainSafe.Gaming.Marketplace
                 textMeshPro.color = SecondaryTextColour;
                 try
                 {
-                    var image = await ImportTexture(nftUri);
-                    Sprite newSprite = Sprite.Create(image, new Rect(0, 0, image.width, image.height), new UnityEngine.Vector2(0.5f, 0.5f));
+                    if (!_cachedSprites.TryGetValue(nftUri, out var sprite))
+                    {
+                        var image = await ImportTexture(nftUri);
+                        sprite = Sprite.Create(image, new Rect(0, 0, image.width, image.height),
+                            new UnityEngine.Vector2(0.5f, 0.5f));
+                        _cachedSprites.TryAdd(nftUri, sprite);
+                        Debug.LogError(nftUri);
+                    }
+                    
                     var imageObj = marketplaceItemPrefabs[marketplaceItemObjectIndex].transform.Find("Image").GetComponent<Image>();
-                    imageObj.sprite = newSprite;
+                    if(sprite != null)
+                        imageObj.sprite = sprite;
                 }
                 catch (Exception e)
                 {
                     Debug.Log($"Error getting image: {e}");
+                    _cachedSprites.TryAdd(nftUri, null);
                 }
                 var buttonObj = marketplaceItemPrefabs[marketplaceItemObjectIndex].transform.Find("PurchaseButton").GetComponent<Button>();
                 buttonObj.onClick.RemoveAllListeners();
-                buttonObj.onClick.AddListener(() => PurchaseNft(marketplaceContract ,marketplaceItemObjectIndex.ToString(), nftPrice));
+                buttonObj.onClick.AddListener(() => PurchaseNft(marketplaceContract ,nftId, nftPrice));
             }
         }
 
