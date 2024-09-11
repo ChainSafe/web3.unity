@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.UnityPackage.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -42,13 +43,28 @@ namespace ChainSafe.Gaming.UnityPackage
 
         public static async Task TerminateAndClear(bool logout = false)
         {
-            if (!Instance)
+            try
             {
-                Debug.LogError("Instance was not set.");
+                if (!Instance)
+                {
+                    Debug.LogError("Instance was not set.");
+                }
+
+                LoadingOverlay.ShowLoadingOverlay("Logging out...");
+                await Instance.web3.TerminateAsync(logout);
+            }
+            catch (Exception _)
+            {
+
+            }
+            finally
+            {      
+                
+                LoadingOverlay.HideLoadingOverlay();
+                Instance.web3 = null;
             }
 
-            await Instance.web3.TerminateAsync(logout);
-            Instance.web3 = null;
+      
         }
     }
 }

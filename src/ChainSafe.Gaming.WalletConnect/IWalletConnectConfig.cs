@@ -15,7 +15,7 @@ namespace ChainSafe.Gaming.WalletConnect
         /// <summary>
         /// Set to true if you want to store this session on a disk for the next time.
         /// </summary>
-        public bool RememberSession { get; }
+        public bool RememberConnection { get; }
 
         /// <summary>
         /// Enforce new session even if the stored one is available.
