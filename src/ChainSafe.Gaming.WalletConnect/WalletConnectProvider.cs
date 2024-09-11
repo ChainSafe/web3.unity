@@ -45,6 +45,7 @@ namespace ChainSafe.Gaming.WalletConnect
         private readonly IWalletRegistry walletRegistry;
         private readonly RedirectionHandler redirection;
         private readonly IHttpClient httpClient;
+        private readonly IAnalyticsClient analyticsClient;
 
         private WalletConnectCore core;
         private WalletConnectSignClient signClient;
@@ -53,7 +54,6 @@ namespace ChainSafe.Gaming.WalletConnect
         private SessionStruct session;
         private bool connected;
         private bool initialized;
-        private IAnalyticsClient analyticsClient;
         private ConnectionHandlerConfig connectionHandlerConfig;
 
         public WalletConnectProvider(
@@ -62,9 +62,8 @@ namespace ChainSafe.Gaming.WalletConnect
             IChainConfig chainConfig,
             IWalletRegistry walletRegistry,
             RedirectionHandler redirection,
-            Web3Environment environment,
-            ChainRegistryProvider chainRegistryProvider)
-            : base(environment, chainRegistryProvider, chainConfig)
+            Web3Environment environment)
+            : base(environment, chainConfig)
         {
             analyticsClient = environment.AnalyticsClient;
             this.redirection = redirection;
@@ -245,7 +244,7 @@ namespace ChainSafe.Gaming.WalletConnect
             var chainId = GetChainId();
             if (chainId != $"{ChainModel.EvmNamespace}:{chainConfig.ChainId}")
             {
-                await PromptNetworkSwitch();
+                await SwitchChain(chainConfig.ChainId);
                 UpdateSessionChainId();
             }
         }
@@ -273,28 +272,6 @@ namespace ChainSafe.Gaming.WalletConnect
             var list = array.ToList();
             list.RemoveAt(0);
             return list;
-        }
-
-        private async Task PromptNetworkSwitch()
-        {
-            var str = $"{BigInteger.Parse(chainConfig.ChainId):X}";
-            str = str.TrimStart('0');
-            var networkSwitchParams = new
-            {
-                chainId = $"0x{str}", // Convert the Chain ID to hex format
-            };
-
-            try
-            {
-                await Request<string>("wallet_switchEthereumChain", networkSwitchParams);
-                WCLogger.Log("Network switch requested.");
-            }
-            catch (Exception ex)
-            {
-                WCLogger.LogError($"Network switch failed: {ex.Message}");
-
-                // Optionally, you can prompt the user with a UI dialog here.
-            }
         }
 
         public override async Task Disconnect()

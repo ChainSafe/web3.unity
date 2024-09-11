@@ -58,7 +58,7 @@ namespace ChainSafe.Gaming.Web3.Core.Chains
             {
                 foreach (var switchHandler in switchHandlers)
                 {
-                    await switchHandler.HandleChainSwitch(Current);
+                    await switchHandler.HandleChainSwitching();
                     succeededHandlers.Push(switchHandler);
                 }
             }
@@ -73,7 +73,7 @@ namespace ChainSafe.Gaming.Web3.Core.Chains
 
                     try
                     {
-                        await handlerToRevert.HandleChainSwitch(Current);
+                        await handlerToRevert.HandleChainSwitching();
                     }
                     catch (Exception revertException)
                     {

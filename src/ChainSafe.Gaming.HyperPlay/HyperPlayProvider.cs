@@ -36,8 +36,8 @@ namespace ChainSafe.Gaming.HyperPlay
         /// <param name="environment">Injected <see cref="environment"/>.</param>
         /// <param name="chainConfig">ChainConfig to fetch chain data.</param>
         /// <param name="chainRegistryProvider">Injected <see cref="ChainRegistryProvider"/>.</param>
-        public HyperPlayProvider(IHyperPlayConfig config, IHyperPlayData data, ILocalStorage localStorage, Web3Environment environment, IChainConfig chainConfig, ChainRegistryProvider chainRegistryProvider)
-            : base(environment, chainRegistryProvider, chainConfig)
+        public HyperPlayProvider(IHyperPlayConfig config, IHyperPlayData data, ILocalStorage localStorage, Web3Environment environment, IChainConfig chainConfig)
+            : base(environment, chainConfig)
         {
             this.config = config;
             this.data = data;

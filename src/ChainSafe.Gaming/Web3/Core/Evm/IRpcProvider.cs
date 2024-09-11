@@ -13,20 +13,6 @@ namespace ChainSafe.Gaming.Evm.Providers
     public interface IRpcProvider
     {
         /// <summary>
-        /// Gets the last known blockchain network information.
-        /// </summary>
-        Network.Network LastKnownNetwork { get; }
-
-        /// <summary>
-        /// Asynchronously refreshes and retrieves the current blockchain network information.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="Task"/> representing the asynchronous operation. The task result contains
-        /// the updated <see cref="Network.Network"/> object representing the current network.
-        /// </returns>
-        Task<Network.Network> RefreshNetwork();
-
-        /// <summary>
         /// Asynchronously performs a specific RPC method on the blockchain.
         /// </summary>
         /// <typeparam name="T">The expected return type of the RPC method.</typeparam>

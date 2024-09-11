@@ -32,5 +32,10 @@ namespace ChainSafe.Gaming.Web3.Core.Nethereum
         {
             throw new NotImplementedException($"Signing transaction is not implemented for {nameof(NethereumTransactionManagerAdapter)}.");
         }
+
+        public void SetChainConfig(IChainConfig chainConfig)
+        {
+            ChainId = BigInteger.Parse(chainConfig.ChainId);
+        }
     }
 }

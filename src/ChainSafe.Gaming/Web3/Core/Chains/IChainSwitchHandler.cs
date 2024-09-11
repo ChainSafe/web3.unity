@@ -4,6 +4,6 @@ namespace ChainSafe.Gaming.Web3.Core.Chains
 {
     public interface IChainSwitchHandler
     {
-        public Task HandleChainSwitch(IChainConfig newChainConfig);
+        public Task HandleChainSwitching();
     }
 }

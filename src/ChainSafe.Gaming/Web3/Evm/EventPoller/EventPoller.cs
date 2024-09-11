@@ -10,13 +10,12 @@ using Nethereum.Hex.HexTypes;
 
 namespace ChainSafe.Gaming.Web3.Core.Evm.EventPoller
 {
-    internal class EventPoller : IEvmEvents
+    internal class EventPoller : IEvmEvents // todo: transform into IEventManager and parse logs for events
     {
         private readonly EventPollerConfiguration config;
         private readonly IRpcProvider rpcProvider;
         private readonly Web3Environment environment;
 
-        private IEvmEvents.ChainChangedDelegate chainChanged;
         private IEvmEvents.PollDelegate poll;
         private IEvmEvents.NewBlockDelegate newBlock;
 
@@ -32,21 +31,6 @@ namespace ChainSafe.Gaming.Web3.Core.Evm.EventPoller
             this.config = config;
             this.rpcProvider = rpcProvider;
             this.environment = environment;
-        }
-
-        public event IEvmEvents.ChainChangedDelegate ChainChanged
-        {
-            add
-            {
-                chainChanged += value;
-                PollableHandlerAdded();
-            }
-
-            remove
-            {
-                chainChanged -= value;
-                PollableHandlerRemoved();
-            }
         }
 
         public event IEvmEvents.PollErrorDelegate PollError;
@@ -84,7 +68,6 @@ namespace ChainSafe.Gaming.Web3.Core.Evm.EventPoller
         private MulticastDelegate[] AllPollableDelegates() =>
             new MulticastDelegate[]
             {
-                chainChanged,
                 poll,
                 newBlock,
             };
@@ -176,18 +159,9 @@ namespace ChainSafe.Gaming.Web3.Core.Evm.EventPoller
         {
             var pollId = nextPollId++;
 
-            ulong blockNumber;
-            Network newNetwork = null;
             try
             {
                 blockNumber = await GetBlockNumber(config.PollInterval / 2);
-
-                var lastNetwork = rpcProvider.LastKnownNetwork;
-                var currentNetwork = await rpcProvider.RefreshNetwork();
-                if (lastNetwork.ChainId != currentNetwork.ChainId)
-                {
-                    newNetwork = currentNetwork;
-                }
             }
             catch (Exception e)
             {
@@ -196,14 +170,7 @@ namespace ChainSafe.Gaming.Web3.Core.Evm.EventPoller
                 return;
             }
 
-            this.blockNumber = blockNumber;
-
             poll?.Invoke(pollId, blockNumber);
-
-            if (newNetwork != null)
-            {
-                chainChanged?.Invoke(newNetwork.ChainId);
-            }
 
             if (reportedBlock == 0)
             {
