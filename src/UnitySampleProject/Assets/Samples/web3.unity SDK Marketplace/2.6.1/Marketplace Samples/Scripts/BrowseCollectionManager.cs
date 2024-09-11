@@ -77,7 +77,8 @@ namespace ChainSafe.Gaming.Collection
                 await AddCollectionToDisplay(collection.name, collection.type, baseUrl + collection.logo);
             }
 
-            EventManagerMarketplace.RaiseToggleProcessingMenu();
+            ProcessingMenu.ToggleMenu();
+            
         }
 
         /// <summary>
@@ -90,7 +91,7 @@ namespace ChainSafe.Gaming.Collection
             var projectResponse = await EvmMarketplace.GetProjectTokens();
             if (index >= projectResponse.tokens.Count)
             {
-                EventManagerMarketplace.RaiseToggleProcessingMenu();
+                ProcessingMenu.ToggleMenu();
                 return;
             }
             var collectionContract = projectResponse.tokens[index].contract_address;
@@ -105,7 +106,7 @@ namespace ChainSafe.Gaming.Collection
                     {
                         await AddCollectionItemToDisplay(collectionContract, item.token_id, item.token_type, item.supply, item.uri);
                     }
-                    EventManagerMarketplace.RaiseToggleProcessingMenu();
+                    ProcessingMenu.ToggleMenu();
 
                     break;
                 }
@@ -116,13 +117,13 @@ namespace ChainSafe.Gaming.Collection
                     {
                         await AddCollectionItemToDisplay(collectionContract, item.token_id, item.token_type, item.supply, item.uri);
                     }
-                    EventManagerMarketplace.RaiseToggleProcessingMenu();
+                    ProcessingMenu.ToggleMenu();
     
                     break;
                 }
                 default:
                     Debug.Log("No NFT type given, returning");
-                    EventManagerMarketplace.RaiseToggleProcessingMenu();
+                    ProcessingMenu.ToggleMenu();
                     return;
             }
         }
@@ -328,7 +329,7 @@ namespace ChainSafe.Gaming.Collection
             ResetCollectionItemPrefabsDisplay();
             ResetProjectCollectionsPrefabsDisplay();
             GetProjectCollections();
-            EventManagerMarketplace.RaiseToggleProcessingMenu();
+            ProcessingMenu.ToggleMenu();
         }
 
         /// <summary>

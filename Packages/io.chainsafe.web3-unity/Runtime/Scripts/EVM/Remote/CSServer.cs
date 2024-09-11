@@ -25,11 +25,32 @@ namespace Scripts.EVM.Remote
         /// <summary>
         /// Unity web request helper function to retrieve data.
         /// </summary>
-        /// <param name="_path">The path suffix to call</param>
+        /// <param name="path">The path suffix to call</param>
+        /// <param name="projectId">Overriden Project id</param>
         /// <returns>Server response</returns>
-        public static async Task<T> GetData<T>(string _path)
+        public static async Task<T> GetData<T>(string path, string projectId = null)
         {
-            using UnityWebRequest webRequest = UnityWebRequest.Get($"{host}{Web3Accessor.Web3.ProjectConfig.ProjectId}{_path}");
+            projectId ??= Web3Accessor.Web3.ProjectConfig.ProjectId;
+            using UnityWebRequest webRequest = UnityWebRequest.Get($"{host}{projectId}{path}");
+            await webRequest.SendWebRequest();
+            if (webRequest.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError("Error: Your project ID doesn't have a marketplace or the token ID doesn't exist, please go to dashboard and create items: " + webRequest.error);
+                return default;
+            }
+            var json = webRequest.downloadHandler.text;
+            var response = JsonConvert.DeserializeObject<T>(json);
+            return response;
+        }
+        
+        /// <summary>
+        /// Unity web request helper function to retrieve data.
+        /// </summary>
+        /// <param name="url">The url to call</param>
+        /// <returns>Server response</returns>
+        public static async Task<T> GetDataFromUrl<T>(string url)
+        {
+            using UnityWebRequest webRequest = UnityWebRequest.Get(url);
             await webRequest.SendWebRequest();
             if (webRequest.result != UnityWebRequest.Result.Success)
             {

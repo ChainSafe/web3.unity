@@ -54,6 +54,13 @@ namespace ChainSafe.Gaming.UnityPackage.Model
             public List<Item> items { get; set; }
             public List<Owners> owners { get; set; }
         }
+        
+        public class MarketplaceItemMetaData
+        {
+            public string name { get; set; }
+            public string image { get; set; }
+            public string tokenType { get; set; }
+        }
 
         public class Item
         {

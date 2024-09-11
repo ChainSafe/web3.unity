@@ -195,8 +195,8 @@ namespace ChainSafe.Gaming.Marketplace
         /// </summary>
         private void InstantiateMarketplace()
         {
-            Instantiate(marketplacePrefab);
-            Destroy(gameObject);
+            marketplacePrefab.SetActive(true);
+            gameObject.SetActive(false);
         }
 
         #endregion

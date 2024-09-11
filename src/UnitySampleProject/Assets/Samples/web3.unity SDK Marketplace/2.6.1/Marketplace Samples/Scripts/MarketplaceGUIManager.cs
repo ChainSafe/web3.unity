@@ -25,7 +25,6 @@ namespace ChainSafe.Gaming.Marketplace
         [SerializeField] private GameObject createCollectionMenu;
         [SerializeField] private GameObject mintNftToCollectionMenu;
         [SerializeField] private GameObject listNftToMarketplaceMenu;
-        [SerializeField] private GameObject processingMenu;
         [SerializeField] private Button openMarketplacesMenuButton;
         [SerializeField] private Button openCollectionsMenuButton;
         [SerializeField] private Button createMarketplaceButton;
@@ -89,20 +88,13 @@ namespace ChainSafe.Gaming.Marketplace
                 displayLineObjects);
         }
 
-        /// <summary>
-        /// Toggles the processing menu.
-        /// </summary>
-        private void ToggleProcessingMenu()
-        {
-            processingMenu.SetActive(!processingMenu.activeSelf);
-        }
         
         /// <summary>
         /// Toggles browse marketplaces menu.
         /// </summary>
         private void ToggleMarketplacesMenu()
         {
-            ToggleProcessingMenu();
+            ProcessingMenu.ToggleMenu();
             EventManagerMarketplace.RaiseToggleMarketplacesMenu();
             browseMarketplacesMenu.SetActive(!browseMarketplacesMenu.activeSelf);
             selectionMenu.SetActive(!selectionMenu.activeSelf);
@@ -113,7 +105,7 @@ namespace ChainSafe.Gaming.Marketplace
         /// </summary>
         private void ToggleCollectionsMenu()
         {
-            ToggleProcessingMenu();
+            ProcessingMenu.ToggleMenu();
             EventManagerMarketplace.RaiseToggleCollectionsMenu();
             browseCollectionsMenu.SetActive(!browseCollectionsMenu.activeSelf);
             selectionMenu.SetActive(!selectionMenu.activeSelf);
@@ -155,7 +147,7 @@ namespace ChainSafe.Gaming.Marketplace
         /// </summary>
         private void OpenSelectedCollection()
         {
-            ToggleProcessingMenu();
+            ProcessingMenu.ToggleMenu();
             mintNftToCollectionMenuButton.gameObject.SetActive(true);
             backButtonBrowseSelectedCollection.gameObject.SetActive(true);
             backButtonBrowseCollection.gameObject.SetActive(false);
@@ -176,7 +168,7 @@ namespace ChainSafe.Gaming.Marketplace
         /// </summary>
         private void OpenSelectedMarketplace()
         {
-            ToggleProcessingMenu();
+            ProcessingMenu.ToggleMenu();
             backButtonBrowseSelectedMarketplace.gameObject.SetActive(true);
             backButtonBrowseMarketplace.gameObject.SetActive(false);
         }
@@ -186,9 +178,9 @@ namespace ChainSafe.Gaming.Marketplace
         /// </summary>
         private void BackToSelectionMenu()
         {
-            if (processingMenu.activeSelf)
+            if (ProcessingMenu.Instance.gameObject.activeSelf)
             {
-                ToggleProcessingMenu();
+                ProcessingMenu.ToggleMenu();
             }
             EventManagerMarketplace.RaiseToggleSelectionMenu();
             browseMarketplacesMenu.SetActive(false);
@@ -264,7 +256,6 @@ namespace ChainSafe.Gaming.Marketplace
             EventManagerMarketplace.ConfigureMarketplaceGuiManager += SetCustomColours;
             EventManagerMarketplace.OpenSelectedMarketplace += OpenSelectedMarketplace;
             EventManagerMarketplace.OpenSelectedCollection += OpenSelectedCollection;
-            EventManagerMarketplace.ToggleProcessingMenu += ToggleProcessingMenu;
         }
         
         /// <summary>
@@ -275,7 +266,6 @@ namespace ChainSafe.Gaming.Marketplace
             EventManagerMarketplace.ConfigureMarketplaceGuiManager -= SetCustomColours;
             EventManagerMarketplace.OpenSelectedMarketplace -= OpenSelectedMarketplace;
             EventManagerMarketplace.OpenSelectedCollection -= OpenSelectedCollection;
-            EventManagerMarketplace.ToggleProcessingMenu -= ToggleProcessingMenu;
         }
 
         #endregion

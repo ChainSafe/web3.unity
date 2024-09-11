@@ -54,7 +54,7 @@ namespace Scripts.EVM.Marketplace
         public static async Task<MarketplaceModel.MarketplaceItemsResponse> GetProjectItems()
         {
             var path = $"/items?chainId={Web3Accessor.Web3.ChainConfig.ChainId}";
-            var response = await CSServer.GetData<MarketplaceModel.MarketplaceItemsResponse>(path);
+            var response = await CSServer.GetDataFromUrl<MarketplaceModel.MarketplaceItemsResponse>(path);
             return response;
         }
 
@@ -62,12 +62,13 @@ namespace Scripts.EVM.Marketplace
         /// Gets all items in a marketplace.
         /// Path: https://api.gaming.chainsafe.io/v1/projects/{projectID}/marketplaces/{marketplaceID}/items
         /// </summary>
-        /// <param name="marketplaceId">MarketplaceID to query</param>
+        /// <param name="marketplaceId">Marketplace ID to query</param>
+        /// <param name="customProjectId">Project ID to query</param>
         /// <returns>MarketplaceModel.MarketplaceItemsResponse</returns>
-        public static async Task<MarketplaceModel.MarketplaceItemsResponse> GetMarketplaceItems(string marketplaceId)
+        public static async Task<MarketplaceModel.MarketplaceItemsResponse> GetMarketplaceItems(string marketplaceId, string customProjectId = null)
         {
             var path = $"/marketplaces/{marketplaceId}/items";
-            var response = await CSServer.GetData<MarketplaceModel.MarketplaceItemsResponse>(path);
+            var response = await CSServer.GetData<MarketplaceModel.MarketplaceItemsResponse>(path, customProjectId);
             return response;
         }
 
@@ -81,7 +82,7 @@ namespace Scripts.EVM.Marketplace
         public static async Task<MarketplaceModel.Item> GetItem(string marketplaceId, string tokenId)
         {
             var path = $"/marketplaces/{marketplaceId}/items/{tokenId}";
-            var response = await CSServer.GetData<MarketplaceModel.Item>(path);
+            var response = await CSServer.GetDataFromUrl<MarketplaceModel.Item>(path);
             return response;
         }
 
@@ -93,7 +94,7 @@ namespace Scripts.EVM.Marketplace
         public static async Task<NftTokenModel.CollectionItemsResponse> GetProjectTokens()
         {
             var path = $"/tokens?chainId={Web3Accessor.Web3.ChainConfig.ChainId}";
-            var response = await CSServer.GetData<NftTokenModel.CollectionItemsResponse>(path);
+            var response = await CSServer.GetDataFromUrl<NftTokenModel.CollectionItemsResponse>(path);
             return response;
         }
 
@@ -106,7 +107,7 @@ namespace Scripts.EVM.Marketplace
         public static async Task<NftTokenModel.CollectionItemsResponse> GetCollectionTokens721(string collectionId721)
         {
             var path = $"/collections/{collectionId721}/tokens";
-            var response = await CSServer.GetData<NftTokenModel.CollectionItemsResponse>(path);
+            var response = await CSServer.GetDataFromUrl<NftTokenModel.CollectionItemsResponse>(path);
             return response;
         }
 
@@ -119,7 +120,7 @@ namespace Scripts.EVM.Marketplace
         public static async Task<NftTokenModel.CollectionItemsResponse> GetCollectionTokens1155(string collectionId1155)
         {
             var path = $"/collections/{collectionId1155}/tokens";
-            var response = await CSServer.GetData<NftTokenModel.CollectionItemsResponse>(path);
+            var response = await CSServer.GetDataFromUrl<NftTokenModel.CollectionItemsResponse>(path);
             return response;
         }
 
@@ -134,7 +135,7 @@ namespace Scripts.EVM.Marketplace
         public static async Task<NftTokenModel.Token> GetCollectionToken(string collectionId, string tokenId)
         {
             var path = $"/collections/{collectionId}/tokens/{tokenId}";
-            var response = await CSServer.GetData<NftTokenModel.Token>(path);
+            var response = await CSServer.GetDataFromUrl<NftTokenModel.Token>(path);
             return response;
         }
 
@@ -148,7 +149,7 @@ namespace Scripts.EVM.Marketplace
         public static async Task<MarketplaceModel.MarketplaceItemsResponse> GetTokenOwners(string collectionId, string tokenId)
         {
             var path = $"/collections/{collectionId}/tokens/{tokenId}/owners";
-            var response = await CSServer.GetData<MarketplaceModel.MarketplaceItemsResponse>(path);
+            var response = await CSServer.GetDataFromUrl<MarketplaceModel.MarketplaceItemsResponse>(path);
             return response;
         }
 

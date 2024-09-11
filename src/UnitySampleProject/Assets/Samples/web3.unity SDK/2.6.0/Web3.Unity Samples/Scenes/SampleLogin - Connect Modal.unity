@@ -313,7 +313,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b575a0ab50061014ca051bbfaf597ac2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  connectOnInitialize: 1
+  connectOnInitialize: 0
   connectModalPrefab: {fileID: 4706621120835174763, guid: 2dd57b774deda1948bd97dcb6d6e9fb4, type: 3}
   connectButton: {fileID: 1551748812896581000}
 --- !u!4 &1658652863
@@ -361,7 +361,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d2237df0314604419146b916b88d158, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneToLoad: SampleMain
+  sceneToLoad: MarketplaceSampleScene
 --- !u!224 &199374705475579680
 RectTransform:
   m_ObjectHideFlags: 0
