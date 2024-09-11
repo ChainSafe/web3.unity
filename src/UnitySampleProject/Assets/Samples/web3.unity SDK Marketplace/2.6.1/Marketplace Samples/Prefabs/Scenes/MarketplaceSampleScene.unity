@@ -1252,8 +1252,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectId: 27638946-39c4-4c20-b9ba-368ab4ebae8d
-  marketplaceId: b15c4c39-e843-45f2-ab89-d27784236cb6
-  marketplaceContractAddress: 0xc7e5325a4f2d1b14ac1d827b351f756ef5e98690
+  marketplaceId: 47df86be-9ff4-44f7-babf-322b87f6bfb7
+  marketplaceContractAddress: 0xfec21026c2cfb2cca13dc183dfb6abaa92cb0097
   marketplaceListing: {fileID: 2733160617654057122, guid: 0baa23627c8ca4a47b26514deac91fcd, type: 3}
   parent: {fileID: 754997803}
 --- !u!1 &950944120

@@ -25,12 +25,12 @@ public class MarketplaceBrowser : MonoBehaviour
 
     private async void Awake()
     {
+        ProcessingMenu.ToggleMenu();
+
         _marketplaceContract =
             await Web3Accessor.Web3.ContractBuilder.Build<MarketplaceContract>(marketplaceContractAddress);
         _marketplaceContract.OnItemSold += ItemSold;
-
-        ProcessingMenu.ToggleMenu();
-
+        
         var marketplaceItems = await Marketplace.GetMarketplaceItems(marketplaceId, projectId);
         foreach (var item in marketplaceItems.items)
         {
@@ -55,7 +55,7 @@ public class MarketplaceBrowser : MonoBehaviour
     {
         if (!_marketplaceListings.TryGetValue(obj.ItemId, out var listing)) return;
         
-        IMainThreadRunner mainThreadRunner = (UnityDispatcherAdapter)Web3Accessor.Web3.ServiceProvider.GetService(typeof(IMainThreadRunner));
+        IMainThreadRunner mainThreadRunner = (IMainThreadRunner)Web3Accessor.Web3.ServiceProvider.GetService(typeof(IMainThreadRunner));
         mainThreadRunner.Enqueue(() =>
         {
             Destroy(listing.gameObject);
