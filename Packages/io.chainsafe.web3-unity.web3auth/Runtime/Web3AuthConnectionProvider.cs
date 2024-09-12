@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -75,10 +76,18 @@ public class Web3AuthConnectionProvider : RestorableConnectionProvider, ILogoutH
         _initializeTcs = new TaskCompletionSource<string>();
         
         var projectConfig = ProjectConfigUtilities.Load();
+
+        var chainConfig = projectConfig.ChainConfigs.FirstOrDefault();
+
+        if (chainConfig is null)
+        {
+            Debug.LogError($"Couldn't initialize {nameof(Web3AuthConnectionProvider)}. No Chain Config were found in Project Config.");
+            return;
+        }
         
         //1155 is a decimal number, we need to convert it to an integer
-        InitWeb3Auth(clientId, new HexBigInteger(BigInteger.Parse(projectConfig.ChainId)).HexValue, 
-            projectConfig.Rpc, projectConfig.Network, "", projectConfig.Symbol, "", network.ToString().ToLower(), Initialized, InitializeError);
+        InitWeb3Auth(clientId, new HexBigInteger(BigInteger.Parse(chainConfig.ChainId)).HexValue, 
+            chainConfig.Rpc, chainConfig.Network, "", chainConfig.Symbol, "", network.ToString().ToLower(), Initialized, InitializeError);
 
         await _initializeTcs.Task;
     }
@@ -235,7 +244,6 @@ public class Web3AuthConnectionProvider : RestorableConnectionProvider, ILogoutH
     {
         if (enableWalletGui)
         {
-            // TODO pass web3 instance here instead of using web3accessor
             _web3AuthWalletGui = Instantiate(web3AuthWalletGUIPrefab);
             _web3AuthWalletGui.Initialize(walletGuiConfig);
         }

@@ -10,10 +10,10 @@ namespace ChainSafe.Gaming.Web3.Core.Chains
     public class ChainManager : IChainManager
     {
         private readonly Dictionary<string, IChainConfig> configs;
-        private readonly IList<IChainSwitchHandler> switchHandlers;
+        private readonly IEnumerable<IChainSwitchHandler> switchHandlers;
         private readonly ILogWriter logWriter;
 
-        public ChainManager(IChainConfigSet configSet, IList<IChainSwitchHandler> switchHandlers, ILogWriter logWriter)
+        public ChainManager(IChainConfigSet configSet, IEnumerable<IChainSwitchHandler> switchHandlers, ILogWriter logWriter)
         {
             this.logWriter = logWriter;
             this.switchHandlers = switchHandlers;

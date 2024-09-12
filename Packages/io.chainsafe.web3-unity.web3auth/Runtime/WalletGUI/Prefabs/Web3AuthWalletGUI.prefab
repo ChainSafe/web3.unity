@@ -4931,7 +4931,6 @@ GameObject:
   - component: {fileID: 4029780974178710413}
   - component: {fileID: 7234845548737740600}
   - component: {fileID: 804371200852392299}
-  - component: {fileID: 6274013656548490657}
   m_Layer: 0
   m_Name: Web3AuthWalletGUI
   m_TagString: Untagged
@@ -5112,18 +5111,6 @@ MonoBehaviour:
   holdToRevealPrivateKeyButton: {fileID: 198969248047024504}
   circleLoadingImage: {fileID: 1647118626164522998}
   holdDuration: 2
---- !u!114 &6274013656548490657
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2911816339710442984}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15ddd9b23c8d92f4db529a02cc14ecab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2991694514551052582
 GameObject:
   m_ObjectHideFlags: 0

@@ -173,7 +173,7 @@ namespace ChainSafe.GamingSdk.Editor
             private void UpdateServerMenuInfo(bool chainSwitched = false)
             {
                 // Get the selected chain index
-                selectedChainIndex = Array.FindIndex(window.chainList.ToArray(), x => x.name == chainConfig.Chain);
+                selectedChainIndex = window.chainList.FindIndex(x => x.name == chainConfig.Chain);
                 // Check if the selectedChainIndex is valid
                 if (selectedChainIndex >= 0 && selectedChainIndex < window.chainList.Count)
                 {
@@ -215,7 +215,8 @@ namespace ChainSafe.GamingSdk.Editor
                 else
                 {
                     // Handle the case where the selected chain is not found
-                    Debug.LogError("Selected chain not found in the chainList.");
+                    Debug.LogError("Couldn't find the chain, switching to default chain.");
+                    selectedChainIndex = window.chainList.FindIndex(x => x.name == ChainConfigEntry.Default.Chain);
                 }
             }
         }
