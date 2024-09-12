@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.Gaming;
 using ChainSafe.Gaming.UnityPackage;
@@ -21,7 +23,7 @@ namespace ChainSafe.GamingSdk.Editor
         [MenuItem("ChainSafe SDK/Project Settings", false, 1)]
         public static void ShowWindow()
         {
-            // Show existing window instance. If one doesn't exist, make one.
+            // Show existing window instance. If it doesn't exist, make one.
             var window = GetWindow(typeof(Web3SettingsEditor));
             window.titleContent = new GUIContent("Web3 Settings");
             window.minSize = new Vector2(450, 300);
@@ -29,7 +31,63 @@ namespace ChainSafe.GamingSdk.Editor
 
         public static void WriteNetworkFile()
         {
-            throw new NotImplementedException();
+            Debug.Log("Updating network.js...");
+
+            var projectConfig = ProjectConfigUtilities.CreateOrLoad();
+
+            if (!projectConfig.ChainConfigs.Any())
+            {
+                Debug.LogError("Can not generate network.js files for WebGL. Please add at least one Chain Config to continue.");
+                return;
+            }
+
+            // declares paths to write our javascript files to
+            var path1 = "Assets/WebGLTemplates/Web3GL-2020x/network.js";
+            var path2 = "Assets/WebGLTemplates/Web3GL-MetaMask/network.js";
+
+            if (AssetDatabase.IsValidFolder(Path.GetDirectoryName(path1)))
+            {
+                // write data to the webgl default network file
+                var sb = new StringBuilder();
+                sb.AppendLine("//You can see a list of compatible EVM chains at https://chainlist.org/");
+                sb.AppendLine("window.networks = [");
+                for (var i = 0; i < projectConfig.ChainConfigs.Count; i++)
+                {
+                    var chainConfig = projectConfig.ChainConfigs[i];
+                    var isLast = i == projectConfig.ChainConfigs.Count - 1;
+                    sb.AppendLine("  {");
+                    sb.AppendLine("    id: " + chainConfig.ChainId + ",");
+                    sb.AppendLine("    label: " + '"' + chainConfig.Chain + " " + chainConfig.Network + '"' + ",");
+                    sb.AppendLine("    token: " + '"' + chainConfig.Symbol + '"' + ",");
+                    sb.AppendLine("    rpcUrl: " + "'" + chainConfig.Rpc + "'" + ",");
+                    sb.AppendLine(!isLast ? "  }," : "  }");
+                }
+                sb.AppendLine("]");
+                File.WriteAllText(path1, sb.ToString());
+            }
+            else
+            {
+                Debug.LogWarning(
+                    $"{Path.GetDirectoryName(path1)} is missing, network.js file will not be updated for this template");
+            }
+
+            if (AssetDatabase.IsValidFolder(Path.GetDirectoryName(path2)))
+            {
+                // writes data to the webgl metamask network file
+                var sb = new StringBuilder();
+                sb.AppendLine("//You can see a list of compatible EVM chains at https://chainlist.org/");
+                sb.AppendLine("window.web3ChainId = " + projectConfig.ChainConfigs.First().ChainId + ";");
+                File.WriteAllText(path2, sb.ToString());
+            }
+            else
+            {
+                Debug.LogWarning(
+                    $"{Path.GetDirectoryName(path2)} is missing, network.js file will not be updated for this template");
+            }
+
+            AssetDatabase.Refresh();
+
+            Debug.Log("Done");
         }
         
         private static GUIStyle centeredLabelStyle;
@@ -238,19 +296,23 @@ namespace ChainSafe.GamingSdk.Editor
         /// <param name="projectID"></param>
         private static async void ValidateProjectID(string projectID)
         {
+            bool projectIdValid;
             try
             {
-                if (await ValidateProjectIDAsync(projectID))
-                {
-#if UNITY_WEBGL
-                WriteNetworkFile();
-#endif
-                }
+                projectIdValid = await ValidateProjectIDAsync(projectID);
             }
             catch (Exception e)
             {
                 Debug.LogError("Failed to validate project ID");
                 Debug.LogException(e);
+                return;
+            }
+            
+            if (projectIdValid)
+            {
+#if UNITY_WEBGL
+                WriteNetworkFile();
+#endif
             }
             
             static async Task<bool> ValidateProjectIDAsync(string projectID)
