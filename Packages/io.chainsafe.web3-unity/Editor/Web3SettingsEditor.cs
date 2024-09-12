@@ -19,12 +19,19 @@ namespace ChainSafe.GamingSdk.Editor
 
         // Initializes window
         [MenuItem("ChainSafe SDK/Project Settings", false, 1)]
-        public static void ShowWindow()
+        public static void ShowWindow() => ShowWindow(null);
+        
+        public static void ShowWindow(Tabs? tabOverride = null)
         {
             // Show existing window instance. If one doesn't exist, make one.
-            var window = GetWindow(typeof(Web3SettingsEditor));
+            var window = (Web3SettingsEditor) GetWindow(typeof(Web3SettingsEditor));
             window.titleContent = new GUIContent("Web3 Settings");
             window.minSize = new Vector2(450, 300);
+
+            if (tabOverride.HasValue)
+            {
+                window.ActiveTab = tabOverride.Value;
+            }
         }
 
         public static void WriteNetworkFile()
@@ -337,8 +344,8 @@ namespace ChainSafe.GamingSdk.Editor
         {
             [JsonProperty("response")] public bool Response { get; set; }
         }
-        
-        private enum Tabs
+
+        public enum Tabs
         {
             Project = 0,
             Chains = 1

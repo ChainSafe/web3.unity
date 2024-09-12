@@ -56,7 +56,7 @@ namespace ChainSafe.GamingSdk.Editor
                 var projectID = ProjectConfigUtilities.Load()?.ProjectId;
                 if (string.IsNullOrWhiteSpace(projectID))
                 {
-                    Web3SettingsEditor.ShowWindow();
+                    Web3SettingsEditor.ShowWindow(Web3SettingsEditor.Tabs.Project);
                 }
             }
             catch (Exception e)
