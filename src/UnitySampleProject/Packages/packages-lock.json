@@ -10,7 +10,7 @@
       "hash": "c2f3628a028373afc8c66e443f7ce21bcb613a47"
     },
     "com.unity.collab-proxy": {
-      "version": "2.2.0",
+      "version": "2.3.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -42,7 +42,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.nuget.mono-cecil": {
-      "version": "1.10.1",
+      "version": "1.11.4",
       "depth": 2,
       "source": "registry",
       "dependencies": {},
@@ -56,18 +56,18 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.sysroot": {
-      "version": "2.0.7",
+      "version": "2.0.10",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.sysroot.linux-x86_64": {
-      "version": "2.0.6",
+      "version": "2.0.9",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.unity.sysroot": "2.0.7"
+        "com.unity.sysroot": "2.0.10"
       },
       "url": "https://packages.unity.com"
     },
@@ -113,6 +113,16 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.unity.toolchain.win-x86_64-linux-x86_64": {
+      "version": "2.0.9",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.sysroot": "2.0.10",
+        "com.unity.sysroot.linux-x86_64": "2.0.9"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.ugui": {
       "version": "1.0.0",
       "depth": 0,
@@ -123,7 +133,7 @@
       }
     },
     "com.unity.visualscripting": {
-      "version": "1.9.1",
+      "version": "1.9.4",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -141,12 +151,30 @@
         "com.unity.textmeshpro": "3.0.6"
       }
     },
+    "io.chainsafe.web3-unity.hyperplay": {
+      "version": "file:../../../Packages/io.chainsafe.web3-unity.hyperplay",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "3.0.2",
+        "io.chainsafe.web3-unity": "2.6.0"
+      }
+    },
     "io.chainsafe.web3-unity.lootboxes": {
       "version": "file:../../../Packages/io.chainsafe.web3-unity.lootboxes",
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "io.chainsafe.web3-unity": "2.5.5"
+        "io.chainsafe.web3-unity": "2.6.0"
+      }
+    },
+    "io.chainsafe.web3-unity.marketplace": {
+      "version": "file:../../../Packages/io.chainsafe.web3-unity.marketplace",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "3.0.2",
+        "io.chainsafe.web3-unity": "2.6.0"
       }
     },
     "io.chainsafe.web3-unity.ramp": {
@@ -155,7 +183,7 @@
       "source": "local",
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.0.2",
-        "io.chainsafe.web3-unity": "2.5.0"
+        "io.chainsafe.web3-unity": "2.6.0"
       }
     },
     "io.chainsafe.web3-unity.web3auth": {
@@ -164,7 +192,7 @@
       "source": "local",
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.0.2",
-        "io.chainsafe.web3-unity": "2.5.5"
+        "io.chainsafe.web3-unity": "2.6.0"
       }
     },
     "nuget.mono-cecil": {
@@ -306,17 +334,6 @@
     "com.unity.modules.uielements": {
       "version": "1.0.0",
       "depth": 0,
-      "source": "builtin",
-      "dependencies": {
-        "com.unity.modules.ui": "1.0.0",
-        "com.unity.modules.imgui": "1.0.0",
-        "com.unity.modules.jsonserialize": "1.0.0",
-        "com.unity.modules.uielementsnative": "1.0.0"
-      }
-    },
-    "com.unity.modules.uielementsnative": {
-      "version": "1.0.0",
-      "depth": 1,
       "source": "builtin",
       "dependencies": {
         "com.unity.modules.ui": "1.0.0",

@@ -25,11 +25,6 @@ namespace ChainSafe.Gaming.Web3.Analytics
 
         public async void CaptureEvent(AnalyticsEvent eventData)
         {
-            eventData.ProjectId ??= ProjectConfig.ProjectId;
-            eventData.ChainId ??= ChainConfig.ChainId;
-            eventData.Network ??= ChainConfig.Network;
-            eventData.Version = AnalyticsVersion;
-
             await httpClient.PostRaw(LoggingUrl, JsonConvert.SerializeObject(eventData), "application/json");
         }
     }

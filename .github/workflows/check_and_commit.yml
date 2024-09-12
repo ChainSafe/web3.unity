@@ -31,24 +31,30 @@ jobs:
         export DESTINATION_DIRECTORY=
         export DESTINATION_PATH=
         
-        export DUPLICATE_SAMPLE_VARS=${{ vars.DUPLICATE_SAMPLE_VARS }}
-        
-        for entry in "${DUPLICATE_SAMPLE_VARS[@]}"
+        while IFS= read -r entry || [ -n "$entry" ];
         do
-          IFS=':' read -ra dirs <<< "$entry"
-          SOURCE_PATH=${dirs[0]}
-          DESTINATION_DIRECTORY=${dirs[1]}
-          
-          SOURCE_PATH="${GITHUB_WORKSPACE}/$SOURCE_PATH/$(ls "$SOURCE_PATH" | head -n 1)/$DESTINATION_DIRECTORY"
+          source_prefix="source:"
+          display_name_prefix="display_name:"
+          destination_prefix="destination:"
         
-          DESTINATION_PATH="${GITHUB_WORKSPACE}/${dirs[2]}"
-          
-          rm -rf "$DESTINATION_PATH"
-          mkdir -p "$DESTINATION_PATH"
-          cp -r "$SOURCE_PATH/." "$DESTINATION_PATH"
+          entry=$(echo "$entry" | sed -e 's/^[[:space:]]*//')
         
-          git add "$DESTINATION_PATH." -f
-        done
+          if [[ $entry = $source_prefix* ]]
+          then
+            SOURCE_PATH=${entry#"$source_prefix"}
+          elif [[ $entry = $display_name_prefix* ]]
+          then
+            DESTINATION_DIRECTORY=${entry#"$display_name_prefix"}
+            SOURCE_PATH="${GITHUB_WORKSPACE}/$SOURCE_PATH/$(ls "$SOURCE_PATH" | head -n 1)/$DESTINATION_DIRECTORY"
+          elif [[ $entry = $destination_prefix* ]]
+          then
+            DESTINATION_PATH="${GITHUB_WORKSPACE}/${entry#"$destination_prefix"}"
+            rm -rf "$DESTINATION_PATH"
+            mkdir -p "$DESTINATION_PATH"
+            cp -r "$SOURCE_PATH/." "$DESTINATION_PATH"
+            git add "$DESTINATION_PATH." -f
+          fi
+        done < "${GITHUB_WORKSPACE}/scripts/data/duplicate_samples.txt"
     - name: update submodules
       # clone submodules
       run: |
@@ -68,36 +74,30 @@ jobs:
 
         echo -e "DLLs Generated\n$(ls "$PUBLISH_PATH")"
 
-        export PACKAGE_DEPENDENCIES=($(<${GITHUB_WORKSPACE}/scripts/data/published_dependencies.txt))
-
-        PACKAGE_DEPENDENCIES="${PACKAGE_DEPENDENCIES//$'\n'/ }"
-        PACKAGE_DEPENDENCIES="${PACKAGE_DEPENDENCIES//$'\r'/}"
-
         export DLL_META_FILE_TEMPLATE="${{ vars.DLL_META_FILE_TEMPLATE }}"
 
-        for entry in "${PACKAGE_DEPENDENCIES[@]}"
+        export PACKAGE_LIB_PATH=
+
+        while IFS= read -r entry || [ -n "$entry" ];
         do
-          IFS=':' read -ra dirs <<< "$entry"
-          export PACKAGE_LIB_PATH="${GITHUB_WORKSPACE}/${dirs[0]}"
-
-          if [ -d "$PACKAGE_LIB_PATH" ]; then
-            rm "$PACKAGE_LIB_PATH"*.dll
-          else
-            mkdir -p "$PACKAGE_LIB_PATH"
-          fi
-
-          IFS=';' read -ra dependencies <<< "${dirs[1]}"
-
-          for dependency in "${dependencies[@]}"
-          do
-            cp "$PUBLISH_PATH/$dependency.dll" $PACKAGE_LIB_PATH
-            if ! [ -f "$PACKAGE_LIB_PATH$dependency.dll.meta" ]; then
-              echo -e "${DLL_META_FILE_TEMPLATE/"[[assetGuid]]"/"$(uuidgen | tr -d '-')"}" >> "$PACKAGE_LIB_PATH$dependency.dll.meta"
+          if [[ $entry == *: ]]
+          then
+            PACKAGE_LIB_PATH="${GITHUB_WORKSPACE}/${entry%:}"
+            if [ -d "$PACKAGE_LIB_PATH" ]; then
+              rm -rf "$PACKAGE_LIB_PATH"*.dll
+              rm -rf "$PACKAGE_LIB_PATH"*.pdb
+            else
+              mkdir -p "$PACKAGE_LIB_PATH"
             fi
-          done
-
+          else
+            export DEPENDENCY=$(echo "$entry" | tr -d '\t' | tr -d ' ')
+            cp "$PUBLISH_PATH/$DEPENDENCY".dll $PACKAGE_LIB_PATH
+            if ! [ -f "$PACKAGE_LIB_PATH$DEPENDENCY.dll.meta" ]; then
+              echo -e "${DLL_META_FILE_TEMPLATE/"[[assetGuid]]"/"$(uuidgen | tr -d '-')"}" >> "$PACKAGE_LIB_PATH$DEPENDENCY.dll.meta"
+            fi
+          fi
           git add "$PACKAGE_LIB_PATH." -f
-        done
+        done < "${GITHUB_WORKSPACE}/scripts/data/published_dependencies.txt"
     - uses: actions/cache@v2
       with:
         path: ${{ matrix.projectPath }}/Library
@@ -110,6 +110,7 @@ jobs:
         UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
       with:
         projectPath: ${{ matrix.projectPath }}
+        customImage: 'unityci/editor:ubuntu-2022.3.26f1-linux-il2cpp-3.1.0'
         testMode: ${{ matrix.testMode }}
         artifactsPath: ${{ matrix.testMode }}-artifacts
         githubToken: ${{ secrets.GITHUB_TOKEN }}

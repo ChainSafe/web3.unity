@@ -57,10 +57,7 @@ namespace ChainSafe.GamingSdk.Gelato
 
             analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
-                ChainId = chainConfig.ChainId,
-                Network = chainConfig.Network,
                 EventName = $"Gelato initialized",
-                ProjectId = projectConfig.ProjectId,
                 PackageName = "io.chainsafe.web3-unity",
             });
         }
@@ -102,7 +99,7 @@ namespace ChainSafe.GamingSdk.Gelato
                     ChainId = int.Parse(chainConfig.ChainId),
                     Target = request.Target,
                     Data = request.Data,
-                    User = await signer.GetAddress(),
+                    User = signer.PublicAddress,
                     UserDeadline = request.UserDeadline,
                     UserNonce = request.UserNonce,
                     FeeToken = request.FeeToken,

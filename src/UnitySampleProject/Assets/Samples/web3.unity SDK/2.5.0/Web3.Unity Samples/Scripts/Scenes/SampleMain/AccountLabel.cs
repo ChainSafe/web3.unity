@@ -7,9 +7,9 @@ public class AccountLabel : MonoBehaviour
 {
     private TMP_Text label;
 
-    private async void Awake()
+    private void Awake()
     {
         label = GetComponent<TMP_Text>();
-        label.text = await Web3Accessor.Web3.Signer.GetAddress();
+        label.text = Web3Accessor.Web3.Signer.PublicAddress;
     }
 }

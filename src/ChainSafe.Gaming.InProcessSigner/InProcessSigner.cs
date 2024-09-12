@@ -15,8 +15,8 @@ namespace ChainSafe.Gaming.InProcessSigner
     /// </summary>
     public class InProcessSigner : ISigner
     {
-        private EthECKey privateKey;
-        private EthereumMessageSigner messageSigner;
+        private readonly EthECKey privateKey;
+        private readonly EthereumMessageSigner messageSigner;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InProcessSigner"/> class.
@@ -33,8 +33,8 @@ namespace ChainSafe.Gaming.InProcessSigner
         /// <summary>
         /// Implementation of <see cref="ISigner.GetAddress"/> using In Process.
         /// </summary>
-        /// <returns>Public address of signer.</returns>
-        public Task<string> GetAddress() => Task.FromResult(privateKey.GetPublicAddress());
+        /// <value>Public address of signer.</value>
+        public string PublicAddress => privateKey.GetPublicAddress();
 
         /// <summary>
         /// Implementation of <see cref="ISigner.SignMessage"/> using In Process.

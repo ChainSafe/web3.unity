@@ -6,6 +6,7 @@ using ChainSafe.Gaming.Lootboxes.Chainlink;
 using Scripts.EVM.Token;
 using UnityEngine;
 using UnityEngine.Networking;
+using ChainSafe.Gaming.Ipfs;
 
 namespace LootBoxes.Chainlink.Scene
 {
@@ -57,7 +58,7 @@ namespace LootBoxes.Chainlink.Scene
 
         private static async Task<Texture> DownloadImage(string imageUri)
         {
-            var request = UnityWebRequestTexture.GetTexture(imageUri.UnpackUriIfIpfs());
+            var request = UnityWebRequestTexture.GetTexture(IpfsHelper.RollupIpfsUri(imageUri));
 
             await request.SendWebRequest();
 

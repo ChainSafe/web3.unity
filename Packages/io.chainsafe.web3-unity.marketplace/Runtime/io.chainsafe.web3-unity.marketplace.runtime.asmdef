@@ -1,0 +1,23 @@
+{
+    "name": "io.chainsafe.web3-unity.marketplace.runtime",
+    "rootNamespace": "ChainSafe.Gaming.Marketplace",
+    "references": [
+        "GUID:5426c6b788696eb4c88f4198b59839eb",
+        "GUID:1e69005fbbf5a4cd0a6c61596a74886e"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "Unity",
+            "expression": "",
+            "define": "MARKETPLACE_AVAILABLE"
+        }
+    ],
+    "noEngineReferences": false
+}

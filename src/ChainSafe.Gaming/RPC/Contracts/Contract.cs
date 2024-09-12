@@ -13,7 +13,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
     /// <summary>
     /// Representation of a contract.
     /// </summary>
-    public class Contract
+    public class Contract : IContract
     {
         private readonly string abi;
         private readonly string address;
@@ -47,6 +47,8 @@ namespace ChainSafe.Gaming.Evm.Contracts
             contractBuilder = new Builders.ContractBuilder(abi, address);
         }
 
+        public string Address => address;
+
         /// <summary>
         /// Returns a new instance of the Contract attached to a new address. This is useful
         /// if there are multiple similar or identical copies of a Contract on the network
@@ -54,7 +56,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
         /// </summary>
         /// <param name="address">Address of the contract to attach to.</param>
         /// <returns>The new contract.</returns>
-        public Contract Attach(string address)
+        public IContract Attach(string address)
         {
             if (string.IsNullOrEmpty(address))
             {
@@ -85,17 +87,13 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
             parameters ??= Array.Empty<object>();
 
-            var txReq = await PrepareTransactionRequest(method, parameters, overwrite, false);
+            var txReq = await PrepareTransactionRequest(method, parameters, true, overwrite);
 
             var result = await provider.Call(txReq);
             analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
-                ChainId = analyticsClient.ChainConfig.ChainId,
                 EventName = method,
-                Network = analyticsClient.ChainConfig.Network,
-                Version = analyticsClient.AnalyticsVersion,
                 PackageName = "io.chainsafe.web3.unity",
-                ProjectId = analyticsClient.ProjectConfig.ProjectId,
             });
 
             return Decode(method, result);
@@ -158,7 +156,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
             var function = contractBuilder.GetFunctionBuilder(method);
 
-            var txReq = await PrepareTransactionRequest(method, parameters, overwrite);
+            var txReq = await PrepareTransactionRequest(method, parameters, false, overwrite);
 
             var tx = await transactionExecutor.SendTransaction(txReq);
             var receipt = await provider.WaitForTransactionReceipt(tx.Hash);
@@ -168,12 +166,8 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
             analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
-                ChainId = analyticsClient.ChainConfig.ChainId,
                 EventName = method,
-                Network = analyticsClient.ChainConfig.Network,
-                Version = analyticsClient.AnalyticsVersion,
                 PackageName = "io.chainsafe.web3.unity",
-                ProjectId = analyticsClient.ProjectConfig.ProjectId,
             });
 
             return (outputValues, receipt);
@@ -201,7 +195,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
                 throw new Exception("provider or signer is not set");
             }
 
-            return await provider.EstimateGas(await PrepareTransactionRequest(method, parameters, overwrite));
+            return await provider.EstimateGas(await PrepareTransactionRequest(method, parameters, false, overwrite));
         }
 
         /// <summary>
@@ -243,27 +237,29 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
             analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
-                ChainId = analyticsClient.ChainConfig.ChainId,
                 EventName = method,
-                Network = analyticsClient.ChainConfig.Network,
-                Version = analyticsClient.AnalyticsVersion,
                 PackageName = "io.chainsafe.web3.unity",
-                ProjectId = analyticsClient.ProjectConfig.ProjectId,
             });
 
             return function.GetData(parameters);
         }
 
-        public async Task<TransactionRequest> PrepareTransactionRequest(string method, object[] parameters, TransactionRequest overwrite = null, bool shouldEstimateGas = true)
+        public async Task<TransactionRequest> PrepareTransactionRequest(string method, object[] parameters, bool isReadCall = false, TransactionRequest overwrite = null)
         {
             parameters ??= Array.Empty<object>();
 
             var function = contractBuilder.GetFunctionBuilder(method);
             var txReq = overwrite ?? new TransactionRequest();
 
-            txReq.From ??= signer == null ? null : await signer.GetAddress();
+            txReq.From ??= signer?.PublicAddress;
             txReq.To ??= address;
             txReq.Data ??= function.GetData(parameters);
+
+            if (isReadCall)
+            {
+                return txReq;
+            }
+
             try
             {
                 var feeData = await provider.GetFeeData();
@@ -273,10 +269,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
                     txReq.MaxPriorityFeePerGas = feeData.MaxFeePerGas.ToHexBigInteger();
                 }
 
-                if (shouldEstimateGas)
-                {
-                    txReq.GasLimit ??= await provider.EstimateGas(txReq);
-                }
+                txReq.GasLimit ??= await provider.EstimateGas(txReq);
             }
             catch (Exception e)
             {

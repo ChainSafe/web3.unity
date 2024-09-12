@@ -5,6 +5,7 @@ using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Core.Evm;
+using ChainSafe.Gaming.Web3.Environment;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
 using Nethereum.Web3.Accounts;
@@ -18,9 +19,10 @@ namespace ChainSafe.Gaming.InProcessTransactionExecutor
     /// </summary>
     public class InProcessTransactionExecutor : ITransactionExecutor
     {
-        private readonly NWeb3 web3;
         private readonly IRpcProvider rpcProvider;
         private readonly string accountAddress;
+
+        private NWeb3 web3;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InProcessTransactionExecutor"/> class.
@@ -28,9 +30,10 @@ namespace ChainSafe.Gaming.InProcessTransactionExecutor
         /// <param name="signer">Injected <see cref="ISigner"/>.</param>
         /// <param name="chainConfig">Injected <see cref="IChainConfig"/>.</param>
         /// <param name="rpcProvider">Injected <see cref="IRpcProvider"/>.</param>
+        /// <param name="mainThreadRunner">Injected <see cref="IMainThreadRunner"/>.</param>
         /// <param name="rpcClientWrapper">Injected <see cref="IRpcClientWrapper"/>.</param>
         /// <exception cref="Web3Exception">Throws exception if initializing instance fails.</exception>
-        public InProcessTransactionExecutor(ISigner signer, IChainConfig chainConfig, IRpcProvider rpcProvider, IRpcClientWrapper rpcClientWrapper)
+        public InProcessTransactionExecutor(ISigner signer, IChainConfig chainConfig, IRpcProvider rpcProvider, IMainThreadRunner mainThreadRunner, IRpcClientWrapper rpcClientWrapper)
         {
             // It should be possible to set up other signers to work with this as well.
             // However, does it make sense to let a remote wallet sign a transaction, but
@@ -39,19 +42,24 @@ namespace ChainSafe.Gaming.InProcessTransactionExecutor
                 throw new Web3Exception($"{nameof(InProcessTransactionExecutor)} only supports {nameof(InProcessSigner.InProcessSigner)}");
             accountAddress = privateKey.GetPublicAddress();
             var account = new Account(privateKey);
-            if (chainConfig.Rpc is not null && !string.Empty.Equals(chainConfig.Rpc))
+
+            // Initialize Web3 on the main thread.
+            mainThreadRunner.Enqueue(() =>
             {
-                web3 = new NWeb3(account, rpcClientWrapper.Client);
-            }
-            else if (chainConfig.Ipc is not null && !string.Empty.Equals(chainConfig.Ipc))
-            {
-                var client = new NIpcClient(chainConfig.Rpc);
-                web3 = new NWeb3(client);
-            }
-            else
-            {
-                throw new Web3Exception($"{nameof(IChainConfig)} should have at least one communication method set.");
-            }
+                if (chainConfig.Rpc is not null && !string.Empty.Equals(chainConfig.Rpc))
+                {
+                    web3 = new NWeb3(account, rpcClientWrapper.Client);
+                }
+                else if (chainConfig.Ipc is not null && !string.Empty.Equals(chainConfig.Ipc))
+                {
+                    var client = new NIpcClient(chainConfig.Rpc);
+                    web3 = new NWeb3(client);
+                }
+                else
+                {
+                    throw new Web3Exception($"{nameof(IChainConfig)} should have at least one communication method set.");
+                }
+            });
 
             this.rpcProvider = rpcProvider;
         }
