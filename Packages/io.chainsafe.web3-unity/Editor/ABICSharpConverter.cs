@@ -384,10 +384,10 @@ public static class ABIToCSHarpTypesExtension
     public static string ToCSharpType(this string parameter)
     {
         // Regular expression for bytes followed by 0 or 3 digits but not followed by []
-        var regex = new Regex(@"^bytes(\d{0}|\d{3})$");
+        var regex = new Regex(@"^bytes(\d*)$");
 
         // Regular expression for bytes[] followed by 0 or 3 digits []
-        var regexArray = new Regex(@"^bytes(\d{0}|\d{3})\[\]$");
+        var regexArray = new Regex(@"^bytes(\d*)\[\]$");
 
         if (regexArray.IsMatch(parameter.ToLower()))
         {
