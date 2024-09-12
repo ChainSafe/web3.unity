@@ -15,7 +15,7 @@ namespace Tests.Runtime
         private readonly IChainConfig chainConfig;
         private readonly IHttpClient httpClient;
 
-        public StubWalletConnectProvider(StubWalletConnectProviderConfig config, Web3Environment environment, IChainConfig chainConfig, ChainRegistryProvider chainRegistryProvider) : base(environment, chainRegistryProvider, chainConfig)
+        public StubWalletConnectProvider(StubWalletConnectProviderConfig config, Web3Environment environment, IChainConfig chainConfig) : base(environment, chainConfig)
         {
             this.config = config;
             this.chainConfig = chainConfig;

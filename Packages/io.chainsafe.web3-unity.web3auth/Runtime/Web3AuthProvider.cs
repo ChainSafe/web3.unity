@@ -20,7 +20,7 @@ public class Web3AuthProvider : WalletProvider, IAccountProvider
     private TaskCompletionSource<Web3AuthResponse> _connectTcs;
     private TaskCompletionSource<object> _disconnectTcs;
 
-    public Web3AuthProvider(Web3AuthWalletConfig config, Web3Environment environment, IChainConfig chainConfig, ChainRegistryProvider chainRegistryProvider) : base(environment, chainRegistryProvider, chainConfig)
+    public Web3AuthProvider(Web3AuthWalletConfig config, Web3Environment environment, IChainConfig chainConfig) : base(environment, chainConfig)
     {
         _config = config;
     }
