@@ -1,5 +1,6 @@
 ﻿using System;
 using ChainSafe.Gaming.Evm.Contracts.Custom;
+using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.UnityPackage;
 using UnityEngine;
 
@@ -36,9 +37,10 @@ namespace Samples.Behaviours.SwitchChain
             Debug.Log(echoMessage);
         }
 
-        public void PrintChainId()
+        public async void PrintChainId()
         {
-            Debug.Log($"Running the SDK with Chain ID: {Web3Accessor.Web3.ChainConfig.ChainId}");
+            var chainId = await Web3Accessor.Web3.RpcProvider.GetChainId();
+            Debug.Log($"Running the SDK with Chain ID: {chainId}");
         }
         
         [Serializable]

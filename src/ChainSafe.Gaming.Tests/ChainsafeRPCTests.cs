@@ -80,9 +80,8 @@ namespace ChainSafe.Gaming.Tests
         [Test]
         public void GetNetworkTest()
         {
-            var network = firstAccount.RpcProvider.LastKnownNetwork;
-            Assert.AreEqual("GoChain Testnet", network.Name);
-            Assert.AreEqual(31337, network.ChainId);
+            var chainId = firstAccount.RpcProvider.GetChainId().Result;
+            Assert.AreEqual("31337", chainId);
         }
 
         /// <summary>

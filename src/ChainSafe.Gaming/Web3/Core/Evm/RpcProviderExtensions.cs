@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Transactions;
@@ -16,6 +17,14 @@ namespace ChainSafe.Gaming.Evm.Providers
 {
     public static class RpcProviderExtensions
     {
+        public static async Task<string> GetChainId(this IRpcProvider provider)
+        {
+            var rawHexChainId = await provider.Perform<string>("eth_chainId");
+            var chainId = new HexBigInteger(rawHexChainId).ToUlong();
+
+            return chainId.ToString(CultureInfo.InvariantCulture);
+        }
+
         /// <summary>
         /// <b>eth_getBalance</b><br/>Asynchronously retrieves the native balance (ETH for Ethereum) of a specified wallet address.
         /// </summary>
