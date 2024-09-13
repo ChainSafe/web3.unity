@@ -8,28 +8,28 @@ using UnityEngine;
 [InitializeOnLoad]
 public static class WebGLThreadPatcherInstaller
 {
-    private const string WebGLThreadPatchedInstalled = "IsWebGLThreadPatcherInstalled";
+    private const string AsyncToolsInstalled = "AreAsyncUtilitiesInstalled";
 
     private const string ManifestPath = "Packages/manifest.json";
 
-    private const string WebGLThreadPatcherPackageName = "com.tools.webglthreadingpatcher";
+    private const string AsyncToolsPackageName = "com.utilities.async";
 
-    private const string WebGLThreadPatcherPackageLink = "https://github.com/VolodymyrBS/WebGLThreadingPatcher.git";
+    private const string AsyncToolPackageLink = "https://github.com/RageAgainstThePixel/com.utilities.async.git#upm";
 
     static WebGLThreadPatcherInstaller()
     {
 #if UNITY_WEBGL
-        if (SessionState.GetBool(WebGLThreadPatchedInstalled, false))
+        if (SessionState.GetBool(AsyncToolsInstalled, false))
         {
             return;
         }
 
         TryInstallThreadPatcher();
 
-        SessionState.SetBool(WebGLThreadPatchedInstalled, true);
+        SessionState.SetBool(AsyncToolsInstalled, true);
 #else
         // reset.
-        SessionState.SetBool(WebGLThreadPatchedInstalled, false);
+        SessionState.SetBool(AsyncToolsInstalled, false);
 #endif
     }
 
@@ -39,15 +39,15 @@ public static class WebGLThreadPatcherInstaller
         Manifest manifest = JsonConvert.DeserializeObject<Manifest>(File.ReadAllText(ManifestPath));
 
         // check if ThreadPatcher is already installed.
-        if (manifest.Dependencies.ContainsKey(WebGLThreadPatcherPackageName))
+        if (manifest.Dependencies.ContainsKey(AsyncToolsPackageName))
         {
             return;
         }
 
-        if (EditorUtility.DisplayDialog("Web3.Unity", "For Web3.Unity to fully work on a WebGL build you need to install a WebGLThreadingPatcher, this will make sure async operations can run to completion.\nInstall WebGLThreadingPatcher?", "Yes", "No"))
+        if (EditorUtility.DisplayDialog("Web3.Unity", "For Web3.Unity to fully work on a WebGL build you need to install Async Utilities, this will make sure async operations can run to completion.\nInstall Async Utilities?", "Yes", "No"))
         {
             // Add the package as a dependency.
-            manifest.Dependencies.Add(WebGLThreadPatcherPackageName, WebGLThreadPatcherPackageLink);
+            manifest.Dependencies.Add(AsyncToolsPackageName, AsyncToolPackageLink);
 
             File.WriteAllText(ManifestPath, JsonConvert.SerializeObject(manifest, Formatting.Indented));
         }
