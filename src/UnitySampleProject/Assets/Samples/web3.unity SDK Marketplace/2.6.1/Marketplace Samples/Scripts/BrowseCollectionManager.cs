@@ -74,7 +74,7 @@ namespace ChainSafe.Gaming.Collection
         {
             foreach (var collection in collectionsResponse.collections.Where(collection => collection.type is "ERC721" or "ERC1155"))
             {
-                await AddCollectionToDisplay(collection.name, collection.type, baseUrl + collection.banner);
+                await AddCollectionToDisplay(collection.name, collection.type, baseUrl + collection.logo);
             }
 
             EventManagerMarketplace.RaiseToggleProcessingMenu();
