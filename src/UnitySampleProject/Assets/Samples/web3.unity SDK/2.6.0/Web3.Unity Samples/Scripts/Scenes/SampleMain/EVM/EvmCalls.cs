@@ -243,18 +243,8 @@ public class EvmCalls : MonoBehaviour
     /// </summary>
     public async void SignMessage()
     {
-        var signedMessage = await Evm.SignMessage(Web3Unity.Web3, messageSign);
-        SampleOutputUtil.PrintResult(signedMessage, nameof(Evm), nameof(Evm.SignMessage));
-    }
-
-    /// <summary>
-    /// Signs a message and verify account ownership
-    /// </summary>
-    public async void SignVerify()
-    {
-        var signatureVerified = await Evm.SignVerify(Web3Unity.Web3, messageSignVerify);
-        var output = signatureVerified ? "Verified" : "Failed to verify";
-        SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.SignVerify));
+        var signedMessage = await Web3Unity.Instance.SignMessage(messageSign);
+        SampleOutputUtil.PrintResult(signedMessage, nameof(Evm), nameof(Web3Unity.Instance.SignMessage));
     }
 
     /// <summary>

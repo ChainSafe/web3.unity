@@ -9,7 +9,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
     public interface IWeb3InitializedHandler
     {
         /// <summary>
-        /// Determines order of execution for <see cref="IWeb3InitializedHandler"/>.
+        /// Determines order of execution for <see cref="IWeb3InitializedHandler"/>s.
         /// </summary>
         public int Priority { get; }
         

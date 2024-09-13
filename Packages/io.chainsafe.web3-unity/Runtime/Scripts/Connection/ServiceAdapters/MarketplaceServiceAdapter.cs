@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace ChainSafe.Gaming.UnityPackage.Connection
 {
+    /// <summary>
+    /// Enables usage of Marketplace when attached.
+    /// </summary>
     public class MarketplaceServiceAdapter : MonoBehaviour, IWeb3BuilderServiceAdapter
     {
         public Web3Builder ConfigureServices(Web3Builder web3Builder)

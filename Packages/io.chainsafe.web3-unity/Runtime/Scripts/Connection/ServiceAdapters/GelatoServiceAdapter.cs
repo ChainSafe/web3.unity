@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace ChainSafe.Gaming.UnityPackage.Connection
 {
+    /// <summary>
+    /// Enables usage of Gelato when attached.
+    /// </summary>
     public class GelatoServiceAdapter : MonoBehaviour, IWeb3BuilderServiceAdapter
     {
         [SerializeField] private string gelatoApiKey;

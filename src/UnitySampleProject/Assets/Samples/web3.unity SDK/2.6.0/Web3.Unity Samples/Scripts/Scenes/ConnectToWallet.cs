@@ -2,6 +2,9 @@ using ChainSafe.Gaming.UnityPackage;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Used to easily connect to wallet.
+/// </summary>
 public class ConnectToWallet : MonoBehaviour
 {
     [SerializeField] private bool connectOnInitialize = true;
