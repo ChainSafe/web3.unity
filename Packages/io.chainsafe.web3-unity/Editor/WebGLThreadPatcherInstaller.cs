@@ -53,9 +53,30 @@ public static class WebGLThreadPatcherInstaller
         }
     }
 
-    private struct Manifest
+    private class Manifest
     {
         [JsonProperty("dependencies")]
         public Dictionary<string, string> Dependencies { get; private set; }
+
+        [JsonProperty("enableLockFile")]
+        public bool EnableLockFile { get; private set; } = true;
+        
+        [JsonProperty("resolutionStrategy", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public string ResolutionStrategy { get; private set; }
+        
+        [JsonProperty("testables", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public string[] Testables { get; private set; }
+        
+        [JsonProperty("scopedRegistries", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public ScopedRegistry[] ScopedRegistries { get; private set; }
+    }
+
+    public struct ScopedRegistry
+    {
+        [JsonProperty("name")] public string Name { get; private set; }
+
+        [JsonProperty("url")] public string Url { get; private set; }
+
+        [JsonProperty("scopes")] public string[] Scopes { get; private set; }
     }
 }
