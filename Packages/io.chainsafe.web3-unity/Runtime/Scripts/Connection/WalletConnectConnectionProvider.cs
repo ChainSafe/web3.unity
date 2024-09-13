@@ -72,7 +72,6 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         {
             get
             {
-#if !UNITY_2022_1_OR_NEWER
 
                 if (_connectionBuilder != null)
                 {
@@ -97,9 +96,6 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
                 _connectionBuilder = webSocketBuilderObj.GetComponent<NativeWebSocketConnectionBuilder>();
 
                 return _connectionBuilder;
-#else
-                return null;
-#endif
             }
         }
         
