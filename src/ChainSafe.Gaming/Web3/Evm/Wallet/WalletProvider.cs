@@ -33,7 +33,7 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
 
         public abstract Task Disconnect();
 
-        public abstract Task<T> Request<T>(string method, params object[] parameters);
+        public abstract Task<T> Request<T>(string method, params object[] parameters); // todo sync wallet chain id before sending any other request
 
         public Task HandleChainSwitching()
         {

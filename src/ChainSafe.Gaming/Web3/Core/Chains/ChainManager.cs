@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.NetCore;
 using ChainSafe.Gaming.Web3.Environment;
@@ -12,6 +13,7 @@ namespace ChainSafe.Gaming.Web3.Core.Chains
         private readonly Dictionary<string, IChainConfig> configs;
         private readonly ILogWriter logWriter;
         private readonly SwitchChainHandlersProvider switchHandlersProvider;
+        private readonly SemaphoreSlim switchChainSemaphore = new(1);
 
         public ChainManager(IChainConfigSet configSet, SwitchChainHandlersProvider switchHandlersProvider, ILogWriter logWriter)
         {
@@ -43,62 +45,71 @@ namespace ChainSafe.Gaming.Web3.Core.Chains
 
         public IChainConfig Current { get; private set; }
 
-        public async Task SwitchChain(string newChainId)
+        public async Task SwitchChain(string newChainId) // todo add timeout mechanism or just take cancellation token as an argument
         {
-            var previousChainId = Current.ChainId;
-
-            if (!configs.TryGetValue(newChainId, out var newChainConfig))
-            {
-                throw new Web3Exception($"No {nameof(IChainConfig)} was registered with id '{newChainId}'. " +
-                                        "Make sure to configure settings for the provided chain before switching to it.");
-            }
-
-            Current = newChainConfig;
-            var succeededHandlers = new Stack<IChainSwitchHandler>();
+            await switchChainSemaphore.WaitAsync(); // wait till previous switch chain process completes
 
             try
             {
-                foreach (var switchHandler in switchHandlersProvider.Handlers)
-                {
-                    await switchHandler.HandleChainSwitching();
-                    succeededHandlers.Push(switchHandler);
-                }
-            }
-            catch (Exception switchException)
-            {
-                // revert everything
-                Current = configs[previousChainId];
+                var previousChainId = Current.ChainId;
 
-                while (succeededHandlers.Count != 0)
+                if (!configs.TryGetValue(newChainId, out var newChainConfig))
                 {
-                    var handlerToRevert = succeededHandlers.Pop();
-
-                    try
-                    {
-                        await handlerToRevert.HandleChainSwitching();
-                    }
-                    catch (Exception revertException)
-                    {
-                        logWriter.LogError(
-                            $"Error occured while reverting handler {handlerToRevert.GetType().Name}. " +
-                            $"Proceeding with revert.\n{revertException}");
-                    }
+                    throw new ArgumentException($"No {nameof(IChainConfig)} was registered with id '{newChainId}'. " +
+                                                "Make sure to configure settings for the provided chain before switching to it.");
                 }
 
-                throw new Web3Exception(
-                    $"One of the handlers thrown an exception. Reverted {nameof(ChainManager)} to the previous chain configuration.",
-                    switchException);
-            }
+                Current = newChainConfig;
+                var succeededHandlers = new Stack<IChainSwitchHandler>();
 
-            logWriter.Log($"Successfully switched to the chain with id '{newChainId}'.");
+                try
+                {
+                    foreach (var switchHandler in switchHandlersProvider.Handlers)
+                    {
+                        await switchHandler.HandleChainSwitching();
+                        succeededHandlers.Push(switchHandler);
+                    }
+                }
+                catch (Exception switchException)
+                {
+                    // revert everything
+                    Current = configs[previousChainId];
 
-            try
-            {
-                ChainSwitched?.Invoke(Current);
+                    while (succeededHandlers.Count != 0)
+                    {
+                        var handlerToRevert = succeededHandlers.Pop();
+
+                        try
+                        {
+                            await handlerToRevert.HandleChainSwitching();
+                        }
+                        catch (Exception revertException)
+                        {
+                            logWriter.LogError(
+                                $"Error occured while reverting handler {handlerToRevert.GetType().Name}. " +
+                                $"Proceeding with revert.\n{revertException}");
+                        }
+                    }
+
+                    throw new Web3Exception(
+                        $"One of the handlers thrown an exception. Reverted {nameof(ChainManager)} to the previous chain configuration.",
+                        switchException);
+                }
+
+                logWriter.Log($"Successfully switched to the chain with id '{newChainId}'.");
+
+                try
+                {
+                    ChainSwitched?.Invoke(Current);
+                }
+                catch (Exception e)
+                {
+                    logWriter.LogError(e.ToString());
+                }
             }
-            catch (Exception e)
+            finally
             {
-                logWriter.LogError(e.ToString());
+                switchChainSemaphore.Release();
             }
         }
 

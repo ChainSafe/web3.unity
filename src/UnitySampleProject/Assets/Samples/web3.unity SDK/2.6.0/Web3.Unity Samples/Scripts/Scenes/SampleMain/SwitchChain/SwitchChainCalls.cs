@@ -18,10 +18,10 @@ namespace Samples.Behaviours.SwitchChain
             currentChainIndex = (currentChainIndex + 1) % chainSetups.Length;
             var chainId = chainSetups[currentChainIndex].chainId;
             
+            Debug.Log($"Switching the chain... Make sure you confirm the chain change in your wallet.");
+            
             // switch chains
             await Web3Accessor.Web3.Chains.SwitchChain(chainId);
-            
-            Debug.Log($"Successfully switched to the chain {chainId}");
         }
 
         public async void CallSmartContract()
