@@ -13,7 +13,6 @@ namespace ChainSafe.Gaming.Web3.Core.Chains
         private readonly Dictionary<string, IChainConfig> configs;
         private readonly ILogWriter logWriter;
         private readonly SwitchChainHandlersProvider switchHandlersProvider;
-        private readonly SemaphoreSlim switchChainSemaphore = new(1);
 
         public ChainManager(IChainConfigSet configSet, SwitchChainHandlersProvider switchHandlersProvider, ILogWriter logWriter)
         {
@@ -45,9 +44,17 @@ namespace ChainSafe.Gaming.Web3.Core.Chains
 
         public IChainConfig Current { get; private set; }
 
-        public async Task SwitchChain(string newChainId) // todo add timeout mechanism or just take cancellation token as an argument
+        public bool IsSwitching { get; private set; }
+
+        public async Task SwitchChain(string newChainId) // todo add cancellation token as an argument and use it
         {
-            await switchChainSemaphore.WaitAsync(); // wait till previous switch chain process completes
+            if (IsSwitching)
+            {
+                throw new InvalidOperationException(
+                    "Can't switch chain. The last chain switching procedure has not yet finished.");
+            }
+
+            IsSwitching = true;
 
             try
             {
@@ -109,7 +116,7 @@ namespace ChainSafe.Gaming.Web3.Core.Chains
             }
             finally
             {
-                switchChainSemaphore.Release();
+                IsSwitching = false;
             }
         }
 

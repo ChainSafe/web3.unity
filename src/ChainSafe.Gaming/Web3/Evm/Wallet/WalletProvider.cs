@@ -57,8 +57,6 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
             {
                 throw new Web3Exception($"Error occured while trying to switch wallet chain.", ex);
             }
-
-            logWriter.Log("Wallet chain switch complete.");
         }
     }
 }

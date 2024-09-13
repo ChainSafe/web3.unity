@@ -9,6 +9,8 @@ namespace ChainSafe.Gaming.Web3.Core.Chains
 
         IChainConfig Current { get; }
 
+        bool IsSwitching { get; }
+
         Task SwitchChain(string newChainId);
 
         void AddChainConfig(IChainConfig newConfig);
