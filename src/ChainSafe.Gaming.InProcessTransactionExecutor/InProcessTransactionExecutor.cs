@@ -4,6 +4,7 @@ using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.InProcessSigner;
 using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Core.Debug;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Accounts;
@@ -82,6 +83,8 @@ namespace ChainSafe.Gaming.InProcessTransactionExecutor
             try
             {
                 string hash = await Account.TransactionManager.SendTransactionAsync(txInput);
+
+                hash = hash.AssertTransactionValid();
 
                 return await rpcProvider.GetTransaction(hash);
             }

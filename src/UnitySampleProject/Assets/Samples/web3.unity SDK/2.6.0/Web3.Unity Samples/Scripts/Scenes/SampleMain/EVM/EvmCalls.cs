@@ -225,8 +225,8 @@ public class EvmCalls : MonoBehaviour
     /// </summary>
     public async void SendTransaction()
     {
-        var transactionHash = await Web3Unity.Instance.SendTransaction(toAddress, BigInteger.Parse(value));
-        SampleOutputUtil.PrintResult(transactionHash, nameof(Evm), nameof(Web3Unity.Instance.SendTransaction));
+        var transactionHash = await Evm.SendTransaction(Web3Unity.Web3, toAddress, BigInteger.Parse(value));
+        SampleOutputUtil.PrintResult(transactionHash, nameof(Evm), nameof(Evm.SendTransaction));
     }
 
     /// <summary>

@@ -161,33 +161,12 @@ namespace ChainSafe.Gaming.UnityPackage
         }
         
         /// <summary>
-        /// Send Transaction.
-        /// </summary>
-        /// <param name="toAddress">Public Address to send to.</param>
-        /// <param name="value">Value to send.</param>
-        /// <returns>Transaction Hash.</returns>
-        public async Task<string> SendTransaction(string toAddress, BigInteger value)
-        {
-            var transaction = new TransactionRequest
-            {
-                From = Address,
-                To = toAddress,
-                Value = new HexBigInteger(value.ToString("X")),
-                MaxFeePerGas = (await Web3.RpcProvider.GetFeeData()).MaxFeePerGas.ToHexBigInteger()
-            };
-            
-            var response = await Web3.TransactionExecutor.SendTransaction(transaction);
-            
-            return response.Hash;
-        }
-
-        /// <summary>
         /// Build Custom contracts.
         /// </summary>
         /// <param name="address">Contract address.</param>
         /// <typeparam name="T">Type of custom contract.</typeparam>
         /// <returns>Built custom contract type.</returns>
-        public Task<T> Build<T>(string address) where T : ICustomContract, new()
+        public Task<T> BuildContract<T>(string address) where T : ICustomContract, new()
         {
             return Web3.ContractBuilder.Build<T>(address);
         }
