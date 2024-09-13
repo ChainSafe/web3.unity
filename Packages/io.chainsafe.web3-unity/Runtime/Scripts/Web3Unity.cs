@@ -41,7 +41,7 @@ namespace ChainSafe.Gaming.UnityPackage
         /// <summary>
         /// Web3 Instance.
         /// </summary>
-        public static CWeb3 Web3 => Instance._web3;
+        public static CWeb3 Web3 => Instance?._web3;
 
         /// <summary>
         /// Connection Modal used to connect to available <see cref="ConnectionProvider"/>s.
