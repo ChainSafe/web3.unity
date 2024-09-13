@@ -10,13 +10,14 @@ namespace ChainSafe.Gaming.Web3.Core.Chains
     public class ChainManager : IChainManager
     {
         private readonly Dictionary<string, IChainConfig> configs;
-        private readonly IEnumerable<IChainSwitchHandler> switchHandlers;
         private readonly ILogWriter logWriter;
+        private readonly SwitchChainHandlersProvider switchHandlersProvider;
 
-        public ChainManager(IChainConfigSet configSet, IEnumerable<IChainSwitchHandler> switchHandlers, ILogWriter logWriter)
+        public ChainManager(IChainConfigSet configSet, SwitchChainHandlersProvider switchHandlersProvider, ILogWriter logWriter)
         {
+            // Referencing IEnumerable<IChainSwitchHandler> in ChainManager causes a deadlock, so we use SwitchChainHandlersProvider
+            this.switchHandlersProvider = switchHandlersProvider;
             this.logWriter = logWriter;
-            this.switchHandlers = switchHandlers;
             Current = configSet.Configs.First();
 
             // build configs map
@@ -44,6 +45,8 @@ namespace ChainSafe.Gaming.Web3.Core.Chains
 
         public async Task SwitchChain(string newChainId)
         {
+            var previousChainId = Current.ChainId;
+
             if (!configs.TryGetValue(newChainId, out var newChainConfig))
             {
                 throw new Web3Exception($"No {nameof(IChainConfig)} was registered with id '{newChainId}'. " +
@@ -51,12 +54,11 @@ namespace ChainSafe.Gaming.Web3.Core.Chains
             }
 
             Current = newChainConfig;
-            var previousChainId = Current.ChainId;
             var succeededHandlers = new Stack<IChainSwitchHandler>();
 
             try
             {
-                foreach (var switchHandler in switchHandlers)
+                foreach (var switchHandler in switchHandlersProvider.Handlers)
                 {
                     await switchHandler.HandleChainSwitching();
                     succeededHandlers.Push(switchHandler);

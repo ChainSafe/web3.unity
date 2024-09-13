@@ -9,8 +9,8 @@ namespace ChainSafe.Gaming
     public class ProjectConfigAsset : ScriptableObject, ICompleteProjectConfig
     {
         [field: SerializeField] public string ProjectId { get; set; }
-        [field: SerializeField] public List<ChainConfigEntry> ChainConfigs { get; set; } = new();
         [field: SerializeField] public bool EnableAnalytics { get; set; }
+        [field: SerializeField] public List<ChainConfigEntry> ChainConfigs { get; set; } = new();
 
         IEnumerable<IChainConfig> IChainConfigSet.Configs => ChainConfigs; 
     }

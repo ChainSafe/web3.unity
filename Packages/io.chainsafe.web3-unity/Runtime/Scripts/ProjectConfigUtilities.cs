@@ -8,7 +8,7 @@ namespace ChainSafe.Gaming.UnityPackage
 {
     public static class ProjectConfigUtilities
     {
-        private const string AssetName = "ProjectConfig";
+        private const string AssetName = "Web3Config";
 
         public static ProjectConfigAsset Load()
         {

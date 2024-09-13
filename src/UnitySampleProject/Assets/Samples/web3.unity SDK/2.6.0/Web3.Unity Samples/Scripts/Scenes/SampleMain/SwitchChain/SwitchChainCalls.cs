@@ -19,6 +19,8 @@ namespace Samples.Behaviours.SwitchChain
             
             // switch chains
             await Web3Accessor.Web3.Chains.SwitchChain(chainId);
+            
+            Debug.Log($"Successfully switched to the chain {chainId}");
         }
 
         public async void CallSmartContract()
@@ -32,6 +34,11 @@ namespace Samples.Behaviours.SwitchChain
             // call the EchoChain function
             var echoMessage = await contract.EchoChain();
             Debug.Log(echoMessage);
+        }
+
+        public void PrintChainId()
+        {
+            Debug.Log($"Running the SDK with Chain ID: {Web3Accessor.Web3.ChainConfig.ChainId}");
         }
         
         [Serializable]
