@@ -96,18 +96,6 @@ namespace Scripts.EVM.Token
             return await contract.Send(method, new object[] { objArray });
         }
 
-        public static async Task<string> SendTransaction(Web3 web3, string to, BigInteger value)
-        {
-            var txRequest = new TransactionRequest
-            {
-                To = to,
-                Value = new HexBigInteger(value.ToString("X")),
-                MaxFeePerGas = new HexBigInteger((await web3.RpcProvider.GetFeeData()).MaxFeePerGas)
-            };
-            var response = await web3.TransactionExecutor.SendTransaction(txRequest);
-            return response.Hash;
-        }
-
         // todo extract in a separate service
         public static string Sha3(string message)
         {

@@ -18,20 +18,13 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
 
         [SerializeField] private string sceneToLoad;
 
-        public Task OnWeb3Initialized(CWeb3 web3)
+        public int Priority => 0;
+
+        public async Task OnWeb3Initialized(CWeb3 web3)
         {
             LoginSceneBuildIndex = SceneManager.GetActiveScene().buildIndex;
 
-            StartCoroutine(LoadScene());
-
-            return Task.CompletedTask;
-        }
-
-        private IEnumerator LoadScene()
-        {
-            yield return 0;
-            
-            SceneManager.LoadSceneAsync(sceneToLoad);
+            await SceneManager.LoadSceneAsync(sceneToLoad);
         }
     }
 }

@@ -10,6 +10,6 @@ public class AccountLabel : MonoBehaviour
     private void Awake()
     {
         label = GetComponent<TMP_Text>();
-        label.text = ChainSafeManager.Web3.Signer.PublicAddress;
+        label.text = Web3Unity.Web3.Signer.PublicAddress;
     }
 }

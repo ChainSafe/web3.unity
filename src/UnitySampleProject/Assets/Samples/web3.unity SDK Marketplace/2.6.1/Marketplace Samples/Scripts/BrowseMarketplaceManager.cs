@@ -219,7 +219,7 @@ namespace ChainSafe.Gaming.Marketplace
             var ethValue = (decimal)BigInteger.Parse(nftPrice) / (decimal)BigInteger.Pow(10, 18);
             string formattedEthValue = ethValue.ToString("0.##################");
             string[] textObjectNames = { "IdText", "TypeText", "PriceText" };
-            string[] textValues = { $"ID: {nftId}", $"{nftType}", $"{formattedEthValue} {ChainSafeManager.Web3.ChainConfig.Symbol.ToUpper()}" };
+            string[] textValues = { $"ID: {nftId}", $"{nftType}", $"{formattedEthValue} {Web3Unity.Web3.ChainConfig.Symbol.ToUpper()}" };
             for (int i = 0; i < textObjectNames.Length; i++)
             {
                 var textObj = marketplaceItemPrefabs[marketplaceItemObjectIndex].transform.Find(textObjectNames[i]);

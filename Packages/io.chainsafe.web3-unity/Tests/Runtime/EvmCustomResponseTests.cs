@@ -1,9 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Providers;
+using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Web3;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Nethereum.Hex.HexTypes;
 using NUnit.Framework;
 using Scripts.EVM.Token;
 using Tests.Runtime;
@@ -97,12 +101,28 @@ public class EvmCustomResponseTests
         Assert.IsTrue(getTransactionStatus.IsCompletedSuccessfully);
     }
 
+    public async Task<string> SendTransaction(string toAddress, BigInteger value)
+    {
+        var transaction = new TransactionRequest
+        {
+            From = web3.Signer.PublicAddress,
+            To = toAddress,
+            Value = new HexBigInteger(value.ToString("X")),
+            MaxFeePerGas = (await web3.RpcProvider.GetFeeData()).MaxFeePerGas.ToHexBigInteger()
+        };
+            
+        var response = await web3.TransactionExecutor.SendTransaction(transaction);
+            
+        return response.Hash;
+    }
+    
     [UnityTest]
     public IEnumerator TestSendTransaction()
     {
         const string testResponse = "0x3446b949c3d214fba7e61c9cf127eac6cd0b2983564cf76be618099879b6f1e1";
         yield return BuildWeb3WithTestResponse(testResponse);
-        var sendTransaction = Evm.SendTransaction(web3, SendToAddress, SendToValue);
+        
+        var sendTransaction = SendTransaction(SendToAddress, SendToValue);
         yield return new WaitUntil(() => sendTransaction.IsCompleted);
         if (sendTransaction.Exception != null) throw sendTransaction.Exception;
         Assert.IsTrue(sendTransaction.IsCompletedSuccessfully);

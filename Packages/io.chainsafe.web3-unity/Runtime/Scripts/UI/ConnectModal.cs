@@ -60,7 +60,7 @@ namespace ChainSafe.Gaming.UnityPackage.UI
             {
                 ShowLoading();
 
-                await ChainSafeManager.Instance.Connect(provider);
+                await Web3Unity.Instance.Connect(provider);
             }
             catch (Exception e)
             {
@@ -79,7 +79,7 @@ namespace ChainSafe.Gaming.UnityPackage.UI
             }
         }
 
-        public void Show()
+        public void Open()
         {
             modalContainer.gameObject.SetActive(true);
         }
@@ -109,7 +109,7 @@ namespace ChainSafe.Gaming.UnityPackage.UI
            LoadingOverlay.HideLoadingOverlay();
         }
 
-        private void Close()
+        public void Close()
         {
             modalContainer.gameObject.SetActive(false);
         }

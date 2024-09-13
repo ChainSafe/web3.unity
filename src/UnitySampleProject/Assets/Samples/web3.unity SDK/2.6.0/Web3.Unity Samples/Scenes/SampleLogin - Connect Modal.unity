@@ -297,6 +297,8 @@ GameObject:
   - component: {fileID: 1658652862}
   - component: {fileID: 1658652865}
   - component: {fileID: 1658652867}
+  - component: {fileID: 1658652869}
+  - component: {fileID: 1658652868}
   m_Layer: 0
   m_Name: ConnectToWallet
   m_TagString: Untagged
@@ -316,6 +318,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b575a0ab50061014ca051bbfaf597ac2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  connectOnInitialize: 1
   connectButton: {fileID: 1551748812896581000}
 --- !u!4 &1658652863
 Transform:
@@ -345,10 +348,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   providers:
-  - {fileID: 11400000, guid: e56cb66917f860e489d3ed4480b4681c, type: 2}
-  - {fileID: 11400000, guid: 0d7bd7ae4b3e79d489bbc54514343f5c, type: 2}
-  - {fileID: 11400000, guid: e5b50e2ca9fe0504daf70376bceb84ac, type: 2}
   - {fileID: 11400000, guid: 835338196b5038d4b9351fadba9dac38, type: 2}
+  - {fileID: 11400000, guid: e5b50e2ca9fe0504daf70376bceb84ac, type: 2}
+  - {fileID: 11400000, guid: 0d7bd7ae4b3e79d489bbc54514343f5c, type: 2}
+  - {fileID: 11400000, guid: e56cb66917f860e489d3ed4480b4681c, type: 2}
 --- !u!114 &1658652865
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -374,7 +377,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96ece91a37dec784f8c42b19da0bbaae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  connectOnInitialize: 1
   connectModalPrefab: {fileID: 4706621120835174763, guid: 2dd57b774deda1948bd97dcb6d6e9fb4, type: 3}
 --- !u!114 &1658652867
 MonoBehaviour:
@@ -389,6 +391,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gelatoApiKey: 7MFQqyGS1Iui_e_MgmFW1BfbFeJ06g8nnL2oUTlIJug_
+--- !u!114 &1658652868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1658652861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d30a4f4c7d578c42beeecc2e2bbd394, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1658652869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1658652861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bddd0599e4c6ca4a8a476d02011f3cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &199374705475579680
 RectTransform:
   m_ObjectHideFlags: 0

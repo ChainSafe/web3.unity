@@ -32,6 +32,9 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         /// </summary>
         [JsonIgnore]
         public Type Type => string.IsNullOrEmpty(TypeName) ? null : Type.GetType(TypeName);
+
+        [JsonIgnore]
+        public int Priority => 0;
         
         public async Task OnWeb3Initialized(CWeb3 web3)
         {

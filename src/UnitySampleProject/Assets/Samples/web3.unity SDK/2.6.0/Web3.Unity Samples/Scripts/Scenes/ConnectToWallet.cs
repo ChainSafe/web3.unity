@@ -1,21 +1,19 @@
-using System;
 using ChainSafe.Gaming.UnityPackage;
-using ChainSafe.Gaming.UnityPackage.Connection;
-using ChainSafe.Gaming.UnityPackage.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ConnectToWallet : MonoBehaviour
 {
+    [SerializeField] private bool connectOnInitialize = true;
     [SerializeField] private Button connectButton;
 
     private async void Start()
     {
-        await ChainSafeManager.Instance.Initialize();
-
-        if (!ChainSafeManager.Instance.Connected)
+        await Web3Unity.Instance.Initialize(connectOnInitialize);
+        
+        if (!Web3Unity.Connected)
         {
-            connectButton.onClick.AddListener(ChainSafeManager.Instance.ShowModal);
+            connectButton.onClick.AddListener(Web3Unity.ConnectModal.Open);
             
             connectButton.interactable = true;
         }
