@@ -35,67 +35,6 @@ namespace ChainSafe.GamingSdk.Editor
                 window.ActiveTab = tabOverride.Value;
             }
         }
-
-        public static void WriteNetworkFile()
-        {
-            Debug.Log("Updating network.js...");
-
-            var projectConfig = ProjectConfigUtilities.CreateOrLoad();
-
-            if (!projectConfig.ChainConfigs.Any())
-            {
-                Debug.LogError("Can not generate network.js files for WebGL. Please add at least one Chain Config to continue.");
-                return;
-            }
-
-            // declares paths to write our javascript files to
-            var path1 = "Assets/WebGLTemplates/Web3GL-2020x/network.js";
-            var path2 = "Assets/WebGLTemplates/Web3GL-MetaMask/network.js";
-
-            if (AssetDatabase.IsValidFolder(Path.GetDirectoryName(path1)))
-            {
-                // write data to the webgl default network file
-                var sb = new StringBuilder();
-                sb.AppendLine("//You can see a list of compatible EVM chains at https://chainlist.org/");
-                sb.AppendLine("window.networks = [");
-                for (var i = 0; i < projectConfig.ChainConfigs.Count; i++)
-                {
-                    var chainConfig = projectConfig.ChainConfigs[i];
-                    var isLast = i == projectConfig.ChainConfigs.Count - 1;
-                    sb.AppendLine("  {");
-                    sb.AppendLine("    id: " + chainConfig.ChainId + ",");
-                    sb.AppendLine("    label: " + '"' + chainConfig.Chain + " " + chainConfig.Network + '"' + ",");
-                    sb.AppendLine("    token: " + '"' + chainConfig.Symbol + '"' + ",");
-                    sb.AppendLine("    rpcUrl: " + "'" + chainConfig.Rpc + "'" + ",");
-                    sb.AppendLine(!isLast ? "  }," : "  }");
-                }
-                sb.AppendLine("]");
-                File.WriteAllText(path1, sb.ToString());
-            }
-            else
-            {
-                Debug.LogWarning(
-                    $"{Path.GetDirectoryName(path1)} is missing, network.js file will not be updated for this template");
-            }
-
-            if (AssetDatabase.IsValidFolder(Path.GetDirectoryName(path2)))
-            {
-                // writes data to the webgl metamask network file
-                var sb = new StringBuilder();
-                sb.AppendLine("//You can see a list of compatible EVM chains at https://chainlist.org/");
-                sb.AppendLine("window.web3ChainId = " + projectConfig.ChainConfigs.First().ChainId + ";");
-                File.WriteAllText(path2, sb.ToString());
-            }
-            else
-            {
-                Debug.LogWarning(
-                    $"{Path.GetDirectoryName(path2)} is missing, network.js file will not be updated for this template");
-            }
-
-            AssetDatabase.Refresh();
-
-            Debug.Log("Done");
-        }
         
         private static GUIStyle centeredLabelStyle;
         private static GUIStyle wrappedGreyMiniLabel;
