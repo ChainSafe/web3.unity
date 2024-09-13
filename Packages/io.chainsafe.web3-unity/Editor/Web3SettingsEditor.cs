@@ -242,23 +242,14 @@ namespace ChainSafe.GamingSdk.Editor
         /// <param name="projectID"></param>
         private static async void ValidateProjectID(string projectID)
         {
-            bool projectIdValid;
             try
             {
-                projectIdValid = await ValidateProjectIDAsync(projectID);
+                await ValidateProjectIDAsync(projectID);
             }
             catch (Exception e)
             {
                 Debug.LogError("Failed to validate project ID");
                 Debug.LogException(e);
-                return;
-            }
-            
-            if (projectIdValid)
-            {
-#if UNITY_WEBGL
-                WriteNetworkFile();
-#endif
             }
             
             static async Task<bool> ValidateProjectIDAsync(string projectID)
