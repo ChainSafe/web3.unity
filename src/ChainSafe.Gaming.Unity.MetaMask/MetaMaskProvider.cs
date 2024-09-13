@@ -80,7 +80,7 @@ namespace ChainSafe.Gaming.Unity.MetaMask
 
             analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
-                EventName = "MetaMask WebGL Initialized",
+                EventName = "Metamask WebGL Initialized",
                 PackageName = "io.chainsafe.web3-unity",
             });
 
