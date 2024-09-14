@@ -33,7 +33,7 @@ namespace ChainSafe.Gaming.Web3.Core.Nethereum
         public Task HandleChainSwitching()
         {
             transactionManager.SetChainConfig(chainConfig);
-            return default;
+            return Task.CompletedTask;
         }
     }
 }

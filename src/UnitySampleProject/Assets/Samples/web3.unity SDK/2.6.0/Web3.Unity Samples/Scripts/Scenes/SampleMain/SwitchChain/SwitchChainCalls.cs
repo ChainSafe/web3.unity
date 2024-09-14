@@ -14,20 +14,28 @@ namespace Samples.Behaviours.SwitchChain
         
         public async void ToggleChain()
         {
-            if (Web3Accessor.Web3.Chains.IsSwitching)
-            {
-                Debug.LogError("The last chain switching operation has not yet been completed.");
-                return;
-            }
-            
             // get next chain id
+            var previousChainIndex = currentChainIndex;
             currentChainIndex = (currentChainIndex + 1) % chainSetups.Length;
             var chainId = chainSetups[currentChainIndex].chainId;
             
             Debug.Log("Switching the chain... Make sure you confirm the chain change in your wallet.");
             
             // switch chains
-            await Web3Accessor.Web3.Chains.SwitchChain(chainId);
+            SampleFeedback.Instance.Activate();
+            try
+            {
+                await Web3Accessor.Web3.Chains.SwitchChain(chainId);
+            }
+            catch
+            {
+                currentChainIndex = previousChainIndex; // revert chain index toggling
+                throw;
+            }
+            finally
+            {
+                SampleFeedback.Instance.Deactivate();
+            }
         }
 
         public async void CallSmartContract()

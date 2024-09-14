@@ -54,6 +54,12 @@ namespace ChainSafe.Gaming.Web3.Core.Chains
                     "Can't switch chain. The last chain switching procedure has not yet finished.");
             }
 
+            if (newChainId == Current.ChainId)
+            {
+                logWriter.Log("Tried to switch to the chain id that's currently active. Ignoring...");
+                return;
+            }
+
             IsSwitching = true;
 
             try
