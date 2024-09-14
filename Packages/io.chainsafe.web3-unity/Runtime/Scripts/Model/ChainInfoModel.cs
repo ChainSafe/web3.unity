@@ -22,5 +22,6 @@ namespace ChainSafe.Gaming.UnityPackage.Model
         public NativeCurrency nativeCurrency { get; set; }
         public object chainId { get; set; }
         public List<Explorer> explorers { get; set; }
+        public bool allowCustomValues { get; set; }
     }
 }

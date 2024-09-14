@@ -19,7 +19,7 @@ namespace ChainSafe.Gaming.Web3.Core.Nethereum
         }
 
         // build Writing adapter
-        public NethereumWeb3Adapter(IClient nethClient, NethereumAccountAdapter accountAdapter)
+        public NethereumWeb3Adapter(IClient nethClient, INethereumAccountAdapter accountAdapter)
         {
             original = new global::Nethereum.Web3.Web3(accountAdapter, nethClient);
         }

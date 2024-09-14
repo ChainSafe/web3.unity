@@ -7,9 +7,9 @@ using UnityEngine;
 namespace ChainSafe.Gaming.Mud.Unity
 {
     /// <summary>
-    /// Represents a configuration asset for MUD module.
+    /// Represents a configuration asset for the MUD module.
     /// </summary>
-    [CreateAssetMenu(menuName = "ChainSafe/Mud Config Asset", fileName = "MudConfigAsset", order = 0)]
+    [CreateAssetMenu(menuName = "ChainSafe/MUD Config", fileName = "MudConfig", order = 0)]
     public class MudConfigAsset : ScriptableObject, IMudConfig
     {
         public MudStorageType StorageType;

@@ -33,7 +33,7 @@ public static class WebGLThreadPatcherInstaller
 #endif
     }
 
-    [MenuItem("ChainSafe SDK/Install WebGLThreadingPatcher")]
+    [MenuItem("ChainSafe SDK/Install WebGLThreadingPatcher", priority = 0)]
     public static void TryInstallThreadPatcher()
     {
         Manifest manifest = JsonConvert.DeserializeObject<Manifest>(File.ReadAllText(ManifestPath));

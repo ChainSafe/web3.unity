@@ -9,6 +9,17 @@ namespace ChainSafe.Gaming.MultiCall
             CustomNetworks = customNetworks;
         }
 
+        public enum UnavailableBehaviourType
+        {
+            Throw,
+            DisableAndLog,
+        }
+
+        /// <summary>
+        /// Contract address of the MultiCall contract by Chain ID.
+        /// </summary>
         public IReadOnlyDictionary<string, string> CustomNetworks { get; }
+
+        public UnavailableBehaviourType UnavailableBehaviour { get; set; } = UnavailableBehaviourType.Throw;
     }
 }
