@@ -20,7 +20,7 @@ namespace ChainSafe.GamingSdk.Editor
         private const string EnableAnalyticsScriptingDefineSymbol = "ENABLE_ANALYTICS";
 
         // Initializes window
-        [MenuItem("ChainSafe SDK/Project Settings", false, 1)]
+        [MenuItem("ChainSafe SDK/Project Settings", false, -200)]
         public static void ShowWindow() => ShowWindow(null);
         
         public static void ShowWindow(Tabs? tabOverride = null)
@@ -42,7 +42,7 @@ namespace ChainSafe.GamingSdk.Editor
         // Chain values
         public string previousProjectId;
 
-        private ProjectConfigAsset projectConfig;
+        private Web3ConfigAsset web3Config;
         private List<ChainSettingsPanel> chainSettingPanels;
         private List<ChainInfo.Root> chainList;
         private FetchingStatus fetchingStatus = FetchingStatus.NotFetching;
@@ -58,8 +58,8 @@ namespace ChainSafe.GamingSdk.Editor
 
         private void Awake()
         {
-            projectConfig = ProjectConfigUtilities.CreateOrLoad();
-            previousProjectId = projectConfig.ProjectId;
+            web3Config = ProjectConfigUtilities.CreateOrLoad();
+            previousProjectId = web3Config.ProjectId;
         }
 
         private void OnEnable()
@@ -150,8 +150,8 @@ namespace ChainSafe.GamingSdk.Editor
         {
             EditorGUI.BeginChangeCheck();
             
-            projectConfig.ProjectId = EditorGUILayout.TextField("Project ID", projectConfig.ProjectId);
-            if (string.IsNullOrWhiteSpace(projectConfig.ProjectId))
+            web3Config.ProjectId = EditorGUILayout.TextField("Project ID", web3Config.ProjectId);
+            if (string.IsNullOrWhiteSpace(web3Config.ProjectId))
             {
                 EditorGUILayout.HelpBox(
                     "Please enter your Project ID to start using the ChainSafe Gaming SDK.",
@@ -162,26 +162,26 @@ namespace ChainSafe.GamingSdk.Editor
                 }
             }
             EditorGUILayout.Space();
-            projectConfig.EnableAnalytics =
+            web3Config.EnableAnalytics =
                 EditorGUILayout.Toggle(
                     new GUIContent("Allow Analytics:",
                         "Consent to collecting data for analytics purposes. This will help improve our product."),
-                    projectConfig.EnableAnalytics);
+                    web3Config.EnableAnalytics);
             GUILayout.Label(
                 "We will collect data for analytics to help improve your experience with our SDK. This data allows us to optimize performance, introduce new features, and ensure seamless integration. You can opt out at any time, but we encourage keeping analytics enabled for the best results!", 
                 wrappedGreyMiniLabel);
 
             if (EditorGUI.EndChangeCheck())
             {
-                EditorUtility.SetDirty(projectConfig);
+                EditorUtility.SetDirty(web3Config);
                 
-                if (projectConfig.ProjectId != previousProjectId)
+                if (web3Config.ProjectId != previousProjectId)
                 {
-                    ValidateProjectID(projectConfig.ProjectId);
-                    previousProjectId = projectConfig.ProjectId;
+                    ValidateProjectID(web3Config.ProjectId);
+                    previousProjectId = web3Config.ProjectId;
                 }
                 
-                if (projectConfig.EnableAnalytics)
+                if (web3Config.EnableAnalytics)
                     ScriptingDefineSymbols.TryAddDefineSymbol(EnableAnalyticsScriptingDefineSymbol);
                 else
                     ScriptingDefineSymbols.TryRemoveDefineSymbol(EnableAnalyticsScriptingDefineSymbol);
@@ -208,9 +208,9 @@ namespace ChainSafe.GamingSdk.Editor
             if (GUILayout.Button("+"))
             {
                 var newChainConfig = ChainConfigEntry.Empty;
-                projectConfig.ChainConfigs.Add(newChainConfig);
+                web3Config.ChainConfigs.Add(newChainConfig);
                 chainSettingPanels.Add(new ChainSettingsPanel(this, newChainConfig));
-                EditorUtility.SetDirty(projectConfig);
+                EditorUtility.SetDirty(web3Config);
             }
             
             GUILayout.EndScrollView();
@@ -223,7 +223,7 @@ namespace ChainSafe.GamingSdk.Editor
 
         private void RemoveChainConfigEntry(string chainId)
         {
-            var index = projectConfig.ChainConfigs.FindIndex(entry => entry.ChainId == chainId);
+            var index = web3Config.ChainConfigs.FindIndex(entry => entry.ChainId == chainId);
 
             if (index < 0)
             {
@@ -231,8 +231,8 @@ namespace ChainSafe.GamingSdk.Editor
                 return;
             }
 
-            projectConfig.ChainConfigs.RemoveAt(index);
-            EditorUtility.SetDirty(projectConfig);
+            web3Config.ChainConfigs.RemoveAt(index);
+            EditorUtility.SetDirty(web3Config);
             chainSettingPanels.RemoveAt(chainSettingPanels.FindIndex(panel => panel.ChainId == chainId));
         }
         
@@ -313,17 +313,17 @@ namespace ChainSafe.GamingSdk.Editor
 
         private void OnChainListFetched()
         {
-            if (projectConfig.ChainConfigs.Count != 0)
+            if (web3Config.ChainConfigs.Count != 0)
             {
-                chainSettingPanels = projectConfig.ChainConfigs
+                chainSettingPanels = web3Config.ChainConfigs
                     .Select((chainConfig) => new ChainSettingsPanel(this, chainConfig))
                     .ToList();
             }
             else
             {
                 var newChainConfig = ChainConfigEntry.Default;
-                projectConfig.ChainConfigs.Add(newChainConfig);
-                EditorUtility.SetDirty(projectConfig);
+                web3Config.ChainConfigs.Add(newChainConfig);
+                EditorUtility.SetDirty(web3Config);
                 
                 chainSettingPanels = new List<ChainSettingsPanel>
                 {

@@ -10,16 +10,16 @@ namespace ChainSafe.Gaming.UnityPackage
     {
         private const string AssetName = "Web3Config";
 
-        public static ProjectConfigAsset Load()
+        public static Web3ConfigAsset Load()
         {
-            var projectConfig = Resources.Load<ProjectConfigAsset>(AssetName);
+            var projectConfig = Resources.Load<Web3ConfigAsset>(AssetName);
             return projectConfig ? projectConfig : null;
         }
 
-        public static ProjectConfigAsset Create(string projectId, string chainId, string chain, string network,
+        public static Web3ConfigAsset Create(string projectId, string chainId, string chain, string network,
             string symbol, string rpc, string blockExplorerUrl, bool enableAnalytics, string ws = "")
         {
-            var projectConfig = ScriptableObject.CreateInstance<ProjectConfigAsset>();
+            var projectConfig = ScriptableObject.CreateInstance<Web3ConfigAsset>();
 
             projectConfig.ProjectId = projectId;
             projectConfig.EnableAnalytics = enableAnalytics;
@@ -41,7 +41,7 @@ namespace ChainSafe.Gaming.UnityPackage
         }
 
 #if UNITY_EDITOR
-        public static ProjectConfigAsset CreateOrLoad()
+        public static Web3ConfigAsset CreateOrLoad()
         {
             var projectConfig = Load();
 
@@ -54,7 +54,7 @@ namespace ChainSafe.Gaming.UnityPackage
                     Directory.CreateDirectory(assetDirectory);
                 }
 
-                projectConfig = ScriptableObject.CreateInstance<ProjectConfigAsset>();
+                projectConfig = ScriptableObject.CreateInstance<Web3ConfigAsset>();
                 UnityEditor.AssetDatabase.CreateAsset(projectConfig,
                     Path.Combine("Assets", nameof(Resources), $"{AssetName}.asset"));
             }
@@ -62,9 +62,9 @@ namespace ChainSafe.Gaming.UnityPackage
             return projectConfig;
         }
 
-        public static void Save(ProjectConfigAsset projectConfig)
+        public static void Save(Web3ConfigAsset web3Config)
         {
-            UnityEditor.EditorUtility.SetDirty(projectConfig);
+            UnityEditor.EditorUtility.SetDirty(web3Config);
             UnityEditor.AssetDatabase.SaveAssets();
         }
 #endif

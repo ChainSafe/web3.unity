@@ -82,7 +82,7 @@ public class ABICSharpConverter : EditorWindow
         }
     }
 
-    [MenuItem("ChainSafe SDK/ABI to C# Contract Converter")]
+    [MenuItem("ChainSafe SDK/Convert ABI to C# Contract", priority = 0)]
     public static void ShowWindow()
     {
         Instance = GetWindow<ABICSharpConverter>("ABI to C# Contract Converter");

@@ -12,20 +12,20 @@ namespace ChainSafe.GamingSdk.Editor
         private class ChainSettingsPanel
         {
             private readonly Web3SettingsEditor window;
-            private readonly ProjectConfigAsset configAsset;
+            private readonly Web3ConfigAsset configAsset;
             private readonly ChainConfigEntry chainConfig;
             
             private int selectedChainIndex;
             private int selectedRpcIndex;
             private StringListSearchProvider searchProvider;
-            private ISearchWindowProvider _searchWindowProviderImplementation;
+            private ISearchWindowProvider searchWindowProviderImplementation;
             private bool changedRpcOrWs;
             private int selectedWebHookIndex;
 
             public ChainSettingsPanel(Web3SettingsEditor window, ChainConfigEntry chainConfigEntry)
             {
                 this.window = window;
-                this.configAsset = window.projectConfig;
+                this.configAsset = window.web3Config;
                 this.chainConfig = chainConfigEntry;
                 
                 UpdateServerMenuInfo();

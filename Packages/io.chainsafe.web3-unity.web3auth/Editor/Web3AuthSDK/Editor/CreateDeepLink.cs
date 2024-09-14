@@ -9,7 +9,7 @@ public class CreateDeepLink : EditorWindow
     TextField uri;
 
 
-    [MenuItem("ChainSafe SDK/Web3Auth/Generate Deep Link")]
+    [MenuItem("ChainSafe SDK/Web3Auth/Generate Deep Link", priority = -100)]
     public static void ShowExample()
     {
         CreateDeepLink wnd = GetWindow<CreateDeepLink>();
