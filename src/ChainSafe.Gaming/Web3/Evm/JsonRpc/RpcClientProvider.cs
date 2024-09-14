@@ -50,9 +50,8 @@ namespace ChainSafe.Gaming.Evm.Providers
                 });
             }
 
-            return JsonSerializer
-                .Create()
-                .Deserialize<T>(new JTokenReader(response.Result))!;
+            var serializer = JsonSerializer.Create();
+            return serializer.Deserialize<T>(new JTokenReader(response.Result))!;
         }
 
         protected override async Task<RpcResponseMessage> SendAsync(RpcRequestMessage request, string route = null)
