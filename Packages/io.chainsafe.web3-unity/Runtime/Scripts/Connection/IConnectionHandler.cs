@@ -62,7 +62,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
             services
                 .UseUnityEnvironment()
                 .UseGelato(GelatoApiKey)
-                // .UseMultiCall()
+                .UseMultiCall()
                 .UseRpcProvider()
                 .UseMarketplace();
 

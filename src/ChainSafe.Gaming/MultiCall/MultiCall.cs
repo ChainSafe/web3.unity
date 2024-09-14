@@ -6,6 +6,7 @@ using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Chains;
+using ChainSafe.Gaming.Web3.Environment;
 using Nethereum.ABI.FunctionEncoding;
 using Nethereum.Contracts.QueryHandlers.MultiCall;
 using Nethereum.Util;
@@ -24,6 +25,7 @@ namespace ChainSafe.Gaming.MultiCall
         private readonly IContractBuilder builder;
         private readonly IChainConfig chainConfig;
         private readonly MultiCallConfig config;
+        private readonly ILogWriter logWriter;
 
         private Contract multiCallContract;
 
@@ -33,8 +35,9 @@ namespace ChainSafe.Gaming.MultiCall
         /// <param name="builder">An implementation of the contract builder.</param>
         /// <param name="chainConfig">The blockchain configuration for the associated chain.</param>
         /// <param name="config">The configuration settings for MultiCall.</param>
-        public MultiCall(IContractBuilder builder, IChainConfig chainConfig, MultiCallConfig config)
+        public MultiCall(IContractBuilder builder, IChainConfig chainConfig, MultiCallConfig config, ILogWriter logWriter)
         {
+            this.logWriter = logWriter;
             this.config = config;
             this.chainConfig = chainConfig;
             this.builder = builder;
@@ -42,7 +45,7 @@ namespace ChainSafe.Gaming.MultiCall
 
         public ValueTask WillStartAsync()
         {
-            BuildMulticallContract();
+            BuildMultiCallContract();
             return default;
         }
 
@@ -51,8 +54,8 @@ namespace ChainSafe.Gaming.MultiCall
         public Task HandleChainSwitching()
         {
             // build a new instance of the contract client
-            BuildMulticallContract();
-            return default;
+            BuildMultiCallContract();
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -64,6 +67,8 @@ namespace ChainSafe.Gaming.MultiCall
         /// <returns>A list of results from executing the batched calls.</returns>
         public async Task<List<Result>> MultiCallAsync(Call3Value[] multiCalls, int pageSize = DefaultCallsPerRequest)
         {
+            AssertContractAvailable();
+
             if (multiCalls.Any(x => x.Value > 0))
             {
                 var results = new List<object[]>();
@@ -114,8 +119,10 @@ namespace ChainSafe.Gaming.MultiCall
             }
         }
 
-        private void BuildMulticallContract()
+        private void BuildMultiCallContract()
         {
+            multiCallContract = null;
+
             try
             {
                 if (MultiCallDefaults.DeployedNetworks.Contains(chainConfig.ChainId))
@@ -134,9 +141,19 @@ namespace ChainSafe.Gaming.MultiCall
                 throw new Web3Exception("Error occured while building Multicall contract client.", e);
             }
 
-            throw new Web3Exception(
-                "Couldn't build Multicall contract. " +
-                $"No configuration for chain id \"{chainConfig.ChainId}\" were found.");
+            switch (config.UnavailableBehaviour)
+            {
+                case MultiCallConfig.UnavailableBehaviourType.Throw:
+                    throw new Web3Exception(
+                        "Couldn't build Multicall contract. " +
+                        $"No configuration for chain id \"{chainConfig.ChainId}\" were found.");
+                case MultiCallConfig.UnavailableBehaviourType.DisableAndLog:
+                    logWriter.Log("Couldn't build Multicall contract. " +
+                                  $"No configuration for chain id \"{chainConfig.ChainId}\" were found.");
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         /// <summary>
@@ -155,6 +172,14 @@ namespace ChainSafe.Gaming.MultiCall
             }
 
             return parsed;
+        }
+
+        private void AssertContractAvailable()
+        {
+            if (multiCallContract is null)
+            {
+                throw new Web3Exception("Can't use MultiCall. No contract for the active chain is available.");
+            }
         }
     }
 }
