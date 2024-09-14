@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.Web3.Core.Chains;
 using ChainSafe.Gaming.Web3.Environment;
 using Nethereum.ABI.FunctionEncoding.Attributes;
 using Nethereum.Contracts;
@@ -13,7 +14,7 @@ using Nethereum.RPC.Reactive.Eth.Subscriptions;
 
 namespace ChainSafe.Gaming.RPC.Events
 {
-    public class EventManager : IEventManager, ILifecycleParticipant
+    public class EventManager : IEventManager, ILifecycleParticipant, IChainSwitchHandler
     {
         private readonly IChainConfig chainConfig;
         private readonly Dictionary<Type, Subscription> subscriptions = new();
@@ -78,17 +79,53 @@ namespace ChainSafe.Gaming.RPC.Events
             }
         }
 
+        async Task IChainSwitchHandler.HandleChainSwitching()
+        {
+            // unsubscribe
+            foreach (var subscription in subscriptions.Values)
+            {
+                if (subscription.NethSubscription is not null)
+                {
+                    await subscription.NethSubscription.UnsubscribeAsync();
+                    subscription.NethSubscription = null;
+                }
+            }
+
+            // dispose web socket client
+            if (webSocketClient is not null)
+            {
+                webSocketClient?.Dispose();
+                webSocketClient = null;
+            }
+
+            // initialize a new web socket client
+            webSocketClient = new StreamingWebSocketClient(chainConfig.Ws);
+
+            // subscribe with a new web socket client
+            foreach (var subscription in subscriptions.Values)
+            {
+                subscription.NethSubscription = new EthLogsObservableSubscription(webSocketClient);
+                subscription.NethSubscription
+                    .GetSubscriptionDataResponsesAsObservable()
+                    .Subscribe(new FilterLogObserver(subscription.LogHandleAction));
+
+                await subscription.NethSubscription.SubscribeAsync(subscription.EventFilter);
+            }
+        }
+
         private async Task<Subscription> InitializeSubscriptionForType<TEvent>()
             where TEvent : IEventDTO, new()
         {
             Subscription rawSubscription = new Subscription<TEvent>(webSocketClient);
-            var eventFilter = Event<TEvent>.GetEventABI().CreateFilterInput();
+            rawSubscription.EventFilter = Event<TEvent>.GetEventABI().CreateFilterInput();
+
+            rawSubscription.LogHandleAction = HandleLog;
             rawSubscription
                 .NethSubscription
                 .GetSubscriptionDataResponsesAsObservable()
-                .Subscribe(new FilterLogObserver(HandleLog));
+                .Subscribe(new FilterLogObserver(rawSubscription.LogHandleAction));
 
-            await rawSubscription.NethSubscription.SubscribeAsync(eventFilter);
+            await rawSubscription.NethSubscription.SubscribeAsync(rawSubscription.EventFilter);
 
             subscriptions[typeof(TEvent)] = rawSubscription;
             return rawSubscription;
@@ -136,6 +173,10 @@ namespace ChainSafe.Gaming.RPC.Events
         private abstract class Subscription
         {
             public EthLogsObservableSubscription NethSubscription { get; set; }
+
+            public Action<FilterLog> LogHandleAction { get; set; }
+
+            public NewFilterInput EventFilter { get; set; }
         }
 
         private class Subscription<TEvent> : Subscription

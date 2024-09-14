@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using ChainSafe.Gaming.Web3.Core;
 using Nethereum.Contracts.QueryHandlers.MultiCall;
 
 namespace ChainSafe.Gaming.MultiCall
@@ -8,7 +7,7 @@ namespace ChainSafe.Gaming.MultiCall
     /// <summary>
     /// Represents an interface for making batched Ethereum function calls using the MultiCall service.
     /// </summary>
-    public interface IMultiCall : ILifecycleParticipant
+    public interface IMultiCall
     {
         /// <summary>
         /// Executes a batch of Ethereum function calls using the MultiCall service asynchronously.

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace LootBoxes.Chainlink.Scene.StageItems
 {
-    [CreateAssetMenu(menuName = Menues.Root + "LootBoxPrefabSet", fileName = "LootBoxPrefabSet", order = 0)]
+    [CreateAssetMenu(menuName = Menues.Root + "Lootbox Prefab Set", fileName = "LootboxPrefabSet", order = 0)]
     public class LootBoxesFrontEndDataSet : ScriptableObject
     {
         [Serializable]

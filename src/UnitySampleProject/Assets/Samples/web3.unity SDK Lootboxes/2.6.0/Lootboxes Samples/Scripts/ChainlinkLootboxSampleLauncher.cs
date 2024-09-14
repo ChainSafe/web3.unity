@@ -1,4 +1,6 @@
-﻿using LootBoxes.Chainlink.Scene;
+﻿using System.Collections.Generic;
+using ChainSafe.Gaming;
+using LootBoxes.Chainlink.Scene;
 using Chainsafe.Gaming.Chainlink;
 using ChainSafe.Gaming.Debugging;
 using ChainSafe.Gaming.Evm.JsonRpc;
@@ -27,15 +29,20 @@ namespace LootBoxes.Chainlink
         private class Web3Config : ICompleteProjectConfig
         {
             public string ProjectId => string.Empty;
-            public string ChainId => "31337";
-            public string Chain => "Anvil";
-            public string Network => "GoChain Testnet";
-            public string Symbol => "GO";
-            public string Rpc => $"http://127.0.0.1:8545";
-            public string BlockExplorerUrl => "https://explorer.gochain.io/";
-            public string Ipc { get; }
-            public string Ws { get; }
             public bool EnableAnalytics => true;
+
+            public IEnumerable<IChainConfig> Configs { get; } = new[]
+            {
+                new ChainConfigEntry
+                {
+                    ChainId = "31337",
+                    Chain = "Anvil",
+                    Network = "GoChain Testnet",
+                    Symbol = "GO",
+                    Rpc = $"http://127.0.0.1:8545",
+                    BlockExplorerUrl = "https://explorer.gochain.io/",
+                }
+            };
         }
 
         private async void Awake()

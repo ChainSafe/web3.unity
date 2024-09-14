@@ -1,8 +1,5 @@
 ﻿using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Web3.Build;
-using ChainSafe.Gaming.Web3.Core;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Nethereum.JsonRpc.Client;
 
 namespace ChainSafe.Gaming.Evm.JsonRpc
@@ -18,7 +15,7 @@ namespace ChainSafe.Gaming.Evm.JsonRpc
             collection.AssertServiceNotBound<IRpcProvider>();
             collection.AssertServiceNotBound<IClient>();
 
-            collection.AddSingleton<IRpcProvider, IClient, ILifecycleParticipant, RpcClientProvider>();
+            collection.AddSingleton<IRpcProvider, IClient, RpcClientProvider>();
 
             return collection;
         }

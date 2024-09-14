@@ -7,6 +7,7 @@ using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.LocalStorage;
 using ChainSafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.Web3.Core.Chains;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using ChainSafe.Gaming.Web3.Core.Logout;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,6 +38,7 @@ namespace ChainSafe.Gaming.Web3
             signer = serviceProvider.GetService<ISigner>();
             transactionExecutor = serviceProvider.GetService<ITransactionExecutor>();
             events = serviceProvider.GetRequiredService<IEvmEvents>();
+            Chains = serviceProvider.GetRequiredService<IChainManager>();
             ContractBuilder = serviceProvider.GetRequiredService<IContractBuilder>();
             ProjectConfig = serviceProvider.GetRequiredService<IProjectConfig>();
             ChainConfig = serviceProvider.GetRequiredService<IChainConfig>();
@@ -73,9 +75,14 @@ namespace ChainSafe.Gaming.Web3
         public ITransactionExecutor TransactionExecutor => AssertComponentAccessible(transactionExecutor, nameof(TransactionExecutor));
 
         /// <summary>
-        /// Access the event service of the Web3 instance, allowing you to subscribe to blockchain events.
+        /// Access the Event Service of the Web3 instance, allowing you to subscribe to blockchain events.
         /// </summary>
         public IEvmEvents Events => AssertComponentAccessible(events, nameof(Events));
+
+        /// <summary>
+        /// Access the Chain Manager of the Web3 instance to switch chains in runtime.
+        /// </summary>
+        public IChainManager Chains { get; }
 
         /// <summary>
         /// Access the factory for creating Ethereum smart contract wrappers.

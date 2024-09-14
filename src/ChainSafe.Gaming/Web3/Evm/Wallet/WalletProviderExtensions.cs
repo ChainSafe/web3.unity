@@ -1,6 +1,7 @@
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.Web3.Core.Chains;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using ChainSafe.Gaming.Web3.Core.Logout;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,7 +23,7 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
         {
             collection.AssertServiceNotBound<IWalletProvider>();
 
-            collection.AddSingleton<IWalletProvider, TProvider>();
+            collection.AddSingleton<IWalletProvider, IChainSwitchHandler, TProvider>();
 
             collection.Replace(ServiceDescriptor.Singleton(typeof(IWalletProviderConfig), config));
 

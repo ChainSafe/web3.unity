@@ -1,6 +1,7 @@
 ﻿using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.Web3.Core.Chains;
 using ChainSafe.GamingSdk.Gelato.Types;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -61,7 +62,7 @@ namespace ChainSafe.GamingSdk.Gelato
             var config = DefaultConfig();
             collection.TryAddSingleton(config);
 
-            collection.AddSingleton<ILifecycleParticipant, IGelato, Gelato>();
+            collection.AddSingleton<ILifecycleParticipant, IGelato, IChainSwitchHandler, Gelato>();
 
             return collection;
         }
