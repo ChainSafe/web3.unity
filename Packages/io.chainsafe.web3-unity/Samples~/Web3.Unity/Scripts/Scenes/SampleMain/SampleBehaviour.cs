@@ -26,5 +26,15 @@ namespace Samples.Behaviours
             await new WaitForSeconds(2);
             SampleFeedback.Instance?.Deactivate();
         }
+
+        public async void ExecuteNoChainCheck()
+        {
+            // Activates the loading pop up to stop duplicate calls
+            SampleFeedback.Instance?.Activate();
+
+            // Deactivates the loading pop up after a few seconds
+            await new WaitForSeconds(2);
+            SampleFeedback.Instance?.Deactivate();
+        }
     }
 }
