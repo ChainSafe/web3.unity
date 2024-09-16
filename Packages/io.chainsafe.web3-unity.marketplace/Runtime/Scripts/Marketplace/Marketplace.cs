@@ -53,7 +53,7 @@ namespace Scripts.EVM.Marketplace
         /// <returns>MarketplaceModel.MarketplaceItemsResponse</returns>
         public static async Task<MarketplaceModel.MarketplaceItemsResponse> GetProjectItems()
         {
-            var path = $"/items?chainId={Web3Accessor.Web3.ChainConfig.ChainId}";
+            var path = $"/items?chainId={Web3Unity.Web3.ChainConfig.ChainId}";
             var response = await CSServer.GetData<MarketplaceModel.MarketplaceItemsResponse>(path);
             return response;
         }
@@ -92,7 +92,7 @@ namespace Scripts.EVM.Marketplace
         /// <returns>NftTokenModel.CollectionItemsResponse</returns>
         public static async Task<NftTokenModel.CollectionItemsResponse> GetProjectTokens()
         {
-            var path = $"/tokens?chainId={Web3Accessor.Web3.ChainConfig.ChainId}";
+            var path = $"/tokens?chainId={Web3Unity.Web3.ChainConfig.ChainId}";
             var response = await CSServer.GetData<NftTokenModel.CollectionItemsResponse>(path);
             return response;
         }
@@ -168,13 +168,13 @@ namespace Scripts.EVM.Marketplace
             var formData = new List<IMultipartFormSection>
                 {
                     new MultipartFormDataSection("name", _name),
-                    new MultipartFormDataSection("owner", Web3Accessor.Web3.Signer.PublicAddress),
-                    new MultipartFormDataSection("chain_id", Web3Accessor.Web3.ChainConfig.ChainId),
-                    new MultipartFormDataSection("projectID", Web3Accessor.Web3.ProjectConfig.ProjectId),
+                    new MultipartFormDataSection("owner", Web3Unity.Web3.Signer.PublicAddress),
+                    new MultipartFormDataSection("chain_id", Web3Unity.Web3.ChainConfig.ChainId),
+                    new MultipartFormDataSection("projectID", Web3Unity.Web3.ProjectConfig.ProjectId),
                     new MultipartFormFileSection("logo", logoImageData, "logo.png", "image/png"),
                     new MultipartFormFileSection("banner", bannerImageData, "banner.png", "image/png"),
                     new MultipartFormDataSection("isImported", "true"),
-                    new MultipartFormDataSection("contractAddress", ChainSafeContracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId]),
+                    new MultipartFormDataSection("contractAddress", ChainSafeContracts.MarketplaceContracts[Web3Unity.Web3.ChainConfig.ChainId]),
                     new MultipartFormDataSection("type", "ERC721")
                 };
             if (!string.IsNullOrEmpty(_description))
@@ -187,14 +187,14 @@ namespace Scripts.EVM.Marketplace
             var method = "create721Collection";
             object[] args =
             {
-                    Web3Accessor.Web3.ProjectConfig.ProjectId,
+                    Web3Unity.Web3.ProjectConfig.ProjectId,
                     collectionData.id,
                     _name,
                     collectionData.type,
                     collectionData.banner,
                     _isMintingPublic
                 };
-            var contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.MarketplaceFactory, ChainSafeContracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId]);
+            var contract = Web3Unity.Web3.ContractBuilder.Build(ABI.MarketplaceFactory, ChainSafeContracts.MarketplaceContracts[Web3Unity.Web3.ChainConfig.ChainId]);
             var data = await contract.SendWithReceipt(method, args);
             return data.receipt;
         }
@@ -217,13 +217,13 @@ namespace Scripts.EVM.Marketplace
                 var formData = new List<IMultipartFormSection>
                 {
                     new MultipartFormDataSection("name", _name),
-                    new MultipartFormDataSection("owner", Web3Accessor.Web3.Signer.PublicAddress),
-                    new MultipartFormDataSection("chain_id", Web3Accessor.Web3.ChainConfig.ChainId),
-                    new MultipartFormDataSection("projectID", Web3Accessor.Web3.ProjectConfig.ProjectId),
+                    new MultipartFormDataSection("owner", Web3Unity.Web3.Signer.PublicAddress),
+                    new MultipartFormDataSection("chain_id", Web3Unity.Web3.ChainConfig.ChainId),
+                    new MultipartFormDataSection("projectID", Web3Unity.Web3.ProjectConfig.ProjectId),
                     new MultipartFormFileSection("logo", logoImageData, "logo.png", "image/png"),
                     new MultipartFormFileSection("banner", bannerImageData, "banner.png", "image/png"),
                     new MultipartFormDataSection("isImported", "true"),
-                    new MultipartFormDataSection("contractAddress", ChainSafeContracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId]),
+                    new MultipartFormDataSection("contractAddress", ChainSafeContracts.MarketplaceContracts[Web3Unity.Web3.ChainConfig.ChainId]),
                     new MultipartFormDataSection("type", "ERC1155")
                 };
                 if (!string.IsNullOrEmpty(_description))
@@ -236,12 +236,12 @@ namespace Scripts.EVM.Marketplace
                 var method = "create1155Collection";
                 object[] args =
                 {
-                    Web3Accessor.Web3.ProjectConfig.ProjectId,
+                    Web3Unity.Web3.ProjectConfig.ProjectId,
                     collectionData.id,
                     collectionData.banner,
                     _isMintingPublic
                 };
-                var contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.MarketplaceFactory, ChainSafeContracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId]);
+                var contract = Web3Unity.Web3.ContractBuilder.Build(ABI.MarketplaceFactory, ChainSafeContracts.MarketplaceContracts[Web3Unity.Web3.ChainConfig.ChainId]);
                 var data = await contract.SendWithReceipt(method, args);
                 return data.receipt;
             }
@@ -283,10 +283,10 @@ namespace Scripts.EVM.Marketplace
                 var method = "mint";
                 object[] args =
                 {
-                    Web3Accessor.Web3.Signer.PublicAddress,
+                    Web3Unity.Web3.Signer.PublicAddress,
                     collectionData.cid
                 };
-                var contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.GeneralErc721, _collectionContract);
+                var contract = Web3Unity.Web3.ContractBuilder.Build(ABI.GeneralErc721, _collectionContract);
                 var txArgs = new TransactionRequest
                 {
                     GasLimit = new HexBigInteger(90000)
@@ -339,12 +339,12 @@ namespace Scripts.EVM.Marketplace
                 Debug.Log($"Amount3: {amount}");
                 object[] args =
                 {
-                    Web3Accessor.Web3.Signer.PublicAddress,
+                    Web3Unity.Web3.Signer.PublicAddress,
                     collectionData.cid,
                     amount
                 };
 
-                var contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.GeneralErc1155, _collectionContract);
+                var contract = Web3Unity.Web3.ContractBuilder.Build(ABI.GeneralErc1155, _collectionContract);
                 var txArgs = new TransactionRequest
                 {
                     GasLimit = new HexBigInteger(90000)
@@ -395,7 +395,7 @@ namespace Scripts.EVM.Marketplace
                 var formData = new List<IMultipartFormSection>
                 {
                     new MultipartFormDataSection("name", _name),
-                    new MultipartFormDataSection("chain_id", Web3Accessor.Web3.ChainConfig.ChainId),
+                    new MultipartFormDataSection("chain_id", Web3Unity.Web3.ChainConfig.ChainId),
                     new MultipartFormFileSection("banner", bannerImageData, "banner.png", "image/png")
                 };
                 if (!string.IsNullOrEmpty(_description))
@@ -409,11 +409,11 @@ namespace Scripts.EVM.Marketplace
                 var method = "createMarketplace";
                 object[] args =
                 {
-                    Web3Accessor.Web3.ProjectConfig.ProjectId,
+                    Web3Unity.Web3.ProjectConfig.ProjectId,
                     collectionData.id,
                     _whitelisting
                 };
-                var contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.MarketplaceFactory, ChainSafeContracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId]);
+                var contract = Web3Unity.Web3.ContractBuilder.Build(ABI.MarketplaceFactory, ChainSafeContracts.MarketplaceContracts[Web3Unity.Web3.ChainConfig.ChainId]);
                 var data = await contract.SendWithReceipt(method, args);
                 return data.receipt;
             }
@@ -456,7 +456,7 @@ namespace Scripts.EVM.Marketplace
                     _permission
                 };
                 var abi = _type == "ERC721" ? Token.ABI.GeneralErc721 : Token.ABI.GeneralErc1155;
-                var contract = Web3Accessor.Web3.ContractBuilder.Build(abi, _nftContract);
+                var contract = Web3Unity.Web3.ContractBuilder.Build(abi, _nftContract);
                 var data = await contract.SendWithReceipt(method, args);
                 return data.receipt;
             }
@@ -488,7 +488,7 @@ namespace Scripts.EVM.Marketplace
                 {
                     Value = new HexBigInteger(BigInteger.Parse(_amountToSend).ToString("X"))
                 };
-                var contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.Marketplace, _marketplaceContract);
+                var contract = Web3Unity.Web3.ContractBuilder.Build(ABI.Marketplace, _marketplaceContract);
                 var data = await contract.SendWithReceipt(method, args, tx);
                 return data.receipt;
             }
@@ -522,7 +522,7 @@ namespace Scripts.EVM.Marketplace
                     priceInWei,
                     deadline
                 };
-                var contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.Marketplace, _marketplaceContract);
+                var contract = Web3Unity.Web3.ContractBuilder.Build(ABI.Marketplace, _marketplaceContract);
                 var data = await contract.SendWithReceipt(method, args);
                 return data.receipt;
             }

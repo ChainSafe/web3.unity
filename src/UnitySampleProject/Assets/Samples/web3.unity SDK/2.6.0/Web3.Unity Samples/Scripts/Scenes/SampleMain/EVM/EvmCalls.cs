@@ -116,9 +116,9 @@ public class EvmCalls : MonoBehaviour
     {
         object[] args =
         {
-            Web3Accessor.Web3.Signer.PublicAddress
+            Web3Unity.Web3.Signer.PublicAddress
         };
-        var response = await Evm.ContractCall(Web3Accessor.Web3, methodCall, ABI.ArrayTotal, ChainSafeContracts.ArrayTotal, args);
+        var response = await Evm.ContractCall(Web3Unity.Web3, methodCall, ABI.ArrayTotal, ChainSafeContracts.ArrayTotal, args);
         Debug.Log(response);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.ContractCall));
@@ -133,7 +133,7 @@ public class EvmCalls : MonoBehaviour
         {
             increaseAmountSend
         };
-        var response = await Evm.ContractSend(Web3Accessor.Web3, methodSend, ABI.ArrayTotal, ChainSafeContracts.ArrayTotal, args);
+        var response = await Evm.ContractSend(Web3Unity.Web3, methodSend, ABI.ArrayTotal, ChainSafeContracts.ArrayTotal, args);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.ContractSend));
     }
@@ -143,7 +143,7 @@ public class EvmCalls : MonoBehaviour
     /// </summary>
     public async void GetArray()
     {
-        var response = await Evm.GetArray<string>(Web3Accessor.Web3, ChainSafeContracts.ArrayTotal, ABI.ArrayTotal, methodArrayGet);
+        var response = await Evm.GetArray<string>(Web3Unity.Web3, ChainSafeContracts.ArrayTotal, ABI.ArrayTotal, methodArrayGet);
         var responseString = string.Join(",\n", response.Select((list, i) => $"#{i} {string.Join((string)", ", (IEnumerable<string>)list)}"));
         SampleOutputUtil.PrintResult(responseString, nameof(Evm), nameof(Evm.GetArray));
     }
@@ -153,7 +153,7 @@ public class EvmCalls : MonoBehaviour
     /// </summary>
     public async void SendArray()
     {
-        var response = await Evm.SendArray(Web3Accessor.Web3, methodArraySend, ABI.ArrayTotal, ChainSafeContracts.ArrayTotal, stringArraySend);
+        var response = await Evm.SendArray(Web3Unity.Web3, methodArraySend, ABI.ArrayTotal, ChainSafeContracts.ArrayTotal, stringArraySend);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.SendArray));
     }
@@ -163,7 +163,7 @@ public class EvmCalls : MonoBehaviour
     /// </summary>
     public async void GetBlockNumber()
     {
-        var blockNumber = await Evm.GetBlockNumber(Web3Accessor.Web3);
+        var blockNumber = await Evm.GetBlockNumber(Web3Unity.Web3);
         SampleOutputUtil.PrintResult(blockNumber.ToString(), nameof(Evm), nameof(Evm.GetBlockNumber));
     }
 
@@ -176,7 +176,7 @@ public class EvmCalls : MonoBehaviour
         {
             increaseAmountSend
         };
-        var gasLimit = await Evm.GetGasLimit(Web3Accessor.Web3, ABI.ArrayTotal, ChainSafeContracts.ArrayTotal, methodSend, args);
+        var gasLimit = await Evm.GetGasLimit(Web3Unity.Web3, ABI.ArrayTotal, ChainSafeContracts.ArrayTotal, methodSend, args);
         SampleOutputUtil.PrintResult(gasLimit.ToString(), nameof(Evm), nameof(Evm.GetGasLimit));
     }
 
@@ -185,7 +185,7 @@ public class EvmCalls : MonoBehaviour
     /// </summary>
     public async void GetGasPrice()
     {
-        var gasPrice = await Evm.GetGasPrice(Web3Accessor.Web3);
+        var gasPrice = await Evm.GetGasPrice(Web3Unity.Web3);
         SampleOutputUtil.PrintResult(gasPrice.ToString(), nameof(Evm), nameof(Evm.GetGasPrice));
     }
 
@@ -194,7 +194,7 @@ public class EvmCalls : MonoBehaviour
     /// </summary>
     public async void GetNonce()
     {
-        var nonce = await Evm.GetNonce(Web3Accessor.Web3);
+        var nonce = await Evm.GetNonce(Web3Unity.Web3);
         SampleOutputUtil.PrintResult(nonce.ToString(), nameof(Evm), nameof(Evm.GetNonce));
     }
 
@@ -203,7 +203,7 @@ public class EvmCalls : MonoBehaviour
     /// </summary>
     public async void GetTransactionStatus()
     {
-        var receipt = await Evm.GetTransactionStatus(Web3Accessor.Web3);
+        var receipt = await Evm.GetTransactionStatus(Web3Unity.Web3);
         var output = $"Confirmations: {receipt.Confirmations}," +
                      $" Block Number: {receipt.BlockNumber}," +
                      $" Status {receipt.Status}";
@@ -216,7 +216,7 @@ public class EvmCalls : MonoBehaviour
     /// </summary>
     public async void RegisteredContract()
     {
-        var balance = await Evm.UseRegisteredContract(Web3Accessor.Web3, registeredContractName, EthMethods.BalanceOf);
+        var balance = await Evm.UseRegisteredContract(Web3Unity.Web3, registeredContractName, EthMethods.BalanceOf);
         SampleOutputUtil.PrintResult(balance.ToString(), nameof(Evm), nameof(Evm.UseRegisteredContract));
     }
 
@@ -225,7 +225,7 @@ public class EvmCalls : MonoBehaviour
     /// </summary>
     public async void SendTransaction()
     {
-        var transactionHash = await Evm.SendTransaction(Web3Accessor.Web3, toAddress, BigInteger.Parse(value));
+        var transactionHash = await Evm.SendTransaction(Web3Unity.Web3, toAddress, BigInteger.Parse(value));
         SampleOutputUtil.PrintResult(transactionHash, nameof(Evm), nameof(Evm.SendTransaction));
     }
 
@@ -243,18 +243,8 @@ public class EvmCalls : MonoBehaviour
     /// </summary>
     public async void SignMessage()
     {
-        var signedMessage = await Evm.SignMessage(Web3Accessor.Web3, messageSign);
-        SampleOutputUtil.PrintResult(signedMessage, nameof(Evm), nameof(Evm.SignMessage));
-    }
-
-    /// <summary>
-    /// Signs a message and verify account ownership
-    /// </summary>
-    public async void SignVerify()
-    {
-        var signatureVerified = await Evm.SignVerify(Web3Accessor.Web3, messageSignVerify);
-        var output = signatureVerified ? "Verified" : "Failed to verify";
-        SampleOutputUtil.PrintResult(output, nameof(Evm), nameof(Evm.SignVerify));
+        var signedMessage = await Web3Unity.Instance.SignMessage(messageSign);
+        SampleOutputUtil.PrintResult(signedMessage, nameof(Evm), nameof(Web3Unity.Instance.SignMessage));
     }
 
     /// <summary>
@@ -268,7 +258,7 @@ public class EvmCalls : MonoBehaviour
         {
             amount
         };
-        var contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.ArrayTotal, eventContract);
+        var contract = Web3Unity.Web3.ContractBuilder.Build(ABI.ArrayTotal, eventContract);
         var data = await contract.SendWithReceipt("addTotal", args);
         // Quick pause to deal with chain congestion
         await new WaitForSeconds(2);
@@ -327,7 +317,7 @@ public class EvmCalls : MonoBehaviour
     /// </summary>
     public async void MultiCall()
     {
-        var erc20Contract = Web3Accessor.Web3.ContractBuilder.Build(ABI.Erc20, ChainSafeContracts.Erc20);
+        var erc20Contract = Web3Unity.Web3.ContractBuilder.Build(ABI.Erc20, ChainSafeContracts.Erc20);
         var erc20BalanceOfCalldata = erc20Contract.Calldata(EthMethods.BalanceOf, new object[]
         {
             Erc20Account
@@ -353,7 +343,7 @@ public class EvmCalls : MonoBehaviour
             }
         };
 
-        var multicallResultResponse = await Web3Accessor.Web3.MultiCall().MultiCallAsync(calls);
+        var multicallResultResponse = await Web3Unity.Web3.MultiCall().MultiCallAsync(calls);
 
         Debug.Log(multicallResultResponse);
 

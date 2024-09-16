@@ -1,9 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Web3.Build;
 using Microsoft.Extensions.DependencyInjection;
 using UnityEngine;
-using CWeb3 = ChainSafe.Gaming.Web3.Web3;
 
 namespace ChainSafe.Gaming.UnityPackage.Connection
 {
@@ -12,12 +12,9 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
     /// </summary>
     public class ConnectionHandler : MonoBehaviour, IConnectionHandler, IWeb3BuilderServiceAdapter
     {
-        [SerializeField] private string gelatoApiKey = "";
-        [Space]
         // Handed in ConnectionHandlerEditor
         [HideInInspector, SerializeField] private ConnectionProvider[] providers;
         
-        public string GelatoApiKey => gelatoApiKey;
         public IWeb3BuilderServiceAdapter[] Web3BuilderServiceAdapters { get; private set; }
 
         public ConnectionProvider[] Providers => providers;
@@ -35,7 +32,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
             }
         }
 
-        public async Task<CWeb3> Restore()
+        public async Task Restore()
         {
             var data = new StoredConnectionProviderData();
 
@@ -46,10 +43,8 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
             
             if (provider != null && provider.RememberSession && await provider.SavedSessionAvailable())
             {
-                return await (this as IConnectionHandler).Connect(provider);
+                await (this as IConnectionHandler).Connect(provider);
             }
-
-            return null;
         }
 
         public Web3Builder ConfigureServices(Web3Builder web3Builder)
@@ -63,6 +58,18 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
                     services.AddSingleton(handler);
                 }
             });
+        }
+
+        public bool GetProvider<T>(out T provider) where T : ConnectionProvider
+        {
+            provider = Providers.FirstOrDefault(p => p.IsAvailable && p is T) as T;
+
+            return provider != null;
+        }
+
+        private void Reset()
+        {
+            providers = Resources.LoadAll<ConnectionProvider>(string.Empty);
         }
     }
 }

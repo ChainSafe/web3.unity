@@ -73,7 +73,7 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
             customTokenPlaceHolder.SetActive(false);
             customTokenContract = data[0];
             customTokenSymbolText.text = data[1].ToUpper();
-            var balance = await Web3Accessor.Web3.Erc20.GetBalanceOf(customTokenContract, Web3Accessor.Web3.Signer.PublicAddress);
+            var balance = await Web3Unity.Web3.Erc20.GetBalanceOf(customTokenContract, Web3Unity.Web3.Signer.PublicAddress);
             var customTokenValue = (decimal)balance / (decimal)BigInteger.Pow(10, 18);
             customTokenAmountText.text = customTokenValue.ToString("N18");
             customTokenDisplay.SetActive(true);
@@ -83,8 +83,8 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
             customTokenDisplay.SetActive(false);
         }
         // Set native token
-        nativeTokenSymbolText.text = Web3Accessor.Web3.ChainConfig.Symbol.ToUpper();
-        var hexBalance = await Web3Accessor.Web3.RpcProvider.GetBalance(Web3Accessor.Web3.Signer.PublicAddress);
+        nativeTokenSymbolText.text = Web3Unity.Web3.ChainConfig.Symbol.ToUpper();
+        var hexBalance = await Web3Unity.Web3.RpcProvider.GetBalance(Web3Unity.Web3.Signer.PublicAddress);
         var weiBalance = BigInteger.Parse(hexBalance.ToString());
         decimal ethBalance = (decimal)weiBalance / (decimal)Math.Pow(10, 18);
         nativeTokenAmountText.text = ethBalance.ToString("0.#########");
@@ -115,7 +115,7 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
         lastCheckedAddress = customTokenAddressInput.text;
         try
         {
-            symbolTask = Web3Accessor.Web3.Erc20.GetSymbol(customTokenAddressInput.text);
+            symbolTask = Web3Unity.Web3.Erc20.GetSymbol(customTokenAddressInput.text);
             customTokenSymbolInput.text = await symbolTask;
             addTokenButton.gameObject.SetActive(true);
         }
@@ -178,13 +178,13 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
             case 0:
                 BigInteger amountInWei0 = BigInteger.Parse((decimal.Parse(transferTokensAmountInput.text) * (decimal)Math.Pow(10, 18)).ToString("F0"));
                 transferTokensContainer.SetActive(false);
-                var response0 = await Evm.SendTransaction(Web3Accessor.Web3, transferTokensWalletInput.text, amountInWei0);
+                var response0 = await Evm.SendTransaction(Web3Unity.Web3, transferTokensWalletInput.text, amountInWei0);
                 Debug.Log($"Transfer Complete! {response0}");
                 break;
             case 1:
                 BigInteger amountInWei1 = BigInteger.Parse((decimal.Parse(transferTokensAmountInput.text) * (decimal)Math.Pow(10, 18)).ToString("F0"));
                 transferTokensContainer.SetActive(false);
-                var response1 = await Web3Accessor.Web3.Erc20.Transfer(customTokenContract, transferTokensWalletInput.text, amountInWei1);
+                var response1 = await Web3Unity.Web3.Erc20.Transfer(customTokenContract, transferTokensWalletInput.text, amountInWei1);
                 Debug.Log($"Transfer Complete! {response1}");
                 break;
             default:

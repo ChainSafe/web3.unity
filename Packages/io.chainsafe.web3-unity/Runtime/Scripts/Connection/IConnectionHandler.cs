@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Connection;
 using ChainSafe.Gaming.Evm.Contracts;
@@ -20,11 +21,6 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
     public interface IConnectionHandler
     {
         /// <summary>
-        /// Gelato API key from Gelato's Web Dashboard.
-        /// </summary>
-        public string GelatoApiKey { get; }
-
-        /// <summary>
         /// All service providers used for configuring <see cref="Web3"/> instance services.
         /// </summary>
         public IWeb3BuilderServiceAdapter[] Web3BuilderServiceAdapters { get; }
@@ -32,7 +28,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         /// <summary>
         /// Login by Building a <see cref="Web3"/> Instance.
         /// </summary>
-        public async Task<CWeb3> Connect(ConnectionProvider provider)
+        public async Task Connect(ConnectionProvider provider)
         {
             Web3Builder web3Builder = new Web3Builder(ProjectConfigUtilities.Load())
                 .Configure(ConfigureCommonServices)
@@ -42,15 +38,13 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
             var web3 = await web3Builder.LaunchAsync();
 
             await OnWeb3Initialized(web3);
-
-            return web3;
         }
 
         private async Task OnWeb3Initialized(CWeb3 web3)
         {
             var web3InitializedHandlers = web3.ServiceProvider.GetServices<IWeb3InitializedHandler>();
             
-            foreach (var web3InitializedHandler in web3InitializedHandlers)
+            foreach (var web3InitializedHandler in web3InitializedHandlers.OrderBy(w => w.Priority))
             {
                 await web3InitializedHandler.OnWeb3Initialized(web3);
             }
@@ -61,10 +55,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
             // TODO: most of these can/should be service adapters
             services
                 .UseUnityEnvironment()
-                .UseGelato(GelatoApiKey)
-                .UseMultiCall()
-                .UseRpcProvider()
-                .UseMarketplace();
+                .UseRpcProvider();
 
             /* As many contracts as needed may be registered here.
              * It is better to register all contracts the application

@@ -23,7 +23,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp.Sample
         private async void OnRampPressed()
         {
             // Show "Buy Crypto" widget
-            var purchaseData = await Web3Accessor.Web3.RampExchanger().BuyCrypto(
+            var purchaseData = await Web3Unity.Web3.RampExchanger().BuyCrypto(
                 new RampBuyWidgetSettings
                 {
                     // For more info on widget settings check https://docs.ramp.network/configuration
@@ -44,7 +44,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp.Sample
         private async void OffRampPressed()
         {
             // Show "Sell Crypto" widget
-            var saleData = await Web3Accessor.Web3.RampExchanger().SellCrypto(
+            var saleData = await Web3Unity.Web3.RampExchanger().SellCrypto(
                 new RampSellWidgetSettings
                 {
                     // For more info on widget settings check https://docs.ramp.network/configuration
@@ -63,7 +63,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp.Sample
         private async void OnRampOffRampPressed()
         {
             // Show "Buy or Sell Crypto" widget
-            var rampTransactionData = await Web3Accessor.Web3.RampExchanger().BuyOrSellCrypto(
+            var rampTransactionData = await Web3Unity.Web3.RampExchanger().BuyOrSellCrypto(
                 new RampBuyOrSellWidgetSettings
                 {
                     // For more info on widget settings check https://docs.ramp.network/configuration 
