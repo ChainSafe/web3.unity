@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -299,6 +298,7 @@ GameObject:
   - component: {fileID: 1658652867}
   - component: {fileID: 1658652869}
   - component: {fileID: 1658652868}
+  - component: {fileID: 1658652870}
   m_Layer: 0
   m_Name: ConnectToWallet
   m_TagString: Untagged
@@ -415,6 +415,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bddd0599e4c6ca4a8a476d02011f3cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1658652870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1658652861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4bbed5530529ea46a1f41b407499dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rampConfig: {fileID: 11400000, guid: d1f58846e4fc71d4e90f287a86f328f9, type: 2}
 --- !u!224 &199374705475579680
 RectTransform:
   m_ObjectHideFlags: 0
