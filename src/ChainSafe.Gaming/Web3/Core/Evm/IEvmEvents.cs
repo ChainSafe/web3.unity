@@ -7,12 +7,6 @@ namespace ChainSafe.Gaming.Web3.Core.Evm
     public interface IEvmEvents
     {
         /// <summary>
-        /// Represents a delegate for handling chain change events.
-        /// </summary>
-        /// <param name="chainID">The chain ID of the new chain.</param>
-        public delegate void ChainChangedDelegate(ulong chainID);
-
-        /// <summary>
         /// Represents a delegate for handling poll error events.
         /// </summary>
         /// <param name="exception">The exception representing the poll error.</param>
@@ -30,11 +24,6 @@ namespace ChainSafe.Gaming.Web3.Core.Evm
         /// </summary>
         /// <param name="blockNumber">The block number of the new block.</param>
         public delegate void NewBlockDelegate(ulong blockNumber);
-
-        /// <summary>
-        /// Occurs when the chain is changed.
-        /// </summary>
-        public event ChainChangedDelegate ChainChanged;
 
         /// <summary>
         /// Occurs when an error is encountered during polling.

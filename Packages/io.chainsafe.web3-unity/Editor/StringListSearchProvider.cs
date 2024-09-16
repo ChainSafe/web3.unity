@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ChainSafe.GamingSdk.Editor;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -94,8 +95,6 @@ public class StringListSearchProvider : ScriptableObject, ISearchWindowProvider
     public bool OnSelectEntry(SearchTreeEntry SearchTreeEntry, SearchWindowContext context)
     {
         onSetIndexCallback?.Invoke((string)SearchTreeEntry.userData);
-        ChainSafeServerSettings instance = EditorWindow.GetWindow<ChainSafeServerSettings>();
-        instance.UpdateServerMenuInfo();
         return true;
     }
 

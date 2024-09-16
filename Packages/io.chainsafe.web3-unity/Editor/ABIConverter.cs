@@ -11,7 +11,7 @@ public class ABIWindow : EditorWindow
     Vector2 TextArea;
 
     // Where is the window menu located
-    [MenuItem("ChainSafe SDK/Generate ABI wrapper")]
+    [MenuItem("ChainSafe SDK/Generate ABI wrapper", priority = 0)]
 
     // Show our window
     public static void ShowWindow()

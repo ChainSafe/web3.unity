@@ -1,3 +1,4 @@
+using System;
 using ChainSafe.Gaming.Web3;
 
 namespace ChainSafe.Gaming.NetCore
@@ -6,6 +7,7 @@ namespace ChainSafe.Gaming.NetCore
     /// Concrete Implementation of <see cref="IChainConfig"/>.
     /// Holds all config files related to chain and network.
     /// </summary>
+    [Serializable]
     public class ChainConfig : IChainConfig
     {
         /// <summary>
@@ -37,12 +39,6 @@ namespace ChainSafe.Gaming.NetCore
         /// RPC node link.
         /// </summary>
         public string Rpc { get; set; }
-
-        /// <summary>
-        /// Implementation of <see cref="IChainConfig.Ipc"/>
-        /// IPC link.
-        /// </summary>
-        public string Ipc { get; set; }
 
         /// <summary>
         /// Implementation of <see cref="IChainConfig.Ws"/>

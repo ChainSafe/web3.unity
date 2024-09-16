@@ -31,11 +31,6 @@ namespace ChainSafe.Gaming.Web3
         public string Rpc { get; }
 
         /// <summary>
-        /// The path to the IPC file to be used by the IPC provider by default.
-        /// </summary>
-        public string Ipc { get; }
-
-        /// <summary>
         /// TODO.
         /// </summary>
         public string Ws { get; }

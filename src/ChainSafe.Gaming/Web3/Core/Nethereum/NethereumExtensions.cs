@@ -1,5 +1,6 @@
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Web3.Build;
+using ChainSafe.Gaming.Web3.Core.Chains;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,7 +15,7 @@ namespace ChainSafe.Gaming.Web3.Core.Nethereum
             // build Adapters for Writing too if we can
             if (services.IsBound<ISigner>() && services.IsBound<ITransactionExecutor>())
             {
-                services.AddSingleton<NethereumAccountAdapter>();
+                services.AddSingleton<INethereumAccountAdapter, IChainSwitchHandler, NethereumAccountAdapter>();
             }
 
             return services;

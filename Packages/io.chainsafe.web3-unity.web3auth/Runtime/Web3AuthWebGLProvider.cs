@@ -11,7 +11,7 @@ public class Web3AuthWebGLProvider : Web3AuthProvider
 {
     private readonly Web3AuthWalletConfig _config;
 
-    public Web3AuthWebGLProvider(Web3AuthWalletConfig config, Web3Environment environment, IChainConfig chainConfig, ChainRegistryProvider chainRegistryProvider) : base(config, environment, chainConfig, chainRegistryProvider)
+    public Web3AuthWebGLProvider(Web3AuthWalletConfig config, Web3Environment environment, IChainConfig chainConfig) : base(config, environment, chainConfig)
     {
         _config = config;
     }

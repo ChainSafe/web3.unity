@@ -3,9 +3,7 @@ using UnityEngine;
 
 namespace ChainSafe.Gaming.UnityPackage
 {
-    [CreateAssetMenu(fileName = "ProjectConfigScriptableObject", menuName = "ScriptableObjects/ProjectConfigScriptableObject",
-        order = 1)]
-    public class ProjectConfigScriptableObject : ScriptableObject, ICompleteProjectConfig
+    public class ProjectConfigScriptableObject_Deprecated : ScriptableObject
     {
         [SerializeField] private string projectID;
         [SerializeField] private string chainID;

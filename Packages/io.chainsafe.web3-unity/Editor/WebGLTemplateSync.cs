@@ -50,7 +50,7 @@ namespace ChainSafe.GamingSdk.Editor
             return true;
         }
 
-        [MenuItem("ChainSafe SDK/Sync WebGL Templates")]
+        [MenuItem("ChainSafe SDK/Sync WebGL Templates", priority = 0)]
         public static void Syncronize()
         {
             AssetDatabase.DisallowAutoRefresh();
@@ -72,8 +72,6 @@ namespace ChainSafe.GamingSdk.Editor
             {
                 AssetDatabase.AllowAutoRefresh();
                 AssetDatabase.Refresh();
-                // Update template values to chain config
-                ChainSafeServerSettings.WriteNetworkFile();
             }
         }
 

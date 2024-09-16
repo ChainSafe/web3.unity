@@ -1,5 +1,6 @@
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.Web3.Core.Chains;
 
 namespace ChainSafe.Gaming.RPC.Events
 {
@@ -9,7 +10,7 @@ namespace ChainSafe.Gaming.RPC.Events
         {
             // todo bind EventPoller implementation of IEventManager when running in WebGL build
             return services
-                .AddSingleton<IEventManager, ILifecycleParticipant, EventManager>();
+                .AddSingleton<IEventManager, ILifecycleParticipant, IChainSwitchHandler, EventManager>();
         }
     }
 }
