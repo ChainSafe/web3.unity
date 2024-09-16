@@ -25,7 +25,7 @@ namespace Samples.Behaviours.SwitchChain
             SampleFeedback.Instance.Activate();
             try
             {
-                await Web3Accessor.Web3.Chains.SwitchChain(chainId);
+                await Web3Unity.Web3.Chains.SwitchChain(chainId);
             }
             catch
             {
@@ -44,7 +44,7 @@ namespace Samples.Behaviours.SwitchChain
             var contractAddress = chainSetups[currentChainIndex].contractAddress;
             
             // build contract client instance
-            var contract = await Web3Accessor.Web3.ContractBuilder.Build<EchoChainContract>(contractAddress);
+            var contract = await Web3Unity.Web3.ContractBuilder.Build<EchoChainContract>(contractAddress);
             
             // call the EchoChain function
             var echoMessage = await contract.EchoChain();
@@ -53,7 +53,7 @@ namespace Samples.Behaviours.SwitchChain
 
         public async void PrintChainId()
         {
-            var chainId = await Web3Accessor.Web3.RpcProvider.GetChainId();
+            var chainId = await Web3Unity.Web3.RpcProvider.GetChainId();
             Debug.Log($"Running the SDK with Chain ID: {chainId}");
         }
         
