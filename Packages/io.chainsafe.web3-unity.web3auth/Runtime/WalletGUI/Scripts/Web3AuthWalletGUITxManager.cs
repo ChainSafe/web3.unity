@@ -59,7 +59,7 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
         rejectRequestButton.onClick.AddListener(RejectRequest);
         autoTxToggle.onValueChanged.AddListener(ToggleAutoTx);
 
-        _transactionHandler = Web3Accessor.Web3.ServiceProvider.GetService<IWeb3AuthTransactionHandler>();
+        _transactionHandler = Web3Unity.Web3.ServiceProvider.GetService<IWeb3AuthTransactionHandler>();
     }
     
     /// <summary>
@@ -226,7 +226,7 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     /// <param name="txHash"></param>
     private void OpenBlockExplorer(string txHash)
     {
-        Application.OpenURL($"{Web3Accessor.Web3.ChainConfig.BlockExplorerUrl}/tx/{txHash}");
+        Application.OpenURL($"{Web3Unity.Web3.ChainConfig.BlockExplorerUrl}/tx/{txHash}");
     }
     
     /// <summary>

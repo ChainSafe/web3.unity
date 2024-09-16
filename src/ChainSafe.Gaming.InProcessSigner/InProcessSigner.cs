@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Core.Debug;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using Nethereum.RPC.Accounts;
 using Newtonsoft.Json;
@@ -39,7 +40,9 @@ namespace ChainSafe.Gaming.InProcessSigner
         /// <returns>Hash response of a successfully signed message.</returns>
         public async Task<string> SignMessage(string message)
         {
-            return await Account.AccountSigningService.PersonalSign.SendRequestAsync(Encoding.UTF8.GetBytes(message));
+            string hash = await Account.AccountSigningService.PersonalSign.SendRequestAsync(Encoding.UTF8.GetBytes(message));
+
+            return hash.AssertSignatureValid(message, PublicAddress);
         }
 
         /// <summary>
@@ -53,7 +56,9 @@ namespace ChainSafe.Gaming.InProcessSigner
         {
             SerializableTypedData<TStructType> typedData = new SerializableTypedData<TStructType>(domain, message);
 
-            return await Account.AccountSigningService.SignTypedDataV4.SendRequestAsync(JsonConvert.SerializeObject(typedData));
+            string hash = await Account.AccountSigningService.SignTypedDataV4.SendRequestAsync(JsonConvert.SerializeObject(typedData));
+
+            return hash.AssertTypedDataSignatureValid(typedData, PublicAddress);
         }
     }
 }

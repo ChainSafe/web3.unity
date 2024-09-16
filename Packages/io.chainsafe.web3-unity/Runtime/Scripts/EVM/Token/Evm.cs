@@ -107,7 +107,7 @@ namespace Scripts.EVM.Token
             var response = await web3.TransactionExecutor.SendTransaction(txRequest);
             return response.Hash;
         }
-
+        
         // todo extract in a separate service
         public static string Sha3(string message)
         {
