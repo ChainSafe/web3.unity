@@ -1,9 +1,11 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.UnityPackage;
 using Scripts.EVM.Token;
 using UnityEngine;
+using Erc20Contract = ChainSafe.Gaming.Evm.Contracts.Custom.Erc20Contract;
 
 /// <summary>
 /// ERC20 calls used in the sample scene
@@ -11,33 +13,46 @@ using UnityEngine;
 public class Erc20Calls : MonoBehaviour
 {
     #region Fields
+
     [Header("Change the fields below for testing purposes")]
 
     #region Balance Of
 
     [Header("Balance Of Call")]
-    [SerializeField] private string accountBalanceOf = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
+    [SerializeField]
+    private string accountBalanceOf = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
 
     #endregion
 
     #region Mint
 
-    [Header("Mint Call")]
-    BigInteger valueToSend = 5;
-    BigInteger weiPerEther = BigInteger.Pow(10, 18);
+    [Header("Mint Call")] private BigInteger valueToSend = 5;
+    private BigInteger weiPerEther = BigInteger.Pow(10, 18);
 
     #endregion
 
     #region Transfer
 
-    [Header("Transfer Call")]
-    [SerializeField] private string toAccount = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
+    [Header("Transfer Call")] [SerializeField]
+    private string toAccount = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
+
     [SerializeField] private BigInteger amountTransfer = 1000000000000000;
 
     #endregion
 
     #endregion
 
+    private Erc20Contract _erc20;
+
+    private async void Awake()
+    {
+        _erc20 = await Web3Unity.Instance.BuildContract<Erc20Contract>(ChainSafeContracts.Erc20);
+    }
+
+    private async void OnDestroy()
+    {
+        await _erc20.DisposeAsync();
+    }
 
 
     /// <summary>
@@ -45,7 +60,7 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void BalanceOf()
     {
-        var balance = await Web3Unity.Web3.Erc20.GetBalanceOf(ChainSafeContracts.Erc20, accountBalanceOf);
+        var balance = await _erc20.BalanceOf(accountBalanceOf);
         SampleOutputUtil.PrintResult(balance.ToString(), "ERC-20", nameof(Erc20Service.GetBalanceOf));
     }
 
@@ -63,7 +78,7 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void Name()
     {
-        var name = await Web3Unity.Web3.Erc20.GetName(ChainSafeContracts.Erc20);
+        var name = await _erc20.Name();
         SampleOutputUtil.PrintResult(name, "ERC-20", nameof(Erc20Service.GetName));
     }
 
@@ -72,7 +87,7 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void Symbol()
     {
-        var symbol = await Web3Unity.Web3.Erc20.GetSymbol(ChainSafeContracts.Erc20);
+        var symbol = await _erc20.Symbol();
         SampleOutputUtil.PrintResult(symbol, "ERC-20", nameof(Erc20Service.GetSymbol));
     }
 
@@ -81,7 +96,7 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void Decimals()
     {
-        var decimals = await Web3Unity.Web3.Erc20.GetDecimals(ChainSafeContracts.Erc20);
+        var decimals = await _erc20.Decimals();
         SampleOutputUtil.PrintResult(decimals.ToString(), "ERC-20", nameof(Erc20Service.GetDecimals));
     }
 
@@ -90,7 +105,7 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void TotalSupply()
     {
-        var totalSupply = await Web3Unity.Web3.Erc20.GetTotalSupply(ChainSafeContracts.Erc20);
+        var totalSupply = await _erc20.TotalSupply();
         SampleOutputUtil.PrintResult(totalSupply.ToString(), "ERC-20", nameof(Erc20Service.GetTotalSupply));
     }
 
@@ -99,8 +114,8 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void MintErc20()
     {
-        var mintResponse = await Web3Unity.Web3.Erc20.Mint(ChainSafeContracts.Erc20, valueToSend * weiPerEther);
-        var output = SampleOutputUtil.BuildOutputValue(mintResponse);
+        var mintResponse = await _erc20.MintWithReceipt(Web3Unity.Web3.Signer.PublicAddress, valueToSend * weiPerEther);
+        var output = SampleOutputUtil.BuildOutputValue(new object[] { mintResponse.TransactionHash });
         SampleOutputUtil.PrintResult(output, "ERC-20", nameof(Erc20Service.Mint));
     }
 
@@ -109,8 +124,15 @@ public class Erc20Calls : MonoBehaviour
     /// </summary>
     public async void TransferErc20()
     {
-        var mintResponse = await Web3Unity.Web3.Erc20.Transfer(ChainSafeContracts.Erc20, toAccount, amountTransfer);
-        var output = SampleOutputUtil.BuildOutputValue(mintResponse);
+        var mintResponse = await _erc20.Transfer(toAccount, amountTransfer);
+        var output = SampleOutputUtil.BuildOutputValue(new object[] { mintResponse });
+        _erc20.OnTransfer += Test;
         SampleOutputUtil.PrintResult(output, "ERC-20", nameof(Erc20Service.Transfer));
+    }
+
+    private void Test(Erc20Contract.TransferEventDTO obj)
+    {
+        Debug.LogError("TRANSFERED" + obj.ToString());
+        _erc20.OnTransfer -= Test;
     }
 }

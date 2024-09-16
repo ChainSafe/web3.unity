@@ -177,6 +177,39 @@ namespace ChainSafe.Gaming.UnityPackage
             
             return Task.CompletedTask;
         }
+
+        public async Task<TransactionResponse> GetTransactionByHash(string transactionHash)
+        {
+            if (Web3 == null || _web3.RpcProvider == default)
+            {
+                throw new InvalidOperationException("Web3 object and/or the RPC provider are null. Make sure you've initialized the Web3 object correctly ");
+            }
+            var parameters = new object[] { transactionHash };
+            TransactionResponse transaction = await Web3.RpcProvider.Perform<TransactionResponse>("eth_getTransactionByHash", parameters);
+            
+            if (transaction == null)
+            {
+                throw new Web3Exception("Transaction not found.");
+            }
+
+            if (transaction.BlockNumber == null)
+            {
+                transaction.Confirmations = 0;
+            }
+            else if (transaction.Confirmations == null)
+            {
+                var blockNumber = await Web3.RpcProvider.GetBlockNumber();
+                var confirmations = (blockNumber.ToUlong() - transaction.BlockNumber.ToUlong()) + 1;
+                if (confirmations <= 0)
+                {
+                    confirmations = 1;
+                }
+
+                transaction.Confirmations = confirmations;
+            }
+
+            return transaction;
+        }
         
         private static void AssertConnection()
         {

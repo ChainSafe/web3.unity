@@ -8,6 +8,7 @@ using ChainSafe.Gaming.InProcessSigner;
 using ChainSafe.Gaming.InProcessTransactionExecutor;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.GamingSdk.Web3Auth;
+using UnityEngine;
 
 /// <summary>
 /// Send Transaction for Web3Auth wallet.
@@ -48,7 +49,7 @@ public class Web3AuthTransactionExecutor : InProcessTransactionExecutor, IWeb3Au
         var response = await base.SendTransaction(transaction.request);
             
         transaction.response.SetResult(response);
-
+        Debug.Log(response.Hash);
         OnTransactionConfirmed?.Invoke(response);
         
         _transactionPool.Remove(transactionId);
