@@ -40,29 +40,40 @@ public static class WebGLThreadPatcherInstaller
         string json = File.ReadAllText(ManifestPath);
         
         Manifest manifest = JsonConvert.DeserializeObject<Manifest>(json);
-
+        
         // check if ThreadPatcher is already installed.
         if (manifest.Dependencies.ContainsKey(AsyncToolsPackageName))
         {
             return;
         }
-
-        if (EditorUtility.DisplayDialog("Web3.Unity", "For Web3.Unity to fully work on a WebGL build you need to install Async Utilities, this will make sure async operations can run to completion.\nInstall Async Utilities?", "Yes", "No"))
+        
+        if (EditorUtility.DisplayDialog("Web3.Unity",
+                "For Web3.Unity to fully work on a WebGL build you need to install Async Utilities, this will make sure async operations can run to completion.\nInstall Async Utilities?",
+                "Yes", "No"))
         {
-            var parsed = JObject.Parse(json);
-
-            parsed.Merge(JObject.Parse(JsonConvert.SerializeObject(new Manifest(new Dictionary<string, string>()
+            try
             {
-                { AsyncToolsPackageName, AsyncToolPackageLink }
-            }))));
+                var parsed = JObject.Parse(json);
 
-            File.WriteAllText(ManifestPath, parsed.ToString(Formatting.Indented));
+                parsed.Merge(JObject.Parse(JsonConvert.SerializeObject(new Manifest(new Dictionary<string, string>()
+                {
+                    { AsyncToolsPackageName, AsyncToolPackageLink }
+                }))));
+
+                File.WriteAllText(ManifestPath, parsed.ToString(Formatting.Indented));
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Error adding {AsyncToolsPackageName} package. {e}");
+
+                throw;
+            }
         }
     }
 
     private class Manifest
     {
-        [JsonProperty("dependencies")]
+        [JsonProperty("dependencies", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public Dictionary<string, string> Dependencies { get; private set; }
 
         public Manifest(Dictionary<string, string> dependencies)
