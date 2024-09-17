@@ -32,10 +32,16 @@ namespace ChainSafe.Gaming.Evm.Providers
             {
                 var request = new RpcRequestMessage(Guid.NewGuid().ToString(), method, parameters);
                 response = await SendAsync(request);
+
+                // Check if response.Result is null
+                if (response.Result == null)
+                {
+                    throw new Web3Exception($"RPC method \"{method}\" returned a null result.");
+                }
             }
             catch (Exception ex)
             {
-                throw new Web3Exception($"RPC method \"{method}\" threw an exception:" + response?.Error.Message, ex);
+                throw new Web3Exception($"RPC method \"{method}\" threw an exception:" + response?.Error?.Message, ex);
             }
             finally
             {
