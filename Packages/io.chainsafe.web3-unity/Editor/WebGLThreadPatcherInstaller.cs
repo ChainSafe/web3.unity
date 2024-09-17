@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -17,7 +18,7 @@ public static class WebGLThreadPatcherInstaller
     private const string AsyncToolPackageLink = "https://github.com/RageAgainstThePixel/com.utilities.async.git#upm";
 
     static WebGLThreadPatcherInstaller()
-    {
+    {   
 #if UNITY_WEBGL
         if (SessionState.GetBool(AsyncToolsInstalled, false))
         {
@@ -36,47 +37,48 @@ public static class WebGLThreadPatcherInstaller
     [MenuItem("ChainSafe SDK/Install WebGLThreadingPatcher", priority = 0)]
     public static void TryInstallThreadPatcher()
     {
-        Manifest manifest = JsonConvert.DeserializeObject<Manifest>(File.ReadAllText(ManifestPath));
-
+        string json = File.ReadAllText(ManifestPath);
+        
+        Manifest manifest = JsonConvert.DeserializeObject<Manifest>(json);
+        
         // check if ThreadPatcher is already installed.
         if (manifest.Dependencies.ContainsKey(AsyncToolsPackageName))
         {
             return;
         }
-
-        if (EditorUtility.DisplayDialog("Web3.Unity", "For Web3.Unity to fully work on a WebGL build you need to install Async Utilities, this will make sure async operations can run to completion.\nInstall Async Utilities?", "Yes", "No"))
+        
+        if (EditorUtility.DisplayDialog("Web3.Unity",
+                "For Web3.Unity to fully work on a WebGL build you need to install Async Utilities, this will make sure async operations can run to completion.\nInstall Async Utilities?",
+                "Yes", "No"))
         {
-            // Add the package as a dependency.
-            manifest.Dependencies.Add(AsyncToolsPackageName, AsyncToolPackageLink);
+            try
+            {
+                var parsed = JObject.Parse(json);
 
-            File.WriteAllText(ManifestPath, JsonConvert.SerializeObject(manifest, Formatting.Indented));
+                parsed.Merge(JObject.Parse(JsonConvert.SerializeObject(new Manifest(new Dictionary<string, string>()
+                {
+                    { AsyncToolsPackageName, AsyncToolPackageLink }
+                }))));
+
+                File.WriteAllText(ManifestPath, parsed.ToString(Formatting.Indented));
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Error adding {AsyncToolsPackageName} package. {e}");
+
+                throw;
+            }
         }
     }
 
     private class Manifest
     {
-        [JsonProperty("dependencies")]
+        [JsonProperty("dependencies", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public Dictionary<string, string> Dependencies { get; private set; }
 
-        [JsonProperty("enableLockFile")]
-        public bool EnableLockFile { get; private set; } = true;
-        
-        [JsonProperty("resolutionStrategy", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public string ResolutionStrategy { get; private set; }
-        
-        [JsonProperty("testables", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public string[] Testables { get; private set; }
-        
-        [JsonProperty("scopedRegistries", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public ScopedRegistry[] ScopedRegistries { get; private set; }
-    }
-
-    public struct ScopedRegistry
-    {
-        [JsonProperty("name")] public string Name { get; private set; }
-
-        [JsonProperty("url")] public string Url { get; private set; }
-
-        [JsonProperty("scopes")] public string[] Scopes { get; private set; }
+        public Manifest(Dictionary<string, string> dependencies)
+        {
+            Dependencies = dependencies;
+        }
     }
 }
