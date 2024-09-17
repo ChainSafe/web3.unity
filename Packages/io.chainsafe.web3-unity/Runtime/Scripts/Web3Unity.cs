@@ -1,16 +1,25 @@
 using System;
+using System.Linq;
 using System.Numerics;
+using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
+using ChainSafe.Gaming.Evm.Contracts.Extensions;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.UnityPackage.UI;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Core.Evm;
+using Nethereum.ABI.FunctionEncoding.Attributes;
 using Nethereum.Hex.HexTypes;
+using Nethereum.RPC.Eth.DTOs;
+using Nethereum.Signer;
+using Nethereum.Util;
+using Newtonsoft.Json;
 using UnityEngine;
 using CWeb3 = ChainSafe.Gaming.Web3.Web3;
+using TransactionReceipt = ChainSafe.Gaming.Evm.Transactions.TransactionReceipt;
 
 namespace ChainSafe.Gaming.UnityPackage
 {
@@ -21,7 +30,7 @@ namespace ChainSafe.Gaming.UnityPackage
     public class Web3Unity : MonoBehaviour, IWeb3InitializedHandler
     {
         private static Web3Unity _instance;
-        
+
         /// <summary>
         /// Static Web3 singleton instance.
         /// </summary>
@@ -29,11 +38,8 @@ namespace ChainSafe.Gaming.UnityPackage
         {
             get
             {
-                if (!_instance)
-                {
-                    _instance = FindObjectOfType<Web3Unity>();
-                }
-                
+                if (!_instance) _instance = FindObjectOfType<Web3Unity>();
+
                 return _instance;
             }
         }
@@ -53,7 +59,7 @@ namespace ChainSafe.Gaming.UnityPackage
                 if (!Instance._connectModal)
                 {
                     Instance._connectModal = Instantiate(Instance.connectModalPrefab);
-                    
+
                     Instance._connectModal.Initialize(Instance._connectionHandler.Providers);
                 }
 
@@ -65,25 +71,25 @@ namespace ChainSafe.Gaming.UnityPackage
         /// Is a wallet connected.
         /// </summary>
         public static bool Connected => Web3 != null;
-        
+
         /// <summary>
         /// Execution priority for <see cref="IWeb3InitializedHandler"/>.
         /// Lower than other so it can be executed first.
         /// </summary>
-        public int Priority => - 1;
-        
+        public int Priority => -1;
+
         /// <summary>
         /// Public key (address) of connected wallet.
         /// </summary>
         public string Address => Web3?.Signer.PublicAddress;
-        
-        [DefaultAssetValue("Packages/io.chainsafe.web3-unity/Runtime/Prefabs/Connect.prefab")]
-        [SerializeField] private ConnectModal connectModalPrefab;
-        
+
+        [DefaultAssetValue("Packages/io.chainsafe.web3-unity/Runtime/Prefabs/Connect.prefab")] [SerializeField]
+        private ConnectModal connectModalPrefab;
+
         private CWeb3 _web3;
-        
+
         private ConnectionHandler _connectionHandler;
-        
+
         private ConnectModal _connectModal;
 
         private void Awake()
@@ -98,11 +104,10 @@ namespace ChainSafe.Gaming.UnityPackage
         public async Task Initialize(bool connectOnInitialize = true)
         {
             _connectionHandler = GetComponent<ConnectionHandler>();
-            
+
             await _connectionHandler.Initialize();
 
             if (connectOnInitialize)
-            {
                 try
                 {
                     await _connectionHandler.Restore();
@@ -111,7 +116,6 @@ namespace ChainSafe.Gaming.UnityPackage
                 {
                     Debug.LogError($"Failed to restore connection: {e}");
                 }
-            }
         }
 
         /// <summary>
@@ -122,7 +126,7 @@ namespace ChainSafe.Gaming.UnityPackage
         {
             await (_connectionHandler as IConnectionHandler).Connect(provider);
         }
-        
+
         /// <summary>
         /// Connect to a wallet with a <see cref="ConnectionProvider"/>.
         /// </summary>
@@ -131,10 +135,9 @@ namespace ChainSafe.Gaming.UnityPackage
         public async Task Connect<T>() where T : ConnectionProvider
         {
             if (!_connectionHandler.GetProvider(out T provider))
-            {
-                throw new Web3Exception($"{typeof(T).Name} unavailable or disabled. Check under Connection Providers in {nameof(ConnectionHandler)}.");
-            }
-            
+                throw new Web3Exception(
+                    $"{typeof(T).Name} unavailable or disabled. Check under Connection Providers in {nameof(ConnectionHandler)}.");
+
             await Connect(provider);
         }
 
@@ -159,7 +162,7 @@ namespace ChainSafe.Gaming.UnityPackage
         {
             return Web3.Signer.SignTypedData(domain, message);
         }
-        
+
         /// <summary>
         /// Build Custom contracts.
         /// </summary>
@@ -170,27 +173,89 @@ namespace ChainSafe.Gaming.UnityPackage
         {
             return Web3.ContractBuilder.Build<T>(address);
         }
-        
+
+        public async Task<HexBigInteger> GetGasPrice()
+        {
+            return await _web3.RpcProvider.GetGasPrice();
+        }
+
+        public async Task<HexBigInteger> GetBlockNumber()
+        {
+            return await _web3.RpcProvider.GetBlockNumber();
+        }
+
+        public async Task<object[]> ContractSend(string method, string abi, string contractAddress, object[] args,
+            HexBigInteger value = null)
+        {
+            var contract = _web3.ContractBuilder.Build(abi, contractAddress);
+            var overwrite = value != null ? new TransactionRequest { Value = value } : null;
+            return await contract.Send(method, args, overwrite);
+        }
+
+        public async Task<object[]> ContractCall(string method, string abi, string contractAddress, object[] args)
+        {
+            var contract = _web3.ContractBuilder.Build(abi, contractAddress);
+            return await contract.Call(method, args);
+        }
+
+        public async Task<HexBigInteger> GetGasLimit(string contractAbi, string contractAddress, string method,
+            object[] args)
+        {
+            var contract = _web3.ContractBuilder.Build(contractAbi, contractAddress);
+            return await contract.EstimateGas(method, args);
+        }
+
+        public T[] GetEvents<T>(TransactionReceipt receipt) where T : IEventDTO, new()
+        {
+            var logs = receipt.Logs.Select(jToken => JsonConvert.DeserializeObject<FilterLog>(jToken.ToString()));
+            var eventAbi = EventExtensions.GetEventABI<T>();
+            var events = logs
+                .Select(log => eventAbi.DecodeEvent<T>(log))
+                .Where(l => l != null).Select(x => x.Event).ToArray();
+            return events;
+        }
+
+        public string GetPublicAddressFromPrivateKey(string privateKey)
+        {
+            return new EthECKey(privateKey).GetPublicAddress();
+        }
+
+        public async Task<string> SendTransaction(string to, BigInteger value)
+        {
+            var txRequest = new TransactionRequest
+            {
+                To = to,
+                Value = new HexBigInteger(value.ToString("X")),
+                MaxFeePerGas = new HexBigInteger((await _web3.RpcProvider.GetFeeData()).MaxFeePerGas)
+            };
+            var response = await _web3.TransactionExecutor.SendTransaction(txRequest);
+            return response.Hash;
+        }
+
+        public string SignMessageWithPrivateKey(string privateKey, string message)
+        {
+            var signer = new EthereumMessageSigner();
+            var signature = signer.HashAndSign(message, privateKey);
+            return signature;
+        }
+
         public Task OnWeb3Initialized(CWeb3 web3)
         {
             _web3 = web3;
-            
+
             return Task.CompletedTask;
         }
 
         public async Task<TransactionResponse> GetTransactionByHash(string transactionHash)
         {
             if (Web3 == null || _web3.RpcProvider == default)
-            {
-                throw new InvalidOperationException("Web3 object and/or the RPC provider are null. Make sure you've initialized the Web3 object correctly ");
-            }
+                throw new InvalidOperationException(
+                    "Web3 object and/or the RPC provider are null. Make sure you've initialized the Web3 object correctly ");
             var parameters = new object[] { transactionHash };
-            TransactionResponse transaction = await Web3.RpcProvider.Perform<TransactionResponse>("eth_getTransactionByHash", parameters);
-            
-            if (transaction == null)
-            {
-                throw new Web3Exception("Transaction not found.");
-            }
+            var transaction =
+                await Web3.RpcProvider.Perform<TransactionResponse>("eth_getTransactionByHash", parameters);
+
+            if (transaction == null) throw new Web3Exception("Transaction not found.");
 
             if (transaction.BlockNumber == null)
             {
@@ -199,26 +264,20 @@ namespace ChainSafe.Gaming.UnityPackage
             else if (transaction.Confirmations == null)
             {
                 var blockNumber = await Web3.RpcProvider.GetBlockNumber();
-                var confirmations = (blockNumber.ToUlong() - transaction.BlockNumber.ToUlong()) + 1;
-                if (confirmations <= 0)
-                {
-                    confirmations = 1;
-                }
+                var confirmations = blockNumber.ToUlong() - transaction.BlockNumber.ToUlong() + 1;
+                if (confirmations <= 0) confirmations = 1;
 
                 transaction.Confirmations = confirmations;
             }
 
             return transaction;
         }
-        
+
         private static void AssertConnection()
         {
-            if (!Connected)
-            {
-                throw new Web3Exception("Account not connected.");
-            }
+            if (!Connected) throw new Web3Exception("Account not connected.");
         }
-        
+
         /// <summary>
         /// Disconnect wallet.
         /// </summary>
@@ -228,6 +287,22 @@ namespace ChainSafe.Gaming.UnityPackage
             return Terminate(true);
         }
         
+        public async Task<bool> SignAndVerifyMessage(string message)
+        {
+            var playerAccount = _web3.Signer.PublicAddress;
+            var signatureString = await _web3.Signer.SignMessage(message);
+            var msg = "\x19" + "Ethereum Signed Message:\n" + message.Length + message;
+            var msgHash = new Sha3Keccack().CalculateHash(Encoding.UTF8.GetBytes(msg));
+            var signature = MessageSigner.ExtractEcdsaSignature(signatureString);
+            var key = EthECKey.RecoverFromSignature(signature, msgHash);
+            return string.Equals(key.GetPublicAddress(), playerAccount, StringComparison.CurrentCultureIgnoreCase);
+        }
+        
+        public string GetMessageHash(string message)
+        {
+            return new Sha3Keccack().CalculateHash(message);
+        }
+
         /// <summary>
         /// Terminate Web3 instance.
         /// </summary>
