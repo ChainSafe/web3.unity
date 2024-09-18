@@ -362,7 +362,6 @@ public class ABICSharpConverter : EditorWindow
             sb.Append(eventSubscription);
             sb.Append("\n");
         }
-        Debug.LogError(sb);
         return sb.ToString();
     }
 

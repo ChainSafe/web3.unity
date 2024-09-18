@@ -49,7 +49,6 @@ public class Web3AuthTransactionExecutor : InProcessTransactionExecutor, IWeb3Au
         var response = await base.SendTransaction(transaction.request);
             
         transaction.response.SetResult(response);
-        Debug.Log(response.Hash);
         OnTransactionConfirmed?.Invoke(response);
         
         _transactionPool.Remove(transactionId);
