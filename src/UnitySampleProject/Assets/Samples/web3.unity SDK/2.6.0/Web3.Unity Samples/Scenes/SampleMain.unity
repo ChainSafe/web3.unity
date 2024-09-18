@@ -203,7 +203,7 @@ MonoBehaviour:
   - 4
   - 50
   - 6
-  tokenIdUri: 0x01559ae4021a565d5cc4740f1cefa95de8c1fb193949ecd32c337b03047da501
+  tokenIdUri: 1
   uriMint: 1
   contractTransfer: 0x358AA13c52544ECCEF6B0ADD0f801012ADAD5eE3
   toAccountTransfer: 0xdD4c825203f97984e7867F11eeCc813A036089D1
