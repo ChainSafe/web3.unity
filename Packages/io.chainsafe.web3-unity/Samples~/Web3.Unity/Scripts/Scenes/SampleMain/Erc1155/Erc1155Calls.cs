@@ -1,9 +1,13 @@
+
+using System;
+using System.Linq;
 using System.Numerics;
 using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.UnityPackage;
 using Scripts.EVM.Token;
 using UnityEngine;
 using UnityEngine.UI;
+using Erc1155Contract = ChainSafe.Gaming.Evm.Contracts.Custom.Erc1155Contract;
 
 /// <summary>
 /// ERC1155 calls used in the sample scene
@@ -63,15 +67,18 @@ public class Erc1155Calls : MonoBehaviour
 
     #endregion
 
+    private Erc1155Contract _erc1155;
+    private async void Awake()
+    {
+        _erc1155 = await Web3Unity.Instance.BuildContract<Erc1155Contract>(ChainSafeContracts.Erc1155);
+    }
+
     /// <summary>
     /// Balance Of ERC1155 Address
     /// </summary>
     public async void BalanceOf()
     {
-        var balance = await Web3Unity.Web3.Erc1155.GetBalanceOf(
-            ChainSafeContracts.Erc1155,
-            tokenIdBalanceOf,
-            accountBalanceOf);
+        var balance = await _erc1155.BalanceOf(accountBalanceOf, BigInteger.Parse(tokenIdBalanceOf));
         SampleOutputUtil.PrintResult(balance.ToString(), "ERC-1155", nameof(Erc1155Service.GetBalanceOf));
     }
 
@@ -80,10 +87,9 @@ public class Erc1155Calls : MonoBehaviour
     /// </summary>
     public async void BalanceOfBatch()
     {
-        var balances = await Web3Unity.Web3.Erc1155.GetBalanceOfBatch(
-            ChainSafeContracts.Erc1155,
+        var balances = await _erc1155.BalanceOfBatch(
             accountsBalanceOfBatch,
-            tokenIdsBalanceOfBatch);
+            tokenIdsBalanceOfBatch.Select(BigInteger.Parse).ToArray());
         SampleOutputUtil.PrintResult(string.Join(", ", balances), "ERC-1155", nameof(Erc1155Service.GetBalanceOfBatch));
     }
 
@@ -92,9 +98,7 @@ public class Erc1155Calls : MonoBehaviour
     /// </summary>
     public async void Uri()
     {
-        var uri = await Web3Unity.Web3.Erc1155.GetUri(
-            ChainSafeContracts.Erc1155,
-            tokenIdUri);
+        var uri = await _erc1155.Uri(BigInteger.Parse(tokenIdUri));
         SampleOutputUtil.PrintResult(uri, "ERC-1155", nameof(Erc1155Service.GetUri));
     }
 
@@ -103,11 +107,10 @@ public class Erc1155Calls : MonoBehaviour
     /// </summary>
     public async void MintErc1155()
     {
-        var response = await Web3Unity.Web3.Erc1155.Mint(
-            ChainSafeContracts.Erc1155,
-            idMint,
-            amountMint);
-        var output = SampleOutputUtil.BuildOutputValue(response);
+        var response = await _erc1155.MintWithReceipt(
+            Web3Unity.Web3.Signer.PublicAddress,
+            idMint, amountMint, Array.Empty<byte>());
+        var output = SampleOutputUtil.BuildOutputValue(new object[] {response.TransactionHash, true});
         SampleOutputUtil.PrintResult(output, "ERC-1155", nameof(Erc1155Service.Mint));
     }
 
@@ -116,12 +119,14 @@ public class Erc1155Calls : MonoBehaviour
     /// </summary>
     public async void TransferErc1155()
     {
-        var response = await Web3Unity.Web3.Erc1155.Transfer(
-            ChainSafeContracts.Erc1155,
+        var response = await _erc1155.SafeTransferFromWithReceipt(
+            Web3Unity.Web3.Signer.PublicAddress,
+            toAccountTransfer,
             tokenIdTransfer,
             amountTransfer,
-            toAccountTransfer);
-        var output = SampleOutputUtil.BuildOutputValue(response);
+            Array.Empty<byte>()
+            );
+        var output = SampleOutputUtil.BuildOutputValue(new object[] {true, response.TransactionHash});
         SampleOutputUtil.PrintResult(output, "ERC-1155", nameof(Erc1155Service.Transfer));
     }
 
