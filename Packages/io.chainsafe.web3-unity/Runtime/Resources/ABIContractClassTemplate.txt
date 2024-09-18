@@ -1,20 +1,21 @@
-using System.Threading.Tasks;
 using System;
-using ChainSafe.Gaming.Evm.Transactions;
-using Nethereum.Hex.HexTypes;
-using ChainSafe.Gaming.Evm.Contracts;
 using System.Numerics;
+using System.Net.WebSockets;
+using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Transactions;
+using ChainSafe.Gaming.Evm.Contracts;
+using Nethereum.Hex.HexTypes;
+using Nethereum.Contracts;
 using Nethereum.RPC.Reactive.Eth.Subscriptions;
 using Nethereum.JsonRpc.WebSocketStreamingClient;
 using Nethereum.ABI.FunctionEncoding.Attributes;
-using Nethereum.Contracts;
 using UnityEngine;
 
 
 
 namespace ChainSafe.Gaming.Evm.Contracts.Custom
 {
-    public class {CLASS_NAME} : ICustomContract
+    public partial class {CLASS_NAME} : ICustomContract
     {
         public string Address => OriginalContract.Address;
        
@@ -49,27 +50,63 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
                 return;
             if(!Subscribed)
                 return;
+                
+            if(Application.platform == RuntimePlatform.WebGLPlayer)
+               return;
             Subscribed = false;
+            try
+            {
             {EVENT_UNSUBSCRIPTION}
-            _webSocketClient?.Dispose();
+            
+             if (_webSocketClient != null)
+                await _webSocketClient.StopAsync();
+            }catch(Exception e)
+            {
+                Debug.LogError("Caught an exception whilst unsubscribing from events\n" + e.Message);
+            }
         }
         
-        public async ValueTask Init()
+        public async ValueTask InitAsync()
         {
             if(Subscribed)
                 return;
-                
+            Subscribed = true;
+
             if(string.IsNullOrEmpty(WebSocketUrl))
             {
                 Debug.LogWarning($"WebSocketUrl is not set for this class. Event Subscriptions will not work.");
                 return;
             }
-           
-            _webSocketClient ??= new StreamingWebSocketClient(WebSocketUrl);
-            await _webSocketClient.StartAsync();
-            Subscribed = true;
+
             
-            {EVENT_SUBSCRIPTION}
+           
+            try
+            {
+                if(Application.platform == RuntimePlatform.WebGLPlayer)
+                {
+                   Debug.LogWarning("WebGL Platform is currently not supporting event subscription");
+                   return;
+                }
+                        
+                _webSocketClient ??= new StreamingWebSocketClient(WebSocketUrl);
+                
+              
+                
+                await _webSocketClient.StartAsync();
+                if (_webSocketClient != null && (_webSocketClient.WebSocketState != WebSocketState.None && _webSocketClient.WebSocketState != WebSocketState.Open &&
+                                                                     _webSocketClient.WebSocketState != WebSocketState.CloseReceived))
+                {
+                    Debug.LogWarning(
+                        $"Websocket is in an invalid state {_webSocketClient.WebSocketState}. It needs to be in a state None, Open or CloseReceived");
+                    return;
+                }
+    
+                {EVENT_SUBSCRIPTION}    
+            }catch(Exception e)
+            {
+                Debug.LogError("Caught an exception whilst subscribing to events. Subscribing to events will not work in this session\n" + e.Message);
+            }
+            
         }
         
         [Obsolete("It's not advisable to use this method. Use the pre-generated methods instead.")]

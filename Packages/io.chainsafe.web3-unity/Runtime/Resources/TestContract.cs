@@ -945,7 +945,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
             _webSocketClient?.Dispose();
         }
 
-        public async ValueTask Init()
+        public async ValueTask InitAsync()
         {
             if (Subscribed)
                 return;

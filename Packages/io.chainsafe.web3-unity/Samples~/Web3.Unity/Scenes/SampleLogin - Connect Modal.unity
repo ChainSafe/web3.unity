@@ -318,7 +318,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b575a0ab50061014ca051bbfaf597ac2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  connectOnInitialize: 1
+  connectOnInitialize: 0
   connectButton: {fileID: 1551748812896581000}
 --- !u!4 &1658652863
 Transform:

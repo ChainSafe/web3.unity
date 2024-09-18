@@ -31,13 +31,19 @@ public class SampleTestsBase
 
         // Assign result to web3
         web3 = buildWeb3.Result;
+        if (Web3Unity.Instance == null)
+        {
+            var web3Unity = new GameObject("Web3Unity", typeof(Web3Unity));
+        }
+
+        Web3Unity.Instance.OnWeb3Initialized(web3);
     }
 
     [UnityTearDown]
     public virtual IEnumerator TearDown()
     {
-        var terminateWeb3Task = web3.TerminateAsync();
-
+        var terminateWeb3Task = Web3Unity.Instance.Disconnect();
+        
         // Wait until for async task to finish
         yield return new WaitUntil(() => terminateWeb3Task.IsCompleted);
     }

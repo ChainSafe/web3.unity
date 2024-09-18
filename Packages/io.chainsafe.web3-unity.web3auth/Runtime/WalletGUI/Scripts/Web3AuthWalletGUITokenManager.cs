@@ -178,7 +178,7 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
             case 0:
                 BigInteger amountInWei0 = BigInteger.Parse((decimal.Parse(transferTokensAmountInput.text) * (decimal)Math.Pow(10, 18)).ToString("F0"));
                 transferTokensContainer.SetActive(false);
-                var response0 = await Evm.SendTransaction(Web3Unity.Web3, transferTokensWalletInput.text, amountInWei0);
+                var response0 = await Web3Unity.Instance.SendTransaction(transferTokensWalletInput.text, amountInWei0);
                 Debug.Log($"Transfer Complete! {response0}");
                 break;
             case 1:
