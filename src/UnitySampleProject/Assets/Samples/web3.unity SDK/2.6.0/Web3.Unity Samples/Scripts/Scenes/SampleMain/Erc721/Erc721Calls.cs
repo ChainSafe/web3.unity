@@ -1,9 +1,13 @@
-using System;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.UnityPackage.Connection;
+using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Build;
+using ChainSafe.Gaming.Web3.Core.Logout;
 using Scripts.EVM.Token;
 using UnityEngine;
 using Erc721Contract = ChainSafe.Gaming.Evm.Contracts.Custom.Erc721Contract;
@@ -11,7 +15,7 @@ using Erc721Contract = ChainSafe.Gaming.Evm.Contracts.Custom.Erc721Contract;
 /// <summary>
 /// ERC721 calls used in the sample scene
 /// </summary>
-public class Erc721Calls : MonoBehaviour
+public class Erc721Calls : MonoBehaviour, IWeb3InitializedHandler, IWeb3BuilderServiceAdapter, ILogoutHandler
 {
     #region Fields
     [Header("Change the fields below for testing purposes")]
@@ -64,16 +68,6 @@ public class Erc721Calls : MonoBehaviour
 
 
     private Erc721Contract _erc721;
-
-    private async void Awake()
-    {
-        _erc721 = await Web3Unity.Instance.BuildContract<Erc721Contract>(ChainSafeContracts.Erc721);
-    }
-
-    private async void OnDestroy()
-    {
-        await _erc721.DisposeAsync();
-    }
 
     /// <summary>
     /// Balance Of ERC721 Address
@@ -139,5 +133,25 @@ public class Erc721Calls : MonoBehaviour
         var response = await _erc721.SafeTransferFromWithReceipt(contractTransfer, toAccountTransfer, tokenIdTransfer);
         var output = SampleOutputUtil.BuildOutputValue(new [] {response.TransactionHash});
         SampleOutputUtil.PrintResult(output, "ERC-721", nameof(Erc721Service.Transfer));
+    }
+
+    public int Priority => 0;
+    
+    public async Task OnWeb3Initialized(Web3 web3)
+    {
+        _erc721 = await web3.ContractBuilder.Build<Erc721Contract>(ChainSafeContracts.Erc721);
+    }
+    
+    public Web3Builder ConfigureServices(Web3Builder web3Builder)
+    {
+        return web3Builder.Configure(services =>
+        {
+            services.AddSingleton<IWeb3InitializedHandler, ILogoutHandler, Erc721Calls>(_ => this);
+        });
+    }
+
+    public async Task OnLogout()
+    {
+        await _erc721.DisposeAsync();
     }
 }

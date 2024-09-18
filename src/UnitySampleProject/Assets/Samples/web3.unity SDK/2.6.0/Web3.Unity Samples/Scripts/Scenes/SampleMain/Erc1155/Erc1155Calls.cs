@@ -1,9 +1,13 @@
-
 using System;
 using System.Linq;
 using System.Numerics;
+using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.UnityPackage.Connection;
+using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Build;
+using ChainSafe.Gaming.Web3.Core.Logout;
 using Scripts.EVM.Token;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,7 +16,7 @@ using Erc1155Contract = ChainSafe.Gaming.Evm.Contracts.Custom.Erc1155Contract;
 /// <summary>
 /// ERC1155 calls used in the sample scene
 /// </summary>
-public class Erc1155Calls : MonoBehaviour
+public class Erc1155Calls : MonoBehaviour, IWeb3InitializedHandler, IWeb3BuilderServiceAdapter, ILogoutHandler
 {
     #region Fields
     [Header("Change the fields below for testing purposes")]
@@ -68,11 +72,7 @@ public class Erc1155Calls : MonoBehaviour
     #endregion
 
     private Erc1155Contract _erc1155;
-    private async void Awake()
-    {
-        _erc1155 = await Web3Unity.Instance.BuildContract<Erc1155Contract>(ChainSafeContracts.Erc1155);
-    }
-
+    
     /// <summary>
     /// Balance Of ERC1155 Address
     /// </summary>
@@ -137,5 +137,25 @@ public class Erc1155Calls : MonoBehaviour
     {
         var texture = await Web3Unity.Web3.Erc1155.ImportTexture(ChainSafeContracts.Erc1155, tokenIdTexture);
         rawImage.texture = texture;
+    }
+
+    public int Priority => 0;
+    
+    public async Task OnWeb3Initialized(Web3 web3)
+    {
+        _erc1155 = await web3.ContractBuilder.Build<Erc1155Contract>(ChainSafeContracts.Erc1155);
+    }
+
+    public Web3Builder ConfigureServices(Web3Builder web3Builder)
+    {
+        return web3Builder.Configure(services =>
+        {
+            services.AddSingleton<IWeb3InitializedHandler, ILogoutHandler, Erc1155Calls>(_ => this);
+        });
+    }
+
+    public async Task OnLogout()
+    {
+        await _erc1155.DisposeAsync();
     }
 }
