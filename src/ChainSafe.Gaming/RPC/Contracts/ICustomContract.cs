@@ -15,6 +15,6 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
         public bool Subscribed { get; set; }
 
-        public ValueTask Init();
+        public ValueTask InitAsync();
     }
 }
