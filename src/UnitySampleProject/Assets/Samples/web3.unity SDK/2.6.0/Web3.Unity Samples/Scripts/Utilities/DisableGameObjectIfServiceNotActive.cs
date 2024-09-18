@@ -1,8 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using ChainSafe.Gaming.MultiCall;
 using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.UnityPackage.Connection;
+using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.GamingSdk.Gelato.Types;
+using Microsoft.Extensions.DependencyInjection;
 using UnityEngine;
 #if MARKETPLACE_AVAILABLE
 using ChainSafe.Gaming.Marketplace;
@@ -16,7 +21,7 @@ public enum ServiceType
     Marketplace = 3
 }
 
-public class DisableGameObjectIfServiceNotActive : MonoBehaviour
+public class DisableGameObjectIfServiceNotActive : MonoBehaviour, IWeb3BuilderServiceAdapter, IWeb3InitializedHandler
 {
     [SerializeField] private ServiceType serviceType;
     private readonly Dictionary<ServiceType, Type> _typesDictionary = new()
@@ -33,10 +38,24 @@ public class DisableGameObjectIfServiceNotActive : MonoBehaviour
 
     private void Awake()
     {
-        ShouldGameObjectBeDisabled();
+        gameObject.SetActive(false);
     }
 
-    private void ShouldGameObjectBeDisabled() => gameObject.SetActive(
-        _typesDictionary.TryGetValue(serviceType, out var value)
-        && Web3Unity.Web3.ServiceProvider.GetService(value) != null);
+    public Web3Builder ConfigureServices(Web3Builder web3Builder)
+    {
+        return web3Builder.Configure(services =>
+        {
+            services.AddSingleton<IWeb3InitializedHandler>(this);
+        });
+    }
+
+    public int Priority => 0;
+    public Task OnWeb3Initialized(Web3 web3)
+    {
+        gameObject.SetActive(
+            _typesDictionary.TryGetValue(serviceType, out var value)
+            && web3.ServiceProvider.GetService(value) != null);
+
+        return Task.CompletedTask;
+    }
 }

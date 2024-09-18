@@ -7,6 +7,7 @@ using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.UnityPackage.UI;
 using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using Nethereum.Hex.HexTypes;
 using UnityEngine;

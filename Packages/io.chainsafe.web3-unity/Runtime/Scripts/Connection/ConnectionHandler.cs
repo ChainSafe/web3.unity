@@ -24,7 +24,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         /// </summary>
         public async Task Initialize()
         {
-            Web3BuilderServiceAdapters = GetComponents<IWeb3BuilderServiceAdapter>();
+            Web3BuilderServiceAdapters = FindObjectsOfType<MonoBehaviour>().OfType<IWeb3BuilderServiceAdapter>().ToArray();
 
             foreach (var provider in Providers)
             {
