@@ -72,6 +72,21 @@ namespace ChainSafe.GamingSdk.Editor
             {
                 AssetDatabase.AllowAutoRefresh();
                 AssetDatabase.Refresh();
+                SwitchTemplate();
+            }
+        }
+        
+        public static void SwitchTemplate()
+        {
+            var projectSettings = AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/ProjectSettings.asset")[0];
+            SerializedObject so = new SerializedObject(projectSettings);
+            SerializedProperty webGLTemplateProp = so.FindProperty("webGLTemplate");
+        
+            if (webGLTemplateProp != null)
+            {
+                webGLTemplateProp.stringValue = "Web3.Unity";
+                so.ApplyModifiedProperties();
+                Debug.Log("WebGL Template changed to Web3.Unity");
             }
         }
 
