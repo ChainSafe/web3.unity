@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -113,10 +114,34 @@ public class ABICSharpConverter : EditorWindow
     // Method to check if the ABI is valid
     private bool IsValidAbi(string abi)
     {
-        abi = abi.Trim();
-        var contractABI = ABIDeserialiserFactory.DeserialiseContractABI(abi);
-        return !string.IsNullOrEmpty(abi) && (contractABI.Functions.Length > 0 || contractABI.Events.Length > 0 || contractABI.Errors.Length > 0);
+        if (string.IsNullOrWhiteSpace(abi))
+        {
+            return false;
+        }
+
+        try
+        {
+         
+            var contractABI = ABIDeserialiserFactory.DeserialiseContractABI(abi);
+
+            if (contractABI == null)
+            {
+                return false;
+            }
+
+            return contractABI.Functions.Length > 0 ||
+                   contractABI.Events.Length > 0 ||
+                   contractABI.Errors.Length > 0 ||
+                   contractABI.Constructor != null;
+
+        }
+        catch (Exception ex)
+        {
+            // Handle or log the exception if needed
+            return false;
+        }
     }
+
 
     // Method to parse and extract custom classes
     private string ParseCustomClasses()
@@ -324,7 +349,7 @@ public class ABICSharpConverter : EditorWindow
     private string ParseEventSubscription()
     {
         var sb = new StringBuilder();
-
+        
         foreach (var eventABI in _contractABI.Events)
         {
             var varName = eventABI.Name.RemoveFirstUnderscore().Capitalize();
@@ -337,7 +362,6 @@ public class ABICSharpConverter : EditorWindow
             sb.Append(eventSubscription);
             sb.Append("\n");
         }
-
         return sb.ToString();
     }
 
