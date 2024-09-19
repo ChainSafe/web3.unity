@@ -14,7 +14,7 @@ using Erc20Contract = ChainSafe.Gaming.Evm.Contracts.Custom.Erc20Contract;
 /// <summary>
 /// ERC20 calls used in the sample scene
 /// </summary>
-public class Erc20Calls : MonoBehaviour, IWeb3InitializedHandler, IWeb3BuilderServiceAdapter, ILogoutHandler
+public class Erc20Calls : Web3BuilderServiceAdapter, IWeb3InitializedHandler, ILogoutHandler
 {
     #region Fields
 
@@ -136,7 +136,7 @@ public class Erc20Calls : MonoBehaviour, IWeb3InitializedHandler, IWeb3BuilderSe
         _erc20 = await web3.ContractBuilder.Build<Erc20Contract>(ChainSafeContracts.Erc20);
     }
 
-    public Web3Builder ConfigureServices(Web3Builder web3Builder)
+    public override Web3Builder ConfigureServices(Web3Builder web3Builder)
     {
         return web3Builder.Configure(services =>
         {

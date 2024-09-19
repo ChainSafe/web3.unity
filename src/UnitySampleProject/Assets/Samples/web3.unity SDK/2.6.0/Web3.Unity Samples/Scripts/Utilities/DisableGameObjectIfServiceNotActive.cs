@@ -21,7 +21,7 @@ public enum ServiceType
     Marketplace = 3
 }
 
-public class DisableGameObjectIfServiceNotActive : MonoBehaviour, IWeb3BuilderServiceAdapter, IWeb3InitializedHandler
+public class DisableGameObjectIfServiceNotActive : Web3BuilderServiceAdapter, IWeb3InitializedHandler
 {
     [SerializeField] private ServiceType serviceType;
     private readonly Dictionary<ServiceType, Type> _typesDictionary = new()
@@ -41,7 +41,7 @@ public class DisableGameObjectIfServiceNotActive : MonoBehaviour, IWeb3BuilderSe
         gameObject.SetActive(false);
     }
 
-    public Web3Builder ConfigureServices(Web3Builder web3Builder)
+    public override Web3Builder ConfigureServices(Web3Builder web3Builder)
     {
         return web3Builder.Configure(services =>
         {

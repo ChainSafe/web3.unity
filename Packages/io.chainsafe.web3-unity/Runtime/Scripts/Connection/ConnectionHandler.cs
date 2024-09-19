@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Web3.Build;
@@ -15,7 +15,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         // Handed in ConnectionHandlerEditor
         [HideInInspector, SerializeField] private ConnectionProvider[] providers;
         
-        public IWeb3BuilderServiceAdapter[] Web3BuilderServiceAdapters { get; private set; }
+        public HashSet<IWeb3BuilderServiceAdapter> Web3BuilderServiceAdapters { get; private set; }
 
         public ConnectionProvider[] Providers => providers;
         
@@ -24,8 +24,9 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         /// </summary>
         public async Task Initialize()
         {
-            Web3BuilderServiceAdapters = FindObjectsOfType<MonoBehaviour>().OfType<IWeb3BuilderServiceAdapter>().ToArray();
-
+            Web3BuilderServiceAdapters = GetComponentsInChildren<IWeb3BuilderServiceAdapter>(true)
+                .Concat(FindObjectsOfType<Web3BuilderServiceAdapter>()).ToHashSet();
+            
             foreach (var provider in Providers)
             {
                 await provider.Initialize();

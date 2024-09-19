@@ -16,7 +16,7 @@ using Erc1155Contract = ChainSafe.Gaming.Evm.Contracts.Custom.Erc1155Contract;
 /// <summary>
 /// ERC1155 calls used in the sample scene
 /// </summary>
-public class Erc1155Calls : MonoBehaviour, IWeb3InitializedHandler, IWeb3BuilderServiceAdapter, ILogoutHandler
+public class Erc1155Calls : Web3BuilderServiceAdapter, IWeb3InitializedHandler, ILogoutHandler
 {
     #region Fields
     [Header("Change the fields below for testing purposes")]
@@ -146,7 +146,7 @@ public class Erc1155Calls : MonoBehaviour, IWeb3InitializedHandler, IWeb3Builder
         _erc1155 = await web3.ContractBuilder.Build<Erc1155Contract>(ChainSafeContracts.Erc1155);
     }
 
-    public Web3Builder ConfigureServices(Web3Builder web3Builder)
+    public override Web3Builder ConfigureServices(Web3Builder web3Builder)
     {
         return web3Builder.Configure(services =>
         {

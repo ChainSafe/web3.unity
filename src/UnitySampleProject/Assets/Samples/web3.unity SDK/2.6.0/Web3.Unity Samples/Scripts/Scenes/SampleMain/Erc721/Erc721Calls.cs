@@ -15,7 +15,7 @@ using Erc721Contract = ChainSafe.Gaming.Evm.Contracts.Custom.Erc721Contract;
 /// <summary>
 /// ERC721 calls used in the sample scene
 /// </summary>
-public class Erc721Calls : MonoBehaviour, IWeb3InitializedHandler, IWeb3BuilderServiceAdapter, ILogoutHandler
+public class Erc721Calls : Web3BuilderServiceAdapter, IWeb3InitializedHandler, ILogoutHandler
 {
     #region Fields
     [Header("Change the fields below for testing purposes")]
@@ -142,7 +142,7 @@ public class Erc721Calls : MonoBehaviour, IWeb3InitializedHandler, IWeb3BuilderS
         _erc721 = await web3.ContractBuilder.Build<Erc721Contract>(ChainSafeContracts.Erc721);
     }
     
-    public Web3Builder ConfigureServices(Web3Builder web3Builder)
+    public override Web3Builder ConfigureServices(Web3Builder web3Builder)
     {
         return web3Builder.Configure(services =>
         {
