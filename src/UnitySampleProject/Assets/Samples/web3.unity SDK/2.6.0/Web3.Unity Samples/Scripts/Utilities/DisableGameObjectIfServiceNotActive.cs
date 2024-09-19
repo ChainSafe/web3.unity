@@ -49,7 +49,6 @@ public class DisableGameObjectIfServiceNotActive : Web3BuilderServiceAdapter, IW
         });
     }
 
-    public int Priority => 0;
     public Task OnWeb3Initialized(Web3 web3)
     {
         gameObject.SetActive(

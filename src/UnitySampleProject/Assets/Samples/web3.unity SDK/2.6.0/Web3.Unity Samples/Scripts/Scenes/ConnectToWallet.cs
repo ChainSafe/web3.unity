@@ -16,80 +16,81 @@ using UnityEngine.UI;
 /// </summary>
 public class ConnectToWallet : MonoBehaviour, IWeb3InitializedHandler, ILogoutHandler, IWeb3BuilderServiceAdapter
 {
-    public int Priority => 0;
-    
     [SerializeField] private bool connectOnInitialize = true;
+    
+    [Space]
     
     [SerializeField] private Button connectButton;
     
     [SerializeField] private Button disconnectButton;
     
+    [Space]
+    
     [SerializeField] private TextMeshProUGUI addressText;
 
     [SerializeField] private Button copyAddressButton;
     
+    [Space]
+    
+    [SerializeField] private Transform connectedTransform;
+    
+    [SerializeField] private Transform disconnectedTransform;
+    
     private async void Start()
     {
-        connectButton.interactable = false;
-        
-        Disconnected();
-        
         try
         {
             await Web3Unity.Instance.Initialize(connectOnInitialize);
         }
         finally
         {
-            connectButton.onClick.AddListener(Web3Unity.ConnectModal.Open);
-        
-            disconnectButton.onClick.AddListener(Disconnect);
-        
-            copyAddressButton.onClick.AddListener(delegate
-            {
-                ClipboardManager.CopyText(addressText.text);
-            });
+            AddButtonListeners();
             
-            connectButton.interactable = true;
+            ConnectionStateChanged(Web3Unity.Connected, Web3Unity.Instance.Address);
+        }
+    }
+
+    private void AddButtonListeners()
+    {
+        connectButton.onClick.AddListener(Web3Unity.ConnectModal.Open);
+        
+        disconnectButton.onClick.AddListener(Disconnect);
+        
+        copyAddressButton.onClick.AddListener(CopyAddress);
+
+        void CopyAddress()
+        {
+            ClipboardManager.CopyText(addressText.text);
         }
     }
     
-    private async void Disconnect()
+    private void ConnectionStateChanged(bool connected, string address = "")
     {
-        await Web3Unity.Instance.Disconnect();
-    }
-
-    private void Connected(string address)
-    {
-        connectButton.gameObject.SetActive(false);
+        connectedTransform.gameObject.SetActive(connected);
         
-        disconnectButton.gameObject.SetActive(true);
-        
-        copyAddressButton.gameObject.SetActive(true);
+        disconnectedTransform.gameObject.SetActive(!connected);
 
-        addressText.text = address;
+        if (connected)
+        {
+            addressText.text = address;
+        }
     }
     
     public Task OnWeb3Initialized(Web3 web3)
     {
-        Connected(web3.Signer.PublicAddress);
+        ConnectionStateChanged(true, web3.Signer.PublicAddress);
         
         return Task.CompletedTask;
     }
 
-    private void Disconnected()
+    private async void Disconnect()
     {
-        connectButton.gameObject.SetActive(true);
-        
-        disconnectButton.gameObject.SetActive(false);
-        
-        copyAddressButton.gameObject.SetActive(false);
-        
-        addressText.text = string.Empty;
+        await Web3Unity.Instance.Disconnect();
     }
     
     public Task OnLogout()
     {
-        Disconnected();
+        ConnectionStateChanged(false);
         
         return Task.CompletedTask;
     }

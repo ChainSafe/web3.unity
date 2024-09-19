@@ -129,8 +129,6 @@ public class Erc20Calls : Web3BuilderServiceAdapter, IWeb3InitializedHandler, IL
         _erc20.OnTransfer -= Test;
     }
 
-    public int Priority => 0;
-    
     public async Task OnWeb3Initialized(Web3 web3)
     {
         _erc20 = await web3.ContractBuilder.Build<Erc20Contract>(ChainSafeContracts.Erc20);

@@ -74,12 +74,6 @@ namespace ChainSafe.Gaming.UnityPackage
         public static bool Connected => Web3 != null;
 
         /// <summary>
-        /// Execution priority for <see cref="IWeb3InitializedHandler"/>.
-        /// Lower than other so it can be executed first.
-        /// </summary>
-        public int Priority => -1;
-
-        /// <summary>
         /// Public key (address) of connected wallet.
         /// </summary>
         public string Address => Web3?.Signer.PublicAddress;

@@ -139,8 +139,6 @@ public class Erc1155Calls : Web3BuilderServiceAdapter, IWeb3InitializedHandler, 
         rawImage.texture = texture;
     }
 
-    public int Priority => 0;
-    
     public async Task OnWeb3Initialized(Web3 web3)
     {
         _erc1155 = await web3.ContractBuilder.Build<Erc1155Contract>(ChainSafeContracts.Erc1155);

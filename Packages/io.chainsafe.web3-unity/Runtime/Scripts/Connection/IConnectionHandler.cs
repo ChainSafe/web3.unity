@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Connection;
 using ChainSafe.Gaming.Evm.Contracts;
@@ -42,7 +41,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         {
             var web3InitializedHandlers = web3.ServiceProvider.GetServices<IWeb3InitializedHandler>();
             
-            foreach (var web3InitializedHandler in web3InitializedHandlers.OrderBy(w => w.Priority))
+            foreach (var web3InitializedHandler in web3InitializedHandlers)
             {
                 await web3InitializedHandler.OnWeb3Initialized(web3);
             }

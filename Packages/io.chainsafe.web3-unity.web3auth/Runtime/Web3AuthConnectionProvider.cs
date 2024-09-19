@@ -50,8 +50,6 @@ public class Web3AuthConnectionProvider : RestorableConnectionProvider, ILogoutH
 
     [NonSerialized] private bool _rememberMe;
     
-    public int Priority => 0;
-    
     public override bool IsAvailable => true;
 
  #if UNITY_WEBGL && !UNITY_EDITOR

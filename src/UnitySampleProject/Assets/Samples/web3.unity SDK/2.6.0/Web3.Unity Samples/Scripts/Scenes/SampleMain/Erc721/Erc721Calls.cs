@@ -135,8 +135,6 @@ public class Erc721Calls : Web3BuilderServiceAdapter, IWeb3InitializedHandler, I
         SampleOutputUtil.PrintResult(output, "ERC-721", nameof(Erc721Service.Transfer));
     }
 
-    public int Priority => 0;
-    
     public async Task OnWeb3Initialized(Web3 web3)
     {
         _erc721 = await web3.ContractBuilder.Build<Erc721Contract>(ChainSafeContracts.Erc721);
