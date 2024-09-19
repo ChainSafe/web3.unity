@@ -12,9 +12,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Used to easily connect to wallet.
+/// Used to easily connect/disconnect a wallet.
 /// </summary>
-public class ConnectToWallet : MonoBehaviour, IWeb3InitializedHandler, ILogoutHandler, IWeb3BuilderServiceAdapter
+public class ConnectToWallet : Web3BuilderServiceAdapter, IWeb3InitializedHandler, ILogoutHandler
 {
     [SerializeField] private bool connectOnInitialize = true;
     
@@ -95,7 +95,7 @@ public class ConnectToWallet : MonoBehaviour, IWeb3InitializedHandler, ILogoutHa
         return Task.CompletedTask;
     }
 
-    public Web3Builder ConfigureServices(Web3Builder web3Builder)
+    public override Web3Builder ConfigureServices(Web3Builder web3Builder)
     {
         return web3Builder.Configure(services =>
         {
