@@ -1,7 +1,8 @@
+using System;
 using System.Threading.Tasks;
+using ChainSafe.Gaming;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Connection;
-using ChainSafe.Gaming.UnityPackage.UI;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core.Logout;
@@ -29,37 +30,67 @@ public class ConnectToWallet : MonoBehaviour, IWeb3InitializedHandler, ILogoutHa
     
     private async void Start()
     {
-        await Web3Unity.Instance.Initialize(connectOnInitialize);
+        connectButton.interactable = false;
         
-        connectButton.onClick.AddListener(Web3Unity.ConnectModal.Open);
+        Disconnected();
         
-        disconnectButton.onClick.AddListener(Disconnect);
+        try
+        {
+            await Web3Unity.Instance.Initialize(connectOnInitialize);
+        }
+        finally
+        {
+            connectButton.onClick.AddListener(Web3Unity.ConnectModal.Open);
+        
+            disconnectButton.onClick.AddListener(Disconnect);
+        
+            copyAddressButton.onClick.AddListener(delegate
+            {
+                ClipboardManager.CopyText(addressText.text);
+            });
+            
+            connectButton.interactable = true;
+        }
     }
     
     private async void Disconnect()
     {
         await Web3Unity.Instance.Disconnect();
     }
-    
-    public Task OnWeb3Initialized(Web3 web3)
+
+    private void Connected(string address)
     {
         connectButton.gameObject.SetActive(false);
         
         disconnectButton.gameObject.SetActive(true);
+        
+        copyAddressButton.gameObject.SetActive(true);
 
-        addressText.text = web3.Signer.PublicAddress;
-
+        addressText.text = address;
+    }
+    
+    public Task OnWeb3Initialized(Web3 web3)
+    {
+        Connected(web3.Signer.PublicAddress);
+        
         return Task.CompletedTask;
     }
 
-    public Task OnLogout()
+    private void Disconnected()
     {
         connectButton.gameObject.SetActive(true);
         
         disconnectButton.gameObject.SetActive(false);
         
+        copyAddressButton.gameObject.SetActive(false);
+        
         addressText.text = string.Empty;
-
+    }
+    
+    public Task OnLogout()
+    {
+        Disconnected();
+        
         return Task.CompletedTask;
     }
 

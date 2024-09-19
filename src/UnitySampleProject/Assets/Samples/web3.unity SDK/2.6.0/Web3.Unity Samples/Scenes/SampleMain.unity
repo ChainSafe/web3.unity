@@ -2179,29 +2179,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1255546033}
     m_Modifications:
-    - target: {fileID: 741206400449128260, guid: cee4edae25d8bec48be2bdf4687fc08f, type: 3}
-      propertyPath: connectOnInitialize
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1137403325278580770, guid: cee4edae25d8bec48be2bdf4687fc08f, type: 3}
       propertyPath: m_Name
       value: ConnectToWallet
-      objectReference: {fileID: 0}
-    - target: {fileID: 4866033601144411325, guid: cee4edae25d8bec48be2bdf4687fc08f, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: -30
-      objectReference: {fileID: 0}
-    - target: {fileID: 4866033601144411325, guid: cee4edae25d8bec48be2bdf4687fc08f, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4889345262278660842, guid: cee4edae25d8bec48be2bdf4687fc08f, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: -30
-      objectReference: {fileID: 0}
-    - target: {fileID: 4889345262278660842, guid: cee4edae25d8bec48be2bdf4687fc08f, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5212087412580531925, guid: cee4edae25d8bec48be2bdf4687fc08f, type: 3}
       propertyPath: m_Pivot.x
@@ -2282,18 +2262,6 @@ PrefabInstance:
     - target: {fileID: 5212087412580531925, guid: cee4edae25d8bec48be2bdf4687fc08f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6027937089113956752, guid: cee4edae25d8bec48be2bdf4687fc08f, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: -30
-      objectReference: {fileID: 0}
-    - target: {fileID: 6027937089113956752, guid: cee4edae25d8bec48be2bdf4687fc08f, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9068694782032335001, guid: cee4edae25d8bec48be2bdf4687fc08f, type: 3}
-      propertyPath: m_fontSize
-      value: 44
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3899,39 +3867,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d447d1e7a64b28a4295aca07791c5557, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bearerToken: Please set your bearer token from the ChainSafe dashboard
-  collectionId721: Set 721 collection ID
-  collectionId1155: Set 1155 collection ID
-  marketplaceId: Set marketplace ID
-  tokenId: Set token ID i.e 1
-  collectionName721: Set 721 collection name
-  collectionDescription721: Set 721 collection description
-  collectionMintingPublic721: 0
-  collectionName1155: Set 1155 collection name
-  collectionDescription1155: Set 1155 collection description
-  collectionMintingPublic1155: 0
-  collectionToDelete: Set collection to delete
-  marketplaceToDelete: Set marketplace to delete
-  collectionContract721: Set 721 collection to mint to
-  uri721: Set metadata uri with full path i.e. https://ipfs.chainsafe.io/ipfs/bafyjvzacdj4apx52hvbyjkwyf7i6a7t3pcqd4kw4xxfc67hgvn3a
-  name721: Set Nft name
-  description721: Set Nft description
-  collectionContract1155: Set 1155 collection to mint to
-  uri1155: Set metadata uri with full path i.e. https://ipfs.chainsafe.io/ipfs/bafyjvzacdj4apx52hvbyjkwyf7i6a7t3pcqd4kw4xxfc67hgvn3a
-  amount1155: Set amount of Nfts to mint i.e 1
-  name1155: Set Nft name
-  description1155: Set Nft description
-  marketplaceName: Set marketplace name
-  marketplaceDescription: Set marketplace description
-  marketplaceWhitelisting: 0
-  tokenIdToList: Set token ID to list
-  weiPriceToList: Set price in wei to list for i.e 100000000000000
-  marketplaceContractToListTo: Set marketplace contract to list to
-  collectionContractToList: Set collection contract to list from
-  marketplaceContractToBuyFrom: Set marketplace contract to buy from
-  itemIdToBuy: Set item ID to buy (the index id of the nft in the marketplace i.e
-    0 or 1)
-  weiPriceToBuy: Set price in wei to buy with i.e 100000000000000
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

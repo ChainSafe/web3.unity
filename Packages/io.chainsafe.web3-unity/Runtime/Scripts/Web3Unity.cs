@@ -244,6 +244,11 @@ namespace ChainSafe.Gaming.UnityPackage
         {
             _web3 = web3;
 
+            if (_connectModal != null)
+            {
+                _connectModal.Close();
+            }
+            
             return Task.CompletedTask;
         }
 

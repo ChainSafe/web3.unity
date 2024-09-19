@@ -250,6 +250,11 @@ public class Web3AuthConnectionProvider : RestorableConnectionProvider, ILogoutH
             _web3AuthWalletGui.Initialize(walletGuiConfig);
         }
 
+        if (_modal != null)
+        {
+            _modal?.Close();
+        }
+        
         return Task.CompletedTask;
     }
 }
