@@ -99,7 +99,7 @@ public class ConnectToWallet : Web3BuilderServiceAdapter, IWeb3InitializedHandle
     {
         return web3Builder.Configure(services =>
         {
-            services.AddSingleton<ILogoutHandler>(this);
+            services.AddSingleton<ILogoutHandler, IWeb3InitializedHandler, ConnectToWallet>(_ => this);
         });
     }
 }
