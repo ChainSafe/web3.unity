@@ -244,13 +244,18 @@ namespace ChainSafe.Gaming.Evm.Contracts
             var tx = await transactionExecutor.SendTransaction(txReq);
             var receipt = await provider.WaitForTransactionReceipt(tx.Hash);
 
-            var outputValues = contractAbiManager.GetFunctionBuilder(method).DecodeTypeOutput<T>(tx.Data);
-
             analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
                 EventName = method,
                 PackageName = "io.chainsafe.web3.unity",
             });
+
+            if (tx.Data == null)
+            {
+                return (default, receipt);
+            }
+
+            var outputValues = contractAbiManager.GetFunctionBuilder(method).DecodeTypeOutput<T>(tx.Data);
 
             return (outputValues, receipt);
         }
