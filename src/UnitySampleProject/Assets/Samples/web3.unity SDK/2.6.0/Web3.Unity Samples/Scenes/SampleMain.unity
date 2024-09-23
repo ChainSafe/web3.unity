@@ -2179,6 +2179,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1255546033}
     m_Modifications:
+    - target: {fileID: 57165399109302134, guid: cee4edae25d8bec48be2bdf4687fc08f, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1137403325278580770, guid: cee4edae25d8bec48be2bdf4687fc08f, type: 3}
       propertyPath: m_Name
       value: ConnectToWallet
@@ -2261,6 +2265,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5212087412580531925, guid: cee4edae25d8bec48be2bdf4687fc08f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9211195089581081706, guid: cee4edae25d8bec48be2bdf4687fc08f, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9211195089581081706, guid: cee4edae25d8bec48be2bdf4687fc08f, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9211195089581081706, guid: cee4edae25d8bec48be2bdf4687fc08f, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9211195089581081706, guid: cee4edae25d8bec48be2bdf4687fc08f, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9211195089581081706, guid: cee4edae25d8bec48be2bdf4687fc08f, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9211195089581081706, guid: cee4edae25d8bec48be2bdf4687fc08f, type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
