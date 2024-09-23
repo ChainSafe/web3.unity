@@ -93,7 +93,15 @@ public class Web3AuthProvider : WalletProvider, IAccountProvider
     
     private void OnLogin(Web3AuthResponse response)
     {
-        _connectTcs.SetResult(response);
+        if (string.IsNullOrEmpty(response.error))
+        {
+            _connectTcs.SetResult(response);
+        }
+
+        else
+        {
+            _connectTcs.SetException(new Web3Exception(response.error));
+        }
     }
     
     /// <summary>
