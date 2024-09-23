@@ -424,7 +424,13 @@ public class Web3Auth : MonoBehaviour
                             this.Enqueue(() => this.onLogin?.Invoke(this.web3AuthResponse));
                     }
                 }
-
+                else
+                {
+                    this.Enqueue(() => this.onLogin?.Invoke(new Web3AuthResponse
+                    {
+                        error = "Failed to connect, session null."
+                    }));
+                }
             })));
         }
     }

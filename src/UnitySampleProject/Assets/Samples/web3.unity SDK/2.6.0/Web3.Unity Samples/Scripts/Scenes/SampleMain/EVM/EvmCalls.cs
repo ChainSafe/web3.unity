@@ -1,44 +1,44 @@
+using System.Linq;
 using System.Numerics;
 using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
+using ChainSafe.Gaming.Evm.Contracts.Extensions;
 using ChainSafe.Gaming.MultiCall;
 using ChainSafe.Gaming.UnityPackage;
 using Nethereum.ABI.FunctionEncoding.Attributes;
 using Nethereum.Contracts.QueryHandlers.MultiCall;
 using Nethereum.Hex.HexConvertors.Extensions;
+using Nethereum.RPC.Eth.DTOs;
+using Newtonsoft.Json;
 using Scripts.EVM.Token;
 using UnityEngine;
 
 public class EvmCalls : MonoBehaviour
 {
     #region Fields
-
     [Header("Change the fields below for testing purposes")]
 
     #region Contract Send
 
     [Header("Contract Send")]
-    [SerializeField]
-    private string methodSend = "addTotal";
-
+    [SerializeField] private string methodSend = "addTotal";
     [SerializeField] private int increaseAmountSend = 1;
 
     #endregion
 
     #region Contract Call
 
-    [Header("Contract Call")] [SerializeField]
-    private string methodCall = "myTotal";
+    [Header("Contract Call")]
+    [SerializeField] private string methodCall = "myTotal";
 
     #endregion
 
     #region Get Send Array
 
-    [Header("Array Calls")] [SerializeField]
-    private string methodArrayGet = "getStore";
-
+    [Header("Array Calls")]
+    [SerializeField] private string methodArrayGet = "getStore";
     [SerializeField] private string methodArraySend = "setStore";
-
-    [SerializeField] private string[] stringArraySend =
+    [SerializeField]
+    private string[] stringArraySend =
     {
         "0xFb3aECf08940785D4fB3Ad87cDC6e1Ceb20e9aac",
         "0x92d4040e4f3591e60644aaa483821d1bd87001e3"
@@ -48,9 +48,8 @@ public class EvmCalls : MonoBehaviour
 
     #region Sign Verify Sha3
 
-    [Header("Sign Verify SHA3 calls")] [SerializeField]
-    private string messageSign = "The right man in the wrong place can make all the difference in the world.";
-
+    [Header("Sign Verify SHA3 calls")]
+    [SerializeField] private string messageSign = "The right man in the wrong place can make all the difference in the world.";
     [SerializeField] private string messageSignVerify = "A man chooses, a slave obeys.";
     [SerializeField] private string messageSha = "It’s dangerous to go alone, take this!";
 
@@ -58,25 +57,23 @@ public class EvmCalls : MonoBehaviour
 
     #region Send Transaction
 
-    [Header("Send Transaction Call")] [SerializeField]
-    private string toAddress = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
-
+    [Header("Send Transaction Call")]
+    [SerializeField] private string toAddress = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
     [SerializeField] private string value = "12300000000000000";
 
     #endregion
 
     #region Registered Contract
 
-    [Header("Registered Contract Call")] [SerializeField]
-    private string registeredContractName = "CsTestErc20";
+    [Header("Registered Contract Call")]
+    [SerializeField] private string registeredContractName = "CsTestErc20";
 
     #endregion
 
     #region ECDSA
 
-    [Header("ECDSA Calls")] [SerializeField]
-    private string ecdsaKey = "0x78dae1a22c7507a4ed30c06172e7614eb168d3546c13856340771e63ad3c0081";
-
+    [Header("ECDSA Calls")]
+    [SerializeField] private string ecdsaKey = "0x78dae1a22c7507a4ed30c06172e7614eb168d3546c13856340771e63ad3c0081";
     [SerializeField] private string ecdsaMessage = "This is a test message";
     [SerializeField] private string transactionHash = "0x123456789";
     [SerializeField] private string chainId = "11155111";
@@ -85,7 +82,8 @@ public class EvmCalls : MonoBehaviour
 
     #region Multi Call
 
-    [Header("MutliCall")] [SerializeField] private string Erc20Account = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
+    [Header("MutliCall")]
+    [SerializeField] private string Erc20Account = "0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2";
 
     #endregion
 
@@ -119,8 +117,7 @@ public class EvmCalls : MonoBehaviour
         {
             Web3Unity.Web3.Signer.PublicAddress
         };
-        var response =
-            await Web3Unity.Instance.ContractCall(methodCall, ABI.ArrayTotal, ChainSafeContracts.ArrayTotal, args);
+        var response = await Web3Unity.Instance.ContractCall(methodCall, ABI.ArrayTotal, ChainSafeContracts.ArrayTotal, args);
         Debug.Log(response);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Web3Unity), nameof(Web3Unity.ContractCall));
@@ -135,8 +132,7 @@ public class EvmCalls : MonoBehaviour
         {
             increaseAmountSend
         };
-        var response =
-            await Web3Unity.Instance.ContractSend(methodSend, ABI.ArrayTotal, ChainSafeContracts.ArrayTotal, args);
+        var response = await Web3Unity.Instance.ContractSend(methodSend, ABI.ArrayTotal, ChainSafeContracts.ArrayTotal, args);
         var output = SampleOutputUtil.BuildOutputValue(response);
         SampleOutputUtil.PrintResult(output, nameof(Web3Unity), nameof(Web3Unity.ContractSend));
     }
@@ -147,7 +143,7 @@ public class EvmCalls : MonoBehaviour
     public async void GetBlockNumber()
     {
         var blockNumber = await Web3Unity.Instance.GetBlockNumber();
-        SampleOutputUtil.PrintResult(blockNumber.ToString(), nameof(Web3Unity), nameof(Web3Unity.GetBlockNumber));
+        SampleOutputUtil.PrintResult(blockNumber.ToString(), nameof(Web3Unity), nameof(Web3Unity.Instance.GetBlockNumber));
     }
 
     /// <summary>
@@ -159,9 +155,8 @@ public class EvmCalls : MonoBehaviour
         {
             increaseAmountSend
         };
-        var gasLimit =
-            await Web3Unity.Instance.GetGasLimit(ABI.ArrayTotal, ChainSafeContracts.ArrayTotal, methodSend, args);
-        SampleOutputUtil.PrintResult(gasLimit.ToString(), nameof(Web3Unity), nameof(Web3Unity.GetGasLimit));
+        var gasLimit = await Web3Unity.Instance.GetGasLimit(ABI.ArrayTotal, ChainSafeContracts.ArrayTotal, methodSend, args);
+        SampleOutputUtil.PrintResult(gasLimit.ToString(), nameof(Web3Unity), nameof(Web3Unity.Instance.GetGasLimit));
     }
 
     /// <summary>
@@ -170,16 +165,16 @@ public class EvmCalls : MonoBehaviour
     public async void GetGasPrice()
     {
         var gasPrice = await Web3Unity.Instance.GetGasPrice();
-        SampleOutputUtil.PrintResult(gasPrice.ToString(), nameof(Web3Unity), nameof(Web3Unity.GetGasPrice));
+        SampleOutputUtil.PrintResult(gasPrice.ToString(), nameof(Web3Unity), nameof(Web3Unity.Instance.GetGasPrice));
     }
 
     /// <summary>
-    /// Encrypts a message with SHA3
+    /// Sends a transaction
     /// </summary>
-    public void GetMessageHash()
+    public async void SendTransaction()
     {
-        var hash = Web3Unity.Instance.GetMessageHash(messageSha);
-        SampleOutputUtil.PrintResult(hash, nameof(Web3Unity), nameof(Web3Unity.GetMessageHash));
+        var hash = await Web3Unity.Instance.SendTransaction(toAddress, BigInteger.Parse(value));
+        SampleOutputUtil.PrintResult(hash, nameof(Web3Unity), nameof(Web3Unity.Instance.SendTransaction));
     }
 
     /// <summary>
@@ -188,23 +183,45 @@ public class EvmCalls : MonoBehaviour
     public async void SignMessage()
     {
         var signedMessage = await Web3Unity.Instance.SignMessage(messageSign);
-        SampleOutputUtil.PrintResult(signedMessage, nameof(Web3Unity), nameof(Web3Unity.SignMessage));
+        SampleOutputUtil.PrintResult(signedMessage, nameof(Web3Unity), nameof(Web3Unity.Instance.SignMessage));
     }
-
 
     /// <summary>
-    /// Signs a message via ECDSA
+    /// Gets events data from a transaction
     /// </summary>
-    public void SignMessageWithPrivateKey()
+    public async void EventTxData()
     {
-        var result = Web3Unity.Instance.SignMessageWithPrivateKey(ecdsaKey, ecdsaMessage);
-        SampleOutputUtil.PrintResult(result, nameof(Web3Unity), nameof(Web3Unity.SignMessageWithPrivateKey));
-    }
-    
-    public void GetPublicAddressFromPrivateKey()
-    {
-        var result = Web3Unity.Instance.GetPublicAddressFromPrivateKey(ecdsaKey);
-        SampleOutputUtil.PrintResult(result, nameof(Web3Unity), nameof(Web3Unity.GetPublicAddressFromPrivateKey));
+        // Contract write
+        var amount = 1;
+        object[] args =
+        {
+            amount
+        };
+        var contract = Web3Unity.Web3.ContractBuilder.Build(ABI.ArrayTotal, eventContract);
+        var data = await contract.SendWithReceipt("addTotal", args);
+        // Quick pause to deal with chain congestion
+        await new WaitForSeconds(2);
+        // Event data from receipt
+        var logs = data.receipt.Logs.Select(jToken => JsonConvert.DeserializeObject<FilterLog>(jToken.ToString()));
+        var eventAbi = EventExtensions.GetEventABI<AmountIncreasedEvent>();
+        var eventLogs = logs
+            .Select(log => eventAbi.DecodeEvent<AmountIncreasedEvent>(log))
+            .Where(l => l != null);
+
+        if (!eventLogs.Any())
+        {
+            Debug.Log("No event data");
+        }
+        else
+        {
+            Debug.Log("Event data found");
+            foreach (var eventLog in eventLogs)
+            {
+                var eventData = eventLog.Event;
+                Debug.Log($"Wallet from event data: {eventData.wallet}");
+                Debug.Log($"Amount from event data: {eventData.amount}");
+            }
+        }
     }
 
     /// <summary>
@@ -228,13 +245,13 @@ public class EvmCalls : MonoBehaviour
             {
                 Target = ChainSafeContracts.Erc20,
                 AllowFailure = true,
-                CallData = erc20BalanceOfCalldata.HexToByteArray()
+                CallData = erc20BalanceOfCalldata.HexToByteArray(),
             },
             new Call3Value()
             {
                 Target = ChainSafeContracts.Erc20,
                 AllowFailure = true,
-                CallData = erc20TotalSupplyCalldata.HexToByteArray()
+                CallData = erc20TotalSupplyCalldata.HexToByteArray(),
             }
         };
 
@@ -244,15 +261,13 @@ public class EvmCalls : MonoBehaviour
 
         if (multicallResultResponse[0] != null && multicallResultResponse[0].Success)
         {
-            var decodedBalanceOf =
-                erc20Contract.Decode(EthMethods.BalanceOf, multicallResultResponse[0].ReturnData.ToHex());
+            var decodedBalanceOf = erc20Contract.Decode(EthMethods.BalanceOf, multicallResultResponse[0].ReturnData.ToHex());
             Debug.Log($"decodedBalanceOf {((BigInteger)decodedBalanceOf[0]).ToString()}");
         }
 
         if (multicallResultResponse[1] != null && multicallResultResponse[1].Success)
         {
-            var decodedTotalSupply =
-                erc20Contract.Decode(EthMethods.TotalSupply, multicallResultResponse[1].ReturnData.ToHex());
+            var decodedTotalSupply = erc20Contract.Decode(EthMethods.TotalSupply, multicallResultResponse[1].ReturnData.ToHex());
             Debug.Log($"decodedTotalSupply {((BigInteger)decodedTotalSupply[0]).ToString()}");
         }
     }
