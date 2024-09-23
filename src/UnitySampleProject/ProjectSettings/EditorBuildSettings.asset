@@ -6,16 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Samples/web3.unity SDK/2.6.0/Web3.Unity Samples/Scenes/SampleLogin
-      - Connect Modal.unity
-    guid: 9cc8718ed12082a4582ab037b41d4f98
-  - enabled: 1
-    path: Assets/Samples/web3.unity SDK Ramp/2.6.0/Ramp Samples/SampleRampIntegration.unity
-    guid: 9583b7671e7df46028765b84323c9bf7
-  - enabled: 1
     path: Assets/Samples/web3.unity SDK/2.6.0/Web3.Unity Samples/Scenes/SampleMain.unity
     guid: 516f54f8261cf44459691b7adc25e055
-  - enabled: 1
-    path: Assets/Samples/web3.unity SDK Marketplace/2.6.1/Marketplace Samples/Prefabs/Scenes/MarketplaceSampleScene.unity
-    guid: 3e59fc56d08b2cb42b49bdb0b0ac5f7b
   m_configObjects: {}
