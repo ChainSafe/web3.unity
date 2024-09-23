@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.Web3.Build;
 
@@ -25,7 +26,7 @@ namespace ChainSafe.Gaming.Connection
         /// <param name="web3Builder">Web3Builder instance to be configured.</param>
         /// <param name="adapters">Multiple <see cref="IWeb3BuilderServiceAdapter"/> to be added to <see cref="Web3Builder"/>.</param>
         /// <returns>Configured <see cref="Web3Builder"/>.</returns>
-        public static Web3Builder ConfigureServices(this Web3Builder web3Builder, IWeb3BuilderServiceAdapter[] adapters)
+        public static Web3Builder ConfigureServices(this Web3Builder web3Builder, HashSet<IWeb3BuilderServiceAdapter> adapters)
         {
             foreach (var adapter in adapters)
             {

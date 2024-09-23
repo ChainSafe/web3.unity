@@ -1,8 +1,12 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
+using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.UnityPackage.Connection;
+using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Build;
+using ChainSafe.Gaming.Web3.Core.Logout;
 using Scripts.EVM.Token;
 using UnityEngine;
 using Erc20Contract = ChainSafe.Gaming.Evm.Contracts.Custom.Erc20Contract;
@@ -10,7 +14,7 @@ using Erc20Contract = ChainSafe.Gaming.Evm.Contracts.Custom.Erc20Contract;
 /// <summary>
 /// ERC20 calls used in the sample scene
 /// </summary>
-public class Erc20Calls : MonoBehaviour
+public class Erc20Calls : Web3BuilderServiceAdapter, IWeb3InitializedHandler, ILogoutHandler
 {
     #region Fields
 
@@ -43,17 +47,6 @@ public class Erc20Calls : MonoBehaviour
     #endregion
 
     private Erc20Contract _erc20;
-
-    private async void Awake()
-    {
-        _erc20 = await Web3Unity.Instance.BuildContract<Erc20Contract>(ChainSafeContracts.Erc20);
-    }
-
-    private async void OnDestroy()
-    {
-        await _erc20.DisposeAsync();
-    }
-
 
     /// <summary>
     /// Balance Of ERC20 Address
@@ -134,5 +127,23 @@ public class Erc20Calls : MonoBehaviour
     {
         Debug.LogError("TRANSFERED" + obj.ToString());
         _erc20.OnTransfer -= Test;
+    }
+
+    public async Task OnWeb3Initialized(Web3 web3)
+    {
+        _erc20 = await web3.ContractBuilder.Build<Erc20Contract>(ChainSafeContracts.Erc20);
+    }
+
+    public override Web3Builder ConfigureServices(Web3Builder web3Builder)
+    {
+        return web3Builder.Configure(services =>
+        {
+            services.AddSingleton<IWeb3InitializedHandler, ILogoutHandler, Erc20Calls>(_ => this);
+        });
+    }
+
+    public async Task OnLogout()
+    {
+        await _erc20.DisposeAsync();
     }
 }
