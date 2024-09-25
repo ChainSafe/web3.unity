@@ -6,7 +6,6 @@ using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.LocalStorage;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Chains;
-using ChainSafe.Gaming.Web3.Core.Evm.EventPoller;
 using ChainSafe.Gaming.Web3.Core.Logout;
 using ChainSafe.Gaming.Web3.Environment;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,7 +25,6 @@ namespace ChainSafe.Gaming.Web3.Build
 
             // Bind default services
             serviceCollection
-                .UseEventPoller() // todo: remove, make a WebGL IEventManager implementation that utilizes Event Polling
                 .AddSingleton<IContractBuilder, ILifecycleParticipant, ContractBuilder>()
                 .AddSingleton<ILocalStorage, DataStorage>()
                 .AddSingleton<ChainRegistryProvider>()

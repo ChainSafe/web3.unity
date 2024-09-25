@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace ChainSafe.Gaming.Web3.Evm.EventPoller
+namespace ChainSafe.Gaming.RPC.Events
 {
-    public class EventPollerConfiguration
+    public class PollingEventManagerConfig
     {
         public TimeSpan PollInterval { get; set; } = TimeSpan.FromSeconds(10);
     }

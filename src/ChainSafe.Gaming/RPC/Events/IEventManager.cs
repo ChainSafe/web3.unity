@@ -6,10 +6,10 @@ namespace ChainSafe.Gaming.RPC.Events
 {
     public interface IEventManager
     {
-        Task Subscribe<TEvent>(Action<TEvent> handler)
+        Task Subscribe<TEvent>(Action<TEvent> handler, params string[] contractAddresses)
             where TEvent : IEventDTO, new();
 
-        Task Unsubscribe<TEvent>(Action<TEvent> handler)
+        Task Unsubscribe<TEvent>(Action<TEvent> handler, params string[] contractAddresses)
             where TEvent : IEventDTO, new();
     }
 }

@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ChainSafe.Gaming.Debugging;
+using ChainSafe.Gaming.EVM.Events;
 using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.Mud;
 using ChainSafe.Gaming.Mud.Tables;
@@ -11,6 +13,7 @@ using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Wallets;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
+using ChainSafe.Gaming.Web3.Evm.EventPoller;
 using ChainSafe.Gaming.Web3.Unity;
 using TMPro;
 using UnityEngine;
@@ -34,12 +37,16 @@ public class MudSample : MonoBehaviour
         web3 = await new Web3Builder(ProjectConfigUtilities.Load(), ProjectConfigUtilities.BuildLocalhostConfig())
             .Configure(services =>
             {
+                // Enable basic components
                 services.UseUnityEnvironment();
-                services.UseRpcProvider();
-
+                services.UseRpcProvider();  
+                
                 // Initializes Wallet as the first account of the locally running Ethereum Node (Anvil).  
                 services.Debug().UseJsonRpcWallet(new JsonRpcWalletConfig { AccountIndex = 0 });
-                    
+                
+                // Enable Events as MUD requires them
+                services.UseEvents(new PollingEventManagerConfig { PollInterval = TimeSpan.FromSeconds(1)}); // the config is only being used for WebGL platform; 1 second poll interval is extremely fast, consider using longer interval in production so that your RPC endpoint doesn't get too overwhelmed
+                
                 // Enable MUD
                 services.UseMud(mudConfig);
             })
@@ -62,7 +69,7 @@ public class MudSample : MonoBehaviour
                     {
                         new("value", "uint32"),
                     },
-                    KeyColumns = new string[0], // empty - singleton table 
+                    KeyColumns = new string[0], // empty key schema - singleton table (one record only)
                 },
             },
         });
