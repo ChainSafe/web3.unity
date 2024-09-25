@@ -39,6 +39,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         /// <summary>
         /// Handle exception thrown during connection.
         /// Different providers might handler it differently.
+        /// It can also serve as a Reset for any failed connection attempts.
         /// </summary>
         /// <param name="exception">Exception thrown during connection.</param>
         /// <exception cref="Exception">Exception thrown during connection.</exception>

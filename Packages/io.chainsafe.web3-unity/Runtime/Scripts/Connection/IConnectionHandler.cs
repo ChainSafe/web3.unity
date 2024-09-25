@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Connection;
@@ -27,14 +28,21 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         /// </summary>
         public async Task Connect(ConnectionProvider provider)
         {
-            Web3Builder web3Builder = new Web3Builder(ProjectConfigUtilities.Load())
-                .Configure(ConfigureCommonServices)
-                .ConfigureServices(Web3BuilderServiceAdapters)
-                .ConfigureServices(provider);
+            try
+            {
+                Web3Builder web3Builder = new Web3Builder(ProjectConfigUtilities.Load())
+                    .Configure(ConfigureCommonServices)
+                    .ConfigureServices(Web3BuilderServiceAdapters)
+                    .ConfigureServices(provider);
 
-            var web3 = await web3Builder.LaunchAsync();
+                var web3 = await web3Builder.LaunchAsync();
 
-            await OnWeb3Initialized(web3);
+                await OnWeb3Initialized(web3);
+            }
+            catch (Exception e)
+            {
+                provider.HandleException(e);
+            }
         }
 
         private async Task OnWeb3Initialized(CWeb3 web3)
