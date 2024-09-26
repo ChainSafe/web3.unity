@@ -1,6 +1,5 @@
 ﻿using ChainSafe.Gaming.RPC.Events;
 using ChainSafe.Gaming.Web3.Build;
-using ChainSafe.Gaming.Web3.Evm.EventPoller;
 
 namespace ChainSafe.Gaming.EVM.Events
 {
