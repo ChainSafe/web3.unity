@@ -108,7 +108,7 @@ public class Erc1155Calls : SampleBase<Erc1155Calls>, IWeb3InitializedHandler, I
     public async Task<string> MintErc1155()
     {
         var response = await _erc1155.MintWithReceipt(
-            Web3Unity.Web3.Signer.PublicAddress,
+            Web3Unity.Instance.Address,
             idMint, amountMint, Array.Empty<byte>());
         var output = SampleOutputUtil.BuildOutputValue(new object[] {response.TransactionHash, true});
         return SampleOutputUtil.BuildResultMessage(output, "ERC-1155", nameof(Erc1155Service.Mint));
@@ -120,7 +120,7 @@ public class Erc1155Calls : SampleBase<Erc1155Calls>, IWeb3InitializedHandler, I
     public async Task<string> TransferErc1155()
     {
         var response = await _erc1155.SafeTransferFromWithReceipt(
-            Web3Unity.Web3.Signer.PublicAddress,
+            Web3Unity.Instance.Address,
             toAccountTransfer,
             tokenIdTransfer,
             amountTransfer,

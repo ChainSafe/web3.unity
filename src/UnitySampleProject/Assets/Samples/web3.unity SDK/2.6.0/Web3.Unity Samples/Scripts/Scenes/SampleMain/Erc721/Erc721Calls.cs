@@ -68,7 +68,7 @@ public class Erc721Calls : SampleBase<Erc721Calls>, IWeb3InitializedHandler, ILo
 
 
     private Erc721Contract _erc721;
-
+    
     /// <summary>
     /// Balance Of ERC721 Address
     /// </summary>
@@ -120,7 +120,7 @@ public class Erc721Calls : SampleBase<Erc721Calls>, IWeb3InitializedHandler, ILo
     /// </summary>
     public async Task<string> MintErc721()
     {
-        var response = await _erc721.SafeMintWithReceipt(Web3Unity.Web3.Signer.PublicAddress, uriMint);
+        var response = await _erc721.SafeMintWithReceipt(Web3Unity.Instance.Address, uriMint);
         var output = SampleOutputUtil.BuildOutputValue(new [] {response.TransactionHash});
         return SampleOutputUtil.BuildResultMessage(output, "ERC-721", nameof(Erc721Service.GetUri));
     }

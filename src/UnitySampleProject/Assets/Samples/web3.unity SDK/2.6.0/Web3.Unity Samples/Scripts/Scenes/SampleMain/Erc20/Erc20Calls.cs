@@ -47,7 +47,7 @@ public class Erc20Calls : SampleBase<Erc20Calls>, IWeb3InitializedHandler, ILogo
     #endregion
 
     private Erc20Contract _erc20;
-
+    
     /// <summary>
     /// Balance Of ERC20 Address
     /// </summary>

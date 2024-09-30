@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.UnityPackage.UI;
+using ChainSafe.Gaming.Web3.Build;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -71,5 +72,10 @@ public abstract class SampleBase<T> : Web3BuilderServiceAdapter where T : Sample
             
             throw;
         }
+    }
+
+    public override Web3Builder ConfigureServices(Web3Builder web3Builder)
+    {
+        return web3Builder;
     }
 }

@@ -5,7 +5,6 @@ using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.Evm.Contracts.Extensions;
 using ChainSafe.Gaming.MultiCall;
 using ChainSafe.Gaming.UnityPackage;
-using ChainSafe.Gaming.Web3.Build;
 using Nethereum.ABI.FunctionEncoding.Attributes;
 using Nethereum.Contracts.QueryHandlers.MultiCall;
 using Nethereum.Hex.HexConvertors.Extensions;
@@ -276,10 +275,5 @@ public class EvmCalls : SampleBase<EvmCalls>
         }
         
         return $"{nameof(MultiCall)} executed.";
-    }
-
-    public override Web3Builder ConfigureServices(Web3Builder web3Builder)
-    {
-        return web3Builder;
     }
 }

@@ -83,9 +83,4 @@ public class IPFSCalls : SampleBase<IPFSCalls>
     }
 
     #endregion
-
-    public override Web3Builder ConfigureServices(Web3Builder web3Builder)
-    {
-        return web3Builder;
-    }
 }
