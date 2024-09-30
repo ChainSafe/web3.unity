@@ -44,8 +44,6 @@ public class Web3AuthProvider : WalletProvider, IAccountProvider
             _coreInstance = gameObject.GetComponent<Web3Auth>();
         }
         
-        _coreInstance.setOptions(_config.Web3AuthOptions, _config.RememberMe);
-
         if (_connectTcs != null && !_connectTcs.Task.IsCompleted)
         {
             Cancel();
@@ -55,6 +53,10 @@ public class Web3AuthProvider : WalletProvider, IAccountProvider
         
         _coreInstance.onLogin += OnLogin;
 
+        _coreInstance.Initialize();
+        
+        _coreInstance.setOptions(_config.Web3AuthOptions, _config.RememberMe);
+        
         var providerTask = _config.ProviderTask;
         
         if (!_config.AutoLogin && providerTask != null 
@@ -86,13 +88,15 @@ public class Web3AuthProvider : WalletProvider, IAccountProvider
 
     private void Cancel()
     {
-        _connectTcs.SetCanceled();
-
         _coreInstance.onLogin -= OnLogin;
+        
+        _connectTcs.SetCanceled();
     }
     
     private void OnLogin(Web3AuthResponse response)
     {
+        _coreInstance.onLogin -= OnLogin;
+        
         if (string.IsNullOrEmpty(response.error))
         {
             _connectTcs.SetResult(response);

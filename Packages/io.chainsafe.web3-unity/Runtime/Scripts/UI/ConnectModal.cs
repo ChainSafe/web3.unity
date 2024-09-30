@@ -69,8 +69,6 @@ namespace ChainSafe.Gaming.UnityPackage.UI
                 {
                     DisplayError(
                         "Connection failed, please try again.");
-
-                    provider.HandleException(e);
                 }
             }
             finally
