@@ -1,7 +1,9 @@
+using System.Threading.Tasks;
 using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.Web3.Build;
 using UnityEngine;
 
-public class GelatoCalls : MonoBehaviour
+public class GelatoCalls : SampleBase<GelatoCalls>
 {
     // Fields
     private GelatoSample gelato;
@@ -15,10 +17,10 @@ public class GelatoCalls : MonoBehaviour
     /// <summary>
     /// Gelato with sync fee
     /// </summary>
-    public async void GelatoCallWithSyncFee()
+    public async Task<string> GelatoCallWithSyncFee()
     {
         var result = await gelato.CallWithSyncFee();
-        SampleOutputUtil.PrintResult(
+        return SampleOutputUtil.BuildResultMessage(
             $"Task complete. Final status of {result.TaskId}: {result.Status.TaskState}. " +
             $"Transaction hash: {result.Status.TransactionHash}",
             nameof(GelatoSample), nameof(GelatoSample.CallWithSyncFee));
@@ -27,10 +29,10 @@ public class GelatoCalls : MonoBehaviour
     /// <summary>
     /// Gelato2771 with sync fee
     /// </summary>
-    public async void GelatoCallWithSyncFeeErc2771()
+    public async Task<string> GelatoCallWithSyncFeeErc2771()
     {
         var result = await gelato.CallWithSyncFeeErc2771();
-        SampleOutputUtil.PrintResult(
+        return SampleOutputUtil.BuildResultMessage(
             $"Task complete. Final status of {result.TaskId}: {result.Status.TaskState}. " +
             $"Transaction hash: {result.Status.TransactionHash}",
             nameof(GelatoSample), nameof(GelatoSample.CallWithSyncFeeErc2771));
@@ -39,10 +41,10 @@ public class GelatoCalls : MonoBehaviour
     /// <summary>
     /// Gelato sponsor call
     /// </summary>
-    public async void GelatoSponsorCall()
+    public async Task<string> GelatoSponsorCall()
     {
         var result = await gelato.SponsorCall();
-        SampleOutputUtil.PrintResult(
+        return SampleOutputUtil.BuildResultMessage(
             $"Task complete. Final status of {result.TaskId}: {result.Status.TaskState}. " +
             $"Transaction hash: {result.Status.TransactionHash}",
             nameof(GelatoSample), nameof(GelatoSample.SponsorCall));
@@ -51,13 +53,18 @@ public class GelatoCalls : MonoBehaviour
     /// <summary>
     /// Gelato2771 sponsor call
     /// </summary>
-    public async void GelatoSponsorCallErc2771()
+    public async Task<string> GelatoSponsorCallErc2771()
     {
         var result = await gelato.SponsorCallErc2771();
 
-        SampleOutputUtil.PrintResult(
+        return SampleOutputUtil.BuildResultMessage(
             $"Task complete. Final status of {result.TaskId}: {result.Status.TaskState}. " +
             $"Transaction hash: {result.Status.TransactionHash}",
             nameof(GelatoSample), nameof(GelatoSample.SponsorCallErc2771));
+    }
+
+    public override Web3Builder ConfigureServices(Web3Builder web3Builder)
+    {
+        return web3Builder;
     }
 }

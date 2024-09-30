@@ -16,7 +16,7 @@ using Erc1155Contract = ChainSafe.Gaming.Evm.Contracts.Custom.Erc1155Contract;
 /// <summary>
 /// ERC1155 calls used in the sample scene
 /// </summary>
-public class Erc1155Calls : Web3BuilderServiceAdapter, IWeb3InitializedHandler, ILogoutHandler
+public class Erc1155Calls : SampleBase<Erc1155Calls>, IWeb3InitializedHandler, ILogoutHandler
 {
     #region Fields
     [Header("Change the fields below for testing purposes")]
@@ -76,48 +76,48 @@ public class Erc1155Calls : Web3BuilderServiceAdapter, IWeb3InitializedHandler, 
     /// <summary>
     /// Balance Of ERC1155 Address
     /// </summary>
-    public async void BalanceOf()
+    public async Task<string> BalanceOf()
     {
         var balance = await _erc1155.BalanceOf(accountBalanceOf, BigInteger.Parse(tokenIdBalanceOf));
-        SampleOutputUtil.PrintResult(balance.ToString(), "ERC-1155", nameof(Erc1155Service.GetBalanceOf));
+        return SampleOutputUtil.BuildResultMessage(balance.ToString(), "ERC-1155", nameof(Erc1155Service.GetBalanceOf));
     }
 
     /// <summary>
     /// Balance Of batch ERC1155
     /// </summary>
-    public async void BalanceOfBatch()
+    public async Task<string> BalanceOfBatch()
     {
         var balances = await _erc1155.BalanceOfBatch(
             accountsBalanceOfBatch,
             tokenIdsBalanceOfBatch.Select(BigInteger.Parse).ToArray());
-        SampleOutputUtil.PrintResult(string.Join(", ", balances), "ERC-1155", nameof(Erc1155Service.GetBalanceOfBatch));
+        return SampleOutputUtil.BuildResultMessage(string.Join(", ", balances), "ERC-1155", nameof(Erc1155Service.GetBalanceOfBatch));
     }
 
     /// <summary>
     /// Uri Of ERC1155 Address
     /// </summary>
-    public async void Uri()
+    public async Task<string> Uri()
     {
         var uri = await _erc1155.Uri(BigInteger.Parse(tokenIdUri));
-        SampleOutputUtil.PrintResult(uri, "ERC-1155", nameof(Erc1155Service.GetUri));
+        return SampleOutputUtil.BuildResultMessage(uri, "ERC-1155", nameof(Erc1155Service.GetUri));
     }
 
     /// <summary>
     /// Mint ERC1155 tokens
     /// </summary>
-    public async void MintErc1155()
+    public async Task<string> MintErc1155()
     {
         var response = await _erc1155.MintWithReceipt(
             Web3Unity.Web3.Signer.PublicAddress,
             idMint, amountMint, Array.Empty<byte>());
         var output = SampleOutputUtil.BuildOutputValue(new object[] {response.TransactionHash, true});
-        SampleOutputUtil.PrintResult(output, "ERC-1155", nameof(Erc1155Service.Mint));
+        return SampleOutputUtil.BuildResultMessage(output, "ERC-1155", nameof(Erc1155Service.Mint));
     }
 
     /// <summary>
     /// Transfer ERC1155 tokens
     /// </summary>
-    public async void TransferErc1155()
+    public async Task<string> TransferErc1155()
     {
         var response = await _erc1155.SafeTransferFromWithReceipt(
             Web3Unity.Web3.Signer.PublicAddress,
@@ -127,16 +127,17 @@ public class Erc1155Calls : Web3BuilderServiceAdapter, IWeb3InitializedHandler, 
             Array.Empty<byte>()
             );
         var output = SampleOutputUtil.BuildOutputValue(new object[] {true, response.TransactionHash});
-        SampleOutputUtil.PrintResult(output, "ERC-1155", nameof(Erc1155Service.Transfer));
+        return SampleOutputUtil.BuildResultMessage(output, "ERC-1155", nameof(Erc1155Service.Transfer));
     }
 
     /// <summary>
     /// Imports an NFTs texture via URI data
     /// </summary>
-    public async void ImportNftTexture1155()
+    public async Task<string> ImportNftTexture1155()
     {
         var texture = await Web3Unity.Web3.Erc1155.ImportTexture(ChainSafeContracts.Erc1155, tokenIdTexture);
         rawImage.texture = texture;
+        return "Nft Texture Set.";
     }
 
     public async Task OnWeb3Initialized(Web3 web3)

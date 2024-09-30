@@ -14,7 +14,7 @@ using Erc20Contract = ChainSafe.Gaming.Evm.Contracts.Custom.Erc20Contract;
 /// <summary>
 /// ERC20 calls used in the sample scene
 /// </summary>
-public class Erc20Calls : Web3BuilderServiceAdapter, IWeb3InitializedHandler, ILogoutHandler
+public class Erc20Calls : SampleBase<Erc20Calls>, IWeb3InitializedHandler, ILogoutHandler
 {
     #region Fields
 
@@ -51,76 +51,78 @@ public class Erc20Calls : Web3BuilderServiceAdapter, IWeb3InitializedHandler, IL
     /// <summary>
     /// Balance Of ERC20 Address
     /// </summary>
-    public async void BalanceOf()
+    public async Task<string> BalanceOf()
     {
         var balance = await _erc20.BalanceOf(accountBalanceOf);
-        SampleOutputUtil.PrintResult(balance.ToString(), "ERC-20", nameof(Erc20Service.GetBalanceOf));
+        
+        return SampleOutputUtil.BuildResultMessage(balance.ToString(), "ERC-20", nameof(Erc20Service.GetBalanceOf));
     }
 
     /// <summary>
     /// Native ERC20 balance of an Address
     /// </summary>
-    public async void NativeBalanceOf()
+    public async Task<string> NativeBalanceOf()
     {
         var balance = await Web3Unity.Web3.RpcProvider.GetBalance(accountBalanceOf);
-        SampleOutputUtil.PrintResult(balance.ToString(), "ERC-20", nameof(NativeBalanceOf));
+        
+        return SampleOutputUtil.BuildResultMessage(balance.ToString(), "ERC-20", nameof(NativeBalanceOf));
     }
 
     /// <summary>
     /// Name of ERC20 Token
     /// </summary>
-    public async void Name()
+    public async Task<string> Name()
     {
-        var name = await _erc20.Name();
-        SampleOutputUtil.PrintResult(name, "ERC-20", nameof(Erc20Service.GetName));
+        var getName = await _erc20.Name();
+        return SampleOutputUtil.BuildResultMessage(getName, "ERC-20", nameof(Erc20Service.GetName));
     }
 
     /// <summary>
     /// Symbol of ERC20 Token
     /// </summary>
-    public async void Symbol()
+    public async Task<string> Symbol()
     {
         var symbol = await _erc20.Symbol();
-        SampleOutputUtil.PrintResult(symbol, "ERC-20", nameof(Erc20Service.GetSymbol));
+        return SampleOutputUtil.BuildResultMessage(symbol, "ERC-20", nameof(Erc20Service.GetSymbol));
     }
 
     /// <summary>
     /// Decimals of ERC20 Token
     /// </summary>
-    public async void Decimals()
+    public async Task<string> Decimals()
     {
         var decimals = await _erc20.Decimals();
-        SampleOutputUtil.PrintResult(decimals.ToString(), "ERC-20", nameof(Erc20Service.GetDecimals));
+        return SampleOutputUtil.BuildResultMessage(decimals.ToString(), "ERC-20", nameof(Erc20Service.GetDecimals));
     }
 
     /// <summary>
     /// Total Supply of ERC20 Token
     /// </summary>
-    public async void TotalSupply()
+    public async Task<string> TotalSupply()
     {
         var totalSupply = await _erc20.TotalSupply();
-        SampleOutputUtil.PrintResult(totalSupply.ToString(), "ERC-20", nameof(Erc20Service.GetTotalSupply));
+        return SampleOutputUtil.BuildResultMessage(totalSupply.ToString(), "ERC-20", nameof(Erc20Service.GetTotalSupply));
     }
 
     /// <summary>
     /// Mints ERC20 Tokens to an address
     /// </summary>
-    public async void MintErc20()
+    public async Task<string> MintErc20()
     {
         var mintResponse = await _erc20.MintWithReceipt(Web3Unity.Web3.Signer.PublicAddress, valueToSend * weiPerEther);
         var output = SampleOutputUtil.BuildOutputValue(new object[] { mintResponse.TransactionHash });
-        SampleOutputUtil.PrintResult(output, "ERC-20", nameof(Erc20Service.Mint));
+        return SampleOutputUtil.BuildResultMessage(output, "ERC-20", nameof(Erc20Service.Mint));
     }
 
     /// <summary>
     /// Transfers ERC20 Tokens to an address
     /// </summary>
-    public async void TransferErc20()
+    public async Task<string> TransferErc20()
     {
         var mintResponse = await _erc20.Transfer(toAccount, amountTransfer);
         var output = SampleOutputUtil.BuildOutputValue(new object[] { mintResponse });
         _erc20.OnTransfer += Test;
-        SampleOutputUtil.PrintResult(output, "ERC-20", nameof(Erc20Service.Transfer));
+        return SampleOutputUtil.BuildResultMessage(output, "ERC-20", nameof(Erc20Service.Transfer));
     }
 
     private void Test(Erc20Contract.TransferEventDTO obj)

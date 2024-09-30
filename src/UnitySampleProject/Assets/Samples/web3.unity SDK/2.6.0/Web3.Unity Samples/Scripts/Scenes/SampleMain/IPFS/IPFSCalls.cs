@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using ChainSafe.Gaming.UnityPackage.Model;
 using UnityEngine;
 using ChainSafe.Gaming.Marketplace;
+using ChainSafe.Gaming.Web3.Build;
 
-public class IPFSCalls : MonoBehaviour
+public class IPFSCalls : SampleBase<IPFSCalls>
 {
     #region Fields
 
@@ -28,7 +30,7 @@ public class IPFSCalls : MonoBehaviour
     /// <summary>
     /// Uploads an image selected by the user to IPFS
     /// </summary>
-    public async void IPFSUploadImage()
+    public async Task<string> IPFSUploadImage()
     {
         var uploadRequest = new IPFSUploadRequestModel
         {
@@ -37,13 +39,13 @@ public class IPFSCalls : MonoBehaviour
             FileNameImage = fileNameImage
         };
         var cid = await IPFS.UploadImage(uploadRequest);
-        Debug.Log($"Image uploaded to https://ipfs.chainsafe.io/ipfs/{cid}");
+        return $"Image uploaded to https://ipfs.chainsafe.io/ipfs/{cid}";
     }
 
     /// <summary>
     /// Uploads metadata to IPFS
     /// </summary>
-    public async void IPFSUploadMetadata()
+    public async Task<string> IPFSUploadMetadata()
     {
         var uploadRequest = new IPFSUploadRequestModel
         {
@@ -57,13 +59,13 @@ public class IPFSCalls : MonoBehaviour
             attributes = IPFS.CreateAttributesList(display_types, trait_types, values)
         };
         var cid = await IPFS.UploadMetaData(uploadRequest);
-        Debug.Log($"Metadata uploaded to https://ipfs.chainsafe.io/ipfs/{cid}");
+        return $"Metadata uploaded to https://ipfs.chainsafe.io/ipfs/{cid}";
     }
 
     /// <summary>
     /// Uploads an image selected by the user including metadata to IPFS
     /// </summary>
-    public async void IPFSUploadImageAndMetadata()
+    public async Task<string> IPFSUploadImageAndMetadata()
     {
         var uploadRequest = new IPFSUploadRequestModel
         {
@@ -77,8 +79,13 @@ public class IPFSCalls : MonoBehaviour
             attributes = IPFS.CreateAttributesList(display_types, trait_types, values)
         };
         var cid = await IPFS.UploadImageAndMetadata(uploadRequest);
-        Debug.Log($"Image & metadata uploaded to https://ipfs.chainsafe.io/ipfs/{cid}");
+        return $"Image & metadata uploaded to https://ipfs.chainsafe.io/ipfs/{cid}";
     }
 
     #endregion
+
+    public override Web3Builder ConfigureServices(Web3Builder web3Builder)
+    {
+        return web3Builder;
+    }
 }

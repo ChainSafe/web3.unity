@@ -1,67 +1,69 @@
 ﻿using System;
+using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts.Custom;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.Web3.Build;
 using UnityEngine;
 
 namespace Samples.Behaviours.SwitchChain
 {
-    public class SwitchChainCalls : MonoBehaviour
+    public class SwitchChainCalls : SampleBase<SwitchChainCalls>
     {
         public ChainSetup[] chainSetups;
 
-        private int currentChainIndex;
+        private int _currentChainIndex;
         
-        public async void ToggleChain()
+        public async Task<string> ToggleChain()
         {
             // get next chain id
-            var previousChainIndex = currentChainIndex;
-            currentChainIndex = (currentChainIndex + 1) % chainSetups.Length;
-            var chainId = chainSetups[currentChainIndex].chainId;
+            var previousChainIndex = _currentChainIndex;
+            _currentChainIndex = (_currentChainIndex + 1) % chainSetups.Length;
+            var chainId = chainSetups[_currentChainIndex].chainId;
             
             Debug.Log("Switching the chain... Make sure you confirm the chain change in your wallet.");
             
-            // switch chains
-            SampleFeedback.Instance.Activate();
             try
             {
                 await Web3Unity.Web3.Chains.SwitchChain(chainId);
+                
+                return $"Chain Switched from {previousChainIndex} to {_currentChainIndex}";
             }
             catch
             {
-                currentChainIndex = previousChainIndex; // revert chain index toggling
+                _currentChainIndex = previousChainIndex; // revert chain index toggling
                 throw;
-            }
-            finally
-            {
-                SampleFeedback.Instance.Deactivate();
             }
         }
 
-        public async void CallSmartContract()
+        public async Task<string> CallSmartContract()
         {
             // get contract address for the current chain
-            var contractAddress = chainSetups[currentChainIndex].contractAddress;
+            var contractAddress = chainSetups[_currentChainIndex].contractAddress;
             
             // build contract client instance
             var contract = await Web3Unity.Web3.ContractBuilder.Build<EchoChainContract>(contractAddress);
             
             // call the EchoChain function
-            var echoMessage = await contract.EchoChain();
-            Debug.Log(echoMessage);
+            return await contract.EchoChain();
         }
 
-        public async void PrintChainId()
+        public async Task<string> PrintChainId()
         {
             var chainId = await Web3Unity.Web3.RpcProvider.GetChainId();
-            Debug.Log($"Running the SDK with Chain ID: {chainId}");
+            return $"Running the SDK with Chain ID: {chainId}";
         }
         
         [Serializable]
-        public class ChainSetup
+        public struct ChainSetup
         {
             public string chainId;
             public string contractAddress;
+        }
+
+        public override Web3Builder ConfigureServices(Web3Builder web3Builder)
+        {
+            return web3Builder;
         }
     }
 }

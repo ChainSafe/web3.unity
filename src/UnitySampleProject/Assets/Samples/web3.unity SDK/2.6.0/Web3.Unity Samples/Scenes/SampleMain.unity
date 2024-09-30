@@ -372,6 +372,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94b4d6797e7b43ccb4b381dee6898199, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <ButtonActionPairs>k__BackingField: []
   accountBalanceOf: 0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2
   toAccount: 0xdD4c825203f97984e7867F11eeCc813A036089D1
 --- !u!1 &24448129
@@ -403,6 +404,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97d1351707be484c82d2ffcdce1f3aa7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <ButtonActionPairs>k__BackingField: []
   accountBalanceOf: 0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2
   tokenIdOwnerOf: 1
   tokenIdsOwnerOfBatch:
@@ -960,6 +962,7 @@ Transform:
   - {fileID: 2077011803}
   - {fileID: 1993709007}
   - {fileID: 2120977409}
+  - {fileID: 379983083}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &98914093 stripped
@@ -1011,6 +1014,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85a6ee44e24097943a5a4641d2c7062e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <ButtonActionPairs>k__BackingField: []
   methodSend: addTotal
   increaseAmountSend: 1
   methodCall: myTotal
@@ -1075,6 +1079,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3aacd24d26ec5f74795e403ddba7a46f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <ButtonActionPairs>k__BackingField: []
   accountBalanceOf: 0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2
   tokenIdBalanceOf: 1
   accountsBalanceOfBatch:
@@ -3349,6 +3354,57 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 352732284}
   m_CullTransparentMesh: 1
+--- !u!1 &379983082
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 379983083}
+  - component: {fileID: 379983084}
+  m_Layer: 0
+  m_Name: RampSamples
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &379983083
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 379983082}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 67264514}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &379983084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 379983082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea0121760e62b10498829475cd3a2c64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <ButtonActionPairs>k__BackingField:
+  - <Button>k__BackingField: {fileID: 1876911317}
+    <MethodName>k__BackingField: OnRampPressed
+  - <Button>k__BackingField: {fileID: 491434544}
+    <MethodName>k__BackingField: OffRampPressed
+  - <Button>k__BackingField: {fileID: 1930047999}
+    <MethodName>k__BackingField: OnRampOffRampPressed
 --- !u!1 &424437031
 GameObject:
   m_ObjectHideFlags: 0
@@ -4650,6 +4706,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 644ad06354f533a48b9859dfdd3eab65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <ButtonActionPairs>k__BackingField: []
 --- !u!1 &649642438 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5855924980481563309, guid: fed17eec8cc2ebf4abd403772e93693d, type: 3}
@@ -7231,7 +7288,6 @@ GameObject:
   m_Component:
   - component: {fileID: 921261270}
   - component: {fileID: 921261271}
-  - component: {fileID: 921261272}
   m_Layer: 5
   m_Name: Buttons
   m_TagString: Untagged
@@ -7287,21 +7343,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &921261272
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 921261269}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea0121760e62b10498829475cd3a2c64, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnRampButton: {fileID: 1876911317}
-  OffRampButton: {fileID: 491434544}
-  OnRampOffRampButton: {fileID: 1930047999}
 --- !u!1001 &937973260
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14659,6 +14700,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a86b695c20675b43ba7a0f0a496749c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <ButtonActionPairs>k__BackingField: []
   apiSecretKey: Fill In Your API Secret Key From Storage
   bucketId: Fill In Your Bucket ID From Storage
   fileNameImage: Logo.png
@@ -15338,6 +15380,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccc3f4b11c1e441b8c9f7b998173cc54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <ButtonActionPairs>k__BackingField: []
   chainSetups:
   - chainId: 11155111
     contractAddress: 0x3A7b0A1ef50D4072960E10d22b04583f99fd8EfB

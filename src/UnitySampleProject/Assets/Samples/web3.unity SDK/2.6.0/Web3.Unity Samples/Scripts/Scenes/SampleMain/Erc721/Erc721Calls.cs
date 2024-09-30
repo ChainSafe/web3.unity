@@ -15,7 +15,7 @@ using Erc721Contract = ChainSafe.Gaming.Evm.Contracts.Custom.Erc721Contract;
 /// <summary>
 /// ERC721 calls used in the sample scene
 /// </summary>
-public class Erc721Calls : Web3BuilderServiceAdapter, IWeb3InitializedHandler, ILogoutHandler
+public class Erc721Calls : SampleBase<Erc721Calls>, IWeb3InitializedHandler, ILogoutHandler
 {
     #region Fields
     [Header("Change the fields below for testing purposes")]
@@ -72,25 +72,25 @@ public class Erc721Calls : Web3BuilderServiceAdapter, IWeb3InitializedHandler, I
     /// <summary>
     /// Balance Of ERC721 Address
     /// </summary>
-    public async void BalanceOf()
+    public async Task<string> BalanceOf()
     {
         var balance = await _erc721.BalanceOf(accountBalanceOf);
-        SampleOutputUtil.PrintResult(balance.ToString(), "ERC-721", nameof(Erc721Service.GetBalanceOf));
+        return SampleOutputUtil.BuildResultMessage(balance.ToString(), "ERC-721", nameof(Erc721Service.GetBalanceOf));
     }
 
     /// <summary>
     /// Owner Of ERC721 tokens
     /// </summary>
-    public async void OwnerOf()
+    public async Task<string> OwnerOf()
     {
         var owner = await _erc721.OwnerOf(BigInteger.Parse(tokenIdOwnerOf));
-        SampleOutputUtil.PrintResult(owner, "ERC-721", nameof(Erc721Service.GetOwnerOf));
+        return SampleOutputUtil.BuildResultMessage(owner, "ERC-721", nameof(Erc721Service.GetOwnerOf));
     }
 
     /// <summary>
     /// Owner Of batch ERC721
     /// </summary>
-    public async void OwnerOfBatch()
+    public async Task<string> OwnerOfBatch()
     {
         var owners = await _erc721.GetOwnerOfBatch(tokenIdsOwnerOfBatch);
         var ownersString = new StringBuilder();
@@ -103,36 +103,36 @@ public class Erc721Calls : Web3BuilderServiceAdapter, IWeb3InitializedHandler, I
                 ownersString.AppendLine("\t" + tokenId);
             }
         }
-        SampleOutputUtil.PrintResult(ownersString.ToString(), "ERC-721", nameof(Erc721Service.GetOwnerOfBatch));
+        return SampleOutputUtil.BuildResultMessage(ownersString.ToString(), "ERC-721", nameof(Erc721Service.GetOwnerOfBatch));
     }
 
     /// <summary>
     /// Uri Of ERC721 Address
     /// </summary>
-    public async void Uri()
+    public async Task<string> Uri()
     {
         var uri = await _erc721.TokenURI(BigInteger.Parse(tokenIdUri));
-        SampleOutputUtil.PrintResult(uri, "ERC-721", nameof(Erc721Service.GetUri));
+        return SampleOutputUtil.BuildResultMessage(uri, "ERC-721", nameof(Erc721Service.GetUri));
     }
 
     /// <summary>
     /// Mint ERC1155 tokens
     /// </summary>
-    public async void MintErc721()
+    public async Task<string> MintErc721()
     {
         var response = await _erc721.SafeMintWithReceipt(Web3Unity.Web3.Signer.PublicAddress, uriMint);
         var output = SampleOutputUtil.BuildOutputValue(new [] {response.TransactionHash});
-        SampleOutputUtil.PrintResult(output, "ERC-721", nameof(Erc721Service.GetUri));
+        return SampleOutputUtil.BuildResultMessage(output, "ERC-721", nameof(Erc721Service.GetUri));
     }
 
     /// <summary>
     /// Transfer ERC1155 tokens
     /// </summary>
-    public async void TransferErc721()
+    public async Task<string> TransferErc721()
     {
         var response = await _erc721.SafeTransferFromWithReceipt(contractTransfer, toAccountTransfer, tokenIdTransfer);
         var output = SampleOutputUtil.BuildOutputValue(new [] {response.TransactionHash});
-        SampleOutputUtil.PrintResult(output, "ERC-721", nameof(Erc721Service.Transfer));
+        return SampleOutputUtil.BuildResultMessage(output, "ERC-721", nameof(Erc721Service.Transfer));
     }
 
     public async Task OnWeb3Initialized(Web3 web3)

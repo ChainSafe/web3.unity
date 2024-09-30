@@ -1,25 +1,14 @@
 #define RAMP_AVAILABLE
 
 using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.Web3.Build;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace ChainSafe.Gaming.Exchangers.Ramp.Sample
 {
-    public class RampSample : MonoBehaviour
+    public class RampSample : SampleBase<RampSample>
     {
-        public Button OnRampButton;
-        public Button OffRampButton;
-        public Button OnRampOffRampButton;
-
-        private void Awake()
-        {
-            // Subscribe to buttons
-            OnRampButton.onClick.AddListener(OnRampPressed);
-            OffRampButton.onClick.AddListener(OffRampPressed);
-            OnRampOffRampButton.onClick.AddListener(OnRampOffRampPressed);
-        }
-
         private async void OnRampPressed()
         {
             // Show "Buy Crypto" widget
@@ -78,6 +67,11 @@ namespace ChainSafe.Gaming.Exchangers.Ramp.Sample
                 });
 
             Debug.Log(rampTransactionData.ToString());
+        }
+
+        public override Web3Builder ConfigureServices(Web3Builder web3Builder)
+        {
+            return web3Builder;
         }
     }
 }
