@@ -1,18 +1,13 @@
 using System.Threading.Tasks;
-using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.UnityPackage.Connection;
+using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
-using UnityEngine;
+using Microsoft.Extensions.DependencyInjection;
 
-public class GelatoCalls : SampleBase<GelatoCalls>
+public class GelatoCalls : SampleBase<GelatoCalls>, IWeb3InitializedHandler
 {
     // Fields
     private GelatoSample gelato;
-
-    // Initializes the protocol class
-    public void Awake()
-    {
-        gelato = new GelatoSample(Web3Unity.Web3);
-    }
 
     /// <summary>
     /// Gelato with sync fee
@@ -65,6 +60,16 @@ public class GelatoCalls : SampleBase<GelatoCalls>
 
     public override Web3Builder ConfigureServices(Web3Builder web3Builder)
     {
-        return web3Builder;
+        return web3Builder.Configure(services =>
+        {
+            services.AddSingleton<IWeb3InitializedHandler>(this);
+        });
+    }
+
+    public Task OnWeb3Initialized(Web3 web3)
+    {
+        gelato = new GelatoSample(web3);
+
+        return Task.CompletedTask;
     }
 }

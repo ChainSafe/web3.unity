@@ -54,6 +54,16 @@ namespace Samples.Behaviours.SwitchChain
             return $"Running the SDK with Chain ID: {chainId}";
         }
         
+        /// <summary>
+        /// Native ERC20 balance of an Address
+        /// </summary>
+        public async Task<string> NativeBalanceOf()
+        {
+            var balance = await Web3Unity.Web3.RpcProvider.GetBalance(Web3Unity.Instance.Address);
+        
+            return SampleOutputUtil.BuildResultMessage(balance.ToString(), "ERC-20", nameof(NativeBalanceOf));
+        }
+        
         [Serializable]
         public struct ChainSetup
         {
