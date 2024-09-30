@@ -212,11 +212,10 @@ namespace ChainSafe.Gaming.RPC.Events
 
             public override async Task ParseAndRaiseEvents(PollingEventManager manager, ulong fromBlock, ulong toBlock)
             {
-                var blockParameter = new BlockParameter(new HexBigInteger(new BigInteger(toBlock)));
                 var logs = await manager.rpcProvider.GetLogs(new NewFilterInput
                 {
-                    FromBlock = blockParameter,
-                    ToBlock = blockParameter, // using same block twice as "ToBlock" is inclusive
+                    FromBlock = new BlockParameter(new HexBigInteger(new BigInteger(fromBlock + 1))), // skipping one block as it should already be processed
+                    ToBlock = new BlockParameter(new HexBigInteger(new BigInteger(toBlock))),
                     Address = contractAddresses,
                     Topics = new[] { topicFilter },
                 });
