@@ -7,7 +7,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
     /// <summary>
     /// Enables usage of MultiCall when attached.
     /// </summary>
-    public class MultiCallServiceAdapter : MonoBehaviour, IWeb3BuilderServiceAdapter
+    public class MultiCallServiceAdapter : MonoBehaviour, IServiceAdapter
     {
         public Web3Builder ConfigureServices(Web3Builder web3Builder)
         {

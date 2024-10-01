@@ -20,7 +20,7 @@ namespace ChainSafe.Gaming.HyperPlay
         {
             var projectConfig = ProjectConfigUtilities.Load();
 
-            return new Web3Builder(projectConfig).Configure(services =>
+            return new Web3Builder(projectConfig, false).Configure(services =>
             {
                 services.UseUnityEnvironment();
                 services.UseRpcProvider();

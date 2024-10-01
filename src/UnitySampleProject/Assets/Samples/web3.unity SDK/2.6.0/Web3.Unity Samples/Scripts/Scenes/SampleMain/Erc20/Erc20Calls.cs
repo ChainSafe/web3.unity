@@ -6,7 +6,7 @@ using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
-using ChainSafe.Gaming.Web3.Core.Logout;
+using ChainSafe.Gaming.Web3.Core;
 using Scripts.EVM.Token;
 using UnityEngine;
 using Erc20Contract = ChainSafe.Gaming.Evm.Contracts.Custom.Erc20Contract;
@@ -14,7 +14,7 @@ using Erc20Contract = ChainSafe.Gaming.Evm.Contracts.Custom.Erc20Contract;
 /// <summary>
 /// ERC20 calls used in the sample scene
 /// </summary>
-public class Erc20Calls : SampleBase<Erc20Calls>, IWeb3InitializedHandler, ILogoutHandler
+public class Erc20Calls : SampleBase<Erc20Calls>, IWeb3InitializedHandler, ILifecycleParticipant, ILightWeightServiceAdapter
 {
     #region Fields
 
@@ -140,11 +140,16 @@ public class Erc20Calls : SampleBase<Erc20Calls>, IWeb3InitializedHandler, ILogo
     {
         return web3Builder.Configure(services =>
         {
-            services.AddSingleton<IWeb3InitializedHandler, ILogoutHandler, Erc20Calls>(_ => this);
+            services.AddSingleton<IWeb3InitializedHandler, ILifecycleParticipant, Erc20Calls>(_ => this);
         });
     }
 
-    public async Task OnLogout()
+    public ValueTask WillStartAsync()
+    {
+        return new ValueTask(Task.CompletedTask);
+    }
+
+    public async ValueTask WillStopAsync()
     {
         await _erc20.DisposeAsync();
     }

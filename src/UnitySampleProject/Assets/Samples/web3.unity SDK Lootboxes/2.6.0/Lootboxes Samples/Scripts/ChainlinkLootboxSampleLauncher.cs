@@ -47,7 +47,7 @@ namespace LootBoxes.Chainlink
 
         private async void Awake()
         {
-            web3 = Web3Unity.Web3 ?? await new Web3Builder(new Web3Config()).Configure(services =>
+            web3 = Web3Unity.Web3 ?? await new Web3Builder(new Web3Config(), false).Configure(services =>
                 {
                     services.UseUnityEnvironment();
                     services.UseRpcProvider();

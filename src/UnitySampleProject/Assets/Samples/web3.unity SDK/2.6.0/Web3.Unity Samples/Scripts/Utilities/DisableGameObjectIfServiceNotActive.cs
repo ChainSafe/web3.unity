@@ -21,7 +21,7 @@ public enum ServiceType
     Marketplace = 3
 }
 
-public class DisableGameObjectIfServiceNotActive : Web3BuilderServiceAdapter, IWeb3InitializedHandler
+public class DisableGameObjectIfServiceNotActive : ServiceAdapter, IWeb3InitializedHandler, ILightWeightServiceAdapter
 {
     [SerializeField] private ServiceType serviceType;
     private readonly Dictionary<ServiceType, Type> _typesDictionary = new()

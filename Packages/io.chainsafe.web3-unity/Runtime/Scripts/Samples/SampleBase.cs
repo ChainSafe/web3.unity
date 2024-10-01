@@ -6,7 +6,7 @@ using ChainSafe.Gaming.Web3.Build;
 using UnityEngine;
 using UnityEngine.UI;
 
-public abstract class SampleBase<T> : Web3BuilderServiceAdapter where T : SampleBase<T>
+public abstract class SampleBase<T> : ServiceAdapter where T : SampleBase<T>
 {
     [Serializable]
     public struct ButtonActionPair

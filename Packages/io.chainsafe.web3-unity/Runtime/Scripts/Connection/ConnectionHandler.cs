@@ -10,12 +10,12 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
     /// <summary>
     /// A concrete implementation of <see cref="IConnectionHandler"/>.
     /// </summary>
-    public class ConnectionHandler : MonoBehaviour, IConnectionHandler, IWeb3BuilderServiceAdapter
+    public class ConnectionHandler : MonoBehaviour, IConnectionHandler, ILightWeightServiceAdapter
     {
         // Handed in ConnectionHandlerEditor
         [HideInInspector, SerializeField] private ConnectionProvider[] providers;
         
-        public HashSet<IWeb3BuilderServiceAdapter> Web3BuilderServiceAdapters { get; private set; }
+        public HashSet<IServiceAdapter> Web3BuilderServiceAdapters { get; private set; }
 
         public ConnectionProvider[] Providers => providers;
         
@@ -24,8 +24,8 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         /// </summary>
         public async Task Initialize()
         {
-            Web3BuilderServiceAdapters = GetComponentsInChildren<IWeb3BuilderServiceAdapter>(true)
-                .Concat(FindObjectsOfType<Web3BuilderServiceAdapter>(true)).ToHashSet();
+            Web3BuilderServiceAdapters = GetComponentsInChildren<IServiceAdapter>(true)
+                .Concat(FindObjectsOfType<ServiceAdapter>(true)).ToHashSet();
             
             foreach (var provider in Providers)
             {

@@ -7,7 +7,7 @@ using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
-using ChainSafe.Gaming.Web3.Core.Logout;
+using ChainSafe.Gaming.Web3.Core;
 using Scripts.EVM.Token;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,7 +16,7 @@ using Erc1155Contract = ChainSafe.Gaming.Evm.Contracts.Custom.Erc1155Contract;
 /// <summary>
 /// ERC1155 calls used in the sample scene
 /// </summary>
-public class Erc1155Calls : SampleBase<Erc1155Calls>, IWeb3InitializedHandler, ILogoutHandler
+public class Erc1155Calls : SampleBase<Erc1155Calls>, IWeb3InitializedHandler, ILifecycleParticipant, ILightWeightServiceAdapter
 {
     #region Fields
     [Header("Change the fields below for testing purposes")]
@@ -149,11 +149,16 @@ public class Erc1155Calls : SampleBase<Erc1155Calls>, IWeb3InitializedHandler, I
     {
         return web3Builder.Configure(services =>
         {
-            services.AddSingleton<IWeb3InitializedHandler, ILogoutHandler, Erc1155Calls>(_ => this);
+            services.AddSingleton<IWeb3InitializedHandler, ILifecycleParticipant, Erc1155Calls>(_ => this);
         });
     }
 
-    public async Task OnLogout()
+    public ValueTask WillStartAsync()
+    {
+        return new ValueTask(Task.CompletedTask);
+    }
+
+    public async ValueTask WillStopAsync()
     {
         await _erc1155.DisposeAsync();
     }

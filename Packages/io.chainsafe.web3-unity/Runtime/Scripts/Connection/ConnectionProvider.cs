@@ -9,7 +9,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
     /// <summary>
     /// Connection Provider Scriptable Object.
     /// </summary>
-    public abstract class ConnectionProvider : ScriptableObject, IWeb3BuilderServiceAdapter
+    public abstract class ConnectionProvider : ScriptableObject, IServiceAdapter
     {
         /// <summary>
         /// Is provider available for connection.

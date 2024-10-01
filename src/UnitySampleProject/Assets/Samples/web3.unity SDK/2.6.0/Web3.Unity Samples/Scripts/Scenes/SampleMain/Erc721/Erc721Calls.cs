@@ -7,7 +7,7 @@ using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
-using ChainSafe.Gaming.Web3.Core.Logout;
+using ChainSafe.Gaming.Web3.Core;
 using Scripts.EVM.Token;
 using UnityEngine;
 using Erc721Contract = ChainSafe.Gaming.Evm.Contracts.Custom.Erc721Contract;
@@ -15,7 +15,7 @@ using Erc721Contract = ChainSafe.Gaming.Evm.Contracts.Custom.Erc721Contract;
 /// <summary>
 /// ERC721 calls used in the sample scene
 /// </summary>
-public class Erc721Calls : SampleBase<Erc721Calls>, IWeb3InitializedHandler, ILogoutHandler
+public class Erc721Calls : SampleBase<Erc721Calls>, IWeb3InitializedHandler, ILifecycleParticipant, ILightWeightServiceAdapter
 {
     #region Fields
     [Header("Change the fields below for testing purposes")]
@@ -144,11 +144,16 @@ public class Erc721Calls : SampleBase<Erc721Calls>, IWeb3InitializedHandler, ILo
     {
         return web3Builder.Configure(services =>
         {
-            services.AddSingleton<IWeb3InitializedHandler, ILogoutHandler, Erc721Calls>(_ => this);
+            services.AddSingleton<IWeb3InitializedHandler, ILifecycleParticipant, Erc721Calls>(_ => this);
         });
     }
 
-    public async Task OnLogout()
+    public ValueTask WillStartAsync()
+    {
+        return new ValueTask(Task.CompletedTask);
+    }
+
+    public async ValueTask WillStopAsync()
     {
         await _erc721.DisposeAsync();
     }

@@ -6,6 +6,7 @@ using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.LocalStorage;
+using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Chains;
 using ChainSafe.Gaming.Web3.Core.Evm;
@@ -34,19 +35,22 @@ namespace ChainSafe.Gaming.Web3
         internal Web3(ServiceProvider serviceProvider)
         {
             this.serviceProvider = serviceProvider;
-            rpcProvider = serviceProvider.GetService<IRpcProvider>();
-            signer = serviceProvider.GetService<ISigner>();
-            transactionExecutor = serviceProvider.GetService<ITransactionExecutor>();
-            events = serviceProvider.GetRequiredService<IEvmEvents>();
-            Chains = serviceProvider.GetRequiredService<IChainManager>();
-            ContractBuilder = serviceProvider.GetRequiredService<IContractBuilder>();
-            ProjectConfig = serviceProvider.GetRequiredService<IProjectConfig>();
-            ChainConfig = serviceProvider.GetRequiredService<IChainConfig>();
-            logoutManager = this.serviceProvider.GetRequiredService<ILogoutManager>();
+
+            rpcProvider = this.serviceProvider.GetService<IRpcProvider>();
+            events = this.serviceProvider.GetRequiredService<IEvmEvents>();
+            Chains = this.serviceProvider.GetRequiredService<IChainManager>();
+            ProjectConfig = this.serviceProvider.GetRequiredService<IProjectConfig>();
+            ChainConfig = this.serviceProvider.GetRequiredService<IChainConfig>();
             localStorage = this.serviceProvider.GetRequiredService<ILocalStorage>();
+            ContractBuilder = this.serviceProvider.GetRequiredService<IContractBuilder>();
             Erc20 = this.serviceProvider.GetRequiredService<Erc20Service>();
             Erc721 = this.serviceProvider.GetRequiredService<Erc721Service>();
             Erc1155 = this.serviceProvider.GetRequiredService<Erc1155Service>();
+
+            // These service are not readonly (need a connected account).
+            this.serviceProvider.TryGetService(out signer);
+            this.serviceProvider.TryGetService(out transactionExecutor);
+            this.serviceProvider.TryGetService(out logoutManager);
         }
 
         /// <summary>

@@ -9,7 +9,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp.Sample
 {
     public class RampSample : SampleBase<RampSample>
     {
-        private async void OnRampPressed()
+        private async void OnRamp()
         {
             // Show "Buy Crypto" widget
             var purchaseData = await Web3Unity.Web3.RampExchanger().BuyCrypto(
@@ -30,7 +30,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp.Sample
             Debug.Log($"Purchase request: {purchaseData}");
         }
 
-        private async void OffRampPressed()
+        private async void OffRamp()
         {
             // Show "Sell Crypto" widget
             var saleData = await Web3Unity.Web3.RampExchanger().SellCrypto(
@@ -49,7 +49,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp.Sample
             Debug.Log($"OffRamp: {saleData}");
         }
 
-        private async void OnRampOffRampPressed()
+        private async void OnRampOffRamp()
         {
             // Show "Buy or Sell Crypto" widget
             var rampTransactionData = await Web3Unity.Web3.RampExchanger().BuyOrSellCrypto(

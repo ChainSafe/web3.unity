@@ -56,7 +56,7 @@ public class SampleTestsBase
             "https://sepolia.etherscan.io/", false, "wss://sepolia.drpc.org");
 
         // Create web3builder & assign services
-        var web3Builder = new Web3Builder(projectConfigScriptableObject).Configure(services =>
+        var web3Builder = new Web3Builder(projectConfigScriptableObject, false).Configure(services =>
         {
             services.UseUnityEnvironment();
             services.UseGelato("_UzPz_Yk_WTjWMfcl45fLvQNGQ9ISx5ZE8TnwnVKYrE_");

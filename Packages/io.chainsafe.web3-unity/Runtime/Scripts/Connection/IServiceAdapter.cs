@@ -5,7 +5,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
     /// <summary>
     /// Provides services for building a <see cref="Web3"/> instance.
     /// </summary>
-    public interface IWeb3BuilderServiceAdapter
+    public interface IServiceAdapter
     {
         /// <summary>
         /// Configures services for building a <see cref="Web3"/> instance.

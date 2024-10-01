@@ -70,12 +70,38 @@ namespace ChainSafe.Gaming.UnityPackage
         /// <summary>
         /// Is a wallet connected.
         /// </summary>
-        public static bool Connected => Web3 != null;
+        public static bool Connected
+        {
+            get
+            {
+                try
+                {
+                    return !string.IsNullOrEmpty(Instance.Address);
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
 
         /// <summary>
         /// Public key (address) of connected wallet.
         /// </summary>
-        public string Address => Web3?.Signer.PublicAddress;
+        public string Address
+        {
+            get
+            {
+                try
+                {
+                    return Web3?.Signer.PublicAddress;
+                }
+                catch (Exception)
+                {
+                    return string.Empty;
+                }
+            }
+        }
 
         [DefaultAssetValue("Packages/io.chainsafe.web3-unity/Runtime/Prefabs/Connect.prefab")] [SerializeField]
         private ConnectModal connectModalPrefab;
@@ -102,6 +128,7 @@ namespace ChainSafe.Gaming.UnityPackage
             await _connectionHandler.Initialize();
 
             if (connectOnInitialize)
+            {
                 try
                 {
                     await _connectionHandler.Restore();
@@ -109,7 +136,14 @@ namespace ChainSafe.Gaming.UnityPackage
                 catch (Exception e)
                 {
                     Debug.LogError($"Failed to restore connection: {e}");
+                    
+                    await ((IConnectionHandler) _connectionHandler).LaunchLightWeightWeb3();
                 }
+            }
+            else
+            {
+                await ((IConnectionHandler) _connectionHandler).LaunchLightWeightWeb3();
+            }
         }
 
         /// <summary>
