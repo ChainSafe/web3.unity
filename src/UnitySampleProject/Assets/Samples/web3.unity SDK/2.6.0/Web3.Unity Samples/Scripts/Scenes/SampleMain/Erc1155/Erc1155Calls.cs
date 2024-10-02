@@ -20,6 +20,11 @@ using Erc1155Contract = ChainSafe.Gaming.Evm.Contracts.Custom.Erc1155Contract;
 public class Erc1155Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecycleParticipant, ILightWeightServiceAdapter, ISample
 {
     #region Fields
+    
+    [field: SerializeField] public string Title { get; private set; }
+    
+    [field: SerializeField, TextArea] public string Description { get; private set; }
+    
     [Header("Change the fields below for testing purposes")]
 
     #region Balance Of
@@ -66,13 +71,15 @@ public class Erc1155Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecycleP
 
     [Header("Token ID for IPFS texture")]
     [SerializeField] private string tokenIdTexture = "0";
-    public RawImage rawImage;
+    public GameObject textureDisplayPrefab;
 
     #endregion
 
     #endregion
 
     private Erc1155Contract _erc1155;
+    
+    private GameObject _textureDisplay;
     
     /// <summary>
     /// Balance Of ERC1155 Address
@@ -137,7 +144,16 @@ public class Erc1155Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecycleP
     public async Task<string> ImportNftTexture1155()
     {
         var texture = await Web3Unity.Web3.Erc1155.ImportTexture(ChainSafeContracts.Erc1155, tokenIdTexture);
+
+        if (_textureDisplay == null)
+        {
+            _textureDisplay = Instantiate(textureDisplayPrefab);
+        }
+        
+        _textureDisplay.SetActive(true);
+        var rawImage = _textureDisplay.GetComponentInChildren<RawImage>();
         rawImage.texture = texture;
+        
         return "Nft Texture Set.";
     }
 

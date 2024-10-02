@@ -10,6 +10,10 @@ public class IPFSCalls : MonoBehaviour, ISample
 {
     #region Fields
 
+    [field: SerializeField] public string Title { get; private set; }
+    
+    [field: SerializeField, TextArea] public string Description { get; private set; }
+    
     [Header("IPFS VALUES")]
     [SerializeField] private string apiSecretKey = "Fill In Your API Secret Key From Storage";
     [SerializeField] private string bucketId = "Fill In Your Bucket ID From Storage";

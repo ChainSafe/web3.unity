@@ -17,6 +17,11 @@ using UnityEngine;
 public class EvmCalls : MonoBehaviour, ISample
 {
     #region Fields
+    
+    [field: SerializeField] public string Title { get; private set; }
+    
+    [field: SerializeField, TextArea] public string Description { get; private set; }
+    
     [Header("Change the fields below for testing purposes")]
 
     #region Contract Send

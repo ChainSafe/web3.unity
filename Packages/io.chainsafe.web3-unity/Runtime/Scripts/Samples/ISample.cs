@@ -11,6 +11,8 @@ namespace ChainSafe.Gaming
 {
     public interface ISample
     {
+        public string Title { get; }
         
+        public string Description { get; }
     }
 }

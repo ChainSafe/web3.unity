@@ -12,6 +12,10 @@ namespace Samples.Behaviours.SwitchChain
 {
     public class SwitchChainCalls : MonoBehaviour, ISample
     {
+        [field: SerializeField] public string Title { get; private set; }
+    
+        [field: SerializeField, TextArea] public string Description { get; private set; }
+        
         public ChainSetup[] chainSetups;
 
         private int _currentChainIndex;

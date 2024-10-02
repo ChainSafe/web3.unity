@@ -18,6 +18,10 @@ using Erc20Contract = ChainSafe.Gaming.Evm.Contracts.Custom.Erc20Contract;
 public class Erc20Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecycleParticipant, ILightWeightServiceAdapter, ISample
 {
     #region Fields
+    
+    [field: SerializeField] public string Title { get; private set; }
+    
+    [field: SerializeField, TextArea] public string Description { get; private set; }
 
     [Header("Change the fields below for testing purposes")]
 

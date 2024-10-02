@@ -9,6 +9,9 @@ namespace ChainSafe.Gaming.Exchangers.Ramp.Sample
 {
     public class RampSample : MonoBehaviour, ISample
     {
+        [field: SerializeField] public string Title { get; private set; }
+        [field: SerializeField, TextArea] public string Description { get; private set; }
+        
         private async void OnRamp()
         {
             // Show "Buy Crypto" widget
