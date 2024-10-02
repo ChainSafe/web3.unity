@@ -2,6 +2,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using ChainSafe.Gaming;
 using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Connection;
@@ -15,7 +16,7 @@ using Erc721Contract = ChainSafe.Gaming.Evm.Contracts.Custom.Erc721Contract;
 /// <summary>
 /// ERC721 calls used in the sample scene
 /// </summary>
-public class Erc721Calls : SampleBase<Erc721Calls>, IWeb3InitializedHandler, ILifecycleParticipant, ILightWeightServiceAdapter
+public class Erc721Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecycleParticipant, ILightWeightServiceAdapter, ISample
 {
     #region Fields
     [Header("Change the fields below for testing purposes")]

@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using System.Threading.Tasks;
+using ChainSafe.Gaming;
 using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.UnityPackage;
@@ -14,7 +15,7 @@ using Erc20Contract = ChainSafe.Gaming.Evm.Contracts.Custom.Erc20Contract;
 /// <summary>
 /// ERC20 calls used in the sample scene
 /// </summary>
-public class Erc20Calls : SampleBase<Erc20Calls>, IWeb3InitializedHandler, ILifecycleParticipant, ILightWeightServiceAdapter
+public class Erc20Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecycleParticipant, ILightWeightServiceAdapter, ISample
 {
     #region Fields
 

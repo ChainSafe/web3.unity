@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace ChainSafe.Gaming.Exchangers.Ramp.Sample
 {
-    public class RampSample : SampleBase<RampSample>
+    public class RampSample : MonoBehaviour, ISample
     {
         private async void OnRamp()
         {
@@ -67,11 +67,6 @@ namespace ChainSafe.Gaming.Exchangers.Ramp.Sample
                 });
 
             Debug.Log(rampTransactionData.ToString());
-        }
-
-        public override Web3Builder ConfigureServices(Web3Builder web3Builder)
-        {
-            return web3Builder;
         }
     }
 }

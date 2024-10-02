@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
+using ChainSafe.Gaming;
 using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.Evm.Contracts.Extensions;
 using ChainSafe.Gaming.MultiCall;
@@ -13,7 +14,7 @@ using Newtonsoft.Json;
 using Scripts.EVM.Token;
 using UnityEngine;
 
-public class EvmCalls : SampleBase<EvmCalls>
+public class EvmCalls : MonoBehaviour, ISample
 {
     #region Fields
     [Header("Change the fields below for testing purposes")]

@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ChainSafe.Gaming;
 using ChainSafe.Gaming.UnityPackage.Model;
 using UnityEngine;
 using ChainSafe.Gaming.Marketplace;
 using ChainSafe.Gaming.Web3.Build;
 
-public class IPFSCalls : SampleBase<IPFSCalls>
+public class IPFSCalls : MonoBehaviour, ISample
 {
     #region Fields
 

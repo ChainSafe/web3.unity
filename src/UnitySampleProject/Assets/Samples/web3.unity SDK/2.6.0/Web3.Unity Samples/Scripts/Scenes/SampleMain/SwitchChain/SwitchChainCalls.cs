@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Threading.Tasks;
+using ChainSafe.Gaming;
 using ChainSafe.Gaming.Evm.Contracts.Custom;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.Web3.Build;
 using UnityEngine;
 
 namespace Samples.Behaviours.SwitchChain
 {
-    public class SwitchChainCalls : SampleBase<SwitchChainCalls>
+    public class SwitchChainCalls : MonoBehaviour, ISample
     {
         public ChainSetup[] chainSetups;
 
@@ -69,11 +71,6 @@ namespace Samples.Behaviours.SwitchChain
         {
             public string chainId;
             public string contractAddress;
-        }
-
-        public override Web3Builder ConfigureServices(Web3Builder web3Builder)
-        {
-            return web3Builder;
         }
     }
 }

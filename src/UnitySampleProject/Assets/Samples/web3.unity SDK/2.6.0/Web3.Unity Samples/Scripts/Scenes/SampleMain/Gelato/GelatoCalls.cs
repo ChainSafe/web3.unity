@@ -1,5 +1,6 @@
 using System.Numerics;
 using System.Threading.Tasks;
+using ChainSafe.Gaming;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.GamingSdk.Gelato;
 using ChainSafe.GamingSdk.Gelato.Dto;
@@ -7,7 +8,7 @@ using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.Web3.Build;
 using Microsoft.Extensions.DependencyInjection;
 
-public class GelatoCalls : SampleBase<GelatoCalls>, IWeb3InitializedHandler
+public class GelatoCalls : ServiceAdapter, IWeb3InitializedHandler, ISample
 {
     private Web3 _web3;
 
