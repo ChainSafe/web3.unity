@@ -2,10 +2,10 @@
 
 Module.InjectExternalScripts = function() {
     const scripts = [
-    "https://cdn.jsdelivr.net/npm/@web3auth/no-modal",
-    "https://cdn.jsdelivr.net/npm/@web3auth/wallet-services-plugin",
-    "https://cdn.jsdelivr.net/npm/@web3auth/openlogin-adapter",
-    "https://cdn.jsdelivr.net/npm/@web3auth/ethereum-provider"
+    "https://cdn.jsdelivr.net/npm/@web3auth/no-modal@9.1.0",
+    "https://cdn.jsdelivr.net/npm/@web3auth/wallet-services-plugin@9.1.0",
+    "https://cdn.jsdelivr.net/npm/@web3auth/openlogin-adapter@8.12.4",
+    "https://cdn.jsdelivr.net/npm/@web3auth/ethereum-provider@9.0.2"
     ];
 
     scripts.forEach(src => {
