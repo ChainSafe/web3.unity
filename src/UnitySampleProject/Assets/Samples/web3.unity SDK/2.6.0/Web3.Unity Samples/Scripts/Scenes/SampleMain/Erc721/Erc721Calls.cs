@@ -16,7 +16,7 @@ using Erc721Contract = ChainSafe.Gaming.Evm.Contracts.Custom.Erc721Contract;
 /// <summary>
 /// ERC721 calls used in the sample scene
 /// </summary>
-public class Erc721Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecycleParticipant, ILightWeightServiceAdapter, ISample
+public class Erc721Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecycleParticipant, ILightWeightServiceAdapter, ILightWeightSample
 {
     #region Fields
     

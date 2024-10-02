@@ -6,7 +6,7 @@ using UnityEngine;
 using ChainSafe.Gaming.Marketplace;
 using ChainSafe.Gaming.Web3.Build;
 
-public class IPFSCalls : MonoBehaviour, ISample
+public class IPFSCalls : MonoBehaviour, ILightWeightSample
 {
     #region Fields
 
