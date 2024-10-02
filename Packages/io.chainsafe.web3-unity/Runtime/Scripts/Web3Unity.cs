@@ -131,9 +131,14 @@ namespace ChainSafe.Gaming.UnityPackage
                 }
             }
             
-            await ((IConnectionHandler) _connectionHandler).LaunchLightWeightWeb3();
+            await LaunchLightWeightWeb3();
         }
 
+        private Task LaunchLightWeightWeb3()
+        {
+            return ((IConnectionHandler) _connectionHandler).LaunchLightWeightWeb3();
+        }
+        
         /// <summary>
         /// Connect to a wallet with a <see cref="ConnectionProvider"/>.
         /// </summary>
@@ -303,9 +308,11 @@ namespace ChainSafe.Gaming.UnityPackage
         /// Disconnect wallet.
         /// </summary>
         /// <returns>Awaitable disconnect task.</returns>
-        public Task Disconnect()
+        public async Task Disconnect()
         {
-            return Terminate(true);
+            await Terminate(true);
+            
+            await LaunchLightWeightWeb3();
         }
         
         public async Task<bool> SignAndVerifyMessage(string message)
