@@ -161,6 +161,11 @@ namespace ChainSafe.Gaming.Web3
             terminated = true;
         }
 
+        public Task SwitchChain(string newChainId)
+        {
+            return Chains.SwitchChain(newChainId);
+        }
+
         private T AssertComponentAccessible<T>(T? value, string propertyName)
             where T : notnull
         {
