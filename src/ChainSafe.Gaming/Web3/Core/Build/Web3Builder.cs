@@ -20,19 +20,20 @@ namespace ChainSafe.Gaming.Web3.Build
     {
         private readonly Web3ServiceCollection serviceCollection;
 
-        private Web3Builder(bool isLightweight)
+        private Web3Builder()
         {
             serviceCollection = new Web3ServiceCollection();
 
-            // Bind readonly services.
-            serviceCollection.AddReadOnlyServices();
-
-            // Bind default services.
-            if (!isLightweight)
-            {
-                serviceCollection
-                    .AddSingleton<ILogoutManager, LogoutManager>();
-            }
+            // Bind default services
+            serviceCollection
+                .UseEventPoller()
+                .AddSingleton<DataStorage>()
+                .AddSingleton<ChainRegistryProvider>()
+                .AddSingleton<IContractBuilder, ContractBuilder>()
+                .AddSingleton<ILogoutManager, LogoutManager>()
+                .AddSingleton<Erc20Service>()
+                .AddSingleton<Erc721Service>()
+                .AddSingleton<Erc1155Service>();
         }
 
         /// <summary>
@@ -40,10 +41,9 @@ namespace ChainSafe.Gaming.Web3.Build
         /// </summary>
         /// <param name="projectConfig">Project config to use with the resulting Web3 instance.</param>
         /// <param name="chainConfigSet">Chain config set to use with the resulting Web3 instance.</param>
-        /// <param name="isLightweight">Is Web3Instance read only.</param>
         /// <exception cref="ArgumentException">One of the arguments is null.</exception>
-        public Web3Builder(IProjectConfig projectConfig, IChainConfigSet chainConfigSet, bool isLightweight)
-            : this(isLightweight)
+        public Web3Builder(IProjectConfig projectConfig, IChainConfigSet chainConfigSet)
+            : this()
         {
             if (projectConfig == null)
             {
@@ -63,11 +63,10 @@ namespace ChainSafe.Gaming.Web3.Build
         /// Initializes a new instance of the <see cref="Web3Builder"/> class.
         /// </summary>
         /// <param name="projectConfig">Project config to use with the resulting Web3 instance.</param>
-        /// <param name="isLightweight">Is Web3Instance read only.</param>
         /// <param name="chainConfigs">Chain configs to use with the resulting Web3 instance.</param>
         /// <exception cref="ArgumentException">One of the arguments is null.</exception>
-        public Web3Builder(IProjectConfig projectConfig, bool isLightweight, params IChainConfig[] chainConfigs)
-            : this(projectConfig, new ChainConfigSet(chainConfigs), isLightweight)
+        public Web3Builder(IProjectConfig projectConfig, params IChainConfig[] chainConfigs)
+            : this(projectConfig, new ChainConfigSet(chainConfigs))
         {
         }
 
@@ -75,10 +74,9 @@ namespace ChainSafe.Gaming.Web3.Build
         /// Initializes a new instance of the <see cref="Web3Builder"/> class.
         /// </summary>
         /// <param name="projectConfig">Complete project config to use with the resulting Web3 instance.</param>
-        /// <param name="isLightweight">Is Web3Instance read only.</param>
         /// <exception cref="ArgumentException">"projectConfig" is null.</exception>
-        public Web3Builder(ICompleteProjectConfig projectConfig, bool isLightweight)
-            : this(projectConfig, projectConfig, isLightweight)
+        public Web3Builder(ICompleteProjectConfig projectConfig)
+            : this(projectConfig, projectConfig)
         {
         }
 

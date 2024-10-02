@@ -31,7 +31,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         {
             try
             {
-                await LaunchWeb3(Web3BuilderServiceAdapters.Append(provider), false);
+                await LaunchWeb3(Web3BuilderServiceAdapters.Append(provider));
             }
             catch (Exception e)
             {
@@ -39,9 +39,9 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
             }
         }
 
-        private async Task LaunchWeb3(IEnumerable<IServiceAdapter> adapters, bool isLightweight)
+        private async Task LaunchWeb3(IEnumerable<IServiceAdapter> adapters)
         {
-            var web3Builder = new Web3Builder(ProjectConfigUtilities.Load(), isLightweight)
+            var web3Builder = new Web3Builder(ProjectConfigUtilities.Load())
                 .Configure(ConfigureCommonServices)
                 .ConfigureServices(adapters);
             
@@ -52,7 +52,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         
         public async Task LaunchLightWeightWeb3()
         {
-            await LaunchWeb3(Web3BuilderServiceAdapters.OfType<ILightWeightServiceAdapter>(), true);
+            await LaunchWeb3(Web3BuilderServiceAdapters.OfType<ILightWeightServiceAdapter>());
         }
 
         private async Task OnWeb3Initialized(CWeb3 web3)

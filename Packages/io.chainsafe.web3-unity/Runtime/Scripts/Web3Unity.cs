@@ -70,38 +70,12 @@ namespace ChainSafe.Gaming.UnityPackage
         /// <summary>
         /// Is a wallet connected.
         /// </summary>
-        public static bool Connected
-        {
-            get
-            {
-                try
-                {
-                    return !string.IsNullOrEmpty(Instance.Address);
-                }
-                catch (Exception)
-                {
-                    return false;
-                }
-            }
-        }
+        public static bool Connected => !string.IsNullOrEmpty(Instance.Address);
 
         /// <summary>
         /// Public key (address) of connected wallet.
         /// </summary>
-        public string Address
-        {
-            get
-            {
-                try
-                {
-                    return Web3?.Signer.PublicAddress;
-                }
-                catch (Exception)
-                {
-                    return string.Empty;
-                }
-            }
-        }
+        public string Address => Web3?.Signer != null ? Web3.Signer.PublicAddress : string.Empty;
 
         [DefaultAssetValue("Packages/io.chainsafe.web3-unity/Runtime/Prefabs/Connect.prefab")] [SerializeField]
         private ConnectModal connectModalPrefab;
@@ -132,18 +106,19 @@ namespace ChainSafe.Gaming.UnityPackage
                 try
                 {
                     await _connectionHandler.Restore();
+
+                    if (Connected)
+                    {
+                        return;
+                    }
                 }
                 catch (Exception e)
                 {
                     Debug.LogError($"Failed to restore connection: {e}");
-                    
-                    await ((IConnectionHandler) _connectionHandler).LaunchLightWeightWeb3();
                 }
             }
-            else
-            {
-                await ((IConnectionHandler) _connectionHandler).LaunchLightWeightWeb3();
-            }
+            
+            await ((IConnectionHandler) _connectionHandler).LaunchLightWeightWeb3();
         }
 
         /// <summary>

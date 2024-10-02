@@ -47,7 +47,7 @@ namespace ChainSafe.Gaming.Web3
             Erc721 = this.serviceProvider.GetRequiredService<Erc721Service>();
             Erc1155 = this.serviceProvider.GetRequiredService<Erc1155Service>();
 
-            // These service are not readonly (need a connected account).
+            // These service are not readonly/lightweight (need a connected account).
             this.serviceProvider.TryGetService(out signer);
             this.serviceProvider.TryGetService(out transactionExecutor);
             this.serviceProvider.TryGetService(out logoutManager);

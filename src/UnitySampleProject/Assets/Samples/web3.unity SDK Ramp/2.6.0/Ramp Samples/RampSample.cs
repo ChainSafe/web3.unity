@@ -1,9 +1,8 @@
 #define RAMP_AVAILABLE
 
+using System.Threading.Tasks;
 using ChainSafe.Gaming.UnityPackage;
-using ChainSafe.Gaming.Web3.Build;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace ChainSafe.Gaming.Exchangers.Ramp.Sample
 {
@@ -12,7 +11,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp.Sample
         [field: SerializeField] public string Title { get; private set; }
         [field: SerializeField, TextArea] public string Description { get; private set; }
         
-        private async void OnRamp()
+        private async Task<string> OnRamp()
         {
             // Show "Buy Crypto" widget
             var purchaseData = await Web3Unity.Web3.RampExchanger().BuyCrypto(
@@ -30,10 +29,10 @@ namespace ChainSafe.Gaming.Exchangers.Ramp.Sample
                     SelectedCountryCode = "RS"
                 });
 
-            Debug.Log($"Purchase request: {purchaseData}");
+            return $"Purchase request: {purchaseData}";
         }
 
-        private async void OffRamp()
+        private async Task<string> OffRamp()
         {
             // Show "Sell Crypto" widget
             var saleData = await Web3Unity.Web3.RampExchanger().SellCrypto(
@@ -49,10 +48,10 @@ namespace ChainSafe.Gaming.Exchangers.Ramp.Sample
                     SelectedCountryCode = "RS"
                 });
 
-            Debug.Log($"OffRamp: {saleData}");
+            return $"OffRamp: {saleData}";
         }
 
-        private async void OnRampOffRamp()
+        private async Task<string> OnRampOffRamp()
         {
             // Show "Buy or Sell Crypto" widget
             var rampTransactionData = await Web3Unity.Web3.RampExchanger().BuyOrSellCrypto(
@@ -69,7 +68,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp.Sample
                     SelectedCountryCode = "RS"
                 });
 
-            Debug.Log(rampTransactionData.ToString());
+            return rampTransactionData.ToString();
         }
     }
 }

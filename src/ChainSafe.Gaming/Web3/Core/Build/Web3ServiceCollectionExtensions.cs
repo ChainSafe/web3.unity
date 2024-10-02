@@ -1,12 +1,5 @@
 ﻿using System;
 using System.Linq;
-using ChainSafe.Gaming.Evm;
-using ChainSafe.Gaming.Evm.Contracts;
-using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
-using ChainSafe.Gaming.LocalStorage;
-using ChainSafe.Gaming.Web3.Core;
-using ChainSafe.Gaming.Web3.Core.Chains;
-using ChainSafe.Gaming.Web3.Core.Evm.EventPoller;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ChainSafe.Gaming.Web3.Build
@@ -51,24 +44,6 @@ namespace ChainSafe.Gaming.Web3.Build
         {
             var assertType = typeof(T);
             return services.Any(d => d.ServiceType == assertType);
-        }
-
-        public static IWeb3ServiceCollection AddReadOnlyServices(this IWeb3ServiceCollection serviceCollection)
-        {
-            serviceCollection
-                .UseEventPoller() // todo: remove, make a WebGL IEventManager implementation that utilizes Event Polling
-                .AddSingleton<ILocalStorage, DataStorage>()
-                .AddSingleton<ChainRegistryProvider>()
-                .AddChainManager()
-                .AddSingleton<Erc20Service>()
-                .AddSingleton<Erc721Service>()
-                .AddSingleton<Erc1155Service>();
-
-            serviceCollection.AddSingleton<ContractBuilder>();
-            serviceCollection.AddSingleton<IContractBuilder, ContractBuilder>(sp => sp.GetRequiredService<ContractBuilder>());
-            serviceCollection.AddSingleton<ILifecycleParticipant, ContractBuilder>(sp => sp.GetRequiredService<ContractBuilder>());
-
-            return serviceCollection;
         }
 
         /// <summary>
