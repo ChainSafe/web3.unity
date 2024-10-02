@@ -52,7 +52,7 @@ namespace ChainSafe.Gaming.Web3.Build
 
             if (chainConfigSet == null)
             {
-                throw new ArgumentNullException(nameof(chainConfigSet), $"{nameof(IChainConfig)} is required for Web3 to work.");
+                throw new ArgumentNullException(nameof(chainConfigSet), $"{nameof(IChainConfigSet)} is required for Web3 to work.");
             }
 
             serviceCollection.AddSingleton(projectConfig);
