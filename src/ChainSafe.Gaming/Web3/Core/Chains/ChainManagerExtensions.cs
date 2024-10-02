@@ -1,4 +1,4 @@
-using ChainSafe.Gaming.Web3.Build;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ChainSafe.Gaming.Web3.Core.Chains
