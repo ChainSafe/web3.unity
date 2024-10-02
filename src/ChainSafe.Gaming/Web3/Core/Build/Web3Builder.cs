@@ -26,14 +26,15 @@ namespace ChainSafe.Gaming.Web3.Build
 
             // Bind default services
             serviceCollection
-                .UseEventPoller()
-                .AddSingleton<DataStorage>()
+                .UseEventPoller() // todo: remove, make a WebGL IEventManager implementation that utilizes Event Polling
+                .AddSingleton<IContractBuilder, ILifecycleParticipant, ContractBuilder>()
+                .AddSingleton<ILocalStorage, DataStorage>()
                 .AddSingleton<ChainRegistryProvider>()
-                .AddSingleton<IContractBuilder, ContractBuilder>()
                 .AddSingleton<ILogoutManager, LogoutManager>()
                 .AddSingleton<Erc20Service>()
                 .AddSingleton<Erc721Service>()
-                .AddSingleton<Erc1155Service>();
+                .AddSingleton<Erc1155Service>()
+                .AddChainManager();
         }
 
         /// <summary>
