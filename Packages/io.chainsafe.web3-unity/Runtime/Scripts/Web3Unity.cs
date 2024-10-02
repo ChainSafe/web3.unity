@@ -75,7 +75,20 @@ namespace ChainSafe.Gaming.UnityPackage
         /// <summary>
         /// Public key (address) of connected wallet.
         /// </summary>
-        public string Address => Web3?.Signer != null ? Web3.Signer.PublicAddress : string.Empty;
+        public string Address
+        {
+            get
+            {
+                try
+                {
+                    return Web3?.Signer.PublicAddress;
+                }
+                catch (Exception)
+                {
+                    return string.Empty;
+                }
+            }
+        }
 
         [DefaultAssetValue("Packages/io.chainsafe.web3-unity/Runtime/Prefabs/Connect.prefab")] [SerializeField]
         private ConnectModal connectModalPrefab;
