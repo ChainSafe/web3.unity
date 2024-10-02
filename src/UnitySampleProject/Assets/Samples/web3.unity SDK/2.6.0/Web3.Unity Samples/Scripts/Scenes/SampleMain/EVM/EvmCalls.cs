@@ -14,7 +14,7 @@ using Newtonsoft.Json;
 using Scripts.EVM.Token;
 using UnityEngine;
 
-public class EvmCalls : MonoBehaviour, ISample
+public class EvmCalls : MonoBehaviour, ILightWeightSample
 {
     #region Fields
     
