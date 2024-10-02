@@ -47,7 +47,7 @@ var Web3AuthWebGLNoModal =  {
                 }
             });
         
-            const openloginAdapter = new window.OpenloginAdapter.OpenloginAdapter();
+            const openloginAdapter = new window.OpenloginAdapter.OpenloginAdapter({ privateKeyProvider });
             window.web3auth.configureAdapter(openloginAdapter);
             
             await window.web3auth.init();
