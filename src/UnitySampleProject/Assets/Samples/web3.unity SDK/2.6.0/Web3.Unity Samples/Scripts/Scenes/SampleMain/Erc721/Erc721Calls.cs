@@ -111,7 +111,7 @@ public class Erc721Calls : Web3BuilderServiceAdapter, IWeb3InitializedHandler, I
     /// </summary>
     public async void Uri()
     {
-        var uri = await _erc721.TokenURI(BigInteger.Parse(tokenIdUri));
+        var uri = await Web3Unity.Web3.Erc721.GetUri(ChainSafeContracts.Erc721, tokenIdUri);
         SampleOutputUtil.PrintResult(uri, "ERC-721", nameof(Erc721Service.GetUri));
     }
 
