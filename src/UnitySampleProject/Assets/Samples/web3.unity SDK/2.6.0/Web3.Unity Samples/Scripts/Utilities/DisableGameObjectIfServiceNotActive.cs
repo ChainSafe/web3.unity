@@ -51,6 +51,10 @@ public class DisableGameObjectIfServiceNotActive : Web3BuilderServiceAdapter, IW
 
     public Task OnWeb3Initialized(Web3 web3)
     {
+        #if RAMP_AVAILABLE
+        Debug.LogError("RAMP IS AVAILABLE!!");
+        #endif
+        
         gameObject.SetActive(
             _typesDictionary.TryGetValue(serviceType, out var value)
             && web3.ServiceProvider.GetService(value) != null);

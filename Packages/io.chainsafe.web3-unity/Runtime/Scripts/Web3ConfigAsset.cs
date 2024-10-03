@@ -9,7 +9,7 @@ namespace ChainSafe.Gaming
     public class Web3ConfigAsset : ScriptableObject, ICompleteProjectConfig
     {
         [field: SerializeField] public string ProjectId { get; set; }
-        [field: SerializeField] public bool EnableAnalytics { get; set; }
+        [field: SerializeField] public bool EnableAnalytics { get; set; } = true;
         [field: SerializeField] public List<ChainConfigEntry> ChainConfigs { get; set; } = new();
 
         IEnumerable<IChainConfig> IChainConfigSet.Configs => ChainConfigs; 
