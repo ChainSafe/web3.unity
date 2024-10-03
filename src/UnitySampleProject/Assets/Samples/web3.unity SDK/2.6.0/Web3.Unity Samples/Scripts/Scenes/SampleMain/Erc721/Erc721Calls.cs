@@ -111,7 +111,7 @@ public class Erc721Calls : Web3BuilderServiceAdapter, IWeb3InitializedHandler, I
     /// </summary>
     public async void Uri()
     {
-        var uri = await _erc721.TokenURI(BigInteger.Parse(tokenIdUri));
+        var uri = await _erc721.TokenURI(tokenIdUri);
         SampleOutputUtil.PrintResult(uri, "ERC-721", nameof(Erc721Service.GetUri));
     }
 
@@ -121,7 +121,7 @@ public class Erc721Calls : Web3BuilderServiceAdapter, IWeb3InitializedHandler, I
     public async void MintErc721()
     {
         var response = await _erc721.SafeMintWithReceipt(Web3Unity.Web3.Signer.PublicAddress, uriMint);
-        var output = SampleOutputUtil.BuildOutputValue(new [] {response.TransactionHash});
+        var output = SampleOutputUtil.BuildOutputValue(new object[] {response.TransactionHash});
         SampleOutputUtil.PrintResult(output, "ERC-721", nameof(Erc721Service.GetUri));
     }
 
