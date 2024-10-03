@@ -1,20 +1,16 @@
 using System;
 using System.Numerics;
-using System.Net.WebSockets;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Transactions;
-using ChainSafe.Gaming.Evm.Contracts;
 using Nethereum.Hex.HexTypes;
-using Nethereum.Contracts;
-using Nethereum.RPC.Reactive.Eth.Subscriptions;
-using Nethereum.JsonRpc.WebSocketStreamingClient;
 using Nethereum.ABI.FunctionEncoding.Attributes;
 using UnityEngine;
+using ChainSafe.Gaming.RPC.Events;
 
 
 namespace ChainSafe.Gaming.Evm.Contracts.Custom
 {
-    public class Erc20Contract : ICustomContract
+    public partial class Erc20Contract : ICustomContract
     {
         public string Address => OriginalContract.Address;
 
@@ -23,15 +19,12 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
 
         public string ContractAddress { get; set; }
 
-        public IContractBuilder ContractBuilder { get; set; }
+        public IEventManager EventManager { get; set; }
 
         public Contract OriginalContract { get; set; }
 
-        public string WebSocketUrl { get; set; }
-
         public bool Subscribed { get; set; }
 
-        private StreamingWebSocketClient _webSocketClient;
 
         #region Methods
 
@@ -77,9 +70,9 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
         }
 
 
-        public async Task<byte> Decimals()
+        public async Task<BigInteger> Decimals()
         {
-            var response = await OriginalContract.Call<byte>("decimals", new object[]
+            var response = await OriginalContract.Call<BigInteger>("decimals", new object[]
             {
             });
 
@@ -198,11 +191,16 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
             public virtual BigInteger Value { get; set; }
         }
 
-        private EthLogsObservableSubscription eventApproval;
         public event Action<ApprovalEventDTO> OnApproval;
+
+        private void Approval(ApprovalEventDTO approval)
+        {
+            OnApproval?.Invoke(approval);
+        }
 
         public partial class TransferEventDTO : TransferEventDTOBase
         {
+            
         }
 
         [Event("Transfer")]
@@ -215,10 +213,19 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
 
             [Parameter("uint256", "value", 2, false)]
             public virtual BigInteger Value { get; set; }
+
+            public override string ToString()
+            {
+                return $"{nameof(From)}: {From}, {nameof(To)}: {To}, {nameof(Value)}: {Value}";
+            }
         }
 
-        private EthLogsObservableSubscription eventTransfer;
         public event Action<TransferEventDTO> OnTransfer;
+
+        private void Transfer(TransferEventDTO transfer)
+        {
+            OnTransfer?.Invoke(transfer);
+        }
 
         #endregion
 
@@ -226,24 +233,20 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
 
         public async ValueTask DisposeAsync()
         {
-            if (string.IsNullOrEmpty(WebSocketUrl))
-                return;
             if (!Subscribed)
                 return;
 
-            if (Application.platform == RuntimePlatform.WebGLPlayer)
-                return;
-            
+
             Subscribed = false;
             try
             {
-                await eventApproval.UnsubscribeAsync();
-                OnApproval = null;
-                await eventTransfer.UnsubscribeAsync();
-                OnTransfer = null;
+                if (EventManager == null)
+                    return;
 
-                if (_webSocketClient != null)
-                    await _webSocketClient.StopAsync();
+                await EventManager.Unsubscribe<ApprovalEventDTO>(Approval, ContractAddress);
+                OnApproval = null;
+                await EventManager.Unsubscribe<TransferEventDTO>(Transfer, ContractAddress);
+                OnTransfer = null;
             }
             catch (Exception e)
             {
@@ -257,69 +260,13 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
                 return;
             Subscribed = true;
 
-            if (string.IsNullOrEmpty(WebSocketUrl))
-            {
-                Debug.LogWarning($"WebSocketUrl is not set for this class. Event Subscriptions will not work.");
-                return;
-            }
-
             try
             {
-                if (Application.platform == RuntimePlatform.WebGLPlayer)
-                {
-                    Debug.LogWarning("WebGL Platform is currently not supporting event subscription");
+                if (EventManager == null)
                     return;
-                }
-
-                _webSocketClient ??= new StreamingWebSocketClient(WebSocketUrl);
-                
-                if (_webSocketClient != null && (_webSocketClient.WebSocketState != WebSocketState.None && _webSocketClient.WebSocketState != WebSocketState.Open &&
-                                                 _webSocketClient.WebSocketState != WebSocketState.CloseReceived))
-                {
-                    Debug.LogWarning(
-                        $"Websocket is in an invalid state {_webSocketClient.WebSocketState}. It needs to be in a state Open or CloseReceived");
-                    return;
-                }
-                
-                await _webSocketClient.StartAsync();
-
-
-               
-
-                var filterApprovalEvent = Event<ApprovalEventDTO>.GetEventABI().CreateFilterInput(ContractAddress);
-                eventApproval = new EthLogsObservableSubscription(_webSocketClient);
-
-                eventApproval.GetSubscriptionDataResponsesAsObservable().Subscribe(log =>
-                {
-                    try
-                    {
-                        var decoded = Event<ApprovalEventDTO>.DecodeEvent(log);
-                        if (decoded != null) OnApproval?.Invoke(decoded.Event);
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.LogError("Log Address: " + log.Address + " is not a standard transfer log:" + ex.Message);
-                    }
-                });
-
-                await eventApproval.SubscribeAsync(filterApprovalEvent);
-                var filterTransferEvent = Event<TransferEventDTO>.GetEventABI().CreateFilterInput(ContractAddress);
-                eventTransfer = new EthLogsObservableSubscription(_webSocketClient);
-
-                eventTransfer.GetSubscriptionDataResponsesAsObservable().Subscribe(log =>
-                {
-                    try
-                    {
-                        var decoded = Event<TransferEventDTO>.DecodeEvent(log);
-                        if (decoded != null) OnTransfer?.Invoke(decoded.Event);
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.LogError("Log Address: " + log.Address + " is not a standard transfer log:" + ex.Message);
-                    }
-                });
-
-                await eventTransfer.SubscribeAsync(filterTransferEvent);
+                Debug.Log("Event manager not null");
+                await EventManager.Subscribe<ApprovalEventDTO>(Approval, ContractAddress);
+                await EventManager.Subscribe<TransferEventDTO>(Transfer, ContractAddress);
             }
             catch (Exception e)
             {

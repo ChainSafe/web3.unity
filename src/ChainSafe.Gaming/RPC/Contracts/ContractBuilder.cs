@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
+using ChainSafe.Gaming.RPC.Events;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Core;
@@ -19,30 +20,30 @@ namespace ChainSafe.Gaming.Evm.Contracts
         private readonly ISigner signer;
         private readonly ITransactionExecutor transactionExecutor;
         private readonly IAnalyticsClient analyticsClient; // Added analytics client
-        private readonly IChainConfig chainConfig;
         private readonly ILogWriter logWriter;
+        private readonly IEventManager eventManager;
 
-        public ContractBuilder(IRpcProvider rpcProvider, IAnalyticsClient analyticsClient, ILogWriter logWriter, IChainConfig chainConfig)
-            : this(new(), rpcProvider, null, null, analyticsClient, logWriter, chainConfig)
+        public ContractBuilder(IRpcProvider rpcProvider, IAnalyticsClient analyticsClient, ILogWriter logWriter, IEventManager eventManager = null)
+            : this(new(), rpcProvider, null, null, analyticsClient, logWriter, eventManager)
         {
         }
 
-        public ContractBuilder(IRpcProvider rpcProvider, ISigner signer, IAnalyticsClient analyticsClient, ILogWriter logWriter, IChainConfig chainConfig)
-            : this(new(), rpcProvider, signer, null, analyticsClient, logWriter, chainConfig)
+        public ContractBuilder(IRpcProvider rpcProvider, ISigner signer, IAnalyticsClient analyticsClient, ILogWriter logWriter, IEventManager eventManager = null)
+            : this(new(), rpcProvider, signer, null, analyticsClient, logWriter, eventManager)
         {
         }
 
-        public ContractBuilder(ContractBuilderConfig config, IRpcProvider rpcProvider, ISigner signer, IAnalyticsClient analyticsClient, ILogWriter logWriter, IChainConfig chainConfig)
-            : this(config, rpcProvider, signer, null, analyticsClient, logWriter, chainConfig)
+        public ContractBuilder(ContractBuilderConfig config, IRpcProvider rpcProvider, ISigner signer, IAnalyticsClient analyticsClient, ILogWriter logWriter, IEventManager eventManager = null)
+            : this(config, rpcProvider, signer, null, analyticsClient, logWriter, eventManager)
         {
         }
 
-        public ContractBuilder(IRpcProvider rpcProvider, ISigner signer, ITransactionExecutor transactionExecutor, IAnalyticsClient analyticsClient, ILogWriter logWriter, IChainConfig chainConfig)
-            : this(new(), rpcProvider, signer, transactionExecutor, analyticsClient, logWriter, chainConfig)
+        public ContractBuilder(IRpcProvider rpcProvider, ISigner signer, ITransactionExecutor transactionExecutor, IAnalyticsClient analyticsClient, ILogWriter logWriter, IEventManager eventManager = null)
+            : this(new(), rpcProvider, signer, transactionExecutor, analyticsClient, logWriter, eventManager)
         {
         }
 
-        public ContractBuilder(ContractBuilderConfig config, IRpcProvider rpcProvider, ISigner signer, ITransactionExecutor transactionExecutor, IAnalyticsClient analyticsClient, ILogWriter logWriter, IChainConfig chainConfig)
+        public ContractBuilder(ContractBuilderConfig config, IRpcProvider rpcProvider, ISigner signer, ITransactionExecutor transactionExecutor, IAnalyticsClient analyticsClient, ILogWriter logWriter, IEventManager eventManager = null)
         {
             try
             {
@@ -57,8 +58,8 @@ namespace ChainSafe.Gaming.Evm.Contracts
             this.signer = signer;
             this.transactionExecutor = transactionExecutor;
             this.analyticsClient = analyticsClient; // Initialize analytics client
-            this.chainConfig = chainConfig;
             this.logWriter = logWriter;
+            this.eventManager = eventManager;
             BasicContracts = new Dictionary<string, Contract>();
             CustomContracts = new Dictionary<string, ICustomContract>();
         }
@@ -94,6 +95,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
         {
             if (CustomContracts.TryGetValue(address, out var value))
             {
+                // re-init this because maybe you did unsubscribe from this contract some time before.
                 await value.InitAsync();
                 return (T)value;
             }
@@ -104,7 +106,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
             };
 
             contract.OriginalContract = Build(contract.ABI, contract.ContractAddress);
-            contract.WebSocketUrl = chainConfig.Ws;
+            contract.EventManager = eventManager;
 
             CustomContracts.Add(contract.ContractAddress, contract);
 

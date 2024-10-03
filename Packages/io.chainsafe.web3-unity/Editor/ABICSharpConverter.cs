@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using ChainSafe.Gaming.RPC.Events;
 using Nethereum.ABI;
 using Nethereum.ABI.ABIDeserialisation;
 using Nethereum.ABI.FunctionEncoding.Attributes;
@@ -138,7 +139,6 @@ public class ABICSharpConverter : EditorWindow
             }
 
             message = "";
-            Debug.LogError("Hm");
             return contractABI.Functions.Length > 0 ||
                    contractABI.Events.Length > 0 ||
                    contractABI.Errors.Length > 0 ||
@@ -364,12 +364,8 @@ public class ABICSharpConverter : EditorWindow
         foreach (var eventABI in _contractABI.Events)
         {
             var varName = eventABI.Name.RemoveFirstUnderscore().Capitalize();
-            sb.Append($"\t\t\tvar filter{varName}Event = Event<{varName}EventDTO>.GetEventABI().CreateFilterInput(ContractAddress);\n");
             var eventSubscription = new StringBuilder(Resources.Load<TextAsset>("SubscriptionTemplate").text);
-            eventSubscription.Replace("{ETH_LOG_CLIENT_NAME}", $"event{varName}");
-            eventSubscription.Replace("{FILTER}", $"filter{varName}Event");
-            eventSubscription.Replace("{CLASS_DTO_NAME}", $"{varName}EventDTO");
-            eventSubscription.Replace("{EVENT_NAME}", $"On{varName}");
+            eventSubscription.Replace("{EVENT_NAME_CSHARP}", varName);
             sb.Append(eventSubscription);
             sb.Append("\n");
         }
@@ -383,7 +379,7 @@ public class ABICSharpConverter : EditorWindow
         foreach (var eventABI in _contractABI.Events)
         {
             var varName = eventABI.Name.RemoveFirstUnderscore().Capitalize();
-            sb.Append($"\t\t\tawait event{varName}.UnsubscribeAsync();\n");
+            sb.Append($"\t\t\tawait EventManager.Unsubscribe<{varName}EventDTO>({varName}, ContractAddress);\n");
             sb.Append($"\t\t\tOn{varName} = null;\n");
         }
 
@@ -398,16 +394,19 @@ public class ABICSharpConverter : EditorWindow
 
         foreach (var eventABI in _contractABI.Events)
         {
+            var varName = eventABI.Name.RemoveFirstUnderscore().Capitalize();
             var eventStringBuilder = new StringBuilder(eventTemplateBase);
             eventStringBuilder.Replace("{EVENT_NAME}", eventABI.Name);
-            eventStringBuilder.Replace("{EVENT_NAME_CSHARP}", eventABI.Name.RemoveFirstUnderscore().Capitalize());
+            eventStringBuilder.Replace("{EVENT_NAME_CSHARP}", varName);
             var stringBuilder = ParseParameters(eventABI.InputParameters, paramTemplate);
 
             eventStringBuilder.Replace("{EVENT_PARAMS}", stringBuilder.ToString());
             sb.Append(eventStringBuilder);
             sb.Append("\n\n");
-            sb.Replace("{EVENT_LOG_SUBSCRIPTION}", $"EthLogsObservableSubscription event{eventABI.Name.RemoveFirstUnderscore().Capitalize()};");
-            sb.Replace("{EVENT_ACTION_SUBSCRIPTION}", $"public event Action<{eventABI.Name.RemoveFirstUnderscore().Capitalize()}EventDTO> On{eventABI.Name.RemoveFirstUnderscore().Capitalize()};");
+            sb.Replace("{EVENT_ACTION_SUBSCRIPTION}", $"public event Action<{varName}EventDTO> On{varName};");
+            sb.Replace("{EVENT_NAME_CSHARP_PARAM}", varName.Uncapitalize());
+            sb.Replace("{EVENT_INVOCATION}", $"On{varName}?.Invoke({varName.Uncapitalize()});");
+            
         }
 
         return sb.ToString();
@@ -458,6 +457,10 @@ public static class ABIToCSHarpTypesExtension
     public static string Capitalize(this string str)
     {
         return string.IsNullOrEmpty(str) ? str : char.ToUpper(str[0]) + str[1..];
+    }
+    public static string Uncapitalize(this string str)
+    {
+        return string.IsNullOrEmpty(str) ? str : char.ToLower(str[0]) + str[1..];
     }
 
     public static string RemoveFirstUnderscore(this string str)

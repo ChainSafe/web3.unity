@@ -3,13 +3,11 @@ using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
-using ChainSafe.Gaming.Ipfs;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core.Logout;
-using Nethereum.Hex.HexConvertors.Extensions;
 using Scripts.EVM.Token;
 using UnityEngine;
 using UnityEngine.UI;
@@ -100,7 +98,7 @@ public class Erc1155Calls : Web3BuilderServiceAdapter, IWeb3InitializedHandler, 
     /// </summary>
     public async void Uri()
     {
-        var uri = await _erc1155.Uri(tokenIdUri);
+        var uri = await _erc1155.Uri(BigInteger.Parse(tokenIdUri));
         SampleOutputUtil.PrintResult(uri, "ERC-1155", nameof(Erc1155Service.GetUri));
     }
 

@@ -119,15 +119,11 @@ public class Erc20Calls : Web3BuilderServiceAdapter, IWeb3InitializedHandler, IL
     {
         var mintResponse = await _erc20.Transfer(toAccount, amountTransfer);
         var output = SampleOutputUtil.BuildOutputValue(new object[] { mintResponse });
-        _erc20.OnTransfer += Test;
+        
         SampleOutputUtil.PrintResult(output, "ERC-20", nameof(Erc20Service.Transfer));
     }
 
-    private void Test(Erc20Contract.TransferEventDTO obj)
-    {
-        Debug.LogError("TRANSFERED" + obj.ToString());
-        _erc20.OnTransfer -= Test;
-    }
+
 
     public async Task OnWeb3Initialized(Web3 web3)
     {
