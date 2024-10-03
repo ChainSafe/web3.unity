@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
@@ -14,13 +15,15 @@ using Newtonsoft.Json;
 using Scripts.EVM.Token;
 using UnityEngine;
 
-public class EvmCalls : MonoBehaviour, ILightWeightSample
+public class EvmCalls : MonoBehaviour, ISample
 {
     #region Fields
     
     [field: SerializeField] public string Title { get; private set; }
     
     [field: SerializeField, TextArea] public string Description { get; private set; }
+    
+    public Type[] DependentServiceTypes => Array.Empty<Type>();
     
     [Header("Change the fields below for testing purposes")]
 

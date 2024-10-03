@@ -1,9 +1,11 @@
+using System.Linq;
 using TMPro;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 using UnityEngine;
 using UnityEngine.UI;
+using CWeb3 = ChainSafe.Gaming.Web3.Web3;
 
 namespace ChainSafe.Gaming
 {
@@ -16,18 +18,27 @@ namespace ChainSafe.Gaming
         
         [field: SerializeField] public Transform Container { get; private set; }
 
-        public void Attach(ISample instance)
+        private ISample _sample;
+        
+        public void Initialize(ISample sample)
         {
-            titleText.text = instance.Title;
-            descriptionText.text = instance.Description;
+            _sample = sample;
+            
+            titleText.text = sample.Title;
+            descriptionText.text = sample.Description;
             
 #if UNITY_EDITOR
             showScriptButton.onClick.AddListener(delegate
             {
                 EditorUtility.FocusProjectWindow();
-                Selection.activeObject = instance as Object;
+                Selection.activeObject = sample as Object;
             });
 #endif
+        }
+        
+        public void Web3Initialized(CWeb3 web3)
+        {
+            gameObject.SetActive(_sample.DependentServiceTypes.All(t => web3.ServiceProvider.GetService(t) != null));
         }
     }
 }

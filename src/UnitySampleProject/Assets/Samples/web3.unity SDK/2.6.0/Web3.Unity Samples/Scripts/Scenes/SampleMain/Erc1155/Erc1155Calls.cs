@@ -17,13 +17,15 @@ using Erc1155Contract = ChainSafe.Gaming.Evm.Contracts.Custom.Erc1155Contract;
 /// <summary>
 /// ERC1155 calls used in the sample scene
 /// </summary>
-public class Erc1155Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecycleParticipant, ILightWeightServiceAdapter, ILightWeightSample
+public class Erc1155Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecycleParticipant, ILightWeightServiceAdapter, ISample
 {
     #region Fields
     
     [field: SerializeField] public string Title { get; private set; }
     
     [field: SerializeField, TextArea] public string Description { get; private set; }
+    
+    public Type[] DependentServiceTypes => Array.Empty<Type>();
     
     [Header("Change the fields below for testing purposes")]
 
@@ -80,6 +82,8 @@ public class Erc1155Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecycleP
     private Erc1155Contract _erc1155;
     
     private GameObject _textureDisplay;
+    
+    private RawImage _rawImage;
     
     /// <summary>
     /// Balance Of ERC1155 Address
@@ -148,11 +152,13 @@ public class Erc1155Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecycleP
         if (_textureDisplay == null)
         {
             _textureDisplay = Instantiate(textureDisplayPrefab);
+            
+            _rawImage = _textureDisplay.GetComponentInChildren<RawImage>();
         }
         
         _textureDisplay.SetActive(true);
-        var rawImage = _textureDisplay.GetComponentInChildren<RawImage>();
-        rawImage.texture = texture;
+        
+        _rawImage.texture = texture;
         
         return "Nft Texture Set.";
     }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ChainSafe.Gaming;
@@ -6,7 +7,7 @@ using UnityEngine;
 using ChainSafe.Gaming.Marketplace;
 using ChainSafe.Gaming.Web3.Build;
 
-public class IPFSCalls : MonoBehaviour, ILightWeightSample
+public class IPFSCalls : MonoBehaviour, ISample
 {
     #region Fields
 
@@ -14,6 +15,8 @@ public class IPFSCalls : MonoBehaviour, ILightWeightSample
     
     [field: SerializeField, TextArea] public string Description { get; private set; }
     
+    public Type[] DependentServiceTypes => Array.Empty<Type>();
+
     [Header("IPFS VALUES")]
     [SerializeField] private string apiSecretKey = "Fill In Your API Secret Key From Storage";
     [SerializeField] private string bucketId = "Fill In Your Bucket ID From Storage";

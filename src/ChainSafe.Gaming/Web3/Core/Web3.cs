@@ -66,22 +66,22 @@ namespace ChainSafe.Gaming.Web3
         /// <summary>
         /// Access the <see cref="IRpcProvider"/> component, which provides RPC communication with the Ethereum network.
         /// </summary>
-        public IRpcProvider RpcProvider => AssertComponentAccessible(rpcProvider, nameof(RpcProvider));
+        public IRpcProvider RpcProvider => AssertComponentAccessible(rpcProvider);
 
         /// <summary>
         /// Access the <see cref="ISigner"/> component, responsible for signing transactions, messages, and providing the player's public address.
         /// </summary>
-        public ISigner Signer => AssertComponentAccessible(signer, nameof(Signer));
+        public ISigner Signer => AssertComponentAccessible(signer);
 
         /// <summary>
         /// Access the <see cref="ITransactionExecutor"/> component, used for sending transactions to the blockchain.
         /// </summary>
-        public ITransactionExecutor TransactionExecutor => AssertComponentAccessible(transactionExecutor, nameof(TransactionExecutor));
+        public ITransactionExecutor TransactionExecutor => AssertComponentAccessible(transactionExecutor);
 
         /// <summary>
         /// Access the Event Service of the Web3 instance, allowing you to subscribe to blockchain events.
         /// </summary>
-        public IEvmEvents Events => AssertComponentAccessible(events, nameof(Events));
+        public IEvmEvents Events => AssertComponentAccessible(events);
 
         /// <summary>
         /// Access the Chain Manager of the Web3 instance to switch chains in runtime.
@@ -166,12 +166,14 @@ namespace ChainSafe.Gaming.Web3
             return Chains.SwitchChain(newChainId);
         }
 
-        private T AssertComponentAccessible<T>(T? value, string propertyName)
+        private T AssertComponentAccessible<T>(T? value)
             where T : notnull
         {
+            string propertyName = typeof(T).Name;
+
             if (value == null)
             {
-                throw new Web3Exception(
+                throw new ServiceNotBoundWeb3Exception<T>(
                     $"{propertyName} is not bound. Make sure to add an implementation of {propertyName} before using it.");
             }
 

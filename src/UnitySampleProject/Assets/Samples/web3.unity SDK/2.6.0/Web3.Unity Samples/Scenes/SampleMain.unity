@@ -1589,12 +1589,12 @@ MonoBehaviour:
     via the SDK. You can then add these CIDs to the URI fields of your NFTs to make
     them dynamic.
 
-    
 
-    <color=red>Please remember to set your API & bucket
-    keys in the IPFSCalls object in the hierarchy to the left. As you receive the
-    CID from each call you can visit them in the browser to see their contents or
-    check the marketplace package to see them deserialized into classes.</color>'
+
+    <color=red>Please remember to set your API & bucket keys
+    in the IPFSCalls object in the hierarchy to the left. As you receive the CID
+    from each call you can visit them in the browser to see their contents or check
+    the marketplace package to see them deserialized into classes.</color>'
   apiSecretKey: Fill In Your API Secret Key From Storage
   bucketId: Fill In Your Bucket ID From Storage
   fileNameImage: Logo.png

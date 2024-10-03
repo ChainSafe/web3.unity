@@ -1,5 +1,6 @@
 #define RAMP_AVAILABLE
 
+using System;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.UnityPackage;
 using UnityEngine;
@@ -11,6 +12,8 @@ namespace ChainSafe.Gaming.Exchangers.Ramp.Sample
         [field: SerializeField] public string Title { get; private set; }
         [field: SerializeField, TextArea] public string Description { get; private set; }
         
+        public Type[] DependentServiceTypes => new[] { typeof(IRampExchanger) };
+
         private async Task<string> OnRamp()
         {
             // Show "Buy Crypto" widget

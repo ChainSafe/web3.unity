@@ -1,25 +1,33 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using ChainSafe.Gaming;
+using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.UnityPackage.UI;
 using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Build;
+using ChainSafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.Web3.Core.Evm;
+using Microsoft.Extensions.DependencyInjection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using CWeb3 = ChainSafe.Gaming.Web3.Web3;
 
-public class Samples : MonoBehaviour
+public class Samples : ServiceAdapter, ILightWeightServiceAdapter, IWeb3InitializedHandler
 {
     [SerializeField] private Transform container;
     [SerializeField] private SampleContainer sampleContainerPrefab;
     [SerializeField] private Button buttonPrefab;
-    
-    private void Start()
-    {
-        Initialize();
-    }
 
+    private readonly List<SampleContainer> _sampleContainers = new List<SampleContainer>();
+
+    private bool _initialized;
+    
     private void Initialize()
     {
         var samples = GetComponentsInChildren<ISample>();
@@ -37,8 +45,10 @@ public class Samples : MonoBehaviour
             }
             
             var sampleContainer = Instantiate(sampleContainerPrefab, container);
+
+            sampleContainer.Initialize(sample);
             
-            sampleContainer.Attach(sample);
+            _sampleContainers.Add(sampleContainer);
             
             foreach (var method in methods)
             {
@@ -54,6 +64,8 @@ public class Samples : MonoBehaviour
                 });
             }
         }
+
+        _initialized = true;
     }
 
     private async void TryExecute(MethodInfo method, ISample instance)
@@ -62,16 +74,23 @@ public class Samples : MonoBehaviour
         {
             LoadingOverlay.ShowLoadingOverlay();
 
-            if (!Web3Unity.Connected && !(instance is ILightWeightSample))
-            {
-                throw new Web3Exception("Connection not found. Please connect your wallet first.");
-            }
-            
             string message = await Execute(method, instance);
             
             Debug.Log(message);
         }
         // Todo: display error via error overlay
+        catch (Exception e)
+        {
+            if (e is ServiceNotBoundWeb3Exception<ISigner> 
+                || e is ServiceNotBoundWeb3Exception<ITransactionExecutor>)
+            {
+                Web3Unity.ConnectModal.Open();
+                
+                throw new AggregateException(new Web3Exception("Connection not found. Please connect your wallet first."), e);
+            }
+
+            throw;
+        }
         finally
         {
             LoadingOverlay.HideLoadingOverlay();
@@ -81,5 +100,28 @@ public class Samples : MonoBehaviour
     private Task<string> Execute(MethodInfo method, ISample instance)
     {
         return (Task<string>) method.Invoke(instance, null);
+    }
+
+    public override Web3Builder ConfigureServices(Web3Builder web3Builder)
+    {
+        return web3Builder.Configure(services =>
+        {
+            services.AddSingleton<IWeb3InitializedHandler>(this);
+        });
+    }
+
+    public Task OnWeb3Initialized(CWeb3 web3)
+    {
+        if (!_initialized)
+        {
+            Initialize();
+        }
+
+        foreach (var sampleContainer in _sampleContainers)
+        {
+            sampleContainer.Web3Initialized(web3);
+        }
+        
+        return Task.CompletedTask;
     }
 }

@@ -16,6 +16,8 @@ namespace Samples.Behaviours.SwitchChain
     
         [field: SerializeField, TextArea] public string Description { get; private set; }
         
+        public Type[] DependentServiceTypes => Array.Empty<Type>();
+        
         public ChainSetup[] chainSetups;
 
         private int _currentChainIndex;
