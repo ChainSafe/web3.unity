@@ -157,8 +157,13 @@ public class Web3AuthConnectionProvider : RestorableConnectionProvider, ILogoutH
     }
 
     public override void HandleException(Exception exception)
-    {        
-        _modal.Close();
+    {
+        _rememberMe = false;
+        
+        if (_modal != null)
+        {
+            _modal.Close();
+        }
         
         base.HandleException(exception);
     }

@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Net.WebSockets;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Evm.Contracts;
+using ChainSafe.Gaming.Ipfs;
 using Nethereum.Hex.HexTypes;
 using Nethereum.Contracts;
 using Nethereum.RPC.Reactive.Eth.Subscriptions;
@@ -46,14 +49,14 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
         }
 
 
-        public async Task<BigInteger[]> BalanceOfBatch(string[] accounts, BigInteger[] ids)
+        public async Task<List<BigInteger>> BalanceOfBatch(string[] accounts, BigInteger[] ids)
         {
-            var response = await OriginalContract.Call<BigInteger[]>("balanceOfBatch", new object[]
+            var response = await OriginalContract.Call("balanceOfBatch", new object[]
             {
                 accounts, ids
             });
 
-            return response;
+            return ((List<BigInteger>)response[0]);
         }
 
 
@@ -174,10 +177,16 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
         }
 
 
-        public async Task<string> Uri(BigInteger uint256)
+        public async Task<string> Uri(string tokenId)
         {
+            if (IpfsHelper.CanDecodeTokenIdToUri(tokenId))
+            {
+                return IpfsHelper.DecodeTokenIdToUri(tokenId);
+            }
+            
             var response = await OriginalContract.Call<string>("uri", new object[]
             {
+                tokenId
             });
 
             return response;

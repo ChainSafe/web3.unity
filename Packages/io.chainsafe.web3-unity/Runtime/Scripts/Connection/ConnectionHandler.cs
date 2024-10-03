@@ -25,7 +25,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         public async Task Initialize()
         {
             Web3BuilderServiceAdapters = GetComponentsInChildren<IWeb3BuilderServiceAdapter>(true)
-                .Concat(FindObjectsOfType<Web3BuilderServiceAdapter>()).ToHashSet();
+                .Concat(FindObjectsOfType<Web3BuilderServiceAdapter>(true)).ToHashSet();
             
             foreach (var provider in Providers)
             {
