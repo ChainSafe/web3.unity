@@ -100,7 +100,7 @@ public class Erc1155Calls : Web3BuilderServiceAdapter, IWeb3InitializedHandler, 
     /// </summary>
     public async void Uri()
     {
-        var uri = await Web3Unity.Web3.Erc1155.GetUri(ChainSafeContracts.Erc1155,tokenIdUri);
+        var uri = await _erc1155.Uri(tokenIdUri);
         SampleOutputUtil.PrintResult(uri, "ERC-1155", nameof(Erc1155Service.GetUri));
     }
 

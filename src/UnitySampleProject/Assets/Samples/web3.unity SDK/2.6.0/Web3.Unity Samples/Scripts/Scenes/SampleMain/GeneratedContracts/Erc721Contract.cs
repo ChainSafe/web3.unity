@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
+using ChainSafe.Gaming.Ipfs;
 using ChainSafe.Gaming.MultiCall;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3;
@@ -210,8 +211,12 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
         }
 
 
-        public async Task<string> TokenURI(BigInteger tokenId)
+        public async Task<string> TokenURI(string tokenId)
         {
+            if (IpfsHelper.CanDecodeTokenIdToUri(tokenId))
+            {
+                return IpfsHelper.DecodeTokenIdToUri(tokenId);
+            }
             var response = await OriginalContract.Call<string>("tokenURI", new object[]
             {
                 tokenId
