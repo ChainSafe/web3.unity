@@ -48,7 +48,7 @@ public static class WebGLThreadPatcherInstaller
         // check if ThreadPatcher & AsyncUtilities are already installed.
         if (manifest.Dependencies.ContainsKey(AsyncToolsPackageName) && manifest.Dependencies.ContainsKey(WebGLThreadingPatcherName))
         {
-            EditorUtility.DisplayDialog("Web3.Unity","Both WebGL Threading Patcher and Async Tools are already installed", "OK");
+            Debug.Log("Both WebGL Threading Patcher and Async Tools are already installed");
             return;
         }
         
