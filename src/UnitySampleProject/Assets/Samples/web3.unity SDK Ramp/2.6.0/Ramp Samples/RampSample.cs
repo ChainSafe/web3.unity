@@ -14,7 +14,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp.Sample
         
         public Type[] DependentServiceTypes => new[] { typeof(IRampExchanger) };
 
-        private async Task<string> OnRamp()
+        public async Task<string> OnRamp()
         {
             // Show "Buy Crypto" widget
             var purchaseData = await Web3Unity.Web3.RampExchanger().BuyCrypto(
@@ -35,7 +35,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp.Sample
             return $"Purchase request: {purchaseData}";
         }
 
-        private async Task<string> OffRamp()
+        public async Task<string> OffRamp()
         {
             // Show "Sell Crypto" widget
             var saleData = await Web3Unity.Web3.RampExchanger().SellCrypto(
@@ -54,7 +54,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp.Sample
             return $"OffRamp: {saleData}";
         }
 
-        private async Task<string> OnRampOffRamp()
+        public async Task<string> OnRampOffRamp()
         {
             // Show "Buy or Sell Crypto" widget
             var rampTransactionData = await Web3Unity.Web3.RampExchanger().BuyOrSellCrypto(
