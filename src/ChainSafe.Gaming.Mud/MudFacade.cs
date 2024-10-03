@@ -28,7 +28,7 @@ namespace ChainSafe.Gaming.Mud
         {
             var stopwatch = Stopwatch.StartNew();
             var world = worldFactory.Build(worldConfig);
-            logWriter.Log($"Loaded world {worldConfig.ContractAddress} in {stopwatch.Elapsed}");
+            logWriter.Log($"Loaded MUD world {worldConfig.ContractAddress} in {stopwatch.Elapsed}");
             return world;
         }
     }
