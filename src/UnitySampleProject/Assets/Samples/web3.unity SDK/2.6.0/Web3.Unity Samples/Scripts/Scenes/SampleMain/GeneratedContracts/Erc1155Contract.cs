@@ -6,6 +6,7 @@ using System.Net.WebSockets;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Evm.Contracts;
+using ChainSafe.Gaming.Ipfs;
 using Nethereum.Hex.HexTypes;
 using Nethereum.Contracts;
 using Nethereum.RPC.Reactive.Eth.Subscriptions;
@@ -176,10 +177,16 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
         }
 
 
-        public async Task<string> Uri(BigInteger uint256)
+        public async Task<string> Uri(string tokenId)
         {
+            if (IpfsHelper.CanDecodeTokenIdToUri(tokenId))
+            {
+                return IpfsHelper.DecodeTokenIdToUri(tokenId);
+            }
+            
             var response = await OriginalContract.Call<string>("uri", new object[]
             {
+                tokenId
             });
 
             return response;
