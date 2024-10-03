@@ -57,11 +57,6 @@ namespace ChainSafe.Gaming.Mud
             // Storage strategies
             services.AddTransient<InMemoryMudStorage>(); // todo implement OffchainIndexerMudStorage, then register it in the next line
 
-            if (!services.IsBound<IEventManager>())
-            {
-                services.UseEvents();
-            }
-
             if (!services.IsBound<INethereumWeb3Adapter>())
             {
                 services.UseNethereumAdapters();

@@ -14,15 +14,15 @@ using Nethereum.RPC.Reactive.Eth.Subscriptions;
 
 namespace ChainSafe.Gaming.RPC.Events
 {
-    public class EventManager : IEventManager, ILifecycleParticipant, IChainSwitchHandler
+    public class WebSocketEventManager : IEventManager, ILifecycleParticipant, IChainSwitchHandler
     {
         private readonly IChainConfig chainConfig;
-        private readonly Dictionary<Type, Subscription> subscriptions = new();
+        private readonly Dictionary<(Type, string[]), Subscription> subscriptions = new();
         private readonly ILogWriter logWriter;
 
         private StreamingWebSocketClient webSocketClient;
 
-        public EventManager(IChainConfig chainConfig, ILogWriter logWriter)
+        public WebSocketEventManager(IChainConfig chainConfig, ILogWriter logWriter)
         {
             this.logWriter = logWriter;
             this.chainConfig = chainConfig;
@@ -43,39 +43,42 @@ namespace ChainSafe.Gaming.RPC.Events
         {
             for (var i = subscriptions.Count - 1; i >= 0; i--)
             {
-                var type = subscriptions.Last().Key;
-                await TerminateSubscriptionForType(type);
+                var (type, addresses) = subscriptions.Last().Key;
+                await TerminateSubscriptionForType(type, addresses);
             }
 
             webSocketClient?.Dispose();
         }
 
-        public async Task Subscribe<TEvent>(Action<TEvent> handler)
+        public async Task Subscribe<TEvent>(Action<TEvent> handler, params string[] contractAddresses)
             where TEvent : IEventDTO, new()
         {
-            if (!subscriptions.TryGetValue(typeof(TEvent), out var rawSubscription))
+            if (!subscriptions.TryGetValue((typeof(TEvent), contractAddresses), out var rawSubscription))
             {
-                rawSubscription = await InitializeSubscriptionForType<TEvent>();
+                rawSubscription = await InitializeSubscriptionForType<TEvent>(contractAddresses);
             }
 
             var subscription = (Subscription<TEvent>)rawSubscription;
             subscription.Handlers.Add(handler);
         }
 
-        public async Task Unsubscribe<TEvent>(Action<TEvent> handler)
+        public async Task Unsubscribe<TEvent>(Action<TEvent> handler, params string[] contractAddresses)
             where TEvent : IEventDTO, new()
         {
-            if (!subscriptions.ContainsKey(typeof(TEvent)))
+            if (!subscriptions.ContainsKey((typeof(TEvent), contractAddresses)))
             {
-                throw new Web3Exception($"Can't unsubscribe. No subscription of type {nameof(TEvent)} was registered.");
+                throw new Web3Exception(contractAddresses.Length == 0
+                    ? $"Can't unsubscribe. No subscription of type {nameof(TEvent)} was registered."
+                    : $"Can't unsubscribe. No subscription of type {nameof(TEvent)} was registered with contract filter " +
+                      $"addresses: {string.Join(", ", contractAddresses)}.");
             }
 
-            var subscription = (Subscription<TEvent>)subscriptions[typeof(TEvent)];
+            var subscription = (Subscription<TEvent>)subscriptions[(typeof(TEvent), contractAddresses)];
             subscription.Handlers.Remove(handler);
 
             if (subscription.Handlers.Count == 0)
             {
-                await TerminateSubscriptionForType<TEvent>();
+                await TerminateSubscriptionForType<TEvent>(contractAddresses);
             }
         }
 
@@ -113,11 +116,11 @@ namespace ChainSafe.Gaming.RPC.Events
             }
         }
 
-        private async Task<Subscription> InitializeSubscriptionForType<TEvent>()
+        private async Task<Subscription> InitializeSubscriptionForType<TEvent>(string[] contractAddresses)
             where TEvent : IEventDTO, new()
         {
             Subscription rawSubscription = new Subscription<TEvent>(webSocketClient);
-            rawSubscription.EventFilter = Event<TEvent>.GetEventABI().CreateFilterInput();
+            rawSubscription.EventFilter = Event<TEvent>.GetEventABI().CreateFilterInput(contractAddresses);
 
             rawSubscription.LogHandleAction = HandleLog;
             rawSubscription
@@ -127,7 +130,7 @@ namespace ChainSafe.Gaming.RPC.Events
 
             await rawSubscription.NethSubscription.SubscribeAsync(rawSubscription.EventFilter);
 
-            subscriptions[typeof(TEvent)] = rawSubscription;
+            subscriptions[(typeof(TEvent), contractAddresses)] = rawSubscription;
             return rawSubscription;
 
             void HandleLog(FilterLog log)
@@ -151,22 +154,22 @@ namespace ChainSafe.Gaming.RPC.Events
                     }
                     catch (Exception e)
                     {
-                        logWriter.LogError($"Error occured in one of the {nameof(TEvent)} handlers.\n{e.Message}\n{e.StackTrace}");
+                        logWriter.LogError($"Error occured in one of the {nameof(TEvent)} handlers: {e.Message}\n{e.StackTrace}");
                     }
                 }
             }
         }
 
-        private Task TerminateSubscriptionForType<TEvent>()
+        private Task TerminateSubscriptionForType<TEvent>(string[] contractAddresses)
             where TEvent : IEventDTO, new()
         {
-            return TerminateSubscriptionForType(typeof(TEvent));
+            return TerminateSubscriptionForType(typeof(TEvent), contractAddresses);
         }
 
-        private Task TerminateSubscriptionForType(Type type)
+        private Task TerminateSubscriptionForType(Type type, string[] contractAddresses)
         {
-            var subscription = subscriptions[type];
-            subscriptions.Remove(type);
+            var subscription = subscriptions[(type, contractAddresses)];
+            subscriptions.Remove((type, contractAddresses));
             return subscription.NethSubscription.UnsubscribeAsync();
         }
 

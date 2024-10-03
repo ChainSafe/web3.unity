@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Mud.Tables;
 using ChainSafe.Gaming.RPC.Events;
+using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Core.Nethereum;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Mud;
@@ -18,17 +19,25 @@ namespace ChainSafe.Gaming.Mud.Storages.InMemory
     public class InMemoryMudStorage : IMudStorage
     {
         private readonly INethereumWeb3Adapter nWeb3;
-        private readonly EventManager eventManager;
+        private readonly IEventManager eventManager;
 
         private readonly SemaphoreSlim storeUpdateSemaphore = new(1);
 
         private IInMemoryMudStorageConfig config;
         private InMemoryTableRepository inMemoryRepository;
+        private string worldAddress;
 
-        public InMemoryMudStorage(INethereumWeb3Adapter nWeb3, EventManager eventManager)
+        public InMemoryMudStorage(INethereumWeb3Adapter nWeb3, IEventManager eventManager)
         {
             this.eventManager = eventManager;
             this.nWeb3 = nWeb3;
+        }
+
+        public InMemoryMudStorage(INethereumWeb3Adapter nWeb3)
+        {
+            throw new Web3Exception($"{nameof(InMemoryMudStorage)} requires {nameof(IEventManager)} to work. " +
+                                    $"Please don't forget to register an {nameof(IEventManager)} in order to use " +
+                                    $"{nameof(InMemoryMudStorage)}.");
         }
 
         public event RecordSetDelegate RecordSet;
@@ -37,6 +46,7 @@ namespace ChainSafe.Gaming.Mud.Storages.InMemory
 
         public async Task Initialize(IMudStorageConfig mudStorageConfig, string worldAddress)
         {
+            this.worldAddress = worldAddress;
             config = (IInMemoryMudStorageConfig)mudStorageConfig;
             inMemoryRepository = new InMemoryTableRepository();
             var storeLogProcessingService = new StoreEventsLogProcessingService(nWeb3, worldAddress);
@@ -46,18 +56,18 @@ namespace ChainSafe.Gaming.Mud.Storages.InMemory
                 null,
                 CancellationToken.None);
 
-            await eventManager.Subscribe<StoreSetRecordEventDTO>(OnStoreSetRecord);
-            await eventManager.Subscribe<StoreSpliceStaticDataEventDTO>(OnStoreSpliceStaticData);
-            await eventManager.Subscribe<StoreSpliceDynamicDataEventDTO>(OnStoreSpliceDynamicDataEventDTO);
-            await eventManager.Subscribe<StoreDeleteRecordEventDTO>(OnStoreDeleteRecord);
+            await eventManager.Subscribe<StoreSetRecordEventDTO>(OnStoreSetRecord, worldAddress);
+            await eventManager.Subscribe<StoreSpliceStaticDataEventDTO>(OnStoreSpliceStaticData, worldAddress);
+            await eventManager.Subscribe<StoreSpliceDynamicDataEventDTO>(OnStoreSpliceDynamicDataEventDTO, worldAddress);
+            await eventManager.Subscribe<StoreDeleteRecordEventDTO>(OnStoreDeleteRecord, worldAddress);
         }
 
         public async Task Terminate()
         {
-            await eventManager.Unsubscribe<StoreSetRecordEventDTO>(OnStoreSetRecord);
-            await eventManager.Unsubscribe<StoreSpliceStaticDataEventDTO>(OnStoreSpliceStaticData);
-            await eventManager.Unsubscribe<StoreSpliceDynamicDataEventDTO>(OnStoreSpliceDynamicDataEventDTO);
-            await eventManager.Unsubscribe<StoreDeleteRecordEventDTO>(OnStoreDeleteRecord);
+            await eventManager.Unsubscribe<StoreSetRecordEventDTO>(OnStoreSetRecord, worldAddress);
+            await eventManager.Unsubscribe<StoreSpliceStaticDataEventDTO>(OnStoreSpliceStaticData, worldAddress);
+            await eventManager.Unsubscribe<StoreSpliceDynamicDataEventDTO>(OnStoreSpliceDynamicDataEventDTO, worldAddress);
+            await eventManager.Unsubscribe<StoreDeleteRecordEventDTO>(OnStoreDeleteRecord, worldAddress);
         }
 
         public async Task<object[][]> Query(MudTableSchema tableSchema, MudQuery query)

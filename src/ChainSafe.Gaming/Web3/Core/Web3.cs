@@ -6,6 +6,7 @@ using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.LocalStorage;
+using ChainSafe.Gaming.RPC.Events;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Chains;
 using ChainSafe.Gaming.Web3.Core.Evm;
@@ -24,7 +25,7 @@ namespace ChainSafe.Gaming.Web3
         private readonly IRpcProvider? rpcProvider;
         private readonly ISigner? signer;
         private readonly ITransactionExecutor? transactionExecutor;
-        private readonly IEvmEvents? events;
+        private readonly IEventManager? events;
         private readonly ILogoutManager logoutManager;
         private readonly ILocalStorage localStorage;
 
@@ -37,7 +38,7 @@ namespace ChainSafe.Gaming.Web3
             rpcProvider = serviceProvider.GetService<IRpcProvider>();
             signer = serviceProvider.GetService<ISigner>();
             transactionExecutor = serviceProvider.GetService<ITransactionExecutor>();
-            events = serviceProvider.GetRequiredService<IEvmEvents>();
+            events = serviceProvider.GetService<IEventManager>();
             Chains = serviceProvider.GetRequiredService<IChainManager>();
             ContractBuilder = serviceProvider.GetRequiredService<IContractBuilder>();
             ProjectConfig = serviceProvider.GetRequiredService<IProjectConfig>();
@@ -77,7 +78,7 @@ namespace ChainSafe.Gaming.Web3
         /// <summary>
         /// Access the Event Service of the Web3 instance, allowing you to subscribe to blockchain events.
         /// </summary>
-        public IEvmEvents Events => AssertComponentAccessible(events, nameof(Events));
+        public IEventManager Events => AssertComponentAccessible(events, nameof(Events));
 
         /// <summary>
         /// Access the Chain Manager of the Web3 instance to switch chains in runtime.
