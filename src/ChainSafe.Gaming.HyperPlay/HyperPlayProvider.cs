@@ -68,7 +68,7 @@ namespace ChainSafe.Gaming.HyperPlay
 
             hash.AssertSignatureValid(message, account);
 
-            if (config.RememberConnection)
+            if (config.RememberSession)
             {
                 data.RememberSession = true;
 

@@ -9,7 +9,7 @@ namespace LootBoxes.Chainlink
     /// <summary>
     /// Configures Lootboxes services to work with a <see cref="ILoginProvider"/>.
     /// </summary>
-    public class LootboxesServicesAdapter : MonoBehaviour, IWeb3BuilderServiceAdapter
+    public class LootboxesServicesAdapter : MonoBehaviour, IServiceAdapter
     {
         // the default values are setup for sepolia.
         [SerializeField] private string contractAddress = "0x1993e2dD323B5dcBd8b52dB7d370bC36D280424B";

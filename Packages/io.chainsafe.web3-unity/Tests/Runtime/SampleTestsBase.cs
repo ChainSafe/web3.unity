@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
+using ChainSafe.Gaming.EVM.Events;
 using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.MultiCall;
 using ChainSafe.Gaming.UnityPackage;
@@ -68,6 +69,7 @@ public class SampleTestsBase
             services.UseWalletProvider<StubWalletConnectProvider>(config);
             services.UseWalletSigner();
             services.UseWalletTransactionExecutor();
+            services.UseEvents();
 
             // Add any contracts we would want to use
             services.ConfigureRegisteredContracts(contracts =>

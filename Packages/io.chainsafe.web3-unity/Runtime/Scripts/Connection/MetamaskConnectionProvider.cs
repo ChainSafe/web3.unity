@@ -20,19 +20,21 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
 
         public override bool IsAvailable => Application.platform == RuntimePlatform.WebGLPlayer && Application.isEditor == false;
 
-        public override Task Initialize()
+        public override Task Initialize(bool rememberSession)
         {
             return Task.CompletedTask;
         }
 
-        public override Web3Builder ConfigureServices(Web3Builder web3Builder)
+        protected override void ConfigureServices(IWeb3ServiceCollection services)
         {
-            return web3Builder.Configure(services =>
-            {
 #if UNITY_WEBGL && !UNITY_EDITOR
-                services.UseMetaMask().UseWalletSigner().UseWalletTransactionExecutor();
+            services.UseMetaMask().UseWalletSigner().UseWalletTransactionExecutor();
 #endif
-            });
+        }
+
+        public override Task<bool> SavedSessionAvailable()
+        {
+            return Task.FromResult(false);
         }
     }
 }

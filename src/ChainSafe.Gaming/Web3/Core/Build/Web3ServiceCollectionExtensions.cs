@@ -73,6 +73,22 @@ namespace ChainSafe.Gaming.Web3.Build
             return serviceCollection;
         }
 
+        public static bool TryGetService<T>(this ServiceProvider serviceProvider, out T service)
+        {
+            service = default;
+
+            try
+            {
+                service = serviceProvider.GetService<T>();
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         /// <summary>
         /// Register the specified implementation for 2 contract types using the factory method.
         /// </summary>

@@ -5,7 +5,9 @@ using ChainSafe.Gaming.Evm.Contracts.Builders;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
+using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Analytics;
+using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using Nethereum.ABI.Model;
 using Nethereum.Hex.HexTypes;
@@ -52,7 +54,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
         /// <summary>
         /// Returns a new instance of the Contract attached to a new address. This is useful
-        /// if there are multiple similar or identical copies of a Contract on the network
+        /// if there are multiple similar or identical copies of a Contract on the network,
         /// and you wish to interact with each of them.
         /// </summary>
         /// <param name="address">Address of the contract to attach to.</param>
@@ -76,15 +78,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
         /// <returns>The result of calling the method.</returns>
         public async Task<object[]> Call(string method, object[] parameters = null, TransactionRequest overwrite = null)
         {
-            if (string.IsNullOrEmpty(Address))
-            {
-                throw new Exception("contract address is not set");
-            }
-
-            if (provider == null)
-            {
-                throw new Exception("provider or signer is not set");
-            }
+            AssetServiceIsAccessible(provider);
 
             parameters ??= Array.Empty<object>();
 
@@ -102,15 +96,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
         public async Task<T> Call<T>(string method, object[] parameters = null, TransactionRequest overwrite = null)
         {
-            if (string.IsNullOrEmpty(Address))
-            {
-                throw new Exception("contract address is not set");
-            }
-
-            if (provider == null)
-            {
-                throw new Exception("provider or signer is not set");
-            }
+            AssetServiceIsAccessible(provider);
 
             parameters ??= Array.Empty<object>();
 
@@ -183,15 +169,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
             object[] parameters = null,
             TransactionRequest overwrite = null)
         {
-            if (string.IsNullOrEmpty(Address))
-            {
-                throw new Exception("contract address is not set");
-            }
-
-            if (signer == null)
-            {
-                throw new Exception("signer is not set");
-            }
+            AssetServiceIsAccessible(signer);
 
             parameters ??= Array.Empty<object>();
 
@@ -227,15 +205,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
             object[] parameters = null,
             TransactionRequest overwrite = null)
         {
-            if (string.IsNullOrEmpty(Address))
-            {
-                throw new Exception("contract address is not set");
-            }
-
-            if (signer == null)
-            {
-                throw new Exception("signer is not set");
-            }
+            AssetServiceIsAccessible(signer);
 
             parameters ??= Array.Empty<object>();
 
@@ -272,15 +242,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
             object[] parameters,
             TransactionRequest overwrite = null)
         {
-            if (string.IsNullOrEmpty(Address))
-            {
-                throw new Exception("contract address is not set");
-            }
-
-            if (provider == null)
-            {
-                throw new Exception("provider or signer is not set");
-            }
+            AssetServiceIsAccessible(provider);
 
             return await provider.EstimateGas(await PrepareTransactionRequest(method, parameters, false, overwrite));
         }
@@ -363,6 +325,19 @@ namespace ChainSafe.Gaming.Evm.Contracts
             }
 
             return txReq;
+        }
+
+        private void AssetServiceIsAccessible<T>(T instance)
+        {
+            if (string.IsNullOrEmpty(Address))
+            {
+                throw new Web3Exception("Contract address is not set.");
+            }
+
+            if (instance == null)
+            {
+                throw new ServiceNotBoundWeb3Exception<T>($"{typeof(T).Name} service is not bound.");
+            }
         }
     }
 }

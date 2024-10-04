@@ -10,26 +10,27 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
     /// <summary>
     /// A concrete implementation of <see cref="IConnectionHandler"/>.
     /// </summary>
-    public class ConnectionHandler : MonoBehaviour, IConnectionHandler, IWeb3BuilderServiceAdapter
+    public class ConnectionHandler : MonoBehaviour, IConnectionHandler, ILightWeightServiceAdapter
     {
         // Handed in ConnectionHandlerEditor
         [HideInInspector, SerializeField] private ConnectionProvider[] providers;
         
-        public HashSet<IWeb3BuilderServiceAdapter> Web3BuilderServiceAdapters { get; private set; }
+        public HashSet<IServiceAdapter> Web3BuilderServiceAdapters { get; private set; }
 
         public ConnectionProvider[] Providers => providers;
-        
+
         /// <summary>
         /// Initializes Connection Handler.
+        /// <param name="rememberConnection">Remember this connection on next login.</param>
         /// </summary>
-        public async Task Initialize()
+        public async Task Initialize(bool rememberConnection)
         {
-            Web3BuilderServiceAdapters = GetComponentsInChildren<IWeb3BuilderServiceAdapter>(true)
-                .Concat(FindObjectsOfType<Web3BuilderServiceAdapter>(true)).ToHashSet();
+            Web3BuilderServiceAdapters = GetComponentsInChildren<IServiceAdapter>(true)
+                .Concat(FindObjectsOfType<ServiceAdapter>(true)).ToHashSet();
             
             foreach (var provider in Providers)
             {
-                await provider.Initialize();
+                await provider.Initialize(rememberConnection);
             }
         }
 
@@ -39,10 +40,9 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
 
             await data.LoadOneTime();
 
-            var provider = Providers.OfType<RestorableConnectionProvider>()
-                .SingleOrDefault(p => p.GetType() == data.Type);
+            var provider = Providers.SingleOrDefault(p => p.GetType() == data.Type);
             
-            if (provider != null && provider.RememberSession && await provider.SavedSessionAvailable())
+            if (provider != null && await provider.SavedSessionAvailable())
             {
                 await (this as IConnectionHandler).Connect(provider);
             }
