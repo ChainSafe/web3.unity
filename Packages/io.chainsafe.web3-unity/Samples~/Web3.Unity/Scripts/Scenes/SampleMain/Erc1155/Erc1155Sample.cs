@@ -2,13 +2,11 @@ using System;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
-using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
-using ChainSafe.Gaming.Web3.Core.Logout;
 using ChainSafe.Gaming.Web3.Core;
 using Scripts.EVM.Token;
 using UnityEngine;
@@ -113,7 +111,7 @@ public class Erc1155Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecycle
     /// </summary>
     public async Task<string> Uri()
     {
-        var uri = await _erc1155.Uri(tokenIdUri);
+        var uri = await _erc1155.Uri(BigInteger.Parse(tokenIdUri));
         
         return uri;
     }
