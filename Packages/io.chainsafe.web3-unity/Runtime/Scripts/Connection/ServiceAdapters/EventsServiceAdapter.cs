@@ -11,8 +11,8 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
 {
     public class EventsServiceAdapter : MonoBehaviour, ILightWeightServiceAdapter
     {
-        [FormerlySerializedAs("pollingIntervalInSeconds")] [SerializeField, Tooltip("How often to poll/make requests to Rpc node in seconds")]
-        private float pollingInterval = 1f;
+        [FormerlySerializedAs("pollingIntervalInSeconds")] [SerializeField, Tooltip("How often to poll/make requests to Rpc node in seconds in WebGL")]
+        private float pollingInterval = 10f;
         
         public Web3Builder ConfigureServices(Web3Builder web3Builder)
         {

@@ -224,6 +224,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
 
         private void Transfer(TransferEventDTO transfer)
         {
+            Debug.Log("Transfer happened " + transfer.Value);
             OnTransfer?.Invoke(transfer);
         }
 
@@ -264,7 +265,6 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
             {
                 if (EventManager == null)
                     return;
-                Debug.Log("Event manager not null");
                 await EventManager.Subscribe<ApprovalEventDTO>(Approval, ContractAddress);
                 await EventManager.Subscribe<TransferEventDTO>(Transfer, ContractAddress);
             }

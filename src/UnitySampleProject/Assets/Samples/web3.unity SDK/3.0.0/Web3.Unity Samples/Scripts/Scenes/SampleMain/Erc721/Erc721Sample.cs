@@ -114,7 +114,7 @@ public class Erc721Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecycleP
     /// </summary>
     public async Task<string> Uri()
     {
-        var uri = await _erc721.TokenURI(tokenIdUri);
+        var uri = await _erc721.TokenURI(BigInteger.Parse(tokenIdUri));
         return uri;
     }
 
