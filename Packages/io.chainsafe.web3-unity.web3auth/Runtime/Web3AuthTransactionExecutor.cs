@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Transactions;
@@ -8,7 +7,6 @@ using ChainSafe.Gaming.InProcessSigner;
 using ChainSafe.Gaming.InProcessTransactionExecutor;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.GamingSdk.Web3Auth;
-using UnityEngine;
 
 /// <summary>
 /// Send Transaction for Web3Auth wallet.
@@ -45,11 +43,19 @@ public class Web3AuthTransactionExecutor : InProcessTransactionExecutor, IWeb3Au
         {
             throw new Web3Exception("Transaction not found in pool.");
         }
-        
-        var response = await base.SendTransaction(transaction.request);
+
+        try
+        {
+            var response = await base.SendTransaction(transaction.request);
             
-        transaction.response.SetResult(response);
-        OnTransactionConfirmed?.Invoke(response);
+            transaction.response.SetResult(response);
+            
+            OnTransactionConfirmed?.Invoke(response);
+        }
+        catch (Exception e)
+        {
+            transaction.response.SetException(e);
+        }
         
         _transactionPool.Remove(transactionId);
     }
