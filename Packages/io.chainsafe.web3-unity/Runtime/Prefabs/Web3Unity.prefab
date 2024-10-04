@@ -11,9 +11,7 @@ GameObject:
   - component: {fileID: 8519303782652390544}
   - component: {fileID: 5008553068369276269}
   - component: {fileID: 29625373239180716}
-  - component: {fileID: 6268052643211326401}
   - component: {fileID: 153625530502621119}
-  - component: {fileID: 8371115045377063251}
   - component: {fileID: 8854369476742677865}
   m_Layer: 0
   m_Name: Web3Unity
@@ -67,19 +65,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connectModalPrefab: {fileID: 4706621120835174763, guid: 2dd57b774deda1948bd97dcb6d6e9fb4, type: 3}
---- !u!114 &6268052643211326401
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9007579812972099230}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 722440245baf97c4f8da707286230694, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gelatoApiKey: 7MFQqyGS1Iui_e_MgmFW1BfbFeJ06g8nnL2oUTlIJug_
 --- !u!114 &153625530502621119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90,18 +75,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9bddd0599e4c6ca4a8a476d02011f3cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &8371115045377063251
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9007579812972099230}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d30a4f4c7d578c42beeecc2e2bbd394, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &8854369476742677865
