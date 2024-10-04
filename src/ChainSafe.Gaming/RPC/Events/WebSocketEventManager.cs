@@ -17,7 +17,7 @@ namespace ChainSafe.Gaming.RPC.Events
     public class WebSocketEventManager : IEventManager, ILifecycleParticipant, IChainSwitchHandler
     {
         private readonly IChainConfig chainConfig;
-        private readonly Dictionary<(Type, string[]), Subscription> subscriptions = new();
+        private readonly Dictionary<EventDictionaryKey, Subscription> subscriptions = new();
         private readonly ILogWriter logWriter;
 
         private StreamingWebSocketClient webSocketClient;
@@ -43,8 +43,8 @@ namespace ChainSafe.Gaming.RPC.Events
         {
             for (var i = subscriptions.Count - 1; i >= 0; i--)
             {
-                var (type, addresses) = subscriptions.Last().Key;
-                await TerminateSubscriptionForType(type, addresses);
+                var tuple = subscriptions.Last().Key;
+                await TerminateSubscriptionForType(tuple.EventType, tuple.ContractAddresses);
             }
 
             webSocketClient?.Dispose();
@@ -53,7 +53,12 @@ namespace ChainSafe.Gaming.RPC.Events
         public async Task Subscribe<TEvent>(Action<TEvent> handler, params string[] contractAddresses)
             where TEvent : IEventDTO, new()
         {
-            if (!subscriptions.TryGetValue((typeof(TEvent), contractAddresses), out var rawSubscription))
+            var tuple = new EventDictionaryKey()
+            {
+                EventType = typeof(TEvent),
+                ContractAddresses = contractAddresses,
+            };
+            if (!subscriptions.TryGetValue(tuple, out var rawSubscription))
             {
                 rawSubscription = await InitializeSubscriptionForType<TEvent>(contractAddresses);
             }
@@ -65,15 +70,20 @@ namespace ChainSafe.Gaming.RPC.Events
         public async Task Unsubscribe<TEvent>(Action<TEvent> handler, params string[] contractAddresses)
             where TEvent : IEventDTO, new()
         {
-            if (!subscriptions.ContainsKey((typeof(TEvent), contractAddresses)))
+            var tuple = new EventDictionaryKey()
+            {
+                EventType = typeof(TEvent),
+                ContractAddresses = contractAddresses,
+            };
+            if (!subscriptions.ContainsKey(tuple))
             {
                 throw new Web3Exception(contractAddresses.Length == 0
-                    ? $"Can't unsubscribe. No subscription of type {nameof(TEvent)} was registered."
-                    : $"Can't unsubscribe. No subscription of type {nameof(TEvent)} was registered with contract filter " +
+                    ? $"Can't unsubscribe. No subscription of type {typeof(TEvent)} was registered."
+                    : $"Can't unsubscribe. No subscription of type {typeof(TEvent)} was registered with contract filter " +
                       $"addresses: {string.Join(", ", contractAddresses)}.");
             }
 
-            var subscription = (Subscription<TEvent>)subscriptions[(typeof(TEvent), contractAddresses)];
+            var subscription = (Subscription<TEvent>)subscriptions[tuple];
             subscription.Handlers.Remove(handler);
 
             if (subscription.Handlers.Count == 0)
@@ -121,7 +131,11 @@ namespace ChainSafe.Gaming.RPC.Events
         {
             Subscription rawSubscription = new Subscription<TEvent>(webSocketClient);
             rawSubscription.EventFilter = Event<TEvent>.GetEventABI().CreateFilterInput(contractAddresses);
-
+            var tuple = new EventDictionaryKey()
+            {
+                EventType = typeof(TEvent),
+                ContractAddresses = contractAddresses,
+            };
             rawSubscription.LogHandleAction = HandleLog;
             rawSubscription
                 .NethSubscription
@@ -130,7 +144,7 @@ namespace ChainSafe.Gaming.RPC.Events
 
             await rawSubscription.NethSubscription.SubscribeAsync(rawSubscription.EventFilter);
 
-            subscriptions[(typeof(TEvent), contractAddresses)] = rawSubscription;
+            subscriptions[tuple] = rawSubscription;
             return rawSubscription;
 
             void HandleLog(FilterLog log)
@@ -168,8 +182,13 @@ namespace ChainSafe.Gaming.RPC.Events
 
         private Task TerminateSubscriptionForType(Type type, string[] contractAddresses)
         {
-            var subscription = subscriptions[(type, contractAddresses)];
-            subscriptions.Remove((type, contractAddresses));
+            var tuple = new EventDictionaryKey()
+            {
+                EventType = type,
+                ContractAddresses = contractAddresses,
+            };
+            var subscription = subscriptions[tuple];
+            subscriptions.Remove(tuple);
             return subscription.NethSubscription.UnsubscribeAsync();
         }
 

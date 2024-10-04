@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.RPC.Events;
 
 namespace ChainSafe.Gaming.Evm.Contracts
 {
@@ -11,7 +12,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
 
         public Contract OriginalContract { get; set; }
 
-        public string WebSocketUrl { get; set; }
+        public IEventManager EventManager { get; set; }
 
         public bool Subscribed { get; set; }
 

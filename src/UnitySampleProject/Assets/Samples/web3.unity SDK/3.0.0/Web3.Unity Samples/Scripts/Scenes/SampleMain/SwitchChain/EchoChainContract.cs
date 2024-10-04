@@ -4,6 +4,7 @@ using System.Net.WebSockets;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Evm.Contracts;
+using ChainSafe.Gaming.RPC.Events;
 using Nethereum.Hex.HexTypes;
 using Nethereum.Contracts;
 using Nethereum.RPC.Reactive.Eth.Subscriptions;
@@ -26,6 +27,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
         public IContractBuilder ContractBuilder { get; set; }
 
         public Contract OriginalContract { get; set; }
+        public IEventManager EventManager { get; set; }
 
         public string WebSocketUrl { get; set; }
 
