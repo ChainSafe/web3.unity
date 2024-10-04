@@ -17,7 +17,7 @@ namespace ChainSafe.Gaming.EVM.Events
         /// </remarks>
         public static IWeb3ServiceCollection UseEvents(this IWeb3ServiceCollection services, PollingEventManagerConfig eventPollerConfig = null)
         {
-#if !UNITY_WEBGL
+#if !UNITY_WEBGL || UNITY_EDITOR
             services.UseEventsWithWebSocket();
 #else
             if (eventPollerConfig == null)

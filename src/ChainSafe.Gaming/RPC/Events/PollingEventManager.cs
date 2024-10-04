@@ -16,7 +16,7 @@ namespace ChainSafe.Gaming.RPC.Events
 {
     public class PollingEventManager : IEventManager, IChainSwitchHandler
     {
-        private readonly Dictionary<(Type, string[]), Subscription> subscriptions = new();
+        private readonly Dictionary<EventDictionaryKey, Subscription> subscriptions = new();
         private readonly ILogWriter logWriter;
         private readonly IRpcProvider rpcProvider;
         private readonly PollingEventManagerConfig config;
@@ -41,7 +41,12 @@ namespace ChainSafe.Gaming.RPC.Events
         public Task Subscribe<TEvent>(Action<TEvent> handler, params string[] contractAddresses)
             where TEvent : IEventDTO, new()
         {
-            var key = (typeof(TEvent), contractAddresses);
+            var key = new EventDictionaryKey()
+            {
+                EventType = typeof(TEvent),
+                ContractAddresses = contractAddresses,
+            };
+
             if (!subscriptions.ContainsKey(key))
             {
                 subscriptions[key] = new Subscription<TEvent>(contractAddresses);
@@ -61,7 +66,11 @@ namespace ChainSafe.Gaming.RPC.Events
         public Task Unsubscribe<TEvent>(Action<TEvent> handler, params string[] contractAddresses)
             where TEvent : IEventDTO, new()
         {
-            var key = (typeof(TEvent), contractAddresses);
+            var key = new EventDictionaryKey()
+            {
+                EventType = typeof(TEvent),
+                ContractAddresses = contractAddresses,
+            };
             if (!subscriptions.TryGetValue(key, out var rawSubscription))
             {
                 throw new Web3Exception(contractAddresses.Length == 0
