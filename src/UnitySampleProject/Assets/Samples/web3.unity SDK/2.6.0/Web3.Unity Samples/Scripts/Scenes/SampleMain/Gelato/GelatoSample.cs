@@ -11,7 +11,7 @@ using ChainSafe.GamingSdk.Gelato.Types;
 using Microsoft.Extensions.DependencyInjection;
 using UnityEngine;
 
-public class GelatoCalls : ServiceAdapter, IWeb3InitializedHandler, ISample
+public class GelatoSample : ServiceAdapter, IWeb3InitializedHandler, ISample
 {
     [field: SerializeField] public string Title { get; private set; }
     
@@ -64,10 +64,8 @@ public class GelatoCalls : ServiceAdapter, IWeb3InitializedHandler, ISample
                 case TaskState.ExecSuccess:
                 case TaskState.ExecReverted:
                 case TaskState.Cancelled:
-                    return SampleOutputUtil.BuildResultMessage(
-                        $"Task complete. Final status of {relayResponse.TaskId}: {status.TaskState}. " +
-                        $"Transaction hash: {status.TransactionHash}",
-                        nameof(GelatoCalls), nameof(CallWithSyncFee));
+                    return $"Task complete. Final status of {relayResponse.TaskId}: {status.TaskState}. " +
+                           $"Transaction hash: {status.TransactionHash}";
                 default:
                     await WaitForSeconds(2);
                     continue;
@@ -107,10 +105,9 @@ public class GelatoCalls : ServiceAdapter, IWeb3InitializedHandler, ISample
                 case TaskState.ExecSuccess:
                 case TaskState.ExecReverted:
                 case TaskState.Cancelled:
-                    return SampleOutputUtil.BuildResultMessage(
+                    return
                         $"Task complete. Final status of {relayResponse.TaskId}: {status.TaskState}. " +
-                        $"Transaction hash: {status.TransactionHash}",
-                        nameof(GelatoCalls), nameof(SponsorCall));
+                        $"Transaction hash: {status.TransactionHash}";
                 default:
                     await WaitForSeconds(2);
                     continue;
@@ -154,10 +151,9 @@ public class GelatoCalls : ServiceAdapter, IWeb3InitializedHandler, ISample
                 case TaskState.ExecSuccess:
                 case TaskState.ExecReverted:
                 case TaskState.Cancelled:
-                    return SampleOutputUtil.BuildResultMessage(
+                    return
                         $"Task complete. Final status of {status.TaskId}: {status.TaskState}. " +
-                        $"Transaction hash: {status.TransactionHash}",
-                        nameof(GelatoCalls), nameof(CallWithSyncFeeErc2771));
+                        $"Transaction hash: {status.TransactionHash}";
                 default:
                     await WaitForSeconds(2);
                     continue;
@@ -199,10 +195,9 @@ public class GelatoCalls : ServiceAdapter, IWeb3InitializedHandler, ISample
                 case TaskState.ExecSuccess:
                 case TaskState.ExecReverted:
                 case TaskState.Cancelled:
-                    return SampleOutputUtil.BuildResultMessage(
+                    return
                         $"Task complete. Final status of {status.TaskId}: {status.TaskState}. " +
-                        $"Transaction hash: {status.TransactionHash}",
-                        nameof(GelatoCalls), nameof(SponsorCallErc2771));
+                        $"Transaction hash: {status.TransactionHash}";
                 default:
                     await WaitForSeconds(2);
                     continue;

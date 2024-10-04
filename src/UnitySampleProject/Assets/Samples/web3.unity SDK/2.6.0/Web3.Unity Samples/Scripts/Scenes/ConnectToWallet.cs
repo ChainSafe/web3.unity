@@ -7,6 +7,7 @@ using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core.Logout;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 /// <summary>
@@ -14,7 +15,7 @@ using UnityEngine.UI;
 /// </summary>
 public class ConnectToWallet : ServiceAdapter, IWeb3InitializedHandler, ILogoutHandler
 {
-    [SerializeField] private bool connectOnInitialize = true;
+    [SerializeField] private bool rememberMe = true;
     
     [Space]
     
@@ -38,7 +39,7 @@ public class ConnectToWallet : ServiceAdapter, IWeb3InitializedHandler, ILogoutH
     {
         try
         {
-            await Web3Unity.Instance.Initialize(connectOnInitialize);
+            await Web3Unity.Instance.Initialize(rememberMe);
         }
         finally
         {

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
@@ -15,7 +16,7 @@ using Newtonsoft.Json;
 using Scripts.EVM.Token;
 using UnityEngine;
 
-public class EvmCalls : MonoBehaviour, ISample
+public class EvmSample : MonoBehaviour, ISample
 {
     #region Fields
     
@@ -128,9 +129,8 @@ public class EvmCalls : MonoBehaviour, ISample
             Web3Unity.Web3.Signer.PublicAddress
         };
         var response = await Web3Unity.Instance.ContractCall(methodCall, ABI.ArrayTotal, ChainSafeContracts.ArrayTotal, args);
-        Debug.Log(response);
-        var output = SampleOutputUtil.BuildOutputValue(response);
-        return SampleOutputUtil.BuildResultMessage(output, nameof(Web3Unity), nameof(Web3Unity.ContractCall));
+        
+        return BuildToString(response);
     }
 
     /// <summary>
@@ -143,8 +143,8 @@ public class EvmCalls : MonoBehaviour, ISample
             increaseAmountSend
         };
         var response = await Web3Unity.Instance.ContractSend(methodSend, ABI.ArrayTotal, ChainSafeContracts.ArrayTotal, args);
-        var output = SampleOutputUtil.BuildOutputValue(response);
-        return SampleOutputUtil.BuildResultMessage(output, nameof(Web3Unity), nameof(Web3Unity.ContractSend));
+        
+        return BuildToString(response);
     }
 
     /// <summary>
@@ -153,7 +153,8 @@ public class EvmCalls : MonoBehaviour, ISample
     public async Task<string> GetBlockNumber()
     {
         var blockNumber = await Web3Unity.Instance.GetBlockNumber();
-        return SampleOutputUtil.BuildResultMessage(blockNumber.ToString(), nameof(Web3Unity), nameof(Web3Unity.Instance.GetBlockNumber));
+        
+        return blockNumber.ToString();
     }
 
     /// <summary>
@@ -165,8 +166,10 @@ public class EvmCalls : MonoBehaviour, ISample
         {
             increaseAmountSend
         };
+        
         var gasLimit = await Web3Unity.Instance.GetGasLimit(ABI.ArrayTotal, ChainSafeContracts.ArrayTotal, methodSend, args);
-        return SampleOutputUtil.BuildResultMessage(gasLimit.ToString(), nameof(Web3Unity), nameof(Web3Unity.Instance.GetGasLimit));
+        
+        return gasLimit.ToString();
     }
 
     /// <summary>
@@ -175,7 +178,8 @@ public class EvmCalls : MonoBehaviour, ISample
     public async Task<string> GetGasPrice()
     {
         var gasPrice = await Web3Unity.Instance.GetGasPrice();
-        return SampleOutputUtil.BuildResultMessage(gasPrice.ToString(), nameof(Web3Unity), nameof(Web3Unity.Instance.GetGasPrice));
+        
+        return gasPrice.ToString();
     }
 
     /// <summary>
@@ -184,7 +188,8 @@ public class EvmCalls : MonoBehaviour, ISample
     public async Task<string> SendTransaction()
     {
         var hash = await Web3Unity.Instance.SendTransaction(toAddress, BigInteger.Parse(value));
-        return SampleOutputUtil.BuildResultMessage(hash, nameof(Web3Unity), nameof(Web3Unity.Instance.SendTransaction));
+        
+        return hash;
     }
 
     /// <summary>
@@ -192,8 +197,9 @@ public class EvmCalls : MonoBehaviour, ISample
     /// </summary>
     public async Task<string> SignMessage()
     {
-        var signedMessage = await Web3Unity.Instance.SignMessage(messageSign);
-        return SampleOutputUtil.BuildResultMessage(signedMessage, nameof(Web3Unity), nameof(Web3Unity.Instance.SignMessage));
+        var signHash = await Web3Unity.Instance.SignMessage(messageSign);
+        
+        return signHash;
     }
 
     /// <summary>
@@ -216,7 +222,7 @@ public class EvmCalls : MonoBehaviour, ISample
         var eventAbi = EventExtensions.GetEventABI<AmountIncreasedEvent>();
         var eventLogs = logs
             .Select(log => eventAbi.DecodeEvent<AmountIncreasedEvent>(log))
-            .Where(l => l != null);
+            .Where(l => l != null).ToArray();
 
         if (!eventLogs.Any())
         {
@@ -284,5 +290,10 @@ public class EvmCalls : MonoBehaviour, ISample
         }
         
         return $"{nameof(MultiCall)} executed.";
+    }
+    
+    private static string BuildToString(IEnumerable<object> dynamicResponse)
+    {
+        return string.Join(",\n", dynamicResponse.Select(o => o.ToString()));
     }
 }

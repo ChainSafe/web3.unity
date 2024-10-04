@@ -3,7 +3,6 @@ using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming;
-using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.Web3;
@@ -17,7 +16,7 @@ using Erc1155Contract = ChainSafe.Gaming.Evm.Contracts.Custom.Erc1155Contract;
 /// <summary>
 /// ERC1155 calls used in the sample scene
 /// </summary>
-public class Erc1155Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecycleParticipant, ILightWeightServiceAdapter, ISample
+public class Erc1155Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecycleParticipant, ILightWeightServiceAdapter, ISample
 {
     #region Fields
     
@@ -91,7 +90,8 @@ public class Erc1155Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecycleP
     public async Task<string> BalanceOf()
     {
         var balance = await _erc1155.BalanceOf(accountBalanceOf, BigInteger.Parse(tokenIdBalanceOf));
-        return SampleOutputUtil.BuildResultMessage(balance.ToString(), "ERC-1155", nameof(Erc1155Service.GetBalanceOf));
+        
+        return balance.ToString();
     }
 
     /// <summary>
@@ -102,7 +102,8 @@ public class Erc1155Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecycleP
         var balances = await _erc1155.BalanceOfBatch(
             accountsBalanceOfBatch,
             tokenIdsBalanceOfBatch.Select(BigInteger.Parse).ToArray());
-        return SampleOutputUtil.BuildResultMessage(string.Join(", ", balances), "ERC-1155", nameof(Erc1155Service.GetBalanceOfBatch));
+
+        return string.Join(",\n", balances.Select(o => o.ToString()));
     }
 
     /// <summary>
@@ -111,7 +112,8 @@ public class Erc1155Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecycleP
     public async Task<string> Uri()
     {
         var uri = await _erc1155.Uri(BigInteger.Parse(tokenIdUri));
-        return SampleOutputUtil.BuildResultMessage(uri, "ERC-1155", nameof(Erc1155Service.GetUri));
+        
+        return uri;
     }
 
     /// <summary>
@@ -122,8 +124,8 @@ public class Erc1155Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecycleP
         var response = await _erc1155.MintWithReceipt(
             Web3Unity.Instance.Address,
             idMint, amountMint, Array.Empty<byte>());
-        var output = SampleOutputUtil.BuildOutputValue(new object[] {response.TransactionHash, true});
-        return SampleOutputUtil.BuildResultMessage(output, "ERC-1155", nameof(Erc1155Service.Mint));
+        
+        return response.TransactionHash;
     }
 
     /// <summary>
@@ -138,8 +140,8 @@ public class Erc1155Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecycleP
             amountTransfer,
             Array.Empty<byte>()
             );
-        var output = SampleOutputUtil.BuildOutputValue(new object[] {true, response.TransactionHash});
-        return SampleOutputUtil.BuildResultMessage(output, "ERC-1155", nameof(Erc1155Service.Transfer));
+        
+        return response.TransactionHash;
     }
 
     /// <summary>
@@ -172,7 +174,7 @@ public class Erc1155Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecycleP
     {
         return web3Builder.Configure(services =>
         {
-            services.AddSingleton<IWeb3InitializedHandler, ILifecycleParticipant, Erc1155Calls>(_ => this);
+            services.AddSingleton<IWeb3InitializedHandler, ILifecycleParticipant, Erc1155Sample>(_ => this);
         });
     }
 

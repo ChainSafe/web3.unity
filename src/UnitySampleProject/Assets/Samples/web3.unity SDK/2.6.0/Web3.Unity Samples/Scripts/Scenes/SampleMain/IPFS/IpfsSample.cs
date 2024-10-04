@@ -5,9 +5,8 @@ using ChainSafe.Gaming;
 using ChainSafe.Gaming.UnityPackage.Model;
 using UnityEngine;
 using ChainSafe.Gaming.Marketplace;
-using ChainSafe.Gaming.Web3.Build;
 
-public class IPFSCalls : MonoBehaviour, ISample
+public class IpfsSample : MonoBehaviour, ISample
 {
     #region Fields
 

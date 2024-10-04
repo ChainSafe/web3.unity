@@ -15,7 +15,7 @@ namespace ChainSafe.Gaming.WalletConnect
         /// <summary>
         /// Set to true if you want to store this session on a disk for the next time.
         /// </summary>
-        public bool RememberConnection { get; }
+        public bool RememberSession { get; }
 
         /// <summary>
         /// Enforce new session even if the stored one is available.
@@ -33,7 +33,7 @@ namespace ChainSafe.Gaming.WalletConnect
         string ProjectName { get; }
 
         /// <summary>
-        /// Project Id provided to you by WalletConnect.
+        /// Project ID provided to you by WalletConnect.
         /// </summary>
         string ProjectId { get; }
 

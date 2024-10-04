@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace Samples.Behaviours.SwitchChain
 {
-    public class SwitchChainCalls : MonoBehaviour, ISample
+    public class SwitchChainSample : MonoBehaviour, ISample
     {
         [field: SerializeField] public string Title { get; private set; }
     
@@ -69,7 +69,7 @@ namespace Samples.Behaviours.SwitchChain
         {
             var balance = await Web3Unity.Web3.RpcProvider.GetBalance(Web3Unity.Instance.Address);
         
-            return SampleOutputUtil.BuildResultMessage(balance.ToString(), "ERC-20", nameof(NativeBalanceOf));
+            return balance.ToString();
         }
         
         [Serializable]

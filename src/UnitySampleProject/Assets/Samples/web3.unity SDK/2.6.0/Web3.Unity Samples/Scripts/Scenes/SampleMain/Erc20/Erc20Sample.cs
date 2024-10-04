@@ -2,7 +2,6 @@
 using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming;
-using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Connection;
@@ -16,7 +15,7 @@ using Erc20Contract = ChainSafe.Gaming.Evm.Contracts.Custom.Erc20Contract;
 /// <summary>
 /// ERC20 calls used in the sample scene
 /// </summary>
-public class Erc20Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecycleParticipant, ILightWeightServiceAdapter, ISample
+public class Erc20Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecycleParticipant, ILightWeightServiceAdapter, ISample
 {
     #region Fields
     
@@ -63,7 +62,7 @@ public class Erc20Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecyclePar
     {
         var balance = await _erc20.BalanceOf(accountBalanceOf);
         
-        return SampleOutputUtil.BuildResultMessage(balance.ToString(), "ERC-20", nameof(Erc20Service.GetBalanceOf));
+        return balance.ToString();
     }
 
     /// <summary>
@@ -73,7 +72,7 @@ public class Erc20Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecyclePar
     {
         var balance = await Web3Unity.Web3.RpcProvider.GetBalance(accountBalanceOf);
         
-        return SampleOutputUtil.BuildResultMessage(balance.ToString(), "ERC-20", nameof(NativeBalanceOf));
+        return balance.ToString();
     }
 
     /// <summary>
@@ -82,7 +81,8 @@ public class Erc20Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecyclePar
     public async Task<string> Name()
     {
         var getName = await _erc20.Name();
-        return SampleOutputUtil.BuildResultMessage(getName, "ERC-20", nameof(Erc20Service.GetName));
+        
+        return getName;
     }
 
     /// <summary>
@@ -91,7 +91,8 @@ public class Erc20Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecyclePar
     public async Task<string> Symbol()
     {
         var symbol = await _erc20.Symbol();
-        return SampleOutputUtil.BuildResultMessage(symbol, "ERC-20", nameof(Erc20Service.GetSymbol));
+        
+        return symbol;
     }
 
     /// <summary>
@@ -100,7 +101,7 @@ public class Erc20Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecyclePar
     public async Task<string> Decimals()
     {
         var decimals = await _erc20.Decimals();
-        return SampleOutputUtil.BuildResultMessage(decimals.ToString(), "ERC-20", nameof(Erc20Service.GetDecimals));
+        return decimals.ToString();
     }
 
     /// <summary>
@@ -109,7 +110,8 @@ public class Erc20Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecyclePar
     public async Task<string> TotalSupply()
     {
         var totalSupply = await _erc20.TotalSupply();
-        return SampleOutputUtil.BuildResultMessage(totalSupply.ToString(), "ERC-20", nameof(Erc20Service.GetTotalSupply));
+        
+        return totalSupply.ToString();
     }
 
     /// <summary>
@@ -118,8 +120,8 @@ public class Erc20Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecyclePar
     public async Task<string> MintErc20()
     {
         var mintResponse = await _erc20.MintWithReceipt(Web3Unity.Web3.Signer.PublicAddress, valueToSend * weiPerEther);
-        var output = SampleOutputUtil.BuildOutputValue(new object[] { mintResponse.TransactionHash });
-        return SampleOutputUtil.BuildResultMessage(output, "ERC-20", nameof(Erc20Service.Mint));
+        
+        return mintResponse.TransactionHash;
     }
 
     /// <summary>
@@ -128,15 +130,8 @@ public class Erc20Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecyclePar
     public async Task<string> TransferErc20()
     {
         var mintResponse = await _erc20.Transfer(toAccount, amountTransfer);
-        var output = SampleOutputUtil.BuildOutputValue(new object[] { mintResponse });
-        _erc20.OnTransfer += Test;
-        return SampleOutputUtil.BuildResultMessage(output, "ERC-20", nameof(Erc20Service.Transfer));
-    }
-
-    private void Test(Erc20Contract.TransferEventDTO obj)
-    {
-        Debug.LogError("TRANSFERED" + obj.ToString());
-        _erc20.OnTransfer -= Test;
+        
+        return mintResponse.ToString();
     }
 
     public async Task OnWeb3Initialized(Web3 web3)
@@ -148,7 +143,7 @@ public class Erc20Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecyclePar
     {
         return web3Builder.Configure(services =>
         {
-            services.AddSingleton<IWeb3InitializedHandler, ILifecycleParticipant, Erc20Calls>(_ => this);
+            services.AddSingleton<IWeb3InitializedHandler, ILifecycleParticipant, Erc20Sample>(_ => this);
         });
     }
 

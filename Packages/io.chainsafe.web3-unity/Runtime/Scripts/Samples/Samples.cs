@@ -76,7 +76,7 @@ public class Samples : ServiceAdapter, ILightWeightServiceAdapter, IWeb3Initiali
 
             string message = await Execute(method, instance);
             
-            Debug.Log(message);
+            Debug.Log($"{message} \n {instance.Title} - {instance.GetType().Name}.{method.Name}");
         }
         // Todo: display error via error overlay
         catch (Exception e)

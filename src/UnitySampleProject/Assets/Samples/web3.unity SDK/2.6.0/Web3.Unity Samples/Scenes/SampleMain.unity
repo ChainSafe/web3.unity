@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 21975178}
   - component: {fileID: 21975179}
   m_Layer: 0
-  m_Name: ERC20Calls
+  m_Name: ERC20Sample
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -184,7 +184,7 @@ GameObject:
   - component: {fileID: 24448131}
   - component: {fileID: 24448130}
   m_Layer: 0
-  m_Name: ERC721Calls
+  m_Name: ERC721Sample
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -392,7 +392,7 @@ GameObject:
   - component: {fileID: 108046415}
   - component: {fileID: 108046416}
   m_Layer: 0
-  m_Name: EVMCalls
+  m_Name: EVMSample
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -462,7 +462,7 @@ GameObject:
   - component: {fileID: 128166331}
   - component: {fileID: 128166332}
   m_Layer: 0
-  m_Name: ERC1155Calls
+  m_Name: ERC1155Sample
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -657,7 +657,7 @@ GameObject:
   - component: {fileID: 379983083}
   - component: {fileID: 379983084}
   m_Layer: 0
-  m_Name: RampSamples
+  m_Name: RampSample
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -870,7 +870,7 @@ GameObject:
   - component: {fileID: 626054679}
   - component: {fileID: 626054680}
   m_Layer: 0
-  m_Name: GelatoCalls
+  m_Name: GelatoSample
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1546,7 +1546,7 @@ GameObject:
   - component: {fileID: 2077011803}
   - component: {fileID: 2077011804}
   m_Layer: 0
-  m_Name: IPFSCalls
+  m_Name: IPFSSample
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1623,7 +1623,7 @@ GameObject:
   - component: {fileID: 2120977409}
   - component: {fileID: 2120977410}
   m_Layer: 0
-  m_Name: SwitchChainCalls
+  m_Name: SwitchChainSample
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

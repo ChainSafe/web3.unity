@@ -1,7 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.Gaming;
 using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
@@ -13,11 +13,12 @@ using ChainSafe.Gaming.Web3.Core;
 using Scripts.EVM.Token;
 using UnityEngine;
 using Erc721Contract = ChainSafe.Gaming.Evm.Contracts.Custom.Erc721Contract;
+using StringBuilder = System.Text.StringBuilder;
 
 /// <summary>
 /// ERC721 calls used in the sample scene
 /// </summary>
-public class Erc721Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecycleParticipant, ILightWeightServiceAdapter, ISample
+public class Erc721Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecycleParticipant, ILightWeightServiceAdapter, ISample
 {
     #region Fields
     
@@ -84,7 +85,8 @@ public class Erc721Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecyclePa
     public async Task<string> BalanceOf()
     {
         var balance = await _erc721.BalanceOf(accountBalanceOf);
-        return SampleOutputUtil.BuildResultMessage(balance.ToString(), "ERC-721", nameof(Erc721Service.GetBalanceOf));
+        
+        return balance.ToString();
     }
 
     /// <summary>
@@ -93,7 +95,8 @@ public class Erc721Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecyclePa
     public async Task<string> OwnerOf()
     {
         var owner = await _erc721.OwnerOf(BigInteger.Parse(tokenIdOwnerOf));
-        return SampleOutputUtil.BuildResultMessage(owner, "ERC-721", nameof(Erc721Service.GetOwnerOf));
+        
+        return owner;
     }
 
     /// <summary>
@@ -102,17 +105,8 @@ public class Erc721Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecyclePa
     public async Task<string> OwnerOfBatch()
     {
         var owners = await _erc721.GetOwnerOfBatch(tokenIdsOwnerOfBatch);
-        var ownersString = new StringBuilder();
-        var dict = owners.GroupBy(x => x.Owner).ToDictionary(x => x.Key, x => x.Select(x => x.TokenId).ToList());
-        foreach (var owner in dict)
-        {
-            ownersString.AppendLine($"Owner: {owner.Key} owns the following token(s):");
-            foreach (var tokenId in owner.Value)
-            {
-                ownersString.AppendLine("\t" + tokenId);
-            }
-        }
-        return SampleOutputUtil.BuildResultMessage(ownersString.ToString(), "ERC-721", nameof(Erc721Service.GetOwnerOfBatch));
+
+        return BuildOwnerOfBatchText(owners);
     }
 
     /// <summary>
@@ -121,7 +115,7 @@ public class Erc721Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecyclePa
     public async Task<string> Uri()
     {
         var uri = await _erc721.TokenURI(BigInteger.Parse(tokenIdUri));
-        return SampleOutputUtil.BuildResultMessage(uri, "ERC-721", nameof(Erc721Service.GetUri));
+        return uri;
     }
 
     /// <summary>
@@ -130,8 +124,8 @@ public class Erc721Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecyclePa
     public async Task<string> MintErc721()
     {
         var response = await _erc721.SafeMintWithReceipt(Web3Unity.Instance.Address, uriMint);
-        var output = SampleOutputUtil.BuildOutputValue(new [] {response.TransactionHash});
-        return SampleOutputUtil.BuildResultMessage(output, "ERC-721", nameof(Erc721Service.GetUri));
+        
+        return response.TransactionHash;
     }
 
     /// <summary>
@@ -140,8 +134,8 @@ public class Erc721Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecyclePa
     public async Task<string> TransferErc721()
     {
         var response = await _erc721.SafeTransferFromWithReceipt(contractTransfer, toAccountTransfer, tokenIdTransfer);
-        var output = SampleOutputUtil.BuildOutputValue(new [] {response.TransactionHash});
-        return SampleOutputUtil.BuildResultMessage(output, "ERC-721", nameof(Erc721Service.Transfer));
+        
+        return response.TransactionHash;
     }
 
     public async Task OnWeb3Initialized(Web3 web3)
@@ -153,7 +147,7 @@ public class Erc721Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecyclePa
     {
         return web3Builder.Configure(services =>
         {
-            services.AddSingleton<IWeb3InitializedHandler, ILifecycleParticipant, Erc721Calls>(_ => this);
+            services.AddSingleton<IWeb3InitializedHandler, ILifecycleParticipant, Erc721Sample>(_ => this);
         });
     }
 
@@ -165,5 +159,24 @@ public class Erc721Calls : ServiceAdapter, IWeb3InitializedHandler, ILifecyclePa
     public async ValueTask WillStopAsync()
     {
         await _erc721.DisposeAsync();
+    }
+
+    private string BuildOwnerOfBatchText(IEnumerable<OwnerOfBatchModel> owners)
+    {
+        var ownersString = new StringBuilder();
+        
+        var dict = owners.GroupBy(x => x.Owner).ToDictionary(x => x.Key, x => x.Select(x => x.TokenId).ToList());
+        
+        foreach (var owner in dict)
+        {
+            ownersString.AppendLine($"Owner: {owner.Key} owns the following token(s):");
+            
+            foreach (var tokenId in owner.Value)
+            {
+                ownersString.AppendLine("\t" + tokenId);
+            }
+        }
+        
+        return ownersString.ToString();
     }
 }
