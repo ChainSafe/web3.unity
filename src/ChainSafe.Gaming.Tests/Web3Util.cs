@@ -4,6 +4,7 @@ using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.NetCore;
+using ChainSafe.Gaming.RPC.Events;
 using ChainSafe.Gaming.Wallets;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core;
@@ -68,6 +69,7 @@ namespace ChainSafe.Gaming.Tests
 
                     services.AddSingleton(jsonRpcWalletConfig);
                     services.AddSingleton<ISigner, ITransactionExecutor, ILifecycleParticipant, JsonRpcWallet>();
+                    services.UseEventsWithPolling();
                 })
                 .Configure(configureDelegate)
                 .LaunchAsync();

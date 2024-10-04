@@ -13,9 +13,9 @@ namespace ChainSafe.Gaming.Connection
         /// Add the given adapter to the <see cref="Web3Builder"/>.
         /// </summary>
         /// <param name="web3Builder">Web3Builder instance to be configured.</param>
-        /// <param name="adapter"><see cref="IWeb3BuilderServiceAdapter"/> to be added to <see cref="Web3Builder"/>.</param>
+        /// <param name="adapter"><see cref="IServiceAdapter"/> to be added to <see cref="Web3Builder"/>.</param>
         /// <returns>Configured <see cref="Web3Builder"/>.</returns>
-        public static Web3Builder ConfigureServices(this Web3Builder web3Builder, IWeb3BuilderServiceAdapter adapter)
+        public static Web3Builder ConfigureServices(this Web3Builder web3Builder, IServiceAdapter adapter)
         {
             return adapter.ConfigureServices(web3Builder);
         }
@@ -24,9 +24,9 @@ namespace ChainSafe.Gaming.Connection
         /// Add the given adapters to the <see cref="Web3Builder"/>.
         /// </summary>
         /// <param name="web3Builder">Web3Builder instance to be configured.</param>
-        /// <param name="adapters">Multiple <see cref="IWeb3BuilderServiceAdapter"/> to be added to <see cref="Web3Builder"/>.</param>
+        /// <param name="adapters">Multiple <see cref="IServiceAdapter"/> to be added to <see cref="Web3Builder"/>.</param>
         /// <returns>Configured <see cref="Web3Builder"/>.</returns>
-        public static Web3Builder ConfigureServices(this Web3Builder web3Builder, HashSet<IWeb3BuilderServiceAdapter> adapters)
+        public static Web3Builder ConfigureServices(this Web3Builder web3Builder, IEnumerable<IServiceAdapter> adapters)
         {
             foreach (var adapter in adapters)
             {
