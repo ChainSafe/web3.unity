@@ -1,18 +1,20 @@
-using System.Threading.Tasks;
+using ChainSafe.Gaming.Web3.Core.Chains;
 
 namespace ChainSafe.Gaming.Web3.Analytics
 {
     public class NoOpAnalyticsClient : IAnalyticsClient
     {
-        public NoOpAnalyticsClient(IChainConfig chainConfig, IProjectConfig projectConfig)
+        private readonly IChainManager chainManager;
+
+        public NoOpAnalyticsClient(IChainManager chainManager, IProjectConfig projectConfig)
         {
-            ChainConfig = chainConfig;
+            this.chainManager = chainManager;
             ProjectConfig = projectConfig;
         }
 
         public string AnalyticsVersion => null;
 
-        public IChainConfig ChainConfig { get; }
+        public IChainConfig ChainConfig => chainManager.Current;
 
         public IProjectConfig ProjectConfig { get; }
 

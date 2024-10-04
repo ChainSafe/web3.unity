@@ -1,32 +1,30 @@
+using System;
 using System.Numerics;
 using System.Threading.Tasks;
+using ChainSafe.Gaming;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.GamingSdk.Gelato;
 using ChainSafe.GamingSdk.Gelato.Dto;
+using ChainSafe.Gaming.UnityPackage.Connection;
+using ChainSafe.Gaming.Web3.Build;
+using ChainSafe.GamingSdk.Gelato.Types;
+using Microsoft.Extensions.DependencyInjection;
 using UnityEngine;
 
-public class GelatoSample
+public class GelatoSample : ServiceAdapter, IWeb3InitializedHandler, ISample
 {
-    private readonly Web3 _web3;
+    [field: SerializeField] public string Title { get; private set; }
+    
+    [field: SerializeField, TextArea] public string Description { get; private set; }
 
-    public GelatoSample(Web3 web3)
-    {
-        _web3 = web3;
-    }
+    public Type[] DependentServiceTypes => new[] { typeof(IGelato) };
 
-    public class TaskResult
-    {
-        public readonly string TaskId;
-        public readonly RelayedTask Status;
+    private Web3 _web3;
 
-        public TaskResult(string taskId, RelayedTask status)
-        {
-            TaskId = taskId;
-            Status = status;
-        }
-    }
-
-    public async Task<TaskResult> CallWithSyncFee()
+    /// <summary>
+    /// Gelato with sync fee
+    /// </summary>
+    public async Task<string> CallWithSyncFee()
     {
         const string vitalik = "0xd8da6bf26964af9d7eed9e03e53415d37aa96045";
         const string target = "0xA045eb75e78f4988d42c3cd201365bDD5D76D406";
@@ -66,7 +64,8 @@ public class GelatoSample
                 case TaskState.ExecSuccess:
                 case TaskState.ExecReverted:
                 case TaskState.Cancelled:
-                    return new TaskResult(relayResponse.TaskId, status);
+                    return $"Task complete. Final status of {relayResponse.TaskId}: {status.TaskState}. " +
+                           $"Transaction hash: {status.TransactionHash}";
                 default:
                     await WaitForSeconds(2);
                     continue;
@@ -74,7 +73,10 @@ public class GelatoSample
         }
     }
 
-    public async Task<TaskResult> SponsorCall()
+    /// <summary>
+    /// Gelato sponsor call
+    /// </summary>
+    public async Task<string> SponsorCall()
     {
         const string counterContract = "0x763D37aB388C5cdd2Fb0849d6275802F959fbF30";
 
@@ -103,7 +105,9 @@ public class GelatoSample
                 case TaskState.ExecSuccess:
                 case TaskState.ExecReverted:
                 case TaskState.Cancelled:
-                    return new TaskResult(relayResponse.TaskId, status);
+                    return
+                        $"Task complete. Final status of {relayResponse.TaskId}: {status.TaskState}. " +
+                        $"Transaction hash: {status.TransactionHash}";
                 default:
                     await WaitForSeconds(2);
                     continue;
@@ -111,7 +115,10 @@ public class GelatoSample
         }
     }
 
-    public async Task<TaskResult> CallWithSyncFeeErc2771()
+    /// <summary>
+    /// Gelato2771 with sync fee
+    /// </summary>
+    public async Task<string> CallWithSyncFeeErc2771()
     {
         const string target = "0x5dD1100f23278e0e27972eacb4F1B81D97D071B7";
         const string feeToken = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
@@ -144,7 +151,9 @@ public class GelatoSample
                 case TaskState.ExecSuccess:
                 case TaskState.ExecReverted:
                 case TaskState.Cancelled:
-                    return new TaskResult(relayResponse.TaskId, status);
+                    return
+                        $"Task complete. Final status of {status.TaskId}: {status.TaskState}. " +
+                        $"Transaction hash: {status.TransactionHash}";
                 default:
                     await WaitForSeconds(2);
                     continue;
@@ -152,7 +161,10 @@ public class GelatoSample
         }
     }
 
-    public async Task<TaskResult> SponsorCallErc2771()
+    /// <summary>
+    /// Gelato2771 sponsor call
+    /// </summary>
+    public async Task<string> SponsorCallErc2771()
     {
         const string target = "0x00172f67db60E5fA346e599cdE675f0ca213b47b";
 
@@ -183,7 +195,9 @@ public class GelatoSample
                 case TaskState.ExecSuccess:
                 case TaskState.ExecReverted:
                 case TaskState.Cancelled:
-                    return new TaskResult(relayResponse.TaskId, status);
+                    return
+                        $"Task complete. Final status of {status.TaskId}: {status.TaskState}. " +
+                        $"Transaction hash: {status.TransactionHash}";
                 default:
                     await WaitForSeconds(2);
                     continue;
@@ -208,5 +222,20 @@ public class GelatoSample
 #else
         await Task.Delay(seconds * 1000);
 #endif
+    }
+    
+    public override Web3Builder ConfigureServices(Web3Builder web3Builder)
+    {
+        return web3Builder.Configure(services =>
+        {
+            services.AddSingleton<IWeb3InitializedHandler>(this);
+        });
+    }
+
+    public Task OnWeb3Initialized(Web3 web3)
+    {
+        _web3 = web3;
+        
+        return Task.CompletedTask;
     }
 }

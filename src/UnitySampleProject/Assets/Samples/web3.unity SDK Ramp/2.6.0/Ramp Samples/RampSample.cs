@@ -1,26 +1,20 @@
 #define RAMP_AVAILABLE
 
+using System;
+using System.Threading.Tasks;
 using ChainSafe.Gaming.UnityPackage;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace ChainSafe.Gaming.Exchangers.Ramp.Sample
 {
-    public class RampSample : MonoBehaviour
+    public class RampSample : MonoBehaviour, ISample
     {
-        public Button OnRampButton;
-        public Button OffRampButton;
-        public Button OnRampOffRampButton;
+        [field: SerializeField] public string Title { get; private set; }
+        [field: SerializeField, TextArea] public string Description { get; private set; }
+        
+        public Type[] DependentServiceTypes => new[] { typeof(IRampExchanger) };
 
-        private void Awake()
-        {
-            // Subscribe to buttons
-            OnRampButton.onClick.AddListener(OnRampPressed);
-            OffRampButton.onClick.AddListener(OffRampPressed);
-            OnRampOffRampButton.onClick.AddListener(OnRampOffRampPressed);
-        }
-
-        private async void OnRampPressed()
+        public async Task<string> OnRamp()
         {
             // Show "Buy Crypto" widget
             var purchaseData = await Web3Unity.Web3.RampExchanger().BuyCrypto(
@@ -38,10 +32,10 @@ namespace ChainSafe.Gaming.Exchangers.Ramp.Sample
                     SelectedCountryCode = "RS"
                 });
 
-            Debug.Log($"Purchase request: {purchaseData}");
+            return $"Purchase request: {purchaseData}";
         }
 
-        private async void OffRampPressed()
+        public async Task<string> OffRamp()
         {
             // Show "Sell Crypto" widget
             var saleData = await Web3Unity.Web3.RampExchanger().SellCrypto(
@@ -57,10 +51,10 @@ namespace ChainSafe.Gaming.Exchangers.Ramp.Sample
                     SelectedCountryCode = "RS"
                 });
 
-            Debug.Log($"OffRamp: {saleData}");
+            return $"OffRamp: {saleData}";
         }
 
-        private async void OnRampOffRampPressed()
+        public async Task<string> OnRampOffRamp()
         {
             // Show "Buy or Sell Crypto" widget
             var rampTransactionData = await Web3Unity.Web3.RampExchanger().BuyOrSellCrypto(
@@ -77,7 +71,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp.Sample
                     SelectedCountryCode = "RS"
                 });
 
-            Debug.Log(rampTransactionData.ToString());
+            return rampTransactionData.ToString();
         }
     }
 }

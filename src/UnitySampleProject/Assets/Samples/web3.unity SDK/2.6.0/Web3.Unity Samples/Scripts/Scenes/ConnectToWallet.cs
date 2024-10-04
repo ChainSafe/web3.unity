@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using ChainSafe.Gaming;
 using ChainSafe.Gaming.UnityPackage;
@@ -6,17 +5,17 @@ using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core.Logout;
-using Microsoft.Extensions.DependencyInjection;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 /// <summary>
 /// Used to easily connect/disconnect a wallet.
 /// </summary>
-public class ConnectToWallet : Web3BuilderServiceAdapter, IWeb3InitializedHandler, ILogoutHandler
+public class ConnectToWallet : ServiceAdapter, IWeb3InitializedHandler, ILogoutHandler
 {
-    [SerializeField] private bool connectOnInitialize = true;
+    [SerializeField] private bool rememberMe = true;
     
     [Space]
     
@@ -40,7 +39,7 @@ public class ConnectToWallet : Web3BuilderServiceAdapter, IWeb3InitializedHandle
     {
         try
         {
-            await Web3Unity.Instance.Initialize(connectOnInitialize);
+            await Web3Unity.Instance.Initialize(rememberMe);
         }
         finally
         {

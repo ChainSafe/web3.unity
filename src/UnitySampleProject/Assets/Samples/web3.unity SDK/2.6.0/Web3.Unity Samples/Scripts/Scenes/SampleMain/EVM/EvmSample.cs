@@ -1,5 +1,9 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Threading.Tasks;
+using ChainSafe.Gaming;
 using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.Evm.Contracts.Extensions;
 using ChainSafe.Gaming.MultiCall;
@@ -12,9 +16,16 @@ using Newtonsoft.Json;
 using Scripts.EVM.Token;
 using UnityEngine;
 
-public class EvmCalls : MonoBehaviour
+public class EvmSample : MonoBehaviour, ISample
 {
     #region Fields
+    
+    [field: SerializeField] public string Title { get; private set; }
+    
+    [field: SerializeField, TextArea] public string Description { get; private set; }
+    
+    public Type[] DependentServiceTypes => Array.Empty<Type>();
+    
     [Header("Change the fields below for testing purposes")]
 
     #region Contract Send
@@ -111,85 +122,90 @@ public class EvmCalls : MonoBehaviour
     /// <summary>
     /// Calls values from a contract
     /// </summary>
-    public async void ContractCall()
+    public async Task<string> ContractCall()
     {
         object[] args =
         {
             Web3Unity.Web3.Signer.PublicAddress
         };
         var response = await Web3Unity.Instance.ContractCall(methodCall, ABI.ArrayTotal, ChainSafeContracts.ArrayTotal, args);
-        Debug.Log(response);
-        var output = SampleOutputUtil.BuildOutputValue(response);
-        SampleOutputUtil.PrintResult(output, nameof(Web3Unity), nameof(Web3Unity.ContractCall));
+        
+        return BuildToString(response);
     }
 
     /// <summary>
     /// Sends values to a contract
     /// </summary>
-    public async void ContractSend()
+    public async Task<string> ContractSend()
     {
         object[] args =
         {
             increaseAmountSend
         };
         var response = await Web3Unity.Instance.ContractSend(methodSend, ABI.ArrayTotal, ChainSafeContracts.ArrayTotal, args);
-        var output = SampleOutputUtil.BuildOutputValue(response);
-        SampleOutputUtil.PrintResult(output, nameof(Web3Unity), nameof(Web3Unity.ContractSend));
+        
+        return BuildToString(response);
     }
 
     /// <summary>
     /// Gets the current block number
     /// </summary>
-    public async void GetBlockNumber()
+    public async Task<string> GetBlockNumber()
     {
         var blockNumber = await Web3Unity.Instance.GetBlockNumber();
-        SampleOutputUtil.PrintResult(blockNumber.ToString(), nameof(Web3Unity), nameof(Web3Unity.Instance.GetBlockNumber));
+        
+        return blockNumber.ToString();
     }
 
     /// <summary>
     /// Gets the gas limit for a specific function
     /// </summary>
-    public async void GetGasLimit()
+    public async Task<string> GetGasLimit()
     {
         object[] args =
         {
             increaseAmountSend
         };
+        
         var gasLimit = await Web3Unity.Instance.GetGasLimit(ABI.ArrayTotal, ChainSafeContracts.ArrayTotal, methodSend, args);
-        SampleOutputUtil.PrintResult(gasLimit.ToString(), nameof(Web3Unity), nameof(Web3Unity.Instance.GetGasLimit));
+        
+        return gasLimit.ToString();
     }
 
     /// <summary>
     /// Gets the current gas price
     /// </summary>
-    public async void GetGasPrice()
+    public async Task<string> GetGasPrice()
     {
         var gasPrice = await Web3Unity.Instance.GetGasPrice();
-        SampleOutputUtil.PrintResult(gasPrice.ToString(), nameof(Web3Unity), nameof(Web3Unity.Instance.GetGasPrice));
+        
+        return gasPrice.ToString();
     }
 
     /// <summary>
     /// Sends a transaction
     /// </summary>
-    public async void SendTransaction()
+    public async Task<string> SendTransaction()
     {
         var hash = await Web3Unity.Instance.SendTransaction(toAddress, BigInteger.Parse(value));
-        SampleOutputUtil.PrintResult(hash, nameof(Web3Unity), nameof(Web3Unity.Instance.SendTransaction));
+        
+        return hash;
     }
 
     /// <summary>
     /// Signs a message, the result is specific to each user
     /// </summary>
-    public async void SignMessage()
+    public async Task<string> SignMessage()
     {
-        var signedMessage = await Web3Unity.Instance.SignMessage(messageSign);
-        SampleOutputUtil.PrintResult(signedMessage, nameof(Web3Unity), nameof(Web3Unity.Instance.SignMessage));
+        var signHash = await Web3Unity.Instance.SignMessage(messageSign);
+        
+        return signHash;
     }
 
     /// <summary>
     /// Gets events data from a transaction
     /// </summary>
-    public async void EventTxData()
+    public async Task<string> EventTxData()
     {
         // Contract write
         var amount = 1;
@@ -206,7 +222,7 @@ public class EvmCalls : MonoBehaviour
         var eventAbi = EventExtensions.GetEventABI<AmountIncreasedEvent>();
         var eventLogs = logs
             .Select(log => eventAbi.DecodeEvent<AmountIncreasedEvent>(log))
-            .Where(l => l != null);
+            .Where(l => l != null).ToArray();
 
         if (!eventLogs.Any())
         {
@@ -222,12 +238,14 @@ public class EvmCalls : MonoBehaviour
                 Debug.Log($"Amount from event data: {eventData.amount}");
             }
         }
+        
+        return $"{nameof(EventTxData)} executed.";
     }
 
     /// <summary>
     /// Makes multiple calls
     /// </summary>
-    public async void MultiCall()
+    public async Task<string> MultiCall()
     {
         var erc20Contract = Web3Unity.Web3.ContractBuilder.Build(ABI.Erc20, ChainSafeContracts.Erc20);
         var erc20BalanceOfCalldata = erc20Contract.Calldata(EthMethods.BalanceOf, new object[]
@@ -270,5 +288,12 @@ public class EvmCalls : MonoBehaviour
             var decodedTotalSupply = erc20Contract.Decode(EthMethods.TotalSupply, multicallResultResponse[1].ReturnData.ToHex());
             Debug.Log($"decodedTotalSupply {((BigInteger)decodedTotalSupply[0]).ToString()}");
         }
+        
+        return $"{nameof(MultiCall)} executed.";
+    }
+    
+    private static string BuildToString(IEnumerable<object> dynamicResponse)
+    {
+        return string.Join(",\n", dynamicResponse.Select(o => o.ToString()));
     }
 }

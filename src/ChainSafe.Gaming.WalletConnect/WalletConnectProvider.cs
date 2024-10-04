@@ -210,7 +210,7 @@ namespace ChainSafe.Gaming.WalletConnect
                     WCLogger.Log("Remote wallet connected.");
                 }
 
-                if (config.RememberConnection)
+                if (config.RememberSession)
                 {
                     await storage.SaveLocalData(localData);
                 }
