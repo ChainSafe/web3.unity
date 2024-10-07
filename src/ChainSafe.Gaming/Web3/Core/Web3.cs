@@ -38,7 +38,6 @@ namespace ChainSafe.Gaming.Web3
             this.serviceProvider = serviceProvider;
 
             rpcProvider = this.serviceProvider.GetService<IRpcProvider>();
-            events = this.serviceProvider.GetRequiredService<IEventManager>();
             Chains = this.serviceProvider.GetRequiredService<IChainManager>();
             ProjectConfig = this.serviceProvider.GetRequiredService<IProjectConfig>();
             ChainConfig = this.serviceProvider.GetRequiredService<IChainConfig>();
@@ -52,6 +51,7 @@ namespace ChainSafe.Gaming.Web3
             this.serviceProvider.TryGetService(out signer);
             this.serviceProvider.TryGetService(out transactionExecutor);
             this.serviceProvider.TryGetService(out logoutManager);
+            this.serviceProvider.TryGetService(out events);
         }
 
         /// <summary>

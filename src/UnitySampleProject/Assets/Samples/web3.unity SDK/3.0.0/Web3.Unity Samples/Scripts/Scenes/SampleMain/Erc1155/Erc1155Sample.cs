@@ -111,8 +111,8 @@ public class Erc1155Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecycle
     /// </summary>
     public async Task<string> Uri()
     {
-        var uri = await _erc1155.Uri(BigInteger.Parse(tokenIdUri));
-
+        var uri = await _erc1155.Uri(tokenIdUri);
+        
         return uri;
     }
 
