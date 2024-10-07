@@ -16,6 +16,10 @@ public static class WebGLThreadPatcherInstaller
     private const string AsyncToolsPackageName = "com.utilities.async";
 
     private const string AsyncToolPackageLink = "https://github.com/RageAgainstThePixel/com.utilities.async.git#upm";
+    
+    private const string WebGLThreadingPatcherLink = "https://github.com/VolodymyrBS/WebGLThreadingPatcher.git";
+    private const string WebGLThreadingPatcherName = "com.tools.webglthreadingpatcher";
+
 
     static WebGLThreadPatcherInstaller()
     {   
@@ -41,14 +45,15 @@ public static class WebGLThreadPatcherInstaller
         
         Manifest manifest = JsonConvert.DeserializeObject<Manifest>(json);
         
-        // check if ThreadPatcher is already installed.
-        if (manifest.Dependencies.ContainsKey(AsyncToolsPackageName))
+        // check if ThreadPatcher & AsyncUtilities are already installed.
+        if (manifest.Dependencies.ContainsKey(AsyncToolsPackageName) && manifest.Dependencies.ContainsKey(WebGLThreadingPatcherName))
         {
+            Debug.Log("Both WebGL Threading Patcher and Async Tools are already installed");
             return;
         }
         
         if (EditorUtility.DisplayDialog("Web3.Unity",
-                "For Web3.Unity to fully work on a WebGL build you need to install Async Utilities, this will make sure async operations can run to completion.\nInstall Async Utilities?",
+                "For Web3.Unity to fully work on a WebGL build you need to install Async Utilities & WebGL Threading Patcher, this will make sure async operations can run to completion.\nInstall Async Utilities & WebGL Threading Patcher?",
                 "Yes", "No"))
         {
             try
@@ -57,10 +62,12 @@ public static class WebGLThreadPatcherInstaller
 
                 parsed.Merge(JObject.Parse(JsonConvert.SerializeObject(new Manifest(new Dictionary<string, string>()
                 {
-                    { AsyncToolsPackageName, AsyncToolPackageLink }
+                    { AsyncToolsPackageName, AsyncToolPackageLink },
+                    { WebGLThreadingPatcherName, WebGLThreadingPatcherLink}
                 }))));
 
                 File.WriteAllText(ManifestPath, parsed.ToString(Formatting.Indented));
+                UnityEditor.PackageManager.Client.Resolve();
             }
             catch (Exception e)
             {

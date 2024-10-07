@@ -22,7 +22,7 @@ using Network = Web3Auth.Network;
 /// ConnectionProvider for connecting wallet via Web3Auth.
 /// </summary>
 [CreateAssetMenu(menuName = "ChainSafe/Connection Provider/Web3Auth", fileName = nameof(Web3AuthConnectionProvider))]
-public class Web3AuthConnectionProvider : RestorableConnectionProvider, ILogoutHandler, IWeb3InitializedHandler
+public class Web3AuthConnectionProvider : ConnectionProvider, ILogoutHandler, IWeb3InitializedHandler
 {
     [field: SerializeField, DefaultAssetValue("Packages/io.chainsafe.web3-unity.web3auth/Runtime/Sprites/web3auth.png")]
     public override Sprite ButtonIcon { get; protected set; }
@@ -34,9 +34,6 @@ public class Web3AuthConnectionProvider : RestorableConnectionProvider, ILogoutH
     [SerializeField] private Network network;
 
     [Space]
-
-    // [SerializeField, DefaultAssetValue("Packages/io.chainsafe.web3-unity.web3auth/Runtime/Prefabs/Web3Auth.prefab")]
-    // private GameObject modalPrefab;
 
     [SerializeField]
     private GuiScreenFactory modalScreenFactory;
@@ -79,8 +76,10 @@ public class Web3AuthConnectionProvider : RestorableConnectionProvider, ILogoutH
         _instance = this;
     }
 
-    public override async Task Initialize()
+    public override async Task Initialize(bool rememberSession)
     {
+        await base.Initialize(rememberSession);
+        
         _initializeTcs = new TaskCompletionSource<string>();
         
         var projectConfig = ProjectConfigUtilities.Load();
@@ -98,12 +97,6 @@ public class Web3AuthConnectionProvider : RestorableConnectionProvider, ILogoutH
             chainConfig.Rpc, chainConfig.Network, "", chainConfig.Symbol, "", network.ToString().ToLower(), Initialized, InitializeError);
 
         await _initializeTcs.Task;
-    }
-#else
-    
-    public override Task Initialize()
-    {
-        return Task.CompletedTask;
     }
 #endif
 

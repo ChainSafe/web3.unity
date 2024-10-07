@@ -15,29 +15,31 @@ namespace ChainSafe.Gaming.HyperPlay
     /// Connection provider for connecting via HyperPlay Launcher.
     /// </summary>
     [CreateAssetMenu(menuName = "ChainSafe/Connection Provider/HyperPlay", fileName = nameof(HyperPlayConnectionProvider))]
-    public class HyperPlayConnectionProvider : RestorableConnectionProvider, IHyperPlayConfig
+    public class HyperPlayConnectionProvider : ConnectionProvider, IHyperPlayConfig
     {
         [field: SerializeField, DefaultAssetValue("Packages/io.chainsafe.web3-unity.hyperplay/Runtime/Sprites/HyperPlay.png")]
         public override Sprite ButtonIcon { get; protected set; }
 
         [field: SerializeField] public override string ButtonText { get; protected set; } = "HyperPlay";
+
+        public override bool DisplayLoadingOnConnection => true;
         
         public string SignMessageRpcMethodName => "personal_sign";
 
         public string SignTypedMessageRpcMethodName => "eth_signTypedData_v3";
 
-        public bool RememberConnection => RememberSession;
-        
+        bool IHyperPlayConfig.RememberSession => RememberSession;
+
         public override bool IsAvailable => Application.isEditor || !Application.isMobilePlatform;
 
         private bool _storedSessionAvailable;
 
-        public override bool DisplayLoadingOnConnection => true;
-
-        public override Task Initialize()
+#if UNITY_WEBGL && !UNITY_EDITOR
+        public override Task Initialize(bool rememberSession)
         {
             return Task.CompletedTask;
         }
+#endif
         
         protected override void ConfigureServices(IWeb3ServiceCollection services)
         {

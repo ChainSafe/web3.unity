@@ -66,7 +66,7 @@ namespace ChainSafe.Gaming.HyperPlay
                 return account;
             }
 
-            if (_config.RememberConnection)
+            if (_config.RememberSession)
             {
                 _data.RememberSession = true;
 
