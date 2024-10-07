@@ -532,6 +532,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ConnectToWallet
       objectReference: {fileID: 0}
+    - target: {fileID: 1137403325278580770, guid: cee4edae25d8bec48be2bdf4687fc08f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5212087412580531925, guid: cee4edae25d8bec48be2bdf4687fc08f, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1534,6 +1538,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d30a4f4c7d578c42beeecc2e2bbd394, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  marketplaceConfig:
+    <EndpointOverride>k__BackingField: 
+    <MarketplaceContractAbi>k__BackingField: 
+    <ProjectIdOverride>k__BackingField: 
+    <MarketplaceId>k__BackingField: 
+    <MarketplaceContractAddress>k__BackingField: 
 --- !u!114 &1894328609
 MonoBehaviour:
   m_ObjectHideFlags: 0
