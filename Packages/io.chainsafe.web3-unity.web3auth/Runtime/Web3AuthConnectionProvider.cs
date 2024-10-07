@@ -57,6 +57,8 @@ public class Web3AuthConnectionProvider : RestorableConnectionProvider, ILogoutH
     [NonSerialized] private bool _rememberMe;
     
     public override bool IsAvailable => true;
+    
+    public override bool DisplayLoadingOnConnection => false;
 
  #if UNITY_WEBGL && !UNITY_EDITOR
 
@@ -98,6 +100,7 @@ public class Web3AuthConnectionProvider : RestorableConnectionProvider, ILogoutH
         await _initializeTcs.Task;
     }
 #else
+    
     public override Task Initialize()
     {
         return Task.CompletedTask;

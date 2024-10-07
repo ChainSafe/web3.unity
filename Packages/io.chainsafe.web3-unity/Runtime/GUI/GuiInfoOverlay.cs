@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
 
 namespace ChainSafe.Gaming.GUI
@@ -8,11 +9,20 @@ namespace ChainSafe.Gaming.GUI
         public TMP_Text Message;
         public GameObject ErrorIcon;
         public GameObject LoadingIcon;
-        private bool deactivateOnClick;
+        
+        private bool closeOnClick;
+        private Action onClose;
+        private Action<GuiInfoOverlay> onRelease;
 
-        public void Initialize(GuiOverlayType type, string message, bool deactivateOnClick)
+        public int Id { get; private set; }
+
+        public void Initialize(int id, GuiOverlayType type, string message, bool closeOnClick, Action onClose, Action<GuiInfoOverlay> release)
         {
-            this.deactivateOnClick = deactivateOnClick;
+            Id = id;
+            this.onClose = onClose;
+            this.closeOnClick = closeOnClick;
+            onRelease = release;
+            
             ErrorIcon.SetActive(type == GuiOverlayType.Error);
             LoadingIcon.SetActive(type == GuiOverlayType.Loading);
             Message.text = message;
@@ -20,12 +30,19 @@ namespace ChainSafe.Gaming.GUI
 
         public void OnScreenClick()
         {
-            if (!deactivateOnClick)
+            if (!closeOnClick)
             {
                 return;
             }
             
-            gameObject.SetActive(false);
+            Hide();
+        }
+
+        internal void Hide()
+        {
+            gameObject.SetActive(false); // replace with animation
+            onClose?.Invoke();
+            onRelease(this);
         }
     }
 }

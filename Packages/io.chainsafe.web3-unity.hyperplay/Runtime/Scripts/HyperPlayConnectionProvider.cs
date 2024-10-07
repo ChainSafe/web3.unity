@@ -31,7 +31,9 @@ namespace ChainSafe.Gaming.HyperPlay
         public override bool IsAvailable => Application.isEditor || !Application.isMobilePlatform;
 
         private bool _storedSessionAvailable;
-        
+
+        public override bool DisplayLoadingOnConnection => true;
+
         public override Task Initialize()
         {
             return Task.CompletedTask;

@@ -8,20 +8,27 @@ namespace ChainSafe.Gaming.GUI
         public GuiScreen LandscapePrefab;
         public GuiScreen PortraitPrefab;
 
-        private GuiScreen builtScreen;
+        private GuiScreen singleScreen;
 
         public T GetSingle<T>()
         {
-            if (!builtScreen)
+            if (!singleScreen)
             {
-                builtScreen = Build();
-                builtScreen.gameObject.SetActive(false);
+                singleScreen = BuildInternal();
+                singleScreen.gameObject.SetActive(false);
             }
             
-            return builtScreen.GetComponent<T>();
+            return singleScreen.GetComponent<T>();
         }
 
-        private GuiScreen Build()
+        public T Build<T>()
+        {
+            var screen = BuildInternal();
+            screen.gameObject.SetActive(false);
+            return screen.GetComponent<T>();
+        }
+
+        private GuiScreen BuildInternal()
         {
             var prefab = FetchPrefab();
             var screen = UnityEngine.Object.Instantiate(prefab);

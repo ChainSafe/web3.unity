@@ -1,31 +1,67 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
 namespace ChainSafe.Gaming.GUI
 {
     public class GuiOverlayManager : MonoBehaviour
     {
-        public GuiScreenFactory ScreenFactory;
-        private Action onClose;
+        public GuiScreenFactory screenFactory;
+        public Transform container;
 
-        private GuiInfoOverlay Overlay => ScreenFactory.GetSingle<GuiInfoOverlay>(); // todo use pool
+        private readonly ObjectPool<GuiInfoOverlay> pool;
+        private readonly List<GuiInfoOverlay> activeOverlays = new();
+        
+        private int overlayCounter = 1000; // offset to detect when default integer value is sent to one of the methods
 
-        public void Show(GuiOverlayType type, string message, bool deactivateOnClick, Action onClose = null)
+        public GuiOverlayManager()
         {
-            this.onClose = onClose;
-            Overlay.Initialize(type, message, deactivateOnClick);
-            Overlay.gameObject.SetActive(true);
+            pool = new ObjectPool<GuiInfoOverlay>(CreateOverlay, InitOverlay, ReleaseOverlay, defaultCapacity: 2);
         }
 
-        public void Hide()
+        public int Show(GuiOverlayType type, string message, bool deactivateOnClick, Action onClose = null)
         {
-            Overlay.gameObject.SetActive(false);
-            
-            if (onClose != null)
+            var overlay = pool.Get();
+            activeOverlays.Add(overlay);
+            overlay.Initialize(overlayCounter++, type, message, deactivateOnClick, onClose, OnReleaseRequested);
+            return overlay.Id;
+        }
+
+        public void Hide(int overlayId)
+        {
+            var overlay = activeOverlays.Find(o => o.Id == overlayId);
+
+            if (overlay == null)
             {
-                onClose.Invoke();
-                onClose = null;
+                throw new InvalidOperationException($"There is no active Overlay with id {overlayId} to hide.");
             }
+            
+            overlay.Hide();
+            activeOverlays.Remove(overlay);
+        }
+
+        private GuiInfoOverlay CreateOverlay()
+        {
+            var overlay = screenFactory.Build<GuiInfoOverlay>();
+            overlay.transform.SetParent(container);
+            return overlay;
+        }
+
+        private void InitOverlay(GuiInfoOverlay overlay)
+        {
+            overlay.transform.SetSiblingIndex(container.childCount); // push to end
+            overlay.gameObject.SetActive(true);
+        }
+
+        private void ReleaseOverlay(GuiInfoOverlay overlay)
+        {
+            overlay.gameObject.SetActive(false);
+        }
+
+        private void OnReleaseRequested(GuiInfoOverlay overlay)
+        {
+            pool.Release(overlay);
         }
     }
 

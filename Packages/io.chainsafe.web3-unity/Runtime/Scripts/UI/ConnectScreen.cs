@@ -14,6 +14,8 @@ namespace ChainSafe.Gaming.UnityPackage.UI
     {
         [SerializeField] private RectTransform providerContainer;
         [SerializeField] private ConnectionProviderButton providerButtonPrefab;
+        
+        private int loadingOverlayId;
 
         public void Initialize(ConnectionProvider[] providers)
         {
@@ -39,7 +41,10 @@ namespace ChainSafe.Gaming.UnityPackage.UI
         {
             try
             {
-                ShowLoading("Establishing connection...");
+                if (provider.DisplayLoadingOnConnection)
+                {
+                    ShowLoading("Establishing connection...");
+                }
 
                 await Web3Unity.Instance.Connect(provider);
             }
@@ -54,7 +59,10 @@ namespace ChainSafe.Gaming.UnityPackage.UI
             }
             finally
             {
-                HideLoading();
+                if (provider.DisplayLoadingOnConnection)
+                {
+                    HideLoading();
+                }
             }
         }
 
@@ -84,7 +92,7 @@ namespace ChainSafe.Gaming.UnityPackage.UI
         private void ShowLoading(string message)
         {
             DisableButtons();
-            GuiManager.Instance.Overlays.Show(GuiOverlayType.Loading, message, false, EnableButtons);
+            loadingOverlayId = GuiManager.Instance.Overlays.Show(GuiOverlayType.Loading, message, false, EnableButtons);
         }
         
         /// <summary>
@@ -92,7 +100,7 @@ namespace ChainSafe.Gaming.UnityPackage.UI
         /// </summary>
         private void HideLoading()
         {
-            GuiManager.Instance.Overlays.Hide();
+            GuiManager.Instance.Overlays.Hide(loadingOverlayId);
         }
 
         private void EnableButtons()

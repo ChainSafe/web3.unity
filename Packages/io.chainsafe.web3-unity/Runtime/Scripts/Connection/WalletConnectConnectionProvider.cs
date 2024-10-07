@@ -100,7 +100,9 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
                 return _connectionBuilder;
             }
         }
-        
+
+        public override bool DisplayLoadingOnConnection => true;
+
         public override Task Initialize()
         {
             return Task.CompletedTask;

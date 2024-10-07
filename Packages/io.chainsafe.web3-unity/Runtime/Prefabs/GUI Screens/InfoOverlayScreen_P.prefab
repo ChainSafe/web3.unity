@@ -96,14 +96,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.98823535, g: 0.64705884, b: 0.64705884, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f34022959f848f94283d4f84e5571165, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6838229fc86f8964885089fb1d0ed6bd, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -332,7 +332,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: df02f2dc09016c54abc68b2bd93ab541, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ab400fd9b39316240b30631965553264, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -561,6 +561,7 @@ GameObject:
   - component: {fileID: 2297351609697431751}
   - component: {fileID: 2488123555950726208}
   - component: {fileID: 9117161514550311940}
+  - component: {fileID: 6537979391340693408}
   m_Layer: 5
   m_Name: Panel
   m_TagString: Untagged
@@ -668,6 +669,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
   m_VerticalFit: 2
+--- !u!225 &6537979391340693408
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6191346726459051022}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &7648492576615933382
 GameObject:
   m_ObjectHideFlags: 0
@@ -681,6 +694,8 @@ GameObject:
   - component: {fileID: 6620895429265316795}
   - component: {fileID: 530721470694714131}
   - component: {fileID: 8822350551004828056}
+  - component: {fileID: 3480591398658853907}
+  - component: {fileID: 1727706438490092776}
   m_Layer: 0
   m_Name: InfoOverlayScreen_P
   m_TagString: Untagged
@@ -746,7 +761,7 @@ MonoBehaviour:
   <Layer>k__BackingField: {fileID: 11400000, guid: 2db925cab13de0a47a825179730b7cfb, type: 2}
   Canvas: {fileID: 9080589346744596597}
   Content: {fileID: 118342098571681222}
-  Animation: {fileID: 0}
+  Animation: {fileID: 1727706438490092776}
 --- !u!114 &530721470694714131
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -785,3 +800,36 @@ MonoBehaviour:
   Message: {fileID: 1166155671716617278}
   ErrorIcon: {fileID: 1302129811454805426}
   LoadingIcon: {fileID: 3999814893022731314}
+--- !u!114 &3480591398658853907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7648492576615933382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!111 &1727706438490092776
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7648492576615933382}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: bc9cf52d71fb11a479cc4f668ef3ac23, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: bc9cf52d71fb11a479cc4f668ef3ac23, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0

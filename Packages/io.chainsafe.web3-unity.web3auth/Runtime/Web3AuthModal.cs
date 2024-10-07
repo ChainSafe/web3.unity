@@ -25,6 +25,7 @@ public class Web3AuthModal : MonoBehaviour
     private TaskCompletionSource<Provider> _getProviderTask;
     
     private CancellationTokenSource _cancellationTokenSource;
+    private int loadingOverlayId = -1;
 
     public CancellationToken CancellationToken => _cancellationTokenSource.Token;
 
@@ -62,12 +63,17 @@ public class Web3AuthModal : MonoBehaviour
 
     private void ShowLoading()
     {
-        GuiManager.Instance.Overlays.Show(GuiOverlayType.Loading, "Connecting with Web3Auth...", false);
+        loadingOverlayId = GuiManager.Instance.Overlays.Show(GuiOverlayType.Loading, "Connecting with Web3Auth...", false);
     }
 
     private void HideLoading()
     {
-        GuiManager.Instance.Overlays.Hide();
+        if (loadingOverlayId == -1)
+        {
+            return;
+        }
+        
+        GuiManager.Instance.Overlays.Hide(loadingOverlayId);
     }
     
     public void Close()

@@ -28,6 +28,11 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         public abstract string ButtonText { get; protected set; }
         
         /// <summary>
+        /// Should loading overlay be shown when initiating a connection using this ConnectionProvider;
+        /// </summary>
+        public abstract bool DisplayLoadingOnConnection { get; }
+        
+        /// <summary>
         /// Initialize Connection provider.
         /// </summary>
         /// <returns>Awaitable Task.</returns>
