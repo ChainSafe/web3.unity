@@ -102,11 +102,6 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
                 return _connectionBuilder;
             }
         }
-
-        public override Task Initialize()
-        {
-            return Task.CompletedTask;
-        }
         
         protected override void ConfigureServices(IWeb3ServiceCollection services)
         {
