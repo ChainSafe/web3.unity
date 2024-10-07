@@ -1413,10 +1413,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Web3Unity
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8854369476742677865, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 9007579812972099230, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1894328615}
     - targetCorrespondingSourceObject: {fileID: 9007579812972099230, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1894328608}
@@ -1547,6 +1551,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gelatoApiKey: 7MFQqyGS1Iui_e_MgmFW1BfbFeJ06g8nnL2oUTlIJug_
+--- !u!114 &1894328615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1894328599}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c73b0a0dd309a546843eca313ee76c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pollingInterval: 10
 --- !u!1 &1993709006
 GameObject:
   m_ObjectHideFlags: 0
