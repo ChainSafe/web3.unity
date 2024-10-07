@@ -60,6 +60,34 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 4702952147469072652, guid: 36a3f2fc417675240b09314464644c20, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4702952147469072652, guid: 36a3f2fc417675240b09314464644c20, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4702952147469072652, guid: 36a3f2fc417675240b09314464644c20, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 6040574409599475407}
+    - target: {fileID: 4702952147469072652, guid: 36a3f2fc417675240b09314464644c20, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4702952147469072652, guid: 36a3f2fc417675240b09314464644c20, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Close
+      objectReference: {fileID: 0}
+    - target: {fileID: 4702952147469072652, guid: 36a3f2fc417675240b09314464644c20, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ChainSafe.Gaming.UnityPackage.UI.ConnectScreen, chainsafe.web3-unity
+      objectReference: {fileID: 0}
+    - target: {fileID: 4702952147469072652, guid: 36a3f2fc417675240b09314464644c20, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 5827103292623766397, guid: 36a3f2fc417675240b09314464644c20, type: 3}
       propertyPath: m_Pivot.x
       value: 0

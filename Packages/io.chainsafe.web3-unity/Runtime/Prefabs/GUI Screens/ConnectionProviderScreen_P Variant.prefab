@@ -88,6 +88,34 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 5440571584024840606, guid: e4cf54e9d4dd10b4f8de02f202891717, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5440571584024840606, guid: e4cf54e9d4dd10b4f8de02f202891717, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5440571584024840606, guid: e4cf54e9d4dd10b4f8de02f202891717, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 284287566088742493}
+    - target: {fileID: 5440571584024840606, guid: e4cf54e9d4dd10b4f8de02f202891717, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5440571584024840606, guid: e4cf54e9d4dd10b4f8de02f202891717, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Close
+      objectReference: {fileID: 0}
+    - target: {fileID: 5440571584024840606, guid: e4cf54e9d4dd10b4f8de02f202891717, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ChainSafe.Gaming.UnityPackage.UI.ConnectScreen, chainsafe.web3-unity
+      objectReference: {fileID: 0}
+    - target: {fileID: 5440571584024840606, guid: e4cf54e9d4dd10b4f8de02f202891717, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 7530051459058269288, guid: e4cf54e9d4dd10b4f8de02f202891717, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
