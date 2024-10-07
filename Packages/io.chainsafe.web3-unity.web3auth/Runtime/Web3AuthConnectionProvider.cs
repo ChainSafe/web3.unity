@@ -57,7 +57,7 @@ public class Web3AuthConnectionProvider : ConnectionProvider, ILogoutHandler, IW
     
     public override bool DisplayLoadingOnConnection => false;
 
- #if UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_WEBGL && !UNITY_EDITOR
 
     private TaskCompletionSource<string> _initializeTcs;
     
@@ -97,6 +97,17 @@ public class Web3AuthConnectionProvider : ConnectionProvider, ILogoutHandler, IW
             chainConfig.Rpc, chainConfig.Network, "", chainConfig.Symbol, "", network.ToString().ToLower(), Initialized, InitializeError);
 
         await _initializeTcs.Task;
+    }
+#endif
+    
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        if (!modalScreenFactory.LandscapePrefab && !modalScreenFactory.PortraitPrefab)
+        {
+            modalScreenFactory.LandscapePrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GuiScreen>("Packages/io.chainsafe.web3-unity.web3auth/Runtime/Prefabs/W3AConnectionScreen_L.prefab");
+            modalScreenFactory.PortraitPrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GuiScreen>("Packages/io.chainsafe.web3-unity.web3auth/Runtime/Prefabs/W3AConnectionScreen_P.prefab");
+        }
     }
 #endif
 
