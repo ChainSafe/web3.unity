@@ -2,7 +2,7 @@
         {
             var response = await OriginalContract.{FUNCTION_CALL}("{CONTRACT_METHOD_CALL}", new object [] {
                 {INPUT_PARAM_NAMES}
-            });
+            }, transactionOverwrite);
             
             return {RETURN_STATEMENT};
         }
