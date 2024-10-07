@@ -15,8 +15,10 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
     [CreateAssetMenu(menuName = "ChainSafe/Connection Provider/Metamask", fileName = nameof(MetamaskConnectionProvider))]
     public class MetamaskConnectionProvider : ConnectionProvider
     {
-        [field: SerializeField, DefaultAssetValue("Packages/io.chainsafe.web3-unity/Runtime/Prefabs/MetamaskRow.prefab")]
-        public override Button ConnectButtonRow { get; protected set; }
+        [field: SerializeField, DefaultAssetValue("Packages/io.chainsafe.web3-unity/Runtime/Sprites/MetaMask_Icon.png")]
+        public override Sprite ButtonIcon { get; protected set; }
+
+        [field: SerializeField] public override string ButtonText { get; protected set; } = "MetaMask";
 
         public override bool IsAvailable => Application.platform == RuntimePlatform.WebGLPlayer && Application.isEditor == false;
 

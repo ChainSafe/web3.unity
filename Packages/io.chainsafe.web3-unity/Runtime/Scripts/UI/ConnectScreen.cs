@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.GUI;
 using ChainSafe.Gaming.UnityPackage.Connection;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,23 +10,10 @@ namespace ChainSafe.Gaming.UnityPackage.UI
     /// <summary>
     /// Connection Modal prompted for connecting to a provider.
     /// </summary>
-    public class ConnectModal : MonoBehaviour
+    public class ConnectScreen : MonoBehaviour
     {
-        [SerializeField] private ErrorOverlay errorOverlay;
-        [SerializeField] private Button closeButton;
-        // Closes modal when background is clicked
-        [SerializeField] private Button closeFromBackgroundButton;
-        
-        [Space]
-        
-        [SerializeField] private RectTransform modalContainer;
         [SerializeField] private RectTransform providerContainer;
-
-        private void Start()
-        {
-            closeButton.onClick.AddListener(Close);
-            closeFromBackgroundButton.onClick.AddListener(Close);
-        }
+        [SerializeField] private ConnectionProviderButton providerButtonPrefab;
 
         public void Initialize(ConnectionProvider[] providers)
         {
@@ -33,15 +21,8 @@ namespace ChainSafe.Gaming.UnityPackage.UI
             {
                 if (provider != null && provider.IsAvailable)
                 {
-                    Button button = Instantiate(provider.ConnectButtonRow, providerContainer);
-
-                    // Don't allow connection before initialization.
-                    button.interactable = true;
-                    
-                    button.onClick.AddListener(delegate
-                    {
-                        ConnectClicked(provider);
-                    });
+                    var button = Instantiate(providerButtonPrefab, providerContainer);
+                    button.Set(provider.ButtonIcon, provider.ButtonText, () => ConnectClicked(provider));
                 }
             }
 
@@ -58,7 +39,7 @@ namespace ChainSafe.Gaming.UnityPackage.UI
         {
             try
             {
-                ShowLoading();
+                ShowLoading("Establishing connection...");
 
                 await Web3Unity.Instance.Connect(provider);
             }
@@ -79,7 +60,12 @@ namespace ChainSafe.Gaming.UnityPackage.UI
 
         public void Open()
         {
-            modalContainer.gameObject.SetActive(true);
+            gameObject.SetActive(true);
+        }
+
+        public void Close()
+        {
+            gameObject.SetActive(false);
         }
         
         /// <summary>
@@ -88,15 +74,17 @@ namespace ChainSafe.Gaming.UnityPackage.UI
         /// <param name="message">Error Message.</param>
         private void DisplayError(string message)
         {
-            errorOverlay.DisplayError(message);
+            DisableButtons();
+            GuiManager.Instance.Overlays.Show(GuiOverlayType.Error, message, true, EnableButtons);
         }
-        
+
         /// <summary>
         /// Show Loading Overlay.
         /// </summary>
-        private void ShowLoading(string text = "")
+        private void ShowLoading(string message)
         {
-            LoadingOverlay.ShowLoadingOverlay(text);
+            DisableButtons();
+            GuiManager.Instance.Overlays.Show(GuiOverlayType.Loading, message, false, EnableButtons);
         }
         
         /// <summary>
@@ -104,12 +92,17 @@ namespace ChainSafe.Gaming.UnityPackage.UI
         /// </summary>
         private void HideLoading()
         {
-           LoadingOverlay.HideLoadingOverlay();
+            GuiManager.Instance.Overlays.Hide();
         }
 
-        public void Close()
+        private void EnableButtons()
         {
-            modalContainer.gameObject.SetActive(false);
+            providerContainer.gameObject.SetActive(true);
+        }
+
+        private void DisableButtons()
+        {
+            providerContainer.gameObject.SetActive(false);
         }
     }
 }

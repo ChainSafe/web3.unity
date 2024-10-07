@@ -52,7 +52,7 @@ public class ConnectToWallet : Web3BuilderServiceAdapter, IWeb3InitializedHandle
 
     private void AddButtonListeners()
     {
-        connectButton.onClick.AddListener(Web3Unity.ConnectModal.Open);
+        connectButton.onClick.AddListener(Web3Unity.ConnectScreen.Open);
         
         disconnectButton.onClick.AddListener(Disconnect);
         

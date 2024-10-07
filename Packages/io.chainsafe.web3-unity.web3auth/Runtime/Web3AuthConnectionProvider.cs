@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using AOT;
 using ChainSafe.Gaming;
+using ChainSafe.Gaming.GUI;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.Web3;
@@ -23,17 +24,22 @@ using Network = Web3Auth.Network;
 [CreateAssetMenu(menuName = "ChainSafe/Connection Provider/Web3Auth", fileName = nameof(Web3AuthConnectionProvider))]
 public class Web3AuthConnectionProvider : RestorableConnectionProvider, ILogoutHandler, IWeb3InitializedHandler
 {
-    [field: SerializeField, DefaultAssetValue("Packages/io.chainsafe.web3-unity.web3auth/Runtime/Prefabs/Web3AuthRow.prefab")]
-    public override Button ConnectButtonRow { get; protected set; }
+    [field: SerializeField, DefaultAssetValue("Packages/io.chainsafe.web3-unity.web3auth/Runtime/Sprites/web3auth.png")]
+    public override Sprite ButtonIcon { get; protected set; }
+
+    [field: SerializeField] public override string ButtonText { get; protected set; } = "Web3Auth";
     
     [SerializeField] private string clientId;
     [SerializeField] private string redirectUri;
     [SerializeField] private Network network;
-    
+
     [Space]
-    
-    [SerializeField, DefaultAssetValue("Packages/io.chainsafe.web3-unity.web3auth/Runtime/Prefabs/Web3Auth.prefab")]
-    private GameObject modalPrefab;
+
+    // [SerializeField, DefaultAssetValue("Packages/io.chainsafe.web3-unity.web3auth/Runtime/Prefabs/Web3Auth.prefab")]
+    // private GameObject modalPrefab;
+
+    [SerializeField]
+    private GuiScreenFactory modalScreenFactory;
     
     [Space]
     
@@ -170,17 +176,8 @@ public class Web3AuthConnectionProvider : RestorableConnectionProvider, ILogoutH
 
     private void DisplayModal()
     {
-        if (_modal != null)
-        {
-            _modal.gameObject.SetActive(true);
-        }
-
-        else
-        {
-            var obj = Instantiate(modalPrefab);
-            
-            _modal = obj.GetComponentInChildren<Web3AuthModal>();
-        }
+        _modal = modalScreenFactory.GetSingle<Web3AuthModal>();
+        _modal.gameObject.SetActive(true);
     }
 
  #if UNITY_WEBGL && !UNITY_EDITOR
@@ -255,7 +252,7 @@ public class Web3AuthConnectionProvider : RestorableConnectionProvider, ILogoutH
 
         if (_modal != null)
         {
-            _modal?.Close();
+            _modal.Close();
         }
         
         return Task.CompletedTask;
