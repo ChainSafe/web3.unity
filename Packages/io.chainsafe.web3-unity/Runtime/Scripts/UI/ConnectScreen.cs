@@ -50,11 +50,12 @@ namespace ChainSafe.Gaming.UnityPackage.UI
             }
             catch (Exception e)
             {
-
-                if (!(e is TaskCanceledException))
+                if (e is not TaskCanceledException && e.InnerException is not TaskCanceledException)
                 {
                     DisplayError(
                         "Connection failed, please try again.");
+                    
+                    Debug.LogException(e);
                 }
             }
             finally
