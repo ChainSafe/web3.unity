@@ -6,7 +6,6 @@ using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.LocalStorage;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Chains;
-using ChainSafe.Gaming.Web3.Core.Evm.EventPoller;
 using ChainSafe.Gaming.Web3.Core.Logout;
 using ChainSafe.Gaming.Web3.Environment;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,7 +25,6 @@ namespace ChainSafe.Gaming.Web3.Build
 
             // Bind default services
             serviceCollection
-                .UseEventPoller() // todo: remove, make a WebGL IEventManager implementation that utilizes Event Polling
                 .AddSingleton<IContractBuilder, ILifecycleParticipant, ContractBuilder>()
                 .AddSingleton<ILocalStorage, DataStorage>()
                 .AddSingleton<ChainRegistryProvider>()
@@ -41,7 +39,7 @@ namespace ChainSafe.Gaming.Web3.Build
         /// Initializes a new instance of the <see cref="Web3Builder"/> class.
         /// </summary>
         /// <param name="projectConfig">Project config to use with the resulting Web3 instance.</param>
-        /// <param name="chainConfig">Chain config to use with the resulting Web3 instance.</param>
+        /// <param name="chainConfigSet">Chain config set to use with the resulting Web3 instance.</param>
         /// <exception cref="ArgumentException">One of the arguments is null.</exception>
         public Web3Builder(IProjectConfig projectConfig, IChainConfigSet chainConfigSet)
             : this()
@@ -53,7 +51,7 @@ namespace ChainSafe.Gaming.Web3.Build
 
             if (chainConfigSet == null)
             {
-                throw new ArgumentNullException(nameof(chainConfigSet), $"{nameof(IChainConfig)} is required for Web3 to work.");
+                throw new ArgumentNullException(nameof(chainConfigSet), $"{nameof(IChainConfigSet)} is required for Web3 to work.");
             }
 
             serviceCollection.AddSingleton(projectConfig);
@@ -64,7 +62,7 @@ namespace ChainSafe.Gaming.Web3.Build
         /// Initializes a new instance of the <see cref="Web3Builder"/> class.
         /// </summary>
         /// <param name="projectConfig">Project config to use with the resulting Web3 instance.</param>
-        /// <param name="chainConfig">Chain config to use with the resulting Web3 instance.</param>
+        /// <param name="chainConfigs">Chain configs to use with the resulting Web3 instance.</param>
         /// <exception cref="ArgumentException">One of the arguments is null.</exception>
         public Web3Builder(IProjectConfig projectConfig, params IChainConfig[] chainConfigs)
             : this(projectConfig, new ChainConfigSet(chainConfigs))

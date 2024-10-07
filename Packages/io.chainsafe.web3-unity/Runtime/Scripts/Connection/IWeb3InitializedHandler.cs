@@ -9,11 +9,6 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
     public interface IWeb3InitializedHandler
     {
         /// <summary>
-        /// Determines order of execution for <see cref="IWeb3InitializedHandler"/>s.
-        /// </summary>
-        public int Priority { get; }
-        
-        /// <summary>
         /// Called when Web3 Instance in <see cref="IConnectionHandler"/> is initialized.
         /// </summary>
         public Task OnWeb3Initialized(CWeb3 web3);

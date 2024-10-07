@@ -21,7 +21,7 @@ using Network = Web3Auth.Network;
 /// ConnectionProvider for connecting wallet via Web3Auth.
 /// </summary>
 [CreateAssetMenu(menuName = "ChainSafe/Connection Provider/Web3Auth", fileName = nameof(Web3AuthConnectionProvider))]
-public class Web3AuthConnectionProvider : RestorableConnectionProvider, ILogoutHandler, IWeb3InitializedHandler
+public class Web3AuthConnectionProvider : ConnectionProvider, ILogoutHandler, IWeb3InitializedHandler
 {
     [field: SerializeField, DefaultAssetValue("Packages/io.chainsafe.web3-unity.web3auth/Runtime/Prefabs/Web3AuthRow.prefab")]
     public override Button ConnectButtonRow { get; protected set; }
@@ -50,8 +50,6 @@ public class Web3AuthConnectionProvider : RestorableConnectionProvider, ILogoutH
 
     [NonSerialized] private bool _rememberMe;
     
-    public int Priority => 0;
-    
     public override bool IsAvailable => true;
 
  #if UNITY_WEBGL && !UNITY_EDITOR
@@ -73,8 +71,10 @@ public class Web3AuthConnectionProvider : RestorableConnectionProvider, ILogoutH
         _instance = this;
     }
 
-    public override async Task Initialize()
+    public override async Task Initialize(bool rememberSession)
     {
+        await base.Initialize(rememberSession);
+        
         _initializeTcs = new TaskCompletionSource<string>();
         
         var projectConfig = ProjectConfigUtilities.Load();
@@ -92,11 +92,6 @@ public class Web3AuthConnectionProvider : RestorableConnectionProvider, ILogoutH
             chainConfig.Rpc, chainConfig.Network, "", chainConfig.Symbol, "", network.ToString().ToLower(), Initialized, InitializeError);
 
         await _initializeTcs.Task;
-    }
-#else
-    public override Task Initialize()
-    {
-        return Task.CompletedTask;
     }
 #endif
 
@@ -159,8 +154,13 @@ public class Web3AuthConnectionProvider : RestorableConnectionProvider, ILogoutH
     }
 
     public override void HandleException(Exception exception)
-    {        
-        _modal.Close();
+    {
+        _rememberMe = false;
+        
+        if (_modal != null)
+        {
+            _modal.Close();
+        }
         
         base.HandleException(exception);
     }
@@ -250,6 +250,11 @@ public class Web3AuthConnectionProvider : RestorableConnectionProvider, ILogoutH
             _web3AuthWalletGui.Initialize(walletGuiConfig);
         }
 
+        if (_modal != null)
+        {
+            _modal?.Close();
+        }
+        
         return Task.CompletedTask;
     }
 }

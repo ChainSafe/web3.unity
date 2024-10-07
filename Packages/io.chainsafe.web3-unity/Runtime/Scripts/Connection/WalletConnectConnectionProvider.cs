@@ -17,7 +17,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
     /// WalletConnect connection provider used for connecting to a wallet using WalletConnect.
     /// </summary>
     [CreateAssetMenu(menuName = "ChainSafe/Connection Provider/Wallet Connect", fileName = nameof(WalletConnectConnectionProvider))]
-    public class WalletConnectConnectionProvider : RestorableConnectionProvider, IWalletConnectConfig, IConnectionHandlerProvider
+    public class WalletConnectConnectionProvider : ConnectionProvider, IWalletConnectConfig, IConnectionHandlerProvider
     {
         [field: SerializeField] public string ProjectId { get; private set; }
         
@@ -57,8 +57,8 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         
         public IList<string> EnabledWallets => enabledWallets;
         public IList<string> DisabledWallets => disabledWallets;
-        
-        public bool RememberConnection { get; set; }
+
+        bool IWalletConnectConfig.RememberSession => RememberSession || _storedSessionAvailable;
         
         public IConnectionHandlerProvider ConnectionHandlerProvider => this;
         
@@ -99,14 +99,9 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
             }
         }
         
-        public override Task Initialize()
-        {
-            return Task.CompletedTask;
-        }
-        
         protected override void ConfigureServices(IWeb3ServiceCollection services)
         {
-            services.UseWalletConnect(this.WithRememberMe(RememberSession || _storedSessionAvailable))
+            services.UseWalletConnect(this)
                 .UseWalletSigner().UseWalletTransactionExecutor();
         }
 

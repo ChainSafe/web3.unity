@@ -58,10 +58,16 @@ public class Web3Auth : MonoBehaviour
     private static readonly Queue<Action> _executionQueue = new Queue<Action>();
 
     private bool rememberMe;
+    
+    private bool _initialized;
 
-
-    public void Awake()
+    public void Initialize()
     {
+        if (_initialized)
+        {
+            return;
+        }
+        
         this.initParams = new Dictionary<string, object>();
 
         this.initParams["clientId"] = clientId;
@@ -90,6 +96,8 @@ public class Web3Auth : MonoBehaviour
         //        } 
 #endif
         authorizeSession("");
+
+        _initialized = true;
     }
 
     public void setOptions(Web3AuthOptions web3AuthOptions, bool rememberMe = false)
@@ -424,7 +432,13 @@ public class Web3Auth : MonoBehaviour
                             this.Enqueue(() => this.onLogin?.Invoke(this.web3AuthResponse));
                     }
                 }
-
+                else
+                {
+                    this.Enqueue(() => this.onLogin?.Invoke(new Web3AuthResponse
+                    {
+                        error = "Failed to connect, session null."
+                    }));
+                }
             })));
         }
     }

@@ -70,18 +70,25 @@ namespace ChainSafe.Gaming.UnityPackage
         /// <summary>
         /// Is a wallet connected.
         /// </summary>
-        public static bool Connected => Web3 != null;
-
-        /// <summary>
-        /// Execution priority for <see cref="IWeb3InitializedHandler"/>.
-        /// Lower than other so it can be executed first.
-        /// </summary>
-        public int Priority => -1;
+        public static bool Connected => !string.IsNullOrEmpty(Instance.Address);
 
         /// <summary>
         /// Public key (address) of connected wallet.
         /// </summary>
-        public string Address => Web3?.Signer.PublicAddress;
+        public string Address
+        {
+            get
+            {
+                try
+                {
+                    return Web3?.Signer.PublicAddress;
+                }
+                catch (Exception)
+                {
+                    return string.Empty;
+                }
+            }
+        }
 
         [DefaultAssetValue("Packages/io.chainsafe.web3-unity/Runtime/Prefabs/Connect.prefab")] [SerializeField]
         private ConnectModal connectModalPrefab;
@@ -100,24 +107,38 @@ namespace ChainSafe.Gaming.UnityPackage
         /// <summary>
         /// Initialize Web3Unity.
         /// </summary>
-        /// <param name="connectOnInitialize">Connect to any saved <see cref="ConnectionProvider"/> if they exist.</param>
-        public async Task Initialize(bool connectOnInitialize = true)
+        /// <param name="rememberConnection">Connect to any saved <see cref="ConnectionProvider"/> if they exist.</param>
+        public async Task Initialize(bool rememberConnection = true)
         {
             _connectionHandler = GetComponent<ConnectionHandler>();
 
-            await _connectionHandler.Initialize();
+            await _connectionHandler.Initialize(rememberConnection);
 
-            if (connectOnInitialize)
+            if (rememberConnection)
+            {
                 try
                 {
                     await _connectionHandler.Restore();
+
+                    if (Connected)
+                    {
+                        return;
+                    }
                 }
                 catch (Exception e)
                 {
                     Debug.LogError($"Failed to restore connection: {e}");
                 }
+            }
+            
+            await LaunchLightWeightWeb3();
         }
 
+        private Task LaunchLightWeightWeb3()
+        {
+            return ((IConnectionHandler) _connectionHandler).LaunchLightWeightWeb3();
+        }
+        
         /// <summary>
         /// Connect to a wallet with a <see cref="ConnectionProvider"/>.
         /// </summary>
@@ -243,6 +264,11 @@ namespace ChainSafe.Gaming.UnityPackage
         {
             _web3 = web3;
 
+            if (_connectModal != null)
+            {
+                _connectModal.Close();
+            }
+            
             return Task.CompletedTask;
         }
 
@@ -282,9 +308,11 @@ namespace ChainSafe.Gaming.UnityPackage
         /// Disconnect wallet.
         /// </summary>
         /// <returns>Awaitable disconnect task.</returns>
-        public Task Disconnect()
+        public async Task Disconnect()
         {
-            return Terminate(true);
+            await Terminate(true);
+            
+            await LaunchLightWeightWeb3();
         }
         
         public async Task<bool> SignAndVerifyMessage(string message)
