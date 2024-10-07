@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 5008553068369276269}
   - component: {fileID: 29625373239180716}
   - component: {fileID: 153625530502621119}
-  - component: {fileID: 8854369476742677865}
   m_Layer: 0
   m_Name: Web3Unity
   m_TagString: Untagged
@@ -77,16 +76,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bddd0599e4c6ca4a8a476d02011f3cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8854369476742677865
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9007579812972099230}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c73b0a0dd309a546843eca313ee76c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pollingInterval: 1
