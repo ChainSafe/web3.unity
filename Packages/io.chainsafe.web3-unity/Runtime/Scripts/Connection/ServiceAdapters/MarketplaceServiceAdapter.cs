@@ -19,23 +19,23 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
             {
                 if (string.IsNullOrEmpty(marketplaceConfig.MarketplaceContractAddress))
                     throw new InvalidDataException("Please provide an appropriate marketplace address");
-                
+
                 if (string.IsNullOrEmpty(marketplaceConfig.MarketplaceId))
                     throw new InvalidDataException("Please provide an appropriate marketplace id");
-                
+
                 services.UseMarketplace(marketplaceConfig);
             });
         }
     }
-    
+
     [Serializable]
     public class MarketplaceConfigUnity : IMarketplaceConfig
     {
-        [field:SerializeField] public string EndpointOverride { get; set; }
-        [field:SerializeField] public string MarketplaceContractAbi { get; set; }
-        [field:SerializeField] public string ProjectIdOverride { get; set; }
-        [field:SerializeField] public string MarketplaceId { get; set; }
-        [field:SerializeField] public string MarketplaceContractAddress { get; set; }
+        [field: SerializeField] public string EndpointOverride { get; set; }
+        [field: SerializeField] public string MarketplaceContractAbi { get; set; }
+        [field: SerializeField] public string ProjectIdOverride { get; set; }
+        [field: SerializeField] public string MarketplaceId { get; set; }
+        [field: SerializeField] public string MarketplaceContractAddress { get; set; }
     }
 
 

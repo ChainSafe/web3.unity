@@ -14,10 +14,10 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
     public class StoredConnectionProviderData : IStorable, IWeb3InitializedHandler, ILogoutHandler
     {
         private ILocalStorage _localStorage;
-        
+
         [JsonIgnore]
         public string StoragePath => "connection-provider-data.json";
-        
+
         [JsonIgnore]
         public bool LoadOnInitialize => true;
 
@@ -36,14 +36,14 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         public async Task OnWeb3Initialized(CWeb3 web3)
         {
             _localStorage = web3.ServiceProvider.GetService<ILocalStorage>();
-            
+
             await _localStorage.Save(this);
         }
 
         public Task OnLogout()
         {
             _localStorage.Clear(this);
-            
+
             return Task.CompletedTask;
         }
     }

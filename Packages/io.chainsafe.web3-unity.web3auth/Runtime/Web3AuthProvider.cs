@@ -15,7 +15,7 @@ using UnityEngine;
 public class Web3AuthProvider : WalletProvider, IAccountProvider
 {
     private readonly Web3AuthWalletConfig _config;
-    
+
     private Web3Auth _coreInstance;
     private TaskCompletionSource<Web3AuthResponse> _connectTcs;
     private TaskCompletionSource<object> _disconnectTcs;
@@ -26,7 +26,7 @@ public class Web3AuthProvider : WalletProvider, IAccountProvider
     }
 
     public IAccount Account { get; private set; }
-    
+
     /// <summary>
     /// Connects Web3Auth wallet.
     /// </summary>
@@ -34,54 +34,54 @@ public class Web3AuthProvider : WalletProvider, IAccountProvider
     public override async Task<string> Connect()
     {
         _coreInstance = Object.FindObjectOfType<Web3Auth>();
-        
+
         if (_coreInstance == null)
         {
             var gameObject = new GameObject("Web3Auth", typeof(Web3Auth));
-        
+
             Object.DontDestroyOnLoad(gameObject);
 
             _coreInstance = gameObject.GetComponent<Web3Auth>();
         }
-        
+
         if (_connectTcs != null && !_connectTcs.Task.IsCompleted)
         {
             Cancel();
         }
-        
+
         _connectTcs = new TaskCompletionSource<Web3AuthResponse>();
-        
+
         _coreInstance.onLogin += OnLogin;
 
         _coreInstance.Initialize();
-        
+
         _coreInstance.setOptions(_config.Web3AuthOptions, _config.RememberMe);
-        
+
         var providerTask = _config.ProviderTask;
-        
-        if (!_config.AutoLogin && providerTask != null 
+
+        if (!_config.AutoLogin && providerTask != null
             //On webGL providerTask is always completed, so we don't have to go through another login flow.
-                               #if UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_WEBGL && !UNITY_EDITOR
                                && !providerTask.IsCompleted
-                                #endif
+#endif
             )
         {
             var provider = await providerTask;
-        
+
             _coreInstance.login(new LoginParams
             {
                 loginProvider = provider,
             });
         }
 
-        await using(_config.CancellationToken.Register(Cancel))
+        await using (_config.CancellationToken.Register(Cancel))
         {
             var response = await _connectTcs.Task;
-        
+
             Account = new Account(response.privKey);
 
             Account.TransactionManager.Client = this;
-        
+
             return Account.Address;
         }
     }
@@ -89,14 +89,14 @@ public class Web3AuthProvider : WalletProvider, IAccountProvider
     private void Cancel()
     {
         _coreInstance.onLogin -= OnLogin;
-        
+
         _connectTcs.SetCanceled();
     }
-    
+
     private void OnLogin(Web3AuthResponse response)
     {
         _coreInstance.onLogin -= OnLogin;
-        
+
         if (string.IsNullOrEmpty(response.error))
         {
             _connectTcs.SetResult(response);
@@ -107,7 +107,7 @@ public class Web3AuthProvider : WalletProvider, IAccountProvider
             _connectTcs.SetException(new Web3Exception(response.error));
         }
     }
-    
+
     /// <summary>
     /// Disconnect Web3Auth wallet.
     /// </summary>
@@ -117,17 +117,17 @@ public class Web3AuthProvider : WalletProvider, IAccountProvider
         {
             _disconnectTcs.SetCanceled();
         }
-        
+
         _disconnectTcs = new TaskCompletionSource<object>();
-        
+
         _coreInstance.onLogout += OnLogout;
-        
+
         _coreInstance.logout();
 
         await _disconnectTcs.Task;
-        
+
         Object.Destroy(_coreInstance.gameObject);
-        
+
         void OnLogout()
         {
             _disconnectTcs.SetResult(null);

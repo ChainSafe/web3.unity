@@ -15,11 +15,11 @@ public class Web3AuthWebGLProvider : Web3AuthProvider
     {
         _config = config;
     }
-    
+
     public override async Task<string> Connect()
     {
         string sessionId = await _config.SessionTask;
-            
+
         KeyStoreManagerUtils.savePreferenceData(KeyStoreManagerUtils.SESSION_ID, sessionId);
 
         return await base.Connect();

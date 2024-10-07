@@ -30,7 +30,8 @@ namespace Plugins.CountlySDK.Services
             RequestCountlyHelper requestCountlyHelper, LocationService locationService, ConsentCountlyService consentService, MonoBehaviour monoBehaviour) : base(configuration, logHelper, consentService)
         {
             Log.Debug("[SessionCountlyService] Initializing.");
-            if (configuration.IsAutomaticSessionTrackingDisabled) {
+            if (configuration.IsAutomaticSessionTrackingDisabled)
+            {
                 Log.Debug("[SessionCountlyService] Disabling automatic session tracking");
             }
 
@@ -39,7 +40,8 @@ namespace Plugins.CountlySDK.Services
             _requestCountlyHelper = requestCountlyHelper;
             _monoBehaviour = monoBehaviour;
 
-            if (_configuration.IsAutomaticSessionTrackingDisabled) {
+            if (_configuration.IsAutomaticSessionTrackingDisabled)
+            {
                 Log.Verbose("[Countly][CountlyConfiguration] Automatic session tracking disabled!");
             }
         }
@@ -49,19 +51,25 @@ namespace Plugins.CountlySDK.Services
         /// </summary>
         internal async Task StartSessionService()
         {
-            if (_configuration.IsAutomaticSessionTrackingDisabled || !_consentService.CheckConsentInternal(Consents.Sessions)) {
+            if (_configuration.IsAutomaticSessionTrackingDisabled || !_consentService.CheckConsentInternal(Consents.Sessions))
+            {
                 /* If location is disabled in init
                 and no session consent is given. Send empty location as separate request.*/
-                if (_locationService.IsLocationDisabled || !_consentService.CheckConsentInternal(Consents.Location)) {
+                if (_locationService.IsLocationDisabled || !_consentService.CheckConsentInternal(Consents.Location))
+                {
                     await _locationService.SendRequestWithEmptyLocation();
-                } else {
+                }
+                else
+                {
                     /*
                  * If there is no session consent or automatic session tracking is disabled, 
                  * location values set in init should be sent as a separate location request.
                  */
                     await _locationService.SendIndependantLocationRequest();
                 }
-            } else {
+            }
+            else
+            {
                 //Start Session
                 await BeginSessionAsync();
             }
@@ -90,7 +98,8 @@ namespace Plugins.CountlySDK.Services
             _eventService.AddEventsToRequestQueue();
             _ = _requestCountlyHelper.ProcessQueue();
 
-            if (!_configuration.IsAutomaticSessionTrackingDisabled) {
+            if (!_configuration.IsAutomaticSessionTrackingDisabled)
+            {
                 _ = ExtendSessionAsync();
             }
         }
@@ -99,7 +108,8 @@ namespace Plugins.CountlySDK.Services
         {
             Log.Debug("[SessionCountlyService] SessionTimerCoroutine, Start");
 
-            if (isInternalTimerStopped) {
+            if (isInternalTimerStopped)
+            {
                 yield break;
             }
 
@@ -116,9 +126,9 @@ namespace Plugins.CountlySDK.Services
         {
             isInternalTimerStopped = true;
 
-            #if UNITY_WEBGL
+#if UNITY_WEBGL
             _monoBehaviour.StopCoroutine(SessionTimerCoroutine());
-            #else
+#else
             if (_sessionTimer != null) {
                 // Unsubscribe from the Elapsed event
                 _sessionTimer.Elapsed -= SessionTimerOnElapsedAsync;
@@ -127,7 +137,7 @@ namespace Plugins.CountlySDK.Services
                 _sessionTimer.Stop();
                 _sessionTimer.Dispose();
             }
-            #endif
+#endif
         }
 
         /// <summary>
@@ -137,9 +147,11 @@ namespace Plugins.CountlySDK.Services
         /// <param name="elapsedEventArgs"> Provides data for <code>Timer.Elapsed</code>event.</param>
         private async void SessionTimerOnElapsedAsync(object sender, ElapsedEventArgs elapsedEventArgs)
         {
-            lock (LockObj) {
+            lock (LockObj)
+            {
 
-                if (isInternalTimerStopped) {
+                if (isInternalTimerStopped)
+                {
                     return;
                 }
 
@@ -157,11 +169,13 @@ namespace Plugins.CountlySDK.Services
         {
             Log.Debug("[SessionCountlyService] BeginSessionAsync");
 
-            if (!_consentService.CheckConsentInternal(Consents.Sessions)) {
+            if (!_consentService.CheckConsentInternal(Consents.Sessions))
+            {
                 return;
             }
 
-            if (IsSessionInitiated) {
+            if (IsSessionInitiated)
+            {
                 Log.Warning("[SessionCountlyService] BeginSessionAsync: The session has already started!");
                 return;
             }
@@ -175,22 +189,29 @@ namespace Plugins.CountlySDK.Services
 
             /* If location is disabled or no location consent is given,
             the SDK adds an empty location entry to every "begin_session" request. */
-            if (_locationService.IsLocationDisabled || !_consentService.CheckConsentInternal(Consents.Location)) {
+            if (_locationService.IsLocationDisabled || !_consentService.CheckConsentInternal(Consents.Location))
+            {
                 requestParams.Add("location", string.Empty);
-            } else {
-                if (!string.IsNullOrEmpty(_locationService.IPAddress)) {
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(_locationService.IPAddress))
+                {
                     requestParams.Add("ip_address", _locationService.IPAddress);
                 }
 
-                if (!string.IsNullOrEmpty(_locationService.CountryCode)) {
+                if (!string.IsNullOrEmpty(_locationService.CountryCode))
+                {
                     requestParams.Add("country_code", _locationService.CountryCode);
                 }
 
-                if (!string.IsNullOrEmpty(_locationService.City)) {
+                if (!string.IsNullOrEmpty(_locationService.City))
+                {
                     requestParams.Add("city", _locationService.City);
                 }
 
-                if (!string.IsNullOrEmpty(_locationService.Location)) {
+                if (!string.IsNullOrEmpty(_locationService.Location))
+                {
                     requestParams.Add("location", _locationService.Location);
                 }
             }
@@ -209,11 +230,13 @@ namespace Plugins.CountlySDK.Services
         {
             Log.Debug("[SessionCountlyService] EndSessionAsync");
 
-            if (!_consentService.CheckConsentInternal(Consents.Sessions)) {
+            if (!_consentService.CheckConsentInternal(Consents.Sessions))
+            {
                 return;
             }
 
-            if (!IsSessionInitiated) {
+            if (!IsSessionInitiated)
+            {
                 Log.Warning("[SessionCountlyService] EndSessionAsync: The session isn't started yet!");
                 return;
             }
@@ -238,11 +261,13 @@ namespace Plugins.CountlySDK.Services
         {
             Log.Debug("[SessionCountlyService] ExtendSessionAsync");
 
-            if (!_consentService.CheckConsentInternal(Consents.Sessions)) {
+            if (!_consentService.CheckConsentInternal(Consents.Sessions))
+            {
                 return;
             }
 
-            if (!IsSessionInitiated) {
+            if (!IsSessionInitiated)
+            {
                 Log.Warning("[SessionCountlyService] ExtendSessionAsync: The session isn't started yet!");
                 return;
             }
@@ -258,17 +283,19 @@ namespace Plugins.CountlySDK.Services
 
             _requestCountlyHelper.AddToRequestQueue(requestParams);
             await _requestCountlyHelper.ProcessQueue();
-            
-            #if UNITY_WEBGL
+
+#if UNITY_WEBGL
             _monoBehaviour.StartCoroutine(SessionTimerCoroutine());
-            #endif
+#endif
         }
 
         #region override Methods
         internal override async void ConsentChanged(List<Consents> updatedConsents, bool newConsentValue, ConsentChangedAction action)
         {
-            if (updatedConsents.Contains(Consents.Sessions) && newConsentValue) {
-                if (!_configuration.IsAutomaticSessionTrackingDisabled) {
+            if (updatedConsents.Contains(Consents.Sessions) && newConsentValue)
+            {
+                if (!_configuration.IsAutomaticSessionTrackingDisabled)
+                {
                     IsSessionInitiated = false;
                     await BeginSessionAsync();
                 }

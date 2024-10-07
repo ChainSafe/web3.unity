@@ -58,7 +58,7 @@ public class Web3Auth : MonoBehaviour
     private static readonly Queue<Action> _executionQueue = new Queue<Action>();
 
     private bool rememberMe;
-    
+
     private bool _initialized;
 
     public void Initialize()
@@ -67,7 +67,7 @@ public class Web3Auth : MonoBehaviour
         {
             return;
         }
-        
+
         this.initParams = new Dictionary<string, object>();
 
         this.initParams["clientId"] = clientId;

@@ -14,7 +14,7 @@ namespace ChainSafe.GamingSdk.Editor
             private readonly Web3SettingsEditor window;
             private readonly Web3ConfigAsset configAsset;
             private readonly ChainConfigEntry chainConfig;
-            
+
             private int selectedChainIndex;
             private int selectedRpcIndex;
             private StringListSearchProvider searchProvider;
@@ -27,7 +27,7 @@ namespace ChainSafe.GamingSdk.Editor
                 this.window = window;
                 this.configAsset = window.web3Config;
                 this.chainConfig = chainConfigEntry;
-                
+
                 UpdateServerMenuInfo();
             }
 
@@ -48,7 +48,7 @@ namespace ChainSafe.GamingSdk.Editor
 
                 EditorGUI.indentLevel++;
                 EditorGUI.BeginChangeCheck();
-                
+
                 // Set string array from chainList to pass into the menu
                 var chainOptions = window.chainList.Select(x => x.name).ToArray();
                 // Display the dynamically updating Popup
@@ -72,7 +72,7 @@ namespace ChainSafe.GamingSdk.Editor
                 var usingCustomSettings = selectedChainIndex == 0;
 
                 GUI.enabled = usingCustomSettings;
-                
+
                 chainConfig.Network = EditorGUILayout.TextField("Network", chainConfig.Network);
                 chainConfig.ChainId = EditorGUILayout.TextField("Chain ID", chainConfig.ChainId);
                 chainConfig.Symbol = EditorGUILayout.TextField("Symbol", chainConfig.Symbol);
@@ -146,9 +146,9 @@ namespace ChainSafe.GamingSdk.Editor
                     EditorGUILayout.EndHorizontal();
                     EditorGUILayout.HelpBox("If you set your custom WebHook URI it will override the selection above.", MessageType.Info);
                 }
-                
+
                 chainConfig.Ws = EditorGUILayout.TextField("Custom WebHook", chainConfig.Ws);
-                
+
                 EditorGUI.indentLevel--;
                 if (EditorGUI.EndChangeCheck() || changedRpcOrWs)
                 {
@@ -162,8 +162,8 @@ namespace ChainSafe.GamingSdk.Editor
             {
                 if (EditorUtility.DisplayDialog(
                         "Remove Chain Config",
-                        "Do you want to remove the chain config?\nThis action can't be undone.", 
-                        "Remove", 
+                        "Do you want to remove the chain config?\nThis action can't be undone.",
+                        "Remove",
                         "Cancel"))
                 {
                     window.RemoveChainConfigEntry(ChainId);
@@ -181,7 +181,7 @@ namespace ChainSafe.GamingSdk.Editor
                     var chainPrototype = window.chainList[selectedChainIndex];
 
                     var overwriteValues = !chainPrototype.allowCustomValues;
-                    
+
                     if (overwriteValues)
                     {
                         chainConfig.Network = chainPrototype.chain;
@@ -195,7 +195,7 @@ namespace ChainSafe.GamingSdk.Editor
                     // Ensure that the selectedRpcIndex is within bounds
                     selectedRpcIndex = Mathf.Clamp(selectedRpcIndex, 0, chainPrototype.rpc.Count - 1);
                     // Set the rpc
-                    if(chainSwitched || string.IsNullOrEmpty(chainConfig.Rpc))
+                    if (chainSwitched || string.IsNullOrEmpty(chainConfig.Rpc))
                         chainConfig.Rpc = chainPrototype.rpc[selectedRpcIndex];
 
                     if (chainSwitched)

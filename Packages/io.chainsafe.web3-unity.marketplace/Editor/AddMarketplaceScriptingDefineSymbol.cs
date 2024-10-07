@@ -12,5 +12,5 @@ public class AddMarketplaceScriptingDefineSymbol
     {
         ScriptingDefineSymbols.TryAddDefineSymbol(DefineSymbol);
     }
-    
+
 }

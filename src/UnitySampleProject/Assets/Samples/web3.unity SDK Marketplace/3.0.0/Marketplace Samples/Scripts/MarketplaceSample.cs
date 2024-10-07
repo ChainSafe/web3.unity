@@ -13,7 +13,7 @@ namespace ChainSafe.Gaming.Marketplace.Samples
         [SerializeField] private Transform parentForItems;
         [SerializeField] private UI_MarketplaceItem marketplaceItem;
         [SerializeField] private Button nextPageButton;
-        
+
         private MarketplacePage _currentPage;
         private async void Start()
         {
@@ -61,7 +61,7 @@ namespace ChainSafe.Gaming.Marketplace.Samples
             {
                 Destroy(parentForItems.GetChild(i).gameObject);
             }
-            
+
             foreach (var pageItem in _currentPage.Items)
             {
                 var item = Instantiate(marketplaceItem, parentForItems);

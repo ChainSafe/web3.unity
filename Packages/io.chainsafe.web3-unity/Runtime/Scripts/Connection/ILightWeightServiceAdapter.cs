@@ -7,6 +7,6 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
     /// </summary>
     public interface ILightWeightServiceAdapter : IServiceAdapter
     {
-        
+
     }
 }

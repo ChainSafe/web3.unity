@@ -20,7 +20,7 @@ namespace ChainSafe.Gaming.HyperPlay
         public string SignMessageRpcMethodName => "personal_sign";
 
         public string SignTypedMessageRpcMethodName => "eth_signTypedData_v3";
-        
+
         [field: SerializeField, DefaultAssetValue("Packages/io.chainsafe.web3-unity.hyperplay/Runtime/Prefabs/HyperPlayRow.prefab")]
         public override Button ConnectButtonRow { get; protected set; }
 
@@ -36,7 +36,7 @@ namespace ChainSafe.Gaming.HyperPlay
             return Task.CompletedTask;
         }
 #endif
-        
+
         protected override void ConfigureServices(IWeb3ServiceCollection services)
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
@@ -54,7 +54,7 @@ namespace ChainSafe.Gaming.HyperPlay
             var data = new HyperPlayData();
 
             await data.LoadOneTime();
-            
+
             _storedSessionAvailable = data.RememberSession;
 
             return _storedSessionAvailable;

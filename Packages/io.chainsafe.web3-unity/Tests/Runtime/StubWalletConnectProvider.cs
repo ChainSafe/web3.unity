@@ -37,19 +37,21 @@ namespace Tests.Runtime
         {
             switch (method)
             {
-                case "personal_sign" : case "eth_signTypedData": case "eth_sendTransaction":
-                    return (T) Convert.ChangeType(config.StubResponse, typeof(T));
+                case "personal_sign":
+                case "eth_signTypedData":
+                case "eth_sendTransaction":
+                    return (T)Convert.ChangeType(config.StubResponse, typeof(T));
                 default:
                     // Direct RPC request via WalletConnect RPC url.
                     // Using WalletConnect Blockchain API: https://docs.walletconnect.com/cloud/blockchain-api
                     var url = $"https://rpc.walletconnect.com/v1?chainId=eip155:{chainConfig.ChainId}&projectId={config.ProjectId}";
 
                     string body = JsonConvert.SerializeObject(new RpcRequestMessage(Guid.NewGuid().ToString(), method, parameters));
-            
+
                     var rawResult = await httpClient.PostRaw(url, body, "application/json");
 
                     RpcResponseMessage response = JsonConvert.DeserializeObject<RpcResponseMessage>(rawResult.Response);
-            
+
                     return response.Result.ToObject<T>();
             }
         }

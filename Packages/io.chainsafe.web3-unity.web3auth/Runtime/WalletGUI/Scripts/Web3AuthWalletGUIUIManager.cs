@@ -54,12 +54,12 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
         if (Web3Unity.Web3 == null)
         {
             Debug.LogError("Web3 instance not set.");
-            
+
             gameObject.SetActive(false);
-            
+
             return;
         }
-        
+
         InitializeButtons();
         originalOrientation = Screen.orientation;
         walletAddressText.text = Web3Unity.Web3.Signer.PublicAddress;
@@ -197,8 +197,8 @@ public class Web3AuthWalletGUIUIManager : MonoBehaviour
     private void SetPrivateKey()
     {
         var accountProvider = (IAccountProvider)Web3Unity.Web3.ServiceProvider.GetService(typeof(IAccountProvider));
-        
-        privateKeyText.text = ((Account) accountProvider.Account).PrivateKey;
+
+        privateKeyText.text = ((Account)accountProvider.Account).PrivateKey;
     }
 
     /// <summary>

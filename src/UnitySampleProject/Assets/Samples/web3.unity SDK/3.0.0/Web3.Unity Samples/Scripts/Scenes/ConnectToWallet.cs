@@ -16,25 +16,25 @@ using UnityEngine.UI;
 public class ConnectToWallet : ServiceAdapter, IWeb3InitializedHandler, ILogoutHandler
 {
     [SerializeField] private bool rememberMe = true;
-    
+
     [Space]
-    
+
     [SerializeField] private Button connectButton;
-    
+
     [SerializeField] private Button disconnectButton;
-    
+
     [Space]
-    
+
     [SerializeField] private TextMeshProUGUI addressText;
 
     [SerializeField] private Button copyAddressButton;
-    
+
     [Space]
-    
+
     [SerializeField] private Transform connectedTransform;
-    
+
     [SerializeField] private Transform disconnectedTransform;
-    
+
     private async void Start()
     {
         try
@@ -44,7 +44,7 @@ public class ConnectToWallet : ServiceAdapter, IWeb3InitializedHandler, ILogoutH
         finally
         {
             AddButtonListeners();
-            
+
             ConnectionStateChanged(Web3Unity.Connected, Web3Unity.Instance.Address);
         }
     }
@@ -52,9 +52,9 @@ public class ConnectToWallet : ServiceAdapter, IWeb3InitializedHandler, ILogoutH
     private void AddButtonListeners()
     {
         connectButton.onClick.AddListener(Web3Unity.ConnectModal.Open);
-        
+
         disconnectButton.onClick.AddListener(Disconnect);
-        
+
         copyAddressButton.onClick.AddListener(CopyAddress);
 
         void CopyAddress()
@@ -62,11 +62,11 @@ public class ConnectToWallet : ServiceAdapter, IWeb3InitializedHandler, ILogoutH
             ClipboardManager.CopyText(addressText.text);
         }
     }
-    
+
     private void ConnectionStateChanged(bool connected, string address = "")
     {
         connectedTransform.gameObject.SetActive(connected);
-        
+
         disconnectedTransform.gameObject.SetActive(!connected);
 
         if (connected)
@@ -74,11 +74,11 @@ public class ConnectToWallet : ServiceAdapter, IWeb3InitializedHandler, ILogoutH
             addressText.text = address;
         }
     }
-    
+
     public Task OnWeb3Initialized(Web3 web3)
     {
         ConnectionStateChanged(true, web3.Signer.PublicAddress);
-        
+
         return Task.CompletedTask;
     }
 
@@ -86,11 +86,11 @@ public class ConnectToWallet : ServiceAdapter, IWeb3InitializedHandler, ILogoutH
     {
         await Web3Unity.Instance.Disconnect();
     }
-    
+
     public Task OnLogout()
     {
         ConnectionStateChanged(false);
-        
+
         return Task.CompletedTask;
     }
 

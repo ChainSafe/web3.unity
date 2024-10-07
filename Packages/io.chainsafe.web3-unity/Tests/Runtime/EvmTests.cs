@@ -54,7 +54,7 @@ public class EvmTests : SampleTestsBase
         Assert.IsTrue(callContract.IsCompletedSuccessfully);
         Assert.AreEqual(CallAmount, callContract.Result[0].ToString());
     }
-    
+
     [UnityTest]
     public IEnumerator TestGetBlockNumber()
     {
@@ -88,7 +88,7 @@ public class EvmTests : SampleTestsBase
         // Just assert successful completion because result is always changing
         Assert.IsTrue(getGasPrice.IsCompletedSuccessfully);
     }
-    
+
     [UnityTest]
     public IEnumerator GetMessageHash()
     {

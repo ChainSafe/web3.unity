@@ -6,7 +6,7 @@ using UnityEngine;
 public class DefaultAssetValuePropertyDrawer : PropertyDrawer
 {
     private DefaultAssetValueAttribute _attribute;
-    
+
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         EditorGUI.PropertyField(position, property, label, true);
@@ -15,11 +15,11 @@ public class DefaultAssetValuePropertyDrawer : PropertyDrawer
         {
             return;
         }
-        
+
         _attribute ??= (DefaultAssetValueAttribute)attribute;
 
         var asset = AssetDatabase.LoadAssetAtPath(_attribute.Path, fieldInfo.FieldType);
-        
+
         if (asset != null)
         {
             property.objectReferenceValue = asset;

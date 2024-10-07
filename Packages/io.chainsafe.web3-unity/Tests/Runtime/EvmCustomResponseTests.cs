@@ -69,13 +69,13 @@ public class EvmCustomResponseTests
         Assert.AreEqual(string.Empty, sendContract.Result);
     }
 
-    
+
     [UnityTest]
     public IEnumerator TestSendTransaction()
     {
         const string testResponse = "0x3446b949c3d214fba7e61c9cf127eac6cd0b2983564cf76be618099879b6f1e1";
         yield return BuildWeb3WithTestResponse(testResponse);
-        
+
         var sendTransaction = Web3Unity.Instance.SendTransaction(SendToAddress, SendToValue);
         yield return new WaitUntil(() => sendTransaction.IsCompleted);
         if (sendTransaction.Exception != null) throw sendTransaction.Exception;

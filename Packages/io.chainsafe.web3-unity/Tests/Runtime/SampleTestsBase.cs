@@ -44,7 +44,7 @@ public class SampleTestsBase
     public virtual IEnumerator TearDown()
     {
         var terminateWeb3Task = Web3Unity.Instance.Disconnect();
-        
+
         // Wait until for async task to finish
         yield return new WaitUntil(() => terminateWeb3Task.IsCompleted);
     }

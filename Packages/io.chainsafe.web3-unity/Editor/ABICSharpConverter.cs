@@ -119,7 +119,7 @@ public class ABICSharpConverter : EditorWindow
     {
         if (string.IsNullOrWhiteSpace(_abi))
         {
-           
+
             message = "ABI Field is Empty";
             Debug.LogError(message);
             return false;
@@ -129,7 +129,7 @@ public class ABICSharpConverter : EditorWindow
         {
             _abi = Regex.Unescape(_abi);
             var contractABI = ABIDeserialiserFactory.DeserialiseContractABI(_abi);
-            
+
 
             if (contractABI == null)
             {
@@ -360,7 +360,7 @@ public class ABICSharpConverter : EditorWindow
     private string ParseEventSubscription()
     {
         var sb = new StringBuilder();
-        
+
         foreach (var eventABI in _contractABI.Events)
         {
             var varName = eventABI.Name.RemoveFirstUnderscore().Capitalize();
@@ -406,7 +406,7 @@ public class ABICSharpConverter : EditorWindow
             sb.Replace("{EVENT_ACTION_SUBSCRIPTION}", $"public event Action<{varName}EventDTO> On{varName};");
             sb.Replace("{EVENT_NAME_CSHARP_PARAM}", varName.Uncapitalize());
             sb.Replace("{EVENT_INVOCATION}", $"On{varName}?.Invoke({varName.Uncapitalize()});");
-            
+
         }
 
         return sb.ToString();

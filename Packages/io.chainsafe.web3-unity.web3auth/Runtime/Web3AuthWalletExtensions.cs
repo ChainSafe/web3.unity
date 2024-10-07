@@ -46,11 +46,11 @@ public static class Web3AuthWalletExtensions
 #else
         collection.AddSingleton<IWalletProvider, IAccountProvider, Web3AuthProvider>();
 #endif
-        
+
         collection.AddSingleton<ISigner, ILifecycleParticipant, ILogoutHandler, Web3AuthSigner>();
-        
+
         collection.AddSingleton<ITransactionExecutor, IWeb3AuthTransactionHandler, Web3AuthTransactionExecutor>();
-        
+
         return collection;
     }
 

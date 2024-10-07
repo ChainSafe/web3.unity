@@ -19,13 +19,13 @@ using Erc1155Contract = ChainSafe.Gaming.Evm.Contracts.Custom.Erc1155Contract;
 public class Erc1155Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecycleParticipant, ILightWeightServiceAdapter, ISample
 {
     #region Fields
-    
+
     [field: SerializeField] public string Title { get; private set; }
-    
+
     [field: SerializeField, TextArea] public string Description { get; private set; }
-    
+
     public Type[] DependentServiceTypes => Array.Empty<Type>();
-    
+
     [Header("Change the fields below for testing purposes")]
 
     #region Balance Of
@@ -79,18 +79,18 @@ public class Erc1155Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecycle
     #endregion
 
     private Erc1155Contract _erc1155;
-    
+
     private GameObject _textureDisplay;
-    
+
     private RawImage _rawImage;
-    
+
     /// <summary>
     /// Balance Of ERC1155 Address
     /// </summary>
     public async Task<string> BalanceOf()
     {
         var balance = await _erc1155.BalanceOf(accountBalanceOf, BigInteger.Parse(tokenIdBalanceOf));
-        
+
         return balance.ToString();
     }
 
@@ -112,7 +112,7 @@ public class Erc1155Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecycle
     public async Task<string> Uri()
     {
         var uri = await _erc1155.Uri(BigInteger.Parse(tokenIdUri));
-        
+
         return uri;
     }
 
@@ -124,7 +124,7 @@ public class Erc1155Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecycle
         var response = await _erc1155.MintWithReceipt(
             Web3Unity.Instance.Address,
             idMint, amountMint, Array.Empty<byte>());
-        
+
         return response.TransactionHash;
     }
 
@@ -140,7 +140,7 @@ public class Erc1155Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecycle
             amountTransfer,
             Array.Empty<byte>()
             );
-        
+
         return response.TransactionHash;
     }
 
@@ -154,14 +154,14 @@ public class Erc1155Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecycle
         if (_textureDisplay == null)
         {
             _textureDisplay = Instantiate(textureDisplayPrefab);
-            
+
             _rawImage = _textureDisplay.GetComponentInChildren<RawImage>();
         }
-        
+
         _textureDisplay.SetActive(true);
-        
+
         _rawImage.texture = texture;
-        
+
         return "Nft Texture Set.";
     }
 

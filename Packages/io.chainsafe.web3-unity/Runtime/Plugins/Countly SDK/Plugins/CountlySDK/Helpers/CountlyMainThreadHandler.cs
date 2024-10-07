@@ -12,15 +12,18 @@ public class CountlyMainThreadHandler : MonoBehaviour
 
     public static CountlyMainThreadHandler Instance
     {
-        get {
-            if (_instance == null) {
+        get
+        {
+            if (_instance == null)
+            {
                 // If instance is null, add this script to the created Countly object
                 GameObject gameObject = Countly.Instance.gameObject;
                 _instance = gameObject.AddComponent<CountlyMainThreadHandler>();
             }
             return _instance;
         }
-        internal set {
+        internal set
+        {
             // Allow internal setting of the instance (used during cleanup)
             _instance = value;
         }
@@ -40,12 +43,16 @@ public class CountlyMainThreadHandler : MonoBehaviour
     public void RunOnMainThread(Action action)
     {
         // Check if we are on the main thread
-        if (IsMainThread()) {
+        if (IsMainThread())
+        {
             // If on the main thread, invoke the action immediately
             action.Invoke();
-        } else {
+        }
+        else
+        {
             // If on a different thread, queue the action to be executed on the main thread
-            lock (lockObject) {
+            lock (lockObject)
+            {
                 _queuedAction = action;
             }
         }
@@ -54,8 +61,10 @@ public class CountlyMainThreadHandler : MonoBehaviour
     private void Update()
     {
         // Execute any queued action on the main thread during the Unity Update phase
-        if (_queuedAction != null) {
-            lock (lockObject) {
+        if (_queuedAction != null)
+        {
+            lock (lockObject)
+            {
                 _queuedAction.Invoke();
                 _queuedAction = null;
             }
