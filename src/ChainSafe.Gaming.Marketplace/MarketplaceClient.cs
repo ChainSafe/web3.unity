@@ -135,7 +135,6 @@ namespace ChainSafe.Gaming.Marketplace
         /// <summary>
         /// Purchase a marketplace item with string datatypes, falls back into the overloaded call with big int data types.
         /// </summary>
-        /// <param name="marketplaceContract">The marketplace contract.</param>
         /// <param name="itemId">Item id identifier.</param>
         /// <param name="itemPrice">Price of the item.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
