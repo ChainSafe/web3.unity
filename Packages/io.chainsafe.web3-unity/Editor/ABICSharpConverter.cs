@@ -43,7 +43,7 @@ public class ABICSharpConverter : EditorWindow
         var style = new GUIStyle(GUI.skin.label) { richText = true };
 
         GUILayout.Space(10);
-        GUILayout.Label("<b><size=15>ChainSafe ABI to C# Contract Converter</size></b>", style);
+        GUILayout.Label("<b><size=15>Contract ABI to C# converter</size></b>", style);
         GUILayout.Space(10);
 
         _contractName = EditorGUILayout.TextField("Contract Name", _contractName);
@@ -86,10 +86,10 @@ public class ABICSharpConverter : EditorWindow
         }
     }
 
-    [MenuItem("ChainSafe SDK/Convert ABI to C# Contract", priority = 0)]
+    [MenuItem("ChainSafe SDK/Contract ABI to C# converter", priority = 0)]
     public static void ShowWindow()
     {
-        Instance = GetWindow<ABICSharpConverter>("ABI to C# Contract Converter");
+        Instance = GetWindow<ABICSharpConverter>("Contract ABI to C# converter");
     }
 
     // Method to handle ABI conversion
