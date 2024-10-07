@@ -63,7 +63,6 @@ public class ABICSharpConverter : EditorWindow
 
         if (!_abiIsValid)
         {
-            Debug.LogError(message);
             EditorGUILayout.HelpBox("Invalid ABI" + message, MessageType.Error);
             return;
         }
@@ -284,7 +283,7 @@ public class ABICSharpConverter : EditorWindow
 
     private static void ReplaceInputParameters(StringBuilder functionStringBuilder, FunctionABI functionABI)
     {
-        functionStringBuilder.Replace("{INPUT_PARAMS}", string.Join(", ", functionABI.InputParameters.Select(x => $"{x.Type.ToCSharpType()} {(string.IsNullOrEmpty(x.Name.ReplaceReservedNames()) ? $"{x.Type}" : $"{x.Name.ReplaceReservedNames()}")}")));
+        functionStringBuilder.Replace("{INPUT_PARAMS}", string.Join(", ", functionABI.InputParameters.Select(x => $"{x.Type.ToCSharpType()} {(string.IsNullOrEmpty(x.Name.ReplaceReservedNames()) ? $"{x.Type}" : $"{x.Name.ReplaceReservedNames()}")}")) + $"{(functionABI.InputParameters.Length > 0 ? "," : "")} TransactionRequest transactionOverwrite=null");
     }
 
     private static void ReplaceContractMethodCall(StringBuilder functionStringBuilder, FunctionABI functionABI)
