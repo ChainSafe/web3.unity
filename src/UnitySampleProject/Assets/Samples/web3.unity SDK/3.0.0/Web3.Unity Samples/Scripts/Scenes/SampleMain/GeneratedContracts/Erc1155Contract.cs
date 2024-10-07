@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Transactions;
@@ -40,9 +41,9 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
         }
 
 
-        public async Task<BigInteger[]> BalanceOfBatch(string[] accounts, BigInteger[] ids)
+        public async Task<List<BigInteger>> BalanceOfBatch(string[] accounts, BigInteger[] ids)
         {
-            var response = await OriginalContract.Call<BigInteger[]>("balanceOfBatch", new object[]
+            var response = await OriginalContract.Call<List<BigInteger>>("balanceOfBatch", new object[]
             {
                 accounts, ids
             });
