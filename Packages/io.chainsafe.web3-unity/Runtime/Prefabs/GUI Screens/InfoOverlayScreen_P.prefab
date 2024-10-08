@@ -800,6 +800,7 @@ MonoBehaviour:
   Message: {fileID: 1166155671716617278}
   ErrorIcon: {fileID: 1302129811454805426}
   LoadingIcon: {fileID: 3999814893022731314}
+  CloseButton: {fileID: 2867007665016301308}
 --- !u!114 &3480591398658853907
 MonoBehaviour:
   m_ObjectHideFlags: 0

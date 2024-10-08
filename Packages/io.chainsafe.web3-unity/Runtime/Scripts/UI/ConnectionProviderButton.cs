@@ -9,8 +9,14 @@ namespace ChainSafe.Gaming.UnityPackage.UI
     {
         public Image Icon;
         public TMP_Text Text;
+        public Button Button;
         
         private Action onClick;
+
+        private void Awake()
+        {
+            Button.onClick.AddListener(OnClick);
+        }
 
         public void Set(Sprite sprite, string text, Action onClick)
         {
@@ -19,7 +25,7 @@ namespace ChainSafe.Gaming.UnityPackage.UI
             Text.text = text;
         }
 
-        public void OnClick()
+        private void OnClick()
         {
             onClick?.Invoke();
         }

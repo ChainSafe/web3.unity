@@ -422,6 +422,7 @@ MonoBehaviour:
   Message: {fileID: 4809029612308911621}
   ErrorIcon: {fileID: 6013280407410683805}
   LoadingIcon: {fileID: 3767185710782491973}
+  CloseButton: {fileID: 8460544751407442695}
 --- !u!114 &7219247439158614986
 MonoBehaviour:
   m_ObjectHideFlags: 0

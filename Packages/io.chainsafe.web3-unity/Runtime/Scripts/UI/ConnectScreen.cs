@@ -14,8 +14,14 @@ namespace ChainSafe.Gaming.UnityPackage.UI
     {
         [SerializeField] private RectTransform providerContainer;
         [SerializeField] private ConnectionProviderButton providerButtonPrefab;
+        [SerializeField] private Button closeButton;
         
         private int loadingOverlayId;
+
+        private void Awake()
+        {
+            closeButton.onClick.AddListener(Close);
+        }
 
         public void Initialize(ConnectionProvider[] providers)
         {

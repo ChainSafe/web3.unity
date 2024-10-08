@@ -106,7 +106,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 266709757113091023, guid: fc9add9f6cfb06b479d08477c75fa7b2, type: 3}
       propertyPath: m_Name
-      value: ConnectiionProviderButton_L Variant
+      value: ConnectionProviderButton_L Variant
       objectReference: {fileID: 0}
     - target: {fileID: 5031812609836150616, guid: fc9add9f6cfb06b479d08477c75fa7b2, type: 3}
       propertyPath: m_AnchorMax.y
@@ -210,7 +210,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6676731838269080285, guid: fc9add9f6cfb06b479d08477c75fa7b2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6676731838269080285, guid: fc9add9f6cfb06b479d08477c75fa7b2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
@@ -278,6 +278,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Icon: {fileID: 6105479208835811077}
   Text: {fileID: 6701966756157619366}
+  Button: {fileID: 9150248872076879321}
 --- !u!114 &6701966756157619366 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9175690222738742178, guid: fc9add9f6cfb06b479d08477c75fa7b2, type: 3}
@@ -294,3 +295,14 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6652467265882153082, guid: fc9add9f6cfb06b479d08477c75fa7b2, type: 3}
   m_PrefabInstance: {fileID: 2473798792254482180}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &9150248872076879321 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6676731838269080285, guid: fc9add9f6cfb06b479d08477c75fa7b2, type: 3}
+  m_PrefabInstance: {fileID: 2473798792254482180}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2442985066507609291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

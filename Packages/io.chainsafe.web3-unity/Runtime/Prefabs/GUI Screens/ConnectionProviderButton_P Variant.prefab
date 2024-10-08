@@ -146,7 +146,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4164142901385985961, guid: b18ff5da99c2125439600bb82bb49665, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4164142901385985961, guid: b18ff5da99c2125439600bb82bb49665, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
@@ -187,6 +187,17 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 472247810901713393}
   m_SourcePrefab: {fileID: 100100000, guid: b18ff5da99c2125439600bb82bb49665, type: 3}
+--- !u!114 &861875182179856173 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4164142901385985961, guid: b18ff5da99c2125439600bb82bb49665, type: 3}
+  m_PrefabInstance: {fileID: 3620893063533908100}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6120094812466359871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2885650084442273362 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1888165445779629782, guid: b18ff5da99c2125439600bb82bb49665, type: 3}
@@ -228,6 +239,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Icon: {fileID: 3820189777709859976}
   Text: {fileID: 2885650084442273362}
+  Button: {fileID: 861875182179856173}
 --- !u!1 &6927812671966869035 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5916454361224292015, guid: b18ff5da99c2125439600bb82bb49665, type: 3}
