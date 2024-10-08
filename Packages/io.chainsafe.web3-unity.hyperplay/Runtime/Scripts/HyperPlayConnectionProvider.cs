@@ -17,12 +17,16 @@ namespace ChainSafe.Gaming.HyperPlay
     [CreateAssetMenu(menuName = "ChainSafe/Connection Provider/HyperPlay", fileName = nameof(HyperPlayConnectionProvider))]
     public class HyperPlayConnectionProvider : ConnectionProvider, IHyperPlayConfig
     {
+        [field: SerializeField, DefaultAssetValue("Packages/io.chainsafe.web3-unity.hyperplay/Runtime/Sprites/HyperPlay.png")]
+        public override Sprite ButtonIcon { get; protected set; }
+
+        [field: SerializeField] public override string ButtonText { get; protected set; } = "HyperPlay";
+
+        public override bool DisplayLoadingOnConnection => true;
+        
         public string SignMessageRpcMethodName => "personal_sign";
 
         public string SignTypedMessageRpcMethodName => "eth_signTypedData_v3";
-        
-        [field: SerializeField, DefaultAssetValue("Packages/io.chainsafe.web3-unity.hyperplay/Runtime/Prefabs/HyperPlayRow.prefab")]
-        public override Button ConnectButtonRow { get; protected set; }
 
         bool IHyperPlayConfig.RememberSession => RememberSession;
 
