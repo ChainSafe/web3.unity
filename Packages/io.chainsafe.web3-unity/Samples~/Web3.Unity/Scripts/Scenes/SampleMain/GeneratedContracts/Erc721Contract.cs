@@ -2,6 +2,7 @@ using System;
 using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Transactions;
+using ChainSafe.Gaming.Ipfs;
 using Nethereum.Hex.HexTypes;
 using Nethereum.ABI.FunctionEncoding.Attributes;
 using UnityEngine;
@@ -183,8 +184,12 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
         }
 
 
-        public async Task<string> TokenURI(BigInteger tokenId) 
+        public async Task<string> TokenURI(string tokenId) 
         {
+            if (IpfsHelper.CanDecodeTokenIdToUri(tokenId))
+            {
+                return IpfsHelper.DecodeTokenIdToUri(tokenId);
+            }
             var response = await OriginalContract.Call<string>("tokenURI", new object [] {
                 tokenId
             });
