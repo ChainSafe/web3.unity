@@ -118,6 +118,6 @@ public class EvmTests : SampleTestsBase
     {
         var getCustomBalanceOf = web3.Erc20.GetBalanceOf(ChainSafeContracts.Erc20);
         yield return new WaitUntil(() => getCustomBalanceOf.IsCompleted);
-        Assert.AreEqual(new BigInteger(4999000000000000000), getCustomBalanceOf.Result);
+        Assert.AreEqual(new BigInteger(14997000000000000000), getCustomBalanceOf.Result);
     }
 }
