@@ -11,7 +11,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp.Sample
     {
         [field: SerializeField] public string Title { get; private set; }
         [field: SerializeField, TextArea] public string Description { get; private set; }
-        
+
         public Type[] DependentServiceTypes => new[] { typeof(IRampExchanger) };
 
         public async Task<string> OnRamp()

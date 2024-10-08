@@ -19,13 +19,13 @@ using UnityEngine;
 public class EvmSample : MonoBehaviour, ISample
 {
     #region Fields
-    
+
     [field: SerializeField] public string Title { get; private set; }
-    
+
     [field: SerializeField, TextArea] public string Description { get; private set; }
-    
+
     public Type[] DependentServiceTypes => Array.Empty<Type>();
-    
+
     [Header("Change the fields below for testing purposes")]
 
     #region Contract Send
@@ -129,7 +129,7 @@ public class EvmSample : MonoBehaviour, ISample
             Web3Unity.Web3.Signer.PublicAddress
         };
         var response = await Web3Unity.Instance.ContractCall(methodCall, ABI.ArrayTotal, ChainSafeContracts.ArrayTotal, args);
-        
+
         return BuildToString(response);
     }
 
@@ -143,7 +143,7 @@ public class EvmSample : MonoBehaviour, ISample
             increaseAmountSend
         };
         var response = await Web3Unity.Instance.ContractSend(methodSend, ABI.ArrayTotal, ChainSafeContracts.ArrayTotal, args);
-        
+
         return BuildToString(response);
     }
 
@@ -153,7 +153,7 @@ public class EvmSample : MonoBehaviour, ISample
     public async Task<string> GetBlockNumber()
     {
         var blockNumber = await Web3Unity.Instance.GetBlockNumber();
-        
+
         return blockNumber.ToString();
     }
 
@@ -166,9 +166,9 @@ public class EvmSample : MonoBehaviour, ISample
         {
             increaseAmountSend
         };
-        
+
         var gasLimit = await Web3Unity.Instance.GetGasLimit(ABI.ArrayTotal, ChainSafeContracts.ArrayTotal, methodSend, args);
-        
+
         return gasLimit.ToString();
     }
 
@@ -178,7 +178,7 @@ public class EvmSample : MonoBehaviour, ISample
     public async Task<string> GetGasPrice()
     {
         var gasPrice = await Web3Unity.Instance.GetGasPrice();
-        
+
         return gasPrice.ToString();
     }
 
@@ -188,7 +188,7 @@ public class EvmSample : MonoBehaviour, ISample
     public async Task<string> SendTransaction()
     {
         var hash = await Web3Unity.Instance.SendTransaction(toAddress, BigInteger.Parse(value));
-        
+
         return hash;
     }
 
@@ -198,7 +198,7 @@ public class EvmSample : MonoBehaviour, ISample
     public async Task<string> SignMessage()
     {
         var signHash = await Web3Unity.Instance.SignMessage(messageSign);
-        
+
         return signHash;
     }
 
@@ -238,7 +238,7 @@ public class EvmSample : MonoBehaviour, ISample
                 Debug.Log($"Amount from event data: {eventData.amount}");
             }
         }
-        
+
         return $"{nameof(EventTxData)} executed.";
     }
 
@@ -288,10 +288,10 @@ public class EvmSample : MonoBehaviour, ISample
             var decodedTotalSupply = erc20Contract.Decode(EthMethods.TotalSupply, multicallResultResponse[1].ReturnData.ToHex());
             Debug.Log($"decodedTotalSupply {((BigInteger)decodedTotalSupply[0]).ToString()}");
         }
-        
+
         return $"{nameof(MultiCall)} executed.";
     }
-    
+
     private static string BuildToString(IEnumerable<object> dynamicResponse)
     {
         return string.Join(",\n", dynamicResponse.Select(o => o.ToString()));
