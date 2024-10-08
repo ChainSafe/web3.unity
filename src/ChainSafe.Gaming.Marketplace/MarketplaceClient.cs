@@ -154,12 +154,12 @@ namespace ChainSafe.Gaming.Marketplace
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         private async Task Purchase(string marketplaceContract, BigInteger itemId, BigInteger itemPrice)
         {
-            if (string.IsNullOrEmpty(this.config.MarketplaceContractAbi))
+            if (string.IsNullOrEmpty(this.config.MarketplaceContractAbiOverride))
             {
-                this.config.MarketplaceContractAbi = IMarketplaceConfig.ReadDefaultAbiFromResources();
+                this.config.MarketplaceContractAbiOverride = IMarketplaceConfig.ReadDefaultAbiFromResources();
             }
 
-            var contract = this.contractBuilder.Build(this.config.MarketplaceContractAbi, marketplaceContract);
+            var contract = this.contractBuilder.Build(this.config.MarketplaceContractAbiOverride, marketplaceContract);
             var transactionPrototype = new TransactionRequest { Value = new HexBigInteger(itemPrice) };
             await contract.Send("purchaseItem", new object[] { itemId }, transactionPrototype);
         }

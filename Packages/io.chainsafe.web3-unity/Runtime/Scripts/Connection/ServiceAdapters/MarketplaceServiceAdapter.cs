@@ -32,7 +32,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
     public class MarketplaceConfigUnity : IMarketplaceConfig
     {
         [field: SerializeField] public string EndpointOverride { get; set; }
-        [field: SerializeField] public string MarketplaceContractAbi { get; set; }
+        [field: SerializeField] public string MarketplaceContractAbiOverride { get; set; }
         [field: SerializeField] public string ProjectIdOverride { get; set; }
         [field: SerializeField] public string MarketplaceId { get; set; }
         [field: SerializeField] public string MarketplaceContractAddress { get; set; }

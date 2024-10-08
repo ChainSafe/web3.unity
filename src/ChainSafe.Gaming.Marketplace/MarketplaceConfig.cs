@@ -16,7 +16,7 @@ namespace ChainSafe.Gaming.Marketplace
         public string? EndpointOverride { get; set; }
 
         /// <inheritdoc/>
-        public string MarketplaceContractAbi { get; set; }
+        public string MarketplaceContractAbiOverride { get; set; }
 
         public string ProjectIdOverride { get; set; }
 

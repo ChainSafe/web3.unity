@@ -20,13 +20,17 @@ namespace ChainSafe.Gaming.Marketplace
         /// <summary>
         /// Gets or sets marketplace contract abi.
         /// </summary>
-        string MarketplaceContractAbi { get; set; }
+        string MarketplaceContractAbiOverride { get; set; }
 
         string ProjectIdOverride { get; set; }
 
         string MarketplaceId { get; set; }
 
         string MarketplaceContractAddress { get; set; }
+
+        string MarketplaceContractAbi => !string.IsNullOrEmpty(MarketplaceContractAbiOverride)
+            ? MarketplaceContractAbiOverride
+            : ReadDefaultAbiFromResources();
 
         public static string ReadDefaultAbiFromResources()
         {

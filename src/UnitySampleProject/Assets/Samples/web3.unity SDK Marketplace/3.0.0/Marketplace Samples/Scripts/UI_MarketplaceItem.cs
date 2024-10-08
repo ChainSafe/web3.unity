@@ -65,7 +65,8 @@ namespace ChainSafe.Gaming.Marketplace.Samples
             try
             {
                 await Web3Unity.Web3.Marketplace().Purchase(_marketplaceItemModel.Id, _marketplaceItemModel.Price);
-                Destroy(gameObject);
+                button.interactable = false;
+                itemStatus.text = "Sold";
             }
             catch (ServiceNotBoundWeb3Exception<ISigner> _)
             {

@@ -1544,7 +1544,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   marketplaceConfig:
     <EndpointOverride>k__BackingField: 
-    <MarketplaceContractAbi>k__BackingField: 
+    <MarketplaceContractAbiOverride>k__BackingField: 
     <ProjectIdOverride>k__BackingField: 
     <MarketplaceId>k__BackingField: 
     <MarketplaceContractAddress>k__BackingField: 
