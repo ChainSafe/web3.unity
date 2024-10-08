@@ -10,7 +10,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
     public class GelatoServiceAdapter : MonoBehaviour, IServiceAdapter
     {
         [SerializeField] private string gelatoApiKey;
-        
+
         public Web3Builder ConfigureServices(Web3Builder web3Builder)
         {
             return web3Builder.Configure(services =>

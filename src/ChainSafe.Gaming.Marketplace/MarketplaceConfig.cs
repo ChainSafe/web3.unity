@@ -2,34 +2,26 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+using System;
+
 namespace ChainSafe.Gaming.Marketplace
 {
-    using System.Reflection;
-    using ChainSafe.Gaming.Evm.Utils;
-
     /// <summary>
     /// Marketplace configuration.
     /// </summary>
-    public struct MarketplaceConfig : IMarketplaceConfig
+    [Serializable]
+    public class MarketplaceConfig : IMarketplaceConfig
     {
-        /// <summary>
-        /// Gets constructor instantiates the class.
-        /// </summary>
-        public static MarketplaceConfig Default => new MarketplaceConfig
-        {
-            EndpointOverride = "https://api.gaming.chainsafe.io",
-            MarketplaceContractAbi = ReadDefaultAbiFromResources(),
-        };
-
         /// <inheritdoc/>
         public string? EndpointOverride { get; set; }
 
         /// <inheritdoc/>
-        public string? MarketplaceContractAbi { get; set; }
+        public string MarketplaceContractAbiOverride { get; set; }
 
-        private static string ReadDefaultAbiFromResources()
-        {
-            return AbiHelper.ReadAbiFromResources(Assembly.GetExecutingAssembly(), "ChainSafe.Gaming.Marketplace.marketplace-abi.json");
-        }
+        public string ProjectIdOverride { get; set; }
+
+        public string MarketplaceId { get; set; }
+
+        public string MarketplaceContractAddress { get; set; }
     }
 }

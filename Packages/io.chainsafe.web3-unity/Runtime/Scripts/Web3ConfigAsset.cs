@@ -12,6 +12,6 @@ namespace ChainSafe.Gaming
         [field: SerializeField] public bool EnableAnalytics { get; set; } = true;
         [field: SerializeField] public List<ChainConfigEntry> ChainConfigs { get; set; } = new();
 
-        IEnumerable<IChainConfig> IChainConfigSet.Configs => ChainConfigs; 
+        IEnumerable<IChainConfig> IChainConfigSet.Configs => ChainConfigs;
     }
 }

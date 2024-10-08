@@ -31,7 +31,7 @@ namespace ChainSafe.Gaming.WalletConnect.Editor
 
         private void ListWalletProviders()
         {
-            var config = (IWalletConnectConfig) target;
+            var config = (IWalletConnectConfig)target;
 
             if (string.IsNullOrWhiteSpace(config.ProjectId))
             {
@@ -45,7 +45,7 @@ namespace ChainSafe.Gaming.WalletConnect.Editor
 
         private void DeleteStorage()
         {
-            var config = (IWalletConnectConfig) target;
+            var config = (IWalletConnectConfig)target;
 
             if (string.IsNullOrEmpty(config.StoragePath))
             {

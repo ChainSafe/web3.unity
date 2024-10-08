@@ -34,19 +34,6 @@ namespace ChainSafe.Gaming.Marketplace
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MarketplaceClient"/> class.
-        /// Constructor creates an instance of the marketplace client class.
-        /// </summary>
-        /// <param name="httpClient">Http client.</param>
-        /// <param name="projectConfig">Project config.</param>
-        /// <param name="chainConfig">Chain config.</param>
-        /// <param name="contractBuilder">Contract builder.</param>
-        public MarketplaceClient(IHttpClient httpClient, IProjectConfig projectConfig, IChainConfig chainConfig, IContractBuilder contractBuilder)
-            : this(httpClient, projectConfig, chainConfig, contractBuilder, MarketplaceConfig.Default)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MarketplaceClient"/> class.
         /// Constructor creates an instance of the marketplace client class with config overload.
         /// </summary>
         /// <param name="httpClient">Http client.</param>
@@ -70,7 +57,6 @@ namespace ChainSafe.Gaming.Marketplace
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public Task<MarketplacePage> LoadPage(
             MarketplacePage? currentPage = null,
-            string? marketplaceId = null,
             string? filterTokenContract = null,
             MarketplaceItemStatus? filterStatus = null,
             MarketplaceSortType sortType = MarketplaceSortType.None,
@@ -78,7 +64,6 @@ namespace ChainSafe.Gaming.Marketplace
         {
             return this.LoadPage(
                 currentPage?.Cursor ?? null,
-                marketplaceId,
                 filterTokenContract,
                 filterStatus,
                 sortType,
@@ -92,28 +77,26 @@ namespace ChainSafe.Gaming.Marketplace
         /// <returns>Loaded page.</returns>
         public async Task<MarketplacePage> LoadPage(
             string? cursor,
-            string? marketplaceId = null,
             string? filterTokenContract = null,
             MarketplaceItemStatus? filterStatus = null,
             MarketplaceSortType sortType = MarketplaceSortType.None,
             MarketplaceSortOrder? sortOrder = null)
         {
             var endpoint = this.config.EndpointOverride;
+            if (string.IsNullOrEmpty(endpoint))
+            {
+                endpoint = "https://api.gaming.chainsafe.io";
+            }
+
             if (endpoint.EndsWith('/'))
             {
                 endpoint = endpoint.Substring(0, endpoint.LastIndexOf('/'));
             }
 
-            var projectId = this.projectConfig.ProjectId;
-            var baseUri = marketplaceId == null
-                ? $"{endpoint}/v1/projects/{projectId}/items"
-                : $"{endpoint}/v1/projects/{projectId}/marketplaces/{marketplaceId}/items";
+            var marketplaceId = config.MarketplaceId;
+            var projectId = !string.IsNullOrEmpty(config.ProjectIdOverride) ? config.ProjectIdOverride : this.projectConfig.ProjectId;
+            var baseUri = $"{endpoint}/v1/projects/{projectId}/marketplaces/{marketplaceId}/items";
             var queryParameters = new Dictionary<string, string>();
-
-            if (marketplaceId == null)
-            {
-                queryParameters["chainId"] = this.chainConfig.ChainId;
-            }
 
             if (filterTokenContract != null)
             {
@@ -152,15 +135,14 @@ namespace ChainSafe.Gaming.Marketplace
         /// <summary>
         /// Purchase a marketplace item with string datatypes, falls back into the overloaded call with big int data types.
         /// </summary>
-        /// <param name="marketplaceContract">The marketplace contract.</param>
         /// <param name="itemId">Item id identifier.</param>
         /// <param name="itemPrice">Price of the item.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public Task Purchase(string marketplaceContract, string itemId, string itemPrice)
+        public Task Purchase(string itemId, string itemPrice)
         {
             var itemIdInt = BigInteger.Parse(itemId);
             var priceInt = BigInteger.Parse(itemPrice);
-            return this.Purchase(marketplaceContract, itemIdInt, priceInt);
+            return Purchase(config.MarketplaceContractAddress, itemIdInt, priceInt);
         }
 
         /// <summary>
@@ -170,9 +152,14 @@ namespace ChainSafe.Gaming.Marketplace
         /// <param name="itemId">Item id identifier.</param>
         /// <param name="itemPrice">Price of the item.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public async Task Purchase(string marketplaceContract, BigInteger itemId, BigInteger itemPrice)
+        private async Task Purchase(string marketplaceContract, BigInteger itemId, BigInteger itemPrice)
         {
-            var contract = this.contractBuilder.Build(this.config.MarketplaceContractAbi, marketplaceContract);
+            if (string.IsNullOrEmpty(this.config.MarketplaceContractAbiOverride))
+            {
+                this.config.MarketplaceContractAbiOverride = IMarketplaceConfig.ReadDefaultAbiFromResources();
+            }
+
+            var contract = this.contractBuilder.Build(this.config.MarketplaceContractAbiOverride, marketplaceContract);
             var transactionPrototype = new TransactionRequest { Value = new HexBigInteger(itemPrice) };
             await contract.Send("purchaseItem", new object[] { itemId }, transactionPrototype);
         }

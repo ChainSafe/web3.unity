@@ -12,7 +12,7 @@ public class CountlyAnalytics : IAnalyticsClient
     private const string ServerUrl = "https://chainsafe-40aca7b26551e.flex.countly.com";
 
     private readonly IChainManager _chainManager;
-    
+
     public async void CaptureEvent(AnalyticsEvent eventData)
     {
         await Countly.Instance.Events.RecordEventAsync(eventData.EventName);
@@ -29,7 +29,7 @@ public class CountlyAnalytics : IAnalyticsClient
         _chainManager = chainManager;
 
         IChainConfig chainConfig = chainConfigSet.Configs.First();
-        
+
         var userDetails = new Dictionary<string, object>
         {
             { "chainId", chainConfig.ChainId },

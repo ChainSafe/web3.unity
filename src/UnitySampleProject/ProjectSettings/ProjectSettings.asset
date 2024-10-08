@@ -793,7 +793,7 @@ PlayerSettings:
   webGLPowerPreference: 2
   scriptingDefineSymbols:
     Standalone: 
-    WebGL: RAMP_AVAILABLE
+    WebGL: RAMP_AVAILABLE;MARKETPLACE_AVAILABLE;ENABLE_ANALYTICS
     iPhone: RAMP_AVAILABLE
   additionalCompilerArguments: {}
   platformArchitecture: {}

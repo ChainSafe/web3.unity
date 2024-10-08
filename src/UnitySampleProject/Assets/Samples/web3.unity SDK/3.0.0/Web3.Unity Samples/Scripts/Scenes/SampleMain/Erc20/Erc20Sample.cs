@@ -18,9 +18,9 @@ using Erc20Contract = ChainSafe.Gaming.Evm.Contracts.Custom.Erc20Contract;
 public class Erc20Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecycleParticipant, ILightWeightServiceAdapter, ISample
 {
     #region Fields
-    
+
     [field: SerializeField] public string Title { get; private set; }
-    
+
     [field: SerializeField, TextArea] public string Description { get; private set; }
 
     public Type[] DependentServiceTypes => Array.Empty<Type>();
@@ -44,7 +44,8 @@ public class Erc20Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecyclePa
 
     #region Transfer
 
-    [Header("Transfer Call")] [SerializeField]
+    [Header("Transfer Call")]
+    [SerializeField]
     private string toAccount = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
 
     [SerializeField] private BigInteger amountTransfer = 1000000000000000;
@@ -54,14 +55,14 @@ public class Erc20Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecyclePa
     #endregion
 
     private Erc20Contract _erc20;
-    
+
     /// <summary>
     /// Balance Of ERC20 Address
     /// </summary>
     public async Task<string> BalanceOf()
     {
         var balance = await _erc20.BalanceOf(accountBalanceOf);
-        
+
         return balance.ToString();
     }
 
@@ -71,7 +72,7 @@ public class Erc20Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecyclePa
     public async Task<string> NativeBalanceOf()
     {
         var balance = await Web3Unity.Web3.RpcProvider.GetBalance(accountBalanceOf);
-        
+
         return balance.ToString();
     }
 
@@ -81,7 +82,7 @@ public class Erc20Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecyclePa
     public async Task<string> Name()
     {
         var getName = await _erc20.Name();
-        
+
         return getName;
     }
 
@@ -91,7 +92,7 @@ public class Erc20Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecyclePa
     public async Task<string> Symbol()
     {
         var symbol = await _erc20.Symbol();
-        
+
         return symbol;
     }
 
@@ -110,7 +111,7 @@ public class Erc20Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecyclePa
     public async Task<string> TotalSupply()
     {
         var totalSupply = await _erc20.TotalSupply();
-        
+
         return totalSupply.ToString();
     }
 
@@ -120,7 +121,7 @@ public class Erc20Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecyclePa
     public async Task<string> MintErc20()
     {
         var mintResponse = await _erc20.MintWithReceipt(Web3Unity.Web3.Signer.PublicAddress, valueToSend * weiPerEther);
-        
+
         return mintResponse.TransactionHash;
     }
 
@@ -130,7 +131,7 @@ public class Erc20Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecyclePa
     public async Task<string> TransferErc20()
     {
         var mintResponse = await _erc20.Transfer(toAccount, amountTransfer);
-        
+
         return mintResponse.ToString();
     }
 
