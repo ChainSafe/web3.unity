@@ -37,7 +37,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
                 object param = tokenId.StartsWith("0x") ? tokenId : BigInteger.Parse(tokenId);
                 var callData = OriginalContract.Calldata(EthMethods.OwnerOf, new[] { param });
                 return new Call3Value
-                    { Target = OriginalContract.Address, AllowFailure = true, CallData = callData.HexToByteArray() };
+                { Target = OriginalContract.Address, AllowFailure = true, CallData = callData.HexToByteArray() };
             }
 
             OwnerOfBatchModel BuildResult(Result result, int index)

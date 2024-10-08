@@ -2,6 +2,9 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+using System.Reflection;
+using ChainSafe.Gaming.Evm.Utils;
+
 namespace ChainSafe.Gaming.Marketplace
 {
     /// <summary>
@@ -17,6 +20,21 @@ namespace ChainSafe.Gaming.Marketplace
         /// <summary>
         /// Gets or sets marketplace contract abi.
         /// </summary>
-        string? MarketplaceContractAbi { get; set; }
+        string MarketplaceContractAbiOverride { get; set; }
+
+        string ProjectIdOverride { get; set; }
+
+        string MarketplaceId { get; set; }
+
+        string MarketplaceContractAddress { get; set; }
+
+        string MarketplaceContractAbi => !string.IsNullOrEmpty(MarketplaceContractAbiOverride)
+            ? MarketplaceContractAbiOverride
+            : ReadDefaultAbiFromResources();
+
+        public static string ReadDefaultAbiFromResources()
+        {
+            return AbiHelper.ReadAbiFromResources(Assembly.GetExecutingAssembly(), "ChainSafe.Gaming.Marketplace.marketplace-abi.json");
+        }
     }
 }

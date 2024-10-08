@@ -23,7 +23,7 @@ namespace ChainSafe.Gaming.UnityPackage
         {
             return storable.LoadOneTime(DataStorageDependencies(storable));
         }
-        
+
         /// <summary>
         /// Save data one time.
         /// </summary>
@@ -35,7 +35,7 @@ namespace ChainSafe.Gaming.UnityPackage
         {
             return storable.SaveOneTime(DataStorageDependencies(storable));
         }
-        
+
         /// <summary>
         /// Clear data one time.
         /// </summary>

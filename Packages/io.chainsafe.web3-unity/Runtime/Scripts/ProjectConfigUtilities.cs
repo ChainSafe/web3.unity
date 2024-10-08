@@ -36,7 +36,7 @@ namespace ChainSafe.Gaming.UnityPackage
                     BlockExplorerUrl = blockExplorerUrl,
                 }
             };
-           
+
             return projectConfig;
         }
 
@@ -74,13 +74,13 @@ namespace ChainSafe.Gaming.UnityPackage
         {
             return new LocalhostChainConfig(chainId, symbol, chain, network, port);
         }
-        
+
         private class LocalhostChainConfig : IChainConfig
         {
             public LocalhostChainConfig(string chainId, string symbol, string chain, string network, string port)
             {
                 var localhostEndPoint = $"127.0.0.1:{port}";
-                
+
                 ChainId = chainId;
                 Symbol = symbol;
                 Chain = chain;

@@ -15,9 +15,9 @@ namespace ChainSafe.Gaming.UnityPackage.UI
         [SerializeField] private Button closeButton;
         // Closes modal when background is clicked
         [SerializeField] private Button closeFromBackgroundButton;
-        
+
         [Space]
-        
+
         [SerializeField] private RectTransform modalContainer;
         [SerializeField] private RectTransform providerContainer;
 
@@ -37,7 +37,7 @@ namespace ChainSafe.Gaming.UnityPackage.UI
 
                     // Don't allow connection before initialization.
                     button.interactable = true;
-                    
+
                     button.onClick.AddListener(delegate
                     {
                         ConnectClicked(provider);
@@ -50,7 +50,7 @@ namespace ChainSafe.Gaming.UnityPackage.UI
                 await TryConnect(provider);
             }
         }
-        
+
         /// <summary>
         /// Try to Connect and displays error and throws exception on a failed attempt.
         /// </summary>
@@ -81,7 +81,7 @@ namespace ChainSafe.Gaming.UnityPackage.UI
         {
             modalContainer.gameObject.SetActive(true);
         }
-        
+
         /// <summary>
         /// Display Error.
         /// </summary>
@@ -90,7 +90,7 @@ namespace ChainSafe.Gaming.UnityPackage.UI
         {
             errorOverlay.DisplayError(message);
         }
-        
+
         /// <summary>
         /// Show Loading Overlay.
         /// </summary>
@@ -98,13 +98,13 @@ namespace ChainSafe.Gaming.UnityPackage.UI
         {
             LoadingOverlay.ShowLoadingOverlay(text);
         }
-        
+
         /// <summary>
         /// Hide Loading overlay.
         /// </summary>
         private void HideLoading()
         {
-           LoadingOverlay.HideLoadingOverlay();
+            LoadingOverlay.HideLoadingOverlay();
         }
 
         public void Close()

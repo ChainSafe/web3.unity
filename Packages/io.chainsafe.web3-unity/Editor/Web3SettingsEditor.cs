@@ -22,11 +22,11 @@ namespace ChainSafe.GamingSdk.Editor
         // Initializes window
         [MenuItem("ChainSafe SDK/Project Settings", false, -200)]
         public static void ShowWindow() => ShowWindow(null);
-        
+
         public static void ShowWindow(Tabs? tabOverride = null)
         {
             // Show existing window instance. If it doesn't exist, make one.
-            var window = (Web3SettingsEditor) GetWindow(typeof(Web3SettingsEditor));
+            var window = (Web3SettingsEditor)GetWindow(typeof(Web3SettingsEditor));
             window.titleContent = new GUIContent("Web3 Settings");
             window.minSize = new Vector2(450, 300);
 
@@ -35,7 +35,7 @@ namespace ChainSafe.GamingSdk.Editor
                 window.ActiveTab = tabOverride.Value;
             }
         }
-        
+
         private static GUIStyle centeredLabelStyle;
         private static GUIStyle wrappedGreyMiniLabel;
 
@@ -68,13 +68,13 @@ namespace ChainSafe.GamingSdk.Editor
                 logo = AssetDatabase.LoadAssetAtPath<Texture2D>(
                     "Packages/io.chainsafe.web3-unity/Editor/Textures/ChainSafeLogo2.png");
 
-            TryFetchSupportedChains(); 
+            TryFetchSupportedChains();
         }
 
         private void OnGUI()
         {
             InitStyles();
-            
+
             using (new EditorGUILayout.VerticalScope())
             {
                 DrawHeader();
@@ -103,7 +103,7 @@ namespace ChainSafe.GamingSdk.Editor
             using (new GUILayout.VerticalScope(GUILayout.Height(240)))
             {
                 GUILayout.FlexibleSpace();
-                
+
                 // logo layout
                 using (new EditorGUILayout.HorizontalScope())
                 {
@@ -111,11 +111,11 @@ namespace ChainSafe.GamingSdk.Editor
                     GUILayout.Label(logo, centeredLabelStyle, GUILayout.MaxHeight(160));
                     // GUILayout.FlexibleSpace();
                 }
-                
+
                 GUILayout.Space(15);
-                
+
                 GUILayout.Label("Welcome to web3.unity, the ChainSafe Gaming SDK!", centeredLabelStyle);
-                
+
                 GUILayout.FlexibleSpace();
             }
         }
@@ -129,7 +129,7 @@ namespace ChainSafe.GamingSdk.Editor
                 ActiveTab = (Tabs)GUILayout.Toolbar((int)ActiveTab, new[] { "Project Settings", "Chain Settings" });
                 GUILayout.FlexibleSpace();
             }
-            
+
             // EditorGUILayout.Separator();
             GUILayout.Space(15);
 
@@ -149,7 +149,7 @@ namespace ChainSafe.GamingSdk.Editor
         private void DrawProjectTabContent()
         {
             EditorGUI.BeginChangeCheck();
-            
+
             web3Config.ProjectId = EditorGUILayout.TextField("Project ID", web3Config.ProjectId);
             if (string.IsNullOrWhiteSpace(web3Config.ProjectId))
             {
@@ -168,19 +168,19 @@ namespace ChainSafe.GamingSdk.Editor
                         "Consent to collecting data for analytics purposes. This will help improve our product."),
                     web3Config.EnableAnalytics);
             GUILayout.Label(
-                "We will collect data for analytics to help improve your experience with our SDK. This data allows us to optimize performance, introduce new features, and ensure seamless integration. You can opt out at any time, but we encourage keeping analytics enabled for the best results!", 
+                "We will collect data for analytics to help improve your experience with our SDK. This data allows us to optimize performance, introduce new features, and ensure seamless integration. You can opt out at any time, but we encourage keeping analytics enabled for the best results!",
                 wrappedGreyMiniLabel);
 
             if (EditorGUI.EndChangeCheck())
             {
                 EditorUtility.SetDirty(web3Config);
-                
+
                 if (web3Config.ProjectId != previousProjectId)
                 {
                     ValidateProjectID(web3Config.ProjectId);
                     previousProjectId = web3Config.ProjectId;
                 }
-                
+
                 if (web3Config.EnableAnalytics)
                     ScriptingDefineSymbols.TryAddDefineSymbol(EnableAnalyticsScriptingDefineSymbol);
                 else
@@ -195,7 +195,7 @@ namespace ChainSafe.GamingSdk.Editor
                 EditorGUILayout.LabelField(new GUIContent("Fetching supported wallets.."), centeredLabelStyle);
                 return;
             }
-            
+
             chainsScrollPosition = GUILayout.BeginScrollView(chainsScrollPosition);
 
             for (int i = 0; i < chainSettingPanels.Count; i++)
@@ -212,7 +212,7 @@ namespace ChainSafe.GamingSdk.Editor
                 chainSettingPanels.Add(new ChainSettingsPanel(this, newChainConfig));
                 EditorUtility.SetDirty(web3Config);
             }
-            
+
             GUILayout.EndScrollView();
         }
 
@@ -235,7 +235,7 @@ namespace ChainSafe.GamingSdk.Editor
             EditorUtility.SetDirty(web3Config);
             chainSettingPanels.RemoveAt(chainSettingPanels.FindIndex(panel => panel.ChainId == chainId));
         }
-        
+
         /// <summary>
         /// Validates the project ID via ChainSafe's backend & writes values to the network js file, static so it can be called externally
         /// </summary>
@@ -251,7 +251,7 @@ namespace ChainSafe.GamingSdk.Editor
                 Debug.LogError("Failed to validate project ID");
                 Debug.LogException(e);
             }
-            
+
             static async Task<bool> ValidateProjectIDAsync(string projectID)
             {
                 var form = new WWWForm();
@@ -324,7 +324,7 @@ namespace ChainSafe.GamingSdk.Editor
                 var newChainConfig = ChainConfigEntry.Default;
                 web3Config.ChainConfigs.Add(newChainConfig);
                 EditorUtility.SetDirty(web3Config);
-                
+
                 chainSettingPanels = new List<ChainSettingsPanel>
                 {
                     new(this, newChainConfig)

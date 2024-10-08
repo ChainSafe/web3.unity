@@ -46,18 +46,21 @@ namespace Plugins.CountlySDK.Helpers
         {
             Log.Verbose($"[RequestCountlyHelper] AddRequestToQueue, Request: [{request.ToString()}]");
 
-            if (_config.EnableTestMode) {
+            if (_config.EnableTestMode)
+            {
                 return;
             }
 
-            if (_requestRepo.Count >= _config.StoredRequestLimit) {
+            if (_requestRepo.Count >= _config.StoredRequestLimit)
+            {
                 // Calculate how many items need to be removed from the queue to accommodate the new request.
                 int exceedAmount = _requestRepo.Count - _config.StoredRequestLimit;
                 int removeAmount = Mathf.Min(exceedAmount, countlyRequestRemoveLimit) + 1;
                 Log.Warning("[RequestCountlyHelper] Request Queue is full. Dropping the oldest request.");
 
                 // Remove the calculated amount of oldest requests from the queue.
-                while (removeAmount > 0) {
+                while (removeAmount > 0)
+                {
                     _requestRepo.Dequeue();
                     removeAmount--;
                 }
@@ -72,7 +75,8 @@ namespace Plugins.CountlySDK.Helpers
         /// </summary>
         internal async Task ProcessQueue()
         {
-            if (_isQueueBeingProcess) {
+            if (_isQueueBeingProcess)
+            {
                 Log.Verbose("[RequestCountlyHelper] ProcessQueue, queue is being processed.");
                 return;
             }
@@ -80,29 +84,35 @@ namespace Plugins.CountlySDK.Helpers
             _isQueueBeingProcess = true;
             CountlyRequestModel[] requests = null;
 
-            try {
+            try
+            {
                 requests = _requestRepo.Models.ToArray();
                 Log.Verbose($"[RequestCountlyHelper] ProcessQueue, request count: [{requests.Length}]");
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Log.Warning($"[RequestCountlyHelper] ProcessQueue, exception occurred while converting Models to array. Exception: {ex}");
                 _isQueueBeingProcess = false;
                 return;
             }
 
             // make sure that flag is corrected and exit
-            if (requests.Length == 0) {
+            if (requests.Length == 0)
+            {
                 Log.Verbose("[RequestCountlyHelper] ProcessQueue, Request Queue is empty. Returning.");
                 _isQueueBeingProcess = false;
                 return;
             }
 
-            foreach (CountlyRequestModel reqModel in requests) {
+            foreach (CountlyRequestModel reqModel in requests)
+            {
                 // Add the remaining request count in RequestData
                 reqModel.RequestData += "&rr=" + (requests.Length - 1);
 
                 CountlyResponse response = await ProcessRequest(reqModel);
 
-                if (!response.IsSuccess) {
+                if (!response.IsSuccess)
+                {
                     Log.Verbose($"[RequestCountlyHelper] ProcessQueue: Request failed. Response: [{response.ToString()}]");
                     _isQueueBeingProcess = false;
                     break;
@@ -149,9 +159,11 @@ namespace Plugins.CountlySDK.Helpers
 
         private string AddChecksum(string query)
         {
-            if (!string.IsNullOrEmpty(_config.Salt)) {
+            if (!string.IsNullOrEmpty(_config.Salt))
+            {
                 // Create a SHA256
-                using (SHA256 sha256Hash = SHA256.Create()) {
+                using (SHA256 sha256Hash = SHA256.Create())
+                {
                     byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(query + _config.Salt));
                     string hex = _countlyUtils.GetStringFromBytes(bytes);
 
@@ -177,12 +189,15 @@ namespace Plugins.CountlySDK.Helpers
             string query = AddChecksum(data);
             string url = uri + query;
 
-            try {
+            try
+            {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-                using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync()) {
+                using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
+                {
                     int code = (int)response.StatusCode;
                     using (Stream stream = response.GetResponseStream())
-                    using (StreamReader reader = new StreamReader(stream)) {
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
                         string res = await reader.ReadToEndAsync();
 
                         countlyResponse.Data = res;
@@ -190,13 +205,17 @@ namespace Plugins.CountlySDK.Helpers
                         countlyResponse.IsSuccess = IsSuccess(countlyResponse);
                     }
                 }
-            } catch (WebException ex) {
+            }
+            catch (WebException ex)
+            {
                 countlyResponse.ErrorMessage = ex.Message;
-                if (ex.Response != null) {
+                if (ex.Response != null)
+                {
                     HttpWebResponse response = (HttpWebResponse)ex.Response;
                     int code = (int)response.StatusCode;
                     using (Stream stream = ex.Response.GetResponseStream())
-                    using (StreamReader reader = new StreamReader(stream)) {
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
                         string res = await reader.ReadToEndAsync();
                         countlyResponse.StatusCode = code;
                         countlyResponse.Data = res;
@@ -219,7 +238,8 @@ namespace Plugins.CountlySDK.Helpers
         {
             CountlyResponse countlyResponse = new CountlyResponse();
 
-            try {
+            try
+            {
                 string query = AddChecksum(data);
                 byte[] dataBytes = Encoding.ASCII.GetBytes(query);
 
@@ -228,14 +248,17 @@ namespace Plugins.CountlySDK.Helpers
                 request.ContentType = "application/x-www-form-urlencoded";
                 request.Method = "POST";
 
-                using (Stream requestBody = request.GetRequestStream()) {
+                using (Stream requestBody = request.GetRequestStream())
+                {
                     await requestBody.WriteAsync(dataBytes, 0, dataBytes.Length);
                 }
 
-                using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync()) {
+                using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
+                {
                     int code = (int)response.StatusCode;
                     using (Stream stream = response.GetResponseStream())
-                    using (StreamReader reader = new StreamReader(stream)) {
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
                         string res = await reader.ReadToEndAsync();
 
                         countlyResponse.Data = res;
@@ -243,13 +266,17 @@ namespace Plugins.CountlySDK.Helpers
                         countlyResponse.IsSuccess = IsSuccess(countlyResponse);
                     }
                 }
-            } catch (WebException ex) {
+            }
+            catch (WebException ex)
+            {
                 countlyResponse.ErrorMessage = ex.Message;
-                if (ex.Response != null) {
+                if (ex.Response != null)
+                {
                     HttpWebResponse response = (HttpWebResponse)ex.Response;
                     int code = (int)response.StatusCode;
                     using (Stream stream = ex.Response.GetResponseStream())
-                    using (StreamReader reader = new StreamReader(stream)) {
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
                         string res = await reader.ReadToEndAsync();
                         countlyResponse.StatusCode = code;
                         countlyResponse.Data = res;
@@ -273,20 +300,28 @@ namespace Plugins.CountlySDK.Helpers
             Log.Debug($"[RequestCountlyHelper] StartProcessRequestRoutine, Start");
             TaskCompletionSource<CountlyResponse> tcs = new TaskCompletionSource<CountlyResponse>();
 
-            try {
+            try
+            {
                 // 'IsObjectMonoBehaviour can only be called from the main thread'
                 // That's why we have to move it to main thread.
-                CountlyMainThreadHandler.Instance.RunOnMainThread(() => {
-                    try {
-                        _monoBehaviour.StartCoroutine(ProcessRequestCoroutine(uri, data, (response) => {
+                CountlyMainThreadHandler.Instance.RunOnMainThread(() =>
+                {
+                    try
+                    {
+                        _monoBehaviour.StartCoroutine(ProcessRequestCoroutine(uri, data, (response) =>
+                        {
                             tcs.SetResult(response);
                         }));
-                    } catch (Exception ex) {
+                    }
+                    catch (Exception ex)
+                    {
                         Log.Error($"[RequestCountlyHelper] StartProcessRequestRoutine, Exception occurred while starting coroutine. Exception: [{ex}]");
                         tcs.SetException(ex);
                     }
                 });
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Log.Error($"[RequestCountlyHelper] StartProcessRequestRoutine, Exception occurred while queueing to main thread. Exception: [{ex}]");
                 tcs.SetException(ex);
             }
@@ -309,7 +344,8 @@ namespace Plugins.CountlySDK.Helpers
             string query = AddChecksum(data);
             string url = uri + query;
 
-            using (UnityWebRequest webRequest = UnityWebRequest.Put(url, data)) {
+            using (UnityWebRequest webRequest = UnityWebRequest.Put(url, data))
+            {
                 webRequest.method = UnityWebRequest.kHttpVerbPOST;
                 yield return webRequest.SendWebRequest();
                 string[] pages = url.Split('?');
@@ -333,18 +369,25 @@ namespace Plugins.CountlySDK.Helpers
         /// <returns>True if the status code is between 200 and 299 and the response data contains a "result" key; otherwise, false.</returns>
         private bool IsSuccess(CountlyResponse countlyResponse)
         {
-            if (countlyResponse.StatusCode >= 200 && countlyResponse.StatusCode < 300) {
-                try {
+            if (countlyResponse.StatusCode >= 200 && countlyResponse.StatusCode < 300)
+            {
+                try
+                {
                     JObject json = JObject.Parse(countlyResponse.Data);
 
-                    if (json.ContainsKey("result")) {
+                    if (json.ContainsKey("result"))
+                    {
                         return true;
                     }
-                } catch (JsonException ex) {
+                }
+                catch (JsonException ex)
+                {
                     Log.Debug($"[RequestCountlyHelper] IsSuccess : Returned request is not a JSON object. Exception: [{ex}]");
                     return false;
                 }
-            } else {
+            }
+            else
+            {
                 Log.Debug($"[RequestCountlyHelper] IsSuccess, Status Code: [{countlyResponse.StatusCode}] is not in between 200-299. Returning false.");
             }
             return false;

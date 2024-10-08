@@ -7,7 +7,7 @@ namespace ChainSafe.Gaming
     public class DefaultAssetValueAttribute : PropertyAttribute
     {
         public string Path { get; private set; }
-        
+
         public DefaultAssetValueAttribute(string path)
         {
             Path = path;

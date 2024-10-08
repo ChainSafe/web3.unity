@@ -10,7 +10,7 @@ using ChainSafe.Gaming.Web3.Evm.Wallet;
 public class Web3AuthSigner : InProcessSigner, ILifecycleParticipant, ILogoutHandler
 {
     private readonly IWalletProvider _walletProvider;
-    
+
     public Web3AuthSigner(IAccountProvider accountProvider, IWalletProvider walletProvider) : base(accountProvider)
     {
         _walletProvider = walletProvider;

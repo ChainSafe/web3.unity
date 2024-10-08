@@ -19,7 +19,7 @@ namespace ChainSafe.Gaming.Connection
         {
             return adapter.ConfigureServices(web3Builder);
         }
-        
+
         /// <summary>
         /// Add the given adapters to the <see cref="Web3Builder"/>.
         /// </summary>
