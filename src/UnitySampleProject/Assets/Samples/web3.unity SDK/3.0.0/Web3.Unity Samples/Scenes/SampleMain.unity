@@ -995,7 +995,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1573338518}
   m_HandleRect: {fileID: 1573338517}
   m_Direction: 0
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -1421,19 +1421,7 @@ PrefabInstance:
     - {fileID: 8854369476742677865, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 9007579812972099230, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1894328615}
-    - targetCorrespondingSourceObject: {fileID: 9007579812972099230, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1894328608}
-    - targetCorrespondingSourceObject: {fileID: 9007579812972099230, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1894328607}
-    - targetCorrespondingSourceObject: {fileID: 9007579812972099230, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1894328609}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
 --- !u!1 &1703188663
 GameObject:
@@ -1512,68 +1500,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!1 &1894328599 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 9007579812972099230, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
-  m_PrefabInstance: {fileID: 1679429479}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1894328607
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1894328599}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4bbed5530529ea46a1f41b407499dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rampConfig: {fileID: 11400000, guid: d1f58846e4fc71d4e90f287a86f328f9, type: 2}
---- !u!114 &1894328608
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1894328599}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d30a4f4c7d578c42beeecc2e2bbd394, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  marketplaceConfig:
-    <EndpointOverride>k__BackingField: 
-    <MarketplaceContractAbiOverride>k__BackingField: 
-    <ProjectIdOverride>k__BackingField: 
-    <MarketplaceId>k__BackingField: 
-    <MarketplaceContractAddress>k__BackingField: 
---- !u!114 &1894328609
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1894328599}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 722440245baf97c4f8da707286230694, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gelatoApiKey: 7MFQqyGS1Iui_e_MgmFW1BfbFeJ06g8nnL2oUTlIJug_
---- !u!114 &1894328615
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1894328599}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c73b0a0dd309a546843eca313ee76c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pollingInterval: 10
 --- !u!1 &1993709006
 GameObject:
   m_ObjectHideFlags: 0
