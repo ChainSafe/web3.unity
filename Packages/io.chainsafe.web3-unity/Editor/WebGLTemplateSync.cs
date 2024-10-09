@@ -71,8 +71,9 @@ namespace ChainSafe.GamingSdk.Editor
             finally
             {
                 AssetDatabase.AllowAutoRefresh();
-                AssetDatabase.Refresh();
                 SwitchTemplate();
+                AssetDatabase.Refresh();
+
             }
         }
 
