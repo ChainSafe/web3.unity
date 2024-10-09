@@ -1,15 +1,15 @@
 source:src/UnitySampleProject/Assets/Samples/web3.unity SDK
     display_name:Web3.Unity Samples
         destination:Packages/io.chainsafe.web3-unity/Samples~/Web3.Unity/
-source:src/UnitySampleProject/Assets/Samples/web3.unity SDK Web3Auth
-    display_name:Web3.Unity Web3Auth Samples
-        destination:Packages/io.chainsafe.web3-unity.web3auth/Samples~/Web3.Unity Web3Auth/
 source:src/UnitySampleProject/Assets/Samples/web3.unity SDK Lootboxes
-    display_name:Chainlink Lootbox Sample
-        destination:Packages/io.chainsafe.web3-unity.lootboxes/Samples~/Chainlink Lootbox Samples/
+    display_name:Lootboxes Samples
+        destination:Packages/io.chainsafe.web3-unity.lootboxes/Samples~/Web3.Unity Chainlink Lootboxes/
 source:src/UnitySampleProject/Assets/Samples/web3.unity SDK Ramp
-    display_name:Web3.Unity Ramp Samples
-        destination:Packages/io.chainsafe.web3-unity.ramp/Samples~/Web3.Unity Ramp Samples/
-source:src/UnitySampleProject/Assets/Samples/web3.unity SDK HyperPlay
-    display_name:Web3.Unity HyperPlay Samples
-        destination:Packages/io.chainsafe.web3-unity.hyperplay/Samples~/Web3.Unity HyperPlay Samples/
+    display_name:Ramp Samples
+        destination:Packages/io.chainsafe.web3-unity.ramp/Samples~/Web3.Unity Ramp/
+source:src/UnitySampleProject/Assets/Samples/web3.unity SDK Marketplace
+    display_name:Marketplace Samples
+        destination:Packages/io.chainsafe.web3-unity.marketplace/Samples~/Web3.Unity Marketplace/
+source:src/UnitySampleProject/Assets/Samples/web3.unity SDK MUD
+    display_name:MUD Samples
+        destination:Packages/io.chainsafe.web3-unity.mud/Samples~/Web3.Unity MUD/

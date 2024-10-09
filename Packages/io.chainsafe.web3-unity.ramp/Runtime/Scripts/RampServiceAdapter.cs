@@ -1,4 +1,4 @@
-using ChainSafe.Gaming.UnityPackage.Common;
+using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.Web3.Build;
 using UnityEngine;
 
@@ -7,7 +7,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
     /// <summary>
     ///     Add Ramp service when building a Web3 instance.
     /// </summary>
-    public class RampServiceAdapter : MonoBehaviour, IWeb3BuilderServiceAdapter
+    public class RampServiceAdapter : MonoBehaviour, IServiceAdapter
     {
         [SerializeField] private RampExchangerConfigSO rampConfig;
 

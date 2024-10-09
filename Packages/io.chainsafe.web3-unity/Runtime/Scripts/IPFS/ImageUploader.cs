@@ -5,7 +5,7 @@ namespace ChainSafe.Gaming.Marketplace
 {
     public class ImageUploader : MonoBehaviour
     {
-        #if UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_WEBGL && !UNITY_EDITOR
         /// <summary>
         /// Emits an event with image data for uploading with webgl
         /// </summary>
@@ -14,6 +14,6 @@ namespace ChainSafe.Gaming.Marketplace
         {
             UploadPlatforms.OnImageSelected(imageData);
         }
-        #endif
+#endif
     }
 }

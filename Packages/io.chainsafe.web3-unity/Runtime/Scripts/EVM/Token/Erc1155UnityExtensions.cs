@@ -20,7 +20,7 @@ namespace Scripts.EVM.Token
             // fetch metadata from uri
             var metaRequest = UnityWebRequest.Get(uri);
             await metaRequest.SendWebRequest();
-            
+
             if (metaRequest.result != UnityWebRequest.Result.Success)
             {
                 throw new Web3Exception($"Metadata request failure: {metaRequest.error}");
@@ -29,16 +29,16 @@ namespace Scripts.EVM.Token
             // prepare texture uri
             var metadata = JsonConvert.DeserializeObject<Erc1155Metadata>(Encoding.UTF8.GetString(metaRequest.downloadHandler.data));
             var textureUri = IpfsHelper.RollupIpfsUri(metadata.image);
-            
+
             // fetch texture
             var textureRequest = UnityWebRequestTexture.GetTexture(textureUri);
             await textureRequest.SendWebRequest();
-            
+
             if (textureRequest.result != UnityWebRequest.Result.Success)
             {
                 throw new Web3Exception($"Texture request failure: {metaRequest.error}");
             }
-            
+
             var texture = ((DownloadHandlerTexture)textureRequest.downloadHandler).texture;
 
             return texture;

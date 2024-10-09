@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.Web3.Core.Chains;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -8,7 +9,7 @@ namespace ChainSafe.Gaming.MultiCall
 {
     public static class MultiCallExtensions
     {
-        private static readonly MultiCallConfig DefaultConfig = new MultiCallConfig(new Dictionary<string, string>());
+        private static readonly MultiCallConfig DefaultConfig = new(new Dictionary<string, string>());
 
         public static IMultiCall MultiCall(this Web3.Web3 web3) => web3.ServiceProvider.GetRequiredService<IMultiCall>();
 
@@ -22,7 +23,7 @@ namespace ChainSafe.Gaming.MultiCall
 
             collection.TryAddSingleton(configuration ?? DefaultConfig);
 
-            collection.AddSingleton<ILifecycleParticipant, IMultiCall, MultiCall>();
+            collection.AddSingleton<IMultiCall, ILifecycleParticipant, IChainSwitchHandler, MultiCall>();
             return collection;
         }
 

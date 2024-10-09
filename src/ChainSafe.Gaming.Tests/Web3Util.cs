@@ -4,6 +4,7 @@ using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.NetCore;
+using ChainSafe.Gaming.RPC.Events;
 using ChainSafe.Gaming.Wallets;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core;
@@ -48,13 +49,18 @@ namespace ChainSafe.Gaming.Tests
             JsonRpcWalletConfig jsonRpcWalletConfig, Web3Builder.ConfigureServicesDelegate configureDelegate = null)
         {
             return new Web3Builder(
-                    new ProjectConfig { ProjectId = string.Empty },
+                    new ProjectConfig
+                    {
+                        ProjectId = string.Empty,
+                        EnableAnalytics = true,
+                    },
                     new ChainConfig
                     {
                         Chain = "Anvil",
                         ChainId = "31337",
                         Network = "GoChain Testnet",
                         Rpc = "http://127.0.0.1:8545",
+                        Ws = "ws://127.0.0.1:8545",
                     })
                 .Configure(services =>
                 {
@@ -63,6 +69,7 @@ namespace ChainSafe.Gaming.Tests
 
                     services.AddSingleton(jsonRpcWalletConfig);
                     services.AddSingleton<ISigner, ITransactionExecutor, ILifecycleParticipant, JsonRpcWallet>();
+                    services.UseEventsWithPolling();
                 })
                 .Configure(configureDelegate)
                 .LaunchAsync();

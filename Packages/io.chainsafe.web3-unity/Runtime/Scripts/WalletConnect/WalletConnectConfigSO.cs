@@ -10,6 +10,9 @@ namespace ChainSafe.Gaming.WalletConnect
     [CreateAssetMenu(menuName = "ChainSafe/WalletConnect/WalletConnect Config", fileName = "WalletConnectConfig", order = 0)]
     public class WalletConnectConfigSO : ScriptableObject, IWalletConnectConfig
     {
+        public string SignMessageRpcMethodName => "personal_sign";
+        public string SignTypedMessageRpcMethodName => "eth_signTypedData";
+
         [field: SerializeField] public bool AutoRenewSession { get; set; } = true;
         [field: SerializeField] public string ProjectName { get; set; }
         [field: SerializeField] public string ProjectId { get; set; }
@@ -17,6 +20,7 @@ namespace ChainSafe.Gaming.WalletConnect
         [field: SerializeField] public Metadata Metadata { get; set; }
         [field: SerializeField] public string StoragePath { get; set; } = "wallet-connect/";
         [field: SerializeField] public string OverrideRegistryUri { get; set; }
+        [field: SerializeField] public WalletConnectLogLevel LogLevel { get; set; } = WalletConnectLogLevel.ErrorOnly;
         [SerializeField] private List<string> enabledWallets;
         [SerializeField] private List<string> disabledWallets;
         [SerializeField] private ConnectionHandlerProviderSO connectionHandlerProvider;
@@ -34,7 +38,6 @@ namespace ChainSafe.Gaming.WalletConnect
         {
             get
             {
-#if !UNITY_2022_1_OR_NEWER
 
                 if (connectionBuilder != null)
                 {
@@ -59,9 +62,6 @@ namespace ChainSafe.Gaming.WalletConnect
                 connectionBuilder = webSocketBuilderObj.GetComponent<NativeWebSocketConnectionBuilder>();
 
                 return connectionBuilder;
-#else
-            return null;
-#endif
             }
         }
     }

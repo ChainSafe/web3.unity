@@ -8,6 +8,9 @@ namespace ChainSafe.Gaming.Evm.Transactions
 {
     public class TransactionRequest : ICloneable
     {
+        [JsonIgnore]
+        public string Id { get; set; }
+
         /// <summary>
         ///    QUANTITY - The transaction type.
         /// </summary>
@@ -83,6 +86,21 @@ namespace ChainSafe.Gaming.Evm.Transactions
         public object Clone()
         {
             return this.MemberwiseClone();
+        }
+
+        public TransactionInput ToTransactionInput()
+        {
+            return new TransactionInput
+            {
+                From = From,
+                To = To,
+                Gas = GasLimit,
+                GasPrice = GasPrice,
+                Value = Value,
+                Data = Data,
+                Nonce = Nonce,
+                AccessList = AccessList,
+            };
         }
 
         public Dictionary<string, object> ToRPCParam()

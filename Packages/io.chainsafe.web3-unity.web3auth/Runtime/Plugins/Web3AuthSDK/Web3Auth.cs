@@ -59,9 +59,15 @@ public class Web3Auth : MonoBehaviour
 
     private bool rememberMe;
 
+    private bool _initialized;
 
-    public void Awake()
+    public void Initialize()
     {
+        if (_initialized)
+        {
+            return;
+        }
+
         this.initParams = new Dictionary<string, object>();
 
         this.initParams["clientId"] = clientId;
@@ -90,6 +96,8 @@ public class Web3Auth : MonoBehaviour
         //        } 
 #endif
         authorizeSession("");
+
+        _initialized = true;
     }
 
     public void setOptions(Web3AuthOptions web3AuthOptions, bool rememberMe = false)
@@ -392,9 +400,11 @@ public class Web3Auth : MonoBehaviour
                         shareMetadata.iv
                     );
 
+
                     var encryptedShareBytes = AES256CBC.toByteArray(new BigInteger(shareMetadata.ciphertext, 16));
                     var share = aes256cbc.decrypt(encryptedShareBytes, shareMetadata.mac);
                     var tempJson = JsonConvert.DeserializeObject<JObject>(System.Text.Encoding.UTF8.GetString(share));
+
 
                     this.web3AuthResponse = JsonConvert.DeserializeObject<Web3AuthResponse>(tempJson.ToString());
                     if (this.web3AuthResponse != null)
@@ -422,7 +432,13 @@ public class Web3Auth : MonoBehaviour
                             this.Enqueue(() => this.onLogin?.Invoke(this.web3AuthResponse));
                     }
                 }
-
+                else
+                {
+                    this.Enqueue(() => this.onLogin?.Invoke(new Web3AuthResponse
+                    {
+                        error = "Failed to connect, session null."
+                    }));
+                }
             })));
         }
     }

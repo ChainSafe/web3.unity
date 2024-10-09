@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b435f36106e244449abb70cf6f41008, type: 3}
+  m_Name: Web3AuthConnectionProvider
+  m_EditorClassIdentifier: 
+  <RememberSession>k__BackingField: 1
+  <ConnectButtonRow>k__BackingField: {fileID: 8599114313589093787, guid: 163bbaaeb51883442a20ea7532888a43, type: 3}
+  clientId: BIYV6RYoZYbQ8VulPi65LoJMXQisHcTKQ296pOstx4LmzOp9HN3LR1tfAeaM3DMuN6c3AHEvvcMFLEE6lnuefAQ
+  redirectUri: torusapp://io.chainsafe.gamingsdk.sdkdemoscene/auth
+  network: 1
+  modalPrefab: {fileID: 1060439634540712661, guid: 42c53f26848d1d54a9ffe18fae333758, type: 3}
+  enableWalletGui: 1
+  web3AuthWalletGUIPrefab: {fileID: 7656622686525558909, guid: b394e6c49b9bd734089cea0293265bd3, type: 3}
+  walletGuiConfig:
+    DisplayWalletIcon: 1
+    AutoPopUpWalletOnTx: 1
+    AutoConfirmTransactions: 0
+    WalletIcon: {fileID: 21300000, guid: 55a46a48cd53d834f99fda690cfea4b1, type: 3}
+    WalletLogo: {fileID: 21300000, guid: ab400fd9b39316240b30631965553264, type: 3}
+    DisplayFont: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+    PrimaryBackgroundColour: {r: 0, g: 0, b: 0, a: 0.7254902}
+    MenuBackgroundColour: {r: 0, g: 0, b: 0, a: 1}
+    PrimaryTextColour: {r: 1, g: 1, b: 1, a: 1}
+    SecondaryTextColour: {r: 0.42745098, g: 0.85882354, b: 0.29411766, a: 1}
+    BorderButtonColour: {r: 1, g: 1, b: 1, a: 1}

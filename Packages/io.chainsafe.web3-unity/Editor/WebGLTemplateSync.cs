@@ -50,7 +50,7 @@ namespace ChainSafe.GamingSdk.Editor
             return true;
         }
 
-        [MenuItem("ChainSafe SDK/Sync WebGL Templates")]
+        [MenuItem("ChainSafe SDK/Sync WebGL Templates", priority = 0)]
         public static void Syncronize()
         {
             AssetDatabase.DisallowAutoRefresh();
@@ -71,9 +71,23 @@ namespace ChainSafe.GamingSdk.Editor
             finally
             {
                 AssetDatabase.AllowAutoRefresh();
+                SwitchTemplate();
                 AssetDatabase.Refresh();
-                // Update template values to chain config
-                ChainSafeServerSettings.WriteNetworkFile();
+
+            }
+        }
+
+        public static void SwitchTemplate()
+        {
+            var projectSettings = AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/ProjectSettings.asset")[0];
+            SerializedObject so = new SerializedObject(projectSettings);
+            SerializedProperty webGLTemplateProp = so.FindProperty("webGLTemplate");
+
+            if (webGLTemplateProp != null)
+            {
+                webGLTemplateProp.stringValue = "Web3.Unity";
+                so.ApplyModifiedProperties();
+                Debug.Log("WebGL Template changed to Web3.Unity");
             }
         }
 

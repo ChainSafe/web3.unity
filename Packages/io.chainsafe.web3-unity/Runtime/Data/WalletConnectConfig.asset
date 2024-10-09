@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37e83d145d6648228945ef840b1b1562, type: 3}
+  m_Name: WalletConnectConfig
+  m_EditorClassIdentifier: 
+  <AutoRenewSession>k__BackingField: 1
+  <ProjectName>k__BackingField: Web3.Unity
+  <ProjectId>k__BackingField: f4bff60eb260841f46b1c77588cd8acb
+  <BaseContext>k__BackingField: unity-game
+  <Metadata>k__BackingField:
+    Name: Web3.Unity
+    Description: web3.unity is an open-source gaming SDK written in C# and developed
+      by ChainSafe Gaming. It connects games built in the Unity game engine to the
+      blockchain. The library currently supports games built for web browsers (WebGL),
+      iOS/Android mobile, and desktop. web3.unity is compatible with most EVM-based
+      chains such as Ethereum, Polygon, Moonbeam, Cronos, Nervos, and Binance Smart
+      Chain, letting developers easily choose and switch between them to create the
+      best in-game experience.
+    Url: https://chainsafe.io/
+    Icons: []
+    Redirect:
+      Native: 
+      Universal: 
+    VerifyUrl: 
+  <StoragePath>k__BackingField: wallet-connect/
+  <OverrideRegistryUri>k__BackingField: 
+  <LogLevel>k__BackingField: 1
+  enabledWallets: []
+  disabledWallets: []
+  connectionHandlerProvider: {fileID: 11400000, guid: cdc198015a446e54794e5921e5aa81ef, type: 2}
+  <WalletLocationOption>k__BackingField: 0
