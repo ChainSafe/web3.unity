@@ -255,10 +255,13 @@ namespace ChainSafe.Gaming.WalletConnect
             if (_socket == null)
                 return;
 
+            if (Dispatcher.Exists())
+            {
 #if !UNITY_WEBGL || UNITY_EDITOR
-            Dispatcher.Instance().OnTick -= OnTick;
+                Dispatcher.Instance().OnTick -= OnTick;
 #endif
-            Dispatcher.Instance().OnApplicationPaused -= OnApplicationPause;
+                Dispatcher.Instance().OnApplicationPaused -= OnApplicationPause;
+            }
 
             _socket = null;
             Connected = false;
