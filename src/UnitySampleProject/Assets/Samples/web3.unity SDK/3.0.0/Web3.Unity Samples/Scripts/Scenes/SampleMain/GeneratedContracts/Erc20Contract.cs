@@ -6,6 +6,7 @@ using Nethereum.Hex.HexTypes;
 using Nethereum.ABI.FunctionEncoding.Attributes;
 using UnityEngine;
 using ChainSafe.Gaming.RPC.Events;
+using ChainSafe.Gaming.UnityPackage;
 
 
 namespace ChainSafe.Gaming.Evm.Contracts.Custom
@@ -243,7 +244,6 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
             {
                 if (EventManager == null)
                     return;
-
                 await EventManager.Unsubscribe<ApprovalEventDTO>(Approval, ContractAddress);
                 OnApproval = null;
                 await EventManager.Unsubscribe<TransferEventDTO>(Transfer, ContractAddress);
