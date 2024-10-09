@@ -31,6 +31,11 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
 
             foreach (var provider in Providers)
             {
+                if (provider == null)
+                {
+                    Debug.LogWarning("Provider you wanted to instantiate is null. Skipping...");
+                    continue;
+                }
                 await provider.Initialize(rememberConnection);
             }
         }
