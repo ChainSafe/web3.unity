@@ -3,6 +3,7 @@
 using System;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.UnityPackage.UI;
 using UnityEngine;
 
 namespace ChainSafe.Gaming.Exchangers.Ramp.Sample
@@ -16,6 +17,7 @@ namespace ChainSafe.Gaming.Exchangers.Ramp.Sample
 
         public async Task<string> OnRamp()
         {
+            LoadingOverlay.HideLoadingOverlay();
             // Show "Buy Crypto" widget
             var purchaseData = await Web3Unity.Web3.RampExchanger().BuyCrypto(
                 new RampBuyWidgetSettings
@@ -37,6 +39,8 @@ namespace ChainSafe.Gaming.Exchangers.Ramp.Sample
 
         public async Task<string> OffRamp()
         {
+            LoadingOverlay.HideLoadingOverlay();
+
             // Show "Sell Crypto" widget
             var saleData = await Web3Unity.Web3.RampExchanger().SellCrypto(
                 new RampSellWidgetSettings
@@ -56,6 +60,8 @@ namespace ChainSafe.Gaming.Exchangers.Ramp.Sample
 
         public async Task<string> OnRampOffRamp()
         {
+            LoadingOverlay.HideLoadingOverlay();
+
             // Show "Buy or Sell Crypto" widget
             var rampTransactionData = await Web3Unity.Web3.RampExchanger().BuyOrSellCrypto(
                 new RampBuyOrSellWidgetSettings
