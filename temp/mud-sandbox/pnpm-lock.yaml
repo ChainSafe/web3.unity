@@ -73,8 +73,8 @@ importers:
         specifier: 18.2.7
         version: 18.2.7
       vite:
-        specifier: ^4.2.1
-        version: 4.5.3(@types/node@18.19.39)
+        specifier: ^4.5.5
+        version: 4.5.5(@types/node@18.19.39)
       wait-port:
         specifier: ^1.0.4
         version: 1.1.0
@@ -102,10 +102,10 @@ importers:
         version: 18.19.39
       ds-test:
         specifier: https://github.com/dapphub/ds-test.git#e282159d5170298eb2455a6c05280ab5a73a4ef0
-        version: https://codeload.github.com/dapphub/ds-test/tar.gz/e282159d5170298eb2455a6c05280ab5a73a4ef0
+        version: git+https://git@github.com:dapphub/ds-test.git#e282159d5170298eb2455a6c05280ab5a73a4ef0
       forge-std:
         specifier: https://github.com/foundry-rs/forge-std.git#74cfb77e308dd188d2f58864aaf44963ae6b88b1
-        version: https://codeload.github.com/foundry-rs/forge-std/tar.gz/74cfb77e308dd188d2f58864aaf44963ae6b88b1
+        version: git+https://git@github.com:foundry-rs/forge-std.git#74cfb77e308dd188d2f58864aaf44963ae6b88b1
       prettier:
         specifier: 3.2.5
         version: 3.2.5
@@ -1280,8 +1280,8 @@ packages:
       sqlite3:
         optional: true
 
-  ds-test@https://codeload.github.com/dapphub/ds-test/tar.gz/e282159d5170298eb2455a6c05280ab5a73a4ef0:
-    resolution: {tarball: https://codeload.github.com/dapphub/ds-test/tar.gz/e282159d5170298eb2455a6c05280ab5a73a4ef0}
+  ds-test@git+https://git@github.com:dapphub/ds-test.git#e282159d5170298eb2455a6c05280ab5a73a4ef0:
+    resolution: {commit: e282159d5170298eb2455a6c05280ab5a73a4ef0, repo: git@github.com:dapphub/ds-test.git, type: git}
     version: 1.0.0
 
   elliptic@6.5.4:
@@ -1326,6 +1326,7 @@ packages:
   eslint@8.57.0:
     resolution: {integrity: sha512-dZ6+mexnaTIbSBZWgou51U6OmzIhYM2VcNdtiTtI7qPNZm35Akpr0f6vtw3w1Kmn5PYo+tZVfh13WrhpS6oLqQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
 
   espree@9.6.1:
@@ -1404,8 +1405,8 @@ packages:
   flatted@3.3.1:
     resolution: {integrity: sha512-X8cqMLLie7KsNUDSdzeN8FYK9rEt4Dt67OsG/DNGnYTSDBG4uFAJFBnUeiV+zCVAvwFy56IjM9sH51jVaEhNxw==}
 
-  forge-std@https://codeload.github.com/foundry-rs/forge-std/tar.gz/74cfb77e308dd188d2f58864aaf44963ae6b88b1:
-    resolution: {tarball: https://codeload.github.com/foundry-rs/forge-std/tar.gz/74cfb77e308dd188d2f58864aaf44963ae6b88b1}
+  forge-std@git+https://git@github.com:foundry-rs/forge-std.git#74cfb77e308dd188d2f58864aaf44963ae6b88b1:
+    resolution: {commit: 74cfb77e308dd188d2f58864aaf44963ae6b88b1, repo: git@github.com:foundry-rs/forge-std.git, type: git}
     version: 1.6.0
 
   fs.realpath@1.0.0:
@@ -2013,8 +2014,8 @@ packages:
       typescript:
         optional: true
 
-  vite@4.5.3:
-    resolution: {integrity: sha512-kQL23kMeX92v3ph7IauVkXkikdDRsYMGTVl5KY2E9OY4ONLvkHf04MDTbnfo6NKxZiDLWzVpP5oTa8hQD8U3dg==}
+  vite@4.5.5:
+    resolution: {integrity: sha512-ifW3Lb2sMdX+WU91s3R0FyQlAyLxOzCSCP37ujw0+r5POeHPwe6udWVIElKQq8gk3t7b8rkmvqC6IHBpCff4GQ==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
     peerDependencies:
@@ -3891,7 +3892,7 @@ snapshots:
       postgres: 3.4.4
       sql.js: 1.10.3
 
-  ds-test@https://codeload.github.com/dapphub/ds-test/tar.gz/e282159d5170298eb2455a6c05280ab5a73a4ef0: {}
+  ds-test@git+https://git@github.com:dapphub/ds-test.git#e282159d5170298eb2455a6c05280ab5a73a4ef0: {}
 
   elliptic@6.5.4:
     dependencies:
@@ -4133,7 +4134,7 @@ snapshots:
 
   flatted@3.3.1: {}
 
-  forge-std@https://codeload.github.com/foundry-rs/forge-std/tar.gz/74cfb77e308dd188d2f58864aaf44963ae6b88b1: {}
+  forge-std@git+https://git@github.com:foundry-rs/forge-std.git#74cfb77e308dd188d2f58864aaf44963ae6b88b1: {}
 
   fs.realpath@1.0.0: {}
 
@@ -4672,7 +4673,7 @@ snapshots:
       - utf-8-validate
       - zod
 
-  vite@4.5.3(@types/node@18.19.39):
+  vite@4.5.5(@types/node@18.19.39):
     dependencies:
       esbuild: 0.18.20
       postcss: 8.4.39
