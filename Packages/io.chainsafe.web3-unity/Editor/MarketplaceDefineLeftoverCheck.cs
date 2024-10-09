@@ -8,7 +8,7 @@ using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 
 [InitializeOnLoad]
-public static class MarketplaceDefineLeftoverCheck 
+public static class MarketplaceDefineLeftoverCheck
 {
     // To store package list request
     private static ListRequest listRequest;
@@ -45,8 +45,8 @@ public static class MarketplaceDefineLeftoverCheck
                 break;
             }
         }
-            
-        if(!packageFound)
+
+        if (!packageFound)
             RemoveCrcRspDefine();
     }
 
@@ -58,13 +58,13 @@ public static class MarketplaceDefineLeftoverCheck
             return;
         // Read all lines from the file
         var lines = File.ReadAllLines(cscRspPath);
-                    
-        if(lines.Length == 1 && lines[0].Contains("-define:MARKETPLACE_AVAILABLE"))
+
+        if (lines.Length == 1 && lines[0].Contains("-define:MARKETPLACE_AVAILABLE"))
         {
             AssetDatabase.DeleteAsset("Assets/csc.rsp");
             return;
         }
-                    
+
 
         // Initialize a list to hold modified lines
         var modifiedLines = new List<string>();

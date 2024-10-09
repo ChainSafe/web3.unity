@@ -7,6 +7,7 @@ using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.Web3.Core.Chains;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using ChainSafe.Gaming.Web3.Environment;
 using ChainSafe.GamingSdk.Gelato.Dto;
@@ -15,7 +16,7 @@ using Nethereum.Hex.HexTypes;
 
 namespace ChainSafe.GamingSdk.Gelato
 {
-    public class Gelato : IGelato, ILifecycleParticipant
+    public class Gelato : IGelato, ILifecycleParticipant, IChainSwitchHandler
     {
         private readonly GelatoClient gelatoClient;
         private readonly IContractBuilder contractBuilder;
@@ -23,7 +24,6 @@ namespace ChainSafe.GamingSdk.Gelato
         private readonly GelatoConfig config;
         private readonly IChainConfig chainConfig;
         private readonly IAnalyticsClient analyticsClient;
-        private readonly IProjectConfig projectConfig;
 
         private bool gelatoDisabled;
 
@@ -35,7 +35,6 @@ namespace ChainSafe.GamingSdk.Gelato
             this.chainConfig = chainConfig;
             this.contractBuilder = contractBuilder;
             this.analyticsClient = analyticsClient;
-            this.projectConfig = projectConfig;
         }
 
         public Gelato(IHttpClient httpClient, IChainConfig chainConfig, IProjectConfig projectConfig, GelatoConfig config, IContractBuilder contractBuilder, IAnalyticsClient analyticsClient)
@@ -44,27 +43,39 @@ namespace ChainSafe.GamingSdk.Gelato
             this.config = config;
             this.chainConfig = chainConfig;
             this.contractBuilder = contractBuilder;
-            this.projectConfig = projectConfig;
         }
 
         public async ValueTask WillStartAsync()
         {
-            if (!await IsNetworkSupported(chainConfig.ChainId))
+            if (await FetchGelatoDisabled())
             {
-                gelatoDisabled = true;
                 return;
             }
 
             analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
-                EventName = $"Gelato initialized",
+                EventName = "Gelato initialized",
+                PackageName = "io.chainsafe.web3-unity",
+            });
+        }
+
+        public ValueTask WillStopAsync() => new(Task.CompletedTask);
+
+        public async Task HandleChainSwitching()
+        {
+            if (await FetchGelatoDisabled())
+            {
+                return;
+            }
+
+            analyticsClient.CaptureEvent(new AnalyticsEvent
+            {
+                EventName = "Gelato reinitialized during chain switching",
                 PackageName = "io.chainsafe.web3-unity",
             });
         }
 
         public bool GetGelatoDisabled() => gelatoDisabled;
-
-        public ValueTask WillStopAsync() => new(Task.CompletedTask);
 
         public async Task<RelayResponse> CallWithSyncFee(CallWithSyncFeeRequest request)
         {
@@ -261,6 +272,11 @@ namespace ChainSafe.GamingSdk.Gelato
         public async Task<string[]> GetPaymentTokens()
         {
             return await gelatoClient.GetPaymentTokens(chainConfig.ChainId);
+        }
+
+        private async Task<bool> FetchGelatoDisabled()
+        {
+            return gelatoDisabled = !await IsNetworkSupported(chainConfig.ChainId);
         }
     }
 }

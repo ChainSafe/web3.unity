@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Providers;
-using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
+using ChainSafe.Gaming.InProcessSigner;
 using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Core.Debug;
 using ChainSafe.Gaming.Web3.Core.Evm;
-using ChainSafe.Gaming.Web3.Environment;
 using Nethereum.Hex.HexTypes;
+using Nethereum.RPC.Accounts;
 using Nethereum.RPC.Eth.DTOs;
-using Nethereum.Web3.Accounts;
-using NIpcClient = Nethereum.JsonRpc.IpcClient.IpcClient;
-using NWeb3 = Nethereum.Web3.Web3;
 
 namespace ChainSafe.Gaming.InProcessTransactionExecutor
 {
@@ -20,49 +18,21 @@ namespace ChainSafe.Gaming.InProcessTransactionExecutor
     public class InProcessTransactionExecutor : ITransactionExecutor
     {
         private readonly IRpcProvider rpcProvider;
-        private readonly string accountAddress;
-
-        private NWeb3 web3;
+        private readonly IAccountProvider accountProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InProcessTransactionExecutor"/> class.
         /// </summary>
-        /// <param name="signer">Injected <see cref="ISigner"/>.</param>
-        /// <param name="chainConfig">Injected <see cref="IChainConfig"/>.</param>
+        /// <param name="accountProvider">Injected <see cref="IAccountProvider"/>.</param>
         /// <param name="rpcProvider">Injected <see cref="IRpcProvider"/>.</param>
-        /// <param name="mainThreadRunner">Injected <see cref="IMainThreadRunner"/>.</param>
-        /// <param name="rpcClientWrapper">Injected <see cref="IRpcClientWrapper"/>.</param>
         /// <exception cref="Web3Exception">Throws exception if initializing instance fails.</exception>
-        public InProcessTransactionExecutor(ISigner signer, IChainConfig chainConfig, IRpcProvider rpcProvider, IMainThreadRunner mainThreadRunner, IRpcClientWrapper rpcClientWrapper)
+        public InProcessTransactionExecutor(IAccountProvider accountProvider, IRpcProvider rpcProvider)
         {
-            // It should be possible to set up other signers to work with this as well.
-            // However, does it make sense to let a remote wallet sign a transaction, but
-            // broadcast it locally? I think not.
-            var privateKey = (signer as InProcessSigner.InProcessSigner)?.GetKey() ??
-                throw new Web3Exception($"{nameof(InProcessTransactionExecutor)} only supports {nameof(InProcessSigner.InProcessSigner)}");
-            accountAddress = privateKey.GetPublicAddress();
-            var account = new Account(privateKey);
-
-            // Initialize Web3 on the main thread.
-            mainThreadRunner.Enqueue(() =>
-            {
-                if (chainConfig.Rpc is not null && !string.Empty.Equals(chainConfig.Rpc))
-                {
-                    web3 = new NWeb3(account, rpcClientWrapper.Client);
-                }
-                else if (chainConfig.Ipc is not null && !string.Empty.Equals(chainConfig.Ipc))
-                {
-                    var client = new NIpcClient(chainConfig.Rpc);
-                    web3 = new NWeb3(client);
-                }
-                else
-                {
-                    throw new Web3Exception($"{nameof(IChainConfig)} should have at least one communication method set.");
-                }
-            });
-
             this.rpcProvider = rpcProvider;
+            this.accountProvider = accountProvider;
         }
+
+        private IAccount Account => accountProvider.Account;
 
         /// <summary>
         /// Implementation of <see cref="ITransactionExecutor.SendTransaction"/>.
@@ -72,11 +42,11 @@ namespace ChainSafe.Gaming.InProcessTransactionExecutor
         /// <param name="transaction">Transaction to send.</param>
         /// <returns>Hash response of a successfully executed transaction.</returns>
         /// <exception cref="Web3Exception">Throws Exception if executing transaction fails.</exception>
-        public async Task<TransactionResponse> SendTransaction(TransactionRequest transaction)
+        public virtual async Task<TransactionResponse> SendTransaction(TransactionRequest transaction)
         {
             if (string.IsNullOrEmpty(transaction.From))
             {
-                transaction.From = accountAddress;
+                transaction.From = Account.Address;
             }
 
             if (transaction.GasPrice == null && transaction.MaxFeePerGas == null)
@@ -112,9 +82,11 @@ namespace ChainSafe.Gaming.InProcessTransactionExecutor
 
             try
             {
-                var signedTransaction = await web3.TransactionManager.SignTransactionAsync(txInput);
-                var txHash = await web3.Eth.Transactions.SendRawTransaction.SendRequestAsync(signedTransaction);
-                return await rpcProvider.GetTransaction(txHash);
+                string hash = await Account.TransactionManager.SendTransactionAsync(txInput);
+
+                hash = hash.AssertTransactionValid();
+
+                return await rpcProvider.GetTransaction(hash);
             }
             catch (Exception ex)
             {

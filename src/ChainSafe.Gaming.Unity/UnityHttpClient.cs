@@ -32,11 +32,20 @@ namespace ChainSafe.Gaming.Web3.Core.Unity
         /// <returns>Converted Network Response.</returns>
         private static NetworkResponse<string> UnityWebRequestToNetworkResponse(UnityWebRequest request)
         {
-            Assert.AreNotEqual(request.result, UnityWebRequest.Result.InProgress);
-
-            if (request.result != UnityWebRequest.Result.Success)
+            // Assert response is successful
             {
-                throw new Web3Exception($"HTTP.{request.method} to {request.url} responded with error: {request.downloadHandler.text}");
+                Assert.AreNotEqual(UnityWebRequest.Result.InProgress, request.result);
+
+                if (request.result == UnityWebRequest.Result.ConnectionError)
+                {
+                    throw new Web3Exception($"HTTP.{request.method} to '{request.url}' - connection error.");
+                }
+
+                if (request.result != UnityWebRequest.Result.Success)
+                {
+                    throw new Web3Exception(
+                        $"HTTP.{request.method} to '{request.url}' responded with error: {request.downloadHandler.text}");
+                }
             }
 
             return NetworkResponse<string>.Success(request.downloadHandler.text);

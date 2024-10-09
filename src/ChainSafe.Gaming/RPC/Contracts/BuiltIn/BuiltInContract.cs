@@ -13,6 +13,8 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
 
         protected Contract Original { get; private set; }
 
+        public string Address => Original.Address;
+
         public virtual IContract Attach(string address) => Original.Attach(address);
 
         public virtual Task<object[]> Call(string method, object[] parameters = null, TransactionRequest overwrite = null) =>

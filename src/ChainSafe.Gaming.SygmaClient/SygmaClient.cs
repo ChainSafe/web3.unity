@@ -25,7 +25,7 @@ using Environment = ChainSafe.Gaming.SygmaClient.Types.Environment;
 
 namespace ChainSafe.Gaming.SygmaClient
 {
-    public class SygmaClient : ISygmaClient, ILifecycleParticipant
+    public class SygmaClient : ISygmaClient, ILifecycleParticipant // todo handle chain switching
     {
         private readonly IContractBuilder contractBuilder;
         private readonly ISigner signer;

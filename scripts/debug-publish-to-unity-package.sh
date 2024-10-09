@@ -1,42 +1,44 @@
 #! /usr/bin/env sh
+
 set -e
 
-echo Building project...
 scripts_dir=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
+
+echo Publishing project...
 
 pushd "$scripts_dir"/../src/ChainSafe.Gaming.Unity
 
-rm -rf obj
-rm -rf bin
-dotnet publish -c debug -f netstandard2.1 /property:Unity=true
+dotnet publish ChainSafe.Gaming.Unity.csproj -c Debug /property:Unity=true
 
-echo Restoring non-Unity packages...
+export PUBLISH_PATH="bin/Debug/netstandard2.1/publish"
 
-dotnet restore
+echo -e "DLLs Generated\n$(ls "$PUBLISH_PATH")"
 
-echo Moving files to Unity package...
+export PACKAGE_LIB_PATH=
 
-pushd bin/debug/netstandard2.1/publish
-rm Newtonsoft.Json.dll
-rm UnityEngine.dll
+while IFS= read -r entry || [ -n "$entry" ];
+do
+  entry=$(echo "$entry" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+  if [[ $entry == *: ]]
+  then
+    PACKAGE_LIB_PATH="$scripts_dir/../${entry%:}"
+    if [ -d "$PACKAGE_LIB_PATH" ]; then
+      rm -rf "$PACKAGE_LIB_PATH"/*.dll
+      rm -rf "$PACKAGE_LIB_PATH"/*.pdb
+    else
+      mkdir -p "$PACKAGE_LIB_PATH"
+    fi
+    echo "Copying to $PACKAGE_LIB_PATH..."
+  else
+    export DEPENDENCY=$(echo "$entry" | tr -d '\t' | tr -d ' ')
+    cp -fr "$PUBLISH_PATH/$DEPENDENCY".dll $PACKAGE_LIB_PATH
+    
+    if [ -f "$PUBLISH_PATH/$DEPENDENCY".pdb ]; then
+      cp -fr "$PUBLISH_PATH/$DEPENDENCY".pdb $PACKAGE_LIB_PATH
+    fi
+  fi
+done < "$scripts_dir/data/published_dependencies.txt"
 
-# Check if io.chainsafe.web3-unity.lootboxes directory exists
-if [ -d "../../../../../../Packages/io.chainsafe.web3-unity.lootboxes" ]; then
-    rm -rf ../../../../../../Packages/io.chainsafe.web3-unity.lootboxes/Chainlink/Runtime/Libraries
-    mkdir -p ../../../../../../Packages/io.chainsafe.web3-unity.lootboxes/Chainlink/Runtime/Libraries
-    cp Chainsafe.Gaming.Chainlink.dll ../../../../../../Packages/io.chainsafe.web3-unity.lootboxes/Chainlink/Runtime/Libraries
-    cp Chainsafe.Gaming.LootBoxes.Chainlink.dll ../../../../../../Packages/io.chainsafe.web3-unity.lootboxes/Chainlink/Runtime/Libraries
-fi
-
-# Delete those DLLs so they don't get copied in the next step
-rm Chainsafe.Gaming.Chainlink.dll
-rm Chainsafe.Gaming.LootBoxes.Chainlink.dll
-
-rm Microsoft.CSharp.dll
-rm -rf ../../../../../../Packages/io.chainsafe.web3-unity/Runtime/Libraries
-mkdir -p ../../../../../../Packages/io.chainsafe.web3-unity/Runtime/Libraries
-cp *.dll ../../../../../../Packages/io.chainsafe.web3-unity/Runtime/Libraries
-cp *.pdb ../../../../../../Packages/io.chainsafe.web3-unity/Runtime/Libraries
 popd
-popd
+
 echo Done

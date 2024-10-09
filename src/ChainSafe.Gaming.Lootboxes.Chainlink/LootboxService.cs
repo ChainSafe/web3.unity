@@ -28,8 +28,6 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
         private readonly LootboxServiceConfig config;
         private readonly ISigner signer;
         private readonly IRpcProvider rpcProvider;
-        private readonly IProjectConfig projectConfig;
-        private readonly IChainConfig chainConfig;
         private readonly IAnalyticsClient analyticsClient;
 
         private Contract contract;
@@ -39,13 +37,9 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
             LootboxServiceConfig config,
             IContractBuilder contractBuilder,
             IRpcProvider rpcProvider,
-            IProjectConfig projectConfig,
-            IChainConfig chainConfig,
             IAnalyticsClient analyticsClient)
         {
             this.rpcProvider = rpcProvider;
-            this.projectConfig = projectConfig;
-            this.chainConfig = chainConfig;
             this.analyticsClient = analyticsClient;
             this.config = config;
             this.contractBuilder = contractBuilder;
@@ -56,10 +50,8 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
             IContractBuilder contractBuilder,
             IRpcProvider rpcProvider,
             ISigner signer,
-            IProjectConfig projectConfig,
-            IChainConfig chainConfig,
             IAnalyticsClient analyticsClient)
-            : this(config, contractBuilder, rpcProvider, projectConfig, chainConfig, analyticsClient)
+            : this(config, contractBuilder, rpcProvider, analyticsClient)
         {
             this.signer = signer;
         }

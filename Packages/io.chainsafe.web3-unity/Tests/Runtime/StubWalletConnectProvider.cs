@@ -15,11 +15,11 @@ namespace Tests.Runtime
         private readonly IChainConfig chainConfig;
         private readonly IHttpClient httpClient;
 
-        public StubWalletConnectProvider(StubWalletConnectProviderConfig config, IHttpClient httpClient, IChainConfig chainConfig, ChainRegistryProvider chainRegistryProvider) : base(chainRegistryProvider: chainRegistryProvider)
+        public StubWalletConnectProvider(StubWalletConnectProviderConfig config, Web3Environment environment, IChainConfig chainConfig) : base(environment, chainConfig)
         {
             this.config = config;
             this.chainConfig = chainConfig;
-            this.httpClient = httpClient;
+            httpClient = environment.HttpClient;
         }
 
         public override Task<string> Connect()
@@ -33,30 +33,27 @@ namespace Tests.Runtime
             return Task.CompletedTask;
         }
 
-        public override Task<T> Perform<T>(string method, params object[] parameters)
+        public override async Task<T> Request<T>(string method, params object[] parameters)
         {
             switch (method)
             {
-                case "personal_sign": case "eth_signTypedData": case "eth_sendTransaction":
-                    return Task.FromResult((T)Convert.ChangeType(config.StubResponse, typeof(T)));
+                case "personal_sign":
+                case "eth_signTypedData":
+                case "eth_sendTransaction":
+                    return (T)Convert.ChangeType(config.StubResponse, typeof(T));
                 default:
-                    return Request<T>(method, parameters);
+                    // Direct RPC request via WalletConnect RPC url.
+                    // Using WalletConnect Blockchain API: https://docs.walletconnect.com/cloud/blockchain-api
+                    var url = $"https://rpc.walletconnect.com/v1?chainId=eip155:{chainConfig.ChainId}&projectId={config.ProjectId}";
+
+                    string body = JsonConvert.SerializeObject(new RpcRequestMessage(Guid.NewGuid().ToString(), method, parameters));
+
+                    var rawResult = await httpClient.PostRaw(url, body, "application/json");
+
+                    RpcResponseMessage response = JsonConvert.DeserializeObject<RpcResponseMessage>(rawResult.Response);
+
+                    return response.Result.ToObject<T>();
             }
-        }
-        
-        // Direct RPC request via WalletConnect RPC url.
-        private async Task<T> Request<T>(string method, params object[] parameters)
-        {
-            // Using WalletConnect Blockchain API: https://docs.walletconnect.com/cloud/blockchain-api
-            var url = $"https://rpc.walletconnect.com/v1?chainId=eip155:{chainConfig.ChainId}&projectId={config.ProjectId}";
-
-            string body = JsonConvert.SerializeObject(new RpcRequestMessage(Guid.NewGuid().ToString(), method, parameters));
-            
-            var rawResult = await httpClient.PostRaw(url, body, "application/json");
-
-            RpcResponseMessage response = JsonConvert.DeserializeObject<RpcResponseMessage>(rawResult.Response);
-            
-            return response.Result.ToObject<T>();
         }
     }
 }

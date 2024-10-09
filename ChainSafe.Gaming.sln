@@ -35,17 +35,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chainsafe.Gaming.Chainlink"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.Debugging", "src\ChainSafe.Gaming.Debugging\ChainSafe.Gaming.Debugging.csproj", "{88B2E2F4-96BC-44B1-AE4D-5FBA6B4C399F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.MetaMask", "src\ChainSafe.Gaming.MetaMask\ChainSafe.Gaming.MetaMask.csproj", "{0631D9F5-2942-4ECE-A0B5-7C3AF54E87AA}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.MetaMask.Unity", "src\ChainSafe.Gaming.MetaMask.Unity\ChainSafe.Gaming.MetaMask.Unity.csproj", "{AF45F008-6ABC-4F37-82BF-4814B7F15B30}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.Unity.MetaMask", "src\ChainSafe.Gaming.Unity.MetaMask\ChainSafe.Gaming.Unity.MetaMask.csproj", "{AF45F008-6ABC-4F37-82BF-4814B7F15B30}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.SygmaClient", "src\ChainSafe.Gaming.SygmaClient\ChainSafe.Gaming.SygmaClient.csproj", "{6D329479-C391-4BF9-B6FC-FFA3AD3A12D7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.Marketplace", "src/ChainSafe.Gaming.Marketplace\ChainSafe.Gaming.Marketplace.csproj", "{E7A9FE35-BEFD-4569-B848-495E0B85B674}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.InProcessTransactionExecutor.Unity", "src\ChainSafe.Gaming.InProcessTransactionExecutor.Unity\ChainSafe.Gaming.InProcessTransactionExecutor.Unity.csproj", "{46C16E64-DC72-446D-B153-A2142691A151}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.HyperPlay", "src\ChainSafe.Gaming.HyperPlay\ChainSafe.Gaming.HyperPlay.csproj", "{0859E3E2-5AB9-4997-9DE7-368EAB89313B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.Unity.EthereumWindow", "src\ChainSafe.Gaming.Unity.EthereumWindow\ChainSafe.Gaming.Unity.EthereumWindow.csproj", "{F743DE56-1650-4111-8613-96E8EC7CFD2D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.Mud", "src\ChainSafe.Gaming.Mud\ChainSafe.Gaming.Mud.csproj", "{084E4FCB-9376-4B29-AA8C-6871E13906E6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -125,12 +125,6 @@ Global
 		{88B2E2F4-96BC-44B1-AE4D-5FBA6B4C399F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{88B2E2F4-96BC-44B1-AE4D-5FBA6B4C399F}.Test|Any CPU.ActiveCfg = Debug|Any CPU
 		{88B2E2F4-96BC-44B1-AE4D-5FBA6B4C399F}.Test|Any CPU.Build.0 = Debug|Any CPU
-		{0631D9F5-2942-4ECE-A0B5-7C3AF54E87AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0631D9F5-2942-4ECE-A0B5-7C3AF54E87AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0631D9F5-2942-4ECE-A0B5-7C3AF54E87AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0631D9F5-2942-4ECE-A0B5-7C3AF54E87AA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0631D9F5-2942-4ECE-A0B5-7C3AF54E87AA}.Test|Any CPU.ActiveCfg = Debug|Any CPU
-		{0631D9F5-2942-4ECE-A0B5-7C3AF54E87AA}.Test|Any CPU.Build.0 = Debug|Any CPU
 		{AF45F008-6ABC-4F37-82BF-4814B7F15B30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AF45F008-6ABC-4F37-82BF-4814B7F15B30}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF45F008-6ABC-4F37-82BF-4814B7F15B30}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -149,18 +143,24 @@ Global
 		{E7A9FE35-BEFD-4569-B848-495E0B85B674}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E7A9FE35-BEFD-4569-B848-495E0B85B674}.Test|Any CPU.ActiveCfg = Debug|Any CPU
 		{E7A9FE35-BEFD-4569-B848-495E0B85B674}.Test|Any CPU.Build.0 = Debug|Any CPU
-		{46C16E64-DC72-446D-B153-A2142691A151}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{46C16E64-DC72-446D-B153-A2142691A151}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{46C16E64-DC72-446D-B153-A2142691A151}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{46C16E64-DC72-446D-B153-A2142691A151}.Release|Any CPU.Build.0 = Release|Any CPU
-		{46C16E64-DC72-446D-B153-A2142691A151}.Test|Any CPU.ActiveCfg = Test|Any CPU
-		{46C16E64-DC72-446D-B153-A2142691A151}.Test|Any CPU.Build.0 = Test|Any CPU
 		{0859E3E2-5AB9-4997-9DE7-368EAB89313B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0859E3E2-5AB9-4997-9DE7-368EAB89313B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0859E3E2-5AB9-4997-9DE7-368EAB89313B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0859E3E2-5AB9-4997-9DE7-368EAB89313B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0859E3E2-5AB9-4997-9DE7-368EAB89313B}.Test|Any CPU.ActiveCfg = Debug|Any CPU
 		{0859E3E2-5AB9-4997-9DE7-368EAB89313B}.Test|Any CPU.Build.0 = Debug|Any CPU
+		{F743DE56-1650-4111-8613-96E8EC7CFD2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F743DE56-1650-4111-8613-96E8EC7CFD2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F743DE56-1650-4111-8613-96E8EC7CFD2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F743DE56-1650-4111-8613-96E8EC7CFD2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F743DE56-1650-4111-8613-96E8EC7CFD2D}.Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{F743DE56-1650-4111-8613-96E8EC7CFD2D}.Test|Any CPU.Build.0 = Debug|Any CPU
+		{084E4FCB-9376-4B29-AA8C-6871E13906E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{084E4FCB-9376-4B29-AA8C-6871E13906E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{084E4FCB-9376-4B29-AA8C-6871E13906E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{084E4FCB-9376-4B29-AA8C-6871E13906E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{084E4FCB-9376-4B29-AA8C-6871E13906E6}.Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{084E4FCB-9376-4B29-AA8C-6871E13906E6}.Test|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

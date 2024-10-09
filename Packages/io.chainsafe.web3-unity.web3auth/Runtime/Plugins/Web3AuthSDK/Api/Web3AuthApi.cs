@@ -19,6 +19,8 @@ public class Web3AuthApi
 
     public IEnumerator authorizeSession(string key, Action<StoreApiResponse> callback)
     {
+        // Wait for a single frame
+        yield return 0;
         //var requestURL = $"{baseAddress}/store/get?key={key}";
         //var request = UnityWebRequest.Get(requestURL);
         WWWForm data = new WWWForm();

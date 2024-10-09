@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Web3.Core.Chains;
 using ChainSafe.Gaming.Web3.Environment;
 using Newtonsoft.Json;
 
@@ -9,15 +10,16 @@ namespace ChainSafe.Gaming.Web3.Analytics
         private const string LoggingUrl = "https://api.gaming.chainsafe.io/logging/logEvent";
 
         private readonly IHttpClient httpClient;
+        private readonly IChainManager chainManager;
 
-        public ApiAnalyticsClient(IProjectConfig projectConfig, IChainConfig chainConfig, IHttpClient httpClient)
+        public ApiAnalyticsClient(IProjectConfig projectConfig, IChainManager chainManager, IHttpClient httpClient)
         {
             this.httpClient = httpClient;
-            ChainConfig = chainConfig;
+            this.chainManager = chainManager;
             ProjectConfig = projectConfig;
         }
 
-        public IChainConfig ChainConfig { get; }
+        public IChainConfig ChainConfig => chainManager.Current;
 
         public IProjectConfig ProjectConfig { get; }
 

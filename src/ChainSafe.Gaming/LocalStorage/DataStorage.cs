@@ -12,7 +12,7 @@ namespace ChainSafe.Gaming.LocalStorage
     /// <summary>
     /// Default implementation of the component responsible for storage of persistent data.
     /// </summary>
-    public class DataStorage
+    public class DataStorage : ILocalStorage
     {
         private readonly IEnumerable<IStorable> store;
         private readonly IOperatingSystemMediator osMediator;
@@ -53,7 +53,7 @@ namespace ChainSafe.Gaming.LocalStorage
         /// <param name="createFile">Create new file if file doesn't exist.</param>
         /// <typeparam name="T">Type of Storable to be saved. Helps for serializing.</typeparam>
         /// <returns>Awaitable Task for save operation.</returns>
-        public async Task Save<T>(T storable, bool createFile = true)
+        public virtual async Task Save<T>(T storable, bool createFile = true)
             where T : IStorable
         {
             var path = AbsolutePath(storable.StoragePath);
@@ -88,7 +88,7 @@ namespace ChainSafe.Gaming.LocalStorage
 
             if (!Exists(path))
             {
-                logWriter.LogError($"Failed to load {storable.StoragePath} : File not found.");
+                logWriter.Log($"Failed to load {storable.StoragePath} : File not found.");
 
                 return;
             }
