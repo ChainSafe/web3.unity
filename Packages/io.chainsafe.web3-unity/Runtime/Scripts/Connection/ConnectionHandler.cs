@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Web3.Build;
@@ -13,11 +14,11 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
     public class ConnectionHandler : MonoBehaviour, IConnectionHandler, ILightWeightServiceAdapter
     {
         // Handed in ConnectionHandlerEditor
-        [HideInInspector, SerializeField] private ConnectionProvider[] providers;
+        [HideInInspector, SerializeField] private ConnectionProvider[] providers = Array.Empty<ConnectionProvider>();
 
         public HashSet<IServiceAdapter> Web3BuilderServiceAdapters { get; private set; }
 
-        public ConnectionProvider[] Providers => providers;
+        public ConnectionProvider[] Providers => providers.Where(p => p != null).ToArray();
 
         /// <summary>
         /// Initializes Connection Handler.

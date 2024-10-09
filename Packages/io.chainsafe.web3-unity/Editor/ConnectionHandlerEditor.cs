@@ -170,6 +170,8 @@ public class ConnectionHandlerEditor : Editor
                         //Update the list of providers.
                         _allProviders.Add(newProvider);
 
+                        _editorFoldouts[providerType] = true;
+                        
                         providersProperty.InsertArrayElementAtIndex(providersProperty.arraySize);
 
                         providersProperty.GetArrayElementAtIndex(providersProperty.arraySize - 1).objectReferenceValue = newProvider;
