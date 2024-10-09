@@ -11,12 +11,12 @@ public class ABIWindow : EditorWindow
     Vector2 TextArea;
 
     // Where is the window menu located
-    [MenuItem("ChainSafe SDK/ABI Converter")]
+    [MenuItem("ChainSafe SDK/Generate ABI wrapper", priority = 0)]
 
     // Show our window
     public static void ShowWindow()
     {
-        GetWindow<ABIWindow>("ChainSafe ABI Converter");
+        GetWindow<ABIWindow>("ChainSafe ABI Formatter");
     }
 
 
@@ -28,7 +28,7 @@ public class ABIWindow : EditorWindow
 
         // Window Header
         GUILayout.Space(10);
-        GUILayout.Label("<b><size=15>ChainSafe ABI Converter</size></b>", style);
+        GUILayout.Label("<b><size=15>ChainSafe ABI Wrapper</size></b>", style);
         GUILayout.Label("Copy/Paste is supported.", style);
         GUILayout.Space(10);
 
@@ -51,10 +51,13 @@ public class ABIWindow : EditorWindow
 
             Debug.Log("ABI Conversion Complete. Results copied to clipboard!");
         }
-
+        GUIStyle labelStyle = new GUIStyle(EditorStyles.label)
+        {
+            wordWrap = true
+        };
         // Window Footer (Instructions)
         GUILayout.Space(10);
-        GUILayout.Label("This tool will automatically convert your ABI for use with the web3.unity SDK. \n", EditorStyles.largeLabel);
+        GUILayout.Label("This tool will fix ABI spacing and will give you the ABI wrapped around in quotation marks so that you can immediately paste it to your ABI String variable inside of your C# project \n", labelStyle);
         GUILayout.Label("<b>=============</b>", style);
         GUILayout.Label("<b>  INSTRUCTIONS</b>", style);
         GUILayout.Label("<b>=============</b> \n", style);

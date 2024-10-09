@@ -7,15 +7,15 @@ using UnityEngine.Networking;
 
 public class UploadPlatforms
 {
-    
+
     #region Fields
-    
+
     public static event EventHandler<byte[]> ImageSelected;
 
     #endregion
-    
+
     #region Methods
-        
+
     /// <summary>
     /// Gets the binary data of a png image with a compiler conditional for different platforms.
     /// </summary>
@@ -23,28 +23,28 @@ public class UploadPlatforms
     public static async Task<byte[]> GetImageData()
     {
         byte[] imageData = null;
-        #if UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_WEBGL && !UNITY_EDITOR
         imageData = await UploadImageWebGL();
         return imageData;
-        #elif UNITY_EDITOR
+#elif UNITY_EDITOR
         imageData = await UploadImageEditor();
         return imageData;
-        #elif UNITY_STANDALONE_WIN
+#elif UNITY_STANDALONE_WIN
         imageData = await UploadImageWindows();
         return imageData;
-        #elif UNITY_STANDALONE_OSX
+#elif UNITY_STANDALONE_OSX
         imageData = await UploadImageOsx();
         return imageData;
-        #elif UNITY_IOS
+#elif UNITY_IOS
         imageData = await UploadImageIOS();
         return imageData;
-        #else
+#else
         Debug.LogError("File picking is not implemented for this platform.");
         return null;
-        #endif
+#endif
     }
-    
-    #if UNITY_EDITOR
+
+#if UNITY_EDITOR
     private static async Task<byte[]> UploadImageEditor()
     {
         var imagePath = UnityEditor.EditorUtility.OpenFilePanel("Select Image", "", "png,jpg,jpeg,gif");
@@ -55,9 +55,9 @@ public class UploadPlatforms
         var imageData = texture.EncodeToPNG();
         return imageData;
     }
-    #endif
-    
-    #if UNITY_WEBGL && !UNITY_EDITOR
+#endif
+
+#if UNITY_WEBGL && !UNITY_EDITOR
     
     [DllImport("__Internal")]
     private static extern void UploadImage();
@@ -103,9 +103,9 @@ public class UploadPlatforms
             throw;
         }
     }
-    #endif
-    
-    #if UNITY_STANDALONE_WIN
+#endif
+
+#if UNITY_STANDALONE_WIN
     [DllImport("user32.dll", CharSet = CharSet.Auto)]
     private static extern IntPtr GetActiveWindow();
 
@@ -186,9 +186,9 @@ public class UploadPlatforms
 
         return null;
     }
-    #endif
+#endif
 
-    #if UNITY_STANDALONE_OSX
+#if UNITY_STANDALONE_OSX
     [DllImport("MacOSFilePicker", EntryPoint = "showOpenFileDialogWithTitle")]
     private static extern void showOpenFileDialog(string title, string[] allowedFileTypes, int allowedFileTypesCount, IntPtr callback);
 
@@ -216,9 +216,9 @@ public class UploadPlatforms
     {
         tcs.SetResult(path);
     }
-    #endif
-    
-    #if UNITY_IOS
+#endif
+
+#if UNITY_IOS
     [DllImport("__Internal")]
     private static extern void showActionSheet(string title, string[] allowedFileTypes, int allowedFileTypesCount, IntPtr callback);
 
@@ -250,7 +250,7 @@ public class UploadPlatforms
         string path = Marshal.PtrToStringAnsi(pathPtr);
         tcs.SetResult(path);
     }
-    #endif
-    
+#endif
+
     #endregion
 }

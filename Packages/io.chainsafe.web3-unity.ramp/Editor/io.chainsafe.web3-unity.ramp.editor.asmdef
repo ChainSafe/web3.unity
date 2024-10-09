@@ -1,0 +1,18 @@
+{
+    "name": "io.chainsafe.web3-unity.ramp.editor",
+    "rootNamespace": "ChainSafe.Gaming.Exchangers.Ramp",
+    "references": [
+        "GUID:5426c6b788696eb4c88f4198b59839eb",
+        "GUID:a37273c0f1cc99640b9cce89c64b02d0",
+        "GUID:a6d2ec6af5b0961468c9e2fca41a75be"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,30 @@
+{
+  "name": "client",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "wait-port localhost:8545 && vite",
+    "preview": "vite preview",
+    "test": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@latticexyz/common": "2.0.12",
+    "@latticexyz/dev-tools": "2.0.12",
+    "@latticexyz/recs": "2.0.12",
+    "@latticexyz/schema-type": "2.0.12",
+    "@latticexyz/store-sync": "2.0.12",
+    "@latticexyz/utils": "2.0.12",
+    "@latticexyz/world": "2.0.12",
+    "contracts": "workspace:*",
+    "rxjs": "7.5.5",
+    "viem": "2.9.20"
+  },
+  "devDependencies": {
+    "@types/react-dom": "18.2.7",
+    "vite": "^4.2.1",
+    "wait-port": "^1.0.4"
+  }
+}

@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Model;
 using ChainSafe.Gaming.Web3;
+using JetBrains.Annotations;
 using Nethereum.Hex.HexTypes;
 using Newtonsoft.Json;
 using Scripts.EVM.Remote;
@@ -19,14 +21,40 @@ namespace Scripts.EVM.Marketplace
         #region Methods
 
         /// <summary>
+        /// Gets profile marketplaces.
+        /// Path: https://api.gaming.chainsafe.io/v1/projects/{projectID}/marketplaces
+        /// </summary>
+        /// <param name="bearerToken">Bearer auth token.</param>
+        /// <returns>MarketplaceModel.ProjectMarketplacesResponse.</returns>
+        public static async Task<MarketplaceModel.ProjectMarketplacesResponse> GetProjectMarketplaces(string bearerToken)
+        {
+            var path = "/marketplaces";
+            var response = await CSServer.GetDataWithToken<MarketplaceModel.ProjectMarketplacesResponse>(path, bearerToken);
+            return response;
+        }
+
+        /// <summary>
+        /// Gets project collections.
+        /// Path: https://api.gaming.chainsafe.io/v1/projects/{projectID}/collections
+        /// </summary>
+        /// <param name="bearerToken">Bearer auth token.</param>
+        /// <returns>NftTokenModel.ProjectCollectionsResponse.</returns>
+        public static async Task<NftTokenModel.ProjectCollectionsResponse> GetProjectCollections(string bearerToken)
+        {
+            var path = "/collections";
+            var response = await CSServer.GetDataWithToken<NftTokenModel.ProjectCollectionsResponse>(path, bearerToken);
+            return response;
+        }
+
+        /// <summary>
         /// Gets all items in a project.
         /// Path: https://api.gaming.chainsafe.io/v1/projects/{projectID}/items
         /// </summary>
-        /// <returns>MarketplaceModel.Root</returns>
-        public static async Task<MarketplaceModel.Root> GetProjectItems()
+        /// <returns>MarketplaceModel.MarketplaceItemsResponse</returns>
+        public static async Task<MarketplaceModel.MarketplaceItemsResponse> GetProjectItems()
         {
-            var path = $"/items?chainId={Web3Accessor.Web3.ChainConfig.ChainId}";
-            var response = await CSServer.GetData<MarketplaceModel.Root>(path);
+            var path = $"/items?chainId={Web3Unity.Web3.ChainConfig.ChainId}";
+            var response = await CSServer.GetData<MarketplaceModel.MarketplaceItemsResponse>(path);
             return response;
         }
 
@@ -35,11 +63,11 @@ namespace Scripts.EVM.Marketplace
         /// Path: https://api.gaming.chainsafe.io/v1/projects/{projectID}/marketplaces/{marketplaceID}/items
         /// </summary>
         /// <param name="marketplaceId">MarketplaceID to query</param>
-        /// <returns>MarketplaceModel.Root</returns>
-        public static async Task<MarketplaceModel.Root> GetMarketplaceItems(string marketplaceId)
+        /// <returns>MarketplaceModel.MarketplaceItemsResponse</returns>
+        public static async Task<MarketplaceModel.MarketplaceItemsResponse> GetMarketplaceItems(string marketplaceId)
         {
             var path = $"/marketplaces/{marketplaceId}/items";
-            var response = await CSServer.GetData<MarketplaceModel.Root>(path);
+            var response = await CSServer.GetData<MarketplaceModel.MarketplaceItemsResponse>(path);
             return response;
         }
 
@@ -56,16 +84,16 @@ namespace Scripts.EVM.Marketplace
             var response = await CSServer.GetData<MarketplaceModel.Item>(path);
             return response;
         }
-        
+
         /// <summary>
         /// Gets all tokens in a project.
         /// Path: https://api.gaming.chainsafe.io/v1/projects/{projectID}/tokens
         /// </summary>
-        /// <returns>NftTokenModel.Root</returns>
-        public static async Task<NftTokenModel.Root> GetProjectTokens()
+        /// <returns>NftTokenModel.CollectionItemsResponse</returns>
+        public static async Task<NftTokenModel.CollectionItemsResponse> GetProjectTokens()
         {
-            var path = $"/tokens?chainId={Web3Accessor.Web3.ChainConfig.ChainId}";
-            var response = await CSServer.GetData<NftTokenModel.Root>(path);
+            var path = $"/tokens?chainId={Web3Unity.Web3.ChainConfig.ChainId}";
+            var response = await CSServer.GetData<NftTokenModel.CollectionItemsResponse>(path);
             return response;
         }
 
@@ -74,11 +102,11 @@ namespace Scripts.EVM.Marketplace
         /// Path: https://api.gaming.chainsafe.io/v1/projects/{projectID}/collections/{collectionID}/tokens
         /// </summary>
         /// <param name="collectionId721">CollectionID721 to query</param>
-        /// <returns>NftTokenModel.Root</returns>
-        public static async Task<NftTokenModel.Root> GetCollectionTokens721(string collectionId721)
+        /// <returns>NftTokenModel.CollectionItemsResponse</returns>
+        public static async Task<NftTokenModel.CollectionItemsResponse> GetCollectionTokens721(string collectionId721)
         {
             var path = $"/collections/{collectionId721}/tokens";
-            var response = await CSServer.GetData<NftTokenModel.Root>(path);
+            var response = await CSServer.GetData<NftTokenModel.CollectionItemsResponse>(path);
             return response;
         }
 
@@ -87,11 +115,11 @@ namespace Scripts.EVM.Marketplace
         /// Path https://api.gaming.chainsafe.io/v1/projects/{projectID}/collections/{collectionID}/tokens
         /// </summary>
         /// <param name="collectionId1155">CollectionID1155 to query</param>
-        /// <returns>NftTokenModel.Root</returns>
-        public static async Task<NftTokenModel.Root> GetCollectionTokens1155(string collectionId1155)
+        /// <returns>NftTokenModel.CollectionItemsResponse</returns>
+        public static async Task<NftTokenModel.CollectionItemsResponse> GetCollectionTokens1155(string collectionId1155)
         {
             var path = $"/collections/{collectionId1155}/tokens";
-            var response = await CSServer.GetData<NftTokenModel.Root>(path);
+            var response = await CSServer.GetData<NftTokenModel.CollectionItemsResponse>(path);
             return response;
         }
 
@@ -117,13 +145,13 @@ namespace Scripts.EVM.Marketplace
         /// <param name="collectionId">CollectionID to query</param>
         /// <param name="tokenId">TokenID to query</param>
         /// <returns>NftTokenModel.Token</returns>
-        public static async Task<MarketplaceModel.Root> GetTokenOwners(string collectionId, string tokenId)
+        public static async Task<MarketplaceModel.MarketplaceItemsResponse> GetTokenOwners(string collectionId, string tokenId)
         {
             var path = $"/collections/{collectionId}/tokens/{tokenId}/owners";
-            var response = await CSServer.GetData<MarketplaceModel.Root>(path);
+            var response = await CSServer.GetData<MarketplaceModel.MarketplaceItemsResponse>(path);
             return response;
         }
-        
+
         /// <summary>
         /// Creates a 721 collection
         /// /// Path https://api.gaming.chainsafe.io/v1/projects/8524f420-ecd1-4cfd-a651-706ade97cac7/collections
@@ -133,40 +161,44 @@ namespace Scripts.EVM.Marketplace
         /// <param name="_description">Description of the 721 collection being created</param>
         /// <param name="_isMintingPublic">If minting is public or not</param>
         /// <returns>Contract send data object</returns>
-        public static async Task<object[]> Create721Collection(string _bearerToken, string _name, string _description, bool _isMintingPublic)
+        public static async Task<TransactionReceipt> Create721Collection(string _bearerToken, string _name, string _description, bool _isMintingPublic)
         {
-                var logoImageData = await UploadPlatforms.GetImageData();
-                var bannerImageData = await UploadPlatforms.GetImageData();
-                var formData = new List<IMultipartFormSection>
+            var logoImageData = await UploadPlatforms.GetImageData();
+            var bannerImageData = await UploadPlatforms.GetImageData();
+            var formData = new List<IMultipartFormSection>
                 {
                     new MultipartFormDataSection("name", _name),
-                    new MultipartFormDataSection("description", _description),
-                    new MultipartFormDataSection("owner", Web3Accessor.Web3.Signer.PublicAddress),
-                    new MultipartFormDataSection("chain_id", Web3Accessor.Web3.ChainConfig.ChainId),
-                    new MultipartFormDataSection("projectID", Web3Accessor.Web3.ProjectConfig.ProjectId),
+                    new MultipartFormDataSection("owner", Web3Unity.Web3.Signer.PublicAddress),
+                    new MultipartFormDataSection("chain_id", Web3Unity.Web3.ChainConfig.ChainId),
+                    new MultipartFormDataSection("projectID", Web3Unity.Web3.ProjectConfig.ProjectId),
                     new MultipartFormFileSection("logo", logoImageData, "logo.png", "image/png"),
                     new MultipartFormFileSection("banner", bannerImageData, "banner.png", "image/png"),
                     new MultipartFormDataSection("isImported", "true"),
-                    new MultipartFormDataSection("contractAddress", ChainSafeContracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId]),
-                    new MultipartFormDataSection("type", "erc721")
+                    new MultipartFormDataSection("contractAddress", ChainSafeContracts.MarketplaceContracts[Web3Unity.Web3.ChainConfig.ChainId]),
+                    new MultipartFormDataSection("type", "ERC721")
                 };
-                var path = "/collections";
-                var collectionResponse = await CSServer.CreateData(_bearerToken, path, formData);
-                var collectionData = JsonConvert.DeserializeObject<CollectionResponses.Collections>(collectionResponse);
-                var method = "create721Collection";
-                object[] args =
-                {
-                    Web3Accessor.Web3.ProjectConfig.ProjectId,
+            if (!string.IsNullOrEmpty(_description))
+            {
+                formData.Insert(1, new MultipartFormDataSection("description", _description));
+            }
+            var path = "/collections";
+            var collectionResponse = await CSServer.CreateData(_bearerToken, path, formData);
+            var collectionData = JsonConvert.DeserializeObject<CollectionResponses.Collections>(collectionResponse);
+            var method = "create721Collection";
+            object[] args =
+            {
+                    Web3Unity.Web3.ProjectConfig.ProjectId,
                     collectionData.id,
                     _name,
                     collectionData.type,
                     collectionData.banner,
                     _isMintingPublic
                 };
-                var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.MarketplaceFactory, ChainSafeContracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId], args);
-                return data;
+            var contract = Web3Unity.Web3.ContractBuilder.Build(ABI.MarketplaceFactory, ChainSafeContracts.MarketplaceContracts[Web3Unity.Web3.ChainConfig.ChainId]);
+            var data = await contract.SendWithReceipt(method, args);
+            return data.receipt;
         }
-        
+
         /// <summary>
         /// Creates a 1155 collection
         /// Path https://api.gaming.chainsafe.io/v1/projects/8524f420-ecd1-4cfd-a651-706ade97cac7/collections/
@@ -176,7 +208,7 @@ namespace Scripts.EVM.Marketplace
         /// <param name="_description">Description of the 1155 collection being created</param>
         /// <param name="_isMintingPublic">If minting is public or not</param>
         /// <returns>Contract send data object</returns>
-        public static async Task<object[]> Create1155Collection(string _bearerToken, string _name, string _description, bool _isMintingPublic)
+        public static async Task<TransactionReceipt> Create1155Collection(string _bearerToken, string _name, string _description, bool _isMintingPublic)
         {
             try
             {
@@ -185,29 +217,33 @@ namespace Scripts.EVM.Marketplace
                 var formData = new List<IMultipartFormSection>
                 {
                     new MultipartFormDataSection("name", _name),
-                    new MultipartFormDataSection("description", _description),
-                    new MultipartFormDataSection("owner", Web3Accessor.Web3.Signer.PublicAddress),
-                    new MultipartFormDataSection("chain_id", Web3Accessor.Web3.ChainConfig.ChainId),
-                    new MultipartFormDataSection("projectID", Web3Accessor.Web3.ProjectConfig.ProjectId),
+                    new MultipartFormDataSection("owner", Web3Unity.Web3.Signer.PublicAddress),
+                    new MultipartFormDataSection("chain_id", Web3Unity.Web3.ChainConfig.ChainId),
+                    new MultipartFormDataSection("projectID", Web3Unity.Web3.ProjectConfig.ProjectId),
                     new MultipartFormFileSection("logo", logoImageData, "logo.png", "image/png"),
                     new MultipartFormFileSection("banner", bannerImageData, "banner.png", "image/png"),
                     new MultipartFormDataSection("isImported", "true"),
-                    new MultipartFormDataSection("contractAddress", ChainSafeContracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId]),
-                    new MultipartFormDataSection("type", "erc1155")
+                    new MultipartFormDataSection("contractAddress", ChainSafeContracts.MarketplaceContracts[Web3Unity.Web3.ChainConfig.ChainId]),
+                    new MultipartFormDataSection("type", "ERC1155")
                 };
+                if (!string.IsNullOrEmpty(_description))
+                {
+                    formData.Insert(1, new MultipartFormDataSection("description", _description));
+                }
                 var path = "/collections";
                 var collectionResponse = await CSServer.CreateData(_bearerToken, path, formData);
                 var collectionData = JsonConvert.DeserializeObject<CollectionResponses.Collections>(collectionResponse);
                 var method = "create1155Collection";
                 object[] args =
                 {
-                    Web3Accessor.Web3.ProjectConfig.ProjectId,
+                    Web3Unity.Web3.ProjectConfig.ProjectId,
                     collectionData.id,
                     collectionData.banner,
                     _isMintingPublic
                 };
-                var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.MarketplaceFactory, ChainSafeContracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId], args);
-                return data;
+                var contract = Web3Unity.Web3.ContractBuilder.Build(ABI.MarketplaceFactory, ChainSafeContracts.MarketplaceContracts[Web3Unity.Web3.ChainConfig.ChainId]);
+                var data = await contract.SendWithReceipt(method, args);
+                return data.receipt;
             }
             catch (Web3Exception e)
             {
@@ -215,33 +251,61 @@ namespace Scripts.EVM.Marketplace
                 throw;
             }
         }
-        
+
         /// <summary>
         /// /// Mints a 721 collection nft to the collection
         /// </summary>
         /// <param name="_collectionContract">721 collection contract to mint from/to</param>
         /// <param name="_uri">URI in full format i.e https://ipfs.chainsafe.io/ipfs/bafyjvzacdj4apx52hvbyjkwyf7i6a7t3pcqd4kw4xxfc67hgvn3a</param>
         /// <returns>Contract send data object</returns>
-        public static async Task<object[]> Mint721CollectionNft(string _collectionContract, string _uri)
+        public static async Task<TransactionReceipt> Mint721CollectionNft(string _bearerToken, string _collectionContract, string _name, [CanBeNull] string _description)
         {
             try
             {
+                var imageData = await UploadPlatforms.GetImageData();
+                var formData = new List<IMultipartFormSection>
+                {
+                    new MultipartFormDataSection("name", _name),
+                    new MultipartFormFileSection("image", imageData, "nftImage.png", "image/png"),
+                    new MultipartFormDataSection("tokenType", "ERC721")
+                    // TODO add attributes to form later
+                    // attributes[0].trait_type: prop1
+                    // attributes[0].value: 100
+                };
+                if (!string.IsNullOrEmpty(_description))
+                {
+                    formData.Insert(2, new MultipartFormDataSection("description", _description));
+                }
+                var path = "/nft?hash=blake2b-208";
+                var collectionResponse = await CSServer.CreateData(_bearerToken, path, formData);
+                var collectionData = JsonConvert.DeserializeObject<ApiResponse>(collectionResponse);
+                Debug.Log($"CID: {collectionData.cid}");
                 var method = "mint";
                 object[] args =
                 {
-                    Web3Accessor.Web3.Signer.PublicAddress,
-                    _uri
+                    Web3Unity.Web3.Signer.PublicAddress,
+                    collectionData.cid
                 };
-                var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.GeneralErc721, _collectionContract, args);
-                return data;
+                var contract = Web3Unity.Web3.ContractBuilder.Build(ABI.GeneralErc721, _collectionContract);
+                var txArgs = new TransactionRequest
+                {
+                    GasLimit = new HexBigInteger(90000)
+                };
+                var data = await contract.SendWithReceipt(method, args, txArgs);
+                return data.receipt;
             }
             catch (Web3Exception e)
             {
                 Console.WriteLine(e);
                 throw;
             }
+            catch (Exception e)
+            {
+                Debug.LogError("Error: " + e.Message);
+                throw;
+            }
         }
-        
+
         /// <summary>
         /// Mints a 1155 collection nft to the collection
         /// </summary>
@@ -249,28 +313,57 @@ namespace Scripts.EVM.Marketplace
         /// <param name="_uri">URI in full format i.e https://ipfs.chainsafe.io/ipfs/bafyjvzacdj4apx52hvbyjkwyf7i6a7t3pcqd4kw4xxfc67hgvn3a</param>
         /// <param name="_amount">Amount of Nfts to mint</param>
         /// <returns>Contract send data object</returns>
-        public static async Task<object[]> Mint1155CollectionNft(string _collectionContract, string _uri, string _amount)
+        public static async Task<TransactionReceipt> Mint1155CollectionNft(string _bearerToken, string _collectionContract, string _amount, string _name, [CanBeNull] string _description)
         {
             try
             {
+                var imageData = await UploadPlatforms.GetImageData();
+                var formData = new List<IMultipartFormSection>
+                {
+                    new MultipartFormDataSection("name", _name),
+                    new MultipartFormFileSection("image", imageData, "nftImage.png", "image/png"),
+                    new MultipartFormDataSection("tokenType", "ERC1155")
+                    // TODO add attributes to form later
+                    // attributes[0].trait_type: prop1
+                    // attributes[0].value: 100
+                };
+                if (!string.IsNullOrEmpty(_description))
+                {
+                    formData.Insert(1, new MultipartFormDataSection("description", _description));
+                }
+                var path = "/nft?hash=blake2b-208";
+                var collectionResponse = await CSServer.CreateData(_bearerToken, path, formData);
+                var collectionData = JsonConvert.DeserializeObject<ApiResponse>(collectionResponse);
                 var method = "mint";
                 var amount = BigInteger.Parse(_amount);
+                Debug.Log($"Amount3: {amount}");
                 object[] args =
                 {
-                    Web3Accessor.Web3.Signer.PublicAddress,
-                    _uri,
+                    Web3Unity.Web3.Signer.PublicAddress,
+                    collectionData.cid,
                     amount
                 };
-                var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.GeneralErc1155, _collectionContract, args);
-                return data;
+
+                var contract = Web3Unity.Web3.ContractBuilder.Build(ABI.GeneralErc1155, _collectionContract);
+                var txArgs = new TransactionRequest
+                {
+                    GasLimit = new HexBigInteger(90000)
+                };
+                var data = await contract.SendWithReceipt(method, args, txArgs);
+                return data.receipt;
             }
             catch (Web3Exception e)
             {
                 Console.WriteLine(e);
                 throw;
             }
+            catch (Exception e)
+            {
+                Debug.LogError("Error: " + e.Message);
+                throw;
+            }
         }
-        
+
         /// <summary>
         /// Deletes a collection that isn't on chain yet by ID
         /// Path https://api.gaming.chainsafe.io/v1/projects/8524f420-ecd1-4cfd-a651-706ade97cac7/collections/e38e9465-fb9b-4316-8d1d-c77e81b50d6a
@@ -284,7 +377,7 @@ namespace Scripts.EVM.Marketplace
             var response = await CSServer.DeleteData(_bearerToken, path);
             return response;
         }
-        
+
         /// <summary>
         /// Creates a marketplace
         /// Path: https://api.gaming.chainsafe.io/v1/projects/8524f420-ecd1-4cfd-a651-706ade97cac7/marketplaces
@@ -294,7 +387,7 @@ namespace Scripts.EVM.Marketplace
         /// <param name="_description">Marketplace description</param>
         /// <param name="_whitelisting">If whitelisting is enabled or not</param>
         /// <returns>Contract send data object</returns>
-        public static async Task<object[]> CreateMarketplace(string _bearerToken, string _name, string _description, bool _whitelisting)
+        public static async Task<TransactionReceipt> CreateMarketplace(string _bearerToken, string _name, string _description, bool _whitelisting)
         {
             try
             {
@@ -302,10 +395,13 @@ namespace Scripts.EVM.Marketplace
                 var formData = new List<IMultipartFormSection>
                 {
                     new MultipartFormDataSection("name", _name),
-                    new MultipartFormDataSection("description", _description),
-                    new MultipartFormDataSection("chain_id", Web3Accessor.Web3.ChainConfig.ChainId),
+                    new MultipartFormDataSection("chain_id", Web3Unity.Web3.ChainConfig.ChainId),
                     new MultipartFormFileSection("banner", bannerImageData, "banner.png", "image/png")
                 };
+                if (!string.IsNullOrEmpty(_description))
+                {
+                    formData.Insert(1, new MultipartFormDataSection("description", _description));
+                }
                 var path = "/marketplaces";
                 var marketplaceResponse = await CSServer.CreateData(_bearerToken, path, formData);
                 Debug.Log(marketplaceResponse);
@@ -313,12 +409,13 @@ namespace Scripts.EVM.Marketplace
                 var method = "createMarketplace";
                 object[] args =
                 {
-                    Web3Accessor.Web3.ProjectConfig.ProjectId,
+                    Web3Unity.Web3.ProjectConfig.ProjectId,
                     collectionData.id,
                     _whitelisting
                 };
-                var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.MarketplaceFactory, ChainSafeContracts.MarketplaceContracts[Web3Accessor.Web3.ChainConfig.ChainId] , args);
-                return data;
+                var contract = Web3Unity.Web3.ContractBuilder.Build(ABI.MarketplaceFactory, ChainSafeContracts.MarketplaceContracts[Web3Unity.Web3.ChainConfig.ChainId]);
+                var data = await contract.SendWithReceipt(method, args);
+                return data.receipt;
             }
             catch (Web3Exception e)
             {
@@ -326,7 +423,7 @@ namespace Scripts.EVM.Marketplace
                 throw;
             }
         }
-        
+
         /// <summary>
         /// Deletes a marketplace that isn't on chain yet by ID
         /// Path: https://api.gaming.chainsafe.io/v1/projects/8524f420-ecd1-4cfd-a651-706ade97cac7/marketplaces/{marketplaceId}
@@ -340,7 +437,7 @@ namespace Scripts.EVM.Marketplace
             var response = await CSServer.DeleteData(_bearerToken, path);
             return response;
         }
-        
+
         /// <summary>
         /// Approves the marketplace to list 721 Nfts
         /// </summary>
@@ -348,7 +445,7 @@ namespace Scripts.EVM.Marketplace
         /// <param name="_marketplaceContract">Marketplace to approve</param>
         /// <param name="_permission">Permission being granted</param>
         /// <returns>Contract send data object</returns>
-        public static async Task<object[]> SetApprovalMarketplace(string _nftContract, string _marketplaceContract, string _type, bool _permission)
+        public static async Task<TransactionReceipt> SetApprovalMarketplace(string _nftContract, string _marketplaceContract, string _type, bool _permission)
         {
             try
             {
@@ -358,9 +455,10 @@ namespace Scripts.EVM.Marketplace
                     _marketplaceContract,
                     _permission
                 };
-                var abi = _type == "721" ? Token.ABI.GeneralErc721 : Token.ABI.GeneralErc1155;
-                var data = await Evm.ContractSend(Web3Accessor.Web3, method, abi, _nftContract, args);
-                return data;
+                var abi = _type == "ERC721" ? Token.ABI.GeneralErc721 : Token.ABI.GeneralErc1155;
+                var contract = Web3Unity.Web3.ContractBuilder.Build(abi, _nftContract);
+                var data = await contract.SendWithReceipt(method, args);
+                return data.receipt;
             }
             catch (Web3Exception e)
             {
@@ -368,8 +466,15 @@ namespace Scripts.EVM.Marketplace
                 throw;
             }
         }
-        
-        public static async Task<object[]> PurchaseNft(string _marketplaceContract, string _itemId, string _amountToSend)
+
+        /// <summary>
+        /// Purchases NFT from the marketplace
+        /// </summary>
+        /// <param name="_marketplaceContract">The marketplace contract to purchase from</param>
+        /// <param name="_itemId">The NFT id to purchase</param>
+        /// <param name="_amountToSend">The amount to send in wei</param>
+        /// <returns>Contract send data object</returns>
+        public static async Task<TransactionReceipt> PurchaseNft(string _marketplaceContract, string _itemId, string _amountToSend)
         {
             try
             {
@@ -379,8 +484,13 @@ namespace Scripts.EVM.Marketplace
                 {
                     itemId
                 };
-                var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.Marketplace, _marketplaceContract, args, new HexBigInteger(_amountToSend));
-                return data;
+                var tx = new TransactionRequest
+                {
+                    Value = new HexBigInteger(BigInteger.Parse(_amountToSend).ToString("X"))
+                };
+                var contract = Web3Unity.Web3.ContractBuilder.Build(ABI.Marketplace, _marketplaceContract);
+                var data = await contract.SendWithReceipt(method, args, tx);
+                return data.receipt;
             }
             catch (Web3Exception e)
             {
@@ -388,7 +498,7 @@ namespace Scripts.EVM.Marketplace
                 throw;
             }
         }
-        
+
         /// <summary>
         /// Lists Nfts to the marketplace
         /// </summary>
@@ -397,7 +507,7 @@ namespace Scripts.EVM.Marketplace
         /// <param name="_tokenId">Toked ID to list</param>
         /// <param name="_price">Price in wei to list for</param>
         /// <returns>Contract send data object</returns>
-        public static async Task<object[]> ListNftsToMarketplace(string _marketplaceContract, string _nftContract, string _tokenId, string _priceInWei)
+        public static async Task<TransactionReceipt> ListNftsToMarketplace(string _marketplaceContract, string _nftContract, string _tokenId, string _priceInWei)
         {
             try
             {
@@ -412,8 +522,9 @@ namespace Scripts.EVM.Marketplace
                     priceInWei,
                     deadline
                 };
-                var data = await Evm.ContractSend(Web3Accessor.Web3, method, Token.ABI.Marketplace, _marketplaceContract, args);
-                return data;
+                var contract = Web3Unity.Web3.ContractBuilder.Build(ABI.Marketplace, _marketplaceContract);
+                var data = await contract.SendWithReceipt(method, args);
+                return data.receipt;
             }
             catch (Web3Exception e)
             {
@@ -438,8 +549,16 @@ namespace Scripts.EVM.Marketplace
             }
         }
 
+        /// <summary>
+        /// Handles CID response from API for metadata uploads.
+        /// </summary>
+        public class ApiResponse
+        {
+            public string cid { get; set; }
+        }
+
         #endregion
-        
+
         #endregion
     }
 }

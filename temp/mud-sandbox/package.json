@@ -1,0 +1,29 @@
+{
+  "name": "mud-template-vanilla",
+  "private": true,
+  "scripts": {
+    "build": "pnpm recursive run build",
+    "dev": "mprocs",
+    "dev:client": "pnpm --filter 'client' run dev",
+    "dev:contracts": "pnpm --filter 'contracts' dev",
+    "foundry:up": "curl -L https://foundry.paradigm.xyz | bash && bash $HOME/.foundry/bin/foundryup",
+    "mud:up": "pnpm mud set-version --tag main && pnpm install",
+    "prepare": "(forge --version || pnpm foundry:up)",
+    "test": "pnpm recursive run test"
+  },
+  "devDependencies": {
+    "@latticexyz/cli": "2.0.12",
+    "@latticexyz/common": "2.0.12",
+    "@types/debug": "4.1.7",
+    "@typescript-eslint/eslint-plugin": "7.1.1",
+    "@typescript-eslint/parser": "7.1.1",
+    "eslint": "8.57.0",
+    "mprocs": "^0.6.4",
+    "rimraf": "^3.0.2",
+    "typescript": "5.4.2"
+  },
+  "engines": {
+    "node": "^18",
+    "pnpm": "^8 || ^9"
+  }
+}
