@@ -21,10 +21,12 @@
     <assembly fullname="ChainSafe.Gaming.NetCore"/>
     <assembly fullname="ChainSafe.Gaming.WalletConnect" preserve="all"/>
     <assembly fullname="ChainSafe.Gaming.MetaMask"/>
-    <assembly fullname="ChainSafe.Gaming.MetaMask.Unity"/>
+    <assembly fullname="ChainSafe.Gaming.Unity.MetaMask"/>
     <assembly fullname="ChainSafe.Gaming.Gelato"/>
     <assembly fullname="ChainSafe.Gaming.ChainLink"/>
     <assembly fullname="ChainSafe.Gaming.LootBoxes.Chainlink"/>
+    <assembly fullname="ChainSafe.Gaming.Marketplace"/>
+    <assembly fullname="ChainSafe.Gaming.Mud"/>
     <!-- Dependencies -->
     <assembly fullname="ADRaffy.ENSNormalize" />
     <assembly fullname="BouncyCastle.Crypto" preserve="all"/>
@@ -42,6 +44,8 @@
     <assembly fullname="Nethereum.Merkle" />
     <assembly fullname="Nethereum.Merkle.Patricia" />
     <assembly fullname="Nethereum.Model" />
+    <assembly fullname="Nethereum.Mud" />
+    <assembly fullname="Nethereum.Mud.Contracts" />
     <assembly fullname="Nethereum.RLP" />
     <assembly fullname="Nethereum.RPC" />
     <assembly fullname="Nethereum.Signer" />

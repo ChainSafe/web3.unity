@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Timers;
-using Newtonsoft.Json;
 using Plugins.CountlySDK.Enums;
 using Plugins.CountlySDK.Helpers;
 using Plugins.CountlySDK.Models;
+using UnityEngine;
 
 namespace Plugins.CountlySDK.Services
 {
@@ -19,13 +20,14 @@ namespace Plugins.CountlySDK.Services
         /// </summary>
         /// <returns>bool</returns>
         internal bool IsSessionInitiated { get; private set; }
-
         private readonly LocationService _locationService;
         private readonly EventCountlyService _eventService;
         internal readonly RequestCountlyHelper _requestCountlyHelper;
+        private readonly MonoBehaviour _monoBehaviour;
+        bool isInternalTimerStopped;
 
         internal SessionCountlyService(CountlyConfiguration configuration, CountlyLogHelper logHelper, EventCountlyService eventService,
-            RequestCountlyHelper requestCountlyHelper, LocationService locationService, ConsentCountlyService consentService) : base(configuration, logHelper, consentService)
+            RequestCountlyHelper requestCountlyHelper, LocationService locationService, ConsentCountlyService consentService, MonoBehaviour monoBehaviour) : base(configuration, logHelper, consentService)
         {
             Log.Debug("[SessionCountlyService] Initializing.");
             if (configuration.IsAutomaticSessionTrackingDisabled)
@@ -36,6 +38,7 @@ namespace Plugins.CountlySDK.Services
             _eventService = eventService;
             _locationService = locationService;
             _requestCountlyHelper = requestCountlyHelper;
+            _monoBehaviour = monoBehaviour;
 
             if (_configuration.IsAutomaticSessionTrackingDisabled)
             {
@@ -79,10 +82,62 @@ namespace Plugins.CountlySDK.Services
         /// </summary>
         private void InitSessionTimer()
         {
+#if UNITY_WEBGL
+            _monoBehaviour.StartCoroutine(SessionTimerCoroutine());
+#else
             _sessionTimer = new Timer { Interval = _configuration.SessionDuration * 1000 };
             _sessionTimer.Elapsed += SessionTimerOnElapsedAsync;
             _sessionTimer.AutoReset = true;
             _sessionTimer.Start();
+#endif
+        }
+
+        private void SendRequestsAndExtendSession()
+        {
+            //Countly.Instance.UserProfile.Save();
+            _eventService.AddEventsToRequestQueue();
+            _ = _requestCountlyHelper.ProcessQueue();
+
+            if (!_configuration.IsAutomaticSessionTrackingDisabled)
+            {
+                _ = ExtendSessionAsync();
+            }
+        }
+
+        private IEnumerator SessionTimerCoroutine()
+        {
+            Log.Debug("[SessionCountlyService] SessionTimerCoroutine, Start");
+
+            if (isInternalTimerStopped)
+            {
+                yield break;
+            }
+
+            yield return new WaitForSeconds(_configuration.SessionDuration);
+            SendRequestsAndExtendSession();
+            Log.Debug("[SessionCountlyService] SessionTimerCoroutine, Coroutine completed.");
+        }
+
+        /// <summary>
+        /// Stops the timer and unsubscribes from the Elapsed event.
+        /// This exists for preventing session extending after tests.
+        /// </summary>
+        internal void StopSessionTimer()
+        {
+            isInternalTimerStopped = true;
+
+#if UNITY_WEBGL
+            _monoBehaviour.StopCoroutine(SessionTimerCoroutine());
+#else
+            if (_sessionTimer != null) {
+                // Unsubscribe from the Elapsed event
+                _sessionTimer.Elapsed -= SessionTimerOnElapsedAsync;
+
+                // Stop and dispose the timer
+                _sessionTimer.Stop();
+                _sessionTimer.Dispose();
+            }
+#endif
         }
 
         /// <summary>
@@ -94,15 +149,14 @@ namespace Plugins.CountlySDK.Services
         {
             lock (LockObj)
             {
-                Log.Debug("[SessionCountlyService] SessionTimerOnElapsedAsync");
 
-                _eventService.AddEventsToRequestQueue();
-                _ = _requestCountlyHelper.ProcessQueue();
-
-                if (!_configuration.IsAutomaticSessionTrackingDisabled)
+                if (isInternalTimerStopped)
                 {
-                    _ = ExtendSessionAsync();
+                    return;
                 }
+
+                Log.Debug("[SessionCountlyService] SessionTimerOnElapsedAsync");
+                SendRequestsAndExtendSession();
             }
 
             await Task.CompletedTask;
@@ -130,10 +184,7 @@ namespace Plugins.CountlySDK.Services
             //Session initiated
             IsSessionInitiated = true;
 
-            Dictionary<string, object> requestParams =
-                new Dictionary<string, object>();
-
-
+            Dictionary<string, object> requestParams = new Dictionary<string, object>();
             requestParams.Add("begin_session", 1);
 
             /* If location is disabled or no location consent is given,
@@ -191,22 +242,17 @@ namespace Plugins.CountlySDK.Services
             }
 
             IsSessionInitiated = false;
-
             _eventService.AddEventsToRequestQueue();
-
-
-            Dictionary<string, object> requestParams =
-                new Dictionary<string, object>
+            // Countly.Instance.UserProfile.Save();
+            Dictionary<string, object> requestParams = new Dictionary<string, object>
                 {
                     {"end_session", 1},
                     {"session_duration",  Convert.ToInt32((DateTime.Now - _lastSessionRequestTime).TotalSeconds)}
                 };
 
-
             _requestCountlyHelper.AddToRequestQueue(requestParams);
             await _requestCountlyHelper.ProcessQueue();
         }
-
 
         /// <summary>
         /// Extends a session by another session duration provided in configuration. By default session duration is 60 seconds.
@@ -226,8 +272,7 @@ namespace Plugins.CountlySDK.Services
                 return;
             }
 
-            Dictionary<string, object> requestParams =
-                new Dictionary<string, object>
+            Dictionary<string, object> requestParams = new Dictionary<string, object>
                 {
                     {
                         "session_duration",  Convert.ToInt32((DateTime.Now - _lastSessionRequestTime).TotalSeconds)
@@ -239,6 +284,9 @@ namespace Plugins.CountlySDK.Services
             _requestCountlyHelper.AddToRequestQueue(requestParams);
             await _requestCountlyHelper.ProcessQueue();
 
+#if UNITY_WEBGL
+            _monoBehaviour.StartCoroutine(SessionTimerCoroutine());
+#endif
         }
 
         #region override Methods
@@ -252,7 +300,6 @@ namespace Plugins.CountlySDK.Services
                     await BeginSessionAsync();
                 }
             }
-
         }
         #endregion
     }

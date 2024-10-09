@@ -7,6 +7,13 @@ namespace ChainSafe.Gaming.UnityPackage.Model
         public string symbol { get; set; }
     }
 
+    public struct Explorer
+    {
+        public string name { get; set; }
+        public string url { get; set; }
+        public string standard { get; set; }
+    }
+
     public struct Root
     {
         public string name { get; set; }
@@ -14,5 +21,7 @@ namespace ChainSafe.Gaming.UnityPackage.Model
         public List<string> rpc { get; set; }
         public NativeCurrency nativeCurrency { get; set; }
         public object chainId { get; set; }
+        public List<Explorer> explorers { get; set; }
+        public bool allowCustomValues { get; set; }
     }
 }

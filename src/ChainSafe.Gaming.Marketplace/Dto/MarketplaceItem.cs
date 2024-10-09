@@ -34,7 +34,7 @@ namespace ChainSafe.Gaming.Marketplace
         /// Gets or sets marketplace Id.
         /// </summary>
         [JsonProperty(PropertyName = "marketplace_id")]
-        public string MarketPlaceId { get; set; }
+        public string MarketplaceId { get; set; }
 
         /// <summary>
         /// Gets or sets token.
@@ -86,18 +86,6 @@ namespace ChainSafe.Gaming.Marketplace
         /// <summary>
         /// Gets the status of marketplace items.
         /// </summary>
-        public MarketplaceItemStatus Status
-        {
-            get
-            {
-                switch (this.StatusRaw)
-                {
-                    case "sold": return MarketplaceItemStatus.Sold;
-                    case "listed": return MarketplaceItemStatus.Listed;
-                    case "canceled": return MarketplaceItemStatus.Canceled;
-                    default: throw new ArgumentOutOfRangeException(nameof(this.StatusRaw));
-                }
-            }
-        }
+        public MarketplaceItemStatus Status => MarketplaceItemStatusExtensions.FromString(this.StatusRaw);
     }
 }

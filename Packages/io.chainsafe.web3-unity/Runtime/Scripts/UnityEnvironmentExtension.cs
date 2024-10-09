@@ -4,7 +4,6 @@ using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core.Unity;
 using ChainSafe.Gaming.Web3.Environment;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace ChainSafe.Gaming.Web3.Unity
 {
@@ -22,7 +21,11 @@ namespace ChainSafe.Gaming.Web3.Unity
             services.AddSingleton<IHttpClient, UnityHttpClient>();
             services.AddSingleton<ILogWriter, UnityLogWriter>();
             services.AddSingleton<IOperatingSystemMediator, UnityOperatingSystemMediator>();
+#if ENABLE_ANALYTICS
             services.AddSingleton<IAnalyticsClient, CountlyAnalytics>();
+#else
+            services.DisableAnalytics();
+#endif
             return services;
         }
     }

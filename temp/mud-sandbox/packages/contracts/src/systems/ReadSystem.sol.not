@@ -1,0 +1,11 @@
+﻿pragma solidity >=0.8.24;
+
+import { System } from "@latticexyz/world/src/System.sol";
+import { Counter } from "../codegen/tables/Counter.sol";
+
+contract ReadSystem is System {
+    function getCounter() public view returns (uint32) {
+        uint32 counter = Counter.get();
+        return counter;
+    }
+}

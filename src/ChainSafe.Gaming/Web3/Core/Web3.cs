@@ -6,7 +6,10 @@ using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.LocalStorage;
+using ChainSafe.Gaming.RPC.Events;
+using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.Web3.Core.Chains;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using ChainSafe.Gaming.Web3.Core.Logout;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,9 +26,9 @@ namespace ChainSafe.Gaming.Web3
         private readonly IRpcProvider? rpcProvider;
         private readonly ISigner? signer;
         private readonly ITransactionExecutor? transactionExecutor;
-        private readonly IEvmEvents? events;
+        private readonly IEventManager? events;
         private readonly ILogoutManager logoutManager;
-        private readonly DataStorage dataStorage;
+        private readonly ILocalStorage localStorage;
 
         private bool initialized;
         private bool terminated;
@@ -33,18 +36,22 @@ namespace ChainSafe.Gaming.Web3
         internal Web3(ServiceProvider serviceProvider)
         {
             this.serviceProvider = serviceProvider;
-            rpcProvider = serviceProvider.GetService<IRpcProvider>();
-            signer = serviceProvider.GetService<ISigner>();
-            transactionExecutor = serviceProvider.GetService<ITransactionExecutor>();
-            events = serviceProvider.GetRequiredService<IEvmEvents>();
-            ContractBuilder = serviceProvider.GetRequiredService<IContractBuilder>();
-            ProjectConfig = serviceProvider.GetRequiredService<IProjectConfig>();
-            ChainConfig = serviceProvider.GetRequiredService<IChainConfig>();
-            logoutManager = this.serviceProvider.GetRequiredService<ILogoutManager>();
-            dataStorage = this.serviceProvider.GetRequiredService<DataStorage>();
+
+            rpcProvider = this.serviceProvider.GetService<IRpcProvider>();
+            Chains = this.serviceProvider.GetRequiredService<IChainManager>();
+            ProjectConfig = this.serviceProvider.GetRequiredService<IProjectConfig>();
+            ChainConfig = this.serviceProvider.GetRequiredService<IChainConfig>();
+            localStorage = this.serviceProvider.GetRequiredService<ILocalStorage>();
+            ContractBuilder = this.serviceProvider.GetRequiredService<IContractBuilder>();
             Erc20 = this.serviceProvider.GetRequiredService<Erc20Service>();
             Erc721 = this.serviceProvider.GetRequiredService<Erc721Service>();
             Erc1155 = this.serviceProvider.GetRequiredService<Erc1155Service>();
+
+            // These service are not readonly/lightweight (need a connected account).
+            this.serviceProvider.TryGetService(out signer);
+            this.serviceProvider.TryGetService(out transactionExecutor);
+            this.serviceProvider.TryGetService(out logoutManager);
+            this.serviceProvider.TryGetService(out events);
         }
 
         /// <summary>
@@ -60,22 +67,27 @@ namespace ChainSafe.Gaming.Web3
         /// <summary>
         /// Access the <see cref="IRpcProvider"/> component, which provides RPC communication with the Ethereum network.
         /// </summary>
-        public IRpcProvider RpcProvider => AssertComponentAccessible(rpcProvider, nameof(RpcProvider));
+        public IRpcProvider RpcProvider => AssertComponentAccessible(rpcProvider);
 
         /// <summary>
         /// Access the <see cref="ISigner"/> component, responsible for signing transactions, messages, and providing the player's public address.
         /// </summary>
-        public ISigner Signer => AssertComponentAccessible(signer, nameof(Signer));
+        public ISigner Signer => AssertComponentAccessible(signer);
 
         /// <summary>
         /// Access the <see cref="ITransactionExecutor"/> component, used for sending transactions to the blockchain.
         /// </summary>
-        public ITransactionExecutor TransactionExecutor => AssertComponentAccessible(transactionExecutor, nameof(TransactionExecutor));
+        public ITransactionExecutor TransactionExecutor => AssertComponentAccessible(transactionExecutor);
 
         /// <summary>
-        /// Access the event service of the Web3 instance, allowing you to subscribe to blockchain events.
+        /// Access the Event Service of the Web3 instance, allowing you to subscribe to blockchain events.
         /// </summary>
-        public IEvmEvents Events => AssertComponentAccessible(events, nameof(Events));
+        public IEventManager Events => AssertComponentAccessible(events);
+
+        /// <summary>
+        /// Access the Chain Manager of the Web3 instance to switch chains in runtime.
+        /// </summary>
+        public IChainManager Chains { get; }
 
         /// <summary>
         /// Access the factory for creating Ethereum smart contract wrappers.
@@ -111,7 +123,7 @@ namespace ChainSafe.Gaming.Web3
 
         internal async ValueTask InitializeAsync()
         {
-            await dataStorage.Initialize();
+            await localStorage.Initialize();
 
             foreach (var lifecycleParticipant in serviceProvider.GetServices<ILifecycleParticipant>())
             {
@@ -150,12 +162,19 @@ namespace ChainSafe.Gaming.Web3
             terminated = true;
         }
 
-        private T AssertComponentAccessible<T>(T? value, string propertyName)
+        public Task SwitchChain(string newChainId)
+        {
+            return Chains.SwitchChain(newChainId);
+        }
+
+        private T AssertComponentAccessible<T>(T? value)
             where T : notnull
         {
+            string propertyName = typeof(T).Name;
+
             if (value == null)
             {
-                throw new Web3Exception(
+                throw new ServiceNotBoundWeb3Exception<T>(
                     $"{propertyName} is not bound. Make sure to add an implementation of {propertyName} before using it.");
             }
 

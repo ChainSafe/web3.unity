@@ -23,38 +23,38 @@ namespace ChainSafe.Gaming.HyperPlay
     {
         private readonly IHyperPlayConfig config;
         private readonly IHyperPlayData data;
-        private readonly DataStorage dataStorage;
-        private readonly IHttpClient httpClient;
+        private readonly ILocalStorage localStorage;
+        private readonly Web3Environment environment;
         private readonly IChainConfig chainConfig;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HyperPlayProvider"/> class.
         /// </summary>
-        /// <param name="config">Injected <see cref="HyperPlayConfig"/>.</param>
+        /// <param name="config">Injected <see cref="IHyperPlayConfig"/>.</param>
         /// <param name="data">Injected <see cref="IHyperPlayData"/>.</param>
-        /// <param name="dataStorage">Injected <see cref="DataStorage"/>.</param>
-        /// <param name="httpClient">HttpClient to make requests.</param>
+        /// <param name="localStorage">Injected <see cref="ILocalStorage"/>.</param>
+        /// <param name="environment">Injected <see cref="environment"/>.</param>
         /// <param name="chainConfig">ChainConfig to fetch chain data.</param>
         /// <param name="chainRegistryProvider">Injected <see cref="ChainRegistryProvider"/>.</param>
-        public HyperPlayProvider(IHyperPlayConfig config, IHyperPlayData data, DataStorage dataStorage, IHttpClient httpClient, IChainConfig chainConfig, ChainRegistryProvider chainRegistryProvider)
-            : base(chainRegistryProvider: chainRegistryProvider)
+        public HyperPlayProvider(IHyperPlayConfig config, IHyperPlayData data, ILocalStorage localStorage, Web3Environment environment, IChainConfig chainConfig)
+            : base(environment, chainConfig)
         {
             this.config = config;
             this.data = data;
-            this.dataStorage = dataStorage;
-            this.httpClient = httpClient;
+            this.localStorage = localStorage;
+            this.environment = environment;
             this.chainConfig = chainConfig;
         }
 
         /// <summary>
         /// Connect to wallet via HyperPlay desktop client and return the account address.
         /// </summary>
-        /// <returns>Signed-in account public address.</returns>
+        /// <returns>Signed in account public address.</returns>
         public override async Task<string> Connect()
         {
-            string[] accounts = await Perform<string[]>("eth_accounts");
+            string[] accounts = await Request<string[]>("eth_accounts");
 
-            string account = accounts[0].AssertIsPublicAddress(nameof(account));
+            string account = accounts[0];
 
             // Saved account exists.
             if (data.RememberSession && data.SavedAccount == account)
@@ -64,22 +64,9 @@ namespace ChainSafe.Gaming.HyperPlay
 
             string message = "Sign-in with Ethereum";
 
-            string hash = await Perform<string>("personal_sign", message, account);
+            string hash = await Request<string>("personal_sign", message, account);
 
-            // Verify signature.
-            // TODO: Make into a Util Method.
-            EthECDSASignature signature = MessageSigner.ExtractEcdsaSignature(hash);
-
-            string messageToHash = "\x19" + "Ethereum Signed Message:\n" + message.Length + message;
-
-            byte[] messageHash = new Sha3Keccack().CalculateHash(Encoding.UTF8.GetBytes(messageToHash));
-
-            var key = EthECKey.RecoverFromSignature(signature, messageHash);
-
-            if (key.GetPublicAddress().ToLower().Trim() != account.ToLower().Trim())
-            {
-                throw new Web3Exception("Fetched address does not match the signing address.");
-            }
+            hash.AssertSignatureValid(message, account);
 
             if (config.RememberSession)
             {
@@ -87,7 +74,7 @@ namespace ChainSafe.Gaming.HyperPlay
 
                 data.SavedAccount = account;
 
-                await dataStorage.Save(data);
+                await localStorage.Save(data);
             }
 
             return account;
@@ -97,7 +84,7 @@ namespace ChainSafe.Gaming.HyperPlay
         {
             if (data.RememberSession)
             {
-                dataStorage.Clear(data);
+                localStorage.Clear(data);
             }
 
             return Task.CompletedTask;
@@ -110,7 +97,7 @@ namespace ChainSafe.Gaming.HyperPlay
         /// <param name="parameters">RPC request parameters.</param>
         /// <typeparam name="T">RPC request response type.</typeparam>
         /// <returns>RPC request Response.</returns>
-        public override async Task<T> Perform<T>(string method, params object[] parameters)
+        public override async Task<T> Request<T>(string method, params object[] parameters)
         {
             string body = JsonConvert.SerializeObject(new HyperPlayRequest
             {
@@ -125,7 +112,7 @@ namespace ChainSafe.Gaming.HyperPlay
                 },
             });
 
-            string response = (await httpClient.PostRaw(config.Url, body, "application/json")).Response;
+            string response = (await environment.HttpClient.PostRaw(config.Url, body, "application/json")).Response;
 
             // In case response is just a primitive type like string/number...
             // Deserializing it directly doesn't work.

@@ -1,8 +1,8 @@
 {
   "dependencies": {
-    "com.tools.webglthreadingpatcher": "https://github.com/VolodymyrBS/WebGLThreadingPatcher.git",
-    "com.unity.collab-proxy": "2.3.1",
-    "com.unity.ide.rider": "3.0.28",
+    "com.unity.collab-proxy": "2.4.4",
+    "com.unity.ide.rider": "3.0.31",
+    "com.unity.ide.visualstudio": "2.0.22",
     "com.unity.ide.vscode": "1.2.5",
     "com.unity.nuget.newtonsoft-json": "3.2.1",
     "com.unity.test-framework": "2.0.1-pre.18",
@@ -12,10 +12,12 @@
     "com.unity.toolchain.win-x86_64-linux-x86_64": "2.0.9",
     "com.unity.ugui": "1.0.0",
     "com.unity.visualscripting": "1.9.4",
+    "com.utilities.async": "https://github.com/RageAgainstThePixel/com.utilities.async.git#upm",
     "io.chainsafe.web3-unity": "file:../../../Packages/io.chainsafe.web3-unity",
     "io.chainsafe.web3-unity.hyperplay": "file:../../../Packages/io.chainsafe.web3-unity.hyperplay",
     "io.chainsafe.web3-unity.lootboxes": "file:../../../Packages/io.chainsafe.web3-unity.lootboxes",
     "io.chainsafe.web3-unity.marketplace": "file:../../../Packages/io.chainsafe.web3-unity.marketplace",
+    "io.chainsafe.web3-unity.mud": "file:../../../Packages/io.chainsafe.web3-unity.mud",
     "io.chainsafe.web3-unity.ramp": "file:../../../Packages/io.chainsafe.web3-unity.ramp",
     "io.chainsafe.web3-unity.web3auth": "file:../../../Packages/io.chainsafe.web3-unity.web3auth",
     "com.unity.modules.ai": "1.0.0",
@@ -48,9 +50,20 @@
     "com.unity.modules.video": "1.0.0",
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
-    "com.unity.modules.xr": "1.0.0"
+    "com.unity.modules.xr": "1.0.0",
+    "com.tools.webglthreadingpatcher": "https://github.com/VolodymyrBS/WebGLThreadingPatcher.git"
   },
   "testables": [
     "io.chainsafe.web3-unity"
+  ],
+  "enableLockFile": true,
+  "scopedRegistries": [
+    {
+      "name": "package.openupm.com",
+      "url": "https://package.openupm.com",
+      "scopes": [
+        "com.nethereum.unity"
+      ]
+    }
   ]
 }
