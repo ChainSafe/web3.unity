@@ -198,32 +198,32 @@ namespace ChainSafe.Gaming.UnityPackage
 
         public async Task<HexBigInteger> GetGasPrice()
         {
-            return await _web3.RpcProvider.GetGasPrice();
+            return await Web3.RpcProvider.GetGasPrice();
         }
 
         public async Task<HexBigInteger> GetBlockNumber()
         {
-            return await _web3.RpcProvider.GetBlockNumber();
+            return await Web3.RpcProvider.GetBlockNumber();
         }
 
         public async Task<object[]> ContractSend(string method, string abi, string contractAddress, object[] args,
             HexBigInteger value = null)
         {
-            var contract = _web3.ContractBuilder.Build(abi, contractAddress);
+            var contract = Web3.ContractBuilder.Build(abi, contractAddress);
             var overwrite = value != null ? new TransactionRequest { Value = value } : null;
             return await contract.Send(method, args, overwrite);
         }
 
         public async Task<object[]> ContractCall(string method, string abi, string contractAddress, object[] args)
         {
-            var contract = _web3.ContractBuilder.Build(abi, contractAddress);
+            var contract = Web3.ContractBuilder.Build(abi, contractAddress);
             return await contract.Call(method, args);
         }
 
         public async Task<HexBigInteger> GetGasLimit(string contractAbi, string contractAddress, string method,
             object[] args)
         {
-            var contract = _web3.ContractBuilder.Build(contractAbi, contractAddress);
+            var contract = Web3.ContractBuilder.Build(contractAbi, contractAddress);
             return await contract.EstimateGas(method, args);
         }
 
@@ -248,9 +248,9 @@ namespace ChainSafe.Gaming.UnityPackage
             {
                 To = to,
                 Value = new HexBigInteger(value.ToString("X")),
-                MaxFeePerGas = new HexBigInteger((await _web3.RpcProvider.GetFeeData()).MaxFeePerGas)
+                MaxFeePerGas = new HexBigInteger((await Web3.RpcProvider.GetFeeData()).MaxFeePerGas)
             };
-            var response = await _web3.TransactionExecutor.SendTransaction(txRequest);
+            var response = await Web3.TransactionExecutor.SendTransaction(txRequest);
             return response.Hash;
         }
 
@@ -275,7 +275,7 @@ namespace ChainSafe.Gaming.UnityPackage
 
         public async Task<TransactionResponse> GetTransactionByHash(string transactionHash)
         {
-            if (Web3 == null || _web3.RpcProvider == default)
+            if (Web3 == null || Web3.RpcProvider == default)
                 throw new InvalidOperationException(
                     "Web3 object and/or the RPC provider are null. Make sure you've initialized the Web3 object correctly ");
             var parameters = new object[] { transactionHash };
@@ -318,8 +318,8 @@ namespace ChainSafe.Gaming.UnityPackage
 
         public async Task<bool> SignAndVerifyMessage(string message)
         {
-            var playerAccount = _web3.Signer.PublicAddress;
-            var signatureString = await _web3.Signer.SignMessage(message);
+            var playerAccount = Web3.Signer.PublicAddress;
+            var signatureString = await Web3.Signer.SignMessage(message);
             var msg = "\x19" + "Ethereum Signed Message:\n" + message.Length + message;
             var msgHash = new Sha3Keccack().CalculateHash(Encoding.UTF8.GetBytes(msg));
             var signature = MessageSigner.ExtractEcdsaSignature(signatureString);
@@ -338,7 +338,7 @@ namespace ChainSafe.Gaming.UnityPackage
         /// <param name="logout">Is Logout.</param>
         private async Task Terminate(bool logout)
         {
-            if (Connected)
+            if (Web3 != null)
             {
                 await Web3.TerminateAsync(logout);
 
