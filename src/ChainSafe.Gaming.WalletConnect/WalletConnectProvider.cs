@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm;
@@ -13,8 +14,10 @@ using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Debug;
 using ChainSafe.Gaming.Web3.Environment;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
+using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.JsonRpc.Client.RpcMessages;
 using Newtonsoft.Json;
+using Org.BouncyCastle.Math;
 using WalletConnectSharp.Common.Logging;
 using WalletConnectSharp.Common.Model.Errors;
 using WalletConnectSharp.Common.Utils;
@@ -25,11 +28,12 @@ using WalletConnectSharp.Network.Models;
 using WalletConnectSharp.Sign;
 using WalletConnectSharp.Sign.Models;
 using WalletConnectSharp.Sign.Models.Engine;
+using BigInteger = System.Numerics.BigInteger;
 
 namespace ChainSafe.Gaming.WalletConnect
 {
     /// <summary>
-    /// Default implementation of <see cref="IWalletConnectProvider"/>.
+    /// Default implementation of <see cref="IWalletProvider"/>.
     /// </summary>
     public class WalletConnectProvider : WalletProvider, ILifecycleParticipant, IConnectionHelper
     {
@@ -41,6 +45,7 @@ namespace ChainSafe.Gaming.WalletConnect
         private readonly IWalletRegistry walletRegistry;
         private readonly RedirectionHandler redirection;
         private readonly IHttpClient httpClient;
+        private readonly IAnalyticsClient analyticsClient;
 
         private WalletConnectCore core;
         private WalletConnectSignClient signClient;
@@ -48,31 +53,27 @@ namespace ChainSafe.Gaming.WalletConnect
         private LocalData localData;
         private SessionStruct session;
         private bool connected;
-        private IAnalyticsClient analyticsClient;
+        private bool initialized;
         private ConnectionHandlerConfig connectionHandlerConfig;
 
         public WalletConnectProvider(
             IWalletConnectConfig config,
             DataStorage storage,
-            ILogWriter logWriter,
             IChainConfig chainConfig,
-            IOperatingSystemMediator osMediator,
             IWalletRegistry walletRegistry,
             RedirectionHandler redirection,
-            IHttpClient httpClient,
-            IAnalyticsClient analyticsClient,
-            ChainRegistryProvider chainRegistryProvider)
-            : base(chainRegistryProvider: chainRegistryProvider)
+            Web3Environment environment)
+            : base(environment, chainConfig)
         {
-            this.analyticsClient = analyticsClient;
+            analyticsClient = environment.AnalyticsClient;
             this.redirection = redirection;
             this.walletRegistry = walletRegistry;
-            this.osMediator = osMediator;
+            osMediator = environment.OperatingSystem;
             this.chainConfig = chainConfig;
             this.storage = storage;
             this.config = config;
-            this.logWriter = logWriter;
-            this.httpClient = httpClient;
+            logWriter = environment.LogWriter;
+            httpClient = environment.HttpClient;
         }
 
         public bool StoredSessionAvailable => localData.SessionTopic != null;
@@ -81,8 +82,18 @@ namespace ChainSafe.Gaming.WalletConnect
 
         private static bool SessionExpired(SessionStruct s) => s.Expiry != null && Clock.IsExpired((long)s.Expiry);
 
-        async ValueTask ILifecycleParticipant.WillStartAsync()
+        public async ValueTask WillStartAsync()
         {
+            await Initialize();
+        }
+
+        private async Task Initialize()
+        {
+            if (initialized)
+            {
+                return;
+            }
+
             analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
                 EventName = "Wallet Connect Initialized",
@@ -91,7 +102,7 @@ namespace ChainSafe.Gaming.WalletConnect
 
             ValidateConfig();
 
-            WCLogger.Logger = new WCLogWriter(logWriter);
+            WCLogger.Logger = new WCLogWriter(logWriter, config);
 
             localData = !config.ForceNewSession
                 ? await storage.LoadLocalData() ?? new LocalData()
@@ -134,11 +145,14 @@ namespace ChainSafe.Gaming.WalletConnect
                             "eth_signTransaction",
                             "eth_sendTransaction",
                             "eth_getTransactionByHash",
+                            "wallet_switchEthereumChain",
                             "eth_blockNumber",
                         },
                     }
                 },
             };
+
+            initialized = true;
         }
 
         private void ValidateConfig()
@@ -154,10 +168,12 @@ namespace ChainSafe.Gaming.WalletConnect
             }
         }
 
-        async ValueTask ILifecycleParticipant.WillStopAsync()
+        public ValueTask WillStopAsync()
         {
             signClient?.Dispose();
             core?.Dispose();
+
+            return new ValueTask(Task.CompletedTask);
         }
 
         public override async Task<string> Connect()
@@ -166,6 +182,11 @@ namespace ChainSafe.Gaming.WalletConnect
             {
                 throw new WalletConnectException(
                     $"Tried connecting {nameof(WalletConnectProvider)}, but it's already been connected.");
+            }
+
+            if (!initialized)
+            {
+                await Initialize();
             }
 
             try
@@ -208,6 +229,8 @@ namespace ChainSafe.Gaming.WalletConnect
 
                 connected = true;
 
+                await CheckAndSwitchNetwork();
+
                 return address;
             }
             catch (Exception e)
@@ -215,6 +238,41 @@ namespace ChainSafe.Gaming.WalletConnect
                 storage.ClearLocalData();
                 throw new WalletConnectException("Error occured during WalletConnect connection process.", e);
             }
+        }
+
+        private async Task CheckAndSwitchNetwork()
+        {
+            var chainId = GetChainId();
+            if (chainId != $"{ChainModel.EvmNamespace}:{chainConfig.ChainId}")
+            {
+                await SwitchChain(chainConfig.ChainId);
+                UpdateSessionChainId();
+            }
+        }
+
+        private void UpdateSessionChainId()
+        {
+            var defaultChain = session.Namespaces.Keys.FirstOrDefault();
+
+            if (!string.IsNullOrWhiteSpace(defaultChain))
+            {
+                var defaultNamespace = session.Namespaces[defaultChain];
+                var chains = ConvertArrayToListAndRemoveFirst(defaultNamespace.Chains);
+                defaultNamespace.Chains = chains.ToArray();
+                var accounts = ConvertArrayToListAndRemoveFirst(defaultNamespace.Accounts);
+                defaultNamespace.Accounts = accounts.ToArray();
+            }
+            else
+            {
+                throw new Web3Exception("Can't update session chain ID. Default chain not found.");
+            }
+        }
+
+        private List<T> ConvertArrayToListAndRemoveFirst<T>(T[] array)
+        {
+            var list = array.ToList();
+            list.RemoveAt(0);
+            return list;
         }
 
         public override async Task Disconnect()
@@ -332,7 +390,7 @@ namespace ChainSafe.Gaming.WalletConnect
             WCLogger.Log("Renewed session successfully.");
         }
 
-        public override async Task<T> Perform<T>(string method, params object[] parameters)
+        public override async Task<T> Request<T>(string method, params object[] parameters)
         {
             if (!connected)
             {
@@ -350,16 +408,6 @@ namespace ChainSafe.Gaming.WalletConnect
                     throw new WalletConnectException(
                         $"Failed to perform {typeof(T)} request - session expired. Please reconnect.");
                 }
-            }
-
-            var methodRegistered = session.Namespaces.Any(n => n.Value.Methods.Contains(method));
-
-            if (!methodRegistered)
-            {
-                throw new WalletConnectException(
-                    $"RPC method {method} is not supported. " +
-                    $"If you add a new method you have to update {nameof(WalletConnectProvider)} code to reflect those changes. " +
-                    "Contact ChainSafe if you think a specific method should be included in the SDK.");
             }
 
             var sessionTopic = session.Topic;
@@ -385,10 +433,6 @@ namespace ChainSafe.Gaming.WalletConnect
                 if (localData.ConnectedLocalWalletName != null)
                 {
                     redirection.Redirect(localData.ConnectedLocalWalletName);
-                }
-                else
-                {
-                    logWriter.LogError("Connected Wallet Name is NULL!");
                 }
             }
         }
@@ -470,33 +514,30 @@ namespace ChainSafe.Gaming.WalletConnect
                     return await MakeRequest<EthSignTransaction>();
                 case "eth_sendTransaction":
                     return await MakeRequest<EthSendTransaction>();
+                case "wallet_switchEthereumChain":
+                    return await MakeRequest<WalletSwitchEthereumChain>();
                 default:
                     try
                     {
-                        return await Request<T>(method, parameters);
+                        // Direct RPC request via http, WalletConnect RPC url.
+                        string chain = session.Namespaces.First().Value.Chains[0];
+
+                        // Using WalletConnect Blockchain API: https://docs.walletconnect.com/cloud/blockchain-api
+                        var url = $"https://rpc.walletconnect.com/v1?chainId={chain}&projectId={config.ProjectId}";
+
+                        string body = JsonConvert.SerializeObject(new RpcRequestMessage(Guid.NewGuid().ToString(), method, parameters));
+
+                        var rawResult = await httpClient.PostRaw(url, body, "application/json");
+
+                        RpcResponseMessage response = JsonConvert.DeserializeObject<RpcResponseMessage>(rawResult.Response);
+
+                        return response.Result.ToObject<T>();
                     }
                     catch (Exception e)
                     {
                         throw new WalletConnectException($"{method} RPC method currently not implemented.", e);
                     }
             }
-        }
-
-        // Direct RPC request via WalletConnect RPC url.
-        private async Task<T> Request<T>(string method, params object[] parameters)
-        {
-            string chain = session.Namespaces.First().Value.Chains[0];
-
-            // Using WalletConnect Blockchain API: https://docs.walletconnect.com/cloud/blockchain-api
-            var url = $"https://rpc.walletconnect.com/v1?chainId={chain}&projectId={config.ProjectId}";
-
-            string body = JsonConvert.SerializeObject(new RpcRequestMessage(Guid.NewGuid().ToString(), method, parameters));
-
-            var rawResult = await httpClient.PostRaw(url, body, "application/json");
-
-            RpcResponseMessage response = JsonConvert.DeserializeObject<RpcResponseMessage>(rawResult.Response);
-
-            return response.Result.ToObject<T>();
         }
     }
 }

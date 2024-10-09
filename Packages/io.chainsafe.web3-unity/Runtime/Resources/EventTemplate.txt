@@ -1,0 +1,14 @@
+        public partial class {EVENT_NAME_CSHARP}EventDTO : {EVENT_NAME_CSHARP}EventDTOBase { }
+        
+        [Event("{EVENT_NAME}")]
+        public class {EVENT_NAME_CSHARP}EventDTOBase : IEventDTO
+        {
+            {EVENT_PARAMS}
+        }
+    
+        {EVENT_ACTION_SUBSCRIPTION}
+        
+        private void {EVENT_NAME_CSHARP}({EVENT_NAME_CSHARP}EventDTO {EVENT_NAME_CSHARP_PARAM})
+        {
+            {EVENT_INVOCATION}
+        }

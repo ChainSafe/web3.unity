@@ -1,9 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Providers;
+using ChainSafe.Gaming.Evm.Transactions;
+using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Nethereum.Hex.HexTypes;
 using NUnit.Framework;
 using Scripts.EVM.Token;
 using Tests.Runtime;
@@ -28,6 +33,7 @@ public class EvmCustomResponseTests
     private const int Transfer1155Amount = 1;
 
     private const string SendToAddress = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
+    private BigInteger SendToValue = 12300000000000000;
 
     private BigInteger TransferErc20Amount = 1;
 
@@ -56,52 +62,21 @@ public class EvmCustomResponseTests
         {
             IncreaseAmount
         };
-        var sendContract = Evm.ContractSend(web3, ContractSendMethod, ABI.ArrayTotal, ChainSafeContracts.ArrayTotal, args);
+        var sendContract = Web3Unity.Instance.ContractSend(ContractSendMethod, ABI.ArrayTotal, ChainSafeContracts.ArrayTotal, args);
         yield return new WaitUntil(() => sendContract.IsCompleted);
         if (sendContract.Exception != null) throw sendContract.Exception;
         Assert.IsTrue(sendContract.IsCompletedSuccessfully);
         Assert.AreEqual(string.Empty, sendContract.Result);
     }
 
-    [UnityTest]
-    public IEnumerator TestSendArray()
-    {
-        yield return BuildWeb3WithTestResponse("0x3446b949c3d214fba7e61c9cf127eac6cd0b2983564cf76be618099879b6f1e1");
-        var sendArray = Evm.SendArray(web3, SendArrayMethod, ABI.ArrayTotal, ChainSafeContracts.ArrayTotal, ArrayToSend.ToArray());
-        yield return new WaitUntil(() => sendArray.IsCompleted);
-        if (sendArray.Exception != null) throw sendArray.Exception;
-        Assert.IsTrue(sendArray.IsCompletedSuccessfully);
-        Assert.AreEqual(string.Empty, sendArray.Result);
-    }
-
-    [UnityTest]
-    public IEnumerator TestGetGasNonce()
-    {
-        yield return BuildWeb3WithTestResponse("0x04b6d6b467d4d07dd0d20c49516afedd1c4a17d4f13bc89b6e6c520890cea832");
-        var getGasNonce = Evm.GetNonce(web3);
-        yield return new WaitUntil(() => getGasNonce.IsCompleted);
-        if (getGasNonce.Exception != null) throw getGasNonce.Exception;
-        // Just assert successful completion because result is always changing
-        Assert.IsTrue(getGasNonce.IsCompletedSuccessfully);
-    }
-
-    [UnityTest]
-    public IEnumerator TestTransactionStatus()
-    {
-        yield return BuildWeb3WithTestResponse("0xaba88d9a1977c8d78ddfb3d973798eb061bd495189d7cbfa832f895896417cd1");
-        var getTransactionStatus = Evm.GetTransactionStatus(web3);
-        yield return new WaitUntil(() => getTransactionStatus.IsCompleted);
-        if (getTransactionStatus.Exception != null) throw getTransactionStatus.Exception;
-        // Just assert successful completion because result is always changing
-        Assert.IsTrue(getTransactionStatus.IsCompletedSuccessfully);
-    }
 
     [UnityTest]
     public IEnumerator TestSendTransaction()
     {
         const string testResponse = "0x3446b949c3d214fba7e61c9cf127eac6cd0b2983564cf76be618099879b6f1e1";
         yield return BuildWeb3WithTestResponse(testResponse);
-        var sendTransaction = Evm.SendTransaction(web3, SendToAddress);
+
+        var sendTransaction = Web3Unity.Instance.SendTransaction(SendToAddress, SendToValue);
         yield return new WaitUntil(() => sendTransaction.IsCompleted);
         if (sendTransaction.Exception != null) throw sendTransaction.Exception;
         Assert.IsTrue(sendTransaction.IsCompletedSuccessfully);
@@ -111,9 +86,9 @@ public class EvmCustomResponseTests
     [UnityTest]
     public IEnumerator TestSignMessage()
     {
-        const string testResponse = "0xda2880dde86b7d870ac9ddfa690010bed8a679350415f8e9cce02d87bac91651081c40455538bce7a18792e3f2ea56457183e8dba8568f3a92785ab0d743ce0b1b";
+        const string testResponse = "0x87dfaa646f476ca53ba8b6e8d122839571e52866be0984ec0497617ad3e988b7401c6b816858df27625166cb98a688f99ba92fa593da3c86c78b19c78c1f51cc1c";
         yield return BuildWeb3WithTestResponse(testResponse);
-        var signMessage = Evm.SignMessage(web3, "The right man in the wrong place can make all the difference in the world.");
+        var signMessage = Web3Unity.Instance.SignMessage("The right man in the wrong place can make all the difference in the world.");
         yield return new WaitUntil(() => signMessage.IsCompleted);
         if (signMessage.Exception != null) throw signMessage.Exception;
         Assert.IsTrue(signMessage.IsCompletedSuccessfully);
@@ -124,8 +99,8 @@ public class EvmCustomResponseTests
     public IEnumerator TestSignVerify()
     {
         yield return BuildWeb3WithTestResponse(
-            "0xda2880dde86b7d870ac9ddfa690010bed8a679350415f8e9cce02d87bac91651081c40455538bce7a18792e3f2ea56457183e8dba8568f3a92785ab0d743ce0b1b");
-        var signVerify = Evm.SignVerify(web3, "A man chooses, a slave obeys.");
+            "0x5c996d43c2e804a0d0de7f8b07cc660bbae638aa7ea137df6156621abe5e1fbb1727ebb06f7e0067537cb0f942825fa15ead9dea6d74e4d17fa6e69007cb59561c");
+        var signVerify = Web3Unity.Instance.SignAndVerifyMessage("A man chooses, a slave obeys.");
         yield return new WaitUntil(() => signVerify.IsCompleted);
         if (signVerify.Exception != null) throw signVerify.Exception;
         Assert.IsTrue(signVerify.IsCompletedSuccessfully);
@@ -208,8 +183,14 @@ public class EvmCustomResponseTests
 
         // Wait until for async task to finish
         yield return new WaitUntil(() => buildWeb3Task.IsCompleted);
+        if (Web3Unity.Instance == null)
+        {
+            new GameObject("Web3Unity", typeof(Web3Unity));
+        }
 
         // Assign result to web3
         web3 = buildWeb3Task.Result;
+        Web3Unity.Instance.OnWeb3Initialized(web3);
+
     }
 }

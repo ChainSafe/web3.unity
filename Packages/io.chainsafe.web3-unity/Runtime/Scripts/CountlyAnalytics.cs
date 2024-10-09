@@ -1,16 +1,17 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Analytics;
+using ChainSafe.Gaming.Web3.Core.Chains;
 using Plugins.CountlySDK;
 using Plugins.CountlySDK.Models;
-using UnityEngine;
 
 public class CountlyAnalytics : IAnalyticsClient
 {
     private const string AppKey = "4d2f30cecf1b7e2b8cd909103c1fac971872aa3f";
     private const string ServerUrl = "https://chainsafe-40aca7b26551e.flex.countly.com";
 
+    private readonly IChainManager _chainManager;
 
     public async void CaptureEvent(AnalyticsEvent eventData)
     {
@@ -18,12 +19,16 @@ public class CountlyAnalytics : IAnalyticsClient
     }
 
     public string AnalyticsVersion => "2.6";
-    public IChainConfig ChainConfig { get; }
+    public IChainConfig ChainConfig => _chainManager.Current;
     public IProjectConfig ProjectConfig { get; }
 
-    public CountlyAnalytics(IChainConfig chainConfig, IProjectConfig projectConfig)
+    public CountlyAnalytics(IChainConfigSet chainConfigSet, IChainManager chainManager, IProjectConfig projectConfig)
     {
         Countly.Instance.Init(new CountlyConfiguration(AppKey, ServerUrl));
+
+        _chainManager = chainManager;
+
+        IChainConfig chainConfig = chainConfigSet.Configs.First();
 
         var userDetails = new Dictionary<string, object>
         {
@@ -36,7 +41,6 @@ public class CountlyAnalytics : IAnalyticsClient
 
         Countly.Instance.UserDetails.SetCustomUserDetails(userDetails);
 
-        ChainConfig = chainConfig;
         ProjectConfig = projectConfig;
     }
 

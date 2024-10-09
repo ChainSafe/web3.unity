@@ -16,6 +16,7 @@ namespace ChainSafe.Gaming.MultiCall
             "5",
             "3",
             "11155111",
+            "11155420",
             "10",
             "69",
             "420",

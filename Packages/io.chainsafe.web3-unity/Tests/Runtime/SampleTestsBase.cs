@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
+using ChainSafe.Gaming.EVM.Events;
 using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.MultiCall;
 using ChainSafe.Gaming.UnityPackage;
@@ -31,12 +32,18 @@ public class SampleTestsBase
 
         // Assign result to web3
         web3 = buildWeb3.Result;
+        if (Web3Unity.Instance == null)
+        {
+            var web3Unity = new GameObject("Web3Unity", typeof(Web3Unity));
+        }
+
+        Web3Unity.Instance.OnWeb3Initialized(web3);
     }
 
     [UnityTearDown]
     public virtual IEnumerator TearDown()
     {
-        var terminateWeb3Task = web3.TerminateAsync();
+        var terminateWeb3Task = Web3Unity.Instance.Disconnect();
 
         // Wait until for async task to finish
         yield return new WaitUntil(() => terminateWeb3Task.IsCompleted);
@@ -44,13 +51,10 @@ public class SampleTestsBase
 
     internal static ValueTask<Web3> BuildTestWeb3(Web3Builder.ConfigureServicesDelegate customConfiguration = null)
     {
-        // Set project config, fallback is for github as it doesn't load
-        var projectConfigScriptableObject = ProjectConfigUtilities.Load();
-        if (projectConfigScriptableObject == null)
-        {
-            projectConfigScriptableObject = ProjectConfigUtilities.Load("3dc3e125-71c4-4511-a367-e981a6a94371", "11155111",
-                "Ethereum", "Sepolia", "Seth", "https://sepolia.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f");
-        }
+        var projectConfigScriptableObject = ProjectConfigUtilities.Create("3dc3e125-71c4-4511-a367-e981a6a94371",
+            "11155111",
+            "Ethereum", "Sepolia", "Seth", "https://sepolia.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f",
+            "https://sepolia.etherscan.io/", false, "wss://sepolia.drpc.org");
 
         // Create web3builder & assign services
         var web3Builder = new Web3Builder(projectConfigScriptableObject).Configure(services =>
@@ -60,10 +64,12 @@ public class SampleTestsBase
             services.UseMultiCall();
             services.UseRpcProvider();
 
-            services.AddSingleton(new StubWalletConnectProviderConfig()); // can be replaced
-            services.AddSingleton<IWalletProvider, StubWalletConnectProvider>();
-            services.UseWalletConnectSigner();
-            services.UseWalletConnectTransactionExecutor();
+            var config = new StubWalletConnectProviderConfig();
+            services.AddSingleton(config); // can be replaced
+            services.UseWalletProvider<StubWalletConnectProvider>(config);
+            services.UseWalletSigner();
+            services.UseWalletTransactionExecutor();
+            services.UseEvents();
 
             // Add any contracts we would want to use
             services.ConfigureRegisteredContracts(contracts =>

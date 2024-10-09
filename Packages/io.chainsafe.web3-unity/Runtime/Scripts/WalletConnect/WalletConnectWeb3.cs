@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using ChainSafe.Gaming.EVM.Events;
 using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3;

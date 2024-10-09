@@ -83,5 +83,5 @@ crashlytics-build.properties
 
 # Ignore the project config since it can always be rebuilt
 /Assets/Resources.meta
-/Assets/Resources/ProjectConfigData.asset
-/Assets/Resources/ProjectConfigData.asset.meta
+/Assets/Resources/Web3Config.asset
+/Assets/Resources/Web3Config.asset.asset.meta
