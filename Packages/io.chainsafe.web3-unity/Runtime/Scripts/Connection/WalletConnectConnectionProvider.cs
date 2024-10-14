@@ -45,9 +45,13 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         [field: SerializeField]
         public WalletLocationOption WalletLocationOption { get; private set; } = WalletLocationOption.LocalAndRemote;
 
-        [field: SerializeField, DefaultAssetValue("Packages/io.chainsafe.web3-unity/Runtime/Prefabs/WalletConnectRow.prefab")]
-        public override Button ConnectButtonRow { get; protected set; }
+        [field: SerializeField, DefaultAssetValue("Packages/io.chainsafe.web3-unity/Runtime/Sprites/Logo_WalletConnect.png")]
+        public override Sprite ButtonIcon { get; protected set; }
 
+        [field: SerializeField] public override string ButtonText { get; protected set; } = "WalletConnect";
+
+        public override bool DisplayLoadingOnConnection => true;
+        
         private bool _storedSessionAvailable;
 
         private ConnectionHandlerBehaviour _loadedHandler;

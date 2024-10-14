@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using AOT;
 using ChainSafe.Gaming;
+using ChainSafe.Gaming.GUI;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.Web3;
@@ -23,18 +24,20 @@ using Network = Web3Auth.Network;
 [CreateAssetMenu(menuName = "ChainSafe/Connection Provider/Web3Auth", fileName = nameof(Web3AuthConnectionProvider))]
 public class Web3AuthConnectionProvider : ConnectionProvider, ILogoutHandler, IWeb3InitializedHandler
 {
-    [field: SerializeField, DefaultAssetValue("Packages/io.chainsafe.web3-unity.web3auth/Runtime/Prefabs/Web3AuthRow.prefab")]
-    public override Button ConnectButtonRow { get; protected set; }
+    [field: SerializeField, DefaultAssetValue("Packages/io.chainsafe.web3-unity.web3auth/Runtime/Sprites/web3auth.png")]
+    public override Sprite ButtonIcon { get; protected set; }
 
+    [field: SerializeField] public override string ButtonText { get; protected set; } = "Web3Auth";
+    
     [SerializeField] private string clientId;
     [SerializeField] private string redirectUri;
     [SerializeField] private Network network;
 
     [Space]
 
-    [SerializeField, DefaultAssetValue("Packages/io.chainsafe.web3-unity.web3auth/Runtime/Prefabs/Web3Auth.prefab")]
-    private GameObject modalPrefab;
-
+    [SerializeField]
+    private GuiScreenFactory modalScreenFactory;
+    
     [Space]
 
     [SerializeField] private bool enableWalletGui;
@@ -51,6 +54,8 @@ public class Web3AuthConnectionProvider : ConnectionProvider, ILogoutHandler, IW
     [NonSerialized] private bool _rememberMe;
 
     public override bool IsAvailable => true;
+    
+    public override bool DisplayLoadingOnConnection => false;
 
 #if UNITY_WEBGL && !UNITY_EDITOR
 
@@ -92,6 +97,17 @@ public class Web3AuthConnectionProvider : ConnectionProvider, ILogoutHandler, IW
             chainConfig.Rpc, chainConfig.Network, "", chainConfig.Symbol, "", network.ToString().ToLower(), Initialized, InitializeError);
 
         await _initializeTcs.Task;
+    }
+#endif
+    
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        if (!modalScreenFactory.LandscapePrefab && !modalScreenFactory.PortraitPrefab)
+        {
+            modalScreenFactory.LandscapePrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GuiScreen>("Packages/io.chainsafe.web3-unity.web3auth/Runtime/Prefabs/W3AConnectionScreen_L.prefab");
+            modalScreenFactory.PortraitPrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GuiScreen>("Packages/io.chainsafe.web3-unity.web3auth/Runtime/Prefabs/W3AConnectionScreen_P.prefab");
+        }
     }
 #endif
 
@@ -167,20 +183,11 @@ public class Web3AuthConnectionProvider : ConnectionProvider, ILogoutHandler, IW
 
     private void DisplayModal()
     {
-        if (_modal != null)
-        {
-            _modal.gameObject.SetActive(true);
-        }
-
-        else
-        {
-            var obj = Instantiate(modalPrefab);
-
-            _modal = obj.GetComponentInChildren<Web3AuthModal>();
-        }
+        _modal = modalScreenFactory.GetSingle<Web3AuthModal>();
+        _modal.gameObject.SetActive(true);
     }
 
-#if UNITY_WEBGL && !UNITY_EDITOR
+ #if UNITY_WEBGL && !UNITY_EDITOR
     
     [MonoPInvokeCallback(typeof(Action))]
     private static void Initialized()
@@ -252,7 +259,7 @@ public class Web3AuthConnectionProvider : ConnectionProvider, ILogoutHandler, IW
 
         if (_modal != null)
         {
-            _modal?.Close();
+            _modal.Close();
         }
 
         return Task.CompletedTask;

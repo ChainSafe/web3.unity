@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using ZXing.QrCode;
@@ -76,7 +77,7 @@ namespace ChainSafe.Gaming.WalletConnect.Dialog
 
         public void Close()
         {
-            OnException(new Exception("User closed the connection dialog."));
+            OnException(new TaskCanceledException("User closed the connection dialog."));
         }
     }
 }

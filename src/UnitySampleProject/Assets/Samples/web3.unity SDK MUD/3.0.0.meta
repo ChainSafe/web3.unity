@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Packages/io.chainsafe.web3-unity/Runtime/Sprites/Branded GUI.meta
+guid: 242f1c8f635c7f14c8a91f23385b7988
+========
 guid: 528d60849302ad34cb9964b235d6ee96
+>>>>>>>> dev:src/UnitySampleProject/Assets/Samples/web3.unity SDK MUD/3.0.0.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
