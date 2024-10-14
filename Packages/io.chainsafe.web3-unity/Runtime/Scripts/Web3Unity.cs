@@ -8,6 +8,7 @@ using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.Evm.Contracts.Extensions;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Transactions;
+using ChainSafe.Gaming.GUI;
 using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.UnityPackage.UI;
 using ChainSafe.Gaming.Web3;
@@ -19,6 +20,7 @@ using Nethereum.Signer;
 using Nethereum.Util;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.Serialization;
 using CWeb3 = ChainSafe.Gaming.Web3.Web3;
 using TransactionReceipt = ChainSafe.Gaming.Evm.Transactions.TransactionReceipt;
 
@@ -53,20 +55,26 @@ namespace ChainSafe.Gaming.UnityPackage
         /// <summary>
         /// Connection Modal used to connect to available <see cref="ConnectionProvider"/>s.
         /// </summary>
-        public static ConnectModal ConnectModal
+        public static ConnectScreen ConnectScreen
         {
             get
             {
-                if (!Instance._connectModal)
+                if (!Instance._connectScreen)
                 {
-                    Instance._connectModal = Instantiate(Instance.connectModalPrefab);
+                    Instance._connectScreen = Instance.connectScreenFactory.GetSingle<ConnectScreen>();
 
-                    Instance._connectModal.Initialize(Instance._connectionHandler.Providers);
+                    Instance._connectScreen.Initialize(Instance._connectionHandler.Providers);
                 }
 
-                return Instance._connectModal;
+                return Instance._connectScreen;
             }
         }
+
+        [SerializeField] private GuiScreenFactory connectScreenFactory;
+        
+        private CWeb3 _web3;
+        private ConnectionHandler _connectionHandler;
+        private ConnectScreen _connectScreen;
 
         /// <summary>
         /// Is a wallet connected.
@@ -91,15 +99,6 @@ namespace ChainSafe.Gaming.UnityPackage
             }
         }
 
-        [DefaultAssetValue("Packages/io.chainsafe.web3-unity/Runtime/Prefabs/Connect.prefab")]
-        [SerializeField]
-        private ConnectModal connectModalPrefab;
-
-        private CWeb3 _web3;
-
-        private ConnectionHandler _connectionHandler;
-
-        private ConnectModal _connectModal;
 
         private void Awake()
         {
@@ -266,9 +265,9 @@ namespace ChainSafe.Gaming.UnityPackage
         {
             _web3 = web3;
 
-            if (_connectModal != null)
+            if (_connectScreen != null)
             {
-                _connectModal.Close();
+                _connectScreen.Close();
             }
 
             return Task.CompletedTask;

@@ -63,7 +63,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96ece91a37dec784f8c42b19da0bbaae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  connectModalPrefab: {fileID: 4706621120835174763, guid: 2dd57b774deda1948bd97dcb6d6e9fb4, type: 3}
+  connectScreenFactory:
+    LandscapePrefab: {fileID: 741700721959473792, guid: 920ab7036ad598d44aa2f8f24a488823, type: 3}
+    PortraitPrefab: {fileID: 4806868497684407626, guid: fc961e494bc607444b66ddaf341ca50c, type: 3}
 --- !u!114 &153625530502621119
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -18,12 +18,22 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         /// Could be platform specific or other conditions.
         /// </summary>
         public abstract bool IsAvailable { get; }
-
+        
         /// <summary>
-        /// Button to connect to the wallet.
+        /// Icon of the button to connect to the wallet.
         /// </summary>
-        public abstract Button ConnectButtonRow { get; protected set; }
-
+        public abstract Sprite ButtonIcon { get; protected set; }
+        
+        /// <summary>
+        /// Text of the button to connect to the wallet.
+        /// </summary>
+        public abstract string ButtonText { get; protected set; }
+        
+        /// <summary>
+        /// Should loading overlay be shown when initiating a connection using this ConnectionProvider;
+        /// </summary>
+        public abstract bool DisplayLoadingOnConnection { get; }
+        
         protected bool RememberSession { get; private set; }
 
         /// <summary>
@@ -66,13 +76,13 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         /// </summary>
         /// <param name="services">Service collection to add services to.</param>
         protected abstract void ConfigureServices(IWeb3ServiceCollection services);
-
+        
         /// <summary>
         /// Check if a saved session is available.
         /// </summary>
         /// <returns>True if a saved session is available.</returns>
         public abstract Task<bool> SavedSessionAvailable();
-
+        
         /// <summary>
         /// Handle exception thrown during connection.
         /// Different providers might handler it differently.
