@@ -28,7 +28,6 @@ namespace ChainSafe.Gaming.WalletConnect
                 services.UseUnityEnvironment();
                 services.UseRpcProvider();
                 services.UseWalletConnect(wcConfig);
-                services.UseEvents();
             }).LaunchAsync();
         }
     }
