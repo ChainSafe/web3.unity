@@ -27,7 +27,7 @@ namespace ChainSafe.Gaming.UnityPackage.UI
                 DontDestroyOnLoad(_instance.gameObject);
                 return _instance;
             }
-            
+
         }
 
         public static void ShowLoadingOverlay(string loadingText = "")

@@ -44,12 +44,12 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
             var web3Builder = new Web3Builder(ProjectConfigUtilities.Load())
                 .Configure(ConfigureCommonServices)
                 .ConfigureServices(adapters);
-            
+
             var web3 = await web3Builder.LaunchAsync();
 
             await OnWeb3Initialized(web3);
         }
-        
+
         public async Task LaunchLightWeightWeb3()
         {
             await LaunchWeb3(Web3BuilderServiceAdapters.OfType<ILightWeightServiceAdapter>());
@@ -58,7 +58,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         private async Task OnWeb3Initialized(CWeb3 web3)
         {
             var web3InitializedHandlers = web3.ServiceProvider.GetServices<IWeb3InitializedHandler>();
-            
+
             foreach (var web3InitializedHandler in web3InitializedHandlers)
             {
                 await web3InitializedHandler.OnWeb3Initialized(web3);

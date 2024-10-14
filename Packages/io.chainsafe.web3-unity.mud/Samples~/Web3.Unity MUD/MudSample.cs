@@ -32,27 +32,27 @@ public class MudSample : MonoBehaviour
     {
         Debug.Log("To run this sample successfully you should have the MUD tutorial project running in the background.\n" +
                   "Follow the link to get started: https://mud.dev/quickstart");
-        
+
         // 1. Initialize Web3 client.
         web3 = await new Web3Builder(ProjectConfigUtilities.Load(), ProjectConfigUtilities.BuildLocalhostConfig())
             .Configure(services =>
             {
                 // Enable basic components
                 services.UseUnityEnvironment();
-                services.UseRpcProvider();  
-                
+                services.UseRpcProvider();
+
                 // Initializes Wallet as the first account of the locally running Ethereum Node (Anvil).  
                 services.Debug().UseJsonRpcWallet(new JsonRpcWalletConfig { AccountIndex = 0 });
-                
+
                 // Enable Events as MUD requires them
-                services.UseEvents(new PollingEventManagerConfig { PollInterval = TimeSpan.FromSeconds(1)}); // the config is only being used for WebGL platform; 1 second poll interval is extremely fast, consider using longer interval in production so that your RPC endpoint doesn't get too overwhelmed
-                
+                services.UseEvents(new PollingEventManagerConfig { PollInterval = TimeSpan.FromSeconds(1) }); // the config is only being used for WebGL platform; 1 second poll interval is extremely fast, consider using longer interval in production so that your RPC endpoint doesn't get too overwhelmed
+
                 // Enable MUD
                 services.UseMud(mudConfig);
             })
             .LaunchAsync();
         Debug.Log($"Web3 client ready. Player address: {web3.Signer.PublicAddress}");
-        
+
         // 2. Create MUD World client.
         world = await web3.Mud().BuildWorld(new MudWorldConfig
         {
@@ -74,7 +74,7 @@ public class MudSample : MonoBehaviour
             },
         });
         Debug.Log("MUD World client ready");
-        
+
         // 3. Get Table client.
         var table = world.GetTable("Counter");
 
@@ -84,7 +84,7 @@ public class MudSample : MonoBehaviour
         var counterValue = (BigInteger)singleRecord[0]; // Get value of the first column
         Debug.Log($"Counter value on load: {counterValue}");
         UpdateGui(counterValue);
-        
+
         // 5. Subscribe to table updates.
         table.RecordUpdated += OnCounterRecordUpdated;
     }
@@ -96,7 +96,7 @@ public class MudSample : MonoBehaviour
             Debug.LogError("Can't run sample. Web3 client was not initialized.");
             return;
         }
-        
+
         // 5. Send transaction to execute the Increment function of the World contract.
         Debug.Log("Sending transaction to execute the Increment function..");
         await world.GetSystems().Send("increment");

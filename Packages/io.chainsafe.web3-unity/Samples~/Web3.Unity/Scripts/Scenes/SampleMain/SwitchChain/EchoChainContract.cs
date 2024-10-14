@@ -63,7 +63,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
             Subscribed = false;
             try
             {
-                if(_webSocketClient != null)
+                if (_webSocketClient != null)
                     await _webSocketClient.StopAsync();
             }
             catch (Exception e)

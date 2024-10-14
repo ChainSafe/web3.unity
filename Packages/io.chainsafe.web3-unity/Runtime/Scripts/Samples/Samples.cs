@@ -27,11 +27,11 @@ public class Samples : ServiceAdapter, ILightWeightServiceAdapter, IWeb3Initiali
     private readonly List<SampleContainer> _sampleContainers = new List<SampleContainer>();
 
     private bool _initialized;
-    
+
     private void Initialize()
     {
         var samples = GetComponentsInChildren<ISample>();
-        
+
         foreach (var sample in samples)
         {
             var methods = sample.GetType().GetMethods().Where(m =>
@@ -43,13 +43,13 @@ public class Samples : ServiceAdapter, ILightWeightServiceAdapter, IWeb3Initiali
             {
                 continue;
             }
-            
+
             var sampleContainer = Instantiate(sampleContainerPrefab, container);
 
             sampleContainer.Initialize(sample);
-            
+
             _sampleContainers.Add(sampleContainer);
-            
+
             foreach (var method in methods)
             {
                 var button = Instantiate(buttonPrefab, sampleContainer.Container);
@@ -57,7 +57,7 @@ public class Samples : ServiceAdapter, ILightWeightServiceAdapter, IWeb3Initiali
                 var buttonText = button.GetComponentInChildren<TMP_Text>();
 
                 buttonText.text = method.Name;
-                
+
                 button.onClick.AddListener(delegate
                 {
                     TryExecute(method, sample);
@@ -75,13 +75,13 @@ public class Samples : ServiceAdapter, ILightWeightServiceAdapter, IWeb3Initiali
             LoadingOverlay.ShowLoadingOverlay();
 
             string message = await Execute(method, instance);
-            
+
             Debug.Log($"{message} \n {instance.Title} - {instance.GetType().Name}.{method.Name}");
         }
         // Todo: display error via error overlay
         catch (Exception e)
         {
-            if (e is ServiceNotBoundWeb3Exception<ISigner> 
+            if (e is ServiceNotBoundWeb3Exception<ISigner>
                 || e is ServiceNotBoundWeb3Exception<ITransactionExecutor>)
             {
                 Web3Unity.ConnectScreen.Open();
@@ -96,10 +96,10 @@ public class Samples : ServiceAdapter, ILightWeightServiceAdapter, IWeb3Initiali
             LoadingOverlay.HideLoadingOverlay();
         }
     }
-    
+
     private Task<string> Execute(MethodInfo method, ISample instance)
     {
-        return (Task<string>) method.Invoke(instance, null);
+        return (Task<string>)method.Invoke(instance, null);
     }
 
     public override Web3Builder ConfigureServices(Web3Builder web3Builder)
@@ -121,7 +121,7 @@ public class Samples : ServiceAdapter, ILightWeightServiceAdapter, IWeb3Initiali
         {
             sampleContainer.Web3Initialized(web3);
         }
-        
+
         return Task.CompletedTask;
     }
 }

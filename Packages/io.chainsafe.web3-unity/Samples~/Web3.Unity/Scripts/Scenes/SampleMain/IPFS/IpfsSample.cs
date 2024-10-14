@@ -11,9 +11,9 @@ public class IpfsSample : MonoBehaviour, ISample
     #region Fields
 
     [field: SerializeField] public string Title { get; private set; }
-    
+
     [field: SerializeField, TextArea] public string Description { get; private set; }
-    
+
     public Type[] DependentServiceTypes => Array.Empty<Type>();
 
     [Header("IPFS VALUES")]

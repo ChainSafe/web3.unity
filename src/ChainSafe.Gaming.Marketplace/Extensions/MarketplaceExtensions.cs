@@ -51,7 +51,7 @@ namespace ChainSafe.Gaming.Marketplace.Extensions
         {
             services.AssertServiceNotBound<MarketplaceClient>();
             services.ConfigureMarketplace(config);
-            services.UseMarketplace(config);
+            services.UseMarketplace();
             return services;
         }
 

@@ -23,11 +23,11 @@ namespace ChainSafe.GamingSdk.Web3Auth
         /// Get the SessionId on connection from the provider.
         /// </summary>
         public Task<string> SessionTask { get; set; }
-        
+
         public CancellationToken CancellationToken { get; set; }
 
         public bool RememberMe { get; set; }
-        
+
         public bool AutoLogin { get; set; }
     }
 }

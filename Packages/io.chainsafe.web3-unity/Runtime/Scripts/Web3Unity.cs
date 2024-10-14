@@ -130,15 +130,15 @@ namespace ChainSafe.Gaming.UnityPackage
                     Debug.LogError($"Failed to restore connection: {e}");
                 }
             }
-            
+
             await LaunchLightWeightWeb3();
         }
 
         private Task LaunchLightWeightWeb3()
         {
-            return ((IConnectionHandler) _connectionHandler).LaunchLightWeightWeb3();
+            return ((IConnectionHandler)_connectionHandler).LaunchLightWeightWeb3();
         }
-        
+
         /// <summary>
         /// Connect to a wallet with a <see cref="ConnectionProvider"/>.
         /// </summary>
@@ -268,7 +268,7 @@ namespace ChainSafe.Gaming.UnityPackage
             {
                 _connectScreen.Close();
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -311,10 +311,10 @@ namespace ChainSafe.Gaming.UnityPackage
         public async Task Disconnect()
         {
             await Terminate(true);
-            
+
             await LaunchLightWeightWeb3();
         }
-        
+
         public async Task<bool> SignAndVerifyMessage(string message)
         {
             var playerAccount = _web3.Signer.PublicAddress;
@@ -325,7 +325,7 @@ namespace ChainSafe.Gaming.UnityPackage
             var key = EthECKey.RecoverFromSignature(signature, msgHash);
             return string.Equals(key.GetPublicAddress(), playerAccount, StringComparison.CurrentCultureIgnoreCase);
         }
-        
+
         public string GetMessageHash(string message)
         {
             return new Sha3Keccack().CalculateHash(message);

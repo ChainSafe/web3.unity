@@ -14,7 +14,7 @@ using UnityEngine;
 public class GelatoSample : ServiceAdapter, IWeb3InitializedHandler, ISample
 {
     [field: SerializeField] public string Title { get; private set; }
-    
+
     [field: SerializeField, TextArea] public string Description { get; private set; }
 
     public Type[] DependentServiceTypes => new[] { typeof(IGelato) };
@@ -223,7 +223,7 @@ public class GelatoSample : ServiceAdapter, IWeb3InitializedHandler, ISample
         await Task.Delay(seconds * 1000);
 #endif
     }
-    
+
     public override Web3Builder ConfigureServices(Web3Builder web3Builder)
     {
         return web3Builder.Configure(services =>
@@ -235,7 +235,7 @@ public class GelatoSample : ServiceAdapter, IWeb3InitializedHandler, ISample
     public Task OnWeb3Initialized(Web3 web3)
     {
         _web3 = web3;
-        
+
         return Task.CompletedTask;
     }
 }

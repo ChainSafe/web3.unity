@@ -200,7 +200,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
 
         public partial class TransferEventDTO : TransferEventDTOBase
         {
-            
+
         }
 
         [Event("Transfer")]

@@ -548,7 +548,7 @@ namespace Scripts.EVM.Marketplace
                 Debug.Log($"{property.Name}: {value}");
             }
         }
-        
+
         /// <summary>
         /// Handles CID response from API for metadata uploads.
         /// </summary>

@@ -16,14 +16,14 @@ public class Web3AuthModal : MonoBehaviour
     public struct ProviderButtonPair
     {
         [field: SerializeField] public Provider Provider { get; private set; }
-        
+
         [field: SerializeField] public Button Button { get; private set; }
     }
-    
+
     [SerializeField] private ProviderButtonPair[] providers;
 
     private TaskCompletionSource<Provider> _getProviderTask;
-    
+
     private CancellationTokenSource _cancellationTokenSource;
     private int loadingOverlayId = -1;
 
@@ -32,9 +32,9 @@ public class Web3AuthModal : MonoBehaviour
     private void OnEnable()
     {
         HideLoading();
-        
+
         _getProviderTask = new TaskCompletionSource<Provider>();
-        
+
         _cancellationTokenSource = new CancellationTokenSource();
     }
 
@@ -48,9 +48,9 @@ public class Web3AuthModal : MonoBehaviour
                 {
                     throw new Web3Exception("Connection already resolved.");
                 }
-                
+
                 _getProviderTask.SetResult(pair.Provider);
-                
+
                 ShowLoading();
             });
         }
@@ -75,21 +75,21 @@ public class Web3AuthModal : MonoBehaviour
         
         GuiManager.Instance.Overlays.Hide(loadingOverlayId);
     }
-    
+
     public void Close()
     {
         _cancellationTokenSource?.Cancel();
 
         gameObject.SetActive(false);
     }
-    
+
     private void OnDisable()
     {
         if (!_getProviderTask.Task.IsCompleted)
         {
             _getProviderTask.SetCanceled();
         }
-        
+
         _cancellationTokenSource.Dispose();
     }
 }

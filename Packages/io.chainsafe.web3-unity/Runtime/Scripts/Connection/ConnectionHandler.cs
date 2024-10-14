@@ -14,7 +14,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
     {
         // Handed in ConnectionHandlerEditor
         [HideInInspector, SerializeField] private ConnectionProvider[] providers;
-        
+
         public HashSet<IServiceAdapter> Web3BuilderServiceAdapters { get; private set; }
 
         public ConnectionProvider[] Providers => providers;
@@ -27,7 +27,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         {
             Web3BuilderServiceAdapters = GetComponentsInChildren<IServiceAdapter>(true)
                 .Concat(FindObjectsOfType<ServiceAdapter>(true)).ToHashSet();
-            
+
             foreach (var provider in Providers)
             {
                 await provider.Initialize(rememberConnection);
@@ -41,7 +41,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
             await data.LoadOneTime();
 
             var provider = Providers.SingleOrDefault(p => p.GetType() == data.Type);
-            
+
             if (provider != null && await provider.SavedSessionAvailable())
             {
                 await (this as IConnectionHandler).Connect(provider);

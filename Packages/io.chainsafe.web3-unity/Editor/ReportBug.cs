@@ -40,7 +40,7 @@ public class ReportBug : EditorWindow
     void OnGUI()
     {
         InitStyles();
-        
+
         // Image
         DrawHeader();
         // Text
@@ -74,7 +74,7 @@ public class ReportBug : EditorWindow
         using (new GUILayout.VerticalScope(GUILayout.Height(200)))
         {
             GUILayout.FlexibleSpace();
-                
+
             // logo layout
             using (new EditorGUILayout.HorizontalScope())
             {
@@ -82,7 +82,7 @@ public class ReportBug : EditorWindow
                 GUILayout.Label(logo, centeredLabelStyle, GUILayout.MaxHeight(160));
                 // GUILayout.FlexibleSpace();
             }
-                
+
             GUILayout.FlexibleSpace();
         }
     }

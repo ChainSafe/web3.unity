@@ -160,7 +160,7 @@ public class Web3AuthWalletGUI : MonoBehaviour
         public Sprite WalletLogo;
         [DefaultAssetValue("Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset")]
         public TMP_FontAsset DisplayFont;
-        
+
         public Color PrimaryBackgroundColour = new Color(0f, 0f, 0f, .725f);
         public Color MenuBackgroundColour = Color.black;
         public Color PrimaryTextColour = Color.white;

@@ -11,9 +11,9 @@ public class DllPlatformFixing : AssetPostprocessor
                 var importer = (PluginImporter)AssetImporter.GetAtPath(importedAssets[i]);
                 if (importer == null) continue;
                 //If it's already set to false, that means we've been here and can early return.
-                if(!importer.GetCompatibleWithAnyPlatform())
+                if (!importer.GetCompatibleWithAnyPlatform())
                     return;
-                
+
                 importer.SetCompatibleWithAnyPlatform(false);
                 importer.SetCompatibleWithPlatform(BuildTarget.WebGL, true);
                 importer.SetCompatibleWithPlatform(BuildTarget.iOS, false);
