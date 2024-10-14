@@ -11,4 +11,4 @@ on:
 jobs:
   pull_reqest_checks:
     name: Pull Request Checks
-    uses: ChainSafe/web3.unity/.github/workflows/pull_request_checks.yaml@rob/ci-fixes
+    uses: ChainSafe/web3.unity/.github/workflows/pull_request_checks.yml@rob/ci-fixes
