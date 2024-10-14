@@ -9,13 +9,14 @@ namespace ChainSafe.Gaming.GUI
     {
         public GuiScreenFactory screenFactory;
         public Transform container;
-
-        private readonly ObjectPool<GuiInfoOverlay> pool;
+        
         private readonly List<GuiInfoOverlay> activeOverlays = new();
+
+        private ObjectPool<GuiInfoOverlay> pool;
         
         private int overlayCounter = 1000; // offset to detect when default integer value is sent to one of the methods
 
-        public GuiOverlayManager()
+        private void Awake()
         {
             pool = new ObjectPool<GuiInfoOverlay>(CreateOverlay, InitOverlay, ReleaseOverlay, defaultCapacity: 2);
         }
