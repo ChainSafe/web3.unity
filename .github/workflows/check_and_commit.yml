@@ -131,4 +131,6 @@ jobs:
         git diff-index --cached --quiet HEAD || git commit -m 'Auto Commit [skip ci]
         - Duplicate Packages Samples
         - Publish DLL Dependencies'
-        git push -f origin HEAD:${{ github.ref_name }}
+        git push -f origin HEAD:$branch
+      env:
+        branch: ${{ github.head_ref || github.ref_name }}
