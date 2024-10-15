@@ -4,16 +4,16 @@ public static class Git
 {
     public static void Add(string path)
     {
-        $"git add \"{path}\" -f".RunWithPowerShell();
+        $"git add \"{path}\" -f".RunWithBash();
     }
     
     public static void Commit(string message)
     {
-        $"git commit -m \"{message}\"".RunWithPowerShell();
+        $"git commit -m \"{message}\"".RunWithBash();
     }
     
     public static void Push()
     {
-        "git push".RunWithPowerShell();
+        "git push".RunWithBash();
     }
 }
