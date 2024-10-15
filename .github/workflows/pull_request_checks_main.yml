@@ -1,0 +1,15 @@
+name: Merge Checks
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - labeled
+      - ready_for_review
+
+jobs:
+  pull_reqest_checks:
+    name: Pull Request Checks
+    uses: ChainSafe/web3.unity/.github/workflows/pull_request_checks.yml@main
+    secrets: inherit
