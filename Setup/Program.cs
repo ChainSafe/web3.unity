@@ -11,13 +11,13 @@ namespace Setup
         
         static void Main(string[] args)
         {
-            string json = File.ReadAllText("Setup/packages.json");
+            string json = File.ReadAllText("packages.json");
 
             string[] paths = JsonConvert.DeserializeObject<string[]>(json);
             
             foreach (string path in paths)
             {
-                Packages.Add(JsonConvert.DeserializeObject<Package>(File.ReadAllText(path)));
+                Packages.Add(JsonConvert.DeserializeObject<Package>(File.ReadAllText($"../{path}")));
             }
             
             Console.Write(JsonConvert.SerializeObject(Packages, Formatting.Indented));

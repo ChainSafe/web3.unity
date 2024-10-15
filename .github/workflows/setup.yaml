@@ -19,4 +19,6 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Run
-        run: dotnet run Setup/Setup.csproj
+        run: |
+          cd Setup
+          dotnet run Setup/Setup.csproj
