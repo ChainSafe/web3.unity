@@ -9,14 +9,25 @@ public static class Git
         $"git add \"{path}\" -f".RunWithBash();
     }
     
-    public static void Commit(string message)
+    public static void Commit(string message, string[] tags = null)
     {
         if (!_configured)
         {
             Configure();
         }
         
-        $"git commit -m \"{message}\"".RunWithBash();
+        $"git commit -m \"{message} [skip ci]\"".RunWithBash();
+
+        if (tags != null)
+        {
+            foreach (var tag in tags)
+            {
+                if (!string.IsNullOrEmpty(tag))
+                {
+                    $"git tag {tag}".RunWithBash();
+                }
+            }
+        }
     }
     
     public static void Push()

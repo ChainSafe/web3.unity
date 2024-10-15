@@ -15,6 +15,8 @@ public class Release
     
     public void Run()
     {
+        string[] tags = new string[_packages.Length];
+        
         foreach (Package package in _packages)
         {
             package.SetVersion(_version);
@@ -24,7 +26,7 @@ public class Release
             Git.Add(package.Path);
         }
         
-        Git.Commit($"Release {_version}");
+        Git.Commit($"Release {_version}", tags);
         
         Git.Push();
     }
