@@ -127,9 +127,10 @@ jobs:
         name: Coverage results for ${{ matrix.testMode }}
         path: ${{ steps.tests.outputs.coveragePath }}
     - name: Commit and Push changes
-      if: ${{ github.ref_name == 'dev' }}
       run: |
         git diff-index --cached --quiet HEAD || git commit -m 'Auto Commit [skip ci]
         - Duplicate Packages Samples
         - Publish DLL Dependencies'
-        git push -f
+        git push -f origin HEAD:$branch
+      env:
+        branch: ${{ github.head_ref || github.ref_name }}
