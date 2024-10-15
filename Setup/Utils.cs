@@ -5,16 +5,16 @@ namespace Setup;
 
 public static class Utils
 {
-    public static void RunWithBash( this string cmd )
+    public static void RunWithBash( this string command)
     {
-        cmd = cmd.Replace( "\"", "\\\"" );
+        command = command.Replace( "\"", "\\\"" );
 
         Process process = new Process()
         {
             StartInfo = new ProcessStartInfo
             {
                 FileName = "/bin/bash",
-                Arguments = $"-c \"{cmd}\"",
+                Arguments = $"-c \"{command}\"",
                 RedirectStandardOutput = true,
                 UseShellExecute = false,
                 CreateNoWindow = true,
@@ -30,6 +30,11 @@ public static class Utils
         foreach (string line in result.Split('\n'))
         {
             Console.WriteLine(line);
+        }
+
+        if (process.ExitCode != 0)
+        {
+            throw new Exception($"Error executing bash command {command}");
         }
     }
 }
