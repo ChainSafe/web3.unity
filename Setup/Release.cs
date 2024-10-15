@@ -20,6 +20,10 @@ public class Release
             package.SetVersion(_version);
 
             package.Save();
+            
+            Git.Add(package.Path);
         }
+        
+        Git.Commit($"Release {_version}");
     }
 }
