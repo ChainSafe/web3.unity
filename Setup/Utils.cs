@@ -1,10 +1,11 @@
+using System;
 using System.Diagnostics;
 
 namespace Setup;
 
 public static class Utils
 {
-    public static string RunWithBash( this string cmd )
+    public static void RunWithBash( this string cmd )
     {
         cmd = cmd.Replace( "\"", "\\\"" );
 
@@ -25,7 +26,10 @@ public static class Utils
         string result = process.StandardOutput.ReadToEnd();
         
         process.WaitForExit();
-        
-        return result;
+
+        foreach (string line in result.Split('\n'))
+        {
+            Console.WriteLine(line);
+        }
     }
 }
