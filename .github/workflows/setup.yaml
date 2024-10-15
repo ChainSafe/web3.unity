@@ -12,7 +12,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
+        with:
+          lfs: true
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
+          
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
@@ -24,4 +27,4 @@ jobs:
           dotnet run -release:3.0.1 Setup/Setup.csproj
       - name: Push
         run: |
-          git push
+          git push -f
