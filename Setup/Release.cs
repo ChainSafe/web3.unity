@@ -25,5 +25,7 @@ public class Release
         }
         
         Git.Commit($"Release {_version}");
+        
+        Git.Push();
     }
 }
