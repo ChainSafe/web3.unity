@@ -11,7 +11,7 @@ public static class Utils
     {
         using (PowerShell powershell = PowerShell.Create())
         {
-            var output = powershell.AddScript(@command).Invoke();
+            powershell.AddScript(@command).Invoke();
         }
     }
 }
