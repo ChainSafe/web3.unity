@@ -26,8 +26,8 @@ public static class Git
 
     private static void Configure()
     {
-        "git config user.email ${github.actor}@users.noreply.github.com".RunWithBash();
-        "git config user.name ${github.actor}".RunWithBash();
+        "git config user.email $git_email".RunWithBash();
+        "git config user.name $git_actor".RunWithBash();
 
         _configured = true;
     }

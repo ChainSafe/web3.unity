@@ -5,6 +5,10 @@ on:
     branches:
       - rob/publish-and-release-tool-1120
 
+env:
+  git_email: "${{ github.actor }}@users.noreply.github.com"
+  git_actor: "${{ github.actor }}"
+
 jobs:
   setup:
     name: Setup job
