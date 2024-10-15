@@ -27,6 +27,8 @@ public static class Utils
         
         process.WaitForExit();
 
+        Console.WriteLine($"Output for {cmd}: {result}");
+        
         foreach (string line in result.Split('\n'))
         {
             Console.WriteLine(line);
