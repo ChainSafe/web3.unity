@@ -1,3 +1,5 @@
+using System;
+
 namespace Setup;
 
 public class Release
@@ -22,6 +24,8 @@ public class Release
             package.Save();
             
             Git.Add(package.Path);
+            
+            Console.WriteLine(package.Path);
         }
         
         Git.Commit($"Release {_version}");
