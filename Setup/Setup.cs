@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace Setup
 {
-    internal class Program
+    internal class Setup
     {
         public static readonly List<Package> Packages = new List<Package>();
         

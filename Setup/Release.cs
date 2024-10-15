@@ -8,7 +8,7 @@ public class Release
     
     public Release(string version)
     {
-        _packages = Program.Packages.ToArray();
+        _packages = Setup.Packages.ToArray();
 
         _version = version;
     }
