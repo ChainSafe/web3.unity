@@ -9,18 +9,39 @@ namespace Setup
     {
         public static readonly List<Package> Packages = new List<Package>();
         
+        // dotnet run -release:3.0.0 -duplicate_samples -publish_dependencies;
         static void Main(string[] args)
         {
             string json = File.ReadAllText("packages.json");
 
             string[] paths = JsonConvert.DeserializeObject<string[]>(json);
-            
-            foreach (string path in paths)
+
+            for (int i = 0; i < paths.Length; i++)
             {
-                Packages.Add(JsonConvert.DeserializeObject<Package>(File.ReadAllText($"../{path}")));
+                string path = $"../{paths[i]}";
+                
+                Package package = new Package(path);
+                
+                JsonConvert.PopulateObject(File.ReadAllText(path), package);
+                
+                Packages.Add(package);
             }
             
-            Console.Write(JsonConvert.SerializeObject(Packages, Formatting.Indented));
+            foreach (var arg in args)
+            {
+                switch (arg)
+                {
+                    case not null when arg.StartsWith("-release"):
+                        
+                        string version = arg.Split(":")[1];
+                        
+                        Release release = new Release(version);
+                        
+                        release.Run();
+                        
+                        break;
+                }
+            }
         }
     }
 }
