@@ -1,13 +1,7 @@
-name: Merge Checks
+name: Pull Request Checks
 
 on:
-  pull_request:
-    branches:
-      - main
-      - dev
-    types:
-      - labeled
-      - ready_for_review
+  workflow_call:
 
 jobs:
   web3_tests:
