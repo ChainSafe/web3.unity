@@ -33,7 +33,7 @@ jobs:
       - name: Run
         run: |
           cd Setup
-          dotnet run -release:3.0.2 Setup/Setup.csproj
+          dotnet run -release:${{ github.event.inputs.version }} Setup/Setup.csproj
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
