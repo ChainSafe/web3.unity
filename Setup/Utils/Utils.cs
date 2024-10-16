@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics;
 
-namespace Setup;
+namespace Setup.Utils;
 
 public static class Utils
 {

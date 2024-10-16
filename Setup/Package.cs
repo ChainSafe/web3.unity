@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Setup.Utils;
 
 namespace Setup
 {
@@ -11,6 +12,9 @@ namespace Setup
     {
         [JsonIgnore]
         public string Path { get; private set; }
+
+        [JsonProperty("name")]
+        public string Name { get; private set; }
         
         [JsonProperty("version")]
         public string Version { get; private set; }
@@ -48,6 +52,15 @@ namespace Setup
             }
             
             Version = version;
+
+            string[] keys = Dependencies.Where(d => Setup.Packages.Any(p => p.Name == d.Key))
+                .Select(d => d.Key)
+                .ToArray();
+
+            foreach (string key in keys)
+            {
+                Dependencies[key] = version;
+            }
         }
 
         public void Save()
@@ -55,11 +68,11 @@ namespace Setup
             string json = File.ReadAllText(Path);
             
             JObject jObject = JObject.Parse(json);
-            
-            jObject.Merge(JObject.Parse(JsonConvert.SerializeObject(this)), new JsonMergeSettings
-            {
-                MergeArrayHandling = MergeArrayHandling.Merge
-            });
+
+            jObject.Merge(
+                JObject.Parse(JsonConvert.SerializeObject(this,
+                    new JsonSerializerSettings { ContractResolver = new JsonPropertiesResolver() })),
+                new JsonMergeSettings { MergeArrayHandling = MergeArrayHandling.Merge });
             
             File.WriteAllText(Path, jObject.ToString(Formatting.Indented));
         }

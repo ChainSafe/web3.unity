@@ -1,3 +1,5 @@
+using Setup.Utils;
+
 namespace Setup;
 
 public static class Git
@@ -24,15 +26,26 @@ public static class Git
             {
                 if (!string.IsNullOrEmpty(tag))
                 {
-                    $"git tag {tag}".RunWithBash();
+                    $"git tag \"{tag}\"".RunWithBash();
                 }
             }
         }
     }
     
-    public static void Push()
+    public static void Push(string[] tags = null)
     {
-        "git push".RunWithBash();
+        "git push -f".RunWithBash();
+
+        if (tags != null)
+        {
+            foreach (string tag in tags)
+            {
+                if (!string.IsNullOrEmpty(tag))
+                {
+                    $"git push origin \"{tag}\"".RunWithBash();
+                }
+            }
+        }
     }
 
     private static void Configure()

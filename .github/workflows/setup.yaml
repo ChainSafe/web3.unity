@@ -28,7 +28,4 @@ jobs:
       - name: Run
         run: |
           cd Setup
-          dotnet run -release:3.0.1 Setup/Setup.csproj
-      - name: Push
-        run: |
-          git push -f
+          dotnet run -release:3.0.2 Setup/Setup.csproj
