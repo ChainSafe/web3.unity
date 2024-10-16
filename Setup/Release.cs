@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Setup;
 
@@ -17,6 +19,10 @@ public class Release
     
     public void Run()
     {
+        List<string> tags = new List<string>();
+
+        tags.Add(_version);
+        
         foreach (Package package in _packages)
         {
             package.SetVersion(_version);
@@ -24,12 +30,10 @@ public class Release
             package.Save();
             
             Git.Add(package.Path);
+            
+            tags.Add($"{package.Name}/{_version}");
         }
         
-        string[] tags = Array.ConvertAll(_packages, p => $"{p.Name}/{_version}");
-        
-        Git.Commit($"Release {_version}", tags);
-        
-        Git.Push(tags);
+        Git.CommitAndPush($"Release {_version}", tags.ToArray());
     }
 }

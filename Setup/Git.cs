@@ -26,7 +26,7 @@ public static class Git
             {
                 if (!string.IsNullOrEmpty(tag))
                 {
-                    $"git tag \"{tag}\"".RunWithBash();
+                    Tag(tag);
                 }
             }
         }
@@ -48,6 +48,18 @@ public static class Git
         }
     }
 
+    public static void CommitAndPush(string message, string[] tags = null)
+    {
+        Commit(message, tags);
+        
+        Push(tags);
+    }
+    
+    public static void Tag(string tag)
+    {
+        $"git tag \"{tag}\"".RunWithBash();
+    }
+    
     private static void Configure()
     {
         "git config user.email $git_email".RunWithBash();
