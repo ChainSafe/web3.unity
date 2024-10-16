@@ -8,8 +8,15 @@ using Setup.Utils;
 
 namespace Setup
 {
+    /// <summary>
+    /// Unity package.json model for UPM.
+    /// https://docs.unity3d.com/Manual/upm-manifestPkg.html.
+    /// </summary>
     public class Package
     {
+        /// <summary>
+        /// Path of package from root of repository.
+        /// </summary>
         [JsonIgnore]
         public string Path { get; private set; }
 
@@ -39,6 +46,11 @@ namespace Setup
             Path = path;
         }
 
+        /// <summary>
+        /// Sets Package Version.
+        /// </summary>
+        /// <param name="version">Version string.</param>
+        /// <exception cref="Exception">Exception thrown if version format doesn't match guidelines https://semver.org/.</exception>
         public void SetVersion(string version)
         {
             string[] increments = version.Split('.');
@@ -63,6 +75,9 @@ namespace Setup
             }
         }
 
+        /// <summary>
+        /// Save altered package to <see cref="Path"/>.
+        /// </summary>
         public void Save()
         {
             string json = File.ReadAllText(Path);

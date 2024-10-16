@@ -11,6 +11,7 @@ namespace Setup
         // dotnet run -release:3.0.0 -duplicate_samples -publish_dependencies;
         static void Main(string[] args)
         {
+            // Initialize packages from file.
             string json = File.ReadAllText("packages.json");
 
             string[] paths = JsonConvert.DeserializeObject<string[]>(json);
@@ -26,6 +27,8 @@ namespace Setup
                 Packages.Add(package);
             }
             
+            // Parse arguments and Run operations based on that.
+            // TODO: use runnable and runner to run multiple operations sort orders.
             foreach (var arg in args)
             {
                 switch (arg)

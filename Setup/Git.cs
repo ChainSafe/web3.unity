@@ -2,6 +2,9 @@ using Setup.Utils;
 
 namespace Setup;
 
+/// <summary>
+/// Git helper class.
+/// </summary>
 public static class Git
 {
     private static bool _configured;

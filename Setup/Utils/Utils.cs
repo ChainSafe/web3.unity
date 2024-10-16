@@ -5,6 +5,11 @@ namespace Setup.Utils;
 
 public static class Utils
 {
+    /// <summary>
+    /// Runs commands with bash.
+    /// </summary>
+    /// <param name="command">Command to run.</param>
+    /// <exception cref="Exception">If command fails.</exception>
     public static void RunWithBash( this string command)
     {
         command = command.Replace( "\"", "\\\"" );

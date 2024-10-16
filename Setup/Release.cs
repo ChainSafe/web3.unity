@@ -1,9 +1,10 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Setup;
 
+/// <summary>
+/// Release.
+/// </summary>
 public class Release
 {
     private readonly Package[] _packages;
@@ -17,6 +18,11 @@ public class Release
         _version = version;
     }
     
+    /// <summary>
+    /// Bumps the version and makes a release.
+    /// Commit and push with package.json versions bumped.
+    /// Tag the commits so another CI (open-upm) can pick them up.
+    /// </summary>
     public void Run()
     {
         List<string> tags = new List<string>();

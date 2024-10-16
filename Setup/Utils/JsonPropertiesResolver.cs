@@ -6,6 +6,9 @@ using Newtonsoft.Json.Serialization;
 
 namespace Setup.Utils;
 
+/// <summary>
+/// Resolver for custom serialization.
+/// </summary>
 public class JsonPropertiesResolver : DefaultContractResolver
 {
     protected override List<MemberInfo> GetSerializableMembers(Type objectType)
