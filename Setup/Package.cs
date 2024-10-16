@@ -13,7 +13,7 @@ namespace Setup
         [JsonIgnore]
         public string Path { get; private set; }
 
-        [JsonProperty("name")]
+        [JsonProperty("name"), JsonIgnoreSerialization]
         public string Name { get; private set; }
         
         [JsonProperty("version")]
@@ -22,10 +22,10 @@ namespace Setup
         [JsonProperty("dependencies", NullValueHandling = NullValueHandling.Ignore)]
         public Dictionary<string, string> Dependencies { get; private set; }
 
-        [JsonProperty("testables", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("testables", NullValueHandling = NullValueHandling.Ignore), JsonIgnoreSerialization]
         public string[] Testables { get; private set; }
     
-        [JsonProperty("samples", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("samples", NullValueHandling = NullValueHandling.Ignore), JsonIgnoreSerialization]
         public Sample[] Samples { get; private set; }
 
         // For Json Deserialize.
