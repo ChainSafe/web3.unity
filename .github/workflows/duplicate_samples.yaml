@@ -14,6 +14,7 @@ jobs:
     secrets: inherit
   check:
     name: Check job
+    needs: [ setup ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
