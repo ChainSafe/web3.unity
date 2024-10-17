@@ -1,0 +1,48 @@
+name: Release ⬆️
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to Release'
+        required: true
+      release_notes:
+        description: 'Version Release Notes'
+        required: true
+
+env:
+  git_email: "${{ github.actor }}@users.noreply.github.com"
+  git_actor: "${{ github.actor }}"
+
+jobs:
+  setup:
+    name: Setup job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
+          
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Run
+        run: |
+          cd Setup
+          dotnet run -release:${{ github.event.inputs.version }} Setup/Setup.csproj
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.event.inputs.version }}
+          release_name: Release ${{ github.event.inputs.version }}
+          body: |
+            ${{ github.event.inputs.release_notes }}
+          draft: false
+          prerelease: false
