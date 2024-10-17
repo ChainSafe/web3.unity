@@ -37,3 +37,9 @@ jobs:
         run: |
           cd Setup
           dotnet run ${{ inputs.arguments || github.event.inputs.arguments }} Setup/Setup.csproj
+          git reset --hard
+      - name: Cache
+        uses: actions/cache/save@v4
+        with:
+          path: .git
+          key: ${{ runner.os }}-git
