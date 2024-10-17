@@ -19,7 +19,7 @@ namespace Setup
             
             List<IRunnable> runnableList = GetRunnableList(args);
 
-            runnableList = runnableList.OrderBy(r => r.Order).ToList();
+            runnableList = runnableList.OrderBy(r => r.Order).Append(new Git()).ToList();
             
             foreach (IRunnable runnable in runnableList)
             {

@@ -9,13 +9,16 @@ on:
       release_notes:
         description: 'Version Release Notes'
         required: true
+      additional_arguments:
+        description: 'Additional arguments such as -duplicate_samples or -sync_dependencies'
+        required: false
 
 jobs:
   setup:
     name: Setup job
     uses: ChainSafe/web3.unity/.github/workflows/setup.yaml@main
     with:
-      arguments: " -release:${{ github.event.inputs.version }}"
+      arguments: "${{ github.event.inputs.additional_arguments }} -release:${{ github.event.inputs.version }}"
     secrets: inherit
   release:
     name: Release job

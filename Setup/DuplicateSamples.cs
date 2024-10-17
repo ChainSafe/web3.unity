@@ -4,6 +4,9 @@ using Setup.Utils;
 
 namespace Setup;
 
+/// <summary>
+/// Duplicates samples in Sample Project into package samples.
+/// </summary>
 public class DuplicateSamples : IRunnable
 {
     private readonly Package[] _packages;
@@ -38,6 +41,6 @@ public class DuplicateSamples : IRunnable
             }
         }
         
-        Git.CommitAndPush("Duplicated Samples");
+        Git.Commit("Duplicated Samples");
     }
 }

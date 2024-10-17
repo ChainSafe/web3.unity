@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Setup.Utils;
 
 namespace Setup;
@@ -5,8 +8,17 @@ namespace Setup;
 /// <summary>
 /// Git helper class.
 /// </summary>
-public static class Git
+public class Git : IRunnable
 {
+    public int Order => int.MaxValue;
+
+    public void Run()
+    {
+        Push();
+    }
+    
+    #region Git Commands
+
     private static bool _configured;
     
     public static void Add(string path)
@@ -71,4 +83,6 @@ public static class Git
 
         _configured = true;
     }
+
+    #endregion
 }

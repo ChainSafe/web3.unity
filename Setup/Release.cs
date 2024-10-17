@@ -13,7 +13,7 @@ public class Release : IRunnable
     
     private readonly string _version;
     
-    public int Order => 2;
+    public int Order => 3;
     
     public Release(string version)
     {
