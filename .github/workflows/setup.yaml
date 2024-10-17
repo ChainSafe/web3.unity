@@ -31,4 +31,4 @@ jobs:
       - name: Run
         run: |
           cd Setup
-          dotnet run${{ inputs.arguments }} Setup/Setup.csproj
+          dotnet run ${{ inputs.arguments }} Setup/Setup.csproj

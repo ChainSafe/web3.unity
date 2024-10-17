@@ -1,15 +1,12 @@
 name: Duplicate Samples 🪞
 
 on:
-  pull_request:
-    types:
-      - labeled
-
+  workflow_call:
+    
 jobs:
   setup:
     name: Duplicate job
-    if: ${{ github.event.label.name == 'ready-to-merge' }}
     uses: ChainSafe/web3.unity/.github/workflows/setup.yaml@main
     with:
-      arguments: " -duplicate_samples"
+      arguments: "-duplicate_samples"
     secrets: inherit
