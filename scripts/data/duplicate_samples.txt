@@ -11,5 +11,5 @@ source:src/UnitySampleProject/Assets/Samples/web3.unity SDK Marketplace
     display_name:Marketplace Samples
         destination:Packages/io.chainsafe.web3-unity.marketplace/Samples~/Web3.Unity Marketplace/
 source:src/UnitySampleProject/Assets/Samples/web3.unity SDK MUD
-    display_name:MUD Samples
+    display_name:Marketplace Samples
         destination:Packages/io.chainsafe.web3-unity.mud/Samples~/Web3.Unity MUD/
