@@ -45,7 +45,7 @@ public class Release : IRunnable
             
             tags.Add($"{package.Name}/{_version}");
 
-            // Move samples to new directory
+            // Move samples to new directory with new version
             if (package.HasSamples())
             {
                 string path = Path.Combine(Setup.SampleProjectPath, "Assets/Samples", package.DisplayName);

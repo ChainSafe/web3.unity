@@ -19,6 +19,7 @@ namespace Setup
             
             List<IRunnable> runnableList = GetRunnableList(args);
 
+            // Add Git to the end of the list to push at the end if there are any new commits.
             runnableList = runnableList.OrderBy(r => r.Order).Append(new Git()).ToList();
             
             foreach (IRunnable runnable in runnableList)
@@ -27,9 +28,11 @@ namespace Setup
             }
         }
 
+        /// <summary>
+        /// Initialize packages from packages.json in root of this project.
+        /// </summary>
         private static void InitializePackages()
         {
-            // Initialize packages from file.
             string json = File.ReadAllText("packages.json");
 
             string[] paths = JsonConvert.DeserializeObject<string[]>(json);
@@ -46,6 +49,11 @@ namespace Setup
             }
         }
         
+        /// <summary>
+        /// Get runnable list based on passed arguments.
+        /// </summary>
+        /// <param name="args">Arguments passed.</param>
+        /// <returns>Runnable List.</returns>
         private static List<IRunnable> GetRunnableList(string[] args)
         {
             List<IRunnable> runnableLit = new List<IRunnable>();

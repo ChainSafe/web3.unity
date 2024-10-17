@@ -14,6 +14,7 @@ public class Git : IRunnable
 
     public void Run()
     {
+        // Push just to make sure we have the latest changes.
         Push();
     }
     
