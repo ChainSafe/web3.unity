@@ -8,7 +8,7 @@ on:
 jobs:
   setup:
     name: Duplicate job
-    uses: ChainSafe/web3.unity/.github/workflows/setup.yaml@main
+    uses: ChainSafe/web3.unity/.github/workflows/setup.yaml@rob/publish-tool-1120
     with:
       arguments: "-duplicate_samples"
     secrets: inherit
