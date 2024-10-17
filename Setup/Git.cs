@@ -20,8 +20,9 @@ public static class Git
         {
             Configure();
         }
-        
-        $"git commit -m \"{message} [skip ci]\"".RunWithBash();
+
+        // Checks if there are any changes to commit before committing
+        $"git diff-index --cached --quiet HEAD || git commit -m \"{message} [skip ci]\"".RunWithBash();
 
         if (tags != null)
         {
