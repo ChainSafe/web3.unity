@@ -1,4 +1,4 @@
-name: Setup Workflow
+name: Setup ⚙️
 
 on:
   workflow_call:
@@ -6,7 +6,12 @@ on:
       arguments:
         required: true
         type: string
-
+  workflow_dispatch: 
+    inputs:
+      arguments:
+        required: true
+        description: 'Arguments to pass to the setup script'
+        type: string
 env:
   git_email: "${{ github.actor }}@users.noreply.github.com"
   git_actor: "${{ github.actor }}"
@@ -31,4 +36,4 @@ jobs:
       - name: Run
         run: |
           cd Setup
-          dotnet run ${{ inputs.arguments }} Setup/Setup.csproj
+          dotnet run ${{ inputs.arguments || github.event.inputs.arguments }} Setup/Setup.csproj
