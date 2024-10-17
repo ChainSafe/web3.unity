@@ -19,6 +19,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.head_ref || github.ref_name }}
           lfs: true
           ssh-key: ${{ secrets.DEPLOY_KEY }}
           
