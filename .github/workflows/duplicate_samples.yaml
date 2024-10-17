@@ -1,0 +1,34 @@
+name: Duplicate Samples 🪞
+
+on:
+  push:
+    branches:
+      - rob/publish-tool-1120
+    
+jobs:
+  setup:
+    name: Duplicate job
+    uses: ChainSafe/web3.unity/.github/workflows/setup.yaml@rob/publish-tool-1120
+    with:
+      arguments: "-duplicate_samples"
+    secrets: inherit
+  check:
+    name: Check job
+    needs: [ setup ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          lfs: true
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
+      - name: Cache
+        uses: actions/cache/restore@v4
+        with:
+          path: .git
+          key: ${{ runner.os }}-git
+      - name: Run
+        run: |
+          git reset --hard
+    
