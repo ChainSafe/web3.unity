@@ -60,7 +60,7 @@ namespace Setup
             // Parse arguments and Run operations based on that.
             foreach (var arg in args)
             {
-                IRunnable runnable = null;
+                IRunnable runnable;
                 
                 switch (arg)
                 {
@@ -79,6 +79,8 @@ namespace Setup
                         break;
                     case "-git_enabled":
                         Git.Enable();
+                        continue;
+                    default:
                         continue;
                 }
                 
