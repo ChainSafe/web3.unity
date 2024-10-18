@@ -25,8 +25,6 @@ public class SyncDependencies : IRunnable
 #else
         string configuration = "Release";
 #endif
-        $"dotnet restore \"{ProjectPath}ChainSafe.Gaming.Unity.csproj\"".Run();
-        
         $"dotnet publish \"{ProjectPath}ChainSafe.Gaming.Unity.csproj\" -c {configuration} /property:Unity=true".Run();
         
         string source = Path.Combine(ProjectPath, "bin", configuration, "netstandard2.1", "publish");
