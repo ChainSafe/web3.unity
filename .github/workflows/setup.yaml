@@ -27,7 +27,10 @@ jobs:
           ref: ${{ github.head_ref || github.ref_name }}
           lfs: true
           ssh-key: ${{ secrets.DEPLOY_KEY }}
-          
+      - name: update submodules
+        run: |
+          git submodule update --init
+        shell: bash
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
