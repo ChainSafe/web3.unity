@@ -12,15 +12,14 @@ namespace Setup
         
         public static readonly List<Package> Packages = new List<Package>();
         
-        // dotnet run -release:3.0.0 -duplicate_samples -publish_dependencies;
+        // dotnet run -release:3.0.0 -duplicate_samples -sync_dependencies;
         static void Main(string[] args)
         {
             InitializePackages();
             
             List<IRunnable> runnableList = GetRunnableList(args);
 
-            // Add Git to the end of the list to push at the end if there are any new commits.
-            runnableList = runnableList.OrderBy(r => r.Order).Append(new Git()).ToList();
+            runnableList = runnableList.OrderBy(r => r.Order).ToList();
             
             foreach (IRunnable runnable in runnableList)
             {
@@ -75,9 +74,6 @@ namespace Setup
                     
                     case "-sync_dependencies":
                         runnableLit.AddRunnable(new SyncDependencies());
-                        break;
-                    case "-unity_test":
-                        runnableLit.AddRunnable(new UnityTests());
                         break;
                 }
             }

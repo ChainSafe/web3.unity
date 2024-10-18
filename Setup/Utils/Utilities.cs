@@ -2,11 +2,60 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Management.Automation;
+using System.Runtime.InteropServices;
 
 namespace Setup.Utils;
 
 public static class Utilities
 {
+    public static void Run(this string command)
+    {
+#if !GIT_ENABLED
+        if (command.ToLower().StartsWith("git"))
+        {
+            Console.WriteLine($"Git disabled skipping command: {command}");
+            
+            return;
+        }  
+#endif
+        
+        // Tried switch statement couldn't find a way to make it work
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            command.RunWithBash();
+        }
+        
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            command.RunWithPowershell();
+        }
+
+        else
+        {
+            throw new Exception($"[Unsupported OS] Can't run command: {command}");
+        }
+    }
+    
+    public static void RunWithPowershell(this string command)
+    {
+        using (PowerShell powerShell = PowerShell.Create())
+        {
+            var result = powerShell.AddScript($"{command} | Out-String").Invoke();
+            
+            // Output
+            foreach (var line in result)
+            {
+                Console.WriteLine(line.ToString());
+            }
+            
+            if (powerShell.HadErrors)
+            {
+                throw new Exception($"Error executing powershell command: {command}");
+            }
+        }
+    }
+    
     /// <summary>
     /// Runs commands with bash.
     /// </summary>
@@ -14,6 +63,13 @@ public static class Utilities
     /// <exception cref="Exception">If command fails.</exception>
     public static void RunWithBash( this string command)
     {
+        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            Console.WriteLine($"Skipping bash command \"{command}\" on non-linux platform.");
+            
+            return;
+        }
+        
         command = command.Replace( "\"", "\\\"" );
 
         Process process = new Process()
@@ -41,7 +97,7 @@ public static class Utilities
 
         if (process.ExitCode != 0)
         {
-            throw new Exception($"Error executing bash command {command}");
+            throw new Exception($"Error executing bash command: {command} Exit Code: {process.ExitCode}");
         }
     }
     

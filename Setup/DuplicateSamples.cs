@@ -11,7 +11,7 @@ public class DuplicateSamples : IRunnable
 {
     private readonly Package[] _packages;
     
-    public int Order => 0;
+    public int Order => 1;
     
     public DuplicateSamples()
     {
@@ -41,6 +41,6 @@ public class DuplicateSamples : IRunnable
             }
         }
         
-        Git.Commit("Duplicated Samples");
+        Git.CommitAndPush("Duplicated Samples");
     }
 }

@@ -1,13 +1,16 @@
-name: Duplicate Samples 🪞
+name: Sync Dependencies 🔄
 
 on:
   workflow_call:
+  push:
+    branches:
+      - rob/publish-tool-1120
     
 jobs:
   setup:
-    name: Duplicate job
+    name: Sync job
     uses: ChainSafe/web3.unity/.github/workflows/setup.yaml@rob/publish-tool-1120
     with:
-      arguments: "-duplicate_samples"
+      arguments: "-sync_dependencies"
     secrets: inherit
     

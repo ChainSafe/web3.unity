@@ -8,23 +8,13 @@ namespace Setup;
 /// <summary>
 /// Git helper class.
 /// </summary>
-public class Git : IRunnable
+public class Git
 {
-    public int Order => int.MaxValue;
-
-    public void Run()
-    {
-        // Push just to make sure we have the latest changes.
-        // Push();
-    }
-    
-    #region Git Commands
-
     private static bool _configured;
-    
+
     public static void Add(string path)
     {
-        $"git add \"{path}\" -f".RunWithBash();
+        $"git add \"{path}\" -f".Run();
     }
     
     public static void Commit(string message, string[] tags = null)
@@ -35,7 +25,7 @@ public class Git : IRunnable
         }
 
         // Checks if there are any changes to commit before committing
-        $"git diff-index --cached --quiet HEAD || git commit -m \"{message} [skip ci]\"".RunWithBash();
+        $"git diff-index --cached --quiet HEAD || git commit -m \"{message} [skip ci]\"".Run();
 
         if (tags != null)
         {
@@ -51,7 +41,7 @@ public class Git : IRunnable
     
     public static void Push(string[] tags = null)
     {
-        "git push -f".RunWithBash();
+        "git push -f".Run();
 
         if (tags != null)
         {
@@ -59,7 +49,7 @@ public class Git : IRunnable
             {
                 if (!string.IsNullOrEmpty(tag))
                 {
-                    $"git push origin \"{tag}\"".RunWithBash();
+                    $"git push origin \"{tag}\"".Run();
                 }
             }
         }
@@ -74,16 +64,14 @@ public class Git : IRunnable
     
     public static void Tag(string tag)
     {
-        $"git tag \"{tag}\"".RunWithBash();
+        $"git tag \"{tag}\"".Run();
     }
     
     private static void Configure()
     {
-        "git config user.email $git_email".RunWithBash();
-        "git config user.name $git_actor".RunWithBash();
+        "git config user.email $git_email".Run();
+        "git config user.name $git_actor".Run();
 
         _configured = true;
     }
-
-    #endregion
 }
