@@ -177,7 +177,7 @@ public class EvmCustomResponseTests
     {
         var buildWeb3Task = SampleTestsBase.BuildTestWeb3(services =>
         {
-            services.Replace(ServiceDescriptor.Singleton(new StubWalletConnectProviderConfig
+            services.Replace(ServiceDescriptor.Singleton(new StubReownConfig
             { StubResponse = testResponse }));
         });
 
