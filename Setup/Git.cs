@@ -11,7 +11,14 @@ namespace Setup;
 public class Git
 {
     private static bool _configured;
+    
+    public static bool Enabled { get; private set; }
 
+    public static void Enable()
+    {
+        Enabled = true;
+    }
+    
     public static void Add(string path)
     {
         $"git add \"{path}\" -f".Run();

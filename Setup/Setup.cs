@@ -60,22 +60,29 @@ namespace Setup
             // Parse arguments and Run operations based on that.
             foreach (var arg in args)
             {
+                IRunnable runnable = null;
+                
                 switch (arg)
                 {
                     case not null when arg.StartsWith("-release"):
                         
                         string version = arg.Split(":")[1];
-                        runnableLit.AddRunnable(new Release(version));
+                        runnable = new Release(version);
                         break;
                     
                     case "-duplicate_samples":
-                        runnableLit.AddRunnable(new DuplicateSamples());
+                        runnable = new DuplicateSamples();
                         break;
                     
                     case "-sync_dependencies":
-                        runnableLit.AddRunnable(new SyncDependencies());
+                        runnable = new SyncDependencies();
                         break;
+                    case "-git_enabled":
+                        Git.Enable();
+                        continue;
                 }
+                
+                runnableLit.AddRunnable(runnable);
             }
 
             return runnableLit;

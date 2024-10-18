@@ -10,9 +10,5 @@
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
       <PackageReference Include="System.Management.Automation" Version="7.4.5" />
     </ItemGroup>
-
-    <PropertyGroup Condition="'$(GIT_ENABLED)' == 'True'">
-        <DefineConstants>GIT_ENABLED</DefineConstants>
-    </PropertyGroup>
     
 </Project>
