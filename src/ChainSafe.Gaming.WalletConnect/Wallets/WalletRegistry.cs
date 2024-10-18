@@ -24,8 +24,15 @@ namespace ChainSafe.Gaming.WalletConnect.Wallets
             this.httpClient = httpClient;
         }
 
-        public static string BuildRegistryUri(string projectId) =>
-            $"https://explorer-api.walletconnect.com/v3/wallets?projectId={projectId}";
+        public static string BuildRegistryUri(string projectId)
+        {
+            if (string.IsNullOrWhiteSpace(projectId))
+            {
+                throw new WalletConnectException("ProjectId was not set.");
+            }
+
+            return $"https://explorer-api.walletconnect.com/v3/wallets?projectId={projectId}";
+        }
 
         async ValueTask ILifecycleParticipant.WillStartAsync()
         {
