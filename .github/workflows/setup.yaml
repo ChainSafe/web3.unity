@@ -39,7 +39,7 @@ jobs:
       - name: Run
         run: |
           cd Setup
-          dotnet run ${{ inputs.arguments || github.event.inputs.arguments }} -git_enabled Setup/Setup.csproj
+          dotnet run ${{ inputs.arguments || github.event.inputs.arguments }} Setup/Setup.csproj
           git reset --hard
       - name: Cache
         uses: actions/cache/save@v4

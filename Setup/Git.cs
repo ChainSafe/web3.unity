@@ -11,12 +11,22 @@ namespace Setup;
 public class Git
 {
     private static bool _configured;
-    
-    public static bool Enabled { get; private set; }
 
-    public static void Enable()
+    public static bool Enabled { get; private set; } = true;
+
+    public static void Configure(string configuration)
     {
-        Enabled = true;
+        switch (configuration)
+        {
+            case "enabled":
+                Enabled = true;
+                break;
+            case "disabled":
+                Enabled = false;
+                break;
+            default:
+                throw new Exception($"-git can't configure {configuration}");
+        }
     }
     
     public static void Add(string path)

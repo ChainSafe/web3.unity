@@ -55,39 +55,39 @@ namespace Setup
         /// <returns>Runnable List.</returns>
         private static List<IRunnable> GetRunnableList(string[] args)
         {
-            List<IRunnable> runnableLit = new List<IRunnable>();
+            List<IRunnable> runnableList = new List<IRunnable>();
             
             // Parse arguments and Run operations based on that.
             foreach (var arg in args)
             {
-                IRunnable runnable;
-                
                 switch (arg)
                 {
                     case not null when arg.StartsWith("-release"):
                         
                         string version = arg.Split(":")[1];
-                        runnable = new Release(version);
+                        runnableList.AddRunnable(new Release(version));
                         break;
                     
                     case "-duplicate_samples":
-                        runnable = new DuplicateSamples();
+                        runnableList.AddRunnable(new DuplicateSamples());
                         break;
                     
                     case "-sync_dependencies":
-                        runnable = new SyncDependencies();
+                        runnableList.AddRunnable(new SyncDependencies());
                         break;
-                    case "-git_enabled":
-                        Git.Enable();
+                    
+                    case not null when arg.StartsWith("-git"):
+                        
+                        string configuration = arg.Split(":")[1];
+                        Git.Configure(configuration);
                         continue;
+                    
                     default:
                         continue;
                 }
-                
-                runnableLit.AddRunnable(runnable);
             }
 
-            return runnableLit;
+            return runnableList;
         }
     }
 }
