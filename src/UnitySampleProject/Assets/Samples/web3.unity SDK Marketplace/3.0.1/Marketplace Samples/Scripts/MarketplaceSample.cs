@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 namespace ChainSafe.Gaming.Marketplace.Samples
 {
+    // More tests
     public class MarketplaceSample : MonoBehaviour
     {
         [SerializeField] private Transform parentForItems;

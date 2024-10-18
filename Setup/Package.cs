@@ -23,6 +23,9 @@ namespace Setup
         [JsonProperty("name"), JsonIgnoreSerialization]
         public string Name { get; private set; }
         
+        [JsonProperty("displayName"), JsonIgnoreSerialization]
+        public string DisplayName { get; private set; }
+        
         [JsonProperty("version")]
         public string Version { get; private set; }
     
@@ -35,6 +38,12 @@ namespace Setup
         [JsonProperty("samples", NullValueHandling = NullValueHandling.Ignore), JsonIgnoreSerialization]
         public Sample[] Samples { get; private set; }
 
+        /// <summary>
+        /// Path of package.json file.
+        /// </summary>
+        [JsonIgnore]
+        public string FilePath { get; private set; }
+        
         // For Json Deserialize.
         public Package()
         {
@@ -44,6 +53,8 @@ namespace Setup
         public Package(string path)
         {
             Path = path;
+            
+            FilePath = System.IO.Path.Combine(path, "package.json");
         }
 
         /// <summary>
@@ -80,7 +91,7 @@ namespace Setup
         /// </summary>
         public void Save()
         {
-            string json = File.ReadAllText(Path);
+            string json = File.ReadAllText(FilePath);
             
             JObject jObject = JObject.Parse(json);
 
@@ -89,12 +100,20 @@ namespace Setup
                     new JsonSerializerSettings { ContractResolver = new JsonPropertiesResolver() })),
                 new JsonMergeSettings { MergeArrayHandling = MergeArrayHandling.Merge });
             
-            File.WriteAllText(Path, jObject.ToString(Formatting.Indented));
+            File.WriteAllText(FilePath, jObject.ToString(Formatting.Indented));
+        }
+
+        public bool HasSamples()
+        {
+            return Samples != null && Samples.Length > 0;
         }
     }
 
     public struct Sample
     {
+        [JsonProperty("displayName")]
+        public string DisplayName { get; private set; }
+        
         [JsonProperty("path")]
         public string Path { get; private set; }
     }
