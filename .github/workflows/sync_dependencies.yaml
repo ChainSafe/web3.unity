@@ -2,9 +2,6 @@ name: Sync Dependencies 🔄
 
 on:
   workflow_call:
-  push:
-    branches:
-      - rob/publish-tool-1120
   workflow_dispatch:
     inputs:
       arguments:

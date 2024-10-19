@@ -74,5 +74,7 @@ public class SyncDependencies : IRunnable
         }
         
         Git.CommitAndPush("Sync Dependencies");
+        
+        Console.WriteLine("Dependencies Synced Successfully!");
     }
 }

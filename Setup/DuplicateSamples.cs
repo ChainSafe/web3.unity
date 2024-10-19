@@ -42,5 +42,7 @@ public class DuplicateSamples : IRunnable
         }
         
         Git.CommitAndPush("Duplicated Samples");
+        
+        Console.WriteLine("Duplicated Samples Successfully!");
     }
 }
