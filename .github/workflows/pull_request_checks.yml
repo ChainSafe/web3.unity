@@ -11,17 +11,16 @@ jobs:
   analyze_code:
     name: Analyze 🧐
     uses: ChainSafe/web3.unity/.github/workflows/codeql.yml@main
-    needs: [ web3_tests ]
-  duplicate_samples:
-    name: Duplicate Samples 🪞
-    if: ${{ github.base_ref == 'main' }}
-    uses: ChainSafe/web3.unity/.github/workflows/duplicate_samples.yaml@main
-    needs: [ analyze_code ]
-    secrets: inherit
   sync_dependencies:
     name: Sync Dependencies 🔄
+    if: ${{ github.base_ref == 'main' }}
     uses: ChainSafe/web3.unity/.github/workflows/sync_dependencies.yaml@main
-    needs: [ duplicate_samples ]
+    needs: [ web3_tests , analyze_code ]
+    secrets: inherit
+  duplicate_samples:
+    name: Duplicate Samples 🪞
+    uses: ChainSafe/web3.unity/.github/workflows/duplicate_samples.yaml@main
+    needs: [ sync_dependencies ]
     secrets: inherit
   unity_tests:
     name: Unity Tests 🧪
