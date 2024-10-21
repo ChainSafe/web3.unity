@@ -122,7 +122,7 @@ namespace ChainSafe.Gaming.Reown
             var optionalNamespace = new ProposedNamespace // todo using optional namespaces like AppKit does, should they be required?
             {
                 Chains = chainConfigSet.Configs
-                    .Select(chainEntry => chainEntry.ChainId)
+                    .Select(chainEntry => $"{ChainModel.EvmNamespace}:{chainEntry.ChainId}")
                     .ToArray(),
                 Methods = new[]
                 {
@@ -388,9 +388,9 @@ namespace ChainSafe.Gaming.Reown
                 handler => signClient.CoreClient.Relayer.Publisher.OnPublishedMessage += handler,
                 handler => signClient.CoreClient.Relayer.Publisher.OnPublishedMessage -= handler);
 
-            var chainId = GetChainId();
+            // var chainId = GetChainId();
 
-            return await ReownRequest<T>(sessionTopic, method, chainId, parameters);
+            return await ReownRequest<T>(sessionTopic, method, parameters);
 
             void OnPublishedMessage(object sender, PublishParams args)
             {
@@ -403,7 +403,7 @@ namespace ChainSafe.Gaming.Reown
 
                 if (connectedLocalWallet != null)
                 {
-                    redirection.Redirect(connectedLocalWallet.Id);
+                    redirection.Redirect(connectedLocalWallet);
                 }
             }
         }
@@ -466,13 +466,13 @@ namespace ChainSafe.Gaming.Reown
             return defaultNamespace.Accounts[0];
         }
 
-        private async Task<T> ReownRequest<T>(string topic, string method, string chainId, params object[] parameters)
+        private async Task<T> ReownRequest<T>(string topic, string method, params object[] parameters)
         {
             // Helper method to make a request using ReownSignClient.
             async Task<T> MakeRequest<TRequest>()
             {
                 var data = (TRequest)Activator.CreateInstance(typeof(TRequest), parameters);
-                return await signClient.Request<TRequest, T>(topic, data, chainId);
+                return await signClient.Request<TRequest, T>(topic, data);
             }
 
             switch (method)
