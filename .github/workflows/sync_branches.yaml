@@ -3,7 +3,10 @@ name: Duplicate Samples
 on:
   workflow_call:
   workflow_dispatch:
-      
+  push: 
+    branches:
+      - rob/publish-tool-1120
+
 jobs:
   setup:
     name: Sync Branches ♾️
@@ -17,7 +20,6 @@ jobs:
           ssh-key: ${{ secrets.DEPLOY_KEY }}
       - name: Sync Branches
         run: |
-          git checkout dev
           git merge main
           git push
         shell: bash
