@@ -1,33 +1,33 @@
 {
-    "name": "io.chainsafe.web3-unity.ramp",
-    "version": "3.0.1",
-    "displayName": "web3.unity SDK Ramp",
-    "description": "This package includes the integration of Ramp's ramp service, which you can use with our Gaming SDK.",
-    "license": "LGPL-3.0-only",
-    "licensesUrl": "https://github.com/ChainSafe/web3.unity/blob/main/LICENSE",
-    "documentationUrl": "https://docs.gaming.chainsafe.io/",
-    "dependencies": {
-        "com.unity.nuget.newtonsoft-json": "3.0.2",
-        "io.chainsafe.web3-unity": "3.0.1"
-    },
-    "keywords": [
-        "web3",
-        "ethereum",
-        "evm",
-        "blockchain",
-        "nft",
-        "ramp"
-    ],
-    "author": {
-        "name": "ChainSafe Gaming",
-        "email": "bd@chainsafe.io",
-        "url": "https://gaming.chainsafe.io/"
-    },
-    "samples": [
-        {
-            "displayName": "Ramp Samples",
-            "description": "Contains example of integration and usage of Ramp functionality.",
-            "path": "Samples~/Web3.Unity Ramp"
-        }
-    ]
+  "name": "io.chainsafe.web3-unity.ramp",
+  "version": "3.0.2",
+  "displayName": "web3.unity SDK Ramp",
+  "description": "This package includes the integration of Ramp's ramp service, which you can use with our Gaming SDK.",
+  "license": "LGPL-3.0-only",
+  "licensesUrl": "https://github.com/ChainSafe/web3.unity/blob/main/LICENSE",
+  "documentationUrl": "https://docs.gaming.chainsafe.io/",
+  "dependencies": {
+    "com.unity.nuget.newtonsoft-json": "3.0.2",
+    "io.chainsafe.web3-unity": "3.0.2"
+  },
+  "keywords": [
+    "web3",
+    "ethereum",
+    "evm",
+    "blockchain",
+    "nft",
+    "ramp"
+  ],
+  "author": {
+    "name": "ChainSafe Gaming",
+    "email": "bd@chainsafe.io",
+    "url": "https://gaming.chainsafe.io/"
+  },
+  "samples": [
+    {
+      "displayName": "Ramp Samples",
+      "description": "Contains example of integration and usage of Ramp functionality.",
+      "path": "Samples~/Web3.Unity Ramp"
+    }
+  ]
 }

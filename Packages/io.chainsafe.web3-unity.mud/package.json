@@ -1,33 +1,33 @@
 {
-    "name": "io.chainsafe.web3-unity.mud",
-    "version": "3.0.1",
-    "displayName": "web3.unity SDK MUD",
-    "description": "This package includes the integration of MUD, which you can use with our Gaming SDK.",
-    "license": "LGPL-3.0-only",
-    "licensesUrl": "https://github.com/ChainSafe/web3.unity/blob/main/LICENSE",
-    "documentationUrl": "https://docs.gaming.chainsafe.io/",
-    "dependencies": {
-        "io.chainsafe.web3-unity": "3.0.1"
-    },
-    "keywords": [
-        "web3",
-        "ethereum",
-        "evm",
-        "blockchain",
-        "nft",
-        "marketplace",
-        "mud"
-    ],
-    "author": {
-        "name": "ChainSafe Gaming",
-        "email": "bd@chainsafe.io",
-        "url": "https://gaming.chainsafe.io/"
-    },
-    "samples": [
-        {
-            "displayName": "Marketplace Samples",
-            "description": "Contains example of integration and usage of Marketplace functionality.",
-            "path": "Samples~/Web3.Unity MUD"
-        }
-    ]
+  "name": "io.chainsafe.web3-unity.mud",
+  "version": "3.0.2",
+  "displayName": "web3.unity SDK MUD",
+  "description": "This package includes the integration of MUD, which you can use with our Gaming SDK.",
+  "license": "LGPL-3.0-only",
+  "licensesUrl": "https://github.com/ChainSafe/web3.unity/blob/main/LICENSE",
+  "documentationUrl": "https://docs.gaming.chainsafe.io/",
+  "dependencies": {
+    "io.chainsafe.web3-unity": "3.0.2"
+  },
+  "keywords": [
+    "web3",
+    "ethereum",
+    "evm",
+    "blockchain",
+    "nft",
+    "marketplace",
+    "mud"
+  ],
+  "author": {
+    "name": "ChainSafe Gaming",
+    "email": "bd@chainsafe.io",
+    "url": "https://gaming.chainsafe.io/"
+  },
+  "samples": [
+    {
+      "displayName": "Marketplace Samples",
+      "description": "Contains example of integration and usage of Marketplace functionality.",
+      "path": "Samples~/Web3.Unity MUD"
+    }
+  ]
 }
