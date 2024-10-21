@@ -8,7 +8,7 @@ namespace Setup;
 /// <summary>
 /// Git helper class.
 /// </summary>
-public class Git
+public static class Git
 {
     private static bool _configured;
 
