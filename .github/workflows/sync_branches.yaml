@@ -1,0 +1,37 @@
+name: Sync Branches
+
+on:
+  workflow_call:
+    inputs:
+      branch:
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      branch:
+        required: true
+        description: "Branch to Sync"
+        type: string
+
+jobs:
+  setup:
+    name: Sync Branches ♾️
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          lfs: true
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
+      - name: Sync Branches
+        run: |
+          git config user.email $git_email
+          git config user.name $git_actor
+          git fetch origin ${{ github.event.inputs.branch }}
+          git merge main --allow-unrelated-histories
+          git push
+        shell: bash
+        env:
+          git_email: "${{ github.actor }}@users.noreply.github.com"
+          git_actor: "${{ github.actor }}"
