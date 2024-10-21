@@ -7,6 +7,7 @@ using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.Evm.Contracts.Extensions;
 using ChainSafe.Gaming.Evm.Providers;
+using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.UnityPackage.UI;
@@ -44,6 +45,8 @@ namespace ChainSafe.Gaming.UnityPackage
                 return _instance;
             }
         }
+
+        public static event Action<(CWeb3 web3, bool isLightweight)> Web3Initialized;
 
         /// <summary>
         /// Web3 Instance.
@@ -270,6 +273,8 @@ namespace ChainSafe.Gaming.UnityPackage
             {
                 _connectModal.Close();
             }
+            
+            Web3Initialized?.Invoke((_web3, _web3.ServiceProvider.GetService(typeof(ISigner)) != null));
 
             return Task.CompletedTask;
         }
