@@ -20,6 +20,8 @@ jobs:
           ssh-key: ${{ secrets.DEPLOY_KEY }}
       - name: Sync Branches
         run: |
+          git config --global user.email "rob1997@users.noreply.github.com"
+          git config --global user.name "rob1997"
           git fetch origin main
           git merge origin/main --allow-unrelated-histories
           git push
