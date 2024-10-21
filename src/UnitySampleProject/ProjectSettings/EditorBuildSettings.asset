@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Samples/web3.unity SDK/3.0.0/Web3.Unity Samples/Scenes/SampleMain.unity
+    path: Assets/Samples/web3.unity SDK/3.0.1/Web3.Unity Samples/Scenes/SampleMain.unity
     guid: 516f54f8261cf44459691b7adc25e055
   m_configObjects: {}

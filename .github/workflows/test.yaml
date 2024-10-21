@@ -5,7 +5,7 @@ on:
 
 jobs:
   check:
-    name: Web3 tests job 🕸️
+    name: Web3 tests 🕸️
     runs-on: ubuntu-latest
     strategy:
       matrix:
