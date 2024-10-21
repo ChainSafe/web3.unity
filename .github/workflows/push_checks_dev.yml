@@ -5,14 +5,14 @@ on:
     branches: [ dev ]
 
 jobs:
-  duplicate_samples:
-    name: Duplicate Samples 🪞
-    uses: ChainSafe/web3.unity/.github/workflows/duplicate_samples.yaml@main
-    secrets: inherit
   sync_dependencies:
     name: Sync Dependencies 🔄
     uses: ChainSafe/web3.unity/.github/workflows/sync_dependencies.yaml@main
-    needs: [ duplicate_samples ]
+    secrets: inherit
+  duplicate_samples:
+    name: Duplicate Samples 🪞
+    uses: ChainSafe/web3.unity/.github/workflows/duplicate_samples.yaml@main
+    needs: [ sync_dependencies ]
     secrets: inherit
   unity_tests:
     name: Unity Tests 🧪
