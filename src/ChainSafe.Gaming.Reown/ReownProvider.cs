@@ -50,7 +50,7 @@ namespace ChainSafe.Gaming.Reown
         private bool initialized;
         private ConnectionHandlerConfig connectionHandlerConfig;
         private Dictionary<string, ProposedNamespace> optionalNamespaces;
-        private WalletModel connectedLocalWallet;
+        private WalletModel sessionWallet;
 
         public ReownProvider(
             IReownConfig config,
@@ -74,8 +74,28 @@ namespace ChainSafe.Gaming.Reown
             this.reownHttpClient = reownHttpClient;
         }
 
-        public bool StoredSessionAvailable => signClient.AddressProvider.HasDefaultSession
-                                              && !string.IsNullOrWhiteSpace(signClient.AddressProvider.DefaultSession.Topic);
+        public bool StoredSessionAvailable
+        {
+            get
+            {
+                if (!signClient.AddressProvider.HasDefaultSession)
+                {
+                    return false; // no session stored
+                }
+
+                if (string.IsNullOrWhiteSpace(signClient.AddressProvider.DefaultSession.Topic))
+                {
+                    return false; // session topic is empty
+                }
+
+                if (!signClient.Session.Keys.Contains(signClient.AddressProvider.DefaultSession.Topic))
+                {
+                    return false; // usually happens when session was closed on the wallet side
+                }
+
+                return true;
+            }
+        }
 
         private bool OsManageWalletSelection => osMediator.Platform == Platform.Android;
 
@@ -194,17 +214,18 @@ namespace ChainSafe.Gaming.Reown
                     ? await ConnectSession()
                     : await RestoreSession();
 
-                connectedLocalWallet = GetSessionLocalWallet();
-
-                ReownLogger.Log(connectedLocalWallet != null
-                    ? $"Local wallet connected. \"{connectedLocalWallet.Name}\" set as locally connected wallet for the current session."
-                    : "Remote wallet connected.");
-
                 var address = GetPlayerAddress();
 
                 if (!AddressExtensions.IsPublicAddress(address))
                 {
                     throw new ReownIntegrationException("Public address provided by Reown is not valid.");
+                }
+
+                sessionWallet = GetSessionWallet();
+
+                if (sessionWallet is null)
+                {
+                    ReownLogger.LogError("Couldn't identify the wallet used to connect the session. Redirection is disabled.");
                 }
 
                 connected = true;
@@ -295,13 +316,20 @@ namespace ChainSafe.Gaming.Reown
                         : null,
 
                     RedirectToWallet = !OsManageWalletSelection
-                        ? walletId => redirection.RedirectConnection(connectedData.Uri, walletId)
+                        ? OnRedirectToWallet
                         : null,
 
                     RedirectOsManaged = OsManageWalletSelection
                         ? () => redirection.RedirectConnectionOsManaged(connectedData.Uri)
                         : null,
                 };
+
+                void OnRedirectToWallet(string walletId)
+                {
+                    signClient.CoreClient.Storage.SetItem("ChainSafe_RecentLocalWalletId", walletId); // saving wallet id to enable future redirection
+                    redirection.RedirectConnection(connectedData.Uri, walletId);
+                }
+
                 var dialogTask = connectionHandler.ConnectUserWallet(connectionHandlerConfig);
 
                 // awaiting handler task to catch exceptions, actually awaiting only for approval
@@ -401,22 +429,19 @@ namespace ChainSafe.Gaming.Reown
                     return;
                 }
 
-                if (connectedLocalWallet != null)
-                {
-                    redirection.Redirect(connectedLocalWallet);
-                }
+                TryRedirectToWallet();
             }
         }
 
-        private WalletModel GetSessionLocalWallet()
+        private WalletModel GetSessionWallet()
         {
             var nativeUrl = RemoveSlash(session.Peer.Metadata.Url);
 
-            var sessionWallet = walletRegistry
+            var wallet = walletRegistry
                 .SupportedWallets
                 .FirstOrDefault(w => RemoveSlash(w.Homepage) == nativeUrl);
 
-            return sessionWallet;
+            return wallet;
 
             string RemoveSlash(string s)
             {
@@ -426,15 +451,28 @@ namespace ChainSafe.Gaming.Reown
             }
         }
 
-        private void TryRedirectToWallet()
+        private async void TryRedirectToWallet()
         {
-            if (connectedLocalWallet == null)
+            if (sessionWallet is null)
             {
+                return; // session wallet couldn't be determined, ignore redirection
+            }
+
+            if (!await signClient.CoreClient.Storage.HasItem("ChainSafe_RecentLocalWalletId"))
+            {
+                return; // no local wallets connected - ignore redirection
+            }
+
+            var recentLocalWalletId = await signClient.CoreClient.Storage.GetItem<string>("ChainSafe_RecentLocalWalletId");
+
+            if (recentLocalWalletId != sessionWallet.Id)
+            {
+                ReownLogger.Log("Last clicked local wallet was not used to connect the session. " +
+                                "Assuming the wallet was connected remotely. No redirection is going to happen.");
                 return;
             }
 
-            var sessionLocalWallet = GetSessionLocalWallet();
-            redirection.Redirect(sessionLocalWallet);
+            redirection.Redirect(sessionWallet); // safe to redirect
         }
 
         private string GetPlayerAddress()
@@ -472,7 +510,14 @@ namespace ChainSafe.Gaming.Reown
             async Task<T> MakeRequest<TRequest>()
             {
                 var data = (TRequest)Activator.CreateInstance(typeof(TRequest), parameters);
-                return await signClient.Request<TRequest, T>(topic, data);
+                try
+                {
+                    return await signClient.Request<TRequest, T>(topic, data);
+                }
+                catch (KeyNotFoundException e)
+                {
+                    throw new ReownIntegrationException("Can't execute request. The session was most likely terminated on the wallet side.", e);
+                }
             }
 
             switch (method)
@@ -491,16 +536,14 @@ namespace ChainSafe.Gaming.Reown
                     try
                     {
                         // Direct RPC request via http, Reown RPC url.
-                        string chain = session.Namespaces.First().Value.Chains[0];
+                        var chain = session.Namespaces.First().Value.Chains[0];
 
-                        // Using Reown Blockchain API: https://docs.Reown.com/cloud/blockchain-api
+                        // Using Reown Blockchain API: https://docs.reown.com/cloud/blockchain-api
                         var url = $"https://rpc.walletconnect.com/v1?chainId={chain}&projectId={config.ProjectId}";
 
-                        string body = JsonConvert.SerializeObject(new RpcRequestMessage(Guid.NewGuid().ToString(), method, parameters));
-
+                        var body = JsonConvert.SerializeObject(new RpcRequestMessage(Guid.NewGuid().ToString(), method, parameters));
                         var rawResult = await reownHttpClient.PostRaw(url, body, "application/json");
-
-                        RpcResponseMessage response = JsonConvert.DeserializeObject<RpcResponseMessage>(rawResult.Response);
+                        var response = JsonConvert.DeserializeObject<RpcResponseMessage>(rawResult.Response);
 
                         return response.Result.ToObject<T>();
                     }
