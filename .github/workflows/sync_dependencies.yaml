@@ -20,7 +20,7 @@ on:
 jobs:
   setup:
     name: Sync Dependencies 🔄
-    uses: ChainSafe/web3.unity/.github/workflows/setup.yaml@rob/publish-tool-1120
+    uses: ChainSafe/web3.unity/.github/workflows/setup.yaml@main
     with:
       arguments: "-sync_dependencies ${{ github.event.inputs.arguments || '-git:enabled' }} -c ${{ github.event.inputs.configuration || 'Release' }}"
     secrets: inherit

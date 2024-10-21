@@ -1,0 +1,23 @@
+name: Duplicate Samples
+
+on:
+  workflow_call:
+  workflow_dispatch:
+      
+jobs:
+  setup:
+    name: Sync Branches ♾️
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          lfs: true
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
+      - name: Sync Branches
+        run: |
+          git checkout dev
+          git merge main
+          git push
+        shell: bash

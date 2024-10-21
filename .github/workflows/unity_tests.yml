@@ -2,9 +2,7 @@ name: Unity Tests
 
 on:
   workflow_call:
-  push:
-    branches:
-      - rob/publish-tool-1120
+  workflow_dispatch: 
 
 jobs:
   unity_tests:

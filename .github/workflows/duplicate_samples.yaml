@@ -20,7 +20,7 @@ on:
 jobs:
   setup:
     name: Duplicate Samples 🪞
-    uses: ChainSafe/web3.unity/.github/workflows/setup.yaml@rob/publish-tool-1120
+    uses: ChainSafe/web3.unity/.github/workflows/setup.yaml@main
     with:
       arguments: "-duplicate_samples ${{ github.event.inputs.arguments || '-git:enabled' }} -c ${{ github.event.inputs.configuration || 'Release' }}"
     secrets: inherit
