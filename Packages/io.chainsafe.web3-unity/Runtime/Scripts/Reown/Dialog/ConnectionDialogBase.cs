@@ -59,7 +59,7 @@ namespace ChainSafe.Gaming.Reown.Dialog
                     SetRedirectOptionsVisible(true);
 
                     var walletOptionConfigs = config.LocalWalletOptions
-                        .Select(data => new WalletOptionConfig(data, () => OnLocalWalletButtonClick(data.Name)))
+                        .Select(data => new WalletOptionConfig(data, () => OnLocalWalletButtonClick(data.Id)))
                         .ToList();
 
                     SpawnRedirectOptions(walletOptionConfigs);
@@ -120,11 +120,11 @@ namespace ChainSafe.Gaming.Reown.Dialog
             ClearDynamicElements();
         }
 
-        private void OnLocalWalletButtonClick(string walletName)
+        private void OnLocalWalletButtonClick(string walletId)
         {
             try
             {
-                config.RedirectToWallet(walletName);
+                config.RedirectToWallet(walletId);
             }
             catch (Exception e)
             {
