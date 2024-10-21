@@ -1,4 +1,4 @@
-name: Duplicate Samples 🪞
+name: Duplicate Samples
 
 on:
   workflow_call:
@@ -19,7 +19,7 @@ on:
       
 jobs:
   setup:
-    name: Duplicate job
+    name: Duplicate Samples 🪞
     uses: ChainSafe/web3.unity/.github/workflows/setup.yaml@rob/publish-tool-1120
     with:
       arguments: "-duplicate_samples ${{ github.event.inputs.arguments || '-git:enabled' }} -c ${{ github.event.inputs.configuration || 'Release' }}"

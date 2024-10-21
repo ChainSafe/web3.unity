@@ -1,4 +1,4 @@
-name: Sync Dependencies 🔄
+name: Sync Dependencies
 
 on:
   workflow_call:
@@ -19,7 +19,7 @@ on:
     
 jobs:
   setup:
-    name: Sync job
+    name: Sync Dependencies 🔄
     uses: ChainSafe/web3.unity/.github/workflows/setup.yaml@rob/publish-tool-1120
     with:
       arguments: "-sync_dependencies ${{ github.event.inputs.arguments || '-git:enabled' }} -c ${{ github.event.inputs.configuration || 'Release' }}"

@@ -5,16 +5,26 @@ on:
 
 jobs:
   web3_tests:
-    name: Web3 Tests
+    name: Web3 tests 🕸
     if: ${{ github.event.action == 'ready_for_review' || github.event.label.name == 'ready-to-merge'}}
     uses: ChainSafe/web3.unity/.github/workflows/test.yaml@main
   analyze_code:
-    name: Analyze Code
+    name: Analyze 🧐
     uses: ChainSafe/web3.unity/.github/workflows/codeql.yml@main
     needs: [ web3_tests ]
-  unity_tests:
-    name: Unity Tests
+  duplicate_samples:
+    name: Duplicate Samples 🪞
     if: ${{ github.base_ref == 'main' }}
-    uses: ChainSafe/web3.unity/.github/workflows/check_and_commit.yml@main
+    uses: ChainSafe/web3.unity/.github/workflows/duplicate_samples.yaml@main
     needs: [ analyze_code ]
+    secrets: inherit
+  sync_dependencies:
+    name: Sync Dependencies 🔄
+    uses: ChainSafe/web3.unity/.github/workflows/sync_dependencies.yaml@main
+    needs: [ duplicate_samples ]
+    secrets: inherit
+  unity_tests:
+    name: Unity Tests 🧪
+    uses: ChainSafe/web3.unity/.github/workflows/unity_tests.yml@main
+    needs: [ sync_dependencies ]
     secrets: inherit
