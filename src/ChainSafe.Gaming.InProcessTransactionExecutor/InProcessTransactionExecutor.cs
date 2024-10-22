@@ -36,8 +36,7 @@ namespace ChainSafe.Gaming.InProcessTransactionExecutor
 
         /// <summary>
         /// Implementation of <see cref="ITransactionExecutor.SendTransaction"/>.
-        /// Send a transaction using Wallet Connect.
-        /// This prompts user to approve a transaction on a connected wallet.
+        /// Sends a transaction.
         /// </summary>
         /// <param name="transaction">Transaction to send.</param>
         /// <returns>Hash response of a successfully executed transaction.</returns>

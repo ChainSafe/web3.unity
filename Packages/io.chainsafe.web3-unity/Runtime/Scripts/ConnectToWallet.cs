@@ -16,15 +16,15 @@ namespace ChainSafe.Gaming.UnityPackage
     {
         [SerializeField] private bool rememberMe = true;
 
-        [Space] [SerializeField] private Button connectButton;
+        [Space][SerializeField] private Button connectButton;
 
         [SerializeField] private Button disconnectButton;
 
-        [Space] [SerializeField] private TextMeshProUGUI addressText;
+        [Space][SerializeField] private TextMeshProUGUI addressText;
 
         [SerializeField] private Button copyAddressButton;
 
-        [Space] [SerializeField] private Transform connectedTransform;
+        [Space][SerializeField] private Transform connectedTransform;
 
         [SerializeField] private Transform disconnectedTransform;
 

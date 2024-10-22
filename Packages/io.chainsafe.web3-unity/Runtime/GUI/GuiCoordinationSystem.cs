@@ -16,16 +16,16 @@ namespace ChainSafe.Gaming.GUI
                 Visible = false;
             }
         }
-        
+
         private readonly List<ScreenRecord> activeScreens = new();
         private int currentVisibleSortOrder = int.MinValue;
-        
+
         public void Register(IGuiScreen screen)
         {
             activeScreens.Add(new ScreenRecord(screen));
             UpdateStackVisibility();
         }
-        
+
         public void Unregister(IGuiScreen screen)
         {
             var record = activeScreens.Find(r => r.Screen == screen);
@@ -50,11 +50,11 @@ namespace ChainSafe.Gaming.GUI
             var opaqueScreenLayers = activeScreens
                 .Select(r => r.Screen.Layer)
                 .Where(l => !l.Transparent);
-            
+
             var newVisibleSortOrder = opaqueScreenLayers.Any()
                 ? opaqueScreenLayers.Max(l => l.SortOrder)
                 : int.MinValue;
-            
+
             if (newVisibleSortOrder == currentVisibleSortOrder) return;
 
             currentVisibleSortOrder = newVisibleSortOrder;
@@ -62,19 +62,19 @@ namespace ChainSafe.Gaming.GUI
             foreach (var activeScreen in activeScreens)
             {
                 var show = activeScreen.Screen.Layer.SortOrder >= currentVisibleSortOrder;
-                
+
                 if (show && !activeScreen.Visible)
                 {
                     ShowScreen(activeScreen);
                     continue;
                 }
-                
+
                 if (!show && activeScreen.Visible)
                 {
                     HideScreen(activeScreen);
                     continue;
                 }
-                
+
                 // ignore
             }
         }

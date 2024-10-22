@@ -15,7 +15,7 @@ namespace ChainSafe.Gaming.UnityPackage.UI
         [SerializeField] private RectTransform providerContainer;
         [SerializeField] private ConnectionProviderButton providerButtonPrefab;
         [SerializeField] private Button closeButton;
-        
+
         private int loadingOverlayId;
 
         private void Awake()
@@ -39,7 +39,7 @@ namespace ChainSafe.Gaming.UnityPackage.UI
                 await TryConnect(provider);
             }
         }
-        
+
         /// <summary>
         /// Try to Connect and displays error and throws exception on a failed attempt.
         /// </summary>
@@ -60,7 +60,7 @@ namespace ChainSafe.Gaming.UnityPackage.UI
                 {
                     DisplayError(
                         "Connection failed, please try again.");
-                    
+
                     Debug.LogException(e);
                 }
             }
@@ -82,7 +82,7 @@ namespace ChainSafe.Gaming.UnityPackage.UI
         {
             gameObject.SetActive(false);
         }
-        
+
         /// <summary>
         /// Display Error.
         /// </summary>
@@ -101,7 +101,7 @@ namespace ChainSafe.Gaming.UnityPackage.UI
             DisableButtons();
             loadingOverlayId = GuiManager.Instance.Overlays.Show(GuiOverlayType.Loading, message, false, EnableButtons);
         }
-        
+
         /// <summary>
         /// Hide Loading overlay.
         /// </summary>

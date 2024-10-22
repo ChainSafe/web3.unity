@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 582efc0fde77aab43a77ee4237ba305a, type: 3}
+  m_Name: ReownConnectionProvider
+  m_EditorClassIdentifier: 
+  handlerPrefab: {fileID: 5250797134093199901, guid: 0c7c312ad6c521f4b8346ed8e9d7c664, type: 3}
+  includeWalletIds: []
+  excludeWalletIds: []
+  <ProjectId>k__BackingField: 214bf16d1d17a589e2d54d49fefa2259
+  <ProjectName>k__BackingField: Web3.Unity
+  <AutoRenewSession>k__BackingField: 1
+  <BaseContext>k__BackingField: unity-game
+  <Metadata>k__BackingField:
+    Description: web3.unity is an open-source gaming SDK.
+    Icons: []
+    Name: Web3.Unity
+    Redirect:
+      Native: 
+      Universal: 
+    Url: https://chainsafe.io/
+    VerifyUrl: 
+  <OverrideRegistryUri>k__BackingField: 
+  <LogLevel>k__BackingField: 1
+  <WalletLocationOption>k__BackingField: 0
+  <ButtonIcon>k__BackingField: {fileID: 21300000, guid: 9af22e71d3035844ca8ae6e9f2a538f5, type: 3}
+  <ButtonText>k__BackingField: Reown

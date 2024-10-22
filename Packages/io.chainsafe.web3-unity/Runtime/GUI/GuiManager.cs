@@ -14,21 +14,21 @@ namespace ChainSafe.Gaming.GUI
         {
             var prefab = Resources.Load<GuiManager>(ResourceName);
             var manager = Instantiate(prefab);
-            
+
             if (manager.HideInHierarchy)
             {
                 manager.gameObject.hideFlags = HideFlags.HideInHierarchy;
             }
-            
+
             DontDestroyOnLoad(manager);
             return manager;
         }
-        
+
         [SerializeField] private bool HideInHierarchy = true;
 
-        [field:SerializeField] public GuiOrientationSystem Orientation { get; private set; }
-        [field:SerializeField] public GuiOverlayManager Overlays { get; private set; }
-        
+        [field: SerializeField] public GuiOrientationSystem Orientation { get; private set; }
+        [field: SerializeField] public GuiOverlayManager Overlays { get; private set; }
+
         public GuiCoordinationSystem Coordination { get; } = new();
     }
 }
