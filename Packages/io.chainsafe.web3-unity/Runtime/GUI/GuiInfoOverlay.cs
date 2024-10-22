@@ -11,7 +11,7 @@ namespace ChainSafe.Gaming.GUI
         public GameObject ErrorIcon;
         public GameObject LoadingIcon;
         public Button CloseButton;
-        
+
         private bool closeOnClick;
         private Action onClose;
         private Action<GuiInfoOverlay> onRelease;
@@ -29,7 +29,7 @@ namespace ChainSafe.Gaming.GUI
             this.onClose = onClose;
             this.closeOnClick = closeOnClick;
             onRelease = release;
-            
+
             ErrorIcon.SetActive(type == GuiOverlayType.Error);
             LoadingIcon.SetActive(type == GuiOverlayType.Loading);
             Message.text = message;
@@ -41,7 +41,7 @@ namespace ChainSafe.Gaming.GUI
             {
                 return;
             }
-            
+
             Hide();
         }
 

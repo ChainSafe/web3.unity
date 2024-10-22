@@ -15,7 +15,7 @@ namespace ChainSafe.Gaming.Reown
             provider.ForceNewSession = forceNewSession;
             return provider;
         }
-        
+
         /// <summary>
         /// Sets <see cref="ReownConfigAsset.ForceNewSession"/> property of this config object.
         /// </summary>

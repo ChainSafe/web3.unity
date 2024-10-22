@@ -22,7 +22,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         [SerializeField] private ConnectionHandlerBehaviour handlerPrefab;
         [SerializeField] private List<string> includeWalletIds;
         [SerializeField] private List<string> excludeWalletIds;
-        
+
         [field: SerializeField] public string ProjectId { get; private set; }
 
         [field: SerializeField] public string ProjectName { get; private set; }
@@ -44,7 +44,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         public override Sprite ButtonIcon { get; protected set; }
 
         [field: SerializeField] public override string ButtonText { get; protected set; } = "Reown";
-        
+
         private bool _storedSessionAvailable;
         private ConnectionHandlerBehaviour _loadedHandler;
         private IConnectionBuilder _connectionBuilder;

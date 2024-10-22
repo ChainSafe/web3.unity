@@ -6,8 +6,10 @@ namespace ChainSafe.Gaming.Reown.Wallets
 {
     public class WalletRegistryResponse
     {
-        [JsonProperty("count")] public int Count { get; set; }
+        [JsonProperty("count")]
+        public int Count { get; set; }
 
-        [JsonProperty("data")] public List<WalletModel> Data { get; set; }
+        [JsonProperty("data")]
+        public List<WalletModel> Data { get; set; }
     }
 }

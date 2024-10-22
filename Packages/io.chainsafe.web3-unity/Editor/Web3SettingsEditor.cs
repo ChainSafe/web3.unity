@@ -229,10 +229,10 @@ namespace ChainSafe.GamingSdk.Editor
         private void SetPrimaryChain(ChainConfigEntry entry)
         {
             var indexOf = web3Config.ChainConfigs.IndexOf(entry);
-            
+
             web3Config.ChainConfigs.RemoveAt(indexOf);
             web3Config.ChainConfigs.Insert(0, entry);
-            
+
             InitializeChainItems();
             chainsScrollPosition = Vector2.zero;
         }

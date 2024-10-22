@@ -9,11 +9,11 @@ namespace ChainSafe.Gaming.GUI
     {
         public GuiScreenFactory screenFactory;
         public Transform container;
-        
+
         private readonly List<GuiInfoOverlay> activeOverlays = new();
 
         private ObjectPool<GuiInfoOverlay> pool;
-        
+
         private int overlayCounter = 1000; // offset to detect when default integer value is sent to one of the methods
 
         private void Awake()
@@ -37,7 +37,7 @@ namespace ChainSafe.Gaming.GUI
             {
                 throw new InvalidOperationException($"There is no active Overlay with id {overlayId} to hide.");
             }
-            
+
             overlay.Hide();
             activeOverlays.Remove(overlay);
         }
