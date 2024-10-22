@@ -274,7 +274,7 @@ namespace ChainSafe.Gaming.UnityPackage
                 _connectModal.Close();
             }
             
-            Web3Initialized?.Invoke((_web3, _web3.ServiceProvider.GetService(typeof(ISigner)) != null));
+            Web3Initialized?.Invoke((_web3, _web3.ServiceProvider.GetService(typeof(ISigner)) == null));
 
             return Task.CompletedTask;
         }
