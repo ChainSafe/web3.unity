@@ -4,6 +4,9 @@ using AOT;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
 using UnityEngine.Scripting;
 
 namespace ChainSafe.Gaming

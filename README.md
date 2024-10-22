@@ -7,20 +7,13 @@
 ## Documentation
 You can access the full docs at [docs.gaming.chainsafe.io](https://docs.gaming.chainsafe.io).
 
-Our codebase is quite easy to use. This is an example of accessing player balance and calling a write method of a custom Smart Contract within Unity.
+Our codebase is quite easy to use. To immediately start with reading from the blockchain, once you've installed our core package,you can simply drag and drop our Web3Unity prefab to the scene and do the following
 
 ```csharp
 async void Awake()
 {
-    // Build Web3 client
-    var web3 = await BuildWeb3();
-    
-    // Get ERC-20 balance for current user
-    var balance = await web3.Erc20.GetBalanceOf(erc20ContractAddress);
-    
-    // Interact with custom Contract
-    var customContract = web3.ContractBuilder.Build(contractAbi, contractAddress);
-    var friendHp = await customContract.SendSingle<int, BigInteger>("healPlayer", nftItemId);
+    await Web3Unity.Instance.Initialize(false);
+    var balance = await Web3Unity.Web3.Erc20.GetBalanceOf(contractAddress, accountAddress);   
 }
 ```
 

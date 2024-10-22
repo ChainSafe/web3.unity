@@ -3,7 +3,8 @@
     "rootNamespace": "ChainSafe.Gaming",
     "references": [
         "GUID:6055be8ebefd69e48b49212b09b47b2f",
-        "GUID:1e69005fbbf5a4cd0a6c61596a74886e"
+        "GUID:1e69005fbbf5a4cd0a6c61596a74886e",
+        "GUID:75469ad4d38634e559750d17036d5f7c"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
