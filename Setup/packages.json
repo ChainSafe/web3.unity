@@ -1,0 +1,9 @@
+[
+  "Packages/io.chainsafe.web3-unity",
+  "Packages/io.chainsafe.web3-unity.hyperplay",
+  "Packages/io.chainsafe.web3-unity.lootboxes",
+  "Packages/io.chainsafe.web3-unity.marketplace",
+  "Packages/io.chainsafe.web3-unity.mud",
+  "Packages/io.chainsafe.web3-unity.ramp",
+  "Packages/io.chainsafe.web3-unity.web3auth"
+]

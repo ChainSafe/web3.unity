@@ -1,0 +1,27 @@
+name: Duplicate Samples
+
+on:
+  workflow_call:
+  workflow_dispatch:
+    inputs:
+      arguments:
+        required: false
+        description: 'Run Arguments'
+        type: string
+      configuration:
+        required: true
+        description: 'Run Configuration'
+        default: 'Release'
+        type: choice
+        options:
+          - Release
+          - Debug
+      
+jobs:
+  setup:
+    name: Duplicate Samples 🪞
+    uses: ChainSafe/web3.unity/.github/workflows/setup.yaml@main
+    with:
+      arguments: "-duplicate_samples ${{ github.event.inputs.arguments || '-git:enabled' }} -c ${{ github.event.inputs.configuration || 'Release' }}"
+    secrets: inherit
+    

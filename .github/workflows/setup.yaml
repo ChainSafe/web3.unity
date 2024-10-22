@@ -1,0 +1,48 @@
+name: Setup ⚙️
+
+on:
+  workflow_call:
+    inputs:
+      arguments:
+        required: true
+        type: string
+  workflow_dispatch: 
+    inputs:
+      arguments:
+        required: true
+        description: 'Arguments to pass to the setup script'
+        type: string
+env:
+  git_email: "${{ github.actor }}@users.noreply.github.com"
+  git_actor: "${{ github.actor }}"
+
+jobs:
+  setup:
+    name: Setup job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          lfs: true
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
+      - name: update submodules
+        run: |
+          git submodule update --init
+        shell: bash
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Run
+        run: |
+          cd Setup
+          dotnet run ${{ inputs.arguments || github.event.inputs.arguments }} Setup/Setup.csproj
+          git reset --hard
+      - name: Cache
+        uses: actions/cache/save@v4
+        with:
+          path: .git
+          key: ${{ runner.os }}-git
