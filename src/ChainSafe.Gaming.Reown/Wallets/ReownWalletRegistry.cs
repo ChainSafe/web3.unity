@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Reown.Models;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Environment;
+using ChainSafe.Gaming.Web3.Environment.Http;
 
 namespace ChainSafe.Gaming.Reown.Wallets
 {
@@ -47,7 +48,7 @@ namespace ChainSafe.Gaming.Reown.Wallets
                 { "exclude", BuildWalletIdsFilter(config.ExcludeWalletIds) },
             };
 
-            var parametersRaw = BuildUriParameters(parameters);
+            var parametersRaw = HttpUtils.BuildUriParameters(parameters);
 
             var response = await reownHttpClient.Get<WalletRegistryResponse>(registryUri + parametersRaw);
             var apiFilteredWallets = platformWallets = response.AssertSuccess().Data;
@@ -93,15 +94,6 @@ namespace ChainSafe.Gaming.Reown.Wallets
                     ? string.Join(",", walletIds)
                     : null;
             }
-        }
-
-        private static string BuildUriParameters(Dictionary<string, string> parameters)
-        {
-            var parametersRaw = parameters
-                .Where(p => !string.IsNullOrWhiteSpace(p.Value))
-                .Select(pair => $"{pair.Key}={pair.Value}");
-
-            return $"?{string.Join("&", parametersRaw)}";
         }
 
         ValueTask ILifecycleParticipant.WillStopAsync() => new(Task.CompletedTask);
