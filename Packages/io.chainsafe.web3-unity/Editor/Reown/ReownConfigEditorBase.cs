@@ -18,11 +18,6 @@ namespace ChainSafe.Gaming.Editor.Reown
                 {
                     ListWalletProviders();
                 }
-
-                // if (GUILayout.Button("Clear cache", GUILayout.ExpandWidth(false)))
-                // {
-                //     DeleteStorage();
-                // }
             }
         }
 
@@ -30,29 +25,5 @@ namespace ChainSafe.Gaming.Editor.Reown
         {
             Application.OpenURL(ReownWalletRegistry.RegistryUri);
         }
-
-        // private void DeleteStorage() // todo check if this is needed, remove otherwise
-        // {
-        //     var config = (IReownConfig)target;
-        //
-        //     if (string.IsNullOrEmpty(config.StoragePath))
-        //     {
-        //         Debug.LogError("StoragePath is empty.");
-        //         return;
-        //     }
-        //
-        //     var storageFolderPath =
-        //         DataStorage.BuildStoragePath(Application.persistentDataPath, config.StoragePath);
-        //
-        //     if (!Directory.Exists(storageFolderPath))
-        //     {
-        //         Debug.Log("Reown cache is already cleared.");
-        //         return;
-        //     }
-        //
-        //     Directory.Delete(storageFolderPath, true);
-        //
-        //     Debug.Log("Reown cache cleared.");
-        // }
     }
 }
