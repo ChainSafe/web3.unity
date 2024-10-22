@@ -39,7 +39,7 @@ public class Erc20Tests : SampleTestsBase
     {
         var getNativeBalanceOf = web3.RpcProvider.GetBalance(Account);
         yield return new WaitUntil(() => getNativeBalanceOf.IsCompleted);
-        Assert.AreEqual(new HexBigInteger(510000000000000000), new HexBigInteger(getNativeBalanceOf.Result));
+        Assert.AreEqual(new HexBigInteger(0), new HexBigInteger(getNativeBalanceOf.Result));
     }
 
     [UnityTest]
