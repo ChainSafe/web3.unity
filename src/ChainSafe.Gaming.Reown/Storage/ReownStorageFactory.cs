@@ -10,7 +10,7 @@ namespace ChainSafe.Gaming.Reown.Storage
 {
     public class ReownStorageFactory
     {
-        public static string RelativeFilePath = "Reown/storage.json";
+        private const string RelativeFilePath = "Reown/storage.json";
 
         public static async Task<IKeyValueStorage> Build(Web3Environment environment)
         {
