@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using ChainSafe.Gaming.Reown.Models;
 
@@ -12,7 +13,7 @@ namespace ChainSafe.Gaming.Reown.Wallets
         /// Get all wallets supported on the current platform.
         /// </summary>
         /// <value>Sequence of <see cref="WalletModel"/> that the platform supports.</value>
-        ReadOnlyCollection<WalletModel> SupportedWallets { get; }
+        IEnumerable<WalletModel> SupportedWallets { get; }
 
         /// <summary>
         /// Return model for the wallet by it's ID.

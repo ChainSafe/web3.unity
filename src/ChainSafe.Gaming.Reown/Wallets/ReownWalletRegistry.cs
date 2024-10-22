@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Reown.Models;
@@ -30,7 +29,7 @@ namespace ChainSafe.Gaming.Reown.Wallets
 
         public static string RegistryUri => $"{Host}/getWallets";
 
-        public ReadOnlyCollection<WalletModel> SupportedWallets => platformWallets.AsReadOnly();
+        public IEnumerable<WalletModel> SupportedWallets => platformWallets.AsReadOnly();
 
         async ValueTask ILifecycleParticipant.WillStartAsync()
         {
@@ -51,7 +50,24 @@ namespace ChainSafe.Gaming.Reown.Wallets
             var parametersRaw = BuildUriParameters(parameters);
 
             var response = await reownHttpClient.Get<WalletRegistryResponse>(registryUri + parametersRaw);
-            platformWallets = response.AssertSuccess().Data;
+            var apiFilteredWallets = platformWallets = response.AssertSuccess().Data;
+            platformWallets = apiFilteredWallets
+                .Where(w =>
+                {
+                    switch (systemMediator.Platform)
+                    {
+                        case Platform.Editor:
+                        case Platform.Desktop:
+                            return !string.IsNullOrWhiteSpace(w.DesktopLink);
+                        case Platform.IOS:
+                        case Platform.Android:
+                            return !string.IsNullOrWhiteSpace(w.MobileLink);
+                        case Platform.WebGL:
+                        default:
+                            return true;
+                    }
+                })
+                .ToList();
 
             /* todo implement and utilize IsWalletInstalled functionality
              *
