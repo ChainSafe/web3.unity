@@ -33,6 +33,8 @@ namespace ChainSafe.Gaming.Reown
     /// </summary>
     public class ReownProvider : WalletProvider, ILifecycleParticipant, IConnectionHelper
     {
+        private const string EvmNamespace = "eip155";
+
         private readonly ILogWriter logWriter;
         private readonly IReownConfig config;
         private readonly IChainConfig chainConfig;
@@ -142,7 +144,7 @@ namespace ChainSafe.Gaming.Reown
             var optionalNamespace = new ProposedNamespace // todo using optional namespaces like AppKit does, should they be required?
             {
                 Chains = chainConfigSet.Configs
-                    .Select(chainEntry => $"{ChainModel.EvmNamespace}:{chainEntry.ChainId}")
+                    .Select(chainEntry => $"{EvmNamespace}:{chainEntry.ChainId}")
                     .ToArray(),
                 Methods = new[]
                 {
@@ -164,7 +166,7 @@ namespace ChainSafe.Gaming.Reown
 
             optionalNamespaces = new Dictionary<string, ProposedNamespace>
             {
-                { ChainModel.EvmNamespace, optionalNamespace },
+                { EvmNamespace, optionalNamespace },
             };
 
             initialized = true;
@@ -246,7 +248,7 @@ namespace ChainSafe.Gaming.Reown
         private async Task CheckAndSwitchNetwork()
         {
             var chainId = GetChainId();
-            if (chainId != $"{ChainModel.EvmNamespace}:{chainConfig.ChainId}")
+            if (chainId != $"{EvmNamespace}:{chainConfig.ChainId}")
             {
                 await SwitchChain(chainConfig.ChainId);
                 UpdateSessionChainId();

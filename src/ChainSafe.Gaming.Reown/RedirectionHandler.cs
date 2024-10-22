@@ -21,16 +21,6 @@ namespace ChainSafe.Gaming.Reown
             this.walletRegistry = walletRegistry;
         }
 
-        private static bool NativeProtocolAvailable(WalletLinkModel linkData)
-        {
-            return !string.IsNullOrWhiteSpace(linkData.NativeProtocol) && linkData.NativeProtocol != ":";
-        }
-
-        private static bool UniversalProtocolAvailable(WalletLinkModel linkData)
-        {
-            return !string.IsNullOrWhiteSpace(linkData.UniversalUrl);
-        }
-
         /// <summary>
         /// Redirect for connection using the pre-selected wallet.
         /// </summary>

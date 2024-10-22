@@ -41,7 +41,7 @@ namespace ChainSafe.Gaming.Reown.Wallets
             var parameters = new Dictionary<string, string>()
             {
                 { "page", 1.ToString() },
-                { "entries", 100.ToString() }, // get as many wallets as we can with one api call (when too many wallets return 400)
+                { "entries", 100.ToString() }, // get as many wallets as we can with one api call (when too many wallets returns 400)
                 { "search", null },
                 { "platform", GetPlatformFilter() },
                 { "include", BuildWalletIdsFilter(config.IncludeWalletIds) },
@@ -50,7 +50,7 @@ namespace ChainSafe.Gaming.Reown.Wallets
 
             var parametersRaw = HttpUtils.BuildUriParameters(parameters);
 
-            var response = await reownHttpClient.Get<WalletRegistryResponse>(registryUri + parametersRaw);
+            var response = await reownHttpClient.Get<WalletRegistryResponse>(registryUri + parametersRaw); // todo download all the available wallets in a loop
             var apiFilteredWallets = platformWallets = response.AssertSuccess().Data;
             platformWallets = apiFilteredWallets
                 .Where(w =>

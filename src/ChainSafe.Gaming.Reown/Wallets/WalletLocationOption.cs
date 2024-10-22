@@ -1,4 +1,4 @@
-namespace ChainSafe.Gaming.Reown
+namespace ChainSafe.Gaming.Reown.Wallets
 {
     /// <summary>
     /// Wallet location options.

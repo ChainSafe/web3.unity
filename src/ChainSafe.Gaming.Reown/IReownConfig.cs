@@ -1,6 +1,7 @@
 #nullable enable
 using System.Collections.Generic;
 using ChainSafe.Gaming.Reown.Connection;
+using ChainSafe.Gaming.Reown.Wallets;
 using ChainSafe.Gaming.Web3.Environment;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
 using Reown.Core;

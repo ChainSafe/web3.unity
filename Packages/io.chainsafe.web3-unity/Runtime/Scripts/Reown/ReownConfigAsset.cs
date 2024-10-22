@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using ChainSafe.Gaming.Reown.Connection;
 using ChainSafe.Gaming.Reown.Dialog;
+using ChainSafe.Gaming.Reown.Wallets;
 using Reown.Core;
 using Reown.Core.Network;
 using Reown.Core.Network.Interfaces;

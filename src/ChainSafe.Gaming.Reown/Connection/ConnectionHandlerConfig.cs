@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using ChainSafe.Gaming.Reown.Models;
+using ChainSafe.Gaming.Reown.Wallets;
 
 namespace ChainSafe.Gaming.Reown.Connection
 {

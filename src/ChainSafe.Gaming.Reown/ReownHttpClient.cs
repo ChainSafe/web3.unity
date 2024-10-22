@@ -5,6 +5,9 @@ using ChainSafe.Gaming.Web3.Environment.Http;
 
 namespace ChainSafe.Gaming.Reown
 {
+    /// <summary>
+    /// An HTTP client wrapper that adds the HTTP headers required by the Reown API to each request.
+    /// </summary>
     public class ReownHttpClient : IHttpClient
     {
         private readonly IHttpClient originalClient;

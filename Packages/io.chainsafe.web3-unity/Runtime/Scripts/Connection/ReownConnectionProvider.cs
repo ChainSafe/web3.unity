@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Reown;
 using ChainSafe.Gaming.Reown.Connection;
 using ChainSafe.Gaming.Reown.Dialog;
+using ChainSafe.Gaming.Reown.Wallets;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
 using Reown.Core;

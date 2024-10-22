@@ -1,6 +1,6 @@
 using System;
 
-namespace ChainSafe.Gaming.Reown
+namespace ChainSafe.Gaming.Reown.Wallets
 {
     public static class WalletLocationOptionsExtensions
     {

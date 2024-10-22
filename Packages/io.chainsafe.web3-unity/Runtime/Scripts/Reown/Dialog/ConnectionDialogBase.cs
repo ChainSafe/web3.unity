@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Reown.Connection;
 using ChainSafe.Gaming.Reown.Models;
+using ChainSafe.Gaming.Reown.Wallets;
 using UnityEngine;
 
 namespace ChainSafe.Gaming.Reown.Dialog
