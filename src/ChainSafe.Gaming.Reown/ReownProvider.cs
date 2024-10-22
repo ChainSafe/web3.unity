@@ -225,7 +225,9 @@ namespace ChainSafe.Gaming.Reown
 
                 if (sessionWallet is null)
                 {
-                    ReownLogger.LogError("Couldn't identify the wallet used to connect the session. Redirection is disabled.");
+                    ReownLogger.LogError("Couldn't identify the wallet used to connect the session. " +
+                                         "Redirection is disabled. " +
+                                         $"URL from wallet metadata is \"{session.Peer.Metadata.Url}\".");
                 }
 
                 connected = true;
