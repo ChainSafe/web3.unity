@@ -7,7 +7,7 @@ namespace ChainSafe.Gaming.GUI
         public float AspectRatioThreshold = 1f;
         public bool Debug;
         public GuiOrientation DebugOrientationValue;
-        
+
         public GuiOrientation Initial { get; private set; }
 
         private void Awake()

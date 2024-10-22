@@ -40,6 +40,16 @@ namespace ChainSafe.GamingSdk.Editor
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.Label(title, EditorStyles.boldLabel);
                 GUILayout.FlexibleSpace();
+                if (window.IsPrimaryChain(chainConfig))
+                {
+                    GUI.enabled = false;
+                    GUILayout.Button("Primary Chain");
+                    GUI.enabled = true;
+                }
+                else if (GUILayout.Button("Set as Primary"))
+                {
+                    window.SetPrimaryChain(chainConfig);
+                }
                 if (GUILayout.Button("Remove"))
                 {
                     OnRemoveClick();

@@ -10,7 +10,7 @@ namespace ChainSafe.Gaming.UnityPackage.UI
         public Image Icon;
         public TMP_Text Text;
         public Button Button;
-        
+
         private Action onClick;
 
         private void Awake()

@@ -5,7 +5,6 @@ using ChainSafe.Gaming.EVM.Events;
 using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.MultiCall;
 using ChainSafe.Gaming.UnityPackage;
-using ChainSafe.Gaming.WalletConnect;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
@@ -64,9 +63,9 @@ public class SampleTestsBase
             services.UseMultiCall();
             services.UseRpcProvider();
 
-            var config = new StubWalletConnectProviderConfig();
+            var config = new StubReownConfig();
             services.AddSingleton(config); // can be replaced
-            services.UseWalletProvider<StubWalletConnectProvider>(config);
+            services.UseWalletProvider<StubReownProvider>(config);
             services.UseWalletSigner();
             services.UseWalletTransactionExecutor();
             services.UseEvents();

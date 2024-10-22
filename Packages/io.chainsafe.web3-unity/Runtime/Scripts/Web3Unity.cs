@@ -74,7 +74,7 @@ namespace ChainSafe.Gaming.UnityPackage
         }
 
         [SerializeField] private GuiScreenFactory connectScreenFactory;
-        
+
         private CWeb3 _web3;
         private ConnectionHandler _connectionHandler;
         private ConnectScreen _connectScreen;
@@ -272,7 +272,7 @@ namespace ChainSafe.Gaming.UnityPackage
             {
                 _connectScreen.Close();
             }
-            
+
             Web3Initialized?.Invoke((_web3, _web3.ServiceProvider.GetService(typeof(ISigner)) == null));
 
             return Task.CompletedTask;

@@ -85,7 +85,7 @@ public class Samples : ServiceAdapter, ILightWeightServiceAdapter, IWeb3Initiali
                 || e is ServiceNotBoundWeb3Exception<ITransactionExecutor>)
             {
                 Web3Unity.ConnectScreen.Open();
-                
+
                 throw new AggregateException(new Web3Exception("Connection not found. Please connect your wallet first."), e);
             }
 

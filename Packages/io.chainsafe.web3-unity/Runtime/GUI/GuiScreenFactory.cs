@@ -17,7 +17,7 @@ namespace ChainSafe.Gaming.GUI
                 singleScreen = BuildInternal();
                 singleScreen.gameObject.SetActive(false);
             }
-            
+
             return singleScreen.GetComponent<T>();
         }
 

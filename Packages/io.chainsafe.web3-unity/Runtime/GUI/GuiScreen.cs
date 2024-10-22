@@ -4,12 +4,12 @@ namespace ChainSafe.Gaming.GUI
 {
     public class GuiScreen : MonoBehaviour, IGuiScreen
     {
-        [field:SerializeField] public GuiLayer Layer { get; set; }
-        
+        [field: SerializeField] public GuiLayer Layer { get; set; }
+
         public Canvas Canvas; // set layer sort order to canvas sort order?
         public GameObject Content;
         public Animation Animation;
-        
+
         private void OnEnable()
         {
             GuiManager.Instance.Coordination.Register(this);
@@ -33,7 +33,7 @@ namespace ChainSafe.Gaming.GUI
         {
             Canvas.enabled = true;
             Content.gameObject.SetActive(true);
-            
+
             if (Animation)
             {
                 Animation.Play();
@@ -44,7 +44,7 @@ namespace ChainSafe.Gaming.GUI
         {
             Canvas.enabled = false;
             Content.gameObject.SetActive(false);
-            
+
             if (Animation)
             {
                 Animation.Stop();

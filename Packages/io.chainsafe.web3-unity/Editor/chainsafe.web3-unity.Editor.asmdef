@@ -1,6 +1,6 @@
 {
     "name": "chainsafe.web3-unity.Editor",
-    "rootNamespace": "",
+    "rootNamespace": "ChainSafe.Gaming.Editor",
     "references": [
         "GUID:5426c6b788696eb4c88f4198b59839eb"
     ],
