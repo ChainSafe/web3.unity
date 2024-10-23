@@ -30,6 +30,7 @@ jobs:
   pre_job:
     runs-on: ubuntu-latest
     if: ${{ needs.check_commit.outputs.commit_message == 'Sync Dependencies - Auto Commit' }}
+    needs: [ check_commit ]
     steps:
       - run: echo "..."
   
