@@ -11,5 +11,5 @@ on:
 jobs:
   pull_reqest_checks:
     name: Pull Request Checks
-    uses: ChainSafe/web3.unity/.github/workflows/pull_request_checks.yml@main
+    uses: ChainSafe/web3.unity/.github/workflows/pull_request_checks.yml@rob/ci-fix-1
     secrets: inherit
