@@ -1,6 +1,6 @@
 {
   "name": "io.chainsafe.web3-unity.ramp",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "displayName": "web3.unity SDK Ramp",
   "description": "This package includes the integration of Ramp's ramp service, which you can use with our Gaming SDK.",
   "license": "LGPL-3.0-only",
@@ -8,7 +8,7 @@
   "documentationUrl": "https://docs.gaming.chainsafe.io/",
   "dependencies": {
     "com.unity.nuget.newtonsoft-json": "3.0.2",
-    "io.chainsafe.web3-unity": "3.0.3"
+    "io.chainsafe.web3-unity": "3.0.4"
   },
   "keywords": [
     "web3",
