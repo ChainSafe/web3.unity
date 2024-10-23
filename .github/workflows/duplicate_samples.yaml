@@ -1,4 +1,4 @@
-name: Duplicate Samples
+name: Duplicate Samples 🪞
 
 on:
   workflow_call:

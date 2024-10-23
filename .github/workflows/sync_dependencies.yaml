@@ -1,4 +1,4 @@
-name: Sync Dependencies
+name: Sync Dependencies 🔄
 
 on:
   workflow_call:
