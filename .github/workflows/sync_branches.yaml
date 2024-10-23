@@ -29,6 +29,8 @@ jobs:
           git config user.email $git_email
           git config user.name $git_actor
           git fetch origin ${{ github.event.inputs.branch }}
+          git checkout ${{ github.event.inputs.branch }}
+          git pull
           git merge main --allow-unrelated-histories
           git push
         shell: bash
