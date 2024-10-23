@@ -1,4 +1,4 @@
-name: Merge Checks
+name: Pull Request Checks
 
 on:
   pull_request:
