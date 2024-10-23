@@ -6,6 +6,7 @@ on:
       - main
     types:
       - labeled
+      - ready_for_review
       - synchronize
 
 env:
@@ -15,6 +16,7 @@ jobs:
   check_commit:
     name: Check Commit 📝
     runs-on: ubuntu-latest
+    if: ${{ !github.event.pull_request.draft }}
     outputs:
       commit_message: ${{ steps.get_head_commit_message.outputs.HEAD_COMMIT_MESSAGE }}
     steps:
@@ -46,7 +48,7 @@ jobs:
     secrets: inherit
   duplicate_samples:
     name: Duplicate Samples 🪞
-    if: ${{ github.base_ref == 'main' && github.event.label.name == 'ready-to-merge' }}
+    if: ${{ github.event.action == 'ready_for_review' || github.event.label.name == 'ready-to-merge'}}
     uses: ChainSafe/web3.unity/.github/workflows/duplicate_samples.yaml@main
     secrets: inherit
   sync_dependencies:
