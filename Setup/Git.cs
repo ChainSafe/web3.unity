@@ -42,7 +42,7 @@ public static class Git
         }
 
         // Checks if there are any changes to commit before committing
-        $"git diff-index --cached --quiet HEAD || git commit -m \"{message} [skip ci]\"".Run();
+        $"git diff-index --cached --quiet HEAD || git commit -m \"{message}\"".Run();
 
         if (tags != null)
         {

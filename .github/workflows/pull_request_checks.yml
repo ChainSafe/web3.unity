@@ -11,19 +11,22 @@ jobs:
   analyze_code:
     name: Analyze 🧐
     uses: ChainSafe/web3.unity/.github/workflows/codeql.yml@main
+  unity_tests:
+    name: Unity Tests 🧪
+    uses: ChainSafe/web3.unity/.github/workflows/unity_tests.yml@main
+    secrets: inherit
   sync_dependencies:
     name: Sync Dependencies 🔄
-    if: ${{ github.base_ref == 'main' }}
+    if: ${{ github.base_ref == 'main' && github.event.action == 'sync' }}
     uses: ChainSafe/web3.unity/.github/workflows/sync_dependencies.yaml@main
-    needs: [ web3_tests , analyze_code ]
     secrets: inherit
   duplicate_samples:
     name: Duplicate Samples 🪞
     uses: ChainSafe/web3.unity/.github/workflows/duplicate_samples.yaml@main
     needs: [ sync_dependencies ]
     secrets: inherit
-  unity_tests:
-    name: Unity Tests 🧪
-    uses: ChainSafe/web3.unity/.github/workflows/unity_tests.yml@main
-    needs: [ sync_dependencies ]
+  label_pr:
+    name: Label Pull Request
+    uses: ChainSafe/web3.unity/.github/workflows/labeler.yaml@rob/ci-fix-1
+    needs: [ duplicate_samples ]
     secrets: inherit

@@ -1,0 +1,14 @@
+name: Label PR
+
+on:
+  workflow_call:
+
+jobs:
+  label_pr:
+    permissions:
+      contents: read
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - id: label-the-PR
+        uses: actions/labeler@v5
