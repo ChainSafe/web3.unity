@@ -7,9 +7,54 @@ on:
     types:
       - labeled
       - ready_for_review
+      - synchronize
 
 jobs:
-  pull_reqest_checks:
-    name: Pull Request Checks
-    uses: ChainSafe/web3.unity/.github/workflows/pull_request_checks.yml@main
+  check_commit:
+    name: Check Commit 📝
+    runs-on: ubuntu-latest
+    if: ${{ !github.event.pull_request.draft }}
+    outputs:
+      commit_message: ${{ steps.get_head_commit_message.outputs.HEAD_COMMIT_MESSAGE }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          lfs: true
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
+      - name: Get Head Commit Message
+        id: get_head_commit_message
+        run: echo "HEAD_COMMIT_MESSAGE=$(git show -s --format=%s)" >> "$GITHUB_OUTPUT"
+  
+  pre_job:
+    name: Pre Job 🚀
+    runs-on: ubuntu-latest
+    if: ${{ needs.check_commit.outputs.commit_message == 'Sync Dependencies - Auto Commit' }}
+    needs: [ check_commit ]
+    steps:
+      - run: echo "..."
+  
+  web3_tests:
+    name: Web3 tests 🕸
+    uses: ChainSafe/web3.unity/.github/workflows/test.yaml@main
+    needs: [ pre_job ]
+  analyze_code:
+    name: Analyze 🧐
+    uses: ChainSafe/web3.unity/.github/workflows/codeql.yml@main
+    needs: [ pre_job ]
+  unity_tests:
+    name: Unity Tests 🧪
+    uses: ChainSafe/web3.unity/.github/workflows/unity_tests.yml@main
+    needs: [ pre_job ]
+    secrets: inherit
+  duplicate_samples:
+    name: Duplicate Samples 🪞
+    if: ${{ github.event.action == 'ready_for_review' || github.event.label.name == 'ready-to-merge'}}
+    uses: ChainSafe/web3.unity/.github/workflows/duplicate_samples.yaml@main
+    secrets: inherit
+  sync_dependencies:
+    name: Sync Dependencies 🔄
+    uses: ChainSafe/web3.unity/.github/workflows/sync_dependencies.yaml@main
+    needs: [ duplicate_samples ]
     secrets: inherit
