@@ -9,7 +9,11 @@ on:
       - ready_for_review
 
 jobs:
-  pull_reqest_checks:
-    name: Pull Request Checks
-    uses: ChainSafe/web3.unity/.github/workflows/pull_request_checks.yml@main
-    secrets: inherit
+  web3_tests:
+    name: Web3 tests 🕸
+    if: ${{ github.event.action == 'ready_for_review' || github.event.label.name == 'ready-to-merge'}}
+    uses: ChainSafe/web3.unity/.github/workflows/test.yaml@main
+  analyze_code:
+    name: Analyze 🧐
+    if: ${{ github.event.action == 'ready_for_review' || github.event.label.name == 'ready-to-merge'}}
+    uses: ChainSafe/web3.unity/.github/workflows/codeql.yml@main
