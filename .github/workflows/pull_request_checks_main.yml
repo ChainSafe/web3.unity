@@ -28,6 +28,7 @@ jobs:
         run: echo "HEAD_COMMIT_MESSAGE=$(git show -s --format=%s)" >> "$GITHUB_OUTPUT"
   
   pre_job:
+    name: Pre Job 🚀
     runs-on: ubuntu-latest
     if: ${{ needs.check_commit.outputs.commit_message == 'Sync Dependencies - Auto Commit' }}
     needs: [ check_commit ]
