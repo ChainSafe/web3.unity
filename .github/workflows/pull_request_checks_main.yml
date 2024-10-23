@@ -9,9 +9,6 @@ on:
       - ready_for_review
       - synchronize
 
-env:
-  sync_commit_message: "Sync Dependencies - Auto Commit"
-
 jobs:
   check_commit:
     name: Check Commit 📝
@@ -30,21 +27,24 @@ jobs:
         id: get_head_commit_message
         run: echo "HEAD_COMMIT_MESSAGE=$(git show -s --format=%s)" >> "$GITHUB_OUTPUT"
   
+  pre_job:
+    runs-on: ubuntu-latest
+    if: ${{ needs.check_commit.outputs.commit_message == 'Sync Dependencies - Auto Commit' }}
+    steps:
+      - run: echo "..."
+  
   web3_tests:
     name: Web3 tests 🕸
-    if: ${{ needs.check_commit.outputs.commit_message == env.sync_commit_message }}
     uses: ChainSafe/web3.unity/.github/workflows/test.yaml@main
-    needs: [ check_commit ]
+    needs: [ pre_job ]
   analyze_code:
     name: Analyze 🧐
-    if: ${{ needs.check_commit.outputs.commit_message == env.sync_commit_message }}
     uses: ChainSafe/web3.unity/.github/workflows/codeql.yml@main
-    needs: [ check_commit ]
+    needs: [ pre_job ]
   unity_tests:
     name: Unity Tests 🧪
-    if: ${{ needs.check_commit.outputs.commit_message == env.sync_commit_message }}
     uses: ChainSafe/web3.unity/.github/workflows/unity_tests.yml@main
-    needs: [ check_commit ]
+    needs: [ pre_job ]
     secrets: inherit
   duplicate_samples:
     name: Duplicate Samples 🪞
