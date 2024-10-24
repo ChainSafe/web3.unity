@@ -46,7 +46,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestContractCall()
     {
-        var address = web3.Signer.PublicAddress;
+        var address = Web3Unity.Web3.Signer.PublicAddress;
         object[] args = { address };
         var callContract = Web3Unity.Instance.ContractCall(ContractCallMethod, ABI.ArrayTotal, ChainSafeContracts.ArrayTotal, args);
         yield return new WaitUntil(() => callContract.IsCompleted);
@@ -116,7 +116,7 @@ public class EvmTests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestCustomBalanceOfErc20()
     {
-        var getCustomBalanceOf = web3.Erc20.GetBalanceOf(ChainSafeContracts.Erc20);
+        var getCustomBalanceOf = Web3Unity.Web3.Erc20.GetBalanceOf(ChainSafeContracts.Erc20);
         yield return new WaitUntil(() => getCustomBalanceOf.IsCompleted);
         Assert.AreEqual(BigInteger.Parse("24997000000000000000"), getCustomBalanceOf.Result);
     }

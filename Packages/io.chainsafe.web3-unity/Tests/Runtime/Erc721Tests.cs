@@ -45,7 +45,7 @@ public class Erc721Tests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestBalanceOf()
     {
-        var getBalanceOf = web3.Erc721.GetBalanceOf(ChainSafeContracts.Erc721, balanceOfAccount);
+        var getBalanceOf = Web3Unity.Web3.Erc721.GetBalanceOf(ChainSafeContracts.Erc721, balanceOfAccount);
         yield return new WaitUntil(() => getBalanceOf.IsCompleted);
         Assert.AreEqual(balanceOfExpected, getBalanceOf.Result);
     }
@@ -53,7 +53,7 @@ public class Erc721Tests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestOwnerOf()
     {
-        var getOwnerOf = web3.Erc721.GetOwnerOf(ChainSafeContracts.Erc721, ownerOfTokenId);
+        var getOwnerOf = Web3Unity.Web3.Erc721.GetOwnerOf(ChainSafeContracts.Erc721, ownerOfTokenId);
         yield return new WaitUntil(() => getOwnerOf.IsCompleted);
         Assert.AreEqual(ownerOfExpected, getOwnerOf.Result);
     }
@@ -61,7 +61,7 @@ public class Erc721Tests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestOwnerOfBatch()
     {
-        var getOwnerOfBatch = web3.Erc721.GetOwnerOfBatch(ChainSafeContracts.Erc721, ownerOfBatchTokenIds);
+        var getOwnerOfBatch = Web3Unity.Web3.Erc721.GetOwnerOfBatch(ChainSafeContracts.Erc721, ownerOfBatchTokenIds);
         yield return new WaitUntil(() => getOwnerOfBatch.IsCompleted);
         CollectionAssert.AreEqual(ownerOfBatchExpected, getOwnerOfBatch.Result.Select(x => x.Owner));
     }
@@ -69,7 +69,7 @@ public class Erc721Tests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestUri()
     {
-        var uri = web3.Erc721.GetUri(ChainSafeContracts.Erc721, uriTokenId);
+        var uri = Web3Unity.Web3.Erc721.GetUri(ChainSafeContracts.Erc721, uriTokenId);
         yield return new WaitUntil(() => uri.IsCompleted);
         Assert.AreEqual(ExpectedUriResult, uri.Result);
     }

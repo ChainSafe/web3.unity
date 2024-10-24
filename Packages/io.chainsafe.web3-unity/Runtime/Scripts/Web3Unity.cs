@@ -4,7 +4,6 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
-using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.Evm.Contracts.Extensions;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
@@ -31,6 +30,9 @@ namespace ChainSafe.Gaming.UnityPackage
     [RequireComponent(typeof(ConnectionHandler))]
     public class Web3Unity : MonoBehaviour, IWeb3InitializedHandler
     {
+#if UNITY_EDITOR
+        public static bool TestMode = false;
+#endif  
         private static Web3Unity _instance;
 
         /// <summary>

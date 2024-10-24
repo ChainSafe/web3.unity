@@ -27,7 +27,7 @@ public class Erc1155Tests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestBalanceOf()
     {
-        var getBalanceOf = web3.Erc1155.GetBalanceOf(ChainSafeContracts.Erc1155, _accounts[0], _tokenIds[0]);
+        var getBalanceOf = Web3Unity.Web3.Erc1155.GetBalanceOf(ChainSafeContracts.Erc1155, _accounts[0], _tokenIds[0]);
         yield return new WaitUntil(() => getBalanceOf.IsCompleted);
         Assert.AreEqual(new BigInteger(0), getBalanceOf.Result);
     }
@@ -35,7 +35,7 @@ public class Erc1155Tests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestBalanceOfBatch()
     {
-        var getBalanceOf = web3.Erc1155.GetBalanceOfBatch(ChainSafeContracts.Erc1155, _accounts, _tokenIds);
+        var getBalanceOf = Web3Unity.Web3.Erc1155.GetBalanceOfBatch(ChainSafeContracts.Erc1155, _accounts, _tokenIds);
         yield return new WaitUntil(() => getBalanceOf.IsCompleted);
         CollectionAssert.AreEqual(new List<BigInteger> { 2, 3 }, getBalanceOf.Result);
     }
@@ -46,7 +46,7 @@ public class Erc1155Tests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestUri()
     {
-        var uri = web3.Erc1155.GetUri(ChainSafeContracts.Erc1155, _tokenIds[0]);
+        var uri = Web3Unity.Web3.Erc1155.GetUri(ChainSafeContracts.Erc1155, _tokenIds[0]);
         yield return new WaitUntil(() => uri.IsCompleted);
         Assert.AreEqual(ExpectedUriResult, uri.Result);
     }
@@ -126,7 +126,7 @@ public class Erc1155Tests : SampleTestsBase
         };
 
         #endregion
-        var texture = web3.Erc1155.ImportTexture(ChainSafeContracts.Erc1155, "1");
+        var texture = Web3Unity.Web3.Erc1155.ImportTexture(ChainSafeContracts.Erc1155, "1");
         yield return new WaitUntil(() => texture.IsCompleted);
         CollectionAssert.AreEqual(bytesOfTheTexture, texture.Result.EncodeToJPG(1));
     }

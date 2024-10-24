@@ -1,43 +1,55 @@
 using System.Collections;
+using System.Diagnostics;
 using System.Threading.Tasks;
-using ChainSafe.Gaming.Evm.Contracts;
-using ChainSafe.Gaming.EVM.Events;
-using ChainSafe.Gaming.Evm.JsonRpc;
-using ChainSafe.Gaming.MultiCall;
 using ChainSafe.Gaming.UnityPackage;
-using ChainSafe.Gaming.WalletConnect;
 using ChainSafe.Gaming.Web3;
-using ChainSafe.Gaming.Web3.Build;
-using ChainSafe.Gaming.Web3.Evm.Wallet;
-using ChainSafe.Gaming.Web3.Unity;
-using ChainSafe.GamingSdk.Gelato;
-using Microsoft.Extensions.DependencyInjection;
-using Scripts.EVM.Token;
-using Tests.Runtime;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.TestTools;
 
 public class SampleTestsBase
 {
-    protected Web3 web3;
+    private const string Mnemonic = "test test test test test test test test test test test junk";
 
+    private Process _anvil;
+    
     [UnitySetUp]
     public IEnumerator SetUp()
     {
-        // Initiate web3 build
-        var buildWeb3 = BuildTestWeb3();
+        #region Anvil
 
-        // Wait until for async task to finish
-        yield return new WaitUntil(() => buildWeb3.IsCompleted);
-
-        // Assign result to web3
-        web3 = buildWeb3.Result;
-        if (Web3Unity.Instance == null)
+        _anvil = new Process()
         {
-            var web3Unity = new GameObject("Web3Unity", typeof(Web3Unity));
+            StartInfo = new ProcessStartInfo("anvil", $"--mnemonic \"{Mnemonic}\" --silent")
+            {
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Hidden,
+                UseShellExecute = true,
+                RedirectStandardOutput = false,
+            },
+        };
+
+        if (!_anvil.Start())
+        {
+            throw new Web3Exception("Anvil failed to start.");
         }
 
-        Web3Unity.Instance.OnWeb3Initialized(web3);
+        #endregion
+        
+        GameObject web3UnityPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(
+            "Packages/io.chainsafe.web3-unity/Tests/Runtime/Web3Unity_Tests.prefab");
+
+        Object.Instantiate(web3UnityPrefab);
+
+        Web3Unity.TestMode = true;
+        
+        Task initialize = Web3Unity.Instance.Initialize(false);
+        
+        yield return new WaitUntil(() => initialize.IsCompleted);
+        
+        Task connect = Web3Unity.Instance.Connect(ScriptableObject.CreateInstance<AnvilConnectionProvider>());
+        
+        yield return new WaitUntil(() => connect.IsCompleted);
     }
 
     [UnityTearDown]
@@ -47,41 +59,9 @@ public class SampleTestsBase
 
         // Wait until for async task to finish
         yield return new WaitUntil(() => terminateWeb3Task.IsCompleted);
-    }
-
-    internal static ValueTask<Web3> BuildTestWeb3(Web3Builder.ConfigureServicesDelegate customConfiguration = null)
-    {
-        var projectConfigScriptableObject = ProjectConfigUtilities.Create("3dc3e125-71c4-4511-a367-e981a6a94371",
-            "11155111",
-            "Ethereum", "Sepolia", "Seth", "https://sepolia.infura.io/v3/287318045c6e455ab34b81d6bcd7a65f",
-            "https://sepolia.etherscan.io/", false, "wss://sepolia.drpc.org");
-
-        // Create web3builder & assign services
-        var web3Builder = new Web3Builder(projectConfigScriptableObject).Configure(services =>
-        {
-            services.UseUnityEnvironment();
-            services.UseGelato("_UzPz_Yk_WTjWMfcl45fLvQNGQ9ISx5ZE8TnwnVKYrE_");
-            services.UseMultiCall();
-            services.UseRpcProvider();
-
-            var config = new StubWalletConnectProviderConfig();
-            services.AddSingleton(config); // can be replaced
-            services.UseWalletProvider<StubWalletConnectProvider>(config);
-            services.UseWalletSigner();
-            services.UseWalletTransactionExecutor();
-            services.UseEvents();
-
-            // Add any contracts we would want to use
-            services.ConfigureRegisteredContracts(contracts =>
-                contracts.RegisterContract("CsTestErc20", ABI.Erc20, ChainSafeContracts.Erc20));
-        });
-
-        if (customConfiguration != null)
-        {
-            web3Builder.Configure(customConfiguration);
-        }
-
-        var buildWeb3 = web3Builder.LaunchAsync();
-        return buildWeb3;
+        
+        _anvil?.Kill();
+        
+        Web3Unity.TestMode = false;
     }
 }
