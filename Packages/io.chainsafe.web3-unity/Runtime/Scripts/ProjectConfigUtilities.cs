@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using ChainSafe.Gaming.Web3;
@@ -12,6 +11,15 @@ namespace ChainSafe.Gaming.UnityPackage
 
         public static Web3ConfigAsset Load()
         {
+#if UNITY_EDITOR
+            if (Web3Unity.TestMode)
+            {
+                return Create("3dc3e125-71c4-4511-a367-e981a6a94371",
+                    "11155111",
+                    "Anvil", "Sepolia", "Seth", "http://127.0.0.1:8545",
+                    "https://sepolia.etherscan.io/", false, "ws://127.0.0.1:8545");
+            }
+#endif
             var projectConfig = Resources.Load<Web3ConfigAsset>(AssetName);
             return projectConfig ? projectConfig : null;
         }

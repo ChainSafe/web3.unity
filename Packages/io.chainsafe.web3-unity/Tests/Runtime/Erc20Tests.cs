@@ -29,23 +29,27 @@ public class Erc20Tests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestBalanceOf()
     {
-        var getBalanceOf = web3.Erc20.GetBalanceOf(ChainSafeContracts.Erc20, Account);
+        var getBalanceOf = Web3Unity.Web3.Erc20.GetBalanceOf(ChainSafeContracts.Erc20, Account);
+        
         yield return new WaitUntil(() => getBalanceOf.IsCompleted);
+        
         Assert.AreEqual(new BigInteger(1000000000000000000), getBalanceOf.Result);
     }
 
     [UnityTest]
     public IEnumerator TestNativeBalanceOf()
     {
-        var getNativeBalanceOf = web3.RpcProvider.GetBalance(Account);
+        var getNativeBalanceOf = Web3Unity.Web3.RpcProvider.GetBalance(Account);
+        
         yield return new WaitUntil(() => getNativeBalanceOf.IsCompleted);
+        
         Assert.AreEqual(new HexBigInteger(0), new HexBigInteger(getNativeBalanceOf.Result));
     }
 
     [UnityTest]
     public IEnumerator TestDecimals()
     {
-        var getDecimals = web3.Erc20.GetDecimals(ChainSafeContracts.Erc20);
+        var getDecimals = Web3Unity.Web3.Erc20.GetDecimals(ChainSafeContracts.Erc20);
         yield return new WaitUntil(() => getDecimals.IsCompleted);
         Assert.AreEqual(new BigInteger(18), getDecimals.Result);
     }
@@ -53,7 +57,7 @@ public class Erc20Tests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestName()
     {
-        var getName = web3.Erc20.GetName(ChainSafeContracts.Erc20);
+        var getName = Web3Unity.Web3.Erc20.GetName(ChainSafeContracts.Erc20);
         yield return new WaitUntil(() => getName.IsCompleted);
         Assert.AreEqual("CsTestErc20", getName.Result);
     }
@@ -61,7 +65,7 @@ public class Erc20Tests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestSymbol()
     {
-        var getSymbol = web3.Erc20.GetSymbol(ChainSafeContracts.Erc20);
+        var getSymbol = Web3Unity.Web3.Erc20.GetSymbol(ChainSafeContracts.Erc20);
         yield return new WaitUntil(() => getSymbol.IsCompleted);
         Assert.AreEqual("CST", getSymbol.Result);
     }
@@ -69,7 +73,7 @@ public class Erc20Tests : SampleTestsBase
     [UnityTest]
     public IEnumerator TestTotalSupply()
     {
-        var getTotalSupply = web3.Erc20.GetTotalSupply(TotalSupplyAddress);
+        var getTotalSupply = Web3Unity.Web3.Erc20.GetTotalSupply(TotalSupplyAddress);
         yield return new WaitUntil(() => getTotalSupply.IsCompleted);
         Assert.AreEqual(new BigInteger(1000000000000000000), getTotalSupply.Result);
     }
