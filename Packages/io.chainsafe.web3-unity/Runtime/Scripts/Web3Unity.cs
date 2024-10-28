@@ -171,15 +171,20 @@ namespace ChainSafe.Gaming.UnityPackage
         /// </summary>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException">Throws an exception if the wallet is not bound</exception>
-        public string WalletPublicAddress()
+        public string WalletPublicAddress
         {
-            if (_web3.ServiceProvider.GetService(typeof(ISigner)) == null)
+            get
             {
-                throw new InvalidOperationException("You don't have the wallet bounded to the Web3 instance. Make sure you are logged in.");
-            }
+                var signer = _web3.ServiceProvider.GetService(typeof(ISigner)) as ISigner;
+                if (signer == null)
+                {
+                    throw new InvalidOperationException("You don't have the wallet bound to the Web3 instance. Make sure you are logged in.");
+                }
 
-            return _web3.Signer.PublicAddress;
+                return signer.PublicAddress;
+            }
         }
+
 
         /// <summary>
         /// Sign message.
