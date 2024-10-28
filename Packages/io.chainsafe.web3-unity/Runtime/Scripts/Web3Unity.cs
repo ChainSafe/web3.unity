@@ -166,24 +166,7 @@ namespace ChainSafe.Gaming.UnityPackage
             await Connect(provider);
         }
 
-        /// <summary>
-        /// Returns the currently connected wallet's public address
-        /// </summary>
-        /// <returns></returns>
-        /// <exception cref="InvalidOperationException">Throws an exception if the wallet is not bound</exception>
-        public string WalletPublicAddress
-        {
-            get
-            {
-                var signer = _web3.ServiceProvider.GetService(typeof(ISigner)) as ISigner;
-                if (signer == null)
-                {
-                    throw new InvalidOperationException("You don't have the wallet bound to the Web3 instance. Make sure you are logged in.");
-                }
-
-                return signer.PublicAddress;
-            }
-        }
+        
 
 
         /// <summary>
