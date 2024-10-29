@@ -1,7 +1,10 @@
 using System.Collections.Generic;
 using System.Numerics;
+using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts.Custom;
+using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.UnityPackage;
+using Nethereum.Hex.HexTypes;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -17,7 +20,7 @@ public class LootboxManager : MonoBehaviour
     
     private void Awake()
     {
-        claimLootboxButton.onClick.AddListener(OpenLootBox);
+        claimLootboxButton.onClick.AddListener(CanClaimRewards);
         postToSocialsButton.onClick.AddListener(PostOnSocialMedia);
         Web3Unity.Web3Initialized += Web3Initialized;
     }
@@ -57,7 +60,7 @@ public class LootboxManager : MonoBehaviour
         {
             Debug.Log($"Lootbox type id: {lootBoxTypeId}");
         }
-        Debug.Log($"checking balance for first lootbox type id: {lootBoxTypeBalanceIds[0]}");
+        Debug.Log($"Checking balance for first lootbox type id: {lootBoxTypeBalanceIds[0]}");
         CheckLootBoxBalance(lootBoxTypeBalanceIds[0]);
     }
 
@@ -68,21 +71,46 @@ public class LootboxManager : MonoBehaviour
         lootboxAmountText.text = lootBoxAmount.ToString();
     }
 
-    private async void OpenLootBox()
+    private async void CanClaimRewards()
     {
-        var gas = BigInteger.Parse("90000");
-        var lootIds = new [] {BigInteger.Parse("1")};
-        var lootAmount = new [] {BigInteger.Parse("1")};
-        var response = await lootboxUsageSample.OpenWithReceipt(gas, lootIds, lootAmount);
-        Debug.Log($"Open call response receipt: {response}");
-        Debug.Log("Claiming rewards");
-        ClaimLootBoxRewards(response.ToString());
+        var response = await lootboxUsageSample.CanClaimRewards(Web3Unity.Instance.Address);
+        if (response)
+        {
+            Debug.Log("Rewards can be claimed");
+            ClaimLootBoxRewards();
+        }
+        else
+        {
+            Debug.Log("Rewards cannot be claimed");
+        }
     }
 
-    private async void ClaimLootBoxRewards(string receipt)
+    private async void ClaimLootBoxRewards()
     {
-        var response = await lootboxUsageSample.ClaimRewardsWithReceipt(receipt);
-        Debug.Log($"Rewards call response receipt: {response}");
+        Debug.Log("Claiming rewards");
+        var response = await lootboxUsageSample.ClaimRewardsWithReceipt(Web3Unity.Instance.Address);
+        Debug.Log($"Rewards call response receipt: {response.TransactionHash}");
+        OpenLootBox();
+    }
+    
+    private async Task<BigInteger> CalculateOpenPrice()
+    {
+        var gas = BigInteger.Parse("100000");
+        var units = BigInteger.Parse("1");
+        var openPrice = await lootboxUsageSample.CalculateOpenPrice(gas, gas, units);
+        Debug.Log($"Open price: {openPrice}");
+        return openPrice;
+    }
+
+    private async void OpenLootBox()
+    {
+        var gas = BigInteger.Parse("100000");
+        var lootIds = new [] {BigInteger.Parse("2")};
+        var lootAmount = new [] {BigInteger.Parse("2")};
+        var openPrice = await CalculateOpenPrice();
+        var response = await lootboxUsageSample.OpenWithReceipt(gas, lootIds, lootAmount,new TransactionRequest { Value = new HexBigInteger(openPrice) });
+        Debug.Log($"Open call response receipt: {response.TransactionHash}");
+        CanClaimRewards();
     }
 
     private void PostOnSocialMedia()
