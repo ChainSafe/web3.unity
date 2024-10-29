@@ -24,6 +24,7 @@ public class LootboxManager : MonoBehaviour
 
     private async void Web3Initialized((Web3 web3, bool isLightweight) valueTuple)
     {
+        if (valueTuple.isLightweight) return;
         if (lootboxUsageSample != null)
         {
             await lootboxUsageSample.DisposeAsync();
