@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Transactions;
@@ -139,13 +140,13 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
         }
 
 
-        public async Task<BigInteger[]> BalanceOfBatch(string[] accounts, BigInteger[] ids, TransactionRequest transactionOverwrite=null) 
+        public async Task<List<BigInteger>> BalanceOfBatch(string[] accounts, List<BigInteger> ids, TransactionRequest transactionOverwrite=null) 
         {
-            var response = await OriginalContract.Call<BigInteger[]>("balanceOfBatch", new object [] {
+            var response = await OriginalContract.Call<List<BigInteger>>("balanceOfBatch", new object [] {
                 accounts, ids
             }, transactionOverwrite);
             
-            return response;
+            return new List<BigInteger>(response);
         }
 
 
@@ -314,9 +315,9 @@ namespace ChainSafe.Gaming.Evm.Contracts.Custom
         }
 
 
-        public async Task<BigInteger[]> GetLootboxTypes( TransactionRequest transactionOverwrite=null) 
+        public async Task<List<BigInteger>> GetLootboxTypes( TransactionRequest transactionOverwrite=null) 
         {
-            var response = await OriginalContract.Call<BigInteger[]>("getLootboxTypes", new object [] {
+            var response = await OriginalContract.Call<List<BigInteger>>("getLootboxTypes", new object [] {
                 
             }, transactionOverwrite);
             
