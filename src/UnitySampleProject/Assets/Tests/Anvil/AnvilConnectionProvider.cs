@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.InProcessSigner;
+using ChainSafe.Gaming.InProcessTransactionExecutor;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.Web3.Build;
@@ -21,7 +22,7 @@ public class AnvilConnectionProvider : ConnectionProvider
 
         services.AddSingleton<ISigner, ILifecycleParticipant, ILogoutHandler, AnvilSigner>();
 
-        services.AddSingleton<ITransactionExecutor, AnvilTransactionExecutor>();
+        services.AddSingleton<ITransactionExecutor, InProcessTransactionExecutor>();
     }
 
     public override Task<bool> SavedSessionAvailable()

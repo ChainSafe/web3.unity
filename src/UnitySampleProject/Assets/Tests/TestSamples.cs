@@ -21,7 +21,7 @@ public class TestSamples
 
     private Process _anvil;
 
-    private List<ISample> _samples = new List<ISample>();
+    private readonly List<ISample> _samples = new List<ISample>();
     
     [OneTimeSetUp]
     public void OneTimeSetUp()

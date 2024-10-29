@@ -30,9 +30,8 @@ namespace ChainSafe.Gaming.UnityPackage
     [RequireComponent(typeof(ConnectionHandler))]
     public class Web3Unity : MonoBehaviour, IWeb3InitializedHandler
     {
-#if UNITY_EDITOR
         public static bool TestMode = false;
-#endif  
+        
         private static Web3Unity _instance;
 
         /// <summary>
