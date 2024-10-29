@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Utils;
 using ChainSafe.Gaming.MultiCall;
+using TransactionReceipt = ChainSafe.Gaming.Evm.Transactions.TransactionReceipt;
 
 namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
 {
@@ -143,6 +144,9 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         public Task<object[]> Mint(string contractAddress, string uri, string destinationAddress)
             => BuildContract(contractAddress).Mint(uri, destinationAddress);
 
+        public Task<TransactionReceipt> MintWithReceipt(string contractAddress, string uri)
+            => BuildContract(contractAddress).MintWithReceipt(uri);
+
         /// <summary>
         /// Transfers a token to a specified account.
         /// </summary>
@@ -162,5 +166,8 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// <returns>A task that represents the asynchronous transfer operation. The task result is an array of objects representing the transfer result.</returns>
         public Task<object[]> Transfer(string contractAddress, string toAccount, string tokenId)
             => BuildContract(contractAddress).Transfer(toAccount, tokenId);
+
+        public Task<TransactionReceipt> TransferWithReceipt(string contractAddress, string toAccount, BigInteger tokenId)
+            => BuildContract(contractAddress).TransferWithReceipt(toAccount, tokenId);
     }
 }

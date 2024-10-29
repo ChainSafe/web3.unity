@@ -126,7 +126,7 @@ public class EvmSample : MonoBehaviour, ISample
     {
         object[] args =
         {
-            Web3Unity.Web3.Signer.PublicAddress
+            Web3Unity.Instance.Address
         };
         var response = await Web3Unity.Instance.ContractCall(methodCall, ABI.ArrayTotal, ChainSafeContracts.ArrayTotal, args);
 

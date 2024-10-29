@@ -4,6 +4,7 @@ using System.Diagnostics.Contracts;
 using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Signers;
+using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Ipfs;
 using ChainSafe.Gaming.Web3;
 
@@ -100,6 +101,23 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
             return Send(EthMethods.Mint, parameters);
         }
 
+        public async Task<TransactionReceipt> MintWithReceipt(BigInteger tokenId, BigInteger amount, byte[] data = null)
+        {
+            EnsureSigner();
+            data ??= Array.Empty<byte>();
+            var parameters = new object[]
+            {
+                signer.PublicAddress, // destination
+                tokenId,
+                amount,
+                data,
+            };
+
+            var response = await SendWithReceipt(EthMethods.Mint, parameters);
+
+            return response.receipt;
+        }
+
         /// <summary>
         /// Transfers a specified amount of tokens from the user's account to a specified destination address.
         /// </summary>
@@ -120,6 +138,24 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
                 data,
             };
             return Send(EthMethods.SafeTransferFrom, parameters);
+        }
+
+        public async Task<TransactionReceipt> TransferWithReceipt(BigInteger tokenId, BigInteger amount, string destinationAddress)
+        {
+            EnsureSigner();
+            var data = Array.Empty<byte>();
+            var parameters = new object[]
+            {
+                signer.PublicAddress, // source
+                destinationAddress,
+                tokenId,
+                amount,
+                data,
+            };
+
+            var response = await SendWithReceipt(EthMethods.SafeTransferFrom, parameters);
+
+            return response.receipt;
         }
 
         private void EnsureSigner()
