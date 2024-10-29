@@ -1,10 +1,17 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts.Custom;
+using ChainSafe.Gaming.Evm.Contracts.Extensions;
 using ChainSafe.Gaming.Evm.Transactions;
+using ChainSafe.Gaming.Lootboxes.Chainlink;
 using ChainSafe.Gaming.UnityPackage;
+using ChainSafe.Gaming.Web3;
 using Nethereum.Hex.HexTypes;
+using Nethereum.RPC.Eth.DTOs;
+using Newtonsoft.Json;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -17,7 +24,7 @@ public class LootboxManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI lootboxAmountText;
     private string lootBoxContract = "0xa31B74DF647979D50f155C7de5b80e9BA3A0C979";
     private LootboxUsageSample lootboxUsageSample;
-    
+
     private void Awake()
     {
         claimLootboxButton.onClick.AddListener(CanClaimRewards);
@@ -52,7 +59,7 @@ public class LootboxManager : MonoBehaviour
         }
         CheckLootBoxBalanceBatch(lootBoxTypes);
     }
-    
+
     private async void CheckLootBoxBalanceBatch(List<BigInteger> types)
     {
         var lootBoxTypeBalanceIds = await lootboxUsageSample.BalanceOfBatch(new[] { Web3Unity.Instance.Address }, types);
@@ -90,9 +97,67 @@ public class LootboxManager : MonoBehaviour
         Debug.Log("Claiming rewards");
         var response = await lootboxUsageSample.ClaimRewardsWithReceipt(Web3Unity.Instance.Address);
         Debug.Log($"Rewards call response receipt: {response.TransactionHash}");
+        var logs = response.Logs.Select(jToken => JsonConvert.DeserializeObject<FilterLog>(jToken.ToString()));
+        var eventAbi = EventExtensions.GetEventABI<RewardsClaimedEvent>();
+        var eventLogs = logs
+            .Select(log => eventAbi.DecodeEvent<RewardsClaimedEvent>(log))
+            .Where(l => l != null);
+
+        if (!eventLogs.Any())
+        {
+            throw new Web3Exception("No RewardsClaimed events were found in log's receipt.");
+        }
+
+        var rewards = LootboxRewards.Empty;
+
+        foreach (var eventLog in eventLogs)
+        {
+            var eventData = eventLog.Event;
+            // TODO FIND THIS FUNCTION
+            //var rewardType = rewardTypeByTokenAddress[eventData.TokenAddress];
+            var rewardType = RewardType.Erc1155;
+            switch (rewardType)
+            {
+                // Erc20 Tokens
+                case RewardType.Erc20:
+                    rewards.Erc20Rewards.Add(new Erc20Reward
+                    {
+                        ContractAddress = eventData.TokenAddress,
+                        AmountRaw = eventData.Amount,
+                    });
+                    break;
+                // Erc721 NFTs
+                case RewardType.Erc721:
+                    rewards.Erc721Rewards.Add(new Erc721Reward
+                    {
+                        ContractAddress = eventData.TokenAddress,
+                        TokenId = eventData.TokenId,
+                    });
+                    break;
+                // Erc1155 NFTs
+                case RewardType.Erc1155:
+                    rewards.Erc1155Rewards.Add(new Erc1155Reward
+                    {
+                        ContractAddress = eventData.TokenAddress,
+                        TokenId = eventData.TokenId,
+                        Amount = eventData.Amount,
+                    });
+                    break;
+                // Single Erc1155 NFT
+                case RewardType.Erc1155Nft:
+                    rewards.Erc1155NftRewards.Add(new Erc1155NftReward
+                    {
+                        ContractAddress = eventData.TokenAddress,
+                        TokenId = eventData.TokenId,
+                    });
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
         OpenLootBox();
     }
-    
+
     private async Task<BigInteger> CalculateOpenPrice()
     {
         var gas = BigInteger.Parse("100000");
@@ -105,12 +170,11 @@ public class LootboxManager : MonoBehaviour
     private async void OpenLootBox()
     {
         var gas = BigInteger.Parse("100000");
-        var lootIds = new [] {BigInteger.Parse("2")};
-        var lootAmount = new [] {BigInteger.Parse("2")};
+        var lootIds = new[] { BigInteger.Parse("2") };
+        var lootAmount = new[] { BigInteger.Parse("2") };
         var openPrice = await CalculateOpenPrice();
-        var response = await lootboxUsageSample.OpenWithReceipt(gas, lootIds, lootAmount,new TransactionRequest { Value = new HexBigInteger(openPrice) });
+        var response = await lootboxUsageSample.OpenWithReceipt(gas, lootIds, lootAmount, new TransactionRequest { Value = new HexBigInteger(openPrice) });
         Debug.Log($"Open call response receipt: {response.TransactionHash}");
-        CanClaimRewards();
     }
 
     private void PostOnSocialMedia()
