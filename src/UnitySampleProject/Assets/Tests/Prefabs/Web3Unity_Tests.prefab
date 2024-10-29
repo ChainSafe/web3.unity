@@ -60,26 +60,5 @@ PrefabInstance:
     - {fileID: 8854369476742677865, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 9007579812972099230, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7031804549754352423}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
---- !u!1 &1081605632408655414 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 9007579812972099230, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
-  m_PrefabInstance: {fileID: 8215683417059745960}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &7031804549754352423
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1081605632408655414}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c73b0a0dd309a546843eca313ee76c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pollingInterval: 10
