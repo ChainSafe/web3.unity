@@ -39,6 +39,7 @@ namespace ChainSafe.Gaming.UnityPackage
                 AddButtonListeners();
 
                 ConnectionStateChanged(Web3Unity.Connected, Web3Unity.Instance.Address);
+                Web3Unity.ConnectScreen.Open();
             }
         }
 
