@@ -13,7 +13,6 @@
     "overrideReferences": true,
     "precompiledReferences": [
         "nunit.framework.dll",
-        "Nethereum.Hex.dll",
         "Nethereum.JsonRpc.Client.dll",
         "Microsoft.Extensions.DependencyInjection.Abstractions.dll",
         "ChainSafe.Gaming.dll",
@@ -22,10 +21,13 @@
         "ChainSafe.Gaming.WalletConnect.dll",
         "ChainSafe.Gaming.InProcessSigner.dll",
         "ChainSafe.Gaming.InProcessTransactionExecutor.dll",
-        "Nethereum.RPC.dll",
         "Newtonsoft.Json.dll",
+        "Nethereum.Hex.dll",
+        "Nethereum.RPC.dll",
         "Nethereum.Signer.dll",
-        "Nethereum.Accounts.dll"
+        "Nethereum.Accounts.dll",
+        "Nethereum.JsonRpc.RpcClient.dll",
+        "Nethereum.JsonRpc.WebSocketClient.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [

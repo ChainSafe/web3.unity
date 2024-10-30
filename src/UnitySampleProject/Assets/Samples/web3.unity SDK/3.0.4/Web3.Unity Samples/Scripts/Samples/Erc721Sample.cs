@@ -1,18 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming;
 using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.UnityPackage;
-using ChainSafe.Gaming.UnityPackage.Connection;
-using ChainSafe.Gaming.Web3;
-using ChainSafe.Gaming.Web3.Build;
-using ChainSafe.Gaming.Web3.Core;
 using Scripts.EVM.Token;
 using UnityEngine;
-using Erc721Contract = ChainSafe.Gaming.Evm.Contracts.Custom.Erc721Contract;
 using StringBuilder = System.Text.StringBuilder;
 
 /// <summary>

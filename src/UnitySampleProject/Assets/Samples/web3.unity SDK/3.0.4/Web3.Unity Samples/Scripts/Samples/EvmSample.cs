@@ -291,7 +291,7 @@ public class EvmSample : MonoBehaviour, ISample
 
         return $"{nameof(MultiCall)} executed.";
     }
-
+    
     private static string BuildToString(IEnumerable<object> dynamicResponse)
     {
         return string.Join(",\n", dynamicResponse.Select(o => o.ToString()));

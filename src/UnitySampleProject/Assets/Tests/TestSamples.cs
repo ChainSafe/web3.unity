@@ -45,7 +45,7 @@ public class TestSamples
         }
 
         // Give Anvil time to start
-        Thread.Sleep(10);
+        Thread.Sleep(TimeSpan.FromSeconds(10));
         
         #endregion
         
@@ -145,10 +145,6 @@ public class TestSamples
     {
         _anvil?.Kill();
 
-        Task disconnect = Web3Unity.Instance.Disconnect();
-        
-        disconnect.Wait();
-        
         Web3Unity.TestMode = false;
     }
 }

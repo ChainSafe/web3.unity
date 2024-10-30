@@ -266,8 +266,10 @@ namespace ChainSafe.Gaming.UnityPackage
             return signature;
         }
 
-        public Task OnWeb3Initialized(CWeb3 web3)
+        public async Task OnWeb3Initialized(CWeb3 web3)
         {
+            await Terminate(false);
+            
             _web3 = web3;
 
             if (_connectModal != null)
@@ -276,8 +278,6 @@ namespace ChainSafe.Gaming.UnityPackage
             }
             
             Web3Initialized?.Invoke((_web3, _web3.ServiceProvider.GetService(typeof(ISigner)) == null));
-
-            return Task.CompletedTask;
         }
 
         public async Task<TransactionResponse> GetTransactionByHash(string transactionHash)
