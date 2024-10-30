@@ -23,6 +23,7 @@ public class LootboxManager : MonoBehaviour
 {
     [SerializeField] private Button claimLootboxButton, postToSocialsButton;
     [SerializeField] private TextMeshProUGUI lootboxAmountText;
+    [SerializeField] private TMP_Dropdown lootboxDropdown;
     private string lootBoxContract = "0xa31B74DF647979D50f155C7de5b80e9BA3A0C979";
     private LootboxUsageSample lootboxUsageSample;
     private BigInteger[] lootIds;
@@ -32,6 +33,7 @@ public class LootboxManager : MonoBehaviour
     {
         claimLootboxButton.onClick.AddListener(() => OpenLootBox(lootIds, lootAmount));
         postToSocialsButton.onClick.AddListener(PostOnSocialMedia);
+        lootboxDropdown.onValueChanged.AddListener(OnLootboxSelected);
         Web3Unity.Web3Initialized += Web3Initialized;
     }
 
@@ -70,10 +72,11 @@ public class LootboxManager : MonoBehaviour
         {
             addresses[i] = Web3Unity.Instance.Address;
         }
+    
         var lootBoxTypeBalanceIds = await lootboxUsageSample.BalanceOfBatch(addresses, types);
         lootIds = new BigInteger[lootBoxTypeBalanceIds.Count];
         lootAmount = new BigInteger[lootBoxTypeBalanceIds.Count];
-
+        lootboxDropdown.ClearOptions();
         if (lootBoxTypeBalanceIds.Count > 0)
         {
             for (int i = 0; i < lootBoxTypeBalanceIds.Count; i++)
@@ -82,6 +85,8 @@ public class LootboxManager : MonoBehaviour
                 Debug.Log($"Lootbox type id: {lootBoxTypeId}, checking balance...");
                 await CheckLootBoxBalance(lootBoxTypeId, i);
             }
+            lootboxDropdown.value = 0;
+            lootboxDropdown.RefreshShownValue();
         }
         else
         {
@@ -91,14 +96,23 @@ public class LootboxManager : MonoBehaviour
 
     private async Task CheckLootBoxBalance(BigInteger id, int index)
     {
-        if (Web3Unity.Instance.Address == null) return;
-
         var lootBoxAmount = await lootboxUsageSample.BalanceOf(Web3Unity.Instance.Address, id);
         Debug.Log($"LootBox Balance for ID {id} = {lootBoxAmount}");
         lootIds[index] = id;
         lootAmount[index] = lootBoxAmount;
+        if (lootBoxAmount > 0)
+        {
+            lootboxDropdown.options.Add(new TMP_Dropdown.OptionData(id.ToString()));
+            lootboxAmountText.text = lootBoxAmount.ToString();
+        }
+    }
 
-        lootboxAmountText.text = lootBoxAmount.ToString();
+    private void OnLootboxSelected(int selectedIndex)
+    {
+        if (selectedIndex >= 0 && selectedIndex < lootIds.Length)
+        {
+            lootboxAmountText.text = lootAmount[selectedIndex].ToString();
+        }
     }
 
     private async void CanClaimRewards(TransactionReceipt txResponse)
@@ -114,15 +128,36 @@ public class LootboxManager : MonoBehaviour
             Debug.Log("Rewards cannot be claimed");
         }
     }
+    
+    private async Task<BigInteger[]> CalculateOpenPrice(BigInteger[] lootIds, BigInteger[] lootAmounts)
+    {
+        var args = new object[] { lootIds, lootAmounts };
+        var gasLimit = await Web3Unity.Instance.GetGasLimit(lootboxUsageSample.ABI, lootBoxContract, "open", args);
+        var gasPriceInWei = await Web3Unity.Instance.GetGasPrice();
+        Debug.Log($"GasLimit: {gasLimit}");
+        Debug.Log($"Gas Price: {gasPriceInWei}");
+        var units = BigInteger.Parse("1");
+        var openPrice = await lootboxUsageSample.CalculateOpenPrice(gasLimit, gasPriceInWei, units);
+        var openPriceObj = new BigInteger[] { openPrice, gasLimit };
+        return openPriceObj;
+    }
+
+    private async void OpenLootBox(BigInteger[] lootIdsToOpen, BigInteger[] lootAmounts)
+    {
+        var openPriceObj = await CalculateOpenPrice(lootIds, lootAmounts);
+        var openPrice = openPriceObj[0];
+        var gasLimit = openPriceObj[1];
+        Debug.Log($"Open price: {openPriceObj[0]}");
+        var response = await lootboxUsageSample.OpenWithReceipt(gasLimit, lootIdsToOpen, lootAmounts, new TransactionRequest { Value = new HexBigInteger(openPrice) });
+        ClaimLootBoxRewards(response);
+    }
 
     private void ClaimLootBoxRewards(TransactionReceipt response)
     {
         Debug.Log($"Claiming rewards from hash: {response.TransactionHash}");
         var logs = response.Logs.Select(jToken => JsonConvert.DeserializeObject<FilterLog>(jToken.ToString()));
         var eventAbi = EventExtensions.GetEventABI<RewardsClaimedEvent>();
-        var eventLogs = logs
-            .Select(log => eventAbi.DecodeEvent<RewardsClaimedEvent>(log))
-            .Where(l => l != null);
+        var eventLogs = logs.Select(log => eventAbi.DecodeEvent<RewardsClaimedEvent>(log)).Where(l => l != null);
 
         if (!eventLogs.Any())
         {
@@ -136,10 +171,10 @@ public class LootboxManager : MonoBehaviour
             var eventData = eventLog.Event;
             // TODO FIND THIS FUNCTION
             //var rewardType = rewardTypeByTokenAddress[eventData.TokenAddress];
+            // Adjust as needed, dummy selection for now.
             var rewardType = RewardType.Erc1155;
             switch (rewardType)
             {
-                // Erc20 Tokens
                 case RewardType.Erc20:
                     rewards.Erc20Rewards.Add(new Erc20Reward
                     {
@@ -147,7 +182,6 @@ public class LootboxManager : MonoBehaviour
                         AmountRaw = eventData.Amount,
                     });
                     break;
-                // Erc721 NFTs
                 case RewardType.Erc721:
                     rewards.Erc721Rewards.Add(new Erc721Reward
                     {
@@ -155,7 +189,6 @@ public class LootboxManager : MonoBehaviour
                         TokenId = eventData.TokenId,
                     });
                     break;
-                // Erc1155 NFTs
                 case RewardType.Erc1155:
                     rewards.Erc1155Rewards.Add(new Erc1155Reward
                     {
@@ -164,7 +197,6 @@ public class LootboxManager : MonoBehaviour
                         Amount = eventData.Amount,
                     });
                     break;
-                // Single Erc1155 NFT
                 case RewardType.Erc1155Nft:
                     rewards.Erc1155NftRewards.Add(new Erc1155NftReward
                     {
@@ -176,35 +208,6 @@ public class LootboxManager : MonoBehaviour
                     throw new ArgumentOutOfRangeException();
             }
         }
-    }
-
-    private async Task<BigInteger> CalculateOpenPrice(BigInteger[] lootIds, BigInteger[] lootAmounts)
-    {
-        var args = new object[]
-        {
-            lootIds,
-            lootAmounts
-        };
-        //var gasLimit = await Web3Unity.Instance.GetGasLimit(lootboxUsageSample.ABI, lootBoxContract, "open", args);
-        var gasLimit = BigInteger.Parse("100000");
-        var gasPriceInWei = await Web3Unity.Instance.GetGasPrice();
-        //Debug.Log($"GasLimit: {gasLimit}");
-        Debug.Log($"GasPrice: {gasPriceInWei}");
-        var units = BigInteger.Parse("1");
-        var openPrice = await lootboxUsageSample.CalculateOpenPrice(gasLimit, gasPriceInWei, units);
-        Debug.Log($"Open price: {openPrice}");
-        return openPrice;
-    }
-
-    private async void OpenLootBox(BigInteger[] lootIds, BigInteger[] lootAmounts)
-    {
-        var gasPriceInWei = await Web3Unity.Instance.GetGasPrice();
-        var gasLimit = BigInteger.Parse("100000");
-        var openPrice = await CalculateOpenPrice(lootIds, lootAmounts);
-        Debug.Log($"Open price: {openPrice}");
-        var response = await lootboxUsageSample.OpenWithReceipt(gasLimit, lootIds, lootAmounts, new TransactionRequest { Value = new HexBigInteger(openPrice) });
-        //CanClaimRewards(response);
-        ClaimLootBoxRewards(response);
     }
 
     private void PostOnSocialMedia()
