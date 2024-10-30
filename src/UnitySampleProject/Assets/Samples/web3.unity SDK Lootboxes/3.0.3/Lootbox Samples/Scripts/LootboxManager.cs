@@ -131,24 +131,25 @@ public class LootboxManager : MonoBehaviour
     
     private async Task<BigInteger[]> CalculateOpenPrice(BigInteger[] lootIds, BigInteger[] lootAmounts)
     {
-        var args = new object[] { lootIds, lootAmounts };
-        var gasLimit = await Web3Unity.Instance.GetGasLimit(lootboxUsageSample.ABI, lootBoxContract, "open", args);
+        var gasLimitEst = BigInteger.Parse("100000");
+        //var args = new object[] { gasLimitEst, lootIds, lootAmounts };
+        //var gasLimit = await Web3Unity.Instance.GetGasLimit(contractAbi, lootBoxContract, "open", args);
         var gasPriceInWei = await Web3Unity.Instance.GetGasPrice();
-        Debug.Log($"GasLimit: {gasLimit}");
+        Debug.Log($"GasLimit: {gasLimitEst}");
         Debug.Log($"Gas Price: {gasPriceInWei}");
         var units = BigInteger.Parse("1");
-        var openPrice = await lootboxUsageSample.CalculateOpenPrice(gasLimit, gasPriceInWei, units);
-        var openPriceObj = new BigInteger[] { openPrice, gasLimit };
+        var openPrice = await lootboxUsageSample.CalculateOpenPrice(gasLimitEst, gasPriceInWei, units);
+        var openPriceObj = new BigInteger[] { openPrice, gasLimitEst };
         return openPriceObj;
     }
 
-    private async void OpenLootBox(BigInteger[] lootIdsToOpen, BigInteger[] lootAmounts)
+    private async void OpenLootBox(BigInteger[] lootIds, BigInteger[] lootAmounts)
     {
         var openPriceObj = await CalculateOpenPrice(lootIds, lootAmounts);
         var openPrice = openPriceObj[0];
         var gasLimit = openPriceObj[1];
         Debug.Log($"Open price: {openPriceObj[0]}");
-        var response = await lootboxUsageSample.OpenWithReceipt(gasLimit, lootIdsToOpen, lootAmounts, new TransactionRequest { Value = new HexBigInteger(openPrice) });
+        var response = await lootboxUsageSample.OpenWithReceipt(gasLimit, lootIds, lootAmounts, new TransactionRequest { Value = new HexBigInteger(openPrice) });
         ClaimLootBoxRewards(response);
     }
 
