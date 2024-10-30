@@ -16,6 +16,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using TransactionReceipt = ChainSafe.Gaming.Evm.Transactions.TransactionReceipt;
 using Web3 = ChainSafe.Gaming.Web3.Web3;
 
 public class LootboxManager : MonoBehaviour
@@ -24,10 +25,12 @@ public class LootboxManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI lootboxAmountText;
     private string lootBoxContract = "0xa31B74DF647979D50f155C7de5b80e9BA3A0C979";
     private LootboxUsageSample lootboxUsageSample;
+    private BigInteger[] lootIds;
+    private BigInteger[] lootAmount;
 
     private void Awake()
     {
-        claimLootboxButton.onClick.AddListener(CanClaimRewards);
+        claimLootboxButton.onClick.AddListener(() => OpenLootBox(lootIds, lootAmount));
         postToSocialsButton.onClick.AddListener(PostOnSocialMedia);
         Web3Unity.Web3Initialized += Web3Initialized;
     }
@@ -62,29 +65,49 @@ public class LootboxManager : MonoBehaviour
 
     private async void CheckLootBoxBalanceBatch(List<BigInteger> types)
     {
-        var lootBoxTypeBalanceIds = await lootboxUsageSample.BalanceOfBatch(new[] { Web3Unity.Instance.Address }, types);
-        foreach (var lootBoxTypeId in lootBoxTypeBalanceIds)
+        var addresses = new string[types.Count];
+        for (int i = 0; i < types.Count; i++)
         {
-            Debug.Log($"Lootbox type id: {lootBoxTypeId}");
+            addresses[i] = Web3Unity.Instance.Address;
         }
-        Debug.Log($"Checking balance for first lootbox type id: {lootBoxTypeBalanceIds[0]}");
-        CheckLootBoxBalance(lootBoxTypeBalanceIds[0]);
+        var lootBoxTypeBalanceIds = await lootboxUsageSample.BalanceOfBatch(addresses, types);
+        lootIds = new BigInteger[lootBoxTypeBalanceIds.Count];
+        lootAmount = new BigInteger[lootBoxTypeBalanceIds.Count];
+
+        if (lootBoxTypeBalanceIds.Count > 0)
+        {
+            for (int i = 0; i < lootBoxTypeBalanceIds.Count; i++)
+            {
+                var lootBoxTypeId = lootBoxTypeBalanceIds[i];
+                Debug.Log($"Lootbox type id: {lootBoxTypeId}, checking balance...");
+                await CheckLootBoxBalance(lootBoxTypeId, i);
+            }
+        }
+        else
+        {
+            Debug.Log("No lootboxes found, mint some from the dashboard or purchase");
+        }
     }
 
-    private async void CheckLootBoxBalance(BigInteger id)
+    private async Task CheckLootBoxBalance(BigInteger id, int index)
     {
+        if (Web3Unity.Instance.Address == null) return;
+
         var lootBoxAmount = await lootboxUsageSample.BalanceOf(Web3Unity.Instance.Address, id);
-        Debug.Log($"LootBox Balance: {lootBoxAmount}");
+        Debug.Log($"LootBox Balance for ID {id} = {lootBoxAmount}");
+        lootIds[index] = id;
+        lootAmount[index] = lootBoxAmount;
+
         lootboxAmountText.text = lootBoxAmount.ToString();
     }
 
-    private async void CanClaimRewards()
+    private async void CanClaimRewards(TransactionReceipt txResponse)
     {
         var response = await lootboxUsageSample.CanClaimRewards(Web3Unity.Instance.Address);
         if (response)
         {
             Debug.Log("Rewards can be claimed");
-            ClaimLootBoxRewards();
+            ClaimLootBoxRewards(txResponse);
         }
         else
         {
@@ -92,11 +115,9 @@ public class LootboxManager : MonoBehaviour
         }
     }
 
-    private async void ClaimLootBoxRewards()
+    private void ClaimLootBoxRewards(TransactionReceipt response)
     {
-        Debug.Log("Claiming rewards");
-        var response = await lootboxUsageSample.ClaimRewardsWithReceipt(Web3Unity.Instance.Address);
-        Debug.Log($"Rewards call response receipt: {response.TransactionHash}");
+        Debug.Log($"Claiming rewards from hash: {response.TransactionHash}");
         var logs = response.Logs.Select(jToken => JsonConvert.DeserializeObject<FilterLog>(jToken.ToString()));
         var eventAbi = EventExtensions.GetEventABI<RewardsClaimedEvent>();
         var eventLogs = logs
@@ -155,26 +176,35 @@ public class LootboxManager : MonoBehaviour
                     throw new ArgumentOutOfRangeException();
             }
         }
-        OpenLootBox();
     }
 
-    private async Task<BigInteger> CalculateOpenPrice()
+    private async Task<BigInteger> CalculateOpenPrice(BigInteger[] lootIds, BigInteger[] lootAmounts)
     {
-        var gas = BigInteger.Parse("100000");
+        var args = new object[]
+        {
+            lootIds,
+            lootAmounts
+        };
+        //var gasLimit = await Web3Unity.Instance.GetGasLimit(lootboxUsageSample.ABI, lootBoxContract, "open", args);
+        var gasLimit = BigInteger.Parse("100000");
+        var gasPriceInWei = await Web3Unity.Instance.GetGasPrice();
+        //Debug.Log($"GasLimit: {gasLimit}");
+        Debug.Log($"GasPrice: {gasPriceInWei}");
         var units = BigInteger.Parse("1");
-        var openPrice = await lootboxUsageSample.CalculateOpenPrice(gas, gas, units);
+        var openPrice = await lootboxUsageSample.CalculateOpenPrice(gasLimit, gasPriceInWei, units);
         Debug.Log($"Open price: {openPrice}");
         return openPrice;
     }
 
-    private async void OpenLootBox()
+    private async void OpenLootBox(BigInteger[] lootIds, BigInteger[] lootAmounts)
     {
-        var gas = BigInteger.Parse("100000");
-        var lootIds = new[] { BigInteger.Parse("2") };
-        var lootAmount = new[] { BigInteger.Parse("2") };
-        var openPrice = await CalculateOpenPrice();
-        var response = await lootboxUsageSample.OpenWithReceipt(gas, lootIds, lootAmount, new TransactionRequest { Value = new HexBigInteger(openPrice) });
-        Debug.Log($"Open call response receipt: {response.TransactionHash}");
+        var gasPriceInWei = await Web3Unity.Instance.GetGasPrice();
+        var gasLimit = BigInteger.Parse("100000");
+        var openPrice = await CalculateOpenPrice(lootIds, lootAmounts);
+        Debug.Log($"Open price: {openPrice}");
+        var response = await lootboxUsageSample.OpenWithReceipt(gasLimit, lootIds, lootAmounts, new TransactionRequest { Value = new HexBigInteger(openPrice) });
+        //CanClaimRewards(response);
+        ClaimLootBoxRewards(response);
     }
 
     private void PostOnSocialMedia()
