@@ -20,6 +20,6 @@ namespace ChainSafe.Gaming.MultiCall
         /// </summary>
         public IReadOnlyDictionary<string, string> CustomNetworks { get; }
 
-        public UnavailableBehaviourType UnavailableBehaviour { get; set; } = UnavailableBehaviourType.Throw;
+        public UnavailableBehaviourType UnavailableBehaviour { get; set; } = UnavailableBehaviourType.DisableAndLog;
     }
 }
