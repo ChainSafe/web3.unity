@@ -112,9 +112,9 @@ namespace ChainSafe.Gaming.Unity.Tests
             yield return TestSample<EvmSample>();
         }
 
-        // Gave it a high timeout because it's a long test
+        // Gave it a high timeout because it's a long test (~60 seconds per method)
         [UnityTest]
-        [Timeout(1000000)]
+        [Timeout(int.MaxValue)]
         public IEnumerator TestGelato()
         {
             // Add a wait time because we can't make too many requests consecutively
