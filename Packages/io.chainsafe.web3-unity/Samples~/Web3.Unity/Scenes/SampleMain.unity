@@ -995,7 +995,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1573338518}
   m_HandleRect: {fileID: 1573338517}
   m_Direction: 0
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -1418,7 +1418,7 @@ PrefabInstance:
       value: Web3Unity
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 8854369476742677865, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
+    - {fileID: 0}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
