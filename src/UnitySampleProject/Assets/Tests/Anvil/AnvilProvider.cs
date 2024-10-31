@@ -6,30 +6,36 @@ using ChainSafe.Gaming.Web3.Evm.Wallet;
 using Nethereum.RPC.Accounts;
 using Nethereum.Web3.Accounts;
 
-public class AnvilProvider : WalletProvider, IAccountProvider
+namespace ChainSafe.Gaming.Unity.Tests
 {
-    public IAccount Account { get; private set; }
-    
-    public AnvilProvider(Web3Environment environment, IChainConfig chainConfig) : base(environment, chainConfig)
+    /// <summary>
+    /// Anvil account provider.
+    /// </summary>
+    public class AnvilProvider : WalletProvider, IAccountProvider
     {
-    }
+        public IAccount Account { get; private set; }
 
-    public override Task<string> Connect()
-    {
-        Account = new Account("0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80");
+        public AnvilProvider(Web3Environment environment, IChainConfig chainConfig) : base(environment, chainConfig)
+        {
+            // Initialize account via private key
+            Account = new Account("0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80");
 
-        Account.TransactionManager.Client = this;
+            Account.TransactionManager.Client = this;
+        }
 
-        return Task.FromResult(Account.Address);
-    }
+        public override Task<string> Connect()
+        {
+            return Task.FromResult(Account.Address);
+        }
 
-    public override Task Disconnect()
-    {
-        return Task.CompletedTask;
-    }
+        public override Task Disconnect()
+        {
+            return Task.CompletedTask;
+        }
 
-    public override Task<T> Request<T>(string method, params object[] parameters)
-    {
-        return Perform<T>(method, parameters);
+        public override Task<T> Request<T>(string method, params object[] parameters)
+        {
+            return Perform<T>(method, parameters);
+        }
     }
 }

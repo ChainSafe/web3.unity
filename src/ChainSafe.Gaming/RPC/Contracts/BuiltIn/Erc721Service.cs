@@ -144,6 +144,12 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         public Task<object[]> Mint(string contractAddress, string uri, string destinationAddress)
             => BuildContract(contractAddress).Mint(uri, destinationAddress);
 
+        /// <summary>
+        /// Mints a new token by invoking the Mint method in a smart contract.
+        /// </summary>
+        /// <param name="contractAddress">The address of the smart contract.</param>
+        /// <param name="uri">The URI of the token.</param>
+        /// <returns>Receipt of the mint.</returns>
         public Task<TransactionReceipt> MintWithReceipt(string contractAddress, string uri)
             => BuildContract(contractAddress).MintWithReceipt(uri);
 
@@ -167,6 +173,13 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         public Task<object[]> Transfer(string contractAddress, string toAccount, string tokenId)
             => BuildContract(contractAddress).Transfer(toAccount, tokenId);
 
+        /// <summary>
+        /// Transfers a token to the specified account.
+        /// </summary>
+        /// <param name="contractAddress">The address of the token contract.</param>
+        /// <param name="toAccount">The account to transfer the token to.</param>
+        /// <param name="tokenId">The ID of the token to transfer.</param>
+        /// <returns>Receipt of the transaction.</returns>
         public Task<TransactionReceipt> TransferWithReceipt(string contractAddress, string toAccount, BigInteger tokenId)
             => BuildContract(contractAddress).TransferWithReceipt(toAccount, tokenId);
     }

@@ -164,6 +164,11 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
             return response;
         }
 
+        /// <summary>
+        /// Mint method to safely mint an object.
+        /// </summary>
+        /// <param name="uri">The URI of the object to be minted.</param>
+        /// <returns>Receipt of the mint.</returns>
         public async Task<TransactionReceipt> MintWithReceipt(string uri)
         {
             if (signer == null)
@@ -205,6 +210,12 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
             return response;
         }
 
+        /// <summary>
+        /// Transfers a token to the specified account.
+        /// </summary>
+        /// <param name="to">The address of the account to which the token will be transferred.</param>
+        /// <param name="tokenId">The unique identifier of the token.</param>
+        /// <returns>Receipt of the transfer.</returns>
         public async Task<TransactionReceipt> TransferWithReceipt(string to, BigInteger tokenId)
         {
             if (signer == null)

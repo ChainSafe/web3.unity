@@ -101,6 +101,13 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
             return Send(EthMethods.Mint, parameters);
         }
 
+        /// <summary>
+        /// Mints new tokens by calling the Mint method on the contract.
+        /// </summary>
+        /// <param name="tokenId">The ID of the token to mint.</param>
+        /// <param name="amount">The amount of tokens to mint.</param>
+        /// <param name="data">(Optional) Additional data to include with the minting.</param>
+        /// <returns>Receipt of the Mint Transaction.</returns>
         public async Task<TransactionReceipt> MintWithReceipt(BigInteger tokenId, BigInteger amount, byte[] data = null)
         {
             EnsureSigner();
@@ -140,6 +147,13 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
             return Send(EthMethods.SafeTransferFrom, parameters);
         }
 
+        /// <summary>
+        /// Transfers a specified amount of tokens from the user's account to a specified destination address.
+        /// </summary>
+        /// <param name="tokenId">The identifier of the token to be transferred.</param>
+        /// <param name="amount">The amount of tokens to be transferred.</param>
+        /// <param name="destinationAddress">The destination address to receive the transferred tokens.</param>
+        /// <returns>Receipt of the transfer.</returns>
         public async Task<TransactionReceipt> TransferWithReceipt(BigInteger tokenId, BigInteger amount, string destinationAddress)
         {
             EnsureSigner();

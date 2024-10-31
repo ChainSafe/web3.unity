@@ -268,6 +268,7 @@ namespace ChainSafe.Gaming.UnityPackage
 
         public async Task OnWeb3Initialized(CWeb3 web3)
         {
+            // Terminate if there's any existing Web3 Instance
             await Terminate(false);
             
             _web3 = web3;

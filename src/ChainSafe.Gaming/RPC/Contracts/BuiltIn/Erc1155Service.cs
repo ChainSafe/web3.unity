@@ -114,6 +114,16 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         public Task<object[]> Mint(string contractAddress, BigInteger tokenId, BigInteger amount, byte[] data = null) =>
             BuildContract(contractAddress).Mint(tokenId, amount, data);
 
+        /// <summary>
+        /// Mints a specified amount of tokens with the given tokenId of a specified contract address.
+        /// </summary>
+        /// <param name="contractAddress">The address of the contract.</param>
+        /// <param name="tokenId">The ID of the token.</param>
+        /// <param name="amount">The amount of tokens to mint.</param>
+        /// <param name="data">Additional data to include in the transaction (optional).</param>
+        /// <returns>
+        /// Receipt of the mint.
+        /// </returns>
         public Task<TransactionReceipt> MintWithReceipt(string contractAddress, BigInteger tokenId, BigInteger amount, byte[] data = null) =>
             BuildContract(contractAddress).MintWithReceipt(tokenId, amount, data);
 
@@ -128,6 +138,14 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         public Task<object[]> Transfer(string contractAddress, BigInteger tokenId, BigInteger amount, string destinationAddress) =>
             BuildContract(contractAddress).Transfer(tokenId, amount, destinationAddress);
 
+        /// <summary>
+        /// Transfers an amount of tokens from the curren user account to the specified destination address.
+        /// </summary>
+        /// <param name="contractAddress">The address of the token contract.</param>
+        /// <param name="tokenId">The ID of the token.</param>
+        /// <param name="amount">The amount of tokens to transfer.</param>
+        /// <param name="destinationAddress">The address where the tokens will be transferred to.</param>
+        /// <returns>Receipt of the transfer.</returns>
         public Task<TransactionReceipt> TransferWithReceipt(string contractAddress, BigInteger tokenId, BigInteger amount, string destinationAddress) =>
             BuildContract(contractAddress).TransferWithReceipt(tokenId, amount, destinationAddress);
     }

@@ -4,27 +4,30 @@ using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Logout;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
 
-public class AnvilSigner : InProcessSigner, ILifecycleParticipant, ILogoutHandler
+namespace ChainSafe.Gaming.Unity.Tests
 {
-    private readonly IWalletProvider _walletProvider;
-
-    public AnvilSigner(IAccountProvider accountProvider, IWalletProvider walletProvider) : base(accountProvider)
+    public class AnvilSigner : InProcessSigner.InProcessSigner, ILifecycleParticipant, ILogoutHandler
     {
-        _walletProvider = walletProvider;
-    }
+        private readonly IWalletProvider _walletProvider;
 
-    public async ValueTask WillStartAsync()
-    {
-        await _walletProvider.Connect();
-    }
+        public AnvilSigner(IAccountProvider accountProvider, IWalletProvider walletProvider) : base(accountProvider)
+        {
+            _walletProvider = walletProvider;
+        }
 
-    public virtual ValueTask WillStopAsync()
-    {
-        return new ValueTask(Task.CompletedTask);
-    }
+        public async ValueTask WillStartAsync()
+        {
+            await _walletProvider.Connect();
+        }
 
-    public async Task OnLogout()
-    {
-        await _walletProvider.Disconnect();
+        public virtual ValueTask WillStopAsync()
+        {
+            return new ValueTask(Task.CompletedTask);
+        }
+
+        public async Task OnLogout()
+        {
+            await _walletProvider.Disconnect();
+        }
     }
 }
