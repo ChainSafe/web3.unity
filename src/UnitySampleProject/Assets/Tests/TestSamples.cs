@@ -106,7 +106,15 @@ public class TestSamples
         yield return TestSample<EvmSample>();
     }
     
-    private IEnumerator TestSample<T>() where T : class, ISample
+    [UnityTest]
+    public IEnumerator TestGelato()
+    {
+        // Add a wait time because we can't make too many requests consecutively
+        // Standard rate limit for testnet is 1 requests per minute
+        yield return TestSample<GelatoSample>(60f);
+    }
+    
+    private IEnumerator TestSample<T>(float waitTimeInSeconds = 0) where T : class, ISample
     {
         if (!_initialized)
         {
@@ -146,6 +154,11 @@ public class TestSamples
             }
                 
             Debug.Log($"{task.Result} \n {sample.Title} - {sample.GetType().Name}.{method.Name}");
+
+            if (waitTimeInSeconds > 0)
+            {
+                yield return new WaitForSeconds(waitTimeInSeconds);
+            }
         }
     }
 
