@@ -22,6 +22,8 @@ public class TestSamples
     private Process _anvil;
 
     private readonly List<ISample> _samples = new List<ISample>();
+
+    private bool _initialized;
     
     [OneTimeSetUp]
     public void OneTimeSetUp()
@@ -63,16 +65,23 @@ public class TestSamples
         }
         
         Web3Unity.TestMode = true;
-        
+    }
+
+    // Can't be in OneTimeSetUp since OneTimeSetUp doesn't support async properly!
+    // More on it here https://discussions.unity.com/t/async-await-in-unittests/
+    private IEnumerator Initialize()
+    {
         Task initialize = Web3Unity.Instance.Initialize(false);
-        
-        initialize.Wait();
+
+        yield return new WaitUntil(() => initialize.IsCompleted);
         
         Task connect = Web3Unity.Instance.Connect(ScriptableObject.CreateInstance<AnvilConnectionProvider>());
         
-        connect.Wait();
-    }
+        yield return new WaitUntil(() => connect.IsCompleted);
 
+        _initialized = true;
+    }
+    
     [UnityTest]
     public IEnumerator TestErc20Sample()
     {
@@ -99,6 +108,11 @@ public class TestSamples
     
     private IEnumerator TestSample<T>() where T : class, ISample
     {
+        if (!_initialized)
+        {
+            yield return Initialize();
+        }
+        
         T sample = GetSample<T>();
         
         if (sample.DependentServiceTypes.Any(t => Web3Unity.Web3.ServiceProvider.GetService(t) == null))
