@@ -32,7 +32,7 @@ namespace ChainSafe.Gaming.RPC.Events
         {
             if (string.IsNullOrWhiteSpace(chainConfig.Ws))
             {
-                throw new Web3Exception("No WebSocket URL was provided in config.");
+                throw new Web3Exception("No WebSocket URL was provided in config. Please toggle the ForceEventPolling to true in order to use event polling instead of WebSockets.");
             }
 
             webSocketClient = new StreamingWebSocketClient(chainConfig.Ws);
