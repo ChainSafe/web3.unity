@@ -57,12 +57,19 @@ namespace ChainSafe.Gaming.Reown.Dialog
             {
                 if (!config.DelegateLocalWalletSelectionToOs)
                 {
-                    SetRedirectOptionsVisible(true);
 
                     var walletOptionConfigs = config.LocalWalletOptions
                         .Select(data => new WalletOptionConfig(data, () => OnLocalWalletButtonClick(data.Id)))
                         .ToList();
+                    
+                    var localWalletsAvailable = walletOptionConfigs.Any();
 
+                    if (!localWalletsAvailable)
+                    {
+                        Debug.Log("Local wallet selection is enabled, but there are no wallets supported for the current platform meeting the provided filters. Disabling local wallet connection option...");
+                    }
+
+                    SetRedirectOptionsVisible(localWalletsAvailable);
                     SpawnRedirectOptions(walletOptionConfigs);
                 }
                 else
