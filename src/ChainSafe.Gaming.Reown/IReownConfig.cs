@@ -93,5 +93,27 @@ namespace ChainSafe.Gaming.Reown
         /// Used to set custom <see cref="IConnectionBuilder"/> to support Unity versions before 2022.1.
         /// </summary>
         IConnectionBuilder ConnectionBuilder { get; }
+
+        /// <summary>
+        /// Validates the Reown configuration object.
+        /// </summary>
+        /// <exception cref="ReownIntegrationException">Thrown when validation fails.</exception>
+        void Validate()
+        {
+            if (string.IsNullOrWhiteSpace(ProjectId))
+            {
+                throw new ReownIntegrationException("ProjectId was not set.");
+            }
+
+            if (ConnectionHandlerProvider == null)
+            {
+                throw new ReownIntegrationException($"No {nameof(IConnectionHandlerProvider)} was provided in the config.");
+            }
+
+            if (string.IsNullOrWhiteSpace(Metadata.Url))
+            {
+                throw new ReownIntegrationException("Your domain URL should be provided in Metadata, otherwise wallets are going to reject the connection.");
+            }
+        }
     }
 }

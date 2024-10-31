@@ -17,6 +17,8 @@ namespace ChainSafe.Gaming.Reown
         {
             this.originalClient = originalClient;
 
+            reownConfig.Validate();
+
             reownHeaders = new[]
             {
                 new HttpHeader { Name = "x-project-id", Value = reownConfig.ProjectId },

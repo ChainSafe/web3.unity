@@ -121,7 +121,7 @@ namespace ChainSafe.Gaming.Reown
                 PackageName = "io.chainsafe.web3-unity",
             });
 
-            ValidateConfig();
+            config.Validate();
 
             ReownLogger.Instance = new ReownLogWriter(logWriter, config);
 
@@ -170,24 +170,6 @@ namespace ChainSafe.Gaming.Reown
             };
 
             initialized = true;
-        }
-
-        private void ValidateConfig()
-        {
-            if (string.IsNullOrWhiteSpace(config.ProjectId))
-            {
-                throw new ReownIntegrationException("ProjectId was not set.");
-            }
-
-            if (config.ConnectionHandlerProvider == null)
-            {
-                throw new ReownIntegrationException($"No {nameof(IConnectionHandlerProvider)} was provided in the config.");
-            }
-
-            if (string.IsNullOrWhiteSpace(config.Metadata.Url))
-            {
-                throw new ReownIntegrationException("Your domain URL should be provided in Metadata, otherwise wallets are going to reject the connection.");
-            }
         }
 
         public ValueTask WillStopAsync()
