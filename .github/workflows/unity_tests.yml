@@ -2,7 +2,7 @@ name: Unity Tests
 
 on:
   workflow_call:
-  workflow_dispatch: 
+  workflow_dispatch:
 
 jobs:
   unity_tests:
