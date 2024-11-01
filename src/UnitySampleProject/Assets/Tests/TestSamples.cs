@@ -79,15 +79,30 @@ namespace ChainSafe.Gaming.Unity.Tests
         {
             Task initialize = Web3Unity.Instance.Initialize(false);
 
-            yield return new WaitUntil(() => initialize.IsCompleted);
+            yield return AssertTask(initialize);
 
             Task connect = Web3Unity.Instance.Connect(ScriptableObject.CreateInstance<AnvilConnectionProvider>());
 
-            yield return new WaitUntil(() => connect.IsCompleted);
+            yield return AssertTask(connect);
 
             _initialized = true;
         }
 
+        private IEnumerator AssertTask(Task task)
+        {
+            yield return new WaitUntil(() => task.IsCompleted);
+
+            if (!task.IsCompletedSuccessfully)
+            {
+                if (task.Exception != null)
+                {
+                    throw task.Exception;
+                }
+
+                throw new Exception($"Task Failed {task.Status}");
+            }
+        }
+        
         [UnityTest]
         public IEnumerator TestErc20Sample()
         {
