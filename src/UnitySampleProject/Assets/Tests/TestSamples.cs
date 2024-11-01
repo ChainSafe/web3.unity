@@ -18,10 +18,6 @@ namespace ChainSafe.Gaming.Unity.Tests
 {
     public class TestSamples
     {
-        private const string Mnemonic = "test test test test test test test test test test test junk";
-
-        private Process _anvil;
-
         private readonly List<ISample> _samples = new List<ISample>();
 
         private bool _initialized;
@@ -29,31 +25,6 @@ namespace ChainSafe.Gaming.Unity.Tests
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            // Initialize Anvil
-            #region Anvil
-
-            _anvil = new Process()
-            {
-                StartInfo = new ProcessStartInfo("anvil",
-                    $"--fork-url https://rpc.ankr.com/eth_sepolia --mnemonic \"{Mnemonic}\" --silent")
-                {
-                    CreateNoWindow = true,
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    UseShellExecute = true,
-                    RedirectStandardOutput = false,
-                },
-            };
-
-            if (!_anvil.Start())
-            {
-                throw new Web3Exception("Anvil failed to start.");
-            }
-
-            // Give Anvil time to start
-            Thread.Sleep(TimeSpan.FromSeconds(10));
-
-            #endregion
-
             // Instantiate Web3Unity to connect via Anvil
             GameObject web3UnityPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(
                 "Assets/Tests/Prefabs/Web3Unity_Tests.prefab");
@@ -201,8 +172,6 @@ namespace ChainSafe.Gaming.Unity.Tests
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
-            _anvil?.Kill();
-
             Web3Unity.TestMode = false;
         }
     }

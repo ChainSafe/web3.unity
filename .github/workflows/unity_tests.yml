@@ -25,6 +25,9 @@ jobs:
         submodules: recursive
     - name: Install Foundry
       uses: foundry-rs/foundry-toolchain@v1
+    - name: Start Anvil
+      run: |
+        anvil --fork-url https://rpc.ankr.com/eth_sepolia --mnemonic "test test test test test test test test test test test junk" &
     - uses: actions/cache@v2
       with:
         path: ${{ matrix.projectPath }}/Library
