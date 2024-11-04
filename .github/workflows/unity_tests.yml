@@ -3,9 +3,6 @@ name: Unity Tests
 on:
   workflow_call:
   workflow_dispatch:
-  push:
-    branches:
-      - rob/move-tests-to-anvil-625
 
 jobs:
   unity_tests:
