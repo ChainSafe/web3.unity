@@ -19,7 +19,7 @@ namespace ChainSafe.Gaming.Reown.Wallets
         private readonly IReownConfig config;
         private readonly IOperatingSystemMediator systemMediator;
 
-        private List<WalletModel> platformWallets;
+        private List<WalletModel> healthyWallets;
 
         public ReownWalletRegistry(ReownHttpClient reownHttpClient, IReownConfig config, IOperatingSystemMediator systemMediator)
         {
@@ -30,29 +30,30 @@ namespace ChainSafe.Gaming.Reown.Wallets
 
         public static string RegistryUri => $"{Host}/getWallets";
 
-        public IEnumerable<WalletModel> SupportedWallets => platformWallets.AsReadOnly();
+        public IEnumerable<WalletModel> SupportedWallets => healthyWallets.AsReadOnly();
 
         async ValueTask ILifecycleParticipant.WillStartAsync()
         {
-            var registryUri = !string.IsNullOrWhiteSpace(config.OverrideRegistryUri)
-                ? config.OverrideRegistryUri
-                : RegistryUri;
-
-            var parameters = new Dictionary<string, string>()
+            int totalWalletsCount = -1;
+            var fetchedWallets = new List<WalletModel>();
+            for (var page = 1; ; page++)
             {
-                { "page", 1.ToString() },
-                { "entries", 100.ToString() }, // get as many wallets as we can with one api call (when too many wallets returns 400)
-                { "search", null },
-                { "platform", GetPlatformFilter() },
-                { "include", BuildWalletIdsFilter(config.IncludeWalletIds) },
-                { "exclude", BuildWalletIdsFilter(config.ExcludeWalletIds) },
-            };
+                var response = await FetchWallets(page);
 
-            var parametersRaw = HttpUtils.BuildUriParameters(parameters);
+                if (totalWalletsCount == -1)
+                {
+                    totalWalletsCount = response.TotalWalletsCountAvailableForDownload;
+                }
 
-            var response = await reownHttpClient.Get<WalletRegistryResponse>(registryUri + parametersRaw); // todo download all the available wallets in a loop
-            var apiFilteredWallets = platformWallets = response.AssertSuccess().Data;
-            platformWallets = apiFilteredWallets
+                fetchedWallets.AddRange(response.Data);
+
+                if (fetchedWallets.Count >= totalWalletsCount)
+                {
+                    break;
+                }
+            }
+
+            healthyWallets = fetchedWallets
                 .Where(w =>
                 {
                     switch (systemMediator.Platform)
@@ -75,8 +76,35 @@ namespace ChainSafe.Gaming.Reown.Wallets
                 var walletClosure = wallet;
                 var isWalletInstalled = WalletUtils.IsWalletInstalled(wallet);
              */
+        }
 
-            return;
+        ValueTask ILifecycleParticipant.WillStopAsync() => new(Task.CompletedTask);
+
+        public WalletModel GetWallet(string id)
+        {
+            return healthyWallets.Find(w => w.Id == id);
+        }
+
+        private async Task<WalletRegistryResponse> FetchWallets(int page)
+        {
+            var registryUri = !string.IsNullOrWhiteSpace(config.OverrideRegistryUri)
+                ? config.OverrideRegistryUri
+                : RegistryUri;
+
+            var parameters = new Dictionary<string, string>()
+            {
+                { "page", page.ToString() },
+                { "entries", 100.ToString() }, // get as many wallets as we can with one api call (when too many wallets returns 400)
+                { "search", null },
+                { "platform", GetPlatformFilter() },
+                { "include", BuildWalletIdsFilter(config.IncludeWalletIds) },
+                { "exclude", BuildWalletIdsFilter(config.ExcludeWalletIds) },
+            };
+
+            var parametersRaw = HttpUtils.BuildUriParameters(parameters);
+
+            var response = await reownHttpClient.Get<WalletRegistryResponse>(registryUri + parametersRaw);
+            return response.AssertSuccess();
 
             string GetPlatformFilter()
             {
@@ -94,13 +122,6 @@ namespace ChainSafe.Gaming.Reown.Wallets
                     ? string.Join(",", walletIds)
                     : null;
             }
-        }
-
-        ValueTask ILifecycleParticipant.WillStopAsync() => new(Task.CompletedTask);
-
-        public WalletModel GetWallet(string id)
-        {
-            return platformWallets.Find(w => w.Id == id);
         }
     }
 }
