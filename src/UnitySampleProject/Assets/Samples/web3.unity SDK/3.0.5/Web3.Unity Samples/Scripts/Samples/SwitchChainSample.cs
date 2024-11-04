@@ -4,8 +4,6 @@ using ChainSafe.Gaming;
 using ChainSafe.Gaming.Evm.Contracts.Custom;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.UnityPackage;
-using ChainSafe.Gaming.UnityPackage.Connection;
-using ChainSafe.Gaming.Web3.Build;
 using UnityEngine;
 
 namespace Samples.Behaviours.SwitchChain
