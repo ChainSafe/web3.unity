@@ -68,7 +68,7 @@ namespace ChainSafe.Gaming.Marketplace.Samples
                 button.interactable = false;
                 itemStatus.text = "Sold";
             }
-            catch (ServiceNotBoundWeb3Exception<ISigner>)
+            catch (ServiceNotBoundWeb3Exception<ISigner> _)
             {
                 Debug.LogError("You wanted to purchase an item and you don't have a wallet. Please connect the wallet to make a purchase");
                 Web3Unity.ConnectModal.Open();
