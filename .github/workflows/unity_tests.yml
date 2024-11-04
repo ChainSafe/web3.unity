@@ -1,4 +1,4 @@
-name: Unity Tests
+name: Unity Tests 🧪
 
 on:
   workflow_call:
