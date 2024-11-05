@@ -14,10 +14,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Success
-        if: ${{ github.event.label.name == 'documented' }}
+        if: ${{ github.event.label.name == 'documented' || contains( github.event.pull_request.labels.*.name, 'documented') }}
         run: echo "Documentation Check Passed"
       - name: Failure
-        if: ${{ github.event.label.name != 'documented' }}
+        if: ${{ github.event.label.name != 'documented' && !contains( github.event.pull_request.labels.*.name, 'documented') }}
         run: |
           echo "Documentation Check Failed - Missing 'documented' label on Pull Request"
           exit 1
