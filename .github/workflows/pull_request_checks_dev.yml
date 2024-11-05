@@ -17,3 +17,6 @@ jobs:
     name: Analyze 🧐
     if: ${{ github.event.action == 'ready_for_review' || github.event.label.name == 'ready-to-merge'}}
     uses: ChainSafe/web3.unity/.github/workflows/codeql.yml@main
+  documentation_check:
+    name: Documentation Check 📚
+    uses: ChainSafe/web3.unity/.github/workflows/documentation_check.yml@main
