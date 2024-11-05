@@ -65,7 +65,7 @@ namespace Samples.Behaviours.SwitchChain
         /// </summary>
         public async Task<string> NativeBalanceOf()
         {
-            var balance = await Web3Unity.Web3.RpcProvider.GetBalance(Web3Unity.Instance.Address);
+            var balance = await Web3Unity.Web3.RpcProvider.GetBalance(Web3Unity.Instance.PublicAddress);
 
             return balance.ToString();
         }

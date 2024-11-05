@@ -54,7 +54,7 @@ public class Erc20Sample : MonoBehaviour, ISample
     /// </summary>
     public async Task<string> BalanceOf()
     {
-        var balance = await Web3Unity.Web3.Erc20.GetBalanceOf(ChainSafeContracts.Erc20);
+        var balance = await Web3Unity.Web3.Erc20.GetBalanceOf(ChainSafeContracts.Erc20, accountBalanceOf);
 
         return balance.ToString();
     }

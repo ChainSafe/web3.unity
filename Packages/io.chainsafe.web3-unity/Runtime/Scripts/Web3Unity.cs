@@ -75,12 +75,12 @@ namespace ChainSafe.Gaming.UnityPackage
         /// <summary>
         /// Is a wallet connected.
         /// </summary>
-        public static bool Connected => !string.IsNullOrEmpty(Instance.Address);
+        public static bool Connected => !string.IsNullOrEmpty(Instance.PublicAddress);
 
         /// <summary>
         /// Public key (address) of connected wallet.
         /// </summary>
-        public string Address
+        public string PublicAddress
         {
             get
             {
