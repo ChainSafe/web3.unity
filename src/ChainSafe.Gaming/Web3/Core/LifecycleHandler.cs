@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ChainSafe.Gaming.Web3.Core
 {
+    /// <summary>
+    /// Handles the lifecycle of <see cref="ILifecycleParticipant"/> instances.
+    /// </summary>
     public class LifecycleHandler
     {
         private readonly ILifecycleParticipant[] lifecycleParticipants;
@@ -14,10 +17,14 @@ namespace ChainSafe.Gaming.Web3.Core
         {
             // Arrange execution based on ExecutionOrder Attribute priority.
             this.lifecycleParticipants = lifecycleParticipants
-                .OrderBy(p => p.GetType().GetCustomAttribute<ExecutionOrderAttribute>()?.Priority ?? 0)
+                .OrderBy(p => p.GetType().GetCustomAttribute<ExecutionOrderAttribute>()?.Order ?? 0)
                 .ToArray();
         }
 
+        /// <summary>
+        /// Starts all lifecycle participants.
+        /// </summary>
+        /// <returns>Awaitable Task.</returns>
         public async Task StartAsync()
         {
             List<ILifecycleParticipant> startedParticipants = new List<ILifecycleParticipant>();
@@ -44,6 +51,10 @@ namespace ChainSafe.Gaming.Web3.Core
             }
         }
 
+        /// <summary>
+        /// Stops all lifecycle participants.
+        /// </summary>
+        /// <returns>Awaitable Task.</returns>
         public async Task StopAsync()
         {
             List<Exception> exceptions = new List<Exception>();

@@ -2,14 +2,17 @@ using System;
 
 namespace ChainSafe.Gaming.Web3.Core
 {
+    /// <summary>
+    /// ExecutionOrder for <see cref="ILifecycleParticipant"/>.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class ExecutionOrderAttribute : Attribute
     {
-        public ExecutionOrderAttribute(int priority)
+        public ExecutionOrderAttribute(int order)
         {
-            Priority = priority;
+            Order = order;
         }
 
-        public int Priority { get; }
+        public int Order { get; }
     }
 }
