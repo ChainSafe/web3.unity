@@ -12,8 +12,10 @@ jobs:
   documentation_check:
     name: Documentation Check 📚
     runs-on: ubuntu-latest
-    if: ${{ github.event.label.name != 'documented' }}
     steps:
-      - run: |
-          exit 1
-      - run: echo "Documentation Check Passed"
+      - name: Success
+        if: ${{ github.event.label.name == 'documented' }}
+        run: echo "Documentation Check Passed"
+      - name: Failure
+        if: ${{ github.event.label.name != 'documented' }}
+        run: exit 1
