@@ -46,7 +46,6 @@ namespace ChainSafe.Gaming.Reown
         private readonly Web3Environment environment;
         private readonly IChainConfigSet chainConfigSet;
 
-        private SignClient signClient;
         private SessionStruct session;
         private bool connected;
         private bool initialized;
@@ -76,21 +75,23 @@ namespace ChainSafe.Gaming.Reown
             this.reownHttpClient = reownHttpClient;
         }
 
+        public SignClient SignClient { get; private set; }
+
         public bool StoredSessionAvailable
         {
             get
             {
-                if (!signClient.AddressProvider.HasDefaultSession)
+                if (!SignClient.AddressProvider.HasDefaultSession)
                 {
                     return false; // no session stored
                 }
 
-                if (string.IsNullOrWhiteSpace(signClient.AddressProvider.DefaultSession.Topic))
+                if (string.IsNullOrWhiteSpace(SignClient.AddressProvider.DefaultSession.Topic))
                 {
                     return false; // session topic is empty
                 }
 
-                if (!signClient.Session.Keys.Contains(signClient.AddressProvider.DefaultSession.Topic))
+                if (!SignClient.Session.Keys.Contains(SignClient.AddressProvider.DefaultSession.Topic))
                 {
                     return false; // usually happens when session was closed on the wallet side
                 }
@@ -138,8 +139,10 @@ namespace ChainSafe.Gaming.Reown
                 RelayUrlBuilder = config.RelayUrlBuilder,
             };
 
-            signClient = await SignClient.Init(signClientOptions);
-            await signClient.AddressProvider.LoadDefaultsAsync();
+            SignClient = await SignClient.Init(signClientOptions);
+            await SignClient.AddressProvider.LoadDefaultsAsync();
+
+            SignClient.CoreClient.Relayer.OnErrored += (sender, exception) => logWriter.LogError("REOWN CONNECTION ERROR");
 
             var optionalNamespace = new ProposedNamespace // todo using optional namespaces like AppKit does, should they be required?
             {
@@ -192,7 +195,7 @@ namespace ChainSafe.Gaming.Reown
 
         public ValueTask WillStopAsync()
         {
-            signClient?.Dispose();
+            SignClient?.Dispose();
 
             return new ValueTask(Task.CompletedTask);
         }
@@ -240,7 +243,7 @@ namespace ChainSafe.Gaming.Reown
             }
             catch (Exception e)
             {
-                signClient.AddressProvider.DefaultSession = default; // reset saved session
+                SignClient.AddressProvider.DefaultSession = default; // reset saved session
                 throw new ReownIntegrationException("Error occured during Reown connection process.", e);
             }
         }
@@ -291,8 +294,8 @@ namespace ChainSafe.Gaming.Reown
 
             try
             {
-                await signClient.Disconnect(session.Topic, Error.FromErrorType(ErrorType.USER_DISCONNECTED));
-                await signClient.CoreClient.Storage.Clear();
+                await SignClient.Disconnect(session.Topic, Error.FromErrorType(ErrorType.USER_DISCONNECTED));
+                await SignClient.CoreClient.Storage.Clear();
                 connected = false;
             }
             catch (Exception e)
@@ -304,7 +307,7 @@ namespace ChainSafe.Gaming.Reown
         private async Task<SessionStruct> ConnectSession()
         {
             var connectOptions = new ConnectOptions { OptionalNamespaces = optionalNamespaces };
-            var connectedData = await signClient.Connect(connectOptions);
+            var connectedData = await SignClient.Connect(connectOptions);
             var connectionHandler = await config.ConnectionHandlerProvider.ProvideHandler();
 
             try
@@ -330,7 +333,7 @@ namespace ChainSafe.Gaming.Reown
 
                 void OnRedirectToWallet(string walletId)
                 {
-                    signClient.CoreClient.Storage.SetItem("ChainSafe_RecentLocalWalletId", walletId); // saving wallet id to enable future redirection
+                    SignClient.CoreClient.Storage.SetItem("ChainSafe_RecentLocalWalletId", walletId); // saving wallet id to enable future redirection
                     redirection.RedirectConnection(connectedData.Uri, walletId);
                 }
 
@@ -365,7 +368,7 @@ namespace ChainSafe.Gaming.Reown
 
         private async Task<SessionStruct> RestoreSession()
         {
-            session = signClient.AddressProvider.DefaultSession;
+            session = SignClient.AddressProvider.DefaultSession;
 
             if (SessionExpired(session))
             {
@@ -381,7 +384,7 @@ namespace ChainSafe.Gaming.Reown
         {
             try
             {
-                var acknowledgement = await signClient.Extend(session.Topic);
+                var acknowledgement = await SignClient.Extend(session.Topic);
                 TryRedirectToWallet();
                 await acknowledgement.Acknowledged();
             }
@@ -417,8 +420,8 @@ namespace ChainSafe.Gaming.Reown
 
             EventUtils.ListenOnce<PublishParams>(
                 OnPublishedMessage,
-                handler => signClient.CoreClient.Relayer.Publisher.OnPublishedMessage += handler,
-                handler => signClient.CoreClient.Relayer.Publisher.OnPublishedMessage -= handler);
+                handler => SignClient.CoreClient.Relayer.Publisher.OnPublishedMessage += handler,
+                handler => SignClient.CoreClient.Relayer.Publisher.OnPublishedMessage -= handler);
 
             // var chainId = GetChainId();
             return await ReownRequest<T>(sessionTopic, method, parameters);
@@ -461,12 +464,12 @@ namespace ChainSafe.Gaming.Reown
                 return; // session wallet couldn't be determined, ignore redirection
             }
 
-            if (!await signClient.CoreClient.Storage.HasItem("ChainSafe_RecentLocalWalletId"))
+            if (!await SignClient.CoreClient.Storage.HasItem("ChainSafe_RecentLocalWalletId"))
             {
                 return; // no local wallets connected - ignore redirection
             }
 
-            var recentLocalWalletId = await signClient.CoreClient.Storage.GetItem<string>("ChainSafe_RecentLocalWalletId");
+            var recentLocalWalletId = await SignClient.CoreClient.Storage.GetItem<string>("ChainSafe_RecentLocalWalletId");
 
             if (recentLocalWalletId != sessionWallet.Id)
             {
@@ -515,7 +518,7 @@ namespace ChainSafe.Gaming.Reown
                 var data = (TRequest)Activator.CreateInstance(typeof(TRequest), parameters);
                 try
                 {
-                    return await signClient.Request<TRequest, T>(topic, data);
+                    return await SignClient.Request<TRequest, T>(topic, data);
                 }
                 catch (KeyNotFoundException e)
                 {
