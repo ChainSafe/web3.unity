@@ -142,9 +142,12 @@ namespace ChainSafe.Gaming.Reown
             SignClient = await SignClient.Init(signClientOptions);
             await SignClient.AddressProvider.LoadDefaultsAsync();
 
-            SignClient.CoreClient.Relayer.OnErrored += (sender, exception) => logWriter.LogError("REOWN CONNECTION ERROR");
+            if (config.OnRelayErrored is not null)
+            {
+                SignClient.CoreClient.Relayer.OnErrored += config.OnRelayErrored;
+            }
 
-            var optionalNamespace = new ProposedNamespace // todo using optional namespaces like AppKit does, should they be required?
+            var optionalNamespace = new ProposedNamespace
             {
                 Chains = chainConfigSet.Configs
                     .Select(chainEntry => $"{EvmNamespace}:{chainEntry.ChainId}")

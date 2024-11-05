@@ -1,8 +1,8 @@
 #nullable enable
+using System;
 using System.Collections.Generic;
 using ChainSafe.Gaming.Reown.Connection;
 using ChainSafe.Gaming.Reown.Wallets;
-using ChainSafe.Gaming.Web3.Environment;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
 using Reown.Core;
 using Reown.Core.Network;
@@ -93,5 +93,13 @@ namespace ChainSafe.Gaming.Reown
         /// Used to set custom <see cref="IConnectionBuilder"/> to support Unity versions before 2022.1.
         /// </summary>
         IConnectionBuilder ConnectionBuilder { get; }
+
+        /// <summary>
+        /// This delegate will be called if an error occurs in the Reown Relay module.
+        /// </summary>
+        /// <remarks>
+        /// You can use this to react to the error caused by connection loss.
+        /// </remarks>
+        EventHandler<Exception>? OnRelayErrored { get; }
     }
 }
