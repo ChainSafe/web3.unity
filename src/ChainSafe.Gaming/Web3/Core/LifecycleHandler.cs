@@ -16,9 +16,7 @@ namespace ChainSafe.Gaming.Web3.Core
         public LifecycleHandler(IEnumerable<ILifecycleParticipant> lifecycleParticipants)
         {
             // Arrange execution based on ExecutionOrder Attribute priority.
-            this.lifecycleParticipants = lifecycleParticipants
-                .OrderBy(p => p.GetType().GetCustomAttribute<ExecutionOrderAttribute>()?.Order ?? 0)
-                .ToArray();
+            this.lifecycleParticipants = lifecycleParticipants.OrderBy(p => p.ExecutionOrder).ToArray();
         }
 
         /// <summary>
