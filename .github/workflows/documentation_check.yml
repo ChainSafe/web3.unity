@@ -1,0 +1,19 @@
+name: Documentation Check 📚
+
+on:
+  pull_request:
+    branches:
+      - main
+      - dev
+    types:
+      - labeled
+
+jobs:
+  documentation_check:
+    name: Documentation Check 📚
+    runs-on: ubuntu-latest
+    if: ${{ github.event.label.name != 'documented' }}
+    steps:
+      - run: |
+          exit 1
+      - run: echo "Documentation Check Passed"
