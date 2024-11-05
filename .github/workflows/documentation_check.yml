@@ -18,4 +18,6 @@ jobs:
         run: echo "Documentation Check Passed"
       - name: Failure
         if: ${{ github.event.label.name != 'documented' }}
-        run: exit 1
+        run: |
+          echo "Documentation Check Failed - Missing 'documented' label on Pull Request"
+          exit 1
