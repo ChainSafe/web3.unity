@@ -4,10 +4,6 @@ using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming;
 using ChainSafe.Gaming.UnityPackage;
-using ChainSafe.Gaming.UnityPackage.Connection;
-using ChainSafe.Gaming.Web3;
-using ChainSafe.Gaming.Web3.Build;
-using ChainSafe.Gaming.Web3.Core;
 using Scripts.EVM.Token;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,7 +12,7 @@ using Erc1155Contract = ChainSafe.Gaming.Evm.Contracts.Custom.Erc1155Contract;
 /// <summary>
 /// ERC1155 calls used in the sample scene
 /// </summary>
-public class Erc1155Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecycleParticipant, ILightWeightServiceAdapter, ISample
+public class Erc1155Sample : MonoBehaviour, ISample
 {
     #region Fields
 
@@ -89,7 +85,7 @@ public class Erc1155Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecycle
     /// </summary>
     public async Task<string> BalanceOf()
     {
-        var balance = await _erc1155.BalanceOf(accountBalanceOf, BigInteger.Parse(tokenIdBalanceOf));
+        var balance = await Web3Unity.Web3.Erc1155.GetBalanceOf(ChainSafeContracts.Erc1155, tokenIdBalanceOf);
 
         return balance.ToString();
     }
@@ -99,9 +95,8 @@ public class Erc1155Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecycle
     /// </summary>
     public async Task<string> BalanceOfBatch()
     {
-        var balances = await _erc1155.BalanceOfBatch(
-            accountsBalanceOfBatch,
-            tokenIdsBalanceOfBatch.Select(BigInteger.Parse).ToArray());
+        var balances = await Web3Unity.Web3.Erc1155.GetBalanceOfBatch(ChainSafeContracts.Erc1155,
+            accountsBalanceOfBatch, tokenIdsBalanceOfBatch);
 
         return string.Join(",\n", balances.Select(o => o.ToString()));
     }
@@ -111,7 +106,7 @@ public class Erc1155Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecycle
     /// </summary>
     public async Task<string> Uri()
     {
-        var uri = await _erc1155.Uri(tokenIdUri);
+        var uri = await Web3Unity.Web3.Erc1155.GetUri(ChainSafeContracts.Erc1155, tokenIdUri);
         
         return uri;
     }
@@ -121,9 +116,7 @@ public class Erc1155Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecycle
     /// </summary>
     public async Task<string> MintErc1155()
     {
-        var response = await _erc1155.MintWithReceipt(
-            Web3Unity.Instance.Address,
-            idMint, amountMint, Array.Empty<byte>());
+        var response = await Web3Unity.Web3.Erc1155.MintWithReceipt(ChainSafeContracts.Erc1155, idMint, amountMint);
 
         return response.TransactionHash;
     }
@@ -133,13 +126,8 @@ public class Erc1155Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecycle
     /// </summary>
     public async Task<string> TransferErc1155()
     {
-        var response = await _erc1155.SafeTransferFromWithReceipt(
-            Web3Unity.Instance.Address,
-            toAccountTransfer,
-            tokenIdTransfer,
-            amountTransfer,
-            Array.Empty<byte>()
-            );
+        var response = await Web3Unity.Web3.Erc1155.TransferWithReceipt(ChainSafeContracts.Erc1155, tokenIdTransfer,
+            amountTransfer, toAccountTransfer);
 
         return response.TransactionHash;
     }
@@ -163,28 +151,5 @@ public class Erc1155Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecycle
         _rawImage.texture = texture;
 
         return "Nft Texture Set.";
-    }
-
-    public async Task OnWeb3Initialized(Web3 web3)
-    {
-        _erc1155 = await web3.ContractBuilder.Build<Erc1155Contract>(ChainSafeContracts.Erc1155);
-    }
-
-    public override Web3Builder ConfigureServices(Web3Builder web3Builder)
-    {
-        return web3Builder.Configure(services =>
-        {
-            services.AddSingleton<IWeb3InitializedHandler, ILifecycleParticipant, Erc1155Sample>(_ => this);
-        });
-    }
-
-    public ValueTask WillStartAsync()
-    {
-        return new ValueTask(Task.CompletedTask);
-    }
-
-    public async ValueTask WillStopAsync()
-    {
-        await _erc1155.DisposeAsync();
     }
 }

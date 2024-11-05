@@ -4,8 +4,6 @@ using ChainSafe.Gaming;
 using ChainSafe.Gaming.Evm.Contracts.Custom;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.UnityPackage;
-using ChainSafe.Gaming.UnityPackage.Connection;
-using ChainSafe.Gaming.Web3.Build;
 using UnityEngine;
 
 namespace Samples.Behaviours.SwitchChain
@@ -67,7 +65,7 @@ namespace Samples.Behaviours.SwitchChain
         /// </summary>
         public async Task<string> NativeBalanceOf()
         {
-            var balance = await Web3Unity.Web3.RpcProvider.GetBalance(Web3Unity.Instance.Address);
+            var balance = await Web3Unity.Web3.RpcProvider.GetBalance(Web3Unity.Instance.PublicAddress);
 
             return balance.ToString();
         }

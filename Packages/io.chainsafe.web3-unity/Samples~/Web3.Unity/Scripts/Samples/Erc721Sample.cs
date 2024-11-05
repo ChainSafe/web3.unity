@@ -1,24 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming;
 using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.UnityPackage;
-using ChainSafe.Gaming.UnityPackage.Connection;
-using ChainSafe.Gaming.Web3;
-using ChainSafe.Gaming.Web3.Build;
-using ChainSafe.Gaming.Web3.Core;
 using Scripts.EVM.Token;
 using UnityEngine;
-using Erc721Contract = ChainSafe.Gaming.Evm.Contracts.Custom.Erc721Contract;
 using StringBuilder = System.Text.StringBuilder;
 
 /// <summary>
 /// ERC721 calls used in the sample scene
 /// </summary>
-public class Erc721Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecycleParticipant, ILightWeightServiceAdapter, ISample
+public class Erc721Sample : MonoBehaviour, ISample
 {
     #region Fields
 
@@ -77,14 +71,12 @@ public class Erc721Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecycleP
     #endregion
 
 
-    private Erc721Contract _erc721;
-
     /// <summary>
     /// Balance Of ERC721 Address
     /// </summary>
     public async Task<string> BalanceOf()
     {
-        var balance = await _erc721.BalanceOf(accountBalanceOf);
+        var balance = await Web3Unity.Web3.Erc721.GetBalanceOf(ChainSafeContracts.Erc721, accountBalanceOf);
 
         return balance.ToString();
     }
@@ -94,7 +86,7 @@ public class Erc721Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecycleP
     /// </summary>
     public async Task<string> OwnerOf()
     {
-        var owner = await _erc721.OwnerOf(BigInteger.Parse(tokenIdOwnerOf));
+        var owner = await Web3Unity.Web3.Erc721.GetOwnerOf(ChainSafeContracts.Erc721, tokenIdOwnerOf);
 
         return owner;
     }
@@ -104,7 +96,7 @@ public class Erc721Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecycleP
     /// </summary>
     public async Task<string> OwnerOfBatch()
     {
-        var owners = await _erc721.GetOwnerOfBatch(tokenIdsOwnerOfBatch);
+        var owners = await Web3Unity.Web3.Erc721.GetOwnerOfBatch(ChainSafeContracts.Erc721, tokenIdsOwnerOfBatch);
 
         return BuildOwnerOfBatchText(owners);
     }
@@ -114,7 +106,7 @@ public class Erc721Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecycleP
     /// </summary>
     public async Task<string> Uri()
     {
-        var uri = await _erc721.TokenURI(tokenIdUri);
+        var uri = await Web3Unity.Web3.Erc721.GetUri(ChainSafeContracts.Erc721, tokenIdUri);
         return uri;
     }
 
@@ -123,7 +115,7 @@ public class Erc721Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecycleP
     /// </summary>
     public async Task<string> MintErc721()
     {
-        var response = await _erc721.SafeMintWithReceipt(Web3Unity.Instance.Address, uriMint);
+        var response = await Web3Unity.Web3.Erc721.MintWithReceipt(ChainSafeContracts.Erc721, uriMint);
 
         return response.TransactionHash;
     }
@@ -133,32 +125,9 @@ public class Erc721Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecycleP
     /// </summary>
     public async Task<string> TransferErc721()
     {
-        var response = await _erc721.SafeTransferFromWithReceipt(contractTransfer, toAccountTransfer, tokenIdTransfer);
+        var response = await Web3Unity.Web3.Erc721.TransferWithReceipt(contractTransfer, toAccountTransfer, tokenIdTransfer);
 
         return response.TransactionHash;
-    }
-
-    public async Task OnWeb3Initialized(Web3 web3)
-    {
-        _erc721 = await web3.ContractBuilder.Build<Erc721Contract>(ChainSafeContracts.Erc721);
-    }
-
-    public override Web3Builder ConfigureServices(Web3Builder web3Builder)
-    {
-        return web3Builder.Configure(services =>
-        {
-            services.AddSingleton<IWeb3InitializedHandler, ILifecycleParticipant, Erc721Sample>(_ => this);
-        });
-    }
-
-    public ValueTask WillStartAsync()
-    {
-        return new ValueTask(Task.CompletedTask);
-    }
-
-    public async ValueTask WillStopAsync()
-    {
-        await _erc721.DisposeAsync();
     }
 
     private string BuildOwnerOfBatchText(IEnumerable<OwnerOfBatchModel> owners)

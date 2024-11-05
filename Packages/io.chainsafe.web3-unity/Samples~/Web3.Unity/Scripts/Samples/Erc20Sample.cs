@@ -4,18 +4,13 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.UnityPackage;
-using ChainSafe.Gaming.UnityPackage.Connection;
-using ChainSafe.Gaming.Web3;
-using ChainSafe.Gaming.Web3.Build;
-using ChainSafe.Gaming.Web3.Core;
 using Scripts.EVM.Token;
 using UnityEngine;
-using Erc20Contract = ChainSafe.Gaming.Evm.Contracts.Custom.Erc20Contract;
 
 /// <summary>
 /// ERC20 calls used in the sample scene
 /// </summary>
-public class Erc20Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecycleParticipant, ILightWeightServiceAdapter, ISample
+public class Erc20Sample : MonoBehaviour, ISample
 {
     #region Fields
 
@@ -54,14 +49,12 @@ public class Erc20Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecyclePa
 
     #endregion
 
-    private Erc20Contract _erc20;
-
     /// <summary>
     /// Balance Of ERC20 Address
     /// </summary>
     public async Task<string> BalanceOf()
     {
-        var balance = await _erc20.BalanceOf(accountBalanceOf);
+        var balance = await Web3Unity.Web3.Erc20.GetBalanceOf(ChainSafeContracts.Erc20, accountBalanceOf);
 
         return balance.ToString();
     }
@@ -81,7 +74,7 @@ public class Erc20Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecyclePa
     /// </summary>
     public async Task<string> Name()
     {
-        var getName = await _erc20.Name();
+        var getName = await Web3Unity.Web3.Erc20.GetName(ChainSafeContracts.Erc20);
 
         return getName;
     }
@@ -91,7 +84,7 @@ public class Erc20Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecyclePa
     /// </summary>
     public async Task<string> Symbol()
     {
-        var symbol = await _erc20.Symbol();
+        var symbol = await Web3Unity.Web3.Erc20.GetSymbol(ChainSafeContracts.Erc20);
 
         return symbol;
     }
@@ -101,7 +94,7 @@ public class Erc20Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecyclePa
     /// </summary>
     public async Task<string> Decimals()
     {
-        var decimals = await _erc20.Decimals();
+        var decimals = await Web3Unity.Web3.Erc20.GetDecimals(ChainSafeContracts.Erc20);
         return decimals.ToString();
     }
 
@@ -110,7 +103,7 @@ public class Erc20Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecyclePa
     /// </summary>
     public async Task<string> TotalSupply()
     {
-        var totalSupply = await _erc20.TotalSupply();
+        var totalSupply = await Web3Unity.Web3.Erc20.GetTotalSupply(ChainSafeContracts.Erc20);
 
         return totalSupply.ToString();
     }
@@ -120,7 +113,7 @@ public class Erc20Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecyclePa
     /// </summary>
     public async Task<string> MintErc20()
     {
-        var mintResponse = await _erc20.MintWithReceipt(Web3Unity.Web3.Signer.PublicAddress, valueToSend * weiPerEther);
+        var mintResponse = await Web3Unity.Web3.Erc20.MintWithReceipt(ChainSafeContracts.Erc20, valueToSend * weiPerEther);
 
         return mintResponse.TransactionHash;
     }
@@ -130,31 +123,8 @@ public class Erc20Sample : ServiceAdapter, IWeb3InitializedHandler, ILifecyclePa
     /// </summary>
     public async Task<string> TransferErc20()
     {
-        var mintResponse = await _erc20.Transfer(toAccount, amountTransfer);
+        var mintResponse = await Web3Unity.Web3.Erc20.TransferWithReceipt(ChainSafeContracts.Erc20, toAccount, amountTransfer);
 
         return mintResponse.ToString();
-    }
-
-    public async Task OnWeb3Initialized(Web3 web3)
-    {
-        _erc20 = await web3.ContractBuilder.Build<Erc20Contract>(ChainSafeContracts.Erc20);
-    }
-
-    public override Web3Builder ConfigureServices(Web3Builder web3Builder)
-    {
-        return web3Builder.Configure(services =>
-        {
-            services.AddSingleton<IWeb3InitializedHandler, ILifecycleParticipant, Erc20Sample>(_ => this);
-        });
-    }
-
-    public ValueTask WillStartAsync()
-    {
-        return new ValueTask(Task.CompletedTask);
-    }
-
-    public async ValueTask WillStopAsync()
-    {
-        await _erc20.DisposeAsync();
     }
 }

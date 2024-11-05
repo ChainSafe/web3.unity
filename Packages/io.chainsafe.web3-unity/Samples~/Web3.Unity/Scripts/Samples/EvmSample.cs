@@ -126,7 +126,7 @@ public class EvmSample : MonoBehaviour, ISample
     {
         object[] args =
         {
-            Web3Unity.Web3.Signer.PublicAddress
+            Web3Unity.Instance.PublicAddress
         };
         var response = await Web3Unity.Instance.ContractCall(methodCall, ABI.ArrayTotal, ChainSafeContracts.ArrayTotal, args);
 
@@ -291,7 +291,7 @@ public class EvmSample : MonoBehaviour, ISample
 
         return $"{nameof(MultiCall)} executed.";
     }
-
+    
     private static string BuildToString(IEnumerable<object> dynamicResponse)
     {
         return string.Join(",\n", dynamicResponse.Select(o => o.ToString()));
