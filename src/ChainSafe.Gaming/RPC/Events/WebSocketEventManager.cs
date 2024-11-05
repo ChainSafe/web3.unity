@@ -14,6 +14,10 @@ using Nethereum.RPC.Reactive.Eth.Subscriptions;
 
 namespace ChainSafe.Gaming.RPC.Events
 {
+    /// <summary>
+    /// <see cref="ILifecycleParticipant.WillStartAsync"/> will be executed later.
+    /// </summary>
+    [ExecutionOrder(10)]
     public class WebSocketEventManager : IEventManager, ILifecycleParticipant, IChainSwitchHandler
     {
         private readonly IChainConfig chainConfig;
