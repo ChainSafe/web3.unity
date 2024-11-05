@@ -48,6 +48,10 @@ jobs:
     uses: ChainSafe/web3.unity/.github/workflows/unity_tests.yml@main
     needs: [ pre_job ]
     secrets: inherit
+  documentation_check:
+    name: Documentation Check 📚
+    uses: ChainSafe/web3.unity/.github/workflows/documentation_check.yml@main
+    needs: [ pre_job ]
   duplicate_samples:
     name: Duplicate Samples 🪞
     if: ${{ github.event.action == 'ready_for_review' || github.event.label.name == 'ready-to-merge'}}
