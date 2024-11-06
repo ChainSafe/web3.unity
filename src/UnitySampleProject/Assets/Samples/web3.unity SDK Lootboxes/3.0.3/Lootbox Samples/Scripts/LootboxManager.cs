@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Chainsafe.Gaming.Chainlink;
-using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Lootboxes.Chainlink;
 using ChainSafe.Gaming.UnityPackage;
 using TMPro;
@@ -22,7 +21,7 @@ public class LootboxManager : MonoBehaviour
     private void Awake()
     {
         claimLootboxButton.onClick.AddListener(OnClaimLootboxClicked);
-        recoverLootboxesButton.onClick.AddListener(() => RecoverLootboxes());
+        recoverLootboxesButton.onClick.AddListener(RecoverLootboxesClicked);
         postToSocialsButton.onClick.AddListener(PostOnSocialMedia);
         lootboxDropdown.onValueChanged.AddListener(OnDropdownValueChanged);
         Web3Unity.Web3Initialized += Web3Initialized;
@@ -89,14 +88,14 @@ public class LootboxManager : MonoBehaviour
         {
             await OpenLootBox(selectedId, selectedAmount);
         }
+        // Claim rewards after opening
+        var rewards = await lootboxService.ClaimRewards();
+        OpenRewardsMenu(rewards);
     }
 
     private async Task OpenLootBox(uint lootId, uint lootAmount)
     {
         await lootboxService.OpenLootbox(lootId, lootAmount);
-        // Change to txReceipt to call ItemData for object spawning
-        //var txReceipt = await lootboxService.OpenLootbox(lootId, lootAmount);
-        //OpenRewardsMenu(txReceipt);
     }
 
     private async void RecoverLootboxesClicked()
@@ -109,10 +108,10 @@ public class LootboxManager : MonoBehaviour
         await lootboxService.RecoverLootboxes();
     }
 
-    private void OpenRewardsMenu(TransactionReceipt txReceipt)
+    private void OpenRewardsMenu(LootboxRewards rewards)
     {
         rewardsMenu.SetActive(true);
-        EventManager.OnToggleRewardItems(txReceipt);
+        EventManager.OnToggleRewardItems(rewards);
     }
 
     private void PostOnSocialMedia()
