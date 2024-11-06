@@ -9,11 +9,11 @@ namespace ChainSafe.Gaming.Web3.Core
     /// <summary>
     /// Handles the lifecycle of <see cref="ILifecycleParticipant"/> instances.
     /// </summary>
-    public class LifecycleHandler
+    public class LifecycleManager
     {
         private readonly ILifecycleParticipant[] lifecycleParticipants;
 
-        public LifecycleHandler(IEnumerable<ILifecycleParticipant> lifecycleParticipants)
+        public LifecycleManager(IEnumerable<ILifecycleParticipant> lifecycleParticipants)
         {
             // Arrange execution based on ExecutionOrder Attribute priority.
             this.lifecycleParticipants = lifecycleParticipants.OrderBy(p => p.ExecutionOrder).ToArray();
@@ -35,17 +35,16 @@ namespace ChainSafe.Gaming.Web3.Core
 
                     startedParticipants.Add(lifecycleParticipant);
                 }
+
+                startedParticipants.Clear();
             }
-            catch (Exception)
+            finally
             {
                 // If an exception was thrown, dispose of all initialized participants.
-                foreach (var lifecycleParticipant in startedParticipants)
+                if (startedParticipants.Count != 0)
                 {
-                    await lifecycleParticipant.WillStopAsync();
+                    await StopLifecycleParticipantsAsync(startedParticipants);
                 }
-
-                // Rethrow the exception.
-                throw;
             }
         }
 
@@ -55,34 +54,33 @@ namespace ChainSafe.Gaming.Web3.Core
         /// <returns>Awaitable Task.</returns>
         public async Task StopAsync()
         {
+            await StopLifecycleParticipantsAsync(lifecycleParticipants);
+        }
+
+        private async Task StopLifecycleParticipantsAsync(IEnumerable<ILifecycleParticipant> participants)
+        {
+            Queue<ILifecycleParticipant> stoppageQueue =
+                new Queue<ILifecycleParticipant>(participants.OrderByDescending(p => p.ExecutionOrder));
+
             List<Exception> exceptions = new List<Exception>();
 
-            List<ILifecycleParticipant> stoppedParticipants = new List<ILifecycleParticipant>();
-
-            await StopAllParticipantsAsync();
-
-            if (exceptions.Count != 0)
+            while (stoppageQueue.Count != 0)
             {
-                throw new AggregateException(exceptions);
-            }
+                ILifecycleParticipant participant = stoppageQueue.Dequeue();
 
-            async Task StopAllParticipantsAsync()
-            {
                 try
                 {
-                    foreach (var participant in lifecycleParticipants.Where(p => !stoppedParticipants.Contains(p)))
-                    {
-                        stoppedParticipants.Add(participant);
-
-                        await participant.WillStopAsync();
-                    }
+                    await participant.WillStopAsync();
                 }
                 catch (Exception e)
                 {
                     exceptions.Add(e);
-
-                    await StopAllParticipantsAsync();
                 }
+            }
+
+            if (exceptions.Count != 0)
+            {
+                throw new AggregateException(exceptions);
             }
         }
     }

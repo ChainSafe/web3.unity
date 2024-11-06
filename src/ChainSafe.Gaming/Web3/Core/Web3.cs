@@ -30,7 +30,7 @@ namespace ChainSafe.Gaming.Web3
         private readonly IEventManager? events;
         private readonly ILogoutManager logoutManager;
         private readonly ILocalStorage localStorage;
-        private readonly LifecycleHandler lifecycleHandler;
+        private readonly LifecycleManager lifecycleManager;
 
         private bool initialized;
         private bool terminated;
@@ -44,7 +44,7 @@ namespace ChainSafe.Gaming.Web3
             ProjectConfig = this.serviceProvider.GetRequiredService<IProjectConfig>();
             ChainConfig = this.serviceProvider.GetRequiredService<IChainConfig>();
             localStorage = this.serviceProvider.GetRequiredService<ILocalStorage>();
-            lifecycleHandler = this.serviceProvider.GetRequiredService<LifecycleHandler>();
+            lifecycleManager = this.serviceProvider.GetRequiredService<LifecycleManager>();
             ContractBuilder = this.serviceProvider.GetRequiredService<IContractBuilder>();
             Erc20 = this.serviceProvider.GetRequiredService<Erc20Service>();
             Erc721 = this.serviceProvider.GetRequiredService<Erc721Service>();
@@ -128,7 +128,7 @@ namespace ChainSafe.Gaming.Web3
         {
             await localStorage.Initialize();
 
-            await lifecycleHandler.StartAsync();
+            await lifecycleManager.StartAsync();
 
             initialized = true;
         }
@@ -152,7 +152,7 @@ namespace ChainSafe.Gaming.Web3
 
             if (initialized)
             {
-                await lifecycleHandler.StopAsync();
+                await lifecycleManager.StopAsync();
             }
 
             await serviceProvider.DisposeAsync();
