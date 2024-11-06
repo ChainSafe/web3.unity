@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Signers;
+using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Ipfs;
 using ChainSafe.Gaming.MultiCall;
 using ChainSafe.Gaming.Web3;
@@ -164,6 +165,23 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         }
 
         /// <summary>
+        /// Mint method to safely mint an object.
+        /// </summary>
+        /// <param name="uri">The URI of the object to be minted.</param>
+        /// <returns>Receipt of the mint.</returns>
+        public async Task<TransactionReceipt> MintWithReceipt(string uri)
+        {
+            if (signer == null)
+            {
+                throw new Web3Exception("Can't mint to the player address. No signer was provided during construction.");
+            }
+
+            var parameters = new object[] { signer.PublicAddress, uri };
+            var response = await SendWithReceipt(EthMethods.SafeMint, parameters);
+            return response.receipt;
+        }
+
+        /// <summary>
         /// Transfers the specified token to the given account.
         /// </summary>
         /// <param name="toAccount">The account to transfer the token to.</param>
@@ -184,12 +202,30 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         {
             if (signer == null)
             {
-                throw new Web3Exception("Can't mint to the player address. No signer was provided during construction.");
+                throw new Web3Exception("Can't transfer to the player address. No signer was provided during construction.");
             }
 
             var parameters = new object[] { signer.PublicAddress, toAccount, tokenId };
             var response = await Send(EthMethods.SafeTransferFrom, parameters);
             return response;
+        }
+
+        /// <summary>
+        /// Transfers a token to the specified account.
+        /// </summary>
+        /// <param name="to">The address of the account to which the token will be transferred.</param>
+        /// <param name="tokenId">The unique identifier of the token.</param>
+        /// <returns>Receipt of the transfer.</returns>
+        public async Task<TransactionReceipt> TransferWithReceipt(string to, BigInteger tokenId)
+        {
+            if (signer == null)
+            {
+                throw new Web3Exception("Can't transfer to the player address. No signer was provided during construction.");
+            }
+
+            var response = await SendWithReceipt(EthMethods.SafeTransferFrom, new object[] { signer.PublicAddress, to, tokenId });
+
+            return response.receipt;
         }
     }
 }
