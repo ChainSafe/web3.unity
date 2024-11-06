@@ -4,7 +4,6 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
-using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.Evm.Contracts.Extensions;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
@@ -31,6 +30,8 @@ namespace ChainSafe.Gaming.UnityPackage
     [RequireComponent(typeof(ConnectionHandler))]
     public class Web3Unity : MonoBehaviour, IWeb3InitializedHandler
     {
+        public static bool TestMode = false;
+        
         private static Web3Unity _instance;
 
         /// <summary>
@@ -74,12 +75,12 @@ namespace ChainSafe.Gaming.UnityPackage
         /// <summary>
         /// Is a wallet connected.
         /// </summary>
-        public static bool Connected => !string.IsNullOrEmpty(Instance.Address);
+        public static bool Connected => !string.IsNullOrEmpty(Instance.PublicAddress);
 
         /// <summary>
         /// Public key (address) of connected wallet.
         /// </summary>
-        public string Address
+        public string PublicAddress
         {
             get
             {
@@ -265,8 +266,11 @@ namespace ChainSafe.Gaming.UnityPackage
             return signature;
         }
 
-        public Task OnWeb3Initialized(CWeb3 web3)
+        public async Task OnWeb3Initialized(CWeb3 web3)
         {
+            // Terminate if there's any existing Web3 Instance
+            await Terminate(false);
+            
             _web3 = web3;
 
             if (_connectModal != null)
@@ -275,8 +279,6 @@ namespace ChainSafe.Gaming.UnityPackage
             }
             
             Web3Initialized?.Invoke((_web3, _web3.ServiceProvider.GetService(typeof(ISigner)) == null));
-
-            return Task.CompletedTask;
         }
 
         public async Task<TransactionResponse> GetTransactionByHash(string transactionHash)

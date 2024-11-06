@@ -13,7 +13,7 @@ jobs:
   check_commit:
     name: Check Commit 📝
     runs-on: ubuntu-latest
-    if: ${{ !github.event.pull_request.draft }}
+    if: ${{ !github.event.pull_request.draft && contains( github.event.pull_request.labels.*.name, 'ready-to-merge') }}
     outputs:
       commit_message: ${{ steps.get_head_commit_message.outputs.HEAD_COMMIT_MESSAGE }}
     steps:
@@ -33,7 +33,7 @@ jobs:
     if: ${{ needs.check_commit.outputs.commit_message == 'Sync Dependencies - Auto Commit' }}
     needs: [ check_commit ]
     steps:
-      - run: echo "..."
+      - run: echo "Proceeding to checks..."
   
   web3_tests:
     name: Web3 tests 🕸
@@ -48,6 +48,10 @@ jobs:
     uses: ChainSafe/web3.unity/.github/workflows/unity_tests.yml@main
     needs: [ pre_job ]
     secrets: inherit
+  documentation_check:
+    name: Documentation Check 📚
+    uses: ChainSafe/web3.unity/.github/workflows/documentation_check.yml@main
+    needs: [ pre_job ]
   duplicate_samples:
     name: Duplicate Samples 🪞
     if: ${{ github.event.action == 'ready_for_review' || github.event.label.name == 'ready-to-merge'}}
