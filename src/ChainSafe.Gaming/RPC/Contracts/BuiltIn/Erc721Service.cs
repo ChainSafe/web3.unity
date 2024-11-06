@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Utils;
 using ChainSafe.Gaming.MultiCall;
+using TransactionReceipt = ChainSafe.Gaming.Evm.Transactions.TransactionReceipt;
 
 namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
 {
@@ -144,6 +145,15 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
             => BuildContract(contractAddress).Mint(uri, destinationAddress);
 
         /// <summary>
+        /// Mints a new token by invoking the Mint method in a smart contract.
+        /// </summary>
+        /// <param name="contractAddress">The address of the smart contract.</param>
+        /// <param name="uri">The URI of the token.</param>
+        /// <returns>Receipt of the mint.</returns>
+        public Task<TransactionReceipt> MintWithReceipt(string contractAddress, string uri)
+            => BuildContract(contractAddress).MintWithReceipt(uri);
+
+        /// <summary>
         /// Transfers a token to a specified account.
         /// </summary>
         /// <param name="contractAddress">The address of the contract.</param>
@@ -162,5 +172,15 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// <returns>A task that represents the asynchronous transfer operation. The task result is an array of objects representing the transfer result.</returns>
         public Task<object[]> Transfer(string contractAddress, string toAccount, string tokenId)
             => BuildContract(contractAddress).Transfer(toAccount, tokenId);
+
+        /// <summary>
+        /// Transfers a token to the specified account.
+        /// </summary>
+        /// <param name="contractAddress">The address of the token contract.</param>
+        /// <param name="toAccount">The account to transfer the token to.</param>
+        /// <param name="tokenId">The ID of the token to transfer.</param>
+        /// <returns>Receipt of the transaction.</returns>
+        public Task<TransactionReceipt> TransferWithReceipt(string contractAddress, string toAccount, BigInteger tokenId)
+            => BuildContract(contractAddress).TransferWithReceipt(toAccount, tokenId);
     }
 }

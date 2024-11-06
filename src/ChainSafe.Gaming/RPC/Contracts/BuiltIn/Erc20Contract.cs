@@ -2,6 +2,7 @@ using System.Diagnostics.Contracts;
 using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Signers;
+using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Web3;
 
 namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
@@ -121,6 +122,22 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         }
 
         /// <summary>
+        /// Mints a specified amount of tokens to the current user address.
+        /// </summary>
+        /// <param name="amount">The amount of tokens to mint.</param>
+        /// <returns>Receipt of the mint.</returns>
+        public async Task<TransactionReceipt> MintWithReceipt(BigInteger amount)
+        {
+            EnsureSigner();
+
+            var response = await SendWithReceipt(
+                EthMethods.Mint,
+                new object[] { signer.PublicAddress, amount });
+
+            return response.receipt;
+        }
+
+        /// <summary>
         /// Transfers a specified amount to the specified account address.
         /// </summary>
         /// <param name="destinationAddress">The address of the account to transfer the amount to.</param>
@@ -133,6 +150,21 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
                 new object[] { destinationAddress, amount });
 
             return response;
+        }
+
+        /// <summary>
+        /// Transfers a specified amount to the specified account address.
+        /// </summary>
+        /// <param name="destinationAddress">The address of the account to transfer the amount to.</param>
+        /// <param name="amount">The amount to transfer.</param>
+        /// <returns>Receipt of the transaction.</returns>
+        public async Task<TransactionReceipt> TransferWithReceipt(string destinationAddress, BigInteger amount)
+        {
+            var response = await SendWithReceipt(
+                EthMethods.Transfer,
+                new object[] { destinationAddress, amount });
+
+            return response.receipt;
         }
 
         private void EnsureSigner()
