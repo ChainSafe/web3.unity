@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace ChainSafe.Gaming.Lootboxes.Chainlink
 {
     /// <summary>
@@ -16,5 +18,11 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
         /// The ABI is essential for decoding the data and events emitted by Ethereum contracts.
         /// </summary>
         public string? ContractAbi { get; set; }
+
+        /// <summary>
+        /// Gets or sets the nft contracts that belong to this LootboxService.
+        /// This is needed to spawn the items related to the Lootbox.
+        /// </summary>
+        public List<string>? NftContracts { get; set; }
     }
 }

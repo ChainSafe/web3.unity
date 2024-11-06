@@ -22,7 +22,7 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
 {
     public class LootboxService : ILootboxService, ILifecycleParticipant
     {
-        public const int GasPerUnit = 100000;
+        public const int GasPerUnit = 200000;
 
         private readonly IContractBuilder contractBuilder;
         private readonly LootboxServiceConfig config;
@@ -67,7 +67,6 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
                 PackageName = "io.chainsafe.web3-unity.lootboxes",
             });
 
-            // todo check if contract is correct
             this.contract = this.contractBuilder.Build(contractAbi, contractAddress);
 
             this.rewardTypeByTokenAddress = await MapTokenAddressToRewardType();
@@ -144,7 +143,7 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
 
             var response = await this.contract.Call(
                 "calculateOpenPrice",
-                new object[] { 50000 + (GasPerUnit * rewardCount), safeGasPrice, rewardCount, });
+                new object[] { 100000 + (GasPerUnit * rewardCount), safeGasPrice, rewardCount, });
             var openPrice = (BigInteger)response[0];
 
             return openPrice;
@@ -191,8 +190,17 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
 
             await this.contract.Send(
                 "open",
-                new object[] { 50000 + (GasPerUnit * rewardCount), new[] { lootboxType }, new[] { lootboxCount } },
+                new object[] { 100000 + (GasPerUnit * rewardCount), new[] { lootboxType }, new[] { lootboxCount } },
                 new TransactionRequest { Value = new HexBigInteger(openPrice) });
+        }
+
+        public async Task RecoverLootboxes()
+        {
+            var playerAddress = this.GetCurrentPlayerAddress();
+
+            await this.contract.Send(
+                "recoverBoxes",
+                new object[] { playerAddress });
         }
 
         public async Task<bool> CanClaimRewards()

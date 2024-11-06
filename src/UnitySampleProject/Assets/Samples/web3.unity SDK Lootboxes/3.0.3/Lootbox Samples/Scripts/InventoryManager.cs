@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Numerics;
-using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts.Custom;
 using ChainSafe.Gaming.UnityPackage;
 using Newtonsoft.Json;
@@ -28,10 +27,6 @@ public class InventoryManager : MonoBehaviour
 
     private async void Start()
     {
-        while (!Web3Unity.Connected)
-        {
-            await Task.Delay(1000);
-        }
         _erc1155 = await Web3Unity.Web3.ContractBuilder.Build<Erc1155Contract>(collectionContract);
         var tokenId = 0;
         var balance = await _erc1155.BalanceOf(Web3Unity.Web3.Signer.PublicAddress, tokenId);

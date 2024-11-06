@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Chainsafe.Gaming.Chainlink;
+using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Lootboxes.Chainlink;
 using ChainSafe.Gaming.UnityPackage;
 using TMPro;
@@ -11,15 +12,17 @@ using Web3 = ChainSafe.Gaming.Web3.Web3;
 
 public class LootboxManager : MonoBehaviour
 {
-    [SerializeField] private Button claimLootboxButton, postToSocialsButton;
+    [SerializeField] private Button claimLootboxButton, recoverLootboxesButton, postToSocialsButton;
     [SerializeField] private TextMeshProUGUI lootboxAmountText;
     [SerializeField] private TMP_Dropdown lootboxDropdown;
+    [SerializeField] private GameObject rewardsMenu;
     private ILootboxService lootboxService;
     private Dictionary<uint, uint> lootboxBalances = new Dictionary<uint, uint>();
 
     private void Awake()
     {
         claimLootboxButton.onClick.AddListener(OnClaimLootboxClicked);
+        recoverLootboxesButton.onClick.AddListener(() => RecoverLootboxes());
         postToSocialsButton.onClick.AddListener(PostOnSocialMedia);
         lootboxDropdown.onValueChanged.AddListener(OnDropdownValueChanged);
         Web3Unity.Web3Initialized += Web3Initialized;
@@ -90,8 +93,26 @@ public class LootboxManager : MonoBehaviour
 
     private async Task OpenLootBox(uint lootId, uint lootAmount)
     {
-        var openPrice = await lootboxService.CalculateOpenPrice(lootId, lootAmount);
-        await lootboxService.OpenLootbox(lootId, lootAmount); 
+        await lootboxService.OpenLootbox(lootId, lootAmount);
+        // Change to txReceipt to call ItemData for object spawning
+        //var txReceipt = await lootboxService.OpenLootbox(lootId, lootAmount);
+        //OpenRewardsMenu(txReceipt);
+    }
+
+    private async void RecoverLootboxesClicked()
+    {
+        await RecoverLootboxes();
+    }
+
+    private async Task RecoverLootboxes()
+    {
+        await lootboxService.RecoverLootboxes();
+    }
+
+    private void OpenRewardsMenu(TransactionReceipt txReceipt)
+    {
+        rewardsMenu.SetActive(true);
+        EventManager.OnToggleRewardItems(txReceipt);
     }
 
     private void PostOnSocialMedia()

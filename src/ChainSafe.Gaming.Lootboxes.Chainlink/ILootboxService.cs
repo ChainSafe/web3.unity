@@ -59,6 +59,8 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         Task OpenLootbox(uint lootboxType, uint lootboxCount = 1);
 
+        Task RecoverLootboxes();
+
         /// <summary>
         /// Checks if the current user can claim rewards.
         /// </summary>
