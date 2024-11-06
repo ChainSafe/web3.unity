@@ -38,7 +38,7 @@ namespace ChainSafe.Gaming.UnityPackage
             {
                 AddButtonListeners();
 
-                ConnectionStateChanged(Web3Unity.Connected, Web3Unity.Instance.Address);
+                ConnectionStateChanged(Web3Unity.Connected, Web3Unity.Instance.PublicAddress);
             }
         }
 
