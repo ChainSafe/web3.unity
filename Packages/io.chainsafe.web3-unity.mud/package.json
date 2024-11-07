@@ -1,13 +1,13 @@
 {
   "name": "io.chainsafe.web3-unity.mud",
-  "version": "3.0.5",
+  "version": "3.0.6",
   "displayName": "web3.unity SDK MUD",
   "description": "This package includes the integration of MUD, which you can use with our Gaming SDK.",
   "license": "LGPL-3.0-only",
   "licensesUrl": "https://github.com/ChainSafe/web3.unity/blob/main/LICENSE",
   "documentationUrl": "https://docs.gaming.chainsafe.io/",
   "dependencies": {
-    "io.chainsafe.web3-unity": "3.0.5"
+    "io.chainsafe.web3-unity": "3.0.6"
   },
   "keywords": [
     "web3",
