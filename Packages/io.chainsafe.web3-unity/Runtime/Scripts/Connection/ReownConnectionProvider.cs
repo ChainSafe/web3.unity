@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Reown;
@@ -51,6 +52,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         private IConnectionBuilder _connectionBuilder;
 
         public bool ForceNewSession { get; set; }
+        public EventHandler<Exception> OnRelayErrored { get; set; }
 
         bool IReownConfig.RememberSession => RememberSession || _storedSessionAvailable;
         public override bool DisplayLoadingOnConnection => true;
