@@ -64,11 +64,9 @@ namespace ChainSafe.Gaming.UnityPackage.UI
             }
             catch (Exception e)
             {
-
                 if (!(e is TaskCanceledException))
                 {
-                    DisplayError(
-                        "Connection failed, please try again.");
+                    DisplayError("Connection failed, please try again.");
                 }
             }
             finally

@@ -28,6 +28,8 @@ namespace ChainSafe.Gaming.RPC.Events
             this.chainConfig = chainConfig;
         }
 
+        public int ExecutionOrder => 10;
+
         public async ValueTask WillStartAsync()
         {
             if (string.IsNullOrWhiteSpace(chainConfig.Ws))
