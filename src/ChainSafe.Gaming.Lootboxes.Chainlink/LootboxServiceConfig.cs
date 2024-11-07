@@ -11,7 +11,7 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
         /// <summary>
         /// Gets or sets the Ethereum address of the smart contract that the LootboxService interacts with.
         /// </summary>
-        public string? ContractAddress { get; set; }
+        public string? LootboxAddress { get; set; }
 
         /// <summary>
         /// Gets or sets the ABI (Application Binary Interface) of the smart contract that the LootboxService interacts with.
@@ -20,9 +20,33 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
         public string? ContractAbi { get; set; }
 
         /// <summary>
-        /// Gets or sets the nft contracts that belong to this LootboxService.
+        /// Gets or sets the Erc20 contracts that belong to this LootboxService.
         /// This is needed to spawn the items related to the Lootbox.
         /// </summary>
-        public List<string>? NftContracts { get; set; }
+        public List<string>? Erc20Contracts { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Erc721 contracts that belong to this LootboxService.
+        /// This is needed to spawn the items related to the Lootbox.
+        /// </summary>
+        public List<string>? Erc721Contracts { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Erc1155 contracts that belong to this LootboxService.
+        /// This is needed to spawn the items related to the Lootbox.
+        /// </summary>
+        public List<string>? Erc1155Contracts { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Erc721 token ids that belong to this LootboxService.
+        /// This is needed to spawn the items related to the Lootbox.
+        /// </summary>
+        public List<int>? Erc721TokenIds { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Erc1155 token ids that belong to this LootboxService.
+        /// This is needed to spawn the items related to the Lootbox.
+        /// </summary>
+        public List<int>? Erc1155TokenIds { get; set; }
     }
 }

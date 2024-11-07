@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Numerics;
 using ChainSafe.Gaming.Evm.Contracts.Custom;
+using ChainSafe.Gaming.Lootboxes.Chainlink;
 using ChainSafe.Gaming.UnityPackage;
 using Newtonsoft.Json;
 using TMPro;
@@ -11,15 +12,10 @@ public class InventoryManager : MonoBehaviour
 {
     [SerializeField] private GameObject inventoryObjectPrefab, nftModal;
     [SerializeField] private Transform inventoryContainer;
+    private LootboxServiceConfig lootboxServiceConfig;
     private Erc20Contract _erc20;
     private Erc721Contract _erc721;
     private Erc1155Contract _erc1155;
-
-    // TODO use contracts from service adapter config rather than hard coding here
-    private string collectionContractErc20 = "0x4be0f897c0853f2b05b85f74c4180d8e243c6ccf";
-    private string collectionContractErc721 = "0x4be0f897c0853f2b05b85f74c4180d8e243c6ccf";
-    private string collectionContractErc1155 = "0x4be0f897c0853f2b05b85f74c4180d8e243c6ccf";
-    private string lootBoxContract = "0xa31B74DF647979D50f155C7de5b80e9BA3A0C979";
 
     private void OnEnable()
     {
@@ -32,81 +28,111 @@ public class InventoryManager : MonoBehaviour
     }
 
     private async void Start()
-{
-    // Initialize contracts
-    _erc20 = await Web3Unity.Web3.ContractBuilder.Build<Erc20Contract>(collectionContractErc20);
-    _erc721 = await Web3Unity.Web3.ContractBuilder.Build<Erc721Contract>(collectionContractErc721);
-    _erc1155 = await Web3Unity.Web3.ContractBuilder.Build<Erc1155Contract>(collectionContractErc1155);
+    {
+        // Initialize contracts from service config
+        lootboxServiceConfig = new LootboxServiceConfig();
+        // Initialize the ERC20, ERC721, and ERC1155 contracts dynamically
+        List<Erc20Contract> erc20Contracts = new List<Erc20Contract>();
+        List<Erc721Contract> erc721Contracts = new List<Erc721Contract>();
+        List<Erc1155Contract> erc1155Contracts = new List<Erc1155Contract>();
 
-    // Fetch balances
-    var erc20Balance = await _erc20.BalanceOf(Web3Unity.Web3.Signer.PublicAddress);
-    var erc721Balance = await _erc721.BalanceOf(Web3Unity.Web3.Signer.PublicAddress);
-    // TODO figure out how to fetch token IDs owned from API
-    var tokenId = 0;
-    var erc1155Balance = await _erc1155.BalanceOf(Web3Unity.Web3.Signer.PublicAddress, tokenId);
-    string tokenType;
-    if (erc20Balance > BigInteger.Zero)
-    {
-        tokenType = "ERC20";
-    }
-    else if (erc721Balance > BigInteger.Zero)
-    {
-        tokenType = "ERC721";
-    }
-    else if (erc1155Balance > BigInteger.Zero)
-    {
-        tokenType = "ERC1155";
-    }
-    else
-    {
-        Debug.Log("No tokens found for the user!");
-        return;
-    }
-
-    ItemData itemData;
-    switch (tokenType)
-    {
-        case "ERC20":
-            itemData = new ItemData
+        if (lootboxServiceConfig.Erc20Contracts != null)
+            foreach (var erc20Address in lootboxServiceConfig.Erc20Contracts)
             {
-                itemType = "ERC20",
-                itemId = "-",
-                itemName = "ERC20 Token",
-                itemAmount = erc20Balance.ToString()
-            };
-            break;
+                var erc20Contract = await Web3Unity.Web3.ContractBuilder.Build<Erc20Contract>(erc20Address);
+                erc20Contracts.Add(erc20Contract);
+            }
 
-        case "ERC721":
-            itemData = new ItemData
+        if (lootboxServiceConfig.Erc721Contracts != null)
+            foreach (var erc721Address in lootboxServiceConfig.Erc721Contracts)
             {
-                itemType = "ERC721",
-                itemId = null,
-                itemName = "ERC721 Token",
-                itemAmount = erc721Balance.ToString()
-            };
-            break;
+                var erc721Contract = await Web3Unity.Web3.ContractBuilder.Build<Erc721Contract>(erc721Address);
+                erc721Contracts.Add(erc721Contract);
+            }
 
-        case "ERC1155":
-            var uri = await _erc1155.Uri(tokenId.ToString());
-            Debug.Log(uri);
-            var tokenData = JsonConvert.DeserializeObject<TokenModel.Token>(uri);
-
-            itemData = new ItemData
+        if (lootboxServiceConfig.Erc1155Contracts != null)
+            foreach (var erc1155Address in lootboxServiceConfig.Erc1155Contracts)
             {
-                itemType = "ERC1155",
-                itemId = tokenId.ToString(),
-                itemName = tokenData.metadata.attributes[0].trait_type,
-                itemAmount = erc1155Balance.ToString()
-            };
-            break;
+                var erc1155Contract = await Web3Unity.Web3.ContractBuilder.Build<Erc1155Contract>(erc1155Address);
+                erc1155Contracts.Add(erc1155Contract);
+            }
 
-        default:
-            Debug.LogError("Unsupported token type!");
+        List<ItemData> items = new List<ItemData>();
+
+        // Check ERC20 balances
+        foreach (var erc20 in erc20Contracts)
+        {
+            var erc20Balance = await erc20.BalanceOf(Web3Unity.Web3.Signer.PublicAddress);
+            if (erc20Balance > BigInteger.Zero)
+            {
+                items.Add(new ItemData
+                {
+                    itemType = "ERC20",
+                    itemId = "",
+                    itemName = "ERC20 Token",
+                    itemAmount = erc20Balance.ToString()
+                });
+            }
+        }
+
+        // Check ERC721 balances for each token ID
+        foreach (var erc721 in erc721Contracts)
+        {
+            if (lootboxServiceConfig.Erc721TokenIds == null) continue;
+            foreach (var tokenId in lootboxServiceConfig.Erc721TokenIds)
+            {
+                var erc721Owner = await erc721.OwnerOf(tokenId);
+                if (erc721Owner == Web3Unity.Web3.Signer.PublicAddress)
+                {
+                    var uri = await erc721.TokenURI(tokenId.ToString());
+                    Debug.Log(uri);
+                    var tokenData = JsonConvert.DeserializeObject<TokenModel.Token>(uri);
+
+                    items.Add(new ItemData
+                    {
+                        itemType = "ERC721",
+                        itemId = tokenId.ToString(),
+                        itemName = tokenData.name,
+                        itemAmount = "1"
+                    });
+                }
+            }
+        }
+
+        // Check ERC1155 balances for each token ID
+        foreach (var erc1155 in erc1155Contracts)
+        {
+            if (lootboxServiceConfig.Erc1155TokenIds == null) continue;
+            foreach (var tokenId in lootboxServiceConfig.Erc1155TokenIds)
+            {
+                var erc1155Balance = await erc1155.BalanceOf(Web3Unity.Web3.Signer.PublicAddress, tokenId);
+                if (erc1155Balance > BigInteger.Zero)
+                {
+                    var uri = await erc1155.Uri(tokenId.ToString());
+                    Debug.Log(uri);
+                    var tokenData = JsonConvert.DeserializeObject<TokenModel.Token>(uri);
+
+                    items.Add(new ItemData
+                    {
+                        itemType = "ERC1155",
+                        itemId = tokenId.ToString(),
+                        itemName = tokenData.name,
+                        itemAmount = erc1155Balance.ToString()
+                    });
+                }
+            }
+        }
+
+        // Check if any data is found
+        if (items.Count == 0)
+        {
+            Debug.Log("No tokens found for the user!");
             return;
+        }
+
+        // Pass all collected items to inventory event
+        EventManager.OnToggleInventoryItems(items.ToArray());
     }
-    ItemData[] items = new ItemData[] { itemData };
-    EventManager.OnToggleInventoryItems(items);
-}
 
     private void SpawnObjects(ItemData[] itemDataArray)
     {
@@ -154,7 +180,7 @@ public class InventoryManager : MonoBehaviour
                         break;
                 }
 
-                // Set up button to open modal with the item's data
+                // Set up button to open modal with the item's data if opened
                 modalButton.onClick.AddListener(() => OpenNftModal(currentItemData));
             }
         }

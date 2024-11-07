@@ -59,7 +59,7 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
         async ValueTask ILifecycleParticipant.WillStartAsync()
         {
             var contractAbi = this.config.ContractAbi.AssertNotNull(nameof(this.config.ContractAbi));
-            var contractAddress = this.config.ContractAddress.AssertNotNull(nameof(this.config.ContractAddress));
+            var contractAddress = this.config.LootboxAddress.AssertNotNull(nameof(this.config.LootboxAddress));
 
             analyticsClient.CaptureEvent(new AnalyticsEvent()
             {
