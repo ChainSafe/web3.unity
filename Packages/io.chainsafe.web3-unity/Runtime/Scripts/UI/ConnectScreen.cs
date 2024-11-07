@@ -47,11 +47,6 @@ namespace ChainSafe.Gaming.UnityPackage.UI
         {
             try
             {
-                if (provider.DisplayLoadingOnConnection)
-                {
-                    ShowLoading("Establishing connection...");
-                }
-
                 await Web3Unity.Instance.Connect(provider);
             }
             catch (Exception e)
@@ -62,13 +57,6 @@ namespace ChainSafe.Gaming.UnityPackage.UI
                         "Connection failed, please try again.");
 
                     Debug.LogException(e);
-                }
-            }
-            finally
-            {
-                if (provider.DisplayLoadingOnConnection)
-                {
-                    HideLoading();
                 }
             }
         }
@@ -91,15 +79,6 @@ namespace ChainSafe.Gaming.UnityPackage.UI
         {
             DisableButtons();
             GuiManager.Instance.Overlays.Show(GuiOverlayType.Error, message, true, EnableButtons);
-        }
-
-        /// <summary>
-        /// Show Loading Overlay.
-        /// </summary>
-        private void ShowLoading(string message)
-        {
-            DisableButtons();
-            loadingOverlayId = GuiManager.Instance.Overlays.Show(GuiOverlayType.Loading, message, false, EnableButtons);
         }
 
         /// <summary>

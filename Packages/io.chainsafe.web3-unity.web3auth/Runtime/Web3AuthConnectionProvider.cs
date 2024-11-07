@@ -54,8 +54,6 @@ public class Web3AuthConnectionProvider : ConnectionProvider, ILogoutHandler, IW
     [NonSerialized] private bool _rememberMe;
 
     public override bool IsAvailable => true;
-    
-    public override bool DisplayLoadingOnConnection => false;
 
 #if UNITY_WEBGL && !UNITY_EDITOR
 
@@ -105,8 +103,8 @@ public class Web3AuthConnectionProvider : ConnectionProvider, ILogoutHandler, IW
     {
         if (!modalScreenFactory.LandscapePrefab && !modalScreenFactory.PortraitPrefab)
         {
-            modalScreenFactory.LandscapePrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GuiScreen>("Packages/io.chainsafe.web3-unity.web3auth/Runtime/Prefabs/W3AConnectionScreen_L.prefab");
-            modalScreenFactory.PortraitPrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GuiScreen>("Packages/io.chainsafe.web3-unity.web3auth/Runtime/Prefabs/W3AConnectionScreen_P.prefab");
+            modalScreenFactory.LandscapePrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GuiScreen>(UnityEditor.AssetDatabase.GUIDToAssetPath("9e5f859444d8b4a448e79b28a6033fd7"));
+            modalScreenFactory.PortraitPrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GuiScreen>(UnityEditor.AssetDatabase.GUIDToAssetPath("5ed2d6739dc24144cb021a0cb4bd8178"));
         }
     }
 #endif

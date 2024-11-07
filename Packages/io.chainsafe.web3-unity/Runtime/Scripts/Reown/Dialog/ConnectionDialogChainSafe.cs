@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -9,41 +9,69 @@ namespace ChainSafe.Gaming.Reown.Dialog
 {
     public class ConnectionDialogChainSafe : ConnectionDialogBase
     {
-        public new Animation animation;
-        public string showAnimationClipName;
-        public string hideAnimationClipName;
-        public RawImage qrCodeImage;
-        public Vector2Int qrCodeSize = new(512, 512);
-        public int qrCodePadding = 20;
+        [Header("QR Code")]
         public GameObject qrCodePanel;
-        public GameObject localWalletButtonsPanel;
+        public RawImage qrCodeImage;
+        public Vector2Int qrCodeSize;
+        public int qrCodePadding;
+        
+        [Header("Local Wallets")]
+        public GameObject localWalletsPanel;
         public LocalWalletButton localWalletButtonPrefab;
-        public RectTransform localWalletButtonsContainer;
-        public GameObject singleButtonForLocalWalletsPanel;
-        public Button singleButtonForLocalWallets;
+        public RectTransform localWalletsContainer;
+        
+        [Header("Single Local Wallet")]
+        public GameObject singleLocalWalletPanel;
+        public Button singleLocalWalletButton;
+        
+        [Header("Other")]
+        public GameObject separator;
+        public Button closeButton;
+        public ScrollRect scrollRectToReset;
 
         private LocalWalletButton[] loadedLocalWalletButtons;
 
         private void Awake()
         {
-            singleButtonForLocalWallets.onClick.AddListener(OpenLocalWalletOsManaged);
+            singleLocalWalletButton.onClick.AddListener(OpenLocalWalletOsManaged);
+            closeButton.onClick.AddListener(Close);
         }
 
-        protected override void PlayShowDialog() => animation.Play(showAnimationClipName);
-        protected override void PlayHideDialog() => animation.Play(hideAnimationClipName);
+        protected override void PlayShowDialog()
+        {
+            gameObject.SetActive(true); // GuiScreen manages animation
+            scrollRectToReset.verticalNormalizedPosition = 1f; // Reset ScrollRect
+        }
 
-        protected override void SetRedirectOptionsVisible(bool visible) => localWalletButtonsPanel.SetActive(visible);
-        protected override void SetQrCodeElementVisible(bool visible) => qrCodePanel.SetActive(visible);
+        protected override void PlayHideDialog()
+        {
+            gameObject.SetActive(false);
+        }
 
-        protected override void SetSingleButtonForRedirectVisible(bool visible) =>
-            singleButtonForLocalWalletsPanel.SetActive(visible);
+        protected override void SetRedirectOptionsVisible(bool visible)
+        {
+            localWalletsPanel.SetActive(visible);
+            UpdateSeparatorVisibility();
+        }
+
+        protected override void SetQrCodeElementVisible(bool visible)
+        {
+            qrCodePanel.SetActive(visible);
+            UpdateSeparatorVisibility();
+        }
+
+        protected override void SetSingleButtonForRedirectVisible(bool visible)
+        {
+            singleLocalWalletPanel.SetActive(visible);
+            UpdateSeparatorVisibility();
+        }
 
         protected override void SpawnRedirectOptions(List<WalletOptionConfig> supportedWallets)
         {
             loadedLocalWalletButtons = supportedWallets
                 .Select(w =>
                 {
-                    var button = Instantiate(localWalletButtonPrefab, localWalletButtonsContainer);
+                    var button = Instantiate(localWalletButtonPrefab, localWalletsContainer);
                     button.Set(w.Data, w.OnClick);
                     return button;
                 })
@@ -53,11 +81,11 @@ namespace ChainSafe.Gaming.Reown.Dialog
         protected override void CreateQrCodeElement(QrCodeBuilder builder)
         {
             qrCodeImage.texture = builder.GenerateQrCode(new QrCodeEncodingOptions
-            {
-                Width = qrCodeSize.x,
-                Height = qrCodeSize.y,
-                Margin = qrCodePadding
-            }
+                {
+                    Width = qrCodeSize.x,
+                    Height = qrCodeSize.y,
+                    Margin = qrCodePadding
+                }
             );
         }
 
@@ -76,7 +104,15 @@ namespace ChainSafe.Gaming.Reown.Dialog
 
         public void Close()
         {
-            OnException(new TaskCanceledException("User closed the connection dialog."));
+            OnException(new TaskCanceledException("User closed the Reown connection dialog."));
+        }
+
+        private void UpdateSeparatorVisibility()
+        {
+            var separatorVisible = qrCodePanel.activeSelf &&
+                                   (localWalletsPanel.activeSelf || singleLocalWalletPanel.activeSelf);
+            
+            separator.SetActive(separatorVisible);
         }
     }
 }

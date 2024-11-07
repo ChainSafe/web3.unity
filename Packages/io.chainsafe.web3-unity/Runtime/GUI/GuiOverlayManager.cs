@@ -42,6 +42,12 @@ namespace ChainSafe.Gaming.GUI
             activeOverlays.Remove(overlay);
         }
 
+        public void UpdateOverlay(int overlayId, string message)
+        {
+            var overlay = activeOverlays.Find(o => o.Id == overlayId);
+            overlay.UpdateMessage(message);
+        }
+
         private GuiInfoOverlay CreateOverlay()
         {
             var overlay = screenFactory.Build<GuiInfoOverlay>();
