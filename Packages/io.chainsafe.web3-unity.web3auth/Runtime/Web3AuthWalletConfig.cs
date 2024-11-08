@@ -29,5 +29,7 @@ namespace ChainSafe.GamingSdk.Web3Auth
         public bool RememberMe { get; set; }
 
         public bool AutoLogin { get; set; }
+        
+        public bool UseWalletGui { get; set; }
     }
 }
