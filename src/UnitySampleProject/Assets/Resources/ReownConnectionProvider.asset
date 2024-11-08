@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 582efc0fde77aab43a77ee4237ba305a, type: 3}
   m_Name: ReownConnectionProvider
   m_EditorClassIdentifier: 
-  handlerPrefab: {fileID: 991181966218726794, guid: 344d6e9400e973843b2b68a8f4786e0b, type: 3}
+  connectionScreenPrefabs:
+    LandscapePrefab: {fileID: 942853868903982638, guid: 344d6e9400e973843b2b68a8f4786e0b, type: 3}
+    PortraitPrefab: {fileID: 593021089488692521, guid: f844207643fe35744b72bf387a704960, type: 3}
   includeWalletIds: []
   excludeWalletIds: []
   <ProjectId>k__BackingField: 214bf16d1d17a589e2d54d49fefa2259
