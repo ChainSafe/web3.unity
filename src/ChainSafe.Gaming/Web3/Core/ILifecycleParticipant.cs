@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace ChainSafe.Gaming.Web3.Core
 {
@@ -11,6 +8,11 @@ namespace ChainSafe.Gaming.Web3.Core
     /// </summary>
     public interface ILifecycleParticipant // TODO: split this into two separate interfaces?
     {
+        /// <summary>
+        /// ExecutionOrder for <see cref="WillStartAsync"/> and <see cref="WillStopAsync"/>.
+        /// </summary>
+        public int ExecutionOrder => 0;
+
         /// <summary>
         /// Called on <see cref="Web3"/> initialization.
         /// </summary>

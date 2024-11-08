@@ -73,7 +73,7 @@ public class SyncDependencies : IRunnable
             Git.Add(destination);
         }
         
-        Git.CommitAndPush("Sync Dependencies");
+        Git.CommitAndPush("Sync Dependencies - Auto Commit", skipCi: false);
         
         Console.WriteLine("Dependencies Synced Successfully!");
     }

@@ -28,11 +28,13 @@ namespace ChainSafe.Gaming.RPC.Events
             this.chainConfig = chainConfig;
         }
 
+        public int ExecutionOrder => 10;
+
         public async ValueTask WillStartAsync()
         {
             if (string.IsNullOrWhiteSpace(chainConfig.Ws))
             {
-                throw new Web3Exception("No WebSocket URL was provided in config.");
+                throw new Web3Exception("No WebSocket URL was provided in config. Please toggle the ForceEventPolling to true in order to use event polling instead of WebSockets.");
             }
 
             webSocketClient = new StreamingWebSocketClient(chainConfig.Ws);
