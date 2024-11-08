@@ -202,7 +202,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 266709757113091023, guid: fc9add9f6cfb06b479d08477c75fa7b2, type: 3}
       propertyPath: m_Name
-      value: Reown Wallet Button Variant
+      value: Reown Wallet Button
       objectReference: {fileID: 0}
     - target: {fileID: 5031812609836150616, guid: fc9add9f6cfb06b479d08477c75fa7b2, type: 3}
       propertyPath: m_AnchorMax.y
@@ -309,8 +309,20 @@ PrefabInstance:
       value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 7502564558348358488, guid: fc9add9f6cfb06b479d08477c75fa7b2, type: 3}
+      propertyPath: m_Padding.m_Left
+      value: 24
+      objectReference: {fileID: 0}
+    - target: {fileID: 7502564558348358488, guid: fc9add9f6cfb06b479d08477c75fa7b2, type: 3}
+      propertyPath: m_Padding.m_Right
+      value: 24
+      objectReference: {fileID: 0}
+    - target: {fileID: 7502564558348358488, guid: fc9add9f6cfb06b479d08477c75fa7b2, type: 3}
       propertyPath: m_ChildControlWidth
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9175690222738742178, guid: fc9add9f6cfb06b479d08477c75fa7b2, type: 3}
+      propertyPath: m_VerticalAlignment
+      value: 512
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
