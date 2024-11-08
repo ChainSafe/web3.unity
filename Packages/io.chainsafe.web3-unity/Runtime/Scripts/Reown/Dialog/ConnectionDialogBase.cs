@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Reown.Connection;
 using ChainSafe.Gaming.Reown.Models;
 using ChainSafe.Gaming.Reown.Wallets;
+using ChainSafe.Gaming.Web3.Environment.Http;
 using UnityEngine;
 
 namespace ChainSafe.Gaming.Reown.Dialog
@@ -33,7 +34,10 @@ namespace ChainSafe.Gaming.Reown.Dialog
         protected abstract void SetRedirectOptionsVisible(bool visible);
         protected abstract void SetQrCodeElementVisible(bool visible);
         protected abstract void SetSingleButtonForRedirectVisible(bool visible);
-        protected abstract void SpawnRedirectOptions(List<WalletOptionConfig> supportedWallets);
+        protected abstract void SpawnRedirectOptions(
+            List<WalletOptionConfig> supportedWallets,
+            string getWalletIconEndpoint,
+            HttpHeader[] httpHeaders);
         protected abstract void CreateQrCodeElement(QrCodeBuilder builder);
         protected abstract void ClearDynamicElements();
 
@@ -70,7 +74,7 @@ namespace ChainSafe.Gaming.Reown.Dialog
                     }
 
                     SetRedirectOptionsVisible(localWalletsAvailable);
-                    SpawnRedirectOptions(walletOptionConfigs);
+                    SpawnRedirectOptions(walletOptionConfigs, config.WalletIconEndpoint, config.HttpHeaders);
                 }
                 else
                 {

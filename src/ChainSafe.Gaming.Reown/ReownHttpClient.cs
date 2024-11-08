@@ -10,16 +10,25 @@ namespace ChainSafe.Gaming.Reown
     /// </summary>
     public class ReownHttpClient : IHttpClient
     {
+        public const string Host = "https://api.web3modal.com";
+
         private readonly IHttpClient originalClient;
         private readonly HttpHeader[] reownHeaders;
+        private readonly IReownConfig reownConfig;
 
         public ReownHttpClient(IHttpClient originalClient, IReownConfig reownConfig)
         {
+            this.reownConfig = reownConfig;
             this.originalClient = originalClient;
 
             reownConfig.Validate();
 
-            reownHeaders = new[]
+            reownHeaders = BuildHeaders();
+        }
+
+        public HttpHeader[] BuildHeaders()
+        {
+            return new[]
             {
                 new HttpHeader { Name = "x-project-id", Value = reownConfig.ProjectId },
                 new HttpHeader { Name = "x-sdk-type", Value = "appkit" },

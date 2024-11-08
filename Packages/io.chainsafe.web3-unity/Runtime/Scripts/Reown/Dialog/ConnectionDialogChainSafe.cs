@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Web3.Environment.Http;
 using UnityEngine;
 using UnityEngine.UI;
 using ZXing.QrCode;
@@ -66,13 +67,16 @@ namespace ChainSafe.Gaming.Reown.Dialog
             UpdateSeparatorVisibility();
         }
 
-        protected override void SpawnRedirectOptions(List<WalletOptionConfig> supportedWallets)
+        protected override void SpawnRedirectOptions(
+            List<WalletOptionConfig> supportedWallets,
+            string getWalletIconEndpoint,
+            HttpHeader[] httpHeaders)
         {
             loadedLocalWalletButtons = supportedWallets
                 .Select(w =>
                 {
                     var button = Instantiate(localWalletButtonPrefab, localWalletsContainer);
-                    button.Set(w.Data, w.OnClick);
+                    button.Set(w.Data, getWalletIconEndpoint, httpHeaders, w.OnClick);
                     return button;
                 })
                 .ToArray();

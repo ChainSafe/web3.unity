@@ -42,7 +42,7 @@ namespace ChainSafe.Gaming.Reown
         private readonly IOperatingSystemMediator osMediator;
         private readonly IWalletRegistry walletRegistry;
         private readonly RedirectionHandler redirection;
-        private readonly IHttpClient reownHttpClient;
+        private readonly ReownHttpClient reownHttpClient;
         private readonly IAnalyticsClient analyticsClient;
         private readonly Web3Environment environment;
         private readonly IChainConfigSet chainConfigSet;
@@ -317,6 +317,10 @@ namespace ChainSafe.Gaming.Reown
                     LocalWalletOptions = !OsManageWalletSelection
                         ? walletRegistry.SupportedWallets.ToList()
                         : null,
+
+                    HttpHeaders = reownHttpClient.BuildHeaders(),
+
+                    WalletIconEndpoint = $"{ReownHttpClient.Host}/getWalletImage/",
 
                     RedirectToWallet = !OsManageWalletSelection
                         ? OnRedirectToWallet
