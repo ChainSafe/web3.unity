@@ -79,7 +79,7 @@ namespace ChainSafe.Gaming.Web3.Core.Operations
 
         public ValueTask WillStopAsync()
         {
-            if (activeOperations.Count >= 0)
+            if (activeOperations.Count > 0)
             {
                 handler.OnNotificationsOver(); // force terminate all notifications
             }
