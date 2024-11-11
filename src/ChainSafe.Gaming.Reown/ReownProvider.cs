@@ -12,6 +12,7 @@ using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Chains;
 using ChainSafe.Gaming.Web3.Core.Debug;
+using ChainSafe.Gaming.Web3.Core.Operations;
 using ChainSafe.Gaming.Web3.Environment;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
 using Nethereum.JsonRpc.Client.RpcMessages;
@@ -41,10 +42,11 @@ namespace ChainSafe.Gaming.Reown
         private readonly IOperatingSystemMediator osMediator;
         private readonly IWalletRegistry walletRegistry;
         private readonly RedirectionHandler redirection;
-        private readonly IHttpClient reownHttpClient;
+        private readonly ReownHttpClient reownHttpClient;
         private readonly IAnalyticsClient analyticsClient;
         private readonly Web3Environment environment;
         private readonly IChainConfigSet chainConfigSet;
+        private readonly IOperationTracker operationTracker;
 
         private SessionStruct session;
         private bool connected;
@@ -60,9 +62,11 @@ namespace ChainSafe.Gaming.Reown
             IWalletRegistry walletRegistry,
             RedirectionHandler redirection,
             Web3Environment environment,
-            ReownHttpClient reownHttpClient)
+            ReownHttpClient reownHttpClient,
+            IOperationTracker operationTracker)
             : base(environment, chainConfig)
         {
+            this.operationTracker = operationTracker;
             this.chainConfigSet = chainConfigSet;
             this.environment = environment;
             analyticsClient = environment.AnalyticsClient;
@@ -122,77 +126,63 @@ namespace ChainSafe.Gaming.Reown
                 PackageName = "io.chainsafe.web3-unity",
             });
 
-            ValidateConfig();
+            config.Validate();
 
             ReownLogger.Instance = new ReownLogWriter(logWriter, config);
 
-            var storage = await ReownStorageFactory.Build(environment);
-            var signClientOptions = new SignClientOptions
+            using (operationTracker.TrackOperation("Initializing the Reown module..."))
             {
-                ProjectId = config.ProjectId,
-                Name = config.ProjectName,
-                Metadata = config.Metadata,
-                BaseContext = config.BaseContext,
-                Storage = storage,
-                KeyChain = new KeyChain(storage),
-                ConnectionBuilder = config.ConnectionBuilder,
-                RelayUrlBuilder = config.RelayUrlBuilder,
-            };
-
-            SignClient = await SignClient.Init(signClientOptions);
-            await SignClient.AddressProvider.LoadDefaultsAsync();
-
-            if (config.OnRelayErrored is not null)
-            {
-                SignClient.CoreClient.Relayer.OnErrored += config.OnRelayErrored;
-            }
-
-            var optionalNamespace = new ProposedNamespace
-            {
-                Chains = chainConfigSet.Configs
-                    .Select(chainEntry => $"{EvmNamespace}:{chainEntry.ChainId}")
-                    .ToArray(),
-                Methods = new[]
+                var storage = await ReownStorageFactory.Build(environment);
+                var signClientOptions = new SignClientOptions
                 {
-                    "eth_sign",
-                    "personal_sign",
-                    "eth_signTypedData",
-                    "eth_signTransaction",
-                    "eth_sendTransaction",
-                    "eth_getTransactionByHash",
-                    "wallet_switchEthereumChain",
-                    "eth_blockNumber",
-                },
-                Events = new[]
+                    ProjectId = config.ProjectId,
+                    Name = config.ProjectName,
+                    Metadata = config.Metadata,
+                    BaseContext = config.BaseContext,
+                    Storage = storage,
+                    KeyChain = new KeyChain(storage),
+                    ConnectionBuilder = config.ConnectionBuilder,
+                    RelayUrlBuilder = config.RelayUrlBuilder,
+                };
+
+                SignClient = await SignClient.Init(signClientOptions);
+                await SignClient.AddressProvider.LoadDefaultsAsync();
+                
+                if (config.OnRelayErrored is not null)
                 {
-                    "chainChanged",
-                    "accountsChanged",
-                },
-            };
+                    SignClient.CoreClient.Relayer.OnErrored += config.OnRelayErrored;
+                }
 
-            optionalNamespaces = new Dictionary<string, ProposedNamespace>
-            {
-                { EvmNamespace, optionalNamespace },
-            };
+                var optionalNamespace =
+                    new ProposedNamespace // todo using optional namespaces like AppKit does, should they be required?
+                    {
+                        Chains = chainConfigSet.Configs
+                            .Select(chainEntry => $"{EvmNamespace}:{chainEntry.ChainId}")
+                            .ToArray(),
+                        Methods = new[]
+                        {
+                            "eth_sign",
+                            "personal_sign",
+                            "eth_signTypedData",
+                            "eth_signTransaction",
+                            "eth_sendTransaction",
+                            "eth_getTransactionByHash",
+                            "wallet_switchEthereumChain",
+                            "eth_blockNumber",
+                        },
+                        Events = new[]
+                        {
+                            "chainChanged",
+                            "accountsChanged",
+                        },
+                    };
 
-            initialized = true;
-        }
+                optionalNamespaces = new Dictionary<string, ProposedNamespace>
+                {
+                    { EvmNamespace, optionalNamespace },
+                };
 
-        private void ValidateConfig()
-        {
-            if (string.IsNullOrWhiteSpace(config.ProjectId))
-            {
-                throw new ReownIntegrationException("ProjectId was not set.");
-            }
-
-            if (config.ConnectionHandlerProvider == null)
-            {
-                throw new ReownIntegrationException($"No {nameof(IConnectionHandlerProvider)} was provided in the config.");
-            }
-
-            if (string.IsNullOrWhiteSpace(config.Metadata.Url))
-            {
-                throw new ReownIntegrationException("Your domain URL should be provided in Metadata, otherwise wallets are going to reject the connection.");
+                initialized = true;
             }
         }
 
@@ -253,11 +243,14 @@ namespace ChainSafe.Gaming.Reown
 
         private async Task CheckAndSwitchNetwork()
         {
-            var chainId = GetChainId();
-            if (chainId != $"{EvmNamespace}:{chainConfig.ChainId}")
+            using (operationTracker.TrackOperation("Switching wallet network..."))
             {
-                await SwitchChain(chainConfig.ChainId);
-                UpdateSessionChainId();
+                var chainId = GetChainId();
+                if (chainId != $"{EvmNamespace}:{chainConfig.ChainId}")
+                {
+                    await SwitchChain(chainConfig.ChainId);
+                    UpdateSessionChainId();
+                }
             }
         }
 
@@ -309,9 +302,15 @@ namespace ChainSafe.Gaming.Reown
 
         private async Task<SessionStruct> ConnectSession()
         {
-            var connectOptions = new ConnectOptions { OptionalNamespaces = optionalNamespaces };
-            var connectedData = await SignClient.Connect(connectOptions);
-            var connectionHandler = await config.ConnectionHandlerProvider.ProvideHandler();
+            ConnectedData connectedData;
+            IConnectionHandler connectionHandler;
+
+            using (operationTracker.TrackOperation("Initializing a new Reown session..."))
+            {
+                var connectOptions = new ConnectOptions { OptionalNamespaces = optionalNamespaces };
+                connectedData = await SignClient.Connect(connectOptions);
+                connectionHandler = await config.ConnectionHandlerProvider.ProvideHandler();
+            }
 
             try
             {
@@ -324,6 +323,10 @@ namespace ChainSafe.Gaming.Reown
                     LocalWalletOptions = !OsManageWalletSelection
                         ? walletRegistry.SupportedWallets.ToList()
                         : null,
+
+                    HttpHeaders = reownHttpClient.BuildHeaders(),
+
+                    WalletIconEndpoint = $"{ReownHttpClient.Host}/getWalletImage/",
 
                     RedirectToWallet = !OsManageWalletSelection
                         ? OnRedirectToWallet
@@ -385,15 +388,18 @@ namespace ChainSafe.Gaming.Reown
 
         private async Task RenewSession()
         {
-            try
+            using (operationTracker.TrackOperation("Renewing the Reown session..."))
             {
-                var acknowledgement = await SignClient.Extend(session.Topic);
-                TryRedirectToWallet();
-                await acknowledgement.Acknowledged();
-            }
-            catch (Exception e)
-            {
-                throw new ReownIntegrationException("Session extension failed.", e);
+                try
+                {
+                    var acknowledgement = await SignClient.Extend(session.Topic);
+                    TryRedirectToWallet();
+                    await acknowledgement.Acknowledged();
+                }
+                catch (Exception e)
+                {
+                    throw new ReownIntegrationException("Session renewal failed.", e);
+                }
             }
 
             ReownLogger.Log("Renewed session successfully.");

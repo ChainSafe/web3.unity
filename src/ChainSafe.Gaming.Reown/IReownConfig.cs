@@ -101,5 +101,27 @@ namespace ChainSafe.Gaming.Reown
         /// You can use this to react to the error caused by connection loss.
         /// </remarks>
         EventHandler<Exception>? OnRelayErrored { get; }
+
+        /// <summary>
+        /// Validates the Reown configuration object.
+        /// </summary>
+        /// <exception cref="ReownIntegrationException">Thrown when validation fails.</exception>
+        void Validate()
+        {
+            if (string.IsNullOrWhiteSpace(ProjectId))
+            {
+                throw new ReownIntegrationException("ProjectId was not set.");
+            }
+
+            if (ConnectionHandlerProvider == null)
+            {
+                throw new ReownIntegrationException($"No {nameof(IConnectionHandlerProvider)} was provided in the config.");
+            }
+
+            if (string.IsNullOrWhiteSpace(Metadata.Url))
+            {
+                throw new ReownIntegrationException("Your domain URL should be provided in Metadata, otherwise wallets are going to reject the connection.");
+            }
+        }
     }
 }

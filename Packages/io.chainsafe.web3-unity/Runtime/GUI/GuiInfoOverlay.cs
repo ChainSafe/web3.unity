@@ -35,6 +35,11 @@ namespace ChainSafe.Gaming.GUI
             Message.text = message;
         }
 
+        public void UpdateMessage(string message)
+        {
+            Message.text = message;
+        }
+
         private void OnScreenClick()
         {
             if (!closeOnClick)
