@@ -34,9 +34,7 @@ public class MudSample : MonoBehaviour
                   "Follow the link to get started: https://mud.dev/quickstart");
 
         // 1. Initialize Web3 client.
-        web3 = await new Web3Builder(
-                ProjectConfigUtilities.Load(),
-                ProjectConfigUtilities.BuildLocalhostConfig())
+        web3 = await new Web3Builder(ProjectConfigUtilities.Load(), ProjectConfigUtilities.BuildLocalhostConfig())
             .Configure(services =>
             {
                 // Enable basic components
