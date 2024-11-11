@@ -133,7 +133,8 @@ public class Web3AuthConnectionProvider : ConnectionProvider, ILogoutHandler, IW
             },
             RememberMe = _rememberMe || RememberSession,
 
-            AutoLogin = _rememberMe
+            AutoLogin = _rememberMe,
+            UseWalletGui = enableWalletGui
         };
 
         web3AuthConfig.CancellationToken = _rememberMe ? default : _modal.CancellationToken;

@@ -4,6 +4,7 @@ using System.Diagnostics.Contracts;
 using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Signers;
+using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Ipfs;
 using ChainSafe.Gaming.Web3;
 
@@ -101,6 +102,30 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         }
 
         /// <summary>
+        /// Mints new tokens by calling the Mint method on the contract.
+        /// </summary>
+        /// <param name="tokenId">The ID of the token to mint.</param>
+        /// <param name="amount">The amount of tokens to mint.</param>
+        /// <param name="data">(Optional) Additional data to include with the minting.</param>
+        /// <returns>Receipt of the Mint Transaction.</returns>
+        public async Task<TransactionReceipt> MintWithReceipt(BigInteger tokenId, BigInteger amount, byte[] data = null)
+        {
+            EnsureSigner();
+            data ??= Array.Empty<byte>();
+            var parameters = new object[]
+            {
+                signer.PublicAddress, // destination
+                tokenId,
+                amount,
+                data,
+            };
+
+            var response = await SendWithReceipt(EthMethods.Mint, parameters);
+
+            return response.receipt;
+        }
+
+        /// <summary>
         /// Transfers a specified amount of tokens from the user's account to a specified destination address.
         /// </summary>
         /// <param name="tokenId">The identifier of the token to be transferred.</param>
@@ -120,6 +145,31 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
                 data,
             };
             return Send(EthMethods.SafeTransferFrom, parameters);
+        }
+
+        /// <summary>
+        /// Transfers a specified amount of tokens from the user's account to a specified destination address.
+        /// </summary>
+        /// <param name="tokenId">The identifier of the token to be transferred.</param>
+        /// <param name="amount">The amount of tokens to be transferred.</param>
+        /// <param name="destinationAddress">The destination address to receive the transferred tokens.</param>
+        /// <returns>Receipt of the transfer.</returns>
+        public async Task<TransactionReceipt> TransferWithReceipt(BigInteger tokenId, BigInteger amount, string destinationAddress)
+        {
+            EnsureSigner();
+            var data = Array.Empty<byte>();
+            var parameters = new object[]
+            {
+                signer.PublicAddress, // source
+                destinationAddress,
+                tokenId,
+                amount,
+                data,
+            };
+
+            var response = await SendWithReceipt(EthMethods.SafeTransferFrom, parameters);
+
+            return response.receipt;
         }
 
         private void EnsureSigner()
