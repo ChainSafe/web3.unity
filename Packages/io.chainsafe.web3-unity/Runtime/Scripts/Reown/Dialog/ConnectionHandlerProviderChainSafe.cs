@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using ChainSafe.Gaming.GUI;
 using ChainSafe.Gaming.Reown.Connection;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ namespace ChainSafe.Gaming.Reown.Dialog
     [CreateAssetMenu(menuName = "ChainSafe/Reown/Connection Handler Provider", fileName = "ConnectionHandlerProvider", order = 0)]
     public class ConnectionHandlerProviderChainSafe : ConnectionHandlerProviderAsset
     {
-        [SerializeField] private ConnectionHandlerBehaviour handlerPrefab;
+        [SerializeField] private GuiScreenFactory connectionScreenPrefabs;
 
         private ConnectionHandlerBehaviour loadedHandler;
 
@@ -22,7 +23,7 @@ namespace ChainSafe.Gaming.Reown.Dialog
                 return Task.FromResult((IConnectionHandler)loadedHandler);
             }
 
-            loadedHandler = Instantiate(handlerPrefab);
+            loadedHandler = connectionScreenPrefabs.Build<ConnectionHandlerBehaviour>();
             return Task.FromResult((IConnectionHandler)loadedHandler);
         }
     }

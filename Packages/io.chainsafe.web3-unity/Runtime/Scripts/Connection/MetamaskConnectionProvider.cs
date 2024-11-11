@@ -21,8 +21,6 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
 
         [field: SerializeField] public override string ButtonText { get; protected set; } = "MetaMask";
 
-        public override bool DisplayLoadingOnConnection => true;
-
         public override bool IsAvailable => Application.platform == RuntimePlatform.WebGLPlayer && Application.isEditor == false;
 
         public override Task Initialize(bool rememberSession)

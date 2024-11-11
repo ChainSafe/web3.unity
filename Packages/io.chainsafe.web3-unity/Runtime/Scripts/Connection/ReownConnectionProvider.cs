@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.GUI;
 using ChainSafe.Gaming.Reown;
 using ChainSafe.Gaming.Reown.Connection;
 using ChainSafe.Gaming.Reown.Dialog;
@@ -11,6 +12,7 @@ using Reown.Core;
 using Reown.Core.Network;
 using Reown.Core.Network.Interfaces;
 using UnityEngine;
+using UnityEngine.Serialization;
 using ReownConnectionHandler = ChainSafe.Gaming.Reown.Connection.IConnectionHandler;
 
 namespace ChainSafe.Gaming.UnityPackage.Connection
@@ -21,7 +23,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
     [CreateAssetMenu(menuName = "ChainSafe/Connection Provider/Reown", fileName = nameof(ReownConnectionProvider))]
     public class ReownConnectionProvider : ConnectionProvider, IReownConfig, IConnectionHandlerProvider
     {
-        [SerializeField] private ConnectionHandlerBehaviour handlerPrefab;
+        [SerializeField] private GuiScreenFactory connectionScreenPrefabs;
         [SerializeField] private List<string> includeWalletIds;
         [SerializeField] private List<string> excludeWalletIds;
 
@@ -55,7 +57,6 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         public EventHandler<Exception> OnRelayErrored { get; set; }
 
         bool IReownConfig.RememberSession => RememberSession || _storedSessionAvailable;
-        public override bool DisplayLoadingOnConnection => true;
         public IList<string> IncludeWalletIds => includeWalletIds;
         public IList<string> ExcludeWalletIds => excludeWalletIds;
         public IConnectionHandlerProvider ConnectionHandlerProvider => this;
@@ -94,6 +95,17 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
                 return _connectionBuilder;
             }
         }
+    
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (!connectionScreenPrefabs.LandscapePrefab && !connectionScreenPrefabs.PortraitPrefab)
+            {
+                connectionScreenPrefabs.LandscapePrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GuiScreen>(UnityEditor.AssetDatabase.GUIDToAssetPath("344d6e9400e973843b2b68a8f4786e0b"));
+                connectionScreenPrefabs.PortraitPrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GuiScreen>(UnityEditor.AssetDatabase.GUIDToAssetPath("f844207643fe35744b72bf387a704960"));
+            }
+        }
+#endif
 
         protected override void ConfigureServices(IWeb3ServiceCollection services)
         {
@@ -119,7 +131,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
                 return Task.FromResult((ReownConnectionHandler)_loadedHandler);
             }
 
-            _loadedHandler = Instantiate(handlerPrefab);
+            _loadedHandler = connectionScreenPrefabs.Build<ConnectionHandlerBehaviour>();
             return Task.FromResult((ReownConnectionHandler)_loadedHandler);
         }
     }
