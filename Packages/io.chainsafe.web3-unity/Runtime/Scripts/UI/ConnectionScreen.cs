@@ -10,7 +10,7 @@ namespace ChainSafe.Gaming.UnityPackage.UI
     /// <summary>
     /// Connection Modal prompted for connecting to a provider.
     /// </summary>
-    public class ConnectScreen : MonoBehaviour
+    public class ConnectionScreen : MonoBehaviour
     {
         [SerializeField] private RectTransform providerContainer;
         [SerializeField] private ConnectionProviderButton providerButtonPrefab;
