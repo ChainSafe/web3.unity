@@ -162,7 +162,6 @@ namespace ChainSafe.GamingSdk.Editor
                 EditorGUI.indentLevel--;
                 if (EditorGUI.EndChangeCheck() || changedRpcOrWs)
                 {
-                    Debug.Log("Change detected.");
                     changedRpcOrWs = false;
                     EditorUtility.SetDirty(configAsset);
                 }
