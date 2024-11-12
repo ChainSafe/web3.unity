@@ -71,7 +71,7 @@ namespace ChainSafe.Gaming.Marketplace.Samples
             catch (ServiceNotBoundWeb3Exception<ISigner> _)
             {
                 Debug.LogError("You wanted to purchase an item and you don't have a wallet. Please connect the wallet to make a purchase");
-                Web3Unity.ConnectScreen.Open();
+                Web3Unity.ConnectionScreen.Open();
             }
         }
     }
