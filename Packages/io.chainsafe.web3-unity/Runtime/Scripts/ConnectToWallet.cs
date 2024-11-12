@@ -44,7 +44,7 @@ namespace ChainSafe.Gaming.UnityPackage
 
         private void AddButtonListeners()
         {
-            connectButton.onClick.AddListener(Web3Unity.ConnectScreen.Open);
+            connectButton.onClick.AddListener(Web3Unity.ConnectionScreen.Open);
 
             disconnectButton.onClick.AddListener(Disconnect);
 
