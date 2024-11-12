@@ -4,9 +4,7 @@ using ChainSafe.Gaming.Unity.MetaMask;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
 #endif
 using ChainSafe.Gaming.Web3.Build;
-using NUnit.Framework.Constraints;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace ChainSafe.Gaming.UnityPackage.Connection
 {
