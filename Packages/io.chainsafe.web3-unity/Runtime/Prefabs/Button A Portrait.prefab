@@ -87,6 +87,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Button A Portrait
       objectReference: {fileID: 0}
+    - target: {fileID: 2667517793985552061, guid: fc9add9f6cfb06b479d08477c75fa7b2, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 37b0e3d56aa287f428ba0d209cc339c1, type: 3}
     - target: {fileID: 5031812609836150616, guid: fc9add9f6cfb06b479d08477c75fa7b2, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
