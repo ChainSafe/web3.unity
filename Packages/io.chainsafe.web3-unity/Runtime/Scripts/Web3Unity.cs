@@ -61,6 +61,11 @@ namespace ChainSafe.Gaming.UnityPackage
         /// </summary>
         public static ConnectionScreen ConnectionScreen => Instance.GetConnectionScreen();
 
+        [Header("Auto-Initialization")]
+        [SerializeField] private bool initializeOnAwake;
+        [SerializeField] private bool rememberConnection;
+        
+        [Header("GUI Settings")]
         [SerializeField] private GuiScreenFactory connectScreenFactory;
 
         private CWeb3 _web3;
@@ -91,9 +96,14 @@ namespace ChainSafe.Gaming.UnityPackage
         }
 
 
-        private void Awake()
+        private async void Awake()
         {
             DontDestroyOnLoad(gameObject);
+
+            if (initializeOnAwake)
+            {
+                await Initialize(rememberConnection);
+            }
         }
 
         /// <summary>
