@@ -61,6 +61,12 @@ namespace ChainSafe.Gaming.UnityPackage
         /// </summary>
         public static ConnectionScreen ConnectionScreen => Instance.GetConnectionScreen();
 
+        /// <summary>
+        /// Connection Modal used to connect to available <see cref="ConnectionProvider"/>s.
+        /// </summary>
+        [Obsolete("Use the ConnectionScreen property.")]
+        public static ConnectionScreen ConnectScreen => Instance.GetConnectionScreen();
+
         [Header("Auto-Initialization")]
         [SerializeField] private bool initializeOnAwake;
         [SerializeField] private bool rememberConnection;
