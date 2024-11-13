@@ -22,7 +22,12 @@ public class Web3AuthProvider : WalletProvider, IAccountProvider
     private TaskCompletionSource<Web3AuthResponse> _connectTcs;
     private TaskCompletionSource<object> _disconnectTcs;
 
-    public Web3AuthProvider(Web3AuthWalletConfig config, Web3Environment environment, IChainConfig chainConfig, IOperationTracker operationTracker) : base(environment, chainConfig)
+    public Web3AuthProvider(
+        Web3AuthWalletConfig config,
+        Web3Environment environment,
+        IChainConfig chainConfig,
+        IOperationTracker operationTracker)
+        : base(environment, chainConfig, operationTracker)
     {
         this.operationTracker = operationTracker;
         _config = config;
