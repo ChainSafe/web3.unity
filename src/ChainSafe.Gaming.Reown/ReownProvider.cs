@@ -463,8 +463,7 @@ namespace ChainSafe.Gaming.Reown
                 handler => SignClient.CoreClient.Relayer.Publisher.OnPublishedMessage += handler,
                 handler => SignClient.CoreClient.Relayer.Publisher.OnPublishedMessage -= handler);
 
-            // var chainId = GetChainId();
-            return await ReownRequest<T>(sessionTopic, method, parameters);
+            return await ReownRequest<T>(sessionTopic, method, parameters).ConfigureAwait(false);
 
             void OnPublishedMessage(object sender, PublishParams args)
             {
