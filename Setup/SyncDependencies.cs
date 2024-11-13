@@ -58,13 +58,23 @@ public class SyncDependencies : IRunnable
             
             foreach (string name in namespaces)
             {
-                File.Copy(Path.Combine(source, $"{name}.dll"), Path.Combine(destination, $"{name}.dll"), true);
-#if DEBUG
-                string filePath = Path.Combine(source, $"{name}.pdb");
+                string fileSource = Path.Combine(source, $"{name}.dll");
                 
-                if (File.Exists(filePath))
+                string fileDestination = Path.Combine(destination, $"{name}.dll");
+                
+                File.Copy(fileSource, fileDestination, true);
+                
+                AddMetaFile(fileDestination);
+#if DEBUG
+                fileSource = fileSource.Replace(".dll", ".pdb");
+                
+                if (File.Exists(fileSource))
                 {
-                    File.Copy(filePath, Path.Combine(destination, $"{name}.pdb"), true);
+                    fileDestination = fileDestination.Replace(".dll", ".pdb");
+                    
+                    File.Copy(fileSource, fileDestination, true);
+                    
+                    AddMetaFile(fileDestination);
                 }
 #endif
                 Console.WriteLine(name);
@@ -76,5 +86,22 @@ public class SyncDependencies : IRunnable
         Git.CommitAndPush("Sync Dependencies - Auto Commit", skipCi: false);
         
         Console.WriteLine("Dependencies Synced Successfully!");
+    }
+
+    private void AddMetaFile(string destination)
+    {
+        destination += ".meta";
+        
+        if (File.Exists(destination)) return;
+        
+        string text = File.ReadAllText("meta_file_template.txt");
+
+        string guid = Guid.NewGuid().ToString();
+
+        guid = guid.Replace("-", string.Empty);
+
+        text = text.Replace("[[assetGuid]]", guid.Substring(0, 32));
+
+        File.WriteAllText(destination, text);
     }
 }
