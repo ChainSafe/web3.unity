@@ -463,7 +463,7 @@ namespace ChainSafe.Gaming.Reown
                 handler => SignClient.CoreClient.Relayer.Publisher.OnPublishedMessage += handler,
                 handler => SignClient.CoreClient.Relayer.Publisher.OnPublishedMessage -= handler);
 
-            return await ReownRequest<T>(sessionTopic, method, parameters).ConfigureAwait(false);
+            return await ReownRequest<T>(sessionTopic, method, parameters);
 
             void OnPublishedMessage(object sender, PublishParams args)
             {
@@ -567,7 +567,7 @@ namespace ChainSafe.Gaming.Reown
                     finally
                     {
 #if DEBUG
-                        logWriter.LogError("SignClient.Request executed successfully");
+                        logWriter.Log("SignClient.Request executed successfully.");
 #endif
                     }
                 }
