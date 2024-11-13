@@ -557,10 +557,17 @@ namespace ChainSafe.Gaming.Reown
                 var data = (TRequest)Activator.CreateInstance(typeof(TRequest), parameters);
                 try
                 {
-                    return await SignClient.Request<TRequest, T>(
-                        topic,
-                        data,
-                        sendChainId ? BuildChainIdForReown(chainConfig.ChainId) : null);
+                    try
+                    {
+                        return await SignClient.Request<TRequest, T>(
+                            topic,
+                            data,
+                            sendChainId ? BuildChainIdForReown(chainConfig.ChainId) : null);
+                    }
+                    finally
+                    {
+                        logWriter.LogError("SignClient.Request executed successfully");
+                    }
                 }
                 catch (KeyNotFoundException e)
                 {
