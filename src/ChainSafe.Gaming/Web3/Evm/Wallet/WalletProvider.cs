@@ -21,7 +21,6 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
         /// Initializes a new instance of the <see cref="WalletProvider"/> class.
         /// </summary>
         /// <param name="environment">Injected <see cref="Web3Environment"/>.</param>
-        /// <param name="chainRegistryProvider">Injected <see cref="chainRegistryProvider"/>.</param>
         /// <param name="chainConfig">Injected <see cref="chainConfig"/>.</param>
         protected WalletProvider(Web3Environment environment, IChainConfig chainConfig, IOperationTracker operationTracker)
             : base(environment, chainConfig)
@@ -37,9 +36,19 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
 
         public abstract Task<T> Request<T>(string method, params object[] parameters); // todo sync wallet chain id before sending any other request
 
-        public Task HandleChainSwitching()
+        public async Task HandleChainSwitching()
         {
-            return SwitchChain(chainConfig.ChainId);
+            try
+            {
+                using (operationTracker.TrackOperation("Switching wallet network..."))
+                {
+                    await SwitchChain(chainConfig.ChainId);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Web3Exception($"Error occured while trying to switch wallet chain.", ex);
+            }
         }
 
         protected async Task SwitchChain(string chainId)
@@ -51,17 +60,7 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
                 chainId = $"0x{str}", // Convert the Chain ID to hex format
             };
 
-            try
-            {
-                using (operationTracker.TrackOperation("Switching wallet network..."))
-                {
-                    await Request<string>("wallet_switchEthereumChain", networkSwitchParams);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Web3Exception($"Error occured while trying to switch wallet chain.", ex);
-            }
+            await Request<string>("wallet_switchEthereumChain", networkSwitchParams);
         }
     }
 }
