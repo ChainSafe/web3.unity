@@ -566,7 +566,9 @@ namespace ChainSafe.Gaming.Reown
                     }
                     finally
                     {
+#if DEBUG
                         logWriter.LogError("SignClient.Request executed successfully");
+#endif
                     }
                 }
                 catch (KeyNotFoundException e)
