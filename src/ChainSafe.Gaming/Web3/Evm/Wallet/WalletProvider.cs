@@ -1,9 +1,9 @@
 using System;
 using System.Numerics;
 using System.Threading.Tasks;
-using ChainSafe.Gaming.Evm;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Web3.Core.Chains;
+using ChainSafe.Gaming.Web3.Core.Operations;
 using ChainSafe.Gaming.Web3.Environment;
 
 namespace ChainSafe.Gaming.Web3.Evm.Wallet
@@ -15,6 +15,7 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
     {
         private readonly ILogWriter logWriter;
         private readonly IChainConfig chainConfig;
+        private readonly IOperationTracker operationTracker;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WalletProvider"/> class.
@@ -22,9 +23,10 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
         /// <param name="environment">Injected <see cref="Web3Environment"/>.</param>
         /// <param name="chainRegistryProvider">Injected <see cref="chainRegistryProvider"/>.</param>
         /// <param name="chainConfig">Injected <see cref="chainConfig"/>.</param>
-        protected WalletProvider(Web3Environment environment, IChainConfig chainConfig)
+        protected WalletProvider(Web3Environment environment, IChainConfig chainConfig, IOperationTracker operationTracker)
             : base(environment, chainConfig)
         {
+            this.operationTracker = operationTracker;
             this.chainConfig = chainConfig;
             this.logWriter = environment.LogWriter;
         }
@@ -51,7 +53,10 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
 
             try
             {
-                await Request<string>("wallet_switchEthereumChain", networkSwitchParams);
+                using (operationTracker.TrackOperation("Switching wallet network..."))
+                {
+                    await Request<string>("wallet_switchEthereumChain", networkSwitchParams);
+                }
             }
             catch (Exception ex)
             {
