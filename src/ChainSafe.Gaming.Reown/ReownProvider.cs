@@ -64,7 +64,7 @@ namespace ChainSafe.Gaming.Reown
             Web3Environment environment,
             ReownHttpClient reownHttpClient,
             IOperationTracker operationTracker)
-            : base(environment, chainConfig)
+            : base(environment, chainConfig, operationTracker)
         {
             this.operationTracker = operationTracker;
             this.chainConfigSet = chainConfigSet;
@@ -230,8 +230,6 @@ namespace ChainSafe.Gaming.Reown
 
                 connected = true;
 
-                await CheckAndSwitchNetwork();
-
                 return address;
             }
             catch (Exception e)
@@ -241,35 +239,9 @@ namespace ChainSafe.Gaming.Reown
             }
         }
 
-        private async Task CheckAndSwitchNetwork()
+        private string BuildChainIdForReown()
         {
-            using (operationTracker.TrackOperation("Switching wallet network..."))
-            {
-                var chainId = GetChainId();
-                if (chainId != $"{EvmNamespace}:{chainConfig.ChainId}")
-                {
-                    await SwitchChain(chainConfig.ChainId);
-                    UpdateSessionChainId();
-                }
-            }
-        }
-
-        private void UpdateSessionChainId()
-        {
-            var defaultChain = session.Namespaces.Keys.FirstOrDefault();
-
-            if (!string.IsNullOrWhiteSpace(defaultChain))
-            {
-                var defaultNamespace = session.Namespaces[defaultChain];
-                var chains = ConvertArrayToListAndRemoveFirst(defaultNamespace.Chains);
-                defaultNamespace.Chains = chains.ToArray();
-                var accounts = ConvertArrayToListAndRemoveFirst(defaultNamespace.Accounts);
-                defaultNamespace.Accounts = accounts.ToArray();
-            }
-            else
-            {
-                throw new Web3Exception("Can't update session chain ID. Default chain not found.");
-            }
+            return $"{EvmNamespace}:{chainConfig.ChainId}";
         }
 
         private List<T> ConvertArrayToListAndRemoveFirst<T>(T[] array)
@@ -495,7 +467,7 @@ namespace ChainSafe.Gaming.Reown
             return GetFullAddress().Split(":")[2];
         }
 
-        private string GetChainId()
+        private string ExtractChainIdFromAddress()
         {
             return string.Join(":", GetFullAddress().Split(":").Take(2));
         }
@@ -527,7 +499,7 @@ namespace ChainSafe.Gaming.Reown
                 var data = (TRequest)Activator.CreateInstance(typeof(TRequest), parameters);
                 try
                 {
-                    return await SignClient.Request<TRequest, T>(topic, data);
+                    return await SignClient.Request<TRequest, T>(topic, data, BuildChainIdForReown());
                 }
                 catch (KeyNotFoundException e)
                 {
