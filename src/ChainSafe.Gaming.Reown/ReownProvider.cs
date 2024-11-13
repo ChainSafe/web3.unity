@@ -64,7 +64,7 @@ namespace ChainSafe.Gaming.Reown
             Web3Environment environment,
             ReownHttpClient reownHttpClient,
             IOperationTracker operationTracker)
-            : base(environment, chainConfig)
+            : base(environment, chainConfig, operationTracker)
         {
             this.operationTracker = operationTracker;
             this.chainConfigSet = chainConfigSet;
@@ -157,7 +157,7 @@ namespace ChainSafe.Gaming.Reown
                     new ProposedNamespace // todo using optional namespaces like AppKit does, should they be required?
                     {
                         Chains = chainConfigSet.Configs
-                            .Select(chainEntry => $"{EvmNamespace}:{chainEntry.ChainId}")
+                            .Select(chainEntry => BuildChainIdForReown(chainEntry.ChainId))
                             .ToArray(),
                         Methods = new[]
                         {
@@ -223,7 +223,7 @@ namespace ChainSafe.Gaming.Reown
 
                 if (sessionWallet is null)
                 {
-                    ReownLogger.LogError("Couldn't identify the wallet used to connect the session. " +
+                    ReownLogger.Log("Couldn't identify the wallet used to connect the session. " +
                                          "Redirection is disabled. " +
                                          $"URL from wallet metadata is \"{session.Peer.Metadata.Url}\".");
                 }
@@ -237,19 +237,45 @@ namespace ChainSafe.Gaming.Reown
             catch (Exception e)
             {
                 SignClient.AddressProvider.DefaultSession = default; // reset saved session
+                await SignClient.CoreClient.Storage.Clear();
+
                 throw new ReownIntegrationException("Error occured during Reown connection process.", e);
             }
         }
 
         private async Task CheckAndSwitchNetwork()
         {
-            using (operationTracker.TrackOperation("Switching wallet network..."))
+            var chainId = ExtractChainIdFromAddress();
+            if (chainId == $"{EvmNamespace}:{chainConfig.ChainId}")
             {
-                var chainId = GetChainId();
-                if (chainId != $"{EvmNamespace}:{chainConfig.ChainId}")
+                return;
+            }
+
+            const int maxSwitchAttempts = 3;
+
+            for (var i = 0;;)
+            {
+                var messageToUser = i == 0
+                    ? "Switching wallet network..."
+                    : $"Switching wallet network (attempt {i + 1})...";
+
+                using (operationTracker.TrackOperation(messageToUser))
                 {
-                    await SwitchChain(chainConfig.ChainId);
-                    UpdateSessionChainId();
+                    try
+                    {
+                        await SwitchChain(chainConfig.ChainId);
+                        UpdateSessionChainId();
+                        return; // success, exit loop
+                    }
+                    catch (ReownNetworkException)
+                    {
+                        if (++i >= maxSwitchAttempts)
+                        {
+                            throw;
+                        }
+
+                        logWriter.Log("Attempted to switch the network, but was rejected. Trying again...");
+                    }
                 }
             }
         }
@@ -270,6 +296,11 @@ namespace ChainSafe.Gaming.Reown
             {
                 throw new Web3Exception("Can't update session chain ID. Default chain not found.");
             }
+        }
+
+        private string BuildChainIdForReown(string chainId)
+        {
+            return $"{EvmNamespace}:{chainId}";
         }
 
         private List<T> ConvertArrayToListAndRemoveFirst<T>(T[] array)
@@ -432,7 +463,6 @@ namespace ChainSafe.Gaming.Reown
                 handler => SignClient.CoreClient.Relayer.Publisher.OnPublishedMessage += handler,
                 handler => SignClient.CoreClient.Relayer.Publisher.OnPublishedMessage -= handler);
 
-            // var chainId = GetChainId();
             return await ReownRequest<T>(sessionTopic, method, parameters);
 
             void OnPublishedMessage(object sender, PublishParams args)
@@ -495,7 +525,7 @@ namespace ChainSafe.Gaming.Reown
             return GetFullAddress().Split(":")[2];
         }
 
-        private string GetChainId()
+        private string ExtractChainIdFromAddress()
         {
             return string.Join(":", GetFullAddress().Split(":").Take(2));
         }
@@ -522,12 +552,24 @@ namespace ChainSafe.Gaming.Reown
         private async Task<T> ReownRequest<T>(string topic, string method, params object[] parameters)
         {
             // Helper method to make a request using ReownSignClient.
-            async Task<T> MakeRequest<TRequest>()
+            async Task<T> MakeRequest<TRequest>(bool sendChainId = true)
             {
                 var data = (TRequest)Activator.CreateInstance(typeof(TRequest), parameters);
                 try
                 {
-                    return await SignClient.Request<TRequest, T>(topic, data);
+                    try
+                    {
+                        return await SignClient.Request<TRequest, T>(
+                            topic,
+                            data,
+                            sendChainId ? BuildChainIdForReown(chainConfig.ChainId) : null);
+                    }
+                    finally
+                    {
+#if DEBUG
+                        logWriter.Log("SignClient.Request executed successfully.");
+#endif
+                    }
                 }
                 catch (KeyNotFoundException e)
                 {
@@ -546,7 +588,7 @@ namespace ChainSafe.Gaming.Reown
                 case "eth_sendTransaction":
                     return await MakeRequest<EthSendTransaction>();
                 case "wallet_switchEthereumChain":
-                    return await MakeRequest<WalletSwitchEthereumChain>();
+                    return await MakeRequest<WalletSwitchEthereumChain>(false);
                 default:
                     try
                     {
