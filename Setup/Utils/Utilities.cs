@@ -64,7 +64,7 @@ public static class Utilities
     /// <exception cref="Exception">If command fails.</exception>
     public static void RunWithBash( this string command)
     {
-        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             Console.WriteLine($"Skipping bash command \"{command}\" on non-linux platform.");
             
