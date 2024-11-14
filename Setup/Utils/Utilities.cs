@@ -22,7 +22,7 @@ public static class Utilities
         }
         
         // Tried switch statement couldn't find a way to make it work
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
             command.RunWithBash();
         }
