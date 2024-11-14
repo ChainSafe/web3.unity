@@ -147,7 +147,7 @@ namespace ChainSafe.Gaming.Reown
 
                 SignClient = await SignClient.Init(signClientOptions);
                 await SignClient.AddressProvider.LoadDefaultsAsync();
-                
+
                 if (config.OnRelayErrored is not null)
                 {
                     SignClient.CoreClient.Relayer.OnErrored += config.OnRelayErrored;
@@ -253,7 +253,7 @@ namespace ChainSafe.Gaming.Reown
 
             const int maxSwitchAttempts = 3;
 
-            for (var i = 0;;)
+            for (var i = 0; ;)
             {
                 var messageToUser = i == 0
                     ? "Switching wallet network..."
