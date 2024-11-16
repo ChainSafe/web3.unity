@@ -47,6 +47,7 @@ namespace ChainSafe.Gaming.Reown
         private readonly Web3Environment environment;
         private readonly IChainConfigSet chainConfigSet;
         private readonly IOperationTracker operationTracker;
+        private readonly IMainThreadRunner mainThreadRunner;
 
         private SessionStruct session;
         private bool connected;
@@ -63,10 +64,12 @@ namespace ChainSafe.Gaming.Reown
             RedirectionHandler redirection,
             Web3Environment environment,
             ReownHttpClient reownHttpClient,
-            IOperationTracker operationTracker)
+            IOperationTracker operationTracker,
+            IMainThreadRunner mainThreadRunner)
             : base(environment, chainConfig, operationTracker)
         {
             this.operationTracker = operationTracker;
+            this.mainThreadRunner = mainThreadRunner;
             this.chainConfigSet = chainConfigSet;
             this.environment = environment;
             analyticsClient = environment.AnalyticsClient;
@@ -463,7 +466,12 @@ namespace ChainSafe.Gaming.Reown
                 handler => SignClient.CoreClient.Relayer.Publisher.OnPublishedMessage += handler,
                 handler => SignClient.CoreClient.Relayer.Publisher.OnPublishedMessage -= handler);
 
-            return await ReownRequest<T>(sessionTopic, method, parameters);
+            // For whatever reason, android and iOS are forcefully killing our thread where this is being run on
+            // So we are ensuring that the request survives the thread kill by running it on the main thread
+            return
+                osMediator.Platform == Platform.Android || osMediator.Platform == Platform.Android ?
+                    await mainThreadRunner.EnqueueTask(() => ReownRequest<T>(sessionTopic, method, parameters))
+                    : await ReownRequest<T>(sessionTopic, method, parameters);
 
             void OnPublishedMessage(object sender, PublishParams args)
             {
@@ -557,19 +565,10 @@ namespace ChainSafe.Gaming.Reown
                 var data = (TRequest)Activator.CreateInstance(typeof(TRequest), parameters);
                 try
                 {
-                    try
-                    {
-                        return await SignClient.Request<TRequest, T>(
-                            topic,
-                            data,
-                            sendChainId ? BuildChainIdForReown(chainConfig.ChainId) : null);
-                    }
-                    finally
-                    {
-#if DEBUG
-                        logWriter.Log("SignClient.Request executed successfully.");
-#endif
-                    }
+                    return await SignClient.Request<TRequest, T>(
+                        topic,
+                        data,
+                        sendChainId ? BuildChainIdForReown(chainConfig.ChainId) : null);;
                 }
                 catch (KeyNotFoundException e)
                 {
