@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Reown.Connection;
 using ChainSafe.Gaming.Reown.Methods;
@@ -470,7 +471,7 @@ namespace ChainSafe.Gaming.Reown
             // So we are ensuring that the request survives the thread kill by running it on the main thread
             return
                 osMediator.Platform == Platform.Android || osMediator.Platform == Platform.Android ?
-                    await mainThreadRunner.EnqueueTask(() => ReownRequest<T>(sessionTopic, method, parameters))
+                    await Task.Run(() => ReownRequest<T>(sessionTopic, method, parameters))
                     : await ReownRequest<T>(sessionTopic, method, parameters);
 
             void OnPublishedMessage(object sender, PublishParams args)
