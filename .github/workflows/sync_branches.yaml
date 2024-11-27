@@ -30,6 +30,8 @@ on:
 
 env:
   message: "Auto Sync with ${{ inputs.base }}"
+  base: ${{ github.event.inputs.base || inputs.base }}
+  target: ${{ github.event.inputs.target || inputs.base }}"
 
 jobs:
   sync:
@@ -47,7 +49,7 @@ jobs:
         uses: devmasx/merge-branch@master
         with:
           type: now
-          from_branch: ${{ inputs.base }}
-          target_branch: ${{ inputs.target }}
+          from_branch: ${{ env.base }}
+          target_branch: ${{ env.target }}
           message: ${{ env.message }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
