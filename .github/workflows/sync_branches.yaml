@@ -52,9 +52,8 @@ jobs:
         run: |
           git config user.email $git_email
           git config user.name $git_actor
+          git status
           git fetch origin ${{ env.base }}
-          git show --summary
-          git pull
           git merge ${{ env.base }} --allow-unrelated-histories
           git push
         shell: bash
