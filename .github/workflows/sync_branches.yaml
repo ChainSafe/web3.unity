@@ -46,10 +46,14 @@ jobs:
           skip_ci=" [skip-ci]"
           echo "message=$message$skip_ci" >> $GITHUB_ENV
       - name: Sync Branches
-        uses: devmasx/merge-branch@master
-        with:
-          type: now
-          from_branch: ${{ env.base }}
-          target_branch: ${{ env.target }}
-          message: ${{ env.message }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.email $git_email
+          git config user.name $git_actor
+          git checkout ${{ env.target }}
+          git pull
+          git merge ${{ env.base }} --allow-unrelated-histories
+          git push
+        shell: bash
+        env:
+          git_email: "${{ github.actor }}@users.noreply.github.com"
+          git_actor: "${{ github.actor }}"
