@@ -9,6 +9,6 @@ jobs:
     name: Sync Branches ♾️
     uses: ChainSafe/web3.unity/.github/workflows/sync_branches.yaml@rob/sync-branches-ci-fix
     with:
-      base: main
-      target: dev
+      base: rob/sync-branches-ci-fix
+      target: rob/sync-branches-ci-fix-test-branch
     secrets: inherit
