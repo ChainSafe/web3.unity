@@ -569,7 +569,7 @@ namespace ChainSafe.Gaming.Reown
                     return await SignClient.Request<TRequest, T>(
                         topic,
                         data,
-                        sendChainId ? BuildChainIdForReown(chainConfig.ChainId) : null);;
+                        sendChainId ? BuildChainIdForReown(chainConfig.ChainId) : null);
                 }
                 catch (KeyNotFoundException e)
                 {
