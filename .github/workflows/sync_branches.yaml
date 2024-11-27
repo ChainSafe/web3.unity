@@ -40,6 +40,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ env.target }}
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
       - name: Set Automation
         if: ${{ inputs.skip_ci }}
         run: |
@@ -49,12 +52,10 @@ jobs:
         run: |
           git config user.email $git_email
           git config user.name $git_actor
-          git branch
-          git fetch origin ${{ env.target }}
-          git checkout ${{ env.target }}
+          git fetch origin ${{ env.base }}
           git log --name-status HEAD^..HEAD
           git pull
-          git merge ${{ env.base }}
+          git merge ${{ env.base }} --allow-unrelated-histories
           git push
         shell: bash
         env:
