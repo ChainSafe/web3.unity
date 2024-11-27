@@ -10,7 +10,6 @@ on:
         required: true
         type: string
       skip_ci:
-        required: true
         type: boolean
         default: true
   workflow_dispatch:
