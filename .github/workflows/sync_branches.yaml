@@ -35,6 +35,9 @@ jobs:
         run: |
           git config user.email $git_email
           git config user.name $git_actor
+          git branch --show-current
+          git branch
+          git fetch
           echo "Syncing branches... base: ${{ inputs.base }} target: ${{ inputs.target }}"
           git merge ${{ inputs.base }} --allow-unrelated-histories
           git push
