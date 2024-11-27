@@ -33,4 +33,5 @@ jobs:
           type: now
           from_branch: ${{ inputs.base }}
           target_branch: ${{ inputs.target }}
+          message: Auto Merge [skip ci]
           github_token: ${{ secrets.GITHUB_TOKEN }}
