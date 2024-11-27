@@ -31,7 +31,7 @@ on:
 env:
   message: "Auto Sync with ${{ inputs.base }}"
   base: ${{ github.event.inputs.base || inputs.base }}
-  target: ${{ github.event.inputs.target || inputs.target }}"
+  target: ${{ github.event.inputs.target || inputs.target }}
 
 jobs:
   sync:
