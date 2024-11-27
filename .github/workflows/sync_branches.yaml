@@ -24,7 +24,7 @@ on:
         type: string
       skip_ci:
         required: true
-        description: "Should push also skip CI"
+        description: "Should push skip CI"
         type: boolean
         default: true
 
