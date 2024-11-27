@@ -42,7 +42,7 @@ jobs:
         if: ${{ inputs.skip_ci }}
         run: |
           skip_ci=" [skip-ci]"
-          echo "message+=$skip_ci" >> $GITHUB_ENV
+          echo "message=message+$skip_ci" >> $GITHUB_ENV
       - name: Sync Branches
         uses: devmasx/merge-branch@master
         with:
