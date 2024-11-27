@@ -53,7 +53,7 @@ jobs:
           git config user.email $git_email
           git config user.name $git_actor
           git fetch origin ${{ env.base }}
-          git log --name-status HEAD^..HEAD
+          git show --summary
           git pull
           git merge ${{ env.base }} --allow-unrelated-histories
           git push
