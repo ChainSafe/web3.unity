@@ -4,15 +4,11 @@ on:
   workflow_call:
     inputs:
       base:
-        description: "Base branch to Sync"
         required: true
         type: string
-        default: "main"
       target:
-        description: "Target branch to Sync"
         required: true
         type: string
-        default: "dev"
   workflow_dispatch:
     inputs:
       base:
@@ -32,18 +28,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.target }}
+          ref: ${{ inputs.target }}
           lfs: true
           ssh-key: ${{ secrets.DEPLOY_KEY }}
       - name: Sync Branches
         run: |
           git config user.email $git_email
           git config user.name $git_actor
-          git branch --show-current
-          echo "Syncing branches... base: ${{ github.event.inputs.base }} target: ${{ github.event.inputs.target }}"
-          echo "Syncing branches... second check base: ${{ github.inputs.base }} target: ${{ github.inputs.target }}"
-          echo "Syncing branches... third check base: ${{ inputs.base }} target: ${{ inputs.target }}"
-          git merge ${{ github.event.inputs.base }} --allow-unrelated-histories
+          echo "Syncing branches... base: ${{ inputs.base }} target: ${{ inputs.target }}"
+          git merge ${{ inputs.base }} --allow-unrelated-histories
           git push
         shell: bash
         env:
