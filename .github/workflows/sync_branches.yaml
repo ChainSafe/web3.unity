@@ -47,5 +47,5 @@ jobs:
           type: now
           from_branch: ${{ inputs.base }}
           target_branch: ${{ inputs.target }}
-          message: $message
+          message: ${{ env.message }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
