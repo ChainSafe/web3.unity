@@ -2,7 +2,7 @@ name: Post Push Checks
 
 on:
   push:
-    branches: [ main ]
+    branches: [ rob/sync-branches-ci-fix ]
 
 jobs:
   sync_branches:
