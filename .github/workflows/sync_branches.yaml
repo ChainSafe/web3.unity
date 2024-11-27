@@ -49,6 +49,8 @@ jobs:
         run: |
           git config user.email $git_email
           git config user.name $git_actor
+          git branch
+          git fetch origin ${{ env.target }}
           git checkout ${{ env.target }}
           git pull
           git merge ${{ env.base }} --allow-unrelated-histories
