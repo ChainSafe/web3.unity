@@ -4,20 +4,24 @@ on:
   workflow_call:
     inputs:
       base:
+        description: "Base branch to Sync"
         required: true
         type: string
+        default: "main"
       target:
+        description: "Target branch to Sync"
         required: true
         type: string
+        default: "dev"
   workflow_dispatch:
     inputs:
       base:
         required: true
-        description: "Branch to Sync"
+        description: "Base branch to Sync"
         type: string
       target:
         required: true
-        description: "Branch to Sync"
+        description: "Target branch to Sync"
         type: string
 
 jobs:
@@ -37,6 +41,8 @@ jobs:
           git config user.name $git_actor
           git branch --show-current
           echo "Syncing branches... base: ${{ github.event.inputs.base }} target: ${{ github.event.inputs.target }}"
+          echo "Syncing branches... second check base: ${{ github.inputs.base }} target: ${{ github.inputs.target }}"
+          echo "Syncing branches... third check base: ${{ inputs.base }} target: ${{ inputs.target }}"
           git merge ${{ github.event.inputs.base }} --allow-unrelated-histories
           git push
         shell: bash
