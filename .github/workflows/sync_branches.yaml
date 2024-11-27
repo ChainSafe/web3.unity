@@ -9,6 +9,10 @@ on:
       target:
         required: true
         type: string
+      skip_ci:
+        required: true
+        type: boolean
+        default: true
   workflow_dispatch:
     inputs:
       base:
@@ -19,19 +23,30 @@ on:
         required: true
         description: "Target branch to Sync"
         type: string
+      skip_ci:
+        required: true
+        description: "Should push also skip CI"
+        type: boolean
+        default: true
+
+env:
+  message: "Auto Sync with ${{ inputs.base }}"
 
 jobs:
-  setup:
+  sync:
     name: Sync Branches ♾️
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      - name: Set Automation
+        if: ${{ inputs.skip_ci }}
+        run: $message += " [ skip-ci ]"
       - name: Sync Branches
         uses: devmasx/merge-branch@master
         with:
           type: now
           from_branch: ${{ inputs.base }}
           target_branch: ${{ inputs.target }}
-          message: Auto Merge [skip ci]
+          message: $message
           github_token: ${{ secrets.GITHUB_TOKEN }}
