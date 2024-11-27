@@ -22,6 +22,7 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
         /// </summary>
         /// <param name="environment">Injected <see cref="Web3Environment"/>.</param>
         /// <param name="chainConfig">Injected <see cref="chainConfig"/>.</param>
+        /// <param name="operationTracker">Injected <see cref="IOperationTracker"/>.</param>
         protected WalletProvider(Web3Environment environment, IChainConfig chainConfig, IOperationTracker operationTracker)
             : base(environment, chainConfig)
         {
