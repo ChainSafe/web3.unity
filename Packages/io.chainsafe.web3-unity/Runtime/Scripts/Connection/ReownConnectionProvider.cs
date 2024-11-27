@@ -35,7 +35,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
 
         [field: SerializeField] public string BaseContext { get; private set; } = "unity-game";
 
-        [field: SerializeField] public Metadata Metadata { get; private set; }
+        [field: SerializeField] public Metadata Metadata { get; private set; } = new Metadata(){ Description = "Web3.Unity SDK is an open source SDK that connects unity games to the blockchain", Name = "Web3.Unity SDK"};
 
         [field: SerializeField] public string OverrideRegistryUri { get; private set; }
 
