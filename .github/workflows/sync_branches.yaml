@@ -53,7 +53,9 @@ jobs:
           git config user.email $git_email
           git config user.name $git_actor
           git status
-          git branch
+          git fetch origin ${{ env.base }}
+          git checkout ${{ env.base }}
+          git checkout ${{ env.target }}
           git merge ${{ env.base }} --allow-unrelated-histories
           git push
         shell: bash
