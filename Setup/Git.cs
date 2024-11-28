@@ -114,8 +114,6 @@ public class Git : IRunnable
         }
         
         Execute(command);
-        
-        Execute("log -1");
     }
     
     public static void Merge(string branch, bool allowUnrelatedHistories = true)
