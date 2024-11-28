@@ -17,7 +17,7 @@ public class DefaultOptions
     public string Release { get; set; }
     
     [Option('g', "git", Required = false, Default = true, HelpText = "Enable Git.")]
-    public bool Git { get; set; }
+    public bool? EnableGit { get; set; }
 
     public List<IRunnable> GetRunnableList()
     {
@@ -38,7 +38,9 @@ public class DefaultOptions
             runnableList.Add(new Release(Release));
         }
 
-        runnableList.Add(new Git(Git));
+        EnableGit ??= false;
+        
+        runnableList.Add(new Git(EnableGit.Value));
 
         return runnableList;
     }
