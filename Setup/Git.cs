@@ -22,6 +22,8 @@ public class Git : IRunnable
     public void Run()
     {
         Console.WriteLine($"Git {nameof(Enabled)} : {Enabled}");
+        
+        Execute("status");
     }
 
     private static void Execute(string command)
