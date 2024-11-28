@@ -4,6 +4,7 @@ using ChainSafe.Gaming.Evm;
 using ChainSafe.Gaming.LocalStorage;
 using ChainSafe.Gaming.Unity.EthereumWindow;
 using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Core.Operations;
 using ChainSafe.Gaming.Web3.Environment;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -31,7 +32,8 @@ namespace ChainSafe.Gaming.HyperPlay
         /// <param name="environment">Injected <see cref="Web3Environment"/>.</param>
         /// <param name="chainConfig">ChainConfig to fetch chain data.</param>
         /// <param name="chainRegistryProvider">Injected <see cref="ChainRegistryProvider"/>.</param>
-        public HyperPlayWebGLProvider(IHyperPlayConfig config, IHyperPlayData data, ILocalStorage localStorage, Web3Environment environment, IChainConfig chainConfig, ChainRegistryProvider chainRegistryProvider) : base(config, data, localStorage, environment, chainConfig)
+        /// <param name="tracker">Injected <see cref="IOperationTracker"/>.</param>
+        public HyperPlayWebGLProvider(IHyperPlayConfig config, IHyperPlayData data, ILocalStorage localStorage, Web3Environment environment, IChainConfig chainConfig, ChainRegistryProvider chainRegistryProvider, IOperationTracker tracker) : base(config, data, localStorage, environment, chainConfig, tracker)
         {
             _config = config;
             _data = data;

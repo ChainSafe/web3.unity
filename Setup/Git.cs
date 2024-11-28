@@ -34,15 +34,20 @@ public static class Git
         $"git add \"{path}\" -f".Run();
     }
     
-    public static void Commit(string message, string[] tags = null)
+    public static void Commit(string message, string[] tags = null, bool skipCi = true)
     {
         if (!_configured)
         {
             Configure();
         }
 
+        if (skipCi)
+        {
+            message += " [skip ci]";
+        }
+        
         // Checks if there are any changes to commit before committing
-        $"git diff-index --cached --quiet HEAD || git commit -m \"{message} [skip ci]\"".Run();
+        $"git diff-index --cached --quiet HEAD || git commit -m \"{message}\"".Run();
 
         if (tags != null)
         {
@@ -72,9 +77,9 @@ public static class Git
         }
     }
 
-    public static void CommitAndPush(string message, string[] tags = null)
+    public static void CommitAndPush(string message, string[] tags = null, bool skipCi = true)
     {
-        Commit(message, tags);
+        Commit(message, tags, skipCi);
         
         Push(tags);
     }

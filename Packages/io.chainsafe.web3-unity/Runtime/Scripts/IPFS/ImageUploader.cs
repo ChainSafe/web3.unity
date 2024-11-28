@@ -1,4 +1,3 @@
-using Scripts.EVM.Remote;
 using UnityEngine;
 
 namespace ChainSafe.Gaming.Marketplace

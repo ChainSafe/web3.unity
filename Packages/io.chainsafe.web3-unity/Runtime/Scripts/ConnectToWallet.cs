@@ -38,14 +38,13 @@ namespace ChainSafe.Gaming.UnityPackage
             {
                 AddButtonListeners();
 
-                ConnectionStateChanged(Web3Unity.Connected, Web3Unity.Instance.Address);
-                Web3Unity.ConnectScreen.Open();
+                ConnectionStateChanged(Web3Unity.Connected, Web3Unity.Instance.PublicAddress);
             }
         }
 
         private void AddButtonListeners()
         {
-            connectButton.onClick.AddListener(Web3Unity.ConnectScreen.Open);
+            connectButton.onClick.AddListener(Web3Unity.ConnectionScreen.Open);
 
             disconnectButton.onClick.AddListener(Disconnect);
 

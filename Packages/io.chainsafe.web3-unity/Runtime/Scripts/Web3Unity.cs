@@ -4,12 +4,12 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
-using ChainSafe.Gaming.Evm.Contracts.BuiltIn;
 using ChainSafe.Gaming.Evm.Contracts.Extensions;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.GUI;
+using ChainSafe.Gaming.MultiCall;
 using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.UnityPackage.UI;
 using ChainSafe.Gaming.Web3;
@@ -33,6 +33,8 @@ namespace ChainSafe.Gaming.UnityPackage
     [RequireComponent(typeof(ConnectionHandler))]
     public class Web3Unity : MonoBehaviour, IWeb3InitializedHandler
     {
+        public static bool TestMode = false;
+        
         private static Web3Unity _instance;
 
         /// <summary>
@@ -58,36 +60,34 @@ namespace ChainSafe.Gaming.UnityPackage
         /// <summary>
         /// Connection Modal used to connect to available <see cref="ConnectionProvider"/>s.
         /// </summary>
-        public static ConnectScreen ConnectScreen
-        {
-            get
-            {
-                if (!Instance._connectScreen)
-                {
-                    Instance._connectScreen = Instance.connectScreenFactory.GetSingle<ConnectScreen>();
+        public static ConnectionScreen ConnectionScreen => Instance.GetConnectionScreen();
 
-                    Instance._connectScreen.Initialize(Instance._connectionHandler.Providers);
-                }
+        /// <summary>
+        /// Connection Modal used to connect to available <see cref="ConnectionProvider"/>s.
+        /// </summary>
+        [Obsolete("Use the ConnectionScreen property.")]
+        public static ConnectionScreen ConnectScreen => Instance.GetConnectionScreen();
 
-                return Instance._connectScreen;
-            }
-        }
-
+        [Header("Auto-Initialization")]
+        [SerializeField] private bool initializeOnAwake;
+        [SerializeField] private bool rememberConnection;
+        
+        [Header("GUI Settings")]
         [SerializeField] private GuiScreenFactory connectScreenFactory;
 
         private CWeb3 _web3;
         private ConnectionHandler _connectionHandler;
-        private ConnectScreen _connectScreen;
+        private ConnectionScreen _connectionScreen;
 
         /// <summary>
         /// Is a wallet connected.
         /// </summary>
-        public static bool Connected => !string.IsNullOrEmpty(Instance.Address);
+        public static bool Connected => !string.IsNullOrEmpty(Instance.PublicAddress);
 
         /// <summary>
         /// Public key (address) of connected wallet.
         /// </summary>
-        public string Address
+        public string PublicAddress
         {
             get
             {
@@ -103,9 +103,14 @@ namespace ChainSafe.Gaming.UnityPackage
         }
 
 
-        private void Awake()
+        private async void Awake()
         {
             DontDestroyOnLoad(gameObject);
+
+            if (initializeOnAwake)
+            {
+                await Initialize(rememberConnection);
+            }
         }
 
         /// <summary>
@@ -138,9 +143,29 @@ namespace ChainSafe.Gaming.UnityPackage
             await LaunchLightWeightWeb3();
         }
 
-        private Task LaunchLightWeightWeb3()
+        /// <summary>
+        /// Terminate Web3 instance.
+        /// </summary>
+        /// <param name="logout">Is Logout.</param>
+        private async Task Terminate(bool logout)
         {
-            return ((IConnectionHandler)_connectionHandler).LaunchLightWeightWeb3();
+            if (Web3 != null)
+            {
+                await Web3.TerminateAsync(logout);
+
+                _web3 = null;
+            }
+        }
+
+        private async void OnDestroy()
+        {
+            // Terminate Web3 instance
+            await Terminate(false);
+        }
+
+        public void OpenConnectionScreen()
+        {
+            GetConnectionScreen().Open();
         }
 
         /// <summary>
@@ -165,9 +190,6 @@ namespace ChainSafe.Gaming.UnityPackage
 
             await Connect(provider);
         }
-
-        
-
 
         /// <summary>
         /// Sign message.
@@ -267,18 +289,19 @@ namespace ChainSafe.Gaming.UnityPackage
             return signature;
         }
 
-        public Task OnWeb3Initialized(CWeb3 web3)
+        public async Task OnWeb3Initialized(CWeb3 web3)
         {
+            // Terminate if there's any existing Web3 Instance
+            await Terminate(false);
+            
             _web3 = web3;
 
-            if (_connectScreen != null)
+            if (_connectionScreen != null)
             {
-                _connectScreen.Close();
+                _connectionScreen.Close();
             }
 
             Web3Initialized?.Invoke((_web3, _web3.ServiceProvider.GetService(typeof(ISigner)) == null));
-
-            return Task.CompletedTask;
         }
 
         public async Task<TransactionResponse> GetTransactionByHash(string transactionHash)
@@ -340,24 +363,21 @@ namespace ChainSafe.Gaming.UnityPackage
             return new Sha3Keccack().CalculateHash(message);
         }
 
-        /// <summary>
-        /// Terminate Web3 instance.
-        /// </summary>
-        /// <param name="logout">Is Logout.</param>
-        private async Task Terminate(bool logout)
+        private Task LaunchLightWeightWeb3()
         {
-            if (Web3 != null)
-            {
-                await Web3.TerminateAsync(logout);
-
-                _web3 = null;
-            }
+            return ((IConnectionHandler)_connectionHandler).LaunchLightWeightWeb3();
         }
 
-        private async void OnDestroy()
+        private ConnectionScreen GetConnectionScreen()
         {
-            // Terminate Web3 instance
-            await Terminate(false);
+            if (!_connectionScreen)
+            {
+                _connectionScreen = connectScreenFactory.GetSingle<ConnectionScreen>();
+
+                _connectionScreen.Initialize(_connectionHandler.Providers);
+            }
+
+            return _connectionScreen;
         }
     }
 }

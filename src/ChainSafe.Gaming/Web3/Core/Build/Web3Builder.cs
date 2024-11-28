@@ -7,6 +7,7 @@ using ChainSafe.Gaming.LocalStorage;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Chains;
 using ChainSafe.Gaming.Web3.Core.Logout;
+using ChainSafe.Gaming.Web3.Core.Operations;
 using ChainSafe.Gaming.Web3.Environment;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -26,12 +27,14 @@ namespace ChainSafe.Gaming.Web3.Build
             // Bind default services
             serviceCollection
                 .AddSingleton<IContractBuilder, ILifecycleParticipant, ContractBuilder>()
+                .AddSingleton<IOperationTracker, ILifecycleParticipant, OperationTracker>()
                 .AddSingleton<ILocalStorage, DataStorage>()
                 .AddSingleton<ChainRegistryProvider>()
                 .AddSingleton<ILogoutManager, LogoutManager>()
                 .AddSingleton<Erc20Service>()
                 .AddSingleton<Erc721Service>()
                 .AddSingleton<Erc1155Service>()
+                .AddSingleton<LifecycleManager>()
                 .AddChainManager();
         }
 
