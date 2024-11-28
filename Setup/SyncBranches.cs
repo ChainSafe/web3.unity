@@ -57,10 +57,15 @@ public class SyncBranches : IRunnable
         }
         
         Git.Commit("Exclude Paths - Auto Commit", skipCi: SkipCi.Value, allowEmpty: true);
+
+        string message = $"Sync to {Base} - Auto Commit";
+
+        if (SkipCi.Value)
+        {
+            message += " [skip ci]";
+        }
         
-        Git.Merge(Base);
-        
-        Git.Commit($"Sync to {Base} - Auto Commit", skipCi: SkipCi.Value, allowEmpty: true);
+        Git.Merge(Base, message);
         
         Git.Push();
         
