@@ -28,15 +28,10 @@ on:
         type: boolean
         default: true
 
-env:
-  base: ${{ github.event.inputs.base || inputs.base }}
-  target: ${{ github.event.inputs.target || inputs.target }}
-  skip_ci: ${{ github.event.inputs.skip_ci || inputs.skip_ci }}
-
 jobs:
   setup:
     name: Sync Branches ♾️
     uses: ChainSafe/web3.unity/.github/workflows/setup.yaml@rob/sync-branches-ci-fix
     with:
-      arguments: "sync -b ${{ env.base }} -t ${{ env.target }} -s ${{ env.skip_ci }}"
+      arguments: "sync -b ${{ github.event.inputs.base || inputs.base }} -t ${{ github.event.inputs.target || inputs.target }} -s ${{ github.event.inputs.skip_ci || inputs.skip_ci }}"
     secrets: inherit
