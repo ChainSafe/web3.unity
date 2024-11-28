@@ -49,9 +49,9 @@ public class SyncBranches : IRunnable
         
         Git.Checkout(Target);
         
-        $"git log {Base} -n 3".Run();
+        $"git log {Base} --oneline -n 3".Run();
         
-        $"git log {Target} -n 3".Run();
+        $"git log {Target} --oneline -n 3".Run();
         
         foreach (string path in _excludedPaths)
         {
