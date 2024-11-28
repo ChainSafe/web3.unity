@@ -114,7 +114,7 @@ public class Git : IRunnable
         Execute(command);
     }
     
-    public static void Merge(string branch, bool allowUnrelatedHistories = false)
+    public static void Merge(string branch, bool allowUnrelatedHistories = true)
     {
         string command = $"merge {branch}";
 
