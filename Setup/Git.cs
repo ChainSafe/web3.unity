@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Setup.Utils;
 
 namespace Setup;
@@ -106,9 +107,11 @@ public class Git : IRunnable
     {
         string command = $"checkout {branch}";
 
+        Console.WriteLine(Directory.GetCurrentDirectory());
+        
         if (!string.IsNullOrEmpty(path))
         {
-            command += $" -- \"{path}\"";
+            command += $" \"../{path}\"";
         }
         
         Execute(command);
