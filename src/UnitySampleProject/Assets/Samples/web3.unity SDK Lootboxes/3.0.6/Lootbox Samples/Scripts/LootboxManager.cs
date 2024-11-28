@@ -70,7 +70,7 @@ public class LootboxManager : MonoBehaviour
 
     private async Task CheckLootBoxBalance(uint id)
     {
-        var lootBoxAmount = await lootboxService.BalanceOf(Web3Unity.Instance.Address, id);
+        var lootBoxAmount = await lootboxService.BalanceOf(Web3Unity.Instance.PublicAddress, id);
         if (lootBoxAmount == 0) return;
         Debug.Log($"LootBox Balance for ID {id} = {lootBoxAmount}");
         lootboxBalances[id] = lootBoxAmount;
