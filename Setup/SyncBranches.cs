@@ -26,7 +26,7 @@ public class SyncBranches : IRunnable
     public string Target { get; set; }
     
     [Option('s', "skip_ci", Required = false, Default = true, HelpText = "Disable/Skip CI triggers for sync/merge.")]
-    public bool SkipCi { get; set; }
+    public bool? SkipCi { get; set; }
     
     public SyncBranches()
     {
@@ -37,6 +37,8 @@ public class SyncBranches : IRunnable
     
     public void Run()
     {
+        SkipCi ??= false;
+        
         Console.WriteLine($"Syncing {Target} branch to {Base} branch...");
         
         Git.Fetch(Base);
@@ -54,11 +56,11 @@ public class SyncBranches : IRunnable
             Git.Add(path);
         }
         
-        Git.Commit("Exclude Paths - Auto Commit", skipCi: SkipCi, allowEmpty: true);
+        Git.Commit("Exclude Paths - Auto Commit", skipCi: SkipCi.Value, allowEmpty: true);
         
         Git.Merge(Base);
         
-        Git.Commit($"Sync to {Base} - Auto Commit", skipCi: SkipCi, allowEmpty: true);
+        Git.Commit($"Sync to {Base} - Auto Commit", skipCi: SkipCi.Value, allowEmpty: true);
         
         Git.Push();
         
