@@ -32,7 +32,7 @@ public class SyncBranches : IRunnable
     {
         Dependency[] dependencies = JsonConvert.DeserializeObject<Dependency[]>(File.ReadAllText("dependencies.json"));
 
-        _excludedPaths = Array.ConvertAll(dependencies, d => d.Path);
+        _excludedPaths = Array.ConvertAll(dependencies, d => $"../{d.Path}");
     }
     
     public void Run()
