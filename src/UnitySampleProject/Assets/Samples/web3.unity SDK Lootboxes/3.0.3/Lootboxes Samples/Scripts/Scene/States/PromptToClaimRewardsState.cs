@@ -36,7 +36,6 @@ namespace LootBoxes.Chainlink.Scene.States
         private async Task ClaimRewards()
         {
             focusedItem.lootbox.PlayClaimingRewards();
-            Context.LastClaimedRewards = await Context.ClaimRewards();
             focusedItem.lootbox.PlayDisintegrate();
             Context.animator.SetTrigger("ClaimedRewards");
         }

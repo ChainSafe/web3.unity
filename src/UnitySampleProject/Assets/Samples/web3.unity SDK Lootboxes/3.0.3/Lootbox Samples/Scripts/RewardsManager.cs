@@ -1,4 +1,6 @@
+using System.Globalization;
 using ChainSafe.Gaming.Lootboxes.Chainlink;
+using Nethereum.Util;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -26,6 +28,7 @@ public class RewardsManager : MonoBehaviour
 
     private void CloseRewardsMenu()
     {
+        Debug.Log("Close rewards menu");
         ClearPreviousRewards();
         gameObject.SetActive(false);
     }
@@ -46,15 +49,16 @@ public class RewardsManager : MonoBehaviour
         // Loop through and spawn rewards based on type
         foreach (var reward in rewards.Erc20Rewards)
         {
-            SpawnRewardItem("ERC20", null, null, reward.AmountRaw.ToString());
+            var balance = UnitConversion.Convert.FromWei(reward.AmountRaw);
+            SpawnRewardItem("ERC20", "Tokens", "ERC20", balance.ToString(CultureInfo.InvariantCulture));
         }
         foreach (var reward in rewards.Erc721Rewards)
         {
-            SpawnRewardItem("ERC721", reward.TokenId.ToString(), reward.TokenName, "1");
+            SpawnRewardItem("ERC721", $"#{reward.TokenId.ToString()}", reward.TokenName, "1");
         }
         foreach (var reward in rewards.Erc1155Rewards)
         {
-            SpawnRewardItem("ERC1155", reward.TokenId.ToString(), reward.TokenName, reward.Amount.ToString());
+            SpawnRewardItem("ERC1155", $"#{reward.TokenId.ToString()}", reward.TokenName, reward.Amount.ToString());
         }
     }
 
@@ -68,7 +72,7 @@ public class RewardsManager : MonoBehaviour
         TextMeshProUGUI amountText = newItem.transform.Find("AmountText").GetComponent<TextMeshProUGUI>();
 
         typeText.text = type;
-        idText.text = $"#{tokenId}";
+        idText.text = $"{tokenId}";
         nameText.text = tokenName;
         amountText.text = amount;
     }

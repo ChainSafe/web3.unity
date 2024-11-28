@@ -46,7 +46,7 @@ namespace LootBoxes.Chainlink.Scene
         public Task<List<uint>> GetTypes() => lootBoxService.GetLootboxTypes();
         public Task<uint> GetBalance(uint typeId) => lootBoxService.BalanceOf(typeId);
         public Task<bool> CanClaimRewards() => lootBoxService.CanClaimRewards();
-        public Task<LootboxRewards> ClaimRewards() => lootBoxService.ClaimRewards();
+        public Task ClaimRewards() => lootBoxService.ClaimRewards();
         public Task<bool> IsOpeningLootBox() => lootBoxService.IsOpeningLootbox();
         public Task<List<LootboxTypeInfo>> FetchAllLootBoxes() => lootBoxService.FetchAllLootboxes();
         public Task<uint> OpeningLootBoxType() => lootBoxService.OpeningLootboxType();

@@ -11,7 +11,7 @@ using Web3 = ChainSafe.Gaming.Web3.Web3;
 
 public class LootboxManager : MonoBehaviour
 {
-    [SerializeField] private Button claimLootboxButton, recoverLootboxesButton, postToSocialsButton;
+    [SerializeField] private Button claimLootboxButton, recoverLootboxesButton, postToSocialsButton, claimRewardsAfterButton;
     [SerializeField] private TextMeshProUGUI lootboxAmountText;
     [SerializeField] private TMP_Dropdown lootboxDropdown;
     [SerializeField] private GameObject rewardsMenu;
@@ -20,6 +20,7 @@ public class LootboxManager : MonoBehaviour
 
     private void Awake()
     {
+        claimRewardsAfterButton.onClick.AddListener(ClaimRewardsClicked);
         claimLootboxButton.onClick.AddListener(OnClaimLootboxClicked);
         recoverLootboxesButton.onClick.AddListener(RecoverLootboxesClicked);
         postToSocialsButton.onClick.AddListener(PostOnSocialMedia);
@@ -31,12 +32,14 @@ public class LootboxManager : MonoBehaviour
     {
         if (valueTuple.isLightweight) return;
         lootboxService = Web3Unity.Web3.Chainlink().Lootboxes();
+        lootboxService.OnRewardsClaimed += OpenRewardsMenu;
         GetLootboxTypes();
     }
 
     public void OnDestroy()
     {
         Web3Unity.Web3Initialized -= Web3Initialized;
+        lootboxService.OnRewardsClaimed -= OpenRewardsMenu;
         lootboxDropdown.onValueChanged.RemoveListener(OnDropdownValueChanged);
     }
 
@@ -59,9 +62,16 @@ public class LootboxManager : MonoBehaviour
         }
     }
 
+    private async void ClaimRewardsClicked()
+    {
+        rewardsMenu.SetActive(true);
+        await lootboxService.ClaimRewards();
+    }
+
     private async Task CheckLootBoxBalance(uint id)
     {
         var lootBoxAmount = await lootboxService.BalanceOf(Web3Unity.Instance.Address, id);
+        if (lootBoxAmount == 0) return;
         Debug.Log($"LootBox Balance for ID {id} = {lootBoxAmount}");
         lootboxBalances[id] = lootBoxAmount;
         lootboxDropdown.options.Add(new TMP_Dropdown.OptionData($"ID: {id}"));
@@ -75,27 +85,35 @@ public class LootboxManager : MonoBehaviour
     private void UpdateBalanceText()
     {
         var selectedText = lootboxDropdown.options[lootboxDropdown.value].text;
-        if (uint.TryParse(selectedText.Replace("ID: ", ""), out uint selectedId) && lootboxBalances.ContainsKey(selectedId))
+        if (uint.TryParse(selectedText.Replace("ID: ", ""), out uint selectedId) && lootboxBalances.TryGetValue(selectedId, out var balance))
         {
-            lootboxAmountText.text = lootboxBalances[selectedId].ToString();
+            claimLootboxButton.interactable = balance > 0;
+            lootboxAmountText.text = balance.ToString(); 
+        }
+        else
+        {
+            claimLootboxButton.interactable = false;
         }
     }
 
     private async void OnClaimLootboxClicked()
     {
-        var selectedText = lootboxDropdown.options[lootboxDropdown.value].text;
-        if (uint.TryParse(selectedText.Replace("ID: ", ""), out uint selectedId) && lootboxBalances.TryGetValue(selectedId, out uint selectedAmount))
-        {
-            await OpenLootBox(selectedId, selectedAmount);
-        }
-        // Claim rewards after opening
-        var rewards = await lootboxService.ClaimRewards();
-        OpenRewardsMenu(rewards);
+        await ClaimLootbox();
     }
 
-    private async Task OpenLootBox(uint lootId, uint lootAmount)
+    private async Task ClaimLootbox()
     {
-        await lootboxService.OpenLootbox(lootId, lootAmount);
+        var selectedText = lootboxDropdown.options[lootboxDropdown.value].text;
+        Debug.Log("Claiming Lootbox");
+        if (uint.TryParse(selectedText.Replace("ID: ", ""), out uint selectedId) && lootboxBalances.TryGetValue(selectedId, out uint selectedAmount))
+        {
+            await lootboxService.OpenLootbox(selectedId);
+        }
+        Debug.Log("Claimed Lootbox");
+        Debug.Log("Claiming rewards");
+        await new WaitForSeconds(30);
+        await lootboxService.ClaimRewards();
+        Debug.Log("Claimed rewards");
     }
 
     private async void RecoverLootboxesClicked()

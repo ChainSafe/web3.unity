@@ -304,7 +304,7 @@ namespace ChainSafe.Gaming.Evm.Providers
         /// </returns>
         public static async Task<TransactionResponse> GetTransaction(this IRpcProvider provider, string transactionHash, TimeSpan? timeOut = null)
         {
-            timeOut ??= TimeSpan.FromSeconds(60);
+            timeOut ??= TimeSpan.FromSeconds(180);
 
             // Poll transaction till it's available on the given node
             TransactionResponse transaction = null;

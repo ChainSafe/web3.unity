@@ -1,12 +1,21 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Web3;
+using Nethereum.ABI.FunctionEncoding.Attributes;
 
 namespace ChainSafe.Gaming.Lootboxes.Chainlink
 {
     public interface ILootboxService
     {
+
+        /// <summary>
+        /// Event invoked when rewards have been claimed.
+        /// </summary>
+        event Action<LootboxRewards> OnRewardsClaimed;
+
         /// <summary>
         /// This method returns all lootbox type ids registered in the smart-contract.
         /// Lootbox type id also represents the number of rewards, that can be
@@ -59,7 +68,17 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         Task OpenLootbox(uint lootboxType, uint lootboxCount = 1);
 
+        /// <summary>
+        /// Recovers lootboxes if an open has failed.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         Task RecoverLootboxes();
+
+        /// <summary>
+        /// Gets all possible items listed in the lootbox.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        Task<LootboxItemList> GetInventory();
 
         /// <summary>
         /// Checks if the current user can claim rewards.
@@ -78,14 +97,14 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
         /// Initiates the process for the current user to claim their rewards.
         /// </summary>
         /// <returns>An instance of <see cref="LootboxRewards"/> containing the details of the claimed rewards.</returns>
-        Task<LootboxRewards> ClaimRewards();
+        Task ClaimRewards();
 
         /// <summary>
         /// Initiates the process for a specified user to claim their rewards.
         /// </summary>
         /// <param name="account">User's public address from which rewards are to be claimed.</param>
         /// <returns>An instance of <see cref="LootboxRewards"/> containing the details of the claimed rewards for the specified user.</returns>
-        Task<LootboxRewards> ClaimRewards(string account);
+        Task ClaimRewards(string account);
 
         /// <summary>
         /// Retrieves a list of all lootboxes along with their balances for the current user.
