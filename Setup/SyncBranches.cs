@@ -49,14 +49,14 @@ public class SyncBranches : IRunnable
         
         Git.Checkout(Target);
         
-        // foreach (string path in _excludedPaths)
-        // {
-        //     Git.Checkout(Base, path);
-        //     
-        //     Git.Add(path);
-        // }
-        //
-        // Git.Commit("Exclude Paths - Auto Commit", skipCi: SkipCi.Value, allowEmpty: true);
+        foreach (string path in _excludedPaths)
+        {
+            Git.Checkout(Base, path);
+            
+            Git.Add(path);
+        }
+        
+        Git.Commit("Exclude Paths - Auto Commit", skipCi: SkipCi.Value, allowEmpty: true);
         
         Git.Merge(Base);
         
