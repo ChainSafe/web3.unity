@@ -10,7 +10,7 @@ namespace Setup;
 /// <summary>
 /// Sync branches (merge).
 /// </summary>
-[Verb("sync_branches", HelpText = "Sync branches.")]
+[Verb("sync", HelpText = "Sync branches.")]
 public class SyncBranches : IRunnable
 {
     public int Order => 0;

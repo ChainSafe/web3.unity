@@ -38,5 +38,5 @@ jobs:
     name: Sync Branches ♾️
     uses: ChainSafe/web3.unity/.github/workflows/setup.yaml@main
     with:
-      arguments: "-b ${{ env.base }} -t ${{ env.taret }} -s ${{ env.skip_ci }}"
+      arguments: "sync -b ${{ env.base }} -t ${{ env.taret }} -s ${{ env.skip_ci }}"
     secrets: inherit
