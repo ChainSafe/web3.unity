@@ -36,7 +36,7 @@ env:
 jobs:
   setup:
     name: Sync Branches ♾️
-    uses: ChainSafe/web3.unity/.github/workflows/setup.yaml@main
+    uses: ChainSafe/web3.unity/.github/workflows/setup.yaml@rob/sync-branches-ci-fix
     with:
       arguments: "sync -b ${{ env.base }} -t ${{ env.taret }} -s ${{ env.skip_ci }}"
     secrets: inherit
