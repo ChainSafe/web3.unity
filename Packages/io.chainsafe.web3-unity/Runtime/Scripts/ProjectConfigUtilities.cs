@@ -40,7 +40,7 @@ namespace ChainSafe.Gaming.UnityPackage
                     ChainId = chainId,
                     Chain = chain,
                     Network = network,
-                    NativeCurrency = new NativeCurrencyUnity()
+                    NativeCurrency = new NativeCurrencyUnityWrapper()
                     {
                         Name = symbol,
                         Symbol = symbol,
@@ -97,7 +97,7 @@ namespace ChainSafe.Gaming.UnityPackage
                 var localhostEndPoint = $"127.0.0.1:{port}";
 
                 ChainId = chainId;
-                NativeCurrency = new NativeCurrencyUnity(){ Symbol = symbol, Name = symbol, Decimals = 18 };
+                NativeCurrency = new NativeCurrencyUnityWrapper(){ Symbol = symbol, Name = symbol, Decimals = 18 };
                 Chain = chain;
                 Network = network;
                 Rpc = $"http://{localhostEndPoint}";

@@ -12,7 +12,7 @@ namespace ChainSafe.Gaming
         private const string ChainDefault = "Sepolia";
         private const string NetworkDefault = "Sepolia";
 
-        private static readonly NativeCurrencyUnity DefaultNativeCurrency = new()
+        private static readonly NativeCurrencyUnityWrapper DefaultNativeCurrency = new()
         {
             Name = "Sepolia Ether",
             Symbol = "ETH",
@@ -28,7 +28,7 @@ namespace ChainSafe.Gaming
         public INativeCurrency NativeCurrency
         {
             get => nativeCurrency;
-            set => nativeCurrency = new NativeCurrencyUnity()
+            set => nativeCurrency = new NativeCurrencyUnityWrapper()
             {
                 Name = value.Name,
                 Symbol = value.Symbol,
@@ -36,7 +36,7 @@ namespace ChainSafe.Gaming
             };
         }
 
-        [SerializeField] private NativeCurrencyUnity nativeCurrency ;
+        [SerializeField] private NativeCurrencyUnityWrapper nativeCurrency ;
         [field: SerializeField] public string Chain { get; set; }
         [field: SerializeField] public string Network { get; set; }
         [field: SerializeField] public string Rpc { get; set; }
@@ -57,7 +57,7 @@ namespace ChainSafe.Gaming
         public static ChainConfigEntry Empty => new()
         {
             ChainId = string.Empty,
-            NativeCurrency = new NativeCurrencyUnity(),
+            NativeCurrency = new NativeCurrencyUnityWrapper(),
             Chain = "Custom",
             Network = string.Empty,
             Rpc = string.Empty,
@@ -67,13 +67,13 @@ namespace ChainSafe.Gaming
     }
 
     /// <summary>
-    /// This is basically a wrapper for the NativeCurrency class to allow for Unity serialization.
+    /// This is basically a wrapper for the INativeCurrency interface to allow for Unity serialization.
     /// </summary>
     [Serializable]
-    public class NativeCurrencyUnity : INativeCurrency
+    public class NativeCurrencyUnityWrapper : INativeCurrency
     {
-        [field: SerializeField] public string Name { get; set; }
-        [field: SerializeField] public string Symbol { get; set; }
-        [field: SerializeField] public int Decimals { get; set; }
+        [field: SerializeField] public string Name { get; set; } = "Ether";
+        [field: SerializeField] public string Symbol { get; set; } = "ETH";
+        [field: SerializeField] public int Decimals { get; set; } = 18;
     }
 }
