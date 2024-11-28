@@ -16,7 +16,7 @@ public class DefaultOptions
     [Option('p', "publish", Required = false, HelpText = "Version to release.")]
     public string Release { get; set; }
     
-    [Option('g', "git", Required = false, Default = false, HelpText = "Enable Git.")]
+    [Option('g', "git", Required = false, Default = true, HelpText = "Enable Git.")]
     public bool Git { get; set; }
 
     public List<IRunnable> GetRunnableList()
