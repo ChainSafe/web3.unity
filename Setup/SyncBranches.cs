@@ -49,11 +49,9 @@ public class SyncBranches : IRunnable
         
         Git.Checkout(Target);
         
-        $"git rev-list --count {Target}..{Base}".Run();
+        $"git log {Base} -n 3".Run();
         
-        "git log -5".Run();
-        
-        $"git rev-list --count {Base}..{Target}".Run();
+        $"git log {Target} -n 3".Run();
         
         foreach (string path in _excludedPaths)
         {
