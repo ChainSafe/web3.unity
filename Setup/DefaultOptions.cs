@@ -13,7 +13,7 @@ public class DefaultOptions
     [Option('d', "duplicate_samples", Required = false, Default = false, HelpText = "Duplicate samples in Sample Project into package samples.")]
     public bool DuplicateSamples { get; set; }
     
-    [Option('r', "release", Required = false, HelpText = "Version to release.")]
+    [Option("--deploy", Required = false, HelpText = "Version to release.")]
     public string Release { get; set; }
     
     [Option('g', "git", Required = false, Default = true, HelpText = "Enable Git.")]
