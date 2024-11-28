@@ -116,10 +116,15 @@ public class Git : IRunnable
         Execute(command);
     }
     
-    public static void Merge(string branch, bool allowUnrelatedHistories = true)
+    public static void Merge(string branch, string message = "", bool allowUnrelatedHistories = true)
     {
-        string command = $"merge {branch}";
+        string command = $"merge {branch} --no-edit --commit --no-ff";
 
+        if (!string.IsNullOrEmpty(message))
+        {
+            command += $" -m \"{message}\"";
+        }
+        
         if (allowUnrelatedHistories)
         {
             command += " --allow-unrelated-histories";
