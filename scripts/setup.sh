@@ -7,6 +7,6 @@ git submodule update --init
 pushd "$scripts_dir"/../Setup
 
 # publish DLLs to unity package
-dotnet run -sync_dependencies -git:disabled -c ${1:-Release} Setup.csproj
+dotnet run -s -g false -c ${1:-Release}
 
 popd

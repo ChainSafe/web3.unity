@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Setup.Utils;
 
 namespace Setup;
@@ -8,46 +6,63 @@ namespace Setup;
 /// <summary>
 /// Git helper class.
 /// </summary>
-public static class Git
+public class Git : IRunnable
 {
     private static bool _configured;
 
-    public static bool Enabled { get; private set; } = true;
+    public static bool Enabled { get; private set; }
 
-    public static void Configure(string configuration)
+    public int Order => - 1;
+
+    public Git(bool enabled)
     {
-        switch (configuration)
+        Enabled = enabled;
+    }
+    
+    public void Run()
+    {
+        Console.WriteLine($"Git {nameof(Enabled)} : {Enabled}");
+        
+        Execute("status");
+    }
+
+    private static void Execute(string command)
+    {
+        if (!Enabled)
         {
-            case "enabled":
-                Enabled = true;
-                break;
-            case "disabled":
-                Enabled = false;
-                break;
-            default:
-                throw new Exception($"-git can't configure {configuration}");
+            Console.WriteLine($"Git disabled skipping command: {command}");
+        }
+        else
+        {
+            if (!_configured)
+            {
+                "git config user.email $git_email".Run();
+                
+                "git config user.name $git_actor".Run();
+
+                _configured = true;
+            }
+        
+            $"git {command}".Run();
         }
     }
     
     public static void Add(string path)
     {
-        $"git add \"{path}\" -f".Run();
+        Execute($"add \"{path}\" -f");
     }
     
-    public static void Commit(string message, string[] tags = null, bool skipCi = true)
+    public static void Commit(string message, string[] tags = null, bool skipCi = true, bool allowEmpty = false)
     {
-        if (!_configured)
-        {
-            Configure();
-        }
-
         if (skipCi)
         {
             message += " [skip ci]";
         }
-        
-        // Checks if there are any changes to commit before committing
-        $"git diff-index --cached --quiet HEAD || git commit -m \"{message}\"".Run();
+
+        Execute(allowEmpty
+            ? $"commit --allow-empty -m \"{message}\""
+            // Checks if there are any changes to commit before committing
+            : $"diff-index --cached --quiet HEAD || git commit -m \"{message}\"");
 
         if (tags != null)
         {
@@ -63,7 +78,7 @@ public static class Git
     
     public static void Push(string[] tags = null)
     {
-        "git push -f".Run();
+        Execute("push -f");
 
         if (tags != null)
         {
@@ -71,7 +86,7 @@ public static class Git
             {
                 if (!string.IsNullOrEmpty(tag))
                 {
-                    $"git push origin \"{tag}\"".Run();
+                    Execute($"push origin \"{tag}\"");
                 }
             }
         }
@@ -83,17 +98,43 @@ public static class Git
         
         Push(tags);
     }
+
+    public static void Fetch(string branch)
+    {
+        Execute($"fetch origin {branch}");
+    }
+    
+    public static void Checkout(string branch, string path = "")
+    {
+        string command = $"checkout {branch}";
+
+        if (!string.IsNullOrEmpty(path))
+        {
+            command += $" \"{path}\"";
+        }
+        
+        Execute(command);
+    }
+    
+    public static void Merge(string branch, string message = "", bool allowUnrelatedHistories = true)
+    {
+        string command = $"merge {branch} --no-edit --commit --no-ff";
+
+        if (!string.IsNullOrEmpty(message))
+        {
+            command += $" -m \"{message}\"";
+        }
+        
+        if (allowUnrelatedHistories)
+        {
+            command += " --allow-unrelated-histories";
+        }
+        
+        Execute(command);
+    }
     
     public static void Tag(string tag)
     {
-        $"git tag \"{tag}\"".Run();
-    }
-    
-    private static void Configure()
-    {
-        "git config user.email $git_email".Run();
-        "git config user.name $git_actor".Run();
-
-        _configured = true;
+        Execute($"tag \"{tag}\"");
     }
 }

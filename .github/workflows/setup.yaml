@@ -6,12 +6,24 @@ on:
       arguments:
         required: true
         type: string
+      configuration:
+        required: false
+        type: string
+        default: "Release"
   workflow_dispatch: 
     inputs:
       arguments:
         required: true
         description: 'Arguments to pass to the setup script'
         type: string
+      configuration:
+        required: true
+        description: 'Run Configuration'
+        default: 'Release'
+        type: choice
+        options:
+          - Release
+          - Debug
 env:
   git_email: "${{ github.actor }}@users.noreply.github.com"
   git_actor: "${{ github.actor }}"
@@ -28,6 +40,7 @@ jobs:
           lfs: true
           ssh-key: ${{ secrets.DEPLOY_KEY }}
           submodules: recursive
+          fetch-depth: 100
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
@@ -36,10 +49,5 @@ jobs:
       - name: Run
         run: |
           cd Setup
-          dotnet run ${{ inputs.arguments || github.event.inputs.arguments }} Setup/Setup.csproj
+          dotnet run ${{ inputs.arguments || github.event.inputs.arguments }} -c ${{ inputs.configuration || github.event.inputs.configuration }}
           git reset --hard
-      - name: Cache
-        uses: actions/cache/save@v4
-        with:
-          path: .git
-          key: ${{ runner.os }}-git

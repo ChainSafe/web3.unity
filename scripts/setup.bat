@@ -14,6 +14,6 @@ if "%1"=="" (
     set "config=%1"
 )
 
-dotnet run -sync_dependencies -git:disabled -c %config% Setup.csproj
+dotnet run -s -g false -c %config% Setup.csproj
 
 popd

@@ -5,6 +5,9 @@ using Setup.Utils;
 
 namespace Setup;
 
+/// <summary>
+/// Generate and copy dependencies to Sample Project.
+/// </summary>
 public class SyncDependencies : IRunnable
 {
     public int Order => 0;
