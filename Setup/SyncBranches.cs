@@ -49,7 +49,7 @@ public class SyncBranches : IRunnable
         
         Git.Checkout(Target);
         
-        $"git rev-list --count {Base}".Run();
+        "git pull -f".Run();
         
         $"git rev-list --count {Target}".Run();
         
