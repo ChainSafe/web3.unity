@@ -792,7 +792,7 @@ PlayerSettings:
   webGLMemoryGeometricGrowthCap: 96
   webGLPowerPreference: 2
   scriptingDefineSymbols:
-    Standalone: ENABLE_ANALYTICS
+    Standalone: 
     WebGL: RAMP_AVAILABLE;MARKETPLACE_AVAILABLE
     iPhone: RAMP_AVAILABLE
   additionalCompilerArguments: {}
