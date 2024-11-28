@@ -11,16 +11,6 @@ public static class Utilities
 {
     public static void Run(this string command)
     {
-        if (!Git.Enabled)
-        {
-            if (command.ToLower().StartsWith("git"))
-            {
-                Console.WriteLine($"Git disabled skipping command: {command}");
-            
-                return;
-            }
-        }
-        
         // Tried switch statement couldn't find a way to make it work
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
