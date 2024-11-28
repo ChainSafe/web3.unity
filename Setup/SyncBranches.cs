@@ -49,6 +49,12 @@ public class SyncBranches : IRunnable
         
         Git.Checkout(Target);
         
+        Git.Checkout(Base);
+        
+        Git.Merge(Target, $"Sync to {Target} - Auto Commit");
+        
+        Git.Checkout(Target);
+        
         foreach (string path in _excludedPaths)
         {
             Git.Checkout(Base, path);
