@@ -11,7 +11,7 @@ public static class Utilities
 {
     public static void Run(this string command)
     {
-        Console.WriteLine($"Running Command {command}...");
+        Console.WriteLine($"Running Command : {command}");
         
         // Tried switch statement couldn't find a way to make it work
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
