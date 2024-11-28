@@ -240,7 +240,7 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
 
         public async Task ClaimRewards()
         {
-            await this.contract.SendWithReceipt("claimRewards", new object[] { signer.PublicAddress });
+            await this.contract.Send("claimRewards", new object[] { signer.PublicAddress });
         }
 
         public async Task ClaimRewards(string account)
