@@ -48,5 +48,5 @@ jobs:
       - name: Run
         run: |
           cd Setup
-          dotnet run -c ${{ inputs.configuration || github.event.inputs.configuration }} ${{ inputs.arguments || github.event.inputs.arguments }}
+          dotnet run ${{ inputs.arguments || github.event.inputs.arguments }} -c ${{ inputs.configuration || github.event.inputs.configuration }}
           git reset --hard
