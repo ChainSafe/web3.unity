@@ -108,7 +108,7 @@ public class Git : IRunnable
 
         if (!string.IsNullOrEmpty(path))
         {
-            command += $" \"{path}\"";
+            command += $" \"{path}.\"";
         }
         
         Execute(command);
