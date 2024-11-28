@@ -11,15 +11,7 @@ public static class Utilities
 {
     public static void Run(this string command)
     {
-        if (!Git.Enabled)
-        {
-            if (command.ToLower().StartsWith("git"))
-            {
-                Console.WriteLine($"Git disabled skipping command: {command}");
-            
-                return;
-            }
-        }
+        Console.WriteLine($"Running Command : {command}");
         
         // Tried switch statement couldn't find a way to make it work
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
@@ -37,8 +29,8 @@ public static class Utilities
             throw new Exception($"[Unsupported OS] Can't run command: {command}");
         }
     }
-    
-    public static void RunWithPowershell(this string command)
+
+    private static void RunWithPowershell(this string command)
     {
         using (PowerShell powerShell = PowerShell.Create())
         {
@@ -62,7 +54,7 @@ public static class Utilities
     /// </summary>
     /// <param name="command">Command to run.</param>
     /// <exception cref="Exception">If command fails.</exception>
-    public static void RunWithBash( this string command)
+    private static void RunWithBash( this string command)
     {
         if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
