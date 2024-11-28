@@ -118,7 +118,7 @@ public class Git : IRunnable
     {
         Execute("reset --hard");
         
-        Execute("git status");
+        Execute("status");
         
         string command = $"merge {branch}";
 
