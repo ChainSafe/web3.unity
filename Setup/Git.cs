@@ -116,10 +116,6 @@ public class Git : IRunnable
     
     public static void Merge(string branch, bool allowUnrelatedHistories = true)
     {
-        Execute("reset --hard");
-        
-        Execute("status");
-        
         string command = $"merge {branch}";
 
         if (allowUnrelatedHistories)
