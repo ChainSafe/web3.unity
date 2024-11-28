@@ -40,6 +40,7 @@ jobs:
           lfs: true
           ssh-key: ${{ secrets.DEPLOY_KEY }}
           submodules: recursive
+          fetch-depth: 100
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
