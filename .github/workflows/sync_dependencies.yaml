@@ -3,6 +3,15 @@ name: Sync Dependencies 🔄
 on:
   workflow_call:
   workflow_dispatch:
+    inputs:
+      configuration:
+        required: true
+        description: 'Run Configuration'
+        default: 'Release'
+        type: choice
+        options:
+          - Release
+          - Debug
     
 jobs:
   setup:
