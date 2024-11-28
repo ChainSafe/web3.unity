@@ -14,6 +14,13 @@ namespace ChainSafe.Gaming.Unity.EthereumWindow.Dto
             Decimals = 18;
         }
 
+        public NativeCurrency(string name, string symbol, int decimals)
+        {
+            Name = name;
+            Symbol = symbol;
+            Decimals = decimals;
+        }
+
         [JsonProperty("name")]
         public string Name { get; set; }
 

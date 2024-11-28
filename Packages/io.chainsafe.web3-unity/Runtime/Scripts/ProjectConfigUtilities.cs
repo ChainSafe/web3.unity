@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Core.Chains;
 using UnityEngine;
 
 namespace ChainSafe.Gaming.UnityPackage
@@ -39,7 +40,12 @@ namespace ChainSafe.Gaming.UnityPackage
                     ChainId = chainId,
                     Chain = chain,
                     Network = network,
-                    Symbol = symbol,
+                    NativeCurrency = new NativeCurrencyUnity()
+                    {
+                        Name = symbol,
+                        Symbol = symbol,
+                        Decimals = 18
+                    },
                     Rpc = rpc,
                     Ws = ws,
                     BlockExplorerUrl = blockExplorerUrl,
@@ -91,7 +97,7 @@ namespace ChainSafe.Gaming.UnityPackage
                 var localhostEndPoint = $"127.0.0.1:{port}";
 
                 ChainId = chainId;
-                Symbol = symbol;
+                NativeCurrency = new NativeCurrencyUnity(){ Symbol = symbol, Name = symbol, Decimals = 18 };
                 Chain = chain;
                 Network = network;
                 Rpc = $"http://{localhostEndPoint}";
@@ -100,7 +106,7 @@ namespace ChainSafe.Gaming.UnityPackage
             }
 
             public string ChainId { get; }
-            public string Symbol { get; }
+            public INativeCurrency NativeCurrency { get; }
             public string Chain { get; }
             public string Network { get; }
             public string Rpc { get; }
