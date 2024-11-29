@@ -171,7 +171,9 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
             var playerAddress = this.GetCurrentPlayerAddress();
 
             // This response is actually very different from all the others since it returns several components
-            var response = (List<ParameterOutput>)(await this.contract.Call("getOpenerRequestDetails", new object[] { playerAddress }))[0];
+            var response =
+                (List<ParameterOutput>)(await this.contract.Call("getOpenerRequestDetails",
+                    new object[] { playerAddress }))[0];
             var address = (string)response[0].Result;
             var unitsToGet = (BigInteger)response[1].Result;
             var lootboxType = ((List<BigInteger>)response[2].Result)[0];
@@ -251,39 +253,39 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
             var rewards = LootboxRewards.Empty;
             var rewardType = this.rewardTypeByTokenAddress[rewardsClaimedEvent.TokenAddress];
             switch (rewardType)
-                {
-                    case RewardType.Erc20:
-                        rewards.Erc20Rewards.Add(new Erc20Reward
-                        {
-                            ContractAddress = rewardsClaimedEvent.TokenAddress,
-                            AmountRaw = rewardsClaimedEvent.Amount,
-                        });
-                        break;
-                    case RewardType.Erc721:
-                        rewards.Erc721Rewards.Add(new Erc721Reward
-                        {
-                            ContractAddress = rewardsClaimedEvent.TokenAddress,
-                            TokenId = rewardsClaimedEvent.TokenId,
-                        });
-                        break;
-                    case RewardType.Erc1155:
-                        rewards.Erc1155Rewards.Add(new Erc1155Reward
-                        {
-                            ContractAddress = rewardsClaimedEvent.TokenAddress,
-                            TokenId = rewardsClaimedEvent.TokenId,
-                            Amount = rewardsClaimedEvent.Amount,
-                        });
-                        break;
-                    case RewardType.Erc1155Nft:
-                        rewards.Erc1155NftRewards.Add(new Erc1155NftReward
-                        {
-                            ContractAddress = rewardsClaimedEvent.TokenAddress,
-                            TokenId = rewardsClaimedEvent.TokenId,
-                        });
-                        break;
-                    case RewardType.Unset:
-                    default:
-                        throw new ArgumentOutOfRangeException();
+            {
+                case RewardType.Erc20:
+                    rewards.Erc20Rewards.Add(new Erc20Reward
+                    {
+                        ContractAddress = rewardsClaimedEvent.TokenAddress,
+                        AmountRaw = rewardsClaimedEvent.Amount,
+                    });
+                    break;
+                case RewardType.Erc721:
+                    rewards.Erc721Rewards.Add(new Erc721Reward
+                    {
+                        ContractAddress = rewardsClaimedEvent.TokenAddress,
+                        TokenId = rewardsClaimedEvent.TokenId,
+                    });
+                    break;
+                case RewardType.Erc1155:
+                    rewards.Erc1155Rewards.Add(new Erc1155Reward
+                    {
+                        ContractAddress = rewardsClaimedEvent.TokenAddress,
+                        TokenId = rewardsClaimedEvent.TokenId,
+                        Amount = rewardsClaimedEvent.Amount,
+                    });
+                    break;
+                case RewardType.Erc1155Nft:
+                    rewards.Erc1155NftRewards.Add(new Erc1155NftReward
+                    {
+                        ContractAddress = rewardsClaimedEvent.TokenAddress,
+                        TokenId = rewardsClaimedEvent.TokenId,
+                    });
+                    break;
+                case RewardType.Unset:
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             OnRewardsClaimed?.Invoke(rewards);
