@@ -14,9 +14,7 @@ using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Debug;
 using Nethereum.ABI.FunctionEncoding;
 using Nethereum.Hex.HexTypes;
-using Nethereum.RPC.Eth.DTOs;
 using Newtonsoft.Json;
-using EventExtensions = ChainSafe.Gaming.Evm.Contracts.Extensions.EventExtensions;
 
 namespace ChainSafe.Gaming.Lootboxes.Chainlink
 {
@@ -287,6 +285,7 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
                     default:
                         throw new ArgumentOutOfRangeException();
             }
+
             OnRewardsClaimed?.Invoke(rewards);
         }
 
@@ -299,62 +298,5 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
 
             return signer.PublicAddress;
         }
-    }
-}
-
-public class ExtraRewardInfo
-{
-    public uint Id { get; set; }
-
-    public uint Units { get; set; }
-
-    public uint AmountPerUnit { get; set; }
-
-    public uint Balance { get; set; }
-
-    public ExtraRewardInfo(uint id, uint units, uint amountPerUnit, uint balance)
-    {
-        Id = id;
-        Units = units;
-        AmountPerUnit = amountPerUnit;
-        Balance = balance;
-    }
-}
-
-public class RewardView
-{
-    public string RewardToken { get; set; }
-
-    public uint RewardType { get; set; }
-
-    public uint Units { get; set; }
-
-    public uint AmountPerUnit { get; set; }
-
-    public uint Balance { get; set; }
-
-    public List<ExtraRewardInfo> Extra { get; set; }
-
-    public RewardView(string rewardToken, uint rewardType, uint units, uint amountPerUnit, uint balance, List<ExtraRewardInfo> extra)
-    {
-        RewardToken = rewardToken;
-        RewardType = rewardType;
-        Units = units;
-        AmountPerUnit = amountPerUnit;
-        Balance = balance;
-        Extra = extra ?? new List<ExtraRewardInfo>();
-    }
-}
-
-public class RewardResponse
-{
-    public List<RewardView> Rewards { get; set; }
-
-    public List<ExtraRewardInfo> ExtraRewards { get; set; }
-
-    public RewardResponse(List<RewardView> rewards, List<ExtraRewardInfo> extraRewards)
-    {
-        Rewards = rewards;
-        ExtraRewards = extraRewards;
     }
 }

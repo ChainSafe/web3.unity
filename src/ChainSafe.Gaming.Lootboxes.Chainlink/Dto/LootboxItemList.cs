@@ -2,7 +2,9 @@
 
 namespace ChainSafe.Gaming.Lootboxes.Chainlink
 {
-    public class LootboxItemList : List<List<List<Item>>> { }
+    public class LootboxItemList : List<List<List<Item>>>
+    {
+    }
 
     public class Parameter
     {

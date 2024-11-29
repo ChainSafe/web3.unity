@@ -10,7 +10,6 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
 {
     public interface ILootboxService
     {
-
         /// <summary>
         /// Event invoked when rewards have been claimed.
         /// </summary>
