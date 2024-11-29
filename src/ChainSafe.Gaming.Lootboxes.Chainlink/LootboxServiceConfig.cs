@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace ChainSafe.Gaming.Lootboxes.Chainlink
 {
@@ -23,30 +24,30 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
         /// Gets or sets the Erc20 contracts that belong to this LootboxService.
         /// This is needed to spawn the items related to the Lootbox.
         /// </summary>
-        public List<string>? Erc20Contracts { get; set; }
+        public List<string> Erc20Contracts { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets or sets the Erc721 contracts that belong to this LootboxService.
         /// This is needed to spawn the items related to the Lootbox.
         /// </summary>
-        public List<string>? Erc721Contracts { get; set; }
+        public List<string> Erc721Contracts { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets or sets the Erc1155 contracts that belong to this LootboxService.
         /// This is needed to spawn the items related to the Lootbox.
         /// </summary>
-        public List<string>? Erc1155Contracts { get; set; }
+        public List<string> Erc1155Contracts { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets or sets the Erc721 token ids that belong to this LootboxService.
         /// This is needed to spawn the items related to the Lootbox.
         /// </summary>
-        public List<int>? Erc721TokenIds { get; set; }
+        public List<BigInteger> Erc721TokenIds { get; set; } = new List<BigInteger>();
 
         /// <summary>
         /// Gets or sets the Erc1155 token ids that belong to this LootboxService.
         /// This is needed to spawn the items related to the Lootbox.
         /// </summary>
-        public List<int>? Erc1155TokenIds { get; set; }
+        public List<BigInteger> Erc1155TokenIds { get; set; } = new List<BigInteger>();
     }
 }

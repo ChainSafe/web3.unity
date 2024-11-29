@@ -109,11 +109,9 @@ public class LootboxManager : MonoBehaviour
         {
             await lootboxService.OpenLootbox(selectedId);
         }
-        Debug.Log("Claimed Lootbox");
         Debug.Log("Claiming rewards");
         await new WaitForSeconds(30);
         await lootboxService.ClaimRewards();
-        Debug.Log("Claimed rewards");
     }
 
     private async void RecoverLootboxesClicked()

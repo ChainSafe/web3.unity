@@ -20,12 +20,6 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private GameObject inventoryObjectPrefab, nftModal;
     [SerializeField] private Transform inventoryContainer;
 
-    private Dictionary<string, List<string>> addresses = new Dictionary<string, List<string>>
-    {
-        { "ERC20", new List<string> { } },
-        { "ERC721", new List<string> { } },
-        { "ERC1155", new List<string> { } }
-    };
     private LootboxServiceConfig lootboxServiceConfig;
     private ILootboxService lootboxService;
 
@@ -34,7 +28,6 @@ public class InventoryManager : MonoBehaviour
         EventManager.ToggleInventoryItems += SpawnObjects;
         FetchAndProcessInventory();
     }
-
 
     private void OnDisable() => EventManager.ToggleInventoryItems -= SpawnObjects;
 
@@ -50,6 +43,7 @@ public class InventoryManager : MonoBehaviour
         {
             var inventoryResponseJson = await lootboxService.GetInventory();
             var jsonDeserialized = JsonConvert.DeserializeObject<LootboxItemList>(JsonConvert.SerializeObject(inventoryResponseJson));
+
             foreach (var outerItem in jsonDeserialized)
             {
                 foreach (var innerItem in outerItem)
@@ -62,60 +56,7 @@ public class InventoryManager : MonoBehaviour
                             var rewardTypeItem = innerItem.Find(x => x.Parameter.Name == "rewardType");
                             if (rewardTypeItem != null)
                             {
-                                switch (int.Parse(rewardTypeItem.Result.ToString()))
-                                {
-                                    case 1:
-                                        Debug.Log("Reward Type: ERC20");
-                                        addresses["ERC20"].Add(item.Result.ToString());
-                                        //lootboxServiceConfig.Erc20Contracts?.Add(item.Result.ToString());
-                                        break;
-                                    case 2:
-                                        Debug.Log("Reward Type: ERC721");
-                                        addresses["ERC721"].Add(item.Result.ToString());
-                                        //lootboxServiceConfig.Erc721Contracts?.Add(item.Result.ToString());
-                                        // TODO MOVE THIS INTO A FUNCTION
-                                        var extraItem721 = innerItem.Find(x => x.Parameter.Name == "extra");
-                                        if (extraItem721 != null)
-                                        {
-                                            try
-                                            {
-                                                var extraList = JsonConvert.DeserializeObject<List<List<ExtraRewardInfo>>>(extraItem721.Result.ToString());
-                                                foreach (var extra in extraList)
-                                                {
-                                                    Debug.Log($"Token ID found: {extra[0].Id}");
-                                                }
-                                            }
-                                            catch (Exception e)
-                                            {
-                                                Debug.LogError($"Error parsing extra field: {e.Message}");
-                                            }
-                                        }
-                                        break;
-                                    case 3:
-                                        Debug.Log("Reward Type: ERC1155");
-                                        addresses["ERC1155"].Add(item.Result.ToString());
-                                        //lootboxServiceConfig.Erc1155Contracts?.Add(item.Result.ToString());
-                                        var extraItem1155 = innerItem.Find(x => x.Parameter.Name == "extra");
-                                        if (extraItem1155 != null)
-                                        {
-                                            try
-                                            {
-                                                var extraList = JsonConvert.DeserializeObject<List<List<ExtraRewardInfo>>>(extraItem1155.Result.ToString());
-                                                foreach (var extra in extraList)
-                                                {
-                                                    Debug.Log($"Token ID found: {extra[0].Id}");
-                                                }
-                                            }
-                                            catch (Exception e)
-                                            {
-                                                Debug.LogError($"Error parsing extra field: {e.Message}");
-                                            }
-                                        }
-                                        break;
-                                    default:
-                                        Debug.Log("Reward Type: UNDEFINED");
-                                        break;
-                                }
+                                HandleRewardType(int.Parse(rewardTypeItem.Result.ToString()), item, innerItem);
                                 break;
                             }
                         }
@@ -130,21 +71,66 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    private void HandleRewardType(int rewardType, Item item, List<Item> innerItem)
+    {
+        switch (rewardType)
+        {
+            case 1: // ERC20
+                if (!lootboxServiceConfig.Erc20Contracts.Contains(item.Result.ToString()))
+                    lootboxServiceConfig.Erc20Contracts.Add(item.Result.ToString());
+                break;
+
+            case 2: // ERC721
+                if (!lootboxServiceConfig.Erc721Contracts.Contains(item.Result.ToString()))
+                    lootboxServiceConfig.Erc721Contracts.Add(item.Result.ToString());
+                ParseExtraRewards(innerItem, lootboxServiceConfig.Erc721TokenIds);
+                break;
+
+            case 3: // ERC1155
+                if (!lootboxServiceConfig.Erc1155Contracts.Contains(item.Result.ToString()))
+                    lootboxServiceConfig.Erc1155Contracts.Add(item.Result.ToString());
+                ParseExtraRewards(innerItem, lootboxServiceConfig.Erc1155TokenIds);
+                break;
+
+            default:
+                Debug.Log("Reward Type: UNDEFINED");
+                break;
+        }
+    }
+
+    private void ParseExtraRewards(List<Item> innerItem, List<BigInteger> tokenIds)
+    {
+        var extraItem = innerItem.Find(x => x.Parameter.Name == "extra");
+        if (extraItem != null)
+        {
+            try
+            {
+                var extraList = JsonConvert.DeserializeObject<List<List<ExtraRewardInfo>>>(extraItem.Result.ToString());
+                foreach (var extra in extraList)
+                {
+                    var tokenId = BigInteger.Parse(extra[0].Id.ToString());
+                    if (!tokenIds.Contains(tokenId))
+                        tokenIds.Add(tokenId);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Error parsing extra field: {e.Message}");
+            }
+        }
+    }
+
     private async Task InitializeContracts()
     {
         Debug.Log("Initializing Contracts");
-        List<Erc20Contract> erc20Contracts = await BuildContracts<Erc20Contract>(addresses["ERC20"]);
-        List<Erc721Contract> erc721Contracts = await BuildContracts<Erc721Contract>(addresses["ERC721"]);
-        List<Erc1155Contract> erc1155Contracts = await BuildContracts<Erc1155Contract>(addresses["ERC1155"]);
+        var erc20Contracts = await BuildContracts<Erc20Contract>(lootboxServiceConfig.Erc20Contracts);
+        var erc721Contracts = await BuildContracts<Erc721Contract>(lootboxServiceConfig.Erc721Contracts);
+        var erc1155Contracts = await BuildContracts<Erc1155Contract>(lootboxServiceConfig.Erc1155Contracts);
 
-        List<ItemData> items = new List<ItemData>();
-
-        Debug.Log("Checking balances");
-        await CheckErc20Balances(erc20Contracts, items);
-        List<BigInteger> tokenIds721 = new List<BigInteger> { 0, 1, 2 };
-        await CheckErc721Balances(erc721Contracts, tokenIds721, items);
-        List<BigInteger> tokenIds1155 = new List<BigInteger> { 0,1, 2 };
-        await CheckErc1155Balances(erc1155Contracts, tokenIds1155, items);
+        var items = new List<ItemData>();
+        await CheckBalances(erc20Contracts, lootboxServiceConfig.Erc721TokenIds, items);
+        await CheckBalances(erc721Contracts, lootboxServiceConfig.Erc721TokenIds, items);
+        await CheckBalances(erc1155Contracts, lootboxServiceConfig.Erc1155TokenIds, items);
 
         if (items.Count > 0)
         {
@@ -170,123 +156,68 @@ public class InventoryManager : MonoBehaviour
         return contracts;
     }
 
-    private async Task CheckErc20Balances(List<Erc20Contract> contracts, List<ItemData> items)
+    private async Task CheckBalances<T>(
+        List<T> contracts,
+        List<BigInteger> tokenIds,
+        List<ItemData> items) where T : ICustomContract
     {
         foreach (var contract in contracts)
         {
-            var balance = await contract.BalanceOf(Web3Unity.Web3.Signer.PublicAddress);
-            var ethBalance = UnitConversion.Convert.FromWei(balance);
-            if (balance > BigInteger.Zero)
+            if (contract is Erc20Contract erc20Contract)
             {
-                Debug.Log("ERC20 Item found!");
-                items.Add(new ItemData
-                {
-                    itemType = "ERC20",
-                    itemName = "ERC20 Token",
-                    itemAmount = ethBalance.ToString()
-                });
-            }
-        }
-    }
-
-    private async Task CheckErc721Balances(List<Erc721Contract> contracts, List<BigInteger> tokenIds, List<ItemData> items)
-    {
-        foreach (var contract in contracts)
-        {
-            foreach (var tokenId in tokenIds)
-            {
-                var owner = await contract.OwnerOf(tokenId);
-                if (owner == Web3Unity.Web3.Signer.PublicAddress)
-                {
-                    Debug.Log("ERC721 Item found!");
-                    var uri = await contract.TokenURI(tokenId.ToString());
-                    var data = await FetchDataWithRetry(uri);
-                    var jsonResponse = JsonConvert.DeserializeObject<TokenModel.Token>(data);
-
-                    items.Add(new ItemData
-                    {
-                        itemType = "ERC721",
-                        itemId = tokenId.ToString(),
-                        itemName = jsonResponse.name,
-                        itemAmount = "1"
-                    });
-                }
-            }
-        }
-    }
-
-    private async Task CheckErc1155Balances(List<Erc1155Contract> contracts, List<BigInteger> tokenIds, List<ItemData> items)
-    {
-        foreach (var contract in contracts)
-        {
-            foreach (var tokenId in tokenIds)
-            {
-                var balance = await contract.BalanceOf(Web3Unity.Web3.Signer.PublicAddress, tokenId);
-                Debug.Log($"Balance owned: {balance}");
-                Debug.Log($"Current Address: {Web3Unity.Web3.Signer.PublicAddress}");
+                var balance = await erc20Contract.BalanceOf(Web3Unity.Web3.Signer.PublicAddress);
                 if (balance > BigInteger.Zero)
                 {
-                    Debug.Log("ERC1155 Item found!");
-                    var uri = await contract.Uri(tokenId.ToString());
-                    Debug.Log(uri);
-                    var data = await FetchDataWithRetry(uri);
-                    var jsonResponse = JsonConvert.DeserializeObject<TokenModel.Token>(data);
-                    // TODO data not showing up here sometimes due to SSL
-                    Debug.Log(data);
-                    Debug.Log(jsonResponse.name);
-                    Debug.Log("Metadata done"); ;
-                    items.Add(new ItemData
+                    var ethBalance = UnitConversion.Convert.FromWei(balance);
+                    items.Add(new ItemData { itemType = "ERC20", itemName = "ERC20 Token", itemAmount = ethBalance.ToString() });
+                }
+            }
+            else if (contract is Erc721Contract erc721Contract)
+            {
+                foreach (var tokenId in tokenIds)
+                {
+                    var owner = await erc721Contract.OwnerOf(tokenId);
+                    if (owner == Web3Unity.Web3.Signer.PublicAddress)
                     {
-                        itemType = "ERC1155",
-                        itemId = tokenId.ToString(),
-                        itemName = jsonResponse.name,
-                        itemAmount = balance.ToString()
-                    });
+                        var uri = await erc721Contract.TokenURI(tokenId.ToString());
+                        var data = await FetchDataWithRetry(uri);
+                        var jsonResponse = JsonConvert.DeserializeObject<TokenModel.Token>(data);
+                        items.Add(new ItemData { itemType = "ERC721", itemId = tokenId.ToString(), itemName = jsonResponse.name, itemAmount = "1" });
+                    }
+                }
+            }
+            else if (contract is Erc1155Contract erc1155Contract)
+            {
+                foreach (var tokenId in tokenIds)
+                {
+                    var balance = await erc1155Contract.BalanceOf(Web3Unity.Web3.Signer.PublicAddress, tokenId);
+                    if (balance > BigInteger.Zero)
+                    {
+                        var uri = await erc1155Contract.Uri(tokenId.ToString());
+                        var data = await FetchDataWithRetry(uri);
+                        var jsonResponse = JsonConvert.DeserializeObject<TokenModel.Token>(data);
+                        items.Add(new ItemData { itemType = "ERC1155", itemId = tokenId.ToString(), itemName = jsonResponse.name, itemAmount = balance.ToString() });
+                    }
                 }
             }
         }
     }
-    
-    private class BypassCertificateHandler : CertificateHandler
-    {
-        protected override bool ValidateCertificate(byte[] certificateData)
-        {
-            // Always return true to bypass certificate validation
-            return true;
-        }
-    }
-    
-    private async Task<string> FetchDataWithRetry(string uri, int maxRetries = 20, float delayBetweenRetries = 3.0f)
+
+    private async Task<string> FetchDataWithRetry(string uri, int maxRetries = 10, float delayBetweenRetries = 5.0f)
     {
         int attempt = 0;
         while (attempt < maxRetries)
         {
             attempt++;
             Debug.Log($"Attempt {attempt}: Fetching data from {uri}");
-        
             using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
             {
-                #if UNITY_EDITOR
-                    webRequest.certificateHandler = new BypassCertificateHandler();
-                #endif
                 await webRequest.SendWebRequest();
-
                 if (webRequest.result == UnityWebRequest.Result.Success)
                 {
-                    Debug.Log("Web request succeeded!");
                     return webRequest.downloadHandler.text;
                 }
-
-                Debug.Log($"Web request failed (Attempt {attempt}/{maxRetries}): {webRequest.error}");
-                if (attempt < maxRetries)
-                {
-                    Debug.Log($"Retrying in {delayBetweenRetries} seconds...");
-                    await Task.Delay((int)(delayBetweenRetries * 1000));
-                }
-                else
-                {
-                    Debug.LogError("All retry attempts failed.");
-                }
+                await Task.Delay((int)(delayBetweenRetries * 1000));
             }
         }
         return string.Empty;

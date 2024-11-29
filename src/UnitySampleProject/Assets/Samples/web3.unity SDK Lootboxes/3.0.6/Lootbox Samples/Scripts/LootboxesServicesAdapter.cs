@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ChainSafe.Gaming.Lootboxes.Chainlink;
 using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.Web3.Build;
@@ -23,7 +24,7 @@ namespace LootBoxes.Chainlink
                 services.UseChainlinkLootboxService(new LootboxServiceConfig
                 {
                     LootboxAddress = lootboxAddress,
-                    ContractAbi = contractAbi
+                    ContractAbi = contractAbi 
                 });
                 services.AddSingleton<Erc1155MetaDataReader>();
             });
