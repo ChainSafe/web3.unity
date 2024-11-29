@@ -172,7 +172,8 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
 
             // This response is actually very different from all the others since it returns several components
             var response =
-                (List<ParameterOutput>)(await this.contract.Call("getOpenerRequestDetails",
+                (List<ParameterOutput>)(await this.contract.Call(
+                    "getOpenerRequestDetails",
                     new object[] { playerAddress }))[0];
             var address = (string)response[0].Result;
             var unitsToGet = (BigInteger)response[1].Result;
