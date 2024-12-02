@@ -1,7 +1,7 @@
+using System.Collections.Generic;
 using System.Globalization;
 using ChainSafe.Gaming.Lootboxes.Chainlink;
 using Nethereum.Util;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +9,7 @@ public class RewardsManager : MonoBehaviour
 {
     [SerializeField] private GameObject rewardsObjectPrefab;
     [SerializeField] private Transform rewardsContainer;
+    [SerializeField] private LootboxItem lootboxItemPrefab;
     [SerializeField] private Button closeRewardsButton;
 
     private void OnEnable()
@@ -45,35 +46,50 @@ public class RewardsManager : MonoBehaviour
     {
         // Clear previous items
         ClearPreviousRewards();
-
-        // Loop through and spawn rewards based on type
+        var rewardItems = new List<ItemData>();
+        // Add ERC20 rewards
         foreach (var reward in rewards.Erc20Rewards)
         {
             var balance = UnitConversion.Convert.FromWei(reward.AmountRaw);
-            SpawnRewardItem("ERC20", "Tokens", "ERC20", balance.ToString(CultureInfo.InvariantCulture));
+            rewardItems.Add(new ItemData
+            {
+                itemType = "ERC20",
+                itemDescription = "Tokens",
+                itemName = "ERC20",
+                itemAmount = balance.ToString(CultureInfo.InvariantCulture)
+            });
         }
+        // Add ERC721 rewards
         foreach (var reward in rewards.Erc721Rewards)
         {
-            SpawnRewardItem("ERC721", $"#{reward.TokenId.ToString()}", reward.TokenName, "1");
+            rewardItems.Add(new ItemData
+            {
+                itemType = "ERC721",
+                itemDescription = $"#{reward.TokenId}",
+                itemName = reward.TokenName,
+                itemAmount = "1"
+            });
         }
+        // Add ERC1155 rewards
         foreach (var reward in rewards.Erc1155Rewards)
         {
-            SpawnRewardItem("ERC1155", $"#{reward.TokenId.ToString()}", reward.TokenName, reward.Amount.ToString());
+            rewardItems.Add(new ItemData
+            {
+                itemType = "ERC1155",
+                itemDescription = $"#{reward.TokenId}",
+                itemName = reward.TokenName,
+                itemAmount = reward.Amount.ToString()
+            });
         }
+        SpawnRewardItem(rewardItems);
     }
-
-    // Helper method to create and populate a reward item UI element
-    private void SpawnRewardItem(string type, string tokenId, string tokenName, string amount)
+    
+    private async void SpawnRewardItem(List<ItemData> itemDataArray)
     {
-        GameObject newItem = Instantiate(rewardsObjectPrefab, rewardsContainer);
-        TextMeshProUGUI typeText = newItem.transform.Find("TypeText").GetComponent<TextMeshProUGUI>();
-        TextMeshProUGUI idText = newItem.transform.Find("IdText").GetComponent<TextMeshProUGUI>();
-        TextMeshProUGUI nameText = newItem.transform.Find("NameText").GetComponent<TextMeshProUGUI>();
-        TextMeshProUGUI amountText = newItem.transform.Find("AmountText").GetComponent<TextMeshProUGUI>();
-
-        typeText.text = type;
-        idText.text = $"{tokenId}";
-        nameText.text = tokenName;
-        amountText.text = amount;
+        foreach (var item in itemDataArray)
+        {
+            var newItem = Instantiate(lootboxItemPrefab, rewardsContainer);
+            await newItem.Initialize(item);
+        }
     }
 }

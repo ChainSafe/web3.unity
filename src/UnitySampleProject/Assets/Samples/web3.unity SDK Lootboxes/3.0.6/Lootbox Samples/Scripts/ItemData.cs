@@ -7,5 +7,5 @@ public class ItemData
     public string itemName;
     public string itemAmount;
     public string itemDescription;
-    public Image itemImage;
+    public string itemImage;
 }

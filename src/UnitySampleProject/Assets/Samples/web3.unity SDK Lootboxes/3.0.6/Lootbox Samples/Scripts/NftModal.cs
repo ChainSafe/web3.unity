@@ -1,5 +1,7 @@
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 public class NftModal : MonoBehaviour
@@ -23,14 +25,30 @@ public class NftModal : MonoBehaviour
         EventManager.ToggleNftModal -= PopulateData;
     }
 
-    private void PopulateData(ItemData itemData)
+    private async void PopulateData(ItemData model)
     {
-        typeText.text = itemData.itemType;
-        nameText.text = itemData.itemName;
-        idText.text = itemData.itemId;
-        descriptionText.text = itemData.itemDescription;
-        amountText.text = itemData.itemAmount;
-        image = itemData.itemImage;
+        typeText.text = model.itemType;
+        nameText.text = model.itemName;
+        idText.text = model.itemId;
+        descriptionText.text = model.itemDescription;
+        amountText.text = model.itemAmount;
+        image.sprite = await GetSprite(model);
+    }
+    
+    private async Task<Sprite> GetSprite(ItemData model)
+    {
+        Sprite sprite = null;
+        string imageUrl = (string)model.itemImage;
+        var unityWebRequest = UnityWebRequestTexture.GetTexture(imageUrl);
+        await unityWebRequest.SendWebRequest();
+        if (unityWebRequest.error != null)
+        {
+            Debug.LogError("There was an error getting the texture " + unityWebRequest.error);
+            return null;
+        }
+        var myTexture = ((DownloadHandlerTexture)unityWebRequest.downloadHandler).texture;
+        sprite = Sprite.Create(myTexture, new Rect(0, 0, myTexture.width, myTexture.height), Vector2.one * 0.5f);
+        return sprite;
     }
 
     private void CloseNftModal()

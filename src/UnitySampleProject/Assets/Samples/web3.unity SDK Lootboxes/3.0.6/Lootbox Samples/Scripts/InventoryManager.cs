@@ -17,7 +17,8 @@ using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
-    [SerializeField] private GameObject inventoryObjectPrefab, nftModal;
+    [SerializeField] private GameObject nftModal;
+    [SerializeField] private LootboxItem lootboxItemPrefab;
     [SerializeField] private Transform inventoryContainer;
 
     private LootboxServiceConfig lootboxServiceConfig;
@@ -182,7 +183,7 @@ public class InventoryManager : MonoBehaviour
                         var uri = await erc721Contract.TokenURI(tokenId.ToString());
                         var data = await FetchDataWithRetry(uri);
                         var jsonResponse = JsonConvert.DeserializeObject<TokenModel.Token>(data);
-                        items.Add(new ItemData { itemType = "ERC721", itemId = tokenId.ToString(), itemName = jsonResponse.name, itemAmount = "1" });
+                        items.Add(new ItemData { itemType = "ERC721", itemId = tokenId.ToString(), itemName = jsonResponse.name, itemAmount = "1", itemImage = jsonResponse.image});
                     }
                 }
             }
@@ -196,7 +197,7 @@ public class InventoryManager : MonoBehaviour
                         var uri = await erc1155Contract.Uri(tokenId.ToString());
                         var data = await FetchDataWithRetry(uri);
                         var jsonResponse = JsonConvert.DeserializeObject<TokenModel.Token>(data);
-                        items.Add(new ItemData { itemType = "ERC1155", itemId = tokenId.ToString(), itemName = jsonResponse.name, itemAmount = balance.ToString() });
+                        items.Add(new ItemData { itemType = "ERC1155", itemId = tokenId.ToString(), itemName = jsonResponse.name, itemAmount = balance.ToString(), itemImage = jsonResponse.image });
                     }
                 }
             }
@@ -223,7 +224,7 @@ public class InventoryManager : MonoBehaviour
         return string.Empty;
     }
 
-    private void SpawnObjects(ItemData[] itemDataArray)
+    private async void SpawnObjects(ItemData[] itemDataArray)
     {
         foreach (Transform child in inventoryContainer)
         {
@@ -232,25 +233,14 @@ public class InventoryManager : MonoBehaviour
 
         foreach (var item in itemDataArray)
         {
-            var newItem = Instantiate(inventoryObjectPrefab, inventoryContainer);
-            var typeText = newItem.transform.Find("TypeText").GetComponent<TextMeshProUGUI>();
-            var idText = newItem.transform.Find("IdText").GetComponent<TextMeshProUGUI>();
-            var nameText = newItem.transform.Find("NameText").GetComponent<TextMeshProUGUI>();
-            var amountText = newItem.transform.Find("AmountText").GetComponent<TextMeshProUGUI>();
-            var modalButton = newItem.transform.Find("Image").GetComponent<Button>();
-
-            typeText.text = item.itemType;
-            idText.text = $"#{item.itemId}";
-            nameText.text = item.itemName;
-            amountText.text = $"Amount: {item.itemAmount}";
-
-            modalButton.onClick.AddListener(() => OpenNftModal(item));
+            var newItem = Instantiate(lootboxItemPrefab, inventoryContainer);
+            await newItem.Initialize(item);
         }
     }
 
-    private void OpenNftModal(ItemData itemData)
+    // TODO make open on event
+    private void OpenNftModal()
     {
         nftModal.SetActive(true);
-        EventManager.OnToggleNftModal(itemData);
     }
 }

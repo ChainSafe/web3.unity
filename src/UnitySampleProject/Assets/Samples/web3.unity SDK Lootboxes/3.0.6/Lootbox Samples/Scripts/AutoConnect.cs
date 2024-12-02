@@ -11,8 +11,17 @@ public class AutoConnect : MonoBehaviour
 
     private void Web3Initialized((Web3 web3, bool isLightweight) valueTuple)
     {
-        Web3Unity.ConnectionScreen.Open();
-        Destroy(gameObject);
+        if (valueTuple.isLightweight)
+        {
+            Web3Unity.ConnectionScreen.Open();
+            Debug.Log("Web3 connection not found");
+            Destroy(gameObject);
+        }
+        else
+        {
+            Debug.Log("Web3 connection established");
+            Destroy(gameObject);
+        }
     }
 
     public void OnDestroy()
