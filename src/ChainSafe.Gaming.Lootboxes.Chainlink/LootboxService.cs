@@ -12,6 +12,7 @@ using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Debug;
+using ChainSafe.Gaming.Web3.Environment;
 using Nethereum.ABI.FunctionEncoding;
 using Nethereum.Hex.HexTypes;
 using Newtonsoft.Json;
@@ -28,6 +29,7 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
         private readonly IRpcProvider rpcProvider;
         private readonly IAnalyticsClient analyticsClient;
         private readonly IEventManager eventManager;
+        private readonly ILogWriter logWriter;
 
         private Contract contract;
         private Dictionary<string, RewardType> rewardTypeByTokenAddress;
@@ -37,11 +39,13 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
             IContractBuilder contractBuilder,
             IRpcProvider rpcProvider,
             IAnalyticsClient analyticsClient,
-            IEventManager eventManager)
+            IEventManager eventManager,
+            ILogWriter logWriter)
         {
             this.rpcProvider = rpcProvider;
             this.analyticsClient = analyticsClient;
             this.eventManager = eventManager;
+            this.logWriter = logWriter;
             this.config = config;
             this.contractBuilder = contractBuilder;
         }
@@ -52,8 +56,9 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
             IRpcProvider rpcProvider,
             ISigner signer,
             IAnalyticsClient analyticsClient,
-            IEventManager eventManager)
-            : this(config, contractBuilder, rpcProvider, analyticsClient, eventManager)
+            IEventManager eventManager,
+            ILogWriter logWriter)
+            : this(config, contractBuilder, rpcProvider, analyticsClient, eventManager, logWriter)
         {
             this.signer = signer;
         }

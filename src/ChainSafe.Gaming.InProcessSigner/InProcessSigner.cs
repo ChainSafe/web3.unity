@@ -14,7 +14,7 @@ namespace ChainSafe.Gaming.InProcessSigner
     /// </summary>
     public class InProcessSigner : ISigner
     {
-        private readonly IAccountProvider accountProvider;
+        private readonly IAccountProvider? accountProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InProcessSigner"/> class.
@@ -25,13 +25,25 @@ namespace ChainSafe.Gaming.InProcessSigner
             this.accountProvider = accountProvider;
         }
 
-        private IAccount Account => accountProvider.Account;
+        private IAccount? Account => accountProvider?.Account;
 
         /// <summary>
         /// Public Address.
         /// </summary>
         /// <value>Public address of signer.</value>
-        public string PublicAddress => Account.Address;
+        /// <summary>
+        public string PublicAddress
+        {
+            get
+            {
+                if (accountProvider == null || Account == null)
+                {
+                    return string.Empty;
+                }
+
+                return accountProvider.Account.Address;
+            }
+        }
 
         /// <summary>
         /// Implementation of <see cref="ISigner.SignMessage"/> using In Process.
@@ -40,7 +52,7 @@ namespace ChainSafe.Gaming.InProcessSigner
         /// <returns>Hash response of a successfully signed message.</returns>
         public async Task<string> SignMessage(string message)
         {
-            string hash = await Account.AccountSigningService.PersonalSign.SendRequestAsync(Encoding.UTF8.GetBytes(message));
+            string hash = await Account!.AccountSigningService.PersonalSign.SendRequestAsync(Encoding.UTF8.GetBytes(message));
 
             return hash.AssertSignatureValid(message, PublicAddress);
         }
@@ -56,7 +68,7 @@ namespace ChainSafe.Gaming.InProcessSigner
         {
             SerializableTypedData<TStructType> typedData = new SerializableTypedData<TStructType>(domain, message);
 
-            string hash = await Account.AccountSigningService.SignTypedDataV4.SendRequestAsync(JsonConvert.SerializeObject(typedData));
+            string hash = await Account!.AccountSigningService.SignTypedDataV4.SendRequestAsync(JsonConvert.SerializeObject(typedData));
 
             return hash.AssertTypedDataSignatureValid(typedData, PublicAddress);
         }
