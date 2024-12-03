@@ -9,9 +9,6 @@ namespace ChainSafe.Gaming.Evm.Network
 {
     public class Chains
     {
-        [JsonProperty(PropertyName = "chains")]
-        public Chain[] ChainsArray { get; set; }
-
         public class Chain
         {
             [JsonProperty(PropertyName = "name")]
