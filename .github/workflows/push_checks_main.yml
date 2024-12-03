@@ -11,4 +11,5 @@ jobs:
     with:
       base: main
       target: dev
+      skip_ci: false
     secrets: inherit
