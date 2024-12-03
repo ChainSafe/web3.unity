@@ -1,5 +1,7 @@
 using System;
+using ChainSafe.Gaming.Evm.Network;
 using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Core.Chains;
 
 namespace ChainSafe.Gaming.NetCore
 {
@@ -17,10 +19,9 @@ namespace ChainSafe.Gaming.NetCore
         public string ChainId { get; set; }
 
         /// <summary>
-        /// Implementation of <see cref="IChainConfig.Symbol"/>
-        /// Chain currency symbol.
+        /// Implementation of <see cref="IChainConfig.NativeCurrency"/>.
         /// </summary>
-        public string Symbol { get; set; }
+        public INativeCurrency NativeCurrency { get; set; }
 
         /// <summary>
         /// Implementation of <see cref="IChainConfig.Chain"/>

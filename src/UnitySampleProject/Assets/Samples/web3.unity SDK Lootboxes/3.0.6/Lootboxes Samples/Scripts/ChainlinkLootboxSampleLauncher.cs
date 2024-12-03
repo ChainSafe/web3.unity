@@ -12,6 +12,7 @@ using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Unity;
 using Microsoft.Extensions.DependencyInjection;
 using UnityEngine;
+using NativeCurrency = ChainSafe.Gaming.Web3.NativeCurrency;
 
 
 namespace LootBoxes.Chainlink
@@ -38,7 +39,12 @@ namespace LootBoxes.Chainlink
                     ChainId = "31337",
                     Chain = "Anvil",
                     Network = "GoChain Testnet",
-                    Symbol = "GO",
+                    NativeCurrency = new NativeCurrency()
+                    {
+                        Name = "Go Ether",
+                        Symbol = "GO",
+                        Decimals = 18
+                    },
                     Rpc = $"http://127.0.0.1:8545",
                     BlockExplorerUrl = "https://explorer.gochain.io/",
                 }
