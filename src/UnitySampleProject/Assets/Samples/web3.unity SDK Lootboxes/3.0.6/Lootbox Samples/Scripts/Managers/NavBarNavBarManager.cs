@@ -4,7 +4,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Nav bar config for lootboxes.
 /// </summary>
-public class NavBar : MonoBehaviour
+public class NavBarManager : MonoBehaviour
 {
     #region Fields
 
