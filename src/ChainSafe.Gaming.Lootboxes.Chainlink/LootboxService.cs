@@ -267,7 +267,9 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
 
         public async Task Buy(int amount, BigInteger maxPrice)
         {
-            await this.contract.Send("buy", new object[] { amount, maxPrice });
+            var pricePerLootbox = await GetPrice();
+            var priceToSend = pricePerLootbox * amount;
+            await this.contract.Send("buy", new object[] { amount, maxPrice }, new TransactionRequest { Value = new HexBigInteger(priceToSend) });
         }
 
         private void ExtractRewards(RewardsClaimedEvent rewardsClaimedEvent)
