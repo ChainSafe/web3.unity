@@ -4769,7 +4769,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1735919807}
-  - {fileID: 1635011356}
   m_Father: {fileID: 617700169}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -6028,11 +6027,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1163407356}
+  m_Father: {fileID: 1735919807}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 865, y: 447}
+  m_AnchoredPosition: {x: -263, y: -465}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1635011357
@@ -6406,6 +6405,7 @@ RectTransform:
   - {fileID: 916748370}
   - {fileID: 1401827716}
   - {fileID: 1851255633}
+  - {fileID: 1635011356}
   m_Father: {fileID: 1163407356}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -7899,8 +7899,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -437}
-  m_SizeDelta: {x: 736.1547, y: 96.5328}
+  m_AnchoredPosition: {x: 49, y: -465.37}
+  m_SizeDelta: {x: 514.2693, y: 99.266}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1851255634
 MonoBehaviour:
@@ -7922,7 +7922,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Open more lootboxes!
+  m_text: Close Rewards
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
