@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Nav bar config for lootboxes.
+/// </summary>
 public class NavBar : MonoBehaviour
 {
     #region Fields

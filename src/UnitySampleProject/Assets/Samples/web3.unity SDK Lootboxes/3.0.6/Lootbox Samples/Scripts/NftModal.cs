@@ -5,6 +5,9 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
+/// <summary>
+/// Assists with populating data for the NFT modal.
+/// </summary>
 public class NftModal : MonoBehaviour
 {
     #region Fields

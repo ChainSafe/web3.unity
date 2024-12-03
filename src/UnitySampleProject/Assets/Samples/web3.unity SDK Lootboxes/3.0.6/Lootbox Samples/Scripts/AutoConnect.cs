@@ -2,6 +2,9 @@ using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3;
 using UnityEngine;
 
+/// <summary>
+/// Assists with auto connection screen for the lootbox sample for a nicer UX.
+/// </summary>
 public class AutoConnect : MonoBehaviour
 {
     #region Methods
