@@ -10,20 +10,29 @@ using ChainSafe.Gaming.UnityPackage;
 using Microsoft.Extensions.DependencyInjection;
 using Nethereum.Util;
 using Newtonsoft.Json;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.UI;
 
+/// <summary>
+/// Manages lootbox inventory items & object spawning.
+/// </summary>
 public class InventoryManager : MonoBehaviour
 {
+    #region Fields
+
     [SerializeField] private GameObject nftModal;
     [SerializeField] private LootboxItem lootboxItemPrefab;
     [SerializeField] private Transform inventoryContainer;
-
     private LootboxServiceConfig lootboxServiceConfig;
     private ILootboxService lootboxService;
 
+    #endregion
+
+    #region Methods
+
+    /// <summary>
+    /// Subscribes to events when enabled & populates inventory.
+    /// </summary>
     private void OnEnable()
     {
         EventManager.ToggleInventoryItems += SpawnObjects;
@@ -31,24 +40,34 @@ public class InventoryManager : MonoBehaviour
         FetchAndProcessInventory();
     }
 
+    /// <summary>
+    /// Unsubscribes from events when disabled to save on memory.
+    /// </summary>
     private void OnDisable()
     {
         EventManager.ToggleInventoryItems -= SpawnObjects;
         EventManager.ToggleNftModal -= OpenNftModal;
     }
-    
+
+    /// <summary>
+    /// Initialize services for later use.
+    /// </summary>
     private void Awake()
     {
         lootboxServiceConfig = Web3Unity.Web3.ServiceProvider.GetService<LootboxServiceConfig>();
         lootboxService = Web3Unity.Web3.Chainlink().Lootboxes();
     }
 
+    /// <summary>
+    /// Fetches & populates the inventory.
+    /// </summary>
     private async void FetchAndProcessInventory()
     {
         try
         {
             var inventoryResponseJson = await lootboxService.GetInventory();
-            var jsonDeserialized = JsonConvert.DeserializeObject<LootboxItemList>(JsonConvert.SerializeObject(inventoryResponseJson));
+            var jsonDeserialized =
+                JsonConvert.DeserializeObject<LootboxItemList>(JsonConvert.SerializeObject(inventoryResponseJson));
 
             foreach (var outerItem in jsonDeserialized)
             {
@@ -69,6 +88,7 @@ public class InventoryManager : MonoBehaviour
                     }
                 }
             }
+
             await InitializeContracts();
         }
         catch (Exception e)
@@ -77,6 +97,12 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Sorts the data by reward type.
+    /// </summary>
+    /// <param name="rewardType">Lootbox type/rarity/loot per box.</param>
+    /// <param name="item">Data item.</param>
+    /// <param name="innerItem">Inner data item.</param>
     private void HandleRewardType(int rewardType, Item item, List<Item> innerItem)
     {
         switch (rewardType)
@@ -104,6 +130,11 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Sorts through the data in the extraReward object member.
+    /// </summary>
+    /// <param name="innerItem">Inner data item.</param>
+    /// <param name="tokenIds">Token id list to check.</param>
     private void ParseExtraRewards(List<Item> innerItem, List<BigInteger> tokenIds)
     {
         var extraItem = innerItem.Find(x => x.Parameter.Name == "extra");
@@ -126,6 +157,9 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Initializes the contracts used in the lootbox so data can be called.
+    /// </summary>
     private async Task InitializeContracts()
     {
         Debug.Log("Initializing Contracts");
@@ -148,6 +182,12 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Generic method to build contracts.
+    /// </summary>
+    /// <param name="addresses">The list of contract addresses to build.</param>
+    /// <typeparam name="T">The type of contract to built.</typeparam>
+    /// <returns>List of built contracts.</returns>
     private async Task<List<T>> BuildContracts<T>(List<string> addresses) where T : ICustomContract, new()
     {
         var contracts = new List<T>();
@@ -162,6 +202,13 @@ public class InventoryManager : MonoBehaviour
         return contracts;
     }
 
+    /// <summary>
+    /// Generic method to check balances for erc20/721/1155 contracts with token IDs if specified.
+    /// </summary>
+    /// <param name="contracts">Contracts to balance check.</param>
+    /// <param name="tokenIds">TokenIds to balance check (1155).</param>
+    /// <param name="items">List of item data.</param>
+    /// <typeparam name="T">The type of contract to check.</typeparam>
     private async Task CheckBalances<T>(
         List<T> contracts,
         List<BigInteger> tokenIds,
@@ -176,7 +223,8 @@ public class InventoryManager : MonoBehaviour
                 {
                     var ethBalance = UnitConversion.Convert.FromWei(balance);
                     var itemName = await Web3Unity.Web3.Erc20.GetName(contract.ContractAddress);
-                    items.Add(new ItemData { itemType = "ERC20", itemName = itemName, itemAmount = ethBalance.ToString() });
+                    items.Add(new ItemData
+                        { itemType = "ERC20", itemName = itemName, itemAmount = ethBalance.ToString() });
                 }
             }
             else if (contract is Erc721Contract erc721Contract)
@@ -189,7 +237,11 @@ public class InventoryManager : MonoBehaviour
                         var uri = await erc721Contract.TokenURI(tokenId.ToString());
                         var data = await FetchDataWithRetry(uri);
                         var jsonResponse = JsonConvert.DeserializeObject<TokenModel.Token>(data);
-                        items.Add(new ItemData { itemType = "ERC721", itemId = tokenId.ToString(), itemName = jsonResponse.name, itemAmount = "1", itemImage = jsonResponse.image});
+                        items.Add(new ItemData
+                        {
+                            itemType = "ERC721", itemId = tokenId.ToString(), itemName = jsonResponse.name,
+                            itemAmount = "1", itemImage = jsonResponse.image
+                        });
                     }
                 }
             }
@@ -203,13 +255,24 @@ public class InventoryManager : MonoBehaviour
                         var uri = await erc1155Contract.Uri(tokenId.ToString());
                         var data = await FetchDataWithRetry(uri);
                         var jsonResponse = JsonConvert.DeserializeObject<TokenModel.Token>(data);
-                        items.Add(new ItemData { itemType = "ERC1155", itemId = tokenId.ToString(), itemName = jsonResponse.name, itemAmount = balance.ToString(), itemImage = jsonResponse.image });
+                        items.Add(new ItemData
+                        {
+                            itemType = "ERC1155", itemId = tokenId.ToString(), itemName = jsonResponse.name,
+                            itemAmount = balance.ToString(), itemImage = jsonResponse.image
+                        });
                     }
                 }
             }
         }
     }
 
+    /// <summary>
+    /// Fetches metadata with retries to circumvent SSL issues.
+    /// </summary>
+    /// <param name="uri">The URI to call/</param>
+    /// <param name="maxRetries">The maximum amount of retries.</param>
+    /// <param name="delayBetweenRetries">The delat between retries in seconds</param>
+    /// <returns></returns>
     private async Task<string> FetchDataWithRetry(string uri, int maxRetries = 10, float delayBetweenRetries = 5.0f)
     {
         int attempt = 0;
@@ -224,12 +287,18 @@ public class InventoryManager : MonoBehaviour
                 {
                     return webRequest.downloadHandler.text;
                 }
+
                 await Task.Delay((int)(delayBetweenRetries * 1000));
             }
         }
+
         return string.Empty;
     }
 
+    /// <summary>
+    /// Spawns & populates inventory objects.
+    /// </summary>
+    /// <param name="itemDataArray">The item data array to populate objects from.</param>
     private async void SpawnObjects(ItemData[] itemDataArray)
     {
         foreach (Transform child in inventoryContainer)
@@ -243,9 +312,15 @@ public class InventoryManager : MonoBehaviour
             await newItem.Initialize(item);
         }
     }
-    
+
+    /// <summary>
+    /// Opens the NFT model to display data for a single item on a larger canvas.
+    /// </summary>
+    /// <param name="itemData">The item data to display.</param>
     private void OpenNftModal(ItemData itemData)
     {
         nftModal.SetActive(true);
     }
+
+    #endregion
 }

@@ -1,37 +1,56 @@
 using System.Collections.Generic;
 using System.Globalization;
-using System.Threading.Tasks;
 using ChainSafe.Gaming.Lootboxes.Chainlink;
 using ChainSafe.Gaming.UnityPackage;
 using Nethereum.Util;
 using Newtonsoft.Json;
 using Scripts.EVM.Token;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.UI;
 
+/// <summary>
+/// Manages lootbox reward data & object spawning.
+/// </summary>
 public class RewardsManager : MonoBehaviour
 {
+    #region Fields
+
     [SerializeField] private GameObject rewardsObjectPrefab;
     [SerializeField] private Transform rewardsContainer;
     [SerializeField] private LootboxItem lootboxItemPrefab;
     [SerializeField] private Button closeRewardsButton;
 
+    #endregion
+
+    #region Methods
+
+    /// <summary>
+    /// Subscribes to events.
+    /// </summary>
     private void OnEnable()
     {
-        EventManager.ToggleRewardItems += SpawnRewards;
+        EventManager.ToggleRewardItems += ParseRewards;
     }
 
+    /// <summary>
+    /// Unsubscribes from the event to free up memory.
+    /// </summary>
     private void OnDisable()
     {
-        EventManager.ToggleRewardItems -= SpawnRewards;
+        EventManager.ToggleRewardItems -= ParseRewards;
     }
 
+    /// <summary>
+    /// Initializes button & functions.
+    /// </summary>
     private void Awake()
     {
         closeRewardsButton.onClick.AddListener(CloseRewardsMenu);
     }
 
+    /// <summary>
+    /// Closes the rewards menu.
+    /// </summary>
     private void CloseRewardsMenu()
     {
         Debug.Log("Close rewards menu");
@@ -39,6 +58,9 @@ public class RewardsManager : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    /// <summary>
+    /// Clears the previous reward objects to stop duplicates.
+    /// </summary>
     private void ClearPreviousRewards()
     {
         foreach (Transform child in rewardsContainer)
@@ -47,7 +69,11 @@ public class RewardsManager : MonoBehaviour
         }
     }
 
-    private async void SpawnRewards(LootboxRewards rewards)
+    /// <summary>
+    /// Parses reward data and attempts to spawn populated objects.
+    /// </summary>
+    /// <param name="rewards">Reward data to parse..</param>
+    private async void ParseRewards(LootboxRewards rewards)
     {
         // Clear previous items
         ClearPreviousRewards();
@@ -63,6 +89,7 @@ public class RewardsManager : MonoBehaviour
                 itemAmount = balance.ToString(CultureInfo.InvariantCulture)
             });
         }
+
         // Add ERC721 rewards
         foreach (var reward in rewards.Erc721Rewards)
         {
@@ -77,6 +104,7 @@ public class RewardsManager : MonoBehaviour
                 itemAmount = "1"
             });
         }
+
         // Add ERC1155 rewards
         foreach (var reward in rewards.Erc1155Rewards)
         {
@@ -91,9 +119,14 @@ public class RewardsManager : MonoBehaviour
                 itemAmount = reward.Amount.ToString()
             });
         }
+
         SpawnRewardItem(rewardItems);
     }
-    
+
+    /// <summary>
+    /// Spawns reward items.
+    /// </summary>
+    /// <param name="itemDataArray">Item data to populate objects with.</param>
     private async void SpawnRewardItem(List<ItemData> itemDataArray)
     {
         foreach (var item in itemDataArray)
@@ -102,4 +135,6 @@ public class RewardsManager : MonoBehaviour
             await newItem.Initialize(item);
         }
     }
+
+    #endregion
 }

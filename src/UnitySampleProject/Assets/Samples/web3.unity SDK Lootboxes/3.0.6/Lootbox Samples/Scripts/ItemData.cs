@@ -1,5 +1,6 @@
-using UnityEngine.UI;
-
+/// <summary>
+/// Item data class to help with displaying lootbox data.
+/// </summary>
 public class ItemData
 {
     public string itemType;

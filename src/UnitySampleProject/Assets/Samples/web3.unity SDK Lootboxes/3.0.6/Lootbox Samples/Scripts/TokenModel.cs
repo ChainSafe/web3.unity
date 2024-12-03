@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Token model class to help with deserializing uri json responses from nft metadata.
+/// </summary>
 public class TokenModel : MonoBehaviour
 {
     public class Token
