@@ -9,5 +9,7 @@ jobs:
     name: Sync Branches ♾️
     uses: ChainSafe/web3.unity/.github/workflows/sync_branches.yaml@main
     with:
-      branch: dev
+      base: main
+      target: dev
+      skip_ci: false
     secrets: inherit
