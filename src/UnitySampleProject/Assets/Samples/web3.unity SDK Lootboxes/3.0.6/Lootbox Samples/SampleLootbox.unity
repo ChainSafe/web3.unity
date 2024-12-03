@@ -4636,11 +4636,12 @@ MonoBehaviour:
   claimLootboxButton: {fileID: 476186422}
   recoverLootboxesButton: {fileID: 1125877107}
   postToSocialsButton: {fileID: 527117523}
-  buyButton: {fileID: 0}
-  getPriceButton: {fileID: 0}
-  setPriceButton: {fileID: 0}
+  debugButtonsContainer: {fileID: 9256350}
+  buyButton: {fileID: 1880710938}
+  getPriceButton: {fileID: 1723939948}
+  setPriceButton: {fileID: 1064971899}
   claimRewardsAfterButton: {fileID: 960323497}
-  debugLootboxes: 0
+  debugLootboxes: 1
 --- !u!224 &1313049950 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5212087412580531925, guid: cee4edae25d8bec48be2bdf4687fc08f, type: 3}
