@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using TMPro;
@@ -11,6 +12,7 @@ public class LootboxItem : MonoBehaviour
     [SerializeField] private Image lootboxItemImage;
     [SerializeField] private TMP_Text itemType, itemName, itemId, itemAmount;
     [SerializeField] private Button button;
+    private static Dictionary<string, Sprite> _spritesDict = new();
     
     public async Task Initialize(ItemData model)
     {
@@ -27,6 +29,7 @@ public class LootboxItem : MonoBehaviour
         Sprite sprite = null;
         string imageUrl = (string)model.itemImage;
         Debug.Log($"ImageUrl: {imageUrl}");
+        if (_spritesDict.TryGetValue(imageUrl, out sprite)) return sprite;
         var unityWebRequest = UnityWebRequestTexture.GetTexture(model.itemImage);
         await unityWebRequest.SendWebRequest();
         if (unityWebRequest.error != null)
@@ -36,6 +39,7 @@ public class LootboxItem : MonoBehaviour
         }
         var myTexture = ((DownloadHandlerTexture)unityWebRequest.downloadHandler).texture;
         sprite = Sprite.Create(myTexture, new Rect(0, 0, myTexture.width, myTexture.height), Vector2.one * 0.5f);
+        _spritesDict[imageUrl] = sprite;
         return sprite;
     }
     

@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Threading.Tasks;
 using Chainsafe.Gaming.Chainlink;
 using ChainSafe.Gaming.Lootboxes.Chainlink;
@@ -11,20 +13,30 @@ using Web3 = ChainSafe.Gaming.Web3.Web3;
 
 public class LootboxManager : MonoBehaviour
 {
-    [SerializeField] private Button claimLootboxButton, recoverLootboxesButton, postToSocialsButton, claimRewardsAfterButton;
     [SerializeField] private TextMeshProUGUI lootboxAmountText;
     [SerializeField] private TMP_Dropdown lootboxDropdown;
     [SerializeField] private GameObject rewardsMenu;
     private ILootboxService lootboxService;
-    private Dictionary<uint, uint> lootboxBalances = new Dictionary<uint, uint>();
+    private Dictionary<int, int> lootboxBalances = new Dictionary<int, int>();
+    [SerializeField] private Button claimLootboxButton, recoverLootboxesButton, postToSocialsButton;
+    [SerializeField] private GameObject debugButtonsContainer;
+    [SerializeField] private Button buyButton, getPriceButton, setPriceButton, claimRewardsAfterButton;
+    [SerializeField] private bool debugLootboxes;
 
     private void Awake()
     {
-        claimRewardsAfterButton.onClick.AddListener(ClaimRewardsClicked);
         claimLootboxButton.onClick.AddListener(OnClaimLootboxClicked);
         recoverLootboxesButton.onClick.AddListener(RecoverLootboxesClicked);
         postToSocialsButton.onClick.AddListener(PostOnSocialMedia);
         lootboxDropdown.onValueChanged.AddListener(OnDropdownValueChanged);
+        if (debugLootboxes)
+        {
+            debugButtonsContainer.SetActive(true);
+            getPriceButton.onClick.AddListener(GetPrice);
+            setPriceButton.onClick.AddListener(SetPrice);
+            buyButton.onClick.AddListener(Buy);
+            claimRewardsAfterButton.onClick.AddListener(ClaimRewardsClicked);
+        }
         Web3Unity.Web3Initialized += Web3Initialized;
     }
 
@@ -68,7 +80,7 @@ public class LootboxManager : MonoBehaviour
         await lootboxService.ClaimRewards();
     }
 
-    private async Task CheckLootBoxBalance(uint id)
+    private async Task CheckLootBoxBalance(int id)
     {
         var lootBoxAmount = await lootboxService.BalanceOf(Web3Unity.Instance.PublicAddress, id);
         if (lootBoxAmount == 0) return;
@@ -85,7 +97,7 @@ public class LootboxManager : MonoBehaviour
     private void UpdateBalanceText()
     {
         var selectedText = lootboxDropdown.options[lootboxDropdown.value].text;
-        if (uint.TryParse(selectedText.Replace("ID: ", ""), out uint selectedId) && lootboxBalances.TryGetValue(selectedId, out var balance))
+        if (int.TryParse(selectedText.Replace("ID: ", ""), out int selectedId) && lootboxBalances.TryGetValue(selectedId, out var balance))
         {
             claimLootboxButton.interactable = balance > 0;
             lootboxAmountText.text = balance.ToString(); 
@@ -105,9 +117,9 @@ public class LootboxManager : MonoBehaviour
     {
         var selectedText = lootboxDropdown.options[lootboxDropdown.value].text;
         Debug.Log("Claiming Lootbox");
-        if (uint.TryParse(selectedText.Replace("ID: ", ""), out uint selectedId) && lootboxBalances.TryGetValue(selectedId, out uint selectedAmount))
+        if (int.TryParse(selectedText.Replace("ID: ", ""), out int selectedId) && lootboxBalances.TryGetValue(selectedId, out int selectedAmount))
         {
-            uint amountToOpen = 1;
+            int amountToOpen = 1;
             await lootboxService.OpenLootbox(selectedId, amountToOpen);
         }
         Debug.Log("Claiming rewards");
@@ -136,5 +148,28 @@ public class LootboxManager : MonoBehaviour
         string message = "I just opened a lootBox!";
         string url = "https://twitter.com/intent/tweet?text=" + UnityWebRequest.EscapeURL(message);
         Application.OpenURL(url);
+    }
+
+    private async void GetPrice()
+    {
+        var response = await lootboxService.GetPrice();
+        Debug.Log(response);
+    }
+    
+    private async void SetPrice()
+    {
+        // 0.000000001 in eth 18 decimals, setting price low to simulate gas
+        var priceToSet = BigInteger.Parse("1000000000");
+        await lootboxService.SetPrice(priceToSet);
+        Debug.Log($"Price set at: {priceToSet}");
+    }
+    
+    private async void Buy()
+    {
+        var amountToBuy = 1;
+        // 0.0001 in eth 18 decimals,
+        var maxPriceToPay = BigInteger.Parse("100000000000000");
+        await lootboxService.Buy(amountToBuy, maxPriceToPay);
+        Debug.Log($"{amountToBuy} Lootbox purchased");
     }
 }
