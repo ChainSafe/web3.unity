@@ -245,7 +245,7 @@ public class LootboxManager : MonoBehaviour
     private async void GetPrice()
     {
         var response = await lootboxService.GetPrice();
-        Debug.Log(response);
+        Debug.Log($"Lootbox price: {response}");
     }
 
     /// <summary>
@@ -268,7 +268,7 @@ public class LootboxManager : MonoBehaviour
     }
 
     /// <summary>
-    /// DEBUG: Buys a lootbox granted that the price has been set above 0.
+    /// DEBUG: Buys a lootbox granted the price has been set above 0 with setPrice.
     /// </summary>
     private async void Buy()
     {
