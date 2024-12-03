@@ -31,7 +31,7 @@ on:
 jobs:
   setup:
     name: Sync Branches ♾️
-    uses: ChainSafe/web3.unity/.github/workflows/setup.yaml@rob/sync-branches-ci-fix
+    uses: ChainSafe/web3.unity/.github/workflows/setup.yaml@main
     with:
       arguments: "sync -b ${{ github.event.inputs.base || inputs.base }} -t ${{ github.event.inputs.target || inputs.target }} -s ${{ github.event.inputs.skip_ci || inputs.skip_ci }}"
     secrets: inherit
