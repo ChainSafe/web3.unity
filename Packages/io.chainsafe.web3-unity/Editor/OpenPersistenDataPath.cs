@@ -13,7 +13,6 @@ public class OpenPersistentDataPath
         if (!Directory.Exists(path))
         {
             Directory.CreateDirectory(path);
-            return;
         }
 
         // Open the folder in the file explorer
