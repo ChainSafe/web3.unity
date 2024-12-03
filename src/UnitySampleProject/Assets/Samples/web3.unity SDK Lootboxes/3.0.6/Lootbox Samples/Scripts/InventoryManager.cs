@@ -27,11 +27,16 @@ public class InventoryManager : MonoBehaviour
     private void OnEnable()
     {
         EventManager.ToggleInventoryItems += SpawnObjects;
+        EventManager.ToggleNftModal += OpenNftModal;
         FetchAndProcessInventory();
     }
 
-    private void OnDisable() => EventManager.ToggleInventoryItems -= SpawnObjects;
-
+    private void OnDisable()
+    {
+        EventManager.ToggleInventoryItems -= SpawnObjects;
+        EventManager.ToggleNftModal -= OpenNftModal;
+    }
+    
     private void Awake()
     {
         lootboxServiceConfig = Web3Unity.Web3.ServiceProvider.GetService<LootboxServiceConfig>();
@@ -170,7 +175,8 @@ public class InventoryManager : MonoBehaviour
                 if (balance > BigInteger.Zero)
                 {
                     var ethBalance = UnitConversion.Convert.FromWei(balance);
-                    items.Add(new ItemData { itemType = "ERC20", itemName = "ERC20 Token", itemAmount = ethBalance.ToString() });
+                    var itemName = await Web3Unity.Web3.Erc20.GetName(contract.ContractAddress);
+                    items.Add(new ItemData { itemType = "ERC20", itemName = itemName, itemAmount = ethBalance.ToString() });
                 }
             }
             else if (contract is Erc721Contract erc721Contract)
@@ -237,9 +243,8 @@ public class InventoryManager : MonoBehaviour
             await newItem.Initialize(item);
         }
     }
-
-    // TODO make open on event
-    private void OpenNftModal()
+    
+    private void OpenNftModal(ItemData itemData)
     {
         nftModal.SetActive(true);
     }

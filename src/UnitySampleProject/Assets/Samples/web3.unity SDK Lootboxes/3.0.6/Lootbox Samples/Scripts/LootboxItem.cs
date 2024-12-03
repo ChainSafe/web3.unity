@@ -9,14 +9,15 @@ public class LootboxItem : MonoBehaviour
 {
     
     [SerializeField] private Image lootboxItemImage;
-    [SerializeField] [CanBeNull] private TMP_Text type, itemId, itemAmount;
+    [SerializeField] private TMP_Text itemType, itemName, itemId, itemAmount;
     [SerializeField] private Button button;
     
     public async Task Initialize(ItemData model)
     {
-        lootboxItemImage.sprite = await GetSprite(model);
-        type.text = model.itemType;
-        itemId.text = $"# {model.itemId}";
+        if (model.itemImage != null) lootboxItemImage.sprite = await GetSprite(model);
+        itemType.text = model.itemType;
+        itemName.text = model.itemName ?? "";
+        itemId.text = model.itemId == null ? "" : $"# {model.itemId}";
         itemAmount.text = $"Amount: {model.itemAmount}";
         button.onClick.AddListener(() => OpenNftModal(model));
     }

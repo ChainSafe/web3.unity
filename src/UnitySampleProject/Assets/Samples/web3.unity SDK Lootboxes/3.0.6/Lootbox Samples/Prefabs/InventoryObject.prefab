@@ -54,7 +54,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lootboxItemImage: {fileID: 3804902640718805182}
-  type: {fileID: 8157232004604333108}
+  itemType: {fileID: 8157232004604333108}
+  itemName: {fileID: 8278089570198722799}
   itemId: {fileID: 8614663266553968753}
   itemAmount: {fileID: 7338867359515306639}
   button: {fileID: 6887502960133551929}
