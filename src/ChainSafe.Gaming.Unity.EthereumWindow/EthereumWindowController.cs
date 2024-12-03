@@ -10,6 +10,7 @@ using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.Client.RpcMessages;
 using Newtonsoft.Json;
 using UnityEngine;
+using NativeCurrency = ChainSafe.Gaming.Unity.EthereumWindow.Dto.NativeCurrency;
 
 namespace ChainSafe.Gaming.Unity.EthereumWindow
 {
@@ -142,7 +143,7 @@ namespace ChainSafe.Gaming.Unity.EthereumWindow
                         Symbol = nativeCurrency.Symbol,
                         Decimals = (int)nativeCurrency.Decimals,
                     }
-                    : new NativeCurrency(chainConfig.Symbol),
+                    : new NativeCurrency(chainConfig.NativeCurrency.Name, chainConfig.NativeCurrency.Symbol, chainConfig.NativeCurrency.Decimals),
             };
         }
 
