@@ -12,7 +12,7 @@ public class OpenPersistentDataPath
         // Check if the directory exists
         if (!Directory.Exists(path))
         {
-            Debug.LogWarning("Persistent Data Path directory does not exist.");
+            Directory.CreateDirectory(path);
             return;
         }
 
