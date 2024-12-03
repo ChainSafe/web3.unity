@@ -107,7 +107,8 @@ public class LootboxManager : MonoBehaviour
         Debug.Log("Claiming Lootbox");
         if (uint.TryParse(selectedText.Replace("ID: ", ""), out uint selectedId) && lootboxBalances.TryGetValue(selectedId, out uint selectedAmount))
         {
-            await lootboxService.OpenLootbox(selectedId);
+            uint amountToOpen = 1;
+            await lootboxService.OpenLootbox(selectedId, amountToOpen);
         }
         Debug.Log("Claiming rewards");
         await new WaitForSeconds(30);

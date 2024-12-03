@@ -108,7 +108,7 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
             await eventManager.Unsubscribe<RewardsClaimedEvent>(ExtractRewards, contractAddress);
         }
 
-        public async Task<List<uint>> GetLootboxTypes()
+        public async Task<List<int>> GetLootboxTypes()
         {
             var response = await this.contract.Call("getLootboxTypes");
             var bigIntTypes = (List<BigInteger>)response[0];
@@ -119,19 +119,19 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
                     "Internal Error. Lootbox type is greater than int.MaxValue.");
             }
 
-            var types = bigIntTypes.Select(bigInt => (uint)bigInt).ToList();
+            var types = bigIntTypes.Select(bigInt => (int)bigInt).ToList();
 
             return types;
         }
 
-        public async Task<uint> BalanceOf(uint lootboxType)
+        public async Task<int> BalanceOf(int lootboxType)
         {
             var playerAddress = this.GetCurrentPlayerAddress();
 
             return await this.BalanceOf(playerAddress, lootboxType);
         }
 
-        public async Task<uint> BalanceOf(string account, uint lootboxType)
+        public async Task<int> BalanceOf(string account, int lootboxType)
         {
             var response = await this.contract.Call(
                 "balanceOf",
@@ -144,12 +144,12 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
                     "Internal Error. Balance is greater than int.MaxValue.");
             }
 
-            var balance = (uint)bigIntBalance;
+            var balance = (int)bigIntBalance;
 
             return balance;
         }
 
-        public async Task<BigInteger> CalculateOpenPrice(uint lootboxType, uint lootboxCount)
+        public async Task<BigInteger> CalculateOpenPrice(int lootboxType, int lootboxCount)
         {
             var rewardCount = lootboxType * lootboxCount;
             var rawGasPrice = (await this.rpcProvider.GetGasPrice()).AssertNotNull("gasPrice").Value;
@@ -171,7 +171,7 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
             return requests > 0;
         }
 
-        public async Task<uint> OpeningLootboxType()
+        public async Task<int> OpeningLootboxType()
         {
             var playerAddress = this.GetCurrentPlayerAddress();
 
@@ -197,10 +197,10 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
                 throw new Web3Exception("Internal Error. Units to get is greater than int.MaxValue.");
             }
 
-            return (uint)lootboxType;
+            return (int)lootboxType;
         }
 
-        public async Task OpenLootbox(uint lootboxType, uint lootboxCount = 1)
+        public async Task OpenLootbox(int lootboxType, int lootboxCount = 1)
         {
             var rewardCount = lootboxType * lootboxCount;
             var openPrice = await this.CalculateOpenPrice(lootboxCount, lootboxCount);
@@ -252,6 +252,22 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
         public async Task ClaimRewards(string account)
         {
             await this.contract.Send("claimRewards", new object[] { account });
+        }
+
+        public async Task<BigInteger> GetPrice()
+        {
+            var response = await this.contract.Call("getPrice", new object[] { });
+            return BigInteger.Parse(response[0].ToString());
+        }
+
+        public async Task SetPrice(BigInteger price)
+        {
+            await this.contract.Send("setPrice", new object[] { price });
+        }
+
+        public async Task Buy(int amount, BigInteger maxPrice)
+        {
+            await this.contract.Send("buy", new object[] { amount, maxPrice });
         }
 
         private void ExtractRewards(RewardsClaimedEvent rewardsClaimedEvent)
