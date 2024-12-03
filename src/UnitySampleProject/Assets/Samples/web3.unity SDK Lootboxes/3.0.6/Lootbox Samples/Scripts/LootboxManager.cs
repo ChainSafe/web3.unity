@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
@@ -20,12 +21,14 @@ public class LootboxManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI lootboxAmountText;
     [SerializeField] private TMP_Dropdown lootboxDropdown;
     [SerializeField] private GameObject rewardsMenu;
-    private ILootboxService lootboxService;
-    private Dictionary<int, int> lootboxBalances = new Dictionary<int, int>();
     [SerializeField] private Button claimLootboxButton, recoverLootboxesButton, postToSocialsButton;
     [SerializeField] private GameObject debugButtonsContainer;
     [SerializeField] private Button buyButton, getPriceButton, setPriceButton, claimRewardsAfterButton;
+    [SerializeField] private TMP_InputField setPriceInput;
     [SerializeField] private bool debugLootboxes;
+    private ILootboxService lootboxService;
+    private Dictionary<int, int> lootboxBalances = new Dictionary<int, int>();
+    private LootboxRewards tempRewards = new LootboxRewards();
 
     #endregion
 
@@ -176,23 +179,52 @@ public class LootboxManager : MonoBehaviour
         await lootboxService.ClaimRewards();
     }
 
+    /// <summary>
+    /// Opens the rewards menu and populates data.
+    /// </summary>
+    /// <param name="rewards">Reward data to populate frome.</param>
     private void OpenRewardsMenu(LootboxRewards rewards)
     {
         rewardsMenu.SetActive(true);
         EventManager.OnToggleRewardItems(rewards);
+        tempRewards = rewards;
     }
 
-    private void PostOnSocialMedia()
+    /// <summary>
+    /// Posts about rewards on social media.
+    /// </summary>
+    private async void PostOnSocialMedia()
     {
-        string message = "I just opened a lootBox!";
-        string url = "https://twitter.com/intent/tweet?text=" + UnityWebRequest.EscapeURL(message);
+        string message;
+        if (tempRewards.Erc20Rewards.Count > 0)
+        {
+            var erc20Name = await Web3Unity.Web3.Erc20.GetName(tempRewards.Erc20Rewards[0].ContractAddress);
+            decimal tokenAmount = (decimal)tempRewards.Erc20Rewards[0].AmountRaw / (decimal)Math.Pow(10, 18);
+            message = $"I just opened a lootBox and got {tokenAmount} {erc20Name} Tokens!";
+        }
+        else if (tempRewards.Erc721Rewards.Count > 0)
+        {
+            message = $"I just opened a lootBox and got {tempRewards.Erc721Rewards[0].TokenName} Tokens!";
+        }
+        else if (tempRewards.Erc1155Rewards.Count > 0)
+        {
+            message =
+                $"I just opened a lootBox and got {tempRewards.Erc1155Rewards[0].TokenName} # {tempRewards.Erc1155Rewards[0].TokenId} Tokens!";
+        }
+        else
+        {
+            message = "I just opened a lootBox and got some rewards!";
+        }
+        // URL-encode the message for social media sharing
+        string encodedMessage = UnityWebRequest.EscapeURL(message);
+        string url = "https://twitter.com/intent/tweet?text=" + encodedMessage;
         Application.OpenURL(url);
     }
 
     #region Debug Methods
 
     /// <summary>
-    /// DEBUG: Fires when rcover lootboxes is clicked.
+    /// DEBUG: Fires when recover lootboxes is clicked.
     /// </summary>
     private async void RecoverLootboxesClicked()
     {
@@ -217,14 +249,22 @@ public class LootboxManager : MonoBehaviour
     }
 
     /// <summary>
-    /// DEBUG: - LOOTBOX DEPLOYER ONLY - Sets the price to open a lootbox.
+    /// DEBUG: - LOOTBOX DEPLOYER ONLY - Sets the price in ETH to open a lootbox.
     /// </summary>
     private async void SetPrice()
     {
-        // 0.000000001 in eth 18 decimals, setting price low to simulate gas
-        var priceToSet = BigInteger.Parse("1000000000");
-        await lootboxService.SetPrice(priceToSet);
-        Debug.Log($"Price set at: {priceToSet}");
+        string priceToSetInput = setPriceInput.text;
+        if (decimal.TryParse(priceToSetInput, out decimal priceInEth))
+        {
+            // Convert the price from ETH to wei for easier input
+            BigInteger priceToSet = new BigInteger(priceInEth * (decimal)Math.Pow(10, 18));
+            await lootboxService.SetPrice(priceToSet);
+            Debug.Log($"Price set at: {priceToSet} wei (equivalent to {priceInEth} ETH)");
+        }
+        else
+        {
+            Debug.LogError("Invalid input. Please enter a valid price in ETH.");
+        }
     }
 
     /// <summary>
