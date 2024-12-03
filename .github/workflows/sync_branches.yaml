@@ -1,39 +1,37 @@
-name: Sync Branches
+name: Sync Branches ♾️
 
 on:
   workflow_call:
     inputs:
-      branch:
+      base:
         required: true
         type: string
+      target:
+        required: true
+        type: string
+      skip_ci:
+        type: boolean
+        default: true
   workflow_dispatch:
     inputs:
-      branch:
+      base:
         required: true
-        description: "Branch to Sync"
+        description: "Base branch to Sync"
         type: string
+      target:
+        required: true
+        description: "Target branch to Sync"
+        type: string
+      skip_ci:
+        required: true
+        description: "Should push skip CI"
+        type: boolean
+        default: true
 
 jobs:
   setup:
     name: Sync Branches ♾️
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref || github.ref_name }}
-          lfs: true
-          ssh-key: ${{ secrets.DEPLOY_KEY }}
-      - name: Sync Branches
-        run: |
-          git config user.email $git_email
-          git config user.name $git_actor
-          git fetch origin ${{ github.event.inputs.branch }}
-          git checkout ${{ github.event.inputs.branch }}
-          git pull
-          git merge main --allow-unrelated-histories
-          git push
-        shell: bash
-        env:
-          git_email: "${{ github.actor }}@users.noreply.github.com"
-          git_actor: "${{ github.actor }}"
+    uses: ChainSafe/web3.unity/.github/workflows/setup.yaml@rob/sync-branches-ci-fix
+    with:
+      arguments: "sync -b ${{ github.event.inputs.base || inputs.base }} -t ${{ github.event.inputs.target || inputs.target }} -s ${{ github.event.inputs.skip_ci || inputs.skip_ci }}"
+    secrets: inherit
