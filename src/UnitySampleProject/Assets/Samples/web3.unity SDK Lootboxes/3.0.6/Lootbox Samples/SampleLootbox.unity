@@ -7185,7 +7185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c73b0a0dd309a546843eca313ee76c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forceEventPolling: 0
+  forceEventPolling: 1
   pollingInterval: 10
 --- !u!1 &1768195759
 GameObject:
