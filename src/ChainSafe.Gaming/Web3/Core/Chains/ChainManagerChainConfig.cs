@@ -13,7 +13,7 @@ namespace ChainSafe.Gaming.Web3.Core.Chains
 
         public string ChainId => CurrentConfig.ChainId;
 
-        public string Symbol => CurrentConfig.Symbol;
+        public INativeCurrency NativeCurrency => CurrentConfig.NativeCurrency;
 
         public string Chain => CurrentConfig.Chain;
 

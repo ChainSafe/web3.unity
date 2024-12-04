@@ -83,7 +83,7 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
             customTokenDisplay.SetActive(false);
         }
         // Set native token
-        nativeTokenSymbolText.text = Web3Unity.Web3.ChainConfig.Symbol.ToUpper();
+        nativeTokenSymbolText.text = Web3Unity.Web3.ChainConfig.NativeCurrency.Symbol.ToUpper();
         var hexBalance = await Web3Unity.Web3.RpcProvider.GetBalance(Web3Unity.Web3.Signer.PublicAddress);
         var weiBalance = BigInteger.Parse(hexBalance.ToString());
         decimal ethBalance = (decimal)weiBalance / (decimal)Math.Pow(10, 18);

@@ -81,7 +81,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
             if (multiCall == null)
             {
                 throw new Web3Exception(
-                    $"Can't execute {nameof(GetOwnerOfBatch)}. No MultiCall component was provided during construction.");
+                    $"Can't execute {nameof(GetOwnerOfBatch)}. No MultiCall component was provided during construction. If you are using Web3Unity component, make sure to add the Multicall service adapter to the same game object.");
             }
 
             var calls = tokenIds
