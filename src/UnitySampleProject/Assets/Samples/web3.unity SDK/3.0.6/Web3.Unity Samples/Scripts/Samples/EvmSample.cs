@@ -15,7 +15,7 @@ using Nethereum.RPC.Eth.DTOs;
 using Newtonsoft.Json;
 using Scripts.EVM.Token;
 using UnityEngine;
-
+#pragma warning disable 0414
 public class EvmSample : MonoBehaviour, ISample
 {
     #region Fields
