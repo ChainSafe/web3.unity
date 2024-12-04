@@ -27,7 +27,7 @@ public class NavBarManager : MonoBehaviour
     /// <summary>
     /// Assists with opening and closing menus.
     /// </summary>
-    /// <param name="menuToOpen"></param>
+    /// <param name="menuToOpen">The menu object to open.</param>
     private void OpenMenu(GameObject menuToOpen)
     {
         CloseAllMenus();

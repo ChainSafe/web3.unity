@@ -186,7 +186,7 @@ public class InventoryManager : MonoBehaviour
     /// Generic method to build contracts.
     /// </summary>
     /// <param name="addresses">The list of contract addresses to build.</param>
-    /// <typeparam name="T">The type of contract to built.</typeparam>
+    /// <typeparam name="T">The type of contract to be built.</typeparam>
     /// <returns>List of built contracts.</returns>
     private async Task<List<T>> BuildContracts<T>(List<string> addresses) where T : ICustomContract, new()
     {
@@ -269,9 +269,9 @@ public class InventoryManager : MonoBehaviour
     /// <summary>
     /// Fetches metadata with retries to circumvent SSL issues.
     /// </summary>
-    /// <param name="uri">The URI to call/</param>
+    /// <param name="uri">The URI to call./</param>
     /// <param name="maxRetries">The maximum amount of retries.</param>
-    /// <param name="delayBetweenRetries">The delat between retries in seconds</param>
+    /// <param name="delayBetweenRetries">The delay between retries in seconds.</param>
     /// <returns></returns>
     private async Task<string> FetchDataWithRetry(string uri, int maxRetries = 10, float delayBetweenRetries = 5.0f)
     {

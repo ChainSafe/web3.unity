@@ -102,7 +102,7 @@ public class LootboxManager : MonoBehaviour
 
     /// <summary>
     /// Executes when the claim rewards button is clicked.
-    /// opens the rewards menu and make a write call to claim rewards.
+    /// Opens the rewards menu and make a write call to claim rewards.
     /// </summary>
     private async void ClaimRewardsClicked()
     {
@@ -182,7 +182,7 @@ public class LootboxManager : MonoBehaviour
     /// <summary>
     /// Opens the rewards menu and populates data.
     /// </summary>
-    /// <param name="rewards">Reward data to populate frome.</param>
+    /// <param name="rewards">Reward data to populate from.</param>
     private void OpenRewardsMenu(LootboxRewards rewards)
     {
         rewardsMenu.SetActive(true);

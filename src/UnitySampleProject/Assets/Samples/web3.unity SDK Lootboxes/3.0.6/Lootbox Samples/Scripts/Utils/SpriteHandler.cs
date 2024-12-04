@@ -13,7 +13,7 @@ public class SpriteHandler : MonoBehaviour
     /// <summary>
     /// Gets the image sprite from the model URI.
     /// </summary>
-    /// <param name="model">Item data model</param>
+    /// <param name="model">Item data model.</param>
     /// <returns>A 2D sprite.</returns>
     public static async Task<Sprite> GetSprite(ItemData model)
     {

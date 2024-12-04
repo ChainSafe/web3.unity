@@ -72,7 +72,7 @@ public class RewardsManager : MonoBehaviour
     /// <summary>
     /// Parses reward data and attempts to spawn populated objects.
     /// </summary>
-    /// <param name="rewards">Reward data to parse..</param>
+    /// <param name="rewards">Reward data to parse.</param>
     private async void ParseRewards(LootboxRewards rewards)
     {
         // Clear previous items
