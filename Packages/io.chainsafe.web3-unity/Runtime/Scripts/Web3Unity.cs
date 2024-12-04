@@ -285,7 +285,7 @@ namespace ChainSafe.Gaming.UnityPackage
         public string SignMessageWithPrivateKey(string privateKey, string message)
         {
             var signer = new EthereumMessageSigner();
-            var signature = signer.HashAndSign(message, privateKey);
+            var signature = signer.Sign(Encoding.UTF8.GetBytes(message), privateKey);
             return signature;
         }
 
