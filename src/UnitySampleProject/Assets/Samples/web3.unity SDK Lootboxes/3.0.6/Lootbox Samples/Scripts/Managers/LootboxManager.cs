@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Chainsafe.Gaming.Chainlink;
 using ChainSafe.Gaming.Lootboxes.Chainlink;
 using ChainSafe.Gaming.UnityPackage;
+using Microsoft.Extensions.DependencyInjection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -26,8 +27,9 @@ public class LootboxManager : MonoBehaviour
     [SerializeField] private Button buyButton, getPriceButton, setPriceButton, claimRewardsAfterButton;
     [SerializeField] private TMP_InputField setPriceInput;
     [SerializeField] private bool debugLootboxes;
-    private ILootboxService lootboxService;
     private Dictionary<int, int> lootboxBalances = new Dictionary<int, int>();
+    private ILootboxService lootboxService;
+    private LootboxServiceConfig lootboxServiceConfig;
     private LootboxRewards tempRewards;
 
     #endregion
@@ -51,7 +53,6 @@ public class LootboxManager : MonoBehaviour
             buyButton.onClick.AddListener(Buy);
             claimRewardsAfterButton.onClick.AddListener(ClaimRewardsClicked);
         }
-
         Web3Unity.Web3Initialized += Web3Initialized;
     }
 
@@ -62,6 +63,7 @@ public class LootboxManager : MonoBehaviour
     private void Web3Initialized((Web3 web3, bool isLightweight) valueTuple)
     {
         if (valueTuple.isLightweight) return;
+        lootboxServiceConfig = Web3Unity.Web3.ServiceProvider.GetService<LootboxServiceConfig>();
         lootboxService = Web3Unity.Web3.Chainlink().Lootboxes();
         lootboxService.OnRewardsClaimed += OpenRewardsMenu;
         GetLootboxTypes();
@@ -116,7 +118,15 @@ public class LootboxManager : MonoBehaviour
     /// <param name="id">The lootbox id/type to check.</param>
     private async Task CheckLootBoxBalance(int id)
     {
-        var lootBoxAmount = await lootboxService.BalanceOf(Web3Unity.Instance.PublicAddress, id);
+        int lootBoxAmount;
+        if (lootboxServiceConfig.LootboxAccount != String.Empty)
+        {
+            lootBoxAmount = await lootboxService.BalanceOf(lootboxServiceConfig.LootboxAddress, id);
+        }
+        else
+        {
+            lootBoxAmount = await lootboxService.BalanceOf(Web3Unity.Instance.PublicAddress, id);
+        }
         if (lootBoxAmount == 0) return;
         Debug.Log($"LootBox Balance for ID {id} = {lootBoxAmount}");
         lootboxBalances[id] = lootBoxAmount;
