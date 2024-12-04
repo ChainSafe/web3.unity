@@ -20,7 +20,7 @@ public class LootboxManager : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI lootboxAmountText;
     [SerializeField] private TMP_Dropdown lootboxDropdown;
-    [SerializeField] private GameObject rewardsMenu;
+    [SerializeField] private GameObject rewardsMenu, loadingMenu;
     [SerializeField] private Button claimLootboxButton, recoverLootboxesButton, postToSocialsButton;
     [SerializeField] private GameObject debugButtonsContainer;
     [SerializeField] private Button buyButton, getPriceButton, setPriceButton, claimRewardsAfterButton;
@@ -28,7 +28,7 @@ public class LootboxManager : MonoBehaviour
     [SerializeField] private bool debugLootboxes;
     private ILootboxService lootboxService;
     private Dictionary<int, int> lootboxBalances = new Dictionary<int, int>();
-    private LootboxRewards tempRewards = new LootboxRewards();
+    private LootboxRewards tempRewards;
 
     #endregion
 
@@ -165,18 +165,28 @@ public class LootboxManager : MonoBehaviour
     /// </summary>
     private async Task ClaimLootbox()
     {
-        var selectedText = lootboxDropdown.options[lootboxDropdown.value].text;
-        Debug.Log("Claiming Lootbox");
-        if (int.TryParse(selectedText.Replace("ID: ", ""), out int selectedId) &&
-            lootboxBalances.TryGetValue(selectedId, out int selectedAmount))
+        try
         {
-            int amountToOpen = 1;
-            await lootboxService.OpenLootbox(selectedId, amountToOpen);
+            ToggleLoadingMenu();
+            var selectedText = lootboxDropdown.options[lootboxDropdown.value].text;
+            Debug.Log("Claiming Lootbox");
+            if (int.TryParse(selectedText.Replace("ID: ", ""), out int selectedId) &&
+                lootboxBalances.TryGetValue(selectedId, out int selectedAmount))
+            {
+                int amountToOpen = 1;
+                await lootboxService.OpenLootbox(selectedId, amountToOpen);
+            }
+            Debug.Log("Claiming rewards");
+            await new WaitForSeconds(30);
+            await lootboxService.ClaimRewards();
+            ToggleLoadingMenu();
         }
-
-        Debug.Log("Claiming rewards");
-        await new WaitForSeconds(30);
-        await lootboxService.ClaimRewards();
+        catch (Exception e)
+        {
+            ToggleLoadingMenu();
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
     /// <summary>
@@ -196,29 +206,37 @@ public class LootboxManager : MonoBehaviour
     private async void PostOnSocialMedia()
     {
         string message;
-        if (tempRewards.Erc20Rewards.Count > 0)
+        if (tempRewards?.Erc20Rewards.Count > 0)
         {
             var erc20Name = await Web3Unity.Web3.Erc20.GetName(tempRewards.Erc20Rewards[0].ContractAddress);
             decimal tokenAmount = (decimal)tempRewards.Erc20Rewards[0].AmountRaw / (decimal)Math.Pow(10, 18);
-            message = $"I just opened a lootBox and got {tokenAmount} {erc20Name} Tokens!";
+            message = $"I just opened a Lootbox and got {tokenAmount} {erc20Name} Tokens!";
         }
-        else if (tempRewards.Erc721Rewards.Count > 0)
+        else if (tempRewards?.Erc721Rewards.Count > 0)
         {
-            message = $"I just opened a lootBox and got {tempRewards.Erc721Rewards[0].TokenName} Tokens!";
+            message = $"I just opened a Lootbox and got {tempRewards.Erc721Rewards[0].TokenName} Tokens!";
         }
-        else if (tempRewards.Erc1155Rewards.Count > 0)
+        else if (tempRewards?.Erc1155Rewards.Count > 0)
         {
             message =
-                $"I just opened a lootBox and got {tempRewards.Erc1155Rewards[0].TokenName} # {tempRewards.Erc1155Rewards[0].TokenId} Tokens!";
+                $"I just opened a Lootbox and got {tempRewards.Erc1155Rewards[0].TokenName} # {tempRewards.Erc1155Rewards[0].TokenId} Tokens!";
         }
         else
         {
-            message = "I just opened a lootBox and got some rewards!";
+            message = "I just opened a Lootbox and got some awesome rewards!";
         }
         // URL-encode the message for social media sharing
         string encodedMessage = UnityWebRequest.EscapeURL(message);
         string url = "https://twitter.com/intent/tweet?text=" + encodedMessage;
         Application.OpenURL(url);
+    }
+
+    /// <summary>
+    /// Toggles the loading menu.
+    /// </summary>
+    private void ToggleLoadingMenu()
+    {
+        loadingMenu.SetActive(!loadingMenu.activeSelf);
     }
 
     #region Debug Methods

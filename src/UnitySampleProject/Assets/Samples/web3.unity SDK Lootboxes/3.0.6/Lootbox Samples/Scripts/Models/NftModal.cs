@@ -31,7 +31,7 @@ public class NftModal : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
-        EventManager.ToggleNftModal += PopulateData;
+        EventManager.ToggleNftData += PopulateData;
     }
 
     /// <summary>
@@ -39,21 +39,21 @@ public class NftModal : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
-        EventManager.ToggleNftModal -= PopulateData;
+        EventManager.ToggleNftData -= PopulateData;
     }
 
     /// <summary>
     /// Populates & displays object data.
     /// </summary>
     /// <param name="model"></param>
-    private async void PopulateData(ItemData model)
+    public async void PopulateData(ItemData model)
     {
-        typeText.text = model.itemType;
-        nameText.text = model.itemName;
-        idText.text = model.itemId;
-        descriptionText.text = model.itemDescription;
-        amountText.text = model.itemAmount;
-        image.sprite = await GetSprite(model);
+        typeText.text = $"Type: {model.itemType}";
+        nameText.text = $"Name: {model.itemName}";
+        idText.text = model.itemId == null ? "" : $"#{model.itemId}";
+        amountText.text = $"Amount: {model.itemAmount}";
+        descriptionText.text = model.itemDescription ?? "";
+        if (model.itemImage != null) image.sprite = await GetSprite(model);
     }
 
     /// <summary>

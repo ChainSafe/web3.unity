@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -14,7 +13,6 @@ public class LootboxItem : MonoBehaviour
     [SerializeField] private Image lootboxItemImage;
     [SerializeField] private TMP_Text itemType, itemName, itemId, itemAmount;
     [SerializeField] private Button button;
-    private static Dictionary<string, Sprite> _spritesDict = new();
 
     #endregion
 
@@ -26,12 +24,12 @@ public class LootboxItem : MonoBehaviour
     /// <param name="model">ItemData model to initialize from.</param>
     public async Task Initialize(ItemData model)
     {
-        if (model.itemImage != null) lootboxItemImage.sprite = await GetSprite(model);
         itemType.text = model.itemType;
         itemName.text = model.itemName ?? "";
-        itemId.text = model.itemId == null ? "" : $"# {model.itemId}";
+        itemId.text = model.itemId == null ? "" : $"#{model.itemId}";
         itemAmount.text = $"Amount: {model.itemAmount}";
         button.onClick.AddListener(() => OpenNftModal(model));
+        if (model.itemImage != null) lootboxItemImage.sprite = await GetSprite(model);
     }
 
     /// <summary>

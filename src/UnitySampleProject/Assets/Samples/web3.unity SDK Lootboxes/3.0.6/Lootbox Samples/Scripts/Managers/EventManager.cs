@@ -12,6 +12,7 @@ public class EventManager : MonoBehaviour
     public static event Action<ItemData[]> ToggleInventoryItems;
     public static event Action<LootboxRewards> ToggleRewardItems;
     public static event Action<ItemData> ToggleNftModal;
+    public static event Action<ItemData> ToggleNftData;
 
     #endregion
 
@@ -38,10 +39,19 @@ public class EventManager : MonoBehaviour
     /// <summary>
     /// Toggles the NFT modal with item data.
     /// </summary>
-    /// <param name="items">Selected NFT item data</param>
+    /// <param name="items">Selected NFT item data.</param>
     public static void OnToggleNftModal(ItemData items)
     {
         ToggleNftModal?.Invoke(items);
+    }
+
+    /// <summary>
+    /// Toggles nft modal data.
+    /// </summary>
+    /// <param name="items">Selected NFT item data</param>
+    public static void OnToggleNftData(ItemData items)
+    {
+        ToggleNftData?.Invoke(items);
     }
 
     #endregion

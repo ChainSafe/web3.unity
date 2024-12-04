@@ -36,7 +36,7 @@ public class InventoryManager : MonoBehaviour
     private void OnEnable()
     {
         EventManager.ToggleInventoryItems += SpawnObjects;
-        EventManager.ToggleNftModal += OpenNftModal;
+        EventManager.ToggleNftModal += ToggleNftModal;
         FetchAndProcessInventory();
     }
 
@@ -46,7 +46,7 @@ public class InventoryManager : MonoBehaviour
     private void OnDisable()
     {
         EventManager.ToggleInventoryItems -= SpawnObjects;
-        EventManager.ToggleNftModal -= OpenNftModal;
+        EventManager.ToggleNftModal -= ToggleNftModal;
     }
 
     /// <summary>
@@ -314,12 +314,12 @@ public class InventoryManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Opens the NFT model to display data for a single item on a larger canvas.
+    /// Toggles the NFT model to display data for a single item on a larger canvas.
     /// </summary>
-    /// <param name="itemData">The item data to display.</param>
-    private void OpenNftModal(ItemData itemData)
+    private void ToggleNftModal(ItemData itemData)
     {
-        nftModal.SetActive(true);
+        nftModal.SetActive(!nftModal.activeSelf);
+        EventManager.OnToggleNftData(itemData);
     }
 
     #endregion
