@@ -1,8 +1,9 @@
+#pragma warning disable 00067
 using System;
 using System.IO;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Unity;
-using NativeWebSocket;
+using Chainsafe.Gaming.Unity.NativeWebSocket;
 using Newtonsoft.Json;
 using Reown.Core.Common;
 using Reown.Core.Common.Logging;
