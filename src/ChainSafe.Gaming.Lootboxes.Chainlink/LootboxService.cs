@@ -21,7 +21,8 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
 {
     public class LootboxService : ILootboxService, ILifecycleParticipant
     {
-        public const int GasPerUnit = 300000;
+        private const int BaseGasPrice = 100000;
+        private const int GasPerUnit = 300000;
 
         private readonly IContractBuilder contractBuilder;
         private readonly LootboxServiceConfig config;
@@ -157,7 +158,7 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
 
             var response = await this.contract.Call(
                 "calculateOpenPrice",
-                new object[] { 100000 + (GasPerUnit * rewardCount), safeGasPrice, rewardCount, });
+                new object[] { BaseGasPrice + (GasPerUnit * rewardCount), safeGasPrice, rewardCount, });
             var openPrice = (BigInteger)response[0];
 
             return openPrice;
@@ -207,7 +208,7 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
 
             await this.contract.Send(
                 "open",
-                new object[] { 100000 + (GasPerUnit * rewardCount), new[] { lootboxType }, new[] { lootboxCount } },
+                new object[] { BaseGasPrice + (GasPerUnit * rewardCount), new[] { lootboxType }, new[] { lootboxCount } },
                 new TransactionRequest { Value = new HexBigInteger(openPrice) });
         }
 
