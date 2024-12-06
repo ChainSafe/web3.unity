@@ -20,28 +20,43 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
     #region Fields
 
     [SerializeField] private GameObject customTokenPlaceHolder;
-    [SerializeField] private GameObject customTokenDisplay;
+    [SerializeField] private GameObject customNftPlaceHolder;
+    [SerializeField] private GameObject customTokenDisplayErc20Parent;
+    [SerializeField] private GameObject customNftDisplayParent;
+    [SerializeField] private GameObject customTokenDisplayErc20;
+    [SerializeField] private GameObject customNftDisplay;
     [SerializeField] private GameObject transferTokensContainer;
     [SerializeField] private GameObject addCustomTokensMenu;
+    [SerializeField] private GameObject addCustomNftMenu;
     [SerializeField] private TMP_Dropdown selectedTokenToTransfer;
     [SerializeField] private TMP_InputField customTokenAddressInput;
     [SerializeField] private TMP_InputField customTokenSymbolInput;
+    [SerializeField] private TMP_InputField customNftAddressInput;
+    [SerializeField] private TMP_InputField customNftSymbolInput;
     [SerializeField] private TMP_InputField transferTokensWalletInput;
     [SerializeField] private TMP_InputField transferTokensAmountInput;
+    [SerializeField] private TextMeshProUGUI customNftAmountText;
+    [SerializeField] private TextMeshProUGUI customNftSymbolText;
     [SerializeField] private TextMeshProUGUI customTokenAmountText;
     [SerializeField] private TextMeshProUGUI customTokenSymbolText;
     [SerializeField] private TextMeshProUGUI nativeTokenSymbolText;
     [SerializeField] private TextMeshProUGUI nativeTokenAmountText;
     [SerializeField] private Button addTokensMenuButton;
+    [SerializeField] private Button addNftsMenuButton;
     [SerializeField] private Button closeAddTokensMenuButton;
+    [SerializeField] private Button closeAddNftMenuButton;
+    [SerializeField] private Button addNftButton;
     [SerializeField] private Button addTokenButton;
     [SerializeField] private Button transferTokensMenuButton;
     [SerializeField] private Button closeTransferTokensButton;
     [SerializeField] private Button transferTokensButton;
+    [SerializeField] private Button toggleCustomTokensButton;
+    [SerializeField] private Button toggleCustomNftsButton;
     private Task<string> symbolTask;
     private bool isSymbolTaskRunning;
     private string lastCheckedAddress;
     private string customTokenContract;
+    private string customNftContract;
 
     #endregion
 
@@ -53,12 +68,18 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
     private void Awake()
     {
         addTokenButton.onClick.AddListener(AddToken);
+        addNftButton.onClick.AddListener(AddNft);
+        addNftsMenuButton.onClick.AddListener(ToggleAddNftMenuButton);
+        closeAddNftMenuButton.onClick.AddListener(ToggleAddNftMenuButton);
         addTokensMenuButton.onClick.AddListener(ToggleAddTokensMenuButton);
         closeAddTokensMenuButton.onClick.AddListener(ToggleAddTokensMenuButton);
         transferTokensMenuButton.onClick.AddListener(ToggleTransferTokensMenuButton);
         closeTransferTokensButton.onClick.AddListener(ToggleTransferTokensMenuButton);
         transferTokensButton.onClick.AddListener(TransferTokens);
+        toggleCustomTokensButton.onClick.AddListener(ToggleCustomTokenMenu);
+        toggleCustomNftsButton.onClick.AddListener(ToggleCustomTokenMenu);
         SetTokens();
+        SetNfts();
     }
 
     /// <summary>
@@ -76,11 +97,11 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
             var balance = await Web3Unity.Web3.Erc20.GetBalanceOf(customTokenContract, Web3Unity.Web3.Signer.PublicAddress);
             var customTokenValue = (decimal)balance / (decimal)BigInteger.Pow(10, 18);
             customTokenAmountText.text = customTokenValue.ToString("N18");
-            customTokenDisplay.SetActive(true);
+            customTokenDisplayErc20.SetActive(true);
         }
         else
         {
-            customTokenDisplay.SetActive(false);
+            customTokenDisplayErc20.SetActive(false);
         }
         // Set native token
         nativeTokenSymbolText.text = Web3Unity.Web3.ChainConfig.NativeCurrency.Symbol.ToUpper();
@@ -90,6 +111,29 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
         nativeTokenAmountText.text = ethBalance.ToString("0.#########");
         SetTokenDropdownOptions();
     }
+    
+    /// <summary>
+    /// Sets native & custom nft displays.
+    /// </summary>
+    private async void SetNfts()
+    {
+        if (File.Exists(Path.Combine(Application.persistentDataPath, "customNft.txt")))
+        {
+            var customTokenData = File.ReadAllText(Path.Combine(Application.persistentDataPath, "customNft.txt"));
+            var data = customTokenData.Split(",");
+            customNftPlaceHolder.SetActive(false);
+            customNftContract = data[0];
+            customNftSymbolText.text = data[1].ToUpper();
+            var tokenId = 1;
+            var balance = await Web3Unity.Web3.Erc1155.GetBalanceOf(customNftContract, tokenId.ToString());
+            customNftAmountText.text = balance.ToString();
+            customNftDisplay.SetActive(true);
+        }
+        else
+        {
+            customNftDisplay.SetActive(false);
+        }
+    }
 
     /// <summary>
     /// Toggles the add token menu.
@@ -97,10 +141,14 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
     private void ToggleAddTokensMenuButton()
     {
         addCustomTokensMenu.SetActive(!addCustomTokensMenu.activeSelf);
-        if (addCustomTokensMenu.activeSelf)
-        {
-            addTokenButton.gameObject.SetActive(false);
-        }
+    }
+    
+    /// <summary>
+    /// Toggles the add nft menu.
+    /// </summary>
+    private void ToggleAddNftMenuButton()
+    {
+        addCustomNftMenu.SetActive(!addCustomNftMenu.activeSelf);
     }
 
     /// <summary>
@@ -130,6 +178,15 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Toggles the custom token type menus.
+    /// </summary>
+    private void ToggleCustomTokenMenu()
+    {
+        customTokenDisplayErc20Parent.SetActive(!customTokenDisplayErc20Parent.activeSelf);
+        customNftDisplayParent.SetActive(!customNftDisplayParent.activeSelf);
+    }
+
+    /// <summary>
     /// Adds a custom token to the wallet.
     /// </summary>
     private void AddToken()
@@ -139,10 +196,26 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
         customTokenSymbolText.text = customTokenSymbolInput.text.ToUpper();
         ToggleAddTokensMenuButton();
         customTokenPlaceHolder.SetActive(false);
-        customTokenDisplay.SetActive(true);
+        customTokenDisplayErc20.SetActive(true);
         customTokenAddressInput.text = string.Empty;
         customTokenSymbolInput.text = string.Empty;
         SetTokens();
+    }
+
+    /// <summary>
+    /// Adds a custom nft to the wallet.
+    /// </summary>
+    private void AddNft()
+    {
+        if (customNftAddressInput.text.Length != 42) return;
+        File.WriteAllText(Path.Combine(Application.persistentDataPath, "customNft.txt"), $"{customNftAddressInput.text},{customNftSymbolInput.text}");
+        customNftSymbolText.text = customNftSymbolInput.text.ToUpper();
+        ToggleAddNftMenuButton();
+        customNftPlaceHolder.SetActive(false);
+        customNftDisplay.SetActive(true);
+        customNftAddressInput.text = string.Empty;
+        customNftSymbolInput.text = string.Empty;
+        SetNfts();
     }
 
     /// <summary>
