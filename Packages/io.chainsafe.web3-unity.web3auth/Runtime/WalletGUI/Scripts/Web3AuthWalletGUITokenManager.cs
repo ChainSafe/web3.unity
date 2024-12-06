@@ -9,7 +9,6 @@ using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.GamingSdk.Web3Auth;
-using Scripts.EVM.Token;
 using UnityEngine.UI;
 
 /// <summary>
@@ -33,6 +32,7 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
     [SerializeField] private TMP_InputField customTokenSymbolInput;
     [SerializeField] private TMP_InputField customNftAddressInput;
     [SerializeField] private TMP_InputField customNftSymbolInput;
+    [SerializeField] private TMP_InputField customNftIdInput;
     [SerializeField] private TMP_InputField transferTokensWalletInput;
     [SerializeField] private TMP_InputField transferTokensAmountInput;
     [SerializeField] private TextMeshProUGUI customNftAmountText;
@@ -124,8 +124,7 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
             customNftPlaceHolder.SetActive(false);
             customNftContract = data[0];
             customNftSymbolText.text = data[1].ToUpper();
-            var tokenId = 1;
-            var balance = await Web3Unity.Web3.Erc1155.GetBalanceOf(customNftContract, tokenId.ToString());
+            var balance = await Web3Unity.Web3.Erc1155.GetBalanceOf(customNftContract, data[2]);
             customNftAmountText.text = balance.ToString();
             customNftDisplay.SetActive(true);
         }
@@ -208,13 +207,14 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
     private void AddNft()
     {
         if (customNftAddressInput.text.Length != 42) return;
-        File.WriteAllText(Path.Combine(Application.persistentDataPath, "customNft.txt"), $"{customNftAddressInput.text},{customNftSymbolInput.text}");
+        File.WriteAllText(Path.Combine(Application.persistentDataPath, "customNft.txt"), $"{customNftAddressInput.text},{customNftSymbolInput.text},{customNftIdInput.text}");
         customNftSymbolText.text = customNftSymbolInput.text.ToUpper();
         ToggleAddNftMenuButton();
         customNftPlaceHolder.SetActive(false);
         customNftDisplay.SetActive(true);
         customNftAddressInput.text = string.Empty;
         customNftSymbolInput.text = string.Empty;
+        customNftIdInput.text = string.Empty;
         SetNfts();
     }
 
