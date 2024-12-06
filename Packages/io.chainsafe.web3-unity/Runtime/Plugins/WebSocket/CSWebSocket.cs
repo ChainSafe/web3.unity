@@ -8,6 +8,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using System.Collections;
+using AOT;
+using System.Runtime.InteropServices;
 
 namespace Chainsafe.Gaming.Unity
 {
