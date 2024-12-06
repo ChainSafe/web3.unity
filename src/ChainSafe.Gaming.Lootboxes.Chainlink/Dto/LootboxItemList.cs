@@ -2,15 +2,19 @@
 
 namespace ChainSafe.Gaming.Lootboxes.Chainlink
 {
-    public class LootboxItemList : List<List<List<Item>>>
+    public class LootboxItemList
     {
+        public List<InnerItem> OuterItem { get; set; }
     }
 
-    public class Parameter
+    public class OuterItem
     {
-        public string Name { get; set; }
+        public List<InnerItem> InnerItem { get; set; }
+    }
 
-        public string Type { get; set; }
+    public class InnerItem
+    {
+        public List<Item> Item { get; set; }
     }
 
     public class Item
@@ -18,5 +22,12 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
         public Parameter Parameter { get; set; }
 
         public object Result { get; set; }
+    }
+
+    public class Parameter
+    {
+        public string Name { get; set; }
+
+        public string Type { get; set; }
     }
 }

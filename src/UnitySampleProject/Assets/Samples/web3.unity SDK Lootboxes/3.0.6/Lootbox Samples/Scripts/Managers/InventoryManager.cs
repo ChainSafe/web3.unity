@@ -68,22 +68,18 @@ public class InventoryManager : MonoBehaviour
             var inventoryResponseJson = await lootboxService.GetInventory();
             var jsonDeserialized =
                 JsonConvert.DeserializeObject<LootboxItemList>(JsonConvert.SerializeObject(inventoryResponseJson));
-
-            foreach (var outerItem in jsonDeserialized)
+            foreach (var innerItem in jsonDeserialized.OuterItem)
             {
-                foreach (var innerItem in outerItem)
+                foreach (var item in innerItem.Item)
                 {
-                    foreach (var item in innerItem)
+                    if (item.Parameter.Name == "rewardToken")
                     {
-                        if (item.Parameter.Name == "rewardToken")
+                        Debug.Log($"{item.Parameter.Name}: {item.Result}");
+                        var rewardTypeItem = innerItem.Item.Find(x => x.Parameter.Name == "rewardType");
+                        if (rewardTypeItem != null)
                         {
-                            Debug.Log($"{item.Parameter.Name}: {item.Result}");
-                            var rewardTypeItem = innerItem.Find(x => x.Parameter.Name == "rewardType");
-                            if (rewardTypeItem != null)
-                            {
-                                HandleRewardType(int.Parse(rewardTypeItem.Result.ToString()), item, innerItem);
-                                break;
-                            }
+                            HandleRewardType(int.Parse(rewardTypeItem.Result.ToString()), item, innerItem);
+                            break;
                         }
                     }
                 }
@@ -103,7 +99,7 @@ public class InventoryManager : MonoBehaviour
     /// <param name="rewardType">Lootbox type/rarity/loot per box.</param>
     /// <param name="item">Data item.</param>
     /// <param name="innerItem">Inner data item.</param>
-    private void HandleRewardType(int rewardType, Item item, List<Item> innerItem)
+    private void HandleRewardType(int rewardType, Item item, InnerItem innerItem)
     {
         switch (rewardType)
         {
@@ -115,13 +111,13 @@ public class InventoryManager : MonoBehaviour
             case 2: // ERC721
                 if (!lootboxServiceConfig.Erc721Contracts.Contains(item.Result.ToString()))
                     lootboxServiceConfig.Erc721Contracts.Add(item.Result.ToString());
-                ParseExtraRewards(innerItem, lootboxServiceConfig.Erc721TokenIds);
+                ParseExtraRewards(innerItem.Item, lootboxServiceConfig.Erc721TokenIds);
                 break;
 
             case 3: // ERC1155
                 if (!lootboxServiceConfig.Erc1155Contracts.Contains(item.Result.ToString()))
                     lootboxServiceConfig.Erc1155Contracts.Add(item.Result.ToString());
-                ParseExtraRewards(innerItem, lootboxServiceConfig.Erc1155TokenIds);
+                ParseExtraRewards(innerItem.Item, lootboxServiceConfig.Erc1155TokenIds);
                 break;
 
             default:
