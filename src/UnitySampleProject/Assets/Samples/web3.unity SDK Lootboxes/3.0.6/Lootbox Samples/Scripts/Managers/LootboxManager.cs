@@ -24,8 +24,7 @@ public class LootboxManager : MonoBehaviour
     [SerializeField] private GameObject rewardsMenu, loadingMenu;
     [SerializeField] private Button claimLootboxButton, recoverLootboxesButton, postToSocialsButton;
     [SerializeField] private GameObject debugButtonsContainer;
-    [SerializeField] private Button buyButton, getPriceButton, setPriceButton, claimRewardsAfterButton;
-    [SerializeField] private TMP_InputField setPriceInput;
+    [SerializeField] private Button buyButton, claimRewardsAfterButton;
     [SerializeField] private bool debugLootboxes;
     private Dictionary<int, int> lootboxBalances = new Dictionary<int, int>();
     private ILootboxService lootboxService;
@@ -48,8 +47,6 @@ public class LootboxManager : MonoBehaviour
         if (debugLootboxes)
         {
             debugButtonsContainer.SetActive(true);
-            getPriceButton.onClick.AddListener(GetPrice);
-            setPriceButton.onClick.AddListener(SetPrice);
             buyButton.onClick.AddListener(Buy);
             claimRewardsAfterButton.onClick.AddListener(ClaimRewardsClicked);
         }
@@ -265,34 +262,6 @@ public class LootboxManager : MonoBehaviour
     private async Task RecoverLootboxes()
     {
         await lootboxService.RecoverLootboxes();
-    }
-
-    /// <summary>
-    /// DEBUG: Gets the price to open a lootbox.
-    /// </summary>
-    private async void GetPrice()
-    {
-        var response = await lootboxService.GetPrice();
-        Debug.Log($"Lootbox price: {response}");
-    }
-
-    /// <summary>
-    /// DEBUG: - LOOTBOX DEPLOYER ONLY - Sets the price in ETH to open a lootbox.
-    /// </summary>
-    private async void SetPrice()
-    {
-        string priceToSetInput = setPriceInput.text;
-        if (decimal.TryParse(priceToSetInput, out decimal priceInEth))
-        {
-            // Convert the price from ETH to wei for easier input
-            BigInteger priceToSet = new BigInteger(priceInEth * (decimal)Math.Pow(10, 18));
-            await lootboxService.SetPrice(priceToSet);
-            Debug.Log($"Price set at: {priceToSet} wei (equivalent to {priceInEth} ETH)");
-        }
-        else
-        {
-            Debug.LogError("Invalid input. Please enter a valid price in ETH.");
-        }
     }
 
     /// <summary>
