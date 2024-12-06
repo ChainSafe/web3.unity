@@ -25,7 +25,7 @@ namespace ChainSafe.Gaming.Evm.Tests
         {
             var lootBoxesConfig = new LootboxServiceConfig
             {
-                LootboxAddress = "0x46E334e90454aDDF311Cd75D4Ae19e2fA06285Ff",
+                ContractAddress = "0x46E334e90454aDDF311Cd75D4Ae19e2fA06285Ff",
                 ContractAbi = File.ReadAllText("Resources/LootboxInterface.abi.json"),
             };
 
