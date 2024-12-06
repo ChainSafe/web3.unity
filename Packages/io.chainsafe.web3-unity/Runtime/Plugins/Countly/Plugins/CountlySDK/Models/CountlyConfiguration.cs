@@ -73,7 +73,7 @@ namespace Plugins.CountlySDK.Models
         /// min value 1 (1 second), max value 600 (10 minutes)
         /// </summary>
         [Obsolete("SessionDuration is deprecated. Use SetUpdateSessionTimerDelay(int duration) instead.")]
-        public int SessionDuration = 60;
+        public int SessionDuration = 20;
 
         /// <summary>
         /// Maximum size of all string keys
@@ -109,13 +109,13 @@ namespace Plugins.CountlySDK.Models
         /// Set threshold value for the number of events that can be stored locally.
         /// </summary>
         [Obsolete("EventQueueThreshold is deprecated. Use SetEventQueueSizeToSend(int threshold) instead.")]
-        public int EventQueueThreshold = 100;
+        public int EventQueueThreshold = 10;
 
         /// <summary>
         /// Set limit for the number of requests that can be stored locally.
         /// </summary>
         [Obsolete("StoredRequestLimit is deprecated. Use SetMaxRequestQueueSize(int limit) instead.")]
-        public int StoredRequestLimit = 1000;
+        public int StoredRequestLimit = 10;
 
         /// <summary>
         /// Set the maximum amount of breadcrumbs.
