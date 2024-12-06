@@ -9,20 +9,29 @@ public class EventManager : MonoBehaviour
 {
     #region Fields
 
-    public static event Action<ItemData[]> ToggleInventoryItems;
-    public static event Action<LootboxRewards> ToggleRewardItems;
-    public static event Action<ItemData> ToggleNftModal;
-    public static event Action<ItemData> ToggleNftData;
+    public static EventManager Instance { get; private set; }
+    public event Action<ItemData[]> ToggleInventoryItems;
+    public event Action<LootboxRewards> ToggleRewardItems;
+    public event Action<ItemData> ToggleNftModal;
+    public event Action<ItemData> ToggleNftData;
 
     #endregion
 
     #region Methods
+    
+    /// <summary>
+    /// Initializes instance.
+    /// </summary>
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     /// <summary>
     /// Toggles inventory items with item data.
     /// </summary>
     /// <param name="items">Array of inventory item data.</param>
-    public static void OnToggleInventoryItems(ItemData[] items)
+    public void OnToggleInventoryItems(ItemData[] items)
     {
         ToggleInventoryItems?.Invoke(items);
     }
@@ -31,7 +40,7 @@ public class EventManager : MonoBehaviour
     /// Toggles reward items with LootboxRewards data.
     /// </summary>
     /// <param name="items">List of lootbox reward data.</param>
-    public static void OnToggleRewardItems(LootboxRewards rewards)
+    public void OnToggleRewardItems(LootboxRewards rewards)
     {
         ToggleRewardItems?.Invoke(rewards);
     }
@@ -40,16 +49,16 @@ public class EventManager : MonoBehaviour
     /// Toggles the NFT modal with item data.
     /// </summary>
     /// <param name="items">Selected NFT item data.</param>
-    public static void OnToggleNftModal(ItemData items)
+    public void OnToggleNftModal(ItemData items)
     {
         ToggleNftModal?.Invoke(items);
     }
 
     /// <summary>
-    /// Toggles nft modal data.
+    /// Toggles NFT modal data.
     /// </summary>
     /// <param name="items">Selected NFT item data</param>
-    public static void OnToggleNftData(ItemData items)
+    public void OnToggleNftData(ItemData items)
     {
         ToggleNftData?.Invoke(items);
     }

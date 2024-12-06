@@ -35,8 +35,8 @@ public class InventoryManager : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
-        EventManager.ToggleInventoryItems += SpawnObjects;
-        EventManager.ToggleNftModal += ToggleNftModal;
+        EventManager.Instance.ToggleInventoryItems += SpawnObjects;
+        EventManager.Instance.ToggleNftModal += ToggleNftModal;
         FetchAndProcessInventory();
     }
 
@@ -45,8 +45,8 @@ public class InventoryManager : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
-        EventManager.ToggleInventoryItems -= SpawnObjects;
-        EventManager.ToggleNftModal -= ToggleNftModal;
+        EventManager.Instance.ToggleInventoryItems -= SpawnObjects;
+        EventManager.Instance.ToggleNftModal -= ToggleNftModal;
     }
 
     /// <summary>
@@ -174,7 +174,7 @@ public class InventoryManager : MonoBehaviour
 
         if (items.Count > 0)
         {
-            EventManager.OnToggleInventoryItems(items.ToArray());
+            EventManager.Instance.OnToggleInventoryItems(items.ToArray());
         }
         else
         {
@@ -328,7 +328,7 @@ public class InventoryManager : MonoBehaviour
     private void ToggleNftModal(ItemData itemData)
     {
         nftModal.SetActive(!nftModal.activeSelf);
-        EventManager.OnToggleNftData(itemData);
+        EventManager.Instance.OnToggleNftData(itemData);
     }
 
     #endregion

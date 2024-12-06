@@ -49,7 +49,7 @@ public class LootboxItem : MonoBehaviour
     /// <param name="itemData">The item data to display.</param>
     private void OpenNftModal(ItemData itemData)
     {
-        EventManager.OnToggleNftModal(itemData);
+        EventManager.Instance.OnToggleNftModal(itemData);
     }
 
     #endregion

@@ -31,7 +31,7 @@ public class NftModal : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
-        EventManager.ToggleNftData += PopulateData;
+        EventManager.Instance.ToggleNftData += PopulateData;
     }
 
     /// <summary>
@@ -39,7 +39,7 @@ public class NftModal : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
-        EventManager.ToggleNftData -= PopulateData;
+        EventManager.Instance.ToggleNftData -= PopulateData;
     }
 
     /// <summary>

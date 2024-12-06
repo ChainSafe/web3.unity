@@ -29,7 +29,7 @@ public class RewardsManager : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
-        EventManager.ToggleRewardItems += ParseRewards;
+        EventManager.Instance.ToggleRewardItems += ParseRewards;
     }
 
     /// <summary>
@@ -37,7 +37,7 @@ public class RewardsManager : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
-        EventManager.ToggleRewardItems -= ParseRewards;
+        EventManager.Instance.ToggleRewardItems -= ParseRewards;
     }
 
     /// <summary>

@@ -206,7 +206,7 @@ public class LootboxManager : MonoBehaviour
     private void OpenRewardsMenu(LootboxRewards rewards)
     {
         rewardsMenu.SetActive(true);
-        EventManager.OnToggleRewardItems(rewards);
+        EventManager.Instance.OnToggleRewardItems(rewards);
         tempRewards = rewards;
     }
 
