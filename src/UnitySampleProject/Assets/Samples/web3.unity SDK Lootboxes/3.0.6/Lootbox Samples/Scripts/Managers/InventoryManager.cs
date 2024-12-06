@@ -216,51 +216,60 @@ public class InventoryManager : MonoBehaviour
     {
         foreach (var contract in contracts)
         {
-            if (contract is Erc20Contract erc20Contract)
+            switch (contract)
             {
-                var balance = await erc20Contract.BalanceOf(Web3Unity.Web3.Signer.PublicAddress);
-                if (balance > BigInteger.Zero)
+                case Erc20Contract erc20Contract:
                 {
-                    var ethBalance = UnitConversion.Convert.FromWei(balance);
-                    var itemName = await Web3Unity.Web3.Erc20.GetName(contract.ContractAddress);
-                    items.Add(new ItemData
-                        { itemType = "ERC20", itemName = itemName, itemAmount = ethBalance.ToString() });
-                }
-            }
-            else if (contract is Erc721Contract erc721Contract)
-            {
-                foreach (var tokenId in tokenIds)
-                {
-                    var owner = await erc721Contract.OwnerOf(tokenId);
-                    if (owner == Web3Unity.Web3.Signer.PublicAddress)
-                    {
-                        var uri = await erc721Contract.TokenURI(tokenId.ToString());
-                        var data = await FetchDataWithRetry(uri);
-                        var jsonResponse = JsonConvert.DeserializeObject<TokenModel.Token>(data);
-                        items.Add(new ItemData
-                        {
-                            itemType = "ERC721", itemId = tokenId.ToString(), itemName = jsonResponse.name,
-                            itemAmount = "1", itemImage = jsonResponse.image
-                        });
-                    }
-                }
-            }
-            else if (contract is Erc1155Contract erc1155Contract)
-            {
-                foreach (var tokenId in tokenIds)
-                {
-                    var balance = await erc1155Contract.BalanceOf(Web3Unity.Web3.Signer.PublicAddress, tokenId);
+                    var balance = await erc20Contract.BalanceOf(Web3Unity.Web3.Signer.PublicAddress);
                     if (balance > BigInteger.Zero)
                     {
-                        var uri = await erc1155Contract.Uri(tokenId.ToString());
-                        var data = await FetchDataWithRetry(uri);
-                        var jsonResponse = JsonConvert.DeserializeObject<TokenModel.Token>(data);
+                        var ethBalance = UnitConversion.Convert.FromWei(balance);
+                        var itemName = await Web3Unity.Web3.Erc20.GetName(contract.ContractAddress);
                         items.Add(new ItemData
-                        {
-                            itemType = "ERC1155", itemId = tokenId.ToString(), itemName = jsonResponse.name,
-                            itemAmount = balance.ToString(), itemImage = jsonResponse.image
-                        });
+                            { itemType = "ERC20", itemName = itemName, itemAmount = ethBalance.ToString() });
                     }
+
+                    break;
+                }
+                case Erc721Contract erc721Contract:
+                {
+                    foreach (var tokenId in tokenIds)
+                    {
+                        var owner = await erc721Contract.OwnerOf(tokenId);
+                        if (owner == Web3Unity.Web3.Signer.PublicAddress)
+                        {
+                            var uri = await erc721Contract.TokenURI(tokenId.ToString());
+                            var data = await FetchDataWithRetry(uri);
+                            var jsonResponse = JsonConvert.DeserializeObject<TokenModel.Token>(data);
+                            items.Add(new ItemData
+                            {
+                                itemType = "ERC721", itemId = tokenId.ToString(), itemName = jsonResponse.name,
+                                itemAmount = "1", itemImage = jsonResponse.image
+                            });
+                        }
+                    }
+
+                    break;
+                }
+                case Erc1155Contract erc1155Contract:
+                {
+                    foreach (var tokenId in tokenIds)
+                    {
+                        var balance = await erc1155Contract.BalanceOf(Web3Unity.Web3.Signer.PublicAddress, tokenId);
+                        if (balance > BigInteger.Zero)
+                        {
+                            var uri = await erc1155Contract.Uri(tokenId.ToString());
+                            var data = await FetchDataWithRetry(uri);
+                            var jsonResponse = JsonConvert.DeserializeObject<TokenModel.Token>(data);
+                            items.Add(new ItemData
+                            {
+                                itemType = "ERC1155", itemId = tokenId.ToString(), itemName = jsonResponse.name,
+                                itemAmount = balance.ToString(), itemImage = jsonResponse.image
+                            });
+                        }
+                    }
+
+                    break;
                 }
             }
         }
