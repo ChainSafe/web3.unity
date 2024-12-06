@@ -51,7 +51,6 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
     [SerializeField] private Button closeTransferTokensButton;
     [SerializeField] private Button transferTokensButton;
     [SerializeField] private Button toggleCustomTokensButton;
-    [SerializeField] private Button toggleCustomNftsButton;
     private Task<string> symbolTask;
     private bool isSymbolTaskRunning;
     private string lastCheckedAddress;
@@ -77,7 +76,6 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
         closeTransferTokensButton.onClick.AddListener(ToggleTransferTokensMenuButton);
         transferTokensButton.onClick.AddListener(TransferTokens);
         toggleCustomTokensButton.onClick.AddListener(ToggleCustomTokenMenu);
-        toggleCustomNftsButton.onClick.AddListener(ToggleCustomTokenMenu);
         SetTokens();
         SetNfts();
     }
