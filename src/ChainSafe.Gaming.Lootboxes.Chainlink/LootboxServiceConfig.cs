@@ -12,12 +12,12 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
         /// <summary>
         /// Gets or sets the Ethereum address of the smart contract that the LootboxService interacts with.
         /// </summary>
-        public string? LootboxAddress { get; set; }
+        public string? ContractAddress { get; set; }
 
         /// <summary>
-        /// Gets or sets the lootbox account if you want to get balances from different accounts.
+        /// Gets or sets the lootbox external account if you want to get balances from a different account without using the override for a better UX.
         /// </summary>
-        public string? LootboxAccount { get; set; }
+        public string? ExternalAccount { get; set; }
 
         /// <summary>
         /// Gets or sets the ABI (Application Binary Interface) of the smart contract that the LootboxService interacts with.

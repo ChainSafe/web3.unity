@@ -6786,11 +6786,11 @@ PrefabInstance:
     - target: {fileID: 5008553068369276269, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
       propertyPath: providers.Array.data[1]
       value: 
-      objectReference: {fileID: 11400000, guid: e5b50e2ca9fe0504daf70376bceb84ac, type: 2}
+      objectReference: {fileID: 11400000, guid: 835338196b5038d4b9351fadba9dac38, type: 2}
     - target: {fileID: 5008553068369276269, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
       propertyPath: providers.Array.data[2]
       value: 
-      objectReference: {fileID: 11400000, guid: 835338196b5038d4b9351fadba9dac38, type: 2}
+      objectReference: {fileID: 11400000, guid: e5b50e2ca9fe0504daf70376bceb84ac, type: 2}
     - target: {fileID: 8519303782652390544, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -7422,6 +7422,7 @@ MonoBehaviour:
     "withdraw",       "outputs": [],       "stateMutability": "nonpayable",      
     "type": "function"     }   ]'
   lootboxAddress: 0xa31B74DF647979D50f155C7de5b80e9BA3A0C979
+  LootboxExternalAccount: 
 --- !u!114 &1762963676
 MonoBehaviour:
   m_ObjectHideFlags: 0

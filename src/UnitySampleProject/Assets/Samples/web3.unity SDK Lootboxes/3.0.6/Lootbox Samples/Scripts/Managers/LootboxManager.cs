@@ -119,9 +119,9 @@ public class LootboxManager : MonoBehaviour
     private async Task CheckLootBoxBalance(int id)
     {
         int lootBoxAmount;
-        if (lootboxServiceConfig.LootboxAccount != String.Empty)
+        if (lootboxServiceConfig.ExternalAccount != String.Empty)
         {
-            lootBoxAmount = await lootboxService.BalanceOf(lootboxServiceConfig.LootboxAddress, id);
+            lootBoxAmount = await lootboxService.BalanceOf(lootboxServiceConfig.ContractAddress, id);
         }
         else
         {

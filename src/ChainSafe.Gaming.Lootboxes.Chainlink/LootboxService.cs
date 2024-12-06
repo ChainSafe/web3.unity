@@ -69,7 +69,7 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
         async ValueTask ILifecycleParticipant.WillStartAsync()
         {
             var contractAbi = this.config.ContractAbi.AssertNotNull(nameof(this.config.ContractAbi));
-            var contractAddress = this.config.LootboxAddress.AssertNotNull(nameof(this.config.LootboxAddress));
+            var contractAddress = this.config.ContractAddress.AssertNotNull(nameof(this.config.ContractAddress));
             await eventManager.Subscribe<RewardsClaimedEvent>(ExtractRewards, contractAddress);
 
             analyticsClient.CaptureEvent(new AnalyticsEvent()
@@ -105,7 +105,7 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
 
         async ValueTask ILifecycleParticipant.WillStopAsync()
         {
-            var contractAddress = this.config.LootboxAddress.AssertNotNull(nameof(this.config.LootboxAddress));
+            var contractAddress = this.config.ContractAddress.AssertNotNull(nameof(this.config.ContractAddress));
             await eventManager.Unsubscribe<RewardsClaimedEvent>(ExtractRewards, contractAddress);
         }
 
