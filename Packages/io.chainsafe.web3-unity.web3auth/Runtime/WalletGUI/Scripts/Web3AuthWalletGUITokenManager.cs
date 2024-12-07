@@ -20,6 +20,7 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
 
     [SerializeField] private GameObject customTokenPlaceHolder;
     [SerializeField] private GameObject customTokenDisplayErc20Parent;
+    [SerializeField] private GameObject customNftDisplayParent;
     [SerializeField] private GameObject customTokenDisplayErc20;
     [SerializeField] private GameObject transferTokensContainer;
     [SerializeField] private GameObject addCustomTokensMenu;
@@ -134,6 +135,7 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
     private void ToggleCustomTokenMenu()
     {
         customTokenDisplayErc20Parent.SetActive(!customTokenDisplayErc20Parent.activeSelf);
+        customNftDisplayParent.SetActive(!customNftDisplayParent.activeSelf);
     }
 
     /// <summary>
