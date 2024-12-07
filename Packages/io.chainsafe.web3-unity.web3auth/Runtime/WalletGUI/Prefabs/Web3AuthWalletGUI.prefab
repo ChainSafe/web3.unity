@@ -2646,12 +2646,12 @@ RectTransform:
   - {fileID: 5076205156865555167}
   - {fileID: 186940547694934307}
   - {fileID: 7734374755973536324}
-  m_Father: {fileID: 8995710301426516959}
+  m_Father: {fileID: 627829595637993716}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 1280, y: 720}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1136090464794109220
 GameObject:
@@ -6155,6 +6155,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7743707375381239092}
   - component: {fileID: 7656622686525558909}
+  - component: {fileID: 6964000328107034790}
   - component: {fileID: 4029780974178710413}
   - component: {fileID: 7234845548737740600}
   - component: {fileID: 804371200852392299}
@@ -6254,6 +6255,30 @@ MonoBehaviour:
   - {fileID: 1152253115440363283}
   - {fileID: 1343096901685853903}
   - {fileID: 6791535591774963464}
+--- !u!114 &6964000328107034790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2911816339710442984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4162cad38571cc4a9f0a5f5023e499c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  customNftPlaceHolder: {fileID: 3893186881389953187}
+  customNftDisplayParent: {fileID: 8176955415891050272}
+  customNftDisplay: {fileID: 6034000924353824336}
+  addCustomNftMenu: {fileID: 1102691479002500486}
+  customNftAddressInput: {fileID: 431849629550995913}
+  customNftSymbolInput: {fileID: 7343186495474426007}
+  customNftIdInput: {fileID: 6727692128954422283}
+  customNftAmountText: {fileID: 8143053246957829318}
+  customNftSymbolText: {fileID: 1935757266164244188}
+  addNftsMenuButton: {fileID: 3285911010377504504}
+  closeAddNftMenuButton: {fileID: 176133887779786777}
+  addNftButton: {fileID: 2207920767897871812}
 --- !u!114 &4029780974178710413
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13355,6 +13380,43 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_AlphaFadeSpeed: 0.15
+--- !u!1 &7204261647375329047
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 627829595637993716}
+  m_Layer: 0
+  m_Name: CustomTokens
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &627829595637993716
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7204261647375329047}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 747709842882747480}
+  - {fileID: 8410690814502686017}
+  m_Father: {fileID: 8995710301426516959}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &7284217069205178480
 GameObject:
   m_ObjectHideFlags: 0
@@ -13758,12 +13820,12 @@ RectTransform:
   - {fileID: 2784346843023226134}
   - {fileID: 6205460579943037967}
   - {fileID: 6858634979783271059}
-  m_Father: {fileID: 8995710301426516959}
+  m_Father: {fileID: 627829595637993716}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 1280, y: 720}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &7526343669070873047
 GameObject:
@@ -16065,8 +16127,7 @@ RectTransform:
   - {fileID: 2574319534681657734}
   - {fileID: 6993828489602598507}
   - {fileID: 3662898391219078816}
-  - {fileID: 747709842882747480}
-  - {fileID: 8410690814502686017}
+  - {fileID: 627829595637993716}
   m_Father: {fileID: 5373238811467919373}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
