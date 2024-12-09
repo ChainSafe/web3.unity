@@ -56,7 +56,9 @@ namespace ChainSafe.Gaming.Marketplace.Samples
             var myTexture = ((DownloadHandlerTexture)unityWebRequest.downloadHandler).texture;
 
             sprite = Sprite.Create(myTexture, new Rect(0, 0, myTexture.width, myTexture.height), Vector2.one * 0.5f);
-
+            
+            _spritesDict[imageUrl] = sprite;
+            
             return sprite;
         }
 
