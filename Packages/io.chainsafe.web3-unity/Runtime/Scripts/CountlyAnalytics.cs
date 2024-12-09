@@ -18,7 +18,7 @@ public class CountlyAnalytics : IAnalyticsClient
         await Countly.Instance.Events.RecordEventAsync(eventData.EventName);
     }
 
-    public string AnalyticsVersion => "2.6";
+    public string AnalyticsVersion => "3.1";
     public IChainConfig ChainConfig => _chainManager.Current;
     public IProjectConfig ProjectConfig { get; }
 
