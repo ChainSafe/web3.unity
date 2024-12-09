@@ -29,6 +29,8 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
             string address = await walletProvider.Connect();
 
             PublicAddress = address.AssertIsPublicAddress();
+
+            await walletProvider.AddNetworkIfNotExistInWallet();
         }
 
         public virtual async Task<string> SignMessage(string message)

@@ -9,7 +9,6 @@ using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.GamingSdk.Web3Auth;
-using Scripts.EVM.Token;
 using UnityEngine.UI;
 
 /// <summary>
@@ -20,7 +19,9 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
     #region Fields
 
     [SerializeField] private GameObject customTokenPlaceHolder;
-    [SerializeField] private GameObject customTokenDisplay;
+    [SerializeField] private GameObject customTokenDisplayErc20Parent;
+    [SerializeField] private GameObject customNftDisplayParent;
+    [SerializeField] private GameObject customTokenDisplayErc20;
     [SerializeField] private GameObject transferTokensContainer;
     [SerializeField] private GameObject addCustomTokensMenu;
     [SerializeField] private TMP_Dropdown selectedTokenToTransfer;
@@ -38,10 +39,12 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
     [SerializeField] private Button transferTokensMenuButton;
     [SerializeField] private Button closeTransferTokensButton;
     [SerializeField] private Button transferTokensButton;
+    [SerializeField] private Button toggleCustomTokensButton;
     private Task<string> symbolTask;
     private bool isSymbolTaskRunning;
     private string lastCheckedAddress;
     private string customTokenContract;
+    private string customNftContract;
 
     #endregion
 
@@ -58,6 +61,7 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
         transferTokensMenuButton.onClick.AddListener(ToggleTransferTokensMenuButton);
         closeTransferTokensButton.onClick.AddListener(ToggleTransferTokensMenuButton);
         transferTokensButton.onClick.AddListener(TransferTokens);
+        toggleCustomTokensButton.onClick.AddListener(ToggleCustomTokenMenu);
         SetTokens();
     }
 
@@ -76,14 +80,14 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
             var balance = await Web3Unity.Web3.Erc20.GetBalanceOf(customTokenContract, Web3Unity.Web3.Signer.PublicAddress);
             var customTokenValue = (decimal)balance / (decimal)BigInteger.Pow(10, 18);
             customTokenAmountText.text = customTokenValue.ToString("N18");
-            customTokenDisplay.SetActive(true);
+            customTokenDisplayErc20.SetActive(true);
         }
         else
         {
-            customTokenDisplay.SetActive(false);
+            customTokenDisplayErc20.SetActive(false);
         }
         // Set native token
-        nativeTokenSymbolText.text = Web3Unity.Web3.ChainConfig.Symbol.ToUpper();
+        nativeTokenSymbolText.text = Web3Unity.Web3.ChainConfig.NativeCurrency.Symbol.ToUpper();
         var hexBalance = await Web3Unity.Web3.RpcProvider.GetBalance(Web3Unity.Web3.Signer.PublicAddress);
         var weiBalance = BigInteger.Parse(hexBalance.ToString());
         decimal ethBalance = (decimal)weiBalance / (decimal)Math.Pow(10, 18);
@@ -97,10 +101,6 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
     private void ToggleAddTokensMenuButton()
     {
         addCustomTokensMenu.SetActive(!addCustomTokensMenu.activeSelf);
-        if (addCustomTokensMenu.activeSelf)
-        {
-            addTokenButton.gameObject.SetActive(false);
-        }
     }
 
     /// <summary>
@@ -130,6 +130,15 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Toggles the custom token type menus.
+    /// </summary>
+    private void ToggleCustomTokenMenu()
+    {
+        customTokenDisplayErc20Parent.SetActive(!customTokenDisplayErc20Parent.activeSelf);
+        customNftDisplayParent.SetActive(!customNftDisplayParent.activeSelf);
+    }
+
+    /// <summary>
     /// Adds a custom token to the wallet.
     /// </summary>
     private void AddToken()
@@ -139,7 +148,7 @@ public class Web3AuthWalletGUITokenManager : MonoBehaviour
         customTokenSymbolText.text = customTokenSymbolInput.text.ToUpper();
         ToggleAddTokensMenuButton();
         customTokenPlaceHolder.SetActive(false);
-        customTokenDisplay.SetActive(true);
+        customTokenDisplayErc20.SetActive(true);
         customTokenAddressInput.text = string.Empty;
         customTokenSymbolInput.text = string.Empty;
         SetTokens();

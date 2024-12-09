@@ -1,3 +1,6 @@
+using ChainSafe.Gaming.Evm.Network;
+using ChainSafe.Gaming.Web3.Core.Chains;
+
 namespace ChainSafe.Gaming.Web3
 {
     /// <summary>
@@ -13,7 +16,7 @@ namespace ChainSafe.Gaming.Web3
         /// <summary>
         /// Token symbol ID.
         /// </summary>
-        public string Symbol { get; }
+        public INativeCurrency NativeCurrency { get; }
 
         /// <summary>
         /// The name of the chain to be used. Equals 'Ethereum' for Ethereum Mainnet.

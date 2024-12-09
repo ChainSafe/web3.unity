@@ -7,17 +7,21 @@
 ## Documentation
 You can access the full docs at [docs.gaming.chainsafe.io](https://docs.gaming.chainsafe.io).
 
-Our codebase is quite easy to use. To immediately start with reading from the blockchain, once you've installed our core package,you can simply drag and drop our Web3Unity prefab to the scene and do the following
+Our codebase is quite easy to use. To immediately start with reading from the blockchain, once you've installed our core
+package, you can simply add a new Web3 client to your scene and do the following:
 
 ```csharp
 async void Awake()
 {
+    // Initialize the Web3 Client
     await Web3Unity.Instance.Initialize(false);
+    
+    // Read the balance of a custom token for the specified account address
     var balance = await Web3Unity.Web3.Erc20.GetBalanceOf(contractAddress, accountAddress);   
 }
 ```
 
-Additional prefab scripts can be found here [docs.gaming.chainsafe.io/current/sample-scripts](https://docs.gaming.chainsafe.io/current/sample-scripts).
+Additional sample scripts can be found at [docs.gaming.chainsafe.io/current/sample-scripts](https://docs.gaming.chainsafe.io/current/sample-scripts).
 
 ## Support
 - Need help with web3.unity or found a bug? Be sure to read the documentation above, then review existing issues or create a new one [here](https://github.com/ChainSafe/web3.unity/issues). This is the best way to get help from the ChainSafe Gaming team.

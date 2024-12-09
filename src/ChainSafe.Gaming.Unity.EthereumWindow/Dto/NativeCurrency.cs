@@ -7,11 +7,11 @@ namespace ChainSafe.Gaming.Unity.EthereumWindow.Dto
     /// </summary>
     public struct NativeCurrency
     {
-        public NativeCurrency(string symbol)
+        public NativeCurrency(string name, string symbol, int decimals)
         {
-            Name = symbol;
+            Name = name;
             Symbol = symbol;
-            Decimals = 18;
+            Decimals = decimals;
         }
 
         [JsonProperty("name")]

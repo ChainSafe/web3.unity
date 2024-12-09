@@ -85,7 +85,7 @@ public class Erc1155Sample : MonoBehaviour, ISample
     /// </summary>
     public async Task<string> BalanceOf()
     {
-        var balance = await Web3Unity.Web3.Erc1155.GetBalanceOf(ChainSafeContracts.Erc1155, tokenIdBalanceOf);
+        var balance = await Web3Unity.Web3.Erc1155.GetBalanceOf(ChainSafeContracts.Erc1155, tokenIdBalanceOf, accountBalanceOf);
 
         return balance.ToString();
     }
