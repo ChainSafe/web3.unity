@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="Snackbar.uss"/>
+    <ui:VisualElement name="snackbar__icon-container" class="snackbar__icon-container" picking-mode="Ignore">
+        <ui:Image name="snackbar__icon" class="snackbar__icon" picking-mode="Ignore"/>
+    </ui:VisualElement>
+    <ui:Label name="snackbar__message" class="snackbar__message" text="Hello, friend!" picking-mode="Ignore"/>
+</ui:UXML>

@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance"
+         engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd"
+         editor-extension-mode="False">
+    <ui:VisualElement name="AppKit" style="flex-grow: 1; visibility: hidden;">
+        <ui:VisualElement name="Background" style="flex-grow: 1; justify-content: center; background-color: rgba(0, 0, 0, 0.8);">
+            <Reown.AppKit.Unity.Components.Modal/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

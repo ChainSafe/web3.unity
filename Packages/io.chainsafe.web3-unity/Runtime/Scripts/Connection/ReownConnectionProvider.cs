@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.GUI;
 using ChainSafe.Gaming.Reown;
+using ChainSafe.Gaming.Reown.AppKit;
 using ChainSafe.Gaming.Reown.Connection;
 using ChainSafe.Gaming.Reown.Dialog;
 using ChainSafe.Gaming.Reown.Wallets;
@@ -109,9 +110,15 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
 
         protected override void ConfigureServices(IWeb3ServiceCollection services)
         {
+            #if !UNITY_WEBGL
             services.UseReown(this)
                 .UseWalletSigner()
                 .UseWalletTransactionExecutor();
+            #else
+            services.UseAppKit(this)
+                .UseWalletSigner()
+                .UseWalletTransactionExecutor();
+            #endif
         }
 
         public override async Task<bool> SavedSessionAvailable()
