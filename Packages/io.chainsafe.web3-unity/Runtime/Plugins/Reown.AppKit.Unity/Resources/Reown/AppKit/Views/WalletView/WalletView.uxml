@@ -1,0 +1,35 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="WalletView.uss"/>
+    <ui:VisualElement class="cell">
+        <Reown.AppKit.Unity.Components.Tabbed>
+            <ui:VisualElement name="tabs-container" class="tabbed__tabs-container">
+                <ui:Label name="QrCodeTab" class="tabbed__tab" text="Mobile"/>
+                <ui:Label name="DeepLinkTab" class="tabbed__tab" text="Desktop"/>
+                <ui:Label name="WebAppTab" class="tabbed__tab" text="Web App"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="content-container" class="tabbed__content-container">
+                <ui:VisualElement name="QrCodeContent" class="tabbed__content">
+                    <Reown.AppKit.Unity.Components.QrCodeView/>
+                </ui:VisualElement>
+                <ui:VisualElement name="DeepLinkContent" class="tabbed__content">
+                    <Reown.AppKit.Unity.Components.DeepLinkView/>
+                </ui:VisualElement>
+                <ui:VisualElement name="WebAppContent" class="tabbed__content">
+                    <Reown.AppKit.Unity.Components.WebAppView/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="wallet-view__get-wallet-container">
+                <ui:Label name="wallet-view__get-wallet-label" text="Don't have --WalletName--?"/>
+                <Reown.AppKit.Unity.Components.Button name="wallet-view__get-wallet-button" size="Small" variant="Accent">
+                    <ui:Label text="&lt;font-weight=600&gt;Get&lt;/font-weight&gt;" style="padding: 0;" class="text-paragraph"/>
+                    <ui:Image style="--unity-image: resource('Reown/AppKit/Icons/icon_bold_chevronright'); margin-left: 4px;"/>
+                </Reown.AppKit.Unity.Components.Button>
+            </ui:VisualElement>
+        </Reown.AppKit.Unity.Components.Tabbed>
+    </ui:VisualElement>
+    <ui:VisualElement class="gap"/>
+    <ui:VisualElement class="landscape-visible cell">
+        <ui:Label name="wallet-view__landscape-continue-in-label" text="Continue in --wallet name--" class="text-paragraph"/>
+        <ui:Label name="wallet-view__landscape-message" text="Accept connection request in your wallet app" class="text-small"/>
+    </ui:VisualElement>
+</ui:UXML>

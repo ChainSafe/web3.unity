@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="TextInput.uss"/>
+    <ui:VisualElement name="text-input__container" class="text-input__container">
+        <ui:VisualElement name="text-input__select-ring" class="text-input__select-ring"/>
+        <ui:VisualElement name="text-input__left-slot" class="text-input__left-slot"/>
+        <ui:TextField name="text-input__text-field" class="text-input__text-field" hide-mobile-input="true"/>
+        <ui:VisualElement name="text-input__right-slot" class="text-input__right-slot"/>
+    </ui:VisualElement>
+</ui:UXML>

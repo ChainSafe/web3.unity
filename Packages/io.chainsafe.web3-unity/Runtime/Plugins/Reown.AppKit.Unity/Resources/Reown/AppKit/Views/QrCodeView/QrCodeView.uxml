@@ -1,0 +1,30 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="QrCodeView.uss"/>
+    <ui:VisualElement class="cell">
+        <Reown.AppKit.Unity.Components.AspectRatio class="qrcode-view__code-container">
+            <Reown.AppKit.Unity.Components.QrCode/>
+            <ui:VisualElement name="qrcode-view__icon-container">
+                <ui:VisualElement name="qrcode-view__logo-container">
+                    <ui:Image name="qrcode-view__logo"/>
+                </ui:VisualElement>
+                <ui:VisualElement name="qrcode-view__wallet-icon-container">
+                    <ui:Image name="qrcode-view__wallet-icon">
+                        <ui:VisualElement name="qrcode-view__wallet-icon-border"/>
+                    </ui:Image>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </Reown.AppKit.Unity.Components.AspectRatio>
+    </ui:VisualElement>
+    <ui:VisualElement class="gap"/>
+    <ui:VisualElement class="cell">
+        <ui:Label name="qrcode-view__subtitle" class="text-paragraph" text="Scan this QR code with your phone"/>
+        <ui:VisualElement name="qrcode-view__copy-link-container">
+            <Reown.AppKit.Unity.Components.Link name="qrcode-view__copy-link"
+                                                text="&lt;font-weight=600&gt;Copy link&lt;/font-weight&gt;"
+                                                size="Small"
+                                                variant="Gray"
+                                                icon="Reown/AppKit/Icons/icon_bold_copy"
+            />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

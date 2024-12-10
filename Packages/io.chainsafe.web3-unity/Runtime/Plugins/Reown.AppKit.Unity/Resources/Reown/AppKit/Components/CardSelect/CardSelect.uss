@@ -1,0 +1,106 @@
+:root {
+    padding-top: 4;
+    padding-bottom: 4;
+}
+
+#card-select__container {
+    width: 77px;
+    height: 95px;
+    padding: 8px 8px 10px;
+    align-items: center;
+    border-radius: var(--ro-border-radius-xs);
+    border-width: var(--ro-card-select-border-width);
+    border-color: var(--ro-card-select-border-color);
+    transition-property: background-color;
+    transition-duration: 100ms;
+
+    background-color: var(--ro-card-select-bg-color);
+}
+
+#card-select:active #card-select__container {
+    border-color: var(--ro-color-accent-100);
+}
+
+#card-select__container:hover {
+    background-color: var(--ro-card-select-bg-color-hover);
+}
+
+#card-select__container:disabled {
+    background-color: var(--ro-gray-glass-010);
+}
+
+.card-select--activated #card-select__container {
+    background-color: var(--ro-accent-glass-015);
+}
+
+.card-select--activated #card-select__label {
+    color: var(--ro-color-accent-100);
+}
+
+#card-select__icon-block {
+    width: 56px;
+    height: 56px;
+    flex-shrink: 0;
+}
+
+#card-select__label {
+    width: 60px;
+    height: 16px;
+    margin: 8px 0 0;
+    padding: 0;
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    -unity-text-align: middle-center;
+    white-space: normal;
+    text-overflow: ellipsis;
+    color: var(--ro-color-fg-100);
+}
+
+#card-select__icon-image-container {
+    width: 56;
+    height: 56;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    overflow: hidden;
+    border-radius: var(--ro-border-radius-3xs);
+}
+
+#card-select__icon-image {
+    position: absolute;
+    width: 60;
+    height: 60;
+    flex-shrink: 0;
+    justify-content: center;
+    align-items: center;
+    border-radius: var(--ro-border-radius-3xs);
+    overflow: hidden;
+}
+
+#card-select__icon-image-border {
+    width: 55;
+    height: 55;
+    border-color: var(--ro-card-select-image-border-color);
+    border-radius: var(--ro-border-radius-3xs);
+    border-width: var(--ro-card-select-image-border-width);
+}
+
+#card-select__status-icon-container {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    right: -2;
+    bottom: -2;
+    padding: 2;
+    border-radius: var(--ro-border-radius-full);
+    justify-content: center;
+    align-items: center;
+    background-color: var(--ro-color-bg-150);
+}
+
+#card-select__status-icon-container > .status-icon {
+    width: 16px;
+    height: 16px;
+}

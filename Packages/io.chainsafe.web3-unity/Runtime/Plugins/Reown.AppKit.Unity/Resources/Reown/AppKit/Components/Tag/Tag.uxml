@@ -1,0 +1,4 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="Tag.uss"/>
+    <ui:Label name="tag__label" class="text-micro"/>
+</ui:UXML>

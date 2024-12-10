@@ -1,0 +1,54 @@
+.snackbar {
+    height: 40;
+    border-width: 1;
+    border-radius: var(--ro-border-radius-s);
+    border-color: var(--ro-gray-glass-005);
+    background-color: var(--ro-color-bg-150);
+    flex-direction: row;
+    padding: 8;
+    -unity-text-align: middle-center;
+    color: var(--ro-color-fg-100);
+    font-size: 16;
+    transition-property: opacity;
+    transition-duration: 0.2s;
+}
+
+.snackbar__icon-container {
+    width: 24;
+    height: 24;
+    flex-grow: 0;
+    flex-shrink: 0;
+    border-radius: 1000;
+    margin-right: 8;
+    align-items: center;
+    justify-content: center;
+}
+
+.snackbar__icon {
+    /*width: 12;*/
+    /*height: 12;*/
+}
+
+.snackbar__icon-container--color-error {
+    background-color: var(--ro-color-bg-error-100);
+}
+
+.snackbar__icon-container--color-error > .snackbar__icon {
+    --unity-image-tint-color: var(--ro-color-error-100);
+}
+
+.snackbar__icon-container--color-success {
+    background-color: var(--ro-color-bg-success-100);
+}
+
+.snackbar__icon-container--color-success > .snackbar__icon {
+    --unity-image-tint-color: var(--ro-color-success-100);
+}
+
+.snackbar__icon-container--color-info {
+    background-color: var(--ro-accent-glass-005);
+}
+
+.snackbar__icon-container--color-info > .snackbar__icon {
+    --unity-image-tint-color: var(--ro-color-fg-100);
+}

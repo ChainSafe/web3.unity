@@ -1,0 +1,22 @@
+:root {
+    padding: 3.5 4 4.5;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--ro-border-radius-5xs);
+    -unity-text-align: middle-center;
+}
+
+#tag__label {
+    padding: 0;
+    margin: 0;
+}
+
+.tag--accent {
+    background-color: var(--ro-accent-glass-015);
+    color: var(--ro-color-accent-100);
+}
+
+.tag--info {
+    background-color: var(--ro-gray-glass-010);
+    color: var(--ro-color-fg-150);
+}

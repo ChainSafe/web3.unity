@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="CardSelect.uss"/>
+    <ui:VisualElement name="card-select__container">
+        <ui:VisualElement name="card-select__icon-block">
+            <ui:VisualElement name="card-select__icon-image-container">
+                <ui:Image name="card-select__icon-image">
+                    <ui:VisualElement name="card-select__icon-image-border"/>
+                </ui:Image>
+            </ui:VisualElement>
+            <ui:VisualElement name="card-select__status-icon-container"/>
+        </ui:VisualElement>
+        <ui:Label name="card-select__label" class="text-tiny" text="---"/>
+    </ui:VisualElement>
+</ui:UXML>

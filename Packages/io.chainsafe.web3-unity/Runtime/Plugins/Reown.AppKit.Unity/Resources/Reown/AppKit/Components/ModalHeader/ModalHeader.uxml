@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="ModalHeader.uss"/>
+    <ui:VisualElement name="modal-header__container">
+        <ui:VisualElement name="modal-header__left-slot" class="modal-header__slot"/>
+        <ui:VisualElement name="modal-header__body"/>
+        <ui:VisualElement name="modal-header__right-slot" class="modal-header__slot"/>
+    </ui:VisualElement>
+    <ui:VisualElement name="modal-header__snackbar-container-horizontal"
+                      picking-mode="Ignore">
+        <ui:VisualElement name="modal-header__snackbar-container-vertical"
+                          picking-mode="Ignore">
+            <Reown.AppKit.Unity.Components.Snackbar name="modal-header__snackbar" picking-mode="Ignore"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
