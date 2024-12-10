@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="QrCode.uss"/>
+    <ui:Image name="qrcode-image" class="qrcode__image">
+        <ui:Image name="qrcode-icon" class="qrcode__icon"/>
+    </ui:Image>
+</ui:UXML>

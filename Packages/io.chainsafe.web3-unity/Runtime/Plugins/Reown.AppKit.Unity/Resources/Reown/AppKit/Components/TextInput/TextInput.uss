@@ -1,0 +1,43 @@
+.text-input {
+    align-items: center;
+    justify-content: center;
+}
+
+TextField {
+    --unity-cursor-color: var(--ro-color-accent-100);
+    flex-shrink: 1;
+}
+
+TextInput {
+    margin-left: 0;
+    margin-right: 0;
+    flex-shrink: 1;
+}
+
+Image {
+    --unity-image-tint-color: var(--ro-color-fg-275);
+}
+
+.text-input__container {
+    overflow: visible;
+    flex-direction: row;
+    padding-left: 12;
+    padding-right: 12;
+    align-items: center;
+    border-radius: var(--ro-border-radius-xxs);
+    border-width: 1;
+    width: 100%;
+    border-color: var(--ro-gray-glass-005);
+    background-color: var(--ro-gray-glass-005);
+    color: var(--ro-color-fg-275);
+}
+
+.text-input__container--focused {
+    border-color: var(--ro-color-accent-100);
+    background-color: var(--ro-gray-glass-010);
+}
+
+#text-input__container > #text-input__text-field > #unity-text-input {
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+}

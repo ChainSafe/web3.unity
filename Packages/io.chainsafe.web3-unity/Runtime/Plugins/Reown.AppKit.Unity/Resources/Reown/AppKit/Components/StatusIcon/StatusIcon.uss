@@ -1,0 +1,26 @@
+.status-icon__icon-container {
+    padding: 25%;
+    border-radius: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.status-icon__icon-container--color-error {
+    background-color: var(--ro-color-bg-error-100);
+}
+
+.status-icon__icon-container--color-error > .status-icon__icon {
+    --unity-image-tint-color: var(--ro-color-error-100);
+}
+
+.status-icon__icon-container--color-success {
+    background-color: var(--ro-color-bg-success-100);
+}
+
+.status-icon__icon-container--color-success > .status-icon__icon {
+    --unity-image-tint-color: var(--ro-color-success-100);
+}
+
+.status-icon__icon {
+    --unity-image: resource("Reown/AppKit/Icons/icon_medium_checkmark");
+}

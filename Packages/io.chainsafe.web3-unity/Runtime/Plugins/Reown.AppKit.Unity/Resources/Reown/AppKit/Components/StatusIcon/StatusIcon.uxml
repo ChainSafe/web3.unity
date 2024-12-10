@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="StatusIcon.uss"/>
+    <ui:VisualElement name="status-icon__icon-container" class="status-icon__icon-container">
+        <ui:Image name="status-icon__icon" class="status-icon__icon"/>
+    </ui:VisualElement>
+</ui:UXML>

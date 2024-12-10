@@ -1,0 +1,70 @@
+:root {
+    flex-direction: row;
+    justify-content: center;
+    color: white;
+    padding-top: 16px;
+}
+
+.modal--landscape WalletView {
+    padding-top: 0;
+}
+
+.cell {
+    width: 100%;
+}
+
+.modal--landscape .cell {
+    width: 300;
+    height: 300;
+    flex-grow: 0;
+    flex-shrink: 0;
+    justify-content: center;
+}
+
+.landscape-visible {
+    display: none;
+}
+
+.modal--landscape .landscape-visible {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal--landscape .landscape-hidden {
+    display: none;
+}
+
+.modal--landscape .gap {
+    height: 100%;
+    width: 32px;
+}
+
+.modal--landscape #wallet-view__get-wallet-container {
+    margin-top: 16;
+}
+
+#wallet-view__get-wallet-container {
+    padding: 12 18 12 18;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: var(--ro-border-radius-xs);
+    flex-direction: row;
+    background-color: var(--ro-gray-glass-002);
+}
+
+#wallet-view__get-wallet-container > Label {
+    color: var(--ro-color-fg-200)
+}
+
+#wallet-view__landscape-continue-in-label {
+    margin-bottom: 8;
+    -unity-text-align: middle-center;
+    color: var(--ro-color-fg-100);
+}
+
+#wallet-view__landscape-message {
+    -unity-text-align: middle-center;
+    color: var(--ro-color-fg-200);
+}
+

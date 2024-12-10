@@ -1,0 +1,24 @@
+.wallet-image {
+    padding: 1px;
+    border-width: 1px;
+    border-color: var(--ro-gray-glass-010);
+    border-radius: var(--ro-border-radius-xs, 8px);
+    flex-shrink: 0;
+    flex-grow: 0;
+}
+
+.wallet-image--size-small {
+    width: 32px;
+    height: 32px;
+}
+
+.wallet-image--size-medium {
+    width: 56px;
+    height: 56px;
+}
+
+.wallet-image--size-large {
+    width: 80px;
+    height: 80px;
+}
+
