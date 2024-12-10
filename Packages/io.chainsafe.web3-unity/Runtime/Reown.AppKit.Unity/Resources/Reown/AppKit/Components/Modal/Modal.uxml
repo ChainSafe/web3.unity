@@ -1,5 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <Style src="Modal.uss"/>
-    <Reown.AppKit.Unity.Components.ModalHeader/>
-    <ui:VisualElement name="modal__body"/>
-</ui:UXML>

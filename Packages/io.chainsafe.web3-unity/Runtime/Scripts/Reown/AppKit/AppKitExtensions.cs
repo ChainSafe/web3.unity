@@ -16,7 +16,8 @@ namespace ChainSafe.Gaming.Reown.AppKit
             services.AssertServiceNotBound<IWalletProvider>();
             services.ConfigureReown(config);
             services.AddSingleton<IConnectionHelper, ILifecycleParticipant, AppKitProvider>();
-            services.UseWalletProvider<ReownProvider>(config);
+            services.AddSingleton<ReownHttpClient>();
+            services.UseWalletProvider<AppKitProvider>(config);
             return services;
         }
 

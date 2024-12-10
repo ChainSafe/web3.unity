@@ -127,6 +127,7 @@ namespace Reown.AppKit.Unity
 
         protected virtual ListItem BuildWalletListItem(Wallet wallet)
         {
+            Debug.Log(wallet.Name +" this is wallet name");
             var walletClosure = wallet;
             var isWalletInstalled = WalletUtils.IsWalletInstalled(wallet);
             var walletStatusIcon = isWalletInstalled ? StatusIconType.Success : StatusIconType.None;

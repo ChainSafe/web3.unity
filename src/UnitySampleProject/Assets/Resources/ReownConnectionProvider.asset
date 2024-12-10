@@ -17,13 +17,14 @@ MonoBehaviour:
     PortraitPrefab: {fileID: 593021089488692521, guid: f844207643fe35744b72bf387a704960, type: 3}
   includeWalletIds: []
   excludeWalletIds: []
-  <ProjectId>k__BackingField: 214bf16d1d17a589e2d54d49fefa2259
+  <ProjectId>k__BackingField: f4bff60eb260841f46b1c77588cd8acb
   <ProjectName>k__BackingField: Web3.Unity
   <AutoRenewSession>k__BackingField: 1
   <BaseContext>k__BackingField: unity-game
   <Metadata>k__BackingField:
     Description: web3.unity is an open-source gaming SDK.
-    Icons: []
+    Icons:
+    - https://docs.gaming.chainsafe.io/img/logo.png
     Name: Web3.Unity
     Redirect:
       Native: 

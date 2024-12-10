@@ -1,5 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <Style src="Link.uss"/>
-    <ui:Image name="link__icon"/>
-    <ui:Label name="link__text" class="text-paragraph"/>
-</ui:UXML>

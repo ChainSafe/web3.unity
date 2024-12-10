@@ -1,3 +1,4 @@
+using System.Globalization;
 using Newtonsoft.Json;
 using Reown.AppKit.Unity.Model;
 using Reown.Sign.Unity;
@@ -20,6 +21,20 @@ namespace Reown.AppKit.Unity.Utils
             link = $"{link}wc";
 
             return Linker.CanOpenURL(link);
+        }
+        
+        public static string ToCamelCase(this string input)
+        {
+            if (string.IsNullOrEmpty(input)) return input;
+
+            var words = input.Split(' ');
+            for (int i = 1; i < words.Length; i++)
+            {
+                words[i] = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(words[i].ToLower());
+            }
+
+            return words[0].ToLower() + string.Concat(words[1..]);
+            
         }
 
         public static void SetRecentWallet(Wallet wallet)

@@ -1,8 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <Style src="NetworkLoadingView.uss"/>
-    <ui:VisualElement name="network-loading-view__icon-container">
-        <ui:Image name="network-loading-view__icon"/>
-    </ui:VisualElement>
-    <ui:Label name="network-loading-view__approve-label" text="Approve in wallet" class="text-paragraph landscape-hidden"/>
-    <ui:Label name="network-loading-view__message-label" text="Accept connection request in your wallet" class="text-small landscape-hidden"/>
-</ui:UXML>

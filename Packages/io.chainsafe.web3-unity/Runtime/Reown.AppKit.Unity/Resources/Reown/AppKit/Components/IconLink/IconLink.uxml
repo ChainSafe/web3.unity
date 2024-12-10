@@ -1,4 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <Style src="IconLink.uss"/>
-    <ui:Image name="icon-link__image"/>
-</ui:UXML>

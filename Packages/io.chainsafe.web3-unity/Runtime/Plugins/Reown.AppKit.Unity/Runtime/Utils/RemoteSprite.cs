@@ -60,7 +60,10 @@ namespace Reown.AppKit.Unity.Utils
         public void SubscribeImage(TImage image)
         {
             if (!_isLoaded && !_isLoading)
+            {
+                Debug.Log("HH");
                 UnityEventsDispatcher.Instance.StartCoroutine(LoadRemoteSprite());
+            }
 
             if (_isLoaded)
             {
