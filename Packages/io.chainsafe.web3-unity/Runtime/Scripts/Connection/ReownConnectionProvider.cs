@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.GUI;
 using ChainSafe.Gaming.Reown;
-using ChainSafe.Gaming.Reown.AppKit;
 using ChainSafe.Gaming.Reown.Connection;
 using ChainSafe.Gaming.Reown.Dialog;
 using ChainSafe.Gaming.Reown.Wallets;
 using ChainSafe.Gaming.Web3.Build;
-using ChainSafe.Gaming.Web3.Evm.Wallet;
 using Reown.Core;
 using Reown.Core.Network;
 using Reown.Core.Network.Interfaces;
 using UnityEngine;
-using UnityEngine.Serialization;
 using ReownConnectionHandler = ChainSafe.Gaming.Reown.Connection.IConnectionHandler;
+
+#if USE_APPKIT && (UNITY_WEBGL && !UNITY_EDITOR)
+
+#endif
 
 namespace ChainSafe.Gaming.UnityPackage.Connection
 {
@@ -110,10 +111,12 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
 
         protected override void ConfigureServices(IWeb3ServiceCollection services)
         {
-            services.UseAppKit(this)
+            
+#if USE_APPKIT && (UNITY_WEBGL && !UNITY_EDITOR)
+ services.UseAppKit(this)
                 .UseAppKitSigner()
                 .UseAppKitTransactionExecutor();
-            return;
+#endif
             #if !UNITY_WEBGL
             services.UseReown(this)
                 .UseWalletSigner()

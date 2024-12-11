@@ -31,7 +31,6 @@ MonoBehaviour:
     m_Url: https://package.openupm.com
     m_Scopes:
     - com.nethereum.unity
-    - com.reown.appkit.unity
     - com.reown.core
     - com.reown.core.common
     - com.reown.core.crypto

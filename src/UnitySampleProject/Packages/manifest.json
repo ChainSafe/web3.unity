@@ -1,10 +1,5 @@
 {
   "dependencies": {
-    "com.reown.appkit.unity": "file:E:/Projekti/Clients/Chainsafe/web3.unity/Packages/com.reown.appkit.unity@1.1.2",
-    "com.reown.core": "1.1.2",
-    "com.reown.sign": "1.1.2",
-    "com.reown.sign.nethereum.unity": "1.1.2",
-    "com.reown.sign.unity": "1.1.2",
     "com.tools.webglthreadingpatcher": "https://github.com/VolodymyrBS/WebGLThreadingPatcher.git",
     "com.unity.collab-proxy": "2.4.4",
     "com.unity.ide.rider": "3.0.34",
@@ -66,7 +61,6 @@
       "url": "https://package.openupm.com",
       "scopes": [
         "com.nethereum.unity",
-        "com.reown.appkit.unity",
         "com.reown.core",
         "com.reown.core.common",
         "com.reown.core.crypto",
