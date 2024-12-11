@@ -113,17 +113,22 @@ namespace ChainSafe.Gaming.UnityPackage
             }
         }
 
+        public Task Initialize()
+        {
+            return Initialize(rememberConnection);
+        }
+        
         /// <summary>
         /// Initialize Web3Unity.
         /// </summary>
-        /// <param name="rememberConnection">Connect to any saved <see cref="ConnectionProvider"/> if they exist.</param>
-        public async Task Initialize(bool rememberConnection = true)
+        /// <param name="rememberMe">Connect to any saved <see cref="ConnectionProvider"/> if they exist.</param>
+        public async Task Initialize(bool rememberMe)
         {
             _connectionHandler = GetComponent<ConnectionHandler>();
 
-            await _connectionHandler.Initialize(rememberConnection);
+            await _connectionHandler.Initialize(rememberMe);
 
-            if (rememberConnection)
+            if (rememberMe)
             {
                 try
                 {
