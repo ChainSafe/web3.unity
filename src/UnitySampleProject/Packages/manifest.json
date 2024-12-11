@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.reown.appkit.unity": "file:E:/Projekti/Clients/Chainsafe/web3.unity/Packages/com.reown.appkit.unity@1.1.2",
     "com.reown.core": "1.1.2",
     "com.reown.sign": "1.1.2",
     "com.reown.sign.nethereum.unity": "1.1.2",

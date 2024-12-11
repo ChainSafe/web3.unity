@@ -37,7 +37,7 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
 
         public abstract Task<T> Request<T>(string method, params object[] parameters); // todo sync wallet chain id before sending any other request
 
-        public async Task HandleChainSwitching()
+        public virtual async Task HandleChainSwitching()
         {
             try
             {

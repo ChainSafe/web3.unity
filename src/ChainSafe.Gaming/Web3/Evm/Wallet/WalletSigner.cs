@@ -22,7 +22,9 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
             this.walletConfig = walletConfig;
         }
 
-        public string PublicAddress { get; private set; }
+        public string PublicAddress { get; protected set; }
+
+        protected IWalletProvider WalletProvider => walletProvider;
 
         public virtual async ValueTask WillStartAsync()
         {

@@ -1,9 +1,11 @@
-﻿using ChainSafe.Gaming.Reown.Wallets;
+﻿using ChainSafe.Gaming.Evm.Signers;
+using ChainSafe.Gaming.Reown.Wallets;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.Web3.Core.Evm;
+using ChainSafe.Gaming.Web3.Core.Logout;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
 using Microsoft.Extensions.DependencyInjection;
-using Reown.AppKit.Unity.Http;
 
 namespace ChainSafe.Gaming.Reown.AppKit
 {
@@ -20,6 +22,21 @@ namespace ChainSafe.Gaming.Reown.AppKit
             services.UseWalletProvider<AppKitProvider>(config);
             return services;
         }
+        
+        public static IWeb3ServiceCollection UseAppKitSigner(this IWeb3ServiceCollection collection)
+        {
+            collection.AssertServiceNotBound<ISigner>();
+            collection.AddSingleton<ISigner, ILifecycleParticipant, ILogoutHandler, AppKitSigner>();
+            return collection;
+        }
+        
+        public static IWeb3ServiceCollection UseAppKitTransactionExecutor(this IWeb3ServiceCollection collection)
+        {
+            collection.AssertServiceNotBound<ITransactionExecutor>();
+            collection.AddSingleton<ITransactionExecutor, AppKitTransactionExecutor>();
+            return collection;
+        }
+
 
     }
 }
