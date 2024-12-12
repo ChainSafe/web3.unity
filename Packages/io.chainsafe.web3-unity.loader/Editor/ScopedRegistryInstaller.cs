@@ -34,7 +34,7 @@ public static class ScopedRegistryAndDependencyInstaller
     static ScopedRegistryAndDependencyInstaller()
     {
         // Check if we've already installed the registry and dependencies
-        if (EditorPrefs.GetBool("Installed scoped registries", false))
+        if (EditorPrefs.GetBool("Installed", false))
             return;
 
         try
@@ -102,8 +102,8 @@ public static class ScopedRegistryAndDependencyInstaller
             File.WriteAllText(manifestPath, manifest.ToString(), Encoding.UTF8);
 
             // Set EditorPref so we don't run again
-            EditorPrefs.SetBool("Installed scoped registries", true);
-
+            EditorPrefs.SetBool("Installed", true);
+            Debug.Log("ASFJOIJIAFSO");
             // Refresh to ensure Unity sees the new dependencies
             AssetDatabase.Refresh();
         }

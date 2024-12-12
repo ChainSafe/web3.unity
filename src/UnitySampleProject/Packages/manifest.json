@@ -1,4 +1,4 @@
-{
+﻿{
   "dependencies": {
     "com.tools.webglthreadingpatcher": "https://github.com/VolodymyrBS/WebGLThreadingPatcher.git",
     "com.unity.collab-proxy": "2.4.4",
@@ -15,7 +15,7 @@
     "com.unity.vectorgraphics": "2.0.0-preview.25",
     "com.unity.visualscripting": "1.9.4",
     "com.utilities.async": "https://github.com/RageAgainstThePixel/com.utilities.async.git#upm",
-    "io.chainsafe.web3-unity": "file:../../../Packages/io.chainsafe.web3-unity",
+    "io.chainsafe.web3-unity": "https://github.com/ChainSafe/web3.unity.git?path=/Packages/io.chainsafe.web3-unity#dev",
     "io.chainsafe.web3-unity.hyperplay": "file:../../../Packages/io.chainsafe.web3-unity.hyperplay",
     "io.chainsafe.web3-unity.loader": "file:E:/Projekti/Clients/Chainsafe/web3.unity/Packages/io.chainsafe.web3-unity.loader",
     "io.chainsafe.web3-unity.lootboxes": "file:../../../Packages/io.chainsafe.web3-unity.lootboxes",

@@ -1,124 +1,5 @@
 {
   "dependencies": {
-    "com.nethereum.unity": {
-      "version": "4.26.0",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://package.openupm.com"
-    },
-    "com.reown.appkit.unity": {
-      "version": "1.1.2",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "com.reown.sign.nethereum.unity": "1.1.2",
-        "com.reown.sign.unity": "1.1.2",
-        "com.reown.core": "1.1.2",
-        "com.reown.unity.dependencies": "1.1.2",
-        "com.unity.vectorgraphics": "2.0.0-preview.24"
-      },
-      "url": "https://package.openupm.com"
-    },
-    "com.reown.core": {
-      "version": "1.1.2",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "com.reown.core.common": "1.1.2",
-        "com.reown.core.network": "1.1.2",
-        "com.reown.core.storage": "1.1.2",
-        "com.reown.core.crypto": "1.1.2",
-        "com.reown.unity.dependencies": "1.1.2"
-      },
-      "url": "https://package.openupm.com"
-    },
-    "com.reown.core.common": {
-      "version": "1.1.2",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.nuget.newtonsoft-json": "3.2.1"
-      },
-      "url": "https://package.openupm.com"
-    },
-    "com.reown.core.crypto": {
-      "version": "1.1.2",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "com.reown.core.common": "1.1.2",
-        "com.reown.core.network": "1.1.2",
-        "com.reown.core.storage": "1.1.2",
-        "com.reown.unity.dependencies": "1.1.2"
-      },
-      "url": "https://package.openupm.com"
-    },
-    "com.reown.core.network": {
-      "version": "1.1.2",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "com.reown.core.common": "1.1.2"
-      },
-      "url": "https://package.openupm.com"
-    },
-    "com.reown.core.storage": {
-      "version": "1.1.2",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "com.reown.core.common": "1.1.2"
-      },
-      "url": "https://package.openupm.com"
-    },
-    "com.reown.sign": {
-      "version": "1.1.2",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "com.reown.core": "1.1.2"
-      },
-      "url": "https://package.openupm.com"
-    },
-    "com.reown.sign.nethereum": {
-      "version": "1.1.2",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "com.reown.sign": "1.1.2",
-        "com.nethereum.unity": "4.26.0"
-      },
-      "url": "https://package.openupm.com"
-    },
-    "com.reown.sign.nethereum.unity": {
-      "version": "1.1.2",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "com.reown.sign.nethereum": "1.1.2",
-        "com.reown.sign.unity": "1.1.2"
-      },
-      "url": "https://package.openupm.com"
-    },
-    "com.reown.sign.unity": {
-      "version": "1.1.2",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "com.reown.sign": "1.1.2"
-      },
-      "url": "https://package.openupm.com"
-    },
-    "com.reown.unity.dependencies": {
-      "version": "1.1.2",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.nuget.newtonsoft-json": "3.2.1"
-      },
-      "url": "https://package.openupm.com"
-    },
     "com.tools.webglthreadingpatcher": {
       "version": "https://github.com/VolodymyrBS/WebGLThreadingPatcher.git",
       "depth": 0,
@@ -312,25 +193,14 @@
       "hash": "d32cbd0e3102f87a73fc9f9ce09a1f82fab92b10"
     },
     "io.chainsafe.web3-unity": {
-      "version": "file:../../../Packages/io.chainsafe.web3-unity",
+      "version": "https://github.com/ChainSafe/web3.unity.git?path=/Packages/io.chainsafe.web3-unity#dev",
       "depth": 0,
-      "source": "local",
+      "source": "git",
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.0.2",
-        "com.unity.textmeshpro": "3.0.6",
-        "com.reown.appkit.unity": "1.1.2",
-        "com.nethereum.unity": "4.26.0",
-        "com.reown.core": "1.1.2",
-        "com.reown.core.common": "1.1.2",
-        "com.reown.core.crypto": "1.1.2",
-        "com.reown.core.network": "1.1.2",
-        "com.reown.core.storage": "1.1.2",
-        "com.reown.sign": "1.1.2",
-        "com.reown.sign.nethereum": "1.1.2",
-        "com.reown.sign.nethereum.unity": "1.1.2",
-        "com.reown.sign.unity": "1.1.2",
-        "com.reown.unity.dependencies": "1.1.2"
-      }
+        "com.unity.textmeshpro": "3.0.6"
+      },
+      "hash": "ba6c187e4d1e829662babc170acb70aee27ad66e"
     },
     "io.chainsafe.web3-unity.hyperplay": {
       "version": "file:../../../Packages/io.chainsafe.web3-unity.hyperplay",
@@ -345,7 +215,9 @@
       "version": "file:E:/Projekti/Clients/Chainsafe/web3.unity/Packages/io.chainsafe.web3-unity.loader",
       "depth": 0,
       "source": "local",
-      "dependencies": {}
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "3.0.2"
+      }
     },
     "io.chainsafe.web3-unity.lootboxes": {
       "version": "file:../../../Packages/io.chainsafe.web3-unity.lootboxes",
