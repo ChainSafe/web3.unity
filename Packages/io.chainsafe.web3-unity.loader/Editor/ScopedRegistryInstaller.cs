@@ -33,7 +33,13 @@ public static class ScopedRegistryAndDependencyInstaller
 
     static ScopedRegistryAndDependencyInstaller()
     {
-        // Check if we've already installed the registry and dependencies
+        InstallDependencies();
+    }
+
+    [MenuItem("Install dependencies")]
+    public static void InstallDependencies()
+    {
+         // Check if we've already installed the registry and dependencies
         if (EditorPrefs.GetBool("Installed", false))
             return;
 
