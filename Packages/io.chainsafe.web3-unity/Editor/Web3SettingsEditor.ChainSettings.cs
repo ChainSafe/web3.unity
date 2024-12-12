@@ -166,6 +166,15 @@ namespace ChainSafe.GamingSdk.Editor
                 }
 
                 chainConfig.Ws = EditorGUILayout.TextField("Custom WebHook", chainConfig.Ws);
+                #if APPKIT_AVAILABLE && UNITY_WEBGL
+                chainConfig.ViemName = EditorGUILayout.TextField(
+                    new GUIContent("AppKit Viem Name", "Since you are using AppKit, you need to fill in the viem name which is required in order for app kit to work on webgl."),
+                    chainConfig.ViemName
+                );
+                if (GUILayout.Button("Find Viem Name For Your Chain", GUILayout.Width(200)))
+                    Application.OpenURL("https://github.com/wevm/viem/blob/main/src/chains/index.ts");
+                EditorGUILayout.Space();
+                #endif
 
                 EditorGUI.indentLevel--;
                 if (EditorGUI.EndChangeCheck() || changedRpcOrWs)

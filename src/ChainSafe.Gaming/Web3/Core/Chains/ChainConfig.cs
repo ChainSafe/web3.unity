@@ -52,5 +52,11 @@ namespace ChainSafe.Gaming.NetCore
         /// Chain block explorer.
         /// </summary>
         public string BlockExplorerUrl { get; set; }
+
+        /// <summary>
+        /// Implementation of <see cref="IChainConfig.BlockExplorerUrl"/>
+        /// This field is only relevant if you are using Unity with WebGL and the AppKit package.
+        /// </summary>
+        public string ViemName { get; set; }
     }
 }

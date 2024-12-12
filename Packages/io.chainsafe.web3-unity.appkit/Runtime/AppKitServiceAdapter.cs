@@ -1,3 +1,4 @@
+#if APPKIT_AVAILABLE
 using System;
 using ChainSafe.Gaming.Reown.AppKit;
 using ChainSafe.Gaming.UnityPackage.Connection;
@@ -20,3 +21,4 @@ public class AppKitServiceAdapter : ServiceAdapter
         return web3Builder;
     }
 }
+#endif

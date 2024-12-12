@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Reown.Methods;
@@ -14,7 +13,6 @@ using Nethereum.JsonRpc.Client.RpcMessages;
 using Newtonsoft.Json;
 using Reown.AppKit.Unity;
 using Reown.AppKit.Unity.WebGl.Wagmi;
-using Reown.Sign.Models;
 using UnityEngine;
 using W3AppKit = global::Reown.AppKit.Unity.AppKit;
 
@@ -35,10 +33,12 @@ namespace ChainSafe.Gaming.Reown.AppKit
         {
             "Testnet",
             "Goerli",
-            "Sepolia",
+            "Sepolia"
         };
-        
-        public AppKitProvider(ReownHttpClient httpClient, IChainConfigSet chains, IReownConfig reownConfig, ILogWriter logWriter, Web3Environment web3Environment, IChainManager chainManager, IOperationTracker operationTracker) : base(web3Environment, chainManager.Current, operationTracker)
+
+        public AppKitProvider(ReownHttpClient httpClient, IChainConfigSet chains, IReownConfig reownConfig,
+            ILogWriter logWriter, Web3Environment web3Environment, IChainManager chainManager,
+            IOperationTracker operationTracker) : base(web3Environment, chainManager.Current, operationTracker)
         {
             _httpClient = httpClient;
             _chains = chains;
@@ -49,26 +49,33 @@ namespace ChainSafe.Gaming.Reown.AppKit
 
         private async Task Initialize()
         {
-            if(_appKitCore != null) 
+            if (_appKitCore != null)
                 return;
             _appKitCore = UnityEngine.Object.Instantiate(Resources.Load<AppKitCore>("Reown AppKit"));
-            
+
             _appKitChains = _chains.Configs
-                .Select(IChainConfigToAppKitChain).ToArray();
-            
+                .Select(x =>
+                {
+                    if (x.ViemName == null)
+                        throw new ReownIntegrationException(
+                            $"Viem Name is not set in the chain config for chain. {x.Chain} {x.ChainId}");
+                    return IChainConfigToAppKitChain(x);
+                }).ToArray();
+
             var appKitConfig = new AppKitConfig()
             {
                 projectId = ReownConfig.ProjectId,
-                metadata = new Metadata(ReownConfig.Metadata.Name, ReownConfig.Metadata.Description, ReownConfig.Metadata.Url, ReownConfig.Metadata.Icons[0], new RedirectData()
-                {
-                    Native = ReownConfig.Metadata.Redirect.Native,
-                    Universal = ReownConfig.Metadata.Redirect.Universal,
-                }),
+                metadata = new Metadata(ReownConfig.Metadata.Name, ReownConfig.Metadata.Description,
+                    ReownConfig.Metadata.Url, ReownConfig.Metadata.Icons[0], new RedirectData()
+                    {
+                        Native = ReownConfig.Metadata.Redirect.Native,
+                        Universal = ReownConfig.Metadata.Redirect.Universal
+                    }),
                 supportedChains = _appKitChains,
                 enableEmail = false,
-                enableOnramp = false,
+                enableOnramp = false
             };
-            
+
             await W3AppKit.InitializeAsync(appKitConfig);
         }
 
@@ -77,29 +84,14 @@ namespace ChainSafe.Gaming.Reown.AppKit
             var chain = _appKitChains.FirstOrDefault(x => x.ChainReference == _chainManager.Current.ChainId);
             await W3AppKit.NetworkController.ChangeActiveChainAsync(chain);
         }
-        
+
         private Chain IChainConfigToAppKitChain(IChainConfig x)
         {
             return new Chain(ChainConstants.Namespaces.Evm, x.ChainId,
                 x.Chain, new Currency(x.NativeCurrency.Name, x.NativeCurrency.Symbol,
                     x.NativeCurrency.Decimals), new BlockExplorer(x.Chain + " block explorer", x.BlockExplorerUrl),
-                x.Rpc, IsTestnet(x.Chain), "https://chainlist.org/unknown-logo.png", ToCamelCase(x.Chain));
+                x.Rpc, IsTestnet(x.Chain), "https://chainlist.org/unknown-logo.png", x.ViemName);
         }
-        
-        static string ToCamelCase(string input)
-        {
-            if (string.IsNullOrEmpty(input)) return input;
-
-            var words = input.Split(' ');
-            for (int i = 1; i < words.Length; i++)
-            {
-                words[i] = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(words[i].ToLower());
-            }
-
-            return words[0].ToLower() + string.Concat(words[1..]);
-        }
-        
-        
 
         private bool IsTestnet(string argChain)
         {
@@ -118,23 +110,23 @@ namespace ChainSafe.Gaming.Reown.AppKit
 
         public bool StoredSessionAvailable => false;
 
-        private readonly TaskCompletionSource<string> _accountConnected = new ();
-        
+        private readonly TaskCompletionSource<string> _accountConnected = new();
+
         public override async Task<string> Connect()
-        { 
+        {
             await Initialize();
             W3AppKit.AccountConnected += AppKitAccountConnected;
             W3AppKit.OpenModal();
             var result = await _accountConnected.Task;
             return result;
         }
-        
+
         private async void AppKitAccountConnected(object sender, Connector.AccountConnectedEventArgs e)
         {
             var account = await e.GetAccount();
             _accountConnected.SetResult(account.Address);
         }
-        
+
         public override async Task Disconnect()
         {
             W3AppKit.AccountConnected -= AppKitAccountConnected;
@@ -145,11 +137,11 @@ namespace ChainSafe.Gaming.Reown.AppKit
         {
             return await ReownRequest<T>(method, parameters);
         }
-        
+
         private async Task<T> ReownRequest<T>(string method, params object[] parameters)
         {
             // Helper method to make a request using ReownSignClient.
-            async Task<T> MakeRequest<TRequest>(bool sendChainId=true)
+            async Task<T> MakeRequest<TRequest>(bool sendChainId = true)
             {
                 var data = (TRequest)Activator.CreateInstance(typeof(TRequest), parameters);
                 try
@@ -158,7 +150,8 @@ namespace ChainSafe.Gaming.Reown.AppKit
                 }
                 catch (KeyNotFoundException e)
                 {
-                    throw new ReownIntegrationException("Can't execute request. The session was most likely terminated on the wallet side.", e);
+                    throw new ReownIntegrationException(
+                        "Can't execute request. The session was most likely terminated on the wallet side.", e);
                 }
             }
 
@@ -182,7 +175,8 @@ namespace ChainSafe.Gaming.Reown.AppKit
                         // Using Reown Blockchain API: https://docs.reown.com/cloud/blockchain-api
                         var url = $"https://rpc.walletconnect.com/v1?chainId={chain}&projectId={ReownConfig.ProjectId}";
 
-                        var body = JsonConvert.SerializeObject(new RpcRequestMessage(Guid.NewGuid().ToString(), method, parameters));
+                        var body = JsonConvert.SerializeObject(new RpcRequestMessage(Guid.NewGuid().ToString(), method,
+                            parameters));
                         var rawResult = await _httpClient.PostRaw(url, body, "application/json");
                         var response = JsonConvert.DeserializeObject<RpcResponseMessage>(rawResult.Response);
 
@@ -194,8 +188,5 @@ namespace ChainSafe.Gaming.Reown.AppKit
                     }
             }
         }
-        
-        
     }
-
 }

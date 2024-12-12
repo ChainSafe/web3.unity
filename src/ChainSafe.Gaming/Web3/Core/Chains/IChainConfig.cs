@@ -42,5 +42,10 @@ namespace ChainSafe.Gaming.Web3
         /// The block explorer URL for the active chain.
         /// </summary>
         public string BlockExplorerUrl { get; }
+
+        /// <summary>
+        /// This field is only relevant if you are using Unity with WebGL and the AppKit package.
+        /// </summary>
+        public string ViemName { get; }
     }
 }

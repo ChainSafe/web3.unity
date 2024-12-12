@@ -1,0 +1,16 @@
+{
+    "name": "io.chainsafe.web3-unity.appkit.editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:a37273c0f1cc99640b9cce89c64b02d0"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

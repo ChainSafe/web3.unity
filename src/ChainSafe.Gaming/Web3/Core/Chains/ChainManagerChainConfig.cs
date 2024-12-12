@@ -24,5 +24,7 @@ namespace ChainSafe.Gaming.Web3.Core.Chains
         public string Ws => CurrentConfig.Ws;
 
         public string BlockExplorerUrl => CurrentConfig.BlockExplorerUrl;
+
+        public string ViemName => CurrentConfig.ViemName;
     }
 }
