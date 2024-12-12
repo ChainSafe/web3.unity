@@ -29,8 +29,9 @@ public static class ScopedRegistryAndDependencyInstaller
 
     // The Git dependency to add
     private const string ChainsafeDependencyKey = "io.chainsafe.web3-unity";
-    private const string ChainsafeDependencyUrl = "https://github.com/ChainSafe/web3.unity.git?path=/Packages/io.chainsafe.web3-unity#dev";
-
+    private const string ChainsafeLoaderDependencyKey = "io.chainsafe.web3-unity.loader";
+    private const string ChainsafeDependencyUrl = "https://github.com/ChainSafe/web3.unity.git?path=/Packages/io.chainsafe.web3-unity.loader#nikola/appkit-implementation-1210";
+    private const string DependenciesKey = "Dependencies Installed";
     static ScopedRegistryAndDependencyInstaller()
     {
         InstallDependencies();
@@ -39,7 +40,10 @@ public static class ScopedRegistryAndDependencyInstaller
     [MenuItem("Edit/Install dependencies")]
     public static void InstallDependencies()
     {
-       
+         // Check if we've already installed the registry and dependencies
+        if (PlayerPrefs.GetInt(DependenciesKey, 0) == 1)
+            return;
+
         try
         {
             string manifestPath = Path.Combine(Application.dataPath, "../Packages/manifest.json");
@@ -101,12 +105,13 @@ public static class ScopedRegistryAndDependencyInstaller
                 dependencies[ChainsafeDependencyKey] = ChainsafeDependencyUrl;
             }
 
+            dependencies.Remove(ChainsafeLoaderDependencyKey);
+
             // Write changes back
             File.WriteAllText(manifestPath, manifest.ToString(), Encoding.UTF8);
 
             // Set EditorPref so we don't run again
-            EditorPrefs.SetBool("Installed", true);
-            Debug.Log("ASFJOIJIAFSO");
+            PlayerPrefs.SetInt(DependenciesKey, 1);
             // Refresh to ensure Unity sees the new dependencies
             AssetDatabase.Refresh();
         }
