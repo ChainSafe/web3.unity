@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.GUI;
 using ChainSafe.Gaming.Reown;
+using ChainSafe.Gaming.Reown.AppKit;
 using ChainSafe.Gaming.Reown.Connection;
 using ChainSafe.Gaming.Reown.Dialog;
 using ChainSafe.Gaming.Reown.Wallets;
@@ -109,17 +110,15 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         
         protected override void ConfigureServices(IWeb3ServiceCollection services)
         {
-           #if !UNITY_WEBGL || UNITY_EDITOR
+            #if UNITY_WEBGL && !UNITY_EDITOR
+            services.UseAppKit(this)
+                .UseAppKitSigner()
+                .UseAppKitTransactionExecutor();
+            #else
             services.UseReown(this)
                 .UseWalletSigner()
                 .UseWalletTransactionExecutor();
-            #else
-            web3Builder.Configure(x =>
-            {
-                x.UseAppKit(reownConnectionProvider);
-                x.UseAppKitSigner();
-                x.UseAppKitTransactionExecutor();
-            });
+             
             #endif
         }
        

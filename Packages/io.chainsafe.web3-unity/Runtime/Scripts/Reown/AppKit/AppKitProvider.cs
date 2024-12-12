@@ -51,7 +51,7 @@ namespace ChainSafe.Gaming.Reown.AppKit
 
         private async Task Initialize()
         {
-            if (_appKitCore != null)
+            if (W3AppKit.Instance != null)
                 return;
             _appKitCore = Object.Instantiate(Resources.Load<AppKitCore>("Reown AppKit"));
 
@@ -120,8 +120,9 @@ namespace ChainSafe.Gaming.Reown.AppKit
             return result;
         }
 
-        private void OpenStateChanged(object sender, ModalOpenStateChangedEventArgs e)
+        private async void OpenStateChanged(object sender, ModalOpenStateChangedEventArgs e)
         {
+            await Task.Delay(200);
             if(!e.IsOpen && _accountConnected.Task.IsCompleted == false)
                 _accountConnected.SetException(new TaskCanceledException());
         }
@@ -134,7 +135,6 @@ namespace ChainSafe.Gaming.Reown.AppKit
 
         public override async Task Disconnect()
         {
-            
             await W3AppKit.ConnectorController.DisconnectAsync();
         }
 
