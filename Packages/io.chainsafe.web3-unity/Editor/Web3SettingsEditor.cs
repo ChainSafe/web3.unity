@@ -60,14 +60,15 @@ namespace ChainSafe.GamingSdk.Editor
         {
             web3Config = ProjectConfigUtilities.CreateOrLoad();
             previousProjectId = web3Config.ProjectId;
-        }
+            }
 
         private void OnEnable()
         {
             if (!logo)
                 logo = AssetDatabase.LoadAssetAtPath<Texture2D>(
                     "Packages/io.chainsafe.web3-unity/Editor/Textures/ChainSafeLogo2.png");
-
+           
+            
             TryFetchSupportedChains();
         }
 
@@ -362,6 +363,14 @@ namespace ChainSafe.GamingSdk.Editor
         {
             Project = 0,
             Chains = 1
+        }
+        
+        public class ViemNameChainId
+        {
+            [JsonProperty("name")]
+            public string ViewName { get; set; }
+            [JsonProperty("id")]
+            public string ChainId { get; set; }
         }
 
         private enum FetchingStatus

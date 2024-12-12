@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ChainSafe.Gaming;
 using ChainSafe.Gaming.Web3;
+using Newtonsoft.Json;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -23,12 +25,18 @@ namespace ChainSafe.GamingSdk.Editor
             private ISearchWindowProvider searchWindowProviderImplementation;
             private bool changedRpcOrWs;
             private int selectedWebHookIndex;
+            private Dictionary<string, string> _viemNamesMap = new ();
+
 
             public ChainSettingsPanel(Web3SettingsEditor window, ChainConfigEntry chainConfigEntry)
             {
                 this.window = window;
                 this.configAsset = window.web3Config;
                 this.chainConfig = chainConfigEntry;
+                var list = JsonConvert.DeserializeObject<ViemNameChainId[]>(Resources.Load<TextAsset>("ViemChain").text);
+            
+                foreach (var item in list)
+                    _viemNamesMap.TryAdd(item.ChainId, item.ViewName);
 
                 UpdateServerMenuInfo();
             }
@@ -166,15 +174,33 @@ namespace ChainSafe.GamingSdk.Editor
                 }
 
                 chainConfig.Ws = EditorGUILayout.TextField("Custom WebHook", chainConfig.Ws);
-                #if APPKIT_AVAILABLE && UNITY_WEBGL
-                chainConfig.ViemName = EditorGUILayout.TextField(
-                    new GUIContent("AppKit Viem Name", "Since you are using AppKit, you need to fill in the viem name which is required in order for app kit to work on webgl."),
-                    chainConfig.ViemName
-                );
-                if (GUILayout.Button("Find Viem Name For Your Chain", GUILayout.Width(200)))
-                    Application.OpenURL("https://github.com/wevm/viem/blob/main/src/chains/index.ts");
+                
+                
+#if UNITY_WEBGL
+                if (!string.IsNullOrEmpty(chainConfig.ChainId) && _viemNamesMap.TryGetValue(chainConfig.ChainId, out var viemName))
+                {
+                    // The chain name is known, so let's just display it as read-only
+                    EditorGUI.BeginDisabledGroup(true);
+                    chainConfig.ViemName = EditorGUILayout.TextField( 
+                        new GUIContent("AppKit Viem Name", "Viem name is essential for the work of the AppKit. It is determined automatically from the known chain mappings."),
+                        viemName
+                    );
+                    EditorGUI.EndDisabledGroup();
+                }
+                else
+                {
+                    // Chain name is unknown, allow editing and show the button
+                    chainConfig.ViemName = EditorGUILayout.TextField(
+                        new GUIContent("AppKit Viem Name", "Since you are using AppKit, you need to fill in the viem name required for WebGL. If you can't find the viem name on the website, this chain will most likely not work on WebGL."),
+                        chainConfig.ViemName
+                    );
+
+                    if (GUILayout.Button("Find Viem Name For Your Chain", GUILayout.Width(200)))
+                        Application.OpenURL("https://github.com/wevm/viem/blob/main/src/chains/index.ts");
+                }
+
                 EditorGUILayout.Space();
-                #endif
+#endif
 
                 EditorGUI.indentLevel--;
                 if (EditorGUI.EndChangeCheck() || changedRpcOrWs)

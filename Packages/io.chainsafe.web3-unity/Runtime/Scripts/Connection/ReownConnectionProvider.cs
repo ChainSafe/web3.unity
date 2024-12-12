@@ -14,17 +14,13 @@ using Reown.Core.Network.Interfaces;
 using UnityEngine;
 using ReownConnectionHandler = ChainSafe.Gaming.Reown.Connection.IConnectionHandler;
 
-#if USE_APPKIT && (UNITY_WEBGL && !UNITY_EDITOR)
-
-#endif
-
 namespace ChainSafe.Gaming.UnityPackage.Connection
 {
     /// <summary>
     /// Reown connection provider used for connecting to a wallet using Reown.
     /// </summary>
     [CreateAssetMenu(menuName = "ChainSafe/Connection Provider/Reown", fileName = nameof(ReownConnectionProvider))]
-    public class ReownConnectionProvider : ConnectionProvider, IReownConfig, IConnectionHandlerProvider
+    public partial class ReownConnectionProvider : ConnectionProvider, IReownConfig, IConnectionHandlerProvider
     {
         [SerializeField] private GuiScreenFactory connectionScreenPrefabs;
         [SerializeField] private List<string> includeWalletIds;
@@ -110,17 +106,16 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         }
 #endif
 
+        
         protected override void ConfigureServices(IWeb3ServiceCollection services)
         {
-            
-            #if UNITY_EDITOR ||  !UNITY_WEBGL
+           #if !APPKIT_AVAILABLE || UNITY_EDITOR
             services.UseReown(this)
                 .UseWalletSigner()
                 .UseWalletTransactionExecutor();
-            #else
-            
             #endif
         }
+       
 
         public override async Task<bool> SavedSessionAvailable()
         {
