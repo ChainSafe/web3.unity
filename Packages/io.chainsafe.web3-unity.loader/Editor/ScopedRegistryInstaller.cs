@@ -7,7 +7,7 @@ using System.Text;
 using Newtonsoft.Json.Linq;
 
 [InitializeOnLoad]
-public static class ScopedRegistryInstaller
+public static class ScopedRegistryAndDependencyInstaller
 {
     private static readonly string RegistryName = "package.openupm.com";
     private static readonly string RegistryUrl = "https://package.openupm.com";
@@ -27,9 +27,13 @@ public static class ScopedRegistryInstaller
         "com.reown.unity.dependencies"
     };
 
-    static ScopedRegistryInstaller()
+    // The Git dependency to add
+    private const string ChainsafeDependencyKey = "io.chainsafe.web3-unity";
+    private const string ChainsafeDependencyUrl = "https://github.com/ChainSafe/web3.unity.git?path=/Packages/io.chainsafe.web3-unity#dev";
+
+    static ScopedRegistryAndDependencyInstaller()
     {
-        // If we've already installed the registry, do nothing
+        // Check if we've already installed the registry and dependencies
         if (EditorPrefs.GetBool("Installed scoped registries", false))
             return;
 
@@ -67,9 +71,9 @@ public static class ScopedRegistryInstaller
             }
             else
             {
-                // Registry already exists, ensure scopes are present and no duplicates
+                // Registry exists, ensure scopes are present
                 JArray scopesArray = (JArray)existingRegistry["scopes"];
-                var currentScopes = scopesArray!.Select(s => s.Value<string>()).ToList();
+                var currentScopes = scopesArray.Select(s => s.Value<string>()).ToList();
 
                 foreach (var scope in RequiredScopes)
                 {
@@ -80,20 +84,32 @@ public static class ScopedRegistryInstaller
                 }
             }
 
+            // Add the Chainsafe Git dependency
+            if (manifest["dependencies"] == null)
+            {
+                manifest["dependencies"] = new JObject();
+            }
+
+            JObject dependencies = (JObject)manifest["dependencies"];
+
+            // If not present or differs, add/update it
+            if (dependencies[ChainsafeDependencyKey] == null || dependencies[ChainsafeDependencyKey].Value<string>() != ChainsafeDependencyUrl)
+            {
+                dependencies[ChainsafeDependencyKey] = ChainsafeDependencyUrl;
+            }
+
             // Write changes back
             File.WriteAllText(manifestPath, manifest.ToString(), Encoding.UTF8);
 
             // Set EditorPref so we don't run again
             EditorPrefs.SetBool("Installed scoped registries", true);
 
-            // Refresh
+            // Refresh to ensure Unity sees the new dependencies
             AssetDatabase.Refresh();
-            
-            Debug.Log("Installed scoped registries");
         }
         catch (System.Exception ex)
         {
-            Debug.LogError($"Failed to install scoped registries: {ex.Message}\n{ex.StackTrace}");
+            Debug.LogError($"Failed to install scoped registries or Chainsafe dependency: {ex.Message}\n{ex.StackTrace}");
         }
     }
 }

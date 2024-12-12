@@ -1,0 +1,21 @@
+{
+  "name": "io.chainsafe.web3-unity.loader",
+  "version": "3.1.0",
+  "displayName": "web3.unity SDK Loader",
+  "description": "Loads chaisnafe sdk in unity from git.",
+  "license": "LGPL-3.0-only",
+  "licensesUrl": "https://github.com/ChainSafe/web3.unity/blob/main/LICENSE",
+  "documentationUrl": "https://docs.gaming.chainsafe.io/",
+  "dependencies": {
+  },
+  "keywords": [
+    "web3",
+    "ethereum",
+    "evm"
+  ],
+  "author": {
+    "name": "ChainSafe Gaming",
+    "email": "bd@chainsafe.io",
+    "url": "https://gaming.chainsafe.io/"
+  }
+}
