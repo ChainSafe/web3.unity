@@ -105,8 +105,6 @@ public static class ScopedRegistryAndDependencyInstaller
                 dependencies[ChainsafeDependencyKey] = ChainsafeDependencyUrl;
             }
 
-            dependencies.Remove(ChainsafeLoaderDependencyKey);
-
             // Write changes back
             File.WriteAllText(manifestPath, manifest.ToString(), Encoding.UTF8);
 
