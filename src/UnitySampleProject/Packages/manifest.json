@@ -16,6 +16,7 @@
     "com.unity.visualscripting": "1.9.4",
     "com.utilities.async": "https://github.com/RageAgainstThePixel/com.utilities.async.git#upm",
     "io.chainsafe.web3-unity": "file:../../../Packages/io.chainsafe.web3-unity",
+    "io.chainsafe.web3-unity.appkit": "file:E:/Projekti/Clients/Chainsafe/web3.unity/Packages/io.chainsafe.web3-unity.appkit",
     "io.chainsafe.web3-unity.hyperplay": "file:../../../Packages/io.chainsafe.web3-unity.hyperplay",
     "io.chainsafe.web3-unity.lootboxes": "file:../../../Packages/io.chainsafe.web3-unity.lootboxes",
     "io.chainsafe.web3-unity.marketplace": "file:../../../Packages/io.chainsafe.web3-unity.marketplace",

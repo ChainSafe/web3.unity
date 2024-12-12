@@ -17,6 +17,7 @@ using Reown.AppKit.Unity.WebGl.Wagmi;
 using Reown.Sign.Models;
 using UnityEngine;
 using W3AppKit = global::Reown.AppKit.Unity.AppKit;
+
 namespace ChainSafe.Gaming.Reown.AppKit
 {
     public class AppKitProvider : WalletProvider, ILifecycleParticipant, IConnectionHelper
@@ -27,9 +28,8 @@ namespace ChainSafe.Gaming.Reown.AppKit
         private readonly IChainConfigSet _chains;
         private readonly ILogWriter _logWriter;
         private readonly IChainManager _chainManager;
-        private bool initialized;
         private Chain[] _appKitChains;
-        private string _sessionTopic;
+        private AppKitCore _appKitCore;
 
         private readonly string[] TestnetSuffix = new[]
         {
@@ -49,8 +49,9 @@ namespace ChainSafe.Gaming.Reown.AppKit
 
         private async Task Initialize()
         {
-            if(initialized)
+            if(_appKitCore != null) 
                 return;
+            _appKitCore = UnityEngine.Object.Instantiate(Resources.Load<AppKitCore>("Reown AppKit"));
             
             _appKitChains = _chains.Configs
                 .Select(IChainConfigToAppKitChain).ToArray();
@@ -69,9 +70,6 @@ namespace ChainSafe.Gaming.Reown.AppKit
             };
             
             await W3AppKit.InitializeAsync(appKitConfig);
-            
-            initialized = true;
-            
         }
 
         public override async Task HandleChainSwitching()
@@ -126,19 +124,11 @@ namespace ChainSafe.Gaming.Reown.AppKit
         { 
             await Initialize();
             W3AppKit.AccountConnected += AppKitAccountConnected;
-            W3AppKit.Instance.SignClient.SessionConnectedUnity += SessionConnected;
             W3AppKit.OpenModal();
             var result = await _accountConnected.Task;
             return result;
         }
-
-
-        private void SessionConnected(object sender, SessionStruct e)
-        {
-            Debug.Log("SESSION CONNECTED! " + e.Topic);
-            _sessionTopic = e.Topic;
-        }
-
+        
         private async void AppKitAccountConnected(object sender, Connector.AccountConnectedEventArgs e)
         {
             var account = await e.GetAccount();

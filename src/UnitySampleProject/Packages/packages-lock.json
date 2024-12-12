@@ -201,6 +201,16 @@
         "com.unity.textmeshpro": "3.0.6"
       }
     },
+    "io.chainsafe.web3-unity.appkit": {
+      "version": "file:E:/Projekti/Clients/Chainsafe/web3.unity/Packages/io.chainsafe.web3-unity.appkit",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "3.0.2",
+        "io.chainsafe.web3-unity": "3.0.6",
+        "com.unity.vectorgraphics": "2.0.0-preview.24"
+      }
+    },
     "io.chainsafe.web3-unity.hyperplay": {
       "version": "file:../../../Packages/io.chainsafe.web3-unity.hyperplay",
       "depth": 0,

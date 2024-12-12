@@ -59,7 +59,14 @@
       "ChainSafe.Gaming.Marketplace",
       "ChainSafe.Gaming.Unity.EthereumWindow",
       "ChainSafe.Gaming.Reown",
-      
+      "Reown.Core",
+      "Reown.Core.Common",
+      "Reown.Core.Crypto",
+      "Reown.Core.Network",
+      "Reown.Core.Network.WebSocket",
+      "Reown.Core.Storage",
+      "Reown.Sign",
+      "Reown.WalletKit"
     ]
   },
   {
