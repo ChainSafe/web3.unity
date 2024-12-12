@@ -88,6 +88,8 @@ public static class ScopedRegistryInstaller
 
             // Refresh
             AssetDatabase.Refresh();
+            
+            Debug.Log("Installed scoped registries");
         }
         catch (System.Exception ex)
         {
