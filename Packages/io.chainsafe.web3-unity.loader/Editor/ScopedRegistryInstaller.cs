@@ -36,13 +36,10 @@ public static class ScopedRegistryAndDependencyInstaller
         InstallDependencies();
     }
 
-    [MenuItem("Install dependencies")]
+    [MenuItem("Edit/Install dependencies")]
     public static void InstallDependencies()
     {
-         // Check if we've already installed the registry and dependencies
-        if (EditorPrefs.GetBool("Installed", false))
-            return;
-
+       
         try
         {
             string manifestPath = Path.Combine(Application.dataPath, "../Packages/manifest.json");
