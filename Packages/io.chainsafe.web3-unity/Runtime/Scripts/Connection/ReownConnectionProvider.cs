@@ -109,10 +109,17 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         
         protected override void ConfigureServices(IWeb3ServiceCollection services)
         {
-           #if !APPKIT_AVAILABLE || UNITY_EDITOR
+           #if !UNITY_WEBGL || UNITY_EDITOR
             services.UseReown(this)
                 .UseWalletSigner()
                 .UseWalletTransactionExecutor();
+            #else
+            web3Builder.Configure(x =>
+            {
+                x.UseAppKit(reownConnectionProvider);
+                x.UseAppKitSigner();
+                x.UseAppKitTransactionExecutor();
+            });
             #endif
         }
        
