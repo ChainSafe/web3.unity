@@ -4,9 +4,7 @@ using AOT;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-#if ENABLE_INPUT_SYSTEM
-using UnityEngine.InputSystem;
-#endif
+
 using UnityEngine.Scripting;
 
 namespace ChainSafe.Gaming
@@ -37,22 +35,7 @@ namespace ChainSafe.Gaming
             _clipboardHandler = null;
 #endif
         }
-
-        private void Update()
-        {
-#if ENABLE_INPUT_SYSTEM
-            if ((Keyboard.current.leftCtrlKey.isPressed || Keyboard.current.leftCommandKey.isPressed) && Keyboard.current.vKey.wasPressedThisFrame)
-            {
-                _clipboardHandler?.Paste();
-            }
-#else
-            if ((Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.LeftCommand)) && Input.GetKeyDown(KeyCode.V))
-            {
-                _clipboardHandler?.Paste();
-            }
-#endif
-        }
-
+        
 
         [MonoPInvokeCallback(typeof(Action))]
         public static void OnPaste(string text)

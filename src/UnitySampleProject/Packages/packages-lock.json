@@ -312,7 +312,7 @@
       "hash": "d32cbd0e3102f87a73fc9f9ce09a1f82fab92b10"
     },
     "io.chainsafe.web3-unity": {
-      "version": "file:E:/Projekti/Clients/Chainsafe/web3.unity/Packages/io.chainsafe.web3-unity",
+      "version": "file:../../../Packages/io.chainsafe.web3-unity",
       "depth": 0,
       "source": "local",
       "dependencies": {
