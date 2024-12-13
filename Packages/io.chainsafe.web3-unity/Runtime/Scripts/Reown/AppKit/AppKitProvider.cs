@@ -30,7 +30,6 @@ namespace ChainSafe.Gaming.Reown.AppKit
         private readonly ILogWriter _logWriter;
         private readonly IChainManager _chainManager;
         private Chain[] _appKitChains;
-        private AppKitCore _appKitCore;
 
         private readonly string[] TestnetSuffix = new[]
         {
@@ -54,7 +53,8 @@ namespace ChainSafe.Gaming.Reown.AppKit
         {
             if (W3AppKit.Instance != null)
                 return;
-            _appKitCore = Object.Instantiate(Resources.Load<AppKitCore>("Reown AppKit"));
+            
+            Object.Instantiate(Resources.Load<AppKitCore>("Reown AppKit"));
 
             _appKitChains = _chains.Configs
                 .Select(x =>

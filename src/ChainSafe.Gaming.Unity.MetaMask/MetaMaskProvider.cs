@@ -88,8 +88,9 @@ namespace ChainSafe.Gaming.Unity.MetaMask
                 EventName = "Metamask WebGL Initialized",
                 PackageName = "io.chainsafe.web3-unity",
             });
-
-            return await metaMaskController.Connect(chainConfig, chainRegistryProvider);
+            var connect = await metaMaskController.Connect(chainConfig, chainRegistryProvider);
+            await AddNetworkIfNotExistInWallet();
+            return connect;
         }
     }
 }
