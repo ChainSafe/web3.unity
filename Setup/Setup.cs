@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using CommandLine;
 using Newtonsoft.Json;
 using Setup.Utils;
 
@@ -57,35 +58,20 @@ namespace Setup
         {
             List<IRunnable> runnableList = new List<IRunnable>();
             
-            // Parse arguments and Run operations based on that.
-            foreach (var arg in args)
-            {
-                switch (arg)
+            Parser.Default.ParseArguments<DefaultOptions, SyncBranches>(args)
+                .WithParsed(options =>
                 {
-                    case not null when arg.StartsWith("-release"):
-                        
-                        string version = arg.Split(":")[1];
-                        runnableList.AddRunnable(new Release(version));
-                        break;
-                    
-                    case "-duplicate_samples":
-                        runnableList.AddRunnable(new DuplicateSamples());
-                        break;
-                    
-                    case "-sync_dependencies":
-                        runnableList.AddRunnable(new SyncDependencies());
-                        break;
-                    
-                    case not null when arg.StartsWith("-git"):
-                        
-                        string configuration = arg.Split(":")[1];
-                        Git.Configure(configuration);
-                        continue;
-                    
-                    default:
-                        continue;
-                }
-            }
+                    switch (options)
+                    {
+                        case DefaultOptions defaultOptions:
+                            runnableList.AddRange(defaultOptions.GetRunnableList());
+                            break;
+                        case SyncBranches syncBranches:
+                            runnableList.Add(syncBranches);
+                            runnableList.Add(new Git(true));
+                            break;
+                    }
+                });
 
             return runnableList;
         }

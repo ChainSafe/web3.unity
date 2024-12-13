@@ -54,8 +54,9 @@ jobs:
     needs: [ pre_job ]
   duplicate_samples:
     name: Duplicate Samples 🪞
-    if: ${{ github.event.action == 'ready_for_review' || github.event.label.name == 'ready-to-merge'}}
+    if: ${{ (github.event.action == 'ready_for_review' || (!github.event.pull_request.draft && contains( github.event.pull_request.labels.*.name, 'ready-to-merge'))) && needs.check_commit.outputs.commit_message != 'Sync Dependencies - Auto Commit'}}
     uses: ChainSafe/web3.unity/.github/workflows/duplicate_samples.yaml@main
+    needs: [ check_commit ]
     secrets: inherit
   sync_dependencies:
     name: Sync Dependencies 🔄

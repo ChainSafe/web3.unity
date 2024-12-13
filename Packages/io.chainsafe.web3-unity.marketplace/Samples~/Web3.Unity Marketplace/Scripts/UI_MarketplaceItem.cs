@@ -35,7 +35,7 @@ namespace ChainSafe.Gaming.Marketplace.Samples
             itemId.text = "ID " + model.Token.Id;
             itemPrice.text =
                 ((decimal)BigInteger.Parse(model.Price) / (decimal)BigInteger.Pow(10, 18)).ToString("0.############",
-                    CultureInfo.InvariantCulture) + Web3Unity.Web3.ChainConfig.Symbol;
+                    CultureInfo.InvariantCulture) + Web3Unity.Web3.ChainConfig.NativeCurrency.Symbol;
             button.onClick.AddListener(Purchase);
         }
 
@@ -56,7 +56,9 @@ namespace ChainSafe.Gaming.Marketplace.Samples
             var myTexture = ((DownloadHandlerTexture)unityWebRequest.downloadHandler).texture;
 
             sprite = Sprite.Create(myTexture, new Rect(0, 0, myTexture.width, myTexture.height), Vector2.one * 0.5f);
-
+            
+            _spritesDict[imageUrl] = sprite;
+            
             return sprite;
         }
 
@@ -68,7 +70,7 @@ namespace ChainSafe.Gaming.Marketplace.Samples
                 button.interactable = false;
                 itemStatus.text = "Sold";
             }
-            catch (ServiceNotBoundWeb3Exception<ISigner> _)
+            catch (ServiceNotBoundWeb3Exception<ISigner>)
             {
                 Debug.LogError("You wanted to purchase an item and you don't have a wallet. Please connect the wallet to make a purchase");
                 Web3Unity.ConnectionScreen.Open();

@@ -9,14 +9,21 @@ on:
       - ready_for_review
 
 jobs:
+  pre_job:
+    name: Pre Job 🚀
+    runs-on: ubuntu-latest
+    if: ${{ github.event.action == 'ready_for_review' || (!github.event.pull_request.draft && contains( github.event.pull_request.labels.*.name, 'ready-to-merge')) }}
+    steps:
+      - run: echo "Proceeding to checks..."
   web3_tests:
     name: Web3 tests 🕸
-    if: ${{ github.event.action == 'ready_for_review' || github.event.label.name == 'ready-to-merge'}}
     uses: ChainSafe/web3.unity/.github/workflows/test.yaml@main
+    needs: [ pre_job ]
   analyze_code:
     name: Analyze 🧐
-    if: ${{ github.event.action == 'ready_for_review' || github.event.label.name == 'ready-to-merge'}}
     uses: ChainSafe/web3.unity/.github/workflows/codeql.yml@main
+    needs: [ pre_job ]
   documentation_check:
     name: Documentation Check 📚
     uses: ChainSafe/web3.unity/.github/workflows/documentation_check.yml@main
+    needs: [ pre_job ]

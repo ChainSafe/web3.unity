@@ -14,8 +14,6 @@ namespace ChainSafe.Gaming.UnityPackage
     /// </summary>
     public class ConnectToWallet : ServiceAdapter, IWeb3InitializedHandler, ILogoutHandler
     {
-        [SerializeField] private bool rememberMe = true;
-
         [Space][SerializeField] private Button connectButton;
 
         [SerializeField] private Button disconnectButton;
@@ -32,7 +30,7 @@ namespace ChainSafe.Gaming.UnityPackage
         {
             try
             {
-                await Web3Unity.Instance.Initialize(rememberMe);
+                await Web3Unity.Instance.Initialize();
             }
             finally
             {

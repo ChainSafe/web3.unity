@@ -15,7 +15,7 @@ jobs:
     name: Setup job
     uses: ChainSafe/web3.unity/.github/workflows/setup.yaml@main
     with:
-      arguments: "-release:${{ github.event.inputs.version }}"
+      arguments: "--deploy ${{ github.event.inputs.version }}"
     secrets: inherit
   release:
     name: Release job
