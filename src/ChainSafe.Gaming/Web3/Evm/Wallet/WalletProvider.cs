@@ -52,7 +52,7 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
 
         private async Task SwitchChain(IChainConfig chainId)
         {
-            await AddNetworkIfNotExistInWallet(chainId);
+            await SwitchChainAddIfMissing(chainId);
         }
 
         private async Task<string> GetWalletChainId()
@@ -65,7 +65,7 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
             return number.ToString(CultureInfo.InvariantCulture);
         }
 
-        public async Task AddNetworkIfNotExistInWallet(IChainConfig config = null)
+        public async Task SwitchChainAddIfMissing(IChainConfig config = null)
         {
             var chainId = await GetWalletChainId();
             var chainConfig = config ?? this.chainConfig;
@@ -76,40 +76,33 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
                 return;
             }
 
-            var addChainParameters = new[]
+            var addChainParameter = new
             {
-                new
+                chainId = "0x" + ulong.Parse(chainConfig.ChainId).ToString("X"),
+                chainName = chainConfig.Chain,
+                nativeCurrency = new
                 {
-                    chainId = "0x" + ulong.Parse(chainConfig.ChainId).ToString("X"),
-                    chainName = chainConfig.Chain,
-                    nativeCurrency = new
-                    {
-                        name = chainConfig.NativeCurrency.Name,
-                        symbol = chainConfig.NativeCurrency.Symbol,
-                        decimals = chainConfig.NativeCurrency.Decimals,
-                    },
-                    rpcUrls = new[] { chainConfig.Rpc },
-                    blockExplorerUrls = new[] { chainConfig.BlockExplorerUrl },
+                    name = chainConfig.NativeCurrency.Name,
+                    symbol = chainConfig.NativeCurrency.Symbol,
+                    decimals = chainConfig.NativeCurrency.Decimals,
                 },
+                rpcUrls = new[] { chainConfig.Rpc },
+                blockExplorerUrls = new[] { chainConfig.BlockExplorerUrl },
             };
 
-            using (operationTracker.TrackOperation($"Adding or Switching the network to: {chainConfig.Chain}..."))
+            using (operationTracker.TrackOperation($"Switching the network to: {chainConfig.Chain}...\n(The network will be added if it's missing)"))
             {
                 try
                 {
-                    await AddChain(addChainParameters);
+                    // this will switch to the network and add it to the wallet if it's missing
+                    await Request<object[]>("wallet_addEthereumChain", addChainParameter);
                 }
                 catch (Exception e)
                 {
-                    logWriter.LogError($"Failed to add and switch to the network: {e.Message}");
+                    logWriter.LogError($"Failed to add or switch to the network: {e.Message}");
                     throw new InvalidOperationException("Failed to add or switch to the network.", e);
                 }
             }
-        }
-
-        protected async Task AddChain(object addChainParameters)
-        {
-            await Request<object[]>("wallet_addEthereumChain", addChainParameters);
         }
     }
 }
