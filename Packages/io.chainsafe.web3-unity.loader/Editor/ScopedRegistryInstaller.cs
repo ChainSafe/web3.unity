@@ -34,15 +34,16 @@ public static class ScopedRegistryAndDependencyInstaller
     private const string DependenciesKey = "Dependencies Installed";
     static ScopedRegistryAndDependencyInstaller()
     {
+        // Check if we've already installed the registry and dependencies
+        if (PlayerPrefs.GetInt(DependenciesKey, 0) == 1)
+            return;
+        
         InstallDependencies();
     }
 
     [MenuItem("Edit/Install dependencies")]
     public static void InstallDependencies()
     {
-         // Check if we've already installed the registry and dependencies
-        if (PlayerPrefs.GetInt(DependenciesKey, 0) == 1)
-            return;
 
         try
         {
