@@ -21,20 +21,6 @@ namespace ChainSafe.Gaming.Reown.AppKit
             services.UseWalletProvider<AppKitProvider>(config);
             return services;
         }
-        
-        public static IWeb3ServiceCollection UseAppKitSigner(this IWeb3ServiceCollection collection)
-        {
-            collection.AssertServiceNotBound<ISigner>();
-            collection.AddSingleton<ISigner, ILifecycleParticipant, ILogoutHandler, AppKitSigner>();
-            return collection;
-        }
-        
-        public static IWeb3ServiceCollection UseAppKitTransactionExecutor(this IWeb3ServiceCollection collection)
-        {
-            collection.AssertServiceNotBound<ITransactionExecutor>();
-            collection.AddSingleton<ITransactionExecutor, AppKitTransactionExecutor>();
-            return collection;
-        }
 
 
     }

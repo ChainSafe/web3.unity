@@ -112,8 +112,9 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         {
             #if UNITY_WEBGL && !UNITY_EDITOR
             services.UseAppKit(this)
-                .UseAppKitSigner()
-                .UseAppKitTransactionExecutor();
+                .UseWalletSigner()
+                .UseWalletTransactionExecutor();
+
             #else
             services.UseReown(this)
                 .UseWalletSigner()
