@@ -1,7 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Numerics;
+using System.Threading;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.Evm.Network;
+using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Reown.Connection;
 using ChainSafe.Gaming.Reown.Methods;
 using ChainSafe.Gaming.Reown.Models;
@@ -15,6 +20,7 @@ using ChainSafe.Gaming.Web3.Core.Debug;
 using ChainSafe.Gaming.Web3.Core.Operations;
 using ChainSafe.Gaming.Web3.Environment;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
+using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.Client.RpcMessages;
 using Newtonsoft.Json;
 using Reown.Core.Common.Logging;
@@ -47,6 +53,7 @@ namespace ChainSafe.Gaming.Reown
         private readonly Web3Environment environment;
         private readonly IChainConfigSet chainConfigSet;
         private readonly IOperationTracker operationTracker;
+        private readonly IRpcProvider rpcProvider;
 
         private SessionStruct session;
         private bool connected;
@@ -63,10 +70,12 @@ namespace ChainSafe.Gaming.Reown
             RedirectionHandler redirection,
             Web3Environment environment,
             ReownHttpClient reownHttpClient,
-            IOperationTracker operationTracker)
+            IOperationTracker operationTracker,
+            IRpcProvider rpcProvider)
             : base(environment, chainConfig, operationTracker)
         {
             this.operationTracker = operationTracker;
+            this.rpcProvider = rpcProvider;
             this.chainConfigSet = chainConfigSet;
             this.environment = environment;
             analyticsClient = environment.AnalyticsClient;
@@ -147,7 +156,7 @@ namespace ChainSafe.Gaming.Reown
 
                 SignClient = await SignClient.Init(signClientOptions);
                 await SignClient.AddressProvider.LoadDefaultsAsync();
-                
+
                 if (config.OnRelayErrored is not null)
                 {
                     SignClient.CoreClient.Relayer.OnErrored += config.OnRelayErrored;
@@ -168,6 +177,7 @@ namespace ChainSafe.Gaming.Reown
                             "eth_sendTransaction",
                             "eth_getTransactionByHash",
                             "wallet_switchEthereumChain",
+                            "wallet_addEthereumChain",
                             "eth_blockNumber",
                         },
                         Events = new[]
@@ -230,8 +240,6 @@ namespace ChainSafe.Gaming.Reown
 
                 connected = true;
 
-                await CheckAndSwitchNetwork();
-
                 return address;
             }
             catch (Exception e)
@@ -240,43 +248,6 @@ namespace ChainSafe.Gaming.Reown
                 await SignClient.CoreClient.Storage.Clear();
 
                 throw new ReownIntegrationException("Error occured during Reown connection process.", e);
-            }
-        }
-
-        private async Task CheckAndSwitchNetwork()
-        {
-            var chainId = ExtractChainIdFromAddress();
-            if (chainId == $"{EvmNamespace}:{chainConfig.ChainId}")
-            {
-                return;
-            }
-
-            const int maxSwitchAttempts = 3;
-
-            for (var i = 0;;)
-            {
-                var messageToUser = i == 0
-                    ? "Switching wallet network..."
-                    : $"Switching wallet network (attempt {i + 1})...";
-
-                using (operationTracker.TrackOperation(messageToUser))
-                {
-                    try
-                    {
-                        await SwitchChain(chainConfig.ChainId);
-                        UpdateSessionChainId();
-                        return; // success, exit loop
-                    }
-                    catch (ReownNetworkException)
-                    {
-                        if (++i >= maxSwitchAttempts)
-                        {
-                            throw;
-                        }
-
-                        logWriter.Log("Attempted to switch the network, but was rejected. Trying again...");
-                    }
-                }
             }
         }
 
@@ -463,7 +434,12 @@ namespace ChainSafe.Gaming.Reown
                 handler => SignClient.CoreClient.Relayer.Publisher.OnPublishedMessage += handler,
                 handler => SignClient.CoreClient.Relayer.Publisher.OnPublishedMessage -= handler);
 
-            return await ReownRequest<T>(sessionTopic, method, parameters);
+            // For whatever reason, android and iOS are forcefully killing our thread where this is being run on
+            // So we are ensuring that the request survives the thread kill by running it on the main thread
+            return
+                osMediator.Platform == Platform.Android || osMediator.Platform == Platform.IOS ?
+                    await Task.Run(() => ReownRequest<T>(sessionTopic, method, parameters))
+                    : await ReownRequest<T>(sessionTopic, method, parameters);
 
             void OnPublishedMessage(object sender, PublishParams args)
             {
@@ -557,19 +533,10 @@ namespace ChainSafe.Gaming.Reown
                 var data = (TRequest)Activator.CreateInstance(typeof(TRequest), parameters);
                 try
                 {
-                    try
-                    {
-                        return await SignClient.Request<TRequest, T>(
-                            topic,
-                            data,
-                            sendChainId ? BuildChainIdForReown(chainConfig.ChainId) : null);
-                    }
-                    finally
-                    {
-#if DEBUG
-                        logWriter.Log("SignClient.Request executed successfully.");
-#endif
-                    }
+                    return await SignClient.Request<TRequest, T>(
+                        topic,
+                        data,
+                        sendChainId ? BuildChainIdForReown(chainConfig.ChainId) : null);
                 }
                 catch (KeyNotFoundException e)
                 {
@@ -589,6 +556,8 @@ namespace ChainSafe.Gaming.Reown
                     return await MakeRequest<EthSendTransaction>();
                 case "wallet_switchEthereumChain":
                     return await MakeRequest<WalletSwitchEthereumChain>(false);
+                case "wallet_addEthereumChain":
+                    return await MakeRequest<WalletAddEthereumChain>(false);
                 default:
                     try
                     {

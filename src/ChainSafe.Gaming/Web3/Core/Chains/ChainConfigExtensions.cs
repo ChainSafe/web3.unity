@@ -12,7 +12,7 @@ namespace ChainSafe.Gaming.NetCore
                 ChainId = chainConfig.ChainId,
                 Network = chainConfig.Network,
                 Rpc = chainConfig.Rpc,
-                Symbol = chainConfig.Symbol,
+                NativeCurrency = chainConfig.NativeCurrency,
                 BlockExplorerUrl = chainConfig.BlockExplorerUrl,
                 Ws = chainConfig.Ws,
             };

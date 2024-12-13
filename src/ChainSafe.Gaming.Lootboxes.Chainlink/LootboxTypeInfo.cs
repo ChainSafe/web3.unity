@@ -5,11 +5,11 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
         /// <summary>
         /// Lootbox Type ID. (Common, Rare, Epic, etc.)
         /// </summary>
-        public uint TypeId { get; set; }
+        public int TypeId { get; set; }
 
         /// <summary>
         /// Current Balance of Lootboxes for this Type.
         /// </summary>
-        public uint Amount { get; set; }
+        public int Amount { get; set; }
     }
 }
