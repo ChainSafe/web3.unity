@@ -8,6 +8,7 @@ using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Ipfs;
 using ChainSafe.Gaming.MultiCall;
 using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Core;
 using Nethereum.Contracts.QueryHandlers.MultiCall;
 using Nethereum.Hex.HexConvertors.Extensions;
 
@@ -26,6 +27,19 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         {
             this.signer = signer;
             this.multiCall = multiCall;
+        }
+
+        internal ISigner Signer
+        {
+            get
+            {
+                if (signer != null)
+                {
+                    return signer;
+                }
+
+                throw new ServiceNotBoundWeb3Exception<ISigner>($"{nameof(ISigner)} service not bound to Web3 instance, connect to an account first.");
+            }
         }
 
         /// <summary>
@@ -141,12 +155,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// <exception cref="Web3Exception">Thrown if no signer was provided during construction.</exception>
         public async Task<object[]> Mint(string uri) // todo review if still relevant
         {
-            if (signer == null)
-            {
-                throw new Web3Exception("Can't mint to the player address. No signer was provided during construction.");
-            }
-
-            var parameters = new object[] { signer.PublicAddress, uri };
+            var parameters = new object[] { Signer.PublicAddress, uri };
             var response = await Send(EthMethods.SafeMint, parameters);
             return response;
         }
@@ -171,12 +180,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// <returns>Receipt of the mint.</returns>
         public async Task<TransactionReceipt> MintWithReceipt(string uri)
         {
-            if (signer == null)
-            {
-                throw new Web3Exception("Can't mint to the player address. No signer was provided during construction.");
-            }
-
-            var parameters = new object[] { signer.PublicAddress, uri };
+            var parameters = new object[] { Signer.PublicAddress, uri };
             var response = await SendWithReceipt(EthMethods.SafeMint, parameters);
             return response.receipt;
         }
@@ -200,12 +204,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// <returns>An array of objects representing the response from the transfer operation.</returns>
         public async Task<object[]> Transfer(string toAccount, string tokenId)
         {
-            if (signer == null)
-            {
-                throw new Web3Exception("Can't transfer to the player address. No signer was provided during construction.");
-            }
-
-            var parameters = new object[] { signer.PublicAddress, toAccount, tokenId };
+            var parameters = new object[] { Signer.PublicAddress, toAccount, tokenId };
             var response = await Send(EthMethods.SafeTransferFrom, parameters);
             return response;
         }
@@ -218,12 +217,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// <returns>Receipt of the transfer.</returns>
         public async Task<TransactionReceipt> TransferWithReceipt(string to, BigInteger tokenId)
         {
-            if (signer == null)
-            {
-                throw new Web3Exception("Can't transfer to the player address. No signer was provided during construction.");
-            }
-
-            var response = await SendWithReceipt(EthMethods.SafeTransferFrom, new object[] { signer.PublicAddress, to, tokenId });
+            var response = await SendWithReceipt(EthMethods.SafeTransferFrom, new object[] { Signer.PublicAddress, to, tokenId });
 
             return response.receipt;
         }
