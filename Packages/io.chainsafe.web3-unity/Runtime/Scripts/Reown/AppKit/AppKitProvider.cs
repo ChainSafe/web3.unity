@@ -59,9 +59,9 @@ namespace ChainSafe.Gaming.Reown.AppKit
             _appKitChains = _chains.Configs
                 .Select(x =>
                 {
-                    if (x.ViemName == null)
+                    if (!ReownConfig.ChainIdViemNameMap.TryGetValue(x.ChainId, out var viemName))
                         throw new ReownIntegrationException(
-                            $"Viem Name is not set in the chain config for chain: {x.Chain} {x.ChainId}");
+                            $"Viem Name is not set for chain: {x.Chain} {x.ChainId}. Make sure to populate the viem name for this chain id in Reown Connection Provider.");
                     return IChainConfigToAppKitChain(x);
                 }).ToArray();
 
@@ -87,7 +87,7 @@ namespace ChainSafe.Gaming.Reown.AppKit
             return new Chain(ChainConstants.Namespaces.Evm, x.ChainId,
                 x.Chain, new Currency(x.NativeCurrency.Name, x.NativeCurrency.Symbol,
                     x.NativeCurrency.Decimals), new BlockExplorer(x.Chain + " block explorer", x.BlockExplorerUrl),
-                x.Rpc, IsTestnet(x.Chain), "https://chainlist.org/unknown-logo.png", x.ViemName);
+                x.Rpc, IsTestnet(x.Chain), "https://chainlist.org/unknown-logo.png", ReownConfig.ChainIdViemNameMap[x.ChainId]);
         }
 
         private bool IsTestnet(string argChain)

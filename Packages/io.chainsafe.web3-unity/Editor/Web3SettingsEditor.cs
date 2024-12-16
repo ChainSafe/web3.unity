@@ -364,14 +364,6 @@ namespace ChainSafe.GamingSdk.Editor
             Project = 0,
             Chains = 1
         }
-        
-        public class ViemNameChainId
-        {
-            [JsonProperty("name")]
-            public string ViewName { get; set; }
-            [JsonProperty("id")]
-            public string ChainId { get; set; }
-        }
 
         private enum FetchingStatus
         {

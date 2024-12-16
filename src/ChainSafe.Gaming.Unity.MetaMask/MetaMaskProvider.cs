@@ -89,7 +89,6 @@ namespace ChainSafe.Gaming.Unity.MetaMask
                 PackageName = "io.chainsafe.web3-unity",
             });
             var connect = await metaMaskController.Connect(chainConfig, chainRegistryProvider);
-            await AddNetworkIfNotExistInWallet();
             return connect;
         }
     }

@@ -42,7 +42,6 @@ namespace ChainSafe.Gaming
         [field: SerializeField] public string Rpc { get; set; }
         [field: SerializeField] public string Ws { get; set; }
         [field: SerializeField] public string BlockExplorerUrl { get; set; }
-        [field: SerializeField] public string ViemName { get; set; }
 
         public static ChainConfigEntry Default => new()
         {

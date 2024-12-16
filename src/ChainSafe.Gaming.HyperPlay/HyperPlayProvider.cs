@@ -60,7 +60,6 @@ namespace ChainSafe.Gaming.HyperPlay
             // Saved account exists.
             if (data.RememberSession && data.SavedAccount == account)
             {
-                await AddNetworkIfNotExistInWallet();
                 return account;
             }
 
@@ -79,7 +78,6 @@ namespace ChainSafe.Gaming.HyperPlay
                 await localStorage.Save(data);
             }
 
-            await AddNetworkIfNotExistInWallet();
             return account;
         }
 

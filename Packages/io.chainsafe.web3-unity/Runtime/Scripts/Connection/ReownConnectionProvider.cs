@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.GUI;
 using ChainSafe.Gaming.Reown;
@@ -9,6 +10,7 @@ using ChainSafe.Gaming.Reown.Dialog;
 using ChainSafe.Gaming.Reown.Wallets;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
+using Newtonsoft.Json;
 using Reown.Core;
 using Reown.Core.Network;
 using Reown.Core.Network.Interfaces;
@@ -21,7 +23,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
     /// Reown connection provider used for connecting to a wallet using Reown.
     /// </summary>
     [CreateAssetMenu(menuName = "ChainSafe/Connection Provider/Reown", fileName = nameof(ReownConnectionProvider))]
-    public partial class ReownConnectionProvider : ConnectionProvider, IReownConfig, IConnectionHandlerProvider
+    public class ReownConnectionProvider : ConnectionProvider, IReownConfig, IConnectionHandlerProvider
     {
         [SerializeField] private GuiScreenFactory connectionScreenPrefabs;
         [SerializeField] private List<string> includeWalletIds;
@@ -43,6 +45,10 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
 
         [field: SerializeField]
         public WalletLocationOption WalletLocationOption { get; private set; } = WalletLocationOption.LocalAndRemote;
+        
+        [field:SerializeField]
+        [Tooltip("")]
+        public ViemNameChainId[] ChainIdAndViemNameArray { get; private set; }
 
         [field: SerializeField]
         public override Sprite ButtonIcon { get; protected set; }
@@ -56,6 +62,8 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         public bool ForceNewSession { get; set; }
         public EventHandler<Exception> OnRelayErrored { get; set; }
 
+        public Dictionary<string, string> ChainIdViemNameMap { get; private set; } = new();
+
         bool IReownConfig.RememberSession => RememberSession || _storedSessionAvailable;
         public IList<string> IncludeWalletIds => includeWalletIds;
         public IList<string> ExcludeWalletIds => excludeWalletIds;
@@ -64,6 +72,9 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         public string SignMessageRpcMethodName => "personal_sign";
         public string SignTypedMessageRpcMethodName => "eth_signTypedData";
         public override bool IsAvailable => true;
+        
+        //We need to serialize this bad boy.
+        [SerializeField, HideInInspector] private ViemNameChainId[] allChainIdsAndViemNames;
 
         public IConnectionBuilder ConnectionBuilder
         {
@@ -104,6 +115,19 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
                 connectionScreenPrefabs.LandscapePrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GuiScreen>(UnityEditor.AssetDatabase.GUIDToAssetPath("344d6e9400e973843b2b68a8f4786e0b"));
                 connectionScreenPrefabs.PortraitPrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GuiScreen>(UnityEditor.AssetDatabase.GUIDToAssetPath("f844207643fe35744b72bf387a704960"));
             }
+
+           
+#if UNITY_WEBGL
+            if(allChainIdsAndViemNames == null || allChainIdsAndViemNames.Length == 0)
+                allChainIdsAndViemNames = JsonConvert.DeserializeObject<ViemNameChainId[]>(Resources.Load<TextAsset>("ViemChain").text);
+            
+            if (ChainIdAndViemNameArray == null || ChainIdAndViemNameArray.Length == 0)
+            {
+                var projectConfig = ProjectConfigUtilities.Load();
+                var dict = projectConfig.ChainConfigs.ToDictionary(x => x.ChainId, x => x);
+                ChainIdAndViemNameArray = allChainIdsAndViemNames.Where(x => dict.ContainsKey(x.ChainId)).ToArray();
+            }
+#endif
         }
 #endif
 
@@ -111,6 +135,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         protected override void ConfigureServices(IWeb3ServiceCollection services)
         {
             #if UNITY_WEBGL && !UNITY_EDITOR
+            ChainIdViemNameMap = ChainIdViemNameMap.Count == 0 ? ChainIdAndViemNameArray.ToDictionary(x => x.ChainId, x => x.ViewName) : ChainIdViemNameMap;
             services.UseAppKit(this)
                 .UseWalletSigner()
                 .UseWalletTransactionExecutor();
@@ -144,5 +169,14 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
             _loadedHandler = connectionScreenPrefabs.Build<ConnectionHandlerBehaviour>();
             return Task.FromResult((ReownConnectionHandler)_loadedHandler);
         }
+    }
+    
+    [Serializable]
+    public class ViemNameChainId
+    {
+        [JsonProperty("id")]
+        [field:SerializeField]public string ChainId { get; set; }
+        [JsonProperty("name")]
+        [field:SerializeField]public string ViewName { get; set; }
     }
 }

@@ -1,4 +1,3 @@
-#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
 using System.IO;
@@ -13,18 +12,8 @@ public static class ScopedRegistryAndDependencyInstaller
     private static readonly string RegistryUrl = "https://package.openupm.com";
     private static readonly string[] RequiredScopes =
     {
-        "com.reown.appkit.unity",
-        "com.nethereum.unity",
-        "com.reown.core",
-        "com.reown.core.common",
-        "com.reown.core.crypto",
-        "com.reown.core.network",
-        "com.reown.core.storage",
-        "com.reown.sign",
-        "com.reown.sign.nethereum",
-        "com.reown.sign.nethereum.unity",
-        "com.reown.sign.unity",
-        "com.reown.unity.dependencies"
+        "com.reown",
+        "com.nethereum.unity"
     };
 
     // The Git dependency to add
@@ -47,6 +36,8 @@ public static class ScopedRegistryAndDependencyInstaller
 
         try
         {
+            // Set EditorPref so we don't run again if we run into an error.
+            PlayerPrefs.SetInt(DependenciesKey, 1);
             string manifestPath = Path.Combine(Application.dataPath, "../Packages/manifest.json");
             string manifestJson = File.ReadAllText(manifestPath, Encoding.UTF8);
             JObject manifest = JObject.Parse(manifestJson);
@@ -111,10 +102,12 @@ public static class ScopedRegistryAndDependencyInstaller
             // Write changes back
             File.WriteAllText(manifestPath, manifest.ToString(), Encoding.UTF8);
 
-            // Set EditorPref so we don't run again
-            PlayerPrefs.SetInt(DependenciesKey, 1);
+           
             // Refresh to ensure Unity sees the new dependencies
             AssetDatabase.Refresh();
+            // Clear the key because maybe some other project you get will have the same name so since all the things inside of the editor
+            // have been installed, you can be safely removed.
+            PlayerPrefs.DeleteKey(DependenciesKey);
         }
         catch (System.Exception ex)
         {
@@ -122,4 +115,3 @@ public static class ScopedRegistryAndDependencyInstaller
         }
     }
 }
-#endif
