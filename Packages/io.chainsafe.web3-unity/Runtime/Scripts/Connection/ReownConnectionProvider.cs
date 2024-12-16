@@ -108,7 +108,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         }
     
 #if UNITY_EDITOR
-        private void OnValidate()
+        public void OnValidate()
         {
             if (!connectionScreenPrefabs.LandscapePrefab && !connectionScreenPrefabs.PortraitPrefab)
             {
@@ -118,16 +118,29 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
 
            
 #if UNITY_WEBGL
-            if(allChainIdsAndViemNames == null || allChainIdsAndViemNames.Length == 0)
-                allChainIdsAndViemNames = JsonConvert.DeserializeObject<ViemNameChainId[]>(Resources.Load<TextAsset>("ViemChain").text);
-            
-            if (ChainIdAndViemNameArray == null || ChainIdAndViemNameArray.Length == 0)
+            PopulateViemNames();
+#endif
+        }
+
+        public void PopulateViemNames(bool force = false)
+        {
+            if (allChainIdsAndViemNames == null || allChainIdsAndViemNames.Length == 0)
             {
-                var projectConfig = ProjectConfigUtilities.Load();
+                var file = Resources.Load<TextAsset>("ViemChain");
+                if (file == null)
+                {
+                    Debug.LogError("File is null! Make sure ViemChain txt file is in the Resources folder");
+                }
+                
+                allChainIdsAndViemNames = JsonConvert.DeserializeObject<ViemNameChainId[]>(file.text);
+            }
+            var projectConfig = ProjectConfigUtilities.Load();
+            if (force || ChainIdAndViemNameArray == null || projectConfig.ChainConfigs.Count != ChainIdAndViemNameArray.Length)
+            {
+                
                 var dict = projectConfig.ChainConfigs.ToDictionary(x => x.ChainId, x => x);
                 ChainIdAndViemNameArray = allChainIdsAndViemNames.Where(x => dict.ContainsKey(x.ChainId)).ToArray();
             }
-#endif
         }
 #endif
 
