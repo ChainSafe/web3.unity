@@ -28,6 +28,6 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
         /// </summary>
         /// <exception cref="InvalidOperationException">Throwing exception if we fail to switch to the network.</exception>
         /// <returns>Nothing.</returns>
-        Task AddNetworkIfNotExistInWallet(IChainConfig chainConfig = null);
+        Task SwitchChainAddIfMissing(IChainConfig chainConfig = null);
     }
 }
