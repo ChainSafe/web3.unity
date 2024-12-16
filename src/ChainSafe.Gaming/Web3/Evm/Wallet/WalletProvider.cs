@@ -50,12 +50,7 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
             }
         }
 
-        private async Task SwitchChain(IChainConfig chainId)
-        {
-            await SwitchChainAddIfMissing(chainId);
-        }
-
-        private async Task<string> GetWalletChainId()
+        public virtual async Task<string> GetWalletChainId()
         {
             var rawHexChainId = await Request<string>(
                 "eth_chainId");
@@ -65,44 +60,17 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
             return number.ToString(CultureInfo.InvariantCulture);
         }
 
-        public async Task SwitchChainAddIfMissing(IChainConfig config = null)
+        public virtual async Task SwitchChain(IChainConfig chain)
         {
-            var chainId = await GetWalletChainId();
-            var chainConfig = config ?? this.chainConfig;
-
-            // If we are already on the correct network, return.
-            if (chainId == chainConfig.ChainId)
+            chain ??= chainConfig;
+            var str = $"{BigInteger.Parse(chain.ChainId):X}";
+            str = str.TrimStart('0');
+            var networkSwitchParams = new
             {
-                return;
-            }
-
-            var addChainParameter = new
-            {
-                chainId = "0x" + ulong.Parse(chainConfig.ChainId).ToString("X"),
-                chainName = chainConfig.Chain,
-                nativeCurrency = new
-                {
-                    name = chainConfig.NativeCurrency.Name,
-                    symbol = chainConfig.NativeCurrency.Symbol,
-                    decimals = chainConfig.NativeCurrency.Decimals,
-                },
-                rpcUrls = new[] { chainConfig.Rpc },
-                blockExplorerUrls = new[] { chainConfig.BlockExplorerUrl },
+                chainId = $"0x{str}", // Convert the Chain ID to hex format
             };
 
-            using (operationTracker.TrackOperation($"Switching the network to: {chainConfig.Chain}...\n(The network will be added if it's missing)"))
-            {
-                try
-                {
-                    // this will switch to the network and add it to the wallet if it's missing
-                    await Request<object[]>("wallet_addEthereumChain", addChainParameter);
-                }
-                catch (Exception e)
-                {
-                    logWriter.LogError($"Failed to add or switch to the network: {e.Message}");
-                    throw new InvalidOperationException("Failed to add or switch to the network.", e);
-                }
-            }
+            await Request<string>("wallet_switchEthereumChain", networkSwitchParams);
         }
     }
 }

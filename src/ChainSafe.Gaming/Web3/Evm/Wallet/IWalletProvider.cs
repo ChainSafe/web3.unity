@@ -28,6 +28,12 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
         /// </summary>
         /// <exception cref="InvalidOperationException">Throwing exception if we fail to switch to the network.</exception>
         /// <returns>Nothing.</returns>
-        Task SwitchChainAddIfMissing(IChainConfig chainConfig = null);
+        Task SwitchChain(IChainConfig chainConfig = null);
+
+        /// <summary>
+        /// Fetches the current Chain ID of the connected wallet.
+        /// </summary>
+        /// <returns>The current Chain ID of the connected wallet.</returns>
+        Task<string> GetWalletChainId();
     }
 }
