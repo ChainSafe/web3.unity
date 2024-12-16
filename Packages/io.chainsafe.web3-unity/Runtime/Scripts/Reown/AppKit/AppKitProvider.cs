@@ -104,6 +104,7 @@ namespace ChainSafe.Gaming.Reown.AppKit
         {
             W3AppKit.AccountConnected -= AppKitAccountConnected;
             W3AppKit.ModalController.OpenStateChanged -= OpenStateChanged;
+            W3AppKit.ModalController.OpenStateChanged -= OpenStateChanged;
             return new ValueTask();
         }
 
@@ -115,10 +116,18 @@ namespace ChainSafe.Gaming.Reown.AppKit
         {
             await Initialize();
             W3AppKit.AccountConnected += AppKitAccountConnected;
+            W3AppKit.NetworkController.ChainChanged += NetworkControllerOnChainChanged;
             W3AppKit.ModalController.OpenStateChanged += OpenStateChanged;
             W3AppKit.OpenModal();
             var result = await _accountConnected.Task;
             return result;
+        }
+
+        private void NetworkControllerOnChainChanged(object sender, NetworkController.ChainChangedEventArgs e)
+        {
+            Debug.Log("Chain changed");
+            
+            W3AppKit.CloseModal();
         }
 
         private async void OpenStateChanged(object sender, ModalOpenStateChangedEventArgs e)

@@ -18,21 +18,28 @@ MonoBehaviour:
   includeWalletIds: []
   excludeWalletIds: []
   <ProjectId>k__BackingField: f4bff60eb260841f46b1c77588cd8acb
-  <ProjectName>k__BackingField: Web3.Unity
+  <ProjectName>k__BackingField: Web3.unity
   <AutoRenewSession>k__BackingField: 1
   <BaseContext>k__BackingField: unity-game
   <Metadata>k__BackingField:
-    Description: web3.unity is an open-source gaming SDK.
-    Icons:
-    - https://docs.gaming.chainsafe.io/img/logo.png
-    Name: Web3.Unity
+    Description: Web3.Unity SDK is an open source SDK that connects unity games to
+      the blockchain
+    Icons: []
+    Name: Web3.Unity SDK
     Redirect:
       Native: 
       Universal: 
-    Url: https://chainsafe.io/
+    Url: https://chainsafe.io
     VerifyUrl: 
   <OverrideRegistryUri>k__BackingField: 
   <LogLevel>k__BackingField: 1
   <WalletLocationOption>k__BackingField: 0
+  <ChainIdAndViemNameArray>k__BackingField:
+  - <ChainId>k__BackingField: 1993
+    <ViewName>k__BackingField: b3Sepolia
+  - <ChainId>k__BackingField: 11155420
+    <ViewName>k__BackingField: optimismSepolia
+  - <ChainId>k__BackingField: 11155111
+    <ViewName>k__BackingField: sepolia
   <ButtonIcon>k__BackingField: {fileID: 21300000, guid: 9af22e71d3035844ca8ae6e9f2a538f5, type: 3}
   <ButtonText>k__BackingField: Reown

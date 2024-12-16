@@ -47,7 +47,6 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         public WalletLocationOption WalletLocationOption { get; private set; } = WalletLocationOption.LocalAndRemote;
         
         [field:SerializeField]
-        [Tooltip("")]
         public ViemNameChainId[] ChainIdAndViemNameArray { get; private set; }
 
         [field: SerializeField]
