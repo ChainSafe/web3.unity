@@ -117,7 +117,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
             }
 
            
-#if UNITY_WEBGL && UNITY_EDITOR
+#if UNITY_WEBGL
             if(allChainIdsAndViemNames == null || allChainIdsAndViemNames.Length == 0)
                 allChainIdsAndViemNames = JsonConvert.DeserializeObject<ViemNameChainId[]>(Resources.Load<TextAsset>("ViemChain").text);
             
