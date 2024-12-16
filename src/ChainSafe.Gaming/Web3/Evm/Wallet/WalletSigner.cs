@@ -30,7 +30,7 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
 
             PublicAddress = address.AssertIsPublicAddress();
 
-            await walletProvider.SwitchChainAddIfMissing();
+            await walletProvider.SwitchChain();
         }
 
         public virtual async Task<string> SignMessage(string message)

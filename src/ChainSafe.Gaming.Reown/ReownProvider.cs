@@ -454,6 +454,11 @@ namespace ChainSafe.Gaming.Reown
             }
         }
 
+        public override Task SwitchChain(IChainConfig chain)
+        {
+            return SwitchChainAddIfMissing(chain);
+        }
+
         private WalletModel GetSessionWallet()
         {
             var nativeUrl = RemoveSlash(session.Peer.Metadata.Url);
@@ -501,11 +506,6 @@ namespace ChainSafe.Gaming.Reown
             return GetFullAddress().Split(":")[2];
         }
 
-        private string ExtractChainIdFromAddress()
-        {
-            return string.Join(":", GetFullAddress().Split(":").Take(2));
-        }
-
         private string GetFullAddress()
         {
             var defaultChain = session.Namespaces.Keys.FirstOrDefault();
@@ -527,23 +527,6 @@ namespace ChainSafe.Gaming.Reown
 
         private async Task<T> ReownRequest<T>(string topic, string method, params object[] parameters)
         {
-            // Helper method to make a request using ReownSignClient.
-            async Task<T> MakeRequest<TRequest>(bool sendChainId = true)
-            {
-                var data = (TRequest)Activator.CreateInstance(typeof(TRequest), parameters);
-                try
-                {
-                    return await SignClient.Request<TRequest, T>(
-                        topic,
-                        data,
-                        sendChainId ? BuildChainIdForReown(chainConfig.ChainId) : null);
-                }
-                catch (KeyNotFoundException e)
-                {
-                    throw new ReownIntegrationException("Can't execute request. The session was most likely terminated on the wallet side.", e);
-                }
-            }
-
             switch (method)
             {
                 case "personal_sign":
@@ -577,6 +560,60 @@ namespace ChainSafe.Gaming.Reown
                     {
                         throw new ReownIntegrationException($"{method} RPC method currently not implemented.", e);
                     }
+            }
+
+            // Helper method to make a request using ReownSignClient.
+            async Task<T> MakeRequest<TRequest>(bool sendChainId = true)
+            {
+                var data = (TRequest)Activator.CreateInstance(typeof(TRequest), parameters);
+                try
+                {
+                    var chainIdParameter = sendChainId ? BuildChainIdForReown(chainConfig.ChainId) : null;
+                    return await SignClient.Request<TRequest, T>(topic, data, chainIdParameter);
+                }
+                catch (KeyNotFoundException e)
+                {
+                    throw new ReownIntegrationException("Can't execute request. The session was most likely terminated on the wallet side.", e);
+                }
+            }
+        }
+
+        private async Task SwitchChainAddIfMissing(IChainConfig config = null)
+        {
+            var chainId = await GetWalletChainId();
+            var chainConfig = config ?? this.chainConfig;
+
+            // If we are already on the correct network, return.
+            if (chainId == chainConfig.ChainId)
+            {
+                return;
+            }
+
+            var addChainParameter = new
+            {
+                chainId = "0x" + ulong.Parse(chainConfig.ChainId).ToString("X"),
+                chainName = chainConfig.Chain,
+                nativeCurrency = new
+                {
+                    name = chainConfig.NativeCurrency.Name,
+                    symbol = chainConfig.NativeCurrency.Symbol,
+                    decimals = chainConfig.NativeCurrency.Decimals,
+                },
+                rpcUrls = new[] { chainConfig.Rpc },
+                blockExplorerUrls = new[] { chainConfig.BlockExplorerUrl },
+            };
+
+            using (operationTracker.TrackOperation($"Switching the network to: {chainConfig.Chain}...\n(The network will be added if it's missing)"))
+            {
+                try
+                {
+                    // this will switch to the network and add it to the wallet if it's missing
+                    await Request<object[]>("wallet_addEthereumChain", addChainParameter);
+                }
+                catch (Exception e)
+                {
+                    throw new InvalidOperationException("Failed to add or switch to the network.", e);
+                }
             }
         }
     }
