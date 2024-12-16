@@ -5,6 +5,7 @@ using System.Linq;
 using ChainSafe.Gaming.UnityPackage.Connection;
 using Newtonsoft.Json;
 using UnityEditor;
+using UnityEditor.Compilation;
 using UnityEngine;
 
 // Editor for adding and removing providers in an interactive way.
@@ -34,8 +35,15 @@ public class ConnectionHandlerEditor : Editor
 
     private void OnEnable()
     {
+        Assembly[] unityAssemblies = CompilationPipeline.GetAssemblies(AssembliesType.PlayerWithoutTestAssemblies);
+        
         AppDomain.CurrentDomain.GetAssemblies().ToList().ForEach(assembly =>
         {
+            if (unityAssemblies.All(a => assembly.GetName().Name != a.name))
+            {
+                return;
+            }
+            
             _providerTypes.AddRange(assembly.GetTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(ConnectionProvider))));
         });
 

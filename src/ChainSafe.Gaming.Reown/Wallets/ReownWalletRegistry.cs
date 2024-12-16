@@ -13,8 +13,6 @@ namespace ChainSafe.Gaming.Reown.Wallets
     /// </summary>
     public class ReownWalletRegistry : ILifecycleParticipant, IWalletRegistry // todo provide pre-downloaded registry with option to update
     {
-        private const string Host = "https://api.web3modal.com";
-
         private readonly IHttpClient reownHttpClient;
         private readonly IReownConfig config;
         private readonly IOperatingSystemMediator systemMediator;
@@ -28,7 +26,7 @@ namespace ChainSafe.Gaming.Reown.Wallets
             this.reownHttpClient = reownHttpClient;
         }
 
-        public static string RegistryUri => $"{Host}/getWallets";
+        public static string RegistryUri => $"{ReownHttpClient.Host}/getWallets";
 
         public IEnumerable<WalletModel> SupportedWallets => healthyWallets.AsReadOnly();
 

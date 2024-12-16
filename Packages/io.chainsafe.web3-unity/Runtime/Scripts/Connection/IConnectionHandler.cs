@@ -5,10 +5,13 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Connection;
 using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.JsonRpc;
+using ChainSafe.Gaming.UnityPackage.UI;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
+using ChainSafe.Gaming.Web3.Core.Operations;
 using ChainSafe.Gaming.Web3.Unity;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Scripts.EVM.Token;
 using CWeb3 = ChainSafe.Gaming.Web3.Web3;
 
@@ -43,7 +46,8 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         {
             var web3Builder = new Web3Builder(ProjectConfigUtilities.Load())
                 .Configure(ConfigureCommonServices)
-                .ConfigureServices(adapters);
+                .ConfigureServices(adapters)
+                .Configure(ConfigureExtraServices);
 
             var web3 = await web3Builder.LaunchAsync();
 
@@ -70,18 +74,15 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
             services
                 .UseUnityEnvironment()
                 .UseRpcProvider();
-
-            /* As many contracts as needed may be registered here.
-             * It is better to register all contracts the application
-             * will be interacting with at configuration time if they
-             * are known in advance. We're just registering shiba
-             * here to show how it's done. You can look at the
-             * `Scripts/Prefabs/Wallet/RegisteredContract` script
-             * to see how it's used later on.
-             */
+            
             services.ConfigureRegisteredContracts(contracts =>
                 contracts.RegisterContract("CsTestErc20", ABI.Erc20, ChainSafeContracts.Erc20));
 
+        }
+
+        private void ConfigureExtraServices(IWeb3ServiceCollection services)
+        {
+            services.TryAddSingleton<IOperationNotificationHandler, GuiOperationNotificationHandler>();
         }
     }
 }

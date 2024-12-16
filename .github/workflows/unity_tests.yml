@@ -1,8 +1,8 @@
-name: Unity Tests
+name: Unity Tests 🧪
 
 on:
   workflow_call:
-  workflow_dispatch: 
+  workflow_dispatch:
 
 jobs:
   unity_tests:
@@ -18,11 +18,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
+        ref: ${{ github.head_ref || github.ref_name }}
         lfs: true
-    - name: update submodules
+        submodules: recursive
+    - name: Install Foundry
+      uses: foundry-rs/foundry-toolchain@v1
+    - name: Start Anvil
       run: |
-        git submodule update --init
-      shell: bash
+        anvil --host 0.0.0.0 --fork-url https://rpc.ankr.com/eth_sepolia --mnemonic "test test test test test test test test test test test junk" &
     - uses: actions/cache@v2
       with:
         path: ${{ matrix.projectPath }}/Library

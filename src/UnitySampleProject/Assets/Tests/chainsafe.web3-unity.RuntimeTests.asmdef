@@ -1,0 +1,38 @@
+{
+    "name": "chainsafe.web3-unity.RuntimeTests",
+    "rootNamespace": "",
+    "references": [
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "chainsafe.web3-unity",
+        "Samples"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll",
+        "Microsoft.Extensions.DependencyInjection.Abstractions.dll",
+        "ChainSafe.Gaming.dll",
+        "ChainSafe.Gaming.Unity.dll",
+        "ChainSafe.Gaming.Gelato.dll",
+        "ChainSafe.Gaming.WalletConnect.dll",
+        "ChainSafe.Gaming.InProcessSigner.dll",
+        "ChainSafe.Gaming.InProcessTransactionExecutor.dll",
+        "Newtonsoft.Json.dll",
+        "Nethereum.Hex.dll",
+        "Nethereum.RPC.dll",
+        "Nethereum.Signer.dll",
+        "Nethereum.Accounts.dll",
+        "Nethereum.JsonRpc.Client.dll",
+        "Nethereum.JsonRpc.RpcClient.dll",
+        "Nethereum.JsonRpc.WebSocketClient.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

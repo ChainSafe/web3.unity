@@ -21,5 +21,13 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
         Task Disconnect();
 
         Task<T> Request<T>(string method, params object[] parameters);
+
+        /// <summary>
+        /// Method that automatically adds a new network to the wallet if it's not present.
+        /// If the network is present, it prompts to switch to that network.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">Throwing exception if we fail to switch to the network.</exception>
+        /// <returns>Nothing.</returns>
+        Task AddNetworkIfNotExistInWallet(IChainConfig chainConfig = null);
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using ChainSafe.Gaming.Reown.Models;
 using ChainSafe.Gaming.Reown.Wallets;
+using ChainSafe.Gaming.Web3.Environment.Http;
 
 namespace ChainSafe.Gaming.Reown.Connection
 {
@@ -19,6 +20,17 @@ namespace ChainSafe.Gaming.Reown.Connection
         /// Used to determine the list of wallets that can be used to connect using the same device the app is running in.
         /// </summary>
         public List<WalletModel> LocalWalletOptions { get; set; }
+
+        /// <summary>
+        /// HTTP Headers that can be used to access the Reown API.
+        /// </summary>
+        public HttpHeader[] HttpHeaders { get; set; }
+
+        /// <summary>
+        /// An endpoint that can be used to build a URI which points to the icon of the specified wallet.
+        /// </summary>
+        /// <remarks>Simply concatenate wallet image id to this string to get the final URI.</remarks>
+        public string WalletIconEndpoint { get; set; }
 
         /// <summary>
         /// Used this delegate to redirect user to the desired wallet for connecting new session.

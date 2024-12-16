@@ -4,9 +4,7 @@ using ChainSafe.Gaming.Unity.MetaMask;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
 #endif
 using ChainSafe.Gaming.Web3.Build;
-using NUnit.Framework.Constraints;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace ChainSafe.Gaming.UnityPackage.Connection
 {
@@ -20,8 +18,6 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         public override Sprite ButtonIcon { get; protected set; }
 
         [field: SerializeField] public override string ButtonText { get; protected set; } = "MetaMask";
-
-        public override bool DisplayLoadingOnConnection => true;
 
         public override bool IsAvailable => Application.platform == RuntimePlatform.WebGLPlayer && Application.isEditor == false;
 

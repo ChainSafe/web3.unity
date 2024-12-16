@@ -53,6 +53,15 @@
     <assembly fullname="Nethereum.Util" />
     <assembly fullname="Nethereum.Web3" />
     <assembly fullname="Newtonsoft.Json" />
+    <assembly fullname="Newtonsoft.Json" />
+    <assembly fullname="Reown.Core" />
+    <assembly fullname="Reown.Core.Common" />
+    <assembly fullname="Reown.Core.Crypto" />
+    <assembly fullname="Reown.Core.Network" />
+    <assembly fullname="Reown.Core.Network.WebSocket" />
+    <assembly fullname="Reown.Core.Storage" />
+    <assembly fullname="Reown.Sign" />
+    <assembly fullname="Reown.WalletKit" />
     
     <!-- Assemblies from UnityPackages -->
     <assembly fullname="chainsafe.web3-unity"/>

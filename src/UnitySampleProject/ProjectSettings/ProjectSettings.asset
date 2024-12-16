@@ -792,8 +792,8 @@ PlayerSettings:
   webGLMemoryGeometricGrowthCap: 96
   webGLPowerPreference: 2
   scriptingDefineSymbols:
-    Standalone: 
-    WebGL: RAMP_AVAILABLE;MARKETPLACE_AVAILABLE;ENABLE_ANALYTICS
+    Standalone: ENABLE_ANALYTICS
+    WebGL: RAMP_AVAILABLE;MARKETPLACE_AVAILABLE
     iPhone: RAMP_AVAILABLE
   additionalCompilerArguments: {}
   platformArchitecture: {}
@@ -912,4 +912,4 @@ PlayerSettings:
   hmiLoadingImage: {fileID: 0}
   platformRequiresReadableAssets: 0
   virtualTexturingSupportEnabled: 0
-  insecureHttpOption: 0
+  insecureHttpOption: 2

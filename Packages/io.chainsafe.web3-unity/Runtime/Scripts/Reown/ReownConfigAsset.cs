@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ChainSafe.Gaming.Reown.Connection;
 using ChainSafe.Gaming.Reown.Dialog;
@@ -32,6 +33,8 @@ namespace ChainSafe.Gaming.Reown
 
         public bool RememberSession { get; set; }
         public bool ForceNewSession { get; set; }
+        public EventHandler<Exception> OnRelayErrored { get; set; }
+        
         public IRelayUrlBuilder RelayUrlBuilder => null; // todo;
 
         public IList<string> IncludeWalletIds => includeWalletIds;

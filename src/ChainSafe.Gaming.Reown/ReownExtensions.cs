@@ -4,6 +4,7 @@ using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Reown.Sign;
 
 namespace ChainSafe.Gaming.Reown
 {
@@ -73,6 +74,19 @@ namespace ChainSafe.Gaming.Reown
         public static IConnectionHelper ConnectionHelper(this ReownSubCategory reown)
         {
             return ((IWeb3SubCategory)reown).Web3.ServiceProvider.GetRequiredService<IConnectionHelper>();
+        }
+
+        /// <summary>
+        /// Access the internal <see cref="SignClient"/> component of the <see cref="ReownProvider"/>.
+        /// Use this when you need more control over the Reown integration.
+        /// </summary>
+        /// <remarks>
+        /// Use this with caution as modifying the state of Reown directly is not safe.
+        /// </remarks>
+        /// <returns>The <see cref="SignClient"/> Reown component.</returns>
+        public static SignClient InternalSignClient(this ReownSubCategory reown)
+        {
+            return ((IWeb3SubCategory)reown).Web3.ServiceProvider.GetRequiredService<ReownProvider>().SignClient;
         }
     }
 }

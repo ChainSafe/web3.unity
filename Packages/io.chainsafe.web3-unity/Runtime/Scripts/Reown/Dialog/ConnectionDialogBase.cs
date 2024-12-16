@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Reown.Connection;
 using ChainSafe.Gaming.Reown.Models;
 using ChainSafe.Gaming.Reown.Wallets;
+using ChainSafe.Gaming.Web3.Environment.Http;
 using UnityEngine;
 
 namespace ChainSafe.Gaming.Reown.Dialog
@@ -33,7 +34,10 @@ namespace ChainSafe.Gaming.Reown.Dialog
         protected abstract void SetRedirectOptionsVisible(bool visible);
         protected abstract void SetQrCodeElementVisible(bool visible);
         protected abstract void SetSingleButtonForRedirectVisible(bool visible);
-        protected abstract void SpawnRedirectOptions(List<WalletOptionConfig> supportedWallets);
+        protected abstract void SpawnRedirectOptions(
+            List<WalletOptionConfig> supportedWallets,
+            string getWalletIconEndpoint,
+            HttpHeader[] httpHeaders);
         protected abstract void CreateQrCodeElement(QrCodeBuilder builder);
         protected abstract void ClearDynamicElements();
 
@@ -57,13 +61,20 @@ namespace ChainSafe.Gaming.Reown.Dialog
             {
                 if (!config.DelegateLocalWalletSelectionToOs)
                 {
-                    SetRedirectOptionsVisible(true);
 
                     var walletOptionConfigs = config.LocalWalletOptions
                         .Select(data => new WalletOptionConfig(data, () => OnLocalWalletButtonClick(data.Id)))
                         .ToList();
+                    
+                    var localWalletsAvailable = walletOptionConfigs.Any();
 
-                    SpawnRedirectOptions(walletOptionConfigs);
+                    if (!localWalletsAvailable)
+                    {
+                        Debug.Log("Local wallet selection is enabled, but there are no wallets supported for the current platform meeting the provided filters. Disabling local wallet connection option...");
+                    }
+
+                    SetRedirectOptionsVisible(localWalletsAvailable);
+                    SpawnRedirectOptions(walletOptionConfigs, config.WalletIconEndpoint, config.HttpHeaders);
                 }
                 else
                 {

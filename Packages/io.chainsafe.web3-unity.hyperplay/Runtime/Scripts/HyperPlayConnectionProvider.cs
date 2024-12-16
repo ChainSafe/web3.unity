@@ -21,8 +21,6 @@ namespace ChainSafe.Gaming.HyperPlay
         public override Sprite ButtonIcon { get; protected set; }
 
         [field: SerializeField] public override string ButtonText { get; protected set; } = "HyperPlay";
-
-        public override bool DisplayLoadingOnConnection => true;
         
         public string SignMessageRpcMethodName => "personal_sign";
 

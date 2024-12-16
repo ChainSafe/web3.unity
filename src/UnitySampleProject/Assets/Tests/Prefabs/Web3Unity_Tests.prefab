@@ -1,0 +1,101 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &8215683417059745960
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 8519303782652390544, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8519303782652390544, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8519303782652390544, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8519303782652390544, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8519303782652390544, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8519303782652390544, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8519303782652390544, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8519303782652390544, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8519303782652390544, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8519303782652390544, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8854369476742677865, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
+      propertyPath: pollingInterval
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 9007579812972099230, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
+      propertyPath: m_Name
+      value: Web3Unity_Tests
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 8854369476742677865, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 9007579812972099230, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7574246785758684077}
+    - targetCorrespondingSourceObject: {fileID: 9007579812972099230, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -2700246260591358817}
+  m_SourcePrefab: {fileID: 100100000, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
+--- !u!1 &1081605632408655414 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9007579812972099230, guid: 6d183a51c0030794a8ff3fea5dbd6423, type: 3}
+  m_PrefabInstance: {fileID: 8215683417059745960}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7574246785758684077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1081605632408655414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 722440245baf97c4f8da707286230694, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gelatoApiKey: OSJYu3JEhBXWjvL98OP6LSUOgiJU5iFfykqLfYRrl4Q_
+--- !u!114 &-2700246260591358817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1081605632408655414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c73b0a0dd309a546843eca313ee76c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pollingInterval: 10

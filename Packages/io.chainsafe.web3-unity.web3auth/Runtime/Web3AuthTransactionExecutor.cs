@@ -19,14 +19,19 @@ public class Web3AuthTransactionExecutor : InProcessTransactionExecutor, IWeb3Au
 
     private readonly Dictionary<string, (TransactionRequest request, TaskCompletionSource<TransactionResponse> response)> _transactionPool = new();
 
-    public Web3AuthTransactionExecutor(IAccountProvider accountProvider, IRpcProvider rpcProvider) : base(accountProvider, rpcProvider)
+    private Web3AuthWalletConfig _walletConfig;
+    public Web3AuthTransactionExecutor(IAccountProvider accountProvider, IRpcProvider rpcProvider, Web3AuthWalletConfig walletConfig) : base(accountProvider, rpcProvider)
     {
+        _walletConfig = walletConfig;
     }
 
     public override Task<TransactionResponse> SendTransaction(TransactionRequest transaction)
     {
         transaction.Id = Guid.NewGuid().ToString();
 
+        if (!_walletConfig.UseWalletGui)
+            return base.SendTransaction(transaction);;
+        
         var tcs = new TaskCompletionSource<TransactionResponse>();
 
         // Add transaction to pool.

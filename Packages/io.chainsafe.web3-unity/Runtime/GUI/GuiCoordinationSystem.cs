@@ -55,8 +55,6 @@ namespace ChainSafe.Gaming.GUI
                 ? opaqueScreenLayers.Max(l => l.SortOrder)
                 : int.MinValue;
 
-            if (newVisibleSortOrder == currentVisibleSortOrder) return;
-
             currentVisibleSortOrder = newVisibleSortOrder;
 
             foreach (var activeScreen in activeScreens)

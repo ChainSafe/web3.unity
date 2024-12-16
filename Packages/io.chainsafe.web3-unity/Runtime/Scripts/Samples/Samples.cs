@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using ChainSafe.Gaming;
 using ChainSafe.Gaming.Evm.Signers;
+using ChainSafe.Gaming.GUI;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.UnityPackage.UI;
@@ -84,9 +85,13 @@ public class Samples : ServiceAdapter, ILightWeightServiceAdapter, IWeb3Initiali
             if (e is ServiceNotBoundWeb3Exception<ISigner>
                 || e is ServiceNotBoundWeb3Exception<ITransactionExecutor>)
             {
-                Web3Unity.ConnectScreen.Open();
+                Web3Unity.ConnectionScreen.Open();
 
-                throw new AggregateException(new Web3Exception("Connection not found. Please connect your wallet first."), e);
+                string message = "Connection not found. Please connect your wallet first.";
+                
+                GuiManager.Instance.Overlays.Show(GuiOverlayType.Toast, message, true, timeOut: 5f);
+                
+                throw new AggregateException(new Web3Exception(message), e);
             }
 
             throw;

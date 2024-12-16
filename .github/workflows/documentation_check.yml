@@ -1,0 +1,24 @@
+name: Documentation Check 📚
+
+on:
+  workflow_call:
+  pull_request:
+    branches:
+      - main
+      - dev
+    types:
+      - labeled
+
+jobs:
+  documentation_check:
+    name: Documentation Check 📚
+    runs-on: ubuntu-latest
+    steps:
+      - name: Success
+        if: ${{ github.event.label.name == 'documented' || contains( github.event.pull_request.labels.*.name, 'documented') }}
+        run: echo "Documentation Check Passed"
+      - name: Failure
+        if: ${{ github.event.label.name != 'documented' && !contains( github.event.pull_request.labels.*.name, 'documented') }}
+        run: |
+          echo "Documentation Check Failed - Missing 'documented' label on Pull Request"
+          exit 1

@@ -1,0 +1,581 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1681933530799260
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5342669745270890240}
+  - component: {fileID: 3530423015304050936}
+  m_Layer: 0
+  m_Name: EVMSample
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5342669745270890240
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1681933530799260}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3979331522068308894}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3530423015304050936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1681933530799260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85a6ee44e24097943a5a4641d2c7062e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Title>k__BackingField: More Examples
+  <Description>k__BackingField: <color=yellow>WARNING!</color> Be aware that configuring
+    the SDK to use the real blockchain network instead of the test network may put
+    your assets at risk. Any transactions or actions performed on the real blockchain
+    are irreversible and could result in the permanent loss of your assets. Double-check
+    your SDK settings before proceeding.
+  methodSend: addTotal
+  increaseAmountSend: 1
+  methodCall: myTotal
+  methodArrayGet: getStore
+  methodArraySend: setStore
+  stringArraySend:
+  - 0xFb3aECf08940785D4fB3Ad87cDC6e1Ceb20e9aac
+  - 0x92d4040e4f3591e60644aaa483821d1bd87001e3
+  messageSign: The right man in the wrong place can make all the difference in the
+    world.
+  messageSignVerify: A man chooses, a slave obeys.
+  messageSha: "It\u2019s dangerous to go alone, take this!"
+  toAddress: 0xdD4c825203f97984e7867F11eeCc813A036089D1
+  value: 12300000000000000
+  registeredContractName: CsTestErc20
+  ecdsaKey: 0x78dae1a22c7507a4ed30c06172e7614eb168d3546c13856340771e63ad3c0081
+  ecdsaMessage: This is a test message
+  transactionHash: 0x123456789
+  chainId: 11155111
+  Erc20Account: 0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2
+--- !u!1 &770630654637815776
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4645417108332907835}
+  - component: {fileID: 6567014196356586925}
+  m_Layer: 0
+  m_Name: ERC721Sample
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4645417108332907835
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 770630654637815776}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3979331522068308894}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6567014196356586925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 770630654637815776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97d1351707be484c82d2ffcdce1f3aa7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Title>k__BackingField: ERC-721
+  <Description>k__BackingField: Technical specification for creating and managing
+    non-fungible tokens (NFTs) on the Ethereum blockchain. Unlike traditional cryptocurrencies,
+    NFTs are unique digital assets that represent ownership of a specific item, piece
+    of content, or digital collectible. ERC-721 tokens enable the creation of distinct,
+    indivisible, and distinguishable digital assets, making them widely used for
+    various applications like digital art, virtual real estate, and rare collectibles.
+  accountBalanceOf: 0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2
+  tokenIdOwnerOf: 1
+  tokenIdsOwnerOfBatch:
+  - 4
+  - 50
+  - 6
+  tokenIdUri: 0x01559ae4021a565d5cc4740f1cefa95de8c1fb193949ecd32c337b03047da501
+  uriMint: 1
+  contractTransfer: 0x358AA13c52544ECCEF6B0ADD0f801012ADAD5eE3
+  toAccountTransfer: 0xdD4c825203f97984e7867F11eeCc813A036089D1
+  tokenIdTransfer: 0
+--- !u!1 &2315808893537780324
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2656954528204131265}
+  - component: {fileID: 5647011086962560167}
+  m_Layer: 0
+  m_Name: IPFSSample
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2656954528204131265
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2315808893537780324}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3979331522068308894}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5647011086962560167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2315808893537780324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a86b695c20675b43ba7a0f0a496749c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Title>k__BackingField: IPFS
+  <Description>k__BackingField: 'InterPlanetary File System is a decentralized protocol
+    and network designed to create a more resilient and distributed method of storing
+    and sharing data on the internet. It uses a content-addressable system, where
+    files are identified and retrieved based on their cryptographic hashes rather
+    than their location. This enables faster and more efficient data retrieval. Our
+    example script will allow you to upload an image from your device and metadata
+    via the SDK. You can then add these CIDs to the URI fields of your NFTs to make
+    them dynamic.
+
+
+
+    <color=red>Please remember to set your API & bucket keys
+    in the IPFSCalls object in the hierarchy to the left. As you receive the CID
+    from each call you can visit them in the browser to see their contents or check
+    the marketplace package to see them deserialized into classes.</color>'
+  apiSecretKey: Fill In Your API Secret Key From Storage
+  bucketId: Fill In Your Bucket ID From Storage
+  fileNameImage: Logo.png
+  fileNameMetaData: MetaData.json
+  nftName: Name of the NFT
+  description: An NFT description
+  externalUrl: The URL that appears below your assets image
+  display_types:
+  - Stamina
+  - Boost Number
+  trait_types:
+  - Health
+  - Thunder Power
+  values:
+  - 5
+  - 20
+  imageCID: Enter your image CID from storage or upload call
+--- !u!1 &3802355616623941118
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3979331522068308894}
+  - component: {fileID: 703159941170540510}
+  m_Layer: 0
+  m_Name: SDKCallSamples
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3979331522068308894
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3802355616623941118}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7418137345523050563}
+  - {fileID: 8478212837436865008}
+  - {fileID: 4645417108332907835}
+  - {fileID: 8322312882165618126}
+  - {fileID: 2403550178484155320}
+  - {fileID: 2656954528204131265}
+  - {fileID: 4964841248805775680}
+  - {fileID: 5342669745270890240}
+  - {fileID: 8659363013278532429}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &703159941170540510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3802355616623941118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed48594f90b6de74a980311fda154c08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  container: {fileID: 0}
+  sampleContainerPrefab: {fileID: 3786133420634202269, guid: 0a323fa659c73e544a2ed96c5b0566cb, type: 3}
+  buttonPrefab: {fileID: 7729517150447678135, guid: 82cd204ff33503f4b8964210f8eb1c6c, type: 3}
+--- !u!1 &4715005104618827823
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2403550178484155320}
+  - component: {fileID: 2704488829141728980}
+  m_Layer: 0
+  m_Name: GelatoSample
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2403550178484155320
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4715005104618827823}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3979331522068308894}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2704488829141728980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4715005104618827823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 644ad06354f533a48b9859dfdd3eab65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Title>k__BackingField: Gelato - Gasless
+  <Description>k__BackingField: Gelato's gasless functionality gives the ability
+    for dApp users to execute transactions or smart contract functions without having
+    to directly pay Ethereum gas fees. Instead, the gas fees are either subsidized
+    by dApp developers or other mechanisms, creating a seamless user experience by
+    abstracting away the complexities of gas management.
+--- !u!1 &5055438410130537077
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4964841248805775680}
+  - component: {fileID: 2008454854163597200}
+  m_Layer: 0
+  m_Name: SwitchChainSample
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4964841248805775680
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5055438410130537077}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3979331522068308894}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2008454854163597200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5055438410130537077}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccc3f4b11c1e441b8c9f7b998173cc54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Title>k__BackingField: Switch Chains
+  <Description>k__BackingField: 
+  chainSetups:
+  - chainId: 11155111
+    contractAddress: 0x3A7b0A1ef50D4072960E10d22b04583f99fd8EfB
+  - chainId: 11155420
+    contractAddress: 0x83e37dA2B64dc0487f58B0cAf954DC50D65B51fd
+--- !u!1 &5075823573706633733
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8322312882165618126}
+  - component: {fileID: 5334421218261937866}
+  m_Layer: 0
+  m_Name: ERC1155Sample
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8322312882165618126
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5075823573706633733}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3979331522068308894}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5334421218261937866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5075823573706633733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3aacd24d26ec5f74795e403ddba7a46f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Title>k__BackingField: ERC-1155
+  <Description>k__BackingField: Technical specification for creating and managing
+    multi-fungible tokens (MFTs) and non-fungible tokens (NFTs) on the Ethereum blockchain.
+    Unlike the ERC-20 and ERC-721 standards, which handle only one type of token
+    (fungible or non-fungible), ERC-1155 tokens allow the creation of both types
+    within a single contract. This versatility makes ERC-1155 tokens suitable for
+    applications requiring different types of assets, such as in-game items, where
+    both unique NFTs and interchangeable MFTs can coexist within the same contract
+    efficiently.
+  accountBalanceOf: 0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2
+  tokenIdBalanceOf: 1
+  accountsBalanceOfBatch:
+  - 0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2
+  - 0xE51995Cdb3b1c109E0e6E67ab5aB31CDdBB83E4a
+  tokenIdsBalanceOfBatch:
+  - 1
+  - 2
+  tokenIdUri: 1
+  toAccountTransfer: 0xdD4c825203f97984e7867F11eeCc813A036089D1
+  tokenIdTexture: 0
+  textureDisplayPrefab: {fileID: 2479110082039870731, guid: 9115128972a7a514c999bdede26d7034, type: 3}
+--- !u!1 &5251878298893694419
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8478212837436865008}
+  - component: {fileID: 2519364000050099989}
+  m_Layer: 0
+  m_Name: ERC20Sample
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8478212837436865008
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5251878298893694419}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3979331522068308894}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2519364000050099989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5251878298893694419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94b4d6797e7b43ccb4b381dee6898199, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Title>k__BackingField: ERC-20
+  <Description>k__BackingField: Widely adopted standard for creating and implementing
+    fungible tokens on the Ethereum blockchain. It defines a set of rules and functions
+    that enable the creation of tokens that can be easily exchanged, transferred,
+    and interacted with within the Ethereum ecosystem.
+  accountBalanceOf: 0xd25b827D92b0fd656A1c829933e9b0b836d5C3e2
+  toAccount: 0xdD4c825203f97984e7867F11eeCc813A036089D1
+--- !u!1 &5576427336278577340
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7418137345523050563}
+  - component: {fileID: 601392295413472988}
+  m_Layer: 0
+  m_Name: RampSample
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7418137345523050563
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5576427336278577340}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3979331522068308894}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &601392295413472988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5576427336278577340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea0121760e62b10498829475cd3a2c64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Title>k__BackingField: Ramp Exchanger
+  <Description>k__BackingField: RAMP.NETWORK is a widely used fiat on/off-ramp provider
+    that facilitates the seamless exchange of fiat currencies to cryptocurrencies
+    and vice versa. It integrates effortlessly with various platforms and wallets,
+    providing users with an easy and secure way to enter and exit the crypto market.
+    With robust compliance and user-friendly interfaces, RAMP.NETWORK supports multiple
+    payment methods, making it a preferred choice for developers and users looking
+    to enhance the accessibility and usability of cryptocurrencies within the broader
+    financial ecosystem.
+--- !u!1 &7748499831995154661
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8659363013278532429}
+  - component: {fileID: 2999956861032212711}
+  m_Layer: 0
+  m_Name: ImageUploader
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8659363013278532429
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7748499831995154661}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3979331522068308894}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2999956861032212711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7748499831995154661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8b0c4a2242595246b31317446fabf8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
