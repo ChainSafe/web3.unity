@@ -113,6 +113,7 @@ namespace ChainSafe.Gaming.UnityPackage
             public string Ipc => null;
             public string Ws { get; }
             public string BlockExplorerUrl { get; }
+            public string ViemName { get; }
         }
     }
 }

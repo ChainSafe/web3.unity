@@ -239,6 +239,7 @@ namespace ChainSafe.Gaming.Reown
                 }
 
                 connected = true;
+                await AddNetworkIfNotExistInWallet();
 
                 return address;
             }

@@ -103,6 +103,11 @@ namespace ChainSafe.Gaming.Reown
         EventHandler<Exception>? OnRelayErrored { get; }
 
         /// <summary>
+        /// Map that contains the chain ID and the Viem name of that chain. Used ONLY for WebGL for AppKit.
+        /// </summary>
+        public Dictionary<string, string> ChainIdViemNameMap { get; }
+
+        /// <summary>
         /// Validates the Reown configuration object.
         /// </summary>
         /// <exception cref="ReownIntegrationException">Thrown when validation fails.</exception>

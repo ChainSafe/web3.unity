@@ -37,7 +37,7 @@ namespace ChainSafe.Gaming
             _clipboardHandler = null;
 #endif
         }
-
+        
         private void Update()
         {
 #if ENABLE_INPUT_SYSTEM
@@ -53,6 +53,7 @@ namespace ChainSafe.Gaming
 #endif
         }
 
+        
 
         [MonoPInvokeCallback(typeof(Action))]
         public static void OnPaste(string text)

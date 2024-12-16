@@ -60,14 +60,15 @@ namespace ChainSafe.GamingSdk.Editor
         {
             web3Config = ProjectConfigUtilities.CreateOrLoad();
             previousProjectId = web3Config.ProjectId;
-        }
+            }
 
         private void OnEnable()
         {
             if (!logo)
                 logo = AssetDatabase.LoadAssetAtPath<Texture2D>(
                     "Packages/io.chainsafe.web3-unity/Editor/Textures/ChainSafeLogo2.png");
-
+           
+            
             TryFetchSupportedChains();
         }
 

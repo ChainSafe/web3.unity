@@ -16,7 +16,10 @@ namespace ChainSafe.Gaming.UnityPackage.UI
         [SerializeField] private ConnectionProviderButton providerButtonPrefab;
         [SerializeField] private Button closeButton;
 
+        private int _numberOfProviders;
+
         private int loadingOverlayId;
+        private ConnectionProvider _provider;
 
         private void Awake()
         {
@@ -29,7 +32,9 @@ namespace ChainSafe.Gaming.UnityPackage.UI
             {
                 if (provider != null && provider.IsAvailable)
                 {
+                    _numberOfProviders++;
                     var button = Instantiate(providerButtonPrefab, providerContainer);
+                    _provider = provider;
                     button.Set(provider.ButtonIcon, provider.ButtonText, () => ConnectClicked(provider));
                 }
             }
@@ -61,9 +66,16 @@ namespace ChainSafe.Gaming.UnityPackage.UI
             }
         }
 
-        public void Open()
+        public async void Open()
         {
-            gameObject.SetActive(true);
+            if (_provider != null && _numberOfProviders == 1)
+            {
+                await TryConnect(_provider);
+            }
+            else
+            {
+                gameObject.SetActive(true);
+            }
         }
 
         public void Close()

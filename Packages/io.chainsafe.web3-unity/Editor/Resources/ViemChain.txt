@@ -1,0 +1,1886 @@
+[
+    {
+        "name": "abey",
+        "id": "179"
+    },
+    {
+        "name": "abstractTestnet",
+        "id": "11124"
+    },
+    {
+        "name": "acala",
+        "id": "787"
+    },
+    {
+        "name": "acria",
+        "id": "47"
+    },
+    {
+        "name": "adf",
+        "id": "1215"
+    },
+    {
+        "name": "aioz",
+        "id": "168"
+    },
+    {
+        "name": "alienx",
+        "id": "10241024"
+    },
+    {
+        "name": "alienxHalTestnet",
+        "id": "10241025"
+    },
+    {
+        "name": "ancient8",
+        "id": "888888888"
+    },
+    {
+        "name": "ancient8Sepolia",
+        "id": "28122024"
+    },
+    {
+        "name": "anvil",
+        "id": "31337"
+    },
+    {
+        "name": "apeChain",
+        "id": "33139"
+    },
+    {
+        "name": "apexTestnet",
+        "id": "3993"
+    },
+    {
+        "name": "arbitrum",
+        "id": "42161"
+    },
+    {
+        "name": "arbitrumGoerli",
+        "id": "421613"
+    },
+    {
+        "name": "arbitrumNova",
+        "id": "42170"
+    },
+    {
+        "name": "arbitrumSepolia",
+        "id": "421614"
+    },
+    {
+        "name": "areonNetwork",
+        "id": "463"
+    },
+    {
+        "name": "areonNetworkTestnet",
+        "id": "462"
+    },
+    {
+        "name": "artelaTestnet",
+        "id": "11822"
+    },
+    {
+        "name": "assetChain",
+        "id": "42420"
+    },
+    {
+        "name": "assetChainTestnet",
+        "id": "42421"
+    },
+    {
+        "name": "astar",
+        "id": "592"
+    },
+    {
+        "name": "astarZkEVM",
+        "id": "3776"
+    },
+    {
+        "name": "astarZkyoto",
+        "id": "6038361"
+    },
+    {
+        "name": "atletaOlympia",
+        "id": "2340"
+    },
+    {
+        "name": "aurora",
+        "id": "1313161554"
+    },
+    {
+        "name": "auroraTestnet",
+        "id": "1313161555"
+    },
+    {
+        "name": "auroria",
+        "id": "205205"
+    },
+    {
+        "name": "avalanche",
+        "id": "43114"
+    },
+    {
+        "name": "avalancheFuji",
+        "id": "43113"
+    },
+    {
+        "name": "b3",
+        "id": "8333"
+    },
+    {
+        "name": "b3Sepolia",
+        "id": "1993"
+    },
+    {
+        "name": "bahamut",
+        "id": "5165"
+    },
+    {
+        "name": "base",
+        "id": "8453"
+    },
+    {
+        "name": "baseGoerli",
+        "id": "84531"
+    },
+    {
+        "name": "baseSepolia",
+        "id": "84532"
+    },
+    {
+        "name": "beam",
+        "id": "4337"
+    },
+    {
+        "name": "beamTestnet",
+        "id": "13337"
+    },
+    {
+        "name": "bearNetworkChainMainnet",
+        "id": "641230"
+    },
+    {
+        "name": "bearNetworkChainTestnet",
+        "id": "751230"
+    },
+    {
+        "name": "berachainTestnet",
+        "id": "80085"
+    },
+    {
+        "name": "berachainTestnetbArtio",
+        "id": "80084"
+    },
+    {
+        "name": "bevmMainnet",
+        "id": "11501"
+    },
+    {
+        "name": "bifrost",
+        "id": "3068"
+    },
+    {
+        "name": "bitTorrent",
+        "id": "199"
+    },
+    {
+        "name": "bitTorrentTestnet",
+        "id": "1028"
+    },
+    {
+        "name": "bitgert",
+        "id": "32520"
+    },
+    {
+        "name": "bitkub",
+        "id": "96"
+    },
+    {
+        "name": "bitkubTestnet",
+        "id": "25925"
+    },
+    {
+        "name": "bitlayer",
+        "id": "200901"
+    },
+    {
+        "name": "bitlayerTestnet",
+        "id": "200810"
+    },
+    {
+        "name": "bitrock",
+        "id": "7171"
+    },
+    {
+        "name": "blast",
+        "id": "81457"
+    },
+    {
+        "name": "blastSepolia",
+        "id": "168587773"
+    },
+    {
+        "name": "bob",
+        "id": "60808"
+    },
+    {
+        "name": "bobSepolia",
+        "id": "808813"
+    },
+    {
+        "name": "boba",
+        "id": "288"
+    },
+    {
+        "name": "bobaSepolia",
+        "id": "28882"
+    },
+    {
+        "name": "boolBetaMainnet",
+        "id": "11100"
+    },
+    {
+        "name": "botanixTestnet",
+        "id": "3636"
+    },
+    {
+        "name": "bounceBit",
+        "id": "6001"
+    },
+    {
+        "name": "bounceBitTestnet",
+        "id": "6000"
+    },
+    {
+        "name": "bronos",
+        "id": "1039"
+    },
+    {
+        "name": "bronosTestnet",
+        "id": "1038"
+    },
+    {
+        "name": "bsc",
+        "id": "56"
+    },
+    {
+        "name": "bscGreenfield",
+        "id": "1017"
+    },
+    {
+        "name": "bscTestnet",
+        "id": "97"
+    },
+    {
+        "name": "bsquared",
+        "id": "223"
+    },
+    {
+        "name": "bsquaredTestnet",
+        "id": "1123"
+    },
+    {
+        "name": "btr",
+        "id": "200901"
+    },
+    {
+        "name": "btrTestnet",
+        "id": "200810"
+    },
+    {
+        "name": "bxn",
+        "id": "4999"
+    },
+    {
+        "name": "bxnTestnet",
+        "id": "4777"
+    },
+    {
+        "name": "cannon",
+        "id": "13370"
+    },
+    {
+        "name": "canto",
+        "id": "7700"
+    },
+    {
+        "name": "celo",
+        "id": "42220"
+    },
+    {
+        "name": "celoAlfajores",
+        "id": "44787"
+    },
+    {
+        "name": "chang",
+        "id": "5858"
+    },
+    {
+        "name": "chiliz",
+        "id": "88888"
+    },
+    {
+        "name": "chips",
+        "id": "2882"
+    },
+    {
+        "name": "classic",
+        "id": "61"
+    },
+    {
+        "name": "coinbit",
+        "id": "112"
+    },
+    {
+        "name": "coinex",
+        "id": "52"
+    },
+    {
+        "name": "confluxESpace",
+        "id": "1030"
+    },
+    {
+        "name": "confluxESpaceTestnet",
+        "id": "71"
+    },
+    {
+        "name": "coreDao",
+        "id": "1116"
+    },
+    {
+        "name": "corn",
+        "id": "21000000"
+    },
+    {
+        "name": "cornTestnet",
+        "id": "21000001"
+    },
+    {
+        "name": "crab",
+        "id": "44"
+    },
+    {
+        "name": "cronos",
+        "id": "25"
+    },
+    {
+        "name": "cronosTestnet",
+        "id": "338"
+    },
+    {
+        "name": "cronoszkEVM",
+        "id": "388"
+    },
+    {
+        "name": "cronoszkEVMTestnet",
+        "id": "282"
+    },
+    {
+        "name": "crossbell",
+        "id": "3737"
+    },
+    {
+        "name": "curtis",
+        "id": "33111"
+    },
+    {
+        "name": "cyber",
+        "id": "7560"
+    },
+    {
+        "name": "cyberTestnet",
+        "id": "111557560"
+    },
+    {
+        "name": "darwinia",
+        "id": "46"
+    },
+    {
+        "name": "dchain",
+        "id": "2716446429837000"
+    },
+    {
+        "name": "dchainTestnet",
+        "id": "2713017997578000"
+    },
+    {
+        "name": "defichainEvm",
+        "id": "1130"
+    },
+    {
+        "name": "defichainEvmTestnet",
+        "id": "1131"
+    },
+    {
+        "name": "degen",
+        "id": "666666666"
+    },
+    {
+        "name": "dfk",
+        "id": "53935"
+    },
+    {
+        "name": "diode",
+        "id": "15"
+    },
+    {
+        "name": "disChain",
+        "id": "513100"
+    },
+    {
+        "name": "dodochainTestnet",
+        "id": "53457"
+    },
+    {
+        "name": "dogechain",
+        "id": "2000"
+    },
+    {
+        "name": "dosChain",
+        "id": "7979"
+    },
+    {
+        "name": "dosChainTestnet",
+        "id": "3939"
+    },
+    {
+        "name": "dreyerxMainnet",
+        "id": "23451"
+    },
+    {
+        "name": "dreyerxTestnet",
+        "id": "23452"
+    },
+    {
+        "name": "dustboyIoT",
+        "id": "555888"
+    },
+    {
+        "name": "dymension",
+        "id": "1100"
+    },
+    {
+        "name": "edgeless",
+        "id": "2026"
+    },
+    {
+        "name": "edgelessTestnet",
+        "id": "202"
+    },
+    {
+        "name": "edgeware",
+        "id": "2021"
+    },
+    {
+        "name": "edgewareTestnet",
+        "id": "2022"
+    },
+    {
+        "name": "ekta",
+        "id": "1994"
+    },
+    {
+        "name": "ektaTestnet",
+        "id": "1004"
+    },
+    {
+        "name": "elastos",
+        "id": "20"
+    },
+    {
+        "name": "elastosTestnet",
+        "id": "21"
+    },
+    {
+        "name": "electroneum",
+        "id": "52014"
+    },
+    {
+        "name": "electroneumTestnet",
+        "id": "5201420"
+    },
+    {
+        "name": "elysiumTestnet",
+        "id": "1338"
+    },
+    {
+        "name": "energy",
+        "id": "246"
+    },
+    {
+        "name": "enuls",
+        "id": "119"
+    },
+    {
+        "name": "eon",
+        "id": "7332"
+    },
+    {
+        "name": "eos",
+        "id": "17777"
+    },
+    {
+        "name": "eosTestnet",
+        "id": "15557"
+    },
+    {
+        "name": "etherlink",
+        "id": "42793"
+    },
+    {
+        "name": "etherlinkTestnet",
+        "id": "128123"
+    },
+    {
+        "name": "evmos",
+        "id": "9001"
+    },
+    {
+        "name": "evmosTestnet",
+        "id": "9000"
+    },
+    {
+        "name": "excelonMainnet",
+        "id": "22052002"
+    },
+    {
+        "name": "expanse",
+        "id": "2"
+    },
+    {
+        "name": "fantom",
+        "id": "250"
+    },
+    {
+        "name": "fantomSonicTestnet",
+        "id": "64240"
+    },
+    {
+        "name": "fantomTestnet",
+        "id": "4002"
+    },
+    {
+        "name": "fibo",
+        "id": "12306"
+    },
+    {
+        "name": "filecoin",
+        "id": "314"
+    },
+    {
+        "name": "filecoinCalibration",
+        "id": "314159"
+    },
+    {
+        "name": "filecoinHyperspace",
+        "id": "3141"
+    },
+    {
+        "name": "fireChain",
+        "id": "995"
+    },
+    {
+        "name": "flare",
+        "id": "14"
+    },
+    {
+        "name": "flareTestnet",
+        "id": "114"
+    },
+    {
+        "name": "flowMainnet",
+        "id": "747"
+    },
+    {
+        "name": "flowPreviewnet",
+        "id": "646"
+    },
+    {
+        "name": "flowTestnet",
+        "id": "545"
+    },
+    {
+        "name": "fluence",
+        "id": "9999999"
+    },
+    {
+        "name": "fluenceStage",
+        "id": "123420000220"
+    },
+    {
+        "name": "fluenceTestnet",
+        "id": "52164803"
+    },
+    {
+        "name": "forma",
+        "id": "984122"
+    },
+    {
+        "name": "foundry",
+        "id": "31337"
+    },
+    {
+        "name": "fraxtal",
+        "id": "252"
+    },
+    {
+        "name": "fraxtalTestnet",
+        "id": "2522"
+    },
+    {
+        "name": "funkiMainnet",
+        "id": "33979"
+    },
+    {
+        "name": "funkiSepolia",
+        "id": "3397901"
+    },
+    {
+        "name": "fuse",
+        "id": "122"
+    },
+    {
+        "name": "fuseSparknet",
+        "id": "123"
+    },
+    {
+        "name": "fusion",
+        "id": "32659"
+    },
+    {
+        "name": "fusionTestnet",
+        "id": "46688"
+    },
+    {
+        "name": "garnet",
+        "id": "17069"
+    },
+    {
+        "name": "geist",
+        "id": "63157"
+    },
+    {
+        "name": "genesys",
+        "id": "16507"
+    },
+    {
+        "name": "glideL1Protocol",
+        "id": "251"
+    },
+    {
+        "name": "glideL2Protocol",
+        "id": "253"
+    },
+    {
+        "name": "gnosis",
+        "id": "100"
+    },
+    {
+        "name": "gnosisChiado",
+        "id": "10200"
+    },
+    {
+        "name": "goChain",
+        "id": "60"
+    },
+    {
+        "name": "gobi",
+        "id": "1663"
+    },
+    {
+        "name": "godwoken",
+        "id": "71402"
+    },
+    {
+        "name": "goerli",
+        "id": "5"
+    },
+    {
+        "name": "gravity",
+        "id": "1625"
+    },
+    {
+        "name": "guruNetwork",
+        "id": "260"
+    },
+    {
+        "name": "guruTestnet",
+        "id": "261"
+    },
+    {
+        "name": "ham",
+        "id": "5112"
+    },
+    {
+        "name": "haqqMainnet",
+        "id": "11235"
+    },
+    {
+        "name": "haqqTestedge2",
+        "id": "54211"
+    },
+    {
+        "name": "hardhat",
+        "id": "31337"
+    },
+    {
+        "name": "harmonyOne",
+        "id": "1666600000"
+    },
+    {
+        "name": "hashkeyTestnet",
+        "id": "133"
+    },
+    {
+        "name": "hedera",
+        "id": "295"
+    },
+    {
+        "name": "hederaPreviewnet",
+        "id": "297"
+    },
+    {
+        "name": "hederaTestnet",
+        "id": "296"
+    },
+    {
+        "name": "hela",
+        "id": "8668"
+    },
+    {
+        "name": "hemiSepolia",
+        "id": "743111"
+    },
+    {
+        "name": "holesky",
+        "id": "17000"
+    },
+    {
+        "name": "hpb",
+        "id": "269"
+    },
+    {
+        "name": "hychain",
+        "id": "2911"
+    },
+    {
+        "name": "hychainTestnet",
+        "id": "29112"
+    },
+    {
+        "name": "iSunCoin",
+        "id": "8017"
+    },
+    {
+        "name": "idchain",
+        "id": "74"
+    },
+    {
+        "name": "immutableZkEvm",
+        "id": "13371"
+    },
+    {
+        "name": "immutableZkEvmTestnet",
+        "id": "13473"
+    },
+    {
+        "name": "inEVM",
+        "id": "2525"
+    },
+    {
+        "name": "inkSepolia",
+        "id": "763373"
+    },
+    {
+        "name": "iota",
+        "id": "8822"
+    },
+    {
+        "name": "iotaTestnet",
+        "id": "1075"
+    },
+    {
+        "name": "iotex",
+        "id": "4689"
+    },
+    {
+        "name": "iotexTestnet",
+        "id": "4690"
+    },
+    {
+        "name": "jbc",
+        "id": "8899"
+    },
+    {
+        "name": "jbcTestnet",
+        "id": "88991"
+    },
+    {
+        "name": "kaia",
+        "id": "8217"
+    },
+    {
+        "name": "kairos",
+        "id": "1001"
+    },
+    {
+        "name": "kakarotSepolia",
+        "id": "1802203764"
+    },
+    {
+        "name": "kakarotStarknetSepolia",
+        "id": "920637907288165"
+    },
+    {
+        "name": "kardiaChain",
+        "id": "24"
+    },
+    {
+        "name": "karura",
+        "id": "686"
+    },
+    {
+        "name": "kava",
+        "id": "2222"
+    },
+    {
+        "name": "kavaTestnet",
+        "id": "2221"
+    },
+    {
+        "name": "kcc",
+        "id": "321"
+    },
+    {
+        "name": "kinto",
+        "id": "7887"
+    },
+    {
+        "name": "klaytn",
+        "id": "8217"
+    },
+    {
+        "name": "klaytnBaobab",
+        "id": "1001"
+    },
+    {
+        "name": "koi",
+        "id": "701"
+    },
+    {
+        "name": "kroma",
+        "id": "255"
+    },
+    {
+        "name": "kromaSepolia",
+        "id": "2358"
+    },
+    {
+        "name": "l3x",
+        "id": "12324"
+    },
+    {
+        "name": "l3xTestnet",
+        "id": "12325"
+    },
+    {
+        "name": "lavita",
+        "id": "360890"
+    },
+    {
+        "name": "lightlinkPegasus",
+        "id": "1891"
+    },
+    {
+        "name": "lightlinkPhoenix",
+        "id": "1890"
+    },
+    {
+        "name": "linea",
+        "id": "59144"
+    },
+    {
+        "name": "lineaGoerli",
+        "id": "59140"
+    },
+    {
+        "name": "lineaSepolia",
+        "id": "59141"
+    },
+    {
+        "name": "lineaTestnet",
+        "id": "59140"
+    },
+    {
+        "name": "lisk",
+        "id": "1135"
+    },
+    {
+        "name": "liskSepolia",
+        "id": "4202"
+    },
+    {
+        "name": "localhost",
+        "id": "1337"
+    },
+    {
+        "name": "loop",
+        "id": "15551"
+    },
+    {
+        "name": "lukso",
+        "id": "42"
+    },
+    {
+        "name": "luksoTestnet",
+        "id": "4201"
+    },
+    {
+        "name": "lycan",
+        "id": "721"
+    },
+    {
+        "name": "lyra",
+        "id": "957"
+    },
+    {
+        "name": "mainnet",
+        "id": "1"
+    },
+    {
+        "name": "mandala",
+        "id": "595"
+    },
+    {
+        "name": "manta",
+        "id": "169"
+    },
+    {
+        "name": "mantaSepoliaTestnet",
+        "id": "3441006"
+    },
+    {
+        "name": "mantaTestnet",
+        "id": "3441005"
+    },
+    {
+        "name": "mantle",
+        "id": "5000"
+    },
+    {
+        "name": "mantleSepoliaTestnet",
+        "id": "5003"
+    },
+    {
+        "name": "mantleTestnet",
+        "id": "5001"
+    },
+    {
+        "name": "mapProtocol",
+        "id": "22776"
+    },
+    {
+        "name": "matchain",
+        "id": "698"
+    },
+    {
+        "name": "matchainTestnet",
+        "id": "699"
+    },
+    {
+        "name": "mchVerse",
+        "id": "29548"
+    },
+    {
+        "name": "mekong",
+        "id": "7078815900"
+    },
+    {
+        "name": "meld",
+        "id": "333000333"
+    },
+    {
+        "name": "merlin",
+        "id": "4200"
+    },
+    {
+        "name": "metachain",
+        "id": "571"
+    },
+    {
+        "name": "metachainIstanbul",
+        "id": "1453"
+    },
+    {
+        "name": "metadium",
+        "id": "11"
+    },
+    {
+        "name": "metalL2",
+        "id": "1750"
+    },
+    {
+        "name": "meter",
+        "id": "82"
+    },
+    {
+        "name": "meterTestnet",
+        "id": "83"
+    },
+    {
+        "name": "metis",
+        "id": "1088"
+    },
+    {
+        "name": "metisGoerli",
+        "id": "599"
+    },
+    {
+        "name": "mev",
+        "id": "7518"
+    },
+    {
+        "name": "mevTestnet",
+        "id": "4759"
+    },
+    {
+        "name": "mint",
+        "id": "185"
+    },
+    {
+        "name": "mintSepoliaTestnet",
+        "id": "1686"
+    },
+    {
+        "name": "mode",
+        "id": "34443"
+    },
+    {
+        "name": "modeTestnet",
+        "id": "919"
+    },
+    {
+        "name": "moonbaseAlpha",
+        "id": "1287"
+    },
+    {
+        "name": "moonbeam",
+        "id": "1284"
+    },
+    {
+        "name": "moonbeamDev",
+        "id": "1281"
+    },
+    {
+        "name": "moonriver",
+        "id": "1285"
+    },
+    {
+        "name": "morph",
+        "id": "2818"
+    },
+    {
+        "name": "morphHolesky",
+        "id": "2810"
+    },
+    {
+        "name": "morphSepolia",
+        "id": "2710"
+    },
+    {
+        "name": "nahmii",
+        "id": "5551"
+    },
+    {
+        "name": "nautilus",
+        "id": "22222"
+    },
+    {
+        "name": "neonDevnet",
+        "id": "245022926"
+    },
+    {
+        "name": "neonMainnet",
+        "id": "245022934"
+    },
+    {
+        "name": "nexi",
+        "id": "4242"
+    },
+    {
+        "name": "nexilix",
+        "id": "240"
+    },
+    {
+        "name": "oasisTestnet",
+        "id": "4090"
+    },
+    {
+        "name": "oasys",
+        "id": "248"
+    },
+    {
+        "name": "odysseyTestnet",
+        "id": "911867"
+    },
+    {
+        "name": "okc",
+        "id": "66"
+    },
+    {
+        "name": "omax",
+        "id": "311"
+    },
+    {
+        "name": "oneWorld",
+        "id": "309075"
+    },
+    {
+        "name": "oortMainnetDev",
+        "id": "9700"
+    },
+    {
+        "name": "opBNB",
+        "id": "204"
+    },
+    {
+        "name": "opBNBTestnet",
+        "id": "5611"
+    },
+    {
+        "name": "optimism",
+        "id": "10"
+    },
+    {
+        "name": "optimismGoerli",
+        "id": "420"
+    },
+    {
+        "name": "optimismSepolia",
+        "id": "11155420"
+    },
+    {
+        "name": "optopia",
+        "id": "62050"
+    },
+    {
+        "name": "optopiaTestnet",
+        "id": "62049"
+    },
+    {
+        "name": "orderly",
+        "id": "291"
+    },
+    {
+        "name": "orderlySepolia",
+        "id": "4460"
+    },
+    {
+        "name": "otimDevnet",
+        "id": "41144114"
+    },
+    {
+        "name": "palm",
+        "id": "11297108109"
+    },
+    {
+        "name": "palmTestnet",
+        "id": "11297108099"
+    },
+    {
+        "name": "pgn",
+        "id": "424"
+    },
+    {
+        "name": "pgnTestnet",
+        "id": "58008"
+    },
+    {
+        "name": "phoenix",
+        "id": "13381"
+    },
+    {
+        "name": "planq",
+        "id": "7070"
+    },
+    {
+        "name": "playfiAlbireo",
+        "id": "1612127"
+    },
+    {
+        "name": "plinga",
+        "id": "242"
+    },
+    {
+        "name": "plumeTestnet",
+        "id": "161221135"
+    },
+    {
+        "name": "polterTestnet",
+        "id": "631571"
+    },
+    {
+        "name": "polygon",
+        "id": "137"
+    },
+    {
+        "name": "polygonAmoy",
+        "id": "80002"
+    },
+    {
+        "name": "polygonMumbai",
+        "id": "80001"
+    },
+    {
+        "name": "polygonZkEvm",
+        "id": "1101"
+    },
+    {
+        "name": "polygonZkEvmCardona",
+        "id": "2442"
+    },
+    {
+        "name": "polygonZkEvmTestnet",
+        "id": "1442"
+    },
+    {
+        "name": "pulsechain",
+        "id": "369"
+    },
+    {
+        "name": "pulsechainV4",
+        "id": "943"
+    },
+    {
+        "name": "qMainnet",
+        "id": "35441"
+    },
+    {
+        "name": "qTestnet",
+        "id": "35443"
+    },
+    {
+        "name": "ql1",
+        "id": "766"
+    },
+    {
+        "name": "real",
+        "id": "111188"
+    },
+    {
+        "name": "redbellyMainnet",
+        "id": "151"
+    },
+    {
+        "name": "redbellyTestnet",
+        "id": "153"
+    },
+    {
+        "name": "redstone",
+        "id": "690"
+    },
+    {
+        "name": "rei",
+        "id": "47805"
+    },
+    {
+        "name": "reyaNetwork",
+        "id": "1729"
+    },
+    {
+        "name": "rollux",
+        "id": "570"
+    },
+    {
+        "name": "rolluxTestnet",
+        "id": "57000"
+    },
+    {
+        "name": "ronin",
+        "id": "2020"
+    },
+    {
+        "name": "root",
+        "id": "7668"
+    },
+    {
+        "name": "rootPorcini",
+        "id": "7672"
+    },
+    {
+        "name": "rootstock",
+        "id": "30"
+    },
+    {
+        "name": "rootstockTestnet",
+        "id": "31"
+    },
+    {
+        "name": "rss3",
+        "id": "12553"
+    },
+    {
+        "name": "rss3Sepolia",
+        "id": "2331"
+    },
+    {
+        "name": "saakuru",
+        "id": "7225878"
+    },
+    {
+        "name": "saigon",
+        "id": "2021"
+    },
+    {
+        "name": "sanko",
+        "id": "1996"
+    },
+    {
+        "name": "sapphire",
+        "id": "23294"
+    },
+    {
+        "name": "sapphireTestnet",
+        "id": "23295"
+    },
+    {
+        "name": "satoshiVM",
+        "id": "3109"
+    },
+    {
+        "name": "satoshiVMTestnet",
+        "id": "3110"
+    },
+    {
+        "name": "scroll",
+        "id": "534352"
+    },
+    {
+        "name": "scrollSepolia",
+        "id": "534351"
+    },
+    {
+        "name": "sei",
+        "id": "1329"
+    },
+    {
+        "name": "seiDevnet",
+        "id": "713715"
+    },
+    {
+        "name": "seiTestnet",
+        "id": "1328"
+    },
+    {
+        "name": "sepolia",
+        "id": "11155111"
+    },
+    {
+        "name": "shape",
+        "id": "360"
+    },
+    {
+        "name": "shapeSepolia",
+        "id": "11011"
+    },
+    {
+        "name": "shardeumSphinx",
+        "id": "8082"
+    },
+    {
+        "name": "shibarium",
+        "id": "109"
+    },
+    {
+        "name": "shibariumTestnet",
+        "id": "157"
+    },
+    {
+        "name": "shiden",
+        "id": "336"
+    },
+    {
+        "name": "shimmer",
+        "id": "148"
+    },
+    {
+        "name": "shimmerTestnet",
+        "id": "1073"
+    },
+    {
+        "name": "silicon",
+        "id": "2355"
+    },
+    {
+        "name": "siliconSepolia",
+        "id": "1722641160"
+    },
+    {
+        "name": "sixProtocol",
+        "id": "98"
+    },
+    {
+        "name": "skaleBlockBrawlers",
+        "id": "391845894"
+    },
+    {
+        "name": "skaleCalypso",
+        "id": "1564830818"
+    },
+    {
+        "name": "skaleCalypsoTestnet",
+        "id": "974399131"
+    },
+    {
+        "name": "skaleCryptoBlades",
+        "id": "1026062157"
+    },
+    {
+        "name": "skaleCryptoColosseum",
+        "id": "1032942172"
+    },
+    {
+        "name": "skaleEuropa",
+        "id": "2046399126"
+    },
+    {
+        "name": "skaleEuropaTestnet",
+        "id": "1444673419"
+    },
+    {
+        "name": "skaleExorde",
+        "id": "2139927552"
+    },
+    {
+        "name": "skaleHumanProtocol",
+        "id": "1273227453"
+    },
+    {
+        "name": "skaleNebula",
+        "id": "1482601649"
+    },
+    {
+        "name": "skaleNebulaTestnet",
+        "id": "37084624"
+    },
+    {
+        "name": "skaleRazor",
+        "id": "278611351"
+    },
+    {
+        "name": "skaleTitan",
+        "id": "1350216234"
+    },
+    {
+        "name": "skaleTitanTestnet",
+        "id": "1020352220"
+    },
+    {
+        "name": "sketchpad",
+        "id": "984123"
+    },
+    {
+        "name": "snax",
+        "id": "2192"
+    },
+    {
+        "name": "snaxTestnet",
+        "id": "13001"
+    },
+    {
+        "name": "soneiumMinato",
+        "id": "1946"
+    },
+    {
+        "name": "songbird",
+        "id": "19"
+    },
+    {
+        "name": "songbirdTestnet",
+        "id": "16"
+    },
+    {
+        "name": "sonicTestnet",
+        "id": "64165"
+    },
+    {
+        "name": "sophon",
+        "id": "50104"
+    },
+    {
+        "name": "sophonTestnet",
+        "id": "531050104"
+    },
+    {
+        "name": "spicy",
+        "id": "88882"
+    },
+    {
+        "name": "step",
+        "id": "1234"
+    },
+    {
+        "name": "storyOdyssey",
+        "id": "1516"
+    },
+    {
+        "name": "storyTestnet",
+        "id": "1513"
+    },
+    {
+        "name": "stratis",
+        "id": "105105"
+    },
+    {
+        "name": "superlumio",
+        "id": "8866"
+    },
+    {
+        "name": "superposition",
+        "id": "55244"
+    },
+    {
+        "name": "swan",
+        "id": "254"
+    },
+    {
+        "name": "swanProximaTestnet",
+        "id": "20241133"
+    },
+    {
+        "name": "swanSaturnTestnet",
+        "id": "2024"
+    },
+    {
+        "name": "swissdlt",
+        "id": "94"
+    },
+    {
+        "name": "syscoin",
+        "id": "57"
+    },
+    {
+        "name": "syscoinTestnet",
+        "id": "5700"
+    },
+    {
+        "name": "taiko",
+        "id": "167000"
+    },
+    {
+        "name": "taikoHekla",
+        "id": "167009"
+    },
+    {
+        "name": "taikoJolnir",
+        "id": "167007"
+    },
+    {
+        "name": "taikoKatla",
+        "id": "167008"
+    },
+    {
+        "name": "taikoTestnetSepolia",
+        "id": "167005"
+    },
+    {
+        "name": "taraxa",
+        "id": "841"
+    },
+    {
+        "name": "taraxaTestnet",
+        "id": "842"
+    },
+    {
+        "name": "telcoinTestnet",
+        "id": "2017"
+    },
+    {
+        "name": "telos",
+        "id": "40"
+    },
+    {
+        "name": "telosTestnet",
+        "id": "41"
+    },
+    {
+        "name": "tenet",
+        "id": "1559"
+    },
+    {
+        "name": "thaiChain",
+        "id": "7"
+    },
+    {
+        "name": "that",
+        "id": "8428"
+    },
+    {
+        "name": "theta",
+        "id": "361"
+    },
+    {
+        "name": "thetaTestnet",
+        "id": "365"
+    },
+    {
+        "name": "thunderCore",
+        "id": "108"
+    },
+    {
+        "name": "thunderTestnet",
+        "id": "997"
+    },
+    {
+        "name": "tiktrixTestnet",
+        "id": "62092"
+    },
+    {
+        "name": "tomb",
+        "id": "6969"
+    },
+    {
+        "name": "tron",
+        "id": "728126428"
+    },
+    {
+        "name": "ubiq",
+        "id": "8"
+    },
+    {
+        "name": "ultron",
+        "id": "1231"
+    },
+    {
+        "name": "ultronTestnet",
+        "id": "1230"
+    },
+    {
+        "name": "unichainSepolia",
+        "id": "1301"
+    },
+    {
+        "name": "unique",
+        "id": "8880"
+    },
+    {
+        "name": "uniqueOpal",
+        "id": "8882"
+    },
+    {
+        "name": "uniqueQuartz",
+        "id": "8881"
+    },
+    {
+        "name": "unreal",
+        "id": "18233"
+    },
+    {
+        "name": "vanar",
+        "id": "2040"
+    },
+    {
+        "name": "vechain",
+        "id": "100009"
+    },
+    {
+        "name": "velas",
+        "id": "106"
+    },
+    {
+        "name": "viction",
+        "id": "88"
+    },
+    {
+        "name": "victionTestnet",
+        "id": "89"
+    },
+    {
+        "name": "vision",
+        "id": "888888"
+    },
+    {
+        "name": "visionTestnet",
+        "id": "666666"
+    },
+    {
+        "name": "wanchain",
+        "id": "888"
+    },
+    {
+        "name": "wanchainTestnet",
+        "id": "999"
+    },
+    {
+        "name": "weaveVMAlphanet",
+        "id": "9496"
+    },
+    {
+        "name": "wemix",
+        "id": "1111"
+    },
+    {
+        "name": "wemixTestnet",
+        "id": "1112"
+    },
+    {
+        "name": "worldLand",
+        "id": "103"
+    },
+    {
+        "name": "worldchain",
+        "id": "480"
+    },
+    {
+        "name": "worldchainSepolia",
+        "id": "4801"
+    },
+    {
+        "name": "x1Testnet",
+        "id": "195"
+    },
+    {
+        "name": "xLayer",
+        "id": "196"
+    },
+    {
+        "name": "xLayerTestnet",
+        "id": "195"
+    },
+    {
+        "name": "xai",
+        "id": "660279"
+    },
+    {
+        "name": "xaiTestnet",
+        "id": "37714555429"
+    },
+    {
+        "name": "xdc",
+        "id": "50"
+    },
+    {
+        "name": "xdcTestnet",
+        "id": "51"
+    },
+    {
+        "name": "xrSepolia",
+        "id": "2730"
+    },
+    {
+        "name": "yooldoVerse",
+        "id": "50005"
+    },
+    {
+        "name": "yooldoVerseTestnet",
+        "id": "50006"
+    },
+    {
+        "name": "zenchainTestnet",
+        "id": "8408"
+    },
+    {
+        "name": "zeniq",
+        "id": "383414847825"
+    },
+    {
+        "name": "zetachain",
+        "id": "7000"
+    },
+    {
+        "name": "zetachainAthensTestnet",
+        "id": "7001"
+    },
+    {
+        "name": "zhejiang",
+        "id": "1337803"
+    },
+    {
+        "name": "zilliqa",
+        "id": "32769"
+    },
+    {
+        "name": "zilliqaTestnet",
+        "id": "33101"
+    },
+    {
+        "name": "zircuit",
+        "id": "48900"
+    },
+    {
+        "name": "zircuitTestnet",
+        "id": "48899"
+    },
+    {
+        "name": "zkFair",
+        "id": "42766"
+    },
+    {
+        "name": "zkFairTestnet",
+        "id": "43851"
+    },
+    {
+        "name": "zkLinkNova",
+        "id": "810180"
+    },
+    {
+        "name": "zkLinkNovaSepoliaTestnet",
+        "id": "810181"
+    },
+    {
+        "name": "zkSync",
+        "id": "324"
+    },
+    {
+        "name": "zkSyncInMemoryNode",
+        "id": "260"
+    },
+    {
+        "name": "zkSyncLocalNode",
+        "id": "270"
+    },
+    {
+        "name": "zkSyncSepoliaTestnet",
+        "id": "300"
+    },
+    {
+        "name": "zksync",
+        "id": "324"
+    },
+    {
+        "name": "zksyncInMemoryNode",
+        "id": "260"
+    },
+    {
+        "name": "zksyncLocalCustomHyperchain",
+        "id": "272"
+    },
+    {
+        "name": "zksyncLocalHyperchain",
+        "id": "270"
+    },
+    {
+        "name": "zksyncLocalHyperchainL1",
+        "id": "9"
+    },
+    {
+        "name": "zksyncLocalNode",
+        "id": "270"
+    },
+    {
+        "name": "zksyncSepoliaTestnet",
+        "id": "300"
+    },
+    {
+        "name": "zora",
+        "id": "7777777"
+    },
+    {
+        "name": "zoraSepolia",
+        "id": "999999999"
+    },
+    {
+        "name": "zoraTestnet",
+        "id": "999"
+    }
+]

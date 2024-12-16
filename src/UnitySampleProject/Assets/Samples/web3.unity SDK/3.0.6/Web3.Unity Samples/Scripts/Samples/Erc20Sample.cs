@@ -114,7 +114,6 @@ public class Erc20Sample : MonoBehaviour, ISample
     public async Task<string> MintErc20()
     {
         var mintResponse = await Web3Unity.Web3.Erc20.MintWithReceipt(ChainSafeContracts.Erc20, valueToSend * weiPerEther);
-
         return mintResponse.TransactionHash;
     }
 
