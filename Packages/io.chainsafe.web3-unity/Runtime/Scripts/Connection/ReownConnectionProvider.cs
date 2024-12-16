@@ -73,10 +73,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         public string SignTypedMessageRpcMethodName => "eth_signTypedData";
         public override bool IsAvailable => true;
         
-        //We need to serialize this bad boy.
-        [SerializeField, HideInInspector] private ViemNameChainId[] allChainIdsAndViemNames;
-
-        public IConnectionBuilder ConnectionBuilder
+       public IConnectionBuilder ConnectionBuilder
         {
             get
             {
@@ -118,26 +115,16 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
 
            
 #if UNITY_WEBGL
-            PopulateViemNames();
+            PopulateViemNames(Resources.Load<TextAsset>("ViemChain").text);
 #endif
         }
 
-        public void PopulateViemNames(bool force = false)
+        public void PopulateViemNames(string text, bool force = false)
         {
-            if (allChainIdsAndViemNames == null || allChainIdsAndViemNames.Length == 0)
-            {
-                var file = Resources.Load<TextAsset>("ViemChain");
-                if (file == null)
-                {
-                    Debug.LogError("File is null! Make sure ViemChain txt file is in the Resources folder");
-                }
-                
-                allChainIdsAndViemNames = JsonConvert.DeserializeObject<ViemNameChainId[]>(file.text);
-            }
             var projectConfig = ProjectConfigUtilities.Load();
             if (force || ChainIdAndViemNameArray == null || projectConfig.ChainConfigs.Count != ChainIdAndViemNameArray.Length)
             {
-                
+                var allChainIdsAndViemNames = JsonConvert.DeserializeObject<ViemNameChainId[]>(text);
                 var dict = projectConfig.ChainConfigs.ToDictionary(x => x.ChainId, x => x);
                 ChainIdAndViemNameArray = allChainIdsAndViemNames.Where(x => dict.ContainsKey(x.ChainId)).ToArray();
             }
