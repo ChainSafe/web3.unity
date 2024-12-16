@@ -1,8 +1,6 @@
-﻿using ChainSafe.Gaming.Evm.Signers;
+﻿#if UNITY_WEBGL && !UNITY_EDITOR
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core;
-using ChainSafe.Gaming.Web3.Core.Evm;
-using ChainSafe.Gaming.Web3.Core.Logout;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -25,3 +23,4 @@ namespace ChainSafe.Gaming.Reown.AppKit
 
     }
 }
+#endif
