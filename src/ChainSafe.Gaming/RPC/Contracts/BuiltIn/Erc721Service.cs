@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Utils;
 using ChainSafe.Gaming.MultiCall;
+using ChainSafe.Gaming.Web3.Environment;
 using TransactionReceipt = ChainSafe.Gaming.Evm.Transactions.TransactionReceipt;
 
 namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
@@ -34,6 +35,12 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
             : this(contractBuilder)
         {
             this.signer = signer;
+        }
+
+        public Erc721Service(IContractBuilder contractBuilder, IMultiCall multiCall)
+            : this(contractBuilder)
+        {
+            this.multiCall = multiCall;
         }
 
         public Erc721Service(IContractBuilder contractBuilder, ISigner signer, IMultiCall multiCall)

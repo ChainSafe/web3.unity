@@ -221,6 +221,22 @@ namespace ChainSafe.GamingSdk.Editor
             GUILayout.Label("ChainSafe Gaming", EditorStyles.centeredGreyMiniLabel);
         }
 
+        private bool IsPrimaryChain(ChainConfigEntry entry)
+        {
+            return web3Config.ChainConfigs.Any() && web3Config.ChainConfigs[0] == entry;
+        }
+
+        private void SetPrimaryChain(ChainConfigEntry entry)
+        {
+            var indexOf = web3Config.ChainConfigs.IndexOf(entry);
+
+            web3Config.ChainConfigs.RemoveAt(indexOf);
+            web3Config.ChainConfigs.Insert(0, entry);
+
+            InitializeChainItems();
+            chainsScrollPosition = Vector2.zero;
+        }
+
         private void RemoveChainConfigEntry(string chainId)
         {
             var index = web3Config.ChainConfigs.FindIndex(entry => entry.ChainId == chainId);
@@ -315,9 +331,7 @@ namespace ChainSafe.GamingSdk.Editor
         {
             if (web3Config.ChainConfigs.Count != 0)
             {
-                chainSettingPanels = web3Config.ChainConfigs
-                    .Select((chainConfig) => new ChainSettingsPanel(this, chainConfig))
-                    .ToList();
+                InitializeChainItems();
             }
             else
             {
@@ -330,6 +344,13 @@ namespace ChainSafe.GamingSdk.Editor
                     new(this, newChainConfig)
                 };
             }
+        }
+
+        private void InitializeChainItems()
+        {
+            chainSettingPanels = web3Config.ChainConfigs
+                .Select((chainConfig) => new ChainSettingsPanel(this, chainConfig))
+                .ToList();
         }
 
         private class ValidateProjectIDResponse

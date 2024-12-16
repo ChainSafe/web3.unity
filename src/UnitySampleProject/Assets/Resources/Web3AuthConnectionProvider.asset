@@ -12,12 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b435f36106e244449abb70cf6f41008, type: 3}
   m_Name: Web3AuthConnectionProvider
   m_EditorClassIdentifier: 
-  <RememberSession>k__BackingField: 1
-  <ConnectButtonRow>k__BackingField: {fileID: 8599114313589093787, guid: 163bbaaeb51883442a20ea7532888a43, type: 3}
+  <ButtonIcon>k__BackingField: {fileID: 21300000, guid: 402d42d6692b5e3498f900fe29e10a89, type: 3}
+  <ButtonText>k__BackingField: Web3Auth
   clientId: BIYV6RYoZYbQ8VulPi65LoJMXQisHcTKQ296pOstx4LmzOp9HN3LR1tfAeaM3DMuN6c3AHEvvcMFLEE6lnuefAQ
   redirectUri: torusapp://io.chainsafe.gamingsdk.sdkdemoscene/auth
   network: 1
-  modalPrefab: {fileID: 1060439634540712661, guid: 42c53f26848d1d54a9ffe18fae333758, type: 3}
+  modalScreenFactory:
+    LandscapePrefab: {fileID: 4903352956951587407, guid: 9e5f859444d8b4a448e79b28a6033fd7, type: 3}
+    PortraitPrefab: {fileID: 7393159509175253276, guid: 5ed2d6739dc24144cb021a0cb4bd8178, type: 3}
   enableWalletGui: 1
   web3AuthWalletGUIPrefab: {fileID: 7656622686525558909, guid: b394e6c49b9bd734089cea0293265bd3, type: 3}
   walletGuiConfig:

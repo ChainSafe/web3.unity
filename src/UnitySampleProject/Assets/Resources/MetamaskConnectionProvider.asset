@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b64d00084d2c544aa644a8a6010964d, type: 3}
   m_Name: MetamaskConnectionProvider
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Metamask
-  <ConnectButtonRow>k__BackingField: {fileID: 8599114313589093787, guid: 1200437cb83a29c4fb63faa44cf63f0d, type: 3}
+  <ButtonIcon>k__BackingField: {fileID: 21300000, guid: 5a352cd3fc34a4b4390c5fa195b12ad7, type: 3}
+  <ButtonText>k__BackingField: MetaMask

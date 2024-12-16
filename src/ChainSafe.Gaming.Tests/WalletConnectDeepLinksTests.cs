@@ -7,9 +7,6 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.NetCore;
 using ChainSafe.Gaming.Tests.Core;
-using ChainSafe.Gaming.WalletConnect;
-using ChainSafe.Gaming.WalletConnect.Models;
-using ChainSafe.Gaming.WalletConnect.Wallets;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Environment;
@@ -18,7 +15,7 @@ using NUnit.Framework;
 
 namespace ChainSafe.Gaming.Tests
 {
-    // [TestFixture] // todo unstable currently; uncomment after new version of WalletRegistry with pre-downloaded, filtered list of wallets introduced
+    // [TestFixture] // todo unstable currently; uncomment after new version of WalletRegistry with pre-downloaded filtered list of wallets gets introduced
     // public class WalletConnectDeepLinksTests
     // {
     //     private static readonly List<string> KnownBrokenWalletsIos = new() // todo note in the documentation

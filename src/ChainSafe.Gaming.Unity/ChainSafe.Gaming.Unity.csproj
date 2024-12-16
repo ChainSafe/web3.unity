@@ -20,7 +20,7 @@
     <ProjectReference Include="..\ChainSafe.Gaming\ChainSafe.Gaming.csproj" />
     <ProjectReference Include="..\ChainSafe.Gaming.InProcessSigner\ChainSafe.Gaming.InProcessSigner.csproj" />
     <ProjectReference Include="..\ChainSafe.Gaming.InProcessTransactionExecutor\ChainSafe.Gaming.InProcessTransactionExecutor.csproj" />
-    <ProjectReference Include="..\ChainSafe.Gaming.WalletConnect\ChainSafe.Gaming.WalletConnect.csproj" />
+    <ProjectReference Include="..\ChainSafe.Gaming.Reown\ChainSafe.Gaming.Reown.csproj" />
     <ProjectReference Include="..\ChainSafe.Gaming.Unity.MetaMask\ChainSafe.Gaming.Unity.MetaMask.csproj" />
     <ProjectReference Include="..\ChainSafe.Gaming.Unity.EthereumWindow\ChainSafe.Gaming.Unity.EthereumWindow.csproj" />
     <ProjectReference Include="..\ChainSafe.Gaming.Unity.ThirdParty\ChainSafe.Gaming.Unity.ThirdParty.csproj" />

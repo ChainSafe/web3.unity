@@ -37,7 +37,8 @@ public class ABICSharpConverter : EditorWindow
         set => _instance = value;
     }
 
-    // UI rendering method
+    private Vector2 _scrollPos;
+        
     private void OnGUI()
     {
         var style = new GUIStyle(GUI.skin.label) { richText = true };
@@ -55,8 +56,17 @@ public class ABICSharpConverter : EditorWindow
             return;
         }
 
+       
         EditorGUI.BeginChangeCheck();
-        _abi = EditorGUILayout.TextField("ABI", _abi, EditorStyles.textArea, GUILayout.Height(200));
+
+        // Calculate the required height for the text area
+        float contentHeight = EditorStyles.textArea.CalcHeight(new GUIContent(_abi), position.width - 20);
+
+        _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos);
+        // Use EditorGUILayout with dynamic height
+        _abi = EditorGUILayout.TextField("ABI", _abi, EditorStyles.textArea, GUILayout.Height(contentHeight));
+        EditorGUILayout.EndScrollView();
+        
         string message = "";
         if (EditorGUI.EndChangeCheck())
             _abiIsValid = IsValidAbi(out message);
@@ -66,6 +76,7 @@ public class ABICSharpConverter : EditorWindow
             EditorGUILayout.HelpBox("Invalid ABI" + message, MessageType.Error);
             return;
         }
+    
 
         if (string.IsNullOrEmpty(_contractName.Trim()))
         {
@@ -85,6 +96,7 @@ public class ABICSharpConverter : EditorWindow
         }
     }
 
+
     [MenuItem("ChainSafe SDK/Contract ABI to C# converter", priority = 0)]
     public static void ShowWindow()
     {
@@ -97,6 +109,19 @@ public class ABICSharpConverter : EditorWindow
         _contractABI = ABIDeserialiserFactory.DeserialiseContractABI(_abi);
         var text = Resources.Load<TextAsset>("ABIContractClassTemplate").text;
         var className = Regex.Replace(_contractName, @"[^a-zA-Z0-9_]|(?<=^)[0-9]", string.Empty);
+        
+        foreach (var abi in _contractABI.Functions)
+        {
+            if (abi.Name.Contains("BatchReceived", StringComparison.InvariantCultureIgnoreCase))
+            {
+                    
+                Debug.LogError("Input param");
+                foreach (var abiInputParameter in abi.InputParameters)
+                {
+                    Debug.Log("ABI TYPE " + abiInputParameter.ABIType + " ABI TYPE" + abiInputParameter.Type + " ABI NAME" + abiInputParameter.Name);
+                }
+            }
+        }
 
         text = text.Replace("{CLASS_NAME}", className);
         var minifiedJson = JsonDocument.Parse(_abi).RootElement.GetRawText();
@@ -138,6 +163,7 @@ public class ABICSharpConverter : EditorWindow
             }
 
             message = "";
+            
             return contractABI.Functions.Length > 0 ||
                    contractABI.Events.Length > 0 ||
                    contractABI.Errors.Length > 0 ||
@@ -261,15 +287,17 @@ public class ABICSharpConverter : EditorWindow
         return result.ToString();
     }
 
+    private static int _inputParamCount = 1;
     private static string GenerateMethodWithFunctionABI(FunctionABI functionABI, string functionTemplateBase, bool useTransactionReceipt)
     {
         var functionStringBuilder = new StringBuilder(functionTemplateBase);
-
+        _inputParamCount = 1;
         ReplaceMethodName(functionStringBuilder, functionABI, useTransactionReceipt);
         ReplaceInputParameters(functionStringBuilder, functionABI);
         ReplaceContractMethodCall(functionStringBuilder, functionABI);
         ReplaceReturnType(functionStringBuilder, functionABI, useTransactionReceipt);
         ReplaceFunctionCall(functionStringBuilder, functionABI, useTransactionReceipt);
+        _inputParamCount = 1;
         ReplaceInputParamNames(functionStringBuilder, functionABI);
         ReplaceReturnStatement(functionStringBuilder, functionABI, useTransactionReceipt);
 
@@ -283,7 +311,7 @@ public class ABICSharpConverter : EditorWindow
 
     private static void ReplaceInputParameters(StringBuilder functionStringBuilder, FunctionABI functionABI)
     {
-        functionStringBuilder.Replace("{INPUT_PARAMS}", string.Join(", ", functionABI.InputParameters.Select(x => $"{x.Type.ToCSharpType()} {(string.IsNullOrEmpty(x.Name.ReplaceReservedNames()) ? $"{x.Type}" : $"{x.Name.ReplaceReservedNames()}")}")) + $"{(functionABI.InputParameters.Length > 0 ? "," : "")} TransactionRequest transactionOverwrite=null");
+        functionStringBuilder.Replace("{INPUT_PARAMS}", string.Join(", ", functionABI.InputParameters.Select(x => $"{x.Type.ToCSharpType()} {(string.IsNullOrEmpty(x.Name.ReplaceReservedNames()) ? $"param{_inputParamCount++}" : $"{x.Name.ReplaceReservedNames()}")}")) + $"{(functionABI.InputParameters.Length > 0 ? "," : "")} TransactionRequest transactionOverwrite=null");
     }
 
     private static void ReplaceContractMethodCall(StringBuilder functionStringBuilder, FunctionABI functionABI)
@@ -326,7 +354,11 @@ public class ABICSharpConverter : EditorWindow
 
     private static void ReplaceInputParamNames(StringBuilder functionStringBuilder, FunctionABI functionABI)
     {
-        functionStringBuilder.Replace("{INPUT_PARAM_NAMES}", string.Join(", ", functionABI.InputParameters.Select(x => x.Name.ReplaceReservedNames())));
+        functionStringBuilder.Replace("{INPUT_PARAM_NAMES}", string.Join(", ", functionABI.InputParameters.Select(x =>
+        {
+            var name = x.Name.ReplaceReservedNames();
+            return string.IsNullOrEmpty(name) ? $"param{_inputParamCount++}" : name;
+        })));
     }
 
     private static void ReplaceReturnStatement(StringBuilder functionStringBuilder, FunctionABI functionABI, bool useTransactionReceipt)
