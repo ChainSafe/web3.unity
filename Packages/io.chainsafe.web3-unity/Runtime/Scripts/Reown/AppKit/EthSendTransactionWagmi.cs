@@ -12,10 +12,10 @@ namespace ChainSafe.Gaming.Reown.AppKit
     [RpcMethod("sendTransaction")]
     [RpcRequestOptions(Clock.ONE_MINUTE, 99999)]
     [Preserve]
-    public class EthSendTransactionSingle : TransactionModel
+    public class EthSendTransactionWagmi : TransactionModel
     {
      
-        public EthSendTransactionSingle(params TransactionInput[] inputs) : base()
+        public EthSendTransactionWagmi(params TransactionInput[] inputs) : base()
         {
             var input = inputs[0];
             From = input.From;
@@ -27,7 +27,7 @@ namespace ChainSafe.Gaming.Reown.AppKit
             Nonce = input.Nonce?.ToString();
         }
         
-        public EthSendTransactionSingle()
+        public EthSendTransactionWagmi()
         {
             
         }

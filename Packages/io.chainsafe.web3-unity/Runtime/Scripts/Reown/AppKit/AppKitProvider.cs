@@ -184,13 +184,13 @@ namespace ChainSafe.Gaming.Reown.AppKit
             {
                 case "personal_sign":
                     method = "signMessage";
-                    return await MakeRequest<EthSignMessageAppKit>();
+                    return await MakeRequest<EthSignMessageWagmi>();
                 case "eth_signTypedData":
                     method = "signTypedData";
                     return await MakeRequest<EthSignTypedData>();
                 case "eth_sendTransaction":
                     method = "sendTransaction";
-                    return await MakeRequest<EthSendTransactionSingle>();
+                    return await MakeRequest<EthSendTransactionWagmi>();
                 case "wallet_addEthereumChain" :
                     return default;
                 default:
