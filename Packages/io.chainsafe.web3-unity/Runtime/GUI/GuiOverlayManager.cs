@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -14,21 +15,34 @@ namespace ChainSafe.Gaming.GUI
 
         private ObjectPool<GuiInfoOverlay> pool;
 
-        private int overlayCounter = 1000; // offset to detect when default integer value is sent to one of the methods
+        private int _overlayCounter = 1000; // offset to detect when default integer value is sent to one of the methods
 
+        private Coroutine _hideCoroutine;
+        
         private void Awake()
         {
             pool = new ObjectPool<GuiInfoOverlay>(CreateOverlay, InitOverlay, ReleaseOverlay, defaultCapacity: 2);
         }
 
-        public int Show(GuiOverlayType type, string message, bool deactivateOnClick, Action onClose = null)
+        public int Show(GuiOverlayType type, string message, bool deactivateOnClick, Action onClose = null, float timeOut = 0)
         {
             var overlay = pool.Get();
             activeOverlays.Add(overlay);
-            overlay.Initialize(overlayCounter++, type, message, deactivateOnClick, onClose, OnReleaseRequested);
+            overlay.Initialize(_overlayCounter++, type, message, deactivateOnClick, onClose, OnReleaseRequested);
+            if (timeOut > 0)
+            {
+                _hideCoroutine = StartCoroutine(Hide(overlay.Id, timeOut));
+            }
             return overlay.Id;
         }
 
+        private IEnumerator Hide(int overlayId, float timeout)
+        {
+            yield return new WaitForSeconds(timeout);
+            
+            Hide(overlayId);
+        }
+        
         public void Hide(int overlayId)
         {
             var overlay = activeOverlays.Find(o => o.Id == overlayId);
@@ -40,6 +54,12 @@ namespace ChainSafe.Gaming.GUI
 
             overlay.Hide();
             activeOverlays.Remove(overlay);
+        }
+
+        public void UpdateOverlay(int overlayId, string message)
+        {
+            var overlay = activeOverlays.Find(o => o.Id == overlayId);
+            overlay.UpdateMessage(message);
         }
 
         private GuiInfoOverlay CreateOverlay()
@@ -62,6 +82,13 @@ namespace ChainSafe.Gaming.GUI
 
         private void OnReleaseRequested(GuiInfoOverlay overlay)
         {
+            if (_hideCoroutine != null)
+            {
+                StopCoroutine(_hideCoroutine);
+                
+                _hideCoroutine = null;
+            }
+            
             pool.Release(overlay);
         }
     }
@@ -69,6 +96,7 @@ namespace ChainSafe.Gaming.GUI
     public enum GuiOverlayType
     {
         Error,
-        Loading
+        Loading,
+        Toast
     }
 }

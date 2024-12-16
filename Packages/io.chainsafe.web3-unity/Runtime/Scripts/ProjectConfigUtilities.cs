@@ -1,7 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Core.Chains;
 using UnityEngine;
 
 namespace ChainSafe.Gaming.UnityPackage
@@ -12,6 +12,16 @@ namespace ChainSafe.Gaming.UnityPackage
 
         public static Web3ConfigAsset Load()
         {
+            if (Web3Unity.TestMode)
+            {
+                bool isWindowsEditor = Application.platform == RuntimePlatform.WindowsEditor;
+                
+                return Create("3dc3e125-71c4-4511-a367-e981a6a94371",
+                    "11155111",
+                    "Anvil", "Sepolia", "Seth", isWindowsEditor ? "http://127.0.0.1:8545" : "http://172.17.0.1:8545",
+                    "https://sepolia.etherscan.io/", false, isWindowsEditor ? "ws://127.0.0.1:8545" : "ws://172.17.0.1:8545");
+            }
+            
             var projectConfig = Resources.Load<Web3ConfigAsset>(AssetName);
             return projectConfig ? projectConfig : null;
         }
@@ -30,7 +40,12 @@ namespace ChainSafe.Gaming.UnityPackage
                     ChainId = chainId,
                     Chain = chain,
                     Network = network,
-                    Symbol = symbol,
+                    NativeCurrency = new NativeCurrencyUnityWrapper()
+                    {
+                        Name = symbol,
+                        Symbol = symbol,
+                        Decimals = 18
+                    },
                     Rpc = rpc,
                     Ws = ws,
                     BlockExplorerUrl = blockExplorerUrl,
@@ -82,7 +97,7 @@ namespace ChainSafe.Gaming.UnityPackage
                 var localhostEndPoint = $"127.0.0.1:{port}";
 
                 ChainId = chainId;
-                Symbol = symbol;
+                NativeCurrency = new NativeCurrencyUnityWrapper(){ Symbol = symbol, Name = symbol, Decimals = 18 };
                 Chain = chain;
                 Network = network;
                 Rpc = $"http://{localhostEndPoint}";
@@ -91,7 +106,7 @@ namespace ChainSafe.Gaming.UnityPackage
             }
 
             public string ChainId { get; }
-            public string Symbol { get; }
+            public INativeCurrency NativeCurrency { get; }
             public string Chain { get; }
             public string Network { get; }
             public string Rpc { get; }

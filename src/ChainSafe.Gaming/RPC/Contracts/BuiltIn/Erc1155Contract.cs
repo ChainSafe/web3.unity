@@ -4,8 +4,10 @@ using System.Diagnostics.Contracts;
 using System.Numerics;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Signers;
+using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Ipfs;
 using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Core;
 
 namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
 {
@@ -22,6 +24,19 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
             this.signer = signer;
         }
 
+        internal ISigner Signer
+        {
+            get
+            {
+                if (signer != null)
+                {
+                    return signer;
+                }
+
+                throw new ServiceNotBoundWeb3Exception<ISigner>($"{nameof(ISigner)} service not bound to Web3 instance, connect to an account first.");
+            }
+        }
+
         /// <summary>
         /// Retrieves the balance of a specific token for the current signer.
         /// </summary>
@@ -29,8 +44,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// <returns>The balance of the specified token as a <see cref="BigInteger"/>.</returns>
         public Task<BigInteger> GetBalanceOf(string tokenId)
         {
-            EnsureSigner();
-            return GetBalanceOf(tokenId, signer.PublicAddress);
+            return GetBalanceOf(tokenId, Signer.PublicAddress);
         }
 
         /// <summary>
@@ -88,16 +102,38 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// <returns>A Task that represents the asynchronous operation. The task result is an array of objects representing the minting result.</returns>
         public Task<object[]> Mint(BigInteger tokenId, BigInteger amount, byte[] data = null)
         {
-            EnsureSigner();
             data ??= Array.Empty<byte>();
             var parameters = new object[]
             {
-                signer.PublicAddress, // destination
+                Signer.PublicAddress, // destination
                 tokenId,
                 amount,
                 data,
             };
             return Send(EthMethods.Mint, parameters);
+        }
+
+        /// <summary>
+        /// Mints new tokens by calling the Mint method on the contract.
+        /// </summary>
+        /// <param name="tokenId">The ID of the token to mint.</param>
+        /// <param name="amount">The amount of tokens to mint.</param>
+        /// <param name="data">(Optional) Additional data to include with the minting.</param>
+        /// <returns>Receipt of the Mint Transaction.</returns>
+        public async Task<TransactionReceipt> MintWithReceipt(BigInteger tokenId, BigInteger amount, byte[] data = null)
+        {
+            data ??= Array.Empty<byte>();
+            var parameters = new object[]
+            {
+                Signer.PublicAddress, // destination
+                tokenId,
+                amount,
+                data,
+            };
+
+            var response = await SendWithReceipt(EthMethods.Mint, parameters);
+
+            return response.receipt;
         }
 
         /// <summary>
@@ -109,11 +145,10 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// <returns>A task that represents the asynchronous transfer operation. The task result contains an array of objects.</returns>
         public Task<object[]> Transfer(BigInteger tokenId, BigInteger amount, string destinationAddress)
         {
-            EnsureSigner();
             var data = Array.Empty<byte>();
             var parameters = new object[]
             {
-                signer.PublicAddress, // source
+                Signer.PublicAddress, // source
                 destinationAddress,
                 tokenId,
                 amount,
@@ -122,14 +157,28 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
             return Send(EthMethods.SafeTransferFrom, parameters);
         }
 
-        private void EnsureSigner()
+        /// <summary>
+        /// Transfers a specified amount of tokens from the user's account to a specified destination address.
+        /// </summary>
+        /// <param name="tokenId">The identifier of the token to be transferred.</param>
+        /// <param name="amount">The amount of tokens to be transferred.</param>
+        /// <param name="destinationAddress">The destination address to receive the transferred tokens.</param>
+        /// <returns>Receipt of the transfer.</returns>
+        public async Task<TransactionReceipt> TransferWithReceipt(BigInteger tokenId, BigInteger amount, string destinationAddress)
         {
-            if (signer is not null)
+            var data = Array.Empty<byte>();
+            var parameters = new object[]
             {
-                return;
-            }
+                Signer.PublicAddress, // source
+                destinationAddress,
+                tokenId,
+                amount,
+                data,
+            };
 
-            throw new Web3Exception("Can't get player address. No Signer was provided during construction.");
+            var response = await SendWithReceipt(EthMethods.SafeTransferFrom, parameters);
+
+            return response.receipt;
         }
     }
 }

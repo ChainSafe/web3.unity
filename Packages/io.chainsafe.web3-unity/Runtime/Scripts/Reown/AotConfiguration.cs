@@ -1,5 +1,7 @@
 ﻿using System;
+using Reown.Core.Common.Events;
 using Reown.Core.Controllers;
+using Reown.Core.Models;
 using Reown.Sign.Models.Engine.Methods;
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -24,6 +26,9 @@ namespace ChainSafe.Gaming.Reown
             Debug.Log(historyFactory.JsonRpcHistoryOfType<SessionExtend, Boolean>().GetType().FullName);
             Debug.Log(historyFactory.JsonRpcHistoryOfType<SessionDelete, Boolean>().GetType().FullName);
             Debug.Log(historyFactory.JsonRpcHistoryOfType<SessionPing, Boolean>().GetType().FullName);
+            Debug.Log(historyFactory.JsonRpcHistoryOfType<BatchFetchMessagesResponse, Boolean>().GetType().FullName);
+            GenericEventHolder holder = new GenericEventHolder();
+            holder.OfType<string>();
             // EventManager<string, GenericEvent<string>>.InstanceOf(null).PropagateEvent(null, null); todo there is no "Events" nuget package for Reown, this might break something
             throw new InvalidOperationException("This method is only for AOT code generation.");
         }
