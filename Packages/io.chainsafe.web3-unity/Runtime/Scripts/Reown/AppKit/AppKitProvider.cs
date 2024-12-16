@@ -184,7 +184,7 @@ namespace ChainSafe.Gaming.Reown.AppKit
             {
                 case "personal_sign":
                     method = "signMessage";
-                    return await MakeRequest<EthSignMessage>();
+                    return await MakeRequest<EthSignMessageAppKit>();
                 case "eth_signTypedData":
                     method = "signTypedData";
                     return await MakeRequest<EthSignTypedData>();
