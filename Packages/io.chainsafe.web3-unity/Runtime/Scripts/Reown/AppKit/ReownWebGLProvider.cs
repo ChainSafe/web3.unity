@@ -21,7 +21,7 @@ using W3AppKit = global::Reown.AppKit.Unity.AppKit;
 
 namespace ChainSafe.Gaming.Reown.AppKit
 {
-    public class AppKitProvider : WalletProvider, ILifecycleParticipant, IConnectionHelper
+    public class ReownWebGLProvider : WalletProvider, ILifecycleParticipant, IConnectionHelper
     {
         private IReownConfig ReownConfig { get; set; }
 
@@ -38,7 +38,7 @@ namespace ChainSafe.Gaming.Reown.AppKit
             "Sepolia"
         };
 
-        public AppKitProvider(ReownHttpClient httpClient, IChainConfigSet chains, IReownConfig reownConfig,
+        public ReownWebGLProvider(ReownHttpClient httpClient, IChainConfigSet chains, IReownConfig reownConfig,
             ILogWriter logWriter, Web3Environment web3Environment, IChainManager chainManager,
             IOperationTracker operationTracker) : base(web3Environment, chainManager.Current, operationTracker)
         {
@@ -124,9 +124,7 @@ namespace ChainSafe.Gaming.Reown.AppKit
         }
 
         private void NetworkControllerOnChainChanged(object sender, NetworkController.ChainChangedEventArgs e)
-        {
-            Debug.Log("Chain changed");
-            
+        {            
             W3AppKit.CloseModal();
         }
 

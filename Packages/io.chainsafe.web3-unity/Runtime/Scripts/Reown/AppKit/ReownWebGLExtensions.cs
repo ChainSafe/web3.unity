@@ -6,17 +6,17 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace ChainSafe.Gaming.Reown.AppKit
 {
-    public static class AppKitExtensions
+    public static class ReownWebGLExtensions
     {
-        public static IWeb3ServiceCollection UseAppKit(
+        public static IWeb3ServiceCollection UseReownWebGL(
             this IWeb3ServiceCollection services,
             IReownConfig config)
         {
             services.AssertServiceNotBound<IWalletProvider>();
             services.ConfigureReown(config);
-            services.AddSingleton<IConnectionHelper, ILifecycleParticipant, AppKitProvider>();
+            services.AddSingleton<IConnectionHelper, ILifecycleParticipant, ReownWebGLProvider>();
             services.AddSingleton<ReownHttpClient>();
-            services.UseWalletProvider<AppKitProvider>(config);
+            services.UseWalletProvider<ReownWebGLProvider>(config);
             return services;
         }
 

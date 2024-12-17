@@ -135,7 +135,7 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
         {
             #if UNITY_WEBGL && !UNITY_EDITOR
             ChainIdViemNameMap = ChainIdViemNameMap.Count == 0 ? ChainIdAndViemNameArray.ToDictionary(x => x.ChainId, x => x.ViewName) : ChainIdViemNameMap;
-            services.UseAppKit(this)
+            services.UseReownWebGL(this)
                 .UseWalletSigner()
                 .UseWalletTransactionExecutor();
 
