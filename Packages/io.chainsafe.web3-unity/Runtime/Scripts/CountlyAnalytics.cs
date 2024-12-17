@@ -39,7 +39,7 @@ public class CountlyAnalytics : IAnalyticsClient
             { "analyticsVersion", AnalyticsVersion }
         };
 
-        Countly.Instance.UserDetails.SetCustomUserDetails(userDetails);
+        Countly.Instance.UserProfile.SetProperties(userDetails);
 
         ProjectConfig = projectConfig;
     }
