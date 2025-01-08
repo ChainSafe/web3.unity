@@ -42,16 +42,16 @@ namespace Plugins.CountlySDK.Services
                     return;
                 }
 
-                if (name.Length > _configuration.maxKeyLength)
+                if (name.Length > _configuration.MaxKeyLength)
                 {
-                    Log.Verbose("[ViewCountlyService] RecordOpenViewAsync : Max allowed key length is " + _configuration.maxKeyLength);
-                    name = name.Substring(0, _configuration.maxKeyLength);
+                    Log.Verbose("[ViewCountlyService] RecordOpenViewAsync : Max allowed key length is " + _configuration.MaxKeyLength);
+                    name = name.Substring(0, _configuration.MaxKeyLength);
                 }
 
                 IDictionary<string, object> openViewSegment = new Dictionary<string, object>
                 {
                     {"name", name},
-                    {"segment", _configuration.MetricHelper.OS},
+                    {"segment", _configuration.metricHelper.OS},
                     {"visit", 1},
                     {"start", _isFirstView ? 1 : 0}
                 };
@@ -107,10 +107,10 @@ namespace Plugins.CountlySDK.Services
                     return;
                 }
 
-                if (name.Length > _configuration.maxKeyLength)
+                if (name.Length > _configuration.MaxKeyLength)
                 {
-                    Log.Verbose("[ViewCountlyService] RecordCloseViewAsync : Max allowed key length is " + _configuration.maxKeyLength);
-                    name = name.Substring(0, _configuration.maxKeyLength);
+                    Log.Verbose("[ViewCountlyService] RecordCloseViewAsync : Max allowed key length is " + _configuration.MaxKeyLength);
+                    name = name.Substring(0, _configuration.MaxKeyLength);
                 }
 
                 double? duration = null;
@@ -125,7 +125,7 @@ namespace Plugins.CountlySDK.Services
                 IDictionary<string, object> segment = new Dictionary<string, object>
                 {
                     {"name", name},
-                    {"segment", _configuration.MetricHelper.OS},
+                    {"segment", _configuration.metricHelper.OS},
                 };
 
                 CountlyEventModel currentView = new CountlyEventModel(CountlyEventModel.ViewEvent, segment, 1, null, duration);

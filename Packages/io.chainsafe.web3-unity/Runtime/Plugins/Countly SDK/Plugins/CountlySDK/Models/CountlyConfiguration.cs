@@ -16,104 +16,124 @@ namespace Plugins.CountlySDK.Models
         /// URL of the Countly server to submit data to.
         /// Mandatory field.
         /// </summary>
-        public string serverUrl = null;
+        [Obsolete("ServerUrl is deprecated. Use CountlyConfiguration(string appKey, string serverUrl) instead.")]
+        public string ServerUrl = null;
 
         /// <summary>
         /// App key for the application being tracked.
         /// Mandatory field.
         /// </summary>
-        public string appKey = null;
+        [Obsolete("AppKey is deprecated. Use CountlyConfiguration(string appKey, string serverUrl) instead.")]
+        public string AppKey = null;
 
         /// <summary>
         /// Unique ID for the device the app is running on.
         /// </summary>
-        public string deviceId = null;
+        [Obsolete("DeviceId is deprecated. Use SetDeviceId(string deviceId) instead.")]
+        public string DeviceId = null;
 
         /// <summary>
         /// Set to prevent parameter tampering.
         /// </summary>
-        public string salt = null;
+        [Obsolete("Salt is deprecated. Use SetParameterTamperingProtectionSalt(string salt) instead.")]
+        public string Salt = null;
 
         /// <summary>
         /// Set to send all requests made to the Countly server using HTTP POST.
         /// </summary>
-        public bool enablePost = false;
+        [Obsolete("EnablePost is deprecated. Use EnableForcedHttpPost() instead.")]
+        public bool EnablePost = false;
 
         /// <summary>
         /// Set to true if you want the SDK to pretend that it's functioning.
         /// </summary>
-        public bool enableTestMode = false;
+        [Obsolete("EnableTestMode is deprecated. This is going to be removed in the future.")]
+        public bool EnableTestMode = false;
 
         /// <summary>
         /// Set to true if you want to enable countly internal debugging logs.
         /// </summary>
-        public bool enableConsoleLogging = false;
+        [Obsolete("EnableConsoleLogging is deprecated. Use EnableLogging() instead.")]
+        public bool EnableConsoleLogging = false;
 
         /// <summary>
         /// Set mode of push notification.
         /// </summary>
-        public TestMode notificationMode = TestMode.None;
+        [Obsolete("NotificationMode is deprecated. Use SetNotificationMode(TestMode mode) instead.")]
+        public TestMode NotificationMode = TestMode.None;
 
         /// <summary>
         /// Set to true to enable manual session handling.
         /// </summary>
+        [Obsolete("EnableManualSessionHandling is deprecated. This is going to be removed in the future.")]
         public readonly bool EnableManualSessionHandling = false;
 
         /// <summary>
         /// Sets the interval for the automatic update calls
         /// min value 1 (1 second), max value 600 (10 minutes)
         /// </summary>
-        public int sessionDuration = 60;
+        [Obsolete("SessionDuration is deprecated. Use SetUpdateSessionTimerDelay(int duration) instead.")]
+        public int SessionDuration = 60;
 
         /// <summary>
         /// Maximum size of all string keys
         /// </summary>
-        public int maxKeyLength = 128;
+        [Obsolete("MaxKeyLength is deprecated. Use SetMaxKeyLength(int length) instead.")]
+        public int MaxKeyLength = 128;
 
         /// <summary>
         /// Maximum size of all values in our key-value pairs
         /// </summary>
-        public int maxValueSize = 256;
+        [Obsolete("MaxValueSize is deprecated. Use SetMaxValueSize(int size) instead.")]
+        public int MaxValueSize = 256;
 
         /// <summary>
         /// Max amount of custom (dev provided) segmentation in one event
         /// </summary>
-        public int maxSegmentationValues = 100;
+        [Obsolete("MaxSegmentationValues is deprecated. Use SetMaxSegmentationValues(int values) instead.")]
+        public int MaxSegmentationValues = 100;
 
         /// <summary>
         /// Limits how many stack trace lines would be recorded per thread
         /// </summary>
-        public int maxStackTraceLinesPerThread = 30;
+        [Obsolete("MaxStackTraceLinesPerThread is deprecated. Use SetMaxStackTraceLinesPerThread(int lines) instead.")]
+        public int MaxStackTraceLinesPerThread = 30;
 
         /// <summary>
         /// Limits how many characters are allowed per stack trace line
         /// </summary>
-        public int maxStackTraceLineLength = 200;
+        [Obsolete("MaxStackTraceLineLength is deprecated. Use SetMaxStackTraceLineLength(int length) instead.")]
+        public int MaxStackTraceLineLength = 200;
 
         /// <summary>
         /// Set threshold value for the number of events that can be stored locally.
         /// </summary>
-        public int eventQueueThreshold = 100;
+        [Obsolete("EventQueueThreshold is deprecated. Use SetEventQueueSizeToSend(int threshold) instead.")]
+        public int EventQueueThreshold = 100;
 
         /// <summary>
         /// Set limit for the number of requests that can be stored locally.
         /// </summary>
-        public int storedRequestLimit = 1000;
+        [Obsolete("StoredRequestLimit is deprecated. Use SetMaxRequestQueueSize(int limit) instead.")]
+        public int StoredRequestLimit = 1000;
 
         /// <summary>
         /// Set the maximum amount of breadcrumbs.
         /// </summary>
-        public int totalBreadcrumbsAllowed = 100;
+        [Obsolete("TotalBreadcrumbsAllowed is deprecated. Use SetMaxBreadcrumbCount(int amount) instead.")]
+        public int TotalBreadcrumbsAllowed = 100;
 
         /// <summary>
         /// Set true to enable uncaught crash reporting.
         /// </summary>
-        public bool enableAutomaticCrashReporting = true;
+        [Obsolete("EnableAutomaticCrashReporting is deprecated. Use DisableAutomaticCrashReporting() instead.")]
+        public bool EnableAutomaticCrashReporting = true;
 
         /// <summary>
         /// Set if consent should be required.
         /// </summary>
-        public bool requiresConsent = false;
+        [Obsolete("RequiresConsent is deprecated. Use SetRequiresConsent(bool enable) instead.")]
+        public bool RequiresConsent = false;
 
         internal SafeIDGenerator SafeViewIDGenerator = null;
         internal SafeIDGenerator SafeEventIDGenerator = null;
@@ -129,8 +149,8 @@ namespace Plugins.CountlySDK.Models
         internal string[] EnabledConsentGroups { get; private set; }
         internal List<INotificationListener> NotificationEventListeners;
         internal Dictionary<string, Consents[]> ConsentGroups { get; private set; }
-        internal Dictionary<string, string> OverridenMetrics;
-        internal MetricHelper MetricHelper;
+        internal Dictionary<string, string> overridenMetrics;
+        internal MetricHelper metricHelper;
 
         /// <summary>
         /// Parent must be undestroyable
@@ -144,10 +164,10 @@ namespace Plugins.CountlySDK.Models
             NotificationEventListeners = new List<INotificationListener>();
         }
 
-        public CountlyConfiguration(string _appKey, string _serverUrl)
+        public CountlyConfiguration(string appKey, string serverUrl)
         {
-            appKey = _appKey;
-            serverUrl = _serverUrl;
+            AppKey = appKey;
+            ServerUrl = serverUrl;
 
             ConsentGroups = new Dictionary<string, Consents[]>();
             NotificationEventListeners = new List<INotificationListener>();
@@ -156,27 +176,27 @@ namespace Plugins.CountlySDK.Models
         internal CountlyConfiguration(CountlyAuthModel authModel, CountlyConfigModel config)
         {
             ConsentGroups = new Dictionary<string, Consents[]>();
-            serverUrl = authModel.ServerUrl;
-            appKey = authModel.AppKey;
-            deviceId = authModel.DeviceId;
+            ServerUrl = authModel.ServerUrl;
+            AppKey = authModel.AppKey;
+            DeviceId = authModel.DeviceId;
 
-            salt = config.Salt;
-            enablePost = config.EnablePost;
+            Salt = config.Salt;
+            EnablePost = config.EnablePost;
             EnableManualSessionHandling = config.EnableManualSessionHandling;
-            enableTestMode = config.EnableTestMode;
-            enableConsoleLogging = config.EnableConsoleLogging;
-            notificationMode = config.NotificationMode;
-            sessionDuration = config.SessionDuration;
-            eventQueueThreshold = config.EventQueueThreshold;
-            storedRequestLimit = config.StoredRequestLimit;
-            totalBreadcrumbsAllowed = config.TotalBreadcrumbsAllowed;
-            enableAutomaticCrashReporting = config.EnableAutomaticCrashReporting;
+            EnableTestMode = config.EnableTestMode;
+            EnableConsoleLogging = config.EnableConsoleLogging;
+            NotificationMode = config.NotificationMode;
+            SessionDuration = config.SessionDuration;
+            EventQueueThreshold = config.EventQueueThreshold;
+            StoredRequestLimit = config.StoredRequestLimit;
+            TotalBreadcrumbsAllowed = config.TotalBreadcrumbsAllowed;
+            EnableAutomaticCrashReporting = config.EnableAutomaticCrashReporting;
             NotificationEventListeners = new List<INotificationListener>();
         }
 
         public override string ToString()
         {
-            return $"{nameof(serverUrl)}: {serverUrl}, {nameof(appKey)}: {appKey}, {nameof(deviceId)}: {deviceId}, {nameof(enableTestMode)}: {enableTestMode}, {nameof(enableConsoleLogging)}: {enableConsoleLogging}, {nameof(eventQueueThreshold)}: {eventQueueThreshold}, {nameof(storedRequestLimit)}: {storedRequestLimit}";
+            return $"{nameof(ServerUrl)}: {ServerUrl}, {nameof(AppKey)}: {AppKey}, {nameof(DeviceId)}: {DeviceId}, {nameof(EnableTestMode)}: {EnableTestMode}, {nameof(EnableConsoleLogging)}: {EnableConsoleLogging}, {nameof(EventQueueThreshold)}: {EventQueueThreshold}, {nameof(StoredRequestLimit)}: {StoredRequestLimit}";
         }
 
         /// <summary>
@@ -240,7 +260,7 @@ namespace Plugins.CountlySDK.Models
         /// </summary>
         public void SetMetricOverride(Dictionary<string, string> overridenMetrics)
         {
-            this.OverridenMetrics = overridenMetrics;
+            this.overridenMetrics = overridenMetrics;
         }
 
         /// <summary>
@@ -265,9 +285,9 @@ namespace Plugins.CountlySDK.Models
         /// Set unique ID for the device the app is running on.
         /// </summary>
         /// <returns>Modified instance of the CountlyConfiguration</returns>
-        public CountlyConfiguration SetDeviceId(string _deviceId)
+        public CountlyConfiguration SetDeviceId(string deviceId)
         {
-            deviceId = _deviceId;
+            DeviceId = deviceId;
 
             return this;
         }
@@ -276,9 +296,9 @@ namespace Plugins.CountlySDK.Models
         /// Set to prevent parameter tampering.
         /// </summary>
         /// <returns>Modified instance of the CountlyConfiguration</returns>
-        public CountlyConfiguration SetParameterTamperingProtectionSalt(string _salt)
+        public CountlyConfiguration SetParameterTamperingProtectionSalt(string salt)
         {
-            salt = _salt;
+            Salt = salt;
 
             return this;
         }
@@ -289,7 +309,7 @@ namespace Plugins.CountlySDK.Models
         /// <returns>Modified instance of the CountlyConfiguration</returns>
         public CountlyConfiguration EnableForcedHttpPost()
         {
-            enablePost = true;
+            EnablePost = true;
 
             return this;
         }
@@ -300,7 +320,7 @@ namespace Plugins.CountlySDK.Models
         /// <returns>Modified instance of the CountlyConfiguration</returns>
         public CountlyConfiguration EnableLogging()
         {
-            enableConsoleLogging = true;
+            EnableConsoleLogging = true;
 
             return this;
         }
@@ -311,7 +331,7 @@ namespace Plugins.CountlySDK.Models
         /// <returns>Modified instance of the CountlyConfiguration</returns>
         public CountlyConfiguration SetNotificationMode(TestMode mode)
         {
-            notificationMode = mode;
+            NotificationMode = mode;
 
             return this;
         }
@@ -322,7 +342,7 @@ namespace Plugins.CountlySDK.Models
         /// <returns>Modified instance of the CountlyConfiguration</returns>
         public CountlyConfiguration SetUpdateSessionTimerDelay(int duration)
         {
-            sessionDuration = duration;
+            SessionDuration = duration;
 
             return this;
         }
@@ -333,7 +353,7 @@ namespace Plugins.CountlySDK.Models
         /// <returns>Modified instance of the CountlyConfiguration</returns>
         public CountlyConfiguration SetMaxKeyLength(int length)
         {
-            maxKeyLength = length;
+            MaxKeyLength = length;
 
             return this;
         }
@@ -344,7 +364,7 @@ namespace Plugins.CountlySDK.Models
         /// <returns>Modified instance of the CountlyConfiguration</returns>
         public CountlyConfiguration SetMaxValueSize(int size)
         {
-            maxValueSize = size;
+            MaxValueSize = size;
 
             return this;
         }
@@ -355,7 +375,7 @@ namespace Plugins.CountlySDK.Models
         /// <returns>Modified instance of the CountlyConfiguration</returns>
         public CountlyConfiguration SetMaxSegmentationValues(int values)
         {
-            maxSegmentationValues = values;
+            MaxSegmentationValues = values;
 
             return this;
         }
@@ -366,7 +386,7 @@ namespace Plugins.CountlySDK.Models
         /// <returns>Modified instance of the CountlyConfiguration</returns>
         public CountlyConfiguration SetMaxStackTraceLinesPerThread(int lines)
         {
-            maxStackTraceLinesPerThread = lines;
+            MaxStackTraceLinesPerThread = lines;
 
             return this;
         }
@@ -377,7 +397,7 @@ namespace Plugins.CountlySDK.Models
         /// <returns>Modified instance of the CountlyConfiguration</returns>
         public CountlyConfiguration SetMaxStackTraceLineLength(int length)
         {
-            maxStackTraceLineLength = length;
+            MaxStackTraceLineLength = length;
 
             return this;
         }
@@ -388,7 +408,7 @@ namespace Plugins.CountlySDK.Models
         /// <returns>Modified instance of the CountlyConfiguration</returns>
         public CountlyConfiguration SetEventQueueSizeToSend(int threshold)
         {
-            eventQueueThreshold = threshold;
+            EventQueueThreshold = threshold;
 
             return this;
         }
@@ -399,7 +419,7 @@ namespace Plugins.CountlySDK.Models
         /// <returns>Modified instance of the CountlyConfiguration</returns>
         public CountlyConfiguration SetMaxRequestQueueSize(int limit)
         {
-            storedRequestLimit = limit;
+            StoredRequestLimit = limit;
 
             return this;
         }
@@ -410,7 +430,7 @@ namespace Plugins.CountlySDK.Models
         /// <returns>Modified instance of the CountlyConfiguration</returns>
         public CountlyConfiguration SetMaxBreadcrumbCount(int amount)
         {
-            totalBreadcrumbsAllowed = amount;
+            TotalBreadcrumbsAllowed = amount;
 
             return this;
         }
@@ -421,7 +441,7 @@ namespace Plugins.CountlySDK.Models
         /// <returns>Modified instance of the CountlyConfiguration</returns>
         public CountlyConfiguration DisableAutomaticCrashReporting()
         {
-            enableAutomaticCrashReporting = false;
+            EnableAutomaticCrashReporting = false;
 
             return this;
         }
@@ -432,7 +452,7 @@ namespace Plugins.CountlySDK.Models
         /// <returns>Modified instance of the CountlyConfiguration</returns>
         public CountlyConfiguration SetRequiresConsent(bool enable)
         {
-            requiresConsent = enable;
+            RequiresConsent = enable;
 
             return this;
         }

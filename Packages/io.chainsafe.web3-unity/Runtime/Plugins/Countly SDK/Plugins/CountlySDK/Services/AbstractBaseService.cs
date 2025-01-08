@@ -37,7 +37,7 @@ namespace Plugins.CountlySDK.Services
             List<string> toRemove = new List<string>();
             foreach (KeyValuePair<string, object> item in segments)
             {
-                if (++i > _configuration.maxSegmentationValues)
+                if (++i > _configuration.MaxSegmentationValues)
                 {
                     toRemove.Add(item.Key);
                     continue;
@@ -68,10 +68,10 @@ namespace Plugins.CountlySDK.Services
 
         protected string TrimKey(string k)
         {
-            if (k.Length > _configuration.maxKeyLength)
+            if (k.Length > _configuration.MaxKeyLength)
             {
-                Log.Warning("[" + GetType().Name + "] TrimKey : Max allowed key length is " + _configuration.maxKeyLength + ". " + k + " will be truncated.");
-                k = k.Substring(0, _configuration.maxKeyLength);
+                Log.Warning("[" + GetType().Name + "] TrimKey : Max allowed key length is " + _configuration.MaxKeyLength + ". " + k + " will be truncated.");
+                k = k.Substring(0, _configuration.MaxKeyLength);
             }
 
             return k;
@@ -81,10 +81,10 @@ namespace Plugins.CountlySDK.Services
         {
             for (int i = 0; i < values.Length; ++i)
             {
-                if (values[i].Length > _configuration.maxValueSize)
+                if (values[i].Length > _configuration.MaxValueSize)
                 {
-                    Log.Warning("[" + GetType().Name + "] TrimKey : Max allowed value length is " + _configuration.maxKeyLength + ". " + values[i] + " will be truncated.");
-                    values[i] = values[i].Substring(0, _configuration.maxValueSize);
+                    Log.Warning("[" + GetType().Name + "] TrimKey : Max allowed value length is " + _configuration.MaxKeyLength + ". " + values[i] + " will be truncated.");
+                    values[i] = values[i].Substring(0, _configuration.MaxValueSize);
                 }
             }
 
@@ -94,10 +94,10 @@ namespace Plugins.CountlySDK.Services
 
         protected string TrimValue(string fieldName, string v)
         {
-            if (v != null && v.Length > _configuration.maxValueSize)
+            if (v != null && v.Length > _configuration.MaxValueSize)
             {
-                Log.Warning("[" + GetType().Name + "] TrimValue : Max allowed '" + fieldName + "' length is " + _configuration.maxValueSize + ". " + v + " will be truncated.");
-                v = v.Substring(0, _configuration.maxValueSize);
+                Log.Warning("[" + GetType().Name + "] TrimValue : Max allowed '" + fieldName + "' length is " + _configuration.MaxValueSize + ". " + v + " will be truncated.");
+                v = v.Substring(0, _configuration.MaxValueSize);
             }
 
             return v;

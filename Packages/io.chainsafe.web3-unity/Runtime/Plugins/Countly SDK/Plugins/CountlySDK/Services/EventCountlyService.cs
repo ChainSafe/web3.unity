@@ -101,15 +101,15 @@ namespace Plugins.CountlySDK.Services
                 return;
             }
 
-            if (_configuration.enableTestMode)
+            if (_configuration.EnableTestMode)
             {
                 return;
             }
 
-            if (key.Length > _configuration.maxKeyLength)
+            if (key.Length > _configuration.MaxKeyLength)
             {
-                Log.Warning("[EventCountlyService] RecordEventInternal : Max allowed key length is " + _configuration.maxKeyLength);
-                key = key.Substring(0, _configuration.maxKeyLength);
+                Log.Warning("[EventCountlyService] RecordEventInternal : Max allowed key length is " + _configuration.MaxKeyLength);
+                key = key.Substring(0, _configuration.MaxKeyLength);
             }
 
             IDictionary<string, object> segments = RemoveSegmentInvalidDataTypes(segmentation);
@@ -130,14 +130,14 @@ namespace Plugins.CountlySDK.Services
         {
             Log.Debug("[EventCountlyService] RecordEventAsync : " + @event.ToString());
 
-            if (_configuration.enableTestMode)
+            if (_configuration.EnableTestMode)
             {
                 return;
             }
 
             _eventRepo.Enqueue(@event);
 
-            if (_eventRepo.Count >= _configuration.eventQueueThreshold)
+            if (_eventRepo.Count >= _configuration.EventQueueThreshold)
             {
                 AddEventsToRequestQueue();
                 await _requestCountlyHelper.ProcessQueue();

@@ -55,7 +55,7 @@ namespace Plugins.CountlySDK.Services
         {
             Log.Debug("[RemoteConfigCountlyService] InitConfig");
 
-            if (_configuration.enableTestMode)
+            if (_configuration.EnableTestMode)
             {
                 return new CountlyResponse { IsSuccess = true };
             }
@@ -101,13 +101,13 @@ namespace Plugins.CountlySDK.Services
 
             requestParams.Add("method", "fetch_remote_config");
 
-            string metricsJSON = _configuration.MetricHelper.buildMetricJSON();
+            string metricsJSON = _configuration.metricHelper.buildMetricJSON();
             requestParams.Add("metrics", metricsJSON);
 
             string data = _requestBuilder.BuildQueryString(requestParams);
 
             CountlyResponse response;
-            if (_configuration.enablePost)
+            if (_configuration.EnablePost)
             {
                 response = await Task.Run(() => _requestCountlyHelper.PostAsync(_countlyUtils.ServerInputUrl, data));
             }

@@ -86,7 +86,7 @@ namespace Plugins.CountlySDK.Services
 
                 if (userDetailsModel.PictureUrl != null && userDetailsModel.PictureUrl.Length > 4096)
                 {
-                    Log.Warning("[" + GetType().Name + "] TrimValue : Max allowed length of 'PictureUrl' is " + _configuration.maxValueSize);
+                    Log.Warning("[" + GetType().Name + "] TrimValue : Max allowed length of 'PictureUrl' is " + _configuration.MaxValueSize);
                     userDetailsModel.PictureUrl = userDetailsModel.PictureUrl.Substring(0, 4096);
                 }
 

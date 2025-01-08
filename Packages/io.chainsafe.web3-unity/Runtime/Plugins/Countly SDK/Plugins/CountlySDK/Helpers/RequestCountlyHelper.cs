@@ -46,15 +46,15 @@ namespace Plugins.CountlySDK.Helpers
         {
             Log.Verbose($"[RequestCountlyHelper] AddRequestToQueue, Request: [{request.ToString()}]");
 
-            if (_config.enableTestMode)
+            if (_config.EnableTestMode)
             {
                 return;
             }
 
-            if (_requestRepo.Count >= _config.storedRequestLimit)
+            if (_requestRepo.Count >= _config.StoredRequestLimit)
             {
                 // Calculate how many items need to be removed from the queue to accommodate the new request.
-                int exceedAmount = _requestRepo.Count - _config.storedRequestLimit;
+                int exceedAmount = _requestRepo.Count - _config.StoredRequestLimit;
                 int removeAmount = Mathf.Min(exceedAmount, countlyRequestRemoveLimit) + 1;
                 Log.Warning("[RequestCountlyHelper] Request Queue is full. Dropping the oldest request.");
 
@@ -131,7 +131,7 @@ namespace Plugins.CountlySDK.Helpers
         private async Task<CountlyResponse> ProcessRequest(CountlyRequestModel model)
         {
             Log.Verbose($"[RequestCountlyHelper] Process request, request: [{model}]");
-            bool shouldPost = _config.enablePost || model.RequestData.Length > 2000;
+            bool shouldPost = _config.EnablePost || model.RequestData.Length > 2000;
 
 #if UNITY_WEBGL
             // There is not HTTP GET for WebGL. We always do a HTTP POST
@@ -159,12 +159,12 @@ namespace Plugins.CountlySDK.Helpers
 
         private string AddChecksum(string query)
         {
-            if (!string.IsNullOrEmpty(_config.salt))
+            if (!string.IsNullOrEmpty(_config.Salt))
             {
                 // Create a SHA256
                 using (SHA256 sha256Hash = SHA256.Create())
                 {
-                    byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(query + _config.salt));
+                    byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(query + _config.Salt));
                     string hex = _countlyUtils.GetStringFromBytes(bytes);
 
                     query += "&checksum256=" + hex;

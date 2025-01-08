@@ -54,7 +54,7 @@ namespace Plugins.CountlySDK.Models
 
             return _lastMilliSecTimeStamp.ToUnixTimeMilliseconds();
         }
-        
+
         internal static TimeMetricModel GetTimeZoneInfoForRequest()
         {
             DateTime currentDateTime = DateTime.Now;
@@ -63,9 +63,7 @@ namespace Plugins.CountlySDK.Models
                 {
                     Hour = currentDateTime.TimeOfDay.Hours,
                     DayOfWeek = (int)currentDateTime.DayOfWeek,
-#pragma warning disable CS0618 // Type or member is obsolete
                     Timezone = TimeZone.CurrentTimeZone.GetUtcOffset(currentDateTime).TotalMinutes.ToString(CultureInfo.InvariantCulture)
-#pragma warning restore CS0618 // Type or member is obsolete
                 };
 
             model.Timestamp = model.GetUniqueMilliSecTimeStamp(currentDateTime);
