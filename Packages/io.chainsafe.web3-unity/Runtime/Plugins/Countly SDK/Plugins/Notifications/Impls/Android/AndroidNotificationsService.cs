@@ -41,7 +41,7 @@ namespace Notifications.Impls.Android
             try
             {
                 AndroidJavaClass countlyPushPlugin = new AndroidJavaClass(CountlyPushPluginPackageName);
-                countlyPushPlugin.CallStatic("setEnableLog", config.EnableConsoleLogging);
+                countlyPushPlugin.CallStatic("setEnableLog", config.enableConsoleLogging);
                 IsInitializedWithoutError = true;
             }
             catch (Exception ex)

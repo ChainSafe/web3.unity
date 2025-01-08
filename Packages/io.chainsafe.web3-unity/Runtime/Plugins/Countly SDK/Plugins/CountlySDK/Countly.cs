@@ -20,9 +20,9 @@ namespace Plugins.CountlySDK
     public class Countly : MonoBehaviour
     {
         //SDK limit defaults
-        internal const int MaxKeyLengthDefault = 128;
-        internal const int MaxValueSizeDefault = 256;
-        internal const int MaxSegmentationValuesDefault = 100;
+        internal const int maxKeyLengthDefault = 128;
+        internal const int maxValueSizeDefault = 256;
+        internal const int maxSegmentationValuesDefault = 100;
         internal const int MaxBreadcrumbCountDefault = 100;
         internal const int MaxStackTraceLinesPerThreadDefault = 30;
         internal const int MaxStackTraceLineLengthDefault = 200;
@@ -167,136 +167,136 @@ namespace Plugins.CountlySDK
 
             _logHelper.Info("[Init] Initializing Countly [SdkName: " + Constants.SdkName + " SdkVersion: " + Constants.SdkVersion + "]");
 
-            configuration.metricHelper = new MetricHelper(configuration.overridenMetrics);
+            configuration.MetricHelper = new MetricHelper(configuration.OverridenMetrics);
 
             if (configuration.Parent != null)
             {
                 transform.parent = configuration.Parent.transform;
             }
 
-            if (string.IsNullOrEmpty(configuration.ServerUrl))
+            if (string.IsNullOrEmpty(configuration.serverUrl))
             {
-                throw new ArgumentNullException(configuration.ServerUrl, "Server URL is required.");
+                throw new ArgumentNullException(configuration.serverUrl, "Server URL is required.");
             }
 
-            if (string.IsNullOrEmpty(configuration.AppKey))
+            if (string.IsNullOrEmpty(configuration.appKey))
             {
-                throw new ArgumentNullException(configuration.AppKey, "App Key is required.");
+                throw new ArgumentNullException(configuration.appKey, "App Key is required.");
             }
 
-            if (configuration.ServerUrl[configuration.ServerUrl.Length - 1] == '/')
+            if (configuration.serverUrl[configuration.serverUrl.Length - 1] == '/')
             {
-                configuration.ServerUrl = configuration.ServerUrl.Remove(configuration.ServerUrl.Length - 1);
+                configuration.serverUrl = configuration.serverUrl.Remove(configuration.serverUrl.Length - 1);
             }
 
-            _logHelper.Debug("[Init] SDK initialized with the URL:[" + configuration.ServerUrl + "] and the appKey:[" + configuration.AppKey + "]");
+            _logHelper.Debug("[Init] SDK initialized with the URL:[" + configuration.serverUrl + "] and the appKey:[" + configuration.appKey + "]");
 
 
-            if (configuration.SessionDuration < 1)
+            if (configuration.sessionDuration < 1)
             {
                 _logHelper.Error("[Init] provided session duration is less than 1. Replacing it with 1.");
-                configuration.SessionDuration = 1;
+                configuration.sessionDuration = 1;
             }
-            _logHelper.Debug("[Init] session duration set to [" + configuration.SessionDuration + "]");
+            _logHelper.Debug("[Init] session duration set to [" + configuration.sessionDuration + "]");
 
-            if (configuration.EnablePost)
+            if (configuration.enablePost)
             {
                 _logHelper.Debug("[Init] Setting HTTP POST to be forced");
             }
 
-            if (configuration.Salt != null)
+            if (configuration.salt != null)
             {
                 _logHelper.Debug("[Init] Enabling tamper protection");
             }
 
-            if (configuration.NotificationMode != TestMode.None)
+            if (configuration.notificationMode != TestMode.None)
             {
                 _logHelper.Debug("[Init] Enabling push notification");
             }
 
-            if (configuration.EnableTestMode)
+            if (configuration.enableTestMode)
             {
                 _logHelper.Warning("[Init] Enabling test mode");
             }
 
-            if (configuration.EnableAutomaticCrashReporting)
+            if (configuration.enableAutomaticCrashReporting)
             {
                 _logHelper.Debug("[Init] Enabling automatic crash reporting");
             }
 
             // Have a look at the SDK limit values
-            if (configuration.EventQueueThreshold < 1)
+            if (configuration.eventQueueThreshold < 1)
             {
                 _logHelper.Error("[Init] provided event queue size is less than 1. Replacing it with 1.");
-                configuration.EventQueueThreshold = 1;
+                configuration.eventQueueThreshold = 1;
             }
-            _logHelper.Debug("[Init] event queue size set to [" + configuration.EventQueueThreshold + "]");
+            _logHelper.Debug("[Init] event queue size set to [" + configuration.eventQueueThreshold + "]");
 
-            if (configuration.StoredRequestLimit < 1)
+            if (configuration.storedRequestLimit < 1)
             {
                 _logHelper.Error("[Init] provided request queue size is less than 1. Replacing it with 1.");
-                configuration.StoredRequestLimit = 1;
+                configuration.storedRequestLimit = 1;
             }
-            _logHelper.Debug("[Init] request queue size set to [" + configuration.StoredRequestLimit + "]");
+            _logHelper.Debug("[Init] request queue size set to [" + configuration.storedRequestLimit + "]");
 
-            if (configuration.MaxKeyLength != MaxKeyLengthDefault)
+            if (configuration.maxKeyLength != maxKeyLengthDefault)
             {
-                if (configuration.MaxKeyLength < 1)
+                if (configuration.maxKeyLength < 1)
                 {
-                    configuration.MaxKeyLength = 1;
+                    configuration.maxKeyLength = 1;
                     _logHelper.Warning("[Init] provided 'maxKeyLength' is less than '1'. Setting it to '1'.");
                 }
-                _logHelper.Info("[Init] provided 'maxKeyLength' override:[" + configuration.MaxKeyLength + "]");
+                _logHelper.Info("[Init] provided 'maxKeyLength' override:[" + configuration.maxKeyLength + "]");
             }
 
-            if (configuration.MaxValueSize != MaxValueSizeDefault)
+            if (configuration.maxValueSize != maxValueSizeDefault)
             {
-                if (configuration.MaxValueSize < 1)
+                if (configuration.maxValueSize < 1)
                 {
-                    configuration.MaxValueSize = 1;
+                    configuration.maxValueSize = 1;
                     _logHelper.Warning("[Init] provided 'maxValueSize' is less than '1'. Setting it to '1'.");
                 }
-                _logHelper.Info("[Init] provided 'maxValueSize' override:[" + configuration.MaxValueSize + "]");
+                _logHelper.Info("[Init] provided 'maxValueSize' override:[" + configuration.maxValueSize + "]");
             }
 
-            if (configuration.MaxSegmentationValues != MaxSegmentationValuesDefault)
+            if (configuration.maxSegmentationValues != maxSegmentationValuesDefault)
             {
-                if (configuration.MaxSegmentationValues < 1)
+                if (configuration.maxSegmentationValues < 1)
                 {
-                    configuration.MaxSegmentationValues = 1;
+                    configuration.maxSegmentationValues = 1;
                     _logHelper.Warning("[Init] provided 'maxSegmentationValues' is less than '1'. Setting it to '1'.");
                 }
-                _logHelper.Info("[Init] provided 'maxSegmentationValues' override:[" + configuration.MaxSegmentationValues + "]");
+                _logHelper.Info("[Init] provided 'maxSegmentationValues' override:[" + configuration.maxSegmentationValues + "]");
             }
 
-            if (configuration.TotalBreadcrumbsAllowed != MaxBreadcrumbCountDefault)
+            if (configuration.totalBreadcrumbsAllowed != MaxBreadcrumbCountDefault)
             {
-                if (configuration.TotalBreadcrumbsAllowed < 1)
+                if (configuration.totalBreadcrumbsAllowed < 1)
                 {
-                    configuration.TotalBreadcrumbsAllowed = 1;
+                    configuration.totalBreadcrumbsAllowed = 1;
                     _logHelper.Warning("[Init] provided 'maxBreadcrumbCount' is less than '1'. Setting it to '1'.");
                 }
-                _logHelper.Info("[Init] provided 'maxBreadcrumbCount' override:[" + configuration.TotalBreadcrumbsAllowed + "]");
+                _logHelper.Info("[Init] provided 'maxBreadcrumbCount' override:[" + configuration.totalBreadcrumbsAllowed + "]");
             }
 
-            if (configuration.MaxStackTraceLinesPerThread != MaxStackTraceLinesPerThreadDefault)
+            if (configuration.maxStackTraceLinesPerThread != MaxStackTraceLinesPerThreadDefault)
             {
-                if (configuration.MaxStackTraceLinesPerThread < 1)
+                if (configuration.maxStackTraceLinesPerThread < 1)
                 {
-                    configuration.MaxStackTraceLinesPerThread = 1;
+                    configuration.maxStackTraceLinesPerThread = 1;
                     _logHelper.Warning("[Init] provided 'maxStackTraceLinesPerThread' is less than '1'. Setting it to '1'.");
                 }
-                _logHelper.Info("[Init] provided 'maxStackTraceLinesPerThread' override:[" + configuration.MaxStackTraceLinesPerThread + "]");
+                _logHelper.Info("[Init] provided 'maxStackTraceLinesPerThread' override:[" + configuration.maxStackTraceLinesPerThread + "]");
             }
 
-            if (configuration.MaxStackTraceLineLength != MaxStackTraceLineLengthDefault)
+            if (configuration.maxStackTraceLineLength != MaxStackTraceLineLengthDefault)
             {
-                if (configuration.MaxStackTraceLineLength < 1)
+                if (configuration.maxStackTraceLineLength < 1)
                 {
-                    configuration.MaxStackTraceLineLength = 1;
+                    configuration.maxStackTraceLineLength = 1;
                     _logHelper.Warning("[Init] provided 'maxStackTraceLineLength' is less than '1'. Setting it to '1'.");
                 }
-                _logHelper.Info("[Init] provided 'maxStackTraceLineLength' override:[" + configuration.MaxStackTraceLineLength + "]");
+                _logHelper.Info("[Init] provided 'maxStackTraceLineLength' override:[" + configuration.maxStackTraceLineLength + "]");
             }
 
             if (configuration.SafeEventIDGenerator == null)
@@ -317,14 +317,14 @@ namespace Plugins.CountlySDK
 
             IDictionary<string, object> migrationParams = new Dictionary<string, object>()
             {
-                {StorageAndMigrationHelper.key_from_2_to_3_custom_id_set, configuration.DeviceId != null },
+                {StorageAndMigrationHelper.key_from_2_to_3_custom_id_set, configuration.deviceId != null },
             };
 
             StorageHelper.RunMigration(migrationParams);
 
             Init(requestBuilder, StorageHelper.RequestRepo, StorageHelper.EventRepo, StorageHelper.ConfigDao);
 
-            Device.InitDeviceId(configuration.DeviceId);
+            Device.InitDeviceId(configuration.deviceId);
             OnInitialisationComplete();
 
             _logHelper.Debug("[Countly] Finished Initializing SDK.");
@@ -358,7 +358,7 @@ namespace Plugins.CountlySDK
             RegisterListenersToServices();
         }
 
-        private async void OnInitialisationComplete()
+        private void OnInitialisationComplete()
         {
             lock (lockObj)
             {

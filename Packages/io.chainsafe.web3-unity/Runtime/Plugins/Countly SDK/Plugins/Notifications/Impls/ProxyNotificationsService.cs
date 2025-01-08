@@ -24,7 +24,7 @@ namespace Notifications.Impls
 
             _countlyGameObject = countlyGameObject;
 
-            if (config.NotificationMode == TestMode.None)
+            if (config.notificationMode == TestMode.None)
             {
                 return;
             }

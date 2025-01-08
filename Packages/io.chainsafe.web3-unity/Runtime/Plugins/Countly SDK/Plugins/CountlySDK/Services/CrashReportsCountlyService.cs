@@ -33,18 +33,18 @@ namespace Plugins.CountlySDK.Services
 
                 int limit = lines.Length;
 
-                if (limit > _configuration.MaxStackTraceLinesPerThread)
+                if (limit > _configuration.maxStackTraceLinesPerThread)
                 {
-                    limit = _configuration.MaxStackTraceLinesPerThread;
+                    limit = _configuration.maxStackTraceLinesPerThread;
                 }
 
                 for (int i = 0; i < limit; ++i)
                 {
                     string line = lines[i];
 
-                    if (line.Length > _configuration.MaxStackTraceLineLength)
+                    if (line.Length > _configuration.maxStackTraceLineLength)
                     {
-                        line = line.Substring(0, _configuration.MaxStackTraceLineLength);
+                        line = line.Substring(0, _configuration.maxStackTraceLineLength);
                     }
 
                     if (i + 1 != limit)
@@ -107,7 +107,7 @@ namespace Plugins.CountlySDK.Services
         /// <returns></returns>
         public async Task SendCrashReportAsync(string message, string stackTrace, IDictionary<string, object> segments = null, bool nonfatal = true)
         {
-            if (_configuration.EnableAutomaticCrashReporting)
+            if (_configuration.enableAutomaticCrashReporting)
             {
                 lock (LockObj)
                 {
@@ -164,14 +164,14 @@ namespace Plugins.CountlySDK.Services
                 return;
             }
 
-            if (_configuration.EnableTestMode)
+            if (_configuration.enableTestMode)
             {
                 return;
             }
 
-            string validBreadcrumb = value.Length > _configuration.MaxValueSize ? value.Substring(0, _configuration.MaxValueSize) : value;
+            string validBreadcrumb = value.Length > _configuration.maxValueSize ? value.Substring(0, _configuration.maxValueSize) : value;
 
-            if (_crashBreadcrumbs.Count == _configuration.TotalBreadcrumbsAllowed)
+            if (_crashBreadcrumbs.Count == _configuration.totalBreadcrumbsAllowed)
             {
                 _crashBreadcrumbs.Dequeue();
             }
@@ -191,7 +191,7 @@ namespace Plugins.CountlySDK.Services
         {
             return new CountlyExceptionDetailModel
             {
-                OS = _configuration.metricHelper.OS,
+                OS = _configuration.MetricHelper.OS,
                 OSVersion = SystemInfo.operatingSystem,
                 Device = SystemInfo.deviceName,
                 Resolution = Screen.currentResolution.ToString(),

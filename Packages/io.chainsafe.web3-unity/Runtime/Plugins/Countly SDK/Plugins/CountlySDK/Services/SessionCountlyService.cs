@@ -85,7 +85,7 @@ namespace Plugins.CountlySDK.Services
 #if UNITY_WEBGL
             _monoBehaviour.StartCoroutine(SessionTimerCoroutine());
 #else
-            _sessionTimer = new Timer { Interval = _configuration.SessionDuration * 1000 };
+            _sessionTimer = new Timer { Interval = _configuration.sessionDuration * 1000 };
             _sessionTimer.Elapsed += SessionTimerOnElapsedAsync;
             _sessionTimer.AutoReset = true;
             _sessionTimer.Start();
@@ -113,7 +113,7 @@ namespace Plugins.CountlySDK.Services
                 yield break;
             }
 
-            yield return new WaitForSeconds(_configuration.SessionDuration);
+            yield return new WaitForSeconds(_configuration.sessionDuration);
             SendRequestsAndExtendSession();
             Log.Debug("[SessionCountlyService] SessionTimerCoroutine, Coroutine completed.");
         }
@@ -216,7 +216,7 @@ namespace Plugins.CountlySDK.Services
                 }
             }
 
-            string metricsJSON = _configuration.metricHelper.buildMetricJSON();
+            string metricsJSON = _configuration.MetricHelper.buildMetricJSON();
             requestParams.Add("metrics", metricsJSON);
 
             _requestCountlyHelper.AddToRequestQueue(requestParams);

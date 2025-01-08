@@ -7,6 +7,7 @@ using Plugins.CountlySDK.Enums;
 using Plugins.CountlySDK.Helpers;
 using Plugins.CountlySDK.Models;
 using UnityEngine;
+#nullable enable
 
 namespace Plugins.CountlySDK
 {
@@ -20,8 +21,8 @@ namespace Plugins.CountlySDK
         {
             _countly = countly;
 
-            ServerInputUrl = _countly.Configuration.ServerUrl + "/i?";
-            ServerOutputUrl = _countly.Configuration.ServerUrl + "/o/sdk?";
+            ServerInputUrl = _countly.Configuration.serverUrl + "/i?";
+            ServerOutputUrl = _countly.Configuration.serverUrl + "/o/sdk?";
         }
 
         public static string GetUniqueDeviceId()
@@ -52,7 +53,7 @@ namespace Plugins.CountlySDK
         {
             Dictionary<string, object> baseParams = new Dictionary<string, object>
             {
-                {"app_key", _countly.Configuration.AppKey},
+                {"app_key", _countly.Configuration.appKey},
                 {"device_id", _countly.Device.DeviceId},
                 {"t", Type()},
                 {"sdk_name", Constants.SdkName},
@@ -78,7 +79,7 @@ namespace Plugins.CountlySDK
         {
             return new Dictionary<string, object>
             {
-                {"app_key", _countly.Configuration.AppKey},
+                {"app_key", _countly.Configuration.appKey},
                 {"device_id", _countly.Device.DeviceId}
             };
         }
@@ -256,7 +257,7 @@ namespace Plugins.CountlySDK
 
             if (removed & logger != null)
             {
-                logger.Warning("[Utils] Unsupported data types were removed from provided segmentation");
+                logger?.Warning("[Utils] Unsupported data types were removed from provided segmentation");
             }
 
             return removed;

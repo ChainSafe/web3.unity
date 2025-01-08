@@ -20,7 +20,7 @@ namespace Plugins.CountlySDK.Services
         {
             Log.Debug("[ConsentCountlyService] Initializing.");
 
-            if (configuration.RequiresConsent)
+            if (configuration.requiresConsent)
             {
                 if (configuration.GivenConsent != null)
                 {
@@ -35,7 +35,7 @@ namespace Plugins.CountlySDK.Services
 
             _requestCountlyHelper = requestCountlyHelper;
             CountlyConsents = new Dictionary<Consents, bool>();
-            RequiresConsent = _configuration.RequiresConsent;
+            RequiresConsent = _configuration.requiresConsent;
             _countlyConsentGroups = new Dictionary<string, Consents[]>(_configuration.ConsentGroups);
 
             if (_configuration.EnabledConsentGroups != null)
