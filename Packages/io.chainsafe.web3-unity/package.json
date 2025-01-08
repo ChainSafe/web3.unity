@@ -9,7 +9,7 @@
   "dependencies": {
     "com.unity.nuget.newtonsoft-json": "3.0.2",
     "com.unity.textmeshpro": "3.0.6",
-    "com.reown.appkit.unity": "1.1.2",
+    "com.reown.appkit.unity": "1.2.0",
     "com.nethereum.unity": "4.26.0",
     "com.reown.core": "1.1.2",
     "com.reown.core.common": "1.1.2",
