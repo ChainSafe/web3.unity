@@ -43,26 +43,10 @@ public class EvmSample : MonoBehaviour, ISample
 
     #endregion
 
-    #region Get Send Array
-
-    [Header("Array Calls")]
-    [SerializeField] private string methodArrayGet = "getStore";
-    [SerializeField] private string methodArraySend = "setStore";
-    [SerializeField]
-    private string[] stringArraySend =
-    {
-        "0xFb3aECf08940785D4fB3Ad87cDC6e1Ceb20e9aac",
-        "0x92d4040e4f3591e60644aaa483821d1bd87001e3"
-    };
-
-    #endregion
-
     #region Sign Verify Sha3
 
     [Header("Sign Verify SHA3 calls")]
     [SerializeField] private string messageSign = "The right man in the wrong place can make all the difference in the world.";
-    [SerializeField] private string messageSignVerify = "A man chooses, a slave obeys.";
-    [SerializeField] private string messageSha = "It’s dangerous to go alone, take this!";
 
     #endregion
 
@@ -71,23 +55,6 @@ public class EvmSample : MonoBehaviour, ISample
     [Header("Send Transaction Call")]
     [SerializeField] private string toAddress = "0xdD4c825203f97984e7867F11eeCc813A036089D1";
     [SerializeField] private string value = "12300000000000000";
-
-    #endregion
-
-    #region Registered Contract
-
-    [Header("Registered Contract Call")]
-    [SerializeField] private string registeredContractName = "CsTestErc20";
-
-    #endregion
-
-    #region ECDSA
-
-    [Header("ECDSA Calls")]
-    [SerializeField] private string ecdsaKey = "0x78dae1a22c7507a4ed30c06172e7614eb168d3546c13856340771e63ad3c0081";
-    [SerializeField] private string ecdsaMessage = "This is a test message";
-    [SerializeField] private string transactionHash = "0x123456789";
-    [SerializeField] private string chainId = "11155111";
 
     #endregion
 
