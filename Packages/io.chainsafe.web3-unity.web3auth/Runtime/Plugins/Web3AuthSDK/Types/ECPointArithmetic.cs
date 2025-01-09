@@ -1,6 +1,7 @@
 using Org.BouncyCastle.Math;
 using Org.BouncyCastle.Math.EC;
 using Org.BouncyCastle.Math.Field;
+#nullable enable
 
 public class ECPointArithmetic
 {
@@ -13,7 +14,6 @@ public class ECPointArithmetic
     private BigInteger? zinv;
     private BigInteger one = BigInteger.One;
     private BigInteger zero = BigInteger.Zero;
-    private bool infinity;
 
     public ECPointArithmetic(ECCurve ec, BigInteger x, BigInteger y, BigInteger z)
     {
@@ -33,7 +33,6 @@ public class ECPointArithmetic
             this.z = z;
         }
         this.zinv = null;
-        infinity = false;
     }
 
     public BigInteger getX()
@@ -106,7 +105,7 @@ public class ECPointArithmetic
         {
             return this;
         }
-        ECPointArithmetic R = new ECPointArithmetic(this.ec, zero, zero, null);
+        ECPointArithmetic R = new ECPointArithmetic(this.ec, zero, zero, null!);
         // u = Y2 * Z1 - Y1 * Z2
         BigInteger u = b.y.Multiply(this.z).Subtract(this.y.Multiply(b.z)).Mod(this.ef.Characteristic);
         // v = X2 * Z1 - X1 * Z2
@@ -118,8 +117,7 @@ public class ECPointArithmetic
             {
                 return this.twice(); // this == b, so double
             }
-
-            infinity = true; // this = -b, so infinity
+            
             return R;
         }
 
@@ -152,10 +150,9 @@ public class ECPointArithmetic
         {
             return this;
         }
-        ECPointArithmetic R = new ECPointArithmetic(this.ec, zero, zero, null);
+        ECPointArithmetic R = new ECPointArithmetic(this.ec, zero, zero, null!);
         if (this.y.SignValue == 0)
         {
-            infinity = true;
             return R;
         }
 
@@ -196,10 +193,9 @@ public class ECPointArithmetic
             return this;
         }
 
-        ECPointArithmetic R = new ECPointArithmetic(this.ec, zero, zero, null);
+        ECPointArithmetic R = new ECPointArithmetic(this.ec, zero, zero, null!);
         if (k.SignValue == 0)
         {
-            infinity = true;
             return R;
         }
 
