@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Unity;
@@ -32,7 +33,10 @@ namespace ChainSafe.Gaming.Reown
         public event EventHandler Closed;
         public event EventHandler<Exception> ErrorReceived;
         public event EventHandler<object> Opened;
+        // Disabled unused event warning, can't remove without altering IJsonRpcConnection.
+        #pragma warning disable CS0067 
         public event EventHandler<Exception> RegisterErrored;
+        #pragma warning restore CS0067
 
         private WebSocket _socket;
         private bool _disposed;
