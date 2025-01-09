@@ -7,6 +7,7 @@ using Plugins.CountlySDK.Enums;
 using Plugins.CountlySDK.Helpers;
 using Plugins.CountlySDK.Models;
 using UnityEngine;
+#nullable enable
 
 namespace Plugins.CountlySDK
 {
@@ -256,7 +257,7 @@ namespace Plugins.CountlySDK
 
             if (removed & logger != null)
             {
-                logger.Warning("[Utils] Unsupported data types were removed from provided segmentation");
+                logger?.Warning("[Utils] Unsupported data types were removed from provided segmentation");
             }
 
             return removed;
