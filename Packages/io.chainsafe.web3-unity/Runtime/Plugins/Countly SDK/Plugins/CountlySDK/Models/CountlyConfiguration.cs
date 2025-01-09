@@ -16,123 +16,103 @@ namespace Plugins.CountlySDK.Models
         /// URL of the Countly server to submit data to.
         /// Mandatory field.
         /// </summary>
-        [Obsolete("ServerUrl is deprecated. Use CountlyConfiguration(string appKey, string serverUrl) instead.")]
         public string ServerUrl = null;
 
         /// <summary>
         /// App key for the application being tracked.
         /// Mandatory field.
         /// </summary>
-        [Obsolete("AppKey is deprecated. Use CountlyConfiguration(string appKey, string serverUrl) instead.")]
         public string AppKey = null;
 
         /// <summary>
         /// Unique ID for the device the app is running on.
         /// </summary>
-        [Obsolete("DeviceId is deprecated. Use SetDeviceId(string deviceId) instead.")]
         public string DeviceId = null;
 
         /// <summary>
         /// Set to prevent parameter tampering.
         /// </summary>
-        [Obsolete("Salt is deprecated. Use SetParameterTamperingProtectionSalt(string salt) instead.")]
         public string Salt = null;
 
         /// <summary>
         /// Set to send all requests made to the Countly server using HTTP POST.
         /// </summary>
-        [Obsolete("EnablePost is deprecated. Use EnableForcedHttpPost() instead.")]
         public bool EnablePost = false;
 
         /// <summary>
         /// Set to true if you want the SDK to pretend that it's functioning.
         /// </summary>
-        [Obsolete("EnableTestMode is deprecated. This is going to be removed in the future.")]
         public bool EnableTestMode = false;
 
         /// <summary>
         /// Set to true if you want to enable countly internal debugging logs.
         /// </summary>
-        [Obsolete("EnableConsoleLogging is deprecated. Use EnableLogging() instead.")]
         public bool EnableConsoleLogging = false;
 
         /// <summary>
         /// Set mode of push notification.
         /// </summary>
-        [Obsolete("NotificationMode is deprecated. Use SetNotificationMode(TestMode mode) instead.")]
         public TestMode NotificationMode = TestMode.None;
 
         /// <summary>
         /// Set to true to enable manual session handling.
         /// </summary>
-        [Obsolete("EnableManualSessionHandling is deprecated. This is going to be removed in the future.")]
         public readonly bool EnableManualSessionHandling = false;
 
         /// <summary>
         /// Sets the interval for the automatic update calls
         /// min value 1 (1 second), max value 600 (10 minutes)
         /// </summary>
-        [Obsolete("SessionDuration is deprecated. Use SetUpdateSessionTimerDelay(int duration) instead.")]
         public int SessionDuration = 60;
 
         /// <summary>
         /// Maximum size of all string keys
         /// </summary>
-        [Obsolete("MaxKeyLength is deprecated. Use SetMaxKeyLength(int length) instead.")]
         public int MaxKeyLength = 128;
 
         /// <summary>
         /// Maximum size of all values in our key-value pairs
         /// </summary>
-        [Obsolete("MaxValueSize is deprecated. Use SetMaxValueSize(int size) instead.")]
         public int MaxValueSize = 256;
 
         /// <summary>
         /// Max amount of custom (dev provided) segmentation in one event
         /// </summary>
-        [Obsolete("MaxSegmentationValues is deprecated. Use SetMaxSegmentationValues(int values) instead.")]
         public int MaxSegmentationValues = 100;
 
         /// <summary>
         /// Limits how many stack trace lines would be recorded per thread
         /// </summary>
-        [Obsolete("MaxStackTraceLinesPerThread is deprecated. Use SetMaxStackTraceLinesPerThread(int lines) instead.")]
         public int MaxStackTraceLinesPerThread = 30;
 
         /// <summary>
         /// Limits how many characters are allowed per stack trace line
         /// </summary>
-        [Obsolete("MaxStackTraceLineLength is deprecated. Use SetMaxStackTraceLineLength(int length) instead.")]
         public int MaxStackTraceLineLength = 200;
 
         /// <summary>
         /// Set threshold value for the number of events that can be stored locally.
         /// </summary>
-        [Obsolete("EventQueueThreshold is deprecated. Use SetEventQueueSizeToSend(int threshold) instead.")]
         public int EventQueueThreshold = 100;
 
         /// <summary>
         /// Set limit for the number of requests that can be stored locally.
         /// </summary>
-        [Obsolete("StoredRequestLimit is deprecated. Use SetMaxRequestQueueSize(int limit) instead.")]
         public int StoredRequestLimit = 1000;
 
         /// <summary>
         /// Set the maximum amount of breadcrumbs.
         /// </summary>
-        [Obsolete("TotalBreadcrumbsAllowed is deprecated. Use SetMaxBreadcrumbCount(int amount) instead.")]
         public int TotalBreadcrumbsAllowed = 100;
 
         /// <summary>
         /// Set true to enable uncaught crash reporting.
         /// </summary>
-        [Obsolete("EnableAutomaticCrashReporting is deprecated. Use DisableAutomaticCrashReporting() instead.")]
         public bool EnableAutomaticCrashReporting = true;
 
         /// <summary>
         /// Set if consent should be required.
         /// </summary>
-        [Obsolete("RequiresConsent is deprecated. Use SetRequiresConsent(bool enable) instead.")]
         public bool RequiresConsent = false;
 
         internal SafeIDGenerator SafeViewIDGenerator = null;

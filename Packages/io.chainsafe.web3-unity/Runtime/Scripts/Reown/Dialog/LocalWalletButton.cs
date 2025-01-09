@@ -43,7 +43,7 @@ namespace ChainSafe.Gaming.Reown.Dialog
             );
         }
 
-        public async void Set(WalletModel data, string walletIconEndpoint, HttpHeader[] httpHeaders, Action onClick)
+        public void Set(WalletModel data, string walletIconEndpoint, HttpHeader[] httpHeaders, Action onClick)
         {
             walletData = data;
             this.walletIconEndpoint = walletIconEndpoint;
