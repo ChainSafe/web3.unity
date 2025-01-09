@@ -55,7 +55,7 @@ namespace ChainSafe.Gaming.Reown
         private readonly IOperationTracker operationTracker;
         private readonly IRpcProvider rpcProvider;
 
-        private SessionStruct session;
+        private Session session;
         private bool connected;
         private bool initialized;
         private ConnectionHandlerConfig connectionHandlerConfig;
@@ -115,7 +115,7 @@ namespace ChainSafe.Gaming.Reown
 
         private bool OsManageWalletSelection => osMediator.Platform == Platform.Android;
 
-        private static bool SessionExpired(SessionStruct s) => s.Expiry != null && Clock.IsExpired((long)s.Expiry);
+        private static bool SessionExpired(Session s) => s.Expiry != null && Clock.IsExpired((long)s.Expiry);
 
         public async ValueTask WillStartAsync()
         {
@@ -302,7 +302,7 @@ namespace ChainSafe.Gaming.Reown
             }
         }
 
-        private async Task<SessionStruct> ConnectSession()
+        private async Task<Session> ConnectSession()
         {
             ConnectedData connectedData;
             IConnectionHandler connectionHandler;
@@ -374,7 +374,7 @@ namespace ChainSafe.Gaming.Reown
             return newSession;
         }
 
-        private async Task<SessionStruct> RestoreSession()
+        private async Task<Session> RestoreSession()
         {
             session = SignClient.AddressProvider.DefaultSession;
 

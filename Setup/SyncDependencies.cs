@@ -62,6 +62,12 @@ public class SyncDependencies : IRunnable
             foreach (string name in namespaces)
             {
                 string fileSource = Path.Combine(source, $"{name}.dll");
+
+                if (!Path.Exists(fileSource))
+                {
+                    Console.WriteLine($"File {name}.dll not found");
+                    continue;
+                }
                 
                 string fileDestination = Path.Combine(destination, $"{name}.dll");
                 
