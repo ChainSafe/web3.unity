@@ -166,7 +166,7 @@ namespace ChainSafe.Gaming.Reown
                     new ProposedNamespace // todo using optional namespaces like AppKit does, should they be required?
                     {
                         Chains = chainConfigSet.Configs
-                            .Select(chainEntry => BuildChainIdForReown(chainEntry.ChainId))
+                            .Select(chainEntry => chainEntry.ChainId)
                             .ToArray(),
                         Methods = new[]
                         {
@@ -175,6 +175,7 @@ namespace ChainSafe.Gaming.Reown
                             "eth_signTypedData",
                             "eth_signTransaction",
                             "eth_sendTransaction",
+                            "eth_chainId",
                             "eth_getTransactionByHash",
                             "wallet_switchEthereumChain",
                             "wallet_addEthereumChain",
@@ -558,6 +559,8 @@ namespace ChainSafe.Gaming.Reown
                     return await MakeRequest<WalletSwitchEthereumChain>(false);
                 case "wallet_addEthereumChain":
                     return await MakeRequest<WalletAddEthereumChain>(false);
+                case "eth_chainId":
+                    return await MakeRequest<WalletGetChainId>();
                 default:
                     try
                     {

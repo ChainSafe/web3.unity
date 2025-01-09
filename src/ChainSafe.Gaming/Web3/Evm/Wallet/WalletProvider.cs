@@ -67,13 +67,20 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
 
         public async Task SwitchChainAddIfMissing(IChainConfig config = null)
         {
-            var chainId = await GetWalletChainId();
-            var chainConfig = config ?? this.chainConfig;
-
-            // If we are already on the correct network, return.
-            if (chainId == chainConfig.ChainId)
+            try
             {
-                return;
+                var chainId = await GetWalletChainId();
+                var chainConfig = config ?? this.chainConfig;
+
+                // If we are already on the correct network, return.
+                if (chainId == chainConfig.ChainId)
+                {
+                    return;
+                }
+            }
+            catch (Exception)
+            {
+                logWriter.Log($"Chain Id isn't present in the wallet. Adding it...");
             }
 
             var addChainParameter = new
