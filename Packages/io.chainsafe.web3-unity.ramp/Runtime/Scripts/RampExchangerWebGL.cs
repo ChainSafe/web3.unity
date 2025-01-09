@@ -28,8 +28,8 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
         private static readonly Dictionary<int, TaskCompletionSource<OffRampSaleData>> sellTaskMap = new();
         private static readonly Dictionary<int, TaskCompletionSource<RampTransactionData>> purchaseOrSellTaskMap = new();
 
-        public event Action<OnRampPurchaseData> OnRampPurchaseCreated;
-        public event Action<OffRampSaleData> OffRampSaleCreated;
+        public event Action<OnRampPurchaseData>? OnRampPurchaseCreated;
+        public event Action<OffRampSaleData>? OffRampSaleCreated;
 
         private readonly IRampExchangerConfig config;
         private readonly ISigner signer;
