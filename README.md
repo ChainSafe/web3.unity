@@ -10,7 +10,7 @@ You can access the full docs at [here](https://docs.gaming.chainsafe.io).
 Our codebase is quite easy to use. To immediately start with reading from the blockchain, once you've installed our core
 package, you can simply add a new Web3 client to your scene by right clicking in the hierarchy and selecting Web3 -> Web3 client.
 
-Please also remember to check the sample scene in the SDK at Assets/Samples/web3.unity SDK/3.0.6/Web3.Unity Samples/Scenes/SampleMain.unity
+If you want to see our SDK in action, don't forget to import our Samples from the package manager -> web3.unity SDK -> Samples tab on the right.
 
 ## Initializing the web3 client
 We recommend that you use the c# class generator when interacting with custom contracts [here](https://docs.gaming.chainsafe.io/current/abi-to-csharp-converter/)
