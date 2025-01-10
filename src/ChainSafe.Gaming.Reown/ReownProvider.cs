@@ -197,6 +197,12 @@ namespace ChainSafe.Gaming.Reown
             }
         }
 
+        protected override Task<string> GetWalletChainId()
+        {
+            var chain = session.Namespaces.First().Value.Chains[0].Split(":");
+            return Task.FromResult(chain[^1]);
+        }
+
         public ValueTask WillStopAsync()
         {
             SignClient?.Dispose();

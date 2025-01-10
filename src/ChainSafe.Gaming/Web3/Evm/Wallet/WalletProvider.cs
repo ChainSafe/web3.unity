@@ -55,7 +55,7 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
             await SwitchChainAddIfMissing(chainId);
         }
 
-        private async Task<string> GetWalletChainId()
+        protected virtual async Task<string> GetWalletChainId()
         {
             var rawHexChainId = await Request<string>(
                 "eth_chainId");
