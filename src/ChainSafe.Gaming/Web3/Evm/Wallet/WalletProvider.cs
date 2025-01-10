@@ -83,25 +83,6 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
                 logWriter.Log($"Chain Id isn't present in the wallet. Adding it...");
             }
 
-            // Metamask will not allow calling wallet_addEthereumChain if the chainId is 1 or 11155111
-            // It will actually throw an error "May not specify default Metamask Chain"
-            if (chainConfig.ChainId is "1" or "11155111")
-            {
-                using (operationTracker.TrackOperation($"Switching the network to: {chainConfig.Chain}..."))
-                {
-                    try
-                    {
-                        await Request<object[]>("wallet_switchEthereumChain", new { chainId = "0x" + ulong.Parse(chainConfig.ChainId).ToString("X") });
-                        return;
-                    }
-                    catch (Exception e)
-                    {
-                        logWriter.LogError($"Failed to switch to the network: {e.Message}");
-                        throw new InvalidOperationException("Failed to add or switch to the network.", e);
-                    }
-                }
-            }
-
             var addChainParameter = new
             {
                 chainId = "0x" + ulong.Parse(chainConfig.ChainId).ToString("X"),
@@ -123,9 +104,37 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
                     // this will switch to the network and add it to the wallet if it's missing
                     await Request<object[]>("wallet_addEthereumChain", addChainParameter);
                 }
+                catch (Exception ex)
+                {
+                    if (ex.Message.Contains("May not specify default MetaMask chain", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        SwitchToDefaultMetaMaskChain();
+                        return;
+                    }
+
+                    logWriter.LogError($"Failed to add or switch to the network: {ex.Message}");
+                    throw new InvalidOperationException("Failed to add or switch to the network.", ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Switching to the default chain (either mainnet or sepolia) in MetaMask.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">Switching to the desired chain is not successful.</exception>
+        private async void SwitchToDefaultMetaMaskChain()
+        {
+            using (operationTracker.TrackOperation($"Switching the network to: {chainConfig.Chain}..."))
+            {
+                try
+                {
+                    await Request<object[]>(
+                        "wallet_switchEthereumChain",
+                        new { chainId = "0x" + ulong.Parse(chainConfig.ChainId).ToString("X") });
+                }
                 catch (Exception e)
                 {
-                    logWriter.LogError($"Failed to add or switch to the network: {e.Message}");
+                    logWriter.LogError($"Failed to switch to the network: {e.Message}");
                     throw new InvalidOperationException("Failed to add or switch to the network.", e);
                 }
             }
