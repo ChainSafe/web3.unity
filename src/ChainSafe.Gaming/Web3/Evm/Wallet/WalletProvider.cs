@@ -108,7 +108,7 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
                 {
                     if (ex.Message.Contains("May not specify default MetaMask chain", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        SwitchToDefaultMetaMaskChain();
+                        await SwitchToDefaultMetaMaskChain();
                         return;
                     }
 
@@ -122,7 +122,7 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
         /// Switching to the default chain (either mainnet or sepolia) in MetaMask.
         /// </summary>
         /// <exception cref="InvalidOperationException">Switching to the desired chain is not successful.</exception>
-        private async void SwitchToDefaultMetaMaskChain()
+        private async Task SwitchToDefaultMetaMaskChain()
         {
             using (operationTracker.TrackOperation($"Switching the network to: {chainConfig.Chain}..."))
             {
