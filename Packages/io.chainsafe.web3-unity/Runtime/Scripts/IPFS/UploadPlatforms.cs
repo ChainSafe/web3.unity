@@ -7,13 +7,15 @@ using UnityEngine.Networking;
 
 public class UploadPlatforms
 {
-
+    
     #region Fields
 
+#if UNITY_WEBGL && !UNITY_EDITOR
     public static event EventHandler<byte[]> ImageSelected;
+#endif
 
     #endregion
-
+    
     #region Methods
 
     /// <summary>
