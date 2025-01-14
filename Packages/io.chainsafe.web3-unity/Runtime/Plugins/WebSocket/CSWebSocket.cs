@@ -38,7 +38,7 @@ public class MainThreadUtil : MonoBehaviour
     }
 }
 
-public class WaitForUpdate : CustomYieldInstruction
+public class WaitForUpdates : CustomYieldInstruction
 {
     public override bool keepWaiting
     {
@@ -697,7 +697,7 @@ namespace NativeWebSocket
             }
             finally
             {
-                await new WaitForUpdate();
+                await new WaitForUpdates();
                 OnClose?.Invoke(closeCode);
             }
         }

@@ -144,8 +144,9 @@ namespace ChainSafe.GamingSdk.Editor
                     selectedWebHookIndex =
                         Mathf.Clamp(selectedWebHookIndex, 0, window.chainList[selectedChainIndex].rpc.Count - 1);
                     var webhookIndex = window.chainList[selectedChainIndex].rpc.IndexOf(chainConfig.Ws);
-                    var selectedWebHook =
-                        webhookIndex == -1 ? window.chainList[selectedChainIndex].rpc[selectedWebHookIndex] : chainConfig.Ws;
+                    var selectedWebHook = (webhookIndex == -1 || string.IsNullOrEmpty(chainConfig.Ws)) 
+                        ? window.chainList[selectedChainIndex].rpc[selectedWebHookIndex] 
+                        : chainConfig.Ws;
                     if (GUILayout.Button(selectedWebHook, EditorStyles.popup))
                     {
                         searchProvider = CreateInstance<StringListSearchProvider>();
