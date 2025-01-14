@@ -462,11 +462,6 @@ namespace ChainSafe.Gaming.Reown
             }
         }
 
-        public override string GetChainId(string chainId)
-        {
-            return BuildChainIdForReown(chainId);
-        }
-
         private WalletModel GetSessionWallet()
         {
             var nativeUrl = RemoveSlash(session.Peer.Metadata.Url);

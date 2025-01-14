@@ -65,9 +65,9 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
             return number.ToString(CultureInfo.InvariantCulture);
         }
 
-        public virtual string GetChainId(string chainId)
+        public string GetChainId(string chainId)
         {
-            return "0x" + ulong.Parse(chainConfig.ChainId).ToString("X");
+            return "0x" + ulong.Parse(chainId).ToString("X");
         }
 
         public virtual async Task SwitchChainAddIfMissing(IChainConfig config = null)
