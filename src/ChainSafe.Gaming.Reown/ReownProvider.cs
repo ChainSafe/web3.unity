@@ -444,9 +444,9 @@ namespace ChainSafe.Gaming.Reown
             // For whatever reason, android and iOS are forcefully killing our thread where this is being run on
             // So we are ensuring that the request survives the thread kill by running it on the main thread
             return
-                osMediator.Platform == Platform.Android || osMediator.Platform == Platform.IOS ?
+               /* osMediator.Platform == Platform.Android || osMediator.Platform == Platform.IOS ?
                     await Task.Run(() => ReownRequest<T>(sessionTopic, method, parameters))
-                    : await ReownRequest<T>(sessionTopic, method, parameters);
+                    : */ await ReownRequest<T>(sessionTopic, method, parameters);
 
             void OnPublishedMessage(object sender, PublishParams args)
             {
