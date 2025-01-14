@@ -65,7 +65,12 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
             return number.ToString(CultureInfo.InvariantCulture);
         }
 
-        public async Task SwitchChainAddIfMissing(IChainConfig config = null)
+        public virtual string GetChainId(string chainId)
+        {
+            return "0x" + ulong.Parse(chainConfig.ChainId).ToString("X");
+        }
+
+        public virtual async Task SwitchChainAddIfMissing(IChainConfig config = null)
         {
             try
             {
@@ -85,7 +90,7 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
 
             var addChainParameter = new
             {
-                chainId = "0x" + ulong.Parse(chainConfig.ChainId).ToString("X"),
+                chainId = GetChainId(chainConfig.ChainId),
                 chainName = chainConfig.Chain,
                 nativeCurrency = new
                 {
@@ -102,7 +107,7 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
                 try
                 {
                     // this will switch to the network and add it to the wallet if it's missing
-                    await Request<object[]>("wallet_addEthereumChain", addChainParameter);
+                    await Task.Run(() => Request<object[]>("wallet_addEthereumChain", addChainParameter));
                 }
                 catch (Exception ex)
                 {

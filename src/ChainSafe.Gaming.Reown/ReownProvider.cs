@@ -444,9 +444,9 @@ namespace ChainSafe.Gaming.Reown
             // For whatever reason, android and iOS are forcefully killing our thread where this is being run on
             // So we are ensuring that the request survives the thread kill by running it on the main thread
             return
-               /* osMediator.Platform == Platform.Android || osMediator.Platform == Platform.IOS ?
+               osMediator.Platform is Platform.Android or Platform.IOS ?
                     await Task.Run(() => ReownRequest<T>(sessionTopic, method, parameters))
-                    : */ await ReownRequest<T>(sessionTopic, method, parameters);
+                    : await ReownRequest<T>(sessionTopic, method, parameters);
 
             void OnPublishedMessage(object sender, PublishParams args)
             {
@@ -457,8 +457,14 @@ namespace ChainSafe.Gaming.Reown
                     return;
                 }
 
+                logWriter.Log("This is message:\n" + args.Message);
                 TryRedirectToWallet();
             }
+        }
+
+        public override string GetChainId(string chainId)
+        {
+            return BuildChainIdForReown(chainId);
         }
 
         private WalletModel GetSessionWallet()
@@ -483,11 +489,13 @@ namespace ChainSafe.Gaming.Reown
         {
             if (sessionWallet is null)
             {
+                logWriter.Log("Session wallet couldn't be determined. No redirection is going to happen.");
                 return; // session wallet couldn't be determined, ignore redirection
             }
 
             if (!await SignClient.CoreClient.Storage.HasItem("ChainSafe_RecentLocalWalletId"))
             {
+                logWriter.Log("No local wallets connected. No redirection is going to happen.");
                 return; // no local wallets connected - ignore redirection
             }
 
