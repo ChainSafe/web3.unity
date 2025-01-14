@@ -27,6 +27,7 @@
     <ProjectReference Include="..\ChainSafe.Gaming.Gelato\ChainSafe.Gaming.Gelato.csproj" />
     <ProjectReference Include="..\ChainSafe.Gaming.SygmaClient\ChainSafe.Gaming.SygmaClient.csproj" />
     <ProjectReference Include="..\ChainSafe.Gaming.HyperPlay\ChainSafe.Gaming.HyperPlay.csproj" />
+    <ProjectReference Include="..\ChainSafe.Gaming.EmbeddedWallet\ChainSafe.Gaming.EmbeddedWallet.csproj" />
   </ItemGroup>
 
   <ItemGroup>

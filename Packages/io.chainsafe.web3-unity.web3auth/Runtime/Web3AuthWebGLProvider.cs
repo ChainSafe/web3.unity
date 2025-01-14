@@ -10,9 +10,9 @@ using ChainSafe.GamingSdk.Web3Auth;
 /// </summary>
 public class Web3AuthWebGLProvider : Web3AuthProvider
 {
-    private readonly Web3AuthWalletConfig _config;
+    private readonly IWeb3AuthConfig _config;
 
-    public Web3AuthWebGLProvider(Web3AuthWalletConfig config, Web3Environment environment, IChainConfig chainConfig, IOperationTracker operationTracker)
+    public Web3AuthWebGLProvider(IWeb3AuthConfig config, Web3Environment environment, IChainConfig chainConfig, IOperationTracker operationTracker)
         : base(config, environment, chainConfig, operationTracker)
     {
         _config = config;

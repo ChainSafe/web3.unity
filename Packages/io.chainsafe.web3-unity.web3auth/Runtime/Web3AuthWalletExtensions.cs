@@ -1,3 +1,4 @@
+using ChainSafe.Gaming.EmbeddedWallet;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.InProcessSigner;
 using ChainSafe.Gaming.LocalStorage;
@@ -17,26 +18,15 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 public static class Web3AuthWalletExtensions
 {
     /// <summary>
-    /// Configures and registers a Web3AuthWallet within an IWeb3ServiceCollection with the provided configuration.
-    /// </summary>
-    /// <param name="collection">The IWeb3ServiceCollection to configure the Web3AuthWallet within.</param>
-    /// <param name="configuration">The configuration for the Web3AuthWallet.</param>
-    /// <returns>The modified IWeb3ServiceCollection with the Web3AuthWallet configuration.</returns>
-    public static IWeb3ServiceCollection UseWeb3AuthWallet(this IWeb3ServiceCollection collection, Web3AuthWalletConfig configuration)
-    {
-        collection.UseWeb3AuthWallet();
-        collection.ConfigureWeb3AuthWallet(configuration);
-        return collection;
-    }
-
-    /// <summary>
     /// Registers and configures a Web3AuthWallet within an IWeb3ServiceCollection.
     /// </summary>
     /// <param name="collection">The IWeb3ServiceCollection to register the Web3AuthWallet within.</param>
+    /// <param name="config">The configuration for the Web3AuthWallet.</param>
     /// <returns>The modified IWeb3ServiceCollection with the Web3AuthWallet registered.</returns>
-    public static IWeb3ServiceCollection UseWeb3AuthWallet(this IWeb3ServiceCollection collection)
+    public static IWeb3ServiceCollection UseWeb3AuthWallet(this IWeb3ServiceCollection collection, IWeb3AuthConfig config)
     {
         collection.AssertServiceNotBound<ISigner>();
+        
         collection.AssertServiceNotBound<ITransactionExecutor>();
 
 #if UNITY_WEBGL && !UNITY_EDITOR
@@ -47,9 +37,11 @@ public static class Web3AuthWalletExtensions
         collection.AddSingleton<IWalletProvider, IAccountProvider, Web3AuthProvider>();
 #endif
 
+        collection.AddSingleton(_ => config);
+        
         collection.AddSingleton<ISigner, ILifecycleParticipant, ILogoutHandler, Web3AuthSigner>();
 
-        collection.AddSingleton<ITransactionExecutor, IWeb3AuthTransactionHandler, Web3AuthTransactionExecutor>();
+        collection.UseEmbeddedWallet(config);
 
         return collection;
     }
@@ -60,9 +52,9 @@ public static class Web3AuthWalletExtensions
     /// <param name="collection">The IWeb3ServiceCollection to configure the Web3AuthWallet within.</param>
     /// <param name="configuration">The configuration for the Web3AuthWallet.</param>
     /// <returns>The modified IWeb3ServiceCollection with the Web3AuthWallet configuration replaced.</returns>
-    public static IWeb3ServiceCollection ConfigureWeb3AuthWallet(this IWeb3ServiceCollection collection, Web3AuthWalletConfig configuration)
+    public static IWeb3ServiceCollection ConfigureWeb3AuthWallet(this IWeb3ServiceCollection collection, IWeb3AuthConfig configuration)
     {
-        collection.Replace(ServiceDescriptor.Singleton(typeof(Web3AuthWalletConfig), configuration));
+        collection.Replace(ServiceDescriptor.Singleton(typeof(IWeb3AuthConfig), configuration));
         return collection;
     }
 }
