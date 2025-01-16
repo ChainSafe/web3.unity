@@ -246,6 +246,7 @@ namespace ChainSafe.Gaming.Reown
                 }
 
                 connected = true;
+                await SwitchChainAddIfMissing();
 
                 return address;
             }

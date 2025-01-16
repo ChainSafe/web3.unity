@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8519303782652390544}
   - component: {fileID: 5008553068369276269}
   - component: {fileID: 29625373239180716}
-  - component: {fileID: 153625530502621119}
+  - component: {fileID: 1849669373672644507}
   m_Layer: 0
   m_Name: Web3Unity
   m_TagString: Untagged
@@ -63,10 +63,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96ece91a37dec784f8c42b19da0bbaae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initializeOnAwake: 1
+  rememberConnection: 1
   connectScreenFactory:
     LandscapePrefab: {fileID: 741700721959473792, guid: 920ab7036ad598d44aa2f8f24a488823, type: 3}
     PortraitPrefab: {fileID: 4806868497684407626, guid: fc961e494bc607444b66ddaf341ca50c, type: 3}
---- !u!114 &153625530502621119
+--- !u!114 &1849669373672644507
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
