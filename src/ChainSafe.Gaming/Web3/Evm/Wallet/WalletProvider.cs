@@ -54,7 +54,7 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
             await SwitchChainAddIfMissing(chainId);
         }
 
-        private async Task<string> GetWalletChainId()
+        protected virtual async Task<string> GetWalletChainId()
         {
             var rawHexChainId = await Request<string>(
                 "eth_chainId");
@@ -64,20 +64,32 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
             return number.ToString(CultureInfo.InvariantCulture);
         }
 
-        public async Task SwitchChainAddIfMissing(IChainConfig config = null)
+        public string GetChainId(string chainId)
         {
-            var chainId = await GetWalletChainId();
-            var chainConfig = config ?? this.chainConfig;
+            return "0x" + ulong.Parse(chainId).ToString("X");
+        }
 
-            // If we are already on the correct network, return.
-            if (chainId == chainConfig.ChainId)
+        public virtual async Task SwitchChainAddIfMissing(IChainConfig config = null)
+        {
+            try
             {
-                return;
+                var chainId = await GetWalletChainId();
+                var chainConfig = config ?? this.chainConfig;
+
+                // If we are already on the correct network, return.
+                if (chainId == chainConfig.ChainId)
+                {
+                    return;
+                }
+            }
+            catch (Exception)
+            {
+                logWriter.Log($"Chain Id isn't present in the wallet. Adding it...");
             }
 
             var addChainParameter = new
             {
-                chainId = "0x" + ulong.Parse(chainConfig.ChainId).ToString("X"),
+                chainId = GetChainId(chainConfig.ChainId),
                 chainName = chainConfig.Chain,
                 nativeCurrency = new
                 {
@@ -94,11 +106,39 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
                 try
                 {
                     // this will switch to the network and add it to the wallet if it's missing
-                    await Request<object[]>("wallet_addEthereumChain", addChainParameter);
+                    await Task.Run(() => Request<object[]>("wallet_addEthereumChain", addChainParameter));
+                }
+                catch (Exception ex)
+                {
+                    if (ex.Message.Contains("May not specify default MetaMask chain", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        await SwitchToDefaultMetaMaskChain();
+                        return;
+                    }
+
+                    logWriter.LogError($"Failed to add or switch to the network: {ex.Message}");
+                    throw new InvalidOperationException("Failed to add or switch to the network.", ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Switching to the default chain (either mainnet or sepolia) in MetaMask.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">Switching to the desired chain is not successful.</exception>
+        private async Task SwitchToDefaultMetaMaskChain()
+        {
+            using (operationTracker.TrackOperation($"Switching the network to: {chainConfig.Chain}..."))
+            {
+                try
+                {
+                    await Request<object[]>(
+                        "wallet_switchEthereumChain",
+                        new { chainId = "0x" + ulong.Parse(chainConfig.ChainId).ToString("X") });
                 }
                 catch (Exception e)
                 {
-                    logWriter.LogError($"Failed to add or switch to the network: {e.Message}");
+                    logWriter.LogError($"Failed to switch to the network: {e.Message}");
                     throw new InvalidOperationException("Failed to add or switch to the network.", e);
                 }
             }

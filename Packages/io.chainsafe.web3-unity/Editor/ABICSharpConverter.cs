@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
 using System.Text.RegularExpressions;
 using ChainSafe.Gaming.RPC.Events;
 using Nethereum.ABI;
@@ -124,9 +123,10 @@ public class ABICSharpConverter : EditorWindow
         }
 
         text = text.Replace("{CLASS_NAME}", className);
-        var minifiedJson = JsonDocument.Parse(_abi).RootElement.GetRawText();
-        var escapedJson = minifiedJson.Replace("\"", "\\\"");
-        text = text.Replace("{CONTRACT_ABI}", escapedJson);
+        string removeNewLines = _abi.Replace("\n", "");
+        string removeWhiteSpaces = Regex.Replace(removeNewLines, @"\s", "");
+        string improvedABI = removeWhiteSpaces.Replace("\"", "\\\"");
+        text = text.Replace("{CONTRACT_ABI}", improvedABI);
         text = Regex.Replace(text, @"\s*\{CUSTOM_CLASSES\}", "\n\n" + ParseCustomClasses());
         text = Regex.Replace(text, @"\s*\{EVENT_CLASSES\}", "\n\n" + ParseEventClasses());
         text = Regex.Replace(text, @"\s*\{METHODS\}", "\n\n" + ParseMethods());

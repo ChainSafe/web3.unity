@@ -16,11 +16,7 @@
 
   <ItemGroup>
     <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
-    <PackageReference Include="Reown.WalletKit" Version="1.1.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ReferencePathWithRefAssemblies Update="C:\Users\kantagara\.nuget\packages\reown.sign\1.0.0\lib\netstandard2.1\Reown.Sign.dll" />
+    <PackageReference Include="Reown.WalletKit" Version="1.2.0" />
   </ItemGroup>
   
 </Project>
