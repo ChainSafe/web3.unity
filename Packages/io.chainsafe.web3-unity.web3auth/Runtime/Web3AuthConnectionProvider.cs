@@ -29,10 +29,15 @@ public class Web3AuthConnectionProvider : ConnectionProvider, ILogoutHandler, IW
     public override Sprite ButtonIcon { get; protected set; }
 
     [field: SerializeField] public override string ButtonText { get; protected set; } = "Web3Auth";
+
+    [field: Space] [field: SerializeField] public string AppName { get; private set; } = "ChainSafe Gaming SDK";
+    [field: SerializeField] public string ClientId { get; private set; }
     
-    [SerializeField] private string clientId;
-    [SerializeField] private string redirectUri;
-    [SerializeField] private Network network;
+    [field: SerializeField] public string RedirectUri { get; private set; }
+    
+    [field: SerializeField] public Network Network { get; private set; }
+    [field: SerializeField] public Web3Auth.ThemeModes Theme { get; private set; } = Web3Auth.ThemeModes.dark;
+    [field: SerializeField] public Web3Auth.Language Language { get; private set; } = Web3Auth.Language.en;
 
     [Space]
 
@@ -56,6 +61,16 @@ public class Web3AuthConnectionProvider : ConnectionProvider, ILogoutHandler, IW
 
     public override bool IsAvailable => true;
 
+    public Task<string> SessionTask { get; private set; }
+    
+    public Task<Provider> ProviderTask => _rememberMe ? default : _modal.SelectProvider();
+    
+    public CancellationToken CancellationToken => _rememberMe ? default : _modal.CancellationToken;
+
+    public bool RememberMe => _rememberMe || RememberSession;
+
+    public bool AutoLogin => _rememberMe;
+    
 #if UNITY_WEBGL && !UNITY_EDITOR
 
     private TaskCompletionSource<string> _initializeTcs;
@@ -242,27 +257,4 @@ public class Web3AuthConnectionProvider : ConnectionProvider, ILogoutHandler, IW
     }
 
     public bool AutoApproveTransactions => !enableWalletGui;
-
-    public Web3AuthOptions Web3AuthOptions => new Web3AuthOptions
-    {
-        clientId = clientId,
-        redirectUrl = new Uri(redirectUri),
-        network = network,
-        whiteLabel = new()
-        {
-            mode = Web3Auth.ThemeModes.dark,
-            defaultLanguage = Web3Auth.Language.en,
-            appName = "ChainSafe Gaming SDK",
-        }
-    };
-
-    public Task<string> SessionTask { get; set; }
-    
-    public Task<Provider> ProviderTask => _rememberMe ? default : _modal.SelectProvider();
-    
-    public CancellationToken CancellationToken => _rememberMe ? default : _modal.CancellationToken;
-
-    public bool RememberMe => _rememberMe || RememberSession;
-
-    public bool AutoLogin => _rememberMe;
 }

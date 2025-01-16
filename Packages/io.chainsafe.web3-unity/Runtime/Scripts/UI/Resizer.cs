@@ -6,13 +6,9 @@ namespace ChainSafe.Gaming.UnityPackage.UI
     /// <summary>
     /// Resizes a rect Transform responsively/based on percentage.
     /// </summary>
-    [ExecuteInEditMode, RequireComponent(typeof(RectTransform))]
+    [RequireComponent(typeof(RectTransform))]
     public class Resizer : MonoBehaviour
     {
-        [SerializeField] private bool executeInEditMode;
-        
-        [Space]
-        
         [SerializeField] private bool resizeWidth;
         [SerializeField] private bool resizeHeight;
 
@@ -70,15 +66,5 @@ namespace ChainSafe.Gaming.UnityPackage.UI
                 _rectTransform.SetSizeWithCurrentAnchors(axis, target);
             }
         }
-
-#if UNITY_EDITOR
-        private void Update()
-        {
-            if (executeInEditMode)
-            {
-                Resize();
-            }
-        }
-#endif
     }
 }

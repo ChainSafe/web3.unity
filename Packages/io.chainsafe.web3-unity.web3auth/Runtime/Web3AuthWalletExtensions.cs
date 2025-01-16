@@ -45,16 +45,4 @@ public static class Web3AuthWalletExtensions
 
         return collection;
     }
-
-    /// <summary>
-    /// Replaces the existing Web3AuthWallet configuration within an IWeb3ServiceCollection with the provided configuration.
-    /// </summary>
-    /// <param name="collection">The IWeb3ServiceCollection to configure the Web3AuthWallet within.</param>
-    /// <param name="configuration">The configuration for the Web3AuthWallet.</param>
-    /// <returns>The modified IWeb3ServiceCollection with the Web3AuthWallet configuration replaced.</returns>
-    public static IWeb3ServiceCollection ConfigureWeb3AuthWallet(this IWeb3ServiceCollection collection, IWeb3AuthConfig configuration)
-    {
-        collection.Replace(ServiceDescriptor.Singleton(typeof(IWeb3AuthConfig), configuration));
-        return collection;
-    }
 }

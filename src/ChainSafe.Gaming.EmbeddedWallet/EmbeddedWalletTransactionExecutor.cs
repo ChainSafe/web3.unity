@@ -3,10 +3,14 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.InProcessSigner;
+using ChainSafe.Gaming.Web3.Core.Evm;
 using TransactionExecutor = ChainSafe.Gaming.InProcessTransactionExecutor.InProcessTransactionExecutor;
 
 namespace ChainSafe.Gaming.EmbeddedWallet
 {
+    /// <summary>
+    /// Implementation of <see cref="ITransactionExecutor"/> for handling embedded wallet transactions.
+    /// </summary>
     public class EmbeddedWalletTransactionExecutor : TransactionExecutor, IEmbeddedWalletTransactionHandler
     {
         private readonly TransactionPool transactionPool;
