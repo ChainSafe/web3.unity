@@ -22,15 +22,13 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
             this.walletConfig = walletConfig;
         }
 
-        public string PublicAddress { get; private set; }
+        public string PublicAddress { get; protected set; }
 
         public virtual async ValueTask WillStartAsync()
         {
             string address = await walletProvider.Connect();
 
             PublicAddress = address.AssertIsPublicAddress();
-
-            await walletProvider.SwitchChainAddIfMissing();
         }
 
         public virtual async Task<string> SignMessage(string message)

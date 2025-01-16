@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ChainSafe.Gaming;
 using ChainSafe.Gaming.Web3;
+using Newtonsoft.Json;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -23,6 +25,7 @@ namespace ChainSafe.GamingSdk.Editor
             private ISearchWindowProvider searchWindowProviderImplementation;
             private bool changedRpcOrWs;
             private int selectedWebHookIndex;
+
 
             public ChainSettingsPanel(Web3SettingsEditor window, ChainConfigEntry chainConfigEntry)
             {
@@ -167,7 +170,7 @@ namespace ChainSafe.GamingSdk.Editor
                 }
 
                 chainConfig.Ws = EditorGUILayout.TextField("Custom WebHook", chainConfig.Ws);
-
+                
                 EditorGUI.indentLevel--;
                 if (EditorGUI.EndChangeCheck() || changedRpcOrWs)
                 {
