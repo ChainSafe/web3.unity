@@ -17,7 +17,7 @@ namespace ChainSafe.Gaming.Reown
         /// </summary>
         /// <param name="url"></param>
         /// <returns>Created connection.</returns>
-        public Task<IJsonRpcConnection> CreateConnection(string url)
+        public Task<IJsonRpcConnection> CreateConnection(string url, string context = null)
         {
             return Task.FromResult<IJsonRpcConnection>(new WebSocketConnection(url));
         }
