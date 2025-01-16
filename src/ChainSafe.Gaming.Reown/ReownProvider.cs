@@ -246,7 +246,7 @@ namespace ChainSafe.Gaming.Reown
                 }
 
                 connected = true;
-                await AddNetworkIfNotExistInWallet();
+                await SwitchChainAddIfMissing();
 
                 return address;
             }

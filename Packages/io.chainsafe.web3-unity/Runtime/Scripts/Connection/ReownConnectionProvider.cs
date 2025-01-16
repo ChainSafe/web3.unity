@@ -111,17 +111,12 @@ namespace ChainSafe.Gaming.UnityPackage.Connection
                 connectionScreenPrefabs.LandscapePrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GuiScreen>(UnityEditor.AssetDatabase.GUIDToAssetPath("344d6e9400e973843b2b68a8f4786e0b"));
                 connectionScreenPrefabs.PortraitPrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GuiScreen>(UnityEditor.AssetDatabase.GUIDToAssetPath("f844207643fe35744b72bf387a704960"));
             }
-
-           
-#if UNITY_WEBGL
-            PopulateViemNames(Resources.Load<TextAsset>("ViemChain").text);
-#endif
         }
 
-        public void PopulateViemNames(string text, bool force = false)
+        public void PopulateViemNames(string text)
         {
             var projectConfig = ProjectConfigUtilities.Load();
-            if (force || ChainIdAndViemNameArray == null || projectConfig.ChainConfigs.Count != ChainIdAndViemNameArray.Length)
+            if (ChainIdAndViemNameArray == null || projectConfig.ChainConfigs.Count != ChainIdAndViemNameArray.Length)
             {
                 var allChainIdsAndViemNames = JsonConvert.DeserializeObject<ViemNameChainId[]>(text);
                 var dict = projectConfig.ChainConfigs.ToDictionary(x => x.ChainId, x => x);

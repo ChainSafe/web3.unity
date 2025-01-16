@@ -19,10 +19,8 @@ namespace ChainSafe.Gaming.Editor.Reown
 
             if (file != null)
             {
-                Debug.Log($"Loaded ViemChain.txt: {file.text}");
-                // Call your custom method
                 ReownConnectionProvider provider = Resources.Load<ReownConnectionProvider>("ReownConnectionProvider");
-                provider.PopulateViemNames(file.text, true);
+                provider.PopulateViemNames(file.text);
             }
             else
             {
