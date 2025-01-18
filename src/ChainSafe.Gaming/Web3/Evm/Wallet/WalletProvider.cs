@@ -16,6 +16,7 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
         private readonly ILogWriter logWriter;
         private readonly IChainConfig chainConfig;
         private readonly IOperationTracker operationTracker;
+        private readonly IOperatingSystemMediator operatingSystemMediator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WalletProvider"/> class.
@@ -23,10 +24,12 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
         /// <param name="environment">Injected <see cref="Web3Environment"/>.</param>
         /// <param name="chainConfig">Injected <see cref="chainConfig"/>.</param>
         /// <param name="operationTracker">Injected <see cref="IOperationTracker"/>.</param>
-        protected WalletProvider(Web3Environment environment, IChainConfig chainConfig, IOperationTracker operationTracker)
+        /// <param name="operatingSystemMediator">Injected <see cref="IOperatingSystemMediator"/>.</param>
+        protected WalletProvider(Web3Environment environment, IChainConfig chainConfig, IOperationTracker operationTracker, IOperatingSystemMediator operatingSystemMediator)
             : base(environment, chainConfig)
         {
             this.operationTracker = operationTracker;
+            this.operatingSystemMediator = operatingSystemMediator;
             this.chainConfig = chainConfig;
             this.logWriter = environment.LogWriter;
         }
@@ -105,14 +108,28 @@ namespace ChainSafe.Gaming.Web3.Evm.Wallet
             {
                 try
                 {
-                    // this will switch to the network and add it to the wallet if it's missing
-                    await Task.Run(() => Request<object[]>("wallet_addEthereumChain", addChainParameter));
+                    if (operatingSystemMediator.IsMobilePlatform)
+                    {
+                        await Task.Run(() => Request<object[]>("wallet_addEthereumChain", addChainParameter));
+                    }
+                    else
+                    {
+                        await Request<object[]>("wallet_addEthereumChain", addChainParameter);
+                    }
                 }
                 catch (Exception ex)
                 {
                     if (ex.Message.Contains("May not specify default MetaMask chain", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        await SwitchToDefaultMetaMaskChain();
+                        if (operatingSystemMediator.IsMobilePlatform)
+                        {
+                            await Task.Run(SwitchToDefaultMetaMaskChain);
+                        }
+                        else
+                        {
+                            await SwitchToDefaultMetaMaskChain();
+                        }
+
                         return;
                     }
 
