@@ -31,7 +31,7 @@ jobs:
         run: |
           cd ..
           
-          ssh-agent bash -c 'ssh-add $DEPLOY_KEY; git clone --bare git@github.com:rob1997/web3.unity.git'
+          ssh-agent bash -c 'ssh-add "$DEPLOY_KEY"; git clone --bare git@github.com:rob1997/web3.unity.git'
           
           cd web3.unity.git
           
