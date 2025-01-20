@@ -1,0 +1,54 @@
+name: Re-author
+on:
+  push:
+    branches:
+      - rob/authoring-fix
+  workflow_dispatch:
+    inputs:
+      previous_author:
+        required: true
+        description: 'Author to change'
+        type: string
+      new_author:
+        required: true
+        description: 'New author'
+        type: string
+
+jobs:
+  reauthor:
+    name: Re-author job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          lfs: true
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
+          submodules: recursive
+          fetch-depth: 100
+      - name: Clone repository
+        run: |
+          cd ..
+          git clone --bare https://github.com/rob1997/web3.unity.git
+          cd web3.unity.git
+          
+          #!/bin/sh
+
+          git filter-branch -f --env-filter '
+          OLD_EMAIL="142783680+robGG1997@users.noreply.github.com"
+          CORRECT_NAME="rob1997"
+          CORRECT_EMAIL="robelgetnetrg@gmail.com"
+          if [ "$GIT_COMMITTER_EMAIL" = "$OLD_EMAIL" ]
+          then
+              export GIT_COMMITTER_NAME="$CORRECT_NAME"
+              export GIT_COMMITTER_EMAIL="$CORRECT_EMAIL"
+          fi
+          if [ "$GIT_AUTHOR_EMAIL" = "$OLD_EMAIL" ]
+          then
+              export GIT_AUTHOR_NAME="$CORRECT_NAME"
+              export GIT_AUTHOR_EMAIL="$CORRECT_EMAIL"
+          fi
+          ' --tag-name-filter cat -- --branches --tags
+          
+          git push --force --tags origin 'refs/heads/*'
