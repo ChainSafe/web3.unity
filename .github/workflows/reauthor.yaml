@@ -27,7 +27,7 @@ jobs:
           private-key: ${{ secrets.DEPLOY_KEY }}
       - name: Clone and Re-author
         run: |
-          git clone --bare git@github.com:rob1997/web3.unity.git
+          git clone --bare git@github.com:ChainSafe/web3.unity.git
           
           cd web3.unity.git
           
