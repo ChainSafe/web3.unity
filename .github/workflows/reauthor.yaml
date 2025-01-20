@@ -31,7 +31,7 @@ jobs:
         run: |
           cd ..
           
-          git clone --bare git@github.com:rob1997/web3.unity.git
+          ssh-agent bash -c 'ssh-add $DEPLOY_KEY; git clone --bare git@github.com:rob1997/web3.unity.git'
           
           cd web3.unity.git
           
@@ -58,3 +58,5 @@ jobs:
           ' --tag-name-filter cat -- --branches --tags
           
           git push --force --tags origin 'refs/heads/*'
+        env:
+          DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
