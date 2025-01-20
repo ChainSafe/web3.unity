@@ -30,7 +30,9 @@ jobs:
       - name: Clone repository
         run: |
           cd ..
-          git clone --bare https://github.com/rob1997/web3.unity.git
+          
+          git clone --bare git@github.com:rob1997/web3.unity.git
+          
           cd web3.unity.git
           
           git config user.email "robelgetnetrg@gmail.com"
