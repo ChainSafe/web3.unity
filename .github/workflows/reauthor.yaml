@@ -51,6 +51,8 @@ jobs:
               export GIT_AUTHOR_EMAIL="$CORRECT_EMAIL"
           fi
           ' --tag-name-filter cat -- --branches --tags
+          
+          git log -n 1 author="robGG1997"
       - name: Force Push
         run: |
           git push --force --tags origin 'refs/heads/*'
