@@ -33,6 +33,10 @@ jobs:
           git clone --bare https://github.com/rob1997/web3.unity.git
           cd web3.unity.git
           
+          git config user.email "robelgetnetrg@gmail.com"
+          
+          git config user.name rob1997
+          
           #!/bin/sh
 
           git filter-branch -f --env-filter '
