@@ -1,11 +1,10 @@
 name: Re-author
 on:
-  push:
   workflow_dispatch:
     inputs:
       previous_email:
         required: true
-        description: 'Author to change'
+        description: 'Author to change (email)'
         type: string
       new_email:
         required: true
