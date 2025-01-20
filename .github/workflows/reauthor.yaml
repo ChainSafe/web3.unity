@@ -37,7 +37,7 @@ jobs:
           #!/bin/sh
 
           git filter-branch -f --env-filter '
-          OLD_EMAIL="142783680+robGG1997@users.noreply.github.com"
+          OLD_EMAIL="robel@chainsafe.io"
           CORRECT_NAME="rob1997"
           CORRECT_EMAIL="robelgetnetrg@gmail.com"
           if [ "$GIT_COMMITTER_EMAIL" = "$OLD_EMAIL" ]
@@ -52,7 +52,6 @@ jobs:
           fi
           ' --tag-name-filter cat -- --branches --tags
           
-          git log -n 1 author="robGG1997"
       - name: Force Push
         run: |
           git push --force --tags origin 'refs/heads/*'
