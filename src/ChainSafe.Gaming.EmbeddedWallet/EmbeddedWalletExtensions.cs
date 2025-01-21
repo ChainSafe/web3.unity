@@ -1,5 +1,8 @@
+using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Web3.Build;
+using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
+using ChainSafe.Gaming.Web3.Core.Logout;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ChainSafe.Gaming.EmbeddedWallet
@@ -20,6 +23,8 @@ namespace ChainSafe.Gaming.EmbeddedWallet
             services.AddSingleton(_ => config);
 
             services.AddSingleton<TransactionPool>();
+
+            services.AddSingleton<ISigner, ILifecycleParticipant, ILogoutHandler, EmbeddedWalletSigner>();
 
             services.AddSingleton<ITransactionExecutor, IEmbeddedWalletTransactionHandler, EmbeddedWalletTransactionExecutor>();
 

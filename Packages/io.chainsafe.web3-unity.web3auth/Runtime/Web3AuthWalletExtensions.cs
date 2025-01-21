@@ -39,8 +39,6 @@ public static class Web3AuthWalletExtensions
 
         collection.AddSingleton(_ => config);
         
-        collection.AddSingleton<ISigner, ILifecycleParticipant, ILogoutHandler, Web3AuthSigner>();
-
         collection.UseEmbeddedWallet(config);
 
         return collection;
