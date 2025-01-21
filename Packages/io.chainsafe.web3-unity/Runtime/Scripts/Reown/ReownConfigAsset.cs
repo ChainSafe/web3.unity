@@ -34,7 +34,8 @@ namespace ChainSafe.Gaming.Reown
         public bool RememberSession { get; set; }
         public bool ForceNewSession { get; set; }
         public EventHandler<Exception> OnRelayErrored { get; set; }
-        
+        public Dictionary<string, string> ChainIdViemNameMap { get; }
+
         public IRelayUrlBuilder RelayUrlBuilder => null; // todo;
 
         public IList<string> IncludeWalletIds => includeWalletIds;
