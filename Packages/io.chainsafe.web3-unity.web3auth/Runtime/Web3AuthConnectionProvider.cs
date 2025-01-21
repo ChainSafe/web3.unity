@@ -48,14 +48,14 @@ public class Web3AuthConnectionProvider : ConnectionProvider, ILogoutHandler, IW
 
     [SerializeField] private bool enableWalletGui;
 
-    [SerializeField, DefaultAssetValue("Packages/io.chainsafe.web3-unity.web3auth/Runtime/WalletGUI/Prefabs/Web3AuthWalletGUI.prefab")]
-    private Web3AuthWalletGUI web3AuthWalletGUIPrefab;
+    [SerializeField, DefaultAssetValue("Packages/io.chainsafe.web3-unity/Runtime/Prefabs/GUI Screens/EmbeddedWalletScreen.prefab")]
+    private EmbeddedWalletScreen embeddedWalletPrefab;
 
     [SerializeField] private Web3AuthWalletGUI.Web3AuthWalletConfig walletGuiConfig;
 
     private Web3AuthModal _modal;
 
-    private Web3AuthWalletGUI _web3AuthWalletGui;
+    private EmbeddedWalletScreen _embeddedWallet;
 
     [NonSerialized] private bool _rememberMe;
 
@@ -232,9 +232,9 @@ public class Web3AuthConnectionProvider : ConnectionProvider, ILogoutHandler, IW
     {
         _rememberMe = false;
 
-        if (enableWalletGui && _web3AuthWalletGui != null)
+        if (enableWalletGui && _embeddedWallet != null)
         {
-            Destroy(_web3AuthWalletGui.gameObject);
+            Destroy(_embeddedWallet.gameObject);
         }
 
         return Task.CompletedTask;
@@ -244,8 +244,8 @@ public class Web3AuthConnectionProvider : ConnectionProvider, ILogoutHandler, IW
     {
         if (enableWalletGui)
         {
-            _web3AuthWalletGui = Instantiate(web3AuthWalletGUIPrefab);
-            _web3AuthWalletGui.Initialize(walletGuiConfig);
+            _embeddedWallet = Instantiate(embeddedWalletPrefab);
+            _embeddedWallet.Initialize(web3);
         }
 
         if (_modal != null)

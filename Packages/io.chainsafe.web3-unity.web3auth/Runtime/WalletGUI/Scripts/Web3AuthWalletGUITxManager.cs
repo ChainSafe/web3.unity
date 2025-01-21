@@ -34,8 +34,7 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     private int txHistoryDisplayCount = 20;
 
     private bool _processingTransaction;
-    private IEmbeddedWalletTransactionHandler _transactionHandler;
-    private TransactionPool _transactionPool;
+    private EmbeddedWalletRequestHandler _requestHandler;
 
     #endregion
 
@@ -60,15 +59,19 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
         rejectRequestButton.onClick.AddListener(RejectRequest);
         autoTxToggle.onValueChanged.AddListener(ToggleAutoTx);
 
-        _transactionHandler = Web3Unity.Web3.ServiceProvider.GetService<IEmbeddedWalletTransactionHandler>();
-        _transactionPool = Web3Unity.Web3.ServiceProvider.GetService<TransactionPool>();
+        _requestHandler = Web3Unity.Web3.ServiceProvider.GetService<EmbeddedWalletRequestHandler>();
     }
 
     /// <summary>
     /// Populates the incoming transaction display.
     /// </summary>
-    private void RequestTransaction(EmbeddedWalletTransaction transaction)
+    private void RequestTransaction(IEmbeddedWalletRequest request)
     {
+        if (!(request is EmbeddedWalletTransaction transaction))
+        {
+            return;
+        }
+        
         if (_processingTransaction)
         {
             return;
@@ -110,7 +113,7 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     private void AcceptRequest()
     {
         ShowTxLoadingMenu();
-        _transactionHandler.TransactionApproved();
+        _requestHandler.Approve();
         ResetTransactionDisplay();
     }
 
@@ -119,15 +122,20 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     /// </summary>
     private void RejectRequest()
     {
-        _transactionHandler.TransactionDeclined();
+        _requestHandler.Decline();
         ResetTransactionDisplay();
     }
 
     /// <summary>
     /// Gets transaction data.
     /// </summary>
-    private void OnTransactionConfirmed(EmbeddedWalletTransaction transaction)
+    private void OnTransactionConfirmed(IEmbeddedWalletRequest request)
     {
+        if (!(request is EmbeddedWalletTransaction transaction))
+        {
+            return;
+        }
+        
         var response = transaction.Response.Task.Result;
         
         var txHash = response.Hash;
@@ -178,15 +186,7 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
         incomingTxDisplay.SetActive(false);
         incomingTxPlaceHolder.SetActive(true);
         // there's transactions in queue
-        if (_transactionPool.Count > 0)
-        {
-            RequestTransaction(_transactionPool.Peek());
-        }
-
-        else
-        {
-            _processingTransaction = false;
-        }
+        _processingTransaction = false;
     }
 
     /// <summary>
@@ -251,8 +251,8 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
 	private void OnEnable()
     {
         Web3AuthEventManager.ConfigureTxManager += OnConfigureTxManager;
-        _transactionHandler.OnTransactionQueued += RequestTransaction;
-        _transactionHandler.OnTransactionConfirmed += OnTransactionConfirmed;
+        _requestHandler.RequestQueued += RequestTransaction;
+        _requestHandler.RequestConfirmed += OnTransactionConfirmed;
     }
 
     /// <summary>
@@ -261,8 +261,8 @@ public class Web3AuthWalletGUITxManager : MonoBehaviour
     private void OnDisable()
     {
         Web3AuthEventManager.ConfigureTxManager -= OnConfigureTxManager;
-        _transactionHandler.OnTransactionQueued -= RequestTransaction;
-        _transactionHandler.OnTransactionConfirmed -= OnTransactionConfirmed;
+        _requestHandler.RequestQueued -= RequestTransaction;
+        _requestHandler.RequestConfirmed -= OnTransactionConfirmed;
     }
 
     /// <summary>
