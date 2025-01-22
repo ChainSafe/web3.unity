@@ -1,16 +1,11 @@
-using System.Text;
 using System.Threading.Tasks;
-using ChainSafe.Gaming.Evm;
 using ChainSafe.Gaming.HyperPlay.Dto;
 using ChainSafe.Gaming.LocalStorage;
 using ChainSafe.Gaming.Web3;
-using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Debug;
-using ChainSafe.Gaming.Web3.Core.Logout;
+using ChainSafe.Gaming.Web3.Core.Operations;
 using ChainSafe.Gaming.Web3.Environment;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
-using Nethereum.Signer;
-using Nethereum.Util;
 using Newtonsoft.Json;
 using Chain = ChainSafe.Gaming.HyperPlay.Dto.Chain;
 
@@ -35,9 +30,15 @@ namespace ChainSafe.Gaming.HyperPlay
         /// <param name="localStorage">Injected <see cref="ILocalStorage"/>.</param>
         /// <param name="environment">Injected <see cref="environment"/>.</param>
         /// <param name="chainConfig">ChainConfig to fetch chain data.</param>
-        /// <param name="chainRegistryProvider">Injected <see cref="ChainRegistryProvider"/>.</param>
-        public HyperPlayProvider(IHyperPlayConfig config, IHyperPlayData data, ILocalStorage localStorage, Web3Environment environment, IChainConfig chainConfig)
-            : base(environment, chainConfig)
+        /// <param name="operationTracker">Injected <see cref="IOperationTracker"/>.</param>
+        public HyperPlayProvider(
+            IHyperPlayConfig config,
+            IHyperPlayData data,
+            ILocalStorage localStorage,
+            Web3Environment environment,
+            IChainConfig chainConfig,
+            IOperationTracker operationTracker)
+            : base(environment, chainConfig, operationTracker)
         {
             this.config = config;
             this.data = data;

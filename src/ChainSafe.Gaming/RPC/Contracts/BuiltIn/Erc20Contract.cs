@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Core;
 
 namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
 {
@@ -12,12 +13,25 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
     /// </summary>
     public class Erc20Contract : BuiltInContract
     {
-        private ISigner signer;
+        private readonly ISigner signer;
 
         internal Erc20Contract(Contract contract, ISigner signer)
             : base(contract)
         {
             this.signer = signer;
+        }
+
+        internal ISigner Signer
+        {
+            get
+            {
+                if (signer != null)
+                {
+                    return signer;
+                }
+
+                throw new ServiceNotBoundWeb3Exception<ISigner>($"{nameof(ISigner)} service not bound to Web3 instance, connect to an account first.");
+            }
         }
 
         /// <summary>
@@ -51,8 +65,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         [Pure]
         public Task<BigInteger> GetBalanceOf()
         {
-            EnsureSigner();
-            return GetBalanceOf(signer.PublicAddress);
+            return GetBalanceOf(Signer.PublicAddress);
         }
 
         /// <summary>
@@ -102,8 +115,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// <returns>A task that represents the asynchronous operation. The task result contains an array of objects.</returns>
         public Task<object[]> Mint(BigInteger amount)
         {
-            EnsureSigner();
-            return Mint(amount, signer.PublicAddress);
+            return Mint(amount, Signer.PublicAddress);
         }
 
         /// <summary>
@@ -128,11 +140,9 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// <returns>Receipt of the mint.</returns>
         public async Task<TransactionReceipt> MintWithReceipt(BigInteger amount)
         {
-            EnsureSigner();
-
             var response = await SendWithReceipt(
                 EthMethods.Mint,
-                new object[] { signer.PublicAddress, amount });
+                new object[] { Signer.PublicAddress, amount });
 
             return response.receipt;
         }
@@ -165,16 +175,6 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
                 new object[] { destinationAddress, amount });
 
             return response.receipt;
-        }
-
-        private void EnsureSigner()
-        {
-            if (signer is not null)
-            {
-                return;
-            }
-
-            throw new Web3Exception("Can't get player address. No Signer was provided during construction.");
         }
     }
 }

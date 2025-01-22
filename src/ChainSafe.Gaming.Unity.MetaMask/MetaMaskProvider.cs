@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Analytics;
+using ChainSafe.Gaming.Web3.Core.Operations;
 using ChainSafe.Gaming.Web3.Environment;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
 using UnityEngine;
@@ -27,8 +28,12 @@ namespace ChainSafe.Gaming.Unity.MetaMask
         /// <param name="environment">Injected <see cref="Web3Environment"/>.</param>
         /// <param name="chainConfig">Injected <see cref="IChainConfig"/>.</param>
         /// <param name="chainRegistryProvider">Injected <see cref="ChainRegistryProvider"/>.</param>
-        public MetaMaskProvider(Web3Environment environment, IChainConfig chainConfig, ChainRegistryProvider chainRegistryProvider)
-            : base(environment, chainConfig)
+        public MetaMaskProvider(
+            Web3Environment environment,
+            IChainConfig chainConfig,
+            ChainRegistryProvider chainRegistryProvider,
+            IOperationTracker operationTracker)
+            : base(environment, chainConfig, operationTracker)
         {
             logWriter = environment.LogWriter;
             this.chainConfig = chainConfig;
@@ -83,8 +88,8 @@ namespace ChainSafe.Gaming.Unity.MetaMask
                 EventName = "Metamask WebGL Initialized",
                 PackageName = "io.chainsafe.web3-unity",
             });
-
-            return await metaMaskController.Connect(chainConfig, chainRegistryProvider);
+            var connect = await metaMaskController.Connect(chainConfig, chainRegistryProvider);
+            return connect;
         }
     }
 }

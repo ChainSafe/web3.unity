@@ -358,7 +358,7 @@ namespace Plugins.CountlySDK
             RegisterListenersToServices();
         }
 
-        private async void OnInitialisationComplete()
+        private void OnInitialisationComplete()
         {
             lock (lockObj)
             {

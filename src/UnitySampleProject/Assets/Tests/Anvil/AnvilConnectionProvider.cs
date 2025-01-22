@@ -9,6 +9,7 @@ using ChainSafe.Gaming.Web3.Core.Evm;
 using ChainSafe.Gaming.Web3.Core.Logout;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
 using Microsoft.Extensions.DependencyInjection;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace ChainSafe.Gaming.Unity.Tests
@@ -20,9 +21,9 @@ namespace ChainSafe.Gaming.Unity.Tests
     {
         // only available when in test mode
         public override bool IsAvailable => Web3Unity.TestMode;
-        
-        //there's no connect modal so this can be null
-        public override Button ConnectButtonRow { get; protected set; }
+
+        public override Sprite ButtonIcon { get; protected set; } = null;
+        public override string ButtonText { get; protected set; } = null;
 
         protected override void ConfigureServices(IWeb3ServiceCollection services)
         {
