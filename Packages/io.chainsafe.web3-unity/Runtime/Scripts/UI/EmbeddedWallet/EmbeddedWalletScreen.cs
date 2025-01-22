@@ -1,6 +1,8 @@
 using ChainSafe.Gaming.EmbeddedWallet;
 using Microsoft.Extensions.DependencyInjection;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using CWeb3 = ChainSafe.Gaming.Web3.Web3;
 
@@ -16,6 +18,12 @@ namespace ChainSafe.Gaming
         
         [SerializeField] private Image requestPendingIcon;
         
+        [Space]
+        
+        [SerializeField] private TextMeshProUGUI addressText;
+        
+        [SerializeField] private Button copyAddressButton;
+        
         private IEmbeddedWalletConfig _config;
         
         private EmbeddedWalletRequestHandler _requestHandler;
@@ -26,6 +34,14 @@ namespace ChainSafe.Gaming
         
         public void Initialize(CWeb3 web3)
         {
+            showButton.onClick.AddListener(Show);
+            
+            hideButton.onClick.AddListener(Hide);
+
+            addressText.text = web3.Signer.PublicAddress;
+            
+            copyAddressButton.onClick.AddListener(CopyAddress);
+            
             // Transaction
             _embeddedWalletRequest = GetComponentInChildren<EmbeddedWalletRequestDisplay>(true);
             
@@ -40,10 +56,11 @@ namespace ChainSafe.Gaming
             _embeddedWalletRequest.Initialize(_requestHandler);
             
             _transactionHistory.Initialize(_requestHandler);
-            
-            showButton.onClick.AddListener(Show);
-            
-            hideButton.onClick.AddListener(Hide);
+        }
+
+        private void CopyAddress()
+        {
+            ClipboardManager.CopyText(addressText.text);
         }
 
         private void Request(IEmbeddedWalletRequest request)

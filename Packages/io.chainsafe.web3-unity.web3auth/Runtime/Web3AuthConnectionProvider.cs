@@ -48,8 +48,8 @@ public class Web3AuthConnectionProvider : ConnectionProvider, ILogoutHandler, IW
 
     [SerializeField] private bool enableWalletGui;
 
-    [SerializeField, DefaultAssetValue("Packages/io.chainsafe.web3-unity/Runtime/Prefabs/GUI Screens/EmbeddedWalletScreen.prefab")]
-    private EmbeddedWalletScreen embeddedWalletPrefab;
+    [SerializeField]
+    private GuiScreenFactory embeddedWalletScreenFactory;
 
     [SerializeField] private Web3AuthWalletGUI.Web3AuthWalletConfig walletGuiConfig;
 
@@ -244,8 +244,9 @@ public class Web3AuthConnectionProvider : ConnectionProvider, ILogoutHandler, IW
     {
         if (enableWalletGui)
         {
-            _embeddedWallet = Instantiate(embeddedWalletPrefab);
+            _embeddedWallet = embeddedWalletScreenFactory.GetSingle<EmbeddedWalletScreen>();
             _embeddedWallet.Initialize(web3);
+            _embeddedWallet.gameObject.SetActive(true);
         }
 
         if (_modal != null)

@@ -55,9 +55,8 @@ namespace ChainSafe.Gaming
 
         private void RequestTransaction(EmbeddedWalletTransaction transaction)
         {
-            // TODO use transaction.Request.ChainId to display the correct symbol
             var message = transaction.Request.Value != null ? 
-                $"{UnitConversion.Convert.FromWei(transaction.Request.Value)} ETH" : transaction.Request.Data;
+                transaction.ValueString : transaction.Request.Data;
             
             ShowModal("Transaction Request", message);
         }

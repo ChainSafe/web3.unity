@@ -48,8 +48,6 @@ namespace ChainSafe.Gaming.EmbeddedWallet
 
         public void Confirm(IEmbeddedWalletRequest request)
         {
-            request.Confirm();
-
             RequestConfirmed?.Invoke(request);
         }
     }

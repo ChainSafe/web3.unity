@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.InProcessSigner;
+using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using TransactionExecutor = ChainSafe.Gaming.InProcessTransactionExecutor.InProcessTransactionExecutor;
 
@@ -15,14 +16,18 @@ namespace ChainSafe.Gaming.EmbeddedWallet
     {
         private readonly IEmbeddedWalletConfig config;
 
+        private readonly IChainConfig chainConfig;
+
         private readonly EmbeddedWalletRequestHandler requestHandler;
 
-        public EmbeddedWalletTransactionExecutor(IEmbeddedWalletConfig config, EmbeddedWalletRequestHandler requestHandler, IAccountProvider accountProvider, IRpcProvider rpcProvider)
+        public EmbeddedWalletTransactionExecutor(IEmbeddedWalletConfig config, IChainConfig chainConfig, EmbeddedWalletRequestHandler requestHandler, IAccountProvider accountProvider, IRpcProvider rpcProvider)
             : base(accountProvider, rpcProvider)
         {
             this.config = config;
 
             this.requestHandler = requestHandler;
+
+            this.chainConfig = chainConfig;
 
             requestHandler.RequestApproved += request =>
             {
@@ -48,7 +53,7 @@ namespace ChainSafe.Gaming.EmbeddedWallet
                 return base.SendTransaction(request);
             }
 
-            var transaction = new EmbeddedWalletTransaction(request);
+            var transaction = new EmbeddedWalletTransaction(request, chainConfig.NativeCurrency.Symbol, chainConfig.BlockExplorerUrl);
 
             requestHandler.Enqueue(transaction);
 
@@ -67,6 +72,8 @@ namespace ChainSafe.Gaming.EmbeddedWallet
             {
                 transaction.Response.SetException(e);
             }
+
+            transaction.Confirm();
 
             requestHandler.Confirm(transaction);
         }

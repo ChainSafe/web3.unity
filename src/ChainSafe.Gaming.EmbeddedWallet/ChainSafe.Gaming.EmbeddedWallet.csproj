@@ -16,5 +16,9 @@
         <ProjectReference Include="..\ChainSafe.Gaming.InProcessTransactionExecutor\ChainSafe.Gaming.InProcessTransactionExecutor.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Nethereum.Util" Version="4.21.0" />
+    </ItemGroup>
+
 </Project>
 
