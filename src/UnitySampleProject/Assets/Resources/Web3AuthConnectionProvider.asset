@@ -14,9 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ButtonIcon>k__BackingField: {fileID: 21300000, guid: 402d42d6692b5e3498f900fe29e10a89, type: 3}
   <ButtonText>k__BackingField: Web3Auth
-  clientId: BIYV6RYoZYbQ8VulPi65LoJMXQisHcTKQ296pOstx4LmzOp9HN3LR1tfAeaM3DMuN6c3AHEvvcMFLEE6lnuefAQ
-  redirectUri: torusapp://io.chainsafe.gamingsdk.sdkdemoscene/auth
-  network: 1
+  <AppName>k__BackingField: ChainSafe Gaming SDK
+  <ClientId>k__BackingField: BIYV6RYoZYbQ8VulPi65LoJMXQisHcTKQ296pOstx4LmzOp9HN3LR1tfAeaM3DMuN6c3AHEvvcMFLEE6lnuefAQ
+  <RedirectUri>k__BackingField: torusapp://io.chainsafe.gamingsdk.sdkdemoscene/auth
+  <Network>k__BackingField: 1
+  <Theme>k__BackingField: 1
+  <Language>k__BackingField: 0
   modalScreenFactory:
     LandscapePrefab: {fileID: 4903352956951587407, guid: 9e5f859444d8b4a448e79b28a6033fd7, type: 3}
     PortraitPrefab: {fileID: 7393159509175253276, guid: 5ed2d6739dc24144cb021a0cb4bd8178, type: 3}

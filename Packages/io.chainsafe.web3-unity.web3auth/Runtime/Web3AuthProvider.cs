@@ -15,7 +15,7 @@ using UnityEngine;
 /// </summary>
 public class Web3AuthProvider : WalletProvider, IAccountProvider
 {
-    private readonly Web3AuthWalletConfig _config;
+    private readonly IWeb3AuthConfig _config;
     private readonly IOperationTracker operationTracker;
 
     private Web3Auth _coreInstance;
@@ -23,7 +23,7 @@ public class Web3AuthProvider : WalletProvider, IAccountProvider
     private TaskCompletionSource<object> _disconnectTcs;
 
     public Web3AuthProvider(
-        Web3AuthWalletConfig config,
+        IWeb3AuthConfig config,
         Web3Environment environment,
         IChainConfig chainConfig,
         IOperationTracker operationTracker)
@@ -70,7 +70,7 @@ public class Web3AuthProvider : WalletProvider, IAccountProvider
         if (!_config.AutoLogin && providerTask != null
             //On webGL providerTask is always completed, so we don't have to go through another login flow.
 #if UNITY_WEBGL && !UNITY_EDITOR
-                               && !providerTask.IsCompleted
+            && !providerTask.IsCompleted
 #endif
             )
         {

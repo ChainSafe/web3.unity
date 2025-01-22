@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 using AOT;
 using ChainSafe.Gaming;
@@ -22,16 +23,21 @@ using Network = Web3Auth.Network;
 /// ConnectionProvider for connecting wallet via Web3Auth.
 /// </summary>
 [CreateAssetMenu(menuName = "ChainSafe/Connection Provider/Web3Auth", fileName = nameof(Web3AuthConnectionProvider))]
-public class Web3AuthConnectionProvider : ConnectionProvider, ILogoutHandler, IWeb3InitializedHandler
+public class Web3AuthConnectionProvider : ConnectionProvider, ILogoutHandler, IWeb3InitializedHandler, IWeb3AuthConfig
 {
     [field: SerializeField, DefaultAssetValue("Packages/io.chainsafe.web3-unity.web3auth/Runtime/Sprites/web3auth.png")]
     public override Sprite ButtonIcon { get; protected set; }
 
     [field: SerializeField] public override string ButtonText { get; protected set; } = "Web3Auth";
+
+    [field: Space] [field: SerializeField] public string AppName { get; private set; } = "ChainSafe Gaming SDK";
+    [field: SerializeField] public string ClientId { get; private set; }
     
-    [SerializeField] private string clientId;
-    [SerializeField] private string redirectUri;
-    [SerializeField] private Network network;
+    [field: SerializeField] public string RedirectUri { get; private set; }
+    
+    [field: SerializeField] public Network Network { get; private set; }
+    [field: SerializeField] public Web3Auth.ThemeModes Theme { get; private set; } = Web3Auth.ThemeModes.dark;
+    [field: SerializeField] public Web3Auth.Language Language { get; private set; } = Web3Auth.Language.en;
 
     [Space]
 
@@ -55,6 +61,16 @@ public class Web3AuthConnectionProvider : ConnectionProvider, ILogoutHandler, IW
 
     public override bool IsAvailable => true;
 
+    public Task<string> SessionTask { get; private set; }
+    
+    public Task<Provider> ProviderTask => _rememberMe ? default : _modal.SelectProvider();
+    
+    public CancellationToken CancellationToken => _rememberMe ? default : _modal.CancellationToken;
+
+    public bool RememberMe => _rememberMe || RememberSession;
+
+    public bool AutoLogin => _rememberMe;
+    
 #if UNITY_WEBGL && !UNITY_EDITOR
 
     private TaskCompletionSource<string> _initializeTcs;
@@ -91,8 +107,8 @@ public class Web3AuthConnectionProvider : ConnectionProvider, ILogoutHandler, IW
         }
         
         //1155 is a decimal number, we need to convert it to an integer
-        InitWeb3Auth(clientId, new HexBigInteger(BigInteger.Parse(chainConfig.ChainId)).HexValue, 
-            chainConfig.Rpc, chainConfig.Network, "", chainConfig.NativeCurrency.Symbol, "", network.ToString().ToLower(), Initialized, InitializeError);
+        InitWeb3Auth(ClientId, new HexBigInteger(BigInteger.Parse(chainConfig.ChainId)).HexValue, 
+            chainConfig.Rpc, chainConfig.Network, "", chainConfig.NativeCurrency.Symbol, "", Network.ToString().ToLower(), Initialized, InitializeError);
 
         await _initializeTcs.Task;
     }
@@ -117,32 +133,8 @@ public class Web3AuthConnectionProvider : ConnectionProvider, ILogoutHandler, IW
             DisplayModal();
         }
 
-        var web3AuthConfig = new Web3AuthWalletConfig
-        {
-            Web3AuthOptions = new()
-            {
-                clientId = clientId,
-                redirectUrl = new Uri(redirectUri),
-                network = network,
-                whiteLabel = new()
-                {
-                    mode = Web3Auth.ThemeModes.dark,
-                    defaultLanguage = Web3Auth.Language.en,
-                    appName = "ChainSafe Gaming SDK",
-                }
-            },
-            RememberMe = _rememberMe || RememberSession,
-
-            AutoLogin = _rememberMe,
-            UseWalletGui = enableWalletGui
-        };
-
-        web3AuthConfig.CancellationToken = _rememberMe ? default : _modal.CancellationToken;
-
-        web3AuthConfig.ProviderTask = _rememberMe ? default : _modal.SelectProvider();
-
 #if UNITY_WEBGL && !UNITY_EDITOR
-            web3AuthConfig.CancellationToken.Register(delegate
+            CancellationToken.Register(delegate
             {
                 if (_connectionTcs != null && !_connectionTcs.Task.IsCompleted)
                 {
@@ -150,10 +142,10 @@ public class Web3AuthConnectionProvider : ConnectionProvider, ILogoutHandler, IW
                 }
             });
             
-            web3AuthConfig.SessionTask = Connect();
+            SessionTask = Connect();
 #endif
 
-        services.UseWeb3AuthWallet(web3AuthConfig);
+        services.UseWeb3AuthWallet(this);
 
         services.AddSingleton<ILogoutHandler, IWeb3InitializedHandler, Web3AuthConnectionProvider>(_ => this);
     }
@@ -263,4 +255,6 @@ public class Web3AuthConnectionProvider : ConnectionProvider, ILogoutHandler, IW
 
         return Task.CompletedTask;
     }
+
+    public bool AutoApproveTransactions => !enableWalletGui;
 }

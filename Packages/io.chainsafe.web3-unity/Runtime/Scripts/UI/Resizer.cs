@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace ChainSafe.Gaming.UnityPackage.UI
@@ -26,7 +27,7 @@ namespace ChainSafe.Gaming.UnityPackage.UI
         [SerializeField] private float normalizedWidth;
         [Range(0f, 1f)]
         [SerializeField] private float normalizedHeight;
-
+        
         private RectTransform _rectTransform;
 
         private void Awake()

@@ -8,9 +8,6 @@ namespace ChainSafe.Gaming.Evm.Transactions
 {
     public class TransactionRequest : ICloneable
     {
-        [JsonIgnore]
-        public string Id { get; set; }
-
         /// <summary>
         ///    QUANTITY - The transaction type.
         /// </summary>

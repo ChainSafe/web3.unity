@@ -18,6 +18,7 @@
       "ChainSafe.Gaming.InProcessSigner",
       "Nethereum.Signer",
       "ChainSafe.Gaming.InProcessTransactionExecutor",
+      "ChainSafe.Gaming.EmbeddedWallet",
       "Nethereum.Util",
       "ChainSafe.Gaming.Unity.ThirdParty",
       "Nethereum.Web3",

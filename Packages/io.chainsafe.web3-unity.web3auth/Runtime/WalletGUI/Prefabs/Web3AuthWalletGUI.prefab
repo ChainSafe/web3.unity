@@ -6292,33 +6292,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   customTokenPlaceHolder: {fileID: 6238643033416456295}
-  customNftPlaceHolder: {fileID: 3893186881389953187}
   customTokenDisplayErc20Parent: {fileID: 5657123885924398801}
   customNftDisplayParent: {fileID: 8176955415891050272}
   customTokenDisplayErc20: {fileID: 1544044832913725164}
-  customNftDisplay: {fileID: 6034000924353824336}
   transferTokensContainer: {fileID: 6754551686753108061}
   addCustomTokensMenu: {fileID: 7449198859952559396}
-  addCustomNftMenu: {fileID: 1102691479002500486}
   selectedTokenToTransfer: {fileID: 1643824617281436576}
   customTokenAddressInput: {fileID: 1450622858095165912}
   customTokenSymbolInput: {fileID: 3033696630416049437}
-  customNftAddressInput: {fileID: 431849629550995913}
-  customNftSymbolInput: {fileID: 7343186495474426007}
-  customNftIdInput: {fileID: 6727692128954422283}
   transferTokensWalletInput: {fileID: 7702073597766504067}
   transferTokensAmountInput: {fileID: 3540026797197030748}
-  customNftAmountText: {fileID: 8143053246957829318}
-  customNftSymbolText: {fileID: 1935757266164244188}
   customTokenAmountText: {fileID: 8346934949460858011}
   customTokenSymbolText: {fileID: 6891909999124788805}
   nativeTokenSymbolText: {fileID: 6256012485412186482}
   nativeTokenAmountText: {fileID: 1012412206096704489}
   addTokensMenuButton: {fileID: 1391477503969280662}
-  addNftsMenuButton: {fileID: 3285911010377504504}
   closeAddTokensMenuButton: {fileID: 5417894310233579526}
-  closeAddNftMenuButton: {fileID: 176133887779786777}
-  addNftButton: {fileID: 2207920767897871812}
   addTokenButton: {fileID: 3172254933871926392}
   transferTokensMenuButton: {fileID: 3166722148647569110}
   closeTransferTokensButton: {fileID: 3090088527211704690}
