@@ -68,6 +68,7 @@ namespace ChainSafe.Gaming.UnityPackage
         [Obsolete("Use the ConnectionScreen property.")]
         public static ConnectionScreen ConnectScreen => Instance.GetConnectionScreen();
 
+        [Header("Auto-Initialization")]
         [SerializeField] private bool rememberConnection;
         
         [Header("GUI Settings")]
