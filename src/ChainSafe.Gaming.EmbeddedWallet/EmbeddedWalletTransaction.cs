@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Transactions;
 
@@ -6,7 +7,7 @@ namespace ChainSafe.Gaming.EmbeddedWallet
     /// <summary>
     /// Transaction object for handling embedded wallet transactions.
     /// </summary>
-    public class EmbeddedWalletTransaction
+    public class EmbeddedWalletTransaction : IEmbeddedWalletRequest
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EmbeddedWalletTransaction"/> class.
@@ -19,6 +20,8 @@ namespace ChainSafe.Gaming.EmbeddedWallet
             Response = new TaskCompletionSource<TransactionResponse>();
         }
 
+        public DateTime Timestamp { get; private set; }
+
         /// <summary>
         /// Initial Transaction Request.
         /// </summary>
@@ -28,5 +31,10 @@ namespace ChainSafe.Gaming.EmbeddedWallet
         /// Awaitable Transaction Response.
         /// </summary>
         public TaskCompletionSource<TransactionResponse> Response { get; private set; }
+
+        public void Confirm()
+        {
+            Timestamp = DateTime.Now;
+        }
     }
 }

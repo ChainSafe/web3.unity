@@ -11,23 +11,35 @@ namespace ChainSafe.Gaming.EmbeddedWallet
     /// <summary>
     /// Implementation of <see cref="ITransactionExecutor"/> for handling embedded wallet transactions.
     /// </summary>
-    public class EmbeddedWalletTransactionExecutor : TransactionExecutor, IEmbeddedWalletTransactionHandler
+    public class EmbeddedWalletTransactionExecutor : TransactionExecutor
     {
-        private readonly TransactionPool transactionPool;
-
         private readonly IEmbeddedWalletConfig config;
 
-        public EmbeddedWalletTransactionExecutor(IEmbeddedWalletConfig config, TransactionPool transactionPool, IAccountProvider accountProvider, IRpcProvider rpcProvider)
+        private readonly EmbeddedWalletRequestHandler requestHandler;
+
+        public EmbeddedWalletTransactionExecutor(IEmbeddedWalletConfig config, EmbeddedWalletRequestHandler requestHandler, IAccountProvider accountProvider, IRpcProvider rpcProvider)
             : base(accountProvider, rpcProvider)
         {
             this.config = config;
 
-            this.transactionPool = transactionPool;
+            this.requestHandler = requestHandler;
+
+            requestHandler.RequestApproved += request =>
+            {
+                if (request is EmbeddedWalletTransaction transaction)
+                {
+                    TransactionApproved(transaction);
+                }
+            };
+
+            requestHandler.RequestDeclined += request =>
+            {
+                if (request is EmbeddedWalletTransaction transaction)
+                {
+                    TransactionDeclined(transaction);
+                }
+            };
         }
-
-        public event Action<EmbeddedWalletTransaction> OnTransactionQueued;
-
-        public event Action<EmbeddedWalletTransaction> OnTransactionConfirmed;
 
         public override Task<TransactionResponse> SendTransaction(TransactionRequest request)
         {
@@ -36,36 +48,31 @@ namespace ChainSafe.Gaming.EmbeddedWallet
                 return base.SendTransaction(request);
             }
 
-            // Add transaction to pool.
-            var transaction = transactionPool.Enqueue(request);
+            var transaction = new EmbeddedWalletTransaction(request);
 
-            OnTransactionQueued?.Invoke(transaction);
+            requestHandler.Enqueue(transaction);
 
             return transaction.Response.Task;
         }
 
-        public async void TransactionApproved()
+        private async void TransactionApproved(EmbeddedWalletTransaction transaction)
         {
-            var transaction = transactionPool.Dequeue();
-
             try
             {
                 var response = await base.SendTransaction(transaction.Request);
 
                 transaction.Response.SetResult(response);
-
-                OnTransactionConfirmed?.Invoke(transaction);
             }
             catch (Exception e)
             {
                 transaction.Response.SetException(e);
             }
+
+            requestHandler.Confirm(transaction);
         }
 
-        public void TransactionDeclined()
+        private void TransactionDeclined(EmbeddedWalletTransaction transaction)
         {
-            var transaction = transactionPool.Dequeue();
-
             transaction.Response.SetCanceled();
         }
     }

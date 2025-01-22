@@ -18,7 +18,7 @@ namespace ChainSafe.Gaming
         {
             var response = transaction.Response.Task.Result;
             
-            timestampText.text = transaction.TimeStamp.ToShortTimeString();
+            timestampText.text = transaction.Timestamp.ToShortTimeString();
             
             // TODO look up how to get action like transfer and mint
             
