@@ -107,8 +107,8 @@ public class Web3AuthConnectionProvider : ConnectionProvider, ILogoutHandler, IW
         }
         
         //1155 is a decimal number, we need to convert it to an integer
-        InitWeb3Auth(clientId, new HexBigInteger(BigInteger.Parse(chainConfig.ChainId)).HexValue, 
-            chainConfig.Rpc, chainConfig.Network, "", chainConfig.NativeCurrency.Symbol, "", network.ToString().ToLower(), Initialized, InitializeError);
+        InitWeb3Auth(ClientId, new HexBigInteger(BigInteger.Parse(chainConfig.ChainId)).HexValue, 
+            chainConfig.Rpc, chainConfig.Network, "", chainConfig.NativeCurrency.Symbol, "", Network.ToString().ToLower(), Initialized, InitializeError);
 
         await _initializeTcs.Task;
     }

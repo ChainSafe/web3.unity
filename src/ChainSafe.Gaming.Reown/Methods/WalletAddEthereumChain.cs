@@ -9,11 +9,13 @@ namespace ChainSafe.Gaming.Reown.Methods
     [RpcRequestOptions(Clock.ONE_MINUTE, 99993)]
     public class WalletAddEthereumChain : List<object>
     {
-        public WalletAddEthereumChain(object[] chains)
+        [Preserve]
+        public WalletAddEthereumChain(params object[] chains)
             : base(chains)
         {
         }
 
+        [Preserve]
         public WalletAddEthereumChain()
         {
         }
