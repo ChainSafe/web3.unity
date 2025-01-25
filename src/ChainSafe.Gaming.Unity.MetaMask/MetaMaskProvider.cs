@@ -28,12 +28,15 @@ namespace ChainSafe.Gaming.Unity.MetaMask
         /// <param name="environment">Injected <see cref="Web3Environment"/>.</param>
         /// <param name="chainConfig">Injected <see cref="IChainConfig"/>.</param>
         /// <param name="chainRegistryProvider">Injected <see cref="ChainRegistryProvider"/>.</param>
+        /// <param name="operationTracker">Injected <see cref="IOperationTracker"/>.</param>
+        /// <param name="operatingSystemMediator">Injected <see cref="IOperatingSystemMediator"/></param>
         public MetaMaskProvider(
             Web3Environment environment,
             IChainConfig chainConfig,
             ChainRegistryProvider chainRegistryProvider,
-            IOperationTracker operationTracker)
-            : base(environment, chainConfig, operationTracker)
+            IOperationTracker operationTracker,
+            IOperatingSystemMediator operatingSystemMediator)
+            : base(environment, chainConfig, operationTracker, operatingSystemMediator)
         {
             logWriter = environment.LogWriter;
             this.chainConfig = chainConfig;

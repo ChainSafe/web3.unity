@@ -71,8 +71,9 @@ namespace ChainSafe.Gaming.Reown
             Web3Environment environment,
             ReownHttpClient reownHttpClient,
             IOperationTracker operationTracker,
-            IRpcProvider rpcProvider)
-            : base(environment, chainConfig, operationTracker)
+            IRpcProvider rpcProvider,
+            IOperatingSystemMediator operatingSystemMediator)
+            : base(environment, chainConfig, operationTracker, operatingSystemMediator)
         {
             this.operationTracker = operationTracker;
             this.rpcProvider = rpcProvider;
@@ -139,62 +140,61 @@ namespace ChainSafe.Gaming.Reown
 
             ReownLogger.Instance = new ReownLogWriter(logWriter, config);
 
-            using (operationTracker.TrackOperation("Initializing the Reown module..."))
+
+            var storage = await ReownStorageFactory.Build(environment);
+            var signClientOptions = new SignClientOptions
             {
-                var storage = await ReownStorageFactory.Build(environment);
-                var signClientOptions = new SignClientOptions
-                {
-                    ProjectId = config.ProjectId,
-                    Name = config.ProjectName,
-                    Metadata = config.Metadata,
-                    BaseContext = config.BaseContext,
-                    Storage = storage,
-                    KeyChain = new KeyChain(storage),
-                    ConnectionBuilder = config.ConnectionBuilder,
-                    RelayUrlBuilder = config.RelayUrlBuilder,
-                };
+                ProjectId = config.ProjectId,
+                Name = config.ProjectName,
+                Metadata = config.Metadata,
+                BaseContext = config.BaseContext,
+                Storage = storage,
+                KeyChain = new KeyChain(storage),
+                ConnectionBuilder = config.ConnectionBuilder,
+                RelayUrlBuilder = config.RelayUrlBuilder,
+            };
 
-                SignClient = await SignClient.Init(signClientOptions);
-                await SignClient.AddressProvider.LoadDefaultsAsync();
+            SignClient = await SignClient.Init(signClientOptions);
+            await SignClient.AddressProvider.LoadDefaultsAsync();
 
-                if (config.OnRelayErrored is not null)
-                {
-                    SignClient.CoreClient.Relayer.OnErrored += config.OnRelayErrored;
-                }
-
-                var optionalNamespace =
-                    new ProposedNamespace // todo using optional namespaces like AppKit does, should they be required?
-                    {
-                        Chains = chainConfigSet.Configs
-                            .Select(chainEntry => chainEntry.ChainId)
-                            .ToArray(),
-                        Methods = new[]
-                        {
-                            "eth_sign",
-                            "personal_sign",
-                            "eth_signTypedData",
-                            "eth_signTransaction",
-                            "eth_sendTransaction",
-                            "eth_chainId",
-                            "eth_getTransactionByHash",
-                            "wallet_switchEthereumChain",
-                            "wallet_addEthereumChain",
-                            "eth_blockNumber",
-                        },
-                        Events = new[]
-                        {
-                            "chainChanged",
-                            "accountsChanged",
-                        },
-                    };
-
-                optionalNamespaces = new Dictionary<string, ProposedNamespace>
-                {
-                    { EvmNamespace, optionalNamespace },
-                };
-
-                initialized = true;
+            if (config.OnRelayErrored is not null)
+            {
+                SignClient.CoreClient.Relayer.OnErrored += config.OnRelayErrored;
             }
+
+            var optionalNamespace =
+                new ProposedNamespace // todo using optional namespaces like AppKit does, should they be required?
+                {
+                    Chains = chainConfigSet.Configs
+                        .Select(chainEntry => chainEntry.ChainId)
+                        .ToArray(),
+                    Methods = new[]
+                    {
+                        "eth_sign",
+                        "personal_sign",
+                        "eth_signTypedData",
+                        "eth_signTransaction",
+                        "eth_sendTransaction",
+                        "eth_chainId",
+                        "eth_getTransactionByHash",
+                        "wallet_switchEthereumChain",
+                        "wallet_addEthereumChain",
+                        "eth_blockNumber",
+                    },
+                    Events = new[]
+                    {
+                        "chainChanged",
+                        "accountsChanged",
+                    },
+                };
+
+            optionalNamespaces = new Dictionary<string, ProposedNamespace>
+            {
+                { EvmNamespace, optionalNamespace },
+            };
+
+            initialized = true;
+        
         }
 
         protected override Task<string> GetWalletChainId()
@@ -314,13 +314,9 @@ namespace ChainSafe.Gaming.Reown
         {
             ConnectedData connectedData;
             IConnectionHandler connectionHandler;
-
-            using (operationTracker.TrackOperation("Initializing a new Reown session..."))
-            {
-                var connectOptions = new ConnectOptions { OptionalNamespaces = optionalNamespaces };
-                connectedData = await SignClient.Connect(connectOptions);
-                connectionHandler = await config.ConnectionHandlerProvider.ProvideHandler();
-            }
+            var connectOptions = new ConnectOptions { OptionalNamespaces = optionalNamespaces };
+            connectedData = await SignClient.Connect(connectOptions);
+            connectionHandler = await config.ConnectionHandlerProvider.ProvideHandler();
 
             try
             {

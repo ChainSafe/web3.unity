@@ -31,14 +31,16 @@ namespace ChainSafe.Gaming.HyperPlay
         /// <param name="environment">Injected <see cref="environment"/>.</param>
         /// <param name="chainConfig">ChainConfig to fetch chain data.</param>
         /// <param name="operationTracker">Injected <see cref="IOperationTracker"/>.</param>
+        /// <param name="operatingSystemMediator">Injected <see cref="IOperatingSystemMediator"/>.</param>
         public HyperPlayProvider(
             IHyperPlayConfig config,
             IHyperPlayData data,
             ILocalStorage localStorage,
             Web3Environment environment,
             IChainConfig chainConfig,
-            IOperationTracker operationTracker)
-            : base(environment, chainConfig, operationTracker)
+            IOperationTracker operationTracker,
+            IOperatingSystemMediator operatingSystemMediator)
+            : base(environment, chainConfig, operationTracker, operatingSystemMediator)
         {
             this.config = config;
             this.data = data;
