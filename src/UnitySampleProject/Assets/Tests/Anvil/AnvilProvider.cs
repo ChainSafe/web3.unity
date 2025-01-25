@@ -16,8 +16,8 @@ namespace ChainSafe.Gaming.Unity.Tests
     {
         public IAccount Account { get; private set; }
 
-        public AnvilProvider(Web3Environment environment, IChainConfig chainConfig, IOperationTracker operationTracker)
-            : base(environment, chainConfig, operationTracker)
+        public AnvilProvider(Web3Environment environment, IChainConfig chainConfig, IOperationTracker operationTracker, IOperatingSystemMediator mediator)
+            : base(environment, chainConfig, operationTracker, mediator)
         {
             // Initialize account via private key
             Account = new Account("0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80");

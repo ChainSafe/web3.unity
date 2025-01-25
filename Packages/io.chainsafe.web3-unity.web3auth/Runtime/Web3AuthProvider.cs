@@ -26,8 +26,9 @@ public class Web3AuthProvider : WalletProvider, IAccountProvider
         Web3AuthWalletConfig config,
         Web3Environment environment,
         IChainConfig chainConfig,
-        IOperationTracker operationTracker)
-        : base(environment, chainConfig, operationTracker)
+        IOperationTracker operationTracker,
+        IOperatingSystemMediator operatingSystemMediator)
+        : base(environment, chainConfig, operationTracker, operatingSystemMediator)
     {
         this.operationTracker = operationTracker;
         _config = config;
