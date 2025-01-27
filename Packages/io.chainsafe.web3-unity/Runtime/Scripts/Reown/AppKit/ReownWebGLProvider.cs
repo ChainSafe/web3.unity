@@ -40,7 +40,7 @@ namespace ChainSafe.Gaming.Reown.AppKit
 
         public ReownWebGLProvider(ReownHttpClient httpClient, IChainConfigSet chains, IReownConfig reownConfig,
             ILogWriter logWriter, Web3Environment web3Environment, IChainManager chainManager,
-            IOperationTracker operationTracker) : base(web3Environment, chainManager.Current, operationTracker)
+            IOperationTracker operationTracker, IOperatingSystemMediator operatingSystemMediator) : base(web3Environment, chainManager.Current, operationTracker, operatingSystemMediator)
         {
             _httpClient = httpClient;
             _chains = chains;
