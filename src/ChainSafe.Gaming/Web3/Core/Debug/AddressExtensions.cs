@@ -16,6 +16,12 @@ namespace ChainSafe.Gaming.Web3.Core.Debug
             return !string.IsNullOrEmpty(value) && Regex.IsMatch(value, regexPattern);
         }
 
+        public static bool IsContractAddress(string value)
+        {
+            // TODO maybe do an eth_getCode call to make sure it's a contract and not an external address.
+            return IsPublicAddress(value);
+        }
+
         /// <summary>
         /// Assert that the string provided is a public address.
         /// </summary>

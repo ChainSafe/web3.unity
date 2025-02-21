@@ -12,6 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73b5e9380c5275043b3558f49f807100, type: 3}
   m_Name: HyperPlayConnectionProvider
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: HyperPlay
-  <ConnectButtonRow>k__BackingField: {fileID: 8599114313589093787, guid: 71b112e16f898d140935553a4b33ae1f, type: 3}
-  <RememberSession>k__BackingField: 1
+  <ButtonIcon>k__BackingField: {fileID: 21300000, guid: fff42e870475d1344995a94a16299795, type: 3}
+  <ButtonText>k__BackingField: HyperPlay

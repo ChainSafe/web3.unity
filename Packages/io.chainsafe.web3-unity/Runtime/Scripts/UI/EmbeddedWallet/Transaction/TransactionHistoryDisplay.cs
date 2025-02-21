@@ -33,6 +33,8 @@ namespace ChainSafe.Gaming
             transactionRow.transform.SetSiblingIndex(1);
             
             transactionRow.Attach(transaction);
+            
+            // TODO persist transactions locally, with a clear function
         }
     }
 }

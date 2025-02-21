@@ -25,7 +25,7 @@ MonoBehaviour:
     PortraitPrefab: {fileID: 7393159509175253276, guid: 5ed2d6739dc24144cb021a0cb4bd8178, type: 3}
   enableWalletGui: 1
   embeddedWalletScreenFactory:
-    LandscapePrefab: {fileID: 9118391042864414103, guid: afa4760b610e6bf44a60604870e75e86, type: 3}
+    LandscapePrefab: {fileID: 9118391042864414103, guid: b5cdb5408f4a60240a37f6f91a23e00b, type: 3}
     PortraitPrefab: {fileID: 0}
   walletGuiConfig:
     DisplayWalletIcon: 1

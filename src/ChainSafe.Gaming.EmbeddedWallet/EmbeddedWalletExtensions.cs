@@ -24,8 +24,8 @@ namespace ChainSafe.Gaming.EmbeddedWallet
 
             services.AddSingleton<EmbeddedWalletRequestHandler>();
 
-			services.AddSingleton<ISigner, ILifecycleParticipant, ILogoutHandler, EmbeddedWalletSigner>();
-			
+            services.AddSingleton<ISigner, ILifecycleParticipant, ILogoutHandler, EmbeddedWalletSigner>();
+
             services.AddSingleton<ITransactionExecutor, EmbeddedWalletTransactionExecutor>();
 
             return services;

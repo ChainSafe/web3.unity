@@ -32,6 +32,8 @@ namespace ChainSafe.Gaming
         
         private TransactionHistoryDisplay _transactionHistory;
         
+        private CustomTokensDisplay _customTokens;
+        
         public void Initialize(CWeb3 web3)
         {
             showButton.onClick.AddListener(Show);
@@ -56,6 +58,11 @@ namespace ChainSafe.Gaming
             _embeddedWalletRequest.Initialize(_requestHandler);
             
             _transactionHistory.Initialize(_requestHandler);
+            
+            // Custom Tokens
+            _customTokens = GetComponentInChildren<CustomTokensDisplay>(true);
+
+            _customTokens.Initialize(web3.Erc20);
         }
 
         private void CopyAddress()
