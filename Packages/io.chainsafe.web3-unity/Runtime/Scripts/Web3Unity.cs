@@ -8,6 +8,8 @@ using ChainSafe.Gaming.Evm.Contracts.Extensions;
 using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
+using ChainSafe.Gaming.GUI;
+using ChainSafe.Gaming.MultiCall;
 using ChainSafe.Gaming.UnityPackage.Connection;
 using ChainSafe.Gaming.UnityPackage.UI;
 using ChainSafe.Gaming.Web3;
@@ -19,6 +21,7 @@ using Nethereum.Signer;
 using Nethereum.Util;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.Serialization;
 using CWeb3 = ChainSafe.Gaming.Web3.Web3;
 using TransactionReceipt = ChainSafe.Gaming.Evm.Transactions.TransactionReceipt;
 
@@ -57,20 +60,23 @@ namespace ChainSafe.Gaming.UnityPackage
         /// <summary>
         /// Connection Modal used to connect to available <see cref="ConnectionProvider"/>s.
         /// </summary>
-        public static ConnectModal ConnectModal
-        {
-            get
-            {
-                if (!Instance._connectModal)
-                {
-                    Instance._connectModal = Instantiate(Instance.connectModalPrefab);
+        public static ConnectionScreen ConnectionScreen => Instance.GetConnectionScreen();
 
-                    Instance._connectModal.Initialize(Instance._connectionHandler.Providers);
-                }
+        /// <summary>
+        /// Connection Modal used to connect to available <see cref="ConnectionProvider"/>s.
+        /// </summary>
+        [Obsolete("Use the ConnectionScreen property.")]
+        public static ConnectionScreen ConnectScreen => Instance.GetConnectionScreen();
 
-                return Instance._connectModal;
-            }
-        }
+        [Header("Auto-Initialization")]
+        [SerializeField] private bool rememberConnection;
+        
+        [Header("GUI Settings")]
+        [SerializeField] private GuiScreenFactory connectScreenFactory;
+
+        private CWeb3 _web3;
+        private ConnectionHandler _connectionHandler;
+        private ConnectionScreen _connectionScreen;
 
         /// <summary>
         /// Is a wallet connected.
@@ -95,32 +101,28 @@ namespace ChainSafe.Gaming.UnityPackage
             }
         }
 
-        [DefaultAssetValue("Packages/io.chainsafe.web3-unity/Runtime/Prefabs/Connect.prefab")]
-        [SerializeField]
-        private ConnectModal connectModalPrefab;
-
-        private CWeb3 _web3;
-
-        private ConnectionHandler _connectionHandler;
-
-        private ConnectModal _connectModal;
 
         private void Awake()
         {
             DontDestroyOnLoad(gameObject);
         }
 
+        public Task Initialize()
+        {
+            return Initialize(rememberConnection);
+        }
+        
         /// <summary>
         /// Initialize Web3Unity.
         /// </summary>
-        /// <param name="rememberConnection">Connect to any saved <see cref="ConnectionProvider"/> if they exist.</param>
-        public async Task Initialize(bool rememberConnection = true)
+        /// <param name="rememberMe">Connect to any saved <see cref="ConnectionProvider"/> if they exist.</param>
+        public async Task Initialize(bool rememberMe)
         {
             _connectionHandler = GetComponent<ConnectionHandler>();
 
-            await _connectionHandler.Initialize(rememberConnection);
+            await _connectionHandler.Initialize(rememberMe);
 
-            if (rememberConnection)
+            if (rememberMe)
             {
                 try
                 {
@@ -140,9 +142,29 @@ namespace ChainSafe.Gaming.UnityPackage
             await LaunchLightWeightWeb3();
         }
 
-        private Task LaunchLightWeightWeb3()
+        /// <summary>
+        /// Terminate Web3 instance.
+        /// </summary>
+        /// <param name="logout">Is Logout.</param>
+        private async Task Terminate(bool logout)
         {
-            return ((IConnectionHandler)_connectionHandler).LaunchLightWeightWeb3();
+            if (Web3 != null)
+            {
+                await Web3.TerminateAsync(logout);
+
+                _web3 = null;
+            }
+        }
+
+        private async void OnDestroy()
+        {
+            // Terminate Web3 instance
+            await Terminate(false);
+        }
+
+        public void OpenConnectionScreen()
+        {
+            GetConnectionScreen().Open();
         }
 
         /// <summary>
@@ -262,7 +284,7 @@ namespace ChainSafe.Gaming.UnityPackage
         public string SignMessageWithPrivateKey(string privateKey, string message)
         {
             var signer = new EthereumMessageSigner();
-            var signature = signer.HashAndSign(message, privateKey);
+            var signature = signer.Sign(Encoding.UTF8.GetBytes(message), privateKey);
             return signature;
         }
 
@@ -273,11 +295,11 @@ namespace ChainSafe.Gaming.UnityPackage
             
             _web3 = web3;
 
-            if (_connectModal != null)
+            if (_connectionScreen != null)
             {
-                _connectModal.Close();
+                _connectionScreen.Close();
             }
-            
+
             Web3Initialized?.Invoke((_web3, _web3.ServiceProvider.GetService(typeof(ISigner)) == null));
         }
 
@@ -340,24 +362,21 @@ namespace ChainSafe.Gaming.UnityPackage
             return new Sha3Keccack().CalculateHash(message);
         }
 
-        /// <summary>
-        /// Terminate Web3 instance.
-        /// </summary>
-        /// <param name="logout">Is Logout.</param>
-        private async Task Terminate(bool logout)
+        private Task LaunchLightWeightWeb3()
         {
-            if (Web3 != null)
-            {
-                await Web3.TerminateAsync(logout);
-
-                _web3 = null;
-            }
+            return ((IConnectionHandler)_connectionHandler).LaunchLightWeightWeb3();
         }
 
-        private async void OnDestroy()
+        private ConnectionScreen GetConnectionScreen()
         {
-            // Terminate Web3 instance
-            await Terminate(false);
+            if (!_connectionScreen)
+            {
+                _connectionScreen = connectScreenFactory.GetSingle<ConnectionScreen>();
+
+                _connectionScreen.Initialize(_connectionHandler.Providers);
+            }
+
+            return _connectionScreen;
         }
     }
 }

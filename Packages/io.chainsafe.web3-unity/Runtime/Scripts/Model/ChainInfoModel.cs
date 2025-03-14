@@ -1,10 +1,17 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace ChainSafe.Gaming.UnityPackage.Model
 {
     public struct NativeCurrency
     {
-        public string symbol { get; set; }
+        [JsonProperty(PropertyName = "symbol")]        
+        public string Symbol { get; set; }
+        
+        [JsonProperty(PropertyName = "decimals")]  
+        public int Decimals { get; set; }
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
     }
 
     public struct Explorer

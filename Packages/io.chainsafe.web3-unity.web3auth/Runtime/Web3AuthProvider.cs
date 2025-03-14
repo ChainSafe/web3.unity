@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm;
 using ChainSafe.Gaming.InProcessSigner;
 using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Core.Operations;
 using ChainSafe.Gaming.Web3.Environment;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
 using ChainSafe.GamingSdk.Web3Auth;
@@ -14,14 +15,21 @@ using UnityEngine;
 /// </summary>
 public class Web3AuthProvider : WalletProvider, IAccountProvider
 {
-    private readonly Web3AuthWalletConfig _config;
+    private readonly IWeb3AuthConfig _config;
+    private readonly IOperationTracker operationTracker;
 
     private Web3Auth _coreInstance;
     private TaskCompletionSource<Web3AuthResponse> _connectTcs;
     private TaskCompletionSource<object> _disconnectTcs;
 
-    public Web3AuthProvider(Web3AuthWalletConfig config, Web3Environment environment, IChainConfig chainConfig) : base(environment, chainConfig)
+    public Web3AuthProvider(
+        IWeb3AuthConfig config,
+        Web3Environment environment,
+        IChainConfig chainConfig,
+        IOperationTracker operationTracker)
+        : base(environment, chainConfig, operationTracker)
     {
+        this.operationTracker = operationTracker;
         _config = config;
     }
 
@@ -62,7 +70,7 @@ public class Web3AuthProvider : WalletProvider, IAccountProvider
         if (!_config.AutoLogin && providerTask != null
             //On webGL providerTask is always completed, so we don't have to go through another login flow.
 #if UNITY_WEBGL && !UNITY_EDITOR
-                               && !providerTask.IsCompleted
+            && !providerTask.IsCompleted
 #endif
             )
         {
@@ -76,13 +84,13 @@ public class Web3AuthProvider : WalletProvider, IAccountProvider
 
         await using (_config.CancellationToken.Register(Cancel))
         {
-            var response = await _connectTcs.Task;
-
-            Account = new Account(response.privKey);
-
-            Account.TransactionManager.Client = this;
-
-            return Account.Address;
+            using (operationTracker.TrackOperation("Connecting with Web3Auth...")) // TODO make this cancelable
+            {
+                var response = await _connectTcs.Task;
+                Account = new Account(response.privKey);
+                Account.TransactionManager.Client = this;
+                return Account.Address;
+            }
         }
     }
 

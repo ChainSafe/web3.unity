@@ -9,7 +9,7 @@ public class WebGLResourceEmbedding : IPreprocessBuildWithReport
     public int callbackOrder => 1;
     public void OnPreprocessBuild(BuildReport report)
     {
-        PlayerSettings.SetPropertyBool("useEmbeddedResources", true, BuildTargetGroup.WebGL);
+        PlayerSettings.WebGL.useEmbeddedResources = true;
     }
 }
 #endif

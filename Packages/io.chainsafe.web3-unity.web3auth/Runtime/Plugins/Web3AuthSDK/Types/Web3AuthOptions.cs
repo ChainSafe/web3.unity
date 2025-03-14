@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 public class Web3AuthOptions
 {
-    public string clientId { get; set; }
+    public string? clientId { get; set; }
     public Web3Auth.Network network { get; set; }
 
     public Web3Auth.BuildEnv buildEnv { get; set; } = Web3Auth.BuildEnv.PRODUCTION;
-    public Uri redirectUrl { get; set; }
+    public Uri? redirectUrl { get; set; }
     public string sdkUrl
     {
         get

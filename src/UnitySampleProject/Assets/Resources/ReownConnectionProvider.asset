@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 582efc0fde77aab43a77ee4237ba305a, type: 3}
+  m_Name: ReownConnectionProvider
+  m_EditorClassIdentifier: 
+  connectionScreenPrefabs:
+    LandscapePrefab: {fileID: 942853868903982638, guid: 344d6e9400e973843b2b68a8f4786e0b, type: 3}
+    PortraitPrefab: {fileID: 593021089488692521, guid: f844207643fe35744b72bf387a704960, type: 3}
+  includeWalletIds: []
+  excludeWalletIds: []
+  <ProjectId>k__BackingField: f4bff60eb260841f46b1c77588cd8acb
+  <ProjectName>k__BackingField: Web3.unity
+  <AutoRenewSession>k__BackingField: 1
+  <BaseContext>k__BackingField: unity-game
+  <Metadata>k__BackingField:
+    Description: Web3.Unity SDK is an open source SDK that connects unity games to
+      the blockchain
+    Icons: []
+    Name: Web3.Unity SDK
+    Redirect:
+      Native: 
+      Universal: 
+    Url: https://chainsafe.io
+    VerifyUrl: 
+  <OverrideRegistryUri>k__BackingField: 
+  <LogLevel>k__BackingField: 1
+  <WalletLocationOption>k__BackingField: 0
+  <ChainIdAndViemNameArray>k__BackingField:
+  - <ChainId>k__BackingField: 1993
+    <ViewName>k__BackingField: b3Sepolia
+  - <ChainId>k__BackingField: 11155420
+    <ViewName>k__BackingField: optimismSepolia
+  - <ChainId>k__BackingField: 11155111
+    <ViewName>k__BackingField: sepolia
+  <ButtonIcon>k__BackingField: {fileID: 21300000, guid: 9af22e71d3035844ca8ae6e9f2a538f5, type: 3}
+  <ButtonText>k__BackingField: Reown

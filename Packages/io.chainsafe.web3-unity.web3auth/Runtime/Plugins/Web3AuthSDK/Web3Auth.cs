@@ -123,8 +123,7 @@ public class Web3Auth : MonoBehaviour
         if (this.web3AuthOptions.clientId != null)
             this.initParams["clientId"] = this.web3AuthOptions.clientId;
 
-        if (this.web3AuthOptions.buildEnv != null)
-            this.initParams["buildEnv"] = this.web3AuthOptions.buildEnv.ToString().ToLower();
+        this.initParams["buildEnv"] = this.web3AuthOptions.buildEnv.ToString().ToLower();
 
         this.initParams["network"] = this.web3AuthOptions.network.ToString().ToLower();
 

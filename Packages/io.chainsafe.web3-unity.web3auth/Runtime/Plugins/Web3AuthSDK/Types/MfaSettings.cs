@@ -1,3 +1,5 @@
+#nullable enable
+
 public class MfaSettings
 {
     public MfaSetting? deviceShareFactor { get; set; }
