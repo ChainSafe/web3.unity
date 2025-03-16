@@ -18,7 +18,8 @@ If you're unfamiliar with Forking, here is a quick guide on how to fork our repo
 ## Setting Up the Development Environment
 
 ### macOS
-**Note: If you're building the project for iOS, you must install Xcode.**
+
+**Note: If you're building the project for iOS, you have to install Xcode.**
 
 1. **Install Unity**: Install Unity Hub by downloading it from Unity's official website.
 
@@ -28,7 +29,7 @@ If you're unfamiliar with Forking, here is a quick guide on how to fork our repo
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     ```
 
-3. **Install .NET SDK**: Install .NET using Homebrew:
+3. **Install .NET SDK**: Install .NET through Homebrew:
 
     ```
     brew install --cask dotnet-sdk
@@ -37,7 +38,7 @@ If you're unfamiliar with Forking, here is a quick guide on how to fork our repo
 
 ### Linux
 
-1. **Install Unity**: Follow the instructions for your Linux distribution on Unity's website.
+1. **Install Unity**: Follow the instructions for your Linux distribution on the Unity website.
 
 2. **Install .NET SDK**: If you're using a Debian-based Linux distro (i.e., Debian, Ubuntu, Linux Mint, etc.), use the following Terminal command to install the .NET SDK:
 
@@ -61,7 +62,9 @@ UnitySampleProject also contains a lot of different packages that are dependent 
 Because we have two projects, developers can often be confused about in which project they should start writing the code. 
 General rule of thumb:
 1. If your code will directly use some of the Unity features, it should probably live inside the UnitySampleProject. 
+
 Note: If you want to add a new module (like web3auth, ramp, or lootboxes), create a new package in the root of the repository's Packages folder.
+
 2. If your code doesn't care much about Unity but is doing a lot of communication with the blockchain itself, you should definitely create a new csproj inside our Chainsafe.Gaming solution. 
 
 If you're unsure how you would actually extend Chainsafe's SDK, take a look at this lengthy [video](https://youtu.be/D6_786zPva8). It shows in depth how you can add your own code and injectors to the Chainsafe.Gaming project.

@@ -48,6 +48,7 @@ but don't let that stop you from creating your own project for a new module.
 # Dependency injection
 
 Later when user requests `web3.Provider`, DI framework handles this requests and creates an 
+
 instance of `JsonRpcProvider` with all its dependencies injected using its constructor.
 
 ```csharp
@@ -67,6 +68,7 @@ as dependencies.
 # Component configuration
 
 `JsonRpcProviderConfiguration` is a simple data object used to configure `JsonRpcProvider`. it looks like this:
+
 ```csharp
 [Serializable]
 public class JsonRpcProviderConfiguration
@@ -109,6 +111,7 @@ public Web3Builder()
     _serviceCollection.AddSingleton<ChainProvider>();
 }
 ```
+
 If you ever need to bind a service, that's not swappable and can be used by many other components 
 as some sort of helper, bind it here. No interface required this time.
 
@@ -166,13 +169,15 @@ But for now there are 3 classes:
 * `ProviderMigration`
 * `SignerMigration`
 
-Most of code is compatible by default, but for Provider and Signer we have to use 
+
+Most of code is compatible by default, but for Provider and Singer we have to use 
 this for object instantiation:
 ```csharp
 var provider = ProviderMigration.NewJsonRpcProvider("http://127.0.0.1:7545");
 var signer = SignerMigration.NewJsonRpcSigner(provider);
 ```
-_Migration may not be the best word for describing this process. Ping me (@oleksandrchainsafe) if you have better ideas._
+
+_Migration might not be the best word for describing this process. Ping me (@oleksandrchainsafe) if you have better ideas._
 
 # Useful links
 

@@ -2,7 +2,8 @@
 
 
 [<img alt="Discord" src="https://img.shields.io/discord/593655374469660673.svg?style=for-the-badge&label=Discord&logo=discord" height="20">](https://discord.gg/Q6A3YA2)
-[<img alt="Twitter" src="https://img.shields.io/x/follow/espadrine.svg?style=for-the-badge&label=x&color=1DA1F2" height="20">](https://x.com/chainsafeth)
+
+[<img alt="Twitter" src="https://img.shields.io/twitter/follow/chainsafeth" height="20">](https://x.com/chainsafeth)
 
 ## Documentation
 You can access the full docs at [docs.gaming.chainsafe.io](https://docs.gaming.chainsafe.io).
