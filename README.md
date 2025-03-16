@@ -2,6 +2,7 @@
 
 
 [<img alt="Discord" src="https://img.shields.io/discord/593655374469660673.svg?style=for-the-badge&label=Discord&logo=discord" height="20">](https://discord.gg/Q6A3YA2)
+
 [<img alt="Twitter" src="https://img.shields.io/twitter/follow/chainsafeth" height="20">](https://x.com/chainsafeth)
 
 ## Documentation
