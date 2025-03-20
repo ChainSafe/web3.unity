@@ -38,7 +38,7 @@ public class MainThreadUtil : MonoBehaviour
     }
 }
 
-public class WaitForUpdate : CustomYieldInstruction
+public class WaitForUpdates : CustomYieldInstruction
 {
     public override bool keepWaiting
     {
@@ -697,7 +697,7 @@ namespace NativeWebSocket
             }
             finally
             {
-                await new WaitForUpdate();
+                await new WaitForUpdates();
                 OnClose?.Invoke(closeCode);
             }
         }
@@ -706,7 +706,14 @@ namespace NativeWebSocket
         {
             if (State == WebSocketState.Open)
             {
-                await m_Socket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, m_CancellationToken);
+                try
+                {
+                    await m_Socket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, m_CancellationToken);
+                }
+                catch (Exception e)
+                {
+                    UnityEngine.Debug.LogError(">> WebSocket exception: " + e.Message);
+                }
             }
         }
     }

@@ -21,7 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainSafe.Gaming.Unity.ThirdParty", "src\ChainSafe.Gaming.Unity.ThirdParty\ChainSafe.Gaming.Unity.ThirdParty.csproj", "{9EC71CB4-9401-4E02-AC63-FC13B3D1AA53}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainSafe.Gaming.WalletConnect", "src\ChainSafe.Gaming.WalletConnect\ChainSafe.Gaming.WalletConnect.csproj", "{99E7A645-CAC5-441B-848D-1253405D6400}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainSafe.Gaming.Reown", "src\ChainSafe.Gaming.Reown\ChainSafe.Gaming.Reown.csproj", "{99E7A645-CAC5-441B-848D-1253405D6400}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.InProcessSigner", "src\ChainSafe.Gaming.InProcessSigner\ChainSafe.Gaming.InProcessSigner.csproj", "{3C01FD36-4D44-4886-A971-4786D99CBFCC}"
 EndProject
@@ -46,6 +46,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.Unity.EthereumWindow", "src\ChainSafe.Gaming.Unity.EthereumWindow\ChainSafe.Gaming.Unity.EthereumWindow.csproj", "{F743DE56-1650-4111-8613-96E8EC7CFD2D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.Mud", "src\ChainSafe.Gaming.Mud\ChainSafe.Gaming.Mud.csproj", "{084E4FCB-9376-4B29-AA8C-6871E13906E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainSafe.Gaming.EmbeddedWallet", "src\ChainSafe.Gaming.EmbeddedWallet\ChainSafe.Gaming.EmbeddedWallet.csproj", "{CFFFCC7F-946E-4371-A235-18250B6A5E09}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -161,6 +163,12 @@ Global
 		{084E4FCB-9376-4B29-AA8C-6871E13906E6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{084E4FCB-9376-4B29-AA8C-6871E13906E6}.Test|Any CPU.ActiveCfg = Debug|Any CPU
 		{084E4FCB-9376-4B29-AA8C-6871E13906E6}.Test|Any CPU.Build.0 = Debug|Any CPU
+		{CFFFCC7F-946E-4371-A235-18250B6A5E09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFFFCC7F-946E-4371-A235-18250B6A5E09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFFFCC7F-946E-4371-A235-18250B6A5E09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFFFCC7F-946E-4371-A235-18250B6A5E09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFFFCC7F-946E-4371-A235-18250B6A5E09}.Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFFFCC7F-946E-4371-A235-18250B6A5E09}.Test|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

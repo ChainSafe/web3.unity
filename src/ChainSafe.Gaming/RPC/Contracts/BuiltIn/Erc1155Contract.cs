@@ -7,6 +7,7 @@ using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Ipfs;
 using ChainSafe.Gaming.Web3;
+using ChainSafe.Gaming.Web3.Core;
 
 namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
 {
@@ -23,6 +24,19 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
             this.signer = signer;
         }
 
+        internal ISigner Signer
+        {
+            get
+            {
+                if (signer != null)
+                {
+                    return signer;
+                }
+
+                throw new ServiceNotBoundWeb3Exception<ISigner>($"{nameof(ISigner)} service not bound to Web3 instance, connect to an account first.");
+            }
+        }
+
         /// <summary>
         /// Retrieves the balance of a specific token for the current signer.
         /// </summary>
@@ -30,8 +44,7 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// <returns>The balance of the specified token as a <see cref="BigInteger"/>.</returns>
         public Task<BigInteger> GetBalanceOf(string tokenId)
         {
-            EnsureSigner();
-            return GetBalanceOf(tokenId, signer.PublicAddress);
+            return GetBalanceOf(tokenId, Signer.PublicAddress);
         }
 
         /// <summary>
@@ -89,11 +102,10 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// <returns>A Task that represents the asynchronous operation. The task result is an array of objects representing the minting result.</returns>
         public Task<object[]> Mint(BigInteger tokenId, BigInteger amount, byte[] data = null)
         {
-            EnsureSigner();
             data ??= Array.Empty<byte>();
             var parameters = new object[]
             {
-                signer.PublicAddress, // destination
+                Signer.PublicAddress, // destination
                 tokenId,
                 amount,
                 data,
@@ -110,11 +122,10 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// <returns>Receipt of the Mint Transaction.</returns>
         public async Task<TransactionReceipt> MintWithReceipt(BigInteger tokenId, BigInteger amount, byte[] data = null)
         {
-            EnsureSigner();
             data ??= Array.Empty<byte>();
             var parameters = new object[]
             {
-                signer.PublicAddress, // destination
+                Signer.PublicAddress, // destination
                 tokenId,
                 amount,
                 data,
@@ -134,11 +145,10 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// <returns>A task that represents the asynchronous transfer operation. The task result contains an array of objects.</returns>
         public Task<object[]> Transfer(BigInteger tokenId, BigInteger amount, string destinationAddress)
         {
-            EnsureSigner();
             var data = Array.Empty<byte>();
             var parameters = new object[]
             {
-                signer.PublicAddress, // source
+                Signer.PublicAddress, // source
                 destinationAddress,
                 tokenId,
                 amount,
@@ -156,11 +166,10 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
         /// <returns>Receipt of the transfer.</returns>
         public async Task<TransactionReceipt> TransferWithReceipt(BigInteger tokenId, BigInteger amount, string destinationAddress)
         {
-            EnsureSigner();
             var data = Array.Empty<byte>();
             var parameters = new object[]
             {
-                signer.PublicAddress, // source
+                Signer.PublicAddress, // source
                 destinationAddress,
                 tokenId,
                 amount,
@@ -170,16 +179,6 @@ namespace ChainSafe.Gaming.Evm.Contracts.BuiltIn
             var response = await SendWithReceipt(EthMethods.SafeTransferFrom, parameters);
 
             return response.receipt;
-        }
-
-        private void EnsureSigner()
-        {
-            if (signer is not null)
-            {
-                return;
-            }
-
-            throw new Web3Exception("Can't get player address. No Signer was provided during construction.");
         }
     }
 }

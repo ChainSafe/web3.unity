@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using ChainSafe.Gaming.GUI;
 using ChainSafe.Gaming.UnityPackage.UI;
 using ChainSafe.Gaming.Web3;
 using UnityEngine;
@@ -20,10 +21,6 @@ public class Web3AuthModal : MonoBehaviour
     }
 
     [SerializeField] private ProviderButtonPair[] providers;
-    [SerializeField] private Button closeButton;
-    // Closes modal when background is clicked
-    [SerializeField] private Button closeFromBackgroundButton;
-    [SerializeField] private LoadingOverlay loadingOverlay;
 
     private TaskCompletionSource<Provider> _getProviderTask;
 
@@ -33,8 +30,6 @@ public class Web3AuthModal : MonoBehaviour
 
     private void OnEnable()
     {
-        HideLoading();
-
         _getProviderTask = new TaskCompletionSource<Provider>();
 
         _cancellationTokenSource = new CancellationTokenSource();
@@ -42,9 +37,6 @@ public class Web3AuthModal : MonoBehaviour
 
     private void Start()
     {
-        closeButton.onClick.AddListener(Close);
-        closeFromBackgroundButton.onClick.AddListener(Close);
-
         foreach (var pair in providers)
         {
             pair.Button.onClick.AddListener(() =>
@@ -55,8 +47,6 @@ public class Web3AuthModal : MonoBehaviour
                 }
 
                 _getProviderTask.SetResult(pair.Provider);
-
-                ShowLoading();
             });
         }
     }
@@ -64,16 +54,6 @@ public class Web3AuthModal : MonoBehaviour
     public Task<Provider> SelectProvider()
     {
         return _getProviderTask.Task;
-    }
-
-    private void ShowLoading()
-    {
-        loadingOverlay.gameObject.SetActive(true);
-    }
-
-    private void HideLoading()
-    {
-        loadingOverlay.gameObject.SetActive(false);
     }
 
     public void Close()

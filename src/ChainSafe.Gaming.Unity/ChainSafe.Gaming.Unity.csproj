@@ -20,13 +20,14 @@
     <ProjectReference Include="..\ChainSafe.Gaming\ChainSafe.Gaming.csproj" />
     <ProjectReference Include="..\ChainSafe.Gaming.InProcessSigner\ChainSafe.Gaming.InProcessSigner.csproj" />
     <ProjectReference Include="..\ChainSafe.Gaming.InProcessTransactionExecutor\ChainSafe.Gaming.InProcessTransactionExecutor.csproj" />
-    <ProjectReference Include="..\ChainSafe.Gaming.WalletConnect\ChainSafe.Gaming.WalletConnect.csproj" />
+    <ProjectReference Include="..\ChainSafe.Gaming.Reown\ChainSafe.Gaming.Reown.csproj" />
     <ProjectReference Include="..\ChainSafe.Gaming.Unity.MetaMask\ChainSafe.Gaming.Unity.MetaMask.csproj" />
     <ProjectReference Include="..\ChainSafe.Gaming.Unity.EthereumWindow\ChainSafe.Gaming.Unity.EthereumWindow.csproj" />
     <ProjectReference Include="..\ChainSafe.Gaming.Unity.ThirdParty\ChainSafe.Gaming.Unity.ThirdParty.csproj" />
     <ProjectReference Include="..\ChainSafe.Gaming.Gelato\ChainSafe.Gaming.Gelato.csproj" />
     <ProjectReference Include="..\ChainSafe.Gaming.SygmaClient\ChainSafe.Gaming.SygmaClient.csproj" />
     <ProjectReference Include="..\ChainSafe.Gaming.HyperPlay\ChainSafe.Gaming.HyperPlay.csproj" />
+    <ProjectReference Include="..\ChainSafe.Gaming.EmbeddedWallet\ChainSafe.Gaming.EmbeddedWallet.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,7 +37,7 @@
 
   <ItemGroup>
     <!-- Resolve dependency conflict by referencing this version directly -->
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
   </ItemGroup>
   
   <ItemGroup>

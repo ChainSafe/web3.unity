@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ChainSafe.Gaming;
+using ChainSafe.Gaming.Web3;
+using Newtonsoft.Json;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using NativeCurrency = ChainSafe.Gaming.Web3.NativeCurrency;
 
 namespace ChainSafe.GamingSdk.Editor
 {
@@ -21,6 +25,7 @@ namespace ChainSafe.GamingSdk.Editor
             private ISearchWindowProvider searchWindowProviderImplementation;
             private bool changedRpcOrWs;
             private int selectedWebHookIndex;
+
 
             public ChainSettingsPanel(Web3SettingsEditor window, ChainConfigEntry chainConfigEntry)
             {
@@ -40,6 +45,16 @@ namespace ChainSafe.GamingSdk.Editor
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.Label(title, EditorStyles.boldLabel);
                 GUILayout.FlexibleSpace();
+                if (window.IsPrimaryChain(chainConfig))
+                {
+                    GUI.enabled = false;
+                    GUILayout.Button("Primary Chain");
+                    GUI.enabled = true;
+                }
+                else if (GUILayout.Button("Set as Primary"))
+                {
+                    window.SetPrimaryChain(chainConfig);
+                }
                 if (GUILayout.Button("Remove"))
                 {
                     OnRemoveClick();
@@ -75,7 +90,13 @@ namespace ChainSafe.GamingSdk.Editor
 
                 chainConfig.Network = EditorGUILayout.TextField("Network", chainConfig.Network);
                 chainConfig.ChainId = EditorGUILayout.TextField("Chain ID", chainConfig.ChainId);
-                chainConfig.Symbol = EditorGUILayout.TextField("Symbol", chainConfig.Symbol);
+                EditorGUILayout.LabelField("Native Currency", EditorStyles.boldLabel);
+                EditorGUI.indentLevel++;
+                // Draw fields for NativeCurrency
+                chainConfig.NativeCurrency.Name = EditorGUILayout.TextField("Name", chainConfig.NativeCurrency.Name);
+                chainConfig.NativeCurrency.Symbol = EditorGUILayout.TextField("Symbol", chainConfig.NativeCurrency.Symbol);
+                chainConfig.NativeCurrency.Decimals = EditorGUILayout.IntField("Decimals", chainConfig.NativeCurrency.Decimals);
+                EditorGUI.indentLevel--;
                 chainConfig.BlockExplorerUrl = EditorGUILayout.TextField("Block Explorer", chainConfig.BlockExplorerUrl);
 
                 GUI.enabled = true;
@@ -123,8 +144,9 @@ namespace ChainSafe.GamingSdk.Editor
                     selectedWebHookIndex =
                         Mathf.Clamp(selectedWebHookIndex, 0, window.chainList[selectedChainIndex].rpc.Count - 1);
                     var webhookIndex = window.chainList[selectedChainIndex].rpc.IndexOf(chainConfig.Ws);
-                    var selectedWebHook =
-                        webhookIndex == -1 ? window.chainList[selectedChainIndex].rpc[selectedWebHookIndex] : chainConfig.Ws;
+                    var selectedWebHook = (webhookIndex == -1 || string.IsNullOrEmpty(chainConfig.Ws)) 
+                        ? window.chainList[selectedChainIndex].rpc[selectedWebHookIndex] 
+                        : chainConfig.Ws;
                     if (GUILayout.Button(selectedWebHook, EditorStyles.popup))
                     {
                         searchProvider = CreateInstance<StringListSearchProvider>();
@@ -148,11 +170,10 @@ namespace ChainSafe.GamingSdk.Editor
                 }
 
                 chainConfig.Ws = EditorGUILayout.TextField("Custom WebHook", chainConfig.Ws);
-
+                
                 EditorGUI.indentLevel--;
                 if (EditorGUI.EndChangeCheck() || changedRpcOrWs)
                 {
-                    Debug.Log("Change detected.");
                     changedRpcOrWs = false;
                     EditorUtility.SetDirty(configAsset);
                 }
@@ -186,7 +207,12 @@ namespace ChainSafe.GamingSdk.Editor
                     {
                         chainConfig.Network = chainPrototype.chain;
                         chainConfig.ChainId = chainPrototype.chainId.ToString();
-                        chainConfig.Symbol = chainPrototype.nativeCurrency.symbol;
+                        chainConfig.NativeCurrency = new NativeCurrency()
+                        {
+                            Name = chainPrototype.nativeCurrency.Name,
+                            Symbol = chainPrototype.nativeCurrency.Symbol,
+                            Decimals = chainPrototype.nativeCurrency.Decimals
+                        };
                         if (chainPrototype.explorers != null)
                         {
                             chainConfig.BlockExplorerUrl = chainPrototype.explorers[0].url;

@@ -14,7 +14,7 @@ public static class Utilities
         Console.WriteLine($"Running Command : {command}");
         
         // Tried switch statement couldn't find a way to make it work
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
             command.RunWithBash();
         }
@@ -56,7 +56,7 @@ public static class Utilities
     /// <exception cref="Exception">If command fails.</exception>
     private static void RunWithBash( this string command)
     {
-        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             Console.WriteLine($"Skipping bash command \"{command}\" on non-linux platform.");
             
