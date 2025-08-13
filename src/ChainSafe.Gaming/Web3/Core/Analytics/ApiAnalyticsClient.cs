@@ -12,16 +12,13 @@ namespace ChainSafe.Gaming.Web3.Analytics
         private readonly IHttpClient httpClient;
         private readonly IChainManager chainManager;
 
-        public ApiAnalyticsClient(IProjectConfig projectConfig, IChainManager chainManager, IHttpClient httpClient)
+        public ApiAnalyticsClient(IChainManager chainManager, IHttpClient httpClient)
         {
             this.httpClient = httpClient;
             this.chainManager = chainManager;
-            ProjectConfig = projectConfig;
         }
 
         public IChainConfig ChainConfig => chainManager.Current;
-
-        public IProjectConfig ProjectConfig { get; }
 
         public string AnalyticsVersion => "2.5.5";
 

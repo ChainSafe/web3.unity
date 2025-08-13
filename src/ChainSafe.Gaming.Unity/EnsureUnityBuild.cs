@@ -9,7 +9,7 @@
             "CodeQuality",
             "IDE0051:Remove unused private members",
             Justification = "Included as a check, not meant to be used")]
-        private Gaming.Evm.Utils.IsUnityBuild isUnityBuild;
+        private ChainSafe.Gaming.Evm.Utils.IsUnityBuild isUnityBuild;
 #pragma warning restore CS0169
     }
 }

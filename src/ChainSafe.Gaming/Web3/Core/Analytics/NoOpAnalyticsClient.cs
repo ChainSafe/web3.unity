@@ -6,17 +6,14 @@ namespace ChainSafe.Gaming.Web3.Analytics
     {
         private readonly IChainManager chainManager;
 
-        public NoOpAnalyticsClient(IChainManager chainManager, IProjectConfig projectConfig)
+        public NoOpAnalyticsClient(IChainManager chainManager)
         {
             this.chainManager = chainManager;
-            ProjectConfig = projectConfig;
         }
 
         public string AnalyticsVersion => null;
 
         public IChainConfig ChainConfig => chainManager.Current;
-
-        public IProjectConfig ProjectConfig { get; }
 
         public void CaptureEvent(AnalyticsEvent eventData)
         {

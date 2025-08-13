@@ -39,44 +39,24 @@ namespace ChainSafe.Gaming.Web3.Build
         /// <summary>
         /// Initializes a new instance of the <see cref="Web3Builder"/> class.
         /// </summary>
-        /// <param name="projectConfig">Project config to use with the resulting Web3 instance.</param>
         /// <param name="chainConfigSet">Chain config set to use with the resulting Web3 instance.</param>
-        /// <exception cref="ArgumentException">One of the arguments is null.</exception>
-        public Web3Builder(IProjectConfig projectConfig, IChainConfigSet chainConfigSet)
+        public Web3Builder(IChainConfigSet chainConfigSet)
             : this()
         {
-            if (projectConfig == null)
-            {
-                throw new ArgumentNullException(nameof(projectConfig), $"{nameof(IProjectConfig)} is required for Web3 to work.");
-            }
-
             if (chainConfigSet == null)
             {
                 throw new ArgumentNullException(nameof(chainConfigSet), $"{nameof(IChainConfigSet)} is required for Web3 to work.");
             }
 
-            serviceCollection.AddSingleton(projectConfig);
             serviceCollection.AddSingleton(chainConfigSet);
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Web3Builder"/> class.
         /// </summary>
-        /// <param name="projectConfig">Project config to use with the resulting Web3 instance.</param>
         /// <param name="chainConfigs">Chain configs to use with the resulting Web3 instance.</param>
-        /// <exception cref="ArgumentException">One of the arguments is null.</exception>
-        public Web3Builder(IProjectConfig projectConfig, params IChainConfig[] chainConfigs)
-            : this(projectConfig, new ChainConfigSet(chainConfigs))
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Web3Builder"/> class.
-        /// </summary>
-        /// <param name="projectConfig">Complete project config to use with the resulting Web3 instance.</param>
-        /// <exception cref="ArgumentException">"projectConfig" is null.</exception>
-        public Web3Builder(ICompleteProjectConfig projectConfig)
-            : this(projectConfig, projectConfig)
+        public Web3Builder(params IChainConfig[] chainConfigs)
+            : this(new ChainConfigSet(chainConfigs))
         {
         }
 

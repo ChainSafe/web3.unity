@@ -9,8 +9,6 @@ namespace ChainSafe.Gaming.Tests.Core
 
         public IChainConfig ChainConfig => null;
 
-        public IProjectConfig ProjectConfig => null;
-
         public void CaptureEvent(AnalyticsEvent eventData)
         {
             // do nothing

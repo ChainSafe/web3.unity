@@ -32,19 +32,17 @@ namespace ChainSafe.Gaming.SygmaClient
         private readonly IChainConfig sourceChainConfig;
         private readonly IChainConfig destinationChainConfig;
         private readonly IAnalyticsClient analyticsClient;
-        private readonly IProjectConfig projectConfig;
         private readonly Config clientConfiguration;
         private readonly IHttpClient httpClient;
         private readonly ILogWriter logWriter;
 
-        public SygmaClient(ILogWriter logWriter, IHttpClient httpClient, IChainConfig sourceChainConfig, IChainConfig destinationChainConfig, ISigner signer, IContractBuilder contractBuilder, IAnalyticsClient analyticsClient, IProjectConfig projectConfig)
+        public SygmaClient(ILogWriter logWriter, IHttpClient httpClient, IChainConfig sourceChainConfig, IChainConfig destinationChainConfig, ISigner signer, IContractBuilder contractBuilder, IAnalyticsClient analyticsClient)
         {
             this.contractBuilder = contractBuilder;
             this.signer = signer;
             this.sourceChainConfig = sourceChainConfig;
             this.destinationChainConfig = destinationChainConfig;
             this.analyticsClient = analyticsClient;
-            this.projectConfig = projectConfig;
             clientConfiguration = new Config(httpClient, uint.Parse(sourceChainConfig.ChainId));
             this.httpClient = httpClient;
             this.logWriter = logWriter;

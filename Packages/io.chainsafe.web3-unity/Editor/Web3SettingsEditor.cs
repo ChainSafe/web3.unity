@@ -19,28 +19,22 @@ namespace ChainSafe.GamingSdk.Editor
         // Default values
         private const string EnableAnalyticsScriptingDefineSymbol = "ENABLE_ANALYTICS";
 
+        
         // Initializes window
         [MenuItem("ChainSafe SDK/Project Settings", false, -200)]
-        public static void ShowWindow() => ShowWindow(null);
-
-        public static void ShowWindow(Tabs? tabOverride = null)
+        public static void ShowWindow()
         {
-            // Show existing window instance. If it doesn't exist, make one.
             var window = (Web3SettingsEditor)GetWindow(typeof(Web3SettingsEditor));
             window.titleContent = new GUIContent("Web3 Settings");
             window.minSize = new Vector2(450, 300);
-
-            if (tabOverride.HasValue)
-            {
-                window.ActiveTab = tabOverride.Value;
-            }
+            
         }
+        
 
         private static GUIStyle centeredLabelStyle;
         private static GUIStyle wrappedGreyMiniLabel;
 
         // Chain values
-        public string previousProjectId;
 
         private Web3ConfigAsset web3Config;
         private List<ChainSettingsPanel> chainSettingPanels;
@@ -49,17 +43,11 @@ namespace ChainSafe.GamingSdk.Editor
 
         private Texture2D logo;
         private Vector2 chainsScrollPosition;
-
-        private Tabs ActiveTab
-        {
-            get => (Tabs)EditorPrefs.GetInt("Web3SdkSettingsEditor.Tab", (int)Tabs.Project);
-            set => EditorPrefs.SetInt("Web3SdkSettingsEditor.Tab", (int)value);
-        }
+        
 
         private void Awake()
         {
             web3Config = ProjectConfigUtilities.CreateOrLoad();
-            previousProjectId = web3Config.ProjectId;
         }
 
         private void OnEnable()
@@ -126,67 +114,15 @@ namespace ChainSafe.GamingSdk.Editor
             using (new EditorGUILayout.HorizontalScope())
             {
                 GUILayout.FlexibleSpace();
-                ActiveTab = (Tabs)GUILayout.Toolbar((int)ActiveTab, new[] { "Project Settings", "Chain Settings" });
                 GUILayout.FlexibleSpace();
+                DrawChainsTabContent();
             }
 
-            // EditorGUILayout.Separator();
             GUILayout.Space(15);
 
-            // DrawHorizontalLine();
-
-            switch (ActiveTab)
-            {
-                case Tabs.Project:
-                    DrawProjectTabContent();
-                    break;
-                case Tabs.Chains:
-                    DrawChainsTabContent();
-                    break;
-            }
         }
 
-        private void DrawProjectTabContent()
-        {
-            EditorGUI.BeginChangeCheck();
-
-            web3Config.ProjectId = EditorGUILayout.TextField("Project ID", web3Config.ProjectId);
-            if (string.IsNullOrWhiteSpace(web3Config.ProjectId))
-            {
-                EditorGUILayout.HelpBox(
-                    "Please enter your Project ID to start using the ChainSafe Gaming SDK.",
-                    MessageType.Warning);
-                if (GUILayout.Button("Get a Project ID"))
-                {
-                    Application.OpenURL("https://dashboard.gaming.chainsafe.io/");
-                }
-            }
-            EditorGUILayout.Space();
-            web3Config.EnableAnalytics =
-                EditorGUILayout.Toggle(
-                    new GUIContent("Allow Analytics:",
-                        "Consent to collecting data for analytics purposes. This will help improve our product."),
-                    web3Config.EnableAnalytics);
-            GUILayout.Label(
-                "We will collect data for analytics to help improve your experience with our SDK. This data allows us to optimize performance, introduce new features, and ensure seamless integration. You can opt out at any time, but we encourage keeping analytics enabled for the best results!",
-                wrappedGreyMiniLabel);
-
-            if (EditorGUI.EndChangeCheck())
-            {
-                EditorUtility.SetDirty(web3Config);
-
-                if (web3Config.ProjectId != previousProjectId)
-                {
-                    ValidateProjectID(web3Config.ProjectId);
-                    previousProjectId = web3Config.ProjectId;
-                }
-
-                if (web3Config.EnableAnalytics)
-                    ScriptingDefineSymbols.TryAddDefineSymbol(EnableAnalyticsScriptingDefineSymbol);
-                else
-                    ScriptingDefineSymbols.TryRemoveDefineSymbol(EnableAnalyticsScriptingDefineSymbol);
-            }
-        }
+       
 
         private void DrawChainsTabContent()
         {
@@ -335,12 +271,6 @@ namespace ChainSafe.GamingSdk.Editor
         private class ValidateProjectIDResponse
         {
             [JsonProperty("response")] public bool Response { get; set; }
-        }
-
-        public enum Tabs
-        {
-            Project = 0,
-            Chains = 1
         }
 
         private enum FetchingStatus
