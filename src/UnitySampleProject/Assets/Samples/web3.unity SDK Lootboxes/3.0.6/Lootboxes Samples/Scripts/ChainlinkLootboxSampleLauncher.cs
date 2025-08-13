@@ -9,6 +9,7 @@ using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Wallets;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
+using ChainSafe.Gaming.Web3.Core.Chains;
 using ChainSafe.Gaming.Web3.Unity;
 using Microsoft.Extensions.DependencyInjection;
 using UnityEngine;
@@ -26,9 +27,8 @@ namespace LootBoxes.Chainlink
 
         private Web3 web3;
 
-        private class Web3Config : ICompleteProjectConfig
+        private class Web3Config : IChainConfigSet
         {
-            public string ProjectId => string.Empty;
             public bool EnableAnalytics => true;
 
             public IEnumerable<IChainConfig> Configs { get; } = new[]

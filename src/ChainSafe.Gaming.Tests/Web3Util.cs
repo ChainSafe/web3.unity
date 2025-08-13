@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts.Builders;
 using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.Evm.Providers;
@@ -6,8 +7,10 @@ using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.NetCore;
 using ChainSafe.Gaming.RPC.Events;
 using ChainSafe.Gaming.Wallets;
+using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Core;
+using ChainSafe.Gaming.Web3.Core.Chains;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -48,12 +51,10 @@ namespace ChainSafe.Gaming.Tests
         private static ValueTask<Web3.Web3> CreateWeb3(
             JsonRpcWalletConfig jsonRpcWalletConfig, Web3Builder.ConfigureServicesDelegate configureDelegate = null)
         {
-            return new Web3Builder(
-                    new ProjectConfig
-                    {
-                        ProjectId = string.Empty,
-                        EnableAnalytics = true,
-                    },
+            var web3Config = new Web3Config
+            {
+                Configs = new[]
+                {
                     new ChainConfig
                     {
                         Chain = "Anvil",
@@ -61,7 +62,11 @@ namespace ChainSafe.Gaming.Tests
                         Network = "GoChain Testnet",
                         Rpc = "http://127.0.0.1:8545",
                         Ws = "ws://127.0.0.1:8545",
-                    })
+                    },
+                },
+            };
+
+            return new Web3Builder(web3Config)
                 .Configure(services =>
                 {
                     services.UseNetCoreEnvironment();
@@ -95,5 +100,10 @@ namespace ChainSafe.Gaming.Tests
 
             return receiptTask.Result.ContractAddress ?? string.Empty;
         }
+    }
+
+    public class Web3Config : IChainConfigSet
+    {
+        public IEnumerable<IChainConfig> Configs { get; set; }
     }
 }

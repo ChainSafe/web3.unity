@@ -11,8 +11,6 @@ namespace ChainSafe.Gaming.Web3.Analytics
 
         IChainConfig ChainConfig { get; }
 
-        IProjectConfig ProjectConfig { get; }
-
         /// <summary>
         /// Captures an analytics event.
         /// </summary>

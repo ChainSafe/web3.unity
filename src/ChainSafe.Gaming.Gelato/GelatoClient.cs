@@ -19,16 +19,14 @@ namespace ChainSafe.GamingSdk.Gelato
         private readonly IHttpClient httpClient;
         private readonly GelatoConfig config;
         private readonly IAnalyticsClient analyticsClient;
-        private readonly IProjectConfig projectConfig;
         private readonly IChainConfig chainConfig;
 
-        public GelatoClient(IHttpClient httpClient, GelatoConfig config, IAnalyticsClient analyticsClient, IChainConfig chainConfig, IProjectConfig projectConfig)
+        public GelatoClient(IHttpClient httpClient, GelatoConfig config, IAnalyticsClient analyticsClient, IChainConfig chainConfig)
         {
             this.httpClient = httpClient;
             this.config = config;
             this.analyticsClient = analyticsClient;
             this.chainConfig = chainConfig;
-            this.projectConfig = projectConfig;
         }
 
         /// <summary>

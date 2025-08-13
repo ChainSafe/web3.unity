@@ -4,6 +4,7 @@ using ChainSafe.Gaming.Evm.JsonRpc;
 using ChainSafe.Gaming.UnityPackage;
 using ChainSafe.Gaming.Web3;
 using ChainSafe.Gaming.Web3.Build;
+using ChainSafe.Gaming.Web3.Core.Chains;
 using ChainSafe.Gaming.Web3.Unity;
 
 namespace ChainSafe.Gaming.WalletConnect
@@ -19,7 +20,7 @@ namespace ChainSafe.Gaming.WalletConnect
         /// <param name="wcConfig">Your WalletConnect config.</param>
         /// <param name="projectConfig">ChainSafe SDK project configuration (optional).</param>
         /// <returns>A lightweight version of Web3 client with basic WalletConnect functionality.</returns>
-        public static ValueTask<Web3.Web3> BuildLightweightWeb3(IWalletConnectConfig wcConfig, ICompleteProjectConfig projectConfig = null)
+        public static ValueTask<Web3.Web3> BuildLightweightWeb3(IWalletConnectConfig wcConfig, IChainConfigSet projectConfig = null)
         {
             projectConfig ??= ProjectConfigUtilities.Load();
 

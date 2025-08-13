@@ -41,7 +41,6 @@ namespace ChainSafe.Gaming.Web3
 
             rpcProvider = this.serviceProvider.GetService<IRpcProvider>();
             Chains = this.serviceProvider.GetRequiredService<IChainManager>();
-            ProjectConfig = this.serviceProvider.GetRequiredService<IProjectConfig>();
             ChainConfig = this.serviceProvider.GetRequiredService<IChainConfig>();
             localStorage = this.serviceProvider.GetRequiredService<ILocalStorage>();
             lifecycleManager = this.serviceProvider.GetRequiredService<LifecycleManager>();
@@ -56,11 +55,6 @@ namespace ChainSafe.Gaming.Web3
             this.serviceProvider.TryGetService(out logoutManager);
             this.serviceProvider.TryGetService(out events);
         }
-
-        /// <summary>
-        /// Access the project configuration object, providing access to project-specific settings.
-        /// </summary>
-        public IProjectConfig ProjectConfig { get; }
 
         /// <summary>
         /// Access the chain configuration object, providing access to blockchain-specific settings.

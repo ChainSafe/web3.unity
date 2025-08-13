@@ -20,9 +20,8 @@ public class CountlyAnalytics : IAnalyticsClient
 
     public string AnalyticsVersion => "2.6";
     public IChainConfig ChainConfig => _chainManager.Current;
-    public IProjectConfig ProjectConfig { get; }
 
-    public CountlyAnalytics(IChainConfigSet chainConfigSet, IChainManager chainManager, IProjectConfig projectConfig)
+    public CountlyAnalytics(IChainConfigSet chainConfigSet, IChainManager chainManager)
     {
         Countly.Instance.Init(new CountlyConfiguration(AppKey, ServerUrl));
 
@@ -35,13 +34,10 @@ public class CountlyAnalytics : IAnalyticsClient
             { "chainId", chainConfig.ChainId },
             { "rpc", chainConfig.Rpc },
             { "network", chainConfig.Network },
-            { "projectId", projectConfig.ProjectId },
             { "analyticsVersion", AnalyticsVersion }
         };
 
         Countly.Instance.UserDetails.SetCustomUserDetails(userDetails);
-
-        ProjectConfig = projectConfig;
     }
 
 }

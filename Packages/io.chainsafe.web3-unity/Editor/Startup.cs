@@ -43,27 +43,9 @@ namespace ChainSafe.GamingSdk.Editor
                     WebGLTemplateSync.Syncronize();
                 }
 #endif
-
-                // Checks project ID
-                ValidateProjectID();
             };
         }
 
-        static void ValidateProjectID()
-        {
-            try
-            {
-                var projectID = ProjectConfigUtilities.Load()?.ProjectId;
-                if (string.IsNullOrWhiteSpace(projectID))
-                {
-                    Web3SettingsEditor.ShowWindow(Web3SettingsEditor.Tabs.Project);
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.LogError("Failed to validate project ID");
-                Debug.LogException(e);
-            }
-        }
+        
     }
 }

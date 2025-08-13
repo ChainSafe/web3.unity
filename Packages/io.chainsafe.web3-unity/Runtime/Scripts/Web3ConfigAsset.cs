@@ -6,9 +6,8 @@ using UnityEngine;
 namespace ChainSafe.Gaming
 {
     [CreateAssetMenu(menuName = "ChainSafe/Project Configuration", fileName = "Web3Config", order = -100)]
-    public class Web3ConfigAsset : ScriptableObject, ICompleteProjectConfig
+    public class Web3ConfigAsset : ScriptableObject, IChainConfigSet
     {
-        [field: SerializeField] public string ProjectId { get; set; }
         [field: SerializeField] public bool EnableAnalytics { get; set; } = true;
         [field: SerializeField] public List<ChainConfigEntry> ChainConfigs { get; set; } = new();
 

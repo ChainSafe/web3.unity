@@ -27,9 +27,9 @@ namespace ChainSafe.GamingSdk.Gelato
 
         private bool gelatoDisabled;
 
-        public Gelato(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, ISigner signer, IContractBuilder contractBuilder, IAnalyticsClient analyticsClient, IProjectConfig projectConfig)
+        public Gelato(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, ISigner signer, IContractBuilder contractBuilder, IAnalyticsClient analyticsClient)
         {
-            gelatoClient = new GelatoClient(httpClient, config, analyticsClient, chainConfig, projectConfig);
+            gelatoClient = new GelatoClient(httpClient, config, analyticsClient, chainConfig);
             this.signer = signer;
             this.config = config;
             this.chainConfig = chainConfig;
@@ -37,9 +37,9 @@ namespace ChainSafe.GamingSdk.Gelato
             this.analyticsClient = analyticsClient;
         }
 
-        public Gelato(IHttpClient httpClient, IChainConfig chainConfig, IProjectConfig projectConfig, GelatoConfig config, IContractBuilder contractBuilder, IAnalyticsClient analyticsClient)
+        public Gelato(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, IContractBuilder contractBuilder, IAnalyticsClient analyticsClient)
         {
-            gelatoClient = new GelatoClient(httpClient, config, analyticsClient, chainConfig, projectConfig);
+            gelatoClient = new GelatoClient(httpClient, config, analyticsClient, chainConfig);
             this.config = config;
             this.chainConfig = chainConfig;
             this.contractBuilder = contractBuilder;
