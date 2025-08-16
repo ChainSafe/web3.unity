@@ -18,7 +18,7 @@ namespace ChainSafe.Gaming.UnityPackage
                 return Create(
                     "11155111",
                     "Anvil", "Sepolia", "Seth", isWindowsEditor ? "http://127.0.0.1:8545" : "http://172.17.0.1:8545",
-                    "https://sepolia.etherscan.io/", false, isWindowsEditor ? "ws://127.0.0.1:8545" : "ws://172.17.0.1:8545");
+                    "https://sepolia.etherscan.io/", isWindowsEditor ? "ws://127.0.0.1:8545" : "ws://172.17.0.1:8545");
             }
             
             var projectConfig = Resources.Load<Web3ConfigAsset>(AssetName);
@@ -26,11 +26,10 @@ namespace ChainSafe.Gaming.UnityPackage
         }
 
         public static Web3ConfigAsset Create(string chainId, string chain, string network,
-            string symbol, string rpc, string blockExplorerUrl, bool enableAnalytics, string ws = "")
+            string symbol, string rpc, string blockExplorerUrl, string ws = "")
         {
             var projectConfig = ScriptableObject.CreateInstance<Web3ConfigAsset>();
 
-            projectConfig.EnableAnalytics = enableAnalytics;
             projectConfig.ChainConfigs = new List<ChainConfigEntry>
             {
                 new()

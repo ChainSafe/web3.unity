@@ -6,7 +6,6 @@ using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Web3;
-using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using Nethereum.ABI.Model;
@@ -24,7 +23,6 @@ namespace ChainSafe.Gaming.Evm.Contracts
         private readonly ISigner signer;
         private readonly ContractAbiManager contractAbiManager;
         private readonly ITransactionExecutor transactionExecutor;
-        private readonly IAnalyticsClient analyticsClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Contract"/> class.
@@ -34,7 +32,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
         /// <param name="provider">The RPC provider.</param>
         /// <param name="signer">The signer.</param>
         /// <param name="transactionExecutor">Transaction executor.</param>
-        internal Contract(string abi, string address, IRpcProvider provider, ISigner signer = null, ITransactionExecutor transactionExecutor = null, IAnalyticsClient analyticsClient = null)
+        internal Contract(string abi, string address, IRpcProvider provider, ISigner signer = null, ITransactionExecutor transactionExecutor = null)
         {
             if (string.IsNullOrEmpty(abi))
             {
@@ -46,7 +44,6 @@ namespace ChainSafe.Gaming.Evm.Contracts
             this.provider = provider;
             this.signer = signer;
             this.transactionExecutor = transactionExecutor;
-            this.analyticsClient = analyticsClient;
             contractAbiManager = new ContractAbiManager(abi, address);
         }
 
@@ -85,11 +82,6 @@ namespace ChainSafe.Gaming.Evm.Contracts
             var txReq = await PrepareTransactionRequest(method, parameters, true, overwrite);
 
             var result = await provider.Call(txReq);
-            analyticsClient.CaptureEvent(new AnalyticsEvent()
-            {
-                EventName = method,
-                PackageName = "io.chainsafe.web3.unity",
-            });
 
             return Decode(method, result);
         }
@@ -103,11 +95,6 @@ namespace ChainSafe.Gaming.Evm.Contracts
             var txReq = await PrepareTransactionRequest(method, parameters, true, overwrite);
 
             var result = await provider.Call(txReq);
-            analyticsClient.CaptureEvent(new AnalyticsEvent()
-            {
-                EventName = method,
-                PackageName = "io.chainsafe.web3.unity",
-            });
 
             return contractAbiManager.GetFunctionBuilder(method).DecodeTypeOutput<T>(result);
         }
@@ -183,12 +170,6 @@ namespace ChainSafe.Gaming.Evm.Contracts
             var output = function.DecodeOutput(tx.Data);
             var outputValues = output.Select(x => x.Result).ToArray();
 
-            analyticsClient.CaptureEvent(new AnalyticsEvent()
-            {
-                EventName = method,
-                PackageName = "io.chainsafe.web3.unity",
-            });
-
             return (outputValues, receipt);
         }
 
@@ -214,19 +195,12 @@ namespace ChainSafe.Gaming.Evm.Contracts
             var tx = await transactionExecutor.SendTransaction(txReq);
             var receipt = await provider.WaitForTransactionReceipt(tx.Hash);
 
-            analyticsClient.CaptureEvent(new AnalyticsEvent()
-            {
-                EventName = method,
-                PackageName = "io.chainsafe.web3.unity",
-            });
-
             if (tx.Data == null)
             {
                 return (default, receipt);
             }
 
             var outputValues = contractAbiManager.GetFunctionBuilder(method).DecodeTypeOutput<T>(tx.Data);
-
             return (outputValues, receipt);
         }
 
@@ -283,12 +257,6 @@ namespace ChainSafe.Gaming.Evm.Contracts
             var dataObject = GameLogger.Log("", "", dataWebGL);
 #endif
             var function = contractAbiManager.GetFunctionBuilder(method);
-
-            analyticsClient.CaptureEvent(new AnalyticsEvent()
-            {
-                EventName = method,
-                PackageName = "io.chainsafe.web3.unity",
-            });
 
             return function.GetData(parameters);
         }

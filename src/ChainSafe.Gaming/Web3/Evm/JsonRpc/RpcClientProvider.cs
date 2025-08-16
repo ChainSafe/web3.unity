@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Web3;
-using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Environment;
 using Nethereum.JsonRpc.Client;
 using Nethereum.JsonRpc.Client.RpcMessages;
@@ -42,18 +41,6 @@ namespace ChainSafe.Gaming.Evm.Providers
             catch (Exception ex)
             {
                 throw new Web3Exception($"RPC method \"{method}\" threw an exception:" + response?.Error?.Message, ex);
-            }
-            finally
-            {
-                environment.AnalyticsClient.CaptureEvent(new AnalyticsEvent()
-                {
-                    EventName = $"{method}",
-                    GameData = new AnalyticsGameData()
-                    {
-                        Params = parameters,
-                    },
-                    PackageName = "io.chainsafe.web3-unity",
-                });
             }
 
             var serializer = JsonSerializer.Create();

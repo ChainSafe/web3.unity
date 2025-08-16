@@ -16,8 +16,6 @@ namespace ChainSafe.GamingSdk.Editor
 {
     public partial class Web3SettingsEditor : EditorWindow
     {
-        // Default values
-        private const string EnableAnalyticsScriptingDefineSymbol = "ENABLE_ANALYTICS";
 
         
         // Initializes window

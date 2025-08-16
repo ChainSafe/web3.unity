@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Contracts;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Web3;
-using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Chains;
 using ChainSafe.Gaming.Web3.Core.Evm;
@@ -23,23 +22,21 @@ namespace ChainSafe.GamingSdk.Gelato
         private readonly ISigner signer;
         private readonly GelatoConfig config;
         private readonly IChainConfig chainConfig;
-        private readonly IAnalyticsClient analyticsClient;
 
         private bool gelatoDisabled;
 
-        public Gelato(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, ISigner signer, IContractBuilder contractBuilder, IAnalyticsClient analyticsClient)
+        public Gelato(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, ISigner signer, IContractBuilder contractBuilder)
         {
-            gelatoClient = new GelatoClient(httpClient, config, analyticsClient, chainConfig);
+            gelatoClient = new GelatoClient(httpClient, config, chainConfig);
             this.signer = signer;
             this.config = config;
             this.chainConfig = chainConfig;
             this.contractBuilder = contractBuilder;
-            this.analyticsClient = analyticsClient;
         }
 
-        public Gelato(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, IContractBuilder contractBuilder, IAnalyticsClient analyticsClient)
+        public Gelato(IHttpClient httpClient, IChainConfig chainConfig, GelatoConfig config, IContractBuilder contractBuilder)
         {
-            gelatoClient = new GelatoClient(httpClient, config, analyticsClient, chainConfig);
+            gelatoClient = new GelatoClient(httpClient, config, chainConfig);
             this.config = config;
             this.chainConfig = chainConfig;
             this.contractBuilder = contractBuilder;
@@ -51,12 +48,6 @@ namespace ChainSafe.GamingSdk.Gelato
             {
                 return;
             }
-
-            analyticsClient.CaptureEvent(new AnalyticsEvent()
-            {
-                EventName = "Gelato initialized",
-                PackageName = "io.chainsafe.web3-unity",
-            });
         }
 
         public ValueTask WillStopAsync() => new(Task.CompletedTask);
@@ -67,12 +58,6 @@ namespace ChainSafe.GamingSdk.Gelato
             {
                 return;
             }
-
-            analyticsClient.CaptureEvent(new AnalyticsEvent
-            {
-                EventName = "Gelato reinitialized during chain switching",
-                PackageName = "io.chainsafe.web3-unity",
-            });
         }
 
         public bool GetGelatoDisabled() => gelatoDisabled;
