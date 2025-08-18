@@ -9,7 +9,7 @@ using ChainSafe.Gaming.WalletConnect.Models;
 using ChainSafe.Gaming.WalletConnect.Storage;
 using ChainSafe.Gaming.WalletConnect.Wallets;
 using ChainSafe.Gaming.Web3;
-using ChainSafe.Gaming.Web3.Analytics;
+ 
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Debug;
 using ChainSafe.Gaming.Web3.Environment;
@@ -45,7 +45,6 @@ namespace ChainSafe.Gaming.WalletConnect
         private readonly IWalletRegistry walletRegistry;
         private readonly RedirectionHandler redirection;
         private readonly IHttpClient httpClient;
-        private readonly IAnalyticsClient analyticsClient;
 
         private WalletConnectCore core;
         private WalletConnectSignClient signClient;
@@ -65,7 +64,6 @@ namespace ChainSafe.Gaming.WalletConnect
             Web3Environment environment)
             : base(environment, chainConfig)
         {
-            analyticsClient = environment.AnalyticsClient;
             this.redirection = redirection;
             this.walletRegistry = walletRegistry;
             osMediator = environment.OperatingSystem;
@@ -94,11 +92,6 @@ namespace ChainSafe.Gaming.WalletConnect
                 return;
             }
 
-            analyticsClient.CaptureEvent(new AnalyticsEvent()
-            {
-                EventName = "Wallet Connect Initialized",
-                PackageName = "io.chainsafe.web3-unity",
-            });
 
             ValidateConfig();
 

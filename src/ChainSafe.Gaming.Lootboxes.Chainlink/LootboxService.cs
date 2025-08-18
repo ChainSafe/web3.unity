@@ -9,7 +9,7 @@ using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.Evm.Transactions;
 using ChainSafe.Gaming.Web3;
-using ChainSafe.Gaming.Web3.Analytics;
+ 
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Debug;
 using ChainSafe.Gaming.Web3.Environment;
@@ -28,7 +28,6 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
         private readonly LootboxServiceConfig config;
         private readonly ISigner signer;
         private readonly IRpcProvider rpcProvider;
-        private readonly IAnalyticsClient analyticsClient;
 
         private Contract contract;
         private Dictionary<string, RewardType> rewardTypeByTokenAddress;
@@ -36,11 +35,9 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
         public LootboxService(
             LootboxServiceConfig config,
             IContractBuilder contractBuilder,
-            IRpcProvider rpcProvider,
-            IAnalyticsClient analyticsClient)
+            IRpcProvider rpcProvider)
         {
             this.rpcProvider = rpcProvider;
-            this.analyticsClient = analyticsClient;
             this.config = config;
             this.contractBuilder = contractBuilder;
         }
@@ -49,9 +46,8 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
             LootboxServiceConfig config,
             IContractBuilder contractBuilder,
             IRpcProvider rpcProvider,
-            ISigner signer,
-            IAnalyticsClient analyticsClient)
-            : this(config, contractBuilder, rpcProvider, analyticsClient)
+            ISigner signer)
+            : this(config, contractBuilder, rpcProvider)
         {
             this.signer = signer;
         }
@@ -60,12 +56,6 @@ namespace ChainSafe.Gaming.Lootboxes.Chainlink
         {
             var contractAbi = this.config.ContractAbi.AssertNotNull(nameof(this.config.ContractAbi));
             var contractAddress = this.config.ContractAddress.AssertNotNull(nameof(this.config.ContractAddress));
-
-            analyticsClient.CaptureEvent(new AnalyticsEvent()
-            {
-                EventName = "Lootboxes Initialized",
-                PackageName = "io.chainsafe.web3-unity.lootboxes",
-            });
 
             // todo check if contract is correct
             this.contract = this.contractBuilder.Build(contractAbi, contractAddress);

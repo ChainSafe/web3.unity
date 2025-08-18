@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm;
 using ChainSafe.Gaming.Web3;
-using ChainSafe.Gaming.Web3.Analytics;
+ 
 using ChainSafe.Gaming.Web3.Environment;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
 using UnityEngine;
@@ -18,7 +18,6 @@ namespace ChainSafe.Gaming.Unity.MetaMask
 
         private readonly MetaMaskController metaMaskController;
         private readonly IChainConfig chainConfig;
-        private readonly IAnalyticsClient analyticsClient;
         private readonly ChainRegistryProvider chainRegistryProvider;
 
         /// <summary>
@@ -32,7 +31,6 @@ namespace ChainSafe.Gaming.Unity.MetaMask
         {
             logWriter = environment.LogWriter;
             this.chainConfig = chainConfig;
-            analyticsClient = environment.AnalyticsClient;
             this.chainRegistryProvider = chainRegistryProvider;
 
             if (Application.isEditor || Application.platform != RuntimePlatform.WebGLPlayer)
@@ -78,11 +76,6 @@ namespace ChainSafe.Gaming.Unity.MetaMask
         {
             logWriter.Log("Connecting from Metamask...");
 
-            analyticsClient.CaptureEvent(new AnalyticsEvent()
-            {
-                EventName = "Metamask WebGL Initialized",
-                PackageName = "io.chainsafe.web3-unity",
-            });
 
             return await metaMaskController.Connect(chainConfig, chainRegistryProvider);
         }

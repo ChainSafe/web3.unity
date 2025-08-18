@@ -1,5 +1,4 @@
-﻿using ChainSafe.Gaming.Web3.Analytics;
-using ChainSafe.Gaming.Web3.Build;
+﻿using ChainSafe.Gaming.Web3.Build;
 using ChainSafe.Gaming.Web3.Environment;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -18,7 +17,6 @@ namespace ChainSafe.Gaming.NetCore
         /// <returns>The same service collection that was passed in. This enables fluent style.</returns>
         public static IWeb3ServiceCollection UseNetCoreEnvironment(this IWeb3ServiceCollection services)
         {
-            services.UseApiAnalytics();
             services.AddSingleton<Web3Environment>();
             services.AddSingleton<IHttpClient, NetCoreHttpClient>();
             services.AddSingleton<ILogWriter, NetCoreLogWriter>();

@@ -29,7 +29,6 @@ namespace LootBoxes.Chainlink
 
         private class Web3Config : IChainConfigSet
         {
-            public bool EnableAnalytics => true;
 
             public IEnumerable<IChainConfig> Configs { get; } = new[]
             {
