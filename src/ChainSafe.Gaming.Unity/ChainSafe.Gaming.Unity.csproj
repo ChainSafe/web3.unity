@@ -12,8 +12,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ChainSafe.Gaming.Lootboxes.Chainlink\ChainSafe.Gaming.Lootboxes.Chainlink.csproj" />
-    <ProjectReference Include="..\Chainsafe.Gaming.Chainlink\Chainsafe.Gaming.Chainlink.csproj" />
     <ProjectReference Include="..\ChainSafe.Gaming.Debugging\ChainSafe.Gaming.Debugging.csproj" />
     <ProjectReference Include="..\ChainSafe.Gaming.Mud\ChainSafe.Gaming.Mud.csproj" />
     <ProjectReference Include="..\ChainSafe.Gaming\ChainSafe.Gaming.csproj" />
