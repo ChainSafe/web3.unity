@@ -257,11 +257,8 @@ namespace ChainSafe.Gaming.Tests
         {
             var contract = firstAccount.ContractBuilder.Build(nft721ABI, firstWalletAddress);
             var result = contract.EstimateGas("ownerOf", new object[] { 1 }).Result;
-#if Lootboxes
-            Assert.AreEqual("21205", result.ToString());
-#else
+
             Assert.AreEqual("21204", result.ToString());
-#endif
         }
 
         /// <summary>
@@ -271,11 +268,7 @@ namespace ChainSafe.Gaming.Tests
         public void GetAccountsTest()
         {
             var accounts = firstAccount.RpcProvider.ListAccounts().Result;
-#if Lootboxes
-            Assert.AreEqual(3, accounts?.Length);
-#else
             Assert.AreEqual(10, accounts?.Length);
-#endif
             foreach (var account in accounts)
             {
                 var accountBalance = firstAccount.RpcProvider.GetBalance(account).Result;
