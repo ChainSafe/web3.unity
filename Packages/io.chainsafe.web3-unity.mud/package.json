@@ -22,12 +22,5 @@
     "name": "ChainSafe Gaming",
     "email": "bd@chainsafe.io",
     "url": "https://gaming.chainsafe.io/"
-  },
-  "samples": [
-    {
-      "displayName": "Marketplace Samples",
-      "description": "Contains example of integration and usage of Marketplace functionality.",
-      "path": "Samples~/Web3.Unity MUD"
-    }
-  ]
+  }
 }

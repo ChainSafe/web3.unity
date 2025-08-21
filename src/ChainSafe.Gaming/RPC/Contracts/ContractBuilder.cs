@@ -6,7 +6,6 @@ using ChainSafe.Gaming.Evm.Providers;
 using ChainSafe.Gaming.Evm.Signers;
 using ChainSafe.Gaming.RPC.Events;
 using ChainSafe.Gaming.Web3;
-using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Evm;
 using ChainSafe.Gaming.Web3.Environment;
@@ -19,31 +18,30 @@ namespace ChainSafe.Gaming.Evm.Contracts
         private readonly IRpcProvider rpcProvider;
         private readonly ISigner signer;
         private readonly ITransactionExecutor transactionExecutor;
-        private readonly IAnalyticsClient analyticsClient; // Added analytics client
         private readonly ILogWriter logWriter;
         private readonly IEventManager eventManager;
 
-        public ContractBuilder(IRpcProvider rpcProvider, IAnalyticsClient analyticsClient, ILogWriter logWriter, IEventManager eventManager = null)
-            : this(new(), rpcProvider, null, null, analyticsClient, logWriter, eventManager)
+        public ContractBuilder(IRpcProvider rpcProvider, ILogWriter logWriter, IEventManager eventManager = null)
+            : this(new(), rpcProvider, null, null, logWriter, eventManager)
         {
         }
 
-        public ContractBuilder(IRpcProvider rpcProvider, ISigner signer, IAnalyticsClient analyticsClient, ILogWriter logWriter, IEventManager eventManager = null)
-            : this(new(), rpcProvider, signer, null, analyticsClient, logWriter, eventManager)
+        public ContractBuilder(IRpcProvider rpcProvider, ISigner signer, ILogWriter logWriter, IEventManager eventManager = null)
+            : this(new(), rpcProvider, signer, null, logWriter, eventManager)
         {
         }
 
-        public ContractBuilder(ContractBuilderConfig config, IRpcProvider rpcProvider, ISigner signer, IAnalyticsClient analyticsClient, ILogWriter logWriter, IEventManager eventManager = null)
-            : this(config, rpcProvider, signer, null, analyticsClient, logWriter, eventManager)
+        public ContractBuilder(ContractBuilderConfig config, IRpcProvider rpcProvider, ISigner signer, ILogWriter logWriter, IEventManager eventManager = null)
+            : this(config, rpcProvider, signer, null, logWriter, eventManager)
         {
         }
 
-        public ContractBuilder(IRpcProvider rpcProvider, ISigner signer, ITransactionExecutor transactionExecutor, IAnalyticsClient analyticsClient, ILogWriter logWriter, IEventManager eventManager = null)
-            : this(new(), rpcProvider, signer, transactionExecutor, analyticsClient, logWriter, eventManager)
+        public ContractBuilder(IRpcProvider rpcProvider, ISigner signer, ITransactionExecutor transactionExecutor, ILogWriter logWriter, IEventManager eventManager = null)
+            : this(new(), rpcProvider, signer, transactionExecutor, logWriter, eventManager)
         {
         }
 
-        public ContractBuilder(ContractBuilderConfig config, IRpcProvider rpcProvider, ISigner signer, ITransactionExecutor transactionExecutor, IAnalyticsClient analyticsClient, ILogWriter logWriter, IEventManager eventManager = null)
+        public ContractBuilder(ContractBuilderConfig config, IRpcProvider rpcProvider, ISigner signer, ITransactionExecutor transactionExecutor, ILogWriter logWriter, IEventManager eventManager = null)
         {
             try
             {
@@ -57,7 +55,6 @@ namespace ChainSafe.Gaming.Evm.Contracts
             this.rpcProvider = rpcProvider;
             this.signer = signer;
             this.transactionExecutor = transactionExecutor;
-            this.analyticsClient = analyticsClient; // Initialize analytics client
             this.logWriter = logWriter;
             this.eventManager = eventManager;
             BasicContracts = new Dictionary<string, Contract>();
@@ -75,7 +72,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
                 throw new Web3Exception($"Contract with name '{name}' was not registered.");
             }
 
-            return new Contract(data.Abi, data.Address, rpcProvider, signer, transactionExecutor, analyticsClient); // Pass analytics client to Contract
+            return new Contract(data.Abi, data.Address, rpcProvider, signer, transactionExecutor);
         }
 
         public Contract Build(string abi, string address)
@@ -85,7 +82,7 @@ namespace ChainSafe.Gaming.Evm.Contracts
                 return value;
             }
 
-            var contract = new Contract(abi, address, rpcProvider, signer, transactionExecutor, analyticsClient); // Pass analytics client to Contract
+            var contract = new Contract(abi, address, rpcProvider, signer, transactionExecutor);
             BasicContracts.Add(address, contract);
             return contract;
         }

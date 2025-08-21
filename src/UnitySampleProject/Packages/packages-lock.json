@@ -185,14 +185,6 @@
         "io.chainsafe.web3-unity": "3.0.6"
       }
     },
-    "io.chainsafe.web3-unity.lootboxes": {
-      "version": "file:../../../Packages/io.chainsafe.web3-unity.lootboxes",
-      "depth": 0,
-      "source": "local",
-      "dependencies": {
-        "io.chainsafe.web3-unity": "3.0.6"
-      }
-    },
     "io.chainsafe.web3-unity.mud": {
       "version": "file:../../../Packages/io.chainsafe.web3-unity.mud",
       "depth": 0,

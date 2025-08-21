@@ -71,14 +71,6 @@
     ]
   },
   {
-    "path":"Packages/io.chainsafe.web3-unity.lootboxes/Chainlink/Runtime/Libraries/",
-    "namespaces":
-    [
-      "Chainsafe.Gaming.Chainlink",
-      "ChainSafe.Gaming.Lootboxes.Chainlink"
-    ]
-  },
-  {
     "path":"Packages/io.chainsafe.web3-unity.hyperplay/Runtime/Libraries/",
     "namespaces":
     [

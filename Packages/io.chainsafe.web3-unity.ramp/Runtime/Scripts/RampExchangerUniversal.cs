@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm.Signers;
-using ChainSafe.Gaming.Web3.Analytics;
+ 
 using ChainSafe.Gaming.Web3.Core;
 
 namespace ChainSafe.Gaming.Exchangers.Ramp
@@ -10,7 +10,6 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
     {
         private readonly IRampExchangerConfig config;
         private readonly ISigner signer;
-        private readonly IAnalyticsClient analyticsClient;
 
         public event Action<OnRampPurchaseData> OnRampPurchaseCreated;
         public event Action<OffRampSaleData> OffRampSaleCreated;
@@ -18,20 +17,14 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
         private IRampExchanger platformImplementation;
 
 
-        public RampExchangerUniversal(IRampExchangerConfig config, ISigner signer, IAnalyticsClient analyticsClient)
+        public RampExchangerUniversal(IRampExchangerConfig config, ISigner signer)
         {
             this.signer = signer;
             this.config = config;
-            this.analyticsClient = analyticsClient;
         }
 
         public ValueTask WillStartAsync()
         {
-            analyticsClient.CaptureEvent(new AnalyticsEvent()
-            {
-                EventName = "Ramp Initialized",
-                PackageName = "io.chainsafe.web3-unity.exchangers.ramp"
-            });
             platformImplementation = RampExchangerFactory.CreateRampExchanger(config, signer);
             platformImplementation.OnRampPurchaseCreated += InvokeOnRampPurchaseCreated;
             platformImplementation.OffRampSaleCreated += InvokeOffRampSaleCreated;
@@ -57,21 +50,11 @@ namespace ChainSafe.Gaming.Exchangers.Ramp
 
         private void InvokeOnRampPurchaseCreated(OnRampPurchaseData obj)
         {
-            analyticsClient.CaptureEvent(new AnalyticsEvent()
-            {
-                EventName = "Ramp Purchased Happened",
-                PackageName = "io.chiansafe.web3-unity.exchangers.ramp"
-            });
             OnRampPurchaseCreated?.Invoke(obj);
         }
 
         private void InvokeOffRampSaleCreated(OffRampSaleData obj)
         {
-            analyticsClient.CaptureEvent(new AnalyticsEvent()
-            {
-                EventName = "Ramp Sale Happened",
-                PackageName = "io.chiansafe.web3-unity.exchangers.ramp"
-            });
             OffRampSaleCreated?.Invoke(obj);
         }
     }

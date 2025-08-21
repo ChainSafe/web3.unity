@@ -13,7 +13,6 @@ using ChainSafe.Gaming.SygmaClient.Contracts;
 using ChainSafe.Gaming.SygmaClient.Dto;
 using ChainSafe.Gaming.SygmaClient.Types;
 using ChainSafe.Gaming.Web3;
-using ChainSafe.Gaming.Web3.Analytics;
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Environment;
 using Nethereum.ABI;
@@ -31,18 +30,16 @@ namespace ChainSafe.Gaming.SygmaClient
         private readonly ISigner signer;
         private readonly IChainConfig sourceChainConfig;
         private readonly IChainConfig destinationChainConfig;
-        private readonly IAnalyticsClient analyticsClient;
         private readonly Config clientConfiguration;
         private readonly IHttpClient httpClient;
         private readonly ILogWriter logWriter;
 
-        public SygmaClient(ILogWriter logWriter, IHttpClient httpClient, IChainConfig sourceChainConfig, IChainConfig destinationChainConfig, ISigner signer, IContractBuilder contractBuilder, IAnalyticsClient analyticsClient)
+        public SygmaClient(ILogWriter logWriter, IHttpClient httpClient, IChainConfig sourceChainConfig, IChainConfig destinationChainConfig, ISigner signer, IContractBuilder contractBuilder)
         {
             this.contractBuilder = contractBuilder;
             this.signer = signer;
             this.sourceChainConfig = sourceChainConfig;
             this.destinationChainConfig = destinationChainConfig;
-            this.analyticsClient = analyticsClient;
             clientConfiguration = new Config(httpClient, uint.Parse(sourceChainConfig.ChainId));
             this.httpClient = httpClient;
             this.logWriter = logWriter;
