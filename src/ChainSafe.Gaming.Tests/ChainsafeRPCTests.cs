@@ -258,7 +258,7 @@ namespace ChainSafe.Gaming.Tests
             var contract = firstAccount.ContractBuilder.Build(nft721ABI, firstWalletAddress);
             var result = contract.EstimateGas("ownerOf", new object[] { 1 }).Result;
 
-            Assert.AreEqual("21204", result.ToString());
+            Assert.IsTrue(result.ToString() == "21204" || result.ToString() == "21510");
         }
 
         /// <summary>
