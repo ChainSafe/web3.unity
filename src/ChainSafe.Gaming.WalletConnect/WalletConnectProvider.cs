@@ -9,7 +9,6 @@ using ChainSafe.Gaming.WalletConnect.Models;
 using ChainSafe.Gaming.WalletConnect.Storage;
 using ChainSafe.Gaming.WalletConnect.Wallets;
 using ChainSafe.Gaming.Web3;
- 
 using ChainSafe.Gaming.Web3.Core;
 using ChainSafe.Gaming.Web3.Core.Debug;
 using ChainSafe.Gaming.Web3.Environment;
@@ -91,7 +90,6 @@ namespace ChainSafe.Gaming.WalletConnect
             {
                 return;
             }
-
 
             ValidateConfig();
 

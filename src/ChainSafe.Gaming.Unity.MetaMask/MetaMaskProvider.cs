@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm;
 using ChainSafe.Gaming.Web3;
- 
 using ChainSafe.Gaming.Web3.Environment;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
 using UnityEngine;
@@ -75,7 +74,6 @@ namespace ChainSafe.Gaming.Unity.MetaMask
         public override async Task<string> Connect()
         {
             logWriter.Log("Connecting from Metamask...");
-
 
             return await metaMaskController.Connect(chainConfig, chainRegistryProvider);
         }
