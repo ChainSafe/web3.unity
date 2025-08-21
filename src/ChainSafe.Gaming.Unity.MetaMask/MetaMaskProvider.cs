@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using ChainSafe.Gaming.Evm;
 using ChainSafe.Gaming.Web3;
- 
 using ChainSafe.Gaming.Web3.Environment;
 using ChainSafe.Gaming.Web3.Evm.Wallet;
 using UnityEngine;
