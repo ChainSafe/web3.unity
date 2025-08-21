@@ -76,7 +76,6 @@ namespace ChainSafe.Gaming.Unity.MetaMask
         {
             logWriter.Log("Connecting from Metamask...");
 
-
             return await metaMaskController.Connect(chainConfig, chainRegistryProvider);
         }
     }
