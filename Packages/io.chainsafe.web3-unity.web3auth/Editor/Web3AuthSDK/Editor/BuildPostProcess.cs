@@ -9,7 +9,7 @@ public class BuildPostProcess
 {
 
     // Runs all the post process build steps. Called from Unity during build
-    [PostProcessBuildAttribute(0)] // Configures this this post process to run first
+    [PostProcessBuildAttribute(0)] // Configures this post process to run first
     public static void OnPostprocessBuild(BuildTarget target, string pathToBuiltProject)
     {
 #if UNITY_IOS
