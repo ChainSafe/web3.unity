@@ -3,7 +3,7 @@ namespace ChainSafe.Gaming.Web3
     /// <summary>
     /// Configuration object containing chain settings.
     /// </summary>
-    public interface IChainConfig // TODO: double check these xml docs pls
+    public interface IChainConfig
     {
         /// <summary>
         /// The id of the chain to be used. Equals '1' for Ethereum Mainnet.
@@ -31,7 +31,7 @@ namespace ChainSafe.Gaming.Web3
         public string Rpc { get; }
 
         /// <summary>
-        /// TODO.
+        /// The WebSocket URI for the chain, used for real-time blockchain event subscriptions.
         /// </summary>
         public string Ws { get; }
 
